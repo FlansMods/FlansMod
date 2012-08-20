@@ -1,0 +1,14 @@
+Name Wooden Wing
+ShortName woodenWing
+Icon WoodenWing
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23259
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Wing
+StackSize 8
+RecipeOutput 2
+Recipe W biplaneWing
+  W
+   
+   

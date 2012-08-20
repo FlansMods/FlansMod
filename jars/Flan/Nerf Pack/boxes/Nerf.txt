@@ -1,0 +1,36 @@
+Name Nerf Blaster Box
+ShortName nerf
+TopTexture NerfBoxTop
+SideTexture NerfBoxSide
+BottomTexture NerfBoxSide
+BlockID 156
+Recipe P plastic
+PPP
+PPP
+PPP
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as iron (ingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//NumGuns must come before all the addGun lines and must be correct.
+NumGuns 7
+AddGun jolt 2 plastic 1 spring 1 dyePowder.14
+AddAmmo whistlerDart 1 foam
+AddGun maverick 4 plastic 1 spring 1 dyePowder.11
+AddAmmo whistlerDart 1 foam
+AddGun recon 7 plastic 1 spring 1 dyePowder.11
+AddAmmo 6DartClip 1 plastic 6 foam
+AddAltAmmo 6DartClip 1 6DartClip.6 6 clipDart
+AddGun raider 10 plastic 1 spring 2 dyePowder.4
+AddAmmo 35DartDrum 3 plastic 35 foam
+AddAltAmmo 35DartDrum 1 35DartDrum.35 35 clipDart
+AddGun longshot 10 plastic 1 spring 2 dyePowder.11
+AddAmmo 6DartClip 1 plastic 6 foam
+AddAltAmmo 6DartClip 1 6DartClip.6 6 clipDart
+AddGun stampede 12 plastic 2 spring 2 dyePowder.11 6 dBattery
+AddAmmo 18DartClip 2 plastic 18 foam
+AddAltAmmo 18DartClip 1 18DartClip.18 18 clipDart
+AddGun vulcan 14 plastic 2 spring 2 dyePowder.11 6 dBattery
+AddAmmo 25DartBelt 3 plastic 25 foam
+AddAltAmmo 25DartBelt 1 25DartBelt.25 25 whistlerDart

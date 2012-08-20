@@ -1,0 +1,24 @@
+Name M16A4
+ShortName m16a4
+//The ammo this gun uses (shortName)
+Ammo m16a4Ammo
+Icon M16A4
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23811
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 40
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 2
+//Damage in half hearts
+Damage 7
+//The higher this value, the more the bullets spread
+Accuracy 2
+//Time in ticks between rounds
+ShootDelay 2
+ShootSound M14Shoot
+ReloadSound mp44Reload
+Mode FullAuto
+Scope None
+Deployable False
+DeployedModel None

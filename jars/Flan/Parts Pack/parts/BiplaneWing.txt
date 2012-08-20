@@ -1,0 +1,14 @@
+Name Biplane Wing
+ShortName biplaneWing
+Icon BiplaneWing
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23256
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Wing
+StackSize 8
+RecipeOutput 1
+Recipe W wood S stick
+WWW
+S S
+WWW
