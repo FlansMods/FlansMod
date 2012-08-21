@@ -31,7 +31,7 @@ public class BlockGunBox extends Block
 	public void buyGun(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if(ModLoader.getMinecraftInstance().theWorld.isRemote)
+		if(!FMLClientHandler.instance().getClient().isSingleplayer())
 		{
 			FlansMod.buyGun(this, i);
 		}
@@ -87,7 +87,7 @@ public class BlockGunBox extends Block
 	public void buyAmmo(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if(ModLoader.getMinecraftInstance().theWorld.isRemote)
+		if(!FMLClientHandler.instance().getClient().isSingleplayer())
 		{
 			FlansMod.buyAmmo(this, i);
 		}
@@ -143,7 +143,7 @@ public class BlockGunBox extends Block
 	public void buyAltAmmo(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if(ModLoader.getMinecraftInstance().theWorld.isRemote)
+		if(!FMLClientHandler.instance().getClient().isSingleplayer())
 		{
 			FlansMod.buyAmmo(this, i);
 		}
