@@ -35,12 +35,14 @@ import cpw.mods.fml.common.registry.TickRegistry;
 
 @Mod(modid = "Flan_FlansMod", name = "Flan's Mod", version = "2.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-//@SidedProxy(clientSide = "flansmod.minecraft.FlansModClient", serverSide = "flansmod.common.FlansMod")
-
-public class FlansMod implements ITickHandler {	
+public class FlansMod implements ITickHandler 
+{
+	@SidedProxy(clientSide = "flansmod.minecraft.ClientProxy", serverSide = "flansmod.common.CommonProxy")
+	public static CommonProxy proxy;
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
+		proxy.load();
 		log("Loading Flan's mod.");
 		TickRegistry.registerTickHandler(this, Side.SERVER);
 		PlayerAPI.register("Flan", PlayerBaseFlan.class);
