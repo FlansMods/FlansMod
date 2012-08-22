@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.File;
 
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 import flansmod.minecraft.ModelMG;
 
@@ -68,12 +67,12 @@ public class GunType extends TypeType
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "guns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/guns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ReloadSound"))
 			{
 				reloadSound = "guns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/guns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 
 			if(split[0].equals("Mode"))

@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 public class TypeType
 {
@@ -88,7 +87,7 @@ public class TypeType
 	{
 		if(smeltableFrom != null)
 		{
-			ModLoader.addSmelting(getRecipeElement(smeltableFrom, 0).itemID, new ItemStack(item));
+			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0).itemID, new ItemStack(item));
 		}
 		if(recipeLine == null)
 			return;
@@ -166,7 +165,7 @@ public class TypeType
 						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2].split("\\.")[0], Integer.valueOf(recipeLine[i * 2 + 2].split("\\.")[1]));
 					else recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 0);
 				}
-				ModLoader.addRecipe(new ItemStack(item, recipeOutput), recipe);
+				GameRegistry.addRecipe(new ItemStack(item, recipeOutput), recipe);
 			}
 			else
 			{
@@ -177,7 +176,7 @@ public class TypeType
 						recipe[i] = getRecipeElement(recipeLine[i + 1].split("\\.")[0], Integer.valueOf(recipeLine[i + 1].split("\\.")[1]));
 					else recipe[i] = getRecipeElement(recipeLine[i + 1], 0);
 				}
-				ModLoader.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
+				GameRegistry.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
 			}
 		}
 		catch(Exception e)

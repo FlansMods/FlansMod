@@ -6,7 +6,6 @@ import net.minecraft.src.EnumOptions;
 import net.minecraft.src.GuiChat;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ModLoader;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Mouse;
@@ -20,9 +19,9 @@ public class GuiPlaneController extends GuiScreen
     {
 		super();
 		plane = entityplane;
-		ModLoader.getMinecraftInstance().setIngameFocus();
-		guiWasHidden = ModLoader.getMinecraftInstance().gameSettings.hideGUI;
-		ModLoader.getMinecraftInstance().gameSettings.hideGUI = true;
+		FMLClientHandler.instance().getClient().setIngameFocus();
+		guiWasHidden = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
+		FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
     }
 		
 	public void onGuiClosed()

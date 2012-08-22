@@ -52,7 +52,7 @@ public class EntityPassengerSeat extends Entity
 		if(plane == null || plane.isDead)
 			setDead();
 		else updatePosition();	
-		if(riddenByEntity == ModLoader.getMinecraftInstance().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
+		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
 			riddenByEntity.mountEntity(this);
 		if(gunDelay > 0)
 			gunDelay--;

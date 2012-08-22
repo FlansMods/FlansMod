@@ -504,7 +504,7 @@ public class EntityPlane extends EntityDriveable
     public void onUpdate()
     {
         super.onUpdate();
-		if(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && FlansMod.controlMode == 1 && ModLoader.isGUIOpen(null))
+		if(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && FlansMod.controlMode == 1 && FMLClientHandler.instance().getClient().currentScreen == null)
 			ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneController(this));
 		
 		//Key Input
