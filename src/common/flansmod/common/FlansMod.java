@@ -37,10 +37,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 //@SidedProxy(clientSide = "flansmod.minecraft.FlansModClient", serverSide = "flansmod.common.FlansMod")
 
-public class FlansMod implements ITickHandler
- {	
-    public static CommonProxy proxy;
-    proxy.load();
+public class FlansMod implements ITickHandler {	
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
