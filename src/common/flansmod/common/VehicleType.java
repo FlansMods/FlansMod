@@ -1,12 +1,13 @@
 package flansmod.common;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
 
 import java.io.BufferedReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.minecraft.ModelVehicle;
 
@@ -156,22 +157,22 @@ public class VehicleType extends DriveableType
 			if(split[0].equals("StartSound"))
 			{
 				startSound = "vehicles." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("EngineSound"))
 			{
 				engineSound = "vehicles." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "vehicles." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ShellSound"))
 			{
 				shellSound = "vehicles." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 				
 			if(split[0].equals("AllowTurretGuns"))

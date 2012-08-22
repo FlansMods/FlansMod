@@ -3,11 +3,12 @@ package flansmod.minecraft;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.RenderEngine;
 import net.minecraft.src.TextureFX;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class CustomModTextureStatic extends TextureFX
 {
@@ -27,7 +28,7 @@ public class CustomModTextureStatic extends TextureFX
         pixels = null;
         tileSize = j;
         tileImage = sheet.hashCode();
-        bindImage(ModLoader.getMinecraftInstance().renderEngine);
+        bindImage(FMLClientHandler.instance().getClient().renderEngine);
         int l = GL11.glGetTexLevelParameteri(3553 /*GL_TEXTURE_2D*/, 0, 4096 /*GL_TEXTURE_WIDTH*/) / 16;
         int i1 = GL11.glGetTexLevelParameteri(3553 /*GL_TEXTURE_2D*/, 0, 4097 /*GL_TEXTURE_HEIGHT*/) / 16;
         int j1 = bufferedimage.getWidth();
@@ -76,7 +77,7 @@ public class CustomModTextureStatic extends TextureFX
         {
             update();
         }
-		bindImage(ModLoader.getMinecraftInstance().renderEngine);
+		bindImage(FMLClientHandler.instance().getClient().renderEngine);
     }
 	
 	public void bindImage(RenderEngine renderengine)

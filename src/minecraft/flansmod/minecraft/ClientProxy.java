@@ -12,15 +12,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityRenderer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.*;
 import net.minecraft.src.PlayerAPI;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.Tessellator;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -32,6 +27,7 @@ import flansmod.common.AAGunType;
 import flansmod.common.BlockGunBox;
 import flansmod.common.BlockPlaneWorkbench;
 import flansmod.common.BulletType;
+import flansmod.common.CommonProxy;
 import flansmod.common.EntityAAGun;
 import flansmod.common.EntityBullet;
 import flansmod.common.EntityMG;
@@ -52,13 +48,9 @@ import flansmod.common.PlaneType;
 import flansmod.common.TypeType;
 import flansmod.common.VehicleType;
 
-@Mod(modid = "Flan_FlansModClient", name = "Flan's Mod", version = "2.0")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
-
-public class FlansModClient extends FlansMod {
-	
-	@Init
-	public void load(FMLInitializationEvent event)
+public class ClientProxy extends CommonProxy 
+{
+	public void load()
 	{
 		if(ABORT)
 		{
@@ -67,7 +59,7 @@ public class FlansModClient extends FlansMod {
 		}
 		log("Loading Flan's mod.");
 		
-		File flanDir = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/");
+		File flanDir = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/");
 		if(!flanDir.exists())
 		{
 			log("Flan folder not found. Creating empty folder.");
@@ -79,7 +71,7 @@ public class FlansModClient extends FlansMod {
 		//Properties
 		try
 		{
-			File file = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt");
+			File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt");
 			if(file != null)
 			{
 				BufferedReader properties = new BufferedReader(new FileReader(file));
@@ -499,7 +491,12 @@ public class FlansModClient extends FlansMod {
 	public static void buyAmmo(BlockGunBox box, int ammo)
 	{
 		//TODO : SMP gun boxes
-	}	
+	}
+
+	public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)	
+	{
+		return null;
+	}
 	
 	public void readProperties(String[] split, BufferedReader file)
 	{
@@ -544,7 +541,7 @@ public class FlansModClient extends FlansMod {
 	{
 		try
 		{
-			FileOutputStream propsOut = new FileOutputStream(new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt"));
+			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt"));
 			propsOut.write(("Accelerate W\r\nDecelerate S\r\nLeft A\r\nRight D\r\nUp SPACE\r\nDown LSHIFT\r\nExit E\r\nInventory R\r\nBomb V\r\nGun LCONTROL\r\nControlSwitch C\r\nExplosions True\r\nBombs True\r\nBullets True").getBytes());
 			propsOut.close();
 		}
@@ -556,7 +553,7 @@ public class FlansModClient extends FlansMod {
 	}
 		
 	private static final boolean DEBUG = false;
-	private static Minecraft minecraft = ModLoader.getMinecraftInstance();
+	private static Minecraft minecraft = FMLClientHandler.instance().getClient();
 	public static List<Item> bulletItems = new ArrayList<Item>();
 	public static List<Item> partItems = new ArrayList<Item>();
 	public static List<Item> planeItems = new ArrayList<Item>();

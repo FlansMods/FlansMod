@@ -6,6 +6,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import flansmod.minecraft.GuiPlaneController;
 import flansmod.minecraft.GuiPlaneMenu;
 import net.minecraft.client.Minecraft;
@@ -504,7 +506,7 @@ public class EntityPlane extends EntityDriveable
     public void onUpdate()
     {
         super.onUpdate();
-		if(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && FlansMod.controlMode == 1 && ModLoader.isGUIOpen(null))
+		if(riddenByEntity != null && riddenByEntity instanceof EntityPlayer && FlansMod.controlMode == 1 && FMLClientHandler.instance().getClient().currentScreen == null)
 			ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneController(this));
 		
 		//Key Input

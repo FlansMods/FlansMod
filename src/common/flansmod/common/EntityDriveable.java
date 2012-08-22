@@ -5,12 +5,13 @@ import java.util.Random;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
@@ -267,5 +268,5 @@ public abstract class EntityDriveable extends Entity
 	public EntityPassengerSeat[] seats;
 	public EntityCollisionBox[] boxes;
 	
-	public static Minecraft mc = ModLoader.getMinecraftInstance();
+	public static Minecraft mc = FMLClientHandler.instance().getClient();
 }

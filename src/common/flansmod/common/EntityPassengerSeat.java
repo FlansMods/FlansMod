@@ -24,6 +24,8 @@ import net.minecraft.src.World;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class EntityPassengerSeat extends Entity
 {
     public EntityPassengerSeat(World world)
@@ -52,7 +54,7 @@ public class EntityPassengerSeat extends Entity
 		if(plane == null || plane.isDead)
 			setDead();
 		else updatePosition();	
-		if(riddenByEntity == ModLoader.getMinecraftInstance().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
+		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
 			riddenByEntity.mountEntity(this);
 		if(gunDelay > 0)
 			gunDelay--;

@@ -3,6 +3,8 @@ package flansmod.common;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
 import net.minecraft.src.DamageSource;
@@ -15,7 +17,6 @@ import net.minecraft.src.EntitySmokeFX;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
@@ -171,7 +172,7 @@ public class EntityBullet extends Entity
 				if(type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-					ModLoader.getMinecraftInstance().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float)xTile + 0.5F, (float)yTile + 0.5F, (float)zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+					FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float)xTile + 0.5F, (float)yTile + 0.5F, (float)zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
 				}
 				if(!type.penetrates)
 					setDead();	
@@ -278,7 +279,7 @@ public class EntityBullet extends Entity
 					if(type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-						ModLoader.getMinecraftInstance().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float)xTile + 0.5F, (float)yTile + 0.5F, (float)zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+						FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float)xTile + 0.5F, (float)yTile + 0.5F, (float)zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
 						if(type.penetrates)
 							killBullet = false;
 					}				
@@ -387,7 +388,7 @@ public class EntityBullet extends Entity
 			obj.motionY = rand.nextGaussian() / 20;
 			obj.motionZ = rand.nextGaussian() / 20;
 			obj.renderDistanceWeight = 250D;
-			ModLoader.getMinecraftInstance().effectRenderer.addEffect(obj);
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
 		}
 		//Drop item on hitting if bullet requires it
 		if(type.dropItemOnHit != null)

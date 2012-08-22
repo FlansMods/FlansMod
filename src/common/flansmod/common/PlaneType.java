@@ -1,12 +1,13 @@
 package flansmod.common;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ModLoader;
 
 import java.io.BufferedReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.minecraft.ModelPlane;
 
@@ -150,22 +151,22 @@ public class PlaneType extends DriveableType
 			if(split[0].equals("StartSound"))
 			{
 				startSound = "planes." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/planes/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("PropSound"))
 			{
 				propSound = "planes." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/planes/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "planes." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/planes/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("BombSound"))
 			{
 				bombSound = "planes." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/planes/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 				
 			//Recipe

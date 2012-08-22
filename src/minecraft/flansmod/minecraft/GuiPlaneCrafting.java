@@ -42,11 +42,11 @@ public class GuiPlaneCrafting extends GuiContainer
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		if(blueStart == 0)
 			drawTexturedModalRect(j + 124, k + 38 + (big ? 18 : 0), 176, 0, 10, 10);
-		if(blueStart > FlansModClient.blueprintsUnlocked.size() - 4)
+		if(blueStart > ClientProxy.blueprintsUnlocked.size() - 4)
 			drawTexturedModalRect(j + 136, k + 38 + (big ? 18 : 0), 186, 0, 10, 10);
-		for(int n = 0; n < (FlansModClient.blueprintsUnlocked.size() < 3 ? FlansModClient.blueprintsUnlocked.size() : 3); n++)
+		for(int n = 0; n < (ClientProxy.blueprintsUnlocked.size() < 3 ? ClientProxy.blueprintsUnlocked.size() : 3); n++)
 		{
-			drawStack(new ItemStack(FlansModClient.blueprintsUnlocked.get(n + blueStart).itemID, 1, 1), j + 109 + n * 18, k + 18 + (big ? 18 : 0));
+			drawStack(new ItemStack(ClientProxy.blueprintsUnlocked.get(n + blueStart).itemID, 1, 1), j + 109 + n * 18, k + 18 + (big ? 18 : 0));
 		}
     }
 	
@@ -57,12 +57,12 @@ public class GuiPlaneCrafting extends GuiContainer
 		int n = j - (height - ySize) / 2;
 		if(blueStart > 0 && m > 125 && m < 135 && n > 39 + (big ? 18 : 0) && n < 49 + (big ? 18 : 0))
 			blueStart--;
-		if(blueStart < FlansModClient.blueprintsUnlocked.size() - 3 && m > 136 && m < 146 && n > 39 + (big ? 18 : 0) && n < 49 + (big ? 18 : 0))
+		if(blueStart < ClientProxy.blueprintsUnlocked.size() - 3 && m > 136 && m < 146 && n > 39 + (big ? 18 : 0) && n < 49 + (big ? 18 : 0))
 			blueStart++;
 		//Blueprint slots
 		for(int p = 0; p < 3; p++)
 		{
-			if(p + blueStart < FlansModClient.blueprintsUnlocked.size() && m > 108 + 18 * p && m < 126 + 18 * p && n > 18 + (big ? 18 : 0) && n < 36 + (big ? 18 : 0))
+			if(p + blueStart < ClientProxy.blueprintsUnlocked.size() && m > 108 + 18 * p && m < 126 + 18 * p && n > 18 + (big ? 18 : 0) && n < 36 + (big ? 18 : 0))
 				((ContainerPlaneCrafting)inventorySlots).clickedBlueprint(p + blueStart);
 		}
 	}

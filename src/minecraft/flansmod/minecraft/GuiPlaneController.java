@@ -6,11 +6,12 @@ import net.minecraft.src.EnumOptions;
 import net.minecraft.src.GuiChat;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ModLoader;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.common.EntityPlane;
 
@@ -20,9 +21,9 @@ public class GuiPlaneController extends GuiScreen
     {
 		super();
 		plane = entityplane;
-		ModLoader.getMinecraftInstance().setIngameFocus();
-		guiWasHidden = ModLoader.getMinecraftInstance().gameSettings.hideGUI;
-		ModLoader.getMinecraftInstance().gameSettings.hideGUI = true;
+		FMLClientHandler.instance().getClient().setIngameFocus();
+		guiWasHidden = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
+		FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
     }
 		
 	public void onGuiClosed()
@@ -66,7 +67,7 @@ public class GuiPlaneController extends GuiScreen
 		
     public void handleInput()
     {
-		if(FlansModClient.controlMode != 1)
+		if(ClientProxy.controlMode != 1)
 		{
 			mc.thePlayer.closeScreen();
 			return;
@@ -75,8 +76,8 @@ public class GuiPlaneController extends GuiScreen
 		{
 			mc.mouseHelper.grabMouseCursor();
 		}
-		if(FlansModClient.controlModeSwitchTimer > 0)
-			FlansModClient.controlModeSwitchTimer--;
+		if(ClientProxy.controlModeSwitchTimer > 0)
+			ClientProxy.controlModeSwitchTimer--;
 		if(Mouse.isButtonDown(0)) //Left mouse
 		{
 			plane.pressKey(9); //Shoot
@@ -87,51 +88,51 @@ public class GuiPlaneController extends GuiScreen
 		}
         for(; Mouse.next(); handleMouseInput()) { }
         for(; Keyboard.next(); handleKeyboardInput()) { }
-		if(plane != null && !plane.isDead && plane.riddenByEntity != null && plane.riddenByEntity instanceof EntityPlayer && FlansModClient.controlMode == 1)
+		if(plane != null && !plane.isDead && plane.riddenByEntity != null && plane.riddenByEntity instanceof EntityPlayer && ClientProxy.controlMode == 1)
 		{
-			if(Keyboard.isKeyDown(FlansModClient.accelerateKey))
+			if(Keyboard.isKeyDown(ClientProxy.accelerateKey))
 			{
 				plane.pressKey(0);
 			}
-			if(Keyboard.isKeyDown(FlansModClient.decelerateKey))
+			if(Keyboard.isKeyDown(ClientProxy.decelerateKey))
 			{
 				plane.pressKey(1);
 			}
-			if(Keyboard.isKeyDown(FlansModClient.inventoryKey))
+			if(Keyboard.isKeyDown(ClientProxy.inventoryKey))
 			{
 				plane.pressKey(7);
 			}
-			if(Keyboard.isKeyDown(FlansModClient.exitKey))
+			if(Keyboard.isKeyDown(ClientProxy.exitKey))
 			{
 				plane.pressKey(6);
 			}	
-			if(Keyboard.isKeyDown(FlansModClient.upKey))
+			if(Keyboard.isKeyDown(ClientProxy.upKey))
 			{
 				//Not used
 			}
-			if(Keyboard.isKeyDown(FlansModClient.downKey))
+			if(Keyboard.isKeyDown(ClientProxy.downKey))
 			{
 				//Not used
 			}	
-			if(Keyboard.isKeyDown(FlansModClient.bombKey))
+			if(Keyboard.isKeyDown(ClientProxy.bombKey))
 			{
 				plane.pressKey(8);
 			}
-			if(Keyboard.isKeyDown(FlansModClient.gunKey))
+			if(Keyboard.isKeyDown(ClientProxy.gunKey))
 			{
 				plane.pressKey(9);
 			}				
-			if(Keyboard.isKeyDown(FlansModClient.leftKey))
+			if(Keyboard.isKeyDown(ClientProxy.leftKey))
 			{
 				plane.pressKey(2);
 			}
-			if(Keyboard.isKeyDown(FlansModClient.rightKey))
+			if(Keyboard.isKeyDown(ClientProxy.rightKey))
 			{
 				plane.pressKey(3);
 			}		
-			if(Keyboard.isKeyDown(FlansModClient.controlSwitchKey))
+			if(Keyboard.isKeyDown(ClientProxy.controlSwitchKey))
 			{
-				FlansModClient.setControlMode(0);
+				ClientProxy.setControlMode(0);
 				mc.thePlayer.closeScreen();
 				return;
 			}

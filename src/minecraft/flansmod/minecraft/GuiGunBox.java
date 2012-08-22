@@ -5,7 +5,6 @@ import net.minecraft.src.FontRenderer;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.OpenGlHelper;
 import net.minecraft.src.RenderHelper;
 import net.minecraft.src.RenderItem;
@@ -13,6 +12,8 @@ import net.minecraft.src.ScaledResolution;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.common.BlockGunBox;
 
@@ -22,7 +23,7 @@ public class GuiGunBox extends GuiScreen
     public GuiGunBox(InventoryPlayer playerinventory, BlockGunBox weaponbox)
     {
 		inventory = playerinventory;
-		mc = ModLoader.getMinecraftInstance();
+		mc = FMLClientHandler.instance().getClient();
 		box = weaponbox;
 		page = 0;
     }
