@@ -2,6 +2,8 @@ package flansmod.common;
 
 import java.util.List;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.Entity;

@@ -13,6 +13,8 @@ import net.minecraft.src.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import flansmod.common.BlockGunBox;
 
 public class GuiGunBox extends GuiScreen

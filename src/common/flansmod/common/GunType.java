@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.File;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.src.ItemStack;
 
 import flansmod.minecraft.ModelMG;

@@ -24,6 +24,8 @@ import net.minecraft.src.World;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class EntityPassengerSeat extends Entity
 {
     public EntityPassengerSeat(World world)

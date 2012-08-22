@@ -6,6 +6,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import flansmod.minecraft.GuiPlaneController;
 import flansmod.minecraft.GuiPlaneMenu;
 import net.minecraft.client.Minecraft;

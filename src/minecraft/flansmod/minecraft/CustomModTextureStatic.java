@@ -8,6 +8,8 @@ import net.minecraft.src.TextureFX;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class CustomModTextureStatic extends TextureFX
 {
     private boolean oldanaglyph;

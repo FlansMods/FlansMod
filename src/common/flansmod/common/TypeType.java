@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
@@ -87,7 +89,7 @@ public class TypeType
 	{
 		if(smeltableFrom != null)
 		{
-			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0).itemID, new ItemStack(item));
+			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0).itemID, new ItemStack(item), 0.0F);
 		}
 		if(recipeLine == null)
 			return;

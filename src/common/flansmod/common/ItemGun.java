@@ -16,6 +16,8 @@ import net.minecraft.src.World;
 
 import org.lwjgl.input.Mouse;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 
 public class ItemGun extends Item
 {

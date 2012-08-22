@@ -41,11 +41,11 @@ public class GuiVehicleCrafting extends GuiContainer
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		if(blueStart == 0)
 			drawTexturedModalRect(j + 124, k + 38, 176, 0, 10, 10);
-		if(blueStart > FlansModClient.vehicleBlueprintsUnlocked.size() - 4)
+		if(blueStart > ClientProxy.vehicleBlueprintsUnlocked.size() - 4)
 			drawTexturedModalRect(j + 136, k + 38, 186, 0, 10, 10);
-		for(int n = 0; n < (FlansModClient.vehicleBlueprintsUnlocked.size() < 3 ? FlansModClient.vehicleBlueprintsUnlocked.size() : 3); n++)
+		for(int n = 0; n < (ClientProxy.vehicleBlueprintsUnlocked.size() < 3 ? ClientProxy.vehicleBlueprintsUnlocked.size() : 3); n++)
 		{
-			drawStack(new ItemStack(FlansModClient.vehicleBlueprintsUnlocked.get(n + blueStart).itemID, 1, 1), j + 109 + n * 18, k + 18);
+			drawStack(new ItemStack(ClientProxy.vehicleBlueprintsUnlocked.get(n + blueStart).itemID, 1, 1), j + 109 + n * 18, k + 18);
 		}
     }
 	
@@ -56,12 +56,12 @@ public class GuiVehicleCrafting extends GuiContainer
 		int n = j - (height - ySize) / 2;
 		if(blueStart > 0 && m > 125 && m < 135 && n > 39 && n < 49)
 			blueStart--;
-		if(blueStart < FlansModClient.vehicleBlueprintsUnlocked.size() - 3 && m > 136 && m < 146 && n > 39 && n < 49)
+		if(blueStart < ClientProxy.vehicleBlueprintsUnlocked.size() - 3 && m > 136 && m < 146 && n > 39 && n < 49)
 			blueStart++;
 		//Blueprint slots
 		for(int p = 0; p < 3; p++)
 		{
-			if(p + blueStart < FlansModClient.vehicleBlueprintsUnlocked.size() && m > 108 + 18 * p && m < 126 + 18 * p && n > 18 && n < 36)
+			if(p + blueStart < ClientProxy.vehicleBlueprintsUnlocked.size() && m > 108 + 18 * p && m < 126 + 18 * p && n > 18 && n < 36)
 				((ContainerVehicleCrafting)inventorySlots).clickedBlueprint(p + blueStart);
 		}
 	}

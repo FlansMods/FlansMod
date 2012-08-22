@@ -12,15 +12,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityRenderer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.*;
 import net.minecraft.src.PlayerAPI;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.Tessellator;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -32,6 +27,7 @@ import flansmod.common.AAGunType;
 import flansmod.common.BlockGunBox;
 import flansmod.common.BlockPlaneWorkbench;
 import flansmod.common.BulletType;
+import flansmod.common.CommonProxy;
 import flansmod.common.EntityAAGun;
 import flansmod.common.EntityBullet;
 import flansmod.common.EntityMG;
@@ -499,7 +495,7 @@ public class ClientProxy extends CommonProxy
 
 	public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)	
 	{
-
+		return null;
 	}
 	
 	public void readProperties(String[] split, BufferedReader file)

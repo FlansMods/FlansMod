@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import flansmod.minecraft.ModelAAGun;
 
 public class AAGunType extends TypeType
