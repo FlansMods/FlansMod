@@ -11,11 +11,12 @@ import net.minecraft.src.EnumMovingObjectType;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.World;
 
 import org.lwjgl.input.Mouse;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 
 public class ItemGun extends Item
@@ -60,17 +61,17 @@ public class ItemGun extends Item
 				{
 					FlansMod.zoomOverlay = type.scope;
 					FlansMod.newZoom = type.zoomLevel;
-					float f = FlansMod.originalMouseSensitivity = ModLoader.getMinecraftInstance().gameSettings.mouseSensitivity;
-					ModLoader.getMinecraftInstance().gameSettings.mouseSensitivity = f / (float)Math.sqrt(type.zoomLevel);
-					FlansMod.originalHideGUI = ModLoader.getMinecraftInstance().gameSettings.hideGUI;
-					ModLoader.getMinecraftInstance().gameSettings.hideGUI = true;
+					float f = FlansMod.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
+					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = f / (float)Math.sqrt(type.zoomLevel);
+					FlansMod.originalHideGUI = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
+					FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
 				}
 				else
 				{
 					//mod_Flan.zoomOverlay = null;
 					FlansMod.newZoom = 1.0F;	
-					ModLoader.getMinecraftInstance().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;	
-					ModLoader.getMinecraftInstance().gameSettings.hideGUI = FlansMod.originalHideGUI;	
+					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;	
+					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;	
 				}
 				FlansMod.shootTime = 10;
 			}
@@ -130,7 +131,7 @@ public class ItemGun extends Item
 					if(type.reloadSound != null)
 					{
 						try {
-							ModLoader.getMinecraftInstance().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+							FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
 						}
 						catch(Exception e)
 						{
@@ -142,7 +143,7 @@ public class ItemGun extends Item
 					//Remove any zooming while reloading
 					FlansMod.zoomOverlay = null;
 					FlansMod.newZoom = 1.0F;	
-					ModLoader.getMinecraftInstance().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;						
+					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;						
 				}
 				return itemstack;
 			}
@@ -189,7 +190,7 @@ public class ItemGun extends Item
 							if(type.reloadSound != null)
 							{
 								try {
-									ModLoader.getMinecraftInstance().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+									FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
 								}
 								catch(Exception e)
 								{
@@ -201,8 +202,8 @@ public class ItemGun extends Item
 							//Remove any zooming while reloading
 							FlansMod.zoomOverlay = null;
 							FlansMod.newZoom = 1.0F;	
-							ModLoader.getMinecraftInstance().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;		
-							ModLoader.getMinecraftInstance().gameSettings.hideGUI = FlansMod.originalHideGUI;
+							FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;		
+							FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 							return itemstack;
 						}
 					}
@@ -257,7 +258,7 @@ public class ItemGun extends Item
     {
 		if(type.deployable)
 		{
-			MovingObjectPosition look = ModLoader.getMinecraftInstance().objectMouseOver;
+			MovingObjectPosition look = FMLClientHandler.instance().getClient().objectMouseOver;
 			if(look != null && look.typeOfHit == EnumMovingObjectType.TILE)
 			{
 				if(look.sideHit == 1)

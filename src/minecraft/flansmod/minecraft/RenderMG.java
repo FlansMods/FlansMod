@@ -23,7 +23,7 @@ public class RenderMG extends Render
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(180F - (float)mg.direction * 90F, 0.0F, 1.0F, 0.0F);
 		loadTexture("/skins/" + mg.type.texture + ".png");
-		ModelMG model = mg.type.model;
+		ModelMG model = (ModelMG)mg.type.model;
 		//GL11.glScalef(-1F, -1F, 1.0F);
 		model.renderBipod(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, mg);
         GL11.glRotatef(-(float)(mg.prevRotationYaw + (mg.rotationYaw - mg.prevRotationYaw) * f1), 0.0F, 1.0F, 0.0F);

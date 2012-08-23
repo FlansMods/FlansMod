@@ -24,7 +24,7 @@ public class RenderBullet extends Render
 		GL11.glRotatef( f + 90F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(bullet.prevRotationPitch + (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
 		loadTexture("/skins/" + bullet.type.texture + ".png");
-		ModelBase model = bullet.type.model;
+		ModelBase model = (ModelBase)bullet.type.model;
 		model.render(bullet, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
         GL11.glPopMatrix();
     }

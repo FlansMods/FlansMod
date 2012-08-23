@@ -2,12 +2,13 @@ package flansmod.common;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 import java.io.BufferedReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.minecraft.ModelAAGun;
 
@@ -76,12 +77,12 @@ public class AAGunType extends TypeType
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "aaguns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/aaguns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/aaguns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ReloadSound"))
 			{
 				reloadSound = "aaguns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/aaguns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/aaguns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("FireAlternately"))
 				fireAlternately = split[1].equals("True");

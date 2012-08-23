@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.File;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 import flansmod.minecraft.ModelMG;
 
@@ -68,12 +69,12 @@ public class GunType extends TypeType
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "guns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/guns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 			if(split[0].equals("ReloadSound"))
 			{
 				reloadSound = "guns." + split[1];
-				ModLoader.getMinecraftInstance().installResource("newSound/guns/" + split[1] + ".ogg", new File(ModLoader.getMinecraftInstance().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
 			}
 
 			if(split[0].equals("Mode"))
@@ -91,16 +92,7 @@ public class GunType extends TypeType
 				deployable = split[1].equals("True");
 			if(split[0].equals("DeployedModel") && deployable)
 			{
-				String s = FlansMod.inMCP ? "net.minecraft.src.Model" : "Model";
-				try 
-				{	
-					model = (ModelMG)Class.forName(s + split[1]).getConstructor().newInstance();
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to load deployable MG model : " + shortName);
-					e.printStackTrace();
-				}
+				model = FlansMod.proxy.loadMGModel(split, shortName);
 			}
 			if(split[0].equals("DeployedTexture"))
 				texture = split[1];
@@ -178,7 +170,7 @@ public class GunType extends TypeType
 	public String scope;
 	public boolean hasScope;
 	public float zoomLevel = 8.0F;
-	public ModelMG model;
+	public Object model;
 	public String texture;
 	public boolean deployable;
 	public float standBackDist = 1.5F;

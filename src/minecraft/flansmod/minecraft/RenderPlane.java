@@ -24,7 +24,7 @@ public class RenderPlane extends Render
         GL11.glRotatef(entityPlane.prevRotationPitch + (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch) * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(-entityPlane.prevRotationRoll - (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll) * f1, 1.0F, 0.0F, 0.0F);
         loadTexture("/skins/" + entityPlane.type.texture + ".png");
-        ModelPlane modPlane = entityPlane.type.model;
+        ModelPlane modPlane = (ModelPlane)entityPlane.type.model;
 		if(modPlane != null)
 			modPlane.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, entityPlane);
         GL11.glPopMatrix();

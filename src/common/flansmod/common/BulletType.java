@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 
-import net.minecraft.src.ModelBase;
-
 public class BulletType extends TypeType
 {
 	public BulletType(BufferedReader file)
@@ -44,16 +42,7 @@ public class BulletType extends TypeType
 		{
 			if(split[0].equals("Model"))
 			{
-				String s = FlansMod.inMCP ? "net.minecraft.src.Model" : "Model";
-				try 
-				{	
-					model = (ModelBase)Class.forName(s + split[1]).getConstructor().newInstance();
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to load bullet model : " + shortName);
-					e.printStackTrace();
-				}
+				model = FlansMod.proxy.loadBulletModel(split, shortName);
 			}
 			if(split[0].equals("Texture"))
 				texture = split[1];
@@ -122,8 +111,8 @@ public class BulletType extends TypeType
 		}
 		return null;
 	}
-		
-	public ModelBase model;
+	
+	public Object model;
 	public String texture = "bullet";
 	public float fallSpeed = 1.0F;
 	public int damage = 0;

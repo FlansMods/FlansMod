@@ -12,15 +12,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityRenderer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
+import net.minecraft.src.*;
 import net.minecraft.src.PlayerAPI;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.Tessellator;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -32,6 +27,7 @@ import flansmod.common.AAGunType;
 import flansmod.common.BlockGunBox;
 import flansmod.common.BlockPlaneWorkbench;
 import flansmod.common.BulletType;
+import flansmod.common.CommonProxy;
 import flansmod.common.EntityAAGun;
 import flansmod.common.EntityBullet;
 import flansmod.common.EntityMG;
@@ -52,13 +48,9 @@ import flansmod.common.PlaneType;
 import flansmod.common.TypeType;
 import flansmod.common.VehicleType;
 
-@Mod(modid = "Flan_FlansModClient", name = "Flan's Mod", version = "2.0")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
-
-public class FlansModClient extends FlansMod {
-	
-	@Init
-	public void load(FMLInitializationEvent event)
+public class FlansModClient extends FlansMod
+{
+	public void load()
 	{
 		if(ABORT)
 		{
@@ -67,7 +59,7 @@ public class FlansModClient extends FlansMod {
 		}
 		log("Loading Flan's mod.");
 		
-		File flanDir = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/");
+		File flanDir = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/");
 		if(!flanDir.exists())
 		{
 			log("Flan folder not found. Creating empty folder.");
@@ -79,7 +71,7 @@ public class FlansModClient extends FlansMod {
 		//Properties
 		try
 		{
-			File file = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt");
+			File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt");
 			if(file != null)
 			{
 				BufferedReader properties = new BufferedReader(new FileReader(file));
@@ -140,8 +132,8 @@ public class FlansModClient extends FlansMod {
 				//Add the images to the classpath so they can be loaded
 				try
 				{
-					method.invoke(classloader, new Object[] { file.toURL() } );
-					method.invoke(classloader, new Object[] { new File(file, "/models/").toURL() } );
+					method.invoke(classloader, new Object[] { file.toURI().toURL() } );
+					method.invoke(classloader, new Object[] { new File(file, "/models/").toURI().toURL() } );
 				}
 				catch(Exception e)
 				{
@@ -298,62 +290,7 @@ public class FlansModClient extends FlansMod {
 		log("Loaded gun box textures.");		
 	}
 	
-    public boolean onTickInGame(float f, Minecraft minecraft)
-	{
-		if(zoomOverlay != null && ModLoader.isGUIOpen(null))
-		{
-		    ScaledResolution scaledresolution = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
-			int i = scaledresolution.getScaledWidth();
-			int j = scaledresolution.getScaledHeight();
-			minecraft.entityRenderer.setupOverlayRendering();
-			GL11.glEnable(3042 /*GL_BLEND*/);
-			GL11.glDisable(2929 /*GL_DEPTH_TEST*/);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(3008 /*GL_ALPHA_TEST*/);
-			GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, minecraft.renderEngine.getTexture("/gui/" + zoomOverlay + ".png"));
-			Tessellator tessellator = Tessellator.instance;
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
-			tessellator.addVertexWithUV(i / 2 + 2 * j, j , -90D, 1.0D, 1.0D);
-			tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
-			tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-			tessellator.draw();
-			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
-			GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		}
-		if(errorString != null && errorStringTimer > 0)
-		{
-		    ScaledResolution scaledresolution = new ScaledResolution(minecraft.gameSettings, minecraft.displayWidth, minecraft.displayHeight);
-			int i = scaledresolution.getScaledWidth();
-			int j = scaledresolution.getScaledHeight();
-			GL11.glEnable(3042 /*GL_BLEND*/);
-			GL11.glDisable(2929 /*GL_DEPTH_TEST*/);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(3008 /*GL_ALPHA_TEST*/);
-			GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, minecraft.renderEngine.getTexture("/gui/gui.png"));
-			Tessellator tessellator = Tessellator.instance;
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(0, 20, -90D, 0D, 66D / 256D);
-			tessellator.addVertexWithUV(200, 20 , -90D, 200D / 256D, 66D / 256D);
-			tessellator.addVertexWithUV(200, 0D, -90D, 200D / 256D, 46D / 256D);
-			tessellator.addVertexWithUV(0, 0D, -90D, 0D, 46D / 256D);
-			tessellator.draw();
-			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /*GL_DEPTH_TEST*/);
-			GL11.glEnable(3008 /*GL_ALPHA_TEST*/);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			minecraft.fontRenderer.drawString(errorString, 6, 6, 0x404040);
-		}
-		return false;
-	}
-	
-	private void tick(Minecraft minecraft, boolean inGUI)
+	public static void tick()
 	{
 		//Guns
 		if(shootTime > 0)
@@ -466,25 +403,6 @@ public class FlansModClient extends FlansMod {
 		controlMode = i;
 		controlModeSwitchTimer = 40;
 	}
-		
-	public static void log(String s)
-	{
-		//TODO : Make better logger
-		System.out.println("Flan's Mod : " + s);
-	}
-	
-	public static void logQuietly(String s)
-	{
-		//TODO : Log dis.
-	}
-	
-	public static void logLoudly(String s)
-	{
-		errorString = s;
-		errorStringTimer = 100;
-		System.out.println("SERIOUS PROBLEM!");
-		System.out.println("Flan's Mod : " + s);
-	}
 	
 	public static void shoot()
 	{
@@ -499,9 +417,9 @@ public class FlansModClient extends FlansMod {
 	public static void buyAmmo(BlockGunBox box, int ammo)
 	{
 		//TODO : SMP gun boxes
-	}	
+	}
 	
-	public void readProperties(String[] split, BufferedReader file)
+	private void readProperties(String[] split, BufferedReader file)
 	{
 		try 
 		{
@@ -544,7 +462,7 @@ public class FlansModClient extends FlansMod {
 	{
 		try
 		{
-			FileOutputStream propsOut = new FileOutputStream(new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt"));
+			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt"));
 			propsOut.write(("Accelerate W\r\nDecelerate S\r\nLeft A\r\nRight D\r\nUp SPACE\r\nDown LSHIFT\r\nExit E\r\nInventory R\r\nBomb V\r\nGun LCONTROL\r\nControlSwitch C\r\nExplosions True\r\nBombs True\r\nBullets True").getBytes());
 			propsOut.close();
 		}
@@ -554,55 +472,7 @@ public class FlansModClient extends FlansMod {
 			e.printStackTrace();
 		}
 	}
-		
-	private static final boolean DEBUG = false;
-	private static Minecraft minecraft = ModLoader.getMinecraftInstance();
-	public static List<Item> bulletItems = new ArrayList<Item>();
-	public static List<Item> partItems = new ArrayList<Item>();
-	public static List<Item> planeItems = new ArrayList<Item>();
-	public static List<Item> vehicleItems = new ArrayList<Item>();
-	public static List<Block> gunBoxBlocks = new ArrayList<Block>();
-	public static List<Item> gunItems = new ArrayList<Item>();
-	public static List<Item> aaGunItems = new ArrayList<Item>();
-	public static boolean inMCP = false;
-	private static boolean ABORT = false;
-	public static int shootTime;
-	public static String zoomOverlay;
-	public static float playerRecoil;
-	public static float antiRecoil;
-	public static float playerZoom = 1.0F;
-	public static float newZoom = 1.0F;
-	public static float lastPlayerZoom;
-	private static long lastTime;
-	public static PlayerAPI papi;
-	//Player changeable stuff
-	public static int accelerateKey = Keyboard.KEY_W;
-	public static int decelerateKey = Keyboard.KEY_S;
-	public static int leftKey = Keyboard.KEY_A;
-	public static int rightKey = Keyboard.KEY_D;
-	public static int upKey = Keyboard.KEY_SPACE;
-	public static int downKey = Keyboard.KEY_LSHIFT;
-	public static int exitKey = Keyboard.KEY_E;
-	public static int inventoryKey = Keyboard.KEY_R;
-	public static int bombKey = Keyboard.KEY_V;
-	public static int gunKey = Keyboard.KEY_LCONTROL;
-	public static int controlSwitchKey = Keyboard.KEY_C;
-	public static boolean explosions = true;
-	public static boolean bombsEnabled = true;
-	public static boolean bulletsEnabled = true;
 	
-	public static Block craftingTable;
-	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
-	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
-	public static int controlMode = 0; //0 = Standard controls, 1 = Mouse controls
-	public static int controlModeSwitchTimer = 20;
-	public static boolean doneTutorial = false;
-	private static float lastRoll = 0.0F;
-	private static boolean playerInPlane = false;
-	public static boolean chaseCam = false;
-	public static float originalMouseSensitivity = 0.5F;
-	public static boolean originalHideGUI = false;
-	private static String errorString = "";
-	private static int errorStringTimer = 0;
+	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
 }
 

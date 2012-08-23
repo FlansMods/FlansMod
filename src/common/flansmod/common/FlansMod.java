@@ -15,17 +15,19 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Block;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityRenderer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.PlayerAPI;
 import net.minecraft.src.ScaledResolution;
 import net.minecraft.src.Tessellator;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -36,16 +38,18 @@ import cpw.mods.fml.common.registry.TickRegistry;
 
 @Mod(modid = "Flan_FlansMod", name = "Flan's Mod", version = "2.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
-//@SidedProxy(clientSide = "flansmod.minecraft.FlansModClient", serverSide = "flansmod.common.FlansMod")
-
-public class FlansMod implements ITickHandler {	
+public class FlansMod implements ITickHandler 
+{
+	@SidedProxy(clientSide = "flansmod.minecraft.ClientProxy", serverSide = "flansmod.common.CommonProxy")
+	public static CommonProxy proxy;
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
+		proxy.load();
 		log("Loading Flan's mod.");
 		TickRegistry.registerTickHandler(this, Side.SERVER);
 		PlayerAPI.register("Flan", PlayerBaseFlan.class);
-		File flanDir = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/");
+		File flanDir = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/");
 		if(!flanDir.exists())
 		{
 			log("Flan folder not found. Creating empty folder.");
@@ -57,8 +61,8 @@ public class FlansMod implements ITickHandler {
 		//Properties
 		try
 		{
-			File file = new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt");
-			if(file != null)
+			File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt");
+			if(file.exists())
 			{
 				BufferedReader properties = new BufferedReader(new FileReader(file));
 				do
@@ -123,8 +127,8 @@ public class FlansMod implements ITickHandler {
 				//Add the images to the classpath so they can be loaded
 				try
 				{
-					method.invoke(classloader, new Object[] { file.toURL() } );
-					method.invoke(classloader, new Object[] { new File(file, "/models/").toURL() } );
+					method.invoke(classloader, new Object[] { file.toURI().toURL() } );
+					method.invoke(classloader, new Object[] { new File(file, "/models/").toURI().toURL() } );
 				}
 				catch(Exception e)
 				{
@@ -174,7 +178,7 @@ public class FlansMod implements ITickHandler {
 		log("Loaded bullets.");
 		
 		//Guns
-		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", ModLoader.getUniqueEntityId());
+		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
 		for(File file : contentPacks)
 		{
 			File gunsDir = new File(file, "/guns/");
@@ -246,7 +250,7 @@ public class FlansMod implements ITickHandler {
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[] {"BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
-		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", ModLoader.getUniqueEntityId());
+		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
 		for(File file : contentPacks)
 		{
 			File planesDir = new File(file, "/planes/");
@@ -279,7 +283,7 @@ public class FlansMod implements ITickHandler {
 		log("Loaded planes.");
 		
 		//AAGuns
-		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", ModLoader.getUniqueEntityId());
+		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		for(File file : contentPacks)
 		{
 			File aaGunsDir = new File(file, "/aaguns/");
@@ -312,7 +316,7 @@ public class FlansMod implements ITickHandler {
 		log("Loaded AA guns.");	
 		
 		//Vehicles
-		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", ModLoader.getUniqueEntityId());
+		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 
 		for(File file : contentPacks)
@@ -418,6 +422,8 @@ public class FlansMod implements ITickHandler {
 	
 	public static void logLoudly(String s)
 	{
+		errorString = s;
+		errorStringTimer = 100;
 		System.out.println("SERIOUS PROBLEM!");
 		System.out.println("Flan's Mod : " + s);
 	}
@@ -432,7 +438,7 @@ public class FlansMod implements ITickHandler {
 		//Client side only
 	}	
 	
-	public void readProperties(String[] split, BufferedReader file)
+	private void readProperties(String[] split, BufferedReader file)
 	{
 		try 
 		{
@@ -453,7 +459,7 @@ public class FlansMod implements ITickHandler {
 	{
 		try
 		{
-			FileOutputStream propsOut = new FileOutputStream(new File(ModLoader.getMinecraftInstance().getMinecraftDir() + "/Flan/properties.txt"));
+			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt"));
 			propsOut.write(("Explosions True\r\nBombs True\r\nBullets True").getBytes());
 			propsOut.close();
 		}
@@ -464,7 +470,7 @@ public class FlansMod implements ITickHandler {
 		}
 	}
 		
-	private static final boolean DEBUG = false;
+	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
 	public static List<Item> partItems = new ArrayList<Item>();
 	public static List<Item> planeItems = new ArrayList<Item>();
@@ -473,7 +479,7 @@ public class FlansMod implements ITickHandler {
 	public static List<Item> gunItems = new ArrayList<Item>();
 	public static List<Item> aaGunItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
-	private static boolean ABORT = false;
+	public static boolean ABORT = false;
 	public static int shootTime;
 	public static String zoomOverlay;
 	public static float playerRecoil;
@@ -481,7 +487,7 @@ public class FlansMod implements ITickHandler {
 	public static float playerZoom = 1.0F;
 	public static float newZoom = 1.0F;
 	public static float lastPlayerZoom;
-	private static long lastTime;
+	public static long lastTime;
 	public static PlayerAPI papi;
 	//Player changeable stuff
 	public static int accelerateKey = Keyboard.KEY_W;
@@ -505,13 +511,13 @@ public class FlansMod implements ITickHandler {
 	public static int controlMode = 0; //0 = Standard controls, 1 = Mouse controls
 	public static int controlModeSwitchTimer = 20;
 	public static boolean doneTutorial = false;
-	private static float lastRoll = 0.0F;
-	private static boolean playerInPlane = false;
+	public static float lastRoll = 0.0F;
+	public static boolean playerInPlane = false;
 	public static boolean chaseCam = false;
 	public static float originalMouseSensitivity = 0.5F;
 	public static boolean originalHideGUI = false;
-	private static String errorString = "";
-	private static int errorStringTimer = 0;
+	public static String errorString = "";
+	public static int errorStringTimer = 0;
 	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
@@ -521,15 +527,15 @@ public class FlansMod implements ITickHandler {
 	{
         if(type.equals(EnumSet.of(TickType.RENDER)))
         {
-            renderTick(ModLoader.getMinecraftInstance());
+            renderTick(FMLClientHandler.instance().getClient());
         }        
         if(type.equals(EnumSet.of(TickType.CLIENT)))
         {
-            clientTick(ModLoader.getMinecraftInstance());
+            clientTick(FMLClientHandler.instance().getClient());
         }
         if(type.equals(EnumSet.of(TickType.SERVER)))
         {
-            serverTick(ModLoader.getMinecraftServerInstance());
+            serverTick(FMLClientHandler.instance().getServer());
         }
 	}
 
