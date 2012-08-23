@@ -13,7 +13,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 
-import flansmod.minecraft.GuiGunBox;
+import flansmod.client.GuiGunBox;
 
 public class BlockGunBox extends Block
 {

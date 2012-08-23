@@ -10,7 +10,7 @@ import java.io.File;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
-import flansmod.minecraft.ModelAAGun;
+import flansmod.client.ModelAAGun;
 
 public class AAGunType extends TypeType
 {
@@ -51,16 +51,7 @@ public class AAGunType extends TypeType
 		{
 			if(split[0].equals("Model"))
 			{
-				String s = FlansMod.inMCP ? "net.minecraft.src.Model" : "Model";
-				try 
-				{	
-					model = (ModelAAGun)Class.forName(s + split[1]).getConstructor().newInstance();
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to load AA gun model : " + shortName);
-					e.printStackTrace();
-				}
+				model = FlansMod.proxy.loadAAGunModel(split, shortName);
 			}
 			if(split[0].equals("Texture"))
 				texture = split[1];
@@ -152,7 +143,7 @@ public class AAGunType extends TypeType
 	public int gunnerZ;
 	public String shootSound;
 	public String reloadSound;
-	public ModelAAGun model;
+	public Object model;
 	public String texture;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;

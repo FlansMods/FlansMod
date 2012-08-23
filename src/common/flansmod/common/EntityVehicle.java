@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import flansmod.minecraft.GuiPlaneMenu;
+import flansmod.client.GuiPlaneMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
@@ -62,11 +62,7 @@ public class EntityVehicle extends EntityDriveable
 			seats[i] = new EntityPassengerSeat(worldObj, this, i, type.seatsX[i], type.seatsY[i], type.seatsZ[i], type.gunner[i]);
 			worldObj.spawnEntityInWorld(seats[i]);
 		}
-		boxes = new EntityCollisionBox[type.model.collisionBoxes.length];
-		for(int i = 0; i < boxes.length; i++)
-		{
-			boxes[i] = type.model.collisionBoxes[i].makeEntity(this);
-		}
+		FlansMod.proxy.makeVehicleEntity(boxes, type, this);
 		yOffset = type.yOffset;
 	}
 	
@@ -284,33 +280,7 @@ public class EntityVehicle extends EntityDriveable
 	{
 		if(!worldObj.isRemote && seat.gunDelay <= 0 && FlansMod.bulletsEnabled)
 		{
-			if(type.model.gunModel.length > 0 && data.guns[1] != null && data.ammo[1] != null && data.ammo[1].getItem() instanceof ItemBullet && data.guns[1].isAmmo(((ItemBullet)data.ammo[1].getItem()).type))
-			{				
-				double cosYaw = Math.cos((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
-				double sinYaw = Math.sin((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
-				double cosPitch = Math.cos((player.rotationPitch - axes.getPitch()) * 3.14159265F / 180F);
-				double sinPitch = Math.sin((player.rotationPitch - axes.getPitch()) * 3.14159265F / 180F);
-				
-				double newX = 3D * cosPitch * sinYaw;
-				double newY = -3D * sinPitch;
-				double newZ = 3D * cosPitch * cosYaw;
-				Vec3 gunOriginVec = rotate(type.model.gunModel[0].rotationPointX / 16D, type.model.gunModel[0].rotationPointY / 16D, type.model.gunModel[0].rotationPointZ / 16D);
-				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunOriginVec.addVector(posX, posY, posZ), player.rotationYaw, axes.getPitch(), (EntityLiving)seat.riddenByEntity, data.guns[1].accuracy, data.guns[1].damage, ((ItemBullet)data.ammo[1].getItem()).type, 3.0F));
-				if(seat.soundDelay <= 0)
-				{
-					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
-					seat.soundDelay = data.guns[1].shootSoundLength;
-				}
-				int damage = data.ammo[1].getItemDamage();
-				data.ammo[1].setItemDamage(damage + 1);	
-				if(damage + 1 == data.ammo[1].getMaxDamage())
-				{
-					if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
-						data.ammo[1].setItemDamage(0);
-					else data.setInventorySlotContents(1, null);
-				}
-				seat.gunDelay = type.vehicleShootDelay;
-			}
+			FlansMod.proxy.spawnVehicle(worldObj, posX, posY, posZ, type, data, seat, this, axes, player);
 		}
 	}
 

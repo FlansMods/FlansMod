@@ -11,8 +11,8 @@ import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 
-import flansmod.minecraft.GuiPlaneCrafting;
-import flansmod.minecraft.GuiVehicleCrafting;
+import flansmod.client.GuiPlaneCrafting;
+import flansmod.client.GuiVehicleCrafting;
 
 public class BlockPlaneWorkbench extends Block
 {

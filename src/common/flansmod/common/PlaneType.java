@@ -9,7 +9,7 @@ import java.io.File;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
-import flansmod.minecraft.ModelPlane;
+import flansmod.client.ModelPlane;
 
 public class PlaneType extends DriveableType
 {

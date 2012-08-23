@@ -36,11 +36,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 
-@Mod(modid = "Flan_FlansMod", name = "Flan's Mod", version = "2.0")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class FlansMod implements ITickHandler 
 {
-	@SidedProxy(clientSide = "flansmod.minecraft.ClientProxy", serverSide = "flansmod.common.CommonProxy")
+	@SidedProxy(clientSide = "flansmod.client.ClientProxy", serverSide = "flansmod.common.CommonProxy")
 	public static CommonProxy proxy;
 	@Init
 	public void load(FMLInitializationEvent event)

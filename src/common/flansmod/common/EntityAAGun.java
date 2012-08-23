@@ -102,8 +102,7 @@ public class EntityAAGun extends Entity
 						barrelRecoil[j] = type.recoil;
 						if(!worldObj.isRemote)
 						{
-							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, rotate(type.model.barrelX / 16D + 3D, type.model.barrelY / 16D, type.model.barrelZ / 16D + 3D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, (EntityLiving)player, type.accuracy, type.damage, bullet));
-							worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+							FlansMod.proxy.spawnAAGun(worldObj, posX, posY, posZ, type, gunYaw, gunPitch, rand, bullet, this, player);
 						}
 					}
 				}

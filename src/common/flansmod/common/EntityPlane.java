@@ -8,8 +8,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
-import flansmod.minecraft.GuiPlaneController;
-import flansmod.minecraft.GuiPlaneMenu;
+import flansmod.client.GuiPlaneController;
+import flansmod.client.GuiPlaneMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
@@ -70,11 +70,7 @@ public class EntityPlane extends EntityDriveable
 			FlansMod.logLoudly("TurboModelThingy not installed");
 			return;
 		}
-		boxes = new EntityCollisionBox[type.model.collisionBoxes.length];
-		for(int i = 0; i < boxes.length; i++)
-		{
-			boxes[i] = type.model.collisionBoxes[i].makeEntity(this);
-		}
+		FlansMod.proxy.makePlaneEntity(boxes, type, this);
 	}
 	
 	private void destroyBrokenParts()

@@ -9,7 +9,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 import net.minecraft.src.ItemStack;
 
-import flansmod.minecraft.ModelMG;
+import flansmod.client.ModelMG;
 
 public class GunType extends TypeType
 {

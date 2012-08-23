@@ -9,7 +9,7 @@ import java.io.File;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
-import flansmod.minecraft.ModelVehicle;
+import flansmod.client.ModelVehicle;
 
 public class VehicleType extends DriveableType
 {
@@ -50,16 +50,7 @@ public class VehicleType extends DriveableType
 		{
 			if(split[0].equals("Model"))
 			{
-				String s = FlansMod.inMCP ? "net.minecraft.src.Model" : "Model";
-				try 
-				{	
-					model = (ModelVehicle)Class.forName(s + split[1]).getConstructor().newInstance();
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to load vehicle model : " + shortName);
-					e.printStackTrace();
-				}
+				model = FlansMod.proxy.loadVehicleModel(split, shortName);
 			}
 					
 			//Movement modifiers
@@ -251,7 +242,7 @@ public class VehicleType extends DriveableType
 		return null;
 	}
 		
-	public ModelVehicle model;
+	public Object model;
 	
 	public float maxSpeed = 1F;
 	public double turnLeftModifier = 1F;

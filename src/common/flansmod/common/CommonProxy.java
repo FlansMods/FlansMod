@@ -1,5 +1,7 @@
 package flansmod.common;
 
+import java.util.Random;
+
 import net.minecraft.src.*;
 
 public abstract class CommonProxy
@@ -10,6 +12,7 @@ public abstract class CommonProxy
 
      public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
      {
+    	 //TODO
           return null;
      }
      
@@ -20,4 +23,14 @@ public abstract class CommonProxy
      public abstract Object loadMGModel(String[] split, String shortName);
      
      public abstract Object loadAAGunModel(String[] split, String shortName);
+     
+     public abstract Object loadVehicleModel(String[] split, String shortName);
+     
+     public abstract void spawnAAGun(World world, double posX, double posY, double posZ, AAGunType type, float gunYaw, float gunPitch, Random rand, BulletType bullet, EntityAAGun entity, Entity player);
+     
+     public abstract void makePlaneEntity(EntityCollisionBox[] boxes, PlaneType type, EntityPlane entity);
+     
+     public abstract void makeVehicleEntity(EntityCollisionBox[] boxes, VehicleType type, EntityVehicle entity);
+     
+     public abstract void spawnVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player);
 }
