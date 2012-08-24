@@ -119,6 +119,10 @@ public class PlaneType extends DriveableType
 					gunner = new int[numPassengers];
 				}
 			}
+			if(split[0].equals("CollisionBoxes"))
+			{
+				boxes = new CollisionBox[Integer.parseInt(split[1])];
+			}
 			if(split[0].equals("AddCollisionBox"))
 			{
 				int id = Integer.parseInt(split[1]);

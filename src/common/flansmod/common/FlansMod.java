@@ -179,6 +179,7 @@ public class FlansMod implements ITickHandler
 		
 		//Guns
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		for(File file : contentPacks)
 		{
 			File gunsDir = new File(file, "/guns/");
@@ -251,6 +252,7 @@ public class FlansMod implements ITickHandler
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[] {"BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 40, 5, true);
 		for(File file : contentPacks)
 		{
 			File planesDir = new File(file, "/planes/");
@@ -284,6 +286,7 @@ public class FlansMod implements ITickHandler
 		
 		//AAGuns
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
 		for(File file : contentPacks)
 		{
 			File aaGunsDir = new File(file, "/aaguns/");
@@ -317,6 +320,7 @@ public class FlansMod implements ITickHandler
 		
 		//Vehicles
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 93, this, 40, 5, true);
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 
 		for(File file : contentPacks)
