@@ -165,6 +165,4 @@ public class ModelVehicle extends ModelBase
     public ModelRendererTurbo rightFrontWheelModel[];
     public ModelRendererTurbo leftBackWheelModel[];
     public ModelRendererTurbo rightBackWheelModel[];
-	
-	public CollisionBox collisionBoxes[];
 }

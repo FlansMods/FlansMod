@@ -44,12 +44,5 @@ public class ModelPanzer extends ModelVehicle
 		
 		flipAll(); //For old models
 		translateAll(-8);
-		
-		collisionBoxes = new CollisionBox[5];
-		collisionBoxes[0] = new CollisionBox(-16, 8, -30, 0);
- 		collisionBoxes[1] = new CollisionBox(16, 8, -30, 0);
- 		collisionBoxes[2] = new CollisionBox(16, 8, 30, 0);
- 		collisionBoxes[3] = new CollisionBox(-16, 8, 30, 0);
-		collisionBoxes[4] = new CollisionBox(0, 32, 0, 4);
     }
 }

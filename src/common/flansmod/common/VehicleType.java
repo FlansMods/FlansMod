@@ -117,6 +117,15 @@ public class VehicleType extends DriveableType
 					gunner = new int[numPassengers];
 				}
 			}
+			if(split[0].equals("CollisionBoxes"))
+			{
+				boxes = new CollisionBox[Integer.parseInt(split[1])];
+			}
+			if(split[0].equals("AddCollisionBox"))
+			{
+				int id = Integer.parseInt(split[1]);
+				boxes[id] = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
+			}
 			if(split[0].equals("Passenger"))
 			{
 				int id = Integer.parseInt(split[1]);
@@ -243,6 +252,8 @@ public class VehicleType extends DriveableType
 	}
 		
 	public Object model;
+	
+	public CollisionBox[] boxes;
 	
 	public float maxSpeed = 1F;
 	public double turnLeftModifier = 1F;

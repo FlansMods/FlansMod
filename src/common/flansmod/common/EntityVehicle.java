@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import flansmod.client.GuiPlaneMenu;
+import flansmod.client.ModelVehicle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
@@ -62,7 +63,12 @@ public class EntityVehicle extends EntityDriveable
 			seats[i] = new EntityPassengerSeat(worldObj, this, i, type.seatsX[i], type.seatsY[i], type.seatsZ[i], type.gunner[i]);
 			worldObj.spawnEntityInWorld(seats[i]);
 		}
-		FlansMod.proxy.makeVehicleEntity(boxes, type, this);
+		
+		boxes = new EntityCollisionBox[type.boxes.length];
+		for(int i = 0; i < boxes.length; i++)
+		{
+			boxes[i] = type.boxes[i].makeEntity(this);
+		}
 		yOffset = type.yOffset;
 	}
 	

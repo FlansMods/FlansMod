@@ -87,7 +87,5 @@ public class ModelJeep extends ModelVehicle
 		
 		flipAll(); //For old models
 		translateAll(-4);
-		
-		collisionBoxes = new CollisionBox[0];
     }
 }

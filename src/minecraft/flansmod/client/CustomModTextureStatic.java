@@ -82,7 +82,7 @@ public class CustomModTextureStatic extends TextureFX
 	
 	public void bindImage(RenderEngine renderengine)
     {
-		GL11.glBindTexture(3553 , renderengine.getTexture(texture));
+		GL11.glBindTexture(3553, renderengine.getTexture(texture));
     }
 
     public static BufferedImage scale2x(BufferedImage bufferedimage)

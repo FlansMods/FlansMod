@@ -183,6 +183,4 @@ public class ModelPlane extends ModelBase
 	public ModelRendererTurbo pitchFlapRightModel[];
 	public ModelRendererTurbo pitchFlapLeftWingModel[];
 	public ModelRendererTurbo pitchFlapRightWingModel[];
-	
-	public CollisionBox collisionBoxes[];
 }

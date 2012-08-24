@@ -151,10 +151,5 @@ public class ModelCamel extends ModelPlane
 		pitchFlapRightWingModel = new ModelRendererTurbo[0];
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-		
-		collisionBoxes = new CollisionBox[3]; //Add collision boxes
-		collisionBoxes[0] = new CollisionBox(0, 0, -32, 3); //Tail
-		collisionBoxes[1] = new CollisionBox(40, 0, 0, 2);	//Left Wing
-		collisionBoxes[2] = new CollisionBox(-40, 0, 0, 1); //Right Wing
     }
 }

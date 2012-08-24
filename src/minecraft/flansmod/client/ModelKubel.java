@@ -79,7 +79,5 @@ public class ModelKubel extends ModelVehicle
 		ammoModel = new ModelRendererTurbo[0];
 		
 		flipAll(); //For old models
-		
-		collisionBoxes = new CollisionBox[0];
     }
 }

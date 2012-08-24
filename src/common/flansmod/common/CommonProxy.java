@@ -28,9 +28,5 @@ public abstract class CommonProxy
      
      public abstract void spawnAAGun(World world, double posX, double posY, double posZ, AAGunType type, float gunYaw, float gunPitch, Random rand, BulletType bullet, EntityAAGun entity, Entity player);
      
-     public abstract void makePlaneEntity(EntityCollisionBox[] boxes, PlaneType type, EntityPlane entity);
-     
-     public abstract void makeVehicleEntity(EntityCollisionBox[] boxes, VehicleType type, EntityVehicle entity);
-     
      public abstract void spawnVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player);
 }

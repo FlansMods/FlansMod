@@ -211,25 +211,6 @@ public class ModelLancaster extends ModelPlane
 		translateAll(52);
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-		
-		collisionBoxes = new CollisionBox[16]; //Add collision boxes
-		collisionBoxes[0] = new CollisionBox(0, 0, -32, 3); 	//Tail
-		collisionBoxes[1] = new CollisionBox(0, 10, -80, 3); 	//Tail 
-		collisionBoxes[2] = new CollisionBox(0, 20, -110, 3); 	//Tail 
-		collisionBoxes[3] = new CollisionBox(80, 20, -112, 3); 	//Tail 
-		collisionBoxes[4] = new CollisionBox(-80, 20, -112, 3); //Tail 
-		collisionBoxes[5] = new CollisionBox(55, 5, 75, 2);		//Left Wing
-		collisionBoxes[6] = new CollisionBox(115, 5, 65, 2);	//Left Wing
-		collisionBoxes[7] = new CollisionBox(200, 20, 20, 2);	//Left Wing
-		collisionBoxes[8] = new CollisionBox(-55, 5, 75, 1); 	//Right Wing
-		collisionBoxes[9] = new CollisionBox(-115, 5, 65, 1); 	//Right Wing
-		collisionBoxes[10] = new CollisionBox(-200, 20, 20, 1); 	//Right Wing
-		collisionBoxes[11] = new CollisionBox(0, 0, 40, 0); 		//Front Block
-		collisionBoxes[12] = new CollisionBox(0, 0, 70, 0); 		//Front Block
-		collisionBoxes[13] = new CollisionBox(0, 0, 100, 0); 		//Front Block
-		collisionBoxes[14] = new CollisionBox(0, 0, 130, 0); 		//Front Block
-		collisionBoxes[15] = new CollisionBox(0, 20, 115, 0); 		//Pilot Seat
-		
     }
 	
 	private void translateAll(int y)

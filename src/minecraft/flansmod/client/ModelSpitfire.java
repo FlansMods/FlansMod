@@ -123,15 +123,6 @@ public class ModelSpitfire extends ModelPlane
 		pitchFlapRightWingModel = new ModelRendererTurbo[0];
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-		
-		collisionBoxes = new CollisionBox[7]; //Add collision boxes
-		collisionBoxes[0] = new CollisionBox(0, 0, -32, 3); //Tail
-		collisionBoxes[1] = new CollisionBox(0, 0, -80, 3); //Tail 
-		collisionBoxes[2] = new CollisionBox(40, 0, 10, 2);	//Left Wing
-		collisionBoxes[3] = new CollisionBox(70, 0, 10, 2);	//Left Wing
-		collisionBoxes[4] = new CollisionBox(-40, 0, 10, 1); //Right Wing
-		collisionBoxes[5] = new CollisionBox(-70, 0, 10, 1); //Right Wing
-		collisionBoxes[6] = new CollisionBox(0, 0, 40, 0); //Front Block
     }
 }		
  

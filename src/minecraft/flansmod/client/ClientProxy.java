@@ -127,26 +127,6 @@ public class ClientProxy extends CommonProxy
 		world.playSoundAtEntity(entity, type.shootSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 	}
 	
-	public void makePlaneEntity(EntityCollisionBox[] boxes, PlaneType type, EntityPlane entity)
-	{
-		ModelPlane planeModel = (ModelPlane)type.model;
-		boxes = new EntityCollisionBox[planeModel.collisionBoxes.length];
-		for(int i = 0; i < boxes.length; i++)
-		{
-			boxes[i] = planeModel.collisionBoxes[i].makeEntity(entity);
-		}
-	}
-	
-	public void makeVehicleEntity(EntityCollisionBox[] boxes, VehicleType type, EntityVehicle entity)
-	{
-		ModelVehicle vehicleModel = (ModelVehicle)type.model;
-		boxes = new EntityCollisionBox[vehicleModel.collisionBoxes.length];
-		for(int i = 0; i < boxes.length; i++)
-		{
-			boxes[i] = vehicleModel.collisionBoxes[i].makeEntity(entity);
-		}
-	}
-	
 	public void spawnVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
 	{
 		ModelVehicle vehicleModel = (ModelVehicle)type.model;

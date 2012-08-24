@@ -10,6 +10,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 import flansmod.client.GuiPlaneController;
 import flansmod.client.GuiPlaneMenu;
+import flansmod.client.ModelPlane;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
@@ -70,7 +71,12 @@ public class EntityPlane extends EntityDriveable
 			FlansMod.logLoudly("TurboModelThingy not installed");
 			return;
 		}
-		FlansMod.proxy.makePlaneEntity(boxes, type, this);
+		
+		boxes = new EntityCollisionBox[type.boxes.length];
+		for(int i = 0; i < boxes.length; i++)
+		{
+			boxes[i] = type.boxes[i].makeEntity(this);
+		}
 	}
 	
 	private void destroyBrokenParts()
@@ -1106,9 +1112,9 @@ public class EntityPlane extends EntityDriveable
 			if(!FlansMod.doneTutorial)
 			{
 				FlansMod.doneTutorial = true;
-				//mc.ingameGUI.addChatMessage("Press " + Keyboard.getKeyName(mod_Flan.inventoryKey) + " to open the menu");
-				//mc.ingameGUI.addChatMessage("Press " + Keyboard.getKeyName(mod_Flan.exitKey) + " to get out");
-				//mc.ingameGUI.addChatMessage("Press " + Keyboard.getKeyName(mod_Flan.controlSwitchKey) + " to switch controls");				
+				mc.thePlayer.addChatMessage("Press " + Keyboard.getKeyName(FlansMod.inventoryKey) + " to open the menu");
+				mc.thePlayer.addChatMessage("Press " + Keyboard.getKeyName(FlansMod.exitKey) + " to get out");
+				mc.thePlayer.addChatMessage("Press " + Keyboard.getKeyName(FlansMod.controlSwitchKey) + " to switch controls");				
 			}
 			return false;
 		}
