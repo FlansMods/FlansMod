@@ -10,14 +10,12 @@ import flansmod.common.EntityBullet;
 
 public class RenderBullet extends Render
 {
-
     public RenderBullet()
     {
         shadowSize = 0.5F;
     }
 
-    public void render(EntityBullet bullet, double d, double d1, double d2, 
-            float f, float f1)
+    public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -29,8 +27,7 @@ public class RenderBullet extends Render
         GL11.glPopMatrix();
     }
 
-    public void doRender(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
         render((EntityBullet)entity, d, d1, d2, f, f1);
     }

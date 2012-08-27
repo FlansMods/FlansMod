@@ -16,8 +16,7 @@ public class RenderVehicle extends Render
         shadowSize = 0.5F;
     }
 
-    public void func_157_a(EntityVehicle vehicle, double d, double d1, double d2, 
-            float f, float f1)
+    public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -73,6 +72,6 @@ public class RenderVehicle extends Render
     public void doRender(Entity entity, double d, double d1, double d2, 
             float f, float f1)
     {
-        func_157_a((EntityVehicle)entity, d, d1, d2, f, f1);
+        render((EntityVehicle)entity, d, d1, d2, f, f1);
     }
 }

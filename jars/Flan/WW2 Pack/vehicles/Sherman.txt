@@ -12,6 +12,12 @@ CargoSlots 0
 //Actually shell slots
 BombSlots 5
 Health 900
+CollisionBoxes 5
+AddCollisionBox 0 -16 8 -30 0
+AddCollisionBox 1 16 8 -30 0
+AddCollisionBox 2 16 8 30 0
+AddCollisionBox 3 -16 8 30 0
+AddCollisionBox 4 0 32 0 4
 //Whether or not guns can be placed in these slots
 //Body is for the driver, turret is for a designated gunner
 AllowBodyGuns True

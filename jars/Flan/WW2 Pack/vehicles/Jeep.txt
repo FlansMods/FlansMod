@@ -12,6 +12,7 @@ CargoSlots 32
 //Actually shell slots
 BombSlots 0
 Health 300
+CollisionBoxes 0
 //Whether or not guns can be placed in these slots
 //Body is for the driver, turret is for a designated gunner
 AllowBodyGuns False

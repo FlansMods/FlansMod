@@ -45,7 +45,6 @@ public class FlansMod implements ITickHandler
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
-		proxy.load();
 		log("Loading Flan's mod.");
 		TickRegistry.registerTickHandler(this, Side.SERVER);
 		PlayerAPI.register("Flan", PlayerBaseFlan.class);
@@ -394,6 +393,7 @@ public class FlansMod implements ITickHandler
 			type.addRecipe();
 		}
 		log("Loaded recipes.");
+		proxy.load();
 	}
 	
 	public void renderTick(Minecraft minecraft)
@@ -554,6 +554,5 @@ public class FlansMod implements ITickHandler
 	{
 		return null;
 	}
-
 }
 

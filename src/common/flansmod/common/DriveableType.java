@@ -21,8 +21,19 @@ public class DriveableType extends TypeType
 		try
 		{
 			if(split[0].equals("Texture"))
+			{
 				texture = split[1];
-				
+			}
+			if(split[0].equals("CollisionBoxes"))
+			{
+				boxes = new CollisionBox[Integer.parseInt(split[1])];
+			}
+			if(split[0].equals("AddCollisionBox"))
+			{
+				int id = Integer.parseInt(split[1]);
+				boxes[id] = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
+			}
+			
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);
@@ -49,6 +60,8 @@ public class DriveableType extends TypeType
 		}
 		return null;
 	}
+	
+	public CollisionBox[] boxes;
 		
 	public String texture;
 			

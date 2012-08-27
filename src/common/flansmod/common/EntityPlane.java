@@ -51,6 +51,7 @@ public class EntityPlane extends EntityDriveable
 			FlansMod.log("Failed to retrieve plane data ID from plane data. " + data.mapName);
 		}
 		type = type1;
+		System.out.println("Loaded plane entity with data: " + type.texture + " " + type.shortName + " " + type.health);
 		initType();
 	}
 	

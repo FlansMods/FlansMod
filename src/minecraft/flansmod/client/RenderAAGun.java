@@ -7,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 
 import flansmod.common.EntityAAGun;
 
-
 public class RenderAAGun extends Render
 {
     public RenderAAGun()
@@ -15,8 +14,7 @@ public class RenderAAGun extends Render
         shadowSize = 0.5F;
     }
 
-    public void renderAA(EntityAAGun aa, double d, double d1, double d2, 
-            float f, float f1)
+    public void render(EntityAAGun aa, double d, double d1, double d2, float f, float f1)
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -29,9 +27,8 @@ public class RenderAAGun extends Render
         GL11.glPopMatrix();
     }
 
-    public void doRender(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
-        renderAA((EntityAAGun)entity, d, d1, d2, f, f1);
+        render((EntityAAGun)entity, d, d1, d2, f, f1);
     }
 }

@@ -17,6 +17,14 @@ BombDelay 100
 CargoSlots 0
 BombSlots 3
 Health 1800
+CollisionBoxes 7
+AddCollisionBox 0 0 0 -32 3
+AddCollisionBox 1 0 0 -80 3
+AddCollisionBox 2 40 0 10 2
+AddCollisionBox 3 70 0 10 2
+AddCollisionBox 4 -40 0 10 1
+AddCollisionBox 5 -70 0 10 1
+AddCollisionBox 6 0 0 0 0
 //Whether or not guns can be placed in these slots
 AllowWingGuns False
 AllowNoseGuns True

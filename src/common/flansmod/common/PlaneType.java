@@ -50,7 +50,16 @@ public class PlaneType extends DriveableType
 		{
 			if(split[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadPlaneModel(split, shortName);
+				String s = "flansmod.client.Model";
+				try 
+				{	
+					model = (ModelPlane)Class.forName(s + split[1]).getConstructor().newInstance();
+				}
+				catch(Exception e)
+				{
+					FlansMod.log("Failed to load plane model : " + shortName);
+					e.printStackTrace();
+				}
 			}
 			
 			//Movement modifiers
@@ -118,15 +127,6 @@ public class PlaneType extends DriveableType
 					seatsZ = new int[numPassengers];
 					gunner = new int[numPassengers];
 				}
-			}
-			if(split[0].equals("CollisionBoxes"))
-			{
-				boxes = new CollisionBox[Integer.parseInt(split[1])];
-			}
-			if(split[0].equals("AddCollisionBox"))
-			{
-				int id = Integer.parseInt(split[1]);
-				boxes[id] = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
 			}
 			if(split[0].equals("Passenger"))
 			{
@@ -259,9 +259,7 @@ public class PlaneType extends DriveableType
 		return null;
 	}
 		
-	public Object model;
-	
-	public CollisionBox[] boxes;
+	public ModelPlane model;
 	
 	public float maxPropSpeed = 1F;
 	public float takeOffSpeed = 1F;
