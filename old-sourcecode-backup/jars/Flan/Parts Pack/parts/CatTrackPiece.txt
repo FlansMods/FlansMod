@@ -1,0 +1,14 @@
+Name Caterpillar Track Piece
+ShortName catTrackPiece
+Icon TrackPiece
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23460
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Misc
+StackSize 64
+RecipeOutput 4
+Recipe I iron
+ I 
+III
+I I

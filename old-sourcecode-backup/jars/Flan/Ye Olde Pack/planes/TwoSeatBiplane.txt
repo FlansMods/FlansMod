@@ -1,0 +1,58 @@
+Name Two Seat Biplane
+ShortName TwoSeatBiplane
+ItemID 23321
+Icon TwoSeaterBiplane
+Model TwoSeatBiplane
+Texture TwoSeaterBiplane
+MaxPropellerSpeed 1.0
+TakeOffSpeed 1.5
+//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
+PropSetup 0
+//Propeller number, x, y, z. Numbering starts at 0.
+PropellerPos 0 0 0 14
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 999
+BombDelay 999
+CargoSlots 16
+BombSlots 0
+Health 450
+CollisionBoxes 3
+AddCollisionBox 0 0 0 -32 3
+AddCollisionBox 1 40 0 0 2
+AddCollisionBox 2 -40 0 0 1
+//Whether or not guns can be placed in these slots
+AllowWingGuns False
+AllowNoseGuns False
+//Next 3 are for large planes only
+AllowSideGuns False
+AllowTailGuns False
+AllowDorsalGun False
+TurnLeftSpeed 1
+TurnRightSpeed 1
+RollLeftSpeed 1
+RollRightSpeed 1
+LookUpSpeed 1
+LookDownSpeed 1
+Acceleration 0.75
+Decceleration 0.75
+FuelTankSize 1500
+MaxHeight 256
+StartSound propStart
+StartSoundLength 20
+PropSound propSound
+PropSoundLength 30
+ShootSound PlaneShoot
+BombSound bomb
+Pilot 0 0 0
+Passengers 1
+//Passenger <id> <x> <y> <z> <gun>
+//The gun id is 0 : No gun, 1 : Left Bay, 2 : Right Bay, 3 : Tail, 4 : Dorsal
+Passenger 0 0 -8 -24 0
+//Recipe
+Propeller woodenPropeller
+Cockpit woodenCockpit
+Wings biplaneWing
+Bay woodenCockpit
+Tail woodenTail
+//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
+Dyes None

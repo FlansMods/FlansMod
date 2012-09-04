@@ -1,0 +1,51 @@
+Name Kubelwagen
+ShortName Kubel
+ItemID 23487
+Icon Kubelwagen
+Model Kubel
+Texture kubelwagen
+MaxSpeed 2.0
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 999
+ShellDelay 999
+CargoSlots 32
+//Actually shell slots
+BombSlots 0
+Health 300
+CollisionBoxes 0
+//Whether or not guns can be placed in these slots
+//Body is for the driver, turret is for a designated gunner
+AllowBodyGuns False
+AllowTurretGuns False
+TurnLeftSpeed 1
+TurnRightSpeed 1
+Acceleration 1
+Decceleration 1
+FuelTankSize 1000
+StartSound Engine
+StartSoundLength 20
+EngineSound Engine
+EngineSoundLength 20
+ShootSound bullet
+ShellSound shell
+Driver -8 2 0
+Passengers 2
+Passenger 0 8 -6 0 0
+Passenger 1 0 6 16 1
+GunYawMin -45
+GunYawMax 45
+GunPitchMin -45
+GunPitchMax 45
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -14 2 -22
+WheelPosition 1 -14 2 22
+WheelPosition 2 14 2 22
+WheelPosition 3 14 2 -22
+//Recipe
+FrontWheels wheel
+BackWheels wheel
+Tracks None
+Chassis smallChassis
+Turret None
+//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
+Dyes Black

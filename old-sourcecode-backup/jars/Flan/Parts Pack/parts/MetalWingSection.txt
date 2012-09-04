@@ -1,0 +1,14 @@
+Name Metal Wing Section
+ShortName metalWingSection
+Icon MetalWingSection
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23289
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Wing
+StackSize 8
+RecipeOutput 1
+Recipe I iron B fenceIron
+III
+BBB
+III

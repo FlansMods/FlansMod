@@ -11,4 +11,14 @@ If possible, a proxy class ModelRendererTurbo extends ModelRendererNitro (or wha
 
 INSTALLATION
 
-Drop new source code into fresh MCP, everything is included.
+Install MCP and Forge.
+Decompile PlayerAPI in a seperate MCP folder without Forge and merge the source into the working Forge MCP folder
+Simply pull the repo to your root MCP directory (a few example content packs are included in the repo) and begin work
+
+*To get TurboModelThingy working with MC 1.3.2, simply change all instances of 'Vec3D' to 'Vec3.'*
+
+DEPENDENCIES
+MCP
+Forge
+PlayerAPI (for now)
+(TurboModelThingy included)

@@ -1,0 +1,14 @@
+Name Caterpillar Track
+ShortName catTrack
+Icon CatTrack
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23461
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Wheel
+StackSize 8
+RecipeOutput 1
+Recipe W wheel P catTrackPiece
+PPP
+PWP
+PPP

@@ -1,0 +1,66 @@
+Name Spitfire
+ShortName Spitfire
+ItemID 23320
+Icon Spitfire
+Model Spitfire
+Texture Spitfire
+MaxPropellerSpeed 4.0
+TakeOffSpeed 3.0
+CameraDistance 10.0
+//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
+PropSetup 0
+//Propeller number, x, y, z. Numbering starts at 0.
+PropellerPos 0 0 0 54
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 5
+BombDelay 100
+CargoSlots 0
+BombSlots 4
+Health 1600
+CollisionBoxes 7
+AddCollisionBox 0 0 0 -32 3
+AddCollisionBox 1 0 0 -80 3
+AddCollisionBox 2 40 0 10 2
+AddCollisionBox 3 70 0 10 2
+AddCollisionBox 4 -40 0 10 1
+AddCollisionBox 5 -70 0 10 1
+AddCollisionBox 6 0 0 40 0
+//Whether or not guns can be placed in these slots
+AllowWingGuns True
+AllowNoseGuns False
+//Next 3 are for large planes only
+AllowSideGuns False
+AllowTailGuns False
+AllowDorsalGun False
+//Add positions for the pilot controlled guns. That is, nose and wing guns.
+//AddGunPosition <type> <x> <y> <Z> where type is one of the corresponding numbers
+//0 : Left Nose, 1 : Right Nose, 2 : Left Wing, 3 : Right Wing
+AddGunPosition 2 -44 3 44
+AddGunPosition 3 44 3 44
+BombPosition 0 16 0
+TurnLeftSpeed 2
+TurnRightSpeed 2
+RollLeftSpeed 2
+RollRightSpeed 2
+LookUpSpeed 2
+LookDownSpeed 2
+Acceleration 3
+Decceleration 3
+FuelTankSize 5000
+MaxHeight 256
+StartSound propStart
+StartSoundLength 20
+PropSound propSound
+PropSoundLength 30
+ShootSound PlaneShoot
+BombSound bomb
+Pilot 0 0 0
+Passengers 0
+//Recipe
+Propeller metalPropeller
+Cockpit metalCockpit
+Wings metalWingSmall
+Bay bombBay
+Tail metalTail
+//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
+Dyes Green

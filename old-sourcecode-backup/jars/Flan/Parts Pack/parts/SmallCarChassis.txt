@@ -1,0 +1,14 @@
+Name Small Car Chassis
+ShortName smallChassis
+Icon SmallCarChassis
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23456
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Chassis
+StackSize 4
+RecipeOutput 1
+Recipe I iron G glass L leather
+  G
+ILI
+III

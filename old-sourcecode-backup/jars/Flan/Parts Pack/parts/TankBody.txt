@@ -1,0 +1,14 @@
+Name Tank Body
+ShortName tankBody
+Icon TankBody
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23459
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Chassis
+StackSize 4
+RecipeOutput 1
+Recipe I iron D trapdoor R redstone
+IDI
+IRI
+III

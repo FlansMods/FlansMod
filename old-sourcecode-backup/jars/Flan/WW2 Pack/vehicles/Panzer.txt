@@ -1,0 +1,64 @@
+Name Panzer IV
+ShortName Panzer
+ItemID 23490
+Icon Panzer
+Model Panzer
+Texture Panzer
+MaxSpeed 1.0
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 5
+ShellDelay 110
+CargoSlots 0
+//Actually shell slots
+BombSlots 5
+Health 1000
+CollisionBoxes 5
+AddCollisionBox 0 -16 8 -30 0
+AddCollisionBox 1 16 8 -30 0
+AddCollisionBox 2 16 8 30 0
+AddCollisionBox 3 -16 8 30 0
+AddCollisionBox 4 0 32 0 4
+//Whether or not guns can be placed in these slots
+//Body is for the driver, turret is for a designated gunner
+AllowBodyGuns True
+AllowTurretGuns False
+TurnLeftSpeed 1
+TurnRightSpeed 1
+Acceleration 1
+Decceleration 1
+FuelTankSize 2000
+StartSound Engine
+StartSoundLength 20
+EngineSound Engine
+EngineSoundLength 20
+ShootSound bullet
+ShellSound TankShell
+HasTurret True
+SquashMobs True
+Tank True
+Driver 0 20 0
+Passengers 0
+//For the passenger's gun
+GunYawMin -180
+GunYawMax 180
+GunPitchMin -45
+GunPitchMax 45
+//For the tank turret
+TurretYawMin -180
+TurretYawMax 180
+TurretPitchMin 0
+TurretPitchMax 45
+GunPosition 0 40 0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -14 2 -22
+WheelPosition 1 -14 2 22
+WheelPosition 2 14 2 22
+WheelPosition 3 14 2 -22
+//Recipe
+FrontWheels None
+BackWheels None
+Tracks catTrack
+Chassis tankBody
+Turret tankTurret
+//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
+Dyes Grey
