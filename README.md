@@ -20,9 +20,11 @@ If possible, we would need to adjust some of the vehicle / plane controls to mak
 We are using a fixed NitroModelThingy. it is complied to work with Flan very well. [our fix.]
 
 # CURRENT GOALS #
-*Set up a packet system for server and client.\n
-*Set up a special plane/gun/vehicle spawning system.\n
-*Remove PlayerAPI dependencies by using the hooks Forge v4.0.0 adds.\n
+*Set up a packet system for server and client.
+
+*Set up a special plane/gun/vehicle spawning system.
+
+*Remove PlayerAPI dependencies by using the hooks Forge v4.0.0 adds.
 
 # INSTALLATION #
 
