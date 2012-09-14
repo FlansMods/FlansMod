@@ -343,20 +343,15 @@ public class EntityBullet extends Entity
 	{
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
-		if (owner instanceof EntityPlayerMP)
+		if (owner instanceof EntityPlayer)
 		{
-			EntityMG mg = getBase((EntityPlayerMP) owner).mountingGun;
+			EntityMG mg = FlansModPlayerHandler.getPlayerData((EntityPlayer)owner).mountingGun;
 			if (mg != null && mg == entity)
 			{
 				return true;
 			}
 		}
 		return false;
-	}
-
-	private PlayerBaseFlan getBase(EntityPlayerMP player)
-	{
-		return ((PlayerBaseFlan) (FlansMod.hapi.getPlayerBase("Flan")));
 	}
 
 	public void setDead()

@@ -192,14 +192,14 @@ public class EntityMG extends Entity
 		{
 			if (gunner == entityplayer)
 			{
-				getBase(gunner).mountingGun = null;
+				FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 				gunner = null;
 				return true;
 			}
-			if (getBase(entityplayer).mountingGun != null)
+			if (FlansModPlayerHandler.getPlayerData(entityplayer).mountingGun != null)
 				return true;
 			gunner = entityplayer;
-			getBase(gunner).mountingGun = this;
+			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = this;
 			if (ammo == null)
 			{
 				int slot = findAmmo(entityplayer);
@@ -214,12 +214,7 @@ public class EntityMG extends Entity
 		}
 		return true;
 	}
-
-	private PlayerBaseFlan getBase(EntityPlayer player)
-	{
-		return ((PlayerBaseFlan) (FlansMod.hapi.getPlayerBase("Flan")));
-	}
-
+	
 	public int findAmmo(EntityPlayer player)
 	{
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++)
@@ -242,7 +237,7 @@ public class EntityMG extends Entity
 		if (ammo != null)
 			entityDropItem(ammo, 0.5F);
 		if (gunner != null)
-			getBase(gunner).mountingGun = null;
+			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 	}
 
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)

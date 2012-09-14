@@ -78,7 +78,7 @@ public class FlansMod implements ITickHandler
 	public static boolean originalHideGUI = false;
 	public static String errorString = "";
 	public static int errorStringTimer = 0;
-	public static HexAPI hapi;
+	public static FlansModPlayerHandler playerHandler;
 	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
@@ -88,7 +88,7 @@ public class FlansMod implements ITickHandler
 	{
 		log("Loading Flan's mod.");
 		TickRegistry.registerTickHandler(this, Side.SERVER);
-		HexAPI.register("Flan", PlayerBaseFlan.class);
+		playerHandler = new FlansModPlayerHandler();
 		File flanDir = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/");
 		if (!flanDir.exists())
 		{
