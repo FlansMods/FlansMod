@@ -9,8 +9,9 @@ import net.minecraft.src.TextureFX;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLTextureFX;
 
-public class CustomModTextureStatic extends TextureFX
+public class CustomModTextureStatic extends FMLTextureFX
 {
 	private boolean oldanaglyph;
 	private int pixels[];

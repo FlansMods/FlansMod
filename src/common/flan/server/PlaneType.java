@@ -50,16 +50,7 @@ public class PlaneType extends DriveableType
 		{
 			if(split[0].equals("Model"))
 			{
-				String s = "flansmod.client.Model";
-				try 
-				{	
-					model = (ModelPlane)Class.forName(s + split[1]).getConstructor().newInstance();
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to load plane model : " + shortName);
-					e.printStackTrace();
-				}
+				FlansMod.proxy.loadPlaneModel(split, shortName);
 			}
 			
 			//Movement modifiers

@@ -6,6 +6,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
 import flan.client.GuiPlaneMenu;
 import flan.client.ModelVehicle;
 import net.minecraft.client.Minecraft;
@@ -26,7 +31,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class EntityVehicle extends EntityDriveable
+public class EntityVehicle extends EntityDriveable implements IEntityAdditionalSpawnData
 {
     public EntityVehicle(World world)
     {
@@ -762,6 +767,28 @@ public class EntityVehicle extends EntityDriveable
 		if(seat > 0 && type.numPassengers >= seat && seats[seat - 1].riddenByEntity == null)
 			return true;
 		return false;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		// TODO Auto-generated method stub
+		data.writeUTF(type.shortName);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		// TODO Auto-generated method stub
+		try
+		{
+			type = VehicleType.getVehicle(data.readUTF());
+			initType();
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to retreive vehicle type from server.");
+			super.setDead();
+			e.printStackTrace();
+		}
 	}
 		
 	public VehicleType type;

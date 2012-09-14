@@ -3,7 +3,11 @@ package flan.server;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Block;
@@ -23,7 +27,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class EntityBullet extends Entity
+public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 {
 	public Entity owner;
 	private int ticksInAir;
@@ -414,5 +418,26 @@ public class EntityBullet extends Entity
 	public float getShadowSize()
 	{
 		return type.hitBoxSize;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		// TODO Auto-generated method stub
+		data.writeUTF(type.shortName);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		// TODO Auto-generated method stub
+		try
+		{
+			type = BulletType.getBullet(data.readUTF());
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to retreive vehicle type from server.");
+			super.setDead();
+			e.printStackTrace();
+		}
 	}
 }

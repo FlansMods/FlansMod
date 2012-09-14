@@ -1,7 +1,15 @@
 package flan.server;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Random;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.DamageSource;
@@ -15,7 +23,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class EntityAAGun extends Entity
+public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
 	private int field_9394_d;
 	private double field_9393_e;
@@ -356,5 +364,27 @@ public class EntityAAGun extends Entity
 			}
 		}
 		return -1;
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		// TODO Auto-generated method stub
+		data.writeUTF(type.shortName);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		// TODO Auto-generated method stub
+		try
+		{
+			type = AAGunType.getAAGun(data.readUTF());
+			initType();
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to retreive AA gun type from server.");
+			super.setDead();
+			e.printStackTrace();
+		}
 	}
 }

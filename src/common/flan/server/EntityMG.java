@@ -17,7 +17,12 @@ import net.minecraft.src.World;
 
 import org.lwjgl.input.Mouse;
 
-public class EntityMG extends Entity
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 {
 	public EntityMG(World world)
 	{
@@ -271,6 +276,27 @@ public class EntityMG extends Entity
 
 	protected void entityInit()
 	{
+	}
+	
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) {
+		// TODO Auto-generated method stub
+		data.writeUTF(type.shortName);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) {
+		// TODO Auto-generated method stub
+		try
+		{
+			type = GunType.getGun(data.readUTF());
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to retreive gun type from server.");
+			super.setDead();
+			e.printStackTrace();
+		}
 	}
 
 	public int blockX, blockY, blockZ;

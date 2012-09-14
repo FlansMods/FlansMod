@@ -93,6 +93,9 @@ public class ClientProxy extends CommonProxy
 	public void spawnVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
 	{
 		ModelVehicle vehicleModel = (ModelVehicle)type.model;
+		/*
+		 * Someone seems to have gotten a little confused here. This is the shooting code.
+		 * 
 		if(vehicleModel.gunModel.length > 0 && data.guns[1] != null && data.ammo[1] != null && data.ammo[1].getItem() instanceof ItemBullet && data.guns[1].isAmmo(((ItemBullet)data.ammo[1].getItem()).type))
 		{				
 			double cosYaw = Math.cos((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
@@ -120,6 +123,7 @@ public class ClientProxy extends CommonProxy
 			}
 			seat.gunDelay = type.vehicleShootDelay;
 		}
+		*/
 	}
 	
 	public ModelVehicle loadVehicleModel(String[] split, String shortName)
@@ -128,6 +132,22 @@ public class ClientProxy extends CommonProxy
 		try 
 		{	
 			ModelVehicle model = (ModelVehicle)Class.forName(s + split[1]).getConstructor().newInstance();
+			return model;
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to load vehicle model : " + shortName);
+			e.printStackTrace();
+			return null;
+		}
+	}	
+	
+	public ModelPlane loadPlaneModel(String[] split, String shortName)
+	{
+		String s = "flansmod.client.Model";
+		try 
+		{	
+			ModelPlane model = (ModelPlane)Class.forName(s + split[1]).getConstructor().newInstance();
 			return model;
 		}
 		catch(Exception e)

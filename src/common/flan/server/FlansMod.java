@@ -87,6 +87,14 @@ public class FlansMod implements ITickHandler
 	public void load(FMLInitializationEvent event)
 	{
 		log("Loading Flan's mod.");
+		try
+		{
+			Class.forName("World");
+		}
+		catch(Exception e)
+		{
+			inMCP = true;
+		}
 		TickRegistry.registerTickHandler(this, Side.SERVER);
 		playerHandler = new FlansModPlayerHandler();
 		File flanDir = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/");
