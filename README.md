@@ -1,23 +1,28 @@
 # FLANS MOD for MC 1.3.2 #
 
-This is the official port of Flan's Mod to 1.3.2
+Official port of FlansMod to 1.3.2.
 
 # INFORMATION TO HELPERS #
 
 Forge is being used, so it should be easy.
 
-Half script is done w00t ;).
+*Guns and boxes are being worked on by Daniel.
+*Planes are being worked on by Aidan.
+*Vehicles are being worked on by Abrar.
+*Flan himself is working on special spawners for planes, guns, and vehicles. This should fix the bugs we have run
+into when placing the entities.
+
+We are in need of a coder who can help out with packets -- wherever we need them.  Because FlansMod for 1.2.5 was strictly
+client-only, it's going to take some work to get planes, vehicles, guns, and boxes working on both client and server.
 
 If possible, we would need to adjust some of the vehicle / plane controls to make sure everything works properly with them.
 
-HexAPI is PlayerAPI. just ours works with Forge :) [Re-name is temporary !]
-
-'flan.server' is 'flan.common' it was a rename becuase LAN is a server [lol ...]
-
 We are using a fixed NitroModelThingy. it is complied to work with Flan very well. [our fix.]
 
-We still need to add Vehicle, Gun Station and Planes handler. that will make the spawn and work properly.
-
+# CURRENT GOALS #
+*Set up a packet system for server and client.
+*Set up a special plane/gun/vehicle spawning system.
+*Remove PlayerAPI dependencies by using the hooks Forge v4.0.0 adds.
 
 # INSTALLATION #
 
