@@ -24,6 +24,8 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.NULL;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -34,7 +36,14 @@ import net.minecraft.src.*;
 import net.minecraftforge.*;
 
 @Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.0")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
+@NetworkMod(
+		clientSideRequired = true,
+		serverSideRequired = true,
+		channels = {"flansmods"},
+	    versionBounds = "[2.0)",
+	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.PacketHandlerClient.class ),
+	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.PacketHandlerServer.class )
+		)
 public class FlansMod
 {
 	@SidedProxy(clientSide = "co.uk.flansmods.client.ClientProxy", serverSide = "co.uk.flansmods.common.CommonProxy")
