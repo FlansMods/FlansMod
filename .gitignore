@@ -20,8 +20,8 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 
-!/src/common/flan/
-!/src/minecraft/flan/
+!/src/common/co/
+!/src/minecraft/co/
 !/jars/Flan/
 !/bin/minecraft/gui/
 !/bin/minecraft/spritesheets/
