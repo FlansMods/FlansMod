@@ -1,7 +1,10 @@
 package net.minecraft.src;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.client.Minecraft;
 
+@SideOnly(Side.CLIENT)
 public class EntityPlayerSP extends EntityPlayer
 {
     public MovementInput movementInput;
