@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import co.uk.flansmods.common.network.FlanPacketServer;
+import co.uk.flansmods.common.network.PacketBreakSound;
+
 import cpw.mods.fml.common.ITickHandler;
 
 import net.minecraft.src.*;
@@ -42,6 +45,11 @@ public class CommonProxy
 	public void loadContentPackGraphics(Method method, ClassLoader classloader)
 	{
 		FlansMod.log("Not client. ContentPack graphic loading skipped.");
+	}
+	
+	public void playBlockBreakSound(int x, int y, int z, int blockID)
+	{
+		FlanPacketServer.sendPacket(PacketBreakSound.buildBreakSoundPacket(x, y, z, blockID));
 	}
 	
 	public ITickHandler getTickHandler()

@@ -40,9 +40,9 @@ import net.minecraftforge.*;
 		clientSideRequired = true,
 		serverSideRequired = true,
 		channels = {"flansmods"},
-	    versionBounds = "[2.0)",
-	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.PacketHandlerClient.class ),
-	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.PacketHandlerServer.class )
+		versionBounds = "[2.0)",
+		clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
+		serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketServer.class )
 		)
 public class FlansMod
 {

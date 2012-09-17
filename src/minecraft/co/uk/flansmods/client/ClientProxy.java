@@ -31,6 +31,7 @@ import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.TickRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -213,6 +214,13 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 		FlansMod.log("Loaded gun box textures.");
+	}
+	
+	public void playBlockBreakSound(int x, int y, int z, int blockID)
+	{
+		Block block = Block.blocksList[blockID];
+    	FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int)x, (int)y, (int)z, 1);
+    	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 	}
 
 	@Override
