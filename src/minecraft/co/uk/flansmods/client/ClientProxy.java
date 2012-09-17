@@ -24,8 +24,12 @@ import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.teams.ArmourType;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLTextureFX;
+import cpw.mods.fml.client.SpriteHelper;
+import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Side;
@@ -44,6 +48,22 @@ import net.minecraftforge.client.MinecraftForgeClient;
 public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "co.uk.flansmods.client.Model";
+	public static final String emptyLines = 
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111";
 
 	@Override
 	public void load()
@@ -97,6 +117,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
 		
 		MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
+		
+		MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
 	}
 
 	@Override
@@ -104,15 +126,22 @@ public class ClientProxy extends CommonProxy
 	{
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
 		
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/bullets.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/planes.png", "0000111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/vehicles.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/guns.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/gunBoxes.png", "0011111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/parts.png", "0011111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/armour.png", "0000001111111111" + emptyLines);
+		
 		// Bullets / Bombs
 		for (BulletType type : BulletType.bullets)
 		{
 			try
 			{
-				java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.iconPath);
-				CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/bullets.png", type.iconIndex, bufferedimage);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic);
-			} catch (Exception e)
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/bullets.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override bullet icon");
 				e.printStackTrace();
@@ -125,10 +154,9 @@ public class ClientProxy extends CommonProxy
 		{
 			try
 			{
-				java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.iconPath);
-				CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/guns.png", type.iconIndex, bufferedimage);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic);
-			} catch (Exception e)
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/guns.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override gun icon");
 				e.printStackTrace();
@@ -141,10 +169,9 @@ public class ClientProxy extends CommonProxy
 		{
 			try
 			{
-				java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.iconPath);
-				CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/parts.png", type.iconIndex, bufferedimage);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic);
-			} catch (Exception e)
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/parts.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override part icon");
 				e.printStackTrace();
@@ -157,10 +184,9 @@ public class ClientProxy extends CommonProxy
 		{
 			try
 			{
-				java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.iconPath);
-				CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/planes.png", type.iconIndex, bufferedimage);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic);
-			} catch (Exception e)
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/planes.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override plane icon");
 				e.printStackTrace();
@@ -173,10 +199,9 @@ public class ClientProxy extends CommonProxy
 		{
 			try
 			{
-				java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.iconPath);
-				CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/planes.png", type.iconIndex, bufferedimage);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic);
-			} catch (Exception e)
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/planes.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override AAGun icon");
 				e.printStackTrace();
@@ -191,28 +216,38 @@ public class ClientProxy extends CommonProxy
 			{
 				if (type.topTextureIndex != 0)
 				{
-					java.awt.image.BufferedImage bufferedimage = ModLoader.loadImage(minecraft.renderEngine, type.topTexturePath);
-					CustomModTextureStatic modtexturestatic = new CustomModTextureStatic("/spriteSheets/gunBoxes.png", type.topTextureIndex, bufferedimage);
-					minecraft.renderEngine.registerTextureFX(modtexturestatic);
+					TextureFXManager.instance().addNewTextureOverride("/spriteSheets/gunBoxes.png", type.topTexturePath, type.topTextureIndex);
 				}
-
-				java.awt.image.BufferedImage bufferedimage1 = ModLoader.loadImage(minecraft.renderEngine, type.sideTexturePath);
-				CustomModTextureStatic modtexturestatic1 = new CustomModTextureStatic("/spriteSheets/gunBoxes.png", type.sideTextureIndex, bufferedimage1);
-				minecraft.renderEngine.registerTextureFX(modtexturestatic1);
+				
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/gunBoxes.png", type.sideTexturePath, type.sideTextureIndex);
 
 				if (type.bottomTextureIndex != 1)
 				{
-					java.awt.image.BufferedImage bufferedimage2 = ModLoader.loadImage(minecraft.renderEngine, type.bottomTexturePath);
-					CustomModTextureStatic modtexturestatic2 = new CustomModTextureStatic("/spriteSheets/gunBoxes.png", type.bottomTextureIndex, bufferedimage2);
-					minecraft.renderEngine.registerTextureFX(modtexturestatic2);
+					TextureFXManager.instance().addNewTextureOverride("/spriteSheets/gunBoxes.png", type.bottomTexturePath, type.bottomTextureIndex);
 				}
-			} catch (Exception e)
+			} 
+			catch (Exception e)
 			{
 				FlansMod.log("Failed to override gun box texture");
 				e.printStackTrace();
 			}
 		}
 		FlansMod.log("Loaded gun box textures.");
+		
+		// Armour
+		for(ArmourType type : ArmourType.armours)
+		{
+			try
+			{				
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/armour.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
+			{
+				FlansMod.log("Failed to override armour icon");
+				e.printStackTrace();
+			}
+		}
+		FlansMod.log("Loaded armour icons.");
 	}
 
 	@Override
@@ -344,7 +379,7 @@ public class ClientProxy extends CommonProxy
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load vehicle model : " + shortName);
+			FlansMod.log("Failed to load plane model : " + shortName);
 			e.printStackTrace();
 			return null;
 		}
