@@ -53,9 +53,14 @@ public class EntityPassengerSeat extends Entity
 		super.onUpdate();
 		if(plane == null || plane.isDead)
 			setDead();
-		else updatePosition();	
+		else
+			updatePosition();
+		
+		/*
 		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
 			riddenByEntity.mountEntity(this);
+			*/
+		
 		if(gunDelay > 0)
 			gunDelay--;
 		if(soundDelay > 0)
@@ -83,7 +88,8 @@ public class EntityPassengerSeat extends Entity
 					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
-			if(riddenByEntity != null && riddenByEntity == plane.mc.thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
+			// TODO FIX THIS EVENTUALLY
+			if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
 			{
 				//Check for plane.data.ammo / reloading
 				if(plane.superData.ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)

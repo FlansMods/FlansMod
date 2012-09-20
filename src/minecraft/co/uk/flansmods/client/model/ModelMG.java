@@ -1,4 +1,4 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.common.EntityMG;
 import net.minecraft.src.ModelBase;

@@ -31,6 +31,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -88,6 +89,8 @@ public class FlansModClient extends FlansMod
 
 	public static void tick()
 	{
+		if (minecraft.thePlayer == null)
+			return;
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
@@ -126,7 +129,7 @@ public class FlansModClient extends FlansMod
 		{
 			try
 			{
-				ModLoader.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, field, playerZoom);
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "V");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -164,33 +167,16 @@ public class FlansModClient extends FlansMod
 	{
 		// TODO : SMP gun boxes
 	}
+	
+	private void doPropertyStuff(File file)
+	{
+		
+	}
 
 	private void readProperties(String[] split, BufferedReader file)
 	{
 		try
 		{
-			if (split[0].equals("Accelerate"))
-				accelerateKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Decelerate"))
-				decelerateKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Left"))
-				leftKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Right"))
-				rightKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Up"))
-				upKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Down"))
-				downKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Exit"))
-				exitKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Inventory"))
-				inventoryKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Bomb"))
-				bombKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("Shoot"))
-				gunKey = Keyboard.getKeyIndex(split[1]);
-			if (split[0].equals("ControlSwitch"))
-				controlSwitchKey = Keyboard.getKeyIndex(split[1]);
 			if (split[0].equals("Explosions"))
 				explosions = split[1].equals("True");
 			if (split[0].equals("Bombs"))
@@ -208,7 +194,7 @@ public class FlansModClient extends FlansMod
 		try
 		{
 			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt"));
-			propsOut.write(("Accelerate W\r\nDecelerate S\r\nLeft A\r\nRight D\r\nUp SPACE\r\nDown LSHIFT\r\nExit E\r\nInventory R\r\nBomb V\r\nGun LCONTROL\r\nControlSwitch C\r\nExplosions True\r\nBombs True\r\nBullets True").getBytes());
+			propsOut.write(("Explosions True\r\nBombs True\r\nBullets True").getBytes());
 			propsOut.close();
 		} catch (Exception e)
 		{

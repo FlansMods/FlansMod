@@ -65,7 +65,8 @@ public class GuiPlaneController extends GuiScreen
 			plane.flapsPitchRight -= 1F * l;
 		}
     }
-		
+	
+	@Override
     public void handleInput()
     {
 		if(FlansModClient.controlMode != 1)
@@ -89,6 +90,7 @@ public class GuiPlaneController extends GuiScreen
 		}
         for(; Mouse.next(); handleMouseInput()) { }
         for(; Keyboard.next(); handleKeyboardInput()) { }
+        /*
 		if(plane != null && !plane.isDead && plane.riddenByEntity != null && plane.riddenByEntity instanceof EntityPlayer && FlansModClient.controlMode == 1)
 		{
 			if(Keyboard.isKeyDown(FlansModClient.accelerateKey))
@@ -143,9 +145,29 @@ public class GuiPlaneController extends GuiScreen
             mc.thePlayer.closeScreen();
 			return;
 		}
+		*/
 	}
 	
-		
+    public void handleMouseInput()
+    {
+        int var1;
+        int var2;
+
+        if (Mouse.getEventButtonState())
+        {
+            var1 = Mouse.getEventX() * this.width / this.mc.displayWidth;
+            var2 = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+            this.mouseClicked(var1, var2, Mouse.getEventButton());
+        }
+        else
+        {
+            var1 = Mouse.getEventX() * this.width / this.mc.displayWidth;
+            var2 = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+            this.mouseMovedOrUp(var1, var2, Mouse.getEventButton());
+        }
+    }
+	
+	@Override
 	public void handleKeyboardInput()
 	{
 	    if(Keyboard.getEventKeyState())

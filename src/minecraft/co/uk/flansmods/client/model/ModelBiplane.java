@@ -1,11 +1,12 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.common.CollisionBox;
 import net.minecraft.src.NMTModelRenderer;
 
-public class ModelTwoSeatBiplane extends ModelPlane
+public class ModelBiplane extends ModelPlane
 {
-    public ModelTwoSeatBiplane()
+
+    public ModelBiplane()
     {
 		int textureX = 128; //The x-size of the texture
 		int textureY = 64;	//The y-size of the texture
@@ -24,21 +25,21 @@ public class ModelTwoSeatBiplane extends ModelPlane
 		yawFlapModel = new NMTModelRenderer[1]; //Only one part to the yaw flap
 		yawFlapModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
         yawFlapModel[0].addBox(0F, 0F , 0F, 10, 10, 2, 0.0F);	
-		//yawFlapModel[0].setPosition(44F, -12F, -1F);			
+		//yawFlapModel[0].setPosition(40F, -12F, -1F);			
 
 		pitchFlapLeftModel = new NMTModelRenderer[1]; //Only one part to the left pitch flap
 		pitchFlapLeftModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
 		pitchFlapLeftModel[0].addBox(0F, 0F , 0F, 10, 15, 2, 0.0F);
         pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
-		//pitchFlapLeftModel[0].setPosition(44F, 3F, -15F);
+		//pitchFlapLeftModel[0].setPosition(40F, 3F, -15F);
 		
 		pitchFlapRightModel = new NMTModelRenderer[1]; //Only one part to the right pitch flap
 		pitchFlapRightModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0F, 0F , 0F, 10, 15, 2, 0.0F);
         pitchFlapRightModel[0].rotateAngleX = 1.570796F;
-		//pitchFlapRightModel[0].setPosition(44F, 3F, 0F);
+		//pitchFlapRightModel[0].setPosition(40F, 3F, 0F);
 				
-        bodyModel = new NMTModelRenderer[13]; //Defining lots of texture origins for the body model
+        bodyModel = new NMTModelRenderer[8]; //Defining lots of texture origins for the body model
         bodyModel[0] = new NMTModelRenderer(this, 0, 8, textureX, textureY);
         bodyModel[1] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
         bodyModel[2] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
@@ -47,11 +48,6 @@ public class ModelTwoSeatBiplane extends ModelPlane
         bodyModel[5] = new NMTModelRenderer(this, 44, 0, textureX, textureY);
 		bodyModel[6] = new NMTModelRenderer(this, 0, 32, textureX, textureY);
 		bodyModel[7] = new NMTModelRenderer(this, 0, 32, textureX, textureY);
-		bodyModel[8] = new NMTModelRenderer(this, 0, 8, textureX, textureY);
-        bodyModel[9] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[10] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[11] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[12] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
 
         byte length = 24;
         byte sidePieceHeight = 6;
@@ -82,22 +78,6 @@ public class ModelTwoSeatBiplane extends ModelPlane
         bodyModel[1].rotateAngleY = 4.712389F;
         bodyModel[2].rotateAngleY = 1.570796F;
         bodyModel[3].rotateAngleY = 3.141593F;
-		
-		
-		bodyModel[8].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
-        //bodyModel[8].setPosition(length, 0 + boatDepth, 0.0F);
-        bodyModel[9].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        //bodyModel[9].setPosition(length - length / 2 + 1, 0 + boatDepth, 0.0F);
-        bodyModel[10].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        //bodyModel[10].setPosition(length + length / 2 - 1, 0 + boatDepth, 0.0F);
-        bodyModel[11].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        //bodyModel[11].setPosition(length, 0 + boatDepth, -width / 2 + 1);
-        bodyModel[12].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        //bodyModel[12].setPosition(length, 0 + boatDepth, width / 2 - 1);
-		bodyModel[8].rotateAngleX = 1.570796F;
-        bodyModel[9].rotateAngleY = 4.712389F;
-        bodyModel[10].rotateAngleY = 1.570796F;
-        bodyModel[11].rotateAngleY = 3.141593F;
 
 		rightWingModel = new NMTModelRenderer[2];	
 		rightWingModel[0] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
@@ -139,13 +119,13 @@ public class ModelTwoSeatBiplane extends ModelPlane
 		tailModel[0] = new NMTModelRenderer(this, 0, 43, textureX, textureY);
 		tailModel[1] = new NMTModelRenderer(this, 0, 32, textureX, textureY);
 		
-        tailModel[0].addBox(35F, -2F , -5F, 20, 8, 10, 0.0F);		//Tail
+        tailModel[0].addBox(11F, -2F , -5F, 40, 8, 10, 0.0F);		//Tail
 		tailModel[1].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
 		
 		//These two must still be initialized even when not used to avoid errors.
 		pitchFlapLeftWingModel = new NMTModelRenderer[0];
 		pitchFlapRightWingModel = new NMTModelRenderer[0];
 
-		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.	
+		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }
 }

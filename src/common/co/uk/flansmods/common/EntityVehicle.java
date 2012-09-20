@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import co.uk.flansmods.client.GuiPlaneMenu;
-import co.uk.flansmods.client.ModelVehicle;
+import co.uk.flansmods.client.model.ModelVehicle;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -81,8 +81,12 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
     {
 		//Simple method. Might add destructible wheels later...
+		
+		// TODO THIS ELSEWHERE
+		/*
 		if(box.part == 4)
 			pressKey(8);
+		*/
 		return attackEntityFrom(damagesource, i);
 	}
 	
@@ -158,8 +162,6 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	
 	public void pressKey(int key)
 	{
-		if(riddenByEntity == null || riddenByEntity != mc.thePlayer)
-			return;
 		switch(key)
 		{
 			case 0 : //Accelerate
@@ -229,6 +231,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			case 7 : //Inventory
 			{
+				// send packet for this.
 				ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
 				break;
 			}
@@ -303,7 +306,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		double actualMotionZ = motionZ;//posZ - prevPosZ;
         super.onUpdate();
 		
-		//Key Input
+		//Key Input  TOD: packets with controls
+        /*
 		if(Keyboard.isKeyDown(FlansMod.accelerateKey))
 			pressKey(0);
 		if(Keyboard.isKeyDown(FlansMod.decelerateKey))
@@ -326,6 +330,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			pressKey(9);
 		if(Keyboard.isKeyDown(FlansMod.controlSwitchKey))
 			pressKey(10);
+			*/
 		
 		//Vehicle movement		
 		if(riddenByEntity == null)
@@ -536,12 +541,15 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 					
 		//Sounds
+		// TODO: Do Sound Stuff
+		/*
 		if (acceleration > 0.2D && acceleration < 1 && soundPosition == 0)
 		{
 			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
 			{
 				try {
-					mc.sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
+					// SOUND PACKETS
+					//mc.sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
 				}
 				catch(Exception e)
 				{
@@ -557,7 +565,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
 			{
 				try {
-					mc.sndManager.playSoundFX(type.engineSound, 1.0F, 1.0F);
+					// TODO: sound packets
+					//mc.sndManager.playSoundFX(type.engineSound, 1.0F, 1.0F);
 				}
 				catch(Exception e)
 				{
@@ -567,6 +576,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			else worldObj.playSoundAtEntity(this, type.engineSound, 1.0F , 1.0F);
 			soundPosition = type.engineSoundLength;
 		}
+		*/
 		
 		if(soundPosition > 0)
 			soundPosition--;
@@ -687,7 +697,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				if(damage <= 20F && damage > 0F)
 				{
 					worldObj.setBlockWithNotify(i, j, k, 0);
-					mc.effectRenderer.addBlockHitEffects(i, j, k, 1);
+					// TODO: breakBlock effects.
+					//mc.effectRenderer.addBlockHitEffects(i, j, k, 1);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
 					velocityYaw += rand.nextFloat() * 1F - 0.5F;
 					velocityPitch += rand.nextFloat() * 1F - 0.5F;

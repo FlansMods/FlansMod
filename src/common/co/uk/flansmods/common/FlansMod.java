@@ -40,9 +40,9 @@ import net.minecraftforge.*;
 		clientSideRequired = true,
 		serverSideRequired = true,
 		channels = {"flansmods"},
-		versionBounds = "[2.0)",
-		clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
-		serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketServer.class )
+	    versionBounds = "[2.0,]",
+	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
+	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketServer.class )
 		)
 public class FlansMod
 {
@@ -72,17 +72,6 @@ public class FlansMod
 	// Player changeable stuff
 	// TODO: move keys to client side only
 	// TODO: create key handlers and register keys.
-	public static int accelerateKey = Keyboard.KEY_W;
-	public static int decelerateKey = Keyboard.KEY_S;
-	public static int leftKey = Keyboard.KEY_A;
-	public static int rightKey = Keyboard.KEY_D;
-	public static int upKey = Keyboard.KEY_SPACE;
-	public static int downKey = Keyboard.KEY_LSHIFT;
-	public static int exitKey = Keyboard.KEY_E;
-	public static int inventoryKey = Keyboard.KEY_R;
-	public static int bombKey = Keyboard.KEY_V;
-	public static int gunKey = Keyboard.KEY_LCONTROL;
-	public static int controlSwitchKey = Keyboard.KEY_C;
 	public static boolean explosions = true;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
@@ -179,8 +168,9 @@ public class FlansMod
 	{
 		log("Loading Flan's mod.");
 		
-		// TODO: do this in the proxy.
-		TickRegistry.registerTickHandler(proxy.getTickHandler(), event.getSide());
+		// Tick handlers
+		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
+		proxy.doTickStuff();
 		
 		// default stuff
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
