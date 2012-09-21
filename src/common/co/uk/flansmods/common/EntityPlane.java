@@ -6,7 +6,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
-import co.uk.flansmods.client.GuiPlaneController;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 
@@ -328,6 +327,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				}				
 				break;
 			}
+			/*
 			case 10 : //Change Controls TODO: CONTROLS
 			{
 				FlansMod.setControlMode(1);
@@ -335,6 +335,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneController(this));
 				break;
 			}
+			*/
 		}
 	}
 

@@ -8,6 +8,7 @@ import co.uk.flansmods.common.EntityDriveable;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.GameSettings;
 import net.minecraft.src.KeyBinding;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -17,9 +18,7 @@ import cpw.mods.fml.common.asm.SideOnly;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler extends KeyHandler
-{
-    protected static KeyBinding key_OneWayFace = new KeyBinding("Change OneWayBlock face", Keyboard.KEY_BACKSLASH);
-    
+{  
 	protected static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W);
 	protected static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S);
 	protected static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A);
@@ -31,6 +30,8 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
+	
+	GameSettings settings;
 
 	public KeyInputHandler()
 	{
@@ -62,6 +63,7 @@ public class KeyInputHandler extends KeyHandler
 				true, // gun
 				false // control switch
 						});
+		settings = FMLClientHandler.instance().getClient().gameSettings; 
 	}
 
 	@Override
@@ -73,6 +75,12 @@ public class KeyInputHandler extends KeyHandler
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb,	boolean tickEnd, boolean isRepeat)
 	{
+		for (KeyBinding key : settings.keyBindings )
+		{
+			if (kb.keyCode == key.keyCode)
+				key.pressed =  kb.pressed = true;
+		}
+		
 		int keyNum = 0;
 		
 		if(kb == accelerateKey)
@@ -111,8 +119,11 @@ public class KeyInputHandler extends KeyHandler
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 	{
-		// TODO Auto-generated method stub
-
+		for (KeyBinding key : settings.keyBindings )
+		{
+			if (kb.keyCode == key.keyCode)
+				key.pressed =  kb.pressed = false;
+		}
 	}
 
 	@Override
