@@ -25,6 +25,8 @@ import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
 import co.uk.flansmods.common.teams.ArmourType;
+import co.uk.flansmods.common.teams.EntityFlag;
+import co.uk.flansmods.common.teams.EntityFlagpole;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.FMLTextureFX;
@@ -119,6 +121,11 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
 		
 		MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
+
 	}
 
 	@Override
@@ -132,7 +139,7 @@ public class ClientProxy extends CommonProxy
 		SpriteHelper.registerSpriteMapForFile("/spriteSheets/guns.png", "1111111111111111" + emptyLines);
 		SpriteHelper.registerSpriteMapForFile("/spriteSheets/gunBoxes.png", "0011111111111111" + emptyLines);
 		SpriteHelper.registerSpriteMapForFile("/spriteSheets/parts.png", "0011111111111111" + emptyLines);
-		SpriteHelper.registerSpriteMapForFile("/spriteSheets/armour.png", "0000001111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/armour.png", "0000000000001111" + emptyLines);
 		
 		// Bullets / Bombs
 		for (BulletType type : BulletType.bullets)

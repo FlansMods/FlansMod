@@ -25,7 +25,7 @@ public class ItemPart extends Item
 		return "/spriteSheets/parts.png";
 	}
 
-	public int getColorFromDamage(int i)
+	public int getColorFromDamage(int i, int j)
 	{
 		return type.colour;
 	}

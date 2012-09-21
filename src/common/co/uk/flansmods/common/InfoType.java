@@ -56,9 +56,9 @@ public class InfoType
 			{
 				shortName = arg0[1];
 			}
-			if (arg0[0].equals("Colour"))
+			if (arg0[0].equals("Colour") || arg0[0].equals("Color"))
 			{
-				colour = (Integer.parseInt(arg0[1])) + ((Integer.parseInt(arg0[2])) << 8) + ((Integer.parseInt(arg0[3])) << 16);
+				colour = (Integer.parseInt(arg0[1]) << 16) + ((Integer.parseInt(arg0[2])) << 8) + ((Integer.parseInt(arg0[3])));
 			}
 			if (arg0[0].equals("ItemID"))
 			{

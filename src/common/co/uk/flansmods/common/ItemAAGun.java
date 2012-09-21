@@ -67,6 +67,11 @@ public class ItemAAGun extends Item
 		}
 		return itemstack;
 	}
+	
+	public int getColorFromDamage(int i, int j)
+	{
+		return type.colour;
+	}
 
 	public AAGunType type;
 }

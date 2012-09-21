@@ -95,5 +95,10 @@ public class ItemVehicle extends ItemMapBase
 		return vehicleData;
     }
 	
+	public int getColorFromDamage(int i, int j)
+	{
+		return type.colour;
+	}
+	
 	public VehicleType type;
 }

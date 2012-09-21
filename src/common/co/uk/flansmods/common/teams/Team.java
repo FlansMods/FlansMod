@@ -11,11 +11,21 @@ public class Team {
 	public static List<Team> teams = new ArrayList<Team>();
 	
 	public List<EntityPlayerMP> members = new ArrayList<EntityPlayerMP>();
+	
+	public List<ITeamBase> bases = new ArrayList<ITeamBase>();
 
 	public String shortName;
 	public String name;
 	public int teamColour = 0xffffff;
 	public char textColour = 'f';
+	
+	public Team(String s, String s1, int teamCol, char textCol)
+	{
+		shortName = s;
+		name = s1;
+		teamColour = teamCol;
+		textColour = textCol;
+	}
 	
 	public Team(BufferedReader file, String pack)
 	{
@@ -61,7 +71,7 @@ public class Team {
 			}
 			if (split[0].equals("TeamColour"))
 			{
-				teamColour = (Integer.parseInt(split[1])) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])) << 16);
+				teamColour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
 			}			
 			if (split[0].equals("TextColour"))
 			{
@@ -113,5 +123,17 @@ public class Team {
 				return team;
 		}
 		return null;
+	}
+	
+	//Called both by ops and the gametype
+	public void addBase(ITeamBase base)
+	{
+		bases.add(base);
+	}
+	
+	//Called both by ops and the gametype
+	public void removeBase(ITeamBase base)
+	{
+		bases.remove(base);
 	}
 }

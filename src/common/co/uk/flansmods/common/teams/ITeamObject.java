@@ -11,11 +11,24 @@ public interface ITeamObject {
 	public ITeamBase getBase();
 	
 	//Called when the owner of a base is set by an op
+	//The object should remember the base ID for saving / loading
 	public void onBaseSet(Team newOwners);
 	
 	//Called when a base is captured, but not when set by an op
+	//The object should remember the base ID for saving / loading
 	public void onBaseCapture(Team newOwners);
+	
+	//Called when an op connects this object to a new base
+	public void setBase(ITeamBase base);
 	
 	//Tick hook for this object. You may use hooks inherited from super classes or this hook interchangeably
 	public void tick();
+	
+	//Called when this object is clicked with a Stick of Destruction
+	public void destroy();
+	
+	//Returns the position of this object
+	public double getPosX();
+	public double getPosY();
+	public double getPosZ();
 }

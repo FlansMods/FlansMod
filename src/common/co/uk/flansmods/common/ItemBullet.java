@@ -23,9 +23,9 @@ public class ItemBullet extends Item
 		return "/spriteSheets/bullets.png";
 	}
 
-	public int getColorFromDamage(int i)
+	public int getColorFromDamage(int i, int j)
 	{
-		return colour;
+		return type.colour;
 	}
 
 	public int colour;

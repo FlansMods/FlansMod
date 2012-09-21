@@ -14,6 +14,10 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.CommandTeams;
+import co.uk.flansmods.common.teams.EntityFlag;
+import co.uk.flansmods.common.teams.EntityFlagpole;
+import co.uk.flansmods.common.teams.ItemFlagpole;
+import co.uk.flansmods.common.teams.ItemOpStick;
 import co.uk.flansmods.common.teams.ItemTeamArmour;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
@@ -100,6 +104,8 @@ public class FlansMod
 	public static boolean bulletsEnabled = true;
 
 	public static Block craftingTable;
+	public static Item opStick;
+	public static Item flag;
 	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
 										// controls
 	public static int controlModeSwitchTimer = 20;
@@ -214,6 +220,19 @@ public class FlansMod
 		// default aa guns stuff
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
+		
+		// Default teams stuff
+		opStick = new ItemOpStick(23540);
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 0), "Stick of Ownership");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 1), "Stick of Connecting");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 2), "Stick of Mapping");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 3), "Stick of Destruction");
+		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
+		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
+		flag = new ItemFlagpole(23541).setIconIndex(7).setItemName("flagpole");
+		LanguageRegistry.addName(flag, "Flag");
 		
 		proxy.loadDefaultGraphics();
 		

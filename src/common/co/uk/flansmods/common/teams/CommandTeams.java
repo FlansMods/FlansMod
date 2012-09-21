@@ -1,7 +1,11 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.FlansMod;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.CommandBase;
+import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.ICommandSender;
+import net.minecraft.src.ItemStack;
 
 public class CommandTeams extends CommandBase {
 	
@@ -49,15 +53,15 @@ public class CommandTeams extends CommandBase {
 			}
 			teamsManager.currentGametype = gametype;
 			gametype.initGametype();
-			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + " changed the gametype to " + gametype.name);
+			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the gametype to \u00a72" + gametype.name);
 			if(teamsManager.teams != null && gametype.numTeamsRequired == teamsManager.teams.length)
 			{
-				teamsManager.messageAll("\u00a72Teams will remain the same unless altered by an op.");
+				teamsManager.messageAll("\u00a7fTeams will remain the same unless altered by an op.");
 			}
 			else
 			{
 				teamsManager.teams = new Team[gametype.numTeamsRequired];
-				teamsManager.messageAll("\u00a72Teams must be reassigned for this gametype. Please wait for an op to do so.");
+				teamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
 			}
 		}
 		if(split[0].equals("listTeams"))
@@ -74,7 +78,7 @@ public class CommandTeams extends CommandBase {
 				if(team == null)
 					sender.sendChatToPlayer("\u00a7f" + i + " : No team");
 				else
-					sender.sendChatToPlayer("\u00a7f" + team.textColour + i + " : " + team.name + " (" + team.shortName + ")");
+					sender.sendChatToPlayer("\u00a7" + team.textColour + i + " : " + team.name + " (" + team.shortName + ")");
 			}
 		}
 		if(split[0].equals("listAllTeams"))
@@ -122,10 +126,31 @@ public class CommandTeams extends CommandBase {
 					}
 				}
 				teams[i] = team;
-				teamList += (i == 0 ? "" : (i == split.length - 2 ? " and " : ", ")) + team.name;
+				teamList += (i == 0 ? "" : (i == split.length - 2 ? " and " : ", ")) + "\u00a7" + team.textColour + team.name + "\u00a7f";
 			}
-			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + " changed the teams to be " + teamList);
+			teamsManager.teams = teams;
+			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
+		}
+		if(split[0].equals("getSticks") || split[0].equals("getOpSticks") || split[0].equals("getOpKit"))
+		{
+			EntityPlayerMP player = getPlayer(sender.getCommandSenderName());
+			if(player != null)
+			{
+				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 0));
+				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 1));
+				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
+				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 3));
+				sender.sendChatToPlayer("\u00a72Enjoy your op sticks.");
+				sender.sendChatToPlayer("\u00a77The Stick of Connecting connects objects (spawns, spawners, banners etc) to bases (flagpoles etc)");
+				sender.sendChatToPlayer("\u00a77The Stick of Ownership sets the team that currently owns a base");
+				sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
+				sender.sendChatToPlayer("\u00a77The Stick of Destruction deletes bases and team objects");
+			}
 		}
 	}
 
+	public EntityPlayerMP getPlayer(String name)
+	{
+		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+	}
 }

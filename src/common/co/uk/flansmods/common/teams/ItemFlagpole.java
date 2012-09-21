@@ -1,35 +1,28 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.EntityMG;
+import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EnumGameType;
 import net.minecraft.src.EnumMovingObjectType;
-import net.minecraft.src.ItemMapBase;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class ItemPlane extends ItemMapBase
-{
-    public ItemPlane(int i, PlaneType type1)
-    {
-        super(i);
-        maxStackSize = 1;
-		setIconIndex(type1.iconIndex);
-		type = type1;
-		type.item = this;
-		setTabToDisplayOn(CreativeTabs.tabTransport);
-    }
-	
-	public String getTextureFile()
-    {
-        return "/spriteSheets/planes.png";
-    }
+public class ItemFlagpole extends Item {
 
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
+	public ItemFlagpole(int i) 
+	{
+		super(i);
+		setTabToDisplayOn(CreativeTabs.tabMisc);
+	}
+
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
         float f = 1.0F;
         float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
         float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
@@ -58,50 +51,29 @@ public class ItemPlane extends ItemMapBase
             int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getPlaneData(itemstack, world)));
-            }
-			if(world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
-			{	
-				itemstack.stackSize--;
+				if(world.getBlockId(i, j, k) == Block.snow.blockID)
+				{
+					j--;
+				}
+				if(isSolid(world, i, j, k))
+				{
+					world.spawnEntityInWorld(new EntityFlagpole(world, i, j + 1, k));
+				}		            
 			}
         }
-        return itemstack;
-    }
-	
-	public PlaneData getPlaneData(ItemStack itemstack, World world)
-    {
-        String s = (new StringBuilder()).append("plane_").append(itemstack.getItemDamage()).toString();
-        PlaneData planeData = (PlaneData)world.loadItemData(co.uk.flansmods.common.PlaneData.class, "plane_" + itemstack.getItemDamage());
-        if(itemstack.getItemDamage() == 0 || planeData == null)
-		{
-			int dataID = world.getUniqueDataId("plane");
-			planeData = new PlaneData("plane_" + dataID, type);
-			//Avoid dataID 0 : default for TMI / Creative
-			if(dataID == 0)
-			{
-				dataID = world.getUniqueDataId("plane");
-				planeData = new PlaneData("plane_" + dataID, type);
-			}
-			world.setItemData("plane_" + dataID, planeData);
-			planeData.markDirty();
-			itemstack.setItemDamage(dataID);
-			try
-			{
-				planeData.engine = PartType.defaultEngine;
-			}
-			catch(Exception e)
-			{
-				System.out.println("Tried spawning plane without engine. Default engine not found.");
-				return null;
-			}
-		}
-		return planeData;
-    }
-	
-	public int getColorFromDamage(int i, int j)
-	{
-		return type.colour;
+		return itemstack;
 	}
 	
-	public PlaneType type;
+	private boolean isSolid(World world, int i, int j, int k)
+	{
+		int blockID = world.getBlockId(i, j, k);
+		if (blockID == 0)
+			return false;
+		return Block.blocksList[blockID].blockMaterial.isSolid() && Block.blocksList[blockID].isOpaqueCube();
+	}
+	
+	public String getTextureFile()
+	{
+		return "/spriteSheets/armour.png";
+	}
 }

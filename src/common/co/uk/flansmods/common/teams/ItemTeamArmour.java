@@ -16,8 +16,9 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	
 	public ItemTeamArmour(ArmourType t)
 	{
-		super(t.itemID, EnumArmorMaterial.CLOTH, 0, t.type);
+		super(t.itemID - 256, EnumArmorMaterial.CLOTH, 0, t.type);
 		type = t;
+		setIconIndex(type.iconIndex);
 		setTabToDisplayOn(CreativeTabs.tabCombat);
 	}
 
@@ -55,7 +56,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 		return "/spriteSheets/armour.png";
 	}
 
-	public int getColorFromDamage(int i)
+	public int getColorFromDamage(int i, int j)
 	{
 		return type.colour;
 	}

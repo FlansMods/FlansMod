@@ -1,0 +1,8 @@
+Name Blue Team Hat
+ShortName blueHat
+ItemID 23501
+Icon Helmet
+Colour 0 0 255
+Type Hat
+Defence 0.1
+ArmourTexture Blue

@@ -2,6 +2,8 @@ package co.uk.flansmods.common;
 
 import java.util.EnumSet;
 
+import co.uk.flansmods.common.teams.TeamsManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
@@ -44,6 +46,7 @@ public class CommonTickHandler implements ITickHandler {
 	public void sTick(MinecraftServer minecraft)
 	{
 		/* Server */
+		TeamsManager.getInstance().tick();
 	}
 	
 	// TODO: make this didicated server-safe

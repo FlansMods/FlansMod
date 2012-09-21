@@ -1,0 +1,8 @@
+Name Red Team Hat
+ShortName redHat
+ItemID 23500
+Icon Helmet
+Colour 255 0 0
+Type Hat
+Defence 0.1
+ArmourTexture Red
