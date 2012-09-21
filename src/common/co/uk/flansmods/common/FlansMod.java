@@ -94,7 +94,7 @@ public class FlansMod
 	public static File propertyFile;
 	
 	@PreInit
-	public void load(FMLPreInitializationEvent event)
+	public void preLoad(FMLPreInitializationEvent event)
 	{
 		log("Preinitializing Flan's mod.");
 		
@@ -163,6 +163,7 @@ public class FlansMod
 		log("Preinitializing complete.");
 	}
 	
+	
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
@@ -198,6 +199,8 @@ public class FlansMod
 		readContentPacks(event);
 		
 		proxy.load();
+		
+		proxy.loadKeyBindings();
 		
 		log("Loading complete.");
 	}

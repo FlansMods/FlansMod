@@ -57,7 +57,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy
 {
-	public static String modelDir = "co.uk.flansmods.client.model";
+	public static String modelDir = "co.uk.flansmods.client.model.Model";
 
 	@Override
 	public void load()
@@ -416,6 +416,7 @@ public class ClientProxy extends CommonProxy
 		try 
 		{	
 			ModelPlane model = (ModelPlane)Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			FlansMod.log("Load vehicle model : " + shortName+"  -- "+split[1]);
 			return model;
 		}
 		catch(Exception e)

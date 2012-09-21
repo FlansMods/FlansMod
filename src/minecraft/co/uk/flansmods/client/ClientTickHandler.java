@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.MouseHelper;
 import net.minecraft.src.ScaledResolution;
@@ -22,11 +23,13 @@ public class ClientTickHandler implements ITickHandler
 {
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
+		Minecraft mc = FMLClientHandler.instance().getClient();
 		
 		// CAPTURE MOUSE INPUT!
+		if (mc.currentScreen == null) // no screen is open. just the game screen.
 		{
-			MouseHelper mouse = FMLClientHandler.instance().getClient().mouseHelper;
-			Entity ridden = FMLClientHandler.instance().getClient().thePlayer.ridingEntity;
+			MouseHelper mouse = mc.mouseHelper;
+			Entity ridden = mc.thePlayer.ridingEntity;
 
 			if (ridden instanceof EntityDriveable)
 			{

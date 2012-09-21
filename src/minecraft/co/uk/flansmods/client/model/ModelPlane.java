@@ -1,6 +1,5 @@
 package co.uk.flansmods.client.model;
 
-import co.uk.flansmods.common.CollisionBox;
 import co.uk.flansmods.common.EntityPlane;
 import net.minecraft.src.ModelBase;
 import net.minecraft.src.NMTModelRenderer;

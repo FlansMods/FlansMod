@@ -74,8 +74,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 		yOffset = type.yOffset;
 		propBlown = new boolean[type.numProps];
-		if(type.model == null)
+		
+		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
 		{
+			type.model = (ModelPlane) FlansMod.proxy.loadPlaneModel(new String[] {"", type.shortName}, type.shortName);
 			FlansMod.logLoudly("NitroModelThingy not installed");
 			return;
 		}

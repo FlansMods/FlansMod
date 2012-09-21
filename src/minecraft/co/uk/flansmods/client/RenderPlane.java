@@ -24,7 +24,7 @@ public class RenderPlane extends Render
     	}
     	if(entityPlane.type.model == null)
     	{
-    		System.out.println("Model is null.");
+    		//System.out.println("Model is null.");
     	}
     	if(entityPlane.type.shortName == null)
     	{
