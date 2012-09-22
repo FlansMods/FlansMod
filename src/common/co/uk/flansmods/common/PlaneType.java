@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
-import co.uk.flansmods.client.ModelPlane;
+import co.uk.flansmods.client.model.ModelPlane;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 
 public class PlaneType extends DriveableType
@@ -250,7 +252,8 @@ public class PlaneType extends DriveableType
 		}
 		return null;
 	}
-		
+	
+	@SideOnly(value = Side.CLIENT)
 	public ModelPlane model;
 	
 	public float maxPropSpeed = 1F;

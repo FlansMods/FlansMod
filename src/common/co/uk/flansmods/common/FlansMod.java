@@ -53,9 +53,9 @@ import net.minecraftforge.*;
 		clientSideRequired = true,
 		serverSideRequired = true,
 		channels = {"flansmods"},
-	    versionBounds = "[2.0]",
-	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.PacketHandlerClient.class ),
-	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.PacketHandlerServer.class )
+	    versionBounds = "[2.0,]",
+	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
+	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketServer.class )
 		)
 public class FlansMod
 {
@@ -88,17 +88,6 @@ public class FlansMod
 	// Player changeable stuff
 	// TODO: move keys to client side only
 	// TODO: create key handlers and register keys.
-	public static int accelerateKey = Keyboard.KEY_W;
-	public static int decelerateKey = Keyboard.KEY_S;
-	public static int leftKey = Keyboard.KEY_A;
-	public static int rightKey = Keyboard.KEY_D;
-	public static int upKey = Keyboard.KEY_SPACE;
-	public static int downKey = Keyboard.KEY_LSHIFT;
-	public static int exitKey = Keyboard.KEY_E;
-	public static int inventoryKey = Keyboard.KEY_R;
-	public static int bombKey = Keyboard.KEY_V;
-	public static int gunKey = Keyboard.KEY_LCONTROL;
-	public static int controlSwitchKey = Keyboard.KEY_C;
 	public static boolean explosions = true;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
@@ -106,10 +95,7 @@ public class FlansMod
 	public static Block craftingTable;
 	public static Item opStick;
 	public static Item flag;
-	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
-										// controls
-	public static int controlModeSwitchTimer = 20;
-	public static boolean doneTutorial = false;
+
 	public static float originalMouseSensitivity = 0.5F;
 	public static boolean originalHideGUI = false;
 	public static String errorString = "";
@@ -198,8 +184,9 @@ public class FlansMod
 	{
 		log("Loading Flan's mod.");
 		
-		// TODO: do this in the proxy.
-		TickRegistry.registerTickHandler(proxy.getTickHandler(), event.getSide());
+		// Tick handlers
+		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
+		proxy.doTickStuff();
 		
 		// default stuff
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
@@ -241,7 +228,16 @@ public class FlansMod
 		
 		proxy.load();
 		
+		proxy.loadKeyBindings();
+		
 		log("Loading complete.");
+	}
+		
+	@ServerStarted
+	public void registerCommand(FMLServerStartedEvent e)
+	{
+		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
+		handler.registerCommand(new CommandTeams());
 	}
 	
 	/**
@@ -251,7 +247,7 @@ public class FlansMod
 	{
 		// Icons, Skins, Models
 		// Get the classloader in order to load the images
-		ClassLoader classloader = (net.minecraft.src.World.class).getClassLoader();
+		ClassLoader classloader = (net.minecraft.client.Minecraft.class).getClassLoader();
 		Method method = null;
 		try
 		{
@@ -522,12 +518,6 @@ public class FlansMod
 		
 		// LOAD GRAPHICS
 		proxy.loadContentPackGraphics(method, classloader);
-	}
-	
-	@ServerStarted
-	public void registerCommand(FMLServerStartedEvent e)
-	{
-		((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager()).registerCommand(new CommandTeams());
 	}
 
 	public String getLabel()

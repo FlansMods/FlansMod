@@ -2,12 +2,20 @@ package co.uk.flansmods.client;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.MouseHelper;
 import net.minecraft.src.ScaledResolution;
 import net.minecraft.src.Tessellator;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.common.EntityDriveable;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -15,7 +23,20 @@ public class ClientTickHandler implements ITickHandler
 {
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
+		Minecraft mc = FMLClientHandler.instance().getClient();
+		
+		// CAPTURE MOUSE INPUT!
+		if (mc.currentScreen == null) // no screen is open. just the game screen.
+		{
+			MouseHelper mouse = mc.mouseHelper;
+			Entity ridden = mc.thePlayer.ridingEntity;
 
+			if (ridden instanceof EntityDriveable)
+			{
+				EntityDriveable entity = (EntityDriveable) ridden;
+				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
+			}
+		}
 	}
 
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
@@ -69,13 +90,12 @@ public class ClientTickHandler implements ITickHandler
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x404040);
-			FlansModClient.tick();
 		}
 	}
 
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.CLIENT);
+		return EnumSet.of(TickType.RENDER);
 	}
 
 	public String getLabel()

@@ -5,6 +5,7 @@ import net.minecraft.src.Render;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.EntityPlane;
 
 
@@ -23,7 +24,7 @@ public class RenderPlane extends Render
     	}
     	if(entityPlane.type.model == null)
     	{
-    		System.out.println("Model is null.");
+    		//System.out.println("Model is null.");
     	}
     	if(entityPlane.type.shortName == null)
     	{

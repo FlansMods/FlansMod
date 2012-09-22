@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
-import co.uk.flansmods.client.ModelVehicle;
+import co.uk.flansmods.client.model.ModelVehicle;
 
 import cpw.mods.fml.client.FMLClientHandler;
 

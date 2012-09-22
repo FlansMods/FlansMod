@@ -213,6 +213,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 					ammo = entityplayer.inventory.getStackInSlot(slot);
 					entityplayer.inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
+					//FlansMod.proxy.  TODO: GET SOUND WORKING HERE
 					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}

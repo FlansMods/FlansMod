@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.File;
 
-import co.uk.flansmods.client.ModelMG;
+import co.uk.flansmods.client.model.ModelMG;
 
 import cpw.mods.fml.client.FMLClientHandler;
 

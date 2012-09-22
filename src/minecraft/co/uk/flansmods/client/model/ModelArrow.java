@@ -1,4 +1,4 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.ModelBase;

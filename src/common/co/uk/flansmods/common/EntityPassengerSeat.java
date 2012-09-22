@@ -25,6 +25,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class EntityPassengerSeat extends Entity
 {
@@ -53,9 +54,14 @@ public class EntityPassengerSeat extends Entity
 		super.onUpdate();
 		if(plane == null || plane.isDead)
 			setDead();
-		else updatePosition();	
+		else
+			updatePosition();
+		
+		/*
 		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
 			riddenByEntity.mountEntity(this);
+			*/
+		
 		if(gunDelay > 0)
 			gunDelay--;
 		if(soundDelay > 0)
@@ -83,7 +89,8 @@ public class EntityPassengerSeat extends Entity
 					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
-			if(riddenByEntity != null && riddenByEntity == plane.mc.thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
+			// TODO FIX THIS EVENTUALLY
+			if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
 			{
 				//Check for plane.data.ammo / reloading
 				if(plane.superData.ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
@@ -233,12 +240,12 @@ public class EntityPassengerSeat extends Entity
 					Entity entity = (Entity)list.get(i);
 					if(entity instanceof EntityLiving)
 					{
-						for(Object obj : (List)ModLoader.getPrivateValue(EntityAITasks.class, ((EntityLiving)entity).tasks, 1))
+						for(Object obj : (List)ObfuscationReflectionHelper.getPrivateValue(EntityAITasks.class, ((EntityLiving)entity).tasks, 1))
 						{
 							EntityAITaskEntry task = (EntityAITaskEntry)obj;
 							if(task.action instanceof EntityAITempt)
 							{
-								if((EntityPlayer)ModLoader.getPrivateValue(EntityAITempt.class, (EntityAITempt)task.action, 7) == player)
+								if((EntityPlayer)ObfuscationReflectionHelper.getPrivateValue(EntityAITempt.class, (EntityAITempt)task.action, 7) == player)
 									following = entity;
 							}
 						}

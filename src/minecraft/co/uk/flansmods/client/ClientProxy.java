@@ -6,12 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
+
+import co.uk.flansmods.client.model.ModelAAGun;
+import co.uk.flansmods.client.model.ModelMG;
+import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.AAGunType;
 import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.CommonProxy;
-import co.uk.flansmods.common.CommonTickHandler;
+import co.uk.flansmods.common.ServerTickHandler;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityBullet;
+import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
@@ -24,19 +31,23 @@ import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.network.FlanPacketServer;
+import co.uk.flansmods.common.network.PacketBreakSound;
+import co.uk.flansmods.common.network.PacketParticleSpawn;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.FMLTextureFX;
 import cpw.mods.fml.client.SpriteHelper;
 import cpw.mods.fml.client.TextureFXManager;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.TickRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -45,11 +56,13 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.src.ModelBase;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
+import net.minecraft.src.WorldClient;
+import net.minecraft.src.WorldServer;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy
 {
-	public static String modelDir = "co.uk.flansmods.client.Model";
+	public static String modelDir = "co.uk.flansmods.client.model.Model";
 	public static final String emptyLines = 
 			"1111111111111111" +
 			"1111111111111111" +
@@ -72,6 +85,8 @@ public class ClientProxy extends CommonProxy
 	{
 		new FlansModClient().load();
 	}
+	
+	// BEGIN ABRAR EDITS --------------------------------------
 
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
@@ -239,6 +254,7 @@ public class ClientProxy extends CommonProxy
 				e.printStackTrace();
 			}
 		}
+
 		FlansMod.log("Loaded gun box textures.");
 		
 		// Armour
@@ -256,11 +272,83 @@ public class ClientProxy extends CommonProxy
 		}
 		FlansMod.log("Loaded armour icons.");
 	}
+	
+	@Override
+	public void loadKeyBindings()
+	{
+		KeyBindingRegistry.registerKeyBinding(new KeyInputHandler());
+	}
+	
+	@Override
+	public void keyPress(int key, EntityPlayer player)
+	{
+		WorldClient world = (WorldClient) FMLClientHandler.instance().getClient().theWorld;
+		Entity entityTest  = player.ridingEntity;
+		
+		if (entityTest == null || !world.isRemote || !(entityTest instanceof EntityDriveable))
+			return;
+		
+		EntityDriveable entity = (EntityDriveable)entityTest;
+		
+		if (entity.riddenByEntity != player)
+			return;
+		
+		// if its not the inventory key, do whatever the entity wants.
+		if (key != 7)
+			entity.pressKey(key);
+		
+		FMLClientHandler.instance().displayGuiScreen(player, new GuiPlaneMenu((player).inventory, world, entity));
+	}
+	
+	@Override
+	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
+	{
+		if (!FlansModClient.doneTutorial)
+		{
+			FlansModClient.doneTutorial = true;
+			
+			if (entityType instanceof EntityPlane)
+			{
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.keyCode) + " to switch controls");
+			}
+			else if (entityType instanceof EntityVehicle)
+			{
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");		
+			}
+		}
+	}
+	
+	// --------------- END ABRAR EDITS ----------------------
+	
+	
+	// ------------------ PACKET SENDING OR NOT -------------
+	
+	public void playBlockBreakSound(int x, int y, int z, int blockID)
+	{
+		Block block = Block.blocksList[blockID];
+    	FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int)x, (int)y, (int)z, 1);
+    	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+	}
+	
+	public void spawnParticle(String type, double x1, double y1, double z1, double x2, double y2, double z2, int number)
+	{
+		World world = FMLClientHandler.instance().getClient().theWorld;
+		
+		for (int i = 0; i < number; i++)
+		{
+			(world).spawnParticle(type, x1, y1, z1, x2, y2, z2);
+		}
+	}
+	
+	// ---------------END PACKET SENDING OR NOT -------------
 
 	@Override
-	public ITickHandler getTickHandler()
+	public void doTickStuff()
 	{
-		return new ClientTickHandler();
+		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
 	}
 
 	@Override
