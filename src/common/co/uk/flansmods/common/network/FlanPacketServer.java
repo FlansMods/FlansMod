@@ -72,16 +72,6 @@ public class FlanPacketServer implements IPacketHandler
         }
 	}
 	
-	public static void sendPacket(Packet packet)
-	{
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		
-		if (side.isClient())
-			PacketDispatcher.sendPacketToServer(packet);
-		else
-			PacketDispatcher.sendPacketToAllPlayers(packet);
-	}
-	
 	/**
 	 * MEANT TO BE ONLY EXTENDED
 	 * interprets the data and does something with it.

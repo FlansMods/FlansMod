@@ -16,6 +16,7 @@ import co.uk.flansmods.common.network.PacketParticleSpawn;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import net.minecraft.src.*;
 
@@ -93,19 +94,19 @@ public class CommonProxy
 	
 	public void playBlockBreakSound(int x, int y, int z, int blockID)
 	{
-		FlanPacketServer.sendPacket(PacketBreakSound.buildBreakSoundPacket(x, y, z, blockID));
+		PacketDispatcher.sendPacketToAllPlayers(PacketBreakSound.buildBreakSoundPacket(x, y, z, blockID));
 	}
 	
 	public void spawnParticle(String type, double x1, double y1, double z1, double x2, double y2, double z2, int number)
 	{
-		FlanPacketServer.sendPacket(PacketParticleSpawn.buildParticleSpawnPacket(type, x1, y1, z1, x2, y2, z2, number));
+		PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x1, y1, z1, x2, y2, z2, number));
 	}
 	
 	// ---------------END PACKET SENDING OR NOT -------------	
 
 	public void doTickStuff()
-	
-	{		
+	{
+		// overriden in client
 	}
 
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)

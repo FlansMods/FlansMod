@@ -71,6 +71,11 @@ public class FlanPacketClient implements IPacketHandler
         }
 	}
 	
+	/**
+	 * use PacketDispatcher.sendPacketToServer(packet)  instead.
+	 * @param packet
+	 */
+	@Deprecated
 	public static void sendPacket(Packet packet)
 	{
 		Side side = FMLCommonHandler.instance().getEffectiveSide();
