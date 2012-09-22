@@ -34,8 +34,11 @@ import co.uk.flansmods.common.VehicleType;
 import co.uk.flansmods.common.network.FlanPacketServer;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
+import co.uk.flansmods.common.teams.ArmourType;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.SpriteHelper;
+import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.ITickHandler;
@@ -58,6 +61,22 @@ import net.minecraftforge.client.MinecraftForgeClient;
 public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "co.uk.flansmods.client.model.Model";
+	public static final String emptyLines = 
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111" +
+			"1111111111111111";
 
 	@Override
 	public void load()
@@ -113,12 +132,22 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
 		
 		MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
+		
+		MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
 	}
 
 	@Override
 	public void loadContentPackGraphics(Method method, ClassLoader classloader)
 	{
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
+		
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/bullets.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/planes.png", "0000111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/vehicles.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/guns.png", "1111111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/gunBoxes.png", "0011111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/parts.png", "0011111111111111" + emptyLines);
+		SpriteHelper.registerSpriteMapForFile("/spriteSheets/armour.png", "0000001111111111" + emptyLines);
 		
 		// Bullets / Bombs
 		for (BulletType type : BulletType.bullets)
@@ -229,6 +258,21 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 		FlansMod.log("Loaded gun box textures.");
+		
+		// Armour
+		for(ArmourType type : ArmourType.armours)
+		{
+			try
+			{				
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/armour.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
+			{
+				FlansMod.log("Failed to override armour icon");
+				e.printStackTrace();
+			}
+		}
+		FlansMod.log("Loaded armour icons.");
 	}
 	
 	@Override
@@ -416,12 +460,11 @@ public class ClientProxy extends CommonProxy
 		try 
 		{	
 			ModelPlane model = (ModelPlane)Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			FlansMod.log("Load vehicle model : " + shortName+"  -- "+split[1]);
 			return model;
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load vehicle model : " + shortName);
+			FlansMod.log("Failed to load plane model : " + shortName);
 			e.printStackTrace();
 			return null;
 		}

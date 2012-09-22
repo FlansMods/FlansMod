@@ -55,6 +55,7 @@ public class AAGunType extends InfoType
 				continue;
 			read(split, file);
 		} while (true);
+		iconIndex = PlaneType.nextIconIndex++;
 		infoTypes.add(this);
 	}
 

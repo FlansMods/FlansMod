@@ -12,17 +12,26 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.common.teams.ArmourType;
+import co.uk.flansmods.common.teams.CommandTeams;
+import co.uk.flansmods.common.teams.ItemTeamArmour;
+import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
+
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.NULL;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
@@ -51,6 +60,8 @@ public class FlansMod
 	
 	@Instance
 	public static FlansMod instance;
+	
+	public static TeamsManager teamsManager;
 
 	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
@@ -58,6 +69,7 @@ public class FlansMod
 	public static List<Block> gunBoxBlocks = new ArrayList<Block>();
 	public static List<Item> gunItems = new ArrayList<Item>();
 	public static List<Item> aaGunItems = new ArrayList<Item>();
+	public static List<Item> armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
 	public static boolean ABORT = false;
 	public static int shootTime;
@@ -203,6 +215,13 @@ public class FlansMod
 		proxy.loadKeyBindings();
 		
 		log("Loading complete.");
+	}
+	
+	@ServerStarted
+	public void registerCommand(FMLServerStartedEvent e)
+	{
+		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
+		handler.registerCommand(new CommandTeams());
 	}
 	
 	/**
@@ -421,6 +440,64 @@ public class FlansMod
 			type.addRecipe();
 		}
 		log("Loaded recipes.");
+		
+		//Armour
+		for (File file : contentPacks)
+		{
+			//Directory is armorFiles because armor is already the set directory for armour skins
+			File armourDir = new File(file, "/armorFiles/");
+			File[] armours = armourDir.listFiles();
+			if (armours == null)
+			{
+				logQuietly("No team files found.");
+			} else
+			{
+				for (int i = 0; i < armours.length; i++)
+				{
+					if (armours[i].isDirectory())
+						continue;
+					try
+					{
+						ArmourType type = new ArmourType(new BufferedReader(new FileReader(armours[i])), file.getName());
+						Item armourItem = new ItemTeamArmour(type).setItemName(type.shortName);
+						armourItems.add(armourItem);
+						LanguageRegistry.addName(armourItem, type.name);
+					} catch (Exception e)
+					{
+						log("Failed to add armour : " + armours[i].getName());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		log("Loaded armour.");
+		
+		//Teams
+		for (File file : contentPacks)
+		{
+			File teamsDir = new File(file, "/teams/");
+			File[] teams = teamsDir.listFiles();
+			if (teams == null)
+			{
+				logQuietly("No team files found.");
+			} else
+			{
+				for (int i = 0; i < teams.length; i++)
+				{
+					if (teams[i].isDirectory())
+						continue;
+					try
+					{
+						Team team = new Team(new BufferedReader(new FileReader(teams[i])), file.getName());
+					} catch (Exception e)
+					{
+						log("Failed to add team : " + teams[i].getName());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		log("Loaded teams.");
 		
 		
 		// LOAD GRAPHICS
