@@ -14,7 +14,6 @@ import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
 
-
 public class BlockPlaneWorkbench extends Block
 {
     public BlockPlaneWorkbench(int i, int j, int k)
@@ -48,12 +47,11 @@ public class BlockPlaneWorkbench extends Block
         }
     }
 
-    public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
+    @Override
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
     	int metadata = world.getBlockMetadata(i, j, k);
-    	if(metadata == 2)
-    		ModLoader.openGUI(entityplayer, new GuiVehicleCrafting(entityplayer.inventory , world, i, j, k));
-    	else ModLoader.openGUI(entityplayer, new GuiPlaneCrafting(entityplayer.inventory , world, i, j, k, metadata == 1));
+    	entityplayer.openGui(FlansMod.instance, metadata, world, i, j, k);
 		return true;
     }
     
