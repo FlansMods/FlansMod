@@ -165,7 +165,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			entityplayer.mountEntity(this);
 			bombDelay = type.planeBombDelay;
 			
-			FlansMod.proxy.doTutorialStuff(entityplayer);
+			FlansMod.proxy.doTutorialStuff(entityplayer, this);
 			
 			return false;
 		}
@@ -239,7 +239,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 4 : //Up
 			{
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.controlMode == 1 || axes.getPitch() > -75F))
+				// TODO: get ControlMod working.
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (/*FlansMod.controlMode == 1 ||*/ axes.getPitch() > -75F))
 				{
 					velocityPitch += type.lookUpModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft += 5F;
@@ -249,7 +250,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 5 : //Down
 			{
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.controlMode == 1 || axes.getPitch() < 75F))
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (/*FlansMod.controlMode == 1 ||*/ axes.getPitch() < 75F))
 				{
 					velocityPitch -= type.lookDownModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft -= 5F;
@@ -635,6 +636,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
         {				
 			Vec3 vec = rotate(type.pilotX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.pilotY / 16D, type.pilotZ / 16D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
+            
+            // TODO: still ControlMode references...
+            /*
 			if(FlansMod.controlMode == 1)
 			{
 				riddenByEntity.prevRotationYaw = riddenByEntity.rotationYaw;
@@ -651,6 +655,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			{
 				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
 			}
+			*/
 			return;
         }
 		else { return; }

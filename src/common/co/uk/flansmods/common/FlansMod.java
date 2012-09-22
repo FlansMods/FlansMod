@@ -89,10 +89,7 @@ public class FlansMod
 	public static boolean bulletsEnabled = true;
 
 	public static Block craftingTable;
-	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
-										// controls
-	public static int controlModeSwitchTimer = 20;
-	public static boolean doneTutorial = false;
+
 	public static float originalMouseSensitivity = 0.5F;
 	public static boolean originalHideGUI = false;
 	public static String errorString = "";

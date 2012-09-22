@@ -303,12 +303,24 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public void doTutorialStuff(EntityPlayer player)
+	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
-		FlansMod.doneTutorial = true;
-		player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
-		player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");
-		player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.keyCode) + " to switch controls");
+		if (!FlansModClient.doneTutorial)
+		{
+			FlansModClient.doneTutorial = true;
+			
+			if (entityType instanceof EntityPlane)
+			{
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.keyCode) + " to switch controls");
+			}
+			else if (entityType instanceof EntityVehicle)
+			{
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
+				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");		
+			}
+		}
 	}
 	
 	// --------------- END ABRAR EDITS ----------------------

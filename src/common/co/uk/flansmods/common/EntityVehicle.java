@@ -753,13 +753,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			entityplayer.mountEntity(this);
 			shellDelay = type.vehicleShellDelay;
-			if(!FlansMod.doneTutorial)
-			{
-				FlansMod.doneTutorial = true;
-				//mc.ingameGUI.addChatMessage("Press " + Keyboard.getKeyName(mod_Flan.inventoryKey) + " to open the menu");
-				//mc.ingameGUI.addChatMessage("Press " + Keyboard.getKeyName(mod_Flan.exitKey) + " to get out");		
-			}
-			return true;
+			FlansMod.proxy.doTutorialStuff(entityplayer, this);
 		}
 		for(int i = 0; i < type.numPassengers; i++)
 		{

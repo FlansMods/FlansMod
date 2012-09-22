@@ -25,6 +25,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class EntityPassengerSeat extends Entity
 {
@@ -239,12 +240,12 @@ public class EntityPassengerSeat extends Entity
 					Entity entity = (Entity)list.get(i);
 					if(entity instanceof EntityLiving)
 					{
-						for(Object obj : (List)ModLoader.getPrivateValue(EntityAITasks.class, ((EntityLiving)entity).tasks, 1))
+						for(Object obj : (List)ObfuscationReflectionHelper.getPrivateValue(EntityAITasks.class, ((EntityLiving)entity).tasks, 1))
 						{
 							EntityAITaskEntry task = (EntityAITaskEntry)obj;
 							if(task.action instanceof EntityAITempt)
 							{
-								if((EntityPlayer)ModLoader.getPrivateValue(EntityAITempt.class, (EntityAITempt)task.action, 7) == player)
+								if((EntityPlayer)ObfuscationReflectionHelper.getPrivateValue(EntityAITempt.class, (EntityAITempt)task.action, 7) == player)
 									following = entity;
 							}
 						}

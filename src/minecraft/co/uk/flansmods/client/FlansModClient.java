@@ -39,6 +39,11 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class FlansModClient extends FlansMod
 {
+	public static boolean doneTutorial = false;
+	
+	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
+	public static int controlModeSwitchTimer = 20;
+	
 	public void load()
 	{
 		if (ABORT)

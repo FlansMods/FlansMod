@@ -83,7 +83,7 @@ public class CommonProxy
 		// #10 is changing the controls.
 	}
 	
-	public void doTutorialStuff(EntityPlayer player)
+	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
 		// FlansMod.log("Tutorial skipped on server");
 	}
