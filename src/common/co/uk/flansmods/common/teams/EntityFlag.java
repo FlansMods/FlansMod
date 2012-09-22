@@ -21,7 +21,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		this(world);
 		setPosition(pole.posX, pole.posY + 2F, pole.posZ);
-		base = pole;
+		setBase(pole);
 	}
 	
     public boolean canBeCollidedWith()

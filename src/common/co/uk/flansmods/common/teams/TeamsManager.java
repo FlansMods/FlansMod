@@ -24,7 +24,7 @@ public class TeamsManager
 	public List<ITeamBase> bases;
 	public List<ITeamObject> objects;
 	//TODO : Save this variable per world to avoid bases recieving the same ID
-	private int nextBaseID = 0;
+	private int nextBaseID = 1;
 	
 	public TeamsManager()
 	{
@@ -88,11 +88,12 @@ public class TeamsManager
 	{
 		if(event.entity instanceof ITeamBase)
 		{
-			((ITeamBase)event.entity).setID(nextBaseID++);
-			bases.add((ITeamBase)event.entity);
+			registerBase((ITeamBase)event.entity, ((ITeamBase)event.entity).getID());
 		}
 		if(event.entity instanceof ITeamObject)
+		{
 			objects.add((ITeamObject)event.entity);
+		}
 	}
 	
 	public ITeamBase getBase(int ID)
@@ -103,5 +104,12 @@ public class TeamsManager
 				return base;
 		}
 		return null;
+	}
+	
+	public void registerBase(ITeamBase base, int currentID)
+	{
+		if(currentID == 0)
+			base.setID(nextBaseID++);
+		bases.add(base);
 	}
 }

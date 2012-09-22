@@ -218,7 +218,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
-		flag = new ItemFlagpole(23541).setIconIndex(7).setItemName("flagpole");
+		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
 		
 		proxy.loadDefaultGraphics();

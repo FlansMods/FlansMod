@@ -24,6 +24,11 @@ public class ItemOpStick extends Item
 		setHasSubtypes(true);
 	}
 	
+	public String getItemNameIS(ItemStack stack)
+	{
+		return getItemName() + stack.getItemDamage();
+	}
+	
 	public int getIconFromDamage(int damage)
     {
         return 8 + damage;
