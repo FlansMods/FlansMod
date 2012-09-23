@@ -19,6 +19,7 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 
+!/src/minecraft/com/
 !/src/common/co/
 !/src/minecraft/co/
 !/jars/Flan/
