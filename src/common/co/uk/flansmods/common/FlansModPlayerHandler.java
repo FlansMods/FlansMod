@@ -1,35 +1,33 @@
 package co.uk.flansmods.common;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.*;
+import net.minecraftforge.common.*;
+import net.minecraftforge.event.*;
+import net.minecraftforge.event.entity.*;
+import net.minecraftforge.event.entity.living.*;
 
-import net.minecraft.src.EntityLiving;
-import net.minecraft.src.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
-import net.minecraftforge.event.IEventListener;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-public class FlansModPlayerHandler implements IEventListener
+public class FlansModPlayerHandler implements IPlayerTracker
 {
 	public static Map<EntityPlayer, FlansModPlayerData> data = new HashMap<EntityPlayer, FlansModPlayerData>();
 	
 	public FlansModPlayerHandler()
 	{
 		MinecraftForge.EVENT_BUS.register(this);
+		GameRegistry.registerPlayerTracker(this);
 	}
 
-	public void invoke(Event event) 
+	@ForgeSubscribe
+	public void onEntityHurt(LivingHurtEvent event) 
 	{
-		if(event instanceof LivingEvent)
+		EntityLiving entity = event.entityLiving;
+		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntityPassengerSeat))
 		{
-			LivingEvent livingEvent = (LivingEvent)event;
-			EntityLiving entity = livingEvent.entityLiving;
-			if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntityPassengerSeat))
-			{
-				((LivingHurtEvent)livingEvent).ammount = 0;
-			}
+			event.ammount = 0;
 		}
 	}
 	
@@ -37,4 +35,22 @@ public class FlansModPlayerHandler implements IEventListener
 	{
 		return data.get(player);
 	}
+
+	@Override
+	public void onPlayerLogin(EntityPlayer player) 
+	{
+		data.put(player, new FlansModPlayerData(player));
+	}
+
+	@Override
+	public void onPlayerLogout(EntityPlayer player) 
+	{
+		data.remove(player);
+	}
+
+	@Override
+	public void onPlayerChangedDimension(EntityPlayer player) {}
+
+	@Override
+	public void onPlayerRespawn(EntityPlayer player) {}
 }
