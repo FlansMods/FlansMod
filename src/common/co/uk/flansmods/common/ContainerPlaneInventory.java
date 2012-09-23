@@ -99,6 +99,7 @@ public class ContainerPlaneInventory extends Container
         }
     }
 	
+    @Override
 	public ItemStack transferStackInSlot(int i)
     {
         return null;
@@ -144,6 +145,7 @@ public class ContainerPlaneInventory extends Container
 		}
 	}
 
+	@Override
     public boolean canInteractWith(EntityPlayer entityplayer)
     {
         return entityplayer.ridingEntity != null && entityplayer.ridingEntity instanceof EntityDriveable;

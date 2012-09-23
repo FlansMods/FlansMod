@@ -50,11 +50,13 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		mgs.add(this);
 	}
 
+	@Override
 	public boolean canBeCollidedWith()
 	{
 		return !isDead;
 	}
 
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -146,6 +148,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			soundDelay--;
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
 	{
 		if (damagesource.damageType.equals("player"))
@@ -185,6 +188,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		return true;
 	}
 
+	@Override
 	public boolean interact(EntityPlayer entityplayer)
 	{
 		// Player right clicked on gun
@@ -234,6 +238,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		return -1;
 	}
 
+	@Override
 	public void setDead()
 	{
 		super.setDead();
@@ -246,6 +251,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 	}
 
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
 		nbttagcompound.setString("Type", type.shortName);
@@ -259,7 +265,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		nbttagcompound.setInteger("BlockZ", blockZ);
 		nbttagcompound.setByte("Dir", (byte) direction);
 	}
-
+	
+	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		type = GunType.getGun(nbttagcompound.getString("Type"));
@@ -275,6 +282,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	protected void entityInit()
 	{
 	}

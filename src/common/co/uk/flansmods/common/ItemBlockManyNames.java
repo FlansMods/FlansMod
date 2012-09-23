@@ -10,6 +10,7 @@ public class ItemBlockManyNames extends ItemBlock {
 		super(i);
 	}
 	
+	@Override
 	public String getItemNameIS(ItemStack stack)
 	{
 		int damage = stack.getItemDamage();

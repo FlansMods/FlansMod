@@ -86,26 +86,31 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
 	{
 		return entity.boundingBox;
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox()
 	{
 		return boundingBox;
 	}
 
+	@Override
 	public boolean canBePushed()
 	{
 		return false;
 	}
 
+	@Override
 	public double getMountedYOffset()
 	{
 		return 0D;
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
 	{
 		if (damagesource.damageType.equals("player"))
@@ -165,11 +170,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		return Vec3.createVectorHelper(newX, newY, newZ);
 	}
 
+	@Override
 	public boolean canBeCollidedWith()
 	{
 		return !isDead;
 	}
 
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -253,6 +260,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	public void setDead()
 	{
 		super.setDead();
@@ -266,6 +274,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	public void updateRiderPosition()
 	{
 		if (riddenByEntity == null)
@@ -288,6 +297,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		return;
 	}
 
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
 		nbttagcompound.setString("Type", type.shortName);
@@ -301,6 +311,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		type = AAGunType.getAAGun(nbttagcompound.getString("Type"));
@@ -314,11 +325,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	public float getShadowSize()
 	{
 		return 0.0F;
 	}
 
+	@Override
 	public boolean interact(EntityPlayer entityplayer)
 	{
 		// Player right clicked on gun

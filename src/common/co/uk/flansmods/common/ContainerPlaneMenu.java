@@ -43,11 +43,13 @@ public class ContainerPlaneMenu extends Container
         }
     }
 	
+    @Override
 	public ItemStack transferStackInSlot(int i)
     {
         return null;
     }
-
+    
+    @Override
     public boolean canInteractWith(EntityPlayer entityplayer)
     {
         return entityplayer.ridingEntity != null && entityplayer.ridingEntity instanceof EntityDriveable;

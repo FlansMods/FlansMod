@@ -50,11 +50,13 @@ public class ContainerVehicleCrafting extends Container
         onCraftMatrixChanged(craftMatrix);
     }
 		
+    @Override
 	public ItemStack transferStackInSlot(int i)
     {
         return null;
     }
 	
+    @Override
     public void onCraftMatrixChanged(IInventory iinventory)
     {
 		//Reset output slot
@@ -204,6 +206,7 @@ public class ContainerVehicleCrafting extends Container
 		}
 	}
 
+	@Override
     public void onCraftGuiClosed(EntityPlayer entityplayer)
     {
         super.onCraftGuiClosed(entityplayer);
@@ -218,6 +221,7 @@ public class ContainerVehicleCrafting extends Container
 
     }
 
+	@Override
     public boolean canInteractWith(EntityPlayer entityplayer)
     {
         if(world.getBlockId(xTile, yTile, zTile) != FlansMod.craftingTable.blockID)

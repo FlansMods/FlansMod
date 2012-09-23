@@ -49,6 +49,7 @@ public class EntityPassengerSeat extends Entity
 		updatePosition();
 	}
 	
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -145,40 +146,48 @@ public class EntityPassengerSeat extends Entity
 		return (double)height * 0.75D;
 	}
 
+	@Override
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
+	@Override
     protected void entityInit()
     {
     }
 
+	@Override
     public AxisAlignedBB getCollisionBox(Entity entity)
     {
         return entity.boundingBox;
     }
 
+	@Override
     public AxisAlignedBB getBoundingBox()
     {
         return boundingBox;
     }
 
+	@Override
     public boolean canBePushed()
     {
         return true;
     }
 	
+	@Override
     public boolean canBeCollidedWith()
     {
         return !isDead;
     }
 	
+	@Override
 	public float getShadowSize()
     {
         return 0.0F;
     }
 	
+	// Flan is this meant to go in attackEntityFrom(DamageSource damagesource, int i). 
     public boolean attackEntityFrom1(DamageSource damagesource, int i)
     {
 		if(damagesource.damageType.equals("player"))
@@ -195,11 +204,13 @@ public class EntityPassengerSeat extends Entity
 		return plane.attackEntityFrom(damagesource, i);
     }
 	
+    @Override
     public boolean attackEntityFrom(DamageSource damagesource, int i)
     {	
 		return plane.attackEntityFrom(damagesource, i);
     }
 	
+    @Override
     public void updateRiderPosition()
     {
         if(riddenByEntity == null)
@@ -216,14 +227,17 @@ public class EntityPassengerSeat extends Entity
 		else { return; }
     }
 
+    @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
     {
     }
 
+    @Override
     protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
     {
     }
 
+    @Override
 	public boolean interact(EntityPlayer player)
     {
 		if(worldObj.isRemote || isDead || plane == null || plane.isDead)

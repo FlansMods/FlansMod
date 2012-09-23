@@ -24,6 +24,7 @@ public class BlockPlaneWorkbench extends Block
         setCreativeTab(CreativeTabs.tabDeco);
     }
     
+    @Override
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
@@ -31,11 +32,13 @@ public class BlockPlaneWorkbench extends Block
         par3List.add(new ItemStack(par1, 1, 2));
     }
 	
+    @Override
 	public String getTextureFile()
     {
         return "/spriteSheets/planes.png";
     }
 
+    @Override
     public int getBlockTextureFromSideAndMetadata(int i, int j)
     {
         if(i == 1)

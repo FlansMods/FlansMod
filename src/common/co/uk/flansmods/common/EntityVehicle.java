@@ -160,6 +160,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         return true;
     }
 	
+	@Override
 	public void pressKey(int key)
 	{
 		switch(key)
@@ -291,6 +292,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 	}
 	
+	@Override
 	public void useGun(int gunID, EntityPlayer player, EntityPassengerSeat seat)
 	{
 		if(!worldObj.isRemote && seat.gunDelay <= 0 && FlansMod.bulletsEnabled)
@@ -299,6 +301,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 	}
 
+	@Override
     public void onUpdate()
     {
 		double actualMotionX = motionX;//posX - prevPosX;
@@ -712,6 +715,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
     {
 	}
 
+	@Override
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
 		tag.setInteger("DataID", dataID);
@@ -723,6 +727,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		tag.setInteger("Health", health);
     }
 
+	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		type = VehicleType.getVehicle(tag.getString("Type"));
@@ -740,6 +745,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		health = tag.getInteger("Health");
     }
 
+	@Override
     public boolean interact(EntityPlayer entityplayer)
     {
 		if(worldObj.isRemote)
