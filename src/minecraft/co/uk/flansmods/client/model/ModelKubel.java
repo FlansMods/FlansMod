@@ -1,6 +1,10 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBase;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBox;
 import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+import com.overminddl1.minecraft.libs.NMT.NMTModelTrapezoid;
 
 public class ModelKubel extends ModelVehicle
 {
@@ -29,8 +33,12 @@ public class ModelKubel extends ModelVehicle
 		bodyModel[4].addBox(-6F, -4F, -14F, 1, 8, 28, 0.0F);		//Mid seat
 		bodyModel[5].addBox(-24F, -6F, -14F, 4, 10, 28, 0.0F);		//Back seat
 		bodyModel[6].addBox(-24F, -6F, -16F, 32, 10, 2, 0.0F);		//Door
-		bodyModel[7].addBox(-24F, -6F, -16F, 32, 10, 2, 0.0F);		//Door
-		bodyModel[7].doMirror(false, false, true);
+		
+		//Other door
+		NMTModelBase temp = new NMTModelBox(bodyModel[7], -24F, -6F, -16F, 32, 10, 2, 0F, 0F, false);
+		temp.doMirror(false, false, true);
+		bodyModel[7].addModel(temp);
+
 		bodyModel[8].addBox(8F, -14F, -16F, 1, 8, 32, 0.0F);		//Windshield
 		bodyModel[9].addBox(12F, -8F, -4F, 8, 2, 8, 0.0F);			//Spare Wheel
 			

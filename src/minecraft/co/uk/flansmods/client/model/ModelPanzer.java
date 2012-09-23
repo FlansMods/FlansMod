@@ -1,7 +1,9 @@
 package co.uk.flansmods.client.model;
 
 import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBase;
 import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+import com.overminddl1.minecraft.libs.NMT.NMTModelTrapezoid;
 
 public class ModelPanzer extends ModelVehicle
 {
@@ -26,8 +28,12 @@ public class ModelPanzer extends ModelVehicle
 		turretModel[0] = new NMTModelRenderer(this, 0, 132, textureX, textureY);
 		turretModel[1] = new NMTModelRenderer(this, 128, 132, textureX, textureY);
 		turretModel[0].addTrapezoid(-16F, -44F, -16F, 32, 12, 32, 0.0F, -2.0F, NMTGlobal.NMT_DIR_TOP);	
+		
 		turretModel[1].addTrapezoid(-15.5F, -44F, -15.5F, 31, 9, 31, 0.0F, -1.5F, NMTGlobal.NMT_DIR_TOP);	
-		turretModel[1].flipFaces();
+		NMTModelBase temp = new NMTModelTrapezoid(turretModel[1], -15.5F, -44F, -15.5F, 31, 9, 31, 0.0F, -1.5F, NMTGlobal.NMT_DIR_TOP);
+		temp.flipFaces();
+		turretModel[1].addModel(temp);
+
 		
 		barrelModel = new NMTModelRenderer[1];
 		barrelModel[0] = new NMTModelRenderer(this, 0, 176, textureX, textureY);

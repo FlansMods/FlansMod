@@ -8,7 +8,8 @@ import net.minecraft.src.ModelBase;
 //Extensible ModelPlane class for rendering plane models
 public class ModelPlane extends ModelBase
 {
-
+	public boolean oldModel = false;
+	
     public ModelPlane()    
 	{
     }
@@ -108,6 +109,9 @@ public class ModelPlane extends ModelBase
 	
 	public void flipAll()
 	{
+		oldModel = !oldModel;
+	}
+	/*
 		for(int i = 0; i < bodyModel.length; i++)
 		{
 			bodyModel[i].doMirror(false, true, true);
@@ -167,7 +171,7 @@ public class ModelPlane extends ModelBase
 			pitchFlapRightWingModel[i].setRotationPoint(pitchFlapRightWingModel[i].rotationPointX, - pitchFlapRightWingModel[i].rotationPointY, - pitchFlapRightWingModel[i].rotationPointZ);
 		}
 	}	
-
+*/
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
     }

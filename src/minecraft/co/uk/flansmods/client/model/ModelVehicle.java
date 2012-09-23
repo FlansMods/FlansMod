@@ -9,7 +9,17 @@ import net.minecraft.src.ModelBase;
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelBase
 {
-
+	public boolean oldModel = false;
+    public NMTModelRenderer bodyModel[];				//The main body of the vehicle
+    public NMTModelRenderer turretModel[];			//The turret (for tanks)
+	public NMTModelRenderer barrelModel[];			//The barrel of the main turret
+    public NMTModelRenderer gunModel[];   			//The passenger controlled gun model
+	public NMTModelRenderer ammoModel[];				//The ammo box for the above gun
+    public NMTModelRenderer leftFrontWheelModel[];	//Obvious really...
+    public NMTModelRenderer rightFrontWheelModel[];
+    public NMTModelRenderer leftBackWheelModel[];
+    public NMTModelRenderer rightBackWheelModel[];
+	
     public ModelVehicle()    
 	{
     }
@@ -76,6 +86,9 @@ public class ModelVehicle extends ModelBase
 	
 	public void flipAll()
 	{
+		oldModel = !oldModel;
+	}
+		/*
 		for(int i = 0; i < bodyModel.length; i++)
 		{
 			bodyModel[i].doMirror(false, true, true);
@@ -111,7 +124,7 @@ public class ModelVehicle extends ModelBase
 			rightBackWheelModel[i].doMirror(false, true, true);
 			rightBackWheelModel[i].setRotationPoint(rightBackWheelModel[i].rotationPointX, - rightBackWheelModel[i].rotationPointY, - rightBackWheelModel[i].rotationPointZ);
 		}
-	}	
+	}	*/
 	
 	public void translateAll(int y)
 	{
@@ -156,14 +169,4 @@ public class ModelVehicle extends ModelBase
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
     }
-
-    public NMTModelRenderer bodyModel[];				//The main body of the vehicle
-    public NMTModelRenderer turretModel[];			//The turret (for tanks)
-	public NMTModelRenderer barrelModel[];			//The barrel of the main turret
-    public NMTModelRenderer gunModel[];   			//The passenger controlled gun model
-	public NMTModelRenderer ammoModel[];				//The ammo box for the above gun
-    public NMTModelRenderer leftFrontWheelModel[];	//Obvious really...
-    public NMTModelRenderer rightFrontWheelModel[];
-    public NMTModelRenderer leftBackWheelModel[];
-    public NMTModelRenderer rightBackWheelModel[];
 }

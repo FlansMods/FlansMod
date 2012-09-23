@@ -1,7 +1,10 @@
 package co.uk.flansmods.client.model;
 
 import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBase;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBox;
 import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+import com.overminddl1.minecraft.libs.NMT.NMTModelTrapezoid;
 
 public class ModelLancaster extends ModelPlane
 {
@@ -27,6 +30,9 @@ public class ModelLancaster extends ModelPlane
     public ModelLancaster()
     {
 		//Initializing Model
+    	
+    	//Temporary modelBase used to store modelBases in order to flip before being added to the modelRenderer
+    	NMTModelBase temp;
 	
         bodyModel = new NMTModelRenderer[19];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
@@ -37,74 +43,83 @@ public class ModelLancaster extends ModelPlane
 		
 		//Section 0
 		bodyModel[0] = new NMTModelRenderer(this,0, 0, textureX, textureY);
-		bodyModel[0].addTrapezoid(-160, -80, -16, 16, 32, 32, 0.0F, -4.0F, NMTGlobal.NMT_DIR_RIGHT); //Front gunner window outside
-		bodyModel[18] = new NMTModelRenderer(this,0, 0, textureX, textureY);
-		bodyModel[18].addTrapezoid(-160, -80, -16, 16, 32, 32, 0.0F, -4.0F, NMTGlobal.NMT_DIR_RIGHT); //Front gunner window inside
-		bodyModel[18].flipFaces();
+		bodyModel[0].addTrapezoid(-160, -80, -16, 16, 32, 32, 0.0F, -4.0F, NMTGlobal.NMT_DIR_RIGHT); 	//Front gunner window outside
+		
+		bodyModel[18] = new NMTModelRenderer(this,0, 0, textureX, textureY);							//Front gunner window inside
+		temp = new NMTModelTrapezoid(bodyModel[18], -160, -80, -16, 16, 32, 32, 0F, -4F, NMTGlobal.NMT_DIR_RIGHT);
+		temp.flipFaces();
+		bodyModel[18].addModel(temp);
+		
 		bodyModel[1] = new NMTModelRenderer(this,64, 0, textureX, textureY);
-		bodyModel[1].addBox(-144, -80, -15, 16, 1, 30, 0.0F); //Top panel
+		bodyModel[1].addBox(-144, -80, -15, 16, 1, 30, 0.0F); 											//Top panel
 		
 		//Section 1 / 2 / 3
 		bodyModel[2] = new NMTModelRenderer(this,127, 1, textureX, textureY);
-		bodyModel[2].addBox(-144, -49, -15, 112, 1, 30, 0.0F); //Floor Upper Level
+		bodyModel[2].addBox(-144, -49, -15, 112, 1, 30, 0.0F); 											//Floor Upper Level
 		bodyModel[3] = new NMTModelRenderer(this,64, 32, textureX, textureY);
-		bodyModel[3].addTrapezoid(-128, -96, -16, 64, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Pilot window outside
-		bodyModel[16] = new NMTModelRenderer(this,64, 32, textureX, textureY);
-		bodyModel[16].addTrapezoid(-128, -96, -16, 64, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Pilot window inside
-		bodyModel[16].flipFaces();
+		bodyModel[3].addTrapezoid(-128, -96, -16, 64, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); 		//Pilot window outside
+		
+		bodyModel[16] = new NMTModelRenderer(this,64, 32, textureX, textureY);							//Pilot window inside
+		temp = new NMTModelTrapezoid(bodyModel[16], -128, -96, -16, 64, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP);
+		temp.flipFaces();
+		bodyModel[16].addModel(temp);
+		
 		bodyModel[4] = new NMTModelRenderer(this,0, 80, textureX, textureY);
-		bodyModel[4].addBox(-144, -80, -16, 112, 32, 1, 0.0F); //Left Wall
+		bodyModel[4].addBox(-144, -80, -16, 112, 32, 1, 0.0F); 											//Left Wall
 		bodyModel[5] = new NMTModelRenderer(this,0, 80, textureX, textureY);
-		bodyModel[5].addBox(-144, -80, -16, 112, 32, 1, 0.0F); //Right Wall
+		bodyModel[5].addBox(-144, -80, -16, 112, 32, 1, 0.0F); 											//Right Wall
 		bodyModel[5].setRotationPoint(-176, 0, 0);
 		bodyModel[5].rotateAngleY = (float)Math.PI;
 		
 		//Wings (4 / 5)
 
 		bodyModel[6] = new NMTModelRenderer(this,226, 80, textureX, textureY);
-		bodyModel[6].addBox(-71, -96, -15, 103, 1, 30, 0.0F); //Main Body Top Panel
+		bodyModel[6].addBox(-71, -96, -15, 103, 1, 30, 0.0F); 											//Main Body Top Panel
 		bodyModel[7] = new NMTModelRenderer(this,432, 24, textureX, textureY);
-		bodyModel[7].addBox(-72, -96, -16, 1, 16, 32, 0.0F); //Main Body Front Panel by Cockpit
+		bodyModel[7].addBox(-72, -96, -16, 1, 16, 32, 0.0F); 											//Main Body Front Panel by Cockpit
 		
 		//Section 5 / 6 / 7
 		
-		bodyModel[8] = new NMTModelRenderer(this,0, 245, textureX, textureY);
-		bodyModel[8].addBox(0, 0, -16, 199, 16, 1, 0.0F); //Main Body Top Right Panel
+		bodyModel[8] = new NMTModelRenderer(this, 0, 245, textureX, textureY);
+		bodyModel[8].addBox(0, 0, -16, 199, 16, 1, 0.0F); 												//Main Body Top Right Panel
 		bodyModel[8].setRotationPoint(-71, -96, 0);
 		
-		bodyModel[9] = new NMTModelRenderer(this,0, 245, textureX, textureY);
-		bodyModel[9].addBox(0, 0, -16, 199, 16, 1, 0.0F); //Main Body Top Left Panel
+		bodyModel[9] = new NMTModelRenderer(this, 0, 245, textureX, textureY);							//Main Body Top Left Panel
+		temp = new NMTModelBox(bodyModel[9], 0, 0, -16, 199, 16, 1, 0F, 0F, false);
+		temp.doMirror(false, false, true);
+		bodyModel[9].addModel(temp);
 		bodyModel[9].setRotationPoint(-71, -96, 0);
-		bodyModel[9].doMirror(false, false, true);
 		
-		bodyModel[10] = new NMTModelRenderer(this,38, 262, textureX, textureY);
-		bodyModel[10].addBox(0, 0, -16, 160, 16, 1, 0.0F); //Main Body Bottom Right Panel
+		bodyModel[10] = new NMTModelRenderer(this, 38, 262, textureX, textureY);
+		bodyModel[10].addBox(0, 0, -16, 160, 16, 1, 0.0F); 												//Main Body Bottom Right Panel
 		bodyModel[10].setRotationPoint(-32, -80, 0);
 		
-		bodyModel[11] = new NMTModelRenderer(this,38, 262, textureX, textureY);
-		bodyModel[11].addBox(0, 0, -16, 160, 16, 1, 0.0F); //Main Body Bottom Left Panel
+		bodyModel[11] = new NMTModelRenderer(this, 38, 262, textureX, textureY);						//Main Body Bottom Left Panel
+		temp = new NMTModelBox(bodyModel[11], 0, 0, -16, 160, 16, 1, 0F, 0F, false);
+		temp.doMirror(false, false, true);
+		bodyModel[11].addModel(temp);
 		bodyModel[11].setRotationPoint(-32, -80, 0);
-		bodyModel[11].doMirror(false, false, true);
 			
-		bodyModel[12] = new NMTModelRenderer(this,144, 279, textureX, textureY);
-		bodyModel[12].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Gunner Window Outside
+		bodyModel[12] = new NMTModelRenderer(this, 144, 279, textureX, textureY);
+		bodyModel[12].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); 		//Gunner Window Outside
 		
-		bodyModel[17] = new NMTModelRenderer(this,144, 279, textureX, textureY);
-		bodyModel[17].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Gunner Window Inside
-		bodyModel[17].flipFaces();
+		bodyModel[17] = new NMTModelRenderer(this, 144, 279, textureX, textureY);						//Gunner Window Inside
+		temp = new NMTModelTrapezoid(bodyModel[17], 32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP);
+		temp.flipFaces();
+		bodyModel[17].addModel(temp);
 		
 		//TEMPORARY CODE
 		//This is just to stop NPEs on rendering model parts 13 to 15 while I try to work out how to do prisms in NMT
 		//TODO : Sort out the prisms
 		
 		bodyModel[13] = new NMTModelRenderer(this,144, 279, textureX, textureY);
-		bodyModel[13].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Gunner Window Outside
+		bodyModel[13].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); 		//Gunner Window Outside
 
 		bodyModel[14] = new NMTModelRenderer(this,144, 279, textureX, textureY);
-		bodyModel[14].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Gunner Window Outside
+		bodyModel[14].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); 		//Gunner Window Outside
 
 		bodyModel[15] = new NMTModelRenderer(this,144, 279, textureX, textureY);
-		bodyModel[15].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); //Gunner Window Outside
+		bodyModel[15].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, NMTGlobal.NMT_DIR_TOP); 		//Gunner Window Outside
 
 		//----------------------------------------------------------------------------------------------------------------
 		
@@ -132,24 +147,28 @@ public class ModelLancaster extends ModelPlane
 		//Tail (8 / 9)
 		tailModel = new NMTModelRenderer[6];
 		tailModel[0] = new NMTModelRenderer(this,0, 279, textureX, textureY);
-		tailModel[0].addBox(96, 16, -82, 16, 64, 2, 0.0F); //Right Tail Flat
+		tailModel[0].addBox(96, 16, -82, 16, 64, 2, 0.0F);										 		//Right Tail Flat
 		tailModel[0].rotateAngleX = -(float)Math.PI / 2;
-		tailModel[1] = new NMTModelRenderer(this,0, 279, textureX, textureY);	
-		tailModel[1].addBox(96, 16, -82, 16, 64, 2, 0.0F); //Left Tail Flat
-		tailModel[1].doMirror(false, true, false);
+		
+		tailModel[1] = new NMTModelRenderer(this,0, 279, textureX, textureY);							//Left Tail Flat
+		temp = new NMTModelBox(bodyModel[1], 96, 16, -82, 16, 64, 2, 0F, 0F, false);
+		temp.doMirror(false, true, false);
+		bodyModel[1].addModel(temp);
+		
+		
 		tailModel[1].rotateAngleX = -(float)Math.PI / 2;	
 		tailModel[2] = new NMTModelRenderer(this,72, 279, textureX, textureY);
-		tailModel[2].addBox(96, -128, 80, 16, 64, 2, 0.0F); //Right Tail Vertical Part
+		tailModel[2].addBox(96, -128, 80, 16, 64, 2, 0.0F); 											//Right Tail Vertical Part
 		tailModel[3] = new NMTModelRenderer(this,72, 279, textureX, textureY);
-		tailModel[3].addBox(96, -128, -82, 16, 64, 2, 0.0F); //Left Tail Vertical Part	
+		tailModel[3].addBox(96, -128, -82, 16, 64, 2, 0.0F); 											//Left Tail Vertical Part	
 		tailModel[4] = new NMTModelRenderer(this,240, 279, textureX, textureY);
-		tailModel[4].addBox(64, -96, -15, 64, 1, 30, 0.0F); //Top Panel
+		tailModel[4].addBox(64, -96, -15, 64, 1, 30, 0.0F); 											//Top Panel
 		tailModel[5] = new NMTModelRenderer(this,304, 111, textureX, textureY);
-		tailModel[5].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, NMTGlobal.NMT_DIR_LEFT); //Rear Gunner Window
+		tailModel[5].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, NMTGlobal.NMT_DIR_LEFT);	 	//Rear Gunner Window
 		
 		rightWingModel = new NMTModelRenderer[6];
 		rightWingModel[0] = new NMTModelRenderer(this,0, 113, textureX, textureY);
-		rightWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Right Wing Inner
+		rightWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); 										//Right Wing Inner
 		rightWingModel[0].rotateAngleX = -(float)Math.PI / 2;		
 		rightWingModel[1] = new NMTModelRenderer(this,136, 113, textureX, textureY);
 		rightWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM); //Right Wing Outer
@@ -159,27 +178,31 @@ public class ModelLancaster extends ModelPlane
 		rightWingModel[3] = new NMTModelRenderer(this,256, 32, textureX, textureY);
 		rightWingModel[3].addTrapezoid(-96, -80, -128, 64, 24, 24, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM); //Right Outer Engine
 		rightWingModel[4] = new NMTModelRenderer(this,408, 24, textureX, textureY);
-		rightWingModel[4].addBox(-115, -76, -60, 6, 16, 16, 0.0F); //Right Inner Engine Propeller Centre
+		rightWingModel[4].addBox(-115, -76, -60, 6, 16, 16, 0.0F); 										//Right Inner Engine Propeller Centre
 		rightWingModel[5] = new NMTModelRenderer(this,408, 24, textureX, textureY);
-		rightWingModel[5].addBox(-99, -76, -124, 6, 16, 16, 0.0F); //Right Outer Engine Propeller Centre
+		rightWingModel[5].addBox(-99, -76, -124, 6, 16, 16, 0.0F); 										//Right Outer Engine Propeller Centre
 		
 		leftWingModel = new NMTModelRenderer[6];
-		leftWingModel[0] = new NMTModelRenderer(this,0, 113, textureX, textureY);	
-		leftWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Left Wing Inner
-		leftWingModel[0].doMirror(false, true, false);
-		leftWingModel[0].rotateAngleX = -(float)Math.PI / 2;		
-		leftWingModel[1] = new NMTModelRenderer(this,136, 113, textureX, textureY);
-		leftWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM); //Left Wing Outer
-		leftWingModel[1].doMirror(false, true, false);
+		leftWingModel[0] = new NMTModelRenderer(this,0, 113, textureX, textureY);						//Left Wing Inner
+		temp = new NMTModelBox(leftWingModel[0], -64, 16, -82, 64, 96, 4, 0F, 0F, false);
+		temp.doMirror(false, true, false);
+		leftWingModel[0].addModel(temp);
+		leftWingModel[0].rotateAngleX = -(float)Math.PI / 2;
+		
+		leftWingModel[1] = new NMTModelRenderer(this,136, 113, textureX, textureY); 					//Left Wing Outer
+		temp = new NMTModelTrapezoid(leftWingModel[1], -64, 112, -82, 80, 128, 4, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM);
+		temp.doMirror(false, true, false);
+		leftWingModel[1].addModel(temp);
 		leftWingModel[1].rotateAngleX = -(float)Math.PI / 2;
+		
 		leftWingModel[2] = new NMTModelRenderer(this,256, 32, textureX, textureY);
 		leftWingModel[2].addTrapezoid(-112, -80, 40, 64, 24, 24, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM); //Left Inner Engine
 		leftWingModel[3] = new NMTModelRenderer(this,256, 32, textureX, textureY);
 		leftWingModel[3].addTrapezoid(-96, -80, 104, 64, 24, 24, 0.0F, -2.0F, NMTGlobal.NMT_DIR_BOTTOM); //Left Outer Engine		
 		leftWingModel[4] = new NMTModelRenderer(this,408, 24, textureX, textureY);
-		leftWingModel[4].addBox(-115, -76, 44, 6, 16, 16, 0.0F); //Left Inner Engine Propeller Centre
+		leftWingModel[4].addBox(-115, -76, 44, 6, 16, 16, 0.0F); 										//Left Inner Engine Propeller Centre
 		leftWingModel[5] = new NMTModelRenderer(this,408, 24, textureX, textureY);
-		leftWingModel[5].addBox(-99, -76, 108, 6, 16, 16, 0.0F); //Left Outer Engine Propeller Centre		
+		leftWingModel[5].addBox(-99, -76, 108, 6, 16, 16, 0.0F); 										//Left Outer Engine Propeller Centre		
 
 		propellerModels = new NMTModelRenderer[4][3]; //4 propellers
 		propellerModels[1] = makeProp(-114, -68, 52);
@@ -209,9 +232,11 @@ public class ModelLancaster extends ModelPlane
 		pitchFlapLeftModel[0].setRotationPoint(112F, -81F, 48F);	
 		
 		pitchFlapLeftWingModel = new NMTModelRenderer[1]; //Two right pitch flaps
-		pitchFlapLeftWingModel[0] = new NMTModelRenderer(this,0, 345, textureX, textureY);
-		pitchFlapLeftWingModel[0].addBox(0F, -48F , -2F, 16, 96, 4, 0.0F);
-		pitchFlapLeftWingModel[0].doMirror(false, true, false);
+		pitchFlapLeftWingModel[0] = new NMTModelRenderer(this, 0, 345, textureX, textureY);
+		temp = new NMTModelBox(pitchFlapLeftWingModel[0], 0F, -48F , -2F, 16, 96, 4, 0F, 0F, false);
+		temp.doMirror(false, true, false);
+		pitchFlapLeftWingModel[0].addModel(temp);
+
         pitchFlapLeftWingModel[0].rotateAngleX = 1.570796F;
 		pitchFlapLeftWingModel[0].setRotationPoint(0F, -80F, 64F);
 		

@@ -8,6 +8,8 @@ import net.minecraft.src.Tessellator;
 
 public class ModelAAGun extends ModelBase
 {
+	public boolean oldModel = false;
+	
 	public ModelAAGun()
 	{
 	}
@@ -67,6 +69,9 @@ public class ModelAAGun extends ModelBase
 
 	public void flipAll()
 	{
+		oldModel = !oldModel;
+	}
+		/*
 		for (int i = 0; i < baseModel.length; i++)
 		{
 			baseModel[i].doMirror(false, true, true);
@@ -98,7 +103,7 @@ public class ModelAAGun extends ModelBase
 				ammoModel[i][j].setRotationPoint(ammoModel[i][j].rotationPointX, -ammoModel[i][j].rotationPointY, -ammoModel[i][j].rotationPointZ);
 			}
 		}
-	}
+	}*/
 
 	public NMTModelRenderer baseModel[]; // The base which stays put
 	public NMTModelRenderer seatModel[]; // The bit which swivels around the yaw
