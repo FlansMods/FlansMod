@@ -13,7 +13,7 @@ import net.minecraft.src.World;
 
 public class ContainerPlaneCrafting extends Container
 {
-
+	
     public ContainerPlaneCrafting(InventoryPlayer inventoryplayer, World worldy, int i, int j, int k, boolean bigger)
     {
 		big = bigger;
@@ -52,11 +52,13 @@ public class ContainerPlaneCrafting extends Container
         onCraftMatrixChanged(craftMatrix);
     }
 		
+    @Override
 	public ItemStack transferStackInSlot(int i)
     {
         return null;
     }
 	
+    @Override
     public void onCraftMatrixChanged(IInventory iinventory)
     {
 		//Reset output slot
@@ -470,6 +472,7 @@ public class ContainerPlaneCrafting extends Container
 		}
 	}
 
+	@Override
     public void onCraftGuiClosed(EntityPlayer entityplayer)
     {
         super.onCraftGuiClosed(entityplayer);
@@ -484,6 +487,7 @@ public class ContainerPlaneCrafting extends Container
 
     }
 
+	@Override
     public boolean canInteractWith(EntityPlayer entityplayer)
     {
         if(world.getBlockId(xTile, yTile, zTile) != FlansMod.craftingTable.blockID)

@@ -114,6 +114,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionZ = motZ;
 	}
 
+	@Override
 	protected void entityInit()
 	{
 	}
@@ -138,6 +139,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		prevRotationPitch = rotationPitch = (float) ((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
 	}
 
+	@Override
 	public void setVelocity(double d, double d1, double d2)
 	{
 		motionX = d;
@@ -154,6 +156,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -358,6 +361,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		return false;
 	}
 
+	@Override
 	public void setDead()
 	{
 		if (isDead)
@@ -407,14 +411,17 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
 	}
 
+	@Override
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 	}
 
+	@Override
 	public float getShadowSize()
 	{
 		return type.hitBoxSize;

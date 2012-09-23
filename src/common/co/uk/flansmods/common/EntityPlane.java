@@ -152,6 +152,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 	}
 	
+	@Override
     public boolean interact(EntityPlayer entityplayer)
     {
 		if(isDead)
@@ -816,6 +817,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 	}
 	
+	@Override
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
 		tag.setInteger("DataID", dataID);
@@ -834,6 +836,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
     }
 
+	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		type = PlaneType.getPlane(tag.getString("Type"));

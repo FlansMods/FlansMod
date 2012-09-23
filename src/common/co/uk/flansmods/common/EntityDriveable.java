@@ -47,30 +47,36 @@ public abstract class EntityDriveable extends Entity
 
 	}
 
+	@Override
     protected boolean canTriggerWalking()
     {
         return false;
     }
 
+	@Override
     protected void entityInit()
     {
     }
 
+	@Override
     public AxisAlignedBB getCollisionBox(Entity entity)
     {
         return entity.boundingBox;
     }
 
+	@Override
     public AxisAlignedBB getBoundingBox()
     {
         return boundingBox;
     }
 
+	@Override
     public boolean canBePushed()
     {
         return true;
     }
 
+	@Override
     public double getMountedYOffset()
     {
         return (double)height * 0.0D - 0.30000001192092896D;
@@ -78,6 +84,7 @@ public abstract class EntityDriveable extends Entity
 	
 	public abstract boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i);
 	
+	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
     {
 	    if(worldObj.isRemote || isDead)
@@ -90,17 +97,21 @@ public abstract class EntityDriveable extends Entity
 		return true;
 	}
 	
+	@Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
 	{
 		//Do nothing. Like a boss.
 		// TODO: perhaps send the player flying??
+		//Sounds good. ^ 
 	}
 
+	@Override
     public boolean canBeCollidedWith()
     {
         return !isDead;
     }
-
+	
+	@Override
     public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
     {
         motionX = velocityX;
@@ -108,6 +119,7 @@ public abstract class EntityDriveable extends Entity
         motionZ = velocityZ;
     }
 
+	@Override
     public void setVelocity(double d, double d1, double d2)
     {
         velocityX = motionX = d;
@@ -118,6 +130,7 @@ public abstract class EntityDriveable extends Entity
     // TODO: gotta do this stuff elsewhere.
 	public abstract void pressKey(int key);
 
+	@Override
     public void onUpdate()
     {
         super.onUpdate();

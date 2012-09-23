@@ -36,6 +36,7 @@ public class EntityCollisionBox extends Entity
 		part = pt;
     }
 	
+    @Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -99,22 +100,28 @@ public class EntityCollisionBox extends Entity
 		}
 	}
 
+	@Override
     protected void entityInit() {}
 
+	@Override
     protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
 	
+	@Override
     protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
 
+	@Override
     public boolean canBeCollidedWith()
     {
         return true;
     }
 	
+	@Override
 	public boolean interact(EntityPlayer player)
     {
 		return plane.interact(player);
 	}
 	
+	@Override
     public boolean attackEntityFrom(DamageSource damageSource, int i)
     {
 		if(plane != null)
@@ -122,6 +129,7 @@ public class EntityCollisionBox extends Entity
 		return false;
     }
 
+	@Override
     public boolean isEntityEqual(Entity entity)
     {
 		for(EntityCollisionBox box : plane.boxes)
