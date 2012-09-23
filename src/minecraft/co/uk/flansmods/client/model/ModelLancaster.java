@@ -1,7 +1,7 @@
 package co.uk.flansmods.client.model;
 
-import net.minecraft.src.NMTGlobal;
-import net.minecraft.src.NMTModelRenderer;
+import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
 
 public class ModelLancaster extends ModelPlane
 {

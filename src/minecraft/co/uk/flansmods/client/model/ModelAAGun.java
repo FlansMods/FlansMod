@@ -1,9 +1,9 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+
 import co.uk.flansmods.common.EntityAAGun;
 import net.minecraft.src.ModelBase;
-import net.minecraft.src.NMTModelBase;
-import net.minecraft.src.NMTModelRenderer;
 import net.minecraft.src.Tessellator;
 
 public class ModelAAGun extends ModelBase

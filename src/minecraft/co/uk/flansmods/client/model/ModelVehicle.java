@@ -1,9 +1,10 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+
 import co.uk.flansmods.common.CollisionBox;
 import co.uk.flansmods.common.EntityVehicle;
 import net.minecraft.src.ModelBase;
-import net.minecraft.src.NMTModelRenderer;
 
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelBase

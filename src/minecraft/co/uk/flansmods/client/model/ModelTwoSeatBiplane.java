@@ -1,7 +1,8 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+
 import co.uk.flansmods.common.CollisionBox;
-import net.minecraft.src.NMTModelRenderer;
 
 public class ModelTwoSeatBiplane extends ModelPlane
 {

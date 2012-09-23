@@ -1,9 +1,10 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.ModelBase;
-import net.minecraft.src.NMTGlobal;
-import net.minecraft.src.NMTModelRenderer;
 
 public class ModelBomb extends ModelBase
 {

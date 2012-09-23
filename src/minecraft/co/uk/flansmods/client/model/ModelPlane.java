@@ -1,8 +1,9 @@
 package co.uk.flansmods.client.model;
 
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+
 import co.uk.flansmods.common.EntityPlane;
 import net.minecraft.src.ModelBase;
-import net.minecraft.src.NMTModelRenderer;
 
 //Extensible ModelPlane class for rendering plane models
 public class ModelPlane extends ModelBase
