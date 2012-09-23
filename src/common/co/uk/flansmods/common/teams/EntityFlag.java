@@ -1,6 +1,8 @@
 package co.uk.flansmods.common.teams;
 
 import co.uk.flansmods.common.FlansMod;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.Entity;
 import net.minecraft.src.NBTTagCompound;
@@ -8,6 +10,7 @@ import net.minecraft.src.World;
 
 public class EntityFlag extends Entity implements ITeamObject {
 	
+	public int baseID;
 	public ITeamBase base;
 
 	public EntityFlag(World world) 
@@ -32,46 +35,69 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(16, new Integer(0));
+		dataWatcher.addObject(16, new String("none"));
 	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound var1) {
-		
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound var1) {
 	
+	@Override
+	public void onUpdate()
+	{
+		super.onUpdate();
+		//If the base is null, maybe because the flag loaded before the base, check again to see if it exists.
+		//Do not do this client side
+		if(base == null && FMLCommonHandler.instance().getEffectiveSide().isServer())
+		{
+			setBase(TeamsManager.getInstance().getBase(baseID));
+		}
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound tags) 
+	{
+		baseID = tags.getInteger("Base");
+		setBase(TeamsManager.getInstance().getBase(baseID));
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound tags) 
+	{
+		tags.setInteger("Base", base.getID());
 	}
 
 	@Override
 	public ITeamBase getBase() 
 	{
-		return TeamsManager.getInstance().getBase(dataWatcher.getWatchableObjectInt(16));
+		return base;
 	}
 
 	@Override
-	public void onBaseSet(Team newOwners) {
-
+	public void onBaseSet(Team newOwners) 
+	{
+		if(newOwners != null)
+			dataWatcher.updateObject(16, newOwners.shortName);
+		else dataWatcher.updateObject(16, "none");
 	}
 
 	@Override
-	public void onBaseCapture(Team newOwners) {
-
+	public void onBaseCapture(Team newOwners) 
+	{
+		onBaseSet(newOwners);
 	}
 
 	@Override
 	public void tick() {
-		if(base == null)
-			setDead();
+
 	}
 
 	@Override
 	public void setBase(ITeamBase b) 
 	{
 		base = b;
-		dataWatcher.updateObject(16, new Integer(base.getID()));
+		if(base != null)
+		{
+			base.addObject(this);
+			Team owner = base.getOwner();
+			onBaseSet(owner);
+		}
 	}
 
 	@Override
@@ -98,4 +124,13 @@ public class EntityFlag extends Entity implements ITeamObject {
 		return posZ;
 	}
 
+	public String getTeamName()
+	{
+		return dataWatcher.getWatchableObjectString(16);
+	}
+	
+	public Team getTeam()
+	{
+		return Team.getTeam(getTeamName());
+	}
 }

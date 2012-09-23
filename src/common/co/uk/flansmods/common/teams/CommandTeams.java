@@ -33,6 +33,7 @@ public class CommandTeams extends CommandBase {
 			{
 				sender.sendChatToPlayer("\u00a7f" + gametype.name + " (" + gametype.shortName + ")");
 			}
+			return;
 		}
 		if(split[0].equals("setGametype"))
 		{
@@ -63,6 +64,7 @@ public class CommandTeams extends CommandBase {
 				teamsManager.teams = new Team[gametype.numTeamsRequired];
 				teamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
 			}
+			return;
 		}
 		if(split[0].equals("listTeams"))
 		{
@@ -80,6 +82,7 @@ public class CommandTeams extends CommandBase {
 				else
 					sender.sendChatToPlayer("\u00a7" + team.textColour + i + " : " + team.name + " (" + team.shortName + ")");
 			}
+			return;
 		}
 		if(split[0].equals("listAllTeams"))
 		{
@@ -94,6 +97,7 @@ public class CommandTeams extends CommandBase {
 			{
 				sender.sendChatToPlayer("\u00a7" + team.textColour + team.name + " (" + team.shortName + ")");
 			}
+			return;
 		}
 		if(split[0].equals("setTeams"))
 		{
@@ -130,6 +134,7 @@ public class CommandTeams extends CommandBase {
 			}
 			teamsManager.teams = teams;
 			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
+			return;
 		}
 		if(split[0].equals("getSticks") || split[0].equals("getOpSticks") || split[0].equals("getOpKit"))
 		{
@@ -146,6 +151,7 @@ public class CommandTeams extends CommandBase {
 				sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
 				sender.sendChatToPlayer("\u00a77The Stick of Destruction deletes bases and team objects");
 			}
+			return;
 		}
 	}
 

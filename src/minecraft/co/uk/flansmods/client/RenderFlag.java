@@ -21,10 +21,7 @@ public class RenderFlag extends Render {
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
 	{
 		EntityFlag flag = (EntityFlag)entity;
-		ITeamBase base = flag.getBase();
-		Team team = null;
-		if(base != null)
-			team = base.getOwner();
+		Team team = flag.getTeam();
 		if(team == null)
 			GL11.glColor3f(1F, 1F, 1F);
 		else 

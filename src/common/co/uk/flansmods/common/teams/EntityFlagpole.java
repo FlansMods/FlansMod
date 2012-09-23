@@ -21,6 +21,9 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	public List<ITeamObject> objects = new ArrayList<ITeamObject>();
 	//The name of this base, changeable by the baseList and baseRename commands
 	public String name = "Default Name";
+	//This base's ID
+	//Do not sync IDs. Not necessary. Only sync team of objects. Much easier than syncing base to object links.
+	private int ID;
 	
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 
@@ -58,15 +61,16 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(16, new Integer(0));
+		//dataWatcher.addObject(16, new Integer(0));
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
+		setID(tags.getInteger("ID"));
 		currentTeam = defaultTeam = Team.getTeam(tags.getString("Team"));
 		map = tags.getString("Map");
-		worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
+		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
 	@Override
@@ -75,6 +79,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		if(defaultTeam != null)
 			tags.setString("Team", defaultTeam.shortName);
 		tags.setString("Map", map);
+		tags.setInteger("ID", getID());
 	}
 
 	@Override
@@ -176,12 +181,14 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	public void setID(int i)
 	{
-		dataWatcher.updateObject(16, new Integer(i));
+		//dataWatcher.updateObject(16, new Integer(i));
+		ID = i;
 	}
 	
 	@Override
 	public int getID()
 	{
-		return dataWatcher.getWatchableObjectInt(16);
+		//return dataWatcher.getWatchableObjectInt(16);
+		return ID;
 	}
 }
