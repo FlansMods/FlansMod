@@ -60,6 +60,7 @@ public class FlanPacketServer implements IPacketHandler
     		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}); break;
     		case 3: break; // TODO: Entity Control Packets (world, entityID, byte[] extra stuff for exactly what to do.)
     		case 4: break; // TODO: Gui packets (world, x, y, z, ExtraData for what gui and if its a TE and stuff.)
+    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}); break;
     		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		

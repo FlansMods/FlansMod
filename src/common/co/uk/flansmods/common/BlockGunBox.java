@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import co.uk.flansmods.client.GuiGunBox;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
@@ -34,7 +35,7 @@ public class BlockGunBox extends Block
 	public void buyGun(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if (!FMLClientHandler.instance().getClient().isSingleplayer())
+		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyGun(this, i);
 		} else
@@ -88,7 +89,7 @@ public class BlockGunBox extends Block
 	public void buyAmmo(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if (!FMLClientHandler.instance().getClient().isSingleplayer())
+		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyAmmo(this, i);
 		} else
@@ -142,7 +143,7 @@ public class BlockGunBox extends Block
 	public void buyAltAmmo(int i, InventoryPlayer inventory)
 	{
 		FlansMod.shootTime = 10;
-		if (!FMLClientHandler.instance().getClient().isSingleplayer())
+		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyAmmo(this, i);
 		} else
