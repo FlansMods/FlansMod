@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
@@ -16,6 +17,8 @@ public class PacketBuyWeapon extends FlanPacketServer
 	public static final byte packetID = 5;
 	
 	//type is 0 for gun, 1 for ammo, 2 for altAmmo
+	//Not called on server.
+	@Deprecated
 	public static Packet buildBuyWeaponPacket(BlockGunBox box, int type, int weaponID)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -50,6 +53,21 @@ public class PacketBuyWeapon extends FlanPacketServer
 	@Override
 	public void interpret(DataInputStream stream, Object[] extradata)
 	{
+		try {
+			int id = stream.readInt();
+			String shortName = stream.readUTF();
+			int type = stream.readInt();
+			int weaponID = stream.readInt();
+			
+			GunBoxType box = GunBoxType.getBox(shortName);
+			BlockGunBox block = (BlockGunBox) box.getBlock();
+			
+			EntityPlayer player = (EntityPlayer) extradata[1];
+			block.purchaseItem(type, weaponID, player.inventory);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		//TODO : Route this to the block, but first combine the boxes into one ID with a tileEntity
 	}
 

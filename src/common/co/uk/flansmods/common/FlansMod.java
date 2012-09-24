@@ -12,6 +12,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.CommandTeams;
 import co.uk.flansmods.common.teams.EntityFlag;
@@ -577,12 +578,12 @@ public class FlansMod
 
 	public static void buyGun(BlockGunBox box, int gun)
 	{
-		// Client side only
+		PacketBuyWeapon.buildBuyWeaponPacket(box, gun, 0);
 	}
 
-	public static void buyAmmo(BlockGunBox box, int ammo)
+	public static void buyAmmo(BlockGunBox box, int ammo, int type)
 	{
-		// Client side only
+		PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo);
 	}
 
 	/** read properties */
