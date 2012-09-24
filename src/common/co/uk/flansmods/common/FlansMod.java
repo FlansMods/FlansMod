@@ -109,6 +109,8 @@ public class FlansMod
 	public static File flanDir;
 	public static File propertyFile;
 	
+	public static Block currentGunBox;
+	
 	@PreInit
 	public void load(FMLPreInitializationEvent event)
 	{

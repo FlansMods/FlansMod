@@ -43,11 +43,11 @@ public class ItemGun extends Item
 			}
 			if (type.mode == 1 && mouseHeld) // FullAuto
 			{
-				itemstack = onItemRightClick2(itemstack, world, (EntityPlayer) entity);
+				itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
 			}
 			if (type.mode == 0 && mouseHeld && !lastMouseHeld) // SemiAuto
 			{
-				itemstack = onItemRightClick2(itemstack, world, (EntityPlayer) entity);
+				itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
 			}
 			if (type.hasScope && Mouse.isButtonDown(0) && FlansMod.shootTime <= 0)
 			{
@@ -74,7 +74,7 @@ public class ItemGun extends Item
 		}
 	}
 
-	public ItemStack onItemRightClick2(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ItemStack onItemRightClick2(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
 	{
 		if (FlansMod.shootTime <= 0)
 		{

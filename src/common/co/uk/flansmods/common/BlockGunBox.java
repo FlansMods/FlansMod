@@ -206,9 +206,11 @@ public class BlockGunBox extends Block
 		return type.sideTextureIndex;
 	}
 
-	public boolean blockActivated(World world, int i, int j, int k, EntityPlayer entityplayer)
+	@Override
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
 	{
-		ModLoader.openGUI(entityplayer, new GuiGunBox(entityplayer.inventory, this));
+		FlansMod.instance.currentGunBox = this;
+		GuiHandler.openGui(entityplayer);
 		return true;
 	}
 
