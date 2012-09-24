@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.network.PacketTeamSelect;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.DamageSource;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.Vec3;
@@ -36,9 +38,9 @@ public class GametypeTDM extends Gametype {
 	}
 
 	@Override
-	public void playerJoined(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
+	public void playerJoined(EntityPlayerMP player) 
+	{
+		sendTeamsMenuToPlayer(player);
 	}
 
 	@Override
@@ -87,6 +89,18 @@ public class GametypeTDM extends Gametype {
 	public Vec3 getSpawnPoint(EntityPlayerMP player) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void playerChoseTeam(EntityPlayerMP player, Team team) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -3,6 +3,7 @@ package co.uk.flansmods.client;
 import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiScreen;
@@ -14,6 +15,7 @@ import net.minecraft.src.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.teams.TeamsManager;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
@@ -21,10 +23,45 @@ import cpw.mods.fml.common.TickType;
 
 public class ClientTickHandler implements ITickHandler
 {
+	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
-		Minecraft mc = FMLClientHandler.instance().getClient();
+		if (type.equals(EnumSet.of(TickType.RENDER)))
+		{
+			rTickStart(FMLClientHandler.instance().getClient());
+		}
+		if (type.equals(EnumSet.of(TickType.CLIENT)))
+		{
+			cTickStart(FMLClientHandler.instance().getClient());
+		}
+	}
+
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData)
+	{
+		if (type.equals(EnumSet.of(TickType.RENDER)))
+		{
+			rTickEnd(FMLClientHandler.instance().getClient());
+		}
+		if (type.equals(EnumSet.of(TickType.CLIENT)))
+		{
+			cTickEnd(FMLClientHandler.instance().getClient());
+		}
+	}
+	
+	public void cTickStart(Minecraft minecraft)
+	{ /* Client side only */
 		
+	}
+
+	public void cTickEnd(Minecraft minecraft)
+	{ /* Client side only */
+		FlansModClient.tick();
+	}
+	
+	
+	public void rTickStart(Minecraft mc)
+	{
 		// CAPTURE MOUSE INPUT!
 		if (mc.currentScreen == null) // no screen is open. just the game screen.
 		{
@@ -39,7 +76,7 @@ public class ClientTickHandler implements ITickHandler
 		}
 	}
 
-	public void tickEnd(EnumSet<TickType> type, Object... tickData)
+	public void rTickEnd(Minecraft mc)
 	{
 		if (FlansModClient.zoomOverlay != null && ModLoader.isGUIOpen(null))
 		{
@@ -95,7 +132,7 @@ public class ClientTickHandler implements ITickHandler
 
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.RENDER);
+		return EnumSet.of(TickType.RENDER, TickType.CLIENT);
 	}
 
 	public String getLabel()

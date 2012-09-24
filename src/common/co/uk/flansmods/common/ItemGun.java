@@ -2,7 +2,11 @@ package co.uk.flansmods.common;
 
 import org.lwjgl.input.Mouse;
 
+import co.uk.flansmods.client.FlansModClient;
+
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.*;
 
 public class ItemGun extends Item
@@ -31,6 +35,7 @@ public class ItemGun extends Item
 		return "/spriteSheets/guns.png";
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
 		if (entity instanceof EntityPlayerMP && ((EntityPlayerMP) entity).inventory.getCurrentItem() == itemstack)
@@ -49,23 +54,23 @@ public class ItemGun extends Item
 			{
 				itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
 			}
-			if (type.hasScope && Mouse.isButtonDown(0) && FlansMod.shootTime <= 0)
+			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0)
 			{
-				if (FlansMod.zoomOverlay == null)
+				if (FlansModClient.zoomOverlay == null)
 				{
-					FlansMod.zoomOverlay = type.scope;
-					FlansMod.newZoom = type.zoomLevel;
+					FlansModClient.zoomOverlay = type.scope;
+					FlansModClient.newZoom = type.zoomLevel;
 					float f = FlansMod.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = f / (float) Math.sqrt(type.zoomLevel);
 					FlansMod.originalHideGUI = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
 					FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
 				} else
 				{
-					FlansMod.newZoom = 1.0F;
+					FlansModClient.newZoom = 1.0F;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
 					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 				}
-				FlansMod.shootTime = 10;
+				FlansModClient.shootTime = 10;
 			}
 		}
 		if (soundDelay > 0)
@@ -76,7 +81,7 @@ public class ItemGun extends Item
 
 	public ItemStack onItemRightClick2(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
 	{
-		if (FlansMod.shootTime <= 0)
+		if (FlansModClient.shootTime <= 0)
 		{
 			if (world.isRemote)
 			{
@@ -133,11 +138,10 @@ public class ItemGun extends Item
 					}
 					// Reset the shoot delay timer to the reload time of this
 					// gun
-					FlansMod.shootTime = type.reloadTime;
-					reload(world, entityplayer);
+					FlansModClient.shootTime = type.reloadTime;
 					// Remove any zooming while reloading
-					FlansMod.zoomOverlay = null;
-					FlansMod.newZoom = 1.0F;
+					FlansModClient.zoomOverlay = null;
+					FlansModClient.newZoom = 1.0F;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
 				}
 				return itemstack;
@@ -194,11 +198,10 @@ public class ItemGun extends Item
 							}
 							// Reset the shoot delay timer to the reload time of
 							// this gun
-							FlansMod.shootTime = type.reloadTime;
-							reload(world, entityplayer);
+							FlansModClient.shootTime = type.reloadTime;
 							// Remove any zooming while reloading
-							FlansMod.zoomOverlay = null;
-							FlansMod.newZoom = 1.0F;
+							FlansModClient.zoomOverlay = null;
+							FlansModClient.newZoom = 1.0F;
 							FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
 							FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 							return itemstack;
@@ -209,15 +212,6 @@ public class ItemGun extends Item
 			}
 		}
 		return itemstack;
-	}
-
-	public void reload(World world, EntityPlayer ep)
-	{
-		FlansMod.shootTime += 1000; //MILISECONDS.
-		while(FlansMod.shootTime != 0)
-		{
-			FlansMod.shootTime--;
-		}
 	}
 
 	/** Method for dropping the gun */
@@ -246,7 +240,7 @@ public class ItemGun extends Item
 			world.playSoundAtEntity(entityplayer, type.shootSound, 1.0F, distortion);
 			soundDelay = type.shootSoundLength;
 		}
-		FlansMod.playerRecoil += type.recoil;
+		FlansModClient.playerRecoil += type.recoil;
 		if (!world.isRemote)
 		{
 			// Spawn the bullet entities
@@ -257,8 +251,8 @@ public class ItemGun extends Item
 			// Drop item on shooting if bullet requires it
 			dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
-		FlansMod.shootTime = type.shootDelay;
-		reload(world, entityplayer);
+		FlansModClient.shootTime = type.shootDelay;
+		
 	}
 
 	/** Deployable guns only */

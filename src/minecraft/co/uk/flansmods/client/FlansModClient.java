@@ -44,6 +44,14 @@ public class FlansModClient extends FlansMod
 	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
 	public static int controlModeSwitchTimer = 20;
 	
+	public static int shootTime;
+	public static String zoomOverlay;
+	public static float playerRecoil;
+	public static float antiRecoil;
+	public static float playerZoom = 1.0F;
+	public static float newZoom = 1.0F;
+	public static float lastPlayerZoom;
+	
 	public void load()
 	{
 		if (ABORT)

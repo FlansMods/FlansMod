@@ -4,10 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
+import co.uk.flansmods.client.GuiPlaneFuel;
+import co.uk.flansmods.client.GuiTeamSelect;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 
 public class PacketTeamSelect extends FlanPacketClient 
@@ -62,7 +66,13 @@ public class PacketTeamSelect extends FlanPacketClient
 			boolean classPacket = stream.readBoolean();
 			if(classPacket)
 			{
-				//TODO: Add classes
+				int numClasses = stream.readByte();
+				PlayerClass[] classes = new PlayerClass[numClasses];
+				for(int i = 0; i < numClasses; i++)
+				{
+					classes[i] = PlayerClass.getClass(stream.readUTF());
+				}
+				Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(classes));
 			}
 			else
 			{
@@ -72,7 +82,7 @@ public class PacketTeamSelect extends FlanPacketClient
 				{
 					teams[i] = Team.getTeam(stream.readUTF());
 				}
-				//new GuiTeamSelect();
+				Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(teams));
 			}
 		}
 		catch(Exception e)

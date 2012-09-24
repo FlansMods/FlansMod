@@ -179,6 +179,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
+					//TODO : Remove client reference.
 					FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
 				}
 				if (!type.penetrates)

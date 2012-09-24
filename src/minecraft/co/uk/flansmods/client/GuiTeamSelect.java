@@ -1,7 +1,9 @@
 package co.uk.flansmods.client;
 
+import co.uk.flansmods.client.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
@@ -53,6 +55,14 @@ public class GuiTeamSelect extends GuiScreen
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
 	}
+	
+	protected void actionPerformed(GuiButton button)
+    {
+		if(classMenu)
+			PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(classChoices[button.id].shortName, true));
+		else
+			PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(teamChoices[button.id].shortName, false));
+    }
 	
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
