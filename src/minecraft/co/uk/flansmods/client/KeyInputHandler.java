@@ -107,9 +107,11 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 10;
 		
 		EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+		if(player == null)
+			return;
 		Entity entityTest = player.ridingEntity;
 		
-		if (entityTest instanceof EntityDriveable)
+		if (entityTest != null && entityTest instanceof EntityDriveable)
 		{
 			EntityDriveable driveable = (EntityDriveable) entityTest;
 			driveable.pressKey(keyNum);
