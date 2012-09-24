@@ -40,50 +40,48 @@ public class BlockGunBox extends Block
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyGun(this, i);
-		} else
+		} 
+		if (i <= type.numGuns && type.guns[i] != null)
 		{
-			if (i <= type.numGuns && type.guns[i] != null)
+			boolean canBuy = true;
+			for (ItemStack check : type.gunParts[i])
 			{
-				boolean canBuy = true;
-				for (ItemStack check : type.gunParts[i])
+				int numMatchingStuff = 0;
+				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
-					int numMatchingStuff = 0;
+					ItemStack stack = inventory.getStackInSlot(j);
+					if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+					{
+						numMatchingStuff += stack.stackSize;
+					}
+				}
+				if (numMatchingStuff < check.stackSize)
+				{
+					canBuy = false;
+				}
+			}
+			if (canBuy)
+			{
+				for (ItemStack remove : type.gunParts[i])
+				{
+					int amountLeft = remove.stackSize;
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
-						if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+						if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
 						{
-							numMatchingStuff += stack.stackSize;
+							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
 						}
 					}
-					if (numMatchingStuff < check.stackSize)
-					{
-						canBuy = false;
-					}
 				}
-				if (canBuy)
+				if (!inventory.addItemStackToInventory(new ItemStack(type.guns[i].getItem())))
 				{
-					for (ItemStack remove : type.gunParts[i])
-					{
-						int amountLeft = remove.stackSize;
-						for (int j = 0; j < inventory.getSizeInventory(); j++)
-						{
-							ItemStack stack = inventory.getStackInSlot(j);
-							if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
-							{
-								amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
-							}
-						}
-					}
-					if (!inventory.addItemStackToInventory(new ItemStack(type.guns[i].getItem())))
-					{
-						// Drop gun on floor
-					}
-				} else
-				{
-					// Cant buy
-					// TODO : Add flashing red squares around the items you lack
+					// Drop gun on floor
 				}
+			} else
+			{
+				// Cant buy
+				// TODO : Add flashing red squares around the items you lack
 			}
 		}
 	}
@@ -93,53 +91,48 @@ public class BlockGunBox extends Block
 		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(this, i);
-		} else
+			FlansMod.buyAmmo(this, i, 1);
+		} 
+		if (i <= type.numGuns && type.bulletParts[i] != null)
 		{
-			if (i <= type.numGuns && type.bulletParts[i] != null)
+			boolean canBuy = true;
+			for (ItemStack check : type.bulletParts[i])
 			{
-				boolean canBuy = true;
-				for (ItemStack check : type.bulletParts[i])
+				int numMatchingStuff = 0;
+				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
-					int numMatchingStuff = 0;
+					ItemStack stack = inventory.getStackInSlot(j);
+					if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+					{
+						numMatchingStuff += stack.stackSize;
+					}
+				}
+				if (numMatchingStuff < check.stackSize)
+				{
+					canBuy = false;
+				}
+			}
+			if (canBuy)
+			{
+				for (ItemStack remove : type.bulletParts[i])
+				{
+					int amountLeft = remove.stackSize;
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
-						if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+						if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
 						{
-							numMatchingStuff += stack.stackSize;
+							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
 						}
-					}
-					if (numMatchingStuff < check.stackSize)
-					{
-						canBuy = false;
 					}
 				}
-				if (canBuy)
+				if (!inventory.addItemStackToInventory(new ItemStack(type.bullets[i].getItem())))
 				{
-					for (ItemStack remove : type.bulletParts[i])
-					{
-						int amountLeft = remove.stackSize;
-						for (int j = 0; j < inventory.getSizeInventory(); j++)
-						{
-							ItemStack stack = inventory.getStackInSlot(j);
-							if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
-							{
-								amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
-							}
-						}
-					}
-					if (!inventory.addItemStackToInventory(new ItemStack(type.bullets[i].getItem())))
-					{
 						// Drop gun on floor
-					}
-				} else
-				{
-					// Cant buy
-					// TODO : Add flashing red squares around the items you lack
 				}
-			}
+			} 
 		}
+		//TODO Add flashing red squares if cant buy.
 	}
 
 	public void buyAltAmmo(int i, InventoryPlayer inventory)
@@ -147,51 +140,49 @@ public class BlockGunBox extends Block
 		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(this, i);
-		} else
+			FlansMod.buyAmmo(this, i, 2);
+		} 
+		if (i <= type.numGuns && type.altBulletParts[i] != null)
 		{
-			if (i <= type.numGuns && type.altBulletParts[i] != null)
+			boolean canBuy = true;
+			for (ItemStack check : type.altBulletParts[i])
 			{
-				boolean canBuy = true;
-				for (ItemStack check : type.altBulletParts[i])
+				int numMatchingStuff = 0;
+				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
-					int numMatchingStuff = 0;
+					ItemStack stack = inventory.getStackInSlot(j);
+					if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+					{
+						numMatchingStuff += stack.stackSize;
+					}
+				}
+				if (numMatchingStuff < check.stackSize)
+				{
+					canBuy = false;
+				}
+			}
+			if (canBuy)
+			{
+				for (ItemStack remove : type.altBulletParts[i])
+				{
+					int amountLeft = remove.stackSize;
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
-						if (stack != null && stack.itemID == check.itemID && stack.getItemDamage() == check.getItemDamage())
+						if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
 						{
-							numMatchingStuff += stack.stackSize;
+							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
 						}
 					}
-					if (numMatchingStuff < check.stackSize)
-					{
-						canBuy = false;
-					}
 				}
-				if (canBuy)
+				if (!inventory.addItemStackToInventory(new ItemStack(type.altBullets[i].getItem())))
 				{
-					for (ItemStack remove : type.altBulletParts[i])
-					{
-						int amountLeft = remove.stackSize;
-						for (int j = 0; j < inventory.getSizeInventory(); j++)
-						{
-							ItemStack stack = inventory.getStackInSlot(j);
-							if (amountLeft > 0 && stack != null && stack.itemID == remove.itemID && stack.getItemDamage() == remove.getItemDamage())
-							{
-								amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
-							}
-						}
-					}
-					if (!inventory.addItemStackToInventory(new ItemStack(type.altBullets[i].getItem())))
-					{
-						// Drop gun on floor
-					}
-				} else
-				{
-					// Cant buy
-					// TODO : Add flashing red squares around the items you lack
+					// Drop gun on floor
 				}
+			} else
+			{
+				// Cant buy
+				// TODO : Add flashing red squares around the items you lack
 			}
 		}
 	}
@@ -219,6 +210,16 @@ public class BlockGunBox extends Block
 	public void addCreativeItems(ArrayList itemList)
 	{
 		itemList.add(new ItemStack(this));
+	}
+	
+	public Block purchaseItem(int i, int id, InventoryPlayer inventory) {
+		switch(i) 
+		{
+			case 0: buyGun(id, inventory);
+			case 1: buyAmmo(id, inventory);
+			case 2: buyAltAmmo(id, inventory);
+		}
+		return this;
 	}
 
 	public GunBoxType type;
