@@ -4,11 +4,16 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
+
 import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 
 public class Team {
 	
 	public static List<Team> teams = new ArrayList<Team>();
+	public static Team spectators = new Team("spectators", "Spectators", 0xffffff, '7');
 	
 	public List<EntityPlayerMP> members = new ArrayList<EntityPlayerMP>();
 	
@@ -21,12 +26,18 @@ public class Team {
 	public int teamColour = 0xffffff;
 	public char textColour = 'f';
 	
+	public ItemStack hat;
+	public ItemStack chest;
+	public ItemStack legs;
+	public ItemStack shoes;
+	
 	public Team(String s, String s1, int teamCol, char textCol)
 	{
 		shortName = s;
 		name = s1;
 		teamColour = teamCol;
 		textColour = textCol;
+		teams.add(this);
 	}
 	
 	public Team(BufferedReader file, String pack)
@@ -109,6 +120,46 @@ public class Team {
 					textColour = 'e';
 				if(split[1].equals("White"))
 					textColour = 'f';
+			}
+			if(split[0].equals("Hat") || split[0].equals("Helmet"))
+			{
+				if(split[1].equals("None"))
+					return;
+				for(Item item : Item.itemsList)
+				{
+					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+						hat = new ItemStack(item);
+				}
+			}
+			if(split[0].equals("Chest") || split[0].equals("Top"))
+			{
+				if(split[1].equals("None"))
+					return;
+				for(Item item : Item.itemsList)
+				{
+					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+						chest = new ItemStack(item);
+				}
+			}
+			if(split[0].equals("Legs") || split[0].equals("Bottom"))
+			{
+				if(split[1].equals("None"))
+					return;
+				for(Item item : Item.itemsList)
+				{
+					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+						legs = new ItemStack(item);
+				}
+			}
+			if(split[0].equals("Shoes") || split[0].equals("Boots"))
+			{
+				if(split[1].equals("None"))
+					return;
+				for(Item item : Item.itemsList)
+				{
+					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+						shoes = new ItemStack(item);
+				}
 			}
 			if(split[0].equals("AddDefaultClass") || split[0].equals("AddClass"))
 			{

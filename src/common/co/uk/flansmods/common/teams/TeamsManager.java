@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Chunk;
@@ -18,7 +20,10 @@ import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
+import net.minecraft.src.InventoryPlayer;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CommandEvent;
@@ -34,20 +39,18 @@ public class TeamsManager implements IPlayerTracker
 {
 	public Gametype currentGametype;
 	public Team[] teams;
-	public Team spectators;
 	public static TeamsManager instance;
 	public List<ITeamBase> bases;
 	public List<ITeamObject> objects;
 	public List<String> maps;
-	//TODO : Save this variable per world to avoid bases recieving the same ID
 	private int nextBaseID = 1;
 	
 	public TeamsManager()
 	{
 		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
-		spectators = new Team("spectators", "Spectators", 0xffffff, '7');
-		
+		GameRegistry.registerPlayerTracker(this);
+
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
 		maps = new ArrayList<String>();
@@ -258,21 +261,46 @@ public class TeamsManager implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onPlayerChangedDimension(EntityPlayer player) 
-	{
-		// TODO Auto-generated method stub
-		
+	{	
 	}
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		// TODO Auto-generated method stub
-		
+		Team team = FlansModPlayerHandler.getPlayerData(player).team;
+		if(team.hat != null)
+			player.inventory.armorInventory[3] = team.hat.copy();
+		if(team.chest != null)
+			player.inventory.armorInventory[2] = team.chest.copy();
+		if(team.legs != null)
+			player.inventory.armorInventory[1] = team.legs.copy();
+		if(team.shoes != null)
+			player.inventory.armorInventory[0] = team.shoes.copy();
+		PlayerClass playerClass = FlansModPlayerHandler.getPlayerData(player).playerClass;
+		if(playerClass != null)
+		{
+			for(ItemStack stack : playerClass.startingItems)
+			{
+				player.inventory.addItemStackToInventory(stack.copy());
+			}
+		}
+		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
+		if(spawnPoint != null)
+		{
+			player.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+		}
+		currentGametype.playerRespawned((EntityPlayerMP)player);
+	}
+	
+	public void forceRespawn(EntityPlayerMP player)
+	{
+		player.inventory.armorInventory = new ItemStack[4];
+		player.inventory.mainInventory = new ItemStack[36];
+		player.heal(9001);
+		onPlayerRespawn(player);
 	}
 }

@@ -3,7 +3,9 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.DamageSource;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Vec3;
@@ -12,6 +14,8 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.network.PacketTeamSelect;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public abstract class Gametype {
 	
@@ -47,22 +51,47 @@ public abstract class Gametype {
 	
 	public static void sendPacketToPlayer(Packet packet, EntityPlayerMP player)
 	{
-		player.serverForThisPlayer.sendPacketToPlayer(packet);
+		PacketDispatcher.sendPacketToPlayer(packet, (Player)player);
 	}
 	
 	public static void sendTeamsMenuToPlayer(EntityPlayerMP player)
 	{
+		if(teamsManager.teams == null)
+			return;
 		Team[] availableTeams = new Team[teamsManager.teams.length + 1];
 		for(int i = 0; i < teamsManager.teams.length; i++)
 		{
 			availableTeams[i] = teamsManager.teams[i];
 		}
-		availableTeams[teamsManager.teams.length + 1] = teamsManager.spectators;
+		availableTeams[teamsManager.teams.length] = Team.spectators;
 		
-		getPlayerData(player).team = teamsManager.spectators;
+		getPlayerData(player).team = Team.spectators;
 		sendPacketToPlayer(PacketTeamSelect.buildTeamChoicesPacket(availableTeams), player);
 	}
+	
+	public static void sendClassMenuToPlayer(EntityPlayerMP player)
+	{
+		Team team = getPlayerData(player).team;
+		if(team == null)
+			sendTeamsMenuToPlayer(player);
+		else if(team != Team.spectators && team.classes.size() > 0)
+		{
+			sendPacketToPlayer(PacketTeamSelect.buildClassChoicesPacket(team.classes.toArray(new PlayerClass[team.classes.size()])), player);
+		}
+	}
+	
+	public static String[] getPlayerNames()
+	{
+		return MinecraftServer.getServer().getAllUsernames();
+	}
+	
+	public static List<EntityPlayer> getPlayers()
+	{
+		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+	}
 
+	public abstract void teamsSet();
+	
 	public abstract void initGametype();
 	
 	public abstract void startNewRound();
@@ -72,6 +101,8 @@ public abstract class Gametype {
 	public abstract void tick();
 	
 	public abstract void playerJoined(EntityPlayerMP player);
+	
+	public abstract void playerRespawned(EntityPlayerMP player);
 	
 	public abstract void playerQuit(EntityPlayerMP player);
 	

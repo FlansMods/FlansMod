@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.common.EntityDriveable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GameSettings;
@@ -30,6 +31,7 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
+	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
 	
 	GameSettings settings;
 
@@ -47,7 +49,8 @@ public class KeyInputHandler extends KeyHandler
 				inventoryKey,
 				bombKey,
 				gunKey,
-				controlSwitchKey
+				controlSwitchKey,
+				teamsMenuKey
 				},
 				new boolean[]
 						{
@@ -61,7 +64,8 @@ public class KeyInputHandler extends KeyHandler
 				false, // inventory
 				true, // bomb
 				true, // gun
-				false // control switch
+				false, // control switch
+				false // teams menu
 						});
 		settings = FMLClientHandler.instance().getClient().gameSettings; 
 	}
@@ -80,6 +84,9 @@ public class KeyInputHandler extends KeyHandler
 			if (kb.keyCode == key.keyCode)
 				key.pressed =  kb.pressed = true;
 		}
+		
+		if(Minecraft.getMinecraft().currentScreen != null)
+			return;
 		
 		int keyNum = 0;
 		
@@ -105,6 +112,11 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 9;
 		else if(kb == controlSwitchKey)
 			keyNum = 10;
+		else if(kb == teamsMenuKey)
+		{
+			Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect());
+			return;
+		}
 		
 		EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
 		if(player == null)

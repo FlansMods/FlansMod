@@ -35,7 +35,7 @@ public class FlanPacketClient implements IPacketHandler
 	
 	public static final void recieve(Packet250CustomPayload packet, EntityPlayer player, NetworkManager manager)
 	{
-		if (packet.channel.equals(channelFlan))
+		if (!packet.channel.equals(channelFlan))
 			return;
 		
 		WorldClient world = FMLClientHandler.instance().getClient().theWorld;

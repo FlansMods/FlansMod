@@ -78,9 +78,9 @@ public class ItemOpStick extends Item
 	    		{
 	    			if(teamsManager.teams != null)
 	    				newOwner = teamsManager.teams[0];
-	    			else newOwner = teamsManager.spectators;
+	    			else newOwner = Team.spectators;
 	    		}
-	    		else if(currentOwner == teamsManager.spectators)
+	    		else if(currentOwner == Team.spectators)
 	    			newOwner = null;
 	    		else
 	    		{
@@ -89,7 +89,7 @@ public class ItemOpStick extends Item
 	    				if(currentOwner == teamsManager.teams[i])
 	    				{
 	    					if(i == teamsManager.teams.length - 1)
-	    						newOwner = teamsManager.spectators;
+	    						newOwner = Team.spectators;
 	    					else newOwner = teamsManager.teams[i + 1];
 	    				}
 	    			}

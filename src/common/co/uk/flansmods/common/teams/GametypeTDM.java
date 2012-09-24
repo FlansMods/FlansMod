@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.DamageSource;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.Vec3;
 
@@ -14,15 +15,31 @@ public class GametypeTDM extends Gametype {
 	}
 
 	@Override
-	public void initGametype() {
-		// TODO Auto-generated method stub
-		
+	public void initGametype() 
+	{
+		startNewRound();
 	}
 
 	@Override
-	public void startNewRound() {
-		// TODO Auto-generated method stub
-		
+	public void teamsSet()
+	{
+		startNewRound();
+	}
+	
+	@Override
+	public void startNewRound() 
+	{
+		for(EntityPlayer player : getPlayers())
+		{
+			if(getPlayerData((EntityPlayerMP)player).team == null || getPlayerData((EntityPlayerMP)player).team == Team.spectators)
+			{
+				sendTeamsMenuToPlayer((EntityPlayerMP)player);
+			}			
+			else if(getPlayerData((EntityPlayerMP)player).playerClass == null)
+			{
+				sendClassMenuToPlayer((EntityPlayerMP)player);
+			}
+		}
 	}
 
 	@Override
@@ -41,6 +58,25 @@ public class GametypeTDM extends Gametype {
 	public void playerJoined(EntityPlayerMP player) 
 	{
 		sendTeamsMenuToPlayer(player);
+	}
+	
+	@Override
+	public void playerChoseTeam(EntityPlayerMP player, Team team) 
+	{
+		//TODO : Auto-balancing
+		getPlayerData(player).team = team;
+		sendClassMenuToPlayer((EntityPlayerMP)player);
+		if(team == Team.spectators)
+		{
+			player.respawnPlayer();
+		}
+	}
+
+	@Override
+	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
+	{
+		getPlayerData(player).playerClass = playerClass;
+		teamsManager.forceRespawn(player);
 	}
 
 	@Override
@@ -92,15 +128,8 @@ public class GametypeTDM extends Gametype {
 	}
 
 	@Override
-	public void playerChoseTeam(EntityPlayerMP player, Team team) {
+	public void playerRespawned(EntityPlayerMP player) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

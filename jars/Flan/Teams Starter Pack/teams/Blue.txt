@@ -10,5 +10,6 @@ Hat blueHat
 Chest None
 Legs None
 Shoes None
-
+AddClass bowman
+AddClass swordsman
 

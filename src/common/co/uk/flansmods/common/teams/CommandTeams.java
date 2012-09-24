@@ -37,7 +37,7 @@ public class CommandTeams extends CommandBase {
 		}
 		if(split[0].equals("setGametype"))
 		{
-			if(split.length == 0)
+			if(split.length != 2)
 			{
 				sender.sendChatToPlayer("\u00a74To set the gametype, use \"/teams setGametype <gametype>\" with a valid gametype.");
 				return;
@@ -101,7 +101,7 @@ public class CommandTeams extends CommandBase {
 		}
 		if(split[0].equals("setTeams"))
 		{
-			if(teamsManager.currentGametype == null)
+			if(teamsManager.currentGametype == null || teamsManager.teams == null)
 			{
 				sender.sendChatToPlayer("\u00a74No gametype selected. Please select the gametype with the setGametype command");
 				return;
@@ -133,6 +133,7 @@ public class CommandTeams extends CommandBase {
 				teamList += (i == 0 ? "" : (i == split.length - 2 ? " and " : ", ")) + "\u00a7" + team.textColour + team.name + "\u00a7f";
 			}
 			teamsManager.teams = teams;
+			teamsManager.currentGametype.teamsSet();
 			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
 			return;
 		}
