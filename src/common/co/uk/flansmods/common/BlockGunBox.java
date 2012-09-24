@@ -7,6 +7,8 @@ import co.uk.flansmods.client.GuiGunBox;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
@@ -210,8 +212,7 @@ public class BlockGunBox extends Block
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
 	{
-		FlansMod.instance.currentGunBox = this;
-		GuiHandler.openGui(entityplayer);
+		GuiHandler.openGunBoxGui(entityplayer, this);
 		return true;
 	}
 

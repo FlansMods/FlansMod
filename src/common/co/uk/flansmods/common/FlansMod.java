@@ -19,6 +19,7 @@ import co.uk.flansmods.common.teams.EntityFlagpole;
 import co.uk.flansmods.common.teams.ItemFlagpole;
 import co.uk.flansmods.common.teams.ItemOpStick;
 import co.uk.flansmods.common.teams.ItemTeamArmour;
+import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
 
@@ -108,8 +109,6 @@ public class FlansMod
 
 	public static File flanDir;
 	public static File propertyFile;
-	
-	public static Block currentGunBox;
 	
 	@PreInit
 	public void load(FMLPreInitializationEvent event)
@@ -493,6 +492,33 @@ public class FlansMod
 		}
 		log("Loaded armour.");
 		
+		//Classes
+		for(File file : contentPacks)
+		{
+			File classesDir = new File(file, "/classes/");
+			File[] classes = classesDir.listFiles();
+			if (classes == null)
+			{
+				logQuietly("No player class files found.");
+			} else
+			{
+				for (int i = 0; i < classes.length; i++)
+				{
+					if (classes[i].isDirectory())
+						continue;
+					try
+					{
+						PlayerClass playerClass = new PlayerClass(new BufferedReader(new FileReader(classes[i])), file.getName());
+					} catch (Exception e)
+					{
+						log("Failed to add player class : " + classes[i].getName());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		log("Loaded player classes.");	
+		
 		//Teams
 		for (File file : contentPacks)
 		{
@@ -518,7 +544,9 @@ public class FlansMod
 				}
 			}
 		}
-		log("Loaded teams.");
+		log("Loaded teams.");		
+		
+
 		
 		
 		// LOAD GRAPHICS

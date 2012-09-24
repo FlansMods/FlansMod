@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.util.Arrays;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.network.PacketBreakSound;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -59,6 +58,8 @@ public class FlanPacketClient implements IPacketHandler
     		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}); break;
     		case 3: break; // TODO: Entity Control Packets (world, entityID, byte[] extra stuff for exactly what to do.)
     		case 4: break; // TODO: Gui packets (world, x, y, z, ExtraData for what gui and if its a TE and stuff.)
+    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}); break;
+    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}); break;
     		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		

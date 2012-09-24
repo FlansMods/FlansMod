@@ -15,7 +15,7 @@ public class PlayerClass
 	
 	public String name;
 	public String shortName;
-	public List<ItemStack> startingItems;
+	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	
 	public PlayerClass(BufferedReader file, String pack)
 	{
@@ -66,7 +66,7 @@ public class PlayerClass
 				int damage = 0;
 				for(Item item : Item.itemsList)
 				{
-					if(item.getItemName().equals(split[1]) || (item.getItemName().split(".").length > 1 && item.getItemName().split(".")[1].equals(split[1])))
+					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
 						matchingItem = item;
 				}
 				if(matchingItem == null)
@@ -89,5 +89,15 @@ public class PlayerClass
 			System.out.println("Reading class file failed.");
 			e.printStackTrace();
 		}
+	}
+	
+	public static PlayerClass getClass(String s)
+	{
+		for(PlayerClass playerClass : classes)
+		{
+			if(playerClass.shortName.equals(s))
+				return playerClass;
+		}
+		return null;
 	}
 }

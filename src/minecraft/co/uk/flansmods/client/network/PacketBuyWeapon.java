@@ -12,7 +12,7 @@ import co.uk.flansmods.common.FlansMod;
 
 public class PacketBuyWeapon extends FlanPacketClient 
 {
-public static final byte packetID = 5;
+	public static final byte packetID = 5;
 	
 	//type is 0 for gun, 1 for ammo, 2 for altAmmo
 	public static Packet buildBuyWeaponPacket(BlockGunBox box, int type, int weaponID)

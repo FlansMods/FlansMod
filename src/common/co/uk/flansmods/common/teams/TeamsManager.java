@@ -10,11 +10,13 @@ import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.IPlayerTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.Chunk;
 import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
@@ -28,7 +30,7 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-public class TeamsManager
+public class TeamsManager implements IPlayerTracker
 {
 	public Gametype currentGametype;
 	public Team[] teams;
@@ -239,5 +241,38 @@ public class TeamsManager
 		if(base.getID() == 0)
 			base.setID(nextBaseID++);
 		bases.add(base);
+	}
+
+	@Override
+	public void onPlayerLogin(EntityPlayer player) 
+	{
+		if(player instanceof EntityPlayerMP)
+		{
+			EntityPlayerMP playerMP = (EntityPlayerMP)player;
+			if(currentGametype != null)
+				currentGametype.playerJoined(playerMP);
+			
+		}
+	}
+
+	@Override
+	public void onPlayerLogout(EntityPlayer player) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPlayerChangedDimension(EntityPlayer player) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPlayerRespawn(EntityPlayer player) 
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

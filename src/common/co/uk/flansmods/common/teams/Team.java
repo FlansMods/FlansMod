@@ -13,6 +13,8 @@ public class Team {
 	public List<EntityPlayerMP> members = new ArrayList<EntityPlayerMP>();
 	
 	public List<ITeamBase> bases = new ArrayList<ITeamBase>();
+	
+	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 
 	public String shortName;
 	public String name;
@@ -107,6 +109,10 @@ public class Team {
 					textColour = 'e';
 				if(split[1].equals("White"))
 					textColour = 'f';
+			}
+			if(split[0].equals("AddDefaultClass") || split[0].equals("AddClass"))
+			{
+				classes.add(PlayerClass.getClass(split[1]));
 			}
 		} catch (Exception e)
 		{

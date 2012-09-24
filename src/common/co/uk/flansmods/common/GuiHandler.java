@@ -33,11 +33,9 @@ public class GuiHandler implements IGuiHandler
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void openGui(EntityPlayer player) {
-		if(FlansMod.currentGunBox != null) {
-			EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(player.username);
-			FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, (BlockGunBox) FlansMod.currentGunBox));
-			FlansMod.currentGunBox = null;
-		}
+	public static void openGunBoxGui(EntityPlayer player, BlockGunBox box) 
+	{
+		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(player.username);
+		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, box));
 	}
 }
