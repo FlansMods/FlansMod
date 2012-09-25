@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.client.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiButton;
@@ -27,6 +28,11 @@ public class GuiTeamSelect extends GuiScreen
 	//For changing team when you want to, as opposed to when the server forces you to.
 	public GuiTeamSelect()
 	{
+		if(teamChoices == null)
+		{
+			FMLClientHandler.instance().getClient().displayGuiScreen(null);
+			return;		
+		}
 		classMenu = false;
 		guiHeight = 29 + 24 * teamChoices.length;
 	}
@@ -53,11 +59,16 @@ public class GuiTeamSelect extends GuiScreen
 			for(int i = 0; i < classChoices.length; i++)
 			{
 				if(classChoices[i] != null)
-					controlList.add(new GuiButton(i, width / 2 - 79, height / 2 - guiHeight / 2 + 24 + 24 * i, 67, 20, classChoices[i].name));
+					controlList.add(new GuiButton(i, width / 2 - 79, height / 2 - guiHeight / 2 + 24 + 24 * i, 65, 20, classChoices[i].name));
 			}
 		}
 		else
 		{
+			if(teamChoices == null)
+			{
+				FMLClientHandler.instance().getClient().displayGuiScreen(null);
+				return;		
+			}
 			for(int i = 0; i < teamChoices.length; i++)
 			{
 				if(teamChoices[i] != null)
@@ -90,6 +101,17 @@ public class GuiTeamSelect extends GuiScreen
 			}
 		}
 		super.drawScreen(i, j, f);
+		if(classMenu)
+		{
+			for(int n = 0; n < classChoices.length; n++)
+			{
+				for(int m = 0; m < classChoices[n].startingItems.size(); m++)
+				{
+					drawSlotInventory(classChoices[n].startingItems.get(m), width / 2 - 11 + 18 * m, height / 2 - guiHeight / 2 + 26 + 24 * n);
+				}
+			}
+		}
+		fontRenderer.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 80, height / 2 - guiHeight / 2 + 8, 0xffffff);
 	}
 	
 	protected void actionPerformed(GuiButton button)
