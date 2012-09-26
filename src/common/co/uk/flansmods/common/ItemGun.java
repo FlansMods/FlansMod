@@ -48,11 +48,17 @@ public class ItemGun extends Item
 			}
 			if (type.mode == 1 && mouseHeld) // FullAuto
 			{
-				itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
+				EntityPlayer player = (EntityPlayer) entity;
+				if(player.isInsideOfMaterial(Material.water) == true) {
+					if(type.canShootUnderwater == true) itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
+				} else itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
 			}
 			if (type.mode == 0 && mouseHeld && !lastMouseHeld) // SemiAuto
 			{
-				itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
+				EntityPlayer player = (EntityPlayer) entity;
+				if(player.isInsideOfMaterial(Material.water) == true) {
+					if(type.canShootUnderwater == true) itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
+				} else itemstack = onItemRightClick2(itemstack, world, (EntityPlayerMP) entity);
 			}
 			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0)
 			{

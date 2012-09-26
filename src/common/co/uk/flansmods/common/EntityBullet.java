@@ -3,10 +3,14 @@ package co.uk.flansmods.common;
 import java.util.List;
 import java.util.Random;
 
+import co.uk.flansmods.common.network.PacketBreakSound;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.src.AxisAlignedBB;
@@ -179,8 +183,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-					//TODO : Remove client reference.
-					FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+					if(FMLCommonHandler.instance().getSide() == Side.CLIENT) 
+					{
+						FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+					} else PacketBreakSound.buildBreakSoundPacket(xTile, yTile, zTile, blockID);
 				}
 				if (!type.penetrates)
 					setDead();
@@ -282,7 +288,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-						FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+						if(FMLCommonHandler.instance().getSide() == Side.CLIENT) 
+						{
+							FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
+						} else PacketBreakSound.buildBreakSoundPacket(xTile, yTile, zTile, blockID);
 						if (type.penetrates)
 							killBullet = false;
 					}
@@ -328,7 +337,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionX *= f4;
 		motionY *= f4;
 		motionZ *= f4;
-		motionY -= f6 * type.fallSpeed;
+		motionY -= f6 * type.fallSpeed * 0.25F;
 		setPosition(posX, posY, posZ);
 		if (type.smokeTrail)
 		{

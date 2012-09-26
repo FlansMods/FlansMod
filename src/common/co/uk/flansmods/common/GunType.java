@@ -44,6 +44,7 @@ public class GunType extends InfoType
 	public float sideViewLimit = 45F;
 	public float pivotHeight = 0.375F;
 	private static int lastIconIndex = 0;
+	public boolean canShootUnderwater;
 	public static List<GunType> guns = new ArrayList<GunType>();
 
 	public GunType(BufferedReader file, String pack)
@@ -147,6 +148,8 @@ public class GunType extends InfoType
 				loadIntoGun = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("BulletSpeed"))
 				speed = Float.parseFloat(arg0[1]);
+			if (arg0[0].equals("CanShootUnderwater"))
+				canShootUnderwater = Boolean.parseBoolean(arg0[1]);
 		} catch (Exception e)
 		{
 			System.out.println("Reading gun file failed.");
