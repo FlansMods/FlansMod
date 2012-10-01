@@ -9,13 +9,14 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
 import co.uk.flansmods.common.BlockGunBox;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunBoxType;
 
 public class PacketBuyWeapon extends FlanPacketClient 
 {
 	public static final byte packetID = 5;
 	
 	//type is 0 for gun, 1 for ammo, 2 for altAmmo
-	public static Packet buildBuyWeaponPacket(BlockGunBox box, int type, int weaponID)
+	public static Packet buildBuyWeaponPacket(GunBoxType box, int type, int weaponID)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -25,7 +26,7 @@ public class PacketBuyWeapon extends FlanPacketClient
 	    try
 	    {
 	    	data.write(packetID); // this is the packet ID. identifies it as a BreakSoundPacket
-	    	data.writeUTF(box.type.shortName);
+	    	data.writeUTF(box.shortName);
 	    	data.write(type);
 	    	data.write(weaponID);
 	

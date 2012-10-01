@@ -232,7 +232,7 @@ public class ClientProxy extends CommonProxy
 		FlansMod.log("Loaded AA gun icons.");
 
 		// Gun Boxes
-		for (GunBoxType type : GunBoxType.boxes)
+		for (GunBoxType type : GunBoxType.gunBoxMap.entrySet().toArray(new GunBoxType[] {}))
 		{
 			try
 			{

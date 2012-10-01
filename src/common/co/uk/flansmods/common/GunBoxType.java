@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ public class GunBoxType extends InfoType
 	public List<ItemStack>[] bulletParts;
 	public List<ItemStack>[] altBulletParts;
 	private static int lastIconIndex = 2;
-	public static List<GunBoxType> boxes = new ArrayList<GunBoxType>();
+	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
 
 	public GunBoxType(BufferedReader file)
 	{
@@ -53,7 +54,7 @@ public class GunBoxType extends InfoType
 				continue;
 			read(split, file);
 		} while (true);
-		boxes.add(this);
+		gunBoxMap.put(this.shortName, this);
 		if (topTexturePath.equals("/icons/boxTop.png"))
 			topTextureIndex = 0;
 		else
@@ -148,14 +149,10 @@ public class GunBoxType extends InfoType
 
 	public static GunBoxType getBox(String s)
 	{
-		for (GunBoxType box : boxes)
-		{
-			if (box.shortName.equals(s))
-				return box;
-		}
-		return null;
+		return gunBoxMap.get(s);
 	}
 
+	// TODO: remove. don't need it. itl all be the same ID.
 	public Block getBlock()
 	{
 		for (Block block : FlansMod.gunBoxBlocks)
@@ -166,6 +163,7 @@ public class GunBoxType extends InfoType
 		return null;
 	}
 
+	// TODO: remove. material will One and ONLY!  wood.
 	public static Material getMaterial(String mat)
 	{
 		if (mat.equals("wood"))

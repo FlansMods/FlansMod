@@ -19,7 +19,7 @@ public class PacketBuyWeapon extends FlanPacketServer
 	//type is 0 for gun, 1 for ammo, 2 for altAmmo
 	//Not called on server.
 	@Deprecated
-	public static Packet buildBuyWeaponPacket(BlockGunBox box, int type, int weaponID)
+	public static Packet buildBuyWeaponPacket(GunBoxType box, int type, int weaponID)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -29,7 +29,7 @@ public class PacketBuyWeapon extends FlanPacketServer
         try
         {
         	data.write(packetID); // this is the packet ID. identifies it as a BreakSoundPacket
-        	data.writeUTF(box.type.shortName);
+        	data.writeUTF(box.shortName);
         	data.write(type);
         	data.write(weaponID);
 
@@ -60,10 +60,9 @@ public class PacketBuyWeapon extends FlanPacketServer
 			int weaponID = stream.readInt();
 			
 			GunBoxType box = GunBoxType.getBox(shortName);
-			BlockGunBox block = (BlockGunBox) box.getBlock();
 			
 			EntityPlayer player = (EntityPlayer) extradata[1];
-			block.purchaseItem(type, weaponID, player.inventory);
+			FlansMod.gunBoxBlock.purchaseItem(type, weaponID, player.inventory, box);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

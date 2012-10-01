@@ -14,6 +14,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.BlockGunBox;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunBoxType;
 
 import cpw.mods.fml.client.FMLClientHandler;
 
@@ -21,11 +23,11 @@ import cpw.mods.fml.client.FMLClientHandler;
 public class GuiGunBox extends GuiScreen
 {
 
-	public GuiGunBox(InventoryPlayer playerinventory, BlockGunBox weaponbox)
+	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{
 		inventory = playerinventory;
 		mc = FMLClientHandler.instance().getClient();
-		box = weaponbox;
+		this.type = type;
 		page = 0;
 	}
 
@@ -44,21 +46,21 @@ public class GuiGunBox extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /* GL_BLEND */);
-		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponBox.png"));
+		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponFlansMod.gunBoxBlock.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
-		drawCenteredString(fontRenderer, box.type.name, k / 2, n + 5, 0xffffff);
-		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponBox.png"));
+		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
+		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponFlansMod.gunBoxBlock.png"));
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
-		if (box.type.numGuns > page * 2 + 1 && box.type.guns[page * 2] != null && box.type.guns[page * 2 + 1] != null)
+		if (type.numGuns > page * 2 + 1 && type.guns[page * 2] != null && type.guns[page * 2 + 1] != null)
 			drawTexturedModalRect(m + 89, n + 18, 5, 18, 82, 90);
 		// Grey out buttons when they are unavaliable
 		if (page == 0)
 			drawTexturedModalRect(m + 77, n + 109, 176, 0, 10, 10);
-		if (box.type.numGuns <= page * 2 + 2)
+		if (type.numGuns <= page * 2 + 2)
 			drawTexturedModalRect(m + 89, n + 109, 186, 0, 10, 10);
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -68,7 +70,7 @@ public class GuiGunBox extends GuiScreen
 
 		// Fill the gun panels with guns
 		drawRecipe(fontrenderer, m, n, page * 2, 0);
-		if (box.type.numGuns > page * 2 + 1)
+		if (type.numGuns > page * 2 + 1)
 			drawRecipe(fontrenderer, m, n, page * 2 + 1, 1);
 		// Draw the inventory slots (not real slots)
 		for (int row = 0; row < 3; row++)
@@ -89,13 +91,13 @@ public class GuiGunBox extends GuiScreen
 	private void drawRecipe(FontRenderer fontrenderer, int m, int n, int q, int offset)
 	{
 		m += offset * 84;
-		if (box.type.guns[q] != null)
+		if (type.guns[q] != null)
 		{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			// fontRenderer.drawString(box.type.guns[q].name, m + 9, n + 22,
+			// fontRenderer.drawString(type.guns[q].name, m + 9, n + 22,
 			// 0xffffffff);
 			RenderHelper.disableStandardItemLighting();
-			String name = box.type.guns[q].name;
+			String name = type.guns[q].name;
 			if (name.length() > 12)
 			{
 				int nextSpace = name.indexOf(" ", 10);
@@ -108,13 +110,13 @@ public class GuiGunBox extends GuiScreen
 			} else
 				drawCenteredString(fontrenderer, name, m + 46, n + 25, 0xffffff);
 			RenderHelper.enableGUIStandardItemLighting();
-			drawSlotInventory(new ItemStack(box.type.guns[q].getItem()), m + 9, n + 44);
-			drawSlotInventory(new ItemStack(box.type.bullets[q].getItem()), m + 9, n + 66);
-			if (box.type.altBullets[q] != null)
+			drawSlotInventory(new ItemStack(type.guns[q].getItem()), m + 9, n + 44);
+			drawSlotInventory(new ItemStack(type.bullets[q].getItem()), m + 9, n + 66);
+			if (type.altBullets[q] != null)
 			{
-				drawSlotInventory(new ItemStack(box.type.altBullets[q].getItem()), m + 9, n + 88);
+				drawSlotInventory(new ItemStack(type.altBullets[q].getItem()), m + 9, n + 88);
 			}
-			int numParts = box.type.gunParts[q].size();
+			int numParts = type.gunParts[q].size();
 			int startPart = 0;
 			if (numParts >= 4)
 			{
@@ -122,9 +124,9 @@ public class GuiGunBox extends GuiScreen
 			}
 			for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 			{
-				drawSlotInventory(box.type.gunParts[q].get(startPart + p), m + 30 + p * 19, n + 44);
+				drawSlotInventory(type.gunParts[q].get(startPart + p), m + 30 + p * 19, n + 44);
 			}
-			numParts = box.type.bulletParts[q].size();
+			numParts = type.bulletParts[q].size();
 			startPart = 0;
 			if (numParts >= 4)
 			{
@@ -132,11 +134,11 @@ public class GuiGunBox extends GuiScreen
 			}
 			for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 			{
-				drawSlotInventory(box.type.bulletParts[q].get(startPart + p), m + 30 + p * 19, n + 66);
+				drawSlotInventory(type.bulletParts[q].get(startPart + p), m + 30 + p * 19, n + 66);
 			}
-			if (box.type.altBullets[q] != null)
+			if (type.altBullets[q] != null)
 			{
-				numParts = box.type.altBulletParts[q].size();
+				numParts = type.altBulletParts[q].size();
 				startPart = 0;
 				if (numParts >= 4)
 				{
@@ -144,7 +146,7 @@ public class GuiGunBox extends GuiScreen
 				}
 				for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 				{
-					drawSlotInventory(box.type.altBulletParts[q].get(startPart + p), m + 30 + p * 19, n + 88);
+					drawSlotInventory(type.altBulletParts[q].get(startPart + p), m + 30 + p * 19, n + 88);
 				}
 			}
 		}
@@ -173,40 +175,40 @@ public class GuiGunBox extends GuiScreen
 			// Forwards button
 			if (m > 89 && m < 99 && n > 109 && n < 119)
 			{
-				if (box.type.numGuns > page * 2 + 2)
+				if (type.numGuns > page * 2 + 2)
 					page++;
 			}
 
 			// Gun 1
-			if (box.type.guns[page * 2] != null && m > 7 && m < 27 && n > 42 && n < 62)
+			if (type.guns[page * 2] != null && m > 7 && m < 27 && n > 42 && n < 62)
 			{
-				box.buyGun(page * 2, inventory);
+				FlansMod.gunBoxBlock.buyGun(page * 2, inventory, type);
 			}
 			// Ammo 1
-			if (box.type.bullets[page * 2] != null && m > 7 && m < 27 && n > 64 && n < 84)
+			if (type.bullets[page * 2] != null && m > 7 && m < 27 && n > 64 && n < 84)
 			{
-				box.buyAmmo(page * 2, inventory);
+				FlansMod.gunBoxBlock.buyAmmo(page * 2, inventory, type);
 			}
 			// Alt Ammo 1
-			if (box.type.altBullets[page * 2] != null && m > 7 && m < 27 && n > 86 && n < 106)
+			if (type.altBullets[page * 2] != null && m > 7 && m < 27 && n > 86 && n < 106)
 			{
-				box.buyAltAmmo(page * 2, inventory);
+				FlansMod.gunBoxBlock.buyAltAmmo(page * 2, inventory, type);
 			}
 
 			// Gun 2
-			if (page * 2 + 1 < box.type.numGuns && box.type.guns[page * 2 + 1] != null && m > 91 && m < 111 && n > 42 && n < 62)
+			if (page * 2 + 1 < type.numGuns && type.guns[page * 2 + 1] != null && m > 91 && m < 111 && n > 42 && n < 62)
 			{
-				box.buyGun(page * 2 + 1, inventory);
+				FlansMod.gunBoxBlock.buyGun(page * 2 + 1, inventory, type);
 			}
 			// Ammo 2
-			if (page * 2 + 1 < box.type.numGuns && box.type.bullets[page * 2 + 1] != null && m > 91 && m < 111 && n > 64 && n < 84)
+			if (page * 2 + 1 < type.numGuns && type.bullets[page * 2 + 1] != null && m > 91 && m < 111 && n > 64 && n < 84)
 			{
-				box.buyAmmo(page * 2 + 1, inventory);
+				FlansMod.gunBoxBlock.buyAmmo(page * 2 + 1, inventory, type);
 			}
 			// Alt Ammo 2
-			if (page * 2 + 1 < box.type.numGuns && box.type.altBullets[page * 2 + 1] != null && m > 91 && m < 111 && n > 86 && n < 106)
+			if (page * 2 + 1 < type.numGuns && type.altBullets[page * 2 + 1] != null && m > 91 && m < 111 && n > 86 && n < 106)
 			{
-				box.buyAltAmmo(page * 2 + 1, inventory);
+				FlansMod.gunBoxBlock.buyAltAmmo(page * 2 + 1, inventory, type);
 			}
 		}
 	}
@@ -227,7 +229,7 @@ public class GuiGunBox extends GuiScreen
 	private InventoryPlayer inventory;
 	private Minecraft mc;
 	private static RenderItem itemRenderer = new RenderItem();
-	private BlockGunBox box;
+	private GunBoxType type;
 	private int page;
 	private int guiOriginX;
 	private int guiOriginY;

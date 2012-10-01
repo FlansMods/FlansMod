@@ -11,35 +11,36 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
 
-public class BlockGunBox extends Block
+public class BlockGunBox extends BlockContainer
 {
-	public BlockGunBox(int i, GunBoxType boxType)
+	public BlockGunBox(int i)
 	{
-		super(i, boxType.material);
-		type = boxType;
-		blockIndexInTexture = type.topTextureIndex;
-		setCreativeTab(CreativeTabs.tabDeco);
+		//super(i, boxType.material);
+		// set specific material.
+		super(i, Material.wood);
+		// not gonna be in creative mode.  special Items WILL
+		//setCreativeTab(CreativeTabs.tabDeco);
+		this.setTextureFile("/spriteSheets/gunBoxes.png");
 	}
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/gunBoxes.png";
-	}
-
-	public void buyGun(int i, InventoryPlayer inventory)
+	
+	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
 	{
 		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyGun(this, i);
+			FlansMod.buyGun(type, i);
 		} 
 		if (i <= type.numGuns && type.guns[i] != null)
 		{
@@ -86,12 +87,12 @@ public class BlockGunBox extends Block
 		}
 	}
 
-	public void buyAmmo(int i, InventoryPlayer inventory)
+	public void buyAmmo(int i, InventoryPlayer inventory, GunBoxType type)
 	{
 		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(this, i, 1);
+			FlansMod.buyAmmo(type, i, 1);
 		} 
 		if (i <= type.numGuns && type.bulletParts[i] != null)
 		{
@@ -135,12 +136,12 @@ public class BlockGunBox extends Block
 		//TODO Add flashing red squares if cant buy.
 	}
 
-	public void buyAltAmmo(int i, InventoryPlayer inventory)
+	public void buyAltAmmo(int i, InventoryPlayer inventory, GunBoxType type)
 	{
 		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(this, i, 2);
+			FlansMod.buyAmmo(type, i, 2);
 		} 
 		if (i <= type.numGuns && type.altBulletParts[i] != null)
 		{
@@ -186,14 +187,18 @@ public class BlockGunBox extends Block
 			}
 		}
 	}
-
-	public int getBlockTextureFromSide(int i)
+	
+	@Override
+	public int getBlockTexture(IBlockAccess iba, int x,int y, int z, int side)
 	{
-		if (i == 1)
+		TileEntityGunBox TE = (TileEntityGunBox) iba.getBlockTileEntity(x, y, z);
+		GunBoxType type = TE.getType();
+		
+		if (side == 1)
 		{
 			return type.topTextureIndex;
 		}
-		if (i == 0)
+		if (side == 0)
 		{
 			return type.bottomTextureIndex;
 		}
@@ -203,24 +208,30 @@ public class BlockGunBox extends Block
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
 	{
-		GuiHandler.openGunBoxGui(entityplayer, this);
+		TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(i, j, k);
+		GuiHandler.openGunBoxGui(entityplayer, entity.getType());
 		return true;
 	}
 
+	@Override
 	public void addCreativeItems(ArrayList itemList)
 	{
 		itemList.add(new ItemStack(this));
 	}
 	
-	public Block purchaseItem(int i, int id, InventoryPlayer inventory) {
+	public Block purchaseItem(int i, int id, InventoryPlayer inventory, GunBoxType type) {
 		switch(i) 
 		{
-			case 0: buyGun(id, inventory);
-			case 1: buyAmmo(id, inventory);
-			case 2: buyAltAmmo(id, inventory);
+			case 0: buyGun(id, inventory, type);
+			case 1: buyAmmo(id, inventory, type);
+			case 2: buyAltAmmo(id, inventory, type);
 		}
 		return this;
 	}
 
-	public GunBoxType type;
+	@Override
+	public TileEntity createNewTileEntity(World var1)
+	{
+		return new TileEntityGunBox();
+	}
 }

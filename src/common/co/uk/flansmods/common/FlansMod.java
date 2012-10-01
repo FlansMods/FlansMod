@@ -73,7 +73,10 @@ public class FlansMod
 	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
 	public static List<Item> partItems = new ArrayList<Item>();
+	
+	// TODO remove
 	public static List<Block> gunBoxBlocks = new ArrayList<Block>();
+	
 	public static List<Item> gunItems = new ArrayList<Item>();
 	public static List<Item> aaGunItems = new ArrayList<Item>();
 	public static List<Item> armourItems = new ArrayList<Item>();
@@ -108,6 +111,9 @@ public class FlansMod
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
 
+	//GunBoxBlock
+	public static BlockGunBox gunBoxBlock;
+	
 	public static File flanDir;
 	public static File propertyFile;
 	
@@ -211,6 +217,10 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
 		
+		// GunBox Block       ID=???  95 is temporary one
+		gunBoxBlock = new BlockGunBox(95); 
+		
+		// GUI handler		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		
 		// Default teams stuff
@@ -319,6 +329,7 @@ public class FlansMod
 						continue;
 					try
 					{
+						// TO BE MADE BETTER
 						GunType type = new GunType(new BufferedReader(new FileReader(guns[i])), file.getName());
 						Item gunItem = new ItemGun(type.itemID - 256, type).setItemName(type.shortName);
 						gunItems.add(gunItem);
@@ -440,11 +451,15 @@ public class FlansMod
 					try
 					{
 						GunBoxType type = new GunBoxType(new BufferedReader(new FileReader(gunBoxes[i])));
-						Block boxBlock = new BlockGunBox(type.blockID, type).setBlockName(type.shortName);
-						gunBoxBlocks.add(boxBlock);
-						LanguageRegistry.addName(boxBlock, type.name);
-						GameRegistry.registerBlock(boxBlock);
+						// TODO: fix.
+						//Block boxBlock = new BlockGunBox(type.blockID, type).setBlockName(type.shortName);
+						//gunBoxBlocks.add(boxBlock);
+						//LanguageRegistry.addName(boxBlock, type.name);
+						//GameRegistry.registerBlock(boxBlock);
+						
 						type.item = Item.itemsList[type.blockID];
+						
+						
 					} catch (Exception e)
 					{
 						log("Failed to add gun box : " + gunBoxes[i].getName());
@@ -576,12 +591,12 @@ public class FlansMod
 		log(s);
 	}
 
-	public static void buyGun(BlockGunBox box, int gun)
+	public static void buyGun(GunBoxType type, int gun)
 	{
-		PacketBuyWeapon.buildBuyWeaponPacket(box, gun, 0);
+		PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0);
 	}
 
-	public static void buyAmmo(BlockGunBox box, int ammo, int type)
+	public static void buyAmmo(GunBoxType box, int ammo, int type)
 	{
 		PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo);
 	}
