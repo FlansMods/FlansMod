@@ -217,8 +217,10 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
 		
-		// GunBox Block       ID=???  95 is temporary one
-		gunBoxBlock = new BlockGunBox(95); 
+		// GunBox Block       ID=???  200 is temporary one
+		gunBoxBlock = new BlockGunBox(200);
+		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class);
+		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 		
 		// GUI handler		
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
@@ -451,15 +453,8 @@ public class FlansMod
 					try
 					{
 						GunBoxType type = new GunBoxType(new BufferedReader(new FileReader(gunBoxes[i])));
-						// TODO: fix.
-						//Block boxBlock = new BlockGunBox(type.blockID, type).setBlockName(type.shortName);
-						//gunBoxBlocks.add(boxBlock);
-						//LanguageRegistry.addName(boxBlock, type.name);
-						//GameRegistry.registerBlock(boxBlock);
-						
-						type.item = Item.itemsList[type.blockID];
-						
-						
+						type.item = Item.itemsList[gunBoxBlock.blockID];
+						type.itemID = gunBoxBlock.blockID;
 					} catch (Exception e)
 					{
 						log("Failed to add gun box : " + gunBoxes[i].getName());

@@ -3,7 +3,9 @@ package co.uk.flansmods.client;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
@@ -232,10 +234,13 @@ public class ClientProxy extends CommonProxy
 		FlansMod.log("Loaded AA gun icons.");
 
 		// Gun Boxes
-		for (GunBoxType type : GunBoxType.gunBoxMap.entrySet().toArray(new GunBoxType[] {}))
+		Iterator<String> it = GunBoxType.gunBoxMap.keySet().iterator();
+		while(it.hasNext())
 		{
 			try
 			{
+				GunBoxType type = GunBoxType.gunBoxMap.get(it.next());
+				
 				if (type.topTextureIndex != 0)
 				{
 					TextureFXManager.instance().addNewTextureOverride("/spriteSheets/gunBoxes.png", type.topTexturePath, type.topTextureIndex);

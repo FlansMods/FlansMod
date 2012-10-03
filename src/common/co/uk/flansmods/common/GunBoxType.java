@@ -30,6 +30,7 @@ public class GunBoxType extends InfoType
 	public List<ItemStack>[] altBulletParts;
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
+	public static ArrayList<String> shortNameList = new ArrayList<String>(); 
 
 	public GunBoxType(BufferedReader file)
 	{
@@ -54,7 +55,10 @@ public class GunBoxType extends InfoType
 				continue;
 			read(split, file);
 		} while (true);
+		
 		gunBoxMap.put(this.shortName, this);
+		shortNameList.add(this.shortName);
+		
 		if (topTexturePath.equals("/icons/boxTop.png"))
 			topTextureIndex = 0;
 		else
@@ -71,8 +75,10 @@ public class GunBoxType extends InfoType
 		super.read(split, file);
 		try
 		{
+			// TODO remove.
 			if (split[0].equals("BlockID"))
 				blockID = Integer.parseInt(split[1]);
+			
 			if (split[0].equals("Material"))
 				material = getMaterial(split[1]);
 			if (split[0].equals("TopTexture"))
@@ -150,17 +156,6 @@ public class GunBoxType extends InfoType
 	public static GunBoxType getBox(String s)
 	{
 		return gunBoxMap.get(s);
-	}
-
-	// TODO: remove. don't need it. itl all be the same ID.
-	public Block getBlock()
-	{
-		for (Block block : FlansMod.gunBoxBlocks)
-		{
-			if (block.blockID == blockID)
-				return block;
-		}
-		return null;
 	}
 
 	// TODO: remove. material will One and ONLY!  wood.

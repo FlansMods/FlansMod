@@ -30,8 +30,8 @@ public class BlockGunBox extends BlockContainer
 		//super(i, boxType.material);
 		// set specific material.
 		super(i, Material.wood);
-		// not gonna be in creative mode.  special Items WILL
-		//setCreativeTab(CreativeTabs.tabDeco);
+		
+		setCreativeTab(CreativeTabs.tabDeco);
 		this.setTextureFile("/spriteSheets/gunBoxes.png");
 	}
 	
@@ -188,6 +188,7 @@ public class BlockGunBox extends BlockContainer
 		}
 	}
 	
+	@SideOnly(value = Side.CLIENT)
 	@Override
 	public int getBlockTexture(IBlockAccess iba, int x,int y, int z, int side)
 	{
