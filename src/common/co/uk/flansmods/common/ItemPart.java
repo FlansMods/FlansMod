@@ -17,7 +17,7 @@ public class ItemPart extends Item
 			setHasSubtypes(true);
 		}
 		type.item = this;
-		setTabToDisplayOn(CreativeTabs.tabMaterials);
+		setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
 	public String getTextureFile()

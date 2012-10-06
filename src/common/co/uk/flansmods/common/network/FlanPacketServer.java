@@ -83,7 +83,7 @@ public class FlanPacketServer implements IPacketHandler
 	 * @param stream
 	 * @param extradata
 	 */
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		
 	}

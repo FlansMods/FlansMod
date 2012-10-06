@@ -27,7 +27,7 @@ public class ItemGun extends Item
 		{
 			setMaxDamage(type.loadIntoGun);
 		}
-		this.setTabToDisplayOn(CreativeTabs.tabCombat);
+		setCreativeTab(CreativeTabs.tabCombat);
 	}
 
 	public String getTextureFile()

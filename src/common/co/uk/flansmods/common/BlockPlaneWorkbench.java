@@ -21,7 +21,7 @@ public class BlockPlaneWorkbench extends Block
         super(i, Material.iron);
         blockIndexInTexture = j;
         sideTexture = k;
-        setCreativeTab(CreativeTabs.tabDeco);
+        setCreativeTab(CreativeTabs.tabDecorations);
     }
     
     @Override

@@ -18,7 +18,7 @@ public class ItemFlagpole extends Item {
 	public ItemFlagpole(int i) 
 	{
 		super(i);
-		setTabToDisplayOn(CreativeTabs.tabMisc);
+		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

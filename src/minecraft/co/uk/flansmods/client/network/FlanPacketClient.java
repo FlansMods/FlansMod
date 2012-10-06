@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.util.Arrays;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.network.PacketBreakSound;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -93,7 +94,7 @@ public class FlanPacketClient implements IPacketHandler
 	 * @param stream
 	 * @param extradata
 	 */
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		
 	}

@@ -19,7 +19,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 		super(t.itemID - 256, EnumArmorMaterial.CLOTH, 0, t.type);
 		type = t;
 		setIconIndex(type.iconIndex);
-		setTabToDisplayOn(CreativeTabs.tabCombat);
+		setCreativeTab(CreativeTabs.tabCombat);
 	}
 
 	public ItemTeamArmour(int ID, EnumArmorMaterial armorMaterial, int renderIndex, int armourType) 

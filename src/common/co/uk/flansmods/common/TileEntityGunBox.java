@@ -31,7 +31,7 @@ public class TileEntityGunBox extends TileEntity
 	}
 	
 	@Override
-    public Packet getAuxillaryInfoPacket()
+    public Packet getDescriptionPacket()
     {
         return PacketGunBoxTE.buildGunBoxPacket(this);
     }

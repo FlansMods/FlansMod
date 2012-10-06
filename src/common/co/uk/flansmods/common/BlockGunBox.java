@@ -31,7 +31,7 @@ public class BlockGunBox extends BlockContainer
 		// set specific material.
 		super(i, Material.wood);
 		
-		setCreativeTab(CreativeTabs.tabDeco);
+		setCreativeTab(CreativeTabs.tabDecorations);
 		this.setTextureFile("/spriteSheets/gunBoxes.png");
 	}
 	

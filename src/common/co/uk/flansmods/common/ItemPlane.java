@@ -20,7 +20,7 @@ public class ItemPlane extends ItemMapBase
 		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
-		setTabToDisplayOn(CreativeTabs.tabTransport);
+		setCreativeTab(CreativeTabs.tabTransport);
     }
 	
 	public String getTextureFile()

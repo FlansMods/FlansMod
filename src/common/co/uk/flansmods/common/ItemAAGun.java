@@ -20,7 +20,7 @@ public class ItemAAGun extends Item
 		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
-		setTabToDisplayOn(CreativeTabs.tabCombat);
+		setCreativeTab(CreativeTabs.tabCombat);
 	}
 
 	public String getTextureFile()
