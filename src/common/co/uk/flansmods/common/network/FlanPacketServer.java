@@ -32,7 +32,9 @@ public class FlanPacketServer implements IPacketHandler
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player)
 	{
-		EntityPlayer playerEntity = (EntityPlayer) player;
+		String name = ((EntityPlayer) player).username;
+		EntityPlayer playerEntity = FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(name);
+		
 		recieve(packet, playerEntity, manager);
 	}
 	

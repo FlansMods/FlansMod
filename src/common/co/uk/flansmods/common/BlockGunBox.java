@@ -195,6 +195,9 @@ public class BlockGunBox extends BlockContainer
 		TileEntityGunBox TE = (TileEntityGunBox) iba.getBlockTileEntity(x, y, z);
 		GunBoxType type = TE.getType();
 		
+		if (type == null)
+			return 0;
+		
 		if (side == 1)
 		{
 			return type.topTextureIndex;

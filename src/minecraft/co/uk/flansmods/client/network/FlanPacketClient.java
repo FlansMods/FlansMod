@@ -7,10 +7,7 @@ import java.io.DataOutputStream;
 import java.util.Arrays;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.network.PacketBreakSound;
-import co.uk.flansmods.common.network.PacketBuyWeapon;
-import co.uk.flansmods.common.network.PacketParticleSpawn;
-import co.uk.flansmods.common.network.PacketTeamSelect;
+import co.uk.flansmods.common.network.*;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -20,9 +17,11 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.World;
 import net.minecraft.src.WorldClient;
 
 public class FlanPacketClient implements IPacketHandler
@@ -33,7 +32,8 @@ public class FlanPacketClient implements IPacketHandler
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player)
 	{
-		EntityPlayer playerEntity = (EntityPlayer) player;
+		String name = ((EntityPlayer) player).username;
+		EntityPlayer playerEntity = FMLClientHandler.instance().getClient().getIntegratedServer().getConfigurationManager().getPlayerForUsername(name);
 		recieve(packet, playerEntity, manager);
 	}
 	
@@ -42,7 +42,7 @@ public class FlanPacketClient implements IPacketHandler
 		if (!packet.channel.equals(channelFlan))
 			return;
 		
-		WorldClient world = FMLClientHandler.instance().getClient().theWorld;
+		World world = player.worldObj;
 		
         try
         {
@@ -64,6 +64,7 @@ public class FlanPacketClient implements IPacketHandler
     		case 4: break; // TODO: Gui packets (world, x, y, z, ExtraData for what gui and if its a TE and stuff.)
     		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player},Side.CLIENT); break;
     		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
+    		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		
@@ -74,21 +75,6 @@ public class FlanPacketClient implements IPacketHandler
         	FlansMod.log("Error recieving packet");
         	e.printStackTrace();
         }
-	}
-	
-	/**
-	 * use PacketDispatcher.sendPacketToServer(packet)  instead.
-	 * @param packet
-	 */
-	@Deprecated
-	public static void sendPacket(Packet packet)
-	{
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		
-		if (side.isClient())
-			PacketDispatcher.sendPacketToServer(packet);
-		else
-			PacketDispatcher.sendPacketToAllPlayers(packet);
 	}
 	
 	/**

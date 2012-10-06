@@ -8,15 +8,18 @@ import net.minecraft.src.TileEntity;
 public class TileEntityGunBox extends TileEntity
 {
 	@Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
-		super.readFromNBT(nbt);
-    }
-	
-	@Override
     public void writeToNBT(NBTTagCompound nbt)
     {
 		super.writeToNBT(nbt);
+		shortName = nbt.getString("type");
+		nbt.setString("type", shortName);
+    }
+	
+	@Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+		super.readFromNBT(nbt);
+		shortName = nbt.getString("type");
     }
 	
 	@Override

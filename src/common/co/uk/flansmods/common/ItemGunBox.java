@@ -20,33 +20,20 @@ public class ItemGunBox extends ItemBlock {
 		super(id);
 	}
 	
+	@Override
     public String getItemNameIS(ItemStack stack)
     {
-		NBTTagCompound tag = stack.getTagCompound();
-		
-		if (tag != null)
-		{
-			// TODO: full name?
-			return GunBoxType.gunBoxMap.get(tag.getString(tagTypeName)).name;
-		}
-		
-		return Block.blocksList[this.getBlockID()].getBlockName();
+    	return GunBoxType.shortNameList.get(stack.getItemDamage());
     }
     
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
+	@Override
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
     	for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
     		par3List.add(new ItemStack(par1, 1, i));
-    }
-    
-    public void onCreated(ItemStack stack, World par2World, EntityPlayer par3EntityPlayer)
-    {
-    	NBTTagCompound tag = new NBTTagCompound();
-    	tag.setString(tagTypeName, GunBoxType.shortNameList.get(stack.getItemDamage()));
-    	stack.setTagCompound(tag);
     }
 	
 	@Override
@@ -57,10 +44,7 @@ public class ItemGunBox extends ItemBlock {
     	if (place)
     	{
     		TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(x, y, z);
-    		NBTTagCompound tag = stack.getTagCompound();
-    		
-    		if (tag != null)
-    			entity.setShortName(tag.getString("type"));
+    		entity.setShortName(GunBoxType.shortNameList.get(stack.getItemDamage()));
     	}
     	
     	return place;

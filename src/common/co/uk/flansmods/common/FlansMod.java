@@ -217,10 +217,16 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
 		
+		// gunBxStuff.. must be done after content packs.
 		// GunBox Block       ID=???  200 is temporary one
-		gunBoxBlock = new BlockGunBox(200);
+		gunBoxBlock = (BlockGunBox) new BlockGunBox(200);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class);
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
+		for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
+		{
+			GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(i));
+			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, i), type.name);
+		}
 		
 		// GUI handler		
 		NetworkRegistry.instance().registerGuiHandler(this, new CommonGuiHandler());
@@ -243,9 +249,17 @@ public class FlansMod
 		// read Content Packs
 		readContentPacks(event);
 		
+		// names registry.
+		for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
+		{
+			GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(i));
+			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, i), type.name);
+		}
+		
 		proxy.load();
 		
 		proxy.loadKeyBindings();
+
 		
 		log("Loading complete.");
 	}
@@ -464,13 +478,6 @@ public class FlansMod
 			}
 		}
 		log("Loaded gun boxes.");
-
-		// Recipes
-		for (InfoType type : InfoType.infoTypes)
-		{
-			type.addRecipe();
-		}
-		log("Loaded recipes.");
 		
 		//Armour
 		for (File file : contentPacks)
@@ -555,10 +562,14 @@ public class FlansMod
 				}
 			}
 		}
-		log("Loaded teams.");		
+		log("Loaded teams.");
 		
-
-		
+		// Recipes
+		for (InfoType type : InfoType.infoTypes)
+		{
+			type.addRecipe();
+		}
+		log("Loaded recipes.");
 		
 		// LOAD GRAPHICS
 		proxy.loadContentPackGraphics(method, classloader);
