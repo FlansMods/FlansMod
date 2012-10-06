@@ -11,14 +11,14 @@ import net.minecraft.src.World;
 import co.uk.flansmods.common.BlockGunBox;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 public class PacketBuyWeapon extends FlanPacketServer
 {
 	public static final byte packetID = 5;
 	
 	//type is 0 for gun, 1 for ammo, 2 for altAmmo
-	//Not called on server.
-	@Deprecated
 	public static Packet buildBuyWeaponPacket(GunBoxType box, int type, int weaponID)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
@@ -51,8 +51,17 @@ public class PacketBuyWeapon extends FlanPacketServer
 	 * ExtraData : [0] = World, [1] = Player
 	 */
 	@Override
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
+		if(side.equals(Side.SERVER)) 
+			interpretClient(stream, extradata);
+		else FlansMod.logLoudly("Recieved Weapon packet on Client. Skipped interpretation");
+		
+		//TODO : Route this to the block, but first combine the boxes into one ID with a tileEntity
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void interpretClient(DataInputStream stream, Object[] extradata) {
 		try {
 			int id = stream.readInt();
 			String shortName = stream.readUTF();
@@ -66,8 +75,6 @@ public class PacketBuyWeapon extends FlanPacketServer
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//TODO : Route this to the block, but first combine the boxes into one ID with a tileEntity
 	}
 
 	@Override

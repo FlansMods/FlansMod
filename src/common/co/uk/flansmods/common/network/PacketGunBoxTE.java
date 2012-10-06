@@ -10,6 +10,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.WorldServer;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.TileEntityGunBox;
+import cpw.mods.fml.common.Side;
 
 public class PacketGunBoxTE extends FlanPacketServer
 {
@@ -47,11 +48,8 @@ public class PacketGunBoxTE extends FlanPacketServer
 
 	// extradata [0] = world
 	@Override
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
-		// just in case. interpret it on both.
-		//FlansMod.log("Particle packet recieved on client. Skipping interpretation.");
-		
 		try
 		{
 			int x = stream.readInt();
@@ -65,7 +63,6 @@ public class PacketGunBoxTE extends FlanPacketServer
 			entity.setShortName(type);
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

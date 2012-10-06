@@ -7,10 +7,13 @@ import java.io.DataOutputStream;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.World;
 
 public class PacketParticleSpawn extends FlanPacketServer
 {
@@ -51,9 +54,36 @@ public class PacketParticleSpawn extends FlanPacketServer
 	}
 
 	@Override
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
-		FlansMod.log("Particle packet recieved on server. Skipping interpretation.");
+		if(side.equals(Side.CLIENT)) interpretClient(stream, extradata);
+		else FlansMod.logLoudly("Received particle packet on server (or bukkit server)! Doing nothing");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void interpretClient(DataInputStream stream, Object[] extradata) {
+		try
+		{
+			double x1 = stream.readDouble();
+			double y1 = stream.readDouble();
+			double z1 = stream.readDouble();
+			double x2 = stream.readDouble();
+			double y2 = stream.readDouble();
+			double z2 = stream.readDouble();
+			int number = stream.read();
+			String type = stream.readUTF();
+			
+			for (int i = 0; i < number; i++)
+			{
+				((World)extradata[0]).spawnParticle(type, x1, y1, z1, x2, y2, z2);
+			}
+
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Error reading packet or spawning particles");
+			e.printStackTrace();
+		}
 	}
 
 	@Override

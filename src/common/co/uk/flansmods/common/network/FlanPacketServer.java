@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;
 
-import co.uk.flansmods.client.network.PacketParticleSpawn;
 import co.uk.flansmods.common.FlansMod;
 
 import cpw.mods.fml.client.FMLClientHandler;

@@ -2,7 +2,7 @@ package co.uk.flansmods.client;
 
 import org.lwjgl.opengl.GL11;
 
-import co.uk.flansmods.client.network.PacketTeamSelect;
+import co.uk.flansmods.common.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;

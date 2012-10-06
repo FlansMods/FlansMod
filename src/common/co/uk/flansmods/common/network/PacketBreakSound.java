@@ -17,7 +17,6 @@ import net.minecraft.src.Packet250CustomPayload;
 
 public class PacketBreakSound extends FlanPacketServer
 {
-	
 	public static final byte packetID = 1;
 	
 	public static Packet buildBreakSoundPacket(int x, int y, int z, int BlockID)

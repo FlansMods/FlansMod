@@ -13,6 +13,8 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 public class PacketTeamSelect extends FlanPacketServer 
 {
@@ -81,29 +83,70 @@ public static final byte packetID = 6;
 	
 	    return packet;
 	}
+	
+	public static Packet buildSelectionPacket(String shortName, boolean classPacket)
+	{
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = channelFlan;
+		
+	    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	    DataOutputStream data = new DataOutputStream(bytes);
+	    try
+	    {
+	    	data.write(packetID); // this is the packet ID. identifies it as a TeamSelectPacket
+	    	data.writeBoolean(classPacket);	//True if selecting class, false if selecting team
+	    	data.writeUTF(shortName);
+	
+	    	packet.data = bytes.toByteArray();
+	    	packet.length = packet.data.length;
+	
+	    	data.close();
+	    	bytes.close();
+	    }
+	    catch(Exception e)
+	    {
+	    	e.printStackTrace();
+	    }
+	
+	    return packet;
+	}
 
 	//Upon recieving, read the team / class chosen and pass it to the gametype
 	@Override
-	public void interpret(DataInputStream stream, Object[] extradata)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
+		if(side.equals(Side.CLIENT)) interpretClient(stream, extradata);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void interpretClient(DataInputStream stream, Object[] extradata) {
 		try
 		{
-			EntityPlayerMP player = (EntityPlayerMP)extradata[0];
 			boolean classPacket = stream.readBoolean();
 			if(classPacket)
 			{
-				PlayerClass playerClass = PlayerClass.getClass(stream.readUTF());
-				TeamsManager.getInstance().currentGametype.playerChoseClass(player, playerClass);
+				int numClasses = stream.readByte();
+				PlayerClass[] classes = new PlayerClass[numClasses];
+				for(int i = 0; i < numClasses; i++)
+				{
+					classes[i] = PlayerClass.getClass(stream.readUTF());
+				}
+				Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(classes));
 			}
 			else
 			{
-				Team team = Team.getTeam(stream.readUTF());
-				TeamsManager.getInstance().currentGametype.playerChoseTeam(player, team);
+				int numTeams = stream.readByte();
+				Team[] teams = new Team[numTeams];
+				for(int i = 0; i < numTeams; i++)
+				{
+					teams[i] = Team.getTeam(stream.readUTF());
+				}
+				Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(teams));
 			}
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Error reading packet");
+			FlansMod.log("Error reading packet or spawning particles");
 			e.printStackTrace();
 		}
 	}
