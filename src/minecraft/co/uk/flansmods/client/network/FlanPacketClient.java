@@ -55,12 +55,12 @@ public class FlanPacketClient implements IPacketHandler
         	
     		switch(ID)
     		{
-    		case 1: (new PacketBreakSound()).interpret(stream, null); break;
-    		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}); break;
+    		case 1: (new PacketBreakSound()).interpret(stream, null, Side.CLIENT); break;
+    		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		case 3: break; // TODO: Entity Control Packets (world, entityID, byte[] extra stuff for exactly what to do.)
     		case 4: break; // TODO: Gui packets (world, x, y, z, ExtraData for what gui and if its a TE and stuff.)
-    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}); break;
-    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}); break;
+    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player},Side.CLIENT); break;
+    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		
