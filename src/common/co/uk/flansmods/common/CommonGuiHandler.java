@@ -1,6 +1,10 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.client.GuiGunBox;
 import net.minecraft.src.*;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class CommonGuiHandler implements IGuiHandler
@@ -14,4 +18,11 @@ public class CommonGuiHandler implements IGuiHandler
      {
           return FlansMod.proxy.getClientGui(ID, player, world, x, y, z);
      }
+     
+ 	@SideOnly(Side.CLIENT)
+ 	public static void openGunBoxGui(EntityPlayer player, GunBoxType type) 
+ 	{
+ 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(player.username);
+ 		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, type));
+ 	}
 }

@@ -109,6 +109,16 @@ public class CommonProxy
 		// overriden in client
 	}
 
+	/**
+	 * Gets the client GUI element from ClientProxy.
+	 * @param ID
+	 * @param player
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		return null;
@@ -116,6 +126,12 @@ public class CommonProxy
 
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
+		switch(ID) 
+		{
+			case 0: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, false);
+			case 1: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, true);
+			case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
+		}
 		return null;
 	}
 

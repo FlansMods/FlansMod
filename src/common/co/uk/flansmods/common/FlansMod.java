@@ -65,7 +65,7 @@ public class FlansMod
 	@SidedProxy(clientSide = "co.uk.flansmods.client.ClientProxy", serverSide = "co.uk.flansmods.common.CommonProxy")
 	public static CommonProxy proxy;
 	
-	@Instance
+	@Instance("FlansMod")
 	public static FlansMod instance;
 	
 	public static TeamsManager teamsManager;
@@ -223,7 +223,7 @@ public class FlansMod
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 		
 		// GUI handler		
-		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(this, new CommonGuiHandler());
 		
 		// Default teams stuff
 		opStick = new ItemOpStick(23540);

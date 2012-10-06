@@ -359,6 +359,12 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
+		switch(ID) 
+		{
+			case 0: return new GuiPlaneCrafting(player.inventory, world, x, y, z, false);
+			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
+			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
+		}
 		return null;
 	}
 
