@@ -10,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GameSettings;
+import net.minecraft.src.GuiChat;
+import net.minecraft.src.GuiInventory;
 import net.minecraft.src.KeyBinding;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -32,9 +34,9 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
 	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
-	
-	GameSettings settings;
 
+	Minecraft mc;
+	
 	public KeyInputHandler()
 	{
 		super(new KeyBinding[]
@@ -67,26 +69,30 @@ public class KeyInputHandler extends KeyHandler
 				false, // control switch
 				false // teams menu
 						});
-		settings = FMLClientHandler.instance().getClient().gameSettings; 
+		
+		mc = Minecraft.getMinecraft();
 	}
 
 	@Override
 	public String getLabel()
 	{
-		return "Control key Ticker";
+		return "Flan Control key Ticker";
 	}
 
 	@Override
 	public void keyDown(EnumSet<TickType> types, KeyBinding kb,	boolean tickEnd, boolean isRepeat)
 	{
-		for (KeyBinding key : settings.keyBindings )
-		{
-			if (kb.keyCode == key.keyCode)
-				key.pressed =  kb.pressed = true;
-		}
-		
-		if(Minecraft.getMinecraft().currentScreen != null)
+		if(mc.currentScreen != null || tickEnd)
 			return;
+		
+		for (KeyBinding key : mc.gameSettings.keyBindings )
+		{
+			if (kb.keyCode == key.keyCode && key != kb)
+			{
+				key.pressed = true;
+				key.pressTime = 1;
+			}
+		}
 		
 		int keyNum = 0;
 		
@@ -114,11 +120,11 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 10;
 		else if(kb == teamsMenuKey)
 		{
-			Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect());
+			mc.displayGuiScreen(new GuiTeamSelect());
 			return;
 		}
 		
-		EntityPlayer player = FMLClientHandler.instance().getClient().thePlayer;
+		EntityPlayer player = mc.thePlayer;
 		if(player == null)
 			return;
 		Entity entityTest = player.ridingEntity;
@@ -133,10 +139,10 @@ public class KeyInputHandler extends KeyHandler
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 	{
-		for (KeyBinding key : settings.keyBindings )
+		for (KeyBinding key : mc.gameSettings.keyBindings)
 		{
-			if (kb.keyCode == key.keyCode)
-				key.pressed =  kb.pressed = false;
+			if (kb.keyCode == key.keyCode && key != kb)
+				key.pressed = false;
 		}
 	}
 
