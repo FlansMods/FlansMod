@@ -8,6 +8,7 @@ import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
@@ -57,6 +58,7 @@ public class PacketBreakSound extends FlanPacketServer
 		FlansMod.log("Sound packet recieved on server. Skipping interpretation.");
 	}
 	
+	@SideOnly(value = Side.CLIENT)
 	private void interpretClient(DataInputStream stream, Object[] extradata)
 	{
         try
