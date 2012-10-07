@@ -208,6 +208,26 @@ public class BlockGunBox extends BlockContainer
 		}
 		return type.sideTextureIndex;
 	}
+	
+	@SideOnly(value = Side.CLIENT)
+	@Override
+	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
+	{
+		GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(metadata));
+		
+		if (type == null)
+			return 0;
+		
+		if (side == 1)
+		{
+			return type.topTextureIndex;
+		}
+		if (side == 0)
+		{
+			return type.bottomTextureIndex;
+		}
+		return type.sideTextureIndex;
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)

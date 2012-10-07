@@ -16,6 +16,7 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.NetworkManager;
@@ -42,7 +43,7 @@ public class FlanPacketClient implements IPacketHandler
 		if (!packet.channel.equals(channelFlan))
 			return;
 		
-		World world = player.worldObj;
+		WorldClient world = Minecraft.getMinecraft().theWorld;
 		
         try
         {

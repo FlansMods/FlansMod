@@ -10,6 +10,7 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.TileEntityGunBox;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 
 public class PacketGunBoxTE extends FlanPacketServer
@@ -62,13 +63,11 @@ public class PacketGunBoxTE extends FlanPacketServer
 			TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(x, y, z);
 			entity.setShortName(type);
 			
-			world.markBlockAsNeedsUpdate(x, y, z);
-			world.markBlockNeedsUpdateForAll(x, y, z);
+			world.markBlockNeedsUpdate(x, y, z);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override

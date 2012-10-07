@@ -11,7 +11,6 @@ public class TileEntityGunBox extends TileEntity
     public void writeToNBT(NBTTagCompound nbt)
     {
 		super.writeToNBT(nbt);
-		shortName = nbt.getString("type");
 		nbt.setString("type", shortName);
     }
 	
