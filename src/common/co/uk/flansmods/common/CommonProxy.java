@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.KeyInputHandler;
-import co.uk.flansmods.common.network.FlanPacketServer;
+import co.uk.flansmods.common.network.FlanPacketCommon;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
 
@@ -62,8 +62,8 @@ public class CommonProxy
 	{
 		FlansMod.log("Not client. Key Bindings skipped.");
 	}
-
-	public void keyPress(int key, EntityPlayer player)
+	
+	public void onMouseMoved(int deltaX, int deltaY, EntityPlayer player)
 	{
 		WorldServer world = (WorldServer) player.worldObj;
 		Entity entityTest  = player.ridingEntity;
@@ -76,11 +76,7 @@ public class CommonProxy
 		if (entity.riddenByEntity != player)
 			return;
 		
-		// change controls?
-		if (key != 10)
-			entity.pressKey(key);
-		
-		// #10 is changing the controls.
+		entity.onMouseMoved(deltaX, deltaY);
 	}
 	
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
@@ -131,6 +127,8 @@ public class CommonProxy
 			case 0: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, false);
 			case 1: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
+			case 3: return new ContainerPlaneMenu(player.inventory, world);
+			case 4: return new ContainerPlaneMenu(player.inventory, world, true, (EntityDriveable) player.ridingEntity);
 		}
 		return null;
 	}

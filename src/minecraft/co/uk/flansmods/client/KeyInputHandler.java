@@ -5,6 +5,8 @@ import java.util.EnumSet;
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Entity;
@@ -13,11 +15,13 @@ import net.minecraft.src.GameSettings;
 import net.minecraft.src.GuiChat;
 import net.minecraft.src.GuiInventory;
 import net.minecraft.src.KeyBinding;
+import net.minecraft.src.WorldClient;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler extends KeyHandler
@@ -125,20 +129,26 @@ public class KeyInputHandler extends KeyHandler
 		}
 		
 		EntityPlayer player = mc.thePlayer;
-		if(player == null)
-			return;
-		Entity entityTest = player.ridingEntity;
+		Entity entityTest  = player.ridingEntity;
 		
 		if (entityTest != null && entityTest instanceof EntityDriveable)
 		{
-			EntityDriveable driveable = (EntityDriveable) entityTest;
-			driveable.pressKey(keyNum);
+			EntityDriveable entity = (EntityDriveable)entityTest;
+			if (kb.keyCode == mc.gameSettings.keyBindInventory.keyCode)
+			{
+				mc.gameSettings.keyBindInventory.pressed = false;
+				mc.gameSettings.keyBindInventory.pressTime = 0;
+			}
+			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
 		}
 	}
 
 	@Override
 	public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
 	{
+		if (tickEnd)
+			return;
+		
 		for (KeyBinding key : mc.gameSettings.keyBindings)
 		{
 			if (kb.keyCode == key.keyCode && key != kb)

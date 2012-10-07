@@ -13,7 +13,7 @@ import co.uk.flansmods.common.TileEntityGunBox;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 
-public class PacketGunBoxTE extends FlanPacketServer
+public class PacketGunBoxTE extends FlanPacketCommon
 {
 	public static final byte packetID = 7;
 	

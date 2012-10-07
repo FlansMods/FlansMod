@@ -160,6 +160,12 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         return true;
     }
 	
+	// Only called when control mdoe is for mouse.
+	@Override
+	public void onMouseMoved(int deltaX, int deltaY)
+	{
+	}
+	
 	@Override
 	public void pressKey(int key)
 	{

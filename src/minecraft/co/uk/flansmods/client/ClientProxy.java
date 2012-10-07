@@ -33,9 +33,10 @@ import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
-import co.uk.flansmods.common.network.FlanPacketServer;
+import co.uk.flansmods.common.network.FlanPacketCommon;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -45,8 +46,10 @@ import cpw.mods.fml.client.SpriteHelper;
 import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
@@ -56,6 +59,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EnumGameType;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.ModelBase;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import net.minecraft.src.WorldClient;
@@ -285,7 +289,7 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public void keyPress(int key, EntityPlayer player)
+	public void onMouseMoved(int deltaX, int deltaY, EntityPlayer player)
 	{
 		WorldClient world = (WorldClient) FMLClientHandler.instance().getClient().theWorld;
 		Entity entityTest  = player.ridingEntity;
@@ -299,10 +303,9 @@ public class ClientProxy extends CommonProxy
 			return;
 		
 		// if its not the inventory key, do whatever the entity wants.
-		if (key != 7)
-			entity.pressKey(key);
+		entity.onMouseMoved(deltaX, deltaY);
 		
-		FMLClientHandler.instance().displayGuiScreen(player, new GuiPlaneMenu((player).inventory, world, entity));
+		PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlMouse(deltaX, deltaY));
 	}
 	
 	@Override
@@ -364,6 +367,8 @@ public class ClientProxy extends CommonProxy
 			case 0: return new GuiPlaneCrafting(player.inventory, world, x, y, z, false);
 			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
+			case 3: return new GuiPlaneMenu(player.inventory, world, (EntityDriveable) player.ridingEntity);
+			case 4: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
 		}
 		return null;
 	}

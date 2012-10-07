@@ -14,7 +14,7 @@ import co.uk.flansmods.common.GunBoxType;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
-public class PacketBuyWeapon extends FlanPacketServer
+public class PacketBuyWeapon extends FlanPacketCommon
 {
 	public static final byte packetID = 5;
 	

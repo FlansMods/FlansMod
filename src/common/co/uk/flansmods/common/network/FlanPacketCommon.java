@@ -22,9 +22,7 @@ import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.WorldServer;
 
-//TODO : Make this abstract?
-
-public class FlanPacketServer implements IPacketHandler
+public class FlanPacketCommon implements IPacketHandler
 {
 	public static String channelFlan = "flansmods";
 	protected Packet250CustomPayload internalPacket;
@@ -51,18 +49,12 @@ public class FlanPacketServer implements IPacketHandler
         	
         	int ID = stream.read();
         	
-        	/*
-        	 *packet ID list...
-        	 * 1 = PacketBreakSound 
-        	 * 2 = PacketParticleSpawn
-        	 */
-        	
     		switch(ID)
     		{
     		case 1: (new PacketBreakSound()).interpret(stream, null, Side.SERVER); break;
     		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-    		case 3: break; // TODO: Entity Control Packets (world, entityID, byte[] extra stuff for exactly what to do.)
-    		case 4: break; // TODO: Gui packets (world, x, y, z, ExtraData for what gui and if its a TE and stuff.)
+    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+    		case 4: break; //-- unneeded. This Id is open for any use.
     		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, Side.SERVER); break;
     		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.SERVER); break;
     		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.SERVER); break;

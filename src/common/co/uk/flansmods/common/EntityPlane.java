@@ -14,6 +14,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.server.FMLServerHandler;
 
@@ -267,7 +268,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 7 :
 			{
 				// automatically only done on client.
-				FMLCommonHandler.instance().showGuiScreen(new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
+				FMLNetworkHandler.openGui(((EntityPlayer)riddenByEntity), FlansMod.instance, 3, worldObj, this.chunkCoordX, this.chunkCoordY, this.chunkCoordZ);
 				break;
 			}
 			case 8 : //Bomb

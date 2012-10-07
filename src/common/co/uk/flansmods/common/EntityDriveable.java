@@ -41,11 +41,7 @@ public abstract class EntityDriveable extends Entity
 	 * @param deltaX 
 	 * @return if mouse movement was handled.
 	 */
-	// TODO: make this abstract
-	public void onMouseMoved(int deltaX, int deltaY)
-	{
-
-	}
+	public abstract void onMouseMoved(int deltaX, int deltaY);
 
 	@Override
     protected boolean canTriggerWalking()

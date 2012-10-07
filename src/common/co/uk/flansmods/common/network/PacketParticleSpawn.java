@@ -15,7 +15,7 @@ import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
 
-public class PacketParticleSpawn extends FlanPacketServer
+public class PacketParticleSpawn extends FlanPacketCommon
 {
 	
 	public static final byte packetID = 2;
