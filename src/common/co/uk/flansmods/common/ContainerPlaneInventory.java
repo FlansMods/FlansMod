@@ -31,13 +31,13 @@ public class ContainerPlaneInventory extends Container
 			}
 			case 1 : 
 			{
-				numItems = plane.superType.numBombSlots;
+				numItems = plane.getSuperType().numBombSlots;
 				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
 				break;
 			}
 			case 2 : 
 			{
-				numItems = plane.superType.numCargoSlots;
+				numItems = plane.getSuperType().numCargoSlots;
 				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
 				break;
 			}	

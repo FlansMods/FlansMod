@@ -139,6 +139,7 @@ public class KeyInputHandler extends KeyHandler
 				mc.gameSettings.keyBindInventory.pressed = false;
 				mc.gameSettings.keyBindInventory.pressTime = 0;
 			}
+			entity.pressKey(keyNum);
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
 		}
 	}

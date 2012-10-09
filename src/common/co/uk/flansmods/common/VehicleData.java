@@ -12,27 +12,11 @@ public class VehicleData extends DriveableData
 	
     public VehicleData(String s, VehicleType vehicleType)
     {
-        super(s, vehicleType, 2, vehicleType.numBombSlots, vehicleType.numCargoSlots);
-		vehicle = vehicleType;
+        super(s, vehicleType.shortName, 2, vehicleType.numBombSlots, vehicleType.numCargoSlots);
     }
 	
-	public void readFromNBT(NBTTagCompound tag)
-    {
-		super.readFromNBT(tag);
-		vehicle = (VehicleType)type;
-		numBombs = type.numBombSlots;
-		numCargo = type.numCargoSlots;
-		bombs = new ItemStack[numBombs];
-		cargo = new ItemStack[numCargo];
-		for(int i = 0; i < numBombs; i++)
-		{
-			bombs[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Bombs " + i));
-		}
- 		for(int i = 0; i < numCargo; i++)
-		{
-			cargo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Cargo " + i));
-		}
+	public VehicleType getVehicleType()
+	{
+		return VehicleType.getVehicle(type);
 	}
-	
-	public VehicleType vehicle;
 }

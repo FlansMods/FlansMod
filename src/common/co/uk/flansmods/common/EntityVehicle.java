@@ -56,12 +56,13 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			FlansMod.log("Failed to retrieve vehicle data ID from vehicle data. " + data.mapName);
 		}
-		type = type1;
+		type = type1.shortName;
 		initType();
 	}
 	
 	private void initType()
 	{
+		VehicleType type = this.getVehicleType();
 		health = type.health;
 		seats = new EntityPassengerSeat[type.numPassengers];
 		for(int i = 0; i < type.numPassengers; i++)
@@ -93,12 +94,13 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
     {
         if(worldObj.isRemote || isDead)
-        {
             return true;
-        }
+        
+        VehicleType type = this.getVehicleType();
+        
 		if(/*onGround &&*/ damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
-			entityDropItem(new ItemStack(type.itemID, 1, dataID), 0.5F);
+			entityDropItem(new ItemStack(this.getVehicleType().itemID, 1, dataID), 0.5F);
 			data.markDirty();
 	 		setDead();
 			return true;
@@ -169,6 +171,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	@Override
 	public void pressKey(int key)
 	{
+		VehicleType type = this.getVehicleType();
 		switch(key)
 		{
 			case 0 : //Accelerate
@@ -303,7 +306,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	{
 		if(!worldObj.isRemote && seat.gunDelay <= 0 && FlansMod.bulletsEnabled)
 		{
-			FlansMod.proxy.spawnVehicle(worldObj, posX, posY, posZ, type, data, seat, this, axes, player);
+			FlansMod.proxy.spawnVehicle(worldObj, posX, posY, posZ, getVehicleType(), data, seat, this, axes, player);
 		}
 	}
 
@@ -314,32 +317,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		double actualMotionY = motionY;//posY - prevPosY;
 		double actualMotionZ = motionZ;//posZ - prevPosZ;
         super.onUpdate();
-		
-		//Key Input  TOD: packets with controls
-        /*
-		if(Keyboard.isKeyDown(FlansMod.accelerateKey))
-			pressKey(0);
-		if(Keyboard.isKeyDown(FlansMod.decelerateKey))
-			pressKey(1);
-		if(Keyboard.isKeyDown(FlansMod.leftKey))
-			pressKey(2);
-		if(Keyboard.isKeyDown(FlansMod.rightKey))
-			pressKey(3);
-		if(Keyboard.isKeyDown(FlansMod.upKey))
-			pressKey(4);
-		if(Keyboard.isKeyDown(FlansMod.downKey))
-			pressKey(5);
-		if(Keyboard.isKeyDown(FlansMod.exitKey))
-			pressKey(6);
-		if(Keyboard.isKeyDown(FlansMod.inventoryKey))
-			pressKey(7);
-		if(Keyboard.isKeyDown(FlansMod.bombKey))
-			pressKey(8);
-		if(Keyboard.isKeyDown(FlansMod.gunKey))
-			pressKey(9);
-		if(Keyboard.isKeyDown(FlansMod.controlSwitchKey))
-			pressKey(10);
-			*/
+        
+        VehicleType type = this.getVehicleType();
 		
 		//Vehicle movement		
 		if(riddenByEntity == null)
@@ -667,7 +646,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				if(!isPartOfThis(entity) && entity.canBePushed())
 				{
 					entity.applyEntityCollision(box);
-					if(entity instanceof EntityLiving && type.squashMobs && riddenByEntity != null)
+					if(entity instanceof EntityLiving && getVehicleType().squashMobs && riddenByEntity != null)
 					{
 						entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)riddenByEntity), 10);
 					}
@@ -682,7 +661,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         {
             return;
         } else if(riddenByEntity instanceof EntityLiving)
-        {				
+        {
+        	VehicleType type = this.getVehicleType();
 			Vec3 vec = rotate(type.driverX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.driverY / 16D, type.driverZ / 16D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
 			riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
@@ -726,7 +706,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
     {
 		tag.setInteger("DataID", dataID);
 		data.writeToNBT(tag);
-		tag.setString("Type", type.shortName);
+		tag.setString("Type", type);
 		tag.setFloat("RotationYaw", axes.getYaw());
 		tag.setFloat("RotationPitch", axes.getPitch());
 		tag.setFloat("RotationRoll", axes.getRoll());
@@ -736,11 +716,11 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
-		type = VehicleType.getVehicle(tag.getString("Type"));
+		type = tag.getString("Type");
 		initType();
 		//TODO : Should be obtained through world?
 		dataID = tag.getInteger("DataID");
-		data = new VehicleData("Vehicle_" + dataID, type);
+		data = new VehicleData("Vehicle_" + dataID, getVehicleType());
 		data.readFromNBT(tag);
 		superType = type;
 		superData = data;
@@ -764,10 +744,10 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		if(canSit(0))
 		{
 			entityplayer.mountEntity(this);
-			shellDelay = type.vehicleShellDelay;
+			shellDelay = getVehicleType().vehicleShellDelay;
 			FlansMod.proxy.doTutorialStuff(entityplayer, this);
 		}
-		for(int i = 0; i < type.numPassengers; i++)
+		for(int i = 0; i < getVehicleType().numPassengers; i++)
 		{
 			if(canSit(i + 1))
 			{
@@ -782,23 +762,26 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	{
 		if(seat == 0 && riddenByEntity == null)
 			return true;
-		if(seat > 0 && type.numPassengers >= seat && seats[seat - 1].riddenByEntity == null)
+		if(seat > 0 && getVehicleType().numPassengers >= seat && seats[seat - 1].riddenByEntity == null)
 			return true;
 		return false;
 	}
 	
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
-		// TODO Auto-generated method stub
-		data.writeUTF(type.shortName);
+	public void writeSpawnData(ByteArrayDataOutput data)
+	{
+		data.writeUTF(type);
+		data.writeInt(dataID);
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
-		// TODO Auto-generated method stub
+	public void readSpawnData(ByteArrayDataInput data)
+	{
 		try
 		{
-			type = VehicleType.getVehicle(data.readUTF());
+			type = superType = data.readUTF();
+			dataID = data.readInt();
+			this.superData = this.data = new VehicleData("Vehicle_" + dataID, VehicleType.getVehicle(type));
 			initType();
 		}
 		catch(Exception e)
@@ -808,8 +791,13 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			e.printStackTrace();
 		}
 	}
+	
+	public VehicleType getVehicleType()
+	{
+		return VehicleType.getVehicle(type);
+	}
 		
-	public VehicleType type;
+	public String type;
 	public VehicleData data;
 		
 	//Weaponry

@@ -3,6 +3,7 @@ package co.uk.flansmods.common;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -43,7 +44,6 @@ public class PlaneType extends DriveableType
 		}
 		while(true);
 		iconIndex = nextIconIndex++;
-		types.add(this);
     }
 	
 	protected void read(String[] split, BufferedReader file)
@@ -52,9 +52,7 @@ public class PlaneType extends DriveableType
 		try
 		{
 			if(split[0].equals("Model"))
-			{
-				FlansMod.proxy.loadPlaneModel(split, shortName);
-			}
+				this.model = (ModelPlane) FlansMod.proxy.loadPlaneModel(split, shortName);
 			
 			//Movement modifiers
 			if(split[0].equals("MaxPropellerSpeed"))
@@ -245,12 +243,7 @@ public class PlaneType extends DriveableType
 	
 	public static PlaneType getPlane(String find)
 	{
-		for(PlaneType type : types)
-		{
-			if(type.shortName.equals(find))
-				return type;
-		}
-		return null;
+		return types.get(find);
 	}
 	
 	@SideOnly(value = Side.CLIENT)
@@ -322,5 +315,5 @@ public class PlaneType extends DriveableType
 	public int propSetup = 0; //0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
 
 	public static int nextIconIndex = 5;
-	public static List<PlaneType> types = new ArrayList<PlaneType>();
+	public static HashMap<String, PlaneType> types = new HashMap<String, PlaneType>();
 }

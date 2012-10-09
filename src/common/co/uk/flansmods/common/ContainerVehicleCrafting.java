@@ -62,7 +62,7 @@ public class ContainerVehicleCrafting extends Container
 		//Reset output slot
 		craftResult.setInventorySlotContents(0, null);
 		//Check each vehicle type's recipe to see if it matches
-		for(VehicleType type : VehicleType.types)
+		for(VehicleType type : VehicleType.types.values())
 		{
 			if(matches(type))
 			{

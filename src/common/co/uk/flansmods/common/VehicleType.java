@@ -3,6 +3,7 @@ package co.uk.flansmods.common;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -41,7 +42,6 @@ public class VehicleType extends DriveableType
 		}
 		while(true);
 		iconIndex = nextIconIndex++;
-		types.add(this);
     }
 	
 	protected void read(String[] split, BufferedReader file)
@@ -235,12 +235,7 @@ public class VehicleType extends DriveableType
 	
 	public static VehicleType getVehicle(String find)
 	{
-		for(VehicleType type : types)
-		{
-			if(type.shortName.equals(find))
-				return type;
-		}
-		return null;
+		return types.get(find);
 	}
 		
 	public Object model;
@@ -309,5 +304,5 @@ public class VehicleType extends DriveableType
 	public boolean hasTurret = false;
 	
 	public static int nextIconIndex = 2;
-	public static List<VehicleType> types = new ArrayList<VehicleType>();
+	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
 }

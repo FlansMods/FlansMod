@@ -208,7 +208,7 @@ public class ClientProxy extends CommonProxy
 		FlansMod.log("Loaded part icons.");
 
 		// Planes
-		for (PlaneType type : PlaneType.types)
+		for (PlaneType type : PlaneType.types.values())
 		{
 			try
 			{

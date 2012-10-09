@@ -3,6 +3,7 @@ package co.uk.flansmods.common;
 import net.minecraft.client.Minecraft;
 
 import java.io.BufferedReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
@@ -12,7 +13,7 @@ public class DriveableType extends InfoType
     public DriveableType(String pack)
     {
 		super(pack);
-		types.add(this);
+		typeList.add(this);
     }
 	
 	protected void read(String[] split, BufferedReader file)
@@ -53,12 +54,25 @@ public class DriveableType extends InfoType
 	
 	public static DriveableType getDriveable(String find)
 	{
-		for(DriveableType type : types)
+		return types.get(find);
+	}
+	
+	protected static void populate()
+	{
+		for (DriveableType type: typeList)
 		{
-			if(type.shortName.equals(find))
-				return type;
+			types.put(type.shortName, type);
+			if (type instanceof PlaneType)
+			{
+				PlaneType.types.put(type.shortName, (PlaneType) type);
+			}
+			else if (type instanceof VehicleType)
+			{
+				VehicleType.types.put(type.shortName, (VehicleType) type);
+			}
 		}
-		return null;
+		
+		typeList = null;
 	}
 	
 	public CollisionBox[] boxes;
@@ -71,5 +85,6 @@ public class DriveableType extends InfoType
 	public int numBombSlots;
 	public int tankSize = 100;
 
-	public static List<DriveableType> types = new ArrayList<DriveableType>();
+	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
+	private static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
 }

@@ -31,7 +31,7 @@ public abstract class EntityDriveable extends Entity
 	public EntityDriveable(World world, DriveableType t, DriveableData d)
 	{
 		this(world);
-		superType = t;	
+		superType = t.shortName;
 		superData = d;
 	}
 	
@@ -255,6 +255,11 @@ public abstract class EntityDriveable extends Entity
     {
         return 0.0F;
     }
+    
+    public DriveableType getSuperType()
+    {
+    	return DriveableType.getDriveable(superType);
+    }
 	
 	public abstract void updateCollisionBox(EntityCollisionBox box);
 	
@@ -264,7 +269,7 @@ public abstract class EntityDriveable extends Entity
 	
 	public int dataID;
 	public DriveableData superData;
-	public DriveableType superType;
+	public String superType;
 	public int health;
 
 	public boolean fuelling;

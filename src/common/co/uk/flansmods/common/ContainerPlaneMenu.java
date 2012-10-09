@@ -21,6 +21,7 @@ public class ContainerPlaneMenu extends Container
         world = worldy;
 		plane = planey;
 		isFuel = fuel;
+		
 		//Fuel slot
 		if(isFuel)
 		{

@@ -571,6 +571,8 @@ public class FlansMod
 		}
 		log("Loaded recipes.");
 		
+		DriveableType.populate();
+		
 		// LOAD GRAPHICS
 		proxy.loadContentPackGraphics(method, classloader);
 	}

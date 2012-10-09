@@ -11,15 +11,11 @@ public class PlaneData extends DriveableData
 	
     public PlaneData(String s, PlaneType planeType)
     {
-        super(s, planeType, 8, planeType.numBombSlots, planeType.numCargoSlots);
-		plane = planeType;
+        super(s, planeType.shortName, 8, planeType.numBombSlots, planeType.numCargoSlots);
     }
 	
-	public void readFromNBT(NBTTagCompound tag)
-    {
-		super.readFromNBT(tag);
-		plane = (PlaneType)type;
+	public PlaneType getPlaneType()
+	{
+		return PlaneType.getPlane(type);
 	}
-	
-	public PlaneType plane;
 }

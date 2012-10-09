@@ -24,7 +24,7 @@ public class GuiPlaneFuel extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        fontRenderer.drawString(plane.superType.name + " - Fuel", 6, 6, 0x404040);
+        fontRenderer.drawString(plane.getSuperType().name + " - Fuel", 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 
@@ -43,7 +43,7 @@ public class GuiPlaneFuel extends GuiContainer
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
-		int fuelTankSize = plane.superType.tankSize;
+		int fuelTankSize = plane.getSuperType().tankSize;
 		int fuelInTank = plane.superData.fuelInTank;
 		if(plane.fuelling)
 			drawTexturedModalRect(j + 15, k + 44, 176 + 15 * (anim % 4), 0, 15, 16);

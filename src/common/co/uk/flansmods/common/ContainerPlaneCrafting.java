@@ -64,7 +64,7 @@ public class ContainerPlaneCrafting extends Container
 		//Reset output slot
 		craftResult.setInventorySlotContents(0, null);
 		//Check each plane type's recipe to see if it matches
-		for(PlaneType type : PlaneType.types)
+		for(PlaneType type : PlaneType.types.values())
 		{
 			if(matches(type))
 			{

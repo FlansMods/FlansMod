@@ -55,7 +55,7 @@ public class GuiPlaneMenu extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        fontRenderer.drawString(entity.superType.name, 6, 6, 0x404040);
+        fontRenderer.drawString(entity.getSuperType().name, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 

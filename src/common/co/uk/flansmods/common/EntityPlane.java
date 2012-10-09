@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import org.lwjgl.input.Keyboard;
@@ -32,6 +33,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.NBTBase;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
@@ -57,12 +59,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		{
 			FlansMod.log("Failed to retrieve plane data ID from plane data. " + data.mapName);
 		}
-		type = type1;
-		System.out.println("FLANSMOD TEST >> Loaded plane entity with data: " + type.texture + " " + type.shortName + " " + type.health);
-		initType();
+		type = type1.shortName;
+		initType(type1);
 	}
 	
-	protected void initType()
+	protected void initType(PlaneType type)
 	{
 		health = type.health;
 		rightWingHealth = leftWingHealth = tailHealth = health;
@@ -106,17 +107,19 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			deltaY = 100;
 		if(deltaY < -100)
 			deltaY = -100;
-		double pitchModifier = deltaY > 0 ? this.type.lookUpModifier : this.type.lookDownModifier;
-		if(this.tailHealth > 0 && this.propSpeed > this.type.takeOffSpeed)
+		
+		PlaneType type = this.getPlaneType();
+		double pitchModifier = deltaY > 0 ? type.lookUpModifier : type.lookDownModifier;
+		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityPitch -= pitchModifier * (this.propSpeed - this.type.takeOffSpeed) * 0.001F * deltaY;
+			this.velocityPitch -= pitchModifier * (this.propSpeed - type.takeOffSpeed) * 0.001F * deltaY;
 			this.flapsPitchLeft += 1F * deltaY;
 			this.flapsPitchRight += 1F * deltaY;
 		}
-		double rollModifier = deltaX > 0 ? this.type.lookUpModifier : this.type.lookDownModifier;
-		if(this.tailHealth > 0 && this.propSpeed > this.type.takeOffSpeed)
+		double rollModifier = deltaX > 0 ? type.lookUpModifier : type.lookDownModifier;
+		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityRoll -= rollModifier * (this.propSpeed - this.type.takeOffSpeed) * 0.001F * deltaX;
+			this.velocityRoll -= rollModifier * (this.propSpeed - type.takeOffSpeed) * 0.001F * deltaX;
 			this.flapsPitchLeft += 1F * deltaX;
 			this.flapsPitchRight -= 1F * deltaX;
 		}
@@ -126,7 +129,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	{
 		if(seat == 0 && riddenByEntity == null)
 			return true;
-		if(seat > 0 && type.numPassengers >= seat && seats[seat - 1].riddenByEntity == null)
+		if(seat > 0 && getPlaneType().numPassengers >= seat && seats[seat - 1].riddenByEntity == null)
 			return true;
 		return false;
 	}
@@ -134,7 +137,19 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data)
 	{
-		data.writeUTF(type.shortName);
+		try
+		{
+			data.writeUTF(type);
+			data.writeInt(dataID);
+			
+			NBTTagCompound tag = new NBTTagCompound();
+			this.data.writeToNBT(tag);
+			tag.writeNamedTag(tag, data);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}		
 	}
 
 	@Override
@@ -142,8 +157,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	{
 		try
 		{
-			type = PlaneType.getPlane(data.readUTF());
-			initType();
+			superType = type = data.readUTF();
+			dataID = data.readInt();
+			this.superData = this.data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
+			this.data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(data));
+			initType(PlaneType.getPlane(type));
 		}
 		catch(Exception e)
 		{
@@ -159,9 +177,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		if(isDead)
 			return true;
 		if(entityplayer == riddenByEntity)
-		{
 			return false;
-		}
+		
+		PlaneType type = this.getPlaneType();
+		
 		if(canSit(0))
 		{
 			entityplayer.mountEntity(this);
@@ -169,7 +188,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			
 			FlansMod.proxy.doTutorialStuff(entityplayer, this);
 			
-			return false;
+			return true;
 		}
 		for(int i = 0; i < type.numPassengers; i++)
 		{
@@ -185,6 +204,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     @Override
 	public void pressKey(int key)
 	{
+    	PlaneType type = this.getPlaneType();
+    	
 		switch(key)
 		{
 			case 0 : //Accelerate
@@ -346,9 +367,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
     {
 		if(worldObj.isRemote || isDead)
-        {
             return true;
-        }
+		
+		PlaneType type = PlaneType.getPlane(this.type);
+		
 		if((box.part != 0 || health <= 0) && (box.part != 1 || leftWingHealth <= 0) && (box.part != 2 || rightWingHealth <= 0) && (box.part != 3 || tailHealth <= 0))
 			return false;
 		switch(box.part)
@@ -500,6 +522,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		if(leftWingHealth <= 0 && box.part == 1)
 			box.setDead();
 		
+		PlaneType type = this.getPlaneType();
+		
 		//Particles!
 		if((tailHealth < type.health / 4 && box.part == 3)
 		|| (rightWingHealth < type.health / 4 && box.part == 2)
@@ -635,7 +659,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
         {
             return;
         } else if(riddenByEntity instanceof EntityLiving)
-        {				
+        {
+        	PlaneType type = this.getPlaneType();
 			Vec3 vec = rotate(type.pilotX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.pilotY / 16D, type.pilotZ / 16D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
             
@@ -666,9 +691,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public boolean attackEntityFrom(DamageSource damagesource, int i, boolean doDamage)
     {
         if(worldObj.isRemote || isDead)
-        {
             return true;
-        }
+        
+        PlaneType type = PlaneType.getPlane(this.type);
         
 		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
@@ -823,7 +848,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     {
 		tag.setInteger("DataID", dataID);
 		data.writeToNBT(tag);
-		tag.setString("Type", type.shortName);
+		tag.setString("Type", type);
 		tag.setFloat("RotationYaw2", -axes.getYaw());
 		tag.setFloat("RotationPitch2", axes.getPitch());
 		tag.setFloat("RotationRoll2", axes.getRoll());
@@ -840,10 +865,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
-		type = PlaneType.getPlane(tag.getString("Type"));
-		initType();
+		type = tag.getString("Type");
+		initType(PlaneType.getPlane(type));
 		dataID = tag.getInteger("DataID");
-		data = new PlaneData("plane_" + dataID, type);
+		data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
 		data.readFromNBT(tag);
 		superData = data;
 		superType = type;
@@ -861,7 +886,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
     }
 	
-	public PlaneType type;
+	public PlaneType getPlaneType()
+	{
+		return PlaneType.getPlane(type);
+	}
+	
+	public String type;
 	public PlaneData data;
 	
 	//Damage handling

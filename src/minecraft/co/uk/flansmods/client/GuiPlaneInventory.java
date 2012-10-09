@@ -35,7 +35,7 @@ public class GuiPlaneInventory extends GuiContainer
 		String wololo = " - Guns";
 		if(screen == 1) wololo = (plane instanceof EntityPlane ? " - Bombs" : " - Shells");
 		if(screen == 2) wololo = " - Cargo";
-        fontRenderer.drawString(plane.superType.name + wololo, 6, 6, 0x404040);
+        fontRenderer.drawString(plane.getSuperType().name + wololo, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
