@@ -481,6 +481,363 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		destroyBrokenParts();
 		return attackEntityFrom(damagesource, i, false);
 	}
+    
+    public void onUpdate()
+    {
+        super.onUpdate();
+
+		//Key Input
+		/*
+		if(FlansMod.controlMode == 0)
+		{
+			if(Keyboard.isKeyDown(FlansMod.accelerateKey))
+				pressKey(0);
+			if(Keyboard.isKeyDown(FlansMod.decelerateKey))
+				pressKey(1);
+			if(Keyboard.isKeyDown(FlansMod.leftKey))
+				pressKey(2);
+			if(Keyboard.isKeyDown(FlansMod.rightKey))
+				pressKey(3);
+			if(Keyboard.isKeyDown(FlansMod.upKey))
+				pressKey(4);
+			if(Keyboard.isKeyDown(FlansMod.downKey))
+				pressKey(5);
+			if(Keyboard.isKeyDown(FlansMod.exitKey))
+				pressKey(6);
+			if(Keyboard.isKeyDown(FlansMod.inventoryKey))
+				pressKey(7);
+			if(Keyboard.isKeyDown(FlansMod.bombKey))
+				pressKey(8);
+			if(Keyboard.isKeyDown(FlansMod.gunKey))
+				pressKey(9);
+			if(Keyboard.isKeyDown(FlansMod.controlSwitchKey))
+				pressKey(10);
+		}
+		*/
+        
+        PlaneType type = this.getPlaneType();
+
+		//Plane movement
+		int numPropsWorking = 0;
+		for(int j = 0; j < type.numProps; j++)
+		{
+			if(!propBlown[j])
+				numPropsWorking++;
+		}
+
+		if(riddenByEntity == null)
+			propSpeed *= 0.8D;
+
+		double acceleration = propSpeed * numPropsWorking * 0.01D;
+		double oldSpeed = getSpeedXYZ();
+		double lastMotionX = motionX;
+		double lastMotionY = motionY;
+		double lastMotionZ = motionZ;
+		double newSpeed = oldSpeed * 0.9D + acceleration;
+		double split = propSpeed / (type.maxPropSpeed + data.engine.engineSpeed);
+		double yComponent = propSpeed - type.takeOffSpeed;
+		if(leftWingHealth <= 0 && rightWingHealth <= 0)
+			yComponent = 0D;
+		if(yComponent < 0D)
+			yComponent = 0D;
+		if(yComponent > 1D)
+			yComponent = 1D;
+		Vector3f zAxis = axes.getZAxis();
+
+		motionX = newSpeed * zAxis.x * split + lastMotionX * (1D - split); //X component of local Z axis
+		motionY = yComponent * newSpeed * zAxis.y * split + lastMotionY * (1D - split); //Y component of local Z axis
+		motionZ = newSpeed * zAxis.z * split + lastMotionZ * (1D - split); //Z component of local Z axis
+
+		velocityYaw *= 0.8F;
+		velocityPitch *= 0.8F;
+		velocityRoll *= 0.8F;
+
+		//Rotate the propeller
+		propAngle += propSpeed / 10F;
+
+		//Return the flaps to their resting position
+		flapsYaw *= 0.8F;
+		flapsPitchLeft *= 0.8F;
+		flapsPitchRight *= 0.8F;
+		//Limit flap angles
+		if(flapsYaw > 10)
+			flapsYaw = 10;
+		if(flapsYaw < -10)
+			flapsYaw = -10;
+		if(flapsPitchRight > 10)
+			flapsPitchRight = 10;
+		if(flapsPitchRight < -10)
+			flapsPitchRight = -10;
+		if(flapsPitchLeft > 10)
+			flapsPitchLeft = 10;
+		if(flapsPitchLeft < -10)
+			flapsPitchLeft = -10;
+
+		//Decrement bomb and gun timers
+		if(bombDelay > 0)
+			bombDelay--;
+		if(gunDelay > 0)
+			gunDelay--;
+
+		//Rise in water and fall by gravity
+		double motionG = 0D;
+		int wetness = 0;
+        for(int j = 0; j < 5; j++)
+        {
+            double d2 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)j / 5D)) + 1D;
+            double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(j + 1)) / 5D) + 1D;
+            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d2, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
+            if(worldObj.isAABBInMaterial(axisalignedbb, Material.water))
+            {
+                motionG += 0.05D;
+				wetness++;
+            }
+        }		
+		if(!onGround)
+			motionG -= (9.81D / 400D);
+		if(numPropsWorking > 0 && (leftWingHealth > 0 || rightWingHealth > 0))
+			motionG *= (1D - getSpeedXYZ() > 0D ? 1D - getSpeedXYZ() : 0D);
+		motionY += motionG;
+
+		if(onGround && propSpeed < 0.1D)
+		{
+			motionX *= 0.9D;
+			motionZ *= 0.9D;
+		}
+
+		//Turning moment caused by blown propellers
+		int turn = 0;
+		switch(type.propSetup)
+		{
+			case 0 : break; //Single propeller
+			case 3 : //4 propellers
+			{
+				if(propBlown[2]) turn++;
+				if(propBlown[3]) turn--;
+			}
+			case 1 : //2 propellers
+			case 2 :
+			{
+				if(propBlown[0]) turn++;
+				if(propBlown[1]) turn--;
+				break;
+			}		
+		}
+		if(leftWingHealth <= 0)
+			turn++;
+		if(rightWingHealth <= 0)
+			turn--;
+		if(!onGround)
+			velocityYaw += turn * getSpeedXYZ();
+
+		//Collision Handling
+		int tileX = MathHelper.floor_double(posX + 0.5D);
+		int tileY= MathHelper.floor_double(posY + 0.5D);
+		int tileZ = MathHelper.floor_double(posZ + 0.5D);
+		smashIntoBlock(tileX, tileY, tileZ);
+		if(getSpeedXYZ() > 0.2D)
+        {
+			if(motionX > motionZ && motionX > -motionZ && motionX > motionY && motionX > -motionY) //Moving in +x
+			{
+				int i = tileX + 1;
+				for(int j = tileY - 1; j < tileY + 2; j++)
+				{
+					for(int k = tileZ - 1; k < tileZ + 2; k++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+			if(-motionX > motionZ && -motionX > -motionZ && -motionX > motionY && -motionX > -motionY) //Moving in -x
+			{
+				int i = tileX - 1;
+				for(int j = tileY - 1; j < tileY + 2; j++)
+				{
+					for(int k = tileZ - 1; k < tileZ + 2; k++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+			if(motionZ > motionX && motionZ > -motionX && motionZ > motionY && motionZ > -motionY) //Moving in +z
+			{
+				int k = tileZ + 1;
+				for(int i = tileX - 1; i < tileX + 2; i++)
+				{
+					for(int j = tileY - 1; j < tileY + 2; j++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+			if(-motionZ > motionX && -motionZ > -motionX && -motionZ > motionY && -motionZ > -motionY) //Moving in -z
+			{
+				int k = tileZ - 1;
+				for(int i = tileX - 1; i < tileX + 2; i++)
+				{
+					for(int j = tileY - 1; j < tileY + 2; j++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+			if(motionY > motionX && motionY > -motionX && motionY > motionZ && motionY > -motionZ) //Moving in +y
+			{
+				int j = tileY + 1;
+				for(int i = tileX - 1; i < tileX + 2; i++)
+				{
+					for(int k = tileZ - 1; k < tileZ + 2; k++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+			if(-motionY > motionX && -motionY > -motionX && -motionY > motionZ && -motionY > -motionZ) //Moving in -y
+			{
+				int j = tileY - 1;
+				for(int i = tileX - 1; i < tileX + 2; i++)
+				{
+					for(int k = tileZ - 1; k < tileZ + 2; k++)
+					{
+						smashIntoBlock(i, j, k);
+					}
+				}
+			}
+        }
+
+		/*
+		if(FlansMod.controlMode == 0 && Math.abs(axes.getRoll()) > 10F)
+		{
+			velocityRoll += axes.getRoll() / 10F;
+		}
+		*/
+
+		//More movement
+
+		rotateYaw(velocityYaw);
+		rotatePitch(velocityPitch);
+		rotateRoll(velocityRoll);
+
+		moveEntity(motionX, motionY, motionZ);
+
+		rotationYaw = axes.getYaw();
+		rotationPitch = axes.getPitch();
+
+		//Fuel Handling
+		if(data.fuel != null && data.fuel.stackSize <= 0)
+			data.fuel = null;
+		if(!fuelling && data.fuel != null && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9)// && onGround && getSpeedXYZ() < 0.1D)
+		{
+			fuelling = true;
+		}
+		if(fuelling)
+		{
+			if(data.fuel == null || data.fuel.stackSize <= 0 || !(data.fuel.getItem() instanceof ItemPart) || ((ItemPart)data.fuel.getItem()).type.category != 9 || data.fuelInTank >= type.tankSize)// || !onGround || getSpeedXYZ() > 0.1D)
+			{
+				fuelling = false;
+			}
+			else
+			{
+				int damage = data.fuel.getItemDamage();
+				data.fuel.setItemDamage(damage + 1);
+				data.fuelInTank += 5;
+				if(damage >= ((ItemPart)data.fuel.getItem()).type.fuel)
+				{
+					data.fuel.setItemDamage(0);
+					data.fuel.stackSize--;
+					if(data.fuel.stackSize <= 0)
+						data.setInventorySlotContents(data.getFuelSlot(), null);
+					fuelling = false;
+				}	
+			}
+		}
+
+		//Sounds
+
+		/*
+		if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
+		{
+			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
+			{
+				try {
+					mc.sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
+				}
+				catch(Exception e)
+				{
+					FlansMod.log("Failed to play sound : " + type.startSound);
+				}
+			}
+			else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
+			soundPosition = type.startSoundLength;
+		}
+
+		if (propSpeed > 1 && soundPosition == 0)
+		{
+			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
+			{
+				try {
+					mc.sndManager.playSoundFX(type.propSound, 1.0F, 1.0F);
+				}
+				catch(Exception e)
+				{
+					FlansMod.log("Failed to play sound : " + type.propSound);
+				}
+			}
+			else worldObj.playSoundAtEntity(this, type.propSound, 1.0F , 1.0F);
+			soundPosition = type.propSoundLength;
+		}
+
+		if(soundPosition > 0)
+			soundPosition--;
+		*/
+		
+		//Damage plane
+		if(health < type.health / 4)
+		{
+			if(health > 0 && rand.nextInt(20 * health) == 0)
+			{
+				//Blow up a propeller!
+				int propNum = rand.nextInt(type.numProps);
+				if(!propBlown[propNum])
+				{
+					propBlown[propNum] = true;
+					Vec3 propVec = rotate((double)(type.propellerX[propNum]) / 16D, (double)(type.propellerY[propNum]) / 16D, (double)(type.propellerZ[propNum]) / 16D);
+					if(FlansMod.explosions)
+						worldObj.createExplosion(this, posX + propVec.xCoord, posY + propVec.yCoord, posZ + propVec.zCoord, 1F);
+				}
+			}
+			for(int i = 0; i < type.numProps; i++)
+			{
+				if(propBlown[i])
+				{
+					for(int j = 0; j < 3; j++)
+					{				
+						Vec3 propVec = rotate((double)(type.propellerX[i]) / 16D, (double)(type.propellerY[i]) / 16D, (double)(type.propellerZ[i]) / 16D);
+						FlansMod.proxy.spawnParticle("smoke", posX + propVec.xCoord + rand.nextGaussian(), posY + propVec.yCoord + rand.nextGaussian(), posZ + propVec.zCoord + rand.nextGaussian(), 0D, 0D, 0D, 1);
+					}
+				}
+			}
+			FlansMod.proxy.spawnParticle("smoke", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
+			if(health < type.health / 8)
+					FlansMod.proxy.spawnParticle("flame", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
+		}
+
+		//Fix non-spawning sub-entities
+		if(!spawnedEntities)
+		{
+			for(int i = 0; i < seats.length; i++)
+			{
+				if(!worldObj.loadedEntityList.contains(seats[i]))
+					worldObj.spawnEntityInWorld(seats[i]);
+			}
+			for(int i = 0; i < boxes.length; i++)
+			{
+				if(!worldObj.loadedEntityList.contains(boxes[i]))
+					worldObj.spawnEntityInWorld(boxes[i]);
+			}
+			spawnedEntities = true;
+		}
+    }
 
 	@Override
 	public void useGun(int gunID, EntityPlayer player, EntityPassengerSeat seat)
@@ -651,7 +1008,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 		}
 	}
-		
+
 	@Override
     public void updateRiderPosition()
     {

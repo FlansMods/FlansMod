@@ -46,9 +46,11 @@ public class RenderPlane extends Render
 
 		if(modPlane != null)
 		{
+			modPlane.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, entityPlane);
+			/*
 			if(modPlane.oldModel)
 				GL11.glScalef(-1F, -1F, 1F);
-			modPlane.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, entityPlane);
+			*/
 		}
 		
         GL11.glPopMatrix();

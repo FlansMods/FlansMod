@@ -34,7 +34,7 @@ public class FlanPacketClient implements IPacketHandler
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player)
 	{
 		String name = ((EntityPlayer) player).username;
-		EntityPlayer playerEntity = FMLClientHandler.instance().getClient().getIntegratedServer().getConfigurationManager().getPlayerForUsername(name);
+		EntityPlayer playerEntity = FMLClientHandler.instance().getClient().thePlayer;
 		recieve(packet, playerEntity, manager);
 	}
 	
