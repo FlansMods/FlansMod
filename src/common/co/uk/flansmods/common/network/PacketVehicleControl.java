@@ -89,8 +89,9 @@ public class PacketVehicleControl extends FlanPacketCommon
 			{
 				int x = stream.readInt();
 				int y = stream.readInt();
-
-				FlansMod.proxy.onMouseMoved(x, y, (EntityPlayer)extradata[0]);
+				
+				EntityDriveable entity = (EntityDriveable)player.ridingEntity;
+				entity.onMouseMoved(x, y);
 			}
 			else
 			{

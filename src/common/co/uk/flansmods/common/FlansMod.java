@@ -581,11 +581,6 @@ public class FlansMod
 	{
 		return null;
 	}
-	
-	public static void setControlMode(int i)
-	{
-		// Client side only
-	}
 
 	public static void logQuietly(String s)
 	{

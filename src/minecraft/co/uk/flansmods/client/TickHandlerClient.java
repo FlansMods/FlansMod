@@ -15,13 +15,15 @@ import net.minecraft.src.Tessellator;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.teams.TeamsManager;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class ClientTickHandler implements ITickHandler
+public class TickHandlerClient implements ITickHandler
 {
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
@@ -63,7 +65,7 @@ public class ClientTickHandler implements ITickHandler
 	public void rTickStart(Minecraft mc)
 	{
 		// CAPTURE MOUSE INPUT!
-		if (mc.currentScreen == null) // no screen is open. just the game screen.
+		if (mc.currentScreen == null && FlansModClient.controlModeMouse)
 		{
 			MouseHelper mouse = mc.mouseHelper;
 			Entity ridden = mc.thePlayer.ridingEntity;
@@ -72,6 +74,7 @@ public class ClientTickHandler implements ITickHandler
 			{
 				EntityDriveable entity = (EntityDriveable) ridden;
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
+				PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlMouse(mouse.deltaX, mouse.deltaY));
 			}
 		}
 	}

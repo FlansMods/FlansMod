@@ -289,26 +289,6 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public void onMouseMoved(int deltaX, int deltaY, EntityPlayer player)
-	{
-		WorldClient world = (WorldClient) FMLClientHandler.instance().getClient().theWorld;
-		Entity entityTest  = player.ridingEntity;
-		
-		if (entityTest == null || !world.isRemote || !(entityTest instanceof EntityDriveable))
-			return;
-		
-		EntityDriveable entity = (EntityDriveable)entityTest;
-		
-		if (entity.riddenByEntity != player)
-			return;
-		
-		// if its not the inventory key, do whatever the entity wants.
-		entity.onMouseMoved(deltaX, deltaY);
-		
-		PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlMouse(deltaX, deltaY));
-	}
-	
-	@Override
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
 		if (!FlansModClient.doneTutorial)
@@ -345,6 +325,9 @@ public class ClientProxy extends CommonProxy
 	{
 		World world = FMLClientHandler.instance().getClient().theWorld;
 		
+		if (world == null)
+			return;
+		
 		for (int i = 0; i < number; i++)
 		{
 			(world).spawnParticle(type, x1, y1, z1, x2, y2, z2);
@@ -356,7 +339,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void doTickStuff()
 	{
-		TickRegistry.registerTickHandler(new ClientTickHandler(), Side.CLIENT);
+		TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class FlansModClient extends FlansMod
 {
 	public static boolean doneTutorial = false;
 	
-	public static int controlMode = 0; // 0 = Standard controls, 1 = Mouse
+	public static boolean controlModeMouse = false; // 0 = Standard controls, 1 = Mouse
 	public static int controlModeSwitchTimer = 20;
 	
 	public static int shootTime;
@@ -158,11 +158,11 @@ public class FlansModClient extends FlansMod
 			errorStringTimer--;
 	}
 
-	public static void setControlMode(int i)
+	public static void flipControlMode()
 	{
 		if (controlModeSwitchTimer > 0)
 			return;
-		controlMode = i;
+		controlModeMouse = !controlModeMouse;
 		controlModeSwitchTimer = 40;
 	}
 

@@ -63,22 +63,6 @@ public class CommonProxy
 		FlansMod.log("Not client. Key Bindings skipped.");
 	}
 	
-	public void onMouseMoved(int deltaX, int deltaY, EntityPlayer player)
-	{
-		WorldServer world = (WorldServer) player.worldObj;
-		Entity entityTest  = player.ridingEntity;
-		
-		if (entityTest == null || world.isRemote || !(entityTest instanceof EntityDriveable))
-			return;
-		
-		EntityDriveable entity = (EntityDriveable)entityTest;
-		
-		if (entity.riddenByEntity != player)
-			return;
-		
-		entity.onMouseMoved(deltaX, deltaY);
-	}
-	
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
 		// FlansMod.log("Tutorial skipped on server");

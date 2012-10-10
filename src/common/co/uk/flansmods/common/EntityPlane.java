@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 
@@ -15,6 +16,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.server.FMLServerHandler;
@@ -351,15 +353,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				}				
 				break;
 			}
-			/*
-			case 10 : //Change Controls TODO: CONTROLS
+			case 10 :
 			{
-				FlansMod.setControlMode(1);
-				// controls.
-				ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneController(this));
+				if (FMLCommonHandler.instance().getSide().equals(Side.CLIENT))
+					FlansModClient.flipControlMode();
 				break;
 			}
-			*/
 		}
 	}
 

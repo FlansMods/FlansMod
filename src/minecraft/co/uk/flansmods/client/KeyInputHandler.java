@@ -98,7 +98,7 @@ public class KeyInputHandler extends KeyHandler
 			}
 		}
 		
-		int keyNum = 0;
+		int keyNum = -1;
 		
 		if(kb == accelerateKey)
 			keyNum = 0;
@@ -127,6 +127,8 @@ public class KeyInputHandler extends KeyHandler
 			mc.displayGuiScreen(new GuiTeamSelect());
 			return;
 		}
+		else
+			return;
 		
 		EntityPlayer player = mc.thePlayer;
 		Entity entityTest  = player.ridingEntity;
