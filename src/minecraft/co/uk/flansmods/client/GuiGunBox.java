@@ -46,13 +46,12 @@ public class GuiGunBox extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /* GL_BLEND */);
-		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponFlansMod.gunBoxBlock.png"));
+		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponBox.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
-		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponFlansMod.gunBoxBlock.png"));
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
 		if (type.numGuns > page * 2 + 1 && type.guns[page * 2] != null && type.guns[page * 2 + 1] != null)
