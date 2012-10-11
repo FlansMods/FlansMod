@@ -76,13 +76,14 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			seats[i] = new EntityPassengerSeat(worldObj, this, i, type.seatsX[i], type.seatsY[i], type.seatsZ[i], type.gunner[i]);
 			worldObj.spawnEntityInWorld(seats[i]);
 		}
+		
 		yOffset = type.yOffset;
 		propBlown = new boolean[type.numProps];
 		
 		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
 		{
 			type.model = (ModelPlane) FlansMod.proxy.loadPlaneModel(new String[] {"", type.shortName}, type.shortName);
-			FlansMod.logLoudly("NitroModelThingy not installed");
+			FlansMod.logLoudly("TurboModelThingy not installed");
 			return;
 		}
 		

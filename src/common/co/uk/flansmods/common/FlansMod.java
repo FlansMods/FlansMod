@@ -216,7 +216,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 40, 5, true);
 		
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 90, this, 40, 5, true);
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 40, 5, true);
 		
 		// default aa guns stuff
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());

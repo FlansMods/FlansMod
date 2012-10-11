@@ -428,7 +428,7 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
-	public void spawnAAGun(World world, double posX, double posY, double posZ, AAGunType type, float gunYaw, float gunPitch, Random rand, BulletType bullet, EntityAAGun entity, Entity player)
+	public void shootAAGun(World world, double posX, double posY, double posZ, AAGunType type, float gunYaw, float gunPitch, Random rand, BulletType bullet, EntityAAGun entity, Entity player)
 	{
 		ModelAAGun model = (ModelAAGun) type.model;
 		world.spawnEntityInWorld(new EntityBullet(world, entity.rotate(model.barrelX / 16D + 3D, model.barrelY / 16D, model.barrelZ / 16D + 3D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, (EntityLiving) player, type.accuracy, type.damage, bullet));
@@ -436,12 +436,9 @@ public class ClientProxy extends CommonProxy
 	}
 
 	@Override
-	public void spawnVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
+	public void shootVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
 	{
 		ModelVehicle vehicleModel = (ModelVehicle)type.model;
-		/*
-		 * Someone seems to have gotten a little confused here. This is the shooting code.
-		 * 
 		if(vehicleModel.gunModel.length > 0 && data.guns[1] != null && data.ammo[1] != null && data.ammo[1].getItem() instanceof ItemBullet && data.guns[1].isAmmo(((ItemBullet)data.ammo[1].getItem()).type))
 		{				
 			double cosYaw = Math.cos((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
@@ -469,7 +466,6 @@ public class ClientProxy extends CommonProxy
 			}
 			seat.gunDelay = type.vehicleShootDelay;
 		}
-		 */
 	}
 
 	@Override

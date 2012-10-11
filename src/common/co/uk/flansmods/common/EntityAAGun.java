@@ -136,7 +136,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						barrelRecoil[j] = type.recoil;
 						if (!worldObj.isRemote)
 						{
-							FlansMod.proxy.spawnAAGun(worldObj, posX, posY, posZ, type, gunYaw, gunPitch, rand, bullet, this, player);
+							FlansMod.proxy.shootAAGun(worldObj, posX, posY, posZ, type, gunYaw, gunPitch, rand, bullet, this, player);
 						}
 					}
 				}

@@ -6,13 +6,16 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.GuiPlaneMenu;
+import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.client.Minecraft;
@@ -33,7 +36,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class EntityVehicle extends EntityDriveable implements IEntityAdditionalSpawnData
+public class EntityVehicle extends EntityDriveable implements IEntityAdditionalSpawnData, IExplodeable
 {
     public EntityVehicle(World world)
     {
@@ -43,11 +46,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type1, VehicleData data1)
 	{
 		super(world, type1, data1);
-		System.out.println("Huh");
 		setPosition(x, y, z);
-		prevPosX = x;
-		prevPosY = y;
-		prevPosZ = z;
 		rotateYaw(180F + placer.rotationYaw);
 		data = data1;
 		try
@@ -59,12 +58,11 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			FlansMod.log("Failed to retrieve vehicle data ID from vehicle data. " + data.mapName);
 		}
 		type = type1.shortName;
-		initType();
+		initType(type1);
 	}
 	
-	private void initType()
+	private void initType(VehicleType type)
 	{
-		VehicleType type = this.getVehicleType();
 		health = type.health;
 		seats = new EntityPassengerSeat[type.numPassengers];
 		for(int i = 0; i < type.numPassengers; i++)
@@ -73,12 +71,20 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			worldObj.spawnEntityInWorld(seats[i]);
 		}
 		
+		yOffset = type.yOffset;
+		
+		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
+		{
+			type.model = (ModelVehicle) FlansMod.proxy.loadVehicleModel(new String[] {"", type.shortName}, type.shortName);
+			FlansMod.logLoudly("TurboModelThingy not installed");
+			return;
+		}
+		
 		boxes = new EntityCollisionBox[type.boxes.length];
 		for(int i = 0; i < boxes.length; i++)
 		{
 			boxes[i] = type.boxes[i].makeEntity(this);
 		}
-		yOffset = type.yOffset;
 	}
 	
 	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
@@ -308,7 +314,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	{
 		if(!worldObj.isRemote && seat.gunDelay <= 0 && FlansMod.bulletsEnabled)
 		{
-			FlansMod.proxy.spawnVehicle(worldObj, posX, posY, posZ, getVehicleType(), data, seat, this, axes, player);
+			FlansMod.proxy.shootVehicle(worldObj, posX, posY, posZ, getVehicleType(), data, seat, this, axes, player);
 		}
 	}
 
@@ -717,7 +723,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		type = tag.getString("Type");
-		initType();
+		initType(VehicleType.getVehicle(type));
 		//TODO : Should be obtained through world?
 		dataID = tag.getInteger("DataID");
 		data = new VehicleData("Vehicle_" + dataID, getVehicleType());
@@ -767,6 +773,14 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		return false;
 	}
 	
+	public void explode()
+	{
+		for(EntityCollisionBox box : boxes)
+		{
+			box.explode();
+		}
+	}
+	
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data)
 	{
@@ -782,11 +796,11 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			type = superType = data.readUTF();
 			dataID = data.readInt();
 			this.superData = this.data = new VehicleData("Vehicle_" + dataID, VehicleType.getVehicle(type));
-			initType();
+			initType(VehicleType.getVehicle(type));
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to retreive vehicle type from server.");
+			FlansMod.log("Failed to retrieve vehicle type from server.");
 			super.setDead();
 			e.printStackTrace();
 		}

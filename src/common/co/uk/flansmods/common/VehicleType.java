@@ -11,6 +11,8 @@ import java.io.File;
 import co.uk.flansmods.client.model.ModelVehicle;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 
 public class VehicleType extends DriveableType
@@ -51,7 +53,7 @@ public class VehicleType extends DriveableType
 		{
 			if(split[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadVehicleModel(split, shortName);
+				model = (ModelVehicle)FlansMod.proxy.loadVehicleModel(split, shortName);
 			}
 					
 			//Movement modifiers
@@ -238,7 +240,8 @@ public class VehicleType extends DriveableType
 		return types.get(find);
 	}
 		
-	public Object model;
+	@SideOnly(Side.CLIENT)
+	public ModelVehicle model;
 	
 	public float maxSpeed = 1F;
 	public double turnLeftModifier = 1F;

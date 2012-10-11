@@ -30,7 +30,6 @@ public class ItemVehicle extends ItemMapBase
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
-    	System.out.println("Vehicle");
         float f = 1.0F;
         float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
         float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
@@ -76,10 +75,13 @@ public class ItemVehicle extends ItemMapBase
         if(itemstack.getItemDamage() == 0 || vehicleData == null)
 		{
 			int dataID = world.getUniqueDataId("vehicle");
+			vehicleData = new VehicleData("vehicle_" + dataID, type);
 			//Avoid dataID 0 : default for TMI / Creative
 			if(dataID == 0)
+			{
 				dataID = world.getUniqueDataId("vehicle");
-			vehicleData = new VehicleData("vehicle_" + dataID, type);
+				vehicleData = new VehicleData("vehicle_" + dataID, type);
+			}
 			world.setItemData("vehicle_" + dataID, vehicleData);
 			vehicleData.markDirty();
 			itemstack.setItemDamage(dataID);
