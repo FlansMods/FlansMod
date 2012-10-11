@@ -129,6 +129,7 @@ public class ClientProxy extends CommonProxy
 	public void loadDefaultGraphics()
 	{
 		MinecraftForgeClient.preloadTexture("/spriteSheets/bullets.png");
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
 		
 		MinecraftForgeClient.preloadTexture("/spriteSheets/guns.png");
@@ -137,7 +138,11 @@ public class ClientProxy extends CommonProxy
 		
 		MinecraftForgeClient.preloadTexture("/spriteSheets/planes.png");
 		
+		MinecraftForgeClient.preloadTexture("/spriteSheets/vehicles.png");
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
 		
@@ -226,6 +231,21 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 		FlansMod.log("Loaded plane icons.");
+		
+		// Vehicles
+		for (VehicleType type : VehicleType.types.values())
+		{
+			try
+			{
+				TextureFXManager.instance().addNewTextureOverride("/spriteSheets/vehicles.png", type.iconPath, type.iconIndex);
+			} 
+			catch (Exception e)
+			{
+				FlansMod.log("Failed to override vehicle icon");
+				e.printStackTrace();
+			}
+		}
+		FlansMod.log("Loaded vehicle icons.");
 
 		// AAGuns
 		for (AAGunType type : AAGunType.infoTypes)

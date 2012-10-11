@@ -1,29 +1,12 @@
 package co.uk.flansmods.client.model;
 
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
-
-import co.uk.flansmods.common.CollisionBox;
+import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.EntityVehicle;
-import net.minecraft.src.ModelBase;
+import net.minecraft.src.*;
 
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelBase
 {
-	public boolean oldModel = false;
-    public NMTModelRenderer bodyModel[];				//The main body of the vehicle
-    public NMTModelRenderer turretModel[];			//The turret (for tanks)
-	public NMTModelRenderer barrelModel[];			//The barrel of the main turret
-    public NMTModelRenderer gunModel[];   			//The passenger controlled gun model
-	public NMTModelRenderer ammoModel[];				//The ammo box for the above gun
-    public NMTModelRenderer leftFrontWheelModel[];	//Obvious really...
-    public NMTModelRenderer rightFrontWheelModel[];
-    public NMTModelRenderer leftBackWheelModel[];
-    public NMTModelRenderer rightBackWheelModel[];
-	
-    public ModelVehicle()    
-	{
-    }
-
     public void render(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle)
     {		
 		//Rendering the body
@@ -86,9 +69,6 @@ public class ModelVehicle extends ModelBase
 	
 	public void flipAll()
 	{
-		oldModel = !oldModel;
-	}
-		/*
 		for(int i = 0; i < bodyModel.length; i++)
 		{
 			bodyModel[i].doMirror(false, true, true);
@@ -124,49 +104,55 @@ public class ModelVehicle extends ModelBase
 			rightBackWheelModel[i].doMirror(false, true, true);
 			rightBackWheelModel[i].setRotationPoint(rightBackWheelModel[i].rotationPointX, - rightBackWheelModel[i].rotationPointY, - rightBackWheelModel[i].rotationPointZ);
 		}
-	}	*/
+	}	
 	
 	public void translateAll(int y)
 	{
-		for(NMTModelRenderer mod : bodyModel)
+		for(ModelRendererTurbo mod : bodyModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : turretModel)
+		for(ModelRendererTurbo mod : turretModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : barrelModel)
+		for(ModelRendererTurbo mod : barrelModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : gunModel)
+		for(ModelRendererTurbo mod : gunModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : ammoModel)
+		for(ModelRendererTurbo mod : ammoModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : leftFrontWheelModel)
+		for(ModelRendererTurbo mod : leftFrontWheelModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : rightFrontWheelModel)
+		for(ModelRendererTurbo mod : rightFrontWheelModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : leftBackWheelModel)
+		for(ModelRendererTurbo mod : leftBackWheelModel)
 		{
 			mod.rotationPointY += y;
 		}
-		for(NMTModelRenderer mod : rightBackWheelModel)
+		for(ModelRendererTurbo mod : rightBackWheelModel)
 		{
 			mod.rotationPointY += y;
 		}
 	}
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-    {
-    }
+    public ModelRendererTurbo bodyModel[];				//The main body of the vehicle
+    public ModelRendererTurbo turretModel[];			//The turret (for tanks)
+	public ModelRendererTurbo barrelModel[];			//The barrel of the main turret
+    public ModelRendererTurbo gunModel[];   			//The passenger controlled gun model
+	public ModelRendererTurbo ammoModel[];				//The ammo box for the above gun
+    public ModelRendererTurbo leftFrontWheelModel[];	//Obvious really...
+    public ModelRendererTurbo rightFrontWheelModel[];
+    public ModelRendererTurbo leftBackWheelModel[];
+    public ModelRendererTurbo rightBackWheelModel[];
 }

@@ -21,22 +21,6 @@ public class RenderPlane extends Render
     public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
     {
     	PlaneType type = entityPlane.getPlaneType();
-    	if(type == null)
-    	{
-    		System.out.println("Entire team is babies.");
-    	}
-    	if(type.texture == null)
-    	{
-    		System.out.println("Texture is null.");
-    	}
-    	if(type.model == null)
-    	{
-    		System.out.println("Model is null.");
-    	}
-    	if(type.shortName == null)
-    	{
-    		System.out.println("Name is null.");
-    	}
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glRotatef(f + 90F, 0.0F, 1.0F, 0.0F);

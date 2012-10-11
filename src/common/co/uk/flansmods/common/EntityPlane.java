@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
@@ -40,7 +41,7 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpawnData
+public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpawnData, IExplodeable
 {
     public EntityPlane(World world)
     {
@@ -752,43 +753,43 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 
 		//Sounds
-
-		/*
-		if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
+		if(worldObj.isRemote)
 		{
-			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
+			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
 			{
-				try {
-					mc.sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
-				}
-				catch(Exception e)
+				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
 				{
-					FlansMod.log("Failed to play sound : " + type.startSound);
+					try {
+						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
+					}
+					catch(Exception e)
+					{
+						FlansMod.log("Failed to play sound : " + type.startSound);
+					}
 				}
+				else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
+				soundPosition = type.startSoundLength;
 			}
-			else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
-			soundPosition = type.startSoundLength;
-		}
-
-		if (propSpeed > 1 && soundPosition == 0)
-		{
-			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
+	
+			if (propSpeed > 1 && soundPosition == 0)
 			{
-				try {
-					mc.sndManager.playSoundFX(type.propSound, 1.0F, 1.0F);
-				}
-				catch(Exception e)
+				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
 				{
-					FlansMod.log("Failed to play sound : " + type.propSound);
+					try {
+						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.propSound, 1.0F, 1.0F);
+					}
+					catch(Exception e)
+					{
+						FlansMod.log("Failed to play sound : " + type.propSound);
+					}
 				}
+				else worldObj.playSoundAtEntity(this, type.propSound, 1.0F , 1.0F);
+				soundPosition = type.propSoundLength;
 			}
-			else worldObj.playSoundAtEntity(this, type.propSound, 1.0F , 1.0F);
-			soundPosition = type.propSoundLength;
+	
+			if(soundPosition > 0)
+				soundPosition--;
 		}
-
-		if(soundPosition > 0)
-			soundPosition--;
-		*/
 		
 		//Damage plane
 		if(health < type.health / 4)
@@ -1194,8 +1195,16 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			|| (box.part == 2 && rightWingHealth <= 0)
 			|| (box.part == 3 && tailHealth <= 0))
 			{
-				box.die();
+				box.explode();
 			}
+		}
+	}
+	
+	public void explode()
+	{
+		for(EntityCollisionBox box : boxes)
+		{
+			box.explode();
 		}
 	}
 	

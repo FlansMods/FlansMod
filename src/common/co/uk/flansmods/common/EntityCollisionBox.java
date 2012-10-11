@@ -78,7 +78,7 @@ public class EntityCollisionBox extends Entity
 		return worldObj.getBlockId(tileX, tileY, tileZ) != 0;
 	}
 	
-	public void die()
+	public void explode()
 	{
 		if(isDead)
 			return;

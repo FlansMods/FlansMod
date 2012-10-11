@@ -109,6 +109,7 @@ public class FlansMod
 	public static FlansModPlayerHandler playerHandler;
 	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
 	public static List<Item> planeItems = new ArrayList<Item>();
+	public static List<Item> vehicleItems = new ArrayList<Item>();
 	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
 
 	//GunBoxBlock
@@ -209,9 +210,13 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
+		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 40, 5, true);
+		
+		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 90, this, 40, 5, true);
 		
 		// default aa guns stuff
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
@@ -419,6 +424,38 @@ public class FlansMod
 			}
 		}
 		log("Loaded planes.");
+		
+		//Vehicles
+		for(File file : contentPacks)
+		{
+			File vehiclesDir = new File(file, "/vehicles/");
+			File[] vehicles = vehiclesDir.listFiles();
+			if(vehicles == null)
+			{
+				logQuietly("No vehicle files found.");
+			}
+			else
+			{
+				for(int i = 0; i < vehicles.length; i++)
+				{
+					if(vehicles[i].isDirectory())
+						continue;
+					try
+					{
+						VehicleType type = new VehicleType(new BufferedReader(new FileReader(vehicles[i])), file.getName());
+						Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setItemName(type.shortName);
+						vehicleItems.add(vehicleItem);
+						LanguageRegistry.addName(vehicleItem, type.name);
+					}
+					catch(Exception e)
+					{
+						log("Failed to add vehicle : " + vehicles[i].getName());
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		log("Loaded vehicles.");
 
 		// AAGuns
 		for (File file : contentPacks)

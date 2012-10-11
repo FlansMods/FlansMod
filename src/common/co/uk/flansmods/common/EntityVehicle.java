@@ -12,6 +12,7 @@ import co.uk.flansmods.client.model.ModelVehicle;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.client.Minecraft;
@@ -42,6 +43,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type1, VehicleData data1)
 	{
 		super(world, type1, data1);
+		System.out.println("Huh");
 		setPosition(x, y, z);
 		prevPosX = x;
 		prevPosY = y;
@@ -529,45 +531,43 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 					
 		//Sounds
-		// TODO: Do Sound Stuff
-		/*
-		if (acceleration > 0.2D && acceleration < 1 && soundPosition == 0)
+		if(worldObj.isRemote)
 		{
-			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
+			if (acceleration > 0.2D && acceleration < 1 && soundPosition == 0)
 			{
-				try {
-					// SOUND PACKETS
-					//mc.sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
-				}
-				catch(Exception e)
+				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
 				{
-					FlansMod.log("Failed to play sound : " + type.startSound);
+					try {
+						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
+					}
+					catch(Exception e)
+					{
+						FlansMod.log("Failed to play sound : " + type.startSound);
+					}
 				}
+				else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
+				soundPosition = type.startSoundLength;
 			}
-			else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
-			soundPosition = type.startSoundLength;
-		}
+				
+			if (acceleration > 1 && soundPosition == 0)
+			{
+				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
+				{
+					try {
+						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.engineSound, 1.0F, 1.0F);
+					}
+					catch(Exception e)
+					{
+						FlansMod.log("Failed to play sound : " + type.engineSound);
+					}
+				}
+				else worldObj.playSoundAtEntity(this, type.engineSound, 1.0F , 1.0F);
+				soundPosition = type.engineSoundLength;
+			}
 			
-		if (acceleration > 1 && soundPosition == 0)
-		{
-			if(riddenByEntity != null && riddenByEntity == mc.thePlayer)
-			{
-				try {
-					// TODO: sound packets
-					//mc.sndManager.playSoundFX(type.engineSound, 1.0F, 1.0F);
-				}
-				catch(Exception e)
-				{
-					FlansMod.log("Failed to play sound : " + type.engineSound);
-				}
-			}
-			else worldObj.playSoundAtEntity(this, type.engineSound, 1.0F , 1.0F);
-			soundPosition = type.engineSoundLength;
+			if(soundPosition > 0)
+				soundPosition--;
 		}
-		*/
-		
-		if(soundPosition > 0)
-			soundPosition--;
 		
 		//Fuel Handling
 		if(data.fuel != null && data.fuel.stackSize <= 0)
