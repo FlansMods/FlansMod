@@ -62,7 +62,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		super.onUpdate();
 		if (worldObj.getBlockId(blockX, blockY - 1, blockZ) == 0)
 		{
-			setDead();
+			if(!worldObj.isRemote)
+			{
+				setDead();
+			}
 		}
 		prevRotationYaw = rotationYaw;
 		prevRotationPitch = rotationPitch;
@@ -243,7 +246,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.setDead();
 		// Drop gun
-		dropItem(type.getItem().shiftedIndex, 1);
+		if(!worldObj.isRemote)
+		{
+			dropItem(type.getItem().shiftedIndex, 1);
+		}
 		// Drop ammo box
 		if (ammo != null)
 			entityDropItem(ammo, 0.5F);

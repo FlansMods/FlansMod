@@ -266,52 +266,39 @@ public class ItemGun extends Item
 	{
 		if (type.deployable)
 		{
-	        float f = 1.0F;
-	        float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
-	        float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
-	        double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * (double)f;
-	        double d1 = (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * (double)f + 1.6200000000000001D) - (double)entityplayer.yOffset;
-	        double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double)f;
-	        Vec3 vec3d = Vec3.createVectorHelper(d, d1, d2);
-	        float f3 = MathHelper.cos(-f2 * 0.01745329F - 3.141593F);
-	        float f4 = MathHelper.sin(-f2 * 0.01745329F - 3.141593F);
-	        float f5 = -MathHelper.cos(-f1 * 0.01745329F);
-	        float f6 = MathHelper.sin(-f1 * 0.01745329F);
-	        float f7 = f4 * f5;
-	        float f8 = f6;
-	        float f9 = f3 * f5;
-	        double d3 = 5D;
-	        Vec3 vec3d1 = vec3d.addVector((double)f7 * d3, (double)f8 * d3, (double)f9 * d3);
-	        MovingObjectPosition movingobjectposition = world.rayTraceBlocks_do(vec3d, vec3d1, true);
-	        if(movingobjectposition == null)
-	        {
-	            return itemstack;
-	        }
-	        if(movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
-	        {
-	        	int playerDir = MathHelper.floor_double((double) ((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-	            int i = movingobjectposition.blockX;
-	            int j = movingobjectposition.blockY;
-	            int k = movingobjectposition.blockZ;
-	            if(!world.isRemote)
-	            {
-					if (world.getBlockId(i, j, k) == Block.snow.blockID)
+			MovingObjectPosition look = FMLClientHandler.instance().getClient().objectMouseOver;
+			if (look != null && look.typeOfHit == EnumMovingObjectType.TILE)
+			{
+				if (look.sideHit == 1)
+				{
+					int playerDir = MathHelper.floor_double((double) ((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+					int i = look.blockX;
+					int j = look.blockY;
+					int k = look.blockZ;
+					if (!world.isRemote)
 					{
-						j--;
-					}
-					if (isSolid(world, i, j, k) && (world.getBlockId(i, j + 1, k) == 0 || world.getBlockId(i, j + 1, k) == Block.snow.blockID) && (world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == 0) && (world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == 0 || world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == Block.snow.blockID))
-					{
-						for (EntityMG mg : EntityMG.mgs)
+						if (world.getBlockId(i, j, k) == Block.snow.blockID)
 						{
-							if (mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
-								return itemstack;
+							j--;
 						}
-						world.spawnEntityInWorld(new EntityMG(world, i, j + 1, k, playerDir, type));
-						if (world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
-							itemstack.stackSize = 0;
-					}		            
+						if (isSolid(world, i, j, k) && (world.getBlockId(i, j + 1, k) == 0 || world.getBlockId(i, j + 1, k) == Block.snow.blockID) && (world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == 0) && (world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == 0 || world.getBlockId(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == Block.snow.blockID))
+						{
+							for (EntityMG mg : EntityMG.mgs)
+							{
+								if (mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
+									return itemstack;
+							}
+							if(!world.isRemote)
+							{
+								world.spawnEntityInWorld(new EntityMG(world, i, j + 1, k, playerDir, type));
+							}
+							if (world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+								itemstack.stackSize = 0;
+						}
+					}
 				}
-	        }
+			}
+
 		}
 		return itemstack;
 	}
