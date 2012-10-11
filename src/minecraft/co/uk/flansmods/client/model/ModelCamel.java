@@ -2,8 +2,6 @@ package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
-
 public class ModelCamel extends ModelPlane
 {
     public ModelCamel()

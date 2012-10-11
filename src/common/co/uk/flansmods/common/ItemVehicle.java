@@ -91,7 +91,7 @@ public class ItemVehicle extends ItemMapBase
 			}
 			catch(Exception e)
 			{
-				FlansMod.log("Tried spawning vehicle without engine. Default engine not found.");
+				System.out.println("Tried spawning vehicle without engine. Default engine not found.");
 				return null;
 			}
 		}

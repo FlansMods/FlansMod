@@ -2,9 +2,6 @@ package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 
-import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
-
 public class ModelBF109 extends ModelPlane
 {
     public ModelBF109()

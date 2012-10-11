@@ -2,11 +2,6 @@ package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 
-import com.overminddl1.minecraft.libs.NMT.NMTGlobal;
-import com.overminddl1.minecraft.libs.NMT.NMTModelBase;
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
-import com.overminddl1.minecraft.libs.NMT.NMTModelTrapezoid;
-
 public class ModelPanzer extends ModelVehicle
 {
     public ModelPanzer()
