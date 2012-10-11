@@ -19,6 +19,7 @@ import co.uk.flansmods.common.AAGunType;
 import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.CommonProxy;
 import co.uk.flansmods.common.EntityCollisionBox;
+import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.ServerTickHandler;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityBullet;
@@ -157,6 +158,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityCollisionBox.class, new RenderNull());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityPassengerSeat.class, new RenderNull());
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 	}
 
 	@Override

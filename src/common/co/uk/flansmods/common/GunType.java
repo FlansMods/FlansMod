@@ -8,6 +8,8 @@ import java.io.File;
 import co.uk.flansmods.client.model.ModelMG;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 import net.minecraft.src.ItemStack;
 
@@ -35,7 +37,10 @@ public class GunType extends InfoType
 	public String scope;
 	public boolean hasScope;
 	public float zoomLevel = 8.0F;
-	public Object model;
+	
+	@SideOnly(Side.CLIENT)
+	public ModelMG model;
+	
 	public String texture;
 	public boolean deployable;
 	public float standBackDist = 1.5F;
@@ -124,7 +129,7 @@ public class GunType extends InfoType
 				deployable = arg0[1].equals("True");
 			if (arg0[0].equals("DeployedModel") && deployable)
 			{
-				model = FlansMod.proxy.loadMGModel(arg0, shortName);
+				model = (ModelMG)FlansMod.proxy.loadMGModel(arg0, shortName);
 			}
 			if (arg0[0].equals("DeployedTexture"))
 				texture = arg0[1];
