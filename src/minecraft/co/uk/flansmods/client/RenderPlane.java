@@ -6,6 +6,7 @@ import net.minecraft.src.Render;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.PlaneType;
 

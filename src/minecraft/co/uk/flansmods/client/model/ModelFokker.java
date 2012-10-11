@@ -1,6 +1,6 @@
 package co.uk.flansmods.client.model;
 
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
+import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 
 public class ModelFokker extends ModelPlane
 {
@@ -9,10 +9,10 @@ public class ModelFokker extends ModelPlane
 		int textureX = 128; //The x-size of the texture
 		int textureY = 128;	//The y-size of the texture
 	
-		propellerModels = new NMTModelRenderer[1][3]; //1 propeller in 3 parts
-        propellerModels[0][0] = new NMTModelRenderer(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 0 : 56, 8 is the texture origin
-        propellerModels[0][1] = new NMTModelRenderer(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 1
-        propellerModels[0][2] = new NMTModelRenderer(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 2	
+		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
+        propellerModels[0][0] = new ModelRendererTurbo(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 0 : 56, 8 is the texture origin
+        propellerModels[0][1] = new ModelRendererTurbo(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 1
+        propellerModels[0][2] = new ModelRendererTurbo(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 2	
         propellerModels[0][0].addBox(0F, -7F, -1F, 2, 5, 2, 0.0F);	//Model the propeller blade by adding a box
         propellerModels[0][1].addBox(0F, -7F, -1F, 2, 5, 2, 0.0F);  //First come the origin coordinates and then the size
         propellerModels[0][2].addBox(0F, -7F, -1F, 2, 5, 2, 0.0F);	
@@ -20,55 +20,55 @@ public class ModelFokker extends ModelPlane
         propellerModels[0][1].setRotationPoint(-29, 0, 0);	
         propellerModels[0][2].setRotationPoint(-29, 0, 0);	
 		
-		yawFlapModel = new NMTModelRenderer[1]; //Only one part to the yaw flap
-		yawFlapModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
+		yawFlapModel = new ModelRendererTurbo[1]; //Only one part to the yaw flap
+		yawFlapModel[0] = new ModelRendererTurbo(this, 104, 0, textureX, textureY);
         yawFlapModel[0].addBox(0F, 0F , 0F, 10, 10, 2, 0.0F);	
-		yawFlapModel[0].setRotationPoint(40F, -12F, -1F);		
+		yawFlapModel[0].setPosition(40F, -12F, -1F);		
 		
-		pitchFlapLeftModel = new NMTModelRenderer[1]; //Only one part to the left pitch flap
-		pitchFlapLeftModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
+		pitchFlapLeftModel = new ModelRendererTurbo[1]; //Only one part to the left pitch flap
+		pitchFlapLeftModel[0] = new ModelRendererTurbo(this, 104, 0, textureX, textureY);
 		pitchFlapLeftModel[0].addBox(0F, 0F , 0F, 10, 15, 2, 0.0F);
         pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
-		pitchFlapLeftModel[0].setRotationPoint(40F, 3F, -15F);
+		pitchFlapLeftModel[0].setPosition(40F, 3F, -15F);
 		
-		pitchFlapRightModel = new NMTModelRenderer[1]; //Only one part to the right pitch flap
-		pitchFlapRightModel[0] = new NMTModelRenderer(this, 104, 0, textureX, textureY);
+		pitchFlapRightModel = new ModelRendererTurbo[1]; //Only one part to the right pitch flap
+		pitchFlapRightModel[0] = new ModelRendererTurbo(this, 104, 0, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0F, 0F , 0F, 10, 15, 2, 0.0F);
         pitchFlapRightModel[0].rotateAngleX = 1.570796F;
-		pitchFlapRightModel[0].setRotationPoint(40F, 3F, 0F);
+		pitchFlapRightModel[0].setPosition(40F, 3F, 0F);
 		
-        bodyModel = new NMTModelRenderer[12];
-        bodyModel[0] = new NMTModelRenderer(this, 0, 8, textureX, textureY);
-        bodyModel[1] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[2] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[3] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-        bodyModel[4] = new NMTModelRenderer(this, 0, 0, textureX, textureY);
-		bodyModel[5] = new NMTModelRenderer(this, 0, 8, textureX, textureY);
-		bodyModel[6] = new NMTModelRenderer(this, 44, 0, textureX, textureY);
-		bodyModel[7] = new NMTModelRenderer(this, 0, 64, textureX, textureY);
-		bodyModel[8] = new NMTModelRenderer(this, 0, 32, textureX, textureY);
-		bodyModel[9] = new NMTModelRenderer(this, 0, 32, textureX, textureY);
-		bodyModel[10] = new NMTModelRenderer(this, 12, 32, textureX, textureY);
-		bodyModel[11] = new NMTModelRenderer(this, 12, 32, textureX, textureY);
+        bodyModel = new ModelRendererTurbo[12];
+        bodyModel[0] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
+        bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bodyModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		bodyModel[5] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
+		bodyModel[6] = new ModelRendererTurbo(this, 44, 0, textureX, textureY);
+		bodyModel[7] = new ModelRendererTurbo(this, 0, 64, textureX, textureY);
+		bodyModel[8] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+		bodyModel[9] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+		bodyModel[10] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
+		bodyModel[11] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
 
         byte length = 24;
         byte sidePieceHeight = 6;
         byte width = 20;
         byte boatDepth = 4;
         bodyModel[0].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
-        bodyModel[0].setRotationPoint(0.0F, 0 + boatDepth, 0.0F);
+        bodyModel[0].setPosition(0.0F, 0 + boatDepth, 0.0F);
 		
         bodyModel[1].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[1].setRotationPoint(-length / 2 + 1, 0 + boatDepth - 4, 0.0F);
+        bodyModel[1].setPosition(-length / 2 + 1, 0 + boatDepth - 4, 0.0F);
 
         bodyModel[2].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[2].setRotationPoint(length / 2 - 1, 0 + boatDepth - 4, 0.0F);
+        bodyModel[2].setPosition(length / 2 - 1, 0 + boatDepth - 4, 0.0F);
 
         bodyModel[3].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[3].setRotationPoint(0.0F, 0 + boatDepth - 4, -width / 2 + 1);
+        bodyModel[3].setPosition(0.0F, 0 + boatDepth - 4, -width / 2 + 1);
 
         bodyModel[4].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[4].setRotationPoint(0.0F, 0 + boatDepth - 4, width / 2 - 1);
+        bodyModel[4].setPosition(0.0F, 0 + boatDepth - 4, width / 2 - 1);
 		
 	    bodyModel[0].rotateAngleX = 1.570796F;
         bodyModel[1].rotateAngleY = 4.712389F;
@@ -77,13 +77,13 @@ public class ModelFokker extends ModelPlane
 		
 		bodyModel[5].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
 		bodyModel[5].rotateAngleX = 1.570796F;
-        bodyModel[5].setRotationPoint(0.0F, 0 + boatDepth - 4, 0.0F);
+        bodyModel[5].setPosition(0.0F, 0 + boatDepth - 4, 0.0F);
 
         bodyModel[6].addBox(0F, 0F , 0F, 4, 4, 4, 0.0F);		//Propeller Centre
-		bodyModel[6].setRotationPoint(-30F, -2F, -2F);
+		bodyModel[6].setPosition(-30F, -2F, -2F);
 		
 		bodyModel[7].addBox(0F, 0F , 0F, 14, 14, 18, 0.0F);		//Front Block
-		bodyModel[7].setRotationPoint(-26F, -7F, -9F);
+		bodyModel[7].setPosition(-26F, -7F, -9F);
 
         bodyModel[8].addBox(-13F, 6F, 5F, 4, 4, 2, 0.0F);		//Wheel
 		bodyModel[9].addBox(-13F, 6F, -7F, 4, 4, 2, 0.0F);		//Wheel
@@ -92,74 +92,74 @@ public class ModelFokker extends ModelPlane
 		bodyModel[11].addBox(-24F, -9F, 2F, 14, 2, 2, 0.0F);	//MG
 		
 		
-		rightWingModel = new NMTModelRenderer[5];
-	    rightWingModel[0] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
-		rightWingModel[1] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
-		rightWingModel[2] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
-		rightWingModel[3] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
-        rightWingModel[4] = new NMTModelRenderer(this, 56, 15, textureX, textureY);
+		rightWingModel = new ModelRendererTurbo[5];
+	    rightWingModel[0] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
+		rightWingModel[1] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
+		rightWingModel[2] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
+		rightWingModel[3] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
+        rightWingModel[4] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
 		
 	    rightWingModel[0].addBox(0F, 0F, 0F, 18, 20, 2, 0.0F);		//Right Lower Wing Inside Piece
 		rightWingModel[0].rotateAngleX = -1.570796F;
-		rightWingModel[0].setRotationPoint(-24F, 5F, -9F);
+		rightWingModel[0].setPosition(-24F, 5F, -9F);
 	    rightWingModel[1].addBox(0F, 0F, 0F, 18, 20, 2, 0.0F);		//Right Lower Wing Outside Piece
 		rightWingModel[1].rotateAngleX = -1.570796F;
-		rightWingModel[1].setRotationPoint(-24F, 5F, -29F);
+		rightWingModel[1].setPosition(-24F, 5F, -29F);
 		rightWingModel[2].addBox(0F, 0F, 0F, 18, 20, 2, 0.0F);		//Right Middle Wing Inside Piece
 		rightWingModel[2].rotateAngleX = -1.570796F;
-		rightWingModel[2].setRotationPoint(-25F, -6F, -9F);
+		rightWingModel[2].setPosition(-25F, -6F, -9F);
 		rightWingModel[3].addBox(0F, 0F, 0F, 18, 20, 2, 0.0F);		//Right Middle Wing Outside Piece
 		rightWingModel[3].rotateAngleX = -1.570796F;
-		rightWingModel[3].setRotationPoint(-25F, -6F, -29F);
+		rightWingModel[3].setPosition(-25F, -6F, -29F);
         rightWingModel[4].addBox(-15F, -18F , -45F, 2, 23, 2, 0F);	//Right Strut
 		
-		leftWingModel = new NMTModelRenderer[5];
-		leftWingModel[0] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
-		leftWingModel[1] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
-		leftWingModel[2] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
-		leftWingModel[3] = new NMTModelRenderer(this, 64 , 0, textureX, textureY);
-        leftWingModel[4] = new NMTModelRenderer(this, 56, 15, textureX, textureY);
+		leftWingModel = new ModelRendererTurbo[5];
+		leftWingModel[0] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
+		leftWingModel[1] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
+		leftWingModel[2] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
+		leftWingModel[3] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
+        leftWingModel[4] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
 		
 		leftWingModel[0].addBox(0F, 0F , 0F, 18, 20, 2	, 0.0F);	//Left Lower Wing Inside Piece
 		leftWingModel[0].rotateAngleX = -1.570796F;
-		leftWingModel[0].setRotationPoint(-24F, 5F, 29F);
+		leftWingModel[0].setPosition(-24F, 5F, 29F);
 		leftWingModel[1].addBox(0F, 0F , 0F, 18, 20, 2	, 0.0F);	//Left Lower Wing Outside Piece
 		leftWingModel[1].rotateAngleX = -1.570796F;
-		leftWingModel[1].setRotationPoint(-24F, 5F, 49F);
+		leftWingModel[1].setPosition(-24F, 5F, 49F);
 		leftWingModel[2].addBox(0F, 0F , 0F, 18, 20, 2	, 0.0F);	//Left Middle Wing Outside Piece
 		leftWingModel[2].rotateAngleX = -1.570796F;
-		leftWingModel[2].setRotationPoint(-25F, -6F, 49F);
+		leftWingModel[2].setPosition(-25F, -6F, 49F);
 		leftWingModel[3].addBox(0F, 0F , 0F, 18, 20, 2	, 0.0F);	//Left Middle Wing Inside Piece
 		leftWingModel[3].rotateAngleX = -1.570796F;
-		leftWingModel[3].setRotationPoint(-25F, -6F, 29F);
+		leftWingModel[3].setPosition(-25F, -6F, 29F);
 	    leftWingModel[4].addBox(-15F, -18F , 43F, 2, 23, 2, 0F);	//Left Strut	
 		
-		topWingModel = new NMTModelRenderer[3];
-		topWingModel[0] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
-        topWingModel[1] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
-		topWingModel[2] = new NMTModelRenderer(this, 64, 0, textureX, textureY);
+		topWingModel = new ModelRendererTurbo[3];
+		topWingModel[0] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
+        topWingModel[1] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
+		topWingModel[2] = new ModelRendererTurbo(this, 64, 0, textureX, textureY);
 		
 		topWingModel[0].addBox(0F, 0F , 0F, 18, 40, 2	, 0.0F);	//Top Left Wing Piece
 		topWingModel[0].rotateAngleX = -1.570796F;
-		topWingModel[0].setRotationPoint(-24F, -20F, 50F);
+		topWingModel[0].setPosition(-24F, -20F, 50F);
         topWingModel[1].addBox(0F, 0F, 0F, 18, 40, 2, 0.0F);		//Top Right Wing Piece
 		topWingModel[1].rotateAngleX = -1.570796F;
 		topWingModel[1].rotateAngleY = 3.141592653589793238462643383279502884197169399375105820947944F;
-		topWingModel[1].setRotationPoint(-6F, -20F, -50F);
+		topWingModel[1].setPosition(-6F, -20F, -50F);
         topWingModel[2].addBox(0F, 0F, 0F, 18, 20, 2, 0.0F);		//Top Middle Wing Piece
 		topWingModel[2].rotateAngleX = -1.570796F;
-		topWingModel[2].setRotationPoint(-24F, -20F, 10F);
+		topWingModel[2].setPosition(-24F, -20F, 10F);
 		
-		tailModel = new NMTModelRenderer[2];
-		tailModel[0] = new NMTModelRenderer(this, 118, 43, textureX, textureY);
-		tailModel[1] = new NMTModelRenderer(this, 0, 32, textureX, textureY);		
+		tailModel = new ModelRendererTurbo[2];
+		tailModel[0] = new ModelRendererTurbo(this, 118, 43, textureX, textureY);
+		tailModel[1] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);		
 		
 		tailModel[0].addBox(11F, -2F , -5F, 40, 8, 10, 0.0F);		//Tail
        	tailModel[1].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Back Wheel
 
 		//These two must still be initialized even when not used to avoid errors.
-		pitchFlapLeftWingModel = new NMTModelRenderer[0];
-		pitchFlapRightWingModel = new NMTModelRenderer[0];
+		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
+		pitchFlapRightWingModel = new ModelRendererTurbo[0];
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }

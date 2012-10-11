@@ -1,19 +1,12 @@
 package co.uk.flansmods.client.model;
 
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
-
+import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.EntityPlane;
-import net.minecraft.src.ModelBase;
+import net.minecraft.src.*;
 
 //Extensible ModelPlane class for rendering plane models
 public class ModelPlane extends ModelBase
 {
-	public boolean oldModel = false;
-	
-    public ModelPlane()    
-	{
-    }
-
     public void render(float f, float f1, float f2, float f3, float f4, float f5, EntityPlane plane)
     {
 		//Rotating the propeller
@@ -109,9 +102,6 @@ public class ModelPlane extends ModelBase
 	
 	public void flipAll()
 	{
-		oldModel = !oldModel;
-	}
-	/*
 		for(int i = 0; i < bodyModel.length; i++)
 		{
 			bodyModel[i].doMirror(false, true, true);
@@ -171,20 +161,20 @@ public class ModelPlane extends ModelBase
 			pitchFlapRightWingModel[i].setRotationPoint(pitchFlapRightWingModel[i].rotationPointX, - pitchFlapRightWingModel[i].rotationPointY, - pitchFlapRightWingModel[i].rotationPointZ);
 		}
 	}	
-*/
+
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
     {
     }
 
-    public NMTModelRenderer bodyModel[];
-    public NMTModelRenderer leftWingModel[];	
-    public NMTModelRenderer rightWingModel[];
-    public NMTModelRenderer topWingModel[];	
-	public NMTModelRenderer tailModel[];	
-	public NMTModelRenderer propellerModels[][]; //Propeller array [numProps][prop blades]
-	public NMTModelRenderer yawFlapModel[];
-	public NMTModelRenderer pitchFlapLeftModel[];
-	public NMTModelRenderer pitchFlapRightModel[];
-	public NMTModelRenderer pitchFlapLeftWingModel[];
-	public NMTModelRenderer pitchFlapRightWingModel[];
+    public ModelRendererTurbo bodyModel[];
+    public ModelRendererTurbo leftWingModel[];	
+    public ModelRendererTurbo rightWingModel[];
+    public ModelRendererTurbo topWingModel[];	
+	public ModelRendererTurbo tailModel[];	
+	public ModelRendererTurbo propellerModels[][]; //Propeller array [numProps][prop blades]
+	public ModelRendererTurbo yawFlapModel[];
+	public ModelRendererTurbo pitchFlapLeftModel[];
+	public ModelRendererTurbo pitchFlapRightModel[];
+	public ModelRendererTurbo pitchFlapLeftWingModel[];
+	public ModelRendererTurbo pitchFlapRightWingModel[];
 }

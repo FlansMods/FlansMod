@@ -13,6 +13,7 @@ import org.lwjgl.input.Keyboard;
 import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.AAGunType;
 import co.uk.flansmods.common.BulletType;
