@@ -24,6 +24,8 @@ import net.minecraft.src.World;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import co.uk.flansmods.api.IControllable;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
@@ -40,7 +42,7 @@ public class EntityPassengerSeat extends Entity
 	public EntityPassengerSeat(World world, EntityDriveable plane1, int seat, int x, int y, int z, int guns)
 	{
 		this(world);
-		plane = plane1;
+		vehicle = plane1;
 		seatID = seat;
 		seatX = x;
 		seatY = y;
@@ -53,7 +55,7 @@ public class EntityPassengerSeat extends Entity
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if(plane == null || plane.isDead)
+		if(vehicle == null || vehicle.isDead)
 			setDead();
 		else
 			updatePosition();
@@ -70,20 +72,20 @@ public class EntityPassengerSeat extends Entity
 		//Decrement the reload timer and reload
 		if(reloadTimer > 0)
 			reloadTimer--;
-		GunType type = plane.superData.guns[1];
+		GunType type = vehicle.superData.guns[1];
 		if(type != null)
 		{
-			if(plane.superData.ammo[1] != null && plane.superData.ammo[1].getItemDamage() == plane.superData.ammo[1].getMaxDamage())
+			if(vehicle.superData.ammo[1] != null && vehicle.superData.ammo[1].getItemDamage() == vehicle.superData.ammo[1].getMaxDamage())
 			{
-				plane.superData.ammo[1] = null;
+				vehicle.superData.ammo[1] = null;
 				//Scrap metal output?
 			}
-			if(plane.superData.ammo == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+			if(vehicle.superData.ammo == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
 			{
 				int slot = findAmmo(((EntityPlayer)riddenByEntity), type);
 				if(slot >= 0)
 				{
-					plane.superData.ammo[1] = ((EntityPlayer)riddenByEntity).inventory.getStackInSlot(slot);
+					vehicle.superData.ammo[1] = ((EntityPlayer)riddenByEntity).inventory.getStackInSlot(slot);
 					if(worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 						((EntityPlayer)riddenByEntity).inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
@@ -94,14 +96,14 @@ public class EntityPassengerSeat extends Entity
 			if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
 			{
 				//Check for plane.data.ammo / reloading
-				if(plane.superData.ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
+				if(vehicle.superData.ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
 				{
 					return;
 				}
 				//Fire
-				BulletType bullet = BulletType.getBullet(plane.superData.ammo[1].itemID);
+				BulletType bullet = BulletType.getBullet(vehicle.superData.ammo[1].itemID);
 				if(worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
-					plane.superData.ammo[1].damageItem(1, ((EntityPlayer)riddenByEntity));
+					vehicle.superData.ammo[1].damageItem(1, ((EntityPlayer)riddenByEntity));
 				FlansMod.shootTime = type.shootDelay;
 				if(!worldObj.isRemote)
 				{
@@ -127,15 +129,15 @@ public class EntityPassengerSeat extends Entity
 	
 	private void updatePosition()
 	{
-		prevRotationYaw = plane.prevRotationYaw;
-		prevRotationPitch = plane.prevRotationPitch;
-		prevRotationRoll = plane.prevRotationRoll;
+		prevRotationYaw = vehicle.prevRotationYaw;
+		prevRotationPitch = vehicle.prevRotationPitch;
+		prevRotationRoll = vehicle.prevRotationRoll;
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
-		setRotation(plane.axes.getYaw(), plane.axes.getPitch());
-		rotationRoll = plane.axes.getRoll();
-		Vec3 posVec = plane.rotate((double)seatX / 16D, (double)seatY / 16D, (double)seatZ / 16D).addVector(plane.posX, plane.posY, plane.posZ);
+		setRotation(vehicle.axes.getYaw(), vehicle.axes.getPitch());
+		rotationRoll = vehicle.axes.getRoll();
+		Vec3 posVec = vehicle.rotate((double)seatX / 16D, (double)seatY / 16D, (double)seatZ / 16D).addVector(vehicle.posX, vehicle.posY, vehicle.posZ);
 		setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
 	}
 	
@@ -197,17 +199,17 @@ public class EntityPassengerSeat extends Entity
 			{
 				if(reloadTimer > 0)
 					return true;
-				plane.useGun(gunnerID, player, this);
+				vehicle.useGun(gunnerID, player, this);
 				return true;
 			}
 		}
-		return plane.attackEntityFrom(damagesource, i);
+		return vehicle.attackEntityFrom(damagesource, i);
     }
 	
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, int i)
     {	
-		return plane.attackEntityFrom(damagesource, i);
+		return vehicle.attackEntityFrom(damagesource, i);
     }
 	
     @Override
@@ -218,7 +220,7 @@ public class EntityPassengerSeat extends Entity
             return;
         } else if(riddenByEntity instanceof EntityLiving)
         {	
-			Vec3 vec = plane.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
+			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
 
 			riddenByEntity.rotationYaw -= 2F * (rotationYaw - prevRotationYaw);
@@ -240,7 +242,7 @@ public class EntityPassengerSeat extends Entity
     @Override
 	public boolean interact(EntityPlayer player)
     {
-		if(worldObj.isRemote || isDead || plane == null || plane.isDead)
+		if(worldObj.isRemote || isDead || vehicle == null || vehicle.isDead)
 			return true;
 		ItemStack stack = player.inventory.getCurrentItem();
 		Entity following = null;
@@ -300,8 +302,8 @@ public class EntityPassengerSeat extends Entity
 		}
         return true;
     }
-		
-	public EntityDriveable plane;
+    
+	public EntityDriveable vehicle;
 	public int seatID;
 	public int seatX;
 	public int seatY;

@@ -6,6 +6,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import co.uk.flansmods.api.IControllable;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
@@ -15,7 +17,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
-public abstract class EntityDriveable extends Entity
+public abstract class EntityDriveable extends Entity implements IControllable
 {
     public EntityDriveable(World world)
     {
@@ -124,7 +126,7 @@ public abstract class EntityDriveable extends Entity
     }
 	
     // TODO: gotta do this stuff elsewhere.
-	public abstract void pressKey(int key);
+	public abstract boolean pressKey(int key);
 
 	@Override
     public void onUpdate()

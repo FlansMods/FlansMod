@@ -61,9 +61,8 @@ public class EntityCollisionBox extends Entity
 				if(damage <= 20F && damage > 0F && speed > 0.3D)
 				{
 					worldObj.setBlockWithNotify(i, j, k, 0);
-					FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects(i, j, k, 1);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
-					FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)i + 0.5F, (float)j + 0.5F, (float)k + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+					FlansMod.proxy.playBlockBreakSound(i, j, k, block.blockID);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import org.lwjgl.input.Keyboard;
@@ -7,6 +8,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
@@ -16,6 +18,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.client.Minecraft;
@@ -32,6 +35,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.ModLoader;
+import net.minecraft.src.NBTBase;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
@@ -170,14 +174,13 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         return true;
     }
 	
-	// Only called when control mdoe is for mouse.
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 	}
 	
 	@Override
-	public void pressKey(int key)
+	public boolean pressKey(int key)
 	{
 		VehicleType type = this.getVehicleType();
 		switch(key)
@@ -197,7 +200,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				{
 					acceleration = type.maxSpeed + data.engine.engineSpeed;
 				}
-				break;
+				return true;
 			}
 			case 1 : //Deccelerate
 			{
@@ -214,19 +217,19 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				{
 					acceleration = -(type.maxSpeed + data.engine.engineSpeed) / 2;
 				}
-				break;
+				return true;
 			}
 			case 2 : //Left
 			{
 				//velocityYaw -= type.turnLeftModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed - acceleration) * 0.15F;
 				wheelsYaw -= 0.5F * type.turnLeftModifier;
-				break;
+				return true;
 			}
 			case 3 : //Right
 			{
 				//velocityYaw += type.turnRightModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed  - acceleration) * 0.15F;
 				wheelsYaw += 0.5F * type.turnLeftModifier;
-				break;
+				return true;
 			}
 			case 4 : //Up, also handbrake
 			{
@@ -235,6 +238,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 					motionX *= 0.75D;
 					motionY *= 0.75D;
 					motionZ *= 0.75D;
+					return true;
 				}
 				break;
 			}
@@ -245,13 +249,13 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			case 6 : //Exit
 			{
 				riddenByEntity.mountEntity(this);
-				break;
+				return true;
 			}
 			case 7 : //Inventory
 			{
 				// send packet for this.
 				ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
-				break;
+				return true;
 			}
 			case 8 : //Shell
 			{
@@ -276,6 +280,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 						data.decrStackSize(slot, 1);
 						shellDelay = type.vehicleShellDelay;
 					}
+					return true;
 				}
 				break;
 			}
@@ -299,14 +304,18 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 						}
 						gunDelay = type.vehicleShootDelay;
 					}
-				}				
+					return true;
+				}
 				break;
 			}
 			case 10 : //Change Controls
 			{
-				break;
+				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
 	@Override
@@ -675,7 +684,6 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			//riddenByEntity.rotationPitch -= (axes.getPitch() - prevRotationPitch);
 			return;
         }
-		else { return; }
     }
 	
 	private void smashIntoBlock(int i, int j, int k)
@@ -740,18 +748,17 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	@Override
     public boolean interact(EntityPlayer entityplayer)
     {
-		if(worldObj.isRemote)
+		if(isDead)
 			return true;
 		if(entityplayer == riddenByEntity)
-		{
-			//entityplayer.mountEntity(this);
-			return true;
-		}
+			return false;
+		
 		if(canSit(0))
 		{
 			entityplayer.mountEntity(this);
 			shellDelay = getVehicleType().vehicleShellDelay;
 			FlansMod.proxy.doTutorialStuff(entityplayer, this);
+			return true;
 		}
 		for(int i = 0; i < getVehicleType().numPassengers; i++)
 		{
@@ -761,7 +768,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				return true;
 			}
 		}
-        return true;
+		return true;
     }
 	
 	private boolean canSit(int seat)
@@ -784,8 +791,19 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data)
 	{
-		data.writeUTF(type);
-		data.writeInt(dataID);
+		try
+		{
+			data.writeUTF(type);
+			data.writeInt(dataID);
+			
+			NBTTagCompound tag = new NBTTagCompound();
+			this.data.writeToNBT(tag);
+			tag.writeNamedTag(tag, data);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}	
 	}
 
 	@Override
@@ -795,7 +813,9 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			type = superType = data.readUTF();
 			dataID = data.readInt();
+			
 			this.superData = this.data = new VehicleData("Vehicle_" + dataID, VehicleType.getVehicle(type));
+			this.data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(data));
 			initType(VehicleType.getVehicle(type));
 		}
 		catch(Exception e)

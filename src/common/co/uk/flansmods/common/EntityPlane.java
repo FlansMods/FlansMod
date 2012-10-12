@@ -103,6 +103,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
+		if (!FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity))
+			return;
 		if(deltaX > 100)
 			deltaX = 100;
 		if(deltaX < -100)
@@ -206,7 +208,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     }
     
     @Override
-	public void pressKey(int key)
+	public boolean pressKey(int key)
 	{
     	PlaneType type = this.getPlaneType();
     	
@@ -227,7 +229,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				{
 					propSpeed = type.maxPropSpeed + data.engine.engineSpeed;
 				}
-				break;
+				return true;
 			}
 			case 1 : //Deccelerate
 			{
@@ -240,11 +242,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					propSpeed -= type.acceleration / 100D;
 					data.fuelInTank--;
 				}
+				
 				if(propSpeed < 0)
 				{
 					propSpeed = 0;
 				}
-				break;
+				return true;
 			}
 			case 2 : //Left
 			{
@@ -253,7 +256,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					velocityYaw -= type.turnLeftModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed - propSpeed) * 0.15F;
 					flapsYaw -= 5F;
 				}
-				break;
+				return true;
 			}
 			case 3 : //Right
 			{
@@ -262,39 +265,39 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					velocityYaw += type.turnRightModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed  - propSpeed) * 0.15F;
 					flapsYaw += 5F;
 				}
-				break;
+				return true;
 			}
 			case 4 : //Up
 			{
 				// TODO: get ControlMod working.
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (/*FlansMod.controlMode == 1 ||*/ axes.getPitch() > -75F))
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity) || axes.getPitch() > -75F))
 				{
 					velocityPitch += type.lookUpModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft += 5F;
 					flapsPitchRight += 5F;
+					return true;
 				}
-				break;
 			}
 			case 5 : //Down
 			{
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (/*FlansMod.controlMode == 1 ||*/ axes.getPitch() < 75F))
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity) || axes.getPitch() < 75F))
 				{
 					velocityPitch -= type.lookDownModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft -= 5F;
 					flapsPitchRight -= 5F;
+					return true;
 				}
-				break;
 			}
 			case 6 : //Exit
 			{
 				riddenByEntity.mountEntity(this);
-				break;
+				return true;
 			}
 			case 7 :
 			{
 				// automatically only done on client.
 				FMLNetworkHandler.openGui(((EntityPlayer)riddenByEntity), FlansMod.instance, 3, worldObj, this.chunkCoordX, this.chunkCoordY, this.chunkCoordZ);
-				break;
+				return true;
 			}
 			case 8 : //Bomb
 			{
@@ -310,6 +313,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 							slot = i;
 						}
 					}
+					
 					if(slot != 0)
 					{
 						Vec3 bombVec = rotate(type.bombXOffset / 16D, type.bombYOffset / 16D, type.bombZOffset / 16D);
@@ -327,8 +331,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 						data.decrStackSize(slot, 1);
 						bombDelay = type.planeBombDelay;
 					}
+					return true;
+					
 				}
-				break;
+				return false;
 			}
 			case 9 : //Shoot
 			{
@@ -352,16 +358,18 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 							gunDelay = type.planeShootDelay;
 						}
 					}
-				}				
-				break;
+					return true;
+				}
+				return false;
 			}
 			case 10 :
 			{
-				if (FMLCommonHandler.instance().getSide().equals(Side.CLIENT))
-					FlansModClient.flipControlMode();
-				break;
+				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
     @Override
@@ -486,35 +494,6 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public void onUpdate()
     {
         super.onUpdate();
-
-		//Key Input
-		/*
-		if(FlansMod.controlMode == 0)
-		{
-			if(Keyboard.isKeyDown(FlansMod.accelerateKey))
-				pressKey(0);
-			if(Keyboard.isKeyDown(FlansMod.decelerateKey))
-				pressKey(1);
-			if(Keyboard.isKeyDown(FlansMod.leftKey))
-				pressKey(2);
-			if(Keyboard.isKeyDown(FlansMod.rightKey))
-				pressKey(3);
-			if(Keyboard.isKeyDown(FlansMod.upKey))
-				pressKey(4);
-			if(Keyboard.isKeyDown(FlansMod.downKey))
-				pressKey(5);
-			if(Keyboard.isKeyDown(FlansMod.exitKey))
-				pressKey(6);
-			if(Keyboard.isKeyDown(FlansMod.inventoryKey))
-				pressKey(7);
-			if(Keyboard.isKeyDown(FlansMod.bombKey))
-				pressKey(8);
-			if(Keyboard.isKeyDown(FlansMod.gunKey))
-				pressKey(9);
-			if(Keyboard.isKeyDown(FlansMod.controlSwitchKey))
-				pressKey(10);
-		}
-		*/
         
         PlaneType type = this.getPlaneType();
 
@@ -1022,9 +1001,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			Vec3 vec = rotate(type.pilotX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.pilotY / 16D, type.pilotZ / 16D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
             
-            // TODO: still ControlMode references...
-            /*
-			if(FlansMod.controlMode == 1)
+			if(FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity))
 			{
 				riddenByEntity.prevRotationYaw = riddenByEntity.rotationYaw;
 				riddenByEntity.prevRotationPitch = riddenByEntity.rotationPitch;
@@ -1040,7 +1017,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			{
 				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
 			}
-			*/
+			
 			return;
         }
 		else { return; }

@@ -337,18 +337,31 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
+	@Override
+	public void changeControlMode(EntityPlayer player)
+	{
+		FlansMod.flipControlMode(player);
+		FlansModClient.flipControlMode();
+		player.addChatMessage("Mouse Control mode is now set to "+FlansModClient.controlModeMouse);
+	}
+	
 	// --------------- END ABRAR EDITS ----------------------
 	
 	
 	// ------------------ PACKET SENDING OR NOT -------------
 	
+	@Override
 	public void playBlockBreakSound(int x, int y, int z, int blockID)
 	{
+		if (FMLClientHandler.instance().getClient().theWorld == null)
+			return;
+		
 		Block block = Block.blocksList[blockID];
     	FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int)x, (int)y, (int)z, 1);
     	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 	}
 	
+	@Override
 	public void spawnParticle(String type, double x1, double y1, double z1, double x2, double y2, double z2, int number)
 	{
 		World world = FMLClientHandler.instance().getClient().theWorld;

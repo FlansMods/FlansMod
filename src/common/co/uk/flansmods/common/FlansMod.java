@@ -111,6 +111,9 @@ public class FlansMod
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<Item> vehicleItems = new ArrayList<Item>();
 	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+	
+	// ControllMode map        if they are here.. it means they have mouse enabled.
+	private static ArrayList<EntityPlayer> controlModeMap;
 
 	//GunBoxBlock
 	public static BlockGunBox gunBoxBlock;
@@ -119,7 +122,7 @@ public class FlansMod
 	public static File propertyFile;
 	
 	@PreInit
-	public void load(FMLPreInitializationEvent event)
+	public void preLoad(FMLPreInitializationEvent event)
 	{
 		log("Preinitializing Flan's mod.");
 		
@@ -193,6 +196,9 @@ public class FlansMod
 	public void load(FMLInitializationEvent event)
 	{
 		log("Loading Flan's mod.");
+		
+		// control modes.
+		this.controlModeMap = new ArrayList<EntityPlayer>();
 		
 		// Tick handlers
 		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
@@ -617,11 +623,25 @@ public class FlansMod
 		proxy.loadContentPackGraphics(method, classloader);
 	}
 
-	public String getLabel()
-	{
-		return null;
-	}
 
+	public static boolean isPlayerMouseControlEnabled(EntityPlayer player)
+	{
+		return instance.controlModeMap.contains(player);
+	}
+	
+	public static boolean isPlayerMouseControlEnabled(String playerUsername)
+	{
+		return isPlayerMouseControlEnabled(FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerUsername));
+	}
+	
+	public static void flipControlMode(EntityPlayer player)
+	{
+		if (instance.controlModeMap.contains(player))
+			instance.controlModeMap.remove(player);
+		else
+			instance.controlModeMap.add(player);
+	}
+	
 	public static void logQuietly(String s)
 	{
 	}

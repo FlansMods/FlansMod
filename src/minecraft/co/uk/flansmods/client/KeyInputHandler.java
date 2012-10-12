@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import org.lwjgl.input.Keyboard;
 
+import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.network.PacketVehicleControl;
@@ -89,16 +90,8 @@ public class KeyInputHandler extends KeyHandler
 		if(mc.currentScreen != null || tickEnd)
 			return;
 		
-		for (KeyBinding key : mc.gameSettings.keyBindings )
-		{
-			if (kb.keyCode == key.keyCode && key != kb)
-			{
-				key.pressed = true;
-				key.pressTime = 1;
-			}
-		}
-		
 		int keyNum = -1;
+		boolean handled = true;
 		
 		if(kb == accelerateKey)
 			keyNum = 0;
@@ -128,21 +121,40 @@ public class KeyInputHandler extends KeyHandler
 			return;
 		}
 		else
-			return;
+			handled = false;
+		
+		
 		
 		EntityPlayer player = mc.thePlayer;
 		Entity entityTest  = player.ridingEntity;
 		
-		if (entityTest != null && entityTest instanceof EntityDriveable)
+		if (entityTest != null && entityTest instanceof IControllable && handled == true)
 		{
-			EntityDriveable entity = (EntityDriveable)entityTest;
+			IControllable entity = (IControllable)entityTest;
 			if (kb.keyCode == mc.gameSettings.keyBindInventory.keyCode)
 			{
 				mc.gameSettings.keyBindInventory.pressed = false;
 				mc.gameSettings.keyBindInventory.pressTime = 0;
 			}
-			entity.pressKey(keyNum);
-			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
+			handled = entity.pressKey(keyNum);
+			
+			if (handled)
+				PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
+		}
+		else
+			handled = false;
+		
+		
+		if (handled == true)
+			return;
+		
+		for (KeyBinding key : mc.gameSettings.keyBindings )
+		{
+			if (kb.keyCode == key.keyCode && key != kb)
+			{
+				key.pressed = true;
+				key.pressTime = 1;
+			}
 		}
 	}
 

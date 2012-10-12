@@ -68,6 +68,11 @@ public class CommonProxy
 		// FlansMod.log("Tutorial skipped on server");
 	}
 	
+	public void changeControlMode(EntityPlayer player)
+	{
+		FlansMod.flipControlMode(player);
+	}
+	
 	// --------------- END ABRAR EDITS ----------------------
 	
 	// ------------------ PACKET SENDING OR NOT -------------

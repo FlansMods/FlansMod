@@ -168,7 +168,7 @@ public class TeamsManager implements IPlayerTracker
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ) + FMLCommonHandler.instance().getMinecraftServerInstance().getWorldName(), "teams.dat");
+		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ), "teams.dat");
 		checkFileExists(file);
 		try
 		{
