@@ -45,13 +45,14 @@ public class GuiGunBox extends GuiScreen
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
-		GL11.glEnable(3042 /* GL_BLEND */);
-		GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, mc.renderEngine.getTexture("/gui/weaponBox.png"));
+		GL11.glEnable(3042 /*GL_BLEND*/);
+		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
+		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
 		if (type.numGuns > page * 2 + 1 && type.guns[page * 2] != null && type.guns[page * 2 + 1] != null)
@@ -84,7 +85,7 @@ public class GuiGunBox extends GuiScreen
 			drawSlotInventory(inventory.getStackInSlot(col), m + 8 + col * 18, n + 180);
 		}
 
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(3042 /*GL_BLEND*/);
 	}
 
 	private void drawRecipe(FontRenderer fontrenderer, int m, int n, int q, int offset)
