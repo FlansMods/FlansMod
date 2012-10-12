@@ -232,9 +232,24 @@ public class BlockGunBox extends BlockContainer
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
 	{
-		TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(i, j, k);
-		CommonGuiHandler.openGunBoxGui(entityplayer, entity.getType());
-		return true;
+		if(world.isRemote)
+		{
+			return true;
+		}
+		else {
+			TileEntityGunBox tileEntity = (TileEntityGunBox)world.getBlockTileEntity(i, j, k);
+			if(tileEntity != null)
+			{
+				if(!entityplayer.isSneaking())
+				{
+					entityplayer.openGui(FlansMod.instance, 5, world, i, j, k);
+				}
+				else {
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 
 	@Override

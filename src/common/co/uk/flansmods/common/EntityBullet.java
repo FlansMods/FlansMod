@@ -422,13 +422,15 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbttagcompound)
+	public void writeEntityToNBT(NBTTagCompound tag)
 	{
+		
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbttagcompound)
+	public void readEntityFromNBT(NBTTagCompound tag)
 	{
+		
 	}
 
 	@Override
@@ -441,6 +443,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		// TODO Auto-generated method stub
 		data.writeUTF(type.shortName);
+		data.writeUTF(owner.getEntityName());
 	}
 
 	@Override
@@ -449,6 +452,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		try
 		{
 			type = BulletType.getBullet(data.readUTF());
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(data.readUTF());
 		}
 		catch(Exception e)
 		{

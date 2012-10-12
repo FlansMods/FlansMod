@@ -1,9 +1,7 @@
 package co.uk.flansmods.common;
 
 import co.uk.flansmods.common.network.PacketGunBoxTE;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Packet;
-import net.minecraft.src.TileEntity;
+import net.minecraft.src.*;
 
 public class TileEntityGunBox extends TileEntity
 {
