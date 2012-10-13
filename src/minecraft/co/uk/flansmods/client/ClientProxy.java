@@ -371,7 +371,7 @@ public class ClientProxy extends CommonProxy
 		
 		for (int i = 0; i < number; i++)
 		{
-			(world).spawnParticle(type, x1, y1, z1, x2, y2, z2);
+			world.spawnParticle(type, x1, y1, z1, x2, y2, z2);
 		}
 	}
 	
