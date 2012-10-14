@@ -23,6 +23,9 @@ LICENSE.txt
 !/src/common/co/
 !/src/minecraft/co/
 !/jars/Flan/
+!/eclipse/Minecraft/bin/gui/
+!/eclipse/Minecraft/bin/spritesheets/
+!/eclipse/Minecraft/bin/teamsMod/
 
 *.bat
 *.sh
