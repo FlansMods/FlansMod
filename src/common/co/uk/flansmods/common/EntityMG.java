@@ -244,7 +244,6 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void setDead()
 	{
-		super.setDead();
 		// Drop gun
 		if(!worldObj.isRemote)
 		{
@@ -255,6 +254,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			entityDropItem(ammo, 0.5F);
 		if (gunner != null)
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
+		
+		super.setDead();
 	}
 
 	@Override
@@ -297,6 +298,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public void writeSpawnData(ByteArrayDataOutput data) {
 		// TODO Auto-generated method stub
 		data.writeUTF(type.shortName);
+		data.writeInt(direction);
 	}
 
 	@Override
@@ -305,6 +307,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		try
 		{
 			type = GunType.getGun(data.readUTF());
+			direction = data.readInt();
 		}
 		catch(Exception e)
 		{
