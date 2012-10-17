@@ -139,12 +139,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (!worldObj.isRemote)
 			{
 				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.accuracy, type.damage, bullet));
-				if (soundDelay <= 0)
-				{
-					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
-					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
-					soundDelay = type.shootSoundLength;
-				}
+			}
+			if (soundDelay <= 0)
+			{
+				float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
+				worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
+				soundDelay = type.shootSoundLength;
 			}
 		}
 		if (soundDelay > 0)
@@ -175,12 +175,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (!worldObj.isRemote)
 				{
 					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, (EntityLiving) player, type.accuracy, type.damage, bullet, type.speed, false));
-					if (soundDelay <= 0)
-					{
-						float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
-						worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
-						soundDelay = type.shootSoundLength;
-					}
+				}
+				if (soundDelay <= 0)
+				{
+					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
+					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
+					soundDelay = type.shootSoundLength;
 				}
 			} else
 			{
@@ -206,12 +206,14 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			{
 				FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 				gunner = null;
+				System.out.println("unmounted");
 				return true;
 			}
 			if (FlansModPlayerHandler.getPlayerData(entityplayer).mountingGun != null)
 				return true;
 			gunner = entityplayer;
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = this;
+			System.out.println("mounted");
 			if (ammo == null)
 			{
 				int slot = findAmmo(entityplayer);

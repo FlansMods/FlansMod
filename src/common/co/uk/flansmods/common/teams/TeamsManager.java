@@ -272,6 +272,8 @@ public class TeamsManager implements IPlayerTracker
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
 		Team team = FlansModPlayerHandler.getPlayerData(player).team;
+		if (team == null)
+			return;
 		if(team.hat != null)
 			player.inventory.armorInventory[3] = team.hat.copy();
 		if(team.chest != null)

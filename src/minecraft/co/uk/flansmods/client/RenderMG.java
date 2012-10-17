@@ -14,8 +14,7 @@ public class RenderMG extends Render
         shadowSize = 0.5F;
     }
 
-    public void render(EntityMG mg, double d, double d1, double d2, 
-            float f, float f1)
+    public void render(EntityMG mg, double d, double d1, double d2, float f, float f1)
     {
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -29,8 +28,7 @@ public class RenderMG extends Render
         GL11.glPopMatrix();
     }
 
-    public void doRender(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
         render((EntityMG)entity, d, d1, d2, f, f1);
     }
