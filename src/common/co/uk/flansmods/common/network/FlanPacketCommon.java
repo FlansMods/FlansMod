@@ -51,14 +51,14 @@ public class FlanPacketCommon implements IPacketHandler
         	
     		switch(ID)
     		{
-    		case 1: (new PacketBreakSound()).interpret(stream, null, Side.SERVER); break;
-    		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-    		case 4: break; //-- unneeded. This Id is open for any use.
-    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, Side.SERVER); break;
-    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-    		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-    		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
+	    		case 1: (new PacketBreakSound()).interpret(stream, null, Side.SERVER); break;
+	    		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.SERVER); break;
+	    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+	    		case 4: break; //-- unneeded. This Id is open for any use.
+	    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, Side.SERVER); break;
+	    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+	    		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.SERVER); break;
+	    		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		
     		stream.close();

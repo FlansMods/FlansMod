@@ -125,7 +125,6 @@ public abstract class EntityDriveable extends Entity implements IControllable
         velocityZ = motionZ = d2;
     }
 	
-    // TODO: gotta do this stuff elsewhere.
 	public abstract boolean pressKey(int key);
 
 	@Override

@@ -104,8 +104,8 @@ public class PacketVehicleControl extends FlanPacketCommon
 					return;
 				
 				EntityDriveable entity = (EntityDriveable)entityTest;
-				
-				entity.pressKey(button);
+				if(!entity.worldObj.isRemote)
+					entity.pressKey(button);
 			}
 		}
         catch(Exception e)

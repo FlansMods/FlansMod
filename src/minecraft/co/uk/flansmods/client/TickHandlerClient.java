@@ -142,5 +142,4 @@ public class TickHandlerClient implements ITickHandler
 	{
 		return "FlansModClient";
 	}
-
 }

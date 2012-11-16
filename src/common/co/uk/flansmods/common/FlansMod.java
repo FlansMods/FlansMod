@@ -35,6 +35,7 @@ import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
@@ -50,6 +51,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import net.minecraftforge.*;
+import net.minecraftforge.common.Configuration;
 
 @Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.0")
 @NetworkMod(
@@ -69,13 +71,12 @@ public class FlansMod
 	public static FlansMod instance;
 	
 	public static TeamsManager teamsManager;
+	
+	public static Configuration configuration;
 
 	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
 	public static List<Item> partItems = new ArrayList<Item>();
-	
-	// TODO remove
-	public static List<Block> gunBoxBlocks = new ArrayList<Block>();
 	
 	public static List<Item> gunItems = new ArrayList<Item>();
 	public static List<Item> aaGunItems = new ArrayList<Item>();
@@ -92,8 +93,6 @@ public class FlansMod
 	public static long lastTime;
 	
 	// Player changeable stuff
-	// TODO: move keys to client side only
-	// TODO: create key handlers and register keys.
 	public static boolean explosions = true;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
@@ -119,12 +118,13 @@ public class FlansMod
 	public static BlockGunBox gunBoxBlock;
 	
 	public static File flanDir;
-	public static File propertyFile;
 	
 	@PreInit
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		log("Preinitializing Flan's mod.");
+		
+		configuration = new Configuration(event.getSuggestedConfigurationFile());
 		
 		flanDir = new File(event.getModConfigurationDirectory().getParentFile(), "/Flan/");
 	
@@ -138,44 +138,7 @@ public class FlansMod
 		}
 		
 		// Properties
-		try
-		{
-			propertyFile = new File(flanDir, "properties.txt");
-			if (propertyFile.exists())
-			{
-				BufferedReader properties = new BufferedReader(new FileReader(propertyFile));
-				do
-				{
-					String line = null;
-					try
-					{
-						line = properties.readLine();
-					} catch (Exception e)
-					{
-						break;
-					}
-					if (line == null)
-					{
-						break;
-					}
-					if (line.startsWith("//"))
-						continue;
-					String[] split = line.split(" ");
-					if (split.length < 2)
-						continue;
-					readProperties(split, properties);
-				} while (true);
-				log("Loaded properties.");
-			} else
-			{
-				log("No properties file found. Using defaults.");
-				createNewProperties();
-			}
-		} catch (Exception e)
-		{
-			log("No properties file found. Using defaults.");
-			createNewProperties();
-		}
+		loadProperties();
 		
 		playerHandler = new FlansModPlayerHandler();
 		teamsManager = new TeamsManager();
@@ -681,21 +644,14 @@ public class FlansMod
 			e.printStackTrace();
 		}
 	}
-
-	/** creating new properties */
-	private void createNewProperties()
+	
+	public void loadProperties()
 	{
-		// TODO: use forge configuration class
-		try
-		{
-			FileOutputStream propsOut = new FileOutputStream(propertyFile);
-			propsOut.write(("Explosions True\r\nBombs True\r\nBullets True").getBytes());
-			propsOut.close();
-		} catch (Exception e)
-		{
-			log("Failed to write default properties");
-			e.printStackTrace();
-		}
+		configuration.load();
+		configuration.get(Configuration.CATEGORY_GENERAL, "explosions", true);
+		configuration.get(Configuration.CATEGORY_GENERAL, "bombs", true);
+		configuration.get(Configuration.CATEGORY_GENERAL, "bullets", true);
+		configuration.save();
 	}
 
 	/** Logger. */

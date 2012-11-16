@@ -53,7 +53,7 @@ public class ContainerPlaneMenu extends Container
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer)
     {
-    	return entityplayer.ridingEntity != null && entityplayer.ridingEntity instanceof EntityDriveable;
+    	return true;
     }
 
 	public EntityDriveable plane;

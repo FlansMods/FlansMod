@@ -76,8 +76,10 @@ public class ItemGun extends Item
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
 					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 				}
-				//TODO ACCESSING CLIENT FILES FROM COMMON AUGH
-				FlansModClient.shootTime = 10;
+				if(world.isRemote)
+				{
+					FlansModClient.shootTime = 10;
+				}
 			}
 		}
 		if (soundDelay > 0)

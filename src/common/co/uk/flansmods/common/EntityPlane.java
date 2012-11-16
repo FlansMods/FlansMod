@@ -216,7 +216,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		{
 			case 0 : //Accelerate
 			{
-				if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 				{
 					propSpeed += type.acceleration / 100D;
 				}
@@ -233,7 +233,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 1 : //Deccelerate
 			{
-				if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 				{
 					propSpeed -= type.acceleration / 100D;
 				}
@@ -351,7 +351,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 							data.ammo[i].setItemDamage(damage + 1);	
 							if(damage + 1 == data.ammo[i].getMaxDamage())
 							{
-								if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+								if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 									data.ammo[i].setItemDamage(0);
 								else data.setInventorySlotContents(i, null);
 							}
@@ -494,6 +494,15 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public void onUpdate()
     {
         super.onUpdate();
+        
+        if(worldObj.isRemote)
+        {
+        	System.out.println("Client: " + (int)posX + " " + (int)posY + " " + (int)posZ);
+        }
+        if(!worldObj.isRemote)
+        {
+        	System.out.println("Server: " + (int)posX + " " + (int)posY + " " + (int)posZ);
+        }
         
         PlaneType type = this.getPlaneType();
 
