@@ -83,7 +83,7 @@ public class EntityCollisionBox extends Entity
 			return;
 		setDead();
 		if(FlansMod.explosions)
-			worldObj.createExplosion(this, posX, posY, posZ, 1F);
+			worldObj.createExplosion(this, posX, posY, posZ, 1F, false);
 		int tileX = MathHelper.floor_double(posX + 0.5D);
 		int tileY = MathHelper.floor_double(posY + 0.5D);
 		int tileZ = MathHelper.floor_double(posZ + 0.5D);

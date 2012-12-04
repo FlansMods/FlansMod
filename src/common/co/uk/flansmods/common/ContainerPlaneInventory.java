@@ -99,12 +99,6 @@ public class ContainerPlaneInventory extends Container
         }
     }
 	
-    @Override
-	public ItemStack transferStackInSlot(int i)
-    {
-        return null;
-    }
-	
 	public void updateScroll(int scrololol)
 	{
 		scroll = scrololol;

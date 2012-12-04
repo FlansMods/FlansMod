@@ -49,13 +49,7 @@ public class ContainerVehicleCrafting extends Container
 		//Update the output slot
         onCraftMatrixChanged(craftMatrix);
     }
-		
-    @Override
-	public ItemStack transferStackInSlot(int i)
-    {
-        return null;
-    }
-	
+			
     @Override
     public void onCraftMatrixChanged(IInventory iinventory)
     {

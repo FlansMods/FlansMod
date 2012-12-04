@@ -262,7 +262,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					{
 						if (movingobjectposition.entityHit instanceof EntityLiving)
 						{
-							((EntityLiving) movingobjectposition.entityHit).arrowHitTempCounter++;
+							((EntityLiving) movingobjectposition.entityHit).arrowHitTimer++;
 							if (shotgun)
 								((EntityLiving) movingobjectposition.entityHit).hurtResistantTime = ((EntityLiving) movingobjectposition.entityHit).maxHurtResistantTime / 2;
 						}
@@ -379,7 +379,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		super.setDead();
 		if (type.explosion > 0)
 		{
-			worldObj.createExplosion(owner, posX, posY, posZ, type.explosion);
+			worldObj.createExplosion(owner, posX, posY, posZ, type.explosion, false);
 		}
 		if (type.fire > 0)
 		{

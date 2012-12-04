@@ -43,12 +43,6 @@ public class ContainerPlaneMenu extends Container
         	addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 137 + (isFuel ? 0 : 19)));
         }
     }
-	
-    @Override
-	public ItemStack transferStackInSlot(int i)
-    {
-        return null;
-    }
     
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer)

@@ -792,7 +792,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					propBlown[propNum] = true;
 					Vec3 propVec = rotate((double)(type.propellerX[propNum]) / 16D, (double)(type.propellerY[propNum]) / 16D, (double)(type.propellerZ[propNum]) / 16D);
 					if(FlansMod.explosions)
-						worldObj.createExplosion(this, posX + propVec.xCoord, posY + propVec.yCoord, posZ + propVec.zCoord, 1F);
+						worldObj.createExplosion(this, posX + propVec.xCoord, posY + propVec.yCoord, posZ + propVec.zCoord, 1F, false);
 				}
 			}
 			for(int i = 0; i < type.numProps; i++)
@@ -1108,7 +1108,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					BulletType bombType = ((ItemBullet)bomb.getItem()).type;
 					if(FlansMod.explosions && (bombType.explodeOnImpact || bombType.fuse > 0) && rand.nextBoolean() && amountExploded < 10F)
 					{
-						worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, bombType.explosion);
+						worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, bombType.explosion, false);
 						amountExploded += bombType.explosion;
 					}
 					else
@@ -1125,7 +1125,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			if(FlansMod.explosions && data.fuelInTank > 0 && rand.nextBoolean() && amountExploded < 10F)
 			{
-				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)data.fuelInTank / 200F);
+				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)data.fuelInTank / 200F, false);
 			}
 			
 			setDead();

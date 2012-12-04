@@ -37,9 +37,9 @@ public class ItemGunBox extends ItemBlock {
     }
 	
 	@Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
     {
-    	boolean place = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+    	boolean place = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
     	
     	if (place)
     	{

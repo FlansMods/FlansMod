@@ -63,7 +63,7 @@ public class PacketGunBoxTE extends FlanPacketCommon
 			TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(x, y, z);
 			entity.setShortName(type);
 			
-			world.markBlockNeedsUpdate(x, y, z);
+			world.markBlockForUpdate(x, y, z);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

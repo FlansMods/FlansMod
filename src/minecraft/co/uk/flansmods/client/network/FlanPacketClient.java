@@ -19,7 +19,7 @@ import cpw.mods.fml.common.network.Player;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityPlayerMP;
-import net.minecraft.src.NetworkManager;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.World;
@@ -31,14 +31,14 @@ public class FlanPacketClient implements IPacketHandler
 	protected Packet250CustomPayload internalPacket;
 	
 	@Override
-	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player)
+	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
 	{
 		String name = ((EntityPlayer) player).username;
 		EntityPlayer playerEntity = FMLClientHandler.instance().getClient().thePlayer;
 		recieve(packet, playerEntity, manager);
 	}
 	
-	public static final void recieve(Packet250CustomPayload packet, EntityPlayer player, NetworkManager manager)
+	public static final void recieve(Packet250CustomPayload packet, EntityPlayer player, INetworkManager manager)
 	{
 		if (!packet.channel.equals(channelFlan))
 			return;

@@ -1,0 +1,5 @@
+Guns make no sound
+Scopes zoom in and then immediately out
+Scope overlays do not appear
+Red and blue hats appear brown
+Upon shooting animal with AAGun some sort of null Item error appeared

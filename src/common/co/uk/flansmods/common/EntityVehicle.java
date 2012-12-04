@@ -129,7 +129,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 					BulletType shellType = ((ItemBullet)shell.getItem()).type;
 					if(FlansMod.explosions && (shellType.explodeOnImpact || shellType.fuse > 0) && rand.nextBoolean())
 					{
-						worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, shellType.explosion);
+						worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, shellType.explosion, false);
 					}
 					else
 						entityDropItem(shell, 1.0F);
@@ -145,7 +145,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			if(FlansMod.explosions && data.fuelInTank > 0 && rand.nextBoolean())
 			{
-				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)data.fuelInTank / 200F);
+				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)data.fuelInTank / 200F, false);
 			}
 			
 			setDead();
