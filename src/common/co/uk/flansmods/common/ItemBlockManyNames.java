@@ -8,6 +8,7 @@ public class ItemBlockManyNames extends ItemBlock {
 	public ItemBlockManyNames(int i)
 	{
 		super(i);
+		setHasSubtypes(true);
 	}
 	
 	@Override
