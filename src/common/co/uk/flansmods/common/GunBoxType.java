@@ -74,11 +74,7 @@ public class GunBoxType extends InfoType
 	{
 		super.read(split, file);
 		try
-		{
-			// TODO remove.
-			if (split[0].equals("BlockID"))
-				blockID = Integer.parseInt(split[1]);
-			
+		{		
 			if (split[0].equals("Material"))
 				material = getMaterial(split[1]);
 			if (split[0].equals("TopTexture"))
