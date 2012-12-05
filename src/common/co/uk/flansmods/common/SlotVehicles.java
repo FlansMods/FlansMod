@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -32,7 +33,7 @@ public class SlotVehicles extends Slot
 		container.decrStack(col, row);
 	}
 	
-	public void onPickupFromSlot(ItemStack stack)
+	public void onPickupFromSlot(EntityPlayer player, ItemStack stack)
 	{
 		if(!result)
 			return;
