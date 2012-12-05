@@ -494,16 +494,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public void onUpdate()
     {
         super.onUpdate();
-        
-        if(worldObj.isRemote)
-        {
-        	System.out.println("Client: " + (int)posX + " " + (int)posY + " " + (int)posZ);
-        }
-        if(!worldObj.isRemote)
-        {
-        	System.out.println("Server: " + (int)posX + " " + (int)posY + " " + (int)posZ);
-        }
-        
+                
         PlaneType type = this.getPlaneType();
 
 		//Plane movement
