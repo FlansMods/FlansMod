@@ -3,3 +3,12 @@ Scopes zoom in and then immediately out
 Scope overlays do not appear
 Red and blue hats appear brown
 Upon shooting animal with AAGun some sort of null Item error appeared
+Right clicking gun boxes does nothing
+Different plane crafting table types stack
+Plane crafting table has no text
+Mouse control mode does not hold the view or respond to movements
+New chunks do not load when flying in a plane
+Planes always face North when placed
+Plane movement is not at all synced
+Same for vehicles
+Nerf shots leave empty items

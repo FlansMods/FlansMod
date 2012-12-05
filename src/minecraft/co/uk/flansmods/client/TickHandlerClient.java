@@ -81,7 +81,7 @@ public class TickHandlerClient implements ITickHandler
 
 	public void rTickEnd(Minecraft mc)
 	{
-		if (FlansModClient.zoomOverlay != null && ModLoader.isGUIOpen(null))
+		if (FlansModClient.zoomOverlay != null && FMLClientHandler.instance().getClient().currentScreen == null)
 		{
 			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 			int i = scaledresolution.getScaledWidth();
