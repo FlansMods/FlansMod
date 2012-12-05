@@ -154,6 +154,8 @@ public class GuiGunBox extends GuiScreen
 
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
+		if(itemstack == null || itemstack.itemID == 0 || itemstack.getItem() == null)
+			return;
 		itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
 	}

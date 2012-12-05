@@ -34,6 +34,7 @@ import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.TileEntityGunBox;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
 import co.uk.flansmods.common.network.FlanPacketCommon;
@@ -393,6 +394,7 @@ public class ClientProxy extends CommonProxy
 			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
 			case 3: return new GuiPlaneMenu(player.inventory, world, (EntityDriveable) player.ridingEntity);
 			case 4: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
+			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
 		}
 		return null;
 	}
