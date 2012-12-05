@@ -103,7 +103,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
-		if (!FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity))
+		if(!FMLCommonHandler.instance().getSide().isClient())
+			return;
+		if(!FlansMod.proxy.mouseControlEnabled())
 			return;
 		if(deltaX > 100)
 			deltaX = 100;
@@ -270,7 +272,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 4 : //Up
 			{
 				// TODO: get ControlMod working.
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity) || axes.getPitch() > -75F))
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getPitch() > -75F))
 				{
 					velocityPitch += type.lookUpModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft += 5F;
@@ -280,7 +282,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 5 : //Down
 			{
-				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity) || axes.getPitch() < 75F))
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getPitch() < 75F))
 				{
 					velocityPitch -= type.lookDownModifier * (propSpeed - type.takeOffSpeed) * 0.15F;
 					flapsPitchLeft -= 5F;
@@ -1001,7 +1003,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			Vec3 vec = rotate(type.pilotX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.pilotY / 16D, type.pilotZ / 16D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
             
-			if(FlansMod.isPlayerMouseControlEnabled((EntityPlayer) this.riddenByEntity))
+			if(FlansMod.proxy.mouseControlEnabled())
 			{
 				riddenByEntity.prevRotationYaw = riddenByEntity.rotationYaw;
 				riddenByEntity.prevRotationPitch = riddenByEntity.rotationPitch;

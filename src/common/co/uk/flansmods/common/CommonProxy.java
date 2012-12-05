@@ -70,10 +70,14 @@ public class CommonProxy
 	
 	public void changeControlMode(EntityPlayer player)
 	{
-		FlansMod.flipControlMode(player);
 	}
 	
 	// --------------- END ABRAR EDITS ----------------------
+	
+	public boolean mouseControlEnabled()
+	{
+		return false;
+	}
 	
 	// ------------------ PACKET SENDING OR NOT -------------
 	
