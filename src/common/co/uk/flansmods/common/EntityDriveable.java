@@ -122,7 +122,6 @@ public abstract class EntityDriveable extends Entity implements IControllable
 		    motionX = velocityX;
 		    motionY = velocityY;
 		    motionZ = velocityZ;
-		    PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
 		else
 		{

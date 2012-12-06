@@ -12,6 +12,7 @@ import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -650,6 +651,12 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			spawnedEntities = true;
 		}
+		
+		//Update position and rotation on the server
+		if(riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity))
+		{
+			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+		}
     }
 	
 	public void updateCollisionBox(EntityCollisionBox box)
@@ -806,6 +813,10 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			NBTTagCompound tag = new NBTTagCompound();
 			this.data.writeToNBT(tag);
 			tag.writeNamedTag(tag, data);
+			
+			data.writeFloat(axes.getYaw());
+			data.writeFloat(axes.getPitch());
+			data.writeFloat(axes.getRoll());
 		}
 		catch (IOException e)
 		{
@@ -814,16 +825,21 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data)
+	public void readSpawnData(ByteArrayDataInput datData)
 	{
 		try
 		{
-			type = superType = data.readUTF();
-			dataID = data.readInt();
+			type = superType = datData.readUTF();
+			dataID = datData.readInt();
 			
-			this.superData = this.data = new VehicleData("Vehicle_" + dataID, VehicleType.getVehicle(type));
-			this.data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(data));
+			superData = data = new VehicleData("Vehicle_" + dataID, VehicleType.getVehicle(type));
+			data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(datData));
 			initType(VehicleType.getVehicle(type));
+			
+			axes.setAngles(datData.readFloat(), datData.readFloat(), datData.readFloat());
+			prevRotationYaw = axes.getYaw();
+			prevRotationPitch = axes.getPitch();
+			prevRotationRoll = axes.getRoll();
 		}
 		catch(Exception e)
 		{

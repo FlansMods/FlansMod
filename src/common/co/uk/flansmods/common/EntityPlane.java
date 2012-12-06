@@ -11,6 +11,7 @@ import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -155,6 +156,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			NBTTagCompound tag = new NBTTagCompound();
 			this.data.writeToNBT(tag);
 			tag.writeNamedTag(tag, data);
+			
+			data.writeFloat(axes.getYaw());
+			data.writeFloat(axes.getPitch());
+			data.writeFloat(axes.getRoll());
 		}
 		catch (IOException e)
 		{
@@ -163,15 +168,21 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data)
+	public void readSpawnData(ByteArrayDataInput datData)
 	{
 		try
 		{
-			superType = type = data.readUTF();
-			dataID = data.readInt();
-			this.superData = this.data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
-			this.data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(data));
+			superType = type = datData.readUTF();
+			dataID = datData.readInt();
+			superData = data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
+			data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(datData));
 			initType(PlaneType.getPlane(type));
+			
+			axes.setAngles(datData.readFloat(), datData.readFloat(), datData.readFloat());
+			prevRotationYaw = axes.getYaw();
+			prevRotationPitch = axes.getPitch();
+			prevRotationRoll = axes.getRoll();
+
 		}
 		catch(Exception e)
 		{
@@ -828,6 +839,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					worldObj.spawnEntityInWorld(boxes[i]);
 			}
 			spawnedEntities = true;
+		}
+		
+		//Update position and rotation on the server
+		if(riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity))
+		{
+			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
 
