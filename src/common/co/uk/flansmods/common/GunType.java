@@ -106,12 +106,12 @@ public class GunType extends InfoType
 			if (arg0[0].equals("ShootSound"))
 			{
 				shootSound = "guns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("sound3/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
 			}
 			if (arg0[0].equals("ReloadSound"))
 			{
 				reloadSound = "guns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FMLClientHandler.instance().getClient().installResource("sound3/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
 			}
 
 			if (arg0[0].equals("Mode"))

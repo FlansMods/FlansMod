@@ -55,11 +55,12 @@ public class FlanPacketClient implements IPacketHandler
     		{
     		case 1: (new PacketBreakSound()).interpret(stream, null, Side.CLIENT); break;
     		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
-    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-    		case 4: break; //-- unneeded. This Id is open for any use.
+    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
+    		case 4: (new PacketVehicleKey()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player},Side.CLIENT); break;
     		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
+    		case 8: (new PacketPlaySound()).interpret(stream, null, Side.CLIENT); break;
     		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		

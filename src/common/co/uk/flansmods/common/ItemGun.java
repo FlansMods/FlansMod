@@ -3,10 +3,12 @@ package co.uk.flansmods.common;
 import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.network.PacketPlaySound;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.*;
 
 public class ItemGun extends Item
@@ -134,13 +136,7 @@ public class ItemGun extends Item
 					// with the player as they move around
 					if (type.reloadSound != null)
 					{
-						try
-						{
-							FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-						} catch (Exception e)
-						{
-							FlansMod.log("Failed to play sound : " + type.reloadSound);
-						}
+						PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
 					}
 					// Reset the shoot delay timer to the reload time of this
 					// gun
@@ -192,17 +188,9 @@ public class ItemGun extends Item
 							
 							// Drop item on reload if bullet requires it
 							dropItem(world, entityplayer, bullet.dropItemOnReload);
-							// Play the reload sound by this method so that it
-							// stays with the player as they move around
 							if (type.reloadSound != null)
 							{
-								try
-								{
-									FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.reloadSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-								} catch (Exception e)
-								{
-									FlansMod.log("Failed to play sound : " + type.reloadSound);
-								}
+								PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
 							}
 							// Reset the shoot delay timer to the reload time of
 							// this gun
@@ -246,6 +234,8 @@ public class ItemGun extends Item
 		{
 			float distortion = type.distortSound ? 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F) : 1F;
 			world.playSoundAtEntity(entityplayer, type.shootSound, 1.0F, distortion);
+			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound));
+
 			soundDelay = type.shootSoundLength;
 		}
 		FlansModClient.playerRecoil += type.recoil;
