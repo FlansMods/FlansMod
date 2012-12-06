@@ -74,7 +74,6 @@ public class TickHandlerClient implements ITickHandler
 			{
 				EntityDriveable entity = (EntityDriveable) ridden;
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
-				PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlMouse(mouse.deltaX, mouse.deltaY));
 			}
 		}
 	}

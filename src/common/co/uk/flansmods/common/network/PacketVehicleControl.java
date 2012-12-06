@@ -20,7 +20,7 @@ public class PacketVehicleControl extends FlanPacketCommon
 {
 	public static final byte packetID = 3;
 	
-	public static Packet buildVehicleControlMouse(int xChange, int yChange)
+	public static Packet buildUpdatePacket(EntityDriveable driveable)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -30,9 +30,13 @@ public class PacketVehicleControl extends FlanPacketCommon
         try
         {
         	data.write(packetID);
-        	data.writeBoolean(true);
-        	data.writeInt(xChange);
-        	data.writeInt(yChange);
+        	data.writeInt(driveable.entityId);
+        	data.writeDouble(driveable.posX);
+        	data.writeDouble(driveable.posY);
+        	data.writeDouble(driveable.posZ);
+        	data.writeFloat(driveable.axes.getYaw());
+        	data.writeFloat(driveable.axes.getPitch());
+        	data.writeFloat(driveable.axes.getRoll());
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -48,33 +52,6 @@ public class PacketVehicleControl extends FlanPacketCommon
         return packet;
 	}
 	
-	public static Packet buildVehicleControlButton(int button)
-	{
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = channelFlan;
-		
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DataOutputStream data = new DataOutputStream(bytes);
-        try
-        {
-        	data.write(packetID);
-        	data.writeBoolean(false);
-        	data.writeInt(button);
-        	
-        	packet.data = bytes.toByteArray();
-        	packet.length = packet.data.length;
-        	
-        	data.close();
-        	bytes.close();
-        }
-        catch(Exception e)
-        {
-                e.printStackTrace();
-        }
-        
-        return packet;
-	}
-
 	// extradata: 0 = player
 	@Override
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
@@ -83,29 +60,20 @@ public class PacketVehicleControl extends FlanPacketCommon
 		{
 			EntityPlayer player =  (EntityPlayer)extradata[0];
 			
-			boolean mouse = stream.readBoolean();        	
-
-			if (mouse)
+			int entityId = stream.readInt();
+			EntityDriveable driveable = null;
+			for(Object obj : player.worldObj.loadedEntityList)
 			{
-				int x = stream.readInt();
-				int y = stream.readInt();
-				
-				EntityDriveable entity = (EntityDriveable)player.ridingEntity;
-				entity.onMouseMoved(x, y);
+				if(obj instanceof EntityDriveable && ((Entity)obj).entityId == entityId)
+				{
+					driveable = (EntityDriveable)obj;
+					break;
+				}
 			}
-			else
+			if(driveable != null)
 			{
-				int button = stream.readInt();
-				
-				WorldServer world = (WorldServer) player.worldObj;
-				Entity entityTest  = player.ridingEntity;
-				
-				if (entityTest == null || !(entityTest instanceof EntityDriveable))
-					return;
-				
-				EntityDriveable entity = (EntityDriveable)entityTest;
-				if(!entity.worldObj.isRemote)
-					entity.pressKey(button);
+				driveable.setPosition(stream.readDouble(), stream.readDouble(), stream.readDouble());
+				driveable.setRotation(stream.readFloat(), stream.readFloat(), stream.readFloat());
 			}
 		}
         catch(Exception e)

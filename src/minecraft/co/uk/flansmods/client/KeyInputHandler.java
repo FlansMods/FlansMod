@@ -138,8 +138,8 @@ public class KeyInputHandler extends KeyHandler
 			}
 			handled = entity.pressKey(keyNum);
 			
-			if (handled)
-				PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
+			//if (handled)
+			//	PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));
 		}
 		else
 			handled = false;

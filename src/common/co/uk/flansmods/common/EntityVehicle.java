@@ -12,6 +12,7 @@ import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
+import co.uk.flansmods.common.network.PacketVehicleKey;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -19,6 +20,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import net.minecraft.client.Minecraft;
@@ -183,6 +185,11 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public boolean pressKey(int key)
 	{
 		VehicleType type = this.getVehicleType();
+    	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && key >= 6 && key <= 9)
+    	{
+    		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
+    		return true;
+    	}
 		switch(key)
 		{
 			case 0 : //Accelerate

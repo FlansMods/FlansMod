@@ -520,4 +520,9 @@ public class ClientProxy extends CommonProxy
 			return null;
 		}
 	}
+	
+	public boolean isThePlayer(EntityPlayer player)
+	{
+		return player == FMLClientHandler.instance().getClient().thePlayer;
+	}
 }

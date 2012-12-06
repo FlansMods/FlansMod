@@ -7,8 +7,12 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.common.network.PacketVehicleControl;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.DamageSource;
@@ -19,6 +23,7 @@ import net.minecraft.src.World;
 
 public abstract class EntityDriveable extends Entity implements IControllable
 {
+   
     public EntityDriveable(World world)
     {
         super(world);
@@ -112,10 +117,44 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	@Override
     public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
     {
-        motionX = velocityX;
-        motionY = velocityY;
-        motionZ = velocityZ;
+		if(riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity))
+		{
+		    motionX = velocityX;
+		    motionY = velocityY;
+		    motionZ = velocityZ;
+		    PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+		}
+		else
+		{
+			if(syncFromServer)
+	        {
+	            boatPosRotationIncrements = i + 5;
+	        }
+	        else
+	        {
+	            double var10 = d - posX;
+	            double var12 = d1 - posY;
+	            double var14 = d2 - posZ;
+	            double var16 = var10 * var10 + var12 * var12 + var14 * var14;
+	
+	            if (var16 <= 1.0D)
+	            {
+	                return;
+	            }
+	
+	            boatPosRotationIncrements = 3;
+	        }
+	        boatX = d;
+	        boatY = d1;
+	        boatZ = d2;
+	        boatYaw = (double)f;
+	        boatPitch = (double)f1;
+	        motionX = velocityX;
+	        motionY = velocityY;
+	        motionZ = velocityZ;
+		}
     }
+	
 
 	@Override
     public void setVelocity(double d, double d1, double d2)
@@ -264,6 +303,14 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	
 	public abstract void updateCollisionBox(EntityCollisionBox box);
 	
+	private boolean syncFromServer = true;
+    private int boatPosRotationIncrements;
+    private double boatX;
+    private double boatY;
+    private double boatZ;
+    private double boatYaw;
+    private double boatPitch;
+    
     private double velocityX;
     private double velocityY;
     private double velocityZ;

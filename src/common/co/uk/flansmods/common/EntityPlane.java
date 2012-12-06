@@ -11,6 +11,7 @@ import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.network.PacketVehicleKey;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -19,6 +20,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.server.FMLServerHandler;
 
@@ -186,6 +188,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			return true;
 		if(entityplayer == riddenByEntity)
 			return false;
+		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+			return true;
 		
 		PlaneType type = this.getPlaneType();
 		
@@ -213,7 +217,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public boolean pressKey(int key)
 	{
     	PlaneType type = this.getPlaneType();
-    	
+    	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && key >= 6 && key <= 9)
+    	{
+    		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
+    		return true;
+    	}
 		switch(key)
 		{
 			case 0 : //Accelerate
@@ -279,6 +287,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					flapsPitchRight += 5F;
 					return true;
 				}
+				break;
 			}
 			case 5 : //Down
 			{
@@ -289,6 +298,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					flapsPitchRight -= 5F;
 					return true;
 				}
+				break;
 			}
 			case 6 : //Exit
 			{
