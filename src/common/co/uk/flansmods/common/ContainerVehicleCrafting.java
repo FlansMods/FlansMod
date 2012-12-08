@@ -1,5 +1,7 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.network.PacketBlueprint;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -140,8 +142,13 @@ public class ContainerVehicleCrafting extends Container
 	
 	public void clickedBlueprint(int blueprint)
 	{
+		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansMod.vehicleBlueprintsUnlocked.get(blueprint).shortName));
+		//clickedBlueprint(FlansMod.vehicleBlueprintsUnlocked.get(blueprint));
+	}
+	
+	public void clickedBlueprint(VehicleType type)
+	{
 		//Fill craft matrix with as much stuff as possible
-		VehicleType type = FlansMod.vehicleBlueprintsUnlocked.get(blueprint);
 		if(type.chassis != null)
 			fillSlot(type.chassis.itemID, 0, 1, 1);
 		if(type.turret != null)
@@ -223,6 +230,11 @@ public class ContainerVehicleCrafting extends Container
             return false;
         }
         return entityplayer.getDistanceSq((double)xTile + 0.5D, (double)yTile + 0.5D, (double)zTile + 0.5D) <= 64D;
+    }
+	
+    public ItemStack transferStackInSlot(EntityPlayer player, int i)
+    {
+        return null;
     }
 
 	public InventoryPlayer inventory;

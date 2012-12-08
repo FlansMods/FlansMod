@@ -1,7 +1,10 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.network.PacketBlueprint;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryCraftResult;
 import net.minecraft.src.InventoryCrafting;
@@ -9,6 +12,7 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import net.minecraft.src.TileEntityFurnace;
 import net.minecraft.src.World;
 
 public class ContainerPlaneCrafting extends Container
@@ -352,8 +356,13 @@ public class ContainerPlaneCrafting extends Container
 	
 	public void clickedBlueprint(int blueprint)
 	{
+		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansMod.blueprintsUnlocked.get(blueprint).shortName));
+		//clickedBlueprint(FlansMod.blueprintsUnlocked.get(blueprint));
+	}
+	
+	public void clickedBlueprint(PlaneType type)
+	{
 		//Fill craft matrix with as much stuff as possible
-		PlaneType type = FlansMod.blueprintsUnlocked.get(blueprint);
 		//Make sure table is of right size
 		//TODO : Seperate into two lists of blueprints
 		if((type.bigTable && !big) || (!type.bigTable && big))
@@ -489,6 +498,11 @@ public class ContainerPlaneCrafting extends Container
             return false;
         }
         return entityplayer.getDistanceSq((double)xTile + 0.5D, (double)yTile + 0.5D, (double)zTile + 0.5D) <= 64D;
+    }
+	
+    public ItemStack transferStackInSlot(EntityPlayer player, int i)
+    {
+        return null;
     }
 
 	public InventoryPlayer inventory;
