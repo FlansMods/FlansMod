@@ -114,19 +114,19 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			{
 				// Player left clicked on the gun
 				// Check for ammo / reloading
-				if (reloadTimer > 0 || FlansMod.shootTime > 0)
+				if (reloadTimer > 0 || shootDelay > 0)
 				{
 					return true;
 				}
 				for (int j = 0; j < type.numBarrels; j++)
 				{
-					if (FlansMod.shootTime <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+					if (shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
 						// Fire
 						BulletType bullet = BulletType.getBullet(ammo[j].itemID);
 						if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 							ammo[j].damageItem(1, (EntityLiving) player);
-						FlansMod.shootTime = type.shootDelay;
+						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;
 						if (!worldObj.isRemote)
 						{

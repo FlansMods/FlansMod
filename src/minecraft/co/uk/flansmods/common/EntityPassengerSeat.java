@@ -88,7 +88,7 @@ public class EntityPassengerSeat extends Entity
 				}
 			}
 			// TODO FIX THIS EVENTUALLY
-			if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
+			/*if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
 			{
 				//Check for plane.data.ammo / reloading
 				if(vehicle.superData.ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
@@ -105,7 +105,7 @@ public class EntityPassengerSeat extends Entity
 					//worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3D.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, riddenByEntity, type.accuracy, type.damage, bullet));
 					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
-			}
+			}*/
 		}
 	}
 	

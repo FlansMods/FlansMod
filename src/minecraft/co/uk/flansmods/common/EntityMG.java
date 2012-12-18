@@ -19,10 +19,25 @@ import org.lwjgl.input.Mouse;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 {
+	public int blockX, blockY, blockZ;
+	public int direction;
+	public GunType type;
+	public ItemStack ammo;
+	public int reloadTimer;
+	public int soundDelay;
+	public int shootDelay;
+	public static List<EntityMG> mgs = new ArrayList<EntityMG>();
+	public EntityPlayer gunner;
+	//Server side
+	public boolean isShooting;
+	//Client side
+	public boolean wasShooting;
+	
 	public EntityMG(World world)
 	{
 		super(world);
@@ -102,6 +117,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			rotationPitch = type.topViewLimit;
 		if (rotationPitch > type.bottomViewLimit)
 			rotationPitch = type.bottomViewLimit;
+		
+		if(shootDelay > 0)
+			shootDelay--;
 
 		// Decrement the reload timer and reload
 		if (reloadTimer > 0)
@@ -123,10 +141,16 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 			}
 		}
-		if (gunner != null && type.mode == 1 && Mouse.isButtonDown(0))
+		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1 && Mouse.isButtonDown(0))
 		{
+			//Send a packet!
+		}
+		if(!worldObj.isRemote && isShooting)
+		{
+			if(gunner == null || gunner.isDead)
+				isShooting = false;
 			// Check for ammo / reloading
-			if (ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
+			if (ammo == null || reloadTimer > 0 || shootDelay > 0)
 			{
 				return;
 			}
@@ -134,7 +158,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			BulletType bullet = BulletType.getBullet(ammo.itemID);
 			if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 				ammo.damageItem(1, gunner);
-			FlansMod.shootTime = type.shootDelay;
+			shootDelay = type.shootDelay;
 			if (!worldObj.isRemote)
 			{
 				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.accuracy, type.damage, bullet));
@@ -149,6 +173,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if (soundDelay > 0)
 			soundDelay--;
 	}
+	
+	//Server side setter to be called upon receiving a packet
+	public void mouseHeld(boolean held)
+	{
+		isShooting = held;
+	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
@@ -162,7 +192,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (type.mode == 1)
 					return true;
 				// Check for ammo / reloading
-				if (ammo == null || reloadTimer > 0 || FlansMod.shootTime > 0)
+				if (ammo == null || reloadTimer > 0 || shootDelay > 0)
 				{
 					return true;
 				}
@@ -170,7 +200,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				BulletType bullet = BulletType.getBullet(ammo.itemID);
 				if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 					ammo.damageItem(1, (EntityLiving) player);
-				FlansMod.shootTime = type.shootDelay;
+				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)
 				{
 					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, (EntityLiving) player, type.accuracy, type.damage, bullet, type.speed, false));
@@ -317,13 +347,4 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			e.printStackTrace();
 		}
 	}
-
-	public int blockX, blockY, blockZ;
-	public int direction;
-	public GunType type;
-	public ItemStack ammo;
-	public int reloadTimer;
-	public int soundDelay;
-	public static List<EntityMG> mgs = new ArrayList<EntityMG>();
-	public EntityPlayer gunner;
 }

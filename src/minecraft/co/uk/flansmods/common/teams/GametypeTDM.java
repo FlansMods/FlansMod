@@ -27,17 +27,7 @@ public class GametypeTDM extends Gametype {
 	@Override
 	public void startNewRound() 
 	{
-		for(EntityPlayer player : getPlayers())
-		{
-			if(getPlayerData((EntityPlayerMP)player).team == null || getPlayerData((EntityPlayerMP)player).team == Team.spectators)
-			{
-				sendTeamsMenuToPlayer((EntityPlayerMP)player);
-			}			
-			else if(getPlayerData((EntityPlayerMP)player).playerClass == null)
-			{
-				sendClassMenuToPlayer((EntityPlayerMP)player);
-			}
-		}
+		showTeamsMenuToAll();
 	}
 
 	@Override

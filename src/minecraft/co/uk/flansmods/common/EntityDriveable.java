@@ -88,6 +88,16 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	}
 	
 	@Override
+	public void setDead()
+	{
+		super.setDead();
+		for(EntityCollisionBox box : boxes)
+			box.setDead();
+		for(EntityPassengerSeat seat : seats)
+			seat.setDead();
+	}
+	
+	@Override
 	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
 	{
 		//Do nothing. Like a boss.

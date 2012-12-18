@@ -2,6 +2,8 @@ package co.uk.flansmods.common;
 
 import java.util.ArrayList;
 
+import co.uk.flansmods.client.FlansModClient;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -31,9 +33,9 @@ public class BlockGunBox extends BlockContainer
 	
 	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
 	{
-		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
+			FlansModClient.shootTime = 10;
 			FlansMod.buyGun(type, i);
 		} 
 		if (i <= type.numGuns && type.guns[i] != null)
@@ -83,10 +85,11 @@ public class BlockGunBox extends BlockContainer
 
 	public void buyAmmo(int i, InventoryPlayer inventory, GunBoxType type)
 	{
-		FlansMod.shootTime = 10;
+		
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyAmmo(type, i, 1);
+			FlansModClient.shootTime = 10;
 		} 
 		if (i <= type.numGuns && type.bulletParts[i] != null)
 		{
@@ -132,10 +135,10 @@ public class BlockGunBox extends BlockContainer
 
 	public void buyAltAmmo(int i, InventoryPlayer inventory, GunBoxType type)
 	{
-		FlansMod.shootTime = 10;
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.buyAmmo(type, i, 2);
+			FlansModClient.shootTime = 10;
 		} 
 		if (i <= type.numGuns && type.altBulletParts[i] != null)
 		{

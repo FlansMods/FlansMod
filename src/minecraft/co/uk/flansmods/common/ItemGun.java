@@ -157,6 +157,7 @@ public class ItemGun extends Item
 					FlansModClient.zoomOverlay = null;
 					FlansModClient.newZoom = 1.0F;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
+					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 				}
 				return itemstack;
 			}

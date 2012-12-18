@@ -72,13 +72,7 @@ public class FlansMod
 	public static List<Item> armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
 	public static boolean ABORT = false;
-	public static int shootTime;
-	public static String zoomOverlay;
-	public static float playerRecoil;
-	public static float antiRecoil;
-	public static float playerZoom = 1.0F;
-	public static float newZoom = 1.0F;
-	public static float lastPlayerZoom;
+
 	public static long lastTime;
 	
 	// Player changeable stuff

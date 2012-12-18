@@ -87,6 +87,21 @@ public abstract class Gametype {
 	{
 		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 	}
+	
+	public static void showTeamsMenuToAll()
+	{
+		for(EntityPlayer player : getPlayers())
+		{
+			if(getPlayerData((EntityPlayerMP)player).team == null)
+			{
+				sendTeamsMenuToPlayer((EntityPlayerMP)player);
+			}			
+			else if(getPlayerData((EntityPlayerMP)player).playerClass == null)
+			{
+				sendClassMenuToPlayer((EntityPlayerMP)player);
+			}
+		}
+	}
 
 	public abstract void teamsSet();
 	
