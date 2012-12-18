@@ -1,6 +1,7 @@
 package co.uk.flansmods.client.tmt;
 
-import net.minecraft.src.*;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 /**
  * The PositionTransformGroup class adds a class which allows for vertex transformations.

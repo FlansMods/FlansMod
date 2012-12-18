@@ -1,9 +1,12 @@
 package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
-import net.minecraft.src.*;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 /**
  * The Bone class makes it possible to create skeletons, which should help you out in

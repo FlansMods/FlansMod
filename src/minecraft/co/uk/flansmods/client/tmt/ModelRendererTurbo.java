@@ -1,13 +1,22 @@
 package co.uk.flansmods.client.tmt;
 
-import java.util.Arrays;
-import net.minecraft.src.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.model.TexturedQuad;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 /**

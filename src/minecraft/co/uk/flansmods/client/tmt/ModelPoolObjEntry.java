@@ -1,8 +1,13 @@
 package co.uk.flansmods.client.tmt;
 
-import java.io.*;
-import net.minecraft.src.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 public class ModelPoolObjEntry extends ModelPoolEntry
 {

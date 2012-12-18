@@ -1,7 +1,8 @@
 package co.uk.flansmods.client;
 
-import org.lwjgl.opengl.GL11;
-import net.minecraft.src.*;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 
 public class RenderNull extends Render
 {

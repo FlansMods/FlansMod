@@ -1,7 +1,7 @@
 package co.uk.flansmods.client;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.Render;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 

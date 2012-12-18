@@ -1,8 +1,13 @@
 package co.uk.flansmods.client.tmt;
 
-import org.lwjgl.opengl.GL11;
-import net.minecraft.src.*;
 import java.util.ArrayList;
+
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.model.TexturedQuad;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.Vec3;
+
+import org.lwjgl.opengl.GL11;
 
 public class TexturedPolygon extends TexturedQuad
 {

@@ -1,7 +1,9 @@
 package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
-import net.minecraft.src.*;
+
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.util.Vec3;
 
 public class PositionTransformVertex extends PositionTextureVertex
 {

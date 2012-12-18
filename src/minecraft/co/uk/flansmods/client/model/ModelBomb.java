@@ -1,8 +1,8 @@
 package co.uk.flansmods.client.model;
 
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.entity.Entity;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import net.minecraft.src.Entity;
-import net.minecraft.src.ModelBase;
 
 public class ModelBomb extends ModelBase
 {

@@ -3,25 +3,17 @@ package co.uk.flansmods.client;
 import java.util.EnumSet;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.MouseHelper;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.Tessellator;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.MouseHelper;
 
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.network.PacketVehicleControl;
-import co.uk.flansmods.common.teams.TeamsManager;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TickHandlerClient implements ITickHandler
 {

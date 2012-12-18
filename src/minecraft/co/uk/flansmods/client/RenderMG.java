@@ -1,10 +1,12 @@
 package co.uk.flansmods.client;
 
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.common.EntityMG;
-import net.minecraft.src.*;
 
 public class RenderMG extends Render
 {

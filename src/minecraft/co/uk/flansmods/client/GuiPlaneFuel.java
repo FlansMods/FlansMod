@@ -1,9 +1,8 @@
 package co.uk.flansmods.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.World;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 

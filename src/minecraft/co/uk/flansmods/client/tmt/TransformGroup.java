@@ -1,6 +1,6 @@
 package co.uk.flansmods.client.tmt;
 
-import net.minecraft.src.*;
+import net.minecraft.util.Vec3;
 
 public abstract class TransformGroup
 {

@@ -1,9 +1,9 @@
 package co.uk.flansmods.client.model;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.ModelBase;
-import net.minecraft.src.ModelRenderer;
-import net.minecraft.src.Tessellator;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;

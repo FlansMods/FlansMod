@@ -1,12 +1,12 @@
 package co.uk.flansmods.client;
 
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.teams.EntityFlag;
-import co.uk.flansmods.common.teams.ITeamBase;
 import co.uk.flansmods.common.teams.Team;
-import net.minecraft.src.Entity;
-import net.minecraft.src.Render;
 
 public class RenderFlag extends Render {
 	

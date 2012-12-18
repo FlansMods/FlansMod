@@ -1,9 +1,8 @@
 package co.uk.flansmods.client.model;
 
+import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.EntityAAGun;
-import net.minecraft.src.ModelBase;
-import net.minecraft.src.Tessellator;
 
 public class ModelAAGun extends ModelBase
 {

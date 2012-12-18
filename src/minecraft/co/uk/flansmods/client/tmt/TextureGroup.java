@@ -1,7 +1,10 @@
 package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
-import net.minecraft.src.*;
+
+import net.minecraft.client.model.TexturedQuad;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.entity.RenderManager;
 
 public class TextureGroup
 {

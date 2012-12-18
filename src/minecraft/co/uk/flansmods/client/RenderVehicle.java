@@ -1,6 +1,8 @@
 package co.uk.flansmods.client;
 
-import net.minecraft.src.*;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelVehicle;

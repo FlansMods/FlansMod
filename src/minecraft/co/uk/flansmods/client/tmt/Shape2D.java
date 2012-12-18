@@ -1,7 +1,9 @@
 package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
-import net.minecraft.src.*;
+
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 public class Shape2D
 {

@@ -1,5 +1,11 @@
 package co.uk.flansmods.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.network.PacketTeamSelect;
@@ -7,12 +13,6 @@ import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.RenderEngine;
-import net.minecraft.src.RenderItem;
 
 public class GuiTeamSelect extends GuiScreen 
 {

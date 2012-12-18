@@ -2,9 +2,8 @@ package co.uk.flansmods.client;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.RenderEngine;
-import net.minecraft.src.TextureFX;
+
+import net.minecraft.client.renderer.RenderEngine;
 
 import org.lwjgl.opengl.GL11;
 

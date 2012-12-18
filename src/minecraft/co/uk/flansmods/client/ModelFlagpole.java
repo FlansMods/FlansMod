@@ -1,9 +1,9 @@
 package co.uk.flansmods.client;
 
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
-import net.minecraft.src.ModelBase;
-import net.minecraft.src.ModelRenderer;
 
 public class ModelFlagpole extends ModelBase 
 {

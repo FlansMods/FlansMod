@@ -4,38 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import co.uk.flansmods.common.AAGunType;
-import co.uk.flansmods.common.BlockGunBox;
-import co.uk.flansmods.common.BulletType;
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityBullet;
-import co.uk.flansmods.common.EntityPlane;
-import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.GunType;
-import co.uk.flansmods.common.ItemGun;
-import co.uk.flansmods.common.PartType;
-import co.uk.flansmods.common.PlaneType;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.*;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import co.uk.flansmods.common.BlockGunBox;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class FlansModClient extends FlansMod
 {

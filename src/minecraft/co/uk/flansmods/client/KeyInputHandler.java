@@ -2,27 +2,18 @@ package co.uk.flansmods.client;
 
 import java.util.EnumSet;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.api.IControllable;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.network.PacketVehicleControl;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GameSettings;
-import net.minecraft.src.GuiChat;
-import net.minecraft.src.GuiInventory;
-import net.minecraft.src.KeyBinding;
-import net.minecraft.src.WorldClient;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.asm.SideOnly;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler extends KeyHandler
