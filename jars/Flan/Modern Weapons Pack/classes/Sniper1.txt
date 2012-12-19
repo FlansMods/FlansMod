@@ -1,4 +1,4 @@
-Name Sniper Class 1
+Name Sniper 1
 ShortName sniper1
 AddItem barrett
 AddItem m9

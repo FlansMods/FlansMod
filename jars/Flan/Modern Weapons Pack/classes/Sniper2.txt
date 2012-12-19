@@ -1,0 +1,9 @@
+Name Sniper 2
+ShortName sniper2
+AddItem dragunov
+AddItem m1911
+AddItem dragunovAmmo
+AddItem dragunovAmmo
+AddItem dragunovAmmo
+AddItem m1911Ammo
+AddItem m1911Ammo
