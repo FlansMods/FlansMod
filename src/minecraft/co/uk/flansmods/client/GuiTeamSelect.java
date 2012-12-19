@@ -60,7 +60,7 @@ public class GuiTeamSelect extends GuiScreen
 			for(int i = 0; i < classChoices.length; i++)
 			{
 				if(classChoices[i] != null)
-					controlList.add(new GuiButton(i, width / 2 - 79, height / 2 - guiHeight / 2 + 24 + 24 * i, 65, 20, classChoices[i].name));
+					controlList.add(new GuiButton(i, width / 2 - 128 + 9, height / 2 - guiHeight / 2 + 24 + 24 * i, 73, 20, classChoices[i].name));
 			}
 		}
 		else
@@ -73,7 +73,7 @@ public class GuiTeamSelect extends GuiScreen
 			for(int i = 0; i < teamChoices.length; i++)
 			{
 				if(teamChoices[i] != null)
-					controlList.add(new GuiButton(i, width / 2 - 78, height / 2 - guiHeight / 2 + 24 + 24 * i, 154, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
+					controlList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
 			}
 		}
 	}
@@ -85,22 +85,24 @@ public class GuiTeamSelect extends GuiScreen
 		int texID = mc.renderEngine.getTexture("/gui/teams.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(texID);
-		drawTexturedModalRect(width / 2 - 88, height / 2 - guiHeight / 2, 0, 0, 176, 22);
-		drawTexturedModalRect(width / 2 - 88, height / 2 + guiHeight / 2 - 6, 0, 73, 176, 7);
+		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
+		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		if(classMenu)
 		{
 			for(int n = 0; n < classChoices.length; n++)
 			{
-				drawTexturedModalRect(width / 2 - 88, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 23, 176, 24);		
+				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 23, 256, 24);		
 			}
 		}
 		else
 		{
 			for(int n = 0; n < teamChoices.length; n++)
 			{
-				drawTexturedModalRect(width / 2 - 88, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 48, 176, 24);		
+				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 48, 256, 24);		
 			}
 		}
+		fontRenderer.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 120, height / 2 - guiHeight / 2 + 8, 0xffffff);
+
 		super.drawScreen(i, j, f);
 		if(classMenu)
 		{
@@ -108,11 +110,10 @@ public class GuiTeamSelect extends GuiScreen
 			{
 				for(int m = 0; m < classChoices[n].startingItems.size(); m++)
 				{
-					drawSlotInventory(classChoices[n].startingItems.get(m), width / 2 - 11 + 18 * m, height / 2 - guiHeight / 2 + 26 + 24 * n);
+					drawSlotInventory(classChoices[n].startingItems.get(m), width / 2 - 128 + 85 + 18 * m, height / 2 - guiHeight / 2 + 26 + 24 * n);
 				}
 			}
 		}
-		fontRenderer.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 80, height / 2 - guiHeight / 2 + 8, 0xffffff);
 	}
 	
 	protected void actionPerformed(GuiButton button)
