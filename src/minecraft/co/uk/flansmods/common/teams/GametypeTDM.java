@@ -52,18 +52,16 @@ public class GametypeTDM extends Gametype {
 	public void playerChoseTeam(EntityPlayerMP player, Team team) 
 	{
 		//TODO : Auto-balancing
-		getPlayerData(player).team = team;
 		sendClassMenuToPlayer((EntityPlayerMP)player);
 		if(team == Team.spectators)
 		{
-			player.respawnPlayer();
+			teamsManager.forceRespawn(player);
 		}
 	}
 
 	@Override
 	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
 	{
-		getPlayerData(player).playerClass = playerClass;
 		teamsManager.forceRespawn(player);
 	}
 

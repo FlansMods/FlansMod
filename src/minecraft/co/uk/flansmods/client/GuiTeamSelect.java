@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -141,5 +142,15 @@ public class GuiTeamSelect extends GuiScreen
 			mc.thePlayer.closeScreen();
 		}
 	}
+	
+    public void onGuiClosed() 
+    {
+    	if(classMenu)
+    	{
+    		if(classChoices != null && classChoices.length > 0)
+    			PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(classChoices[0].shortName, true));
+    	}
+    	else PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(Team.spectators.shortName, false));
+    }
 
 }

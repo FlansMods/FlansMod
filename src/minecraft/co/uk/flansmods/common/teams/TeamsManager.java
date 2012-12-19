@@ -302,4 +302,40 @@ public class TeamsManager implements IPlayerTracker
 		player.heal(9001);
 		onPlayerRespawn(player);
 	}
+	
+	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
+	{
+		Team team = null;
+		for(Team t : teams)
+		{
+			if(t.shortName.equals(teamName))
+				team = t;
+		}
+		if(team != null)
+		{
+			team.members.add(player);
+			FlansModPlayerHandler.getPlayerData(player).team = team;
+			if(currentGametype != null)
+				currentGametype.playerChoseTeam(player, team);
+		}
+	}	
+	
+	public void playerSelectedClass(EntityPlayerMP player, String className)
+	{
+		Team team = FlansModPlayerHandler.getPlayerData(player).team;
+		if(team == null)
+			return;
+		PlayerClass playerClass = null;
+		for(PlayerClass pc : team.classes)
+		{
+			if(pc.shortName.equals(className))
+				playerClass = pc;
+		}
+		if(playerClass != null)
+		{
+			FlansModPlayerHandler.getPlayerData(player).playerClass = playerClass;
+			if(currentGametype != null)
+				currentGametype.playerChoseClass(player, playerClass);
+		}
+	}
 }

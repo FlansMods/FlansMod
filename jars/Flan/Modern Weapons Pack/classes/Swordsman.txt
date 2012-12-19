@@ -1,0 +1,3 @@
+Name Swordsman
+ShortName swordsman
+AddItem swordIron

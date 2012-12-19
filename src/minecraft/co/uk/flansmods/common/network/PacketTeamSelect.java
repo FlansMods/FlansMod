@@ -5,12 +5,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.GuiTeamSelect;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -114,6 +116,7 @@ public static final byte packetID = 6;
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		if(side.equals(Side.CLIENT)) interpretClient(stream, extradata);
+		if(side.equals(Side.SERVER)) interpretServer(stream, extradata); 
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -140,6 +143,28 @@ public static final byte packetID = 6;
 					teams[i] = Team.getTeam(stream.readUTF());
 				}
 				Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(teams));
+			}
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Error reading packet or spawning particles");
+			e.printStackTrace();
+		}
+	}	
+	
+	public void interpretServer(DataInputStream stream, Object[] extradata) {
+	try
+		{
+			EntityPlayerMP player = (EntityPlayerMP)extradata[0];
+			boolean classPacket = stream.readBoolean();
+			String choice = stream.readUTF();
+			if(classPacket)
+			{
+				TeamsManager.getInstance().playerSelectedClass(player, choice);
+			}
+			else
+			{
+				TeamsManager.getInstance().playerSelectedTeam(player, choice);
 			}
 		}
 		catch(Exception e)

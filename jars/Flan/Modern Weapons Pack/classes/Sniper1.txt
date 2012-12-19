@@ -1,0 +1,9 @@
+Name Sniper Class 1
+ShortName sniper1
+AddItem barrett
+AddItem m9
+AddItem barrettAmmo
+AddItem barrettAmmo
+AddItem barrettAmmo
+AddItem m9Ammo
+AddItem m9Ammo
