@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Side;
@@ -50,9 +51,9 @@ public class ItemGun extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
+	public void onUpdateClient(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
-		if (entity instanceof EntityPlayerMP && ((EntityPlayerMP) entity).inventory.getCurrentItem() == itemstack)
+		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == itemstack)
 		{
 			lastMouseHeld = mouseHeld;
 			mouseHeld = Mouse.isButtonDown(1);
@@ -60,10 +61,19 @@ public class ItemGun extends Item
 			{
 				return;
 			}
+			if(mouseHeld && !lastMouseHeld) //Send packet when firing a semi or starting to fire a full
+			{
+				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(true));
+			}
+			if(type.mode == 1 && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
+			{
+				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(false));
+			}
+			/*
 			if (type.mode == 1 && mouseHeld) // FullAuto
 			{
 				EntityPlayerMP player = (EntityPlayerMP) entity;
-				if(!player.isInsideOfMaterial(Material.water) || type.canShootUnderwater) 
+				if(!player.isInsideOfMaterial(Material.water) || type.canShootUnderwater)
 					itemstack = onItemRightClick2(itemstack, world, player);
 			}
 			if (type.mode == 0 && mouseHeld && !lastMouseHeld) // SemiAuto
@@ -72,6 +82,7 @@ public class ItemGun extends Item
 				if(!player.isInsideOfMaterial(Material.water) || type.canShootUnderwater) 
 					itemstack = onItemRightClick2(itemstack, world, player);
 			}
+			*/
 			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0)
 			{
 				if (FlansModClient.zoomOverlay == null)
@@ -96,15 +107,51 @@ public class ItemGun extends Item
 			soundDelay--;
 		}
 	}
-
-	public ItemStack onItemRightClick2(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
+	
+	public void onUpdateServer(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
-		if (FlansModClient.shootTime <= 0)
+		if(entity instanceof EntityPlayerMP)
 		{
-			if (world.isRemote)
+			EntityPlayerMP player = (EntityPlayerMP)entity;
+			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
+			if(player.inventory.getCurrentItem() != itemstack)
 			{
-				// FlansMod.shoot();
+				//If the player is no longer holding a gun, emulate a release of the shoot button
+				if(player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() == null || !(player.inventory.getCurrentItem().getItem() instanceof ItemGun))
+				{
+					data.isShooting = false;
+				}
+				return;
 			}
+			if(type.mode == 1 && data.isShooting)
+			{
+				tryToShoot(itemstack, world, player);
+			}
+		}
+	}
+	
+	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
+	{
+		if(world.isRemote)
+			onUpdateClient(itemstack, world, entity, i, flag);
+		else onUpdateServer(itemstack, world, entity, i, flag);
+	}
+	 
+	
+	public ItemStack onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean isShooting)
+	{
+		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
+		data.isShooting = isShooting;
+		if(type.mode == 0 && isShooting)
+			return tryToShoot(stack, world, player);
+		return stack;
+	}
+		
+	public ItemStack tryToShoot(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
+	{
+		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer);
+		if(data.shootTime <= 0)
+		{
 			if (type.loadIntoGun > 0)
 			{
 				BulletType bullet = type.ammo.get(0);
@@ -150,12 +197,12 @@ public class ItemGun extends Item
 					}
 					// Reset the shoot delay timer to the reload time of this
 					// gun
-					FlansModClient.shootTime = type.reloadTime;
+					data.shootTime = type.reloadTime;
 					// Remove any zooming while reloading
-					FlansModClient.zoomOverlay = null;
-					FlansModClient.newZoom = 1.0F;
-					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
-					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
+					//FlansModClient.zoomOverlay = null;
+					//FlansModClient.newZoom = 1.0F;
+					//FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
+					//FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 				}
 				return itemstack;
 			}
@@ -205,12 +252,12 @@ public class ItemGun extends Item
 							}
 							// Reset the shoot delay timer to the reload time of
 							// this gun
-							FlansModClient.shootTime = type.reloadTime;
+							data.shootTime = type.reloadTime;
 							// Remove any zooming while reloading
-							FlansModClient.zoomOverlay = null;
-							FlansModClient.newZoom = 1.0F;
-							FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
-							FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
+							//FlansModClient.zoomOverlay = null;
+							//FlansModClient.newZoom = 1.0F;
+							//FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
+							//FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 							return itemstack;
 						}
 					}
@@ -220,6 +267,7 @@ public class ItemGun extends Item
 		}
 		return itemstack;
 	}
+	
 
 	/** Method for dropping the gun */
 	private void dropItem(World world, EntityPlayer entityplayer, String itemName)
@@ -243,10 +291,7 @@ public class ItemGun extends Item
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && type.shootSound != null)
 		{
-			float distortion = type.distortSound ? 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F) : 1F;
-			world.playSoundAtEntity(entityplayer, type.shootSound, 1.0F, distortion);
 			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound));
-
 			soundDelay = type.shootSoundLength;
 		}
 		FlansModClient.playerRecoil += type.recoil;
@@ -260,7 +305,7 @@ public class ItemGun extends Item
 			// Drop item on shooting if bullet requires it
 			dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
-		FlansModClient.shootTime = type.shootDelay;
+		FlansModPlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
 		
 	}
 

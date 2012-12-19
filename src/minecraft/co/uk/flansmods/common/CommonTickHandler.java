@@ -47,6 +47,7 @@ public class CommonTickHandler implements ITickHandler {
 	{
 		/* Server */
 		TeamsManager.getInstance().tick();
+		FlansMod.playerHandler.tick();
 	}
 	
 	// TODO: make this didicated server-safe

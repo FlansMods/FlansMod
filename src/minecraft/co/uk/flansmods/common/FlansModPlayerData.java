@@ -9,7 +9,15 @@ public class FlansModPlayerData
 	public EntityMG mountingGun;
 	public Team team;
 	public PlayerClass playerClass;
+	public boolean isShooting;
+	public int shootTime;
 	
 	//TODO Unknown purpose!
 	public FlansModPlayerData(EntityPlayer player) {}
+	
+	public void tick()
+	{
+		if(shootTime > 0)
+			shootTime--;
+	}
 }

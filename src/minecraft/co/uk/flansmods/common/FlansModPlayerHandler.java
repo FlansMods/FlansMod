@@ -31,6 +31,12 @@ public class FlansModPlayerHandler implements IPlayerTracker
 		}
 	}
 	
+	public void tick()
+	{
+		for(FlansModPlayerData d : data.values())
+			d.tick();
+	}
+	
 	public static FlansModPlayerData getPlayerData(EntityPlayer player)
 	{
 		return data.get(player);

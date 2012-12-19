@@ -54,6 +54,7 @@ public class FlanPacketCommon implements IPacketHandler
 	    		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, Side.SERVER); break;
 	    		case 11: (new PacketRightClick()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	    		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+	    		case 13: (new PacketGunFire()).interpret(stream, new Object[] {player, world}, Side.SERVER); break;
 	    		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		
