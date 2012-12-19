@@ -17,8 +17,11 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.network.PacketBreakSound;
+import co.uk.flansmods.common.network.PacketFlak;
+import co.uk.flansmods.common.network.PacketPlaySound;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -26,6 +29,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
@@ -180,10 +184,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-					if(FMLCommonHandler.instance().getSide() == Side.CLIENT) 
-					{
-						FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
-					} else PacketBreakSound.buildBreakSoundPacket(xTile, yTile, zTile, blockID);
+					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 				}
 				if (!type.penetrates)
 					setDead();
@@ -263,7 +264,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 							if (shotgun)
 								((EntityLiving) movingobjectposition.entityHit).hurtResistantTime = ((EntityLiving) movingobjectposition.entityHit).maxHurtResistantTime / 2;
 						}
-						worldObj.playSoundAtEntity(this, type.hitSound, 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
+						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}
 					if (type.penetrates)
 					{
@@ -285,10 +286,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
-						if(FMLCommonHandler.instance().getSide() == Side.CLIENT) 
-						{
-							FMLClientHandler.instance().getClient().sndManager.playSound(Block.glass.stepSound.getBreakSound(), (float) xTile + 0.5F, (float) yTile + 0.5F, (float) zTile + 0.5F, (Block.glass.stepSound.getVolume() + 1.0F) / 2.0F, Block.glass.stepSound.getPitch() * 0.8F);
-						} else PacketBreakSound.buildBreakSoundPacket(xTile, yTile, zTile, blockID);
+						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 						if (type.penetrates)
 							killBullet = false;
 					}
@@ -371,12 +369,12 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void setDead()
 	{
-		if (isDead)
+		if (isDead || worldObj.isRemote)
 			return;
 		super.setDead();
 		if (type.explosion > 0)
 		{
-			worldObj.createExplosion(owner, posX, posY, posZ, type.explosion, false);
+			worldObj.createExplosion(owner, posX, posY, posZ, type.explosion, FlansMod.explosions);
 		}
 		if (type.fire > 0)
 		{
@@ -394,17 +392,11 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 		}
-		for (int i = 0; i < type.flak; i++)
-		{
-			EntityFX obj = new EntitySmokeFX(worldObj, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0.01D, 0.01D, 0.01D);
-			obj.motionX = rand.nextGaussian() / 20;
-			obj.motionY = rand.nextGaussian() / 20;
-			obj.motionZ = rand.nextGaussian() / 20;
-			obj.renderDistanceWeight = 250D;
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
-		}
+		//Send flak packet
+		if(type.flak > 0)
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketFlak.buildFlakPacket(posX, posY, posZ, type.flak));
 		// Drop item on hitting if bullet requires it
-		if (type.dropItemOnHit != null)
+		if (type.dropItemOnHit != null && worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 		{
 			String itemName = type.dropItemOnHit;
 			int damage = 0;

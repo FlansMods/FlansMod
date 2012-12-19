@@ -187,7 +187,8 @@ public class ItemGun extends Item
 						}
 						itemstack.setItemDamage(i);
 						// Drop item on reload if bullet requires it
-						dropItem(world, entityplayer, bullet.dropItemOnReload);
+						if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+							dropItem(world, entityplayer, bullet.dropItemOnReload);
 					}
 					// Play the reload sound by this method so that it stays
 					// with the player as they move around
@@ -198,11 +199,6 @@ public class ItemGun extends Item
 					// Reset the shoot delay timer to the reload time of this
 					// gun
 					data.shootTime = type.reloadTime;
-					// Remove any zooming while reloading
-					//FlansModClient.zoomOverlay = null;
-					//FlansModClient.newZoom = 1.0F;
-					//FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
-					//FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 				}
 				return itemstack;
 			}
@@ -241,11 +237,13 @@ public class ItemGun extends Item
 									item = null;
 								entityplayer.inventory.setInventorySlotContents(j, item);
 								// Drop item on reload if bullet requires it
-								dropItem(world, entityplayer, bullet.dropItemOnReload);
+								if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+									dropItem(world, entityplayer, bullet.dropItemOnReload);
 							}
 							
 							// Drop item on reload if bullet requires it
-							dropItem(world, entityplayer, bullet.dropItemOnReload);
+							if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+								dropItem(world, entityplayer, bullet.dropItemOnReload);
 							if (type.reloadSound != null)
 							{
 								PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
@@ -253,11 +251,6 @@ public class ItemGun extends Item
 							// Reset the shoot delay timer to the reload time of
 							// this gun
 							data.shootTime = type.reloadTime;
-							// Remove any zooming while reloading
-							//FlansModClient.zoomOverlay = null;
-							//FlansModClient.newZoom = 1.0F;
-							//FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
-							//FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
 							return itemstack;
 						}
 					}
@@ -303,7 +296,8 @@ public class ItemGun extends Item
 				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.accuracy, type.damage, bullet, type.speed, type.numBullets > 1));
 			}
 			// Drop item on shooting if bullet requires it
-			dropItem(world, entityplayer, bullet.dropItemOnShoot);
+			if(bullet.dropItemOnShoot != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
 		FlansModPlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
 		

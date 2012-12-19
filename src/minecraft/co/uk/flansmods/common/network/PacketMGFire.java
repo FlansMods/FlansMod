@@ -16,7 +16,7 @@ import cpw.mods.fml.common.Side;
 
 public class PacketMGFire extends FlanPacketCommon 
 {
-public static final byte packetID = 12;
+	public static final byte packetID = 12;
 	
 	public static Packet buildMGFirePacket(boolean held)
 	{

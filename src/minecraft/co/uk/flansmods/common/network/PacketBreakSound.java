@@ -49,9 +49,8 @@ public class PacketBreakSound extends FlanPacketCommon
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		if (side.equals(Side.CLIENT))
-			interpretClient(stream, extradata);
-			
-		FlansMod.log("Sound packet recieved on server. Skipping interpretation.");
+			interpretClient(stream, extradata);	
+		else FlansMod.log("Sound packet recieved on server. Skipping interpretation.");
 	}
 	
 	@SideOnly(value = Side.CLIENT)
