@@ -1,7 +1,9 @@
-Name Sniper 1
+Name Scout
 ShortName sniper1
 AddItem barrett
 AddItem m9
+AddItem mwKnife
+AddItem mwBinoculars
 AddItem barrettAmmo
 AddItem barrettAmmo
 AddItem barrettAmmo

@@ -141,17 +141,18 @@ public class GuiTeamSelect extends GuiScreen
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.keyCode)
 		{
 			mc.thePlayer.closeScreen();
+	    	if(classMenu)
+	    	{
+	    		if(classChoices != null && classChoices.length > 0)
+	    			PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(classChoices[0].shortName, true));
+	    	}
+	    	else PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(Team.spectators.shortName, false));
 		}
 	}
 	
     public void onGuiClosed() 
     {
-    	if(classMenu)
-    	{
-    		if(classChoices != null && classChoices.length > 0)
-    			PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(classChoices[0].shortName, true));
-    	}
-    	else PacketDispatcher.sendPacketToServer(PacketTeamSelect.buildSelectionPacket(Team.spectators.shortName, false));
+
     }
 
 }

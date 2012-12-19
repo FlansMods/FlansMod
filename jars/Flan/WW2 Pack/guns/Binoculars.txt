@@ -1,10 +1,10 @@
-Name Knife
-ShortName mwKnife
+Name Binoculars
+ShortName ww2Binoculars
 //The ammo this gun uses (shortName)
-Icon Knife
+Icon WW2Binoculars
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23851
+ItemID 23696
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 999999
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -20,7 +20,8 @@ ShootDelay 999999
 ShootSound DesertEagleShoot
 ReloadSound lugerReload
 Mode SemiAuto
-Scope None
+Scope Binoculars
+ZoomLevel 16
 Deployable False
 DeployedModel None
-MeleeDamage 5
+MeleeDamage 2

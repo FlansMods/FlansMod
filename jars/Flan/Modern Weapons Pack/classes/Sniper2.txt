@@ -1,7 +1,9 @@
-Name Sniper 2
+Name Scout
 ShortName sniper2
 AddItem dragunov
 AddItem m1911
+AddItem mwKnife
+AddItem mwBinoculars
 AddItem dragunovAmmo
 AddItem dragunovAmmo
 AddItem dragunovAmmo

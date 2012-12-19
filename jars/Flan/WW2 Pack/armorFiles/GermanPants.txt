@@ -1,0 +1,8 @@
+Name German WW2 Trousers
+ShortName germanPants
+ItemID 23583
+Icon GermanPants
+Colour 255 255 255
+Type Pants
+Defence 0.1
+ArmourTexture German

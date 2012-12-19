@@ -1,5 +1,5 @@
 Name Binoculars
-ShortName binoculars
+ShortName mwBinoculars
 //The ammo this gun uses (shortName)
 Icon Binoculars
 //Colour in Red, Green, Blue, each going up to 255.

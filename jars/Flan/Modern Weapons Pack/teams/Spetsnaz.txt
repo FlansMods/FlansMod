@@ -11,4 +11,5 @@ Chest spetsnazBody
 Legs spetsnazPants
 Shoes spetsnazBoots
 AddClass sniper1
-
+AddClass sniper2
+AddClass assault1

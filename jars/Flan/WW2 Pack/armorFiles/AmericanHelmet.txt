@@ -1,0 +1,8 @@
+Name American WW2 Helmet
+ShortName americanHelmet
+ItemID 23641
+Icon AmericanHelmet
+Colour 255 255 255
+Type Helmet
+Defence 0.1
+ArmourTexture American

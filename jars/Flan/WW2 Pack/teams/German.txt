@@ -1,16 +1,19 @@
-Name U.S. Marines
-ShortName marines
+Name German
+ShortName german
 //TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
 //This is used for player names and such
-TextColour Blue
+TextColour Grey
 //TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
-TeamColour 0 0 128
+TeamColour 128 128 128
 //Specify the armour this team should spawn with
-Hat marineHelmet
-Chest marineBody
-Legs marinePants
-Shoes marineBoots
-AddClass sniper1
-AddClass sniper2
-AddClass assault1
+Hat germanHelmet
+Chest germanCoat
+Legs germanPants
+Shoes germanBoots
+AddClass germanScout
+AddClass germanAssault1
+AddClass germanAssault2
+AddClass germanSupport
+AddClass germanMedic
+
 
