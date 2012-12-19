@@ -73,7 +73,8 @@ public class TeamsManager implements IPlayerTracker
 	
 	public void tick()
 	{
-		currentGametype.tick();
+		if(currentGametype != null)
+			currentGametype.tick();
 		for(ITeamBase base : bases)
 		{
 			base.tick();

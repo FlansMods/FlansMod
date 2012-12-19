@@ -10,9 +10,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
+import co.uk.flansmods.client.TickHandlerClient;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.TickRegistry;
 
 public class CommonProxy
 {
@@ -90,6 +93,7 @@ public class CommonProxy
 	public void doTickStuff()
 	{
 		// overriden in client
+		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 	}
 
 	/**

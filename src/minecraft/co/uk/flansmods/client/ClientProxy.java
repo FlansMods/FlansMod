@@ -370,6 +370,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void doTickStuff()
 	{
+		super.doTickStuff();
 		TickRegistry.registerTickHandler(new TickHandlerClient(), Side.CLIENT);
 	}
 

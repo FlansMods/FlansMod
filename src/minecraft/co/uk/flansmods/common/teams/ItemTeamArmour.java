@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.teams;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,9 +57,11 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	{
 		return "/spriteSheets/armour.png";
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+    {
+    	return type.colour;
+    }
 
-	public int getColorFromDamage(int i, int j)
-	{
-		return type.colour;
-	}
 }

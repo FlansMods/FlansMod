@@ -1,7 +1,10 @@
 package co.uk.flansmods.common;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemPart extends Item
 {
@@ -25,10 +28,11 @@ public class ItemPart extends Item
 		return "/spriteSheets/parts.png";
 	}
 
-	public int getColorFromDamage(int i, int j)
-	{
-		return type.colour;
-	}
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+    {
+    	return type.colour;
+    }
 
 	public PartType type;
 }

@@ -326,10 +326,11 @@ public class ItemGun extends Item
 		return true;
 	}
 
-	public int getColorFromDamage(int i, int j)
-	{
-		return type.colour;
-	}
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+    {
+    	return type.colour;
+    }
 
 	public boolean isItemStackDamageable()
 	{

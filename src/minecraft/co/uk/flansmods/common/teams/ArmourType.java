@@ -52,9 +52,9 @@ public class ArmourType extends InfoType
 			{
 				if(split[1].equals("Hat") || split[1].equals("Helmet"))
 					type = 0;
-				if(split[1].equals("Chest"))
+				if(split[1].equals("Chest") || split[1].equals("Body"))
 					type = 1;
-				if(split[1].equals("Legs"))
+				if(split[1].equals("Legs") || split[1].equals("Pants"))
 					type = 2;				
 				if(split[1].equals("Shoes") || split[1].equals("Boots"))
 					type = 3;
