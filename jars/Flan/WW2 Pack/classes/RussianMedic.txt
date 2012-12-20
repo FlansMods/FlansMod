@@ -1,0 +1,10 @@
+Name Medic
+ShortName russianMedic
+AddItem nagant
+AddItem tt33
+AddItem ww2Knife
+AddItem potion 2 16421
+AddItem nagantAmmo
+AddItem nagantAmmo
+AddItem tt33Ammo
+AddItem tt33Ammo

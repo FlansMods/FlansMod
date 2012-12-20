@@ -1,0 +1,10 @@
+Name Medic
+ShortName britishMedic
+AddItem leeEnfield
+AddItem webley
+AddItem ww2Knife
+AddItem potion 2 16421
+AddItem leeEnfieldAmmo
+AddItem leeEnfieldAmmo
+AddItem webleyAmmo
+AddItem webleyAmmo

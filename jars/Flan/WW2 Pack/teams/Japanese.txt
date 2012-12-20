@@ -10,5 +10,8 @@ Hat japaneseHelmet
 Chest japaneseCoat
 Legs japanesePants
 Shoes japaneseBoots
-
+AddClass japaneseScout
+AddClass japaneseAssault1
+AddClass japaneseSupport
+AddClass japaneseMedic
 

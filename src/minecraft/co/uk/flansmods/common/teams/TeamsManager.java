@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -22,9 +24,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -112,6 +119,21 @@ public class TeamsManager implements IPlayerTracker
 	}	
 	
 	@ForgeSubscribe
+	public void onEntityHurt(LivingHurtEvent event) 
+	{
+		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
+			if(!currentGametype.playerAttacked((EntityPlayerMP)event.entity, event.source))
+				event.ammount = 0;
+	}
+	
+	@ForgeSubscribe
+	public void onEntityKilled(LivingDeathEvent event) 
+	{
+		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
+			currentGametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+	}
+	
+	@ForgeSubscribe
 	public void entityJoinedWorld(EntityJoinWorldEvent event)
 	{
 		if(event.entity instanceof ITeamBase)
@@ -121,6 +143,30 @@ public class TeamsManager implements IPlayerTracker
 		if(event.entity instanceof ITeamObject)
 		{
 			objects.add((ITeamObject)event.entity);
+		}
+	}
+	
+	@ForgeSubscribe
+	public void playerInteracted(PlayerInteractEvent event)
+	{
+		TileEntity te = event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z);
+		if(te != null)
+		{
+			ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
+			if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
+			{
+				if(te instanceof ITeamObject)
+					((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)te);
+				if(te instanceof ITeamBase)
+					((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)te);
+			}
+			else if(currentGametype != null)
+			{
+				if(te instanceof ITeamObject)
+					currentGametype.objectClickedByPlayer((ITeamObject)te, (EntityPlayerMP)event.entityPlayer);
+				if(te instanceof ITeamBase)
+					currentGametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.entityPlayer);
+			}
 		}
 	}
 	
@@ -305,6 +351,7 @@ public class TeamsManager implements IPlayerTracker
 	
 	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
 	{
+		Team previousTeam = Gametype.getPlayerData(player).team;
 		Team team = null;
 		for(Team t : teams)
 		{
@@ -316,7 +363,7 @@ public class TeamsManager implements IPlayerTracker
 			team.members.add(player);
 			FlansModPlayerHandler.getPlayerData(player).team = team;
 			if(currentGametype != null)
-				currentGametype.playerChoseTeam(player, team);
+				currentGametype.playerChoseTeam(player, team, previousTeam);
 		}
 	}	
 	

@@ -10,5 +10,9 @@ Hat britishHelmet
 Chest britishCoat
 Legs britishPants
 Shoes britishBoots
+AddClass britishScout
+AddClass britishAssault1
+AddClass britishSupport
+AddClass britishMedic
 
 

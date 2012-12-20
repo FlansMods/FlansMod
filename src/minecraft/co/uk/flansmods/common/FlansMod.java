@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
+import co.uk.flansmods.common.teams.BlockSpawner;
 import co.uk.flansmods.common.teams.CommandTeams;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -23,6 +25,7 @@ import co.uk.flansmods.common.teams.ItemTeamArmour;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
+import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -81,6 +84,7 @@ public class FlansMod
 	public static boolean bulletsEnabled = true;
 
 	public static Block craftingTable;
+	public static Block spawner;
 	public static Item opStick;
 	public static Item flag;
 
@@ -148,6 +152,14 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		
+		//Teams stuff
+		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable();
+		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class);
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
+		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
+		
 		// default planes stuff
 		craftingTable = new BlockPlaneWorkbench(255, 1, 0).setBlockName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class);
@@ -158,6 +170,7 @@ public class FlansMod
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
+		
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 5, true);
 		

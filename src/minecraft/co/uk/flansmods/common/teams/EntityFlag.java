@@ -41,7 +41,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		super.onUpdate();
 		//If the base is null, maybe because the flag loaded before the base, check again to see if it exists.
 		//Do not do this client side
-		if(base == null && FMLCommonHandler.instance().getEffectiveSide().isServer())
+		if(base == null && !worldObj.isRemote)
 		{
 			setBase(TeamsManager.getInstance().getBase(baseID));
 		}

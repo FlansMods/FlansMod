@@ -1,0 +1,11 @@
+Name Assault
+ShortName americanAssault1
+AddItem thompson
+AddItem colt
+AddItem ww2Knife
+AddItem thompsonAmmo
+AddItem thompsonAmmo
+AddItem thompsonAmmo
+AddItem thompsonAmmo
+AddItem coltAmmo
+AddItem coltAmmo

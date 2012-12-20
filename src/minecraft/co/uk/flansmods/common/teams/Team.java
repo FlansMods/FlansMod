@@ -19,6 +19,8 @@ public class Team {
 	
 	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 
+	public int score = 0;
+	
 	public String shortName;
 	public String name;
 	public int teamColour = 0xffffff;

@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.network.PacketTeamSelect;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class CommandTeams extends CommandBase {
 	
@@ -40,6 +42,12 @@ public class CommandTeams extends CommandBase {
 			if(split.length != 2)
 			{
 				sender.sendChatToPlayer("\u00a74To set the gametype, use \"/teams setGametype <gametype>\" with a valid gametype.");
+				return;
+			}
+			if(split[1].equals("None"))
+			{
+				teamsManager.currentGametype.stopGametype();
+				teamsManager.currentGametype = null;
 				return;
 			}
 			Gametype gametype = Gametype.getGametype(split[1]);

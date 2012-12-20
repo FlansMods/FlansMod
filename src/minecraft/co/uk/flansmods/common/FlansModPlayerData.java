@@ -11,6 +11,10 @@ public class FlansModPlayerData
 	public PlayerClass playerClass;
 	public boolean isShooting;
 	public int shootTime;
+	//For use by the currentGametype
+	public int score;
+	public int kills;
+	public int deaths;
 	
 	//TODO Unknown purpose!
 	public FlansModPlayerData(EntityPlayer player) {}

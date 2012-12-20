@@ -1,8 +1,12 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.network.PacketTeamSelect;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.Vec3;
 
 public class GametypeTDM extends Gametype {
@@ -20,7 +24,7 @@ public class GametypeTDM extends Gametype {
 
 	@Override
 	public void teamsSet()
-	{
+	{	
 		startNewRound();
 	}
 	
@@ -49,20 +53,21 @@ public class GametypeTDM extends Gametype {
 	}
 	
 	@Override
-	public void playerChoseTeam(EntityPlayerMP player, Team team) 
+	public void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		//TODO : Auto-balancing
-		sendClassMenuToPlayer((EntityPlayerMP)player);
-		if(team == Team.spectators)
+		Team currentTeam = Gametype.getPlayerData(player).team;
+		if(currentTeam != null && Gametype.isAValidTeam(currentTeam))
 		{
-			teamsManager.forceRespawn(player);
+			playerKilled(player, DamageSource.magic);
 		}
+		
+		sendClassMenuToPlayer((EntityPlayerMP)player);
+		teamsManager.forceRespawn(player);
 	}
 
 	@Override
 	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
 	{
-		teamsManager.forceRespawn(player);
 	}
 
 	@Override
@@ -72,15 +77,36 @@ public class GametypeTDM extends Gametype {
 	}
 
 	@Override
-	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
+	{
+		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
+		if(attacker != null)
+		{
+			//Spectators may not attack players
+			if(getPlayerData(attacker).team == Team.spectators)
+				return false;
+		}
+		//Players may not attack spectators
+		if(getPlayerData(player).team == Team.spectators)
+			return false;
+		return true;
 	}
 
 	@Override
-	public void playerKilled(EntityPlayerMP player, DamageSource source) {
-		// TODO Auto-generated method stub
-		
+	public void playerKilled(EntityPlayerMP player, DamageSource source) 
+	{
+		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
+		if(attacker != null)
+		{
+			if(attacker == player)
+				givePoints(attacker, -1);
+			else 
+			{	
+				givePoints(attacker, 1);
+				getPlayerData(attacker).kills++;
+			}
+		}
+		getPlayerData(player).deaths++;
 	}
 
 	@Override

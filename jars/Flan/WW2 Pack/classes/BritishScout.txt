@@ -1,0 +1,11 @@
+Name Scout
+ShortName britishScout
+AddItem leeEnfieldSniper
+AddItem webley
+AddItem ww2Knife
+AddItem ww2Binoculars
+AddItem leeEnfieldAmmo
+AddItem leeEnfieldAmmo
+AddItem leeEnfieldAmmo
+AddItem webleyAmmo
+AddItem webleyAmmo

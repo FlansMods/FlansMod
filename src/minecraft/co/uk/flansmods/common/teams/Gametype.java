@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.Vec3;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
@@ -92,7 +94,7 @@ public abstract class Gametype {
 	{
 		for(EntityPlayer player : getPlayers())
 		{
-			if(getPlayerData((EntityPlayerMP)player).team == null)
+			if(getPlayerData((EntityPlayerMP)player).team == null || !isAValidTeam(getPlayerData((EntityPlayerMP)player).team))
 			{
 				sendTeamsMenuToPlayer((EntityPlayerMP)player);
 			}			
@@ -101,6 +103,48 @@ public abstract class Gametype {
 				sendClassMenuToPlayer((EntityPlayerMP)player);
 			}
 		}
+	}
+	
+	public static boolean isAValidTeam(Team team)
+	{
+		for(Team t : teamsManager.teams)
+		{
+			if(t == team)
+				return true;
+		}
+		return false;
+	}
+	
+	public static void resetScores()
+	{
+		for(Team team : teamsManager.teams)
+			team.score = 0;
+		for(EntityPlayer player : getPlayers())
+			getPlayerData((EntityPlayerMP)player).score = 0;
+	}
+	
+	public static void givePoints(EntityPlayerMP player, int points)
+	{
+		FlansModPlayerData data = getPlayerData(player);
+		data.score += points;
+		if(data.team != null)
+			data.team.score += points;
+	}
+	
+	public static EntityPlayerMP getPlayerFromDamageSource(DamageSource source)
+	{
+		EntityPlayerMP attacker = null;
+		if(source instanceof EntityDamageSource)
+		{
+			if(((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP)((EntityDamageSource)source).getEntity();
+		}
+		if(source instanceof EntityDamageSourceIndirect)
+		{
+			if(((EntityDamageSourceIndirect)source).getSourceOfDamage() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP)((EntityDamageSourceIndirect)source).getEntity(); 
+		}
+		return attacker;
 	}
 
 	public abstract void teamsSet();
@@ -119,7 +163,7 @@ public abstract class Gametype {
 	
 	public abstract void playerQuit(EntityPlayerMP player);
 	
-	public abstract void playerChoseTeam(EntityPlayerMP player, Team team);
+	public abstract void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam);
 	
 	public abstract void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass);
 	

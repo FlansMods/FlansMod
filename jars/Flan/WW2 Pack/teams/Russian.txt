@@ -10,5 +10,8 @@ Hat russianHelmet
 Chest russianCoat
 Legs russianPants
 Shoes russianBoots
-
+AddClass russianScout
+AddClass russianAssault1
+AddClass russianSupport
+AddClass russianMedic
 

@@ -1,0 +1,9 @@
+Name Assault
+ShortName russianAssault1
+AddItem ppsh
+AddItem tt33
+AddItem ww2Knife
+AddItem ppshAmmo
+AddItem ppshAmmo
+AddItem tt33Ammo
+AddItem tt33Ammo

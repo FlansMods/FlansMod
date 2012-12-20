@@ -1,0 +1,10 @@
+Name Assault
+ShortName japaneseAssault1
+AddItem type100
+AddItem luger
+AddItem ww2Knife
+AddItem type100Ammo
+AddItem type100Ammo
+AddItem type100Ammo
+AddItem lugerAmmo
+AddItem lugerAmmo
