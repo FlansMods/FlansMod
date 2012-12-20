@@ -151,14 +151,7 @@ public class FlansMod
 		// default stuff
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
-		
-		//Teams stuff
-		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
-		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class);
-		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
-		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
-		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
-		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
+
 		
 		// default planes stuff
 		craftingTable = new BlockPlaneWorkbench(255, 1, 0).setBlockName("flansCraftingBench");
@@ -210,6 +203,12 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
 		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
+		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
+		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class);
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
+		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
+		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
 		
 		proxy.registerTileEntityRenderers();
 		proxy.loadDefaultGraphics();

@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 
 public class BlockSpawner extends BlockContainer 
 {
+	public static boolean colouredPass = false;
+	
 	public BlockSpawner(int i, Material material) 
 	{
 		super(i, material);
@@ -41,7 +43,7 @@ public class BlockSpawner extends BlockContainer
     @Override
     public int getBlockTextureFromSideAndMetadata(int i, int j)
     {
-    	return j * 2;
+    	return j * 2 + (colouredPass ? 1 : 0);
     }
     
     @Override
@@ -110,5 +112,23 @@ public class BlockSpawner extends BlockContainer
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntitySpawner();
+	}
+	
+	@Override
+	public int colorMultiplier(IBlockAccess access, int x, int y, int z)
+	{
+		if(!colouredPass)
+			return 0xffffff;
+		try
+		{
+			TileEntitySpawner spawner = (TileEntitySpawner)access.getBlockTileEntity(x, y, z);
+			Team team = spawner.getTeam();
+			return team.teamColour;
+		}
+		catch(Exception e)
+		{
+			return 0xffffff;
+		}
+		
 	}
 }

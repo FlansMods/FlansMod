@@ -149,6 +149,8 @@ public class ItemGun extends Item
 		
 	public ItemStack tryToShoot(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
 	{
+		if(type.deployable)
+			return itemstack;
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer);
 		if(data.shootTime <= 0)
 		{

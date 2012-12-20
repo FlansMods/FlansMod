@@ -200,6 +200,8 @@ public class TeamsManager implements IPlayerTracker
 	@ForgeSubscribe
 	public void worldData(WorldEvent event)
 	{
+		if(event.world.isRemote)
+			return;
 		if(event instanceof WorldEvent.Load)
 		{
 			loadPerWorldData(event, event.world);
@@ -212,6 +214,7 @@ public class TeamsManager implements IPlayerTracker
 	
 	private void loadPerWorldData(Event event, World world)
 	{
+
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
@@ -295,6 +298,11 @@ public class TeamsManager implements IPlayerTracker
 		if(base.getID() == 0)
 			base.setID(nextBaseID++);
 		bases.add(base);
+	}	
+	
+	public void registerObject(ITeamObject obj)
+	{
+		objects.add(obj);
 	}
 
 	@Override
