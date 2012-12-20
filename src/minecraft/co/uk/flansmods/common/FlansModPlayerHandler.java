@@ -3,8 +3,11 @@ package co.uk.flansmods.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import co.uk.flansmods.common.teams.TeamsManager;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -46,6 +49,8 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	public void onPlayerLogin(EntityPlayer player) 
 	{
 		data.put(player, new FlansModPlayerData(player));
+		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
+			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 	}
 
 	@Override

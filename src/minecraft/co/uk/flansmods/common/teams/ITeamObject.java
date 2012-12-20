@@ -31,4 +31,7 @@ public interface ITeamObject {
 	public double getPosX();
 	public double getPosY();
 	public double getPosZ();
+	
+	//Return true if players can spawn here
+	public boolean isSpawnPoint();
 }

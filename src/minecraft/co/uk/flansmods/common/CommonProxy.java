@@ -11,8 +11,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 import co.uk.flansmods.client.TickHandlerClient;
+import co.uk.flansmods.client.TileEntitySpawnerRenderer;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
+import co.uk.flansmods.common.teams.TileEntitySpawner;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -43,6 +46,10 @@ public class CommonProxy
 		}
 		FlansMod.log("Loaded textures and models.");
 		return contentPacks;
+	}
+	
+	public void registerTileEntityRenderers() 
+	{
 	}
 	
 	public void loadDefaultGraphics()

@@ -77,18 +77,24 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public double getPosX() 
 	{
-		return xCoord;
+		return xCoord + 0.5F;
 	}
 
 	@Override
 	public double getPosY() 
 	{
-		return yCoord;
+		return yCoord + 0.5F;
 	}
 
 	@Override
 	public double getPosZ() 
 	{
-		return zCoord;
+		return zCoord + 0.5F;
+	}
+	
+	@Override
+	public boolean isSpawnPoint()
+	{
+		return true;
 	}
 }

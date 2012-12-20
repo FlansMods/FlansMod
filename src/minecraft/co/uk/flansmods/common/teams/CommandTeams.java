@@ -46,7 +46,8 @@ public class CommandTeams extends CommandBase {
 			}
 			if(split[1].equals("None"))
 			{
-				teamsManager.currentGametype.stopGametype();
+				if(teamsManager.currentGametype != null)
+					teamsManager.currentGametype.stopGametype();
 				teamsManager.currentGametype = null;
 				return;
 			}
@@ -76,7 +77,7 @@ public class CommandTeams extends CommandBase {
 		}
 		if(split[0].equals("listTeams"))
 		{
-			if(teamsManager.teams == null)
+			if(teamsManager.currentGametype == null || teamsManager.teams == null)
 			{
 				sender.sendChatToPlayer("\u00a74The gametype is not yet set. Set it by \"/teams setGametype <gametype>\"");
 				return;
@@ -155,7 +156,7 @@ public class CommandTeams extends CommandBase {
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 3));
 				sender.sendChatToPlayer("\u00a72Enjoy your op sticks.");
-				sender.sendChatToPlayer("\u00a77The Stick of Connecting connects objects (spawns, spawners, banners etc) to bases (flagpoles etc)");
+				sender.sendChatToPlayer("\u00a77The Stick of Connecting connects objects (spawners, banners etc) to bases (flagpoles etc)");
 				sender.sendChatToPlayer("\u00a77The Stick of Ownership sets the team that currently owns a base");
 				sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
 				sender.sendChatToPlayer("\u00a77The Stick of Destruction deletes bases and team objects");

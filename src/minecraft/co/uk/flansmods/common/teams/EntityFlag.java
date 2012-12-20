@@ -130,4 +130,9 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		return Team.getTeam(getTeamName());
 	}
+	
+	public boolean isSpawnPoint()
+	{
+		return false;
+	}
 }

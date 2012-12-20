@@ -35,7 +35,7 @@ public static final byte packetID = 6;
 	    	data.writeByte(teams.length);
 	    	for(int i = 0; i < teams.length; i++)
 	    	{
-	    		data.writeUTF(teams[i].shortName);
+	    		data.writeUTF(teams[i] == null ? Team.spectators.shortName : teams[i].shortName);
 	    	}
 	    	
 	    	packet.data = bytes.toByteArray();

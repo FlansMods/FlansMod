@@ -2,6 +2,7 @@ package co.uk.flansmods.common.teams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +22,7 @@ public abstract class Gametype {
 	
 	public static List<Gametype> gametypes = new ArrayList<Gametype>();
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
+	public static Random rand = new Random();
 	
 	public static Gametype getGametype(String type)
 	{
@@ -94,6 +96,10 @@ public abstract class Gametype {
 	{
 		for(EntityPlayer player : getPlayers())
 		{
+			if(getPlayerData((EntityPlayerMP)player) == null)
+			{
+				continue;
+			}
 			if(getPlayerData((EntityPlayerMP)player).team == null || !isAValidTeam(getPlayerData((EntityPlayerMP)player).team))
 			{
 				sendTeamsMenuToPlayer((EntityPlayerMP)player);
@@ -107,6 +113,8 @@ public abstract class Gametype {
 	
 	public static boolean isAValidTeam(Team team)
 	{
+		if(teamsManager.teams == null)
+			return false;
 		for(Team t : teamsManager.teams)
 		{
 			if(t == team)

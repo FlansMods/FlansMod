@@ -48,9 +48,11 @@ import co.uk.flansmods.common.VehicleType;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
+import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.SpriteHelper;
 import cpw.mods.fml.client.TextureFXManager;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Side;
@@ -147,6 +149,12 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityPassengerSeat.class, new RenderNull());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
+	}
+	
+	@Override
+	public void registerTileEntityRenderers() 
+	{
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}
 
 	@Override

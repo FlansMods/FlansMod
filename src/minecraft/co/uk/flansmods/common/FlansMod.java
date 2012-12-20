@@ -153,7 +153,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		
 		//Teams stuff
-		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable();
+		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class);
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
@@ -211,6 +211,7 @@ public class FlansMod
 		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
 		
+		proxy.registerTileEntityRenderers();
 		proxy.loadDefaultGraphics();
 		
 		// read Content Packs

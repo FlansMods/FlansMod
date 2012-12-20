@@ -36,6 +36,8 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker
@@ -149,6 +151,8 @@ public class TeamsManager implements IPlayerTracker
 	@ForgeSubscribe
 	public void playerInteracted(PlayerInteractEvent event)
 	{
+		if(event.entityPlayer.worldObj.isRemote)
+			return;
 		TileEntity te = event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z);
 		if(te != null)
 		{
@@ -211,23 +215,27 @@ public class TeamsManager implements IPlayerTracker
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ), "teams.dat");
+		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ) + MinecraftServer.getServer().getWorldName(), "teams.dat");
 		checkFileExists(file);
 		try
 		{
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
 			nextBaseID = tags.getInteger("NextBaseID");
 			currentGametype = Gametype.getGametype(tags.getString("Gametype"));
-			currentGametype.initGametype();
-			teams = new Team[currentGametype.numTeamsRequired];
-			for(int i = 0; i < teams.length; i++)
+			if(currentGametype != null)
 			{
-				teams[i] = Team.getTeam(tags.getString("Team " + i));
+				currentGametype.initGametype();
+				teams = new Team[currentGametype.numTeamsRequired];
+				for(int i = 0; i < teams.length; i++)
+				{
+					teams[i] = Team.getTeam(tags.getString("Team " + i));
+				}
 			}
 		}
 		catch(Exception e)
 		{
 			FlansMod.log("Failed to load from teams.dat");
+			e.printStackTrace();
 		}
 	}
 	
@@ -324,15 +332,7 @@ public class TeamsManager implements IPlayerTracker
 		if(team.legs != null)
 			player.inventory.armorInventory[1] = team.legs.copy();
 		if(team.shoes != null)
-			player.inventory.armorInventory[0] = team.shoes.copy();
-		PlayerClass playerClass = FlansModPlayerHandler.getPlayerData(player).playerClass;
-		if(playerClass != null)
-		{
-			for(ItemStack stack : playerClass.startingItems)
-			{
-				player.inventory.addItemStackToInventory(stack.copy());
-			}
-		}
+			player.inventory.armorInventory[0] = team.shoes.copy();		
 		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 		if(spawnPoint != null)
 		{
@@ -383,6 +383,22 @@ public class TeamsManager implements IPlayerTracker
 			FlansModPlayerHandler.getPlayerData(player).playerClass = playerClass;
 			if(currentGametype != null)
 				currentGametype.playerChoseClass(player, playerClass);
+			for(ItemStack stack : playerClass.startingItems)
+			{
+				player.inventory.addItemStackToInventory(stack.copy());
+			}
 		}
+	}
+	
+	public boolean areTeamsValid()
+	{
+		if(teams == null)
+			return false;
+		for(Team t : teams)
+		{
+			if(t == null)
+				return false;
+		}
+		return true;
 	}
 }

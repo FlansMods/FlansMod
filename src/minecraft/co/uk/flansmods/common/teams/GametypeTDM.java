@@ -1,5 +1,9 @@
 package co.uk.flansmods.common.teams;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +13,8 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.Vec3;
 
-public class GametypeTDM extends Gametype {
+public class GametypeTDM extends Gametype 
+{
 
 	public GametypeTDM() 
 	{
@@ -134,8 +139,25 @@ public class GametypeTDM extends Gametype {
 	}
 
 	@Override
-	public Vec3 getSpawnPoint(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
+	public Vec3 getSpawnPoint(EntityPlayerMP player) 
+	{
+		FlansModPlayerData data = getPlayerData(player);
+		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
+		for(ITeamBase base : data.team.bases)
+		{
+			for(ITeamObject object : base.getObjects())
+			{
+				if(object.isSpawnPoint())
+					validSpawnPoints.add(object);
+			}
+		}
+		
+		if(validSpawnPoints.size() > 0)
+		{
+			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
+			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+		}
+		
 		return null;
 	}
 
