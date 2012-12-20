@@ -143,7 +143,10 @@ public class ItemGun extends Item
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
 		data.isShooting = isShooting;
 		if(type.mode == 0 && isShooting)
+		{
+			data.isShooting = false;
 			return tryToShoot(stack, world, player);
+		}
 		return stack;
 	}
 		

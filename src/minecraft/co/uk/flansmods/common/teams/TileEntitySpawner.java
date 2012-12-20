@@ -1,8 +1,12 @@
 package co.uk.flansmods.common.teams;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -13,11 +17,13 @@ import net.minecraft.tileentity.TileEntity;
 public class TileEntitySpawner extends TileEntity implements ITeamObject
 {
 	//Server side
-	public int spawnDelay;
-	public ItemStack[] stacksToSpawn;
+	public int spawnDelay = 1200;
+	public List<ItemStack> stacksToSpawn = new ArrayList<ItemStack>();
+	public List<EntityTeamItem> itemEntities = new ArrayList<EntityTeamItem>();
 	public ITeamBase base;
 	private int baseID = -1;
 	private int dimension;
+	public int currentDelay;
 	
 	//Client side
 	private String team;
@@ -25,7 +31,6 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	public TileEntitySpawner()
 	{
 		TeamsManager.getInstance().registerObject(this);
-		stacksToSpawn = new ItemStack[5];
 	}
 	
 	@Override
@@ -42,8 +47,6 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     	team = packet.customParam1.getString("Team");
     }
     
-    
-    
     @Override
     public void updateEntity()
     {
@@ -59,6 +62,26 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 				newBase.addObject(this);
 			}
 		}
+		if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
+			return;
+		for(int i = 0; i < itemEntities.size(); i++)
+		{
+			if(itemEntities.get(i).isDead)
+				itemEntities.remove(i);
+		}
+		if(currentDelay > 0 && itemEntities.size() == 0)
+		{
+			currentDelay--;
+		}
+		if(currentDelay == 0)
+		{
+			currentDelay = spawnDelay;
+			for(int i = 0; i < stacksToSpawn.size(); i++)
+			{
+				EntityTeamItem itemEntity = new EntityTeamItem(this, i);
+				worldObj.spawnEntityInWorld(itemEntity);
+			}
+		}
     }
     
 	@Override
@@ -69,19 +92,30 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		if(base != null)
 			nbt.setInteger("Base", base.getID());
 		nbt.setInteger("dim", worldObj.provider.dimensionId);
-	
+		nbt.setInteger("numStacks", stacksToSpawn.size());
+		for(int i = 0; i < stacksToSpawn.size(); i++)
+		{
+			NBTTagCompound stackNBT = new NBTTagCompound();
+			stacksToSpawn.get(i).writeToNBT(stackNBT);
+			nbt.setCompoundTag("stack" + i, stackNBT);
+		}
+			
     }
 	
 	@Override
     public void readFromNBT(NBTTagCompound nbt)
     {
 		super.readFromNBT(nbt);
-		spawnDelay = nbt.getInteger("delay");
+		currentDelay = spawnDelay = nbt.getInteger("delay");
 		baseID = nbt.getInteger("Base");
 		dimension = nbt.getInteger("dim");
 		setBase(TeamsManager.getInstance().getBase(baseID));
 		if(base != null)
 			base.addObject(this);
+		for(int i = 0; i < nbt.getInteger("numStacks"); i++)
+		{
+			stacksToSpawn.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack" + i)));
+		}
     }
 
 	@Override
@@ -92,7 +126,9 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	
 	public Team getTeam()
 	{
-		return Team.getTeam(team);
+		if(worldObj.isRemote)
+			return Team.getTeam(team);
+		else return base == null ? null : base.getOwner();
 	}
 
 	@Override
@@ -147,6 +183,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public boolean isSpawnPoint()
 	{
-		return true;
+		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		return metadata == 1;
 	}
 }

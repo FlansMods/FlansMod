@@ -19,6 +19,7 @@ import co.uk.flansmods.common.teams.BlockSpawner;
 import co.uk.flansmods.common.teams.CommandTeams;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
+import co.uk.flansmods.common.teams.EntityTeamItem;
 import co.uk.flansmods.common.teams.ItemFlagpole;
 import co.uk.flansmods.common.teams.ItemOpStick;
 import co.uk.flansmods.common.teams.ItemTeamArmour;
@@ -209,6 +210,8 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
+		//EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
 		
 		proxy.registerTileEntityRenderers();
 		proxy.loadDefaultGraphics();

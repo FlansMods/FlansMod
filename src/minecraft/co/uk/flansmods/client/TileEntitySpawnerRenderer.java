@@ -4,13 +4,16 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.BlockSpawner;
+import co.uk.flansmods.common.teams.TileEntitySpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -48,8 +51,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer {
         var10.setColorOpaque(1, 1, 1);
   
         GL11.glColor4f(1, 1, 0, 0.5F);
-        blockRenderer.renderBlockAllFaces(FlansMod.spawner, te.xCoord, te.yCoord, te.zCoord);
-
+        blockRenderer.renderBlockAllFaces(FlansMod.spawner, te.xCoord, te.yCoord, te.zCoord);        
         var10.setTranslation(0.0D, 0.0D, 0.0D);
         var10.draw();
         ForgeHooksClient.afterBlockRender(FlansMod.spawner, blockRenderer);

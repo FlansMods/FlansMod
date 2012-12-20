@@ -87,8 +87,11 @@ public class ItemOpStick extends Item
 	    			}
 	    		}
 	    		teamsManager.messagePlayer(player, "Base owner changed to " + (newOwner == null ? "none" : newOwner.shortName));
+	    		if(currentOwner != null)
+	    			currentOwner.bases.remove(base);
 	    		base.setBase(newOwner);
-	    		newOwner.bases.add(base);
+	    		if(newOwner != null)
+	    			newOwner.bases.add(base);
 	    		for(ITeamObject object : base.getObjects())
 	    		{
 	    			object.onBaseSet(newOwner);
