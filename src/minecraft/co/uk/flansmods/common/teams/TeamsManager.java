@@ -341,10 +341,18 @@ public class TeamsManager implements IPlayerTracker
 			player.inventory.armorInventory[1] = team.legs.copy();
 		if(team.shoes != null)
 			player.inventory.armorInventory[0] = team.shoes.copy();		
+		PlayerClass pc = FlansModPlayerHandler.getPlayerData(player).playerClass;
+		if(pc != null)
+		{
+			for(ItemStack stack : pc.startingItems)
+			{
+				player.inventory.addItemStackToInventory(stack.copy());
+			}
+		}
 		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 		if(spawnPoint != null)
 		{
-			player.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+			((EntityPlayerMP)player).playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 		}
 		currentGametype.playerRespawned((EntityPlayerMP)player);
 	}

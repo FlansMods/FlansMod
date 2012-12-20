@@ -60,10 +60,10 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		Team currentTeam = Gametype.getPlayerData(player).team;
-		if(currentTeam != null && Gametype.isAValidTeam(currentTeam))
+		if(previousTeam != null && Gametype.isAValidTeam(previousTeam))
 		{
-			playerKilled(player, DamageSource.magic);
+			getPlayerData(player).deaths++;
+			getPlayerData(player).score--;
 		}
 		
 		sendClassMenuToPlayer((EntityPlayerMP)player);

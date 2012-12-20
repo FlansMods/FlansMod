@@ -68,6 +68,8 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		setID(tags.getInteger("ID"));
 		currentTeam = defaultTeam = Team.getTeam(tags.getString("Team"));
+		if(currentTeam != null)
+			currentTeam.bases.add(this);
 		map = tags.getString("Map");
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
