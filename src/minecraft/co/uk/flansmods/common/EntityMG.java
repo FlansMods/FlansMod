@@ -25,6 +25,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -144,7 +145,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
 					gunner.inventory.setInventorySlotContents(slot, null);
 				reloadTimer = type.reloadTime;
-				worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.reloadSound));
 			}
 		}
 		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1)
@@ -155,13 +156,15 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
 				wasShooting = true;
 			}
-			if(!Mouse.isButtonDown(0) && wasShooting)
+			else if(!Mouse.isButtonDown(0) && wasShooting)
 			{
 				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
 				wasShooting = false;
 			}
 		}
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer() && isShooting)
+		//if(!worldObj.isRemote)
+			//System.out.println(isShooting);
+		if(!worldObj.isRemote && isShooting)
 		{
 			if(gunner == null || gunner.isDead)
 				isShooting = false;
@@ -249,9 +252,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketMGMount.buildMGPacket(player, this, false));
 				return true;
 			}
-			if (FlansModPlayerHandler.getPlayerData(player).mountingGun != null)
+			if (FlansModPlayerHandler.getPlayerData(player).mountingGun != null && !FlansModPlayerHandler.getPlayerData(player).mountingGun.isDead)
+			{
 				return true;
-			
+			}
+
 			mountGun(player, true);
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketMGMount.buildMGPacket(player, this, true));
 			if (ammo == null)
@@ -272,14 +277,15 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	
 	public void mountGun(EntityPlayer player, boolean mounting)
 	{
+		Side side = worldObj.isRemote ? Side.CLIENT : Side.SERVER;
 		if(mounting)
 		{
 			gunner = player;
-			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = this;
+			FlansModPlayerHandler.getPlayerData(gunner, side).mountingGun = this;
 		}
 		else
 		{
-			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
+			FlansModPlayerHandler.getPlayerData(gunner, side).mountingGun = null;
 			gunner = null;
 		}
 	}
@@ -304,10 +310,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if(!worldObj.isRemote)
 		{
 			dropItem(type.getItem().shiftedIndex, 1);
+			// Drop ammo box
+			if (ammo != null)
+				entityDropItem(ammo, 0.5F);
 		}
-		// Drop ammo box
-		if (ammo != null)
-			entityDropItem(ammo, 0.5F);
 		if (gunner != null)
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 		

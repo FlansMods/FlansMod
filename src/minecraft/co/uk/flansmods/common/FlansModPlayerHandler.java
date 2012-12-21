@@ -12,11 +12,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class FlansModPlayerHandler implements IPlayerTracker
 {
-	public static Map<EntityPlayer, FlansModPlayerData> data = new HashMap<EntityPlayer, FlansModPlayerData>();
+	public static Map<EntityPlayer, FlansModPlayerData> serverSideData = new HashMap<EntityPlayer, FlansModPlayerData>();
+	public static Map<EntityPlayer, FlansModPlayerData> clientSideData = new HashMap<EntityPlayer, FlansModPlayerData>();
 	
 	public FlansModPlayerHandler()
 	{
@@ -36,19 +38,32 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	
 	public void tick()
 	{
-		for(FlansModPlayerData d : data.values())
+		for(FlansModPlayerData d : serverSideData.values())
+			d.tick();
+		for(FlansModPlayerData d : clientSideData.values())
 			d.tick();
 	}
 	
 	public static FlansModPlayerData getPlayerData(EntityPlayer player)
 	{
-		return data.get(player);
+		return getPlayerData(player, Side.SERVER);
+	}
+
+	
+	public static FlansModPlayerData getPlayerData(EntityPlayer player, Side side)
+	{
+		if(side.isClient())
+		{
+			if(!clientSideData.containsKey(player))
+				clientSideData.put(player, new FlansModPlayerData(player));
+		}
+		return side.isClient() ? clientSideData.get(player) : serverSideData.get(player);
 	}
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		data.put(player, new FlansModPlayerData(player));
+		serverSideData.put(player, new FlansModPlayerData(player));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
 			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 	}
@@ -56,7 +71,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		data.remove(player);
+		serverSideData.remove(player);
 	}
 
 	@Override

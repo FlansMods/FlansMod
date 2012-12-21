@@ -49,6 +49,8 @@ public class PacketMGFire extends FlanPacketCommon
 	@Override
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
+		if(side.isClient())
+			return;
 		try
 		{
 			EntityPlayer player = (EntityPlayer)extradata[0];
