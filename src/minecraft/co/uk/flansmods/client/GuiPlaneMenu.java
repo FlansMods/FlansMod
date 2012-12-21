@@ -34,6 +34,7 @@ public class GuiPlaneMenu extends GuiContainer
 	
 	protected void actionPerformed(GuiButton button)
     {
+		//Replace with a packet requesting the GUI from the server
         if (button.id == 0) //Guns
         {
             mc.displayGuiScreen(new GuiPlaneInventory(inventory, world, entity, 0));

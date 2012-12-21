@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import org.lwjgl.util.vector.Vector3f;
 
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.client.GuiPlaneMenu;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
@@ -219,7 +220,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public boolean pressKey(int key)
 	{
     	PlaneType type = this.getPlaneType();
-    	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && key >= 6 && key <= 9)
+    	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && (key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
     		return true;
@@ -309,8 +310,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 7 :
 			{
-				// automatically only done on client.
-				FMLNetworkHandler.openGui(((EntityPlayer)riddenByEntity), FlansMod.instance, 3, worldObj, this.chunkCoordX, this.chunkCoordY, this.chunkCoordZ);
+				if(worldObj.isRemote)
+					FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
 				return true;
 			}
 			case 8 : //Bomb
@@ -847,6 +848,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	
 	private void smashIntoBlock(int i, int j, int k)
 	{
+		if(worldObj.isRemote)
+			return;
 		int blockID = worldObj.getBlockId(i, j, k);
 		if(blockID != 0)
 		{

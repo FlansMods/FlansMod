@@ -1,5 +1,7 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.network.PacketRightClick;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,6 +46,8 @@ public class EntityCollisionBox extends Entity
 	
 	public void smashIntoBlock(int i, int j, int k)
 	{
+		if(worldObj.isRemote)
+			return;
 		int blockID = worldObj.getBlockId(i, j, k);
 		if(blockID != 0)
 		{
@@ -113,6 +117,10 @@ public class EntityCollisionBox extends Entity
 	@Override
 	public boolean interact(EntityPlayer player)
     {
+		if(worldObj.isRemote)
+		{
+			PacketDispatcher.sendPacketToServer(PacketRightClick.buildClickPacket(this));
+		}
 		return plane.interact(player);
 	}
 	
@@ -132,6 +140,11 @@ public class EntityCollisionBox extends Entity
 			if(entity == box)
 				return true;
 		}
-        return this == entity || plane == entity;
+		for(EntityPassengerSeat seat : plane.seats)
+		{
+			if(entity == seat || entity == seat.riddenByEntity)
+				return true;
+		}
+        return this == entity || plane == entity || plane.riddenByEntity == entity;
     }
 }

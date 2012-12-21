@@ -353,6 +353,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 
 	private boolean isPartOfOwner(Entity entity)
 	{
+		if(owner == null)
+			return false;
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
 		if (owner instanceof EntityPlayer)

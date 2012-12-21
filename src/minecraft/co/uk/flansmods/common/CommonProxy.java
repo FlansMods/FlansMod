@@ -127,6 +127,10 @@ public class CommonProxy
 			case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
 			case 3: return new ContainerPlaneMenu(player.inventory, world);
 			case 4: return new ContainerPlaneMenu(player.inventory, world, true, (EntityDriveable)player.ridingEntity);
+			case 6: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 0);
+			case 7: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 1);
+			case 8: return new ContainerPlaneMenu(player.inventory, world, true, (EntityDriveable)player.ridingEntity);
+			case 9: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 2);
 		}
 		return null;
 	}

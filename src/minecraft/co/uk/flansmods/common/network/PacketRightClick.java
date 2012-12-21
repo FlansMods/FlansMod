@@ -40,7 +40,7 @@ public class PacketRightClick extends FlanPacketCommon
         }
         catch(Exception e)
         {
-                e.printStackTrace();
+        	e.printStackTrace();
         }
         
         return packet;

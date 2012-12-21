@@ -35,6 +35,7 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -180,8 +181,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	@Override
 	public boolean pressKey(int key)
 	{
-		VehicleType type = this.getVehicleType();
-    	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && key >= 6 && key <= 9)
+		VehicleType type = getVehicleType();
+    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
     		return true;
@@ -256,60 +257,19 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			case 7 : //Inventory
 			{
-				// send packet for this.
-				ModLoader.openGUI((EntityPlayer)riddenByEntity, new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
+				if(worldObj.isRemote)
+					FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
 				return true;
 			}
 			case 8 : //Shell
 			{
-				if(!worldObj.isRemote && shellDelay <= 0 && FlansMod.bombsEnabled)
-				{
-					int slot = 0;
-					for(int i = data.getBombInventoryStart(); i < data.getBombInventoryStart() + type.numBombSlots; i++)
-					{
-						ItemStack shell = data.getStackInSlot(i);
-						if(shell != null && shell.getItem() instanceof ItemBullet && ((ItemBullet)shell.getItem()).type.isShell)
-						{
-							slot = i;
-						}
-					}
-					if(slot != 0)
-					{
-						Vec3 shellVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
-						float globalGunPitch = (float)Math.asin(barrelVector.y) * 180F / 3.14159265F;
-						float globalGunYaw = -(float)Math.atan2(barrelVector.x, barrelVector.z) * 180F / 3.14159265F;
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, shellVec.addVector(posX, posY, posZ).addVector(barrelVector.x * 2D, barrelVector.y * 2D, barrelVector.z * 2D), globalGunYaw, globalGunPitch, barrelVector.x * 4D, barrelVector.y * 4D, barrelVector.z * 4D, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type));
-						worldObj.playSoundAtEntity(this, type.shellSound, 1.0F , 1.0F);
-						data.decrStackSize(slot, 1);
-						shellDelay = type.vehicleShellDelay;
-					}
-					return true;
-				}
-				break;
+				shootShell();
+				return true;
 			}
 			case 9 : //Shoot
 			{
-				if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
-				{
-					int i = 0;
-					if(data.guns[i] != null && data.ammo[i] != null && data.ammo[i].getItem() instanceof ItemBullet && data.guns[i].isAmmo(((ItemBullet)data.ammo[i].getItem()).type))
-					{
-						Vec3 gunVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F));
-						worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
-						int damage = data.ammo[i].getItemDamage();
-						data.ammo[i].setItemDamage(damage + 1);	
-						if(damage + 1 == data.ammo[i].getMaxDamage())
-						{
-							if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
-								data.ammo[i].setItemDamage(0);
-							else data.setInventorySlotContents(i, null);
-						}
-						gunDelay = type.vehicleShootDelay;
-					}
-					return true;
-				}
-				break;
+				shootBullet();
+				return true;
 			}
 			case 10 : //Change Controls
 			{
@@ -319,6 +279,57 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 		
 		return false;
+	}
+	
+	public void shootShell()
+	{
+		VehicleType type = getVehicleType();
+		if(!worldObj.isRemote && shellDelay <= 0 && FlansMod.bombsEnabled)
+		{
+			int slot = 0;
+			for(int i = data.getBombInventoryStart(); i < data.getBombInventoryStart() + type.numBombSlots; i++)
+			{
+				ItemStack shell = data.getStackInSlot(i);
+				if(shell != null && shell.getItem() instanceof ItemBullet && ((ItemBullet)shell.getItem()).type.isShell)
+				{
+					slot = i;
+				}
+			}
+			if(slot != 0)
+			{
+				Vec3 shellVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
+				float globalGunPitch = (float)Math.asin(barrelVector.y) * 180F / 3.14159265F;
+				float globalGunYaw = -(float)Math.atan2(barrelVector.x, barrelVector.z) * 180F / 3.14159265F;
+				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, shellVec.addVector(posX, posY, posZ).addVector(barrelVector.x * 2D, barrelVector.y * 2D, barrelVector.z * 2D), globalGunYaw, globalGunPitch, barrelVector.x * 4D, barrelVector.y * 4D, barrelVector.z * 4D, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type));
+				worldObj.playSoundAtEntity(this, type.shellSound, 1.0F , 1.0F);
+				data.decrStackSize(slot, 1);
+				shellDelay = type.vehicleShellDelay;
+			}
+		}
+	}
+	
+	public void shootBullet()
+	{
+		VehicleType type = getVehicleType();
+		if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
+		{
+			int i = 0;
+			if(data.guns[i] != null && data.ammo[i] != null && data.ammo[i].getItem() instanceof ItemBullet && data.guns[i].isAmmo(((ItemBullet)data.ammo[i].getItem()).type))
+			{
+				Vec3 gunVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
+				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F));
+				worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
+				int damage = data.ammo[i].getItemDamage();
+				data.ammo[i].setItemDamage(damage + 1);	
+				if(damage + 1 == data.ammo[i].getMaxDamage())
+				{
+					if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+						data.ammo[i].setItemDamage(0);
+					else data.setInventorySlotContents(i, null);
+				}
+				gunDelay = type.vehicleShootDelay;
+			}
+		}
 	}
 	
 	@Override

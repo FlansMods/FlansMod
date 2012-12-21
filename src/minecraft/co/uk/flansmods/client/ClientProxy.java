@@ -390,9 +390,13 @@ public class ClientProxy extends CommonProxy
 			case 0: return new GuiPlaneCrafting(player.inventory, world, x, y, z, false);
 			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
-			case 3: return new GuiPlaneMenu(player.inventory, world, (EntityDriveable) player.ridingEntity);
-			case 4: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
+			//case 3: return new GuiPlaneMenu(player.inventory, world, (EntityDriveable) player.ridingEntity);
+			//case 4: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
+			case 6: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 0);
+			case 7: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 1);
+			case 8: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
+			case 9: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 2);
 		}
 		return null;
 	}

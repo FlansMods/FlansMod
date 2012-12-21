@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -12,11 +11,11 @@ import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.common.Side;
 
-public class PacketVehicleControl extends FlanPacketCommon
-{
-	public static final byte packetID = 3;
+public class PacketVehicleGUI extends FlanPacketCommon {
 	
-	public static Packet buildUpdatePacket(EntityDriveable driveable)
+	public static final byte packetID = 15;
+	
+	public static Packet buildGUIPacket(int guiID)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -26,16 +25,7 @@ public class PacketVehicleControl extends FlanPacketCommon
         try
         {
         	data.write(packetID);
-        	data.writeInt(driveable.entityId);
-        	data.writeDouble(driveable.posX);
-        	data.writeDouble(driveable.posY);
-        	data.writeDouble(driveable.posZ);
-        	data.writeFloat(driveable.axes.getYaw());
-        	data.writeFloat(driveable.axes.getPitch());
-        	data.writeFloat(driveable.axes.getRoll());
-        	data.writeDouble(driveable.motionX);
-        	data.writeDouble(driveable.motionY);
-        	data.writeDouble(driveable.motionZ);
+        	data.writeInt(guiID);
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -59,28 +49,27 @@ public class PacketVehicleControl extends FlanPacketCommon
 		{
 			EntityPlayer player =  (EntityPlayer)extradata[0];
 			
-			int entityId = stream.readInt();
-			EntityDriveable driveable = null;
-			for(Object obj : player.worldObj.loadedEntityList)
+			int guiID = stream.readInt();
+			if(player.ridingEntity != null && player.ridingEntity instanceof EntityDriveable)
 			{
-				if(obj instanceof EntityDriveable && ((Entity)obj).entityId == entityId)
+				EntityDriveable d = ((EntityDriveable)player.ridingEntity);
+				switch(guiID)
 				{
-					driveable = (EntityDriveable)obj;
-					break;
+				case 0 : //Guns
+					player.openGui(FlansMod.instance, 6, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
+				case 1 : //Bombs / Shells
+					player.openGui(FlansMod.instance, 7, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
+				case 2 : //Fuel
+					player.openGui(FlansMod.instance, 8, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
+				case 3 : //Cargo
+					player.openGui(FlansMod.instance, 9, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 				}
 			}
-			if(driveable != null)
-			{
-				driveable.setPosition(stream.readDouble(), stream.readDouble(), stream.readDouble());
-				driveable.setRotation(stream.readFloat(), stream.readFloat(), stream.readFloat());
-				driveable.motionX = stream.readDouble();
-				driveable.motionY = stream.readDouble();
-				driveable.motionZ = stream.readDouble();
-			}
+			
 		}
         catch(Exception e)
         {
-        	FlansMod.log("error parsing control packet");
+        	FlansMod.log("error parsing GUI packet");
         	e.printStackTrace();
         }
 	}
@@ -90,4 +79,5 @@ public class PacketVehicleControl extends FlanPacketCommon
 	{
 		return packetID;
 	}
+
 }

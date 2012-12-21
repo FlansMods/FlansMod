@@ -21,8 +21,11 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 
+import co.uk.flansmods.common.network.PacketRightClick;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class EntityPassengerSeat extends Entity
 {
@@ -237,6 +240,11 @@ public class EntityPassengerSeat extends Entity
     @Override
 	public boolean interact(EntityPlayer player)
     {
+		if(worldObj.isRemote)
+		{
+			PacketDispatcher.sendPacketToServer(PacketRightClick.buildClickPacket(this));
+			return true;
+		}
 		if(worldObj.isRemote || isDead || vehicle == null || vehicle.isDead)
 			return true;
 		ItemStack stack = player.inventory.getCurrentItem();
@@ -296,6 +304,22 @@ public class EntityPassengerSeat extends Entity
 			return true;
 		}
         return true;
+    }
+    
+	@Override
+    public boolean isEntityEqual(Entity entity)
+    {
+		for(EntityCollisionBox box : vehicle.boxes)
+		{
+			if(entity == box)
+				return true;
+		}
+		for(EntityPassengerSeat seat : vehicle.seats)
+		{
+			if(entity == seat || entity == seat.riddenByEntity)
+				return true;
+		}
+        return this == entity || vehicle == entity || vehicle.riddenByEntity == entity;
     }
     
 	public EntityDriveable vehicle;
