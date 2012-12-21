@@ -9,6 +9,7 @@ public class FlansModPlayerData
 	public EntityMG mountingGun;
 	public Team team;
 	public PlayerClass playerClass;
+	public PlayerClass newPlayerClass;
 	public boolean isShooting;
 	public int shootTime;
 	//For use by the currentGametype
@@ -23,5 +24,12 @@ public class FlansModPlayerData
 	{
 		if(shootTime > 0)
 			shootTime--;
+	}
+	
+	public PlayerClass getPlayerClass()
+	{
+		if(playerClass != newPlayerClass)
+			playerClass = newPlayerClass;
+		return playerClass;
 	}
 }

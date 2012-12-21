@@ -58,21 +58,29 @@ public class GametypeTDM extends Gametype
 	}
 	
 	@Override
-	public void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
+	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		if(previousTeam != null && Gametype.isAValidTeam(previousTeam))
+		if(previousTeam != null && previousTeam != team && isAValidTeam(previousTeam))
 		{
 			getPlayerData(player).deaths++;
 			getPlayerData(player).score--;
 		}
 		
 		sendClassMenuToPlayer((EntityPlayerMP)player);
-		teamsManager.forceRespawn(player);
+		if(team != previousTeam)
+			teamsManager.forceRespawn(player);
+		return true;
 	}
 
 	@Override
-	public void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
+	public boolean playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
 	{
+		Team team = getPlayerData(player).team;
+		if(!team.classes.contains(playerClass))
+			return false;
+		getPlayerData(player).newPlayerClass = playerClass;
+		TeamsManager.getInstance().resetInventory(player);
+		return true;
 	}
 
 	@Override

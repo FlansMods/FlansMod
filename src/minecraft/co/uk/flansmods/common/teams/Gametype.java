@@ -171,9 +171,11 @@ public abstract class Gametype {
 	
 	public abstract void playerQuit(EntityPlayerMP player);
 	
-	public abstract void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam);
+	//Return false if the player may not choose that team
+	public abstract boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam);
 	
-	public abstract void playerChoseClass(EntityPlayerMP player, PlayerClass playerClass);
+	//Return false if the player may not choose that class
+	public abstract boolean playerChoseClass(EntityPlayerMP player, PlayerClass playerClass);
 	
 	//Return true if damage should be dealt.
 	public abstract boolean playerAttacked(EntityPlayerMP player, DamageSource source);

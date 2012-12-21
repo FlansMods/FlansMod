@@ -330,25 +330,7 @@ public class TeamsManager implements IPlayerTracker
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		Team team = FlansModPlayerHandler.getPlayerData(player).team;
-		if (team == null)
-			return;
-		if(team.hat != null)
-			player.inventory.armorInventory[3] = team.hat.copy();
-		if(team.chest != null)
-			player.inventory.armorInventory[2] = team.chest.copy();
-		if(team.legs != null)
-			player.inventory.armorInventory[1] = team.legs.copy();
-		if(team.shoes != null)
-			player.inventory.armorInventory[0] = team.shoes.copy();		
-		PlayerClass pc = FlansModPlayerHandler.getPlayerData(player).playerClass;
-		if(pc != null)
-		{
-			for(ItemStack stack : pc.startingItems)
-			{
-				player.inventory.addItemStackToInventory(stack.copy());
-			}
-		}
+		resetInventory(player);
 		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 		if(spawnPoint != null)
 		{
@@ -376,10 +358,17 @@ public class TeamsManager implements IPlayerTracker
 		}
 		if(team != null)
 		{
-			team.members.add(player);
 			FlansModPlayerHandler.getPlayerData(player).team = team;
 			if(currentGametype != null)
-				currentGametype.playerChoseTeam(player, team, previousTeam);
+			{
+				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
+				if(canJoinTeam)
+				{
+					team.members.add(player);
+					previousTeam.members.remove(player);
+					messageAll(player.username + " joined \u00a7" + team.textColour + team.name);
+				}
+			}
 		}
 	}	
 	
@@ -399,10 +388,34 @@ public class TeamsManager implements IPlayerTracker
 			FlansModPlayerHandler.getPlayerData(player).playerClass = playerClass;
 			if(currentGametype != null)
 				currentGametype.playerChoseClass(player, playerClass);
-			for(ItemStack stack : playerClass.startingItems)
-			{
-				player.inventory.addItemStackToInventory(stack.copy());
-			}
+		}
+	}
+	
+	public void resetInventory(EntityPlayer player)
+	{
+		Team team = FlansModPlayerHandler.getPlayerData(player).team;
+		PlayerClass playerClass = FlansModPlayerHandler.getPlayerData(player).getPlayerClass();
+
+		if(team == null)
+			return;
+		
+		player.inventory.armorInventory = new ItemStack[4];
+		player.inventory.mainInventory = new ItemStack[36];
+		if(team.hat != null)
+			player.inventory.armorInventory[3] = team.hat.copy();
+		if(team.chest != null)
+			player.inventory.armorInventory[2] = team.chest.copy();
+		if(team.legs != null)
+			player.inventory.armorInventory[1] = team.legs.copy();
+		if(team.shoes != null)
+			player.inventory.armorInventory[0] = team.shoes.copy();		
+		
+		if(playerClass == null)
+			return;
+		
+		for(ItemStack stack : playerClass.startingItems)
+		{
+			player.inventory.addItemStackToInventory(stack.copy());
 		}
 	}
 	
