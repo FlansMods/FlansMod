@@ -7,20 +7,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.network.packet.Packet255KickDisconnect;
-import co.uk.flansmods.client.GuiTeamSelect;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.teams.PlayerClass;
-import co.uk.flansmods.common.teams.Team;
-import co.uk.flansmods.common.teams.TeamsManager;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
 
 public class PacketContentPackList extends FlanPacketCommon 
 {	

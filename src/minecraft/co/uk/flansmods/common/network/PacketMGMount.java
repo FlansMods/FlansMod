@@ -11,7 +11,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.FlansMod;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
 public class PacketMGMount extends FlanPacketCommon 
 {

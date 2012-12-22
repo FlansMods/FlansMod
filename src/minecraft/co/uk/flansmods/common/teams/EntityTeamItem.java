@@ -1,24 +1,21 @@
 package co.uk.flansmods.common.teams;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
-import co.uk.flansmods.common.FlansModPlayerHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawnData {
 
@@ -87,16 +84,18 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
             		return;
             }
 
-            int var2 = item.stackSize;
+            //Getter of EntityItem
+            int var2 = func_92014_d().stackSize;
 
-            if ((event.getResult() == Result.ALLOW || var2 <= 0 || par1EntityPlayer.inventory.addItemStackToInventory(item)))
+            if ((event.getResult() == Result.ALLOW || var2 <= 0 || par1EntityPlayer.inventory.addItemStackToInventory(func_92014_d())))
             {
                 GameRegistry.onPickupNotification(par1EntityPlayer, this);
 
                 func_85030_a("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 par1EntityPlayer.onItemPickup(this, var2);
 
-                if (item.stackSize <= 0)
+                //Getter of EntityItem
+                if (func_92014_d().stackSize <= 0)
                 {
                 	spawner.itemEntities.remove(this);
                     setDead();
@@ -115,7 +114,8 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			data.writeInt(spawner.zCoord);
 			data.writeDouble(angle);
 			NBTTagCompound tags = new NBTTagCompound();
-			item.writeToNBT(tags);
+			//Getter of EntityItem
+			func_92014_d().writeToNBT(tags);
 			NBTTagCompound.writeNamedTag(tags, data);
 		}
 		catch(Exception e)
@@ -134,7 +134,10 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			yCoord = data.readInt();
 			zCoord = data.readInt();
 			angle = data.readDouble();
-			item = ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data));
+			//Flan, as EntityItem's itemstack (previously the field was called 'item') field is now only managed
+			//by datawatchers, there are now getters and setters, both currently still unmapped by Forge. This
+			//method sets the itemstack.
+			func_92013_a(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
 		}
 		catch(Exception e)
 		{

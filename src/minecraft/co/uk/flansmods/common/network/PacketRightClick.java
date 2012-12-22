@@ -12,7 +12,7 @@ import co.uk.flansmods.common.EntityCollisionBox;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
 public class PacketRightClick extends FlanPacketCommon 
 {

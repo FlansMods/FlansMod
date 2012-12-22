@@ -1,16 +1,14 @@
 package co.uk.flansmods.common;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.model.ModelMG;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class GunType extends InfoType

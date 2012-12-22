@@ -13,8 +13,8 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketTeamSelect extends FlanPacketCommon 
 {

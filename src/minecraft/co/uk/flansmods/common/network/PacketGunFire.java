@@ -5,16 +5,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
-import co.uk.flansmods.common.EntityMG;
-import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.ItemGun;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
 public class PacketGunFire extends FlanPacketCommon 
 {

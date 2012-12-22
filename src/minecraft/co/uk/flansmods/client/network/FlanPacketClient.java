@@ -26,9 +26,9 @@ import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 
 public class FlanPacketClient implements IPacketHandler
 {

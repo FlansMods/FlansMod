@@ -4,8 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,18 +17,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
-import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
 
 public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 {

@@ -9,8 +9,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketBuyWeapon extends FlanPacketCommon
 {

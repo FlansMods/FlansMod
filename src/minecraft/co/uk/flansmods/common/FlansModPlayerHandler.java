@@ -3,17 +3,16 @@ package co.uk.flansmods.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.uk.flansmods.common.teams.TeamsManager;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.IPlayerTracker;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class FlansModPlayerHandler implements IPlayerTracker
 {

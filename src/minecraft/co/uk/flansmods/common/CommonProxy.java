@@ -4,21 +4,15 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
-import co.uk.flansmods.client.TickHandlerClient;
-import co.uk.flansmods.client.TileEntitySpawnerRenderer;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
-import co.uk.flansmods.common.teams.TileEntitySpawner;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy
 {

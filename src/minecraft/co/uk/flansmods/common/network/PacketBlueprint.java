@@ -14,7 +14,7 @@ import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.VehicleType;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.relauncher.Side;
 
 public class PacketBlueprint extends FlanPacketCommon 
 {

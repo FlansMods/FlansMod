@@ -8,16 +8,13 @@ import java.util.Random;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntitySmokeFX;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
-import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.FlansModPlayerHandler;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketFlak extends FlanPacketCommon 
 {

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -31,14 +30,10 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker

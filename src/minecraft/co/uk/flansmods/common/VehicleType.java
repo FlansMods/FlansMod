@@ -1,19 +1,12 @@
 package co.uk.flansmods.common;
 
-import net.minecraft.client.Minecraft;
-
 import java.io.BufferedReader;
 import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.io.File;
 
 import co.uk.flansmods.client.model.ModelVehicle;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class VehicleType extends DriveableType
