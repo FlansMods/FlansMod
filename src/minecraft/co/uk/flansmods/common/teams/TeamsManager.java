@@ -205,6 +205,7 @@ public class TeamsManager implements IPlayerTracker
 		if(event instanceof WorldEvent.Load)
 		{
 			loadPerWorldData(event, event.world);
+			savePerWorldData(event, event.world);
 		}
 		if(event instanceof WorldEvent.Save)
 		{
@@ -218,7 +219,7 @@ public class TeamsManager implements IPlayerTracker
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ) + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
 		checkFileExists(file);
 		try
 		{
@@ -239,12 +240,13 @@ public class TeamsManager implements IPlayerTracker
 		{
 			FlansMod.log("Failed to load from teams.dat");
 			e.printStackTrace();
+			
 		}
 	}
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" : "" ) + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
 		checkFileExists(file);
 		try
 		{

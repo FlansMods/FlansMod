@@ -161,6 +161,11 @@ public class CommonProxy
 		return null;
 	}
 	
+	public void loadSound(String contentPack, String type, String sound)
+	{
+		
+	}
+	
 	public void shootAAGun(World world, double posX, double posY, double posZ, AAGunType type, float gunYaw, float gunPitch, Random rand, BulletType bullet, EntityAAGun entity, Entity player)
 	{
 	}

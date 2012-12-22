@@ -12,6 +12,7 @@ import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelPlane;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -52,8 +53,8 @@ public class PlaneType extends DriveableType
 		super.read(split, file);
 		try
 		{
-			if(split[0].equals("Model"))
-				this.model = (ModelPlane) FlansMod.proxy.loadPlaneModel(split, shortName);
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
+				model = (ModelPlane) FlansMod.proxy.loadPlaneModel(split, shortName);
 			
 			//Movement modifiers
 			if(split[0].equals("MaxPropellerSpeed"))
@@ -144,22 +145,22 @@ public class PlaneType extends DriveableType
 			if(split[0].equals("StartSound"))
 			{
 				startSound = "planes." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
 			}
 			if(split[0].equals("PropSound"))
 			{
 				propSound = "planes." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
 			}
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "planes." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
 				bombSound = "planes." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/planes/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
 			}
 				
 			//Recipe

@@ -11,6 +11,7 @@ import java.io.File;
 import co.uk.flansmods.client.model.ModelVehicle;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -51,7 +52,7 @@ public class VehicleType extends DriveableType
 		super.read(split, file);
 		try
 		{
-			if(split[0].equals("Model"))
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
 				model = (ModelVehicle)FlansMod.proxy.loadVehicleModel(split, shortName);
 			}
@@ -151,22 +152,22 @@ public class VehicleType extends DriveableType
 			if(split[0].equals("StartSound"))
 			{
 				startSound = "vehicles." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "vehicles", split[1]);
 			}
 			if(split[0].equals("EngineSound"))
 			{
 				engineSound = "vehicles." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "vehicles", split[1]);
 			}
 			if(split[0].equals("ShootSound"))
 			{
 				shootSound = "vehicles." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "vehicles", split[1]);
 			}
 			if(split[0].equals("ShellSound"))
 			{
 				shellSound = "vehicles." + split[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/vehicles/" + split[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + split[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "vehicles", split[1]);
 			}
 				
 			if(split[0].equals("AllowTurretGuns"))

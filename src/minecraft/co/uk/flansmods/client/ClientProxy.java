@@ -520,6 +520,12 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
+	@Override
+	public void loadSound(String contentPack, String type, String sound)
+	{
+		FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
+	}
+	
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return player == FMLClientHandler.instance().getClient().thePlayer;

@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class AAGunType extends InfoType
 {
@@ -63,7 +64,7 @@ public class AAGunType extends InfoType
 		super.read(arg0, file);
 		try
 		{
-			if (arg0[0].equals("Model"))
+			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("Model"))
 			{
 				model = FlansMod.proxy.loadAAGunModel(arg0, shortName);
 			}
@@ -94,12 +95,12 @@ public class AAGunType extends InfoType
 			if (arg0[0].equals("ShootSound"))
 			{
 				shootSound = "aaguns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/aaguns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
 			}
 			if (arg0[0].equals("ReloadSound"))
 			{
 				reloadSound = "aaguns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("newSound/aaguns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
 			}
 			if (arg0[0].equals("FireAlternately"))
 			{

@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -31,7 +32,7 @@ public class CommonTickHandler implements ITickHandler {
 		}
 		if (type.equals(EnumSet.of(TickType.SERVER)))
 		{
-			sTick(FMLClientHandler.instance().getServer());
+			sTick(FMLCommonHandler.instance().getMinecraftServerInstance());
 		}
 	}
 	

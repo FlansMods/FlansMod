@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.model.ModelMG;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -104,14 +105,13 @@ public class GunType extends InfoType
 			if (arg0[0].equals("ShootSound"))
 			{
 				shootSound = "guns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("sound3/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "guns", arg0[1]);
 			}
 			if (arg0[0].equals("ReloadSound"))
 			{
 				reloadSound = "guns." + arg0[1];
-				FMLClientHandler.instance().getClient().installResource("sound3/guns/" + arg0[1] + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + arg0[1] + ".ogg"));
+				FlansMod.proxy.loadSound(contentPack, "guns", arg0[1]);
 			}
-
 			if (arg0[0].equals("Mode"))
 				mode = arg0[1].equals("FullAuto") ? 1 : 0;
 			if (arg0[0].equals("Scope"))
@@ -125,7 +125,7 @@ public class GunType extends InfoType
 				zoomLevel = Float.parseFloat(arg0[1]);
 			if (arg0[0].equals("Deployable"))
 				deployable = arg0[1].equals("True");
-			if (arg0[0].equals("DeployedModel") && deployable)
+			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("DeployedModel") && deployable)
 			{
 				model = (ModelMG)FlansMod.proxy.loadMGModel(arg0, shortName);
 			}
