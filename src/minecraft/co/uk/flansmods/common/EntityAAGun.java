@@ -1,5 +1,7 @@
 package co.uk.flansmods.common;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +14,15 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
+import co.uk.flansmods.client.model.ModelAAGun;
+import co.uk.flansmods.common.network.PacketMGFire;
+import co.uk.flansmods.common.network.PacketPlaySound;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
@@ -39,6 +47,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public ItemStack[] ammo; // One per barrel
 	public int reloadTimer;
 	public int currentBarrel; // For cycling through firing each barrel
+	public boolean mouseHeld;
+	public boolean wasShooting;
 
 	public EntityAAGun(World world)
 	{
@@ -103,6 +113,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		return 0D;
 	}
+	
+	public void setMouseHeld(boolean held)
+	{
+		mouseHeld = held;
+	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
@@ -112,29 +127,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			Entity player = ((EntityDamageSource) damagesource).getEntity();
 			if (player == riddenByEntity)
 			{
-				// Player left clicked on the gun
-				// Check for ammo / reloading
-				if (reloadTimer > 0 || shootDelay > 0)
-				{
-					return true;
-				}
-				for (int j = 0; j < type.numBarrels; j++)
-				{
-					if (shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
-					{
-						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[j].itemID);
-						if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
-							ammo[j].damageItem(1, (EntityLiving) player);
-						shootDelay = type.shootDelay;
-						barrelRecoil[j] = type.recoil;
-						if (!worldObj.isRemote)
-						{
-							FlansMod.proxy.shootAAGun(worldObj, posX, posY, posZ, type, gunYaw, gunPitch, rand, bullet, this, player);
-						}
-					}
-				}
-				currentBarrel = (currentBarrel + 1) % type.numBarrels;
+
 			} else
 			{
 				// Break gun
@@ -200,6 +193,21 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		motionX *= 0.5;
 		motionZ *= 0.5;
 		moveEntity(motionX, motionY, motionZ);
+		
+		if (worldObj.isRemote && riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
+		{
+			//Send a packet!
+			if(Mouse.isButtonDown(0) && !wasShooting)
+			{
+				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
+				wasShooting = true;
+			}
+			else if(!Mouse.isButtonDown(0) && wasShooting)
+			{
+				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
+				wasShooting = false;
+			}
+		}
 
 		if (worldObj.isRemote)
 		{
@@ -251,6 +259,28 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
+		}
+		
+
+		
+		if (!worldObj.isRemote && mouseHeld && riddenByEntity != null && riddenByEntity instanceof EntityPlayer && reloadTimer <= 0 && shootDelay <= 0)
+		{
+			EntityPlayer player = (EntityPlayer)riddenByEntity;
+			for (int j = 0; j < type.numBarrels; j++)
+			{
+				if (shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+				{
+					// Fire
+					BulletType bullet = BulletType.getBullet(ammo[j].itemID);
+					if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+						ammo[j].damageItem(1, player);
+					shootDelay = type.shootDelay;
+					barrelRecoil[j] = type.recoil;
+					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, bullet));
+					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound));
+				}
+			}
+			currentBarrel = (currentBarrel + 1) % type.numBarrels;
 		}
 	}
 

@@ -29,6 +29,7 @@ public class AAGunType extends InfoType
 	public String texture;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
+	public int[] barrelX, barrelY, barrelZ;
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 
 	public AAGunType(BufferedReader file, String pack)
@@ -109,6 +110,16 @@ public class AAGunType extends InfoType
 			if (arg0[0].equals("NumBarrels"))
 			{
 				numBarrels = Integer.parseInt(arg0[1]);
+				barrelX = new int[numBarrels];
+				barrelY = new int[numBarrels];
+				barrelZ = new int[numBarrels];
+			}
+			if(arg0[0].equals("Barrel"))
+			{
+				int id = Integer.parseInt(arg0[1]);
+				barrelX[id] = Integer.parseInt(arg0[2]);
+				barrelY[id] = Integer.parseInt(arg0[3]);
+				barrelZ[id] = Integer.parseInt(arg0[4]);
 			}
 			if (arg0[0].equals("Health"))
 			{
@@ -136,6 +147,7 @@ public class AAGunType extends InfoType
 				gunnerY = Integer.parseInt(arg0[2]);
 				gunnerZ = Integer.parseInt(arg0[3]);
 			}
+
 		} catch (Exception e)
 		{
 			FlansMod.log("" + e);

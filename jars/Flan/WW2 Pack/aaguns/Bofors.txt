@@ -8,6 +8,7 @@ Model Bofors
 //Place the texture .png in the skins folder
 Texture Bofors
 NumBarrels 1
+Barrel 0 -6 12 6
 FireAlternately True
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 20

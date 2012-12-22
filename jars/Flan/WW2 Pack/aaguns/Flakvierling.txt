@@ -8,6 +8,10 @@ Model Flakvierling
 //Place the texture .png in the skins folder
 Texture Flakvierling
 NumBarrels 4
+Barrel 0 40 6 6
+Barrel 1 40 12 6
+Barrel 2 40 12 0
+Barrel 3 40 6 0
 FireAlternately True
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100
