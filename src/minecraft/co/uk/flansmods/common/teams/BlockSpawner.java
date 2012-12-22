@@ -2,6 +2,7 @@ package co.uk.flansmods.common.teams;
 
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.TileEntityGunBox;
 
 import net.minecraft.block.Block;
@@ -25,7 +26,7 @@ public class BlockSpawner extends BlockContainer
 	public BlockSpawner(int i, Material material) 
 	{
 		super(i, material);
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 
     @Override
