@@ -296,7 +296,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			if(slot != 0)
 			{
-				Vec3 shellVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
+				Vec3 shellVec = rotate(type.gunX / 16D, type.gunY / 16D, type.gunZ / 16D);
 				float globalGunPitch = (float)Math.asin(barrelVector.y) * 180F / 3.14159265F;
 				float globalGunYaw = -(float)Math.atan2(barrelVector.x, barrelVector.z) * 180F / 3.14159265F;
 				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, shellVec.addVector(posX, posY, posZ).addVector(barrelVector.x * 2D, barrelVector.y * 2D, barrelVector.z * 2D), globalGunYaw, globalGunPitch, barrelVector.x * 4D, barrelVector.y * 4D, barrelVector.z * 4D, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type));
@@ -315,7 +315,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			int i = 0;
 			if(data.guns[i] != null && data.ammo[i] != null && data.ammo[i].getItem() instanceof ItemBullet && data.guns[i].isAmmo(((ItemBullet)data.ammo[i].getItem()).type))
 			{
-				Vec3 gunVec = rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
+				Vec3 gunVec = rotate(type.gunX / 16D, type.gunY / 16D, type.gunZ / 16D);
 				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F));
 				worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
 				int damage = data.ammo[i].getItemDamage();

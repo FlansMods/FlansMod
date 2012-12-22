@@ -74,9 +74,15 @@ public class VehicleType extends DriveableType
 			//Propellers and Armaments
 			if(split[0].equals("GunPosition"))
 			{
+				gunX = Integer.parseInt(split[1]);
+				gunY = Integer.parseInt(split[2]);
+				gunZ = Integer.parseInt(split[3]);				
+			}
+			if(split[0].equals("BarrelPosition"))
+			{
 				barrelX = Integer.parseInt(split[1]);
 				barrelY = Integer.parseInt(split[2]);
-				barrelZ = Integer.parseInt(split[3]);				
+				barrelZ = Integer.parseInt(split[3]);
 			}
 			if(split[0].equals("ShootDelay"))
 				vehicleShootDelay = Integer.parseInt(split[1]);
@@ -248,6 +254,10 @@ public class VehicleType extends DriveableType
 	public boolean squashMobs = false;
 	public float cameraDistance = 5F;
 		
+	public int gunX;
+	public int gunY;
+	public int gunZ;
+	
 	public int barrelX;
 	public int barrelY;
 	public int barrelZ;

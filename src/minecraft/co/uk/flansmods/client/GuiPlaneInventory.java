@@ -30,7 +30,7 @@ public class GuiPlaneInventory extends GuiContainer
 		numItems = container.numItems;
     }
 	
-    protected void drawGuiContainerForegroundLayer()
+    protected void drawGuiContainerForegroundLayer(int x, int y)
     {
 		String wololo = " - Guns";
 		if(screen == 1) wololo = (plane instanceof EntityPlane ? " - Bombs" : " - Shells");

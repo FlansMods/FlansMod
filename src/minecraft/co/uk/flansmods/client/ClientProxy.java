@@ -458,7 +458,7 @@ public class ClientProxy extends CommonProxy
 			double newX = 3D * cosPitch * sinYaw;
 			double newY = -3D * sinPitch;
 			double newZ = 3D * cosPitch * cosYaw;
-			Vec3 gunOriginVec = entity.rotate(vehicleModel.gunModel[0].rotationPointX / 16D, vehicleModel.gunModel[0].rotationPointY / 16D, vehicleModel.gunModel[0].rotationPointZ / 16D);
+			Vec3 gunOriginVec = entity.rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
 			world.spawnEntityInWorld(new EntityBullet(world, gunOriginVec.addVector(posX, posY, posZ), player.rotationYaw, axes.getPitch(), (EntityLiving)seat.riddenByEntity, data.guns[1].accuracy, data.guns[1].damage, ((ItemBullet)data.ammo[1].getItem()).type, 3.0F));
 			if(seat.soundDelay <= 0)
 			{
