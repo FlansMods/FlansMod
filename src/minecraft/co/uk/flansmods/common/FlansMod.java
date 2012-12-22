@@ -67,6 +67,8 @@ public class FlansMod
 	public static TeamsManager teamsManager;
 	
 	public static Configuration configuration;
+	
+	public static CreativeTabFlan tabFlan = new CreativeTabFlan();
 
 	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
@@ -150,6 +152,8 @@ public class FlansMod
 		// Tick handlers
 		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
 		proxy.doTickStuff();
+		
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan", "Flan's Mod");
 		
 		//Content pack handler
 		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());

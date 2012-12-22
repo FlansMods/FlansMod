@@ -11,7 +11,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -141,7 +140,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (slot >= 0)
 			{
 				ammo = gunner.inventory.getStackInSlot(slot);
-				if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+				if (!gunner.capabilities.isCreativeMode)
 					gunner.inventory.setInventorySlotContents(slot, null);
 				reloadTimer = type.reloadTime;
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.reloadSound));
@@ -174,7 +173,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			}
 			// Fire
 			BulletType bullet = BulletType.getBullet(ammo.itemID);
-			if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+			if (gunner != null && !((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
 			worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.accuracy, type.damage, bullet));
@@ -212,7 +211,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				}
 				// Fire
 				BulletType bullet = BulletType.getBullet(ammo.itemID);
-				if (worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+				if (gunner != null && !((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 					ammo.damageItem(1, (EntityLiving) player);
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)

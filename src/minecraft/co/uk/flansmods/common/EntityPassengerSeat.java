@@ -16,7 +16,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -84,7 +83,7 @@ public class EntityPassengerSeat extends Entity
 				if(slot >= 0)
 				{
 					vehicle.superData.ammo[1] = ((EntityPlayer)riddenByEntity).inventory.getStackInSlot(slot);
-					if(worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+					if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 						((EntityPlayer)riddenByEntity).inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
 					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));

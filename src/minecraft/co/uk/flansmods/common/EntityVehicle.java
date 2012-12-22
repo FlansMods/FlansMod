@@ -18,7 +18,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
 import org.lwjgl.util.vector.Matrix4f;
@@ -191,7 +190,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			case 0 : //Accelerate
 			{
-				if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 				{
 					acceleration += type.acceleration / 20D;
 				}
@@ -208,7 +207,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			case 1 : //Deccelerate
 			{
-				if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 				{
 					acceleration -= type.acceleration / 20D;
 				}
@@ -323,7 +322,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				data.ammo[i].setItemDamage(damage + 1);	
 				if(damage + 1 == data.ammo[i].getMaxDamage())
 				{
-					if(worldObj.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+					if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 						data.ammo[i].setItemDamage(0);
 					else data.setInventorySlotContents(i, null);
 				}

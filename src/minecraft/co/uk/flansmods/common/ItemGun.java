@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
@@ -41,7 +40,7 @@ public class ItemGun extends Item
 		{
 			setMaxDamage(type.loadIntoGun);
 		}
-		setCreativeTab(CreativeTabs.tabCombat);
+		setCreativeTab(FlansMod.tabFlan);
 	}
 
 	public String getTextureFile()
@@ -191,7 +190,7 @@ public class ItemGun extends Item
 				{
 					// Reload
 					// Creative mode
-					if (world.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+					if (entityplayer.capabilities.isCreativeMode)
 					{
 						// Reset the stack for infinite ammo
 						itemstack.setItemDamage(0);
@@ -208,7 +207,7 @@ public class ItemGun extends Item
 						}
 						itemstack.setItemDamage(i);
 						// Drop item on reload if bullet requires it
-						if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+						if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
 							dropItem(world, entityplayer, bullet.dropItemOnReload);
 					}
 					// Play the reload sound by this method so that it stays
@@ -258,12 +257,12 @@ public class ItemGun extends Item
 									item = null;
 								entityplayer.inventory.setInventorySlotContents(j, item);
 								// Drop item on reload if bullet requires it
-								if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+								if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
 									dropItem(world, entityplayer, bullet.dropItemOnReload);
 							}
 							
 							// Drop item on reload if bullet requires it
-							if(bullet.dropItemOnReload != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+							if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
 								dropItem(world, entityplayer, bullet.dropItemOnReload);
 							if (type.reloadSound != null)
 							{
@@ -316,7 +315,7 @@ public class ItemGun extends Item
 				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.accuracy, type.damage, bullet, type.speed, type.numBullets > 1));
 			}
 			// Drop item on shooting if bullet requires it
-			if(bullet.dropItemOnShoot != null && world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
 		FlansModPlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
@@ -354,7 +353,7 @@ public class ItemGun extends Item
 							{
 								world.spawnEntityInWorld(new EntityMG(world, i, j + 1, k, playerDir, type));
 							}
-							if (world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+							if (!entityplayer.capabilities.isCreativeMode)
 								itemstack.stackSize = 0;
 						}
 					}

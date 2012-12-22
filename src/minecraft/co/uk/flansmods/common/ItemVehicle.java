@@ -8,7 +8,6 @@ import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +21,7 @@ public class ItemVehicle extends ItemMapBase
 		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
-		setCreativeTab(CreativeTabs.tabTransport);
+		setCreativeTab(FlansMod.tabFlan);
     }
 	
 	public String getTextureFile()
@@ -62,7 +61,7 @@ public class ItemVehicle extends ItemMapBase
             {
 				world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getVehicleData(itemstack, world)));
             }
-			if(world.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+			if(!entityplayer.capabilities.isCreativeMode)
 			{	
 				itemstack.stackSize--;
 			}

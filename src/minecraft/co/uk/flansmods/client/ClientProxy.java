@@ -12,7 +12,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -470,7 +469,7 @@ public class ClientProxy extends CommonProxy
 			data.ammo[1].setItemDamage(damage + 1);	
 			if(damage + 1 == data.ammo[1].getMaxDamage())
 			{
-				if(world.getWorldInfo().getGameType() == EnumGameType.CREATIVE)
+				if(player.capabilities.isCreativeMode)
 					data.ammo[1].setItemDamage(0);
 				else data.setInventorySlotContents(1, null);
 			}
