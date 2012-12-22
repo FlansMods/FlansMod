@@ -13,6 +13,7 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
+import co.uk.flansmods.common.network.FlansModContentPackVerifier;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.BlockSpawner;
@@ -148,6 +149,9 @@ public class FlansMod
 		// Tick handlers
 		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
 		proxy.doTickStuff();
+		
+		//Content pack handler
+		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());
 		
 		// default stuff
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());

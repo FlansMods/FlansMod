@@ -147,7 +147,7 @@ public static final byte packetID = 6;
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Error reading packet or spawning particles");
+			FlansMod.log("Error reading packet or opening team gui");
 			e.printStackTrace();
 		}
 	}	
@@ -169,7 +169,7 @@ public static final byte packetID = 6;
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Error reading packet or spawning particles");
+			FlansMod.log("Error reading packet or selecting team / class");
 			e.printStackTrace();
 		}
 	}

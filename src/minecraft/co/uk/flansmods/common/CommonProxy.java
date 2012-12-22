@@ -22,6 +22,8 @@ import cpw.mods.fml.common.registry.TickRegistry;
 
 public class CommonProxy
 {
+	public List<File> contentPacks;
+	
 	public void load()
 	{
 		
@@ -32,7 +34,7 @@ public class CommonProxy
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		// this stuff is only done client side.
-		List<File> contentPacks = new ArrayList<File>();
+		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
 			if (file.isDirectory())
@@ -45,6 +47,11 @@ public class CommonProxy
 			}
 		}
 		FlansMod.log("Loaded textures and models.");
+		return contentPacks;
+	}
+	
+	public List<File> getContentList()
+	{
 		return contentPacks;
 	}
 	
