@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
@@ -235,6 +236,11 @@ public class TeamsManager implements IPlayerTracker
 					teams[i] = Team.getTeam(tags.getString("Team " + i));
 				}
 			}
+			FlansMod.bombsEnabled = tags.getBoolean("Bombs");
+			FlansMod.bulletsEnabled = tags.getBoolean("Bullets");
+			FlansMod.explosions = tags.getBoolean("Explosions");
+			FlansMod.forceAdventureMode = tags.getBoolean("ForceAdventure");
+			FlansMod.canBreakGuns = tags.getBoolean("CanBreakGuns");
 		}
 		catch(Exception e)
 		{
@@ -261,6 +267,11 @@ public class TeamsManager implements IPlayerTracker
 						tags.setString("Team " + i, teams[i].shortName);
 				}
 			}
+			tags.setBoolean("Bombs", FlansMod.bombsEnabled);
+			tags.setBoolean("Bullets", FlansMod.bulletsEnabled);
+			tags.setBoolean("Explosions", FlansMod.explosions);
+			tags.setBoolean("ForceAdventure", FlansMod.forceAdventureMode);
+			tags.setBoolean("CanBreakGuns", FlansMod.canBreakGuns);
 			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
 		}
 		catch(Exception e)
@@ -338,6 +349,8 @@ public class TeamsManager implements IPlayerTracker
 		{
 			((EntityPlayerMP)player).playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 		}
+		if(FlansMod.forceAdventureMode)
+			player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
 		currentGametype.playerRespawned((EntityPlayerMP)player);
 	}
 	

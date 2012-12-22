@@ -226,9 +226,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
 					soundDelay = type.shootSoundLength;
 				}
-			} else
+			} else if(gunner != null)
 			{
-				// Break gun
+				return gunner.attackEntityFrom(damagesource, i);
+			} else if(FlansMod.canBreakGuns)
+			{
 				setDead();
 			}
 		}

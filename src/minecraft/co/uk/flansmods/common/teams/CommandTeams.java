@@ -163,6 +163,26 @@ public class CommandTeams extends CommandBase {
 			}
 			return;
 		}
+		if(split[0].equals("forceAdventure") || split[0].equals("forceAdventureMode"))
+		{
+			FlansMod.forceAdventureMode = Boolean.parseBoolean(split[1]);
+		}
+		if(split[0].equals("explosions"))
+		{
+			FlansMod.explosions = Boolean.parseBoolean(split[1]);
+		}
+		if(split[0].equals("bombs") || split[0].equals("allowBombs"))
+		{
+			FlansMod.bombsEnabled = Boolean.parseBoolean(split[1]);
+		}
+		if(split[0].equals("bullets") || split[0].equals("bulletsEnabled"))
+		{
+			FlansMod.bulletsEnabled = Boolean.parseBoolean(split[1]);
+		}
+		if(split[0].equals("canBreakGuns"))
+		{
+			FlansMod.canBreakGuns = Boolean.parseBoolean(split[1]);
+		}
 	}
 
 	public EntityPlayerMP getPlayer(String name)

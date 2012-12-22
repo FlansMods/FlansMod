@@ -84,6 +84,8 @@ public class FlansMod
 	public static boolean explosions = true;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
+	public static boolean forceAdventureMode = false;
+	public static boolean canBreakGuns = true;
 
 	public static Block craftingTable;
 	public static Block spawner;

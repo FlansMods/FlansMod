@@ -128,9 +128,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if (player == riddenByEntity)
 			{
 
-			} else
+			} else if(riddenByEntity != null)
 			{
-				// Break gun
+				return riddenByEntity.attackEntityFrom(damagesource, i);
+			} else if(FlansMod.canBreakGuns)
+			{
 				setDead();
 			}
 		} else
@@ -289,6 +291,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.setDead();
 		// Drop gun
+		if(worldObj.isRemote)
+			return;
 		dropItem(type.getItem().shiftedIndex, 1);
 		// Drop ammo boxes
 		for (ItemStack stack : ammo)
