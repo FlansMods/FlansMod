@@ -727,7 +727,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 		if(fuelling)
 		{
-			if(data.fuel == null || data.fuel.stackSize <= 0 || !(data.fuel.getItem() instanceof ItemPart) || ((ItemPart)data.fuel.getItem()).type.category != 9 || data.fuelInTank >= type.tankSize)// || !onGround || getSpeedXYZ() > 0.1D)
+			if(data.fuel == null || data.fuel.stackSize <= 0 || data.fuelInTank >= type.tankSize)// || !onGround || getSpeedXYZ() > 0.1D)
 			{
 				fuelling = false;
 			}
@@ -744,6 +744,19 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 						data.setInventorySlotContents(data.getFuelSlot(), null);
 					fuelling = false;
 				}	
+			}
+		}
+		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
+		{
+			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank+500 <= type.tankSize)
+			{
+				data.fuelInTank += 500;
+				data.fuel = new ItemStack(Item.bucketEmpty);
+			}
+			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank+1000 <= type.tankSize)
+			{
+				data.fuelInTank += 1000;
+				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
 		}
 

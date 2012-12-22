@@ -47,50 +47,46 @@ public class ContainerPlaneMenu extends Container
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
     {
-		if(isFuel)
-		{
-			ItemStack stack = null;
-	        Slot currentSlot = (Slot)inventorySlots.get(slotID);
-	
-	        if(currentSlot != null && currentSlot.getHasStack())
-	        {
-	            ItemStack slotStack = currentSlot.getStack();
-	            stack = slotStack.copy();
-	            
-	            if(slotID != 0)
-	            {
-	            	if(!mergeItemStack(slotStack, 0, 1, false))
-	            	{
-	            		return null;
-	            	}
-	            }
-	            else {
-	            	if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
-	            	{
-	            		return null;
-	            	}
-	            }
-	            
-	            if (slotStack.stackSize == 0)
-	            {
-	                currentSlot.putStack((ItemStack)null);
-	            }
-	            else
-	            {
-	                currentSlot.onSlotChanged();
-	            }
-	
-	            if (slotStack.stackSize == stack.stackSize)
-	            {
-	                return null;
-	            }
-	
-	            currentSlot.onPickupFromSlot(player, slotStack);
-	        }
-	
-	        return stack;
-		}
-		return null;
+		ItemStack stack = null;
+        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+
+        if(currentSlot != null && currentSlot.getHasStack())
+        {
+            ItemStack slotStack = currentSlot.getStack();
+            stack = slotStack.copy();
+            
+            if(slotID != 0)
+            {
+            	if(!mergeItemStack(slotStack, 0, 1, false))
+            	{
+            		return null;
+            	}
+            }
+            else {
+            	if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
+            	{
+            		return null;
+            	}
+            }
+            
+            if (slotStack.stackSize == 0)
+            {
+                currentSlot.putStack((ItemStack)null);
+            }
+            else
+            {
+                currentSlot.onSlotChanged();
+            }
+
+            if (slotStack.stackSize == stack.stackSize)
+            {
+                return null;
+            }
+
+            currentSlot.onPickupFromSlot(player, slotStack);
+        }
+
+        return stack;
     }
     
     @Override

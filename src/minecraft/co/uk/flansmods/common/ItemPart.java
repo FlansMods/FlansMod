@@ -1,6 +1,9 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
@@ -21,6 +24,14 @@ public class ItemPart extends Item
 		}
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlan);
+	}
+	
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	{
+		if(type.category == 9)
+		{
+			par3List.add("Fuel Stored: " + (type.fuel - par1ItemStack.getItemDamage()) + " / " + type.fuel);
+		}
 	}
 
 	public String getTextureFile()
