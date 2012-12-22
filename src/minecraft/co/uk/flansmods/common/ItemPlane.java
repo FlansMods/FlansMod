@@ -21,7 +21,7 @@ public class ItemPlane extends ItemMapBase
 		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlan);
+		setCreativeTab(FlansMod.tabFlanVehicles);
     }
 	
 	public String getTextureFile()

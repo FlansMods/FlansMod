@@ -21,7 +21,7 @@ public class ItemAAGun extends Item
 		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlan);
+		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 
 	public String getTextureFile()

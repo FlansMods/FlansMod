@@ -40,7 +40,7 @@ public class ItemGun extends Item
 		{
 			setMaxDamage(type.loadIntoGun);
 		}
-		setCreativeTab(FlansMod.tabFlan);
+		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 
 	public String getTextureFile()

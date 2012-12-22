@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.FlansMod;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,7 @@ public class ItemFlagpole extends Item {
 	public ItemFlagpole(int i) 
 	{
 		super(i);
-		setCreativeTab(CreativeTabs.tabMisc);
+		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

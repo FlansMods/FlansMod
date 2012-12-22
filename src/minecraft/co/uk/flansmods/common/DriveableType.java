@@ -72,7 +72,7 @@ public class DriveableType extends InfoType
 			}
 		}
 		
-		typeList = null;
+		//typeList = null;
 	}
 	
 	public CollisionBox[] boxes;
@@ -86,5 +86,5 @@ public class DriveableType extends InfoType
 	public int tankSize = 100;
 
 	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
-	private static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
+	public static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
 }

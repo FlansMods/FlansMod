@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.FlansMod;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 		super(t.itemID - 256, EnumArmorMaterial.CLOTH, 0, t.type);
 		type = t;
 		setIconIndex(type.iconIndex);
-		setCreativeTab(CreativeTabs.tabCombat);
+		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 
 	public ItemTeamArmour(int ID, EnumArmorMaterial armorMaterial, int renderIndex, int armourType) 

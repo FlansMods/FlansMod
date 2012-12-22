@@ -68,7 +68,10 @@ public class FlansMod
 	
 	public static Configuration configuration;
 	
-	public static CreativeTabFlan tabFlan = new CreativeTabFlan();
+	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0);
+	public static CreativeTabFlan tabFlanVehicles = new CreativeTabFlan(1);
+	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
+	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
 	public static final boolean DEBUG = false;
 	public static List<Item> bulletItems = new ArrayList<Item>();
@@ -153,7 +156,10 @@ public class FlansMod
 		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
 		proxy.doTickStuff();
 		
-		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan", "Flan's Mod");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan0", "Flan's Mod Guns");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan1", "Flan's Mod Vehicles");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan2", "Flan's Mod Parts");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan3", "Flan's Mod Team Stuff");
 		
 		//Content pack handler
 		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());

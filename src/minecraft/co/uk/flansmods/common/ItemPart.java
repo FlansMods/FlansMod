@@ -20,7 +20,7 @@ public class ItemPart extends Item
 			setHasSubtypes(true);
 		}
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlan);
+		setCreativeTab(FlansMod.tabFlanParts);
 	}
 
 	public String getTextureFile()

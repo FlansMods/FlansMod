@@ -18,7 +18,7 @@ public class ItemBullet extends Item
 		setMaxDamage(type.roundsPerItem);
 		setMaxStackSize(type.maxStackSize);
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlan);
+		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 
 	public String getTextureFile()
