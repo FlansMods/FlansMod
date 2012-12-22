@@ -145,12 +145,50 @@ public class ContainerPlaneInventory extends Container
 		return true;
     }
 	
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
+	@Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
     {
-    	return null;
+		ItemStack stack = null;
+        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+
+        if(currentSlot != null && currentSlot.getHasStack())
+        {
+            ItemStack slotStack = currentSlot.getStack();
+            stack = slotStack.copy();
+            
+            if(slotID >= numItems)
+            {
+            	if(!mergeItemStack(slotStack, 0, numItems, false))
+            	{
+            		return null;
+            	}
+            }
+            else {
+            	if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
+            	{
+            		return null;
+            	}
+            }
+            
+            if (slotStack.stackSize == 0)
+            {
+                currentSlot.putStack((ItemStack)null);
+            }
+            else
+            {
+                currentSlot.onSlotChanged();
+            }
+
+            if (slotStack.stackSize == stack.stackSize)
+            {
+                return null;
+            }
+
+            currentSlot.onPickupFromSlot(player, slotStack);
+        }
+
+        return stack;
     }
-    
-    
 
 	public InventoryPlayer inventory;
     public World world;

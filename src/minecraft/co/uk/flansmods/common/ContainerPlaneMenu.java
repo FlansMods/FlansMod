@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerPlaneMenu extends Container
@@ -41,6 +42,51 @@ public class ContainerPlaneMenu extends Container
         {
         	addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 137 + (isFuel ? 0 : 19)));
         }
+    }
+    
+	@Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+    {
+		ItemStack stack = null;
+        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+
+        if(currentSlot != null && currentSlot.getHasStack())
+        {
+            ItemStack slotStack = currentSlot.getStack();
+            stack = slotStack.copy();
+            
+            if(slotID != 0)
+            {
+            	if(!mergeItemStack(slotStack, 0, 1, false))
+            	{
+            		return null;
+            	}
+            }
+            else {
+            	if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
+            	{
+            		return null;
+            	}
+            }
+            
+            if (slotStack.stackSize == 0)
+            {
+                currentSlot.putStack((ItemStack)null);
+            }
+            else
+            {
+                currentSlot.onSlotChanged();
+            }
+
+            if (slotStack.stackSize == stack.stackSize)
+            {
+                return null;
+            }
+
+            currentSlot.onPickupFromSlot(player, slotStack);
+        }
+
+        return stack;
     }
     
     @Override
