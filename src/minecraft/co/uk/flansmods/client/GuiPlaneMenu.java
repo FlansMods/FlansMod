@@ -10,6 +10,9 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.common.ContainerPlaneMenu;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPlane;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 
 public class GuiPlaneMenu extends GuiContainer
@@ -37,19 +40,23 @@ public class GuiPlaneMenu extends GuiContainer
 		//Replace with a packet requesting the GUI from the server
         if (button.id == 0) //Guns
         {
-            mc.displayGuiScreen(new GuiPlaneInventory(inventory, world, entity, 0));
+        	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(0));
+        	inventory.player.openGui(FlansMod.instance, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
         if (button.id == 1) //Bombs
         {
-            mc.displayGuiScreen(new GuiPlaneInventory(inventory, world, entity, 1));
+        	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(1));
+        	inventory.player.openGui(FlansMod.instance, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
         if (button.id == 2) //Fuel
         {
-            mc.displayGuiScreen(new GuiPlaneFuel(inventory, world, entity));
+        	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(2));
+        	inventory.player.openGui(FlansMod.instance, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         } 
 		if (button.id == 3) //Cargo
         {
-            mc.displayGuiScreen(new GuiPlaneInventory(inventory, world, entity, 2));
+			PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(3));
+			inventory.player.openGui(FlansMod.instance, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
     }
 
