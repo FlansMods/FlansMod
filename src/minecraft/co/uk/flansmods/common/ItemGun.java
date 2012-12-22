@@ -64,10 +64,15 @@ public class ItemGun extends Item
 			if(mouseHeld && !lastMouseHeld) //Send packet when firing a semi or starting to fire a full
 			{
 				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(true));
+				clientSideShoot();
 			}
 			if(type.mode == 1 && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
 			{
 				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(false));
+			}
+			if(type.mode == 1 && mouseHeld)
+			{
+				clientSideShoot();
 			}
 			/*
 			if (type.mode == 1 && mouseHeld) // FullAuto
@@ -105,6 +110,15 @@ public class ItemGun extends Item
 		if (soundDelay > 0)
 		{
 			soundDelay--;
+		}
+	}
+	
+	public void clientSideShoot()
+	{
+		if(FlansModClient.shootTime <= 0)
+		{
+			FlansModClient.playerRecoil += type.recoil;
+			FlansModClient.shootTime = type.shootDelay;
 		}
 	}
 	
@@ -292,7 +306,6 @@ public class ItemGun extends Item
 			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound));
 			soundDelay = type.shootSoundLength;
 		}
-		FlansModClient.playerRecoil += type.recoil;
 		if (!world.isRemote)
 		{
 			// Spawn the bullet entities

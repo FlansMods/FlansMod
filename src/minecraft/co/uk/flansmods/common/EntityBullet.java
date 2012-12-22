@@ -359,7 +359,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			return true;
 		if (owner instanceof EntityPlayer)
 		{
-			EntityMG mg = FlansModPlayerHandler.getPlayerData((EntityPlayer)owner).mountingGun;
+			EntityMG mg = FlansModPlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
 			if (mg != null && mg == entity)
 			{
 				return true;
@@ -458,11 +458,16 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		try
 		{
 			type = BulletType.getBullet(data.readUTF());
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(data.readUTF());
+			String name = data.readUTF();
+			for(Object obj : worldObj.playerEntities)
+			{
+				if(((EntityPlayer)obj).username.equals(name))
+					owner = (EntityPlayer)obj;
+			}
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to retreive vehicle type from server.");
+			FlansMod.log("Failed to read bullet owner from server.");
 			super.setDead();
 			e.printStackTrace();
 		}
