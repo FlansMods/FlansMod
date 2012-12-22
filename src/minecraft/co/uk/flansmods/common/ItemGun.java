@@ -94,15 +94,18 @@ public class ItemGun extends Item
 				{
 					FlansModClient.zoomOverlay = type.scope;
 					FlansModClient.newZoom = type.zoomLevel;
-					float f = FlansMod.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
+					float f = FlansModClient.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = f / (float) Math.sqrt(type.zoomLevel);
-					FlansMod.originalHideGUI = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
+					FlansModClient.originalHideGUI = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
+					FlansModClient.originalThirdPerson = FMLClientHandler.instance().getClient().gameSettings.thirdPersonView;
 					FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
+					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = 0;
 				} else
 				{
 					FlansModClient.newZoom = 1.0F;
-					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansMod.originalMouseSensitivity;
-					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansMod.originalHideGUI;
+					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansModClient.originalHideGUI;
+					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 				}
 				FlansModClient.shootTime = 10;
 			}

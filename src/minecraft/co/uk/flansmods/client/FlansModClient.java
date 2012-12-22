@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.common.BlockGunBox;
+import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -29,6 +31,12 @@ public class FlansModClient extends FlansMod
 	public static float playerZoom = 1.0F;
 	public static float newZoom = 1.0F;
 	public static float lastPlayerZoom;
+	
+	public static float originalMouseSensitivity = 0.5F;
+	public static boolean originalHideGUI = false;
+	public static int originalThirdPerson = 0;
+	
+	public static boolean inPlane = false;
 	
 	public void load()
 	{
@@ -113,6 +121,7 @@ public class FlansModClient extends FlansMod
 			playerZoom = 1.0F;
 			zoomOverlay = null;
 			minecraft.gameSettings.hideGUI = originalHideGUI;
+			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
 		}
 
 		String field = inMCP ? "cameraZoom" : "V";
@@ -120,7 +129,7 @@ public class FlansModClient extends FlansMod
 		{
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "V");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "X");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -129,7 +138,49 @@ public class FlansModClient extends FlansMod
 		}
 		lastPlayerZoom = playerZoom;
 		field = inMCP ? "camRoll" : "O";
-
+		if (minecraft.thePlayer.ridingEntity instanceof EntityDriveable)
+		{
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll(), "camRoll", "O");
+			} catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}			
+			if(!inPlane && minecraft.thePlayer.ridingEntity instanceof EntityPlane)
+			{
+				try
+				{
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityPlane)minecraft.thePlayer.ridingEntity).getPlaneType().cameraDistance, "thirdPersonDistance", "B");
+				} catch (Exception e)
+				{
+					log("I forgot to update obfuscated reflection D:");
+					throw new RuntimeException(e);
+				}		
+				inPlane = true;
+			}
+		}
+		else if(inPlane)
+		{
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "O");
+			} catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}			
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "B");
+			} catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}	
+			inPlane = false;
+		}
 		if (controlModeSwitchTimer > 0)
 			controlModeSwitchTimer--;
 		if (errorStringTimer > 0)

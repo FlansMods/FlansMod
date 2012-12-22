@@ -92,8 +92,7 @@ public class FlansMod
 	public static Item opStick;
 	public static Item flag;
 
-	public static float originalMouseSensitivity = 0.5F;
-	public static boolean originalHideGUI = false;
+
 	public static String errorString = "";
 	public static int errorStringTimer = 0;
 	public static FlansModPlayerHandler playerHandler;
