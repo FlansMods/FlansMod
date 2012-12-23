@@ -129,8 +129,19 @@ public class ItemGun extends Item
 	{
 		if(FlansModClient.shootTime <= 0)
 		{
-			FlansModClient.playerRecoil += type.recoil;
-			FlansModClient.shootTime = type.shootDelay;
+			boolean hasAmmo = false;
+			for(int i = 0; i < type.ammo.size(); i++)
+			{
+				if(FlansModClient.minecraft.thePlayer.inventory.hasItem(type.ammo.get(i).itemID))
+				{
+					hasAmmo = true;
+				}
+			}
+			if(hasAmmo)
+			{
+				FlansModClient.playerRecoil += type.recoil;
+				FlansModClient.shootTime = type.shootDelay;
+			}
 		}
 	}
 	

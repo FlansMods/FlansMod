@@ -84,6 +84,8 @@ public class GametypeTDM extends Gametype
 		{
 			getPlayerData(player).deaths++;
 			getPlayerData(player).score--;
+			getPlayerData(player).playerClass = null;
+			getPlayerData(player).newPlayerClass = null;
 		}
 		
 		sendClassMenuToPlayer((EntityPlayerMP)player);
@@ -99,7 +101,14 @@ public class GametypeTDM extends Gametype
 		if(!team.classes.contains(playerClass))
 			return false;
 		getPlayerData(player).newPlayerClass = playerClass;
-		TeamsManager.getInstance().resetInventory(player);
+		if(getPlayerData(player).playerClass == null)
+		{
+			teamsManager.resetInventory(player);
+		}
+		else
+		{
+			player.sendChatToPlayer("You will respawn with the " + playerClass.name.toLowerCase() + " class"); 
+		}
 		return true;
 	}
 

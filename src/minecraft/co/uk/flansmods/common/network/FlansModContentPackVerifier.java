@@ -42,7 +42,8 @@ public class FlansModContentPackVerifier implements IConnectionHandler
 	@Override
 	public void clientLoggedIn(NetHandler clientHandler, INetworkManager manager, Packet1Login login) 
 	{
-		PacketDispatcher.sendPacketToServer(PacketContentPackList.buildContentPackListPacket(FlansMod.proxy.getContentList()));
+		//TODO : Fix this
+		//PacketDispatcher.sendPacketToServer(PacketContentPackList.buildContentPackListPacket(FlansMod.proxy.getContentList()));
 	}
 
 }

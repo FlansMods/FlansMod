@@ -375,6 +375,11 @@ public class TeamsManager implements IPlayerTracker
 	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
 	{
 		Team previousTeam = Gametype.getPlayerData(player).team;
+		if(previousTeam.shortName.equals(teamName))
+		{
+			Gametype.sendClassMenuToPlayer(player);
+			return;
+		}
 		Team team = null;
 		for(Team t : teams)
 		{
@@ -416,9 +421,9 @@ public class TeamsManager implements IPlayerTracker
 		}
 		if(playerClass != null)
 		{
-			FlansModPlayerHandler.getPlayerData(player).playerClass = playerClass;
 			if(currentGametype != null)
 				currentGametype.playerChoseClass(player, playerClass);
+			FlansModPlayerHandler.getPlayerData(player).playerClass = playerClass;
 		}
 	}
 	
