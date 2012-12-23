@@ -1,21 +1,39 @@
 package co.uk.flansmods.client;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.BlockGunBox;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemGun;
+import co.uk.flansmods.common.PlaneType;
+import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.teams.Gametype;
+import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod
@@ -39,6 +57,9 @@ public class FlansModClient extends FlansMod
 	
 	public static boolean inPlane = false;
 	
+	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
+	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+	
 	public void load()
 	{
 		if (ABORT)
@@ -49,6 +70,8 @@ public class FlansModClient extends FlansMod
 		
 		log("Loading Flan's mod.");
 
+		MinecraftForge.EVENT_BUS.register(this);
+		
 		// Properties
 		// TODO: move to common and proxy-ify
 		try
@@ -186,6 +209,90 @@ public class FlansModClient extends FlansMod
 			controlModeSwitchTimer--;
 		if (errorStringTimer > 0)
 			errorStringTimer--;
+	}
+	
+	@ForgeSubscribe
+	public void worldData(WorldEvent event)
+	{
+		if(!event.world.isRemote)
+			return;
+		if(event instanceof WorldEvent.Load)
+		{
+			loadPerWorldData(event, event.world);
+			savePerWorldData(event, event.world);
+		}
+		if(event instanceof WorldEvent.Save)
+		{
+			savePerWorldData(event, event.world);
+		}
+	}
+	
+	private void loadPerWorldData(Event event, World world)
+	{
+		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		checkFileExists(file);
+		try
+		{
+			blueprintsUnlocked = new ArrayList<PlaneType>();
+			vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
+			int numPlaneBlues = tags.getInteger("NumPlaneBlues");
+			for(int i = 0; i < numPlaneBlues; i++)
+			{
+				blueprintsUnlocked.add(PlaneType.getPlane(tags.getString("PlaneBlue" + i)));
+			}
+			int numVehicleBlues = tags.getInteger("NumVehicleBlues");
+			for(int i = 0; i < numVehicleBlues; i++)
+			{
+				vehicleBlueprintsUnlocked.add(VehicleType.getVehicle(tags.getString("VehicleBlue" + i)));
+			}
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to load from teams.dat");
+			e.printStackTrace();
+		}
+	}
+	
+	private void savePerWorldData(Event event, World world)
+	{
+		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		checkFileExists(file);
+		try
+		{
+			NBTTagCompound tags = new NBTTagCompound();
+			tags.setInteger("NumPlaneBlues", blueprintsUnlocked.size());
+			for(int i = 0; i < blueprintsUnlocked.size(); i++)
+			{
+				tags.setString("PlaneBlue" + i, blueprintsUnlocked.get(i).shortName);
+			}
+			tags.setInteger("NumVehicleBlues", vehicleBlueprintsUnlocked.size());
+			for(int i = 0; i < vehicleBlueprintsUnlocked.size(); i++)
+			{
+				tags.setString("VehicleBlue" + i, vehicleBlueprintsUnlocked.get(i).shortName);
+			}
+			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to save to teams.dat");
+		}
+	}
+	
+	private void checkFileExists(File file)
+	{
+		if(!file.exists())
+		{
+			try
+			{ 
+				file.createNewFile();
+			}
+			catch(Exception e)
+			{
+				FlansMod.log("Failed to create file");
+				FlansMod.log(file.getAbsolutePath());
+			}
+		}	
 	}
 
 	public static void flipControlMode()

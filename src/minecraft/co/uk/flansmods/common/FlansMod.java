@@ -105,10 +105,9 @@ public class FlansMod
 	public static String errorString = "";
 	public static int errorStringTimer = 0;
 	public static FlansModPlayerHandler playerHandler;
-	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<Item> vehicleItems = new ArrayList<Item>();
-	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+
 	
 	//GunBoxBlock
 	public static BlockGunBox gunBoxBlock;
