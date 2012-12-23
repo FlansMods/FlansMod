@@ -86,7 +86,7 @@ public class ItemGun extends Item
 					itemstack = onItemRightClick2(itemstack, world, player);
 			}
 			*/
-			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0)
+			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
 				if (FlansModClient.zoomOverlay == null)
 				{
@@ -106,6 +106,14 @@ public class ItemGun extends Item
 					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 				}
 				FlansModClient.shootTime = 10;
+			}
+			
+			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.zoomOverlay != null && type.hasScope)
+			{
+				FlansModClient.newZoom = 1.0F;
+				FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+				FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansModClient.originalHideGUI;
+				FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 			}
 		}
 		if (soundDelay > 0)
