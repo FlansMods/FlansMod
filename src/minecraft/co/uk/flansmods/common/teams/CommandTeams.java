@@ -158,12 +158,12 @@ public class CommandTeams extends CommandBase {
 			{
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 0));
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 1));
-				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
+				//player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 3));
 				sender.sendChatToPlayer("\u00a72Enjoy your op sticks.");
 				sender.sendChatToPlayer("\u00a77The Stick of Connecting connects objects (spawners, banners etc) to bases (flagpoles etc)");
 				sender.sendChatToPlayer("\u00a77The Stick of Ownership sets the team that currently owns a base");
-				sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
+				//sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
 				sender.sendChatToPlayer("\u00a77The Stick of Destruction deletes bases and team objects");
 			}
 			return;

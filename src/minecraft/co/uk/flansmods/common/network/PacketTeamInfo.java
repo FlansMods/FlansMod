@@ -36,43 +36,46 @@ public class PacketTeamInfo extends FlanPacketCommon
         		data.writeUTF("No Gametype");
         		data.writeInt(0);
         	}
-        	data.writeUTF(TeamsManager.getInstance().currentGametype.name);
-        	if(TeamsManager.getInstance().teams == null)
-        	{
-        		data.writeInt(0);
-        	}
         	else
         	{
-	        	data.writeInt(TeamsManager.getInstance().teams.length);
-	        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+        		data.writeUTF(TeamsManager.getInstance().currentGametype.name);
+	        	if(TeamsManager.getInstance().teams == null)
 	        	{
-	        		Team team = TeamsManager.getInstance().teams[i];
-	        		if(team == null)
-	        		{
-	        			data.writeUTF("none");
-	        			continue;
-	        		}
-	        		data.writeUTF(team.shortName);
-	        		data.writeInt(team.score);
-	        		data.writeInt(team.members.size());
-	        		for(int j = 0; j < team.members.size(); j++)
-	        		{
-	        			EntityPlayer player = team.members.get(j);
-	        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(player, Side.SERVER);
-	        			data.writeUTF(player.username);
-	        			if(playerData == null)
-	        			{
-	        				data.writeInt(0);
-	        				data.writeInt(0);
-	        				data.writeInt(0);
-	        			}
-	        			else
-	        			{
-		        			data.writeInt(playerData.score);
-		        			data.writeInt(playerData.kills);
-		        			data.writeInt(playerData.deaths);
-	        			}
-	        		}
+	        		data.writeInt(0);
+	        	}
+	        	else
+	        	{
+		        	data.writeInt(TeamsManager.getInstance().teams.length);
+		        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+		        	{
+		        		Team team = TeamsManager.getInstance().teams[i];
+		        		if(team == null)
+		        		{
+		        			data.writeUTF("none");
+		        			continue;
+		        		}
+		        		data.writeUTF(team.shortName);
+		        		data.writeInt(team.score);
+		        		data.writeInt(team.members.size());
+		        		for(int j = 0; j < team.members.size(); j++)
+		        		{
+		        			EntityPlayer player = team.members.get(j);
+		        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(player, Side.SERVER);
+		        			data.writeUTF(player.username);
+		        			if(playerData == null)
+		        			{
+		        				data.writeInt(0);
+		        				data.writeInt(0);
+		        				data.writeInt(0);
+		        			}
+		        			else
+		        			{
+			        			data.writeInt(playerData.score);
+			        			data.writeInt(playerData.kills);
+			        			data.writeInt(playerData.deaths);
+		        			}
+		        		}
+		        	}
 	        	}
         	}
         	
