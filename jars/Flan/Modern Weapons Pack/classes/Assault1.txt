@@ -1,4 +1,4 @@
-Name Assault
+Name AK47
 ShortName assault1
 AddItem ak47
 AddItem usp

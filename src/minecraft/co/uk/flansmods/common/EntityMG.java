@@ -173,7 +173,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			}
 			// Fire
 			BulletType bullet = BulletType.getBullet(ammo.itemID);
-			if (gunner != null && !((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
 			worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.accuracy, type.damage, bullet));

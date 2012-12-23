@@ -1,4 +1,4 @@
-Name Scout
+Name Dragunov
 ShortName sniper2
 AddItem dragunov
 AddItem m1911

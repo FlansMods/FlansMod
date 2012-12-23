@@ -1,4 +1,4 @@
-Name Scout
+Name Barrett
 ShortName sniper1
 AddItem barrett
 AddItem m9

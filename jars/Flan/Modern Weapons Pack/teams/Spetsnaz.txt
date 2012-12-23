@@ -10,6 +10,11 @@ Hat spetsnazHelmet
 Chest spetsnazBody
 Legs spetsnazPants
 Shoes spetsnazBoots
-AddClass sniper1
 AddClass sniper2
+AddClass sniper5
+AddClass assault3
 AddClass assault1
+AddClass lightAssault1
+AddClass lightAssault4
+AddClass shotgun2
+AddClass heavy2

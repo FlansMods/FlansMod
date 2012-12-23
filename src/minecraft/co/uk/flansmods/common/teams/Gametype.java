@@ -93,7 +93,7 @@ public abstract class Gametype {
 		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 	}
 	
-	public static void showTeamsMenuToAll()
+	public static void showTeamsMenuToAll(boolean spectatorsValid)
 	{
 		for(EntityPlayer player : getPlayers())
 		{
@@ -101,7 +101,7 @@ public abstract class Gametype {
 			{
 				continue;
 			}
-			if(getPlayerData((EntityPlayerMP)player).team == null || !isAValidTeam(getPlayerData((EntityPlayerMP)player).team))
+			if(getPlayerData((EntityPlayerMP)player).team == null || !isAValidTeam(getPlayerData((EntityPlayerMP)player).team, spectatorsValid))
 			{
 				sendTeamsMenuToPlayer((EntityPlayerMP)player);
 			}			
@@ -112,11 +112,11 @@ public abstract class Gametype {
 		}
 	}
 	
-	public static boolean isAValidTeam(Team team)
+	public static boolean isAValidTeam(Team team, boolean spectatorsValid)
 	{
 		if(teamsManager.teams == null)
 			return false;
-		if(team == Team.spectators)
+		if(team == Team.spectators && spectatorsValid)
 			return true;
 		for(Team t : teamsManager.teams)
 		{

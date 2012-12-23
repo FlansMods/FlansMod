@@ -39,7 +39,7 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void startNewRound() 
 	{
-		showTeamsMenuToAll();
+		showTeamsMenuToAll(false);
 		resetScores();
 		respawnAll();
 		teamsManager.messageAll("\u00a7fA new round has started!");
@@ -80,7 +80,7 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam))
+		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam, true))
 		{
 			getPlayerData(player).deaths++;
 			getPlayerData(player).score--;
