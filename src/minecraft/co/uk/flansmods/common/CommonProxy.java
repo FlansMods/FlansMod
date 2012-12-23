@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy
 {
-	public List<File> contentPacks;
+
 	
 	public void load()
 	{
@@ -28,7 +28,7 @@ public class CommonProxy
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		// this stuff is only done client side.
-		contentPacks = new ArrayList<File>();
+		List<File> contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
 			if (file.isDirectory())
@@ -46,8 +46,8 @@ public class CommonProxy
 	
 	public List<File> getContentList()
 	{
-		return contentPacks;
-	}
+		return null;
+	}	
 	
 	public void registerTileEntityRenderers() 
 	{

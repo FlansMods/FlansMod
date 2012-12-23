@@ -47,6 +47,11 @@ public class PacketTeamInfo extends FlanPacketCommon
 	        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
 	        	{
 	        		Team team = TeamsManager.getInstance().teams[i];
+	        		if(team == null)
+	        		{
+	        			data.writeUTF("none");
+	        			continue;
+	        		}
 	        		data.writeUTF(team.shortName);
 	        		data.writeInt(team.score);
 	        		data.writeInt(team.members.size());

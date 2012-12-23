@@ -8,6 +8,7 @@ import co.uk.flansmods.common.network.PacketTeamSelect;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -15,6 +16,8 @@ import net.minecraft.util.Vec3;
 
 public class GametypeTDM extends Gametype 
 {
+	public int scoreLimit = 25;
+	public int newRoundTimer = 0;
 
 	public GametypeTDM() 
 	{
@@ -37,18 +40,35 @@ public class GametypeTDM extends Gametype
 	public void startNewRound() 
 	{
 		showTeamsMenuToAll();
+		resetScores();
+		respawnAll();
+		teamsManager.messageAll("\u00a7fA new round has started!");
 	}
 
 	@Override
-	public void stopGametype() {
-		// TODO Auto-generated method stub
-		
+	public void stopGametype() 
+	{
+		resetScores();
 	}
 
 	@Override
-	public void tick() {
-		// TODO Auto-generated method stub
-		
+	public void tick() 
+	{
+		newRoundTimer--;
+		if(newRoundTimer == 0)
+			startNewRound();
+		if(teamsManager.teams != null)
+		{
+			for(Team team : teamsManager.teams)
+			{
+				if(team != null && team.score >= scoreLimit && newRoundTimer < 0)
+				{
+					teamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
+					newRoundTimer = 200;
+					teamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
+				}
+			}
+		}
 	}
 
 	@Override
@@ -92,6 +112,11 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
 	{
+		//Players may not fight between rounds
+		if(newRoundTimer > 0)
+		{
+			return false;
+		}
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
@@ -112,12 +137,16 @@ public class GametypeTDM extends Gametype
 		if(attacker != null)
 		{
 			if(attacker == player)
-				givePoints(attacker, -1);
+				getPlayerData(player).score--;
 			else 
 			{	
 				givePoints(attacker, 1);
 				getPlayerData(attacker).kills++;
 			}
+		}
+		else
+		{
+			getPlayerData(player).score--;
 		}
 		getPlayerData(player).deaths++;
 	}
@@ -170,8 +199,31 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
-	public void playerRespawned(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
+	public void playerRespawned(EntityPlayerMP player) 
+	{
 		
+	}
+
+	@Override
+	public boolean setVariable(String variable, String value) 
+	{
+		if(variable.equals("scoreLimit"))
+		{
+			scoreLimit = Integer.parseInt(value);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tags) 
+	{
+		scoreLimit = tags.getInteger("ScoreLimit");
+	}
+
+	@Override
+	public void saveToNBT(NBTTagCompound tags) 
+	{
+		tags.setInteger("ScoreLimit", scoreLimit);
 	}
 }

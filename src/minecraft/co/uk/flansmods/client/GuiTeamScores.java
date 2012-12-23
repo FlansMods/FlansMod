@@ -20,14 +20,29 @@ public class GuiTeamScores extends GuiScreen
 		public int score;
 		public int numPlayers;
 		public PlayerData[] playerData;
-		
-		private static class PlayerData
+	}
+	
+	public static class PlayerData
+	{
+		public String username;
+		public int score;
+		public int kills;
+		public int deaths;
+	}
+	
+	public static PlayerData getPlayerData(String username)
+	{
+		for(TeamData team : teamData)
 		{
-			public String username;
-			public int score;
-			public int kills;
-			public int deaths;
+			if(team == null || team.playerData == null)
+				return null;
+			for(PlayerData player : team.playerData)
+			{
+				if(player != null && player.username.equals(username))
+					return player;
+			}
 		}
+		return null;
 	}
 	
 	//Move the packet interpretation here for simplicity
@@ -42,12 +57,17 @@ public class GuiTeamScores extends GuiScreen
 			teamData = new TeamData[numTeams];
 			for(int i = 0; i < numTeams; i++)
 			{
+				teamData[i] = new TeamData();
 				String teamName = stream.readUTF();
+				if(teamName.equals("none"))
+					continue;
 				teamData[i].team = Team.getTeam(teamName);
 				teamData[i].score = stream.readInt();
 				teamData[i].numPlayers = stream.readInt();
+				teamData[i].playerData = new PlayerData[teamData[i].numPlayers];
 				for(int j = 0; j < teamData[i].numPlayers; j++)
 				{
+					teamData[i].playerData[j] = new PlayerData();
 					teamData[i].playerData[j].username = stream.readUTF();
 					teamData[i].playerData[j].score = stream.readInt();
 					teamData[i].playerData[j].kills = stream.readInt();

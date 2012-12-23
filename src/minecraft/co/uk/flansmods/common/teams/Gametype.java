@@ -6,6 +6,7 @@ import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
@@ -115,6 +116,8 @@ public abstract class Gametype {
 	{
 		if(teamsManager.teams == null)
 			return false;
+		if(team == Team.spectators)
+			return true;
 		for(Team t : teamsManager.teams)
 		{
 			if(t == team)
@@ -125,10 +128,22 @@ public abstract class Gametype {
 	
 	public static void resetScores()
 	{
-		for(Team team : teamsManager.teams)
-			team.score = 0;
+		if(teamsManager.teams != null)
+			for(Team team : teamsManager.teams)
+				if(team != null)
+					team.score = 0;
 		for(EntityPlayer player : getPlayers())
-			getPlayerData((EntityPlayerMP)player).score = 0;
+		{
+			getPlayerData((EntityPlayerMP)player).resetScore();
+		}
+	}
+	
+	public static void respawnAll()
+	{
+		for(EntityPlayer player : getPlayers())
+		{
+			TeamsManager.getInstance().forceRespawn((EntityPlayerMP)player);
+		}
 	}
 	
 	public static void givePoints(EntityPlayerMP player, int points)
@@ -191,4 +206,11 @@ public abstract class Gametype {
 	public abstract void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player);
 	
 	public abstract Vec3 getSpawnPoint(EntityPlayerMP player);
+	
+	//Return whether or not the variable exists
+	public abstract boolean setVariable(String variable, String value);
+	
+	public abstract void readFromNBT(NBTTagCompound tags);
+	
+	public abstract void saveToNBT(NBTTagCompound tags);
 }

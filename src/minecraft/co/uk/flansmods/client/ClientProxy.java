@@ -74,6 +74,8 @@ public class ClientProxy extends CommonProxy
 			"1111111111111111" +
 			"1111111111111111" +
 			"1111111111111111";
+	
+	public List<File> contentPacks;
 
 	@Override
 	public void load()
@@ -87,7 +89,7 @@ public class ClientProxy extends CommonProxy
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		// this stuff is only done client side.
-		List<File> contentPacks = new ArrayList<File>();
+		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
 			if (file.isDirectory())
@@ -109,6 +111,11 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 		FlansMod.log("Loaded textures and models.");
+		return contentPacks;
+	}
+	
+	public List<File> getContentList()
+	{
 		return contentPacks;
 	}
 

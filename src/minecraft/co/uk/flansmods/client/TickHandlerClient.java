@@ -120,7 +120,39 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x404040);
+			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x000000);
+		}
+		if(GuiTeamScores.numTeams > 0)
+		{
+			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+			int i = scaledresolution.getScaledWidth();
+			int j = scaledresolution.getScaledHeight();
+			GL11.glEnable(3042 /* GL_BLEND */);
+			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+			GL11.glDepthMask(false);
+			GL11.glBlendFunc(770, 771);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/teamsScores.png"));
+			Tessellator tessellator = Tessellator.instance;
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 109D / 256D, 27D / 256D);
+			tessellator.addVertexWithUV(i / 2 + 19, 27, -90D, 147D / 256D, 27D / 256D);
+			tessellator.addVertexWithUV(i / 2 + 19, 0D, -90D, 147D / 256D, 0D / 256D);
+			tessellator.addVertexWithUV(i / 2 - 19, 0D, -90D, 109D / 256D, 0D / 256D);
+			tessellator.draw();
+			GL11.glDepthMask(true);
+			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
+			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			String playerUsername = FlansModClient.minecraft.thePlayer.username;
+			if(GuiTeamScores.getPlayerData(playerUsername) != null)
+			{
+				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
+				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
+				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
+			}
+			
 		}
 	}
 

@@ -165,23 +165,69 @@ public class CommandTeams extends CommandBase {
 		}
 		if(split[0].equals("forceAdventure") || split[0].equals("forceAdventureMode"))
 		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
 			FlansMod.forceAdventureMode = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Adventure mode will " + (FlansMod.forceAdventureMode ? "now" : "no longer") + " be forced");
 		}
 		if(split[0].equals("explosions"))
 		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
 			FlansMod.explosions = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Expolsions are now " + (FlansMod.explosions ? "enabled" : "disabled"));
 		}
 		if(split[0].equals("bombs") || split[0].equals("allowBombs"))
 		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
 			FlansMod.bombsEnabled = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Boms are now " + (FlansMod.bombsEnabled ? "enabled" : "disabled"));
 		}
 		if(split[0].equals("bullets") || split[0].equals("bulletsEnabled"))
 		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
 			FlansMod.bulletsEnabled = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Bullets are now " + (FlansMod.bulletsEnabled ? "enabled" : "disabled"));
 		}
 		if(split[0].equals("canBreakGuns"))
 		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
 			FlansMod.canBreakGuns = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("AAGuns and MGs can " + (FlansMod.canBreakGuns ? "now" : "no longer") + " be broken");
+		}
+		if(split[0].equals("setVariable"))
+		{
+			if(TeamsManager.getInstance().currentGametype == null)
+			{
+				sender.sendChatToPlayer("There is no gametype to set variables for");		
+				return;
+			}
+			if(split.length != 3)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams setVariable <variable> <value>");	
+				return;
+			}
+			if(TeamsManager.getInstance().currentGametype.setVariable(split[1], split[2]))
+				sender.sendChatToPlayer("Set variable " + split[1] + " in gametype " + TeamsManager.getInstance().currentGametype.shortName + " to " + split[2]);
+			else sender.sendChatToPlayer("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentGametype.shortName);
 		}
 	}
 

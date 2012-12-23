@@ -32,4 +32,9 @@ public class FlansModPlayerData
 			playerClass = newPlayerClass;
 		return playerClass;
 	}
+
+	public void resetScore() 
+	{
+		score = kills = deaths = 0;
+	}
 }

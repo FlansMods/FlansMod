@@ -234,6 +234,7 @@ public class TeamsManager implements IPlayerTracker
 			if(currentGametype != null)
 			{
 				currentGametype.initGametype();
+				currentGametype.readFromNBT(tags);
 				teams = new Team[currentGametype.numTeamsRequired];
 				for(int i = 0; i < teams.length; i++)
 				{
@@ -263,6 +264,10 @@ public class TeamsManager implements IPlayerTracker
 			NBTTagCompound tags = new NBTTagCompound();
 			tags.setInteger("NextBaseID", nextBaseID);
 			tags.setString("Gametype", currentGametype == null ? "None" : currentGametype.shortName);
+			if(currentGametype != null)
+			{
+				currentGametype.saveToNBT(tags);
+			}
 			if(teams != null)
 			{
 				for(int i = 0; i < teams.length; i++)
@@ -348,13 +353,14 @@ public class TeamsManager implements IPlayerTracker
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
 		resetInventory(player);
+		if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+			player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
 		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 		if(spawnPoint != null)
 		{
 			((EntityPlayerMP)player).playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 		}
-		if(FlansMod.forceAdventureMode)
-			player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
+		
 		currentGametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
@@ -372,9 +378,15 @@ public class TeamsManager implements IPlayerTracker
 		Team team = null;
 		for(Team t : teams)
 		{
-			if(t.shortName.equals(teamName))
+			if(t != null && t.shortName.equals(teamName))
 				team = t;
 		}
+		if(teamName.equals(Team.spectators.shortName))
+		{
+			team = Team.spectators;
+		}
+		if(team == null)
+			team = Team.spectators;
 		if(team != null)
 		{
 			FlansModPlayerHandler.getPlayerData(player).team = team;
