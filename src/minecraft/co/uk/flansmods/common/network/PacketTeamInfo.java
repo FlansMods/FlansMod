@@ -60,9 +60,18 @@ public class PacketTeamInfo extends FlanPacketCommon
 	        			EntityPlayer player = team.members.get(j);
 	        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(player, Side.SERVER);
 	        			data.writeUTF(player.username);
-	        			data.writeInt(playerData.score);
-	        			data.writeInt(playerData.kills);
-	        			data.writeInt(playerData.deaths);
+	        			if(playerData == null)
+	        			{
+	        				data.writeInt(0);
+	        				data.writeInt(0);
+	        				data.writeInt(0);
+	        			}
+	        			else
+	        			{
+		        			data.writeInt(playerData.score);
+		        			data.writeInt(playerData.kills);
+		        			data.writeInt(playerData.deaths);
+	        			}
 	        		}
 	        	}
         	}

@@ -84,8 +84,8 @@ public class TeamsManager implements IPlayerTracker
 		if(currentGametype != null)
 			currentGametype.tick();
 		time++;
-		//Send a full team info update every 5 seconds.
-		if(time % 100 == 0)
+		//Send a full team info update every 2 seconds.
+		if(time % 40 == 0)
 		{
 			PacketDispatcher.sendPacketToAllPlayers(PacketTeamInfo.buildInfoPacket());
 		}

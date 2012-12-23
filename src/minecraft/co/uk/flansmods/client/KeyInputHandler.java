@@ -30,6 +30,7 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
 	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
+	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
 
 	Minecraft mc;
 	
@@ -48,7 +49,8 @@ public class KeyInputHandler extends KeyHandler
 				bombKey,
 				gunKey,
 				controlSwitchKey,
-				teamsMenuKey
+				teamsMenuKey,
+				teamsScoresKey
 				},
 				new boolean[]
 						{
@@ -63,7 +65,8 @@ public class KeyInputHandler extends KeyHandler
 				true, // bomb
 				true, // gun
 				false, // control switch
-				false // teams menu
+				false, // teams menu
+				false // teams scores menu
 						});
 		
 		mc = Minecraft.getMinecraft();
@@ -109,6 +112,11 @@ public class KeyInputHandler extends KeyHandler
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
+			return;
+		}
+		else if(kb == teamsScoresKey)
+		{
+			mc.displayGuiScreen(new GuiTeamScores());
 			return;
 		}
 		else

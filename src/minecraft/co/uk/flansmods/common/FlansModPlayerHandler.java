@@ -16,8 +16,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public class FlansModPlayerHandler implements IPlayerTracker
 {
-	public static Map<EntityPlayer, FlansModPlayerData> serverSideData = new HashMap<EntityPlayer, FlansModPlayerData>();
-	public static Map<EntityPlayer, FlansModPlayerData> clientSideData = new HashMap<EntityPlayer, FlansModPlayerData>();
+	public static Map<String, FlansModPlayerData> serverSideData = new HashMap<String, FlansModPlayerData>();
+	public static Map<String, FlansModPlayerData> clientSideData = new HashMap<String, FlansModPlayerData>();
 	
 	public FlansModPlayerHandler()
 	{
@@ -54,15 +54,15 @@ public class FlansModPlayerHandler implements IPlayerTracker
 		if(side.isClient())
 		{
 			if(!clientSideData.containsKey(player))
-				clientSideData.put(player, new FlansModPlayerData(player));
+				clientSideData.put(player.username, new FlansModPlayerData(player));
 		}
-		return side.isClient() ? clientSideData.get(player) : serverSideData.get(player);
+		return side.isClient() ? clientSideData.get(player.username) : serverSideData.get(player.username);
 	}
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		serverSideData.put(player, new FlansModPlayerData(player));
+		serverSideData.put(player.username, new FlansModPlayerData(player));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
 			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 	}

@@ -122,7 +122,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x000000);
 		}
-		if(GuiTeamScores.numTeams > 0)
+		if(FlansModClient.minecraft.thePlayer != null && GuiTeamScores.numTeams > 0)
 		{
 			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 			int i = scaledresolution.getScaledWidth();
@@ -152,7 +152,6 @@ public class TickHandlerClient implements ITickHandler
 				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
 			}
-			
 		}
 	}
 

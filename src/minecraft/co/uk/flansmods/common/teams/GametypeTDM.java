@@ -80,7 +80,7 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		if(previousTeam != null && previousTeam != team && isAValidTeam(previousTeam))
+		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam))
 		{
 			getPlayerData(player).deaths++;
 			getPlayerData(player).score--;
