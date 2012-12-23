@@ -13,10 +13,12 @@ import net.minecraft.command.CommandHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.ForgeChunkManager;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.BlockSpawner;
+import co.uk.flansmods.common.teams.ChunkLoadingHandler;
 import co.uk.flansmods.common.teams.CommandTeams;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -230,6 +232,8 @@ public class FlansMod
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
 		//EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
+		
+		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
 		
 		proxy.registerTileEntityRenderers();
 		proxy.loadDefaultGraphics();
