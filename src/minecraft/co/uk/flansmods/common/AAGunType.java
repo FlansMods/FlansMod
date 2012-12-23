@@ -60,6 +60,7 @@ public class AAGunType extends InfoType
 		infoTypes.add(this);
 	}
 
+	@Override
 	protected void read(String[] arg0, BufferedReader file)
 	{
 		super.read(arg0, file);

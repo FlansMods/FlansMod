@@ -27,11 +27,10 @@ public class CreativeTabFlan extends CreativeTabs
 			icon++;
 		switch(type)
 		{
-		case 0 : return GunType.guns.size() == 0 ? new ItemStack(Block.cloth, 1, 4) : new ItemStack(GunType.guns.get(icon % GunType.guns.size()).item);
-		case 1 : return DriveableType.typeList.size() == 0 ? new ItemStack(Block.cloth, 1, 14) : new ItemStack(DriveableType.typeList.get(icon % DriveableType.typeList.size()).item);
-		case 2 : return FlansMod.partItems.size() == 0 ? new ItemStack(Block.cloth, 1, 5) : new ItemStack(FlansMod.partItems.get(icon % FlansMod.partItems.size()));
-		case 3 : return FlansMod.armourItems.size() == 0 ? new ItemStack(Block.cloth, 1, 11) : new ItemStack(FlansMod.armourItems.get(icon % FlansMod.armourItems.size()));
-
+			case 0 : return GunType.guns.size() == 0 ? new ItemStack(Block.cloth, 1, 4) : new ItemStack(GunType.guns.get(icon % GunType.guns.size()).item);
+			case 1 : return DriveableType.typeList.size() == 0 ? new ItemStack(Block.cloth, 1, 14) : new ItemStack(DriveableType.typeList.get(icon % DriveableType.typeList.size()).item);
+			case 2 : return FlansMod.partItems.size() == 0 ? new ItemStack(Block.cloth, 1, 5) : new ItemStack(FlansMod.partItems.get(icon % FlansMod.partItems.size()));
+			case 3 : return FlansMod.armourItems.size() == 0 ? new ItemStack(Block.cloth, 1, 11) : new ItemStack(FlansMod.armourItems.get(icon % FlansMod.armourItems.size()));
 		}
 		return new ItemStack(FlansMod.craftingTable);
 	}
