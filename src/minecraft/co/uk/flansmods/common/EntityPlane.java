@@ -191,7 +191,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			return true;
 		if(entityplayer == riddenByEntity)
 			return false;
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(worldObj.isRemote)
 			return true;
 		
 		PlaneType type = this.getPlaneType();

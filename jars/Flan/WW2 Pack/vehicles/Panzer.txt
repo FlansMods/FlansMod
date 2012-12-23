@@ -48,7 +48,8 @@ TurretYawMin -180
 TurretYawMax 180
 TurretPitchMin 0
 TurretPitchMax 45
-GunPosition 0 40 0
+GunPosition 15 40 0
+BarrelPosition 15 30 0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
 WheelPosition 0 -14 2 -22
 WheelPosition 1 -14 2 22

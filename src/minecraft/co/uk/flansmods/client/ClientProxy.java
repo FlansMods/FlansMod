@@ -444,7 +444,7 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 
-	@Override
+	/*@Override
 	public void shootVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
 	{
 		ModelVehicle vehicleModel = (ModelVehicle)type.model;
@@ -475,7 +475,7 @@ public class ClientProxy extends CommonProxy
 			}
 			seat.gunDelay = type.vehicleShootDelay;
 		}
-	}
+	}*/
 
 	@Override
 	public ModelVehicle loadVehicleModel(String[] split, String shortName)

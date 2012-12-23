@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.common.network.PacketRightClick;
+import co.uk.flansmods.common.network.PacketSeatMount;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
@@ -282,12 +283,12 @@ public class EntityPassengerSeat extends Entity
 		}
 		if(player == riddenByEntity)
 		{
-			player.mountEntity(this);
+			sitInSeat(player, false);
 			return true;
 		}
-		if(riddenByEntity != null && riddenByEntity != player)
+		if(riddenByEntity != null && riddenByEntity != player && !(riddenByEntity instanceof EntityPlayer))
 		{
-			riddenByEntity.mountEntity(this);
+			sitInSeat(riddenByEntity, false);
 			return true;
 		}
 		if(riddenByEntity == null)
@@ -295,14 +296,34 @@ public class EntityPassengerSeat extends Entity
 			//Holding wheat, put following mob into seat
 			if(following != null && stack != null && stack.itemID == Item.wheat.shiftedIndex)
 			{
-				following.mountEntity(this);
+				sitInSeat(following, true);
 				return true;
 			}
 			//Otherwise, get in seat
-			player.mountEntity(this);
+			sitInSeat(player, true);
 			return true;
 		}
         return true;
+    }
+    
+    public void sitInSeat(Entity entity, boolean sit)
+    {
+    	if(!worldObj.isRemote)
+    	{
+    		PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(entity, this, sit), dimension);
+    	}
+    	if(sit)
+    	{
+    		if(riddenByEntity != null)
+    			riddenByEntity.mountEntity(this);
+    		entity.ridingEntity = this;
+    		riddenByEntity = entity;
+    	}
+    	else
+    	{
+    		entity.ridingEntity = null;
+    		riddenByEntity = null;
+    	}
     }
     
 	@Override

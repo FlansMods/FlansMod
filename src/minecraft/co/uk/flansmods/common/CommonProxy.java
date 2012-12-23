@@ -167,10 +167,6 @@ public class CommonProxy
 		
 	}
 	
-	public void shootVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
-	{
-	}
-	
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return false;

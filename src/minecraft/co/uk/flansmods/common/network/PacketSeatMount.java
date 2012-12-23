@@ -9,15 +9,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityMG;
+import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.relauncher.Side;
 
-public class PacketMGMount extends FlanPacketCommon 
+public class PacketSeatMount extends FlanPacketCommon 
 {
-	public static final byte packetID = 10;
+	public static final byte packetID = 17;
 	
-	public static Packet buildMGPacket(EntityPlayer player, EntityMG mg, boolean mounting)
+	public static Packet buildMountPacket(Entity entity, EntityPassengerSeat seat, boolean mounting)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -27,8 +29,9 @@ public class PacketMGMount extends FlanPacketCommon
         try
         {
         	data.write(packetID);
-        	data.writeInt(player.entityId);
-        	data.writeInt(mg.entityId);
+        	data.writeInt(entity.entityId);
+        	data.writeInt(seat.vehicle.entityId);
+        	data.writeInt(seat.seatID);
         	data.writeBoolean(mounting);
         	
         	packet.data = bytes.toByteArray();
@@ -52,31 +55,32 @@ public class PacketMGMount extends FlanPacketCommon
         {
         	World world = (World)extradata[0];
 			int playerId = stream.readInt();
-			EntityPlayer player = null;
+			Entity entity = null;
 			for(Object obj : world.loadedEntityList)
 			{
-				if(obj instanceof EntityPlayer && ((Entity)obj).entityId == playerId)
+				if(((Entity)obj).entityId == playerId)
 				{
-					player = (EntityPlayer)obj;
+					entity = (EntityPlayer)obj;
 					break;
 				}
 			}
-			int mgId = stream.readInt();
-			EntityMG mg = null;
+			int driveableId = stream.readInt();
+			EntityDriveable driveable = null;
 			for(Object obj : world.loadedEntityList)
 			{
-				if(obj instanceof EntityMG && ((Entity)obj).entityId == mgId)
+				if(obj instanceof EntityDriveable && ((Entity)obj).entityId == driveableId)
 				{
-					mg = (EntityMG)obj;
+					driveable = (EntityDriveable)obj;
 					break;
 				}
 			}
+			int seatID = stream.readInt();
 			boolean mounting = stream.readBoolean();
-			mg.mountGun(player, mounting);
+			driveable.seats[seatID].sitInSeat(entity, mounting);
         }
         catch(Exception e)
         {
-        	FlansMod.log("Error reading mountMG packet");
+        	FlansMod.log("Error reading mountPassengerSeat packet");
         	e.printStackTrace();
         }
 	}

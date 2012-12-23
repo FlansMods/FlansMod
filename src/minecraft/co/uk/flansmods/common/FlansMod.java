@@ -175,7 +175,7 @@ public class FlansMod
 		
 		// default planes stuff
 		craftingTable = new BlockPlaneWorkbench(255, 1, 0).setBlockName("flansCraftingBench");
-		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class);
+		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Small Plane Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Large Plane Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
@@ -200,7 +200,7 @@ public class FlansMod
 		// gunBxStuff.. must be done after content packs.
 		// GunBox Block       ID=???  200 is temporary one
 		gunBoxBlock = (BlockGunBox) new BlockGunBox(200);
-		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class);
+		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 		for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
 		{
@@ -224,7 +224,7 @@ public class FlansMod
 		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
 		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
-		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class);
+		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamSpawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");

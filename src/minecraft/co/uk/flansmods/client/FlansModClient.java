@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import co.uk.flansmods.common.BlockGunBox;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPlane;
+import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -140,9 +141,10 @@ public class FlansModClient extends FlansMod
 		field = inMCP ? "camRoll" : "O";
 		if (minecraft.thePlayer.ridingEntity instanceof EntityDriveable)
 		{
+			inPlane = true;
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll(), "camRoll", "O");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll() * (minecraft.thePlayer.ridingEntity instanceof EntityVehicle ? -1 : 1), "camRoll", "O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -158,7 +160,6 @@ public class FlansModClient extends FlansMod
 					log("I forgot to update obfuscated reflection D:");
 					throw new RuntimeException(e);
 				}		
-				inPlane = true;
 			}
 		}
 		else if(inPlane)
