@@ -32,8 +32,10 @@ import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker
@@ -45,6 +47,7 @@ public class TeamsManager implements IPlayerTracker
 	public List<ITeamObject> objects;
 	public List<String> maps;
 	private int nextBaseID = 1;
+	private long time;
 	
 	public TeamsManager()
 	{
@@ -80,6 +83,12 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(currentGametype != null)
 			currentGametype.tick();
+		time++;
+		//Send a full team info update every 5 seconds.
+		if(time % 100 == 0)
+		{
+			PacketDispatcher.sendPacketToAllPlayers(PacketTeamInfo.buildInfoPacket());
+		}
 		for(ITeamBase base : bases)
 		{
 			base.tick();

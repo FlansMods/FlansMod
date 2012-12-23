@@ -22,6 +22,7 @@ import co.uk.flansmods.common.network.PacketParticleSpawn;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketRightClick;
 import co.uk.flansmods.common.network.PacketSeatMount;
+import co.uk.flansmods.common.network.PacketTeamInfo;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
@@ -75,8 +76,9 @@ public class FlanPacketClient implements IPacketHandler
     		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
-    		case 17: (new PacketSeatMount()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
-    		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
+       		case 17: (new PacketSeatMount()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
+       		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.CLIENT); break;
+       	    default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		
     		stream.close();

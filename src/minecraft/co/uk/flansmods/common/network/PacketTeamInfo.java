@@ -1,0 +1,91 @@
+package co.uk.flansmods.common.network;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import co.uk.flansmods.client.GuiTeamScores;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class PacketTeamInfo extends FlanPacketCommon 
+{
+	public static final byte packetID = 18;
+	
+	public static Packet buildInfoPacket()
+	{
+		Packet250CustomPayload packet = new Packet250CustomPayload();
+		packet.channel = channelFlan;
+		
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream data = new DataOutputStream(bytes);
+        try
+        {
+        	data.write(packetID);
+        	if(TeamsManager.getInstance().currentGametype == null)
+        	{
+        		data.writeUTF("No Gametype");
+        		data.writeInt(0);
+        	}
+        	data.writeUTF(TeamsManager.getInstance().currentGametype.name);
+        	if(TeamsManager.getInstance().teams == null)
+        	{
+        		data.writeInt(0);
+        	}
+        	else
+        	{
+	        	data.writeInt(TeamsManager.getInstance().teams.length);
+	        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+	        	{
+	        		Team team = TeamsManager.getInstance().teams[i];
+	        		data.writeUTF(team.shortName);
+	        		data.writeInt(team.score);
+	        		data.writeInt(team.members.size());
+	        		for(int j = 0; j < team.members.size(); j++)
+	        		{
+	        			EntityPlayer player = team.members.get(j);
+	        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(player, Side.SERVER);
+	        			data.writeUTF(player.username);
+	        			data.writeInt(playerData.score);
+	        			data.writeInt(playerData.kills);
+	        			data.writeInt(playerData.deaths);
+	        		}
+	        	}
+        	}
+        	
+        	packet.data = bytes.toByteArray();
+        	packet.length = packet.data.length;
+        	
+        	data.close();
+        	bytes.close();
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+        
+        return packet;
+	}	
+		
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void interpret(DataInputStream stream, Object[] extradata, Side side)
+	{
+		GuiTeamScores.interpret(stream);
+	}
+	
+	@Override
+	public byte getPacketID()
+	{
+		return packetID;
+	}
+}
