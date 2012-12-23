@@ -25,6 +25,7 @@ public class GuiPlaneCrafting extends GuiContainer
         inventorySlots.onCraftGuiClosed(mc.thePlayer);
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer(int i, int j)
     {
         fontRenderer.drawString((big ? "Large" : "Small") + " Plane Crafting", 6, 6, 0x404040);
@@ -32,6 +33,7 @@ public class GuiPlaneCrafting extends GuiContainer
         fontRenderer.drawString("Blueprints", 108, 6 + (big ? 18 : 0), 0x101080);
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         int i = mc.renderEngine.getTexture(big ? "/gui/planeCraftingLarge.png" : "/gui/planeCrafting.png");
