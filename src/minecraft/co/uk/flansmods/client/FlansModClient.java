@@ -150,7 +150,7 @@ public class FlansModClient extends FlansMod
 				log("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
 			}			
-			if(!inPlane && minecraft.thePlayer.ridingEntity instanceof EntityPlane)
+			if(minecraft.thePlayer.ridingEntity instanceof EntityPlane)
 			{
 				try
 				{
