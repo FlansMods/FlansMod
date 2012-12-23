@@ -22,9 +22,14 @@ public class CommandTeams extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] split) 
 	{
-		if(teamsManager == null || split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
+		if(teamsManager == null)
 		{
-			//TODO : Add help information
+			sender.sendChatToPlayer("Teams mod is broken. You will need to look at the server side logs to see what's wrong");
+			return;
+		}
+		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
+		{
+			sendHelpInformation(sender);
 			return;
 		}
 		if(split[0].equals("listGametypes"))
@@ -172,6 +177,7 @@ public class CommandTeams extends CommandBase {
 			}
 			FlansMod.forceAdventureMode = Boolean.parseBoolean(split[1]);
 			sender.sendChatToPlayer("Adventure mode will " + (FlansMod.forceAdventureMode ? "now" : "no longer") + " be forced");
+			return;
 		}
 		if(split[0].equals("explosions"))
 		{
@@ -182,6 +188,7 @@ public class CommandTeams extends CommandBase {
 			}
 			FlansMod.explosions = Boolean.parseBoolean(split[1]);
 			sender.sendChatToPlayer("Expolsions are now " + (FlansMod.explosions ? "enabled" : "disabled"));
+			return;
 		}
 		if(split[0].equals("bombs") || split[0].equals("allowBombs"))
 		{
@@ -192,6 +199,7 @@ public class CommandTeams extends CommandBase {
 			}
 			FlansMod.bombsEnabled = Boolean.parseBoolean(split[1]);
 			sender.sendChatToPlayer("Boms are now " + (FlansMod.bombsEnabled ? "enabled" : "disabled"));
+			return;
 		}
 		if(split[0].equals("bullets") || split[0].equals("bulletsEnabled"))
 		{
@@ -202,6 +210,7 @@ public class CommandTeams extends CommandBase {
 			}
 			FlansMod.bulletsEnabled = Boolean.parseBoolean(split[1]);
 			sender.sendChatToPlayer("Bullets are now " + (FlansMod.bulletsEnabled ? "enabled" : "disabled"));
+			return;
 		}
 		if(split[0].equals("canBreakGuns"))
 		{
@@ -212,6 +221,7 @@ public class CommandTeams extends CommandBase {
 			}
 			FlansMod.canBreakGuns = Boolean.parseBoolean(split[1]);
 			sender.sendChatToPlayer("AAGuns and MGs can " + (FlansMod.canBreakGuns ? "now" : "no longer") + " be broken");
+			return;
 		}
 		if(split[0].equals("setVariable"))
 		{
@@ -228,7 +238,37 @@ public class CommandTeams extends CommandBase {
 			if(TeamsManager.getInstance().currentGametype.setVariable(split[1], split[2]))
 				sender.sendChatToPlayer("Set variable " + split[1] + " in gametype " + TeamsManager.getInstance().currentGametype.shortName + " to " + split[2]);
 			else sender.sendChatToPlayer("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentGametype.shortName);
+			return;
 		}
+		sender.sendChatToPlayer(split[0] + " is not a valid teams command. Try /teams help");
+	}
+	
+	public void sendHelpInformation(ICommandSender sender)
+	{
+		sender.sendChatToPlayer("\u00a72Listing teams commands");
+		sender.sendChatToPlayer("/teams listGametypes");
+		sender.sendChatToPlayer("/teams setGametype <name>");
+		sender.sendChatToPlayer("/teams listAllTeams");
+		sender.sendChatToPlayer("/teams listTeams");
+		sender.sendChatToPlayer("/teams setTeams <teamName1> <teamName2>");
+		sender.sendChatToPlayer("/teams getSticks");
+		sender.sendChatToPlayer("/teams setVariable <variable> <value>");
+		sender.sendChatToPlayer("/teams forceAdventure <true / false>");
+		sender.sendChatToPlayer("/teams explosions <true / false>");
+		sender.sendChatToPlayer("/teams canBreakGuns <true / false>");
+		/*
+		sender.sendChatToPlayer("Listing teams commands");
+		sender.sendChatToPlayer("/teams listGametypes - see the gametypes available on this server");
+		sender.sendChatToPlayer("/teams setGametype <name> - set the gametype (to one listed by listGametypes)");
+		sender.sendChatToPlayer("/teams listAllTeams - list the teams available on this server");
+		sender.sendChatToPlayer("/teams listTeams - list the currently in use teams");
+		sender.sendChatToPlayer("/teams setTeams <teamName1> <teamName2> - set the teams (to teams listed by listAllTeams)");
+		sender.sendChatToPlayer("/teams getSticks - get the Op sticks (for map making and editing)");
+		sender.sendChatToPlayer("/teams setVariable <variable> <value> - set a variable for the current gametype");
+		sender.sendChatToPlayer("/teams forceAdventure <true / false> - set whether players should be in adventure mode while playing");
+		sender.sendChatToPlayer("/teams explosions <true / false> - set whether explosions damage the world");
+		sender.sendChatToPlayer("/teams canBreakGuns <true / false> - set whether MGs / AAGuns can be broken");
+		*/
 	}
 
 	public EntityPlayerMP getPlayer(String name)
