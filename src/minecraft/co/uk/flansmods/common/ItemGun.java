@@ -17,8 +17,10 @@ import org.lwjgl.input.Mouse;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
+import co.uk.flansmods.common.network.PacketReload;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -224,6 +226,7 @@ public class ItemGun extends Item
 					{
 						PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
 					}
+					PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)entityplayer);
 					// Reset the shoot delay timer to the reload time of this
 					// gun
 					data.shootTime = type.reloadTime;
@@ -278,6 +281,8 @@ public class ItemGun extends Item
 							}
 							// Reset the shoot delay timer to the reload time of
 							// this gun
+							PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)entityplayer);
+
 							data.shootTime = type.reloadTime;
 							return itemstack;
 						}
