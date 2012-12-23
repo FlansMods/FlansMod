@@ -135,4 +135,10 @@ public class GuiTeamScores extends GuiScreen
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }
