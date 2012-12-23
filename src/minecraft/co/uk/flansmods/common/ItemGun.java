@@ -43,6 +43,7 @@ public class ItemGun extends Item
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 
+	@Override
 	public String getTextureFile()
 	{
 		return "/spriteSheets/guns.png";
@@ -153,6 +154,7 @@ public class ItemGun extends Item
 		}
 	}
 	
+	@Override
 	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
 		if(world.isRemote)
@@ -288,7 +290,6 @@ public class ItemGun extends Item
 		}
 		return itemstack;
 	}
-	
 
 	/** Method for dropping the gun */
 	private void dropItem(World world, EntityPlayer entityplayer, String itemName)
@@ -331,6 +332,7 @@ public class ItemGun extends Item
 	}
 
 	/** Deployable guns only */
+	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
 		if (type.deployable)
@@ -380,16 +382,19 @@ public class ItemGun extends Item
 		return Block.blocksList[blockID].blockMaterial.isSolid() && Block.blocksList[blockID].isOpaqueCube();
 	}
 
+	@Override
 	public int getDamageVsEntity(Entity par1Entity)
 	{
 		return type.meleeDamage;
 	}
 
+	@Override
 	public boolean isFull3D()
 	{
 		return true;
 	}
 
+	@Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

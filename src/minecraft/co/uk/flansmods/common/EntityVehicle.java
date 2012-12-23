@@ -89,6 +89,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 	}
 	
+	@Override
 	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
     {
 		//Simple method. Might add destructible wheels later...
@@ -101,6 +102,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		return attackEntityFrom(damagesource, i);
 	}
 	
+	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)
     {
         if(worldObj.isRemote || isDead)
@@ -664,6 +666,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
     }
 	
+	@Override
 	public void updateCollisionBox(EntityCollisionBox box)
 	{
 		Vec3 vec = rotate(box.x / 16D, box.y / 16D, box.z / 16D);
@@ -689,6 +692,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 	}
 	
+	@Override
     public void updateRiderPosition()
     {
         if(riddenByEntity == null)
@@ -730,6 +734,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		}
 	}
 	
+	@Override
 	public void applyEntityCollision(Entity entity)
     {
 	}
