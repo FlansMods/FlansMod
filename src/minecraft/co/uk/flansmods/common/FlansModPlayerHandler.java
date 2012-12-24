@@ -62,7 +62,8 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
-		serverSideData.put(player.username, new FlansModPlayerData(player));
+		if(!serverSideData.containsKey(player.username))
+			serverSideData.put(player.username, new FlansModPlayerData(player));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
 			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 	}
@@ -70,7 +71,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		serverSideData.remove(player);
+		serverSideData.remove(player.username);
 	}
 
 	@Override
