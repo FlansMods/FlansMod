@@ -255,4 +255,14 @@ public class InfoType
 		FlansMod.log("Could not find " + arg0 + " when adding recipe");
 		return null;
 	}
+	
+	public static InfoType getType(String s)
+	{
+		for(InfoType type : infoTypes)
+		{
+			if(type.shortName.equals(s))
+				return type;
+		}
+		return null;
+	}
 }

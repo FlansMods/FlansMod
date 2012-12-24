@@ -28,6 +28,7 @@ import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemGun;
 import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.VehicleType;
@@ -215,10 +216,11 @@ public class FlansModClient extends FlansMod
 	@ForgeSubscribe
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		System.out.println(event.message);
 		if(event.message.startsWith("death."))
 		{
-			
+			String[] split = event.message.split("\\.");
+			event.setCanceled(true);
+			FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[2] + " killed " + split[3] + " with a " + InfoType.getType(split[1]).name);
 		}
 	}
 	
