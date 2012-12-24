@@ -1,5 +1,7 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
 import co.uk.flansmods.client.FlansModClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -79,8 +81,9 @@ public class SlotVehicles extends Slot
 			container.decrStack(2, 1);
 		}
 		//Add the vehicle to the list of blueprints
-		if(!FlansModClient.vehicleBlueprintsUnlocked.contains(type))
-			FlansModClient.vehicleBlueprintsUnlocked.add(type);
+		List<DriveableType> blueprints = FlansMod.proxy.getBlueprints(true);
+		if(blueprints != null && !blueprints.contains(type))
+			blueprints.add(type);
 		//Register the data
 		container.world.setItemData("vehicle_" + dataID, data);
         data.markDirty();	

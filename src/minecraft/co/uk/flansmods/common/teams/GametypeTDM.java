@@ -195,6 +195,8 @@ public class GametypeTDM extends Gametype
 	{
 		FlansModPlayerData data = getPlayerData(player);
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
+		if(data.team == null)
+			return null;
 		for(ITeamBase base : data.team.bases)
 		{
 			for(ITeamObject object : base.getObjects())

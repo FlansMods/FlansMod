@@ -1,5 +1,7 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
 import co.uk.flansmods.client.FlansModClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -149,8 +151,9 @@ public class SlotPlanes extends Slot
 			}
 		}
 		//Add the plane to the list of blueprints
-		if(!FlansModClient.blueprintsUnlocked.contains(type))
-			FlansModClient.blueprintsUnlocked.add(type);
+		List<DriveableType> blueprints = FlansMod.proxy.getBlueprints(false);
+		if(blueprints != null && !blueprints.contains(type))
+			blueprints.add(type);
 		//Register the data
 		container.world.setItemData("plane_" + dataID, data);
         data.markDirty();	

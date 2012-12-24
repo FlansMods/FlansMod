@@ -480,9 +480,9 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		//wheelVectors[3].yCoord -= dY;
 
 		//Now calculate the rotation matrix based on these points
-		Vec3 zAxis2 = wheelVectors[0].subtract(wheelVectors[1]).normalize();
-		Vec3 xAxis = wheelVectors[0].subtract(wheelVectors[3]).normalize();
-		Vec3 yAxis = zAxis2.crossProduct(xAxis);
+		Vec3 zAxis2 = subtract(wheelVectors[0], wheelVectors[1]).normalize();
+		Vec3 xAxis = subtract(wheelVectors[0], wheelVectors[3]).normalize();
+		Vec3 yAxis = crossProduct(zAxis2, xAxis);
 		Matrix4f rotationMatrix = new Matrix4f();
 		rotationMatrix.m00 = (float)xAxis.xCoord;
 		rotationMatrix.m10 = (float)xAxis.yCoord;
@@ -673,6 +673,17 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
+	
+	//Returns a - b. Because for some reason this is client only in Vec3...
+	private Vec3 subtract(Vec3 a, Vec3 b)
+	{
+		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
+	}
+	
+	private Vec3 crossProduct(Vec3 a, Vec3 b)
+	{
+        return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
+	}
 	
 	@Override
 	public void updateCollisionBox(EntityCollisionBox box)
