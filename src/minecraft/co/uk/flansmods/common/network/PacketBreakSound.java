@@ -25,7 +25,7 @@ public class PacketBreakSound extends FlanPacketCommon
         DataOutputStream data = new DataOutputStream(bytes);
         try
         {
-        	data.write(0); // this is the packet ID. identifies it as a BreakSoundPacket
+        	data.write(packetID); // this is the packet ID. identifies it as a BreakSoundPacket
         	data.writeInt(x);
         	data.writeInt(y);
         	data.writeInt(z);
