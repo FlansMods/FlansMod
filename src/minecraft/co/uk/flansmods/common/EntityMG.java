@@ -26,6 +26,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 {
@@ -149,16 +150,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1)
 		{
 			//Send a packet!
-			if(Mouse.isButtonDown(0) && !wasShooting)
-			{
-				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
-				wasShooting = true;
-			}
-			else if(!Mouse.isButtonDown(0) && wasShooting)
-			{
-				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
-				wasShooting = false;
-			}
+			checkForShooting();
 		}
 		//if(!worldObj.isRemote)
 			//System.out.println(isShooting);
@@ -185,6 +177,21 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 		if (soundDelay > 0)
 			soundDelay--;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void checkForShooting()
+	{
+		if(Mouse.isButtonDown(0) && !wasShooting)
+		{
+			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
+			wasShooting = true;
+		}
+		else if(!Mouse.isButtonDown(0) && wasShooting)
+		{
+			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
+			wasShooting = false;
+		}
 	}
 	
 	//Server side setter to be called upon receiving a packet

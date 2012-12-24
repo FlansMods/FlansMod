@@ -13,7 +13,6 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.common.network.PacketMGFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 
@@ -23,6 +22,8 @@ import com.google.common.io.ByteArrayDataOutput;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
@@ -197,17 +198,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		
 		if (worldObj.isRemote && riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
 		{
-			//Send a packet!
-			if(Mouse.isButtonDown(0) && !wasShooting)
-			{
-				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
-				wasShooting = true;
-			}
-			else if(!Mouse.isButtonDown(0) && wasShooting)
-			{
-				PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
-				wasShooting = false;
-			}
+			checkForShooting();
 		}
 
 		if (worldObj.isRemote)
@@ -282,6 +273,22 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 			currentBarrel = (currentBarrel + 1) % type.numBarrels;
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void checkForShooting()
+	{
+		//Send a packet!
+		if(Mouse.isButtonDown(0) && !wasShooting)
+		{
+			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
+			wasShooting = true;
+		}
+		else if(!Mouse.isButtonDown(0) && wasShooting)
+		{
+			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(false));
+			wasShooting = false;
 		}
 	}
 
