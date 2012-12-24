@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -32,6 +33,16 @@ public class FlansModPlayerHandler implements IPlayerTracker
 		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntityPassengerSeat))
 		{
 			event.ammount = 0;
+		}
+	}
+	
+	@ForgeSubscribe
+	public void onEntityKilled(LivingDeathEvent event) 
+	{
+		EntityLiving entity = event.entityLiving;
+		if(entity instanceof EntityPlayer)
+		{
+			getPlayerData((EntityPlayer)entity).isShooting = false;
 		}
 	}
 	
