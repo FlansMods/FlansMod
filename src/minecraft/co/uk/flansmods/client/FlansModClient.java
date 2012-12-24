@@ -229,7 +229,7 @@ public class FlansModClient extends FlansMod
 	
 	private void loadPerWorldData(Event event, World world)
 	{
-		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		File file = new File("teams.dat");
 		checkFileExists(file);
 		try
 		{
@@ -256,7 +256,7 @@ public class FlansModClient extends FlansMod
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
+		File file = new File("teams.dat");
 		checkFileExists(file);
 		try
 		{

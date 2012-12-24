@@ -14,8 +14,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet11PlayerPosition;
+import net.minecraft.network.packet.Packet34EntityTeleport;
+import net.minecraft.network.packet.Packet6SpawnPosition;
+import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
@@ -355,13 +360,21 @@ public class TeamsManager implements IPlayerTracker
 		resetInventory(player);
 		if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
 			player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
-		Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
-		if(spawnPoint != null)
+		if(currentGametype != null)
 		{
-			((EntityPlayerMP)player).playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+			Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
+			if(spawnPoint != null)
+			{
+				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
+				playerMP.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(playerMP.dimension, (byte)playerMP.worldObj.difficultySetting, playerMP.worldObj.getWorldInfo().getTerrainType(), playerMP.worldObj.getHeight(), playerMP.theItemInWorldManager.getGameType()));
+				playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+				playerMP.playerNetServerHandler.sendPacketToPlayer(new Packet6SpawnPosition(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord), MathHelper.floor_double(spawnPoint.zCoord)));
+				PacketDispatcher.sendPacketToAllInDimension(new Packet11PlayerPosition(playerMP.posX, playerMP.posY, 0, playerMP.posZ, true), playerMP.dimension);
+			}
+			
+			
+			currentGametype.playerRespawned((EntityPlayerMP)player);
 		}
-		
-		currentGametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
 	public void forceRespawn(EntityPlayerMP player)
