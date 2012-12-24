@@ -39,6 +39,10 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void startNewRound() 
 	{
+		for(EntityPlayer player : getPlayers())
+		{
+			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
+		}
 		showTeamsMenuToAll(false);
 		resetScores();
 		respawnAll();
