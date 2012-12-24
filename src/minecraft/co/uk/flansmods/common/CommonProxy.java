@@ -135,31 +135,35 @@ public class CommonProxy
 		}
 		return null;
 	}
-
-	public Object loadBulletModel(String[] split, String shortName)
-	{
-		return null;
-	}
-
-	public Object loadMGModel(String[] split, String shortName)
-	{
-		return null;
-	}
-
-	public Object loadAAGunModel(String[] split, String shortName)
-	{
 	
-		return null;
+	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
+	{
+		
 	}
 
-	public Object loadVehicleModel(String[] split, String shortName)
+	public void loadBulletModel(String[] split, String shortName, BulletType type)
 	{
-		return null;
+		return;
+	}
+
+	public void loadMGModel(String[] split, String shortName, GunType type)
+	{
+		return;
+	}
+
+	public void loadAAGunModel(String[] split, String shortName, AAGunType type)
+	{
+		return;
+	}
+
+	public void loadVehicleModel(String[] split, String shortName, VehicleType type)
+	{
+		return;
 	}
 	
-	public Object loadPlaneModel(String[] split, String shortName)
+	public void loadPlaneModel(String[] split, String shortName, PlaneType type)
 	{
-		return null;
+		return;
 	}
 	
 	public void loadSound(String contentPack, String type, String sound)

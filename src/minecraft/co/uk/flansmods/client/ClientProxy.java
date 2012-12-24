@@ -404,50 +404,52 @@ public class ClientProxy extends CommonProxy
 		}
 		return null;
 	}
+	
+	@Override
+	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
+	{
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(player.inventory, world, driveable));
+	}
 
 	@Override
-	public ModelBase loadBulletModel(String[] split, String shortName)
+	public void loadBulletModel(String[] split, String shortName, BulletType type)
 	{
 		try
 		{
 			ModelBase model = (ModelBase) Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			return model;
+			type.model = model;
 		} catch (Exception e)
 		{
 			FlansMod.log("Failed to load bullet model : " + shortName);
 			e.printStackTrace();
-			return null;
 		}
 	}
 
 	@Override
-	public ModelMG loadMGModel(String[] split, String shortName)
+	public void loadMGModel(String[] split, String shortName, GunType type)
 	{
 		try
 		{
 			ModelMG model = (ModelMG) Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			return model;
+			type.model = model;
 		} catch (Exception e)
 		{
 			FlansMod.log("Failed to load deployable MG model : " + shortName);
 			e.printStackTrace();
-			return null;
 		}
 	}
 
 	@Override
-	public ModelAAGun loadAAGunModel(String[] split, String shortName)
+	public void loadAAGunModel(String[] split, String shortName, AAGunType type)
 	{
 		try
 		{
 			ModelAAGun model = (ModelAAGun) Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			return model;
+			type.model = model;
 		} catch (Exception e)
 		{
-			FlansMod.log(modelDir + split[1]);
 			FlansMod.log("Failed to load AA gun model : " + shortName);
 			e.printStackTrace();
-			return null;
 		}
 	}
 
@@ -485,34 +487,32 @@ public class ClientProxy extends CommonProxy
 	}*/
 
 	@Override
-	public ModelVehicle loadVehicleModel(String[] split, String shortName)
+	public void loadVehicleModel(String[] split, String shortName, VehicleType type)
 	{
 		try 
 		{	
 			ModelVehicle model = (ModelVehicle)Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			return model;
+			type.model = model;
 		}
 		catch(Exception e)
 		{
 			FlansMod.log("Failed to load vehicle model : " + shortName);
 			e.printStackTrace();
-			return null;
 		}
 	}	
 
 	@Override
-	public ModelPlane loadPlaneModel(String[] split, String shortName)
+	public void loadPlaneModel(String[] split, String shortName, PlaneType type)
 	{
 		try 
 		{	
 			ModelPlane model = (ModelPlane)Class.forName(modelDir + split[1]).getConstructor().newInstance();
-			return model;
+			type.model = model;
 		}
 		catch(Exception e)
 		{
 			FlansMod.log("Failed to load plane model : " + shortName);
 			e.printStackTrace();
-			return null;
 		}
 	}
 	

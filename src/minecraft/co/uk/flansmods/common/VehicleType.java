@@ -47,7 +47,7 @@ public class VehicleType extends DriveableType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
-				model = (ModelVehicle)FlansMod.proxy.loadVehicleModel(split, shortName);
+				FlansMod.proxy.loadVehicleModel(split, shortName, this);
 			}
 					
 			//Movement modifiers

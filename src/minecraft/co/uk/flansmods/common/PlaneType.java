@@ -46,7 +46,7 @@ public class PlaneType extends DriveableType
 		try
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				model = (ModelPlane) FlansMod.proxy.loadPlaneModel(split, shortName);
+				FlansMod.proxy.loadPlaneModel(split, shortName, this);
 			
 			//Movement modifiers
 			if(split[0].equals("MaxPropellerSpeed"))

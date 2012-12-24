@@ -1,7 +1,9 @@
 package co.uk.flansmods.common;
 
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
+import co.uk.flansmods.common.vector.Matrix4f;
+import co.uk.flansmods.common.vector.Vector3f;
+
+
 
 public class RotatedAxes
 {

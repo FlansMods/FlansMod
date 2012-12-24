@@ -19,18 +19,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import co.uk.flansmods.api.IExplodeable;
-import co.uk.flansmods.client.GuiPlaneMenu;
-import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
+import co.uk.flansmods.common.vector.Vector3f;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -77,7 +74,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		
 		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
 		{
-			type.model = (ModelPlane) FlansMod.proxy.loadPlaneModel(new String[] {"", type.shortName}, type.shortName);
+			FlansMod.proxy.loadPlaneModel(new String[] {"", type.shortName}, type.shortName, type);
 			FlansMod.logLoudly("TurboModelThingy not installed");
 			return;
 		}
@@ -311,7 +308,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 7 :
 			{
 				if(worldObj.isRemote)
-					FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(((EntityPlayer)riddenByEntity).inventory, worldObj, this));
+					FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
 				return true;
 			}
 			case 8 : //Bomb
@@ -765,6 +762,17 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		{
 			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
 			{
+				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.startSound, false));
+				soundPosition = type.startSoundLength;
+			}
+			if (propSpeed > 1 && soundPosition == 0)
+			{
+				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.propSound, false));
+				soundPosition = type.propSoundLength;
+			}
+			/*
+			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
+			{
 				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
 				{
 					try {
@@ -793,7 +801,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				}
 				else worldObj.playSoundAtEntity(this, type.propSound, 1.0F , 1.0F);
 				soundPosition = type.propSoundLength;
-			}
+			}*/
 	
 			if(soundPosition > 0)
 				soundPosition--;
