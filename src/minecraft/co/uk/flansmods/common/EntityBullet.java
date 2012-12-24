@@ -349,8 +349,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	private DamageSource getBulletDamage()
 	{
 		if(owner instanceof EntityPlayer)
-			return (new EntityDamageSourceIndirect(firedFrom.shortName + "." + ((EntityPlayer)owner).username, this, owner)).setProjectile();
-		else return (new EntityDamageSourceIndirect(firedFrom.shortName, this, owner)).setProjectile();
+			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)owner, firedFrom)).setProjectile();
+		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 
 	private boolean isPartOfOwner(Entity entity)

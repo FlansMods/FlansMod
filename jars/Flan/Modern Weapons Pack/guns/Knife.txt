@@ -17,8 +17,8 @@ Damage 0
 Accuracy 0
 //Time in ticks between rounds
 ShootDelay 0
-ShootSound DesertEagleShoot
-ReloadSound lugerReload
+//ShootSound DesertEagleShoot
+//ReloadSound lugerReload
 Mode SemiAuto
 Scope None
 Deployable False
