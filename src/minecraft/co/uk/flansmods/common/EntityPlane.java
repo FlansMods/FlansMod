@@ -332,7 +332,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					if(slot != 0)
 					{
 						Vec3 bombVec = rotate(type.bombXOffset / 16D, type.bombYOffset / 16D, type.bombZOffset / 16D);
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type));
+						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type, type));
 						if(type.bombSound != null)
 						{
 							try {
@@ -360,7 +360,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 						if(data.guns[i] != null && data.ammo[i] != null && data.ammo[i].getItem() instanceof ItemBullet && data.guns[i].isAmmo(((ItemBullet)data.ammo[i].getItem()).type))
 						{
 							Vec3 gunVec = rotate(type.barrelX[i] / 16D, type.barrelY[i] / 16D, type.barrelZ[i] / 16D);
-							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F));
+							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F, type));
 							worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
 							int damage = data.ammo[i].getItemDamage();
 							data.ammo[i].setItemDamage(damage + 1);	

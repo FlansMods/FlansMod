@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -209,6 +210,16 @@ public class FlansModClient extends FlansMod
 			controlModeSwitchTimer--;
 		if (errorStringTimer > 0)
 			errorStringTimer--;
+	}
+	
+	@ForgeSubscribe
+	public void chatMessage(ClientChatReceivedEvent event)
+	{
+		System.out.println(event.message);
+		if(event.message.startsWith("death."))
+		{
+			
+		}
 	}
 	
 	@ForgeSubscribe

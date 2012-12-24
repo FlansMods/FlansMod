@@ -277,7 +277,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						ammo[j].damageItem(1, player);
 					shootDelay = type.shootDelay;
 					barrelRecoil[j] = type.recoil;
-					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, bullet));
+					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, bullet, type));
 					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound));
 				}
 			}

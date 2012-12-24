@@ -33,6 +33,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public Entity owner;
 	private int ticksInAir;
 	public BulletType type;
+	public InfoType firedFrom;
 	public int damage;
 	public boolean shotgun = false;
 
@@ -44,16 +45,17 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Standard handheld gun bullet creation method.
-	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1)
+	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
-		this(world, shooter, spread, gunDamage, type1, 3.0F, false);
+		this(world, shooter, spread, gunDamage, type1, 3.0F, false, shotFrom);
 	}
 
 	// Custom speed handheld gun bullet creation method
-	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot)
+	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
 	{
 		super(world);
 		type = type1;
+		firedFrom = shotFrom;
 		ticksInAir = 0;
 		owner = shooter;
 		damage = gunDamage;
@@ -72,15 +74,16 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Machinegun bullet constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
-		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F);
+		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F, shotFrom);
 	}
 
 	// Custom bullet speed constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		super(world);
+		firedFrom = shotFrom;
 		type = type1;
 		ticksInAir = 0;
 		owner = shooter;
@@ -99,10 +102,11 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Bomb constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLiving shooter, int gunDamage, BulletType type1)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLiving shooter, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		super(world);
 		type = type1;
+		firedFrom = shotFrom;
 		ticksInAir = 0;
 		owner = shooter;
 		damage = gunDamage;
@@ -344,7 +348,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 
 	private DamageSource getBulletDamage()
 	{
-		return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
+		if(owner instanceof EntityPlayer)
+			return (new EntityDamageSourceIndirect(firedFrom.shortName + "." + ((EntityPlayer)owner).username, this, owner)).setProjectile();
+		else return (new EntityDamageSourceIndirect(firedFrom.shortName, this, owner)).setProjectile();
 	}
 
 	private boolean isPartOfOwner(Entity entity)
