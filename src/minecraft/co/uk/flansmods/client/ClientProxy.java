@@ -24,6 +24,7 @@ import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.AAGunType;
 import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.CommonProxy;
+import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.EntityCollisionBox;
@@ -35,6 +36,7 @@ import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.GunType;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.PlaneType;
@@ -42,6 +44,7 @@ import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.TileEntityGunBox;
 import co.uk.flansmods.common.VehicleData;
 import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -525,5 +528,25 @@ public class ClientProxy extends CommonProxy
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return player == FMLClientHandler.instance().getClient().thePlayer;
+	}
+	
+	@Override
+	public void buyGun(GunBoxType type, int gun)
+	{
+		PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0);
+		FlansModClient.shootTime = 10;
+	}
+
+	@Override
+	public void buyAmmo(GunBoxType box, int ammo, int type)
+	{
+		PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo);
+		FlansModClient.shootTime = 10;
+	}
+	
+	@Override
+	public List<DriveableType> getBlueprints(boolean vehicle)
+	{
+		return vehicle ? FlansModClient.vehicleBlueprintsUnlocked : FlansModClient.blueprintsUnlocked;
 	}
 }

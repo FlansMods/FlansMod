@@ -22,28 +22,12 @@ public class CommonTickHandler implements ITickHandler {
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
-		if (type.equals(EnumSet.of(TickType.RENDER)))
-		{
-			rTick(FMLClientHandler.instance().getClient());
-		}
-		if (type.equals(EnumSet.of(TickType.CLIENT)))
-		{
-			cTick(FMLClientHandler.instance().getClient());
-		}
 		if (type.equals(EnumSet.of(TickType.SERVER)))
 		{
 			sTick(FMLCommonHandler.instance().getMinecraftServerInstance());
 		}
 	}
 	
-	public void rTick(Minecraft minecraft)
-	{ /* Client side only */
-	}
-
-	public void cTick(Minecraft minecraft)
-	{ /* Client side only */
-	}
-
 	public void sTick(MinecraftServer minecraft)
 	{
 		/* Server */
@@ -51,10 +35,9 @@ public class CommonTickHandler implements ITickHandler {
 		FlansMod.playerHandler.tick();
 	}
 	
-	// TODO: make this didicated server-safe
 	public EnumSet<TickType> ticks()
 	{
-		return EnumSet.of(TickType.CLIENT, TickType.SERVER, TickType.RENDER);
+		return EnumSet.of(TickType.SERVER);
 	}
 
 	@Override

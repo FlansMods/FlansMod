@@ -1,7 +1,5 @@
 package co.uk.flansmods.common;
 
-import net.minecraft.client.Minecraft;
-
 import java.io.BufferedReader;
 import java.util.HashMap;
 import java.util.List;

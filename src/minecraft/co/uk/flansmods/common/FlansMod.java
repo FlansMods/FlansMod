@@ -620,15 +620,7 @@ public class FlansMod
 		log(s);
 	}
 
-	public static void buyGun(GunBoxType type, int gun)
-	{
-		PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0);
-	}
 
-	public static void buyAmmo(GunBoxType box, int ammo, int type)
-	{
-		PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo);
-	}
 
 	/** read properties */
 	private void readProperties(String[] split, BufferedReader file)

@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.network.PacketBreakSound;
+import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -174,5 +175,20 @@ public class CommonProxy
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return false;
+	}
+	
+	public void buyGun(GunBoxType type, int gun)
+	{
+		//Client only
+	}
+
+	public void buyAmmo(GunBoxType box, int ammo, int type)
+	{
+		//Client only
+	}
+	
+	public List<DriveableType> getBlueprints(boolean vehicle)
+	{
+		return null;
 	}
 }

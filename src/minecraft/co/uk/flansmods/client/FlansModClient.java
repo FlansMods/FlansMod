@@ -24,14 +24,17 @@ import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.BlockGunBox;
+import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemGun;
 import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -59,8 +62,8 @@ public class FlansModClient extends FlansMod
 	
 	public static boolean inPlane = false;
 	
-	public static List<PlaneType> blueprintsUnlocked = new ArrayList<PlaneType>();
-	public static List<VehicleType> vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+	public static List<DriveableType> blueprintsUnlocked = new ArrayList<DriveableType>();
+	public static List<DriveableType> vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
 	
 	public void load()
 	{
@@ -246,8 +249,8 @@ public class FlansModClient extends FlansMod
 		checkFileExists(file);
 		try
 		{
-			blueprintsUnlocked = new ArrayList<PlaneType>();
-			vehicleBlueprintsUnlocked = new ArrayList<VehicleType>();
+			blueprintsUnlocked = new ArrayList<DriveableType>();
+			vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
 			int numPlaneBlues = tags.getInteger("NumPlaneBlues");
 			for(int i = 0; i < numPlaneBlues; i++)
@@ -319,16 +322,6 @@ public class FlansModClient extends FlansMod
 	public static void shoot()
 	{
 		// TODO : SMP guns
-	}
-
-	public static void buyGun(BlockGunBox box, int gun)
-	{
-		// TODO : SMP gun boxes
-	}
-
-	public static void buyAmmo(BlockGunBox box, int ammo)
-	{
-		// TODO : SMP gun boxes
 	}
 	
 	private void doPropertyStuff(File file)

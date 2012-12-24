@@ -10,7 +10,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.network.PacketBlueprint;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -143,7 +142,7 @@ public class ContainerVehicleCrafting extends Container
 	
 	public void clickedBlueprint(int blueprint)
 	{
-		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansModClient.vehicleBlueprintsUnlocked.get(blueprint).shortName));
+		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansMod.proxy.getBlueprints(false).get(blueprint).shortName));
 		//clickedBlueprint(FlansMod.vehicleBlueprintsUnlocked.get(blueprint));
 	}
 	

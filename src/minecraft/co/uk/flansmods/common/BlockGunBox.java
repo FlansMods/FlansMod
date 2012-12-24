@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import co.uk.flansmods.client.FlansModClient;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,8 +33,7 @@ public class BlockGunBox extends BlockContainer
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansModClient.shootTime = 10;
-			FlansMod.buyGun(type, i);
+			FlansMod.proxy.buyGun(type, i);
 		} 
 		if (i <= type.numGuns && type.guns[i] != null)
 		{
@@ -87,8 +85,7 @@ public class BlockGunBox extends BlockContainer
 		
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(type, i, 1);
-			FlansModClient.shootTime = 10;
+			FlansMod.proxy.buyAmmo(type, i, 1);
 		} 
 		if (i <= type.numGuns && type.bulletParts[i] != null)
 		{
@@ -136,8 +133,7 @@ public class BlockGunBox extends BlockContainer
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
-			FlansMod.buyAmmo(type, i, 2);
-			FlansModClient.shootTime = 10;
+			FlansMod.proxy.buyAmmo(type, i, 2);
 		} 
 		if (i <= type.numGuns && type.altBulletParts[i] != null)
 		{
