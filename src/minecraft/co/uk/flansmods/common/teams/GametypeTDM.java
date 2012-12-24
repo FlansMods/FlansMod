@@ -39,13 +39,15 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void startNewRound() 
 	{
+		respawnAll();
 		for(EntityPlayer player : getPlayers())
 		{
 			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
+			if(getPlayerData((EntityPlayerMP)player).team != null)
+				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
 		}
 		showTeamsMenuToAll(false);
 		resetScores();
-		respawnAll();
 		teamsManager.messageAll("\u00a7fA new round has started!");
 	}
 

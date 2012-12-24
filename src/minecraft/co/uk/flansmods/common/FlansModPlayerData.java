@@ -6,6 +6,7 @@ import co.uk.flansmods.common.teams.Team;
 
 public class FlansModPlayerData 
 {
+	public String username;
 	public EntityMG mountingGun;
 	public Team team;
 	public PlayerClass playerClass;
@@ -16,9 +17,14 @@ public class FlansModPlayerData
 	public int score;
 	public int kills;
 	public int deaths;
+
 	
 	//TODO Unknown purpose!
-	public FlansModPlayerData(EntityPlayer player) {}
+	public FlansModPlayerData(String name) 
+	{
+		username = name;
+		
+	}
 	
 	public void tick()
 	{

@@ -413,7 +413,7 @@ public class TeamsManager implements IPlayerTracker
 				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
 				if(canJoinTeam)
 				{
-					team.members.add(player);
+					team.members.add(player.username);
 					previousTeam.members.remove(player);
 					messageAll(player.username + " joined \u00a7" + team.textColour + team.name);
 				}

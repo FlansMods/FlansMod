@@ -56,25 +56,34 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	
 	public static FlansModPlayerData getPlayerData(EntityPlayer player)
 	{
-		return getPlayerData(player, Side.SERVER);
+		return getPlayerData(player.username, Side.SERVER);
+	}
+	
+	public static FlansModPlayerData getPlayerData(String username)
+	{
+		return getPlayerData(username, Side.SERVER);
 	}
 
-	
 	public static FlansModPlayerData getPlayerData(EntityPlayer player, Side side)
+	{
+		return getPlayerData(player.username, side);
+	}
+	
+	public static FlansModPlayerData getPlayerData(String username, Side side)
 	{
 		if(side.isClient())
 		{
-			if(!clientSideData.containsKey(player))
-				clientSideData.put(player.username, new FlansModPlayerData(player));
+			if(!clientSideData.containsKey(username))
+				clientSideData.put(username, new FlansModPlayerData(username));
 		}
-		return side.isClient() ? clientSideData.get(player.username) : serverSideData.get(player.username);
+		return side.isClient() ? clientSideData.get(username) : serverSideData.get(username);
 	}
 
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
 		if(!serverSideData.containsKey(player.username))
-			serverSideData.put(player.username, new FlansModPlayerData(player));
+			serverSideData.put(player.username, new FlansModPlayerData(player.username));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
 			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 	}

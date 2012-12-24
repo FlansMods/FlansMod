@@ -59,9 +59,9 @@ public class PacketTeamInfo extends FlanPacketCommon
 		        		data.writeInt(team.members.size());
 		        		for(int j = 0; j < team.members.size(); j++)
 		        		{
-		        			EntityPlayer player = team.members.get(j);
-		        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(player, Side.SERVER);
-		        			data.writeUTF(player.username);
+		        			String username = team.members.get(j);
+		        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(username, Side.SERVER);
+		        			data.writeUTF(username);
 		        			if(playerData == null)
 		        			{
 		        				data.writeInt(0);

@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansModPlayerHandler;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +16,7 @@ public class Team {
 	public static List<Team> teams = new ArrayList<Team>();
 	public static Team spectators = new Team("spectators", "Spectators", 0xffffff, '7');
 	
-	public List<EntityPlayerMP> members = new ArrayList<EntityPlayerMP>();
+	public List<String> members = new ArrayList<String>();
 	
 	public List<ITeamBase> bases = new ArrayList<ITeamBase>();
 	
@@ -192,5 +195,11 @@ public class Team {
 	public void removeBase(ITeamBase base)
 	{
 		bases.remove(base);
+	}
+	
+	public void removePlayer(EntityPlayer player)
+	{
+		members.remove(player.username);
+		FlansModPlayerHandler.getPlayerData(player).team = null;
 	}
 }
