@@ -299,13 +299,13 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	
 	public abstract void updateCollisionBox(EntityCollisionBox box);
 	
-	private boolean syncFromServer = true;
-    private int boatPosRotationIncrements;
-    private double boatX;
-    private double boatY;
-    private double boatZ;
-    private double boatYaw;
-    private double boatPitch;
+	public boolean syncFromServer = true;
+	public int boatPosRotationIncrements;
+    public double boatX;
+    public double boatY;
+    public double boatZ;
+    public double boatYaw;
+    public double boatPitch;
     
     private double velocityX;
     private double velocityY;

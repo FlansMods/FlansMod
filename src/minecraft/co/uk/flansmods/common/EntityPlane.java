@@ -506,7 +506,46 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public void onUpdate()
     {
         super.onUpdate();
-                
+        
+        if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
+        {
+            double var24 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            double x;
+            double y;
+            double var12;
+            double z;
+            if (boatPosRotationIncrements > 0)
+            {
+            	
+                x = posX + (boatX - posX) / (double)boatPosRotationIncrements;
+                y = posY + (boatY - posY) / (double)boatPosRotationIncrements;
+                z = posZ + (boatZ - posZ) / (double)boatPosRotationIncrements;
+                var12 = MathHelper.wrapAngleTo180_double(boatYaw - (double)rotationYaw);
+                rotationYaw = (float)((double)rotationYaw + var12 / (double)boatPosRotationIncrements);
+                rotationPitch = (float)((double)rotationPitch + (boatPitch - (double)rotationPitch) / (double)boatPosRotationIncrements);
+                --boatPosRotationIncrements;
+                setPosition(x, y, z);
+                setRotation(rotationYaw, rotationPitch);
+            }
+            else
+            {
+                x = posX + motionX;
+                y = posY + motionY;
+                z = posZ + motionZ;
+                setPosition(x, y, z);
+
+                if (onGround)
+                {
+                    motionX *= 0.5D;
+                    motionY *= 0.5D;
+                    motionZ *= 0.5D;
+                }
+
+                motionX *= 0.9900000095367432D;
+                motionY *= 0.949999988079071D;
+                motionZ *= 0.9900000095367432D;
+            }
+        }
         PlaneType type = this.getPlaneType();
 
 		//Plane movement
