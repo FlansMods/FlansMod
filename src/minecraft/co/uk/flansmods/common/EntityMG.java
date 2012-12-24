@@ -321,7 +321,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (ammo != null)
 				entityDropItem(ammo, 0.5F);
 		}
-		if (gunner != null)
+		if (gunner != null && FlansModPlayerHandler.getPlayerData(gunner) != null)
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
 		
 		super.setDead();
