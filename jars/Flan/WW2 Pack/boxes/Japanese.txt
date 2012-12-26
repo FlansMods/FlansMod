@@ -1,7 +1,7 @@
 Name Japanese Weapon Box
 ShortName japanese
 TopTexture boxTop
-SideTexture japaneseBox
+SideTexture JapaneseBox
 BottomTexture boxBottom
 BlockID 153
 Recipe I iron W dyePowder.15 R dyePowder.1

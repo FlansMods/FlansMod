@@ -6,6 +6,6 @@ AddItem colt
 AddItem ww2Knife
 AddItem browningAmmo
 AddItem bazookaAmmo
-AddItem bazookaAmmo
+AddItem coltAmmo
 AddItem coltAmmo
 AddItem coltAmmo

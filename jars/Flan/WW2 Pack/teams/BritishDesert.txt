@@ -1,17 +1,18 @@
-Name Soviet
-ShortName russian
+Name British
+ShortName britishDesert
 //TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
 //This is used for player names and such
-TextColour Red
+TextColour Blue
 //TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
-TeamColour 255 0 0
+TeamColour 0 0 255
 //Specify the armour this team should spawn with
-Hat russianHelmet
-Chest russianCoat
-Legs russianPants
-Shoes russianBoots
-AddClass russianScout
-AddClass russianAssault1
-AddClass russianSupport
-AddClass russianMedic
+Hat britishDesertHelmet
+Chest britishDesertCoat
+Legs britishDesertPants
+Shoes britishDesertBoots
+AddClass britishScout
+AddClass britishAssault1
+AddClass britishSupport
+AddClass britishMedic
+
 

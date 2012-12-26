@@ -1,7 +1,7 @@
 Name British Weapon Box
 ShortName british
 TopTexture boxTop
-SideTexture britishBox
+SideTexture BritishBox
 BottomTexture boxBottom
 BlockID 151
 Recipe I iron B dyePowder.4 R dyePowder.1

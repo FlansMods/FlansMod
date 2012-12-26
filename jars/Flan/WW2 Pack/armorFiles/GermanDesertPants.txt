@@ -1,0 +1,8 @@
+Name German WW2 Desert Trousers
+ShortName germanDesertPants
+ItemID 23579
+Icon GermanDesertPants
+Colour 255 255 255
+Type Pants
+Defence 0.1
+ArmourTexture GermanDesert

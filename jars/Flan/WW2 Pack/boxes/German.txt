@@ -1,7 +1,7 @@
 Name German Weapon Box
 ShortName german
 TopTexture boxTop
-SideTexture germanBox
+SideTexture GermanBox
 BottomTexture boxBottom
 BlockID 150
 Recipe I iron B dyePowder.0 R dyePowder.1

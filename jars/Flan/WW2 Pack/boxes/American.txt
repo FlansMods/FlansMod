@@ -1,7 +1,7 @@
 Name American Weapon Box
 ShortName american
 TopTexture boxTop
-SideTexture americanBox
+SideTexture AmericanBox
 BottomTexture boxBottom
 BlockID 152
 Recipe I iron B dyePowder.4 R dyePowder.1
