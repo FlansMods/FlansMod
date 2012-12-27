@@ -92,11 +92,12 @@ public class FlansMod
 	public static long lastTime;
 	
 	// Player changeable stuff
-	public static boolean explosions = true;
+	public static boolean explosions = false;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
-	public static boolean forceAdventureMode = false;
-	public static boolean canBreakGuns = true;
+	public static boolean forceAdventureMode = true;
+	public static boolean canBreakGuns = false;
+	public static boolean canBreakGlass = false;
 
 	public static Block craftingTable;
 	public static Block spawner;

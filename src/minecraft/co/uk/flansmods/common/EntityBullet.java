@@ -181,7 +181,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			AxisAlignedBB axisalignedbb = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
 			if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ)))
 			{
-				if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
+				if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
 					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
@@ -283,7 +283,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					zTile = movingobjectposition.blockZ;
 					blockID = worldObj.getBlockId(xTile, yTile, zTile);
 					boolean killBullet = true;
-					if (type.breaksGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
+					if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlockWithNotify(xTile, yTile, zTile, 0);
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));

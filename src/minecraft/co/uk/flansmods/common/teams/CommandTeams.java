@@ -223,6 +223,17 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer("AAGuns and MGs can " + (FlansMod.canBreakGuns ? "now" : "no longer") + " be broken");
 			return;
 		}
+		if(split[0].equals("canBreakGlass"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
+			FlansMod.canBreakGlass = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Glass and glowstone can " + (FlansMod.canBreakGlass ? "now" : "no longer") + " be broken");
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentGametype == null)
@@ -256,6 +267,7 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer("/teams forceAdventure <true / false>");
 		sender.sendChatToPlayer("/teams explosions <true / false>");
 		sender.sendChatToPlayer("/teams canBreakGuns <true / false>");
+		sender.sendChatToPlayer("/teams canBreakGlass <true / false>");
 		/*
 		sender.sendChatToPlayer("Listing teams commands");
 		sender.sendChatToPlayer("/teams listGametypes - see the gametypes available on this server");
