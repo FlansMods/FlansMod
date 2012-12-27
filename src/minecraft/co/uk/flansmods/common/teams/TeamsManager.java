@@ -32,11 +32,17 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.ItemGun;
+import co.uk.flansmods.common.ItemAAGun;
+import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.ItemPlane;
+import co.uk.flansmods.common.ItemVehicle;
 import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -182,6 +188,23 @@ public class TeamsManager implements IPlayerTracker
 					currentGametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.entityPlayer);
 			}
 		}
+	}
+	
+	@ForgeSubscribe
+	public void playerDrops(PlayerDropsEvent event)
+	{
+		for(int i = 0; i < event.drops.size(); i++)
+		{
+			ItemStack stack = event.drops.get(i).func_92014_d();
+			if(stack != null && stack.getItem() != null)
+			{
+				if(!FlansMod.weaponDrops && stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
+					event.drops.remove(i);
+				if(!FlansMod.armourDrops && stack.getItem() instanceof ItemTeamArmour)
+					event.drops.remove(i);
+			}
+		}
+
 	}
 	
 	@ForgeSubscribe
@@ -415,8 +438,7 @@ public class TeamsManager implements IPlayerTracker
 				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
 				if(canJoinTeam)
 				{
-					team.members.add(player.username);
-					previousTeam.members.remove(player);
+					team.addPlayer(player);
 					messageAll(player.username + " joined \u00a7" + team.textColour + team.name);
 				}
 			}

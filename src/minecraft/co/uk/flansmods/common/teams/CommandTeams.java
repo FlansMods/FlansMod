@@ -234,6 +234,28 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer("Glass and glowstone can " + (FlansMod.canBreakGlass ? "now" : "no longer") + " be broken");
 			return;
 		}
+		if(split[0].equals("armourDrops") || split[0].equals("armorDrops"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
+			FlansMod.armourDrops = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Armour will " + (FlansMod.armourDrops ? "now" : "no longer") + " be dropped");
+			return;
+		}
+		if(split[0].equals("weaponDrops"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
+			FlansMod.weaponDrops = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Weapons will " + (FlansMod.weaponDrops ? "now" : "no longer") + " be dropped");
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentGametype == null)

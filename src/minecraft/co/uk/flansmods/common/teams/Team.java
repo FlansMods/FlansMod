@@ -202,4 +202,15 @@ public class Team {
 		members.remove(player.username);
 		FlansModPlayerHandler.getPlayerData(player).team = null;
 	}
+	
+	public void addPlayer(EntityPlayer player)
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		list.add(player.username);
+		for(Team team : teams)
+		{
+			team.members.removeAll(list);
+		}
+		members.add(player.username);
+	}
 }
