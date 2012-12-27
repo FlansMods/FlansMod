@@ -16,6 +16,7 @@ import net.minecraft.util.Vec3;
 
 public class GametypeTDM extends Gametype 
 {
+	public boolean friendlyFire = false;
 	public int scoreLimit = 25;
 	public int newRoundTimer = 0;
 
@@ -142,6 +143,9 @@ public class GametypeTDM extends Gametype
 		//Players may not attack spectators
 		if(getPlayerData(player).team == Team.spectators)
 			return false;
+		//Check for friendly fire
+		if(getPlayerData(player).team == getPlayerData(attacker).team)
+			return friendlyFire;
 		return true;
 	}
 
@@ -229,6 +233,11 @@ public class GametypeTDM extends Gametype
 			scoreLimit = Integer.parseInt(value);
 			return true;
 		}
+		if(variable.equals("friendlyFire"))
+		{
+			friendlyFire = Boolean.parseBoolean(value);
+			return true;
+		}
 		return false;
 	}
 
@@ -236,11 +245,13 @@ public class GametypeTDM extends Gametype
 	public void readFromNBT(NBTTagCompound tags) 
 	{
 		scoreLimit = tags.getInteger("ScoreLimit");
+		friendlyFire = tags.getBoolean("FriendlyFire");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
 		tags.setInteger("ScoreLimit", scoreLimit);
+		tags.setBoolean("FriendlyFire", friendlyFire);
 	}
 }
