@@ -56,6 +56,7 @@ public class PacketTeamInfo extends FlanPacketCommon
 		        		}
 		        		data.writeUTF(team.shortName);
 		        		data.writeInt(team.score);
+		        		team.sortPlayers();
 		        		data.writeInt(team.members.size());
 		        		for(int j = 0; j < team.members.size(); j++)
 		        		{

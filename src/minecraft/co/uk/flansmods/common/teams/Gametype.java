@@ -16,6 +16,7 @@ import net.minecraft.util.Vec3;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.network.PacketTeamSelect;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
@@ -45,6 +46,11 @@ public abstract class Gametype {
 		shortName = s1;
 		numTeamsRequired = numTeams;
 		gametypes.add(this);
+	}
+	
+	public EntityPlayerMP getPlayer(String username)
+	{
+		return MinecraftServer.getServerConfigurationManager(FMLCommonHandler.instance().getMinecraftServerInstance()).getPlayerForUsername(username);
 	}
 	
 	public static FlansModPlayerData getPlayerData(EntityPlayerMP player)

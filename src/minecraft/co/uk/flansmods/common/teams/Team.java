@@ -2,8 +2,11 @@ package co.uk.flansmods.common.teams;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -199,18 +202,59 @@ public class Team {
 	
 	public void removePlayer(EntityPlayer player)
 	{
-		members.remove(player.username);
-		FlansModPlayerHandler.getPlayerData(player).team = null;
+		removePlayer(player.username);
 	}
 	
-	public void addPlayer(EntityPlayer player)
+	public String removePlayer(String username)
+	{
+		members.remove(username);
+		FlansModPlayerHandler.getPlayerData(username).team = null;
+		return username;
+	}
+	
+	public EntityPlayer addPlayer(EntityPlayer player)
+	{
+		addPlayer(player.username);
+		return player;
+	}
+	
+	public String addPlayer(String username)
 	{
 		ArrayList<String> list = new ArrayList<String>();
-		list.add(player.username);
+		list.add(username);
 		for(Team team : teams)
 		{
 			team.members.removeAll(list);
 		}
-		members.add(player.username);
+		members.add(username);
+		FlansModPlayerHandler.getPlayerData(username).team = this;
+		return username;
+	}
+	
+	public String removeWorstPlayer()
+	{
+		sortPlayers();
+		if(members.size() == 0)
+			return null;
+		else return removePlayer(members.get(members.size() - 1));
+	}
+	
+	public void sortPlayers()
+	{
+		Collections.sort(members, new ComparatorScore());
+	}
+	
+	private class ComparatorScore implements Comparator<String>
+	{
+		@Override
+		public int compare(String a, String b) 
+		{
+			FlansModPlayerData dataA = FlansModPlayerHandler.getPlayerData(a);
+			FlansModPlayerData dataB = FlansModPlayerHandler.getPlayerData(b);
+			if(dataA == null || dataB == null)
+				return 0;			
+			return dataA.score - dataB.score;
+		}
+		
 	}
 }

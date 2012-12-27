@@ -480,8 +480,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		//wheelVectors[3].yCoord -= dY;
 
 		//Now calculate the rotation matrix based on these points
-		Vec3 zAxis2 = subtract(wheelVectors[0], wheelVectors[1]).normalize();
-		Vec3 xAxis = subtract(wheelVectors[0], wheelVectors[3]).normalize();
+		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
+		Vec3 xAxis = subtract(wheelVectors[3], wheelVectors[0]).normalize();
 		Vec3 yAxis = crossProduct(zAxis2, xAxis);
 		Matrix4f rotationMatrix = new Matrix4f();
 		rotationMatrix.m00 = (float)xAxis.xCoord;

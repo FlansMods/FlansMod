@@ -17,8 +17,11 @@ import net.minecraft.util.Vec3;
 public class GametypeTDM extends Gametype 
 {
 	public boolean friendlyFire = false;
+	public boolean autoBalance = true;
 	public int scoreLimit = 25;
 	public int newRoundTimer = 0;
+	public int time;
+	public int autoBalanceInterval = 1200;
 
 	public GametypeTDM() 
 	{
@@ -73,7 +76,51 @@ public class GametypeTDM extends Gametype
 					teamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
 					newRoundTimer = 200;
 					teamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
+					time = -300;
 				}
+			}
+		}
+		time++;
+		if(time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
+		{
+			teamsManager.messageAll("\u00a7fAutobalancing teams...");
+		}
+		if(time % autoBalanceInterval == 0 && needAutobalance())
+		{
+			autobalance();
+		}
+	}
+	
+	public boolean needAutobalance()
+	{
+		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+			return false;
+		int membersTeamA = teamsManager.teams[0].members.size();
+		int membersTeamB = teamsManager.teams[1].members.size();
+		if(Math.abs(membersTeamA - membersTeamB) > 1)
+			return true;
+		return false;
+	}
+	
+	public void autobalance()
+	{
+		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+			return;
+		int membersTeamA = teamsManager.teams[0].members.size();
+		int membersTeamB = teamsManager.teams[1].members.size();
+		if(membersTeamA - membersTeamB > 1)
+		{
+			for(int i = 0; i < (membersTeamA - membersTeamB) / 2; i++)
+			{
+				//My goodness this is convoluted...
+				sendClassMenuToPlayer(getPlayer(teamsManager.teams[1].addPlayer(teamsManager.teams[0].removeWorstPlayer())));
+			}
+		}
+		if(membersTeamB - membersTeamA > 1)
+		{
+			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
+			{
+				sendClassMenuToPlayer(getPlayer(teamsManager.teams[0].addPlayer(teamsManager.teams[1].removeWorstPlayer())));
 			}
 		}
 	}
@@ -87,6 +134,16 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
+		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+			return false;
+		if(autoBalance)
+		{
+			int membersOnTeamTheyWantToJoin = team.members.size();
+			int membersOnBothTeams = teamsManager.teams[0].members.size() + teamsManager.teams[1].members.size();
+			int membersOnTeamTheyDontWantToJoin = membersOnBothTeams - membersOnTeamTheyWantToJoin;
+			if(membersOnTeamTheyWantToJoin > membersOnTeamTheyDontWantToJoin)
+				return false;
+		}
 		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam, true))
 		{
 			getPlayerData(player).deaths++;
@@ -228,14 +285,19 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean setVariable(String variable, String value) 
 	{
-		if(variable.equals("scoreLimit"))
+		if(variable.toLowerCase().equals("scorelimit"))
 		{
 			scoreLimit = Integer.parseInt(value);
 			return true;
 		}
-		if(variable.equals("friendlyFire"))
+		if(variable.toLowerCase().equals("friendlyfire"))
 		{
 			friendlyFire = Boolean.parseBoolean(value);
+			return true;
+		}
+		if(variable.toLowerCase().equals("autobalance"))
+		{
+			autoBalance = Boolean.parseBoolean(value);
 			return true;
 		}
 		return false;
@@ -246,6 +308,7 @@ public class GametypeTDM extends Gametype
 	{
 		scoreLimit = tags.getInteger("ScoreLimit");
 		friendlyFire = tags.getBoolean("FriendlyFire");
+		autoBalance = tags.getBoolean("AutoBalance");
 	}
 
 	@Override
@@ -253,5 +316,6 @@ public class GametypeTDM extends Gametype
 	{
 		tags.setInteger("ScoreLimit", scoreLimit);
 		tags.setBoolean("FriendlyFire", friendlyFire);
+		tags.setBoolean("AutoBalance", autoBalance);
 	}
 }

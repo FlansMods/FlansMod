@@ -441,7 +441,6 @@ public class TeamsManager implements IPlayerTracker
 			team = Team.spectators;
 		if(team != null)
 		{
-			FlansModPlayerHandler.getPlayerData(player).team = team;
 			if(currentGametype != null)
 			{
 				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
@@ -449,6 +448,11 @@ public class TeamsManager implements IPlayerTracker
 				{
 					team.addPlayer(player);
 					messageAll(player.username + " joined \u00a7" + team.textColour + team.name);
+				}
+				else 
+				{
+					player.addChatMessage("You may not pick that team");
+					Gametype.sendTeamsMenuToPlayer(player);
 				}
 			}
 		}
