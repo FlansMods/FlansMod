@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -193,17 +194,25 @@ public class TeamsManager implements IPlayerTracker
 	@ForgeSubscribe
 	public void playerDrops(PlayerDropsEvent event)
 	{
-		for(int i = 0; i < event.drops.size(); i++)
+		ArrayList<EntityItem> dropsToThrow = new ArrayList<EntityItem>();
+		for(EntityItem entity : event.drops)
 		{
-			ItemStack stack = event.drops.get(i).func_92014_d();
+			ItemStack stack = entity.func_92014_d();
 			if(stack != null && stack.getItem() != null)
 			{
-				if(!FlansMod.weaponDrops && stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
-					event.drops.remove(i);
-				if(!FlansMod.armourDrops && stack.getItem() instanceof ItemTeamArmour)
-					event.drops.remove(i);
+				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
+				{
+					if(!FlansMod.weaponDrops)
+						dropsToThrow.add(entity);
+				}
+				else if(stack.getItem() instanceof ItemTeamArmour)
+				{
+					if(!FlansMod.armourDrops)
+						dropsToThrow.add(entity);
+				}
 			}
 		}
+		event.drops.removeAll(dropsToThrow);
 
 	}
 	
@@ -443,6 +452,13 @@ public class TeamsManager implements IPlayerTracker
 				}
 			}
 		}
+		if(team == Team.spectators)
+		{
+			FlansModPlayerHandler.getPlayerData(player).playerClass = FlansModPlayerHandler.getPlayerData(player).newPlayerClass = null;
+			resetInventory(player);
+			player.capabilities.allowFlying = true;
+		}
+		else player.capabilities.allowFlying = false;
 	}	
 	
 	public void playerSelectedClass(EntityPlayerMP player, String className)
