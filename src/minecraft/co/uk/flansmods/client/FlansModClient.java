@@ -223,7 +223,8 @@ public class FlansModClient extends FlansMod
 		{
 			String[] split = event.message.split("\\.");
 			event.setCanceled(true);
-			FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[3] + " killed " + split[2] + " with a " + InfoType.getType(split[1]).name);
+			TickHandlerClient.addKillMessage(split);
+			//FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[3] + " killed " + split[2] + " with a " + InfoType.getType(split[1]).name);
 		}
 	}
 	

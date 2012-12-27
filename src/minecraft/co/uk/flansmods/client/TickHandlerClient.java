@@ -1,16 +1,25 @@
 package co.uk.flansmods.client;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.InfoType;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
@@ -50,6 +59,14 @@ public class TickHandlerClient implements ITickHandler
 
 	public void cTickEnd(Minecraft minecraft)
 	{ /* Client side only */
+		for(int i = 0; i < killMessages.size(); i++)
+		{
+			killMessages.get(i).timer--;
+			if(killMessages.get(i).timer == 0)
+			{
+				killMessages.remove(i);
+			}
+		}
 		FlansModClient.tick();
 	}
 	
@@ -153,6 +170,32 @@ public class TickHandlerClient implements ITickHandler
 				FlansModClient.minecraft.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
 			}
 		}
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		int i = scaledresolution.getScaledWidth();
+		int j = scaledresolution.getScaledHeight();
+		for(KillMessage killMessage : killMessages)
+		{
+			FlansModClient.minecraft.fontRenderer.drawString(killMessage.killerName + "    " + killMessage.killedName, i - FlansModClient.minecraft.fontRenderer.getStringWidth(killMessage.killerName + "    " + killMessage.killedName) - 5, j - 32 - killMessage.line * 18, 0xffffff);
+		}
+		RenderHelper.enableGUIStandardItemLighting();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		
+		for (KillMessage killMessage : killMessages)
+		{
+			drawSlotInventory(FlansModClient.minecraft.fontRenderer, new ItemStack(killMessage.weapon.item), i - FlansModClient.minecraft.fontRenderer.getStringWidth("    " + killMessage.killedName) - 6, j - 36 - killMessage.line * 18);
+		}
+		GL11.glDisable(3042 /*GL_BLEND*/);
+		RenderHelper.disableStandardItemLighting();
+	}
+	
+	private void drawSlotInventory(FontRenderer fontRenderer, ItemStack itemstack, int i, int j)
+	{
+		if(itemstack == null || itemstack.itemID == 0 || itemstack.getItem() == null)
+			return;
+		itemRenderer.renderItemIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
 
 	public EnumSet<TickType> ticks()
@@ -163,5 +206,37 @@ public class TickHandlerClient implements ITickHandler
 	public String getLabel()
 	{
 		return "FlansModClient";
+	}
+	
+	public static void addKillMessage(String[] split)
+	{
+		for(KillMessage killMessage : killMessages)
+		{
+			killMessage.line++;
+			if(killMessage.line > 10)
+				killMessage.timer = 0;
+		}
+		killMessages.add(new KillMessage(split));
+	}
+	
+	private static RenderItem itemRenderer = new RenderItem();
+	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
+	
+	private static class KillMessage
+	{
+		public KillMessage(String[] split)
+		{
+			killerName = split[3];
+			killedName = split[2];
+			weapon = InfoType.getType(split[1]);
+			line = 0;
+			timer = 200;
+		}
+		
+		public String killerName;
+		public String killedName;
+		public InfoType weapon;
+		public int timer;
+		public int line;
 	}
 }
