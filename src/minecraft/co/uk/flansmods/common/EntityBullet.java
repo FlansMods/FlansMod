@@ -361,6 +361,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			return true;
 		if (owner instanceof EntityPlayer)
 		{
+			if(FlansModPlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
+				return false;
 			EntityMG mg = FlansModPlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
 			if (mg != null && mg == entity)
 			{

@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.network;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunBoxType;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -16,6 +17,7 @@ public class FlansModContentPackVerifier implements IConnectionHandler
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) 
 	{
+		PacketDispatcher.sendPacketToPlayer(PacketGunBoxOrdering.buildGunBoxOrderingPacket(), player);
 	}
 
 	@Override
