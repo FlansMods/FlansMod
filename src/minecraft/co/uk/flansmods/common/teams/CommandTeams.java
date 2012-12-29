@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -54,6 +56,11 @@ public class CommandTeams extends CommandBase {
 				if(teamsManager.currentGametype != null)
 					teamsManager.currentGametype.stopGametype();
 				teamsManager.currentGametype = null;
+				for(FlansModPlayerData data : FlansModPlayerHandler.serverSideData.values())
+				{
+					if(data != null)
+						data.team = null;
+				}
 				return;
 			}
 			Gametype gametype = Gametype.getGametype(split[1]);
