@@ -21,6 +21,7 @@ import net.minecraft.network.packet.Packet6SpawnPosition;
 import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
@@ -38,6 +39,7 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import co.uk.flansmods.common.EntityDamageSourceGun;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
@@ -151,7 +153,19 @@ public class TeamsManager implements IPlayerTracker
 	public void onEntityKilled(LivingDeathEvent event) 
 	{
 		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
+		{
 			currentGametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+			if(event.source instanceof EntityDamageSource)
+			{
+				Entity entity = event.source.getSourceOfDamage();
+				if(entity instanceof EntityPlayer)
+				{
+					ItemStack stack = ((EntityPlayer)entity).getCurrentEquippedItem();
+					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
+						messageAll("death." + ((ItemGun)stack.getItem()).type.shortName + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)event.entity).team.textColour + event.entity.getEntityName() + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityName());
+				}
+			}
+		}
 	}
 	
 	@ForgeSubscribe
