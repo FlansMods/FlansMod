@@ -58,6 +58,13 @@ public class EntityPassengerSeat extends Entity
 		else
 			updatePosition();
 		
+		if(worldObj.isRemote)
+		{
+			riddenByEntity = theRealRiddenByEntity;
+			if(riddenByEntity != null)
+				riddenByEntity.ridingEntity = this;
+		}
+		
 		/*
 		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
 			riddenByEntity.mountEntity(this);
@@ -137,6 +144,12 @@ public class EntityPassengerSeat extends Entity
 		rotationRoll = vehicle.axes.getRoll();
 		Vec3 posVec = vehicle.rotate((double)seatX / 16D, (double)seatY / 16D, (double)seatZ / 16D).addVector(vehicle.posX, vehicle.posY, vehicle.posZ);
 		setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
+        if(worldObj.isRemote && riddenByEntity != null)
+        {
+			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
+            riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
+        }
+		//updateRiderPosition();
 	}
 	
 	public double getMountedYOffset()
@@ -220,11 +233,7 @@ public class EntityPassengerSeat extends Entity
         {	
 			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
-
-			riddenByEntity.rotationYaw -= 2F * (rotationYaw - prevRotationYaw);
-			return;
         }
-		else { return; }
     }
 
     @Override
@@ -315,16 +324,19 @@ public class EntityPassengerSeat extends Entity
     	if(sit)
     	{
     		if(riddenByEntity != null)
-    			riddenByEntity.mountEntity(this);
+    			riddenByEntity.ridingEntity = null;
     		entity.ridingEntity = this;
     		riddenByEntity = entity;
+    		theRealRiddenByEntity = entity;
     	}
     	else
     	{
     		entity.ridingEntity = null;
     		riddenByEntity = null;
+    		theRealRiddenByEntity = null;
     	}
     }
+   
     
 	@Override
     public boolean isEntityEqual(Entity entity)
@@ -355,4 +367,6 @@ public class EntityPassengerSeat extends Entity
 	
 	public float rotationRoll;
 	public float prevRotationRoll;
+	
+	private Entity theRealRiddenByEntity;
 }

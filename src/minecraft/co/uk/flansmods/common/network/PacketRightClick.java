@@ -93,7 +93,7 @@ public class PacketRightClick extends FlanPacketCommon
 					break;
 				}
 			}
-			if(driveable != null)
+			if(driveable != null && ((passengerSeat && driveable.seats.length > i) || (!passengerSeat && driveable.boxes.length > i)))
 			{
 				if(passengerSeat)
 					driveable.seats[i].interact(player);

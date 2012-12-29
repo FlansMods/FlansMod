@@ -827,7 +827,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			if(canSit(i + 1))
 			{
-				entityplayer.mountEntity(seats[i]);	
+				seats[i].interact(entityplayer);	
 				return true;
 			}
 		}
