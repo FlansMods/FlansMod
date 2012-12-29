@@ -347,6 +347,51 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		double actualMotionZ = motionZ;//posZ - prevPosZ;
         super.onUpdate();
         
+        prevRotationYaw = axes.getYaw();
+        prevRotationPitch = axes.getPitch();
+        prevRotationRoll = axes.getRoll();
+        
+        if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
+        {
+            double x;
+            double y;
+            double var12;
+            double z;
+            if (boatPosRotationIncrements > 0)
+            {
+            	
+                x = posX + (boatX - posX) / (double)boatPosRotationIncrements;
+                y = posY + (boatY - posY) / (double)boatPosRotationIncrements;
+                z = posZ + (boatZ - posZ) / (double)boatPosRotationIncrements;
+                var12 = MathHelper.wrapAngleTo180_double(boatYaw - (double)rotationYaw);
+                rotationYaw = (float)((double)rotationYaw + var12 / (double)boatPosRotationIncrements);
+                rotationPitch = (float)((double)rotationPitch + (boatPitch - (double)rotationPitch) / (double)boatPosRotationIncrements);
+                float rotationRoll = (float)((double)axes.getRoll() + (boatRoll - (double)axes.getRoll()) / (double)boatPosRotationIncrements);
+                --boatPosRotationIncrements;
+                setPosition(x, y, z);
+                setRotation(rotationYaw, rotationPitch, rotationRoll);     
+            }
+            else
+            {
+                x = posX + motionX;
+                y = posY + motionY;
+                z = posZ + motionZ;
+                setPosition(x, y, z);
+
+                if (onGround)
+                {
+                    motionX *= 0.5D;
+                    motionY *= 0.5D;
+                    motionZ *= 0.5D;
+                }
+
+                motionX *= 0.9900000095367432D;
+                motionY *= 0.949999988079071D;
+                motionZ *= 0.9900000095367432D;
+            }
+            return;
+        }
+        
         VehicleType type = this.getVehicleType();
 		
 		//Vehicle movement		
@@ -570,38 +615,6 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.engineSound, false));
 				soundPosition = type.engineSoundLength;
 			}
-			/*
-			if (acceleration > 0.2D && acceleration < 1 && soundPosition == 0)
-			{
-				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
-				{
-					try {
-						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
-					}
-					catch(Exception e)
-					{
-						FlansMod.log("Failed to play sound : " + type.startSound);
-					}
-				}
-				else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
-				soundPosition = type.startSoundLength;
-			}
-				
-			if (acceleration > 1 && soundPosition == 0)
-			{
-				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
-				{
-					try {
-						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.engineSound, 1.0F, 1.0F);
-					}
-					catch(Exception e)
-					{
-						FlansMod.log("Failed to play sound : " + type.engineSound);
-					}
-				}
-				else worldObj.playSoundAtEntity(this, type.engineSound, 1.0F , 1.0F);
-				soundPosition = type.engineSoundLength;
-			}*/
 			
 			if(soundPosition > 0)
 				soundPosition--;
@@ -672,6 +685,11 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
+		
+		if(!worldObj.isRemote && ticksExisted % 5 == 0)
+		{
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketVehicleControl.buildUpdatePacket(this));
+		}
     }
 	
 	//Returns a - b. Because for some reason this is client only in Vec3...
@@ -730,6 +748,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	
 	private void smashIntoBlock(int i, int j, int k)
 	{
+		if(worldObj.isRemote || !FlansMod.explosions)
+			 return;
 		int blockID = worldObj.getBlockId(i, j, k);
 		if(blockID != 0)
 		{

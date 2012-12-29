@@ -151,6 +151,31 @@ public abstract class EntityDriveable extends Entity implements IControllable
 		}
     }
 	
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ)
+	{
+		if(worldObj.isRemote)
+		{
+	        boatX = x;
+	        boatY = y;
+	        boatZ = z;
+	        boatYaw = yaw;
+	        boatPitch = pitch;
+	        boatRoll = roll;
+	        motionX = motX;
+	        motionY = motY;
+	        motionZ = motZ;
+	        boatPosRotationIncrements = 5;
+		}
+		else
+		{
+			setPosition(x, y, z);
+			setRotation(yaw, pitch, roll);
+			motionX = motX;
+			motionY = motY;
+			motionZ = motZ;
+		}
+	}
+	
 
 	@Override
     public void setVelocity(double d, double d1, double d2)
@@ -261,7 +286,8 @@ public abstract class EntityDriveable extends Entity implements IControllable
 			
 	public void setRotation(float rotYaw, float rotPitch, float rotRoll)
 	{
-		setRotation(rotYaw, rotPitch);
+		axes.setAngles(rotYaw, rotPitch, rotRoll);
+		//setRotation(rotYaw, rotPitch);
 		//axes.getRoll() = rotRoll;
 	}
 	
@@ -306,6 +332,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
     public double boatZ;
     public double boatYaw;
     public double boatPitch;
+    public double boatRoll;
     
     private double velocityX;
     private double velocityY;

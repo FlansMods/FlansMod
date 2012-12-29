@@ -71,11 +71,7 @@ public class PacketVehicleControl extends FlanPacketCommon
 			}
 			if(driveable != null)
 			{
-				driveable.setPosition(stream.readDouble(), stream.readDouble(), stream.readDouble());
-				driveable.setRotation(stream.readFloat(), stream.readFloat(), stream.readFloat());
-				driveable.motionX = stream.readDouble();
-				driveable.motionY = stream.readDouble();
-				driveable.motionZ = stream.readDouble();
+				driveable.setPositionRotationAndMotion(stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readDouble(), stream.readDouble(), stream.readDouble());
 			}
 		}
         catch(Exception e)

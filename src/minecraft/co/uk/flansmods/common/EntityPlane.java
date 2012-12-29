@@ -507,9 +507,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     {
         super.onUpdate();
         
+        prevRotationYaw = axes.getYaw();
+        prevRotationPitch = axes.getPitch();
+        prevRotationRoll = axes.getRoll();
+        
         if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
         {
-            double var24 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
             double x;
             double y;
             double var12;
@@ -520,12 +523,13 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
                 x = posX + (boatX - posX) / (double)boatPosRotationIncrements;
                 y = posY + (boatY - posY) / (double)boatPosRotationIncrements;
                 z = posZ + (boatZ - posZ) / (double)boatPosRotationIncrements;
-                var12 = MathHelper.wrapAngleTo180_double(boatYaw - (double)rotationYaw);
+                var12 = MathHelper.wrapAngleTo180_double(-boatYaw - (double)rotationYaw);
                 rotationYaw = (float)((double)rotationYaw + var12 / (double)boatPosRotationIncrements);
-                rotationPitch = (float)((double)rotationPitch + (boatPitch - (double)rotationPitch) / (double)boatPosRotationIncrements);
+                rotationPitch = (float)((double)rotationPitch + (-boatPitch - (double)rotationPitch) / (double)boatPosRotationIncrements);
+                float rotationRoll = (float)((double)axes.getRoll() + (-boatRoll - (double)axes.getRoll()) / (double)boatPosRotationIncrements);
                 --boatPosRotationIncrements;
                 setPosition(x, y, z);
-                setRotation(rotationYaw, rotationPitch);
+                setRotation(rotationYaw, rotationPitch, rotationRoll);
             }
             else
             {
@@ -545,6 +549,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
                 motionY *= 0.949999988079071D;
                 motionZ *= 0.9900000095367432D;
             }
+            return;
         }
         PlaneType type = this.getPlaneType();
 
@@ -809,38 +814,6 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.propSound, false));
 				soundPosition = type.propSoundLength;
 			}
-			/*
-			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
-			{
-				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
-				{
-					try {
-						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.startSound, 1.0F, 1.0F);
-					}
-					catch(Exception e)
-					{
-						FlansMod.log("Failed to play sound : " + type.startSound);
-					}
-				}
-				else worldObj.playSoundAtEntity(this, type.startSound, 1.0F , 1.0F);
-				soundPosition = type.startSoundLength;
-			}
-	
-			if (propSpeed > 1 && soundPosition == 0)
-			{
-				if(riddenByEntity != null && riddenByEntity == FMLClientHandler.instance().getClient().thePlayer)
-				{
-					try {
-						FMLClientHandler.instance().getClient().sndManager.playSoundFX(type.propSound, 1.0F, 1.0F);
-					}
-					catch(Exception e)
-					{
-						FlansMod.log("Failed to play sound : " + type.propSound);
-					}
-				}
-				else worldObj.playSoundAtEntity(this, type.propSound, 1.0F , 1.0F);
-				soundPosition = type.propSoundLength;
-			}*/
 	
 			if(soundPosition > 0)
 				soundPosition--;
@@ -898,6 +871,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		{
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
+		
+		if(!worldObj.isRemote && ticksExisted % 5 == 0)
+		{
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketVehicleControl.buildUpdatePacket(this));
+		}
     }
 
 	@Override
@@ -908,7 +886,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	
 	private void smashIntoBlock(int i, int j, int k)
 	{
-		if(worldObj.isRemote)
+		if(worldObj.isRemote || !FlansMod.explosions)
 			return;
 		int blockID = worldObj.getBlockId(i, j, k);
 		if(blockID != 0)
