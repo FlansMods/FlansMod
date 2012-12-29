@@ -254,7 +254,7 @@ public class Team {
 			FlansModPlayerData dataB = FlansModPlayerHandler.getPlayerData(b);
 			if(dataA == null || dataB == null)
 				return 0;			
-			return dataA.score - dataB.score;
+			return dataB.score - dataA.score;
 		}
 		
 	}
