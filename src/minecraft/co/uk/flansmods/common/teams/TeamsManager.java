@@ -33,11 +33,13 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.ItemGun;
 import co.uk.flansmods.common.ItemAAGun;
@@ -214,6 +216,15 @@ public class TeamsManager implements IPlayerTracker
 		}
 		event.drops.removeAll(dropsToThrow);
 
+	}
+	
+	@ForgeSubscribe
+	public void playerLoot(EntityItemPickupEvent event)
+	{
+		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(event.entityPlayer);
+		if(data != null && data.team == Team.spectators)
+			event.setCanceled(true);
+		
 	}
 	
 	@ForgeSubscribe
