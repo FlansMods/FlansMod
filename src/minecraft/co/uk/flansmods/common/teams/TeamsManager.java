@@ -379,6 +379,10 @@ public class TeamsManager implements IPlayerTracker
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
+		for(Team team : Team.teams)
+		{
+			team.removePlayer(player);
+		}
 	}
 
 	@Override
