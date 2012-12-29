@@ -173,8 +173,9 @@ public class TickHandlerClient implements ITickHandler
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
-		for(KillMessage killMessage : killMessages)
+		for(int n = 0; n < killMessages.size(); n++)
 		{
+			KillMessage killMessage = killMessages.get(n);
 			FlansModClient.minecraft.fontRenderer.drawString("\u00a7" + killMessage.killerName + "    " + "\u00a7" + killMessage.killedName, i - FlansModClient.minecraft.fontRenderer.getStringWidth(killMessage.killerName + "    " + killMessage.killedName) - 5, j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		RenderHelper.enableGUIStandardItemLighting();
@@ -182,8 +183,9 @@ public class TickHandlerClient implements ITickHandler
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
-		for (KillMessage killMessage : killMessages)
+		for(int n = 0; n < killMessages.size(); n++)
 		{
+			KillMessage killMessage = killMessages.get(n);
 			drawSlotInventory(FlansModClient.minecraft.fontRenderer, new ItemStack(killMessage.weapon.item), i - FlansModClient.minecraft.fontRenderer.getStringWidth("    " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
@@ -230,7 +232,7 @@ public class TickHandlerClient implements ITickHandler
 			killedName = split[2];
 			weapon = InfoType.getType(split[1]);
 			line = 0;
-			timer = 2000;
+			timer = 200;
 		}
 		
 		public String killerName;

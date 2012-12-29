@@ -81,11 +81,11 @@ public class GametypeTDM extends Gametype
 			}
 		}
 		time++;
-		if(time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
+		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
 		{
 			teamsManager.messageAll("\u00a7fAutobalancing teams...");
 		}
-		if(time % autoBalanceInterval == 0 && needAutobalance())
+		if(autoBalance && time % autoBalanceInterval == 0 && needAutobalance())
 		{
 			autobalance();
 		}
@@ -134,8 +134,8 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return false;
+		//if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+		//	return false;
 		if(autoBalance)
 		{
 			int membersOnTeamTheyWantToJoin = team.members.size();
@@ -185,6 +185,8 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
 	{
+		if(getPlayerData(player) == null || getPlayerData(player).team == null)
+			return false;
 		//Players may not fight between rounds
 		if(newRoundTimer > 0)
 		{
@@ -196,13 +198,15 @@ public class GametypeTDM extends Gametype
 			//Spectators may not attack players
 			if(getPlayerData(attacker).team == Team.spectators)
 				return false;
+			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
+				return false;
+			//Check for friendly fire
+			if(getPlayerData(player).team == getPlayerData(attacker).team)
+				return friendlyFire;
 		}
 		//Players may not attack spectators
 		if(getPlayerData(player).team == Team.spectators)
 			return false;
-		//Check for friendly fire
-		if(getPlayerData(player).team == getPlayerData(attacker).team)
-			return friendlyFire;
 		return true;
 	}
 

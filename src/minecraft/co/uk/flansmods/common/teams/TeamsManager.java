@@ -443,6 +443,7 @@ public class TeamsManager implements IPlayerTracker
 		{
 			if(currentGametype != null)
 			{
+				FlansModPlayerHandler.getPlayerData(player).team = team;
 				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
 				if(canJoinTeam)
 				{

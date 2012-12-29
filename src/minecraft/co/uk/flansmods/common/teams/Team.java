@@ -208,7 +208,8 @@ public class Team {
 	public String removePlayer(String username)
 	{
 		members.remove(username);
-		FlansModPlayerHandler.getPlayerData(username).team = null;
+		if(FlansModPlayerHandler.getPlayerData(username) != null)
+			FlansModPlayerHandler.getPlayerData(username).team = null;
 		return username;
 	}
 	

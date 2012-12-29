@@ -56,6 +56,8 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	
 	public static FlansModPlayerData getPlayerData(EntityPlayer player)
 	{
+		if(player == null)
+			return null;
 		return getPlayerData(player.username, Side.SERVER);
 	}
 	
@@ -66,6 +68,8 @@ public class FlansModPlayerHandler implements IPlayerTracker
 
 	public static FlansModPlayerData getPlayerData(EntityPlayer player, Side side)
 	{
+		if(player == null)
+			return null;
 		return getPlayerData(player.username, side);
 	}
 	
