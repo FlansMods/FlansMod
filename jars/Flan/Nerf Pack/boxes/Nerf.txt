@@ -3,7 +3,7 @@ ShortName nerf
 TopTexture NerfBoxTop
 SideTexture NerfBoxSide
 BottomTexture NerfBoxSide
-BlockID 156
+GunBoxID 156
 Recipe P plastic
 PPP
 PPP

@@ -3,7 +3,7 @@ ShortName japanese
 TopTexture boxTop
 SideTexture JapaneseBox
 BottomTexture boxBottom
-BlockID 153
+GunBoxID 153
 Recipe I iron W dyePowder.15 R dyePowder.1
 III
 WRW

@@ -3,7 +3,7 @@ ShortName german
 TopTexture boxTop
 SideTexture GermanBox
 BottomTexture boxBottom
-BlockID 150
+GunBoxID 150
 Recipe I iron B dyePowder.0 R dyePowder.1
 III
 RBR
