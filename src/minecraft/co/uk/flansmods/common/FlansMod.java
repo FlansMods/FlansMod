@@ -206,11 +206,7 @@ public class FlansMod
 		gunBoxBlock = (BlockGunBox) new BlockGunBox(200);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
-		for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
-		{
-			GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(i));
-			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, i), type.name);
-		}
+
 		
 		// GUI handler		
 		NetworkRegistry.instance().registerGuiHandler(this, new CommonGuiHandler());
@@ -244,13 +240,11 @@ public class FlansMod
 		// read Content Packs
 		readContentPacks(event);
 		
-		// names registry.
-		for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
+		for (GunBoxType type : GunBoxType.gunBoxMap.values())
 		{
-			GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(i));
-			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, i), type.name);
+			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, type.gunBoxID), type.name);
 		}
-		
+				
 		proxy.load();
 		
 		proxy.loadKeyBindings();
@@ -626,6 +620,7 @@ public class FlansMod
 
 
 	/** read properties */
+	
 	private void readProperties(String[] split, BufferedReader file)
 	{
 		// TODO: use forge Configuration class

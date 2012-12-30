@@ -205,7 +205,7 @@ public class BlockGunBox extends BlockContainer
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		GunBoxType type = GunBoxType.gunBoxMap.get(GunBoxType.shortNameList.get(metadata));
+		GunBoxType type = GunBoxType.getBox(metadata);
 		
 		if (type == null)
 			return 0;

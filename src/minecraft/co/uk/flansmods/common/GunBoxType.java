@@ -21,6 +21,8 @@ public class GunBoxType extends InfoType
 	public int topTextureIndex;
 	public int sideTextureIndex;
 	public int bottomTextureIndex;
+	//Unique to this box. Used to determine its damage value.
+	public int gunBoxID;
 	public int numGuns;
 	public int nextGun = 0;
 	public int nextAmmo = 0;
@@ -33,9 +35,13 @@ public class GunBoxType extends InfoType
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
 	public static ArrayList<String> shortNameList = new ArrayList<String>(); 
+	//Give each box a default ID upon construction and then override it by reading from the text file later.
+	//This way unconverted content packs will still work in SP at least
+	public static int nextDefaultID;
 
 	public GunBoxType(BufferedReader file)
 	{
+		gunBoxID = nextDefaultID++;
 		do
 		{
 			String line = null;
@@ -85,6 +91,8 @@ public class GunBoxType extends InfoType
 				bottomTexturePath = "/icons/" + split[1] + ".png";
 			if (split[0].equals("SideTexture"))
 				sideTexturePath = "/icons/" + split[1] + ".png";
+			if (split[0].equals("GunBoxID"))
+				gunBoxID = Integer.parseInt(split[1]);
 			if (split[0].equals("NumGuns"))
 			{
 				numGuns = Integer.parseInt(split[1]);
@@ -154,6 +162,16 @@ public class GunBoxType extends InfoType
 	public static GunBoxType getBox(String s)
 	{
 		return gunBoxMap.get(s);
+	}
+	
+	public static GunBoxType getBox(int ID)
+	{
+		for(GunBoxType type : gunBoxMap.values())
+		{
+			if(type.gunBoxID == ID)
+				return type;
+		}
+		return null;
 	}
 
 	// TODO: remove. material will One and ONLY!  wood.
@@ -264,7 +282,7 @@ public class GunBoxType extends InfoType
 					else
 						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 0);
 				}
-				GameRegistry.addRecipe(new ItemStack(FlansMod.gunBoxBlock, recipeOutput, shortNameList.indexOf(shortName)), recipe);
+				GameRegistry.addRecipe(new ItemStack(FlansMod.gunBoxBlock, recipeOutput, gunBoxID), recipe);
 			} else
 			{
 				recipe = new Object[recipeLine.length - 1];
@@ -275,7 +293,7 @@ public class GunBoxType extends InfoType
 					else
 						recipe[i] = getRecipeElement(recipeLine[i + 1], 0);
 				}
-				GameRegistry.addShapelessRecipe(new ItemStack(FlansMod.gunBoxBlock, recipeOutput, shortNameList.indexOf(shortName)), recipe);
+				GameRegistry.addShapelessRecipe(new ItemStack(FlansMod.gunBoxBlock, recipeOutput, gunBoxID), recipe);
 			}
 		} catch (Exception e)
 		{

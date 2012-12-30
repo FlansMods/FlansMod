@@ -20,7 +20,7 @@ public class ItemGunBox extends ItemBlock {
 	@Override
     public String getItemNameIS(ItemStack stack)
     {
-    	return GunBoxType.shortNameList.get(stack.getItemDamage());
+    	return GunBoxType.getBox(stack.getItemDamage()).shortName;
     }
     
     /**
@@ -29,8 +29,8 @@ public class ItemGunBox extends ItemBlock {
 	@Override
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-    	for (int i = 0; i < GunBoxType.shortNameList.size(); i++)
-    		par3List.add(new ItemStack(par1, 1, i));
+    	for(GunBoxType type : GunBoxType.gunBoxMap.values())
+    		par3List.add(new ItemStack(par1, 1, type.gunBoxID));
     }
 	
 	@Override
@@ -41,7 +41,7 @@ public class ItemGunBox extends ItemBlock {
     	if (place)
     	{
     		TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(x, y, z);
-    		entity.setShortName(GunBoxType.shortNameList.get(stack.getItemDamage()));
+    		entity.setShortName(GunBoxType.getBox(stack.getItemDamage()).shortName);
     	}
     	
     	return place;
