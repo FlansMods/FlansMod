@@ -15,12 +15,16 @@ public class ItemGunBox extends ItemBlock {
 	public ItemGunBox(int id)
 	{
 		super(id);
+		setHasSubtypes(true);
 	}
 	
 	@Override
     public String getItemNameIS(ItemStack stack)
     {
-    	return GunBoxType.getBox(stack.getItemDamage()).shortName;
+		GunBoxType type = GunBoxType.getBox(stack.getItemDamage());
+		if(type == null)
+			return "";
+    	return type.shortName;
     }
     
     /**
@@ -36,12 +40,15 @@ public class ItemGunBox extends ItemBlock {
 	@Override
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
     {
+		GunBoxType type = GunBoxType.getBox(stack.getItemDamage());
+		if(type == null)
+			return false;
     	boolean place = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
     	
     	if (place)
     	{
     		TileEntityGunBox entity = (TileEntityGunBox) world.getBlockTileEntity(x, y, z);
-    		entity.setShortName(GunBoxType.getBox(stack.getItemDamage()).shortName);
+    		entity.setShortName(type.shortName);
     	}
     	
     	return place;

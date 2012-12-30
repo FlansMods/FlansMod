@@ -91,7 +91,7 @@ public class GunBoxType extends InfoType
 				bottomTexturePath = "/icons/" + split[1] + ".png";
 			if (split[0].equals("SideTexture"))
 				sideTexturePath = "/icons/" + split[1] + ".png";
-			if (split[0].equals("GunBoxID"))
+			if (split[0].equals("GunBoxID") || split[0].equals("BlockID"))
 				gunBoxID = Integer.parseInt(split[1]);
 			if (split[0].equals("NumGuns"))
 			{
