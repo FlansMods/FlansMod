@@ -138,9 +138,6 @@ public class FlansMod
 			//return;
 		}
 		
-		// Properties
-		loadProperties();
-		
 		playerHandler = new FlansModPlayerHandler();
 		teamsManager = new TeamsManager();
 		
@@ -617,36 +614,6 @@ public class FlansMod
 		errorStringTimer = 100;
 		System.out.println("SERIOUS PROBLEM!");
 		log(s);
-	}
-
-
-
-	/** read properties */
-	
-	private void readProperties(String[] split, BufferedReader file)
-	{
-		// TODO: use forge Configuration class
-		try
-		{
-			if (split[0].equals("Explosions"))
-				explosions = split[1].equals("True");
-			if (split[0].equals("Bombs"))
-				bombsEnabled = split[1].equals("True");
-			if (split[0].equals("Bullets"))
-				bulletsEnabled = split[1].equals("True");
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public void loadProperties()
-	{
-		configuration.load();
-		configuration.get(Configuration.CATEGORY_GENERAL, "explosions", true);
-		configuration.get(Configuration.CATEGORY_GENERAL, "bombs", true);
-		configuration.get(Configuration.CATEGORY_GENERAL, "bullets", true);
-		configuration.save();
 	}
 
 	/** Logger. */
