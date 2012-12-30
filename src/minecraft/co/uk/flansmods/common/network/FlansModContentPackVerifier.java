@@ -17,7 +17,6 @@ public class FlansModContentPackVerifier implements IConnectionHandler
 	@Override
 	public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) 
 	{
-		PacketDispatcher.sendPacketToPlayer(PacketGunBoxOrdering.buildGunBoxOrderingPacket(), player);
 	}
 
 	@Override
