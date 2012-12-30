@@ -180,11 +180,14 @@ public class ItemGun extends Item
 	public ItemStack onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean isShooting)
 	{
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
-		data.isShooting = isShooting;
-		if(type.mode == 0 && isShooting)
+		if(data.shootClickDelay == 0)
 		{
-			data.isShooting = false;
-			return tryToShoot(stack, world, player);
+			data.isShooting = isShooting;
+			if(type.mode == 0 && isShooting)
+			{
+				data.isShooting = false;
+				return tryToShoot(stack, world, player);
+			}
 		}
 		return stack;
 	}

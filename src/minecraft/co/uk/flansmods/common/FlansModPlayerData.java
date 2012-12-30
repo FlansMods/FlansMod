@@ -13,6 +13,7 @@ public class FlansModPlayerData
 	public PlayerClass newPlayerClass;
 	public boolean isShooting;
 	public int shootTime;
+	public int shootClickDelay;
 	//For use by the currentGametype
 	public int score;
 	public int kills;
@@ -30,6 +31,8 @@ public class FlansModPlayerData
 	{
 		if(shootTime > 0)
 			shootTime--;
+		if(shootClickDelay > 0)
+			shootClickDelay--;
 	}
 	
 	public PlayerClass getPlayerClass()

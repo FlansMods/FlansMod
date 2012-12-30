@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -39,10 +40,12 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.EntityDamageSourceGun;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemGun;
 import co.uk.flansmods.common.ItemAAGun;
 import co.uk.flansmods.common.ItemBullet;
@@ -211,14 +214,65 @@ public class TeamsManager implements IPlayerTracker
 	public void playerDrops(PlayerDropsEvent event)
 	{
 		ArrayList<EntityItem> dropsToThrow = new ArrayList<EntityItem>();
+		//First collect together guns and ammo if smart drops are enabled
+		if(FlansMod.weaponDrops == 2)
+		{
+			
+			for(Iterator<EntityItem> iterator = event.drops.listIterator(); iterator.hasNext(); )
+			{
+				EntityItem entity = iterator.next();
+				ItemStack stack = entity.func_92014_d();
+				if(stack != null && stack.getItem() != null)
+				{
+					if(stack.getItem() instanceof ItemGun)
+					{	
+						EntityGunItem gunEntity = new EntityGunItem(entity);
+						stack.stackSize = 0;
+						boolean alreadyAdded = false;
+						for(Iterator<EntityItem> checker = dropsToThrow.listIterator(); checker.hasNext(); )
+						{
+							EntityItem check = checker.next();
+							if(((ItemGun)stack.getItem()).type == ((ItemGun)check.func_92014_d().getItem()).type)
+								alreadyAdded = true;
+						}
+						if(!alreadyAdded)
+						{
+							event.entityPlayer.worldObj.spawnEntityInWorld(gunEntity);
+							dropsToThrow.add(gunEntity);
+						}
+					}
+				}
+			}
+		}
+		//Now iterate again and look for ammo
+		for(Iterator<EntityItem> gunIterator = dropsToThrow.listIterator(); gunIterator.hasNext(); )
+		{
+			EntityGunItem gunEntity = (EntityGunItem)gunIterator.next();
+			GunType gunType = ((ItemGun)gunEntity.func_92014_d().getItem()).type;
+			for(Iterator<EntityItem> ammoIterator = event.drops.listIterator(); ammoIterator.hasNext(); )
+			{
+				EntityItem ammoEntity = ammoIterator.next();
+				ItemStack ammoItemstack = ammoEntity.func_92014_d();
+				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemBullet)
+				{
+					BulletType bulletType = ((ItemBullet)ammoItemstack.getItem()).type;
+					if(gunType.isAmmo(bulletType))
+					{
+						gunEntity.ammoStacks.add(ammoItemstack.copy());
+						ammoItemstack.stackSize = 0;
+					}	
+				}
+			}
+		}
+		//Now check the remaining items to see if they should be dropped
 		for(EntityItem entity : event.drops)
 		{
 			ItemStack stack = entity.func_92014_d();
-			if(stack != null && stack.getItem() != null)
+			if(stack != null && stack.getItem() != null && stack.stackSize > 0)
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
 				{
-					if(!FlansMod.weaponDrops)
+					if(FlansMod.weaponDrops > 0)
 						dropsToThrow.add(entity);
 				}
 				else if(stack.getItem() instanceof ItemTeamArmour)
@@ -308,6 +362,8 @@ public class TeamsManager implements IPlayerTracker
 			FlansMod.explosions = tags.getBoolean("Explosions");
 			FlansMod.forceAdventureMode = tags.getBoolean("ForceAdventure");
 			FlansMod.canBreakGuns = tags.getBoolean("CanBreakGuns");
+			FlansMod.armourDrops = tags.getBoolean("ArmourDrops");
+			FlansMod.weaponDrops = tags.getInteger("WeaponDrops");
 		}
 		catch(Exception e)
 		{
@@ -343,6 +399,8 @@ public class TeamsManager implements IPlayerTracker
 			tags.setBoolean("Explosions", FlansMod.explosions);
 			tags.setBoolean("ForceAdventure", FlansMod.forceAdventureMode);
 			tags.setBoolean("CanBreakGuns", FlansMod.canBreakGuns);
+			tags.setBoolean("ArmourDrops", FlansMod.armourDrops);
+			tags.setInteger("WeaponDrops", FlansMod.weaponDrops);
 			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
 		}
 		catch(Exception e)

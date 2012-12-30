@@ -22,6 +22,7 @@ import co.uk.flansmods.common.teams.ChunkLoadingHandler;
 import co.uk.flansmods.common.teams.CommandTeams;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
+import co.uk.flansmods.common.teams.EntityGunItem;
 import co.uk.flansmods.common.teams.EntityTeamItem;
 import co.uk.flansmods.common.teams.ItemFlagpole;
 import co.uk.flansmods.common.teams.ItemOpStick;
@@ -99,7 +100,7 @@ public class FlansMod
 	public static boolean canBreakGuns = false;
 	public static boolean canBreakGlass = false;
 	public static boolean armourDrops = false;
-	public static boolean weaponDrops = true;
+	public static int weaponDrops = 0; //0 = no drops, 1 = drops, 2 = smart drops
 
 	public static Block craftingTable;
 	public static Block spawner;
@@ -231,6 +232,7 @@ public class FlansMod
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
 		//EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
+		EntityRegistry.registerModEntity(EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
 		
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
 		

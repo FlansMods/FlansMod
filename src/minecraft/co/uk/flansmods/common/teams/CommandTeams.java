@@ -256,11 +256,24 @@ public class CommandTeams extends CommandBase {
 		{
 			if(split.length != 2)
 			{
-				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <on/off/smart>");	
 				return;
 			}
-			FlansMod.weaponDrops = Boolean.parseBoolean(split[1]);
-			sender.sendChatToPlayer("Weapons will " + (FlansMod.weaponDrops ? "now" : "no longer") + " be dropped");
+			if(split[1].toLowerCase().equals("on"))
+			{
+				FlansMod.weaponDrops = 1;
+				sender.sendChatToPlayer("Weapons will be dropped normally");
+			}
+			else if(split[1].toLowerCase().equals("off"))
+			{
+				FlansMod.weaponDrops = 0;
+				sender.sendChatToPlayer("Weapons will be not be dropped");
+			}
+			else if(split[1].toLowerCase().equals("smart"))
+			{
+				FlansMod.weaponDrops = 2;
+				sender.sendChatToPlayer("Smart drops enabled");
+			}
 			return;
 		}
 		if(split[0].equals("setVariable"))
@@ -297,6 +310,8 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer("/teams explosions <true / false>");
 		sender.sendChatToPlayer("/teams canBreakGuns <true / false>");
 		sender.sendChatToPlayer("/teams canBreakGlass <true / false>");
+		sender.sendChatToPlayer("/teams armourDrops <true / false>");
+		sender.sendChatToPlayer("/teams weaponDrops <off / on / smart>");
 		/*
 		sender.sendChatToPlayer("Listing teams commands");
 		sender.sendChatToPlayer("/teams listGametypes - see the gametypes available on this server");
