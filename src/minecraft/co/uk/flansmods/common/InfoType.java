@@ -239,7 +239,7 @@ public class InfoType
 		}
 		for (Item item : Item.itemsList)
 		{
-			if (item != null && item.getItemName() != null && item.getItemName().split("\\.")[1].equals(arg0))
+			if (item != null && item.getItemName() != null && (item.getItemName().equals("item." + arg0) || item.getItemName().equals("tile." + arg0)))
 			{
 				return new ItemStack(item, 1, damage);
 			}
