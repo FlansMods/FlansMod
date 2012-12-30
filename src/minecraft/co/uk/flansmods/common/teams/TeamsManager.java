@@ -476,19 +476,15 @@ public class TeamsManager implements IPlayerTracker
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		resetInventory(player);
-		if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
-			player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
 		if(currentGametype != null)
-		{
+		{		
+			resetInventory(player);
+			if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+				player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
 			Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 			if(spawnPoint != null)
 			{
 				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
-				//playerMP.playerNetServerHandler.sendPacketToPlayer(new Packet9Respawn(playerMP.dimension, (byte)playerMP.worldObj.difficultySetting, playerMP.worldObj.getWorldInfo().getTerrainType(), playerMP.worldObj.getHeight(), playerMP.theItemInWorldManager.getGameType()));
-				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				//playerMP.playerNetServerHandler.sendPacketToPlayer(new Packet6SpawnPosition(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord), MathHelper.floor_double(spawnPoint.zCoord)));
-				//PacketDispatcher.sendPacketToAllInDimension(new Packet11PlayerPosition(playerMP.posX, playerMP.posY, 0, playerMP.posZ, true), playerMP.dimension);
 				playerMP.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 			}
