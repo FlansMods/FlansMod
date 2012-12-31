@@ -23,6 +23,6 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
     	Team killedTeam = FlansModPlayerHandler.getPlayerData(par1EntityPlayer).team;
     	Team killerTeam = FlansModPlayerHandler.getPlayerData(shooter).team;
     	
-        return "death." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + par1EntityPlayer.username + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getEntityName();
+        return "flanDeath." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + par1EntityPlayer.username + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getEntityName();
     }
 }

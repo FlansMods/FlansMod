@@ -165,7 +165,7 @@ public class TeamsManager implements IPlayerTracker
 				{
 					ItemStack stack = ((EntityPlayer)entity).getCurrentEquippedItem();
 					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
-						messageAll("death." + ((ItemGun)stack.getItem()).type.shortName + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)event.entity).team.textColour + event.entity.getEntityName() + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityName());
+						messageAll("flanDeath." + ((ItemGun)stack.getItem()).type.shortName + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)event.entity).team.textColour + event.entity.getEntityName() + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityName());
 				}
 			}
 		}

@@ -212,13 +212,16 @@ public class TickHandlerClient implements ITickHandler
 	
 	public static void addKillMessage(String[] split)
 	{
-		for(KillMessage killMessage : killMessages)
+		if(split.length == 4)
 		{
-			killMessage.line++;
-			if(killMessage.line > 10)
-				killMessage.timer = 0;
+			for(KillMessage killMessage : killMessages)
+			{
+				killMessage.line++;
+				if(killMessage.line > 10)
+					killMessage.timer = 0;
+			}
+			killMessages.add(new KillMessage(split));
 		}
-		killMessages.add(new KillMessage(split));
 	}
 	
 	private static RenderItem itemRenderer = new RenderItem();

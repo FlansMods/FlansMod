@@ -219,7 +219,7 @@ public class FlansModClient extends FlansMod
 	@ForgeSubscribe
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.startsWith("death."))
+		if(event.message.startsWith("flanDeath."))
 		{
 			String[] split = event.message.split("\\.");
 			event.setCanceled(true);
