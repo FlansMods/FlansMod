@@ -110,14 +110,28 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	public void setBase(Team newOwners) 
 	{
+		updateOwners(newOwners);
 		currentTeam = defaultTeam = newOwners;
 	}
 
 	@Override
 	public void captureBase(Team newOwners) 
 	{
+		updateOwners(newOwners);
 		currentTeam = newOwners;
 		teamsManager.messageAll("\u00a7" + newOwners.textColour + newOwners.name + "\u00a7f captured " + name + "!");
+	}
+	
+	public void updateOwners(Team newOwners)
+	{
+		ArrayList<ITeamBase> thisBase = new ArrayList<ITeamBase>();
+		thisBase.add(this);
+		for(Team team : Team.teams)
+		{
+			team.bases.removeAll(thisBase);
+		}
+		if(newOwners != null)
+			newOwners.bases.add(this);
 	}
 
 	@Override
@@ -129,7 +143,12 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	public void startRound() 
 	{
+		updateOwners(defaultTeam);
 		currentTeam = defaultTeam;
+		for(ITeamObject object : getObjects())
+		{
+			object.onBaseSet(defaultTeam);
+		}
 	}
 
 	@Override
@@ -177,6 +196,12 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	public double getPosZ() 
 	{
 		return posZ;
+	}
+	
+	@Override
+	public World getWorld()
+	{
+		return worldObj;
 	}
 	
 	@Override

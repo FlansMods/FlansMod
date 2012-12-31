@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.teams;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -72,6 +74,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		if(newOwners != null)
 			dataWatcher.updateObject(16, newOwners.shortName);
 		else dataWatcher.updateObject(16, "none");
+		
 	}
 
 	@Override

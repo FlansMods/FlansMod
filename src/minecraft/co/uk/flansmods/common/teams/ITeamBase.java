@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
 
 /**
  * Interface for objects that act as team bases, places that teams are given or can capture, dependent on game mode.
@@ -54,6 +55,9 @@ public interface ITeamBase {
 	public double getPosX();
 	public double getPosY();
 	public double getPosZ();
+	
+	//Returns the world this base is in
+	public World getWorld();
 	
 	//Sets the ID of this base
 	public void setID(int i);

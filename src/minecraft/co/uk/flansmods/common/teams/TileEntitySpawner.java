@@ -180,7 +180,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public void onBaseCapture(Team newOwners) 
 	{
-		
+		onBaseSet(newOwners);
 	}
 
 	@Override
