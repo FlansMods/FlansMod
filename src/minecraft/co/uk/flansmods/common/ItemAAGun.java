@@ -1,6 +1,7 @@
 package co.uk.flansmods.common;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,6 +70,16 @@ public class ItemAAGun extends Item
 		return itemstack;
 	}
 	
+    public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
+    {
+    	Entity entity = new EntityAAGun(world, type, x, y, z);
+    	if(!world.isRemote)
+        {
+			world.spawnEntityInWorld(entity);
+        }
+    	return entity;
+    }
+    
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

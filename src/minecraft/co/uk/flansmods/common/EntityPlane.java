@@ -42,9 +42,14 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     
 	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type1, PlaneData data1)
 	{
+		this(world, x, y, z, type1, data1);
+		rotateYaw(180F + placer.rotationYaw);
+	}
+    
+	public EntityPlane(World world, double x, double y, double z, PlaneType type1, PlaneData data1)
+	{
 		super(world, type1, data1);
 		setPosition(x, y, z);
-		rotateYaw(placer.rotationYaw);
 		data = data1;
 		try
 		{
@@ -226,7 +231,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		{
 			case 0 : //Accelerate
 			{
-				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode || !FlansMod.vehiclesNeedFuel)
 				{
 					propSpeed += type.acceleration / 100D;
 				}
@@ -243,7 +248,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 1 : //Deccelerate
 			{
-				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode || !FlansMod.vehiclesNeedFuel)
 				{
 					propSpeed -= type.acceleration / 100D;
 				}

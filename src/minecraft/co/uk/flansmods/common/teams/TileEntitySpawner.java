@@ -5,8 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.ItemAAGun;
+import co.uk.flansmods.common.ItemPlane;
+import co.uk.flansmods.common.ItemVehicle;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +30,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	public int spawnDelay = 1200;
 	public List<ItemStack> stacksToSpawn = new ArrayList<ItemStack>();
 	public List<EntityTeamItem> itemEntities = new ArrayList<EntityTeamItem>();
+	public Entity spawnedEntity;
 	public ITeamBase base;
 	private int baseID = -1;
 	private int dimension;
@@ -76,7 +81,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		}
 		if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
 			return;
-		for(int i = 0; i < itemEntities.size(); i++)
+		for(int i = itemEntities.size() - 1; i >= 0; i--)
 		{
 			if(itemEntities.get(i).isDead)
 				itemEntities.remove(i);
@@ -90,8 +95,31 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 			currentDelay = spawnDelay;
 			for(int i = 0; i < stacksToSpawn.size(); i++)
 			{
-				EntityTeamItem itemEntity = new EntityTeamItem(this, i);
-				worldObj.spawnEntityInWorld(itemEntity);
+				if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 2)
+				{
+					if(spawnedEntity != null && !spawnedEntity.isDead)
+					{
+						continue;
+					}
+					ItemStack stack = stacksToSpawn.get(i);
+					if(stack != null && stack.getItem() instanceof ItemPlane)
+					{
+						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+					}					
+					if(stack != null && stack.getItem() instanceof ItemVehicle)
+					{
+						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+					}
+					if(stack != null && stack.getItem() instanceof ItemAAGun)
+					{
+						spawnedEntity = ((ItemAAGun)stack.getItem()).spawnAAGun(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+					}
+				}
+				else
+				{
+					EntityTeamItem itemEntity = new EntityTeamItem(this, i);
+					worldObj.spawnEntityInWorld(itemEntity);
+				}
 			}
 		}
     }

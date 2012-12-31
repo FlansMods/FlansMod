@@ -101,8 +101,9 @@ public class FlansMod
 	public static boolean forceAdventureMode = true;
 	public static boolean canBreakGuns = false;
 	public static boolean canBreakGlass = false;
-	public static boolean armourDrops = false;
-	public static int weaponDrops = 0; //0 = no drops, 1 = drops, 2 = smart drops
+	public static boolean armourDrops = true;
+	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
+	public static boolean vehiclesNeedFuel = true;
 
 	public static Block craftingTable;
 	public static Block spawner;

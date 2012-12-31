@@ -1,6 +1,7 @@
 package co.uk.flansmods.common;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,16 @@ public class ItemVehicle extends ItemMapBase
 			}
         }
         return itemstack;
+    }
+    
+    public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)
+    {
+    	Entity entity = new EntityVehicle(world, x, y, z, type, getVehicleData(stack, world));
+    	if(!world.isRemote)
+        {
+			world.spawnEntityInWorld(entity);
+        }
+    	return entity;
     }
 	
 	public VehicleData getVehicleData(ItemStack itemstack, World world)

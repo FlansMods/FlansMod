@@ -364,6 +364,7 @@ public class TeamsManager implements IPlayerTracker
 			FlansMod.canBreakGuns = tags.getBoolean("CanBreakGuns");
 			FlansMod.armourDrops = tags.getBoolean("ArmourDrops");
 			FlansMod.weaponDrops = tags.getInteger("WeaponDrops");
+			FlansMod.vehiclesNeedFuel = tags.getBoolean("NeedFuel");
 		}
 		catch(Exception e)
 		{
@@ -401,6 +402,7 @@ public class TeamsManager implements IPlayerTracker
 			tags.setBoolean("CanBreakGuns", FlansMod.canBreakGuns);
 			tags.setBoolean("ArmourDrops", FlansMod.armourDrops);
 			tags.setInteger("WeaponDrops", FlansMod.weaponDrops);
+			tags.setBoolean("NeedFuel", FlansMod.vehiclesNeedFuel);
 			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
 		}
 		catch(Exception e)

@@ -41,12 +41,18 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
     {
         super(world);
     }
-	
+    
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type1, VehicleData data1)
+	{
+		this(world, x, y, z, type1, data1);
+		rotateYaw(180F + placer.rotationYaw);
+	}
+
+	
+	public EntityVehicle(World world, double x, double y, double z, VehicleType type1, VehicleData data1)
 	{
 		super(world, type1, data1);
 		setPosition(x, y, z);
-		rotateYaw(180F + placer.rotationYaw);
 		data = data1;
 		try
 		{
@@ -189,7 +195,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			case 0 : //Accelerate
 			{
-				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode || !FlansMod.vehiclesNeedFuel)
 				{
 					acceleration += type.acceleration / 20D;
 				}
@@ -206,7 +212,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			case 1 : //Deccelerate
 			{
-				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode || !FlansMod.vehiclesNeedFuel)
 				{
 					acceleration -= type.acceleration / 20D;
 				}
