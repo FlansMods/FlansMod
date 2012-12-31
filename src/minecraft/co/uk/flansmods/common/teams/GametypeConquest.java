@@ -118,6 +118,8 @@ public class GametypeConquest extends Gametype {
 			for(Object obj : playersNearBase)
 			{
 				EntityPlayerMP player = (EntityPlayerMP)obj;
+				if(getPlayerData(player) == null)
+					continue;
 				Team playerTeam = getPlayerData(player).team;
 				if(playerTeam != baseTeam && playerTeam != Team.spectators && playerTeam != null && !player.isDead)
 				{
