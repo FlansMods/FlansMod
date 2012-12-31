@@ -75,6 +75,8 @@ public class FlansMod
 	
 	public static Configuration configuration;
 	
+	public static int craftingTableID = 255, spawnerID = 254, gunBoxID = 200;
+	
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0);
 	public static CreativeTabFlan tabFlanVehicles = new CreativeTabFlan(1);
 	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
@@ -127,6 +129,8 @@ public class FlansMod
 		
 		configuration = new Configuration(event.getSuggestedConfigurationFile());
 		
+		loadProperties();
+		
 		flanDir = new File(event.getModConfigurationDirectory().getParentFile(), "/Flan/");
 	
 		if (!flanDir.exists())
@@ -176,7 +180,7 @@ public class FlansMod
 
 		
 		// default planes stuff
-		craftingTable = new BlockPlaneWorkbench(255, 1, 0).setBlockName("flansCraftingBench");
+		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setBlockName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Small Plane Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Large Plane Crafting Table");
@@ -201,7 +205,7 @@ public class FlansMod
 		
 		// gunBxStuff.. must be done after content packs.
 		// GunBox Block       ID=???  200 is temporary one
-		gunBoxBlock = (BlockGunBox) new BlockGunBox(200);
+		gunBoxBlock = (BlockGunBox) new BlockGunBox(gunBoxID);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 
@@ -221,7 +225,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
 		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
-		spawner = new BlockSpawner(254, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
+		spawner = new BlockSpawner(spawnerID, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamSpawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
@@ -602,6 +606,15 @@ public class FlansMod
 		
 		// LOAD GRAPHICS
 		proxy.loadContentPackGraphics(method, classloader);
+	}
+	
+	public static void loadProperties()
+	{
+		configuration.load();
+		craftingTableID = configuration.getBlock("Crafting Table", craftingTableID).getInt(craftingTableID);
+		spawnerID = configuration.getBlock("Team Spawner", spawnerID).getInt(spawnerID);
+		gunBoxID = configuration.getBlock("Gun Box", gunBoxID).getInt(gunBoxID);
+		configuration.save();
 	}
 	
 	public static void logQuietly(String s)
