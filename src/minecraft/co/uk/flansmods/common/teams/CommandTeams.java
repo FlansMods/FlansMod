@@ -276,6 +276,18 @@ public class CommandTeams extends CommandBase {
 			}
 			return;
 		}
+		if(split[0].equals("fuelNeeded"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
+			FlansMod.vehiclesNeedFuel = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Vehicles will " + (FlansMod.vehiclesNeedFuel ? "now" : "no longer") + " require fuel");
+			return;
+		}
+
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentGametype == null)
@@ -312,6 +324,7 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer("/teams canBreakGlass <true / false>");
 		sender.sendChatToPlayer("/teams armourDrops <true / false>");
 		sender.sendChatToPlayer("/teams weaponDrops <off / on / smart>");
+		sender.sendChatToPlayer("/teams fuelNeeded <true / false>");
 		/*
 		sender.sendChatToPlayer("Listing teams commands");
 		sender.sendChatToPlayer("/teams listGametypes - see the gametypes available on this server");

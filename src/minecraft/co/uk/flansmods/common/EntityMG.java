@@ -218,7 +218,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				}
 				// Fire
 				BulletType bullet = BulletType.getBullet(ammo.itemID);
-				if (gunner != null && !((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+				if (gunner != null && !((EntityPlayer)gunner).capabilities.isCreativeMode)
 					ammo.damageItem(1, (EntityLiving) player);
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)

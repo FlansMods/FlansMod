@@ -46,7 +46,7 @@ public class EntityCollisionBox extends Entity
 	
 	public void smashIntoBlock(int i, int j, int k)
 	{
-		if(worldObj.isRemote)
+		if(worldObj.isRemote || !FlansMod.explosions)
 			return;
 		int blockID = worldObj.getBlockId(i, j, k);
 		if(blockID != 0)

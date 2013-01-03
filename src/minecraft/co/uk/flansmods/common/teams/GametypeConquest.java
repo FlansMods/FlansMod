@@ -125,6 +125,11 @@ public class GametypeConquest extends Gametype {
 				{
 					enemiesNearBase.add(player);
 				}
+				if(playerTeam == baseTeam)
+				{
+					enemiesNearBase = new ArrayList<EntityPlayerMP>();
+					break;
+				}
 			}
 			if(enemiesNearBase.size() == 0)
 			{
