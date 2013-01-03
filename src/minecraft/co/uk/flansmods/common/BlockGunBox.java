@@ -250,9 +250,9 @@ public class BlockGunBox extends BlockContainer
 	public Block purchaseItem(int i, int id, InventoryPlayer inventory, GunBoxType type) {
 		switch(i) 
 		{
-			case 0: buyGun(id, inventory, type);
-			case 1: buyAmmo(id, inventory, type);
-			case 2: buyAltAmmo(id, inventory, type);
+			case 0: buyGun(id, inventory, type); break;
+			case 1: buyAmmo(id, inventory, type); break;
+			case 2: buyAltAmmo(id, inventory, type); break;
 		}
 		return this;
 	}

@@ -28,8 +28,8 @@ public class PacketBuyWeapon extends FlanPacketCommon
         {
         	data.write(packetID); // this is the packet ID. identifies it as a BreakSoundPacket
         	data.writeUTF(box.shortName);
-        	data.write(type);
-        	data.write(weaponID);
+        	data.writeInt(type);
+        	data.writeInt(weaponID);
 
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -52,16 +52,16 @@ public class PacketBuyWeapon extends FlanPacketCommon
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		if(side.equals(Side.SERVER)) 
-			interpretClient(stream, extradata);
+			interpretServer(stream, extradata);
 		else FlansMod.logLoudly("Recieved Weapon packet on Client. Skipped interpretation");
 		
 		//TODO : Route this to the block, but first combine the boxes into one ID with a tileEntity
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public void interpretClient(DataInputStream stream, Object[] extradata) {
-		try {
-			int id = stream.readInt();
+	public void interpretServer(DataInputStream stream, Object[] extradata) 
+	{
+		try 
+		{
 			String shortName = stream.readUTF();
 			int type = stream.readInt();
 			int weaponID = stream.readInt();
@@ -70,7 +70,8 @@ public class PacketBuyWeapon extends FlanPacketCommon
 			
 			EntityPlayer player = (EntityPlayer) extradata[1];
 			FlansMod.gunBoxBlock.purchaseItem(type, weaponID, player.inventory, box);
-		} catch (Exception e) {
+		} catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}

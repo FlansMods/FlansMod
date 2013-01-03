@@ -55,6 +55,7 @@ import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -533,14 +534,14 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void buyGun(GunBoxType type, int gun)
 	{
-		PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0);
+		PacketDispatcher.sendPacketToServer(PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0));
 		FlansModClient.shootTime = 10;
 	}
 
 	@Override
 	public void buyAmmo(GunBoxType box, int ammo, int type)
 	{
-		PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo);
+		PacketDispatcher.sendPacketToServer(PacketBuyWeapon.buildBuyWeaponPacket(box, type, ammo));
 		FlansModClient.shootTime = 10;
 	}
 	
