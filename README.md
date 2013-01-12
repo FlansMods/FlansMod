@@ -1,4 +1,4 @@
-# FLANS MOD for MC 1.3.2 #
+# FLANS MOD for MC 1.4.2 #
 
 Official port of FlansMod to 1.3.2.
 
