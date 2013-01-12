@@ -1,25 +1,9 @@
-# FLANS MOD for MC 1.3.2 #
+# Flan's Mod for Minecraft v1.4.6/7 #
 
-Official port of FlansMod to 1.3.2.
+Here you will find the source code from the Minecraft modification, Flan's Mod.  If you want to pitch in,
+just submit a pull request, and either _aidancbrady_ or _jamioflan_ will review and merge.  If you are here
+because of a crash or bug, you can simply submit it in the 'Issues' section.  Be sure to double-check that
+the bug wasn't reported previously.
 
-# INFORMATION TO HELPERS #
-
-Forge is being used, so it should be swapAndReplace("easy", "hard and painful").
-
-*IC2, BC, and ICBM integration is being worked on by Aidan.
-
-*Planes, vehicles, and controls are being worked on by AbrarSyed.
-
-We are using a fixed NitroModelThingy. it is complied to work with Flan very well. [our fix.]
-
-# CURRENT GOALS #
-
-*Add IC2, BC, and ICBM support.
-
-*Finish controls.
-
-*Fix gun reloading glitch.
-
-# INSTALLATION #
-
-Drop new source code into fresh MCP, everything is included.
+This GitHub environment is to be treated maturely -- do not release any of this source code without prior
+permission from jamioflan.
