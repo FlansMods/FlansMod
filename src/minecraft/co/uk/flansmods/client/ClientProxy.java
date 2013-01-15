@@ -534,7 +534,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void buyGun(GunBoxType type, int gun)
 	{
-		PacketDispatcher.sendPacketToServer(PacketBuyWeapon.buildBuyWeaponPacket(type, gun, 0));
+		PacketDispatcher.sendPacketToServer(PacketBuyWeapon.buildBuyWeaponPacket(type, 0, gun));
 		FlansModClient.shootTime = 10;
 	}
 
