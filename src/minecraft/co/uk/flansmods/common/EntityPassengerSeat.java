@@ -303,7 +303,7 @@ public class EntityPassengerSeat extends Entity
 		if(riddenByEntity == null)
 		{
 			//Holding wheat, put following mob into seat
-			if(following != null && stack != null && stack.itemID == Item.wheat.shiftedIndex)
+			if(following != null && stack != null && stack.itemID == Item.wheat.itemID)
 			{
 				sitInSeat(following, true);
 				return true;

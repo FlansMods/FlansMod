@@ -179,7 +179,7 @@ public class EntityGunItem extends EntityItem {
 	        					if(player.inventory.addItemStackToInventory(ammoStack))
 	        					{
 	        						GameRegistry.onPickupNotification(player, this);
-	        		                func_85030_a("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+	        		                playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 	        						ammoStacks.remove(j);
 	        					}
 	        				}

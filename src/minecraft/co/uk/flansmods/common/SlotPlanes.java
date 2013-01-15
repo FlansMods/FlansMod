@@ -23,7 +23,7 @@ public class SlotPlanes extends Slot
     {
 		if(result)
 			return false;
-		if(itemstack.getItem() instanceof ItemPart || (itemstack.getItem() instanceof ItemGun && ((ItemGun)(itemstack.getItem())).type.deployable) || itemstack.itemID == Item.dyePowder.shiftedIndex)
+		if(itemstack.getItem() instanceof ItemPart || (itemstack.getItem() instanceof ItemGun && ((ItemGun)(itemstack.getItem())).type.deployable) || itemstack.itemID == Item.dyePowder.itemID)
 			return true;
 		return false;
     }

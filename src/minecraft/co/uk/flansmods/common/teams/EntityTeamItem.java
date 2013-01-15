@@ -91,7 +91,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
             {
                 GameRegistry.onPickupNotification(par1EntityPlayer, this);
 
-                func_85030_a("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 par1EntityPlayer.onItemPickup(this, var2);
 
                 //Getter of EntityItem

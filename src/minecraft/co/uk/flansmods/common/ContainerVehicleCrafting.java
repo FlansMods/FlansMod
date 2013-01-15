@@ -117,7 +117,7 @@ public class ContainerVehicleCrafting extends Container
 		ItemStack dyes1 = getStack(2, 1);
 		if(vehicle.dyes)
 		{	
-			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.shiftedIndex;
+			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.itemID;
 			if(!(allDyes && dyes1.getItemDamage() == vehicle.dyeColour))
 				return false;		
 		}
@@ -171,7 +171,7 @@ public class ContainerVehicleCrafting extends Container
 		fillEngineSlot(0, 1);
 		if(type.dyes)
 		{
-			fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 2, 1);
+			fillSlot(Item.dyePowder.itemID, type.dyeColour, 2, 1);
 		}
 	}
 	

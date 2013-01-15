@@ -316,7 +316,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		// Drop gun
 		if(!worldObj.isRemote)
 		{
-			dropItem(type.getItem().shiftedIndex, 1);
+			dropItem(type.getItem().itemID, 1);
 			// Drop ammo box
 			if (ammo != null)
 				entityDropItem(ammo, 0.5F);

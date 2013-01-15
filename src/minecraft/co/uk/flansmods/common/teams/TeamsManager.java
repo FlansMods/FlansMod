@@ -483,7 +483,7 @@ public class TeamsManager implements IPlayerTracker
 		{		
 			resetInventory(player);
 			if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
-				player.sendGameTypeToPlayer(EnumGameType.ADVENTURE);
+				player.setGameType(EnumGameType.ADVENTURE);
 			Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
 			if(spawnPoint != null)
 			{

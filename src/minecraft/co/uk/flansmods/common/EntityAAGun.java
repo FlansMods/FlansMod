@@ -299,7 +299,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		// Drop gun
 		if(worldObj.isRemote)
 			return;
-		dropItem(type.getItem().shiftedIndex, 1);
+		dropItem(type.getItem().itemID, 1);
 		// Drop ammo boxes
 		for (ItemStack stack : ammo)
 		{

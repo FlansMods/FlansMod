@@ -206,16 +206,16 @@ public class ContainerPlaneCrafting extends Container
 		ItemStack dyes0 = getStack(4, 6);
 		if(plane.dyes)
 		{	
-			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.shiftedIndex &&
-			dyes2 != null && dyes2.itemID == Item.dyePowder.shiftedIndex &&
-			dyes3 != null && dyes3.itemID == Item.dyePowder.shiftedIndex &&
-			dyes4 != null && dyes4.itemID == Item.dyePowder.shiftedIndex &&
-			dyes5 != null && dyes5.itemID == Item.dyePowder.shiftedIndex &&
-			dyes6 != null && dyes6.itemID == Item.dyePowder.shiftedIndex &&
-			dyes7 != null && dyes7.itemID == Item.dyePowder.shiftedIndex &&
-			dyes8 != null && dyes8.itemID == Item.dyePowder.shiftedIndex &&	
-			dyes9 != null && dyes9.itemID == Item.dyePowder.shiftedIndex &&
-			dyes0 != null && dyes0.itemID == Item.dyePowder.shiftedIndex;
+			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.itemID &&
+			dyes2 != null && dyes2.itemID == Item.dyePowder.itemID &&
+			dyes3 != null && dyes3.itemID == Item.dyePowder.itemID &&
+			dyes4 != null && dyes4.itemID == Item.dyePowder.itemID &&
+			dyes5 != null && dyes5.itemID == Item.dyePowder.itemID &&
+			dyes6 != null && dyes6.itemID == Item.dyePowder.itemID &&
+			dyes7 != null && dyes7.itemID == Item.dyePowder.itemID &&
+			dyes8 != null && dyes8.itemID == Item.dyePowder.itemID &&	
+			dyes9 != null && dyes9.itemID == Item.dyePowder.itemID &&
+			dyes0 != null && dyes0.itemID == Item.dyePowder.itemID;
 			if(!(allDyes && dyes1.getItemDamage() == plane.dyeColour
 			&& dyes2.getItemDamage() == plane.dyeColour
 			&& dyes3.getItemDamage() == plane.dyeColour 
@@ -321,12 +321,12 @@ public class ContainerPlaneCrafting extends Container
 		ItemStack dyes6 = getStack(4, 5);
 		if(plane.dyes)
 		{	
-			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.shiftedIndex &&
-			dyes2 != null && dyes2.itemID == Item.dyePowder.shiftedIndex &&
-			dyes3 != null && dyes3.itemID == Item.dyePowder.shiftedIndex &&
-			dyes4 != null && dyes4.itemID == Item.dyePowder.shiftedIndex &&
-			dyes5 != null && dyes5.itemID == Item.dyePowder.shiftedIndex &&
-			dyes6 != null && dyes6.itemID == Item.dyePowder.shiftedIndex;
+			boolean allDyes = dyes1 != null && dyes1.itemID == Item.dyePowder.itemID &&
+			dyes2 != null && dyes2.itemID == Item.dyePowder.itemID &&
+			dyes3 != null && dyes3.itemID == Item.dyePowder.itemID &&
+			dyes4 != null && dyes4.itemID == Item.dyePowder.itemID &&
+			dyes5 != null && dyes5.itemID == Item.dyePowder.itemID &&
+			dyes6 != null && dyes6.itemID == Item.dyePowder.itemID;
 			if(!(allDyes && dyes1.getItemDamage() == plane.dyeColour
 			&& dyes2.getItemDamage() == plane.dyeColour
 			&& dyes3.getItemDamage() == plane.dyeColour 
@@ -420,26 +420,26 @@ public class ContainerPlaneCrafting extends Container
 		{
 			if(big)
 			{
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 0);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 1);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 0);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 1);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 5);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 6);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 5);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 6);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 4, 0);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 4, 6);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 0);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 1);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 0);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 1);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 5);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 6);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 5);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 6);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 4, 0);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 4, 6);
 			}
 			else
 			{
 
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 2);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 0, 4);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 2);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 1, 4);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 4, 1);
-				fillSlot(Item.dyePowder.shiftedIndex, type.dyeColour, 4, 5);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 2);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 0, 4);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 2);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 1, 4);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 4, 1);
+				fillSlot(Item.dyePowder.itemID, type.dyeColour, 4, 5);
 			}
 		}
 	}
