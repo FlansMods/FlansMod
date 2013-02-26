@@ -18,18 +18,17 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
+import co.uk.flansmods.common.vector.Matrix3f;
 import co.uk.flansmods.common.vector.Vector3f;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -361,8 +360,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					{
 						if(data.guns[i] != null && data.ammo[i] != null && data.ammo[i].getItem() instanceof ItemBullet && data.guns[i].isAmmo(((ItemBullet)data.ammo[i].getItem()).type))
 						{
-							Vec3 gunVec = rotate(type.barrelX[i] / 16D, type.barrelY[i] / 16D, type.barrelZ[i] / 16D);
-							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), -axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F, type));
+							//For some reason -Z, -Y, X are the correct coordinates to use, this is based off experiments with the plane renderer
+							Vec3 gunVec = rotateGunBarrelPosition(-type.barrelZ[i] / 16D, -type.barrelY[i] / 16D, type.barrelX[i] / 16D);
+							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), -axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F, type));
 							worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
 							int damage = data.ammo[i].getItemDamage();
 							data.ammo[i].setItemDamage(damage + 1);	
@@ -388,7 +388,18 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		
 		return false;
 	}
-
+    
+    Vec3 rotateGunBarrelPosition(double x, double y, double z)
+    {
+    	//The negatives are from trial and error, the +90 is to match up with the rendering transformations
+    	Matrix3f yawMat = Matrix3f.getMatrixRotY((-axes.getYaw()+90)/180f * 3.141592f);
+    	Matrix3f pitchMat = Matrix3f.getMatrixRotZ((-axes.getPitch())/180f * 3.141592f);
+    	Matrix3f rollMat = Matrix3f.getMatrixRotX((axes.getRoll())/180f * 3.141592f);
+    	
+    	Matrix3f rotationMatrix = yawMat.mult(pitchMat).mult(rollMat);
+    	return rotationMatrix.mult(Vec3.createVectorHelper(x, y, z));
+    }
+    
     @Override
 	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
     {
