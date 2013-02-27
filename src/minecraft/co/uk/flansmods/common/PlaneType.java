@@ -136,23 +136,23 @@ public class PlaneType extends DriveableType
 				propSoundLength = Integer.parseInt(split[1]);
 			if(split[0].equals("StartSound"))
 			{
-				startSound = "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
+				startSound = contentPack + "planes." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
 			}
 			if(split[0].equals("PropSound"))
 			{
-				propSound = "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
+				propSound = contentPack + "planes." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
 			}
 			if(split[0].equals("ShootSound"))
 			{
-				shootSound = "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
+				shootSound = contentPack + "planes." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
-				bombSound = "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, "planes", split[1]);
+				bombSound = contentPack + "planes." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
 			}
 				
 			//Recipe
