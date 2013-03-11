@@ -148,7 +148,7 @@ public class FlansMod
 		
 		try
 		{
-			Class.forName("net.minecraft.src.World");
+			Class.forName("net.minecraft.world.World");
 		}
 		catch(Exception e)
 		{
