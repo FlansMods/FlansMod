@@ -85,9 +85,9 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
             }
 
             //Getter of EntityItem
-            int var2 = func_92014_d().stackSize;
+            int var2 = getEntityItem().stackSize;
 
-            if ((event.getResult() == Result.ALLOW || var2 <= 0 || par1EntityPlayer.inventory.addItemStackToInventory(func_92014_d())))
+            if ((event.getResult() == Result.ALLOW || var2 <= 0 || par1EntityPlayer.inventory.addItemStackToInventory(getEntityItem())))
             {
                 GameRegistry.onPickupNotification(par1EntityPlayer, this);
 
@@ -95,7 +95,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
                 par1EntityPlayer.onItemPickup(this, var2);
 
                 //Getter of EntityItem
-                if (func_92014_d().stackSize <= 0)
+                if (getEntityItem().stackSize <= 0)
                 {
                 	spawner.itemEntities.remove(this);
                     setDead();
@@ -115,7 +115,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			data.writeDouble(angle);
 			NBTTagCompound tags = new NBTTagCompound();
 			//Getter of EntityItem
-			func_92014_d().writeToNBT(tags);
+			getEntityItem().writeToNBT(tags);
 			NBTTagCompound.writeNamedTag(tags, data);
 		}
 		catch(Exception e)
@@ -137,7 +137,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			//Flan, as EntityItem's itemstack (previously the field was called 'item') field is now only managed
 			//by datawatchers, there are now getters and setters, both currently still unmapped by Forge. This
 			//method sets the itemstack.
-			func_92013_a(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
+			func_92058_a(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
 		}
 		catch(Exception e)
 		{

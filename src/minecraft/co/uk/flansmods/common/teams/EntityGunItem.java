@@ -37,7 +37,7 @@ public class EntityGunItem extends EntityItem {
 	
 	public EntityGunItem(EntityItem entity)
 	{
-		super(entity.worldObj, entity.posX, entity.posY, entity.posZ, entity.func_92014_d().copy());
+		super(entity.worldObj, entity.posX, entity.posY, entity.posZ, entity.getEntityItem().copy());
 		setSize(1F, 1F);
 		ammoStacks = new ArrayList<ItemStack>();
 	}
@@ -87,7 +87,7 @@ public class EntityGunItem extends EntityItem {
 	public void onUpdate()
 	{
 		onEntityUpdate();
-		if(func_92014_d() == null || func_92014_d().getItem() == null || !(func_92014_d().getItem() instanceof ItemGun))
+		if(getEntityItem() == null || getEntityItem().getItem() == null || !(getEntityItem().getItem() instanceof ItemGun))
 			setDead();
 		
 		if(!worldObj.isRemote && ammoStacks == null)
@@ -217,7 +217,7 @@ public class EntityGunItem extends EntityItem {
     		}
     		EntityGunItem newGunItem = new EntityGunItem(worldObj, posX, posY, posZ, currentItem.copy(), newAmmoStacks); 
     		worldObj.spawnEntityInWorld(newGunItem);
-    		player.inventory.setInventorySlotContents(player.inventory.currentItem, func_92014_d());
+    		player.inventory.setInventorySlotContents(player.inventory.currentItem, getEntityItem());
     		for(ItemStack stack : ammoStacks)
     		{
     			player.inventory.addItemStackToInventory(stack);
