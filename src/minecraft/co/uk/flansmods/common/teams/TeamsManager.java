@@ -222,7 +222,7 @@ public class TeamsManager implements IPlayerTracker
 			for(Iterator<EntityItem> iterator = event.drops.listIterator(); iterator.hasNext(); )
 			{
 				EntityItem entity = iterator.next();
-				ItemStack stack = entity.func_92014_d();
+				ItemStack stack = entity.getEntityItem();
 				if(stack != null && stack.getItem() != null)
 				{
 					if(stack.getItem() instanceof ItemGun)
@@ -233,7 +233,7 @@ public class TeamsManager implements IPlayerTracker
 						for(Iterator<EntityItem> checker = dropsToThrow.listIterator(); checker.hasNext(); )
 						{
 							EntityItem check = checker.next();
-							if(((ItemGun)stack.getItem()).type == ((ItemGun)check.func_92014_d().getItem()).type)
+							if(((ItemGun)stack.getItem()).type == ((ItemGun)check.getEntityItem().getItem()).type)
 								alreadyAdded = true;
 						}
 						if(!alreadyAdded)
@@ -249,11 +249,11 @@ public class TeamsManager implements IPlayerTracker
 		for(Iterator<EntityItem> gunIterator = dropsToThrow.listIterator(); gunIterator.hasNext(); )
 		{
 			EntityGunItem gunEntity = (EntityGunItem)gunIterator.next();
-			GunType gunType = ((ItemGun)gunEntity.func_92014_d().getItem()).type;
+			GunType gunType = ((ItemGun)gunEntity.getEntityItem().getItem()).type;
 			for(Iterator<EntityItem> ammoIterator = event.drops.listIterator(); ammoIterator.hasNext(); )
 			{
 				EntityItem ammoEntity = ammoIterator.next();
-				ItemStack ammoItemstack = ammoEntity.func_92014_d();
+				ItemStack ammoItemstack = ammoEntity.getEntityItem();
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemBullet)
 				{
 					BulletType bulletType = ((ItemBullet)ammoItemstack.getItem()).type;
@@ -268,7 +268,7 @@ public class TeamsManager implements IPlayerTracker
 		//Now check the remaining items to see if they should be dropped
 		for(EntityItem entity : event.drops)
 		{
-			ItemStack stack = entity.func_92014_d();
+			ItemStack stack = entity.getEntityItem();
 			if(stack != null && stack.getItem() != null && stack.stackSize > 0)
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
