@@ -2,11 +2,16 @@ package co.uk.flansmods.common;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockPlaneWorkbench extends Block
@@ -14,8 +19,6 @@ public class BlockPlaneWorkbench extends Block
     public BlockPlaneWorkbench(int i, int j, int k)
     {
         super(i, Material.iron);
-        blockIndexInTexture = j;
-        sideTexture = k;
         setCreativeTab(FlansMod.tabFlanVehicles);
     }
     
@@ -26,22 +29,16 @@ public class BlockPlaneWorkbench extends Block
         par3List.add(new ItemStack(par1, 1, 1));
         par3List.add(new ItemStack(par1, 1, 2));
     }
-	
-    @Override
-	public String getTextureFile()
-    {
-        return "/spriteSheets/planes.png";
-    }
 
     @Override
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    public Icon getBlockTextureFromSideAndMetadata(int i, int j)
     {
         if(i == 1)
         {
-            return j + 1;
+            return top[j + 1];
         } else
         {
-            return sideTexture;
+            return side;
         }
     }
 
@@ -53,5 +50,17 @@ public class BlockPlaneWorkbench extends Block
 		return true;
     }
     
-	private int sideTexture;
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void func_94332_a(IconRegister register)
+    {
+    	top = new Icon[3];
+    	top[0] = register.func_94245_a("planeCraftingTableSmall");
+    	top[1] = register.func_94245_a("planeCraftingTableLarge");
+    	top[2] = register.func_94245_a("vehicleCraftingTable");
+    	side = register.func_94245_a("planeCraftingTableSide");
+    }
+    
+	private Icon side;
+	private Icon[] top;
 }

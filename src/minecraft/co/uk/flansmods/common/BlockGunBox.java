@@ -285,8 +285,9 @@ public class BlockGunBox extends BlockContainer
         super.breakBlock(world, x, y, z, par5, par6);
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
-    public void func_94581_a(IconRegister register)
+    public void func_94332_a(IconRegister register)
     {
     	for(GunBoxType type : GunBoxType.gunBoxMap.values())
     	{
