@@ -65,7 +65,7 @@ public class InfoType
 			}
 			if (arg0[0].equals("Icon"))
 			{
-				iconPath = "/icons/" + arg0[1] + ".png";
+				iconPath = arg0[1];
 			}
 			if (arg0[0].equals("RecipeOutput"))
 			{
@@ -243,6 +243,11 @@ public class InfoType
 			{
 				return new ItemStack(item, 1, damage);
 			}
+		}
+		for(InfoType type : infoTypes)
+		{
+			if(type.shortName.equals(arg0))
+				return new ItemStack(type.item, 1, damage);
 		}
 		if (arg0.equals("gunpowder"))
 		{

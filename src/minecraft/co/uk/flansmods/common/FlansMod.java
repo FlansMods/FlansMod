@@ -181,7 +181,7 @@ public class FlansMod
 
 		
 		// default planes stuff
-		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setBlockName("flansCraftingBench");
+		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setUnlocalizedName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Small Plane Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Large Plane Crafting Table");
@@ -224,7 +224,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
-		flag = new ItemFlagpole(23541).setIconIndex(6).setItemName("flagpole");
+		flag = new ItemFlagpole(23541).setIconIndex(6).setUnlocalizedName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
 		spawner = new BlockSpawner(spawnerID, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamSpawner");
@@ -316,7 +316,7 @@ public class FlansMod
 					try
 					{
 						BulletType type = new BulletType(new BufferedReader(new FileReader(bullets[i])));
-						Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setItemName(type.shortName);
+						Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.iconPath);
 						bulletItems.add(bulletItem);
 						LanguageRegistry.addName(bulletItem, type.name);
 					} catch (Exception e)
@@ -347,7 +347,7 @@ public class FlansMod
 					{
 						// TO BE MADE BETTER
 						GunType type = new GunType(new BufferedReader(new FileReader(guns[i])), file.getName());
-						Item gunItem = new ItemGun(type.itemID - 256, type).setItemName(type.shortName);
+						Item gunItem = new ItemGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						gunItems.add(gunItem);
 						LanguageRegistry.addName(gunItem, type.name);
 					} catch (Exception e)
@@ -377,7 +377,7 @@ public class FlansMod
 					try
 					{
 						PartType type = new PartType(new BufferedReader(new FileReader(parts[i])));
-						Item partItem = new ItemPart(type.itemID - 256, type).setItemName(type.shortName);
+						Item partItem = new ItemPart(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						partItems.add(partItem);
 						LanguageRegistry.addName(partItem, type.name);
 					} catch (Exception e)
@@ -407,7 +407,7 @@ public class FlansMod
 					try
 					{
 						PlaneType type = new PlaneType(new BufferedReader(new FileReader(planes[i])), file.getName());
-						Item planeItem = new ItemPlane(type.itemID - 256, type).setItemName(type.shortName);
+						Item planeItem = new ItemPlane(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						planeItems.add(planeItem);
 						LanguageRegistry.addName(planeItem, type.name);
 					} catch (Exception e)
@@ -438,7 +438,7 @@ public class FlansMod
 					try
 					{
 						VehicleType type = new VehicleType(new BufferedReader(new FileReader(vehicles[i])), file.getName());
-						Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setItemName(type.shortName);
+						Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						vehicleItems.add(vehicleItem);
 						LanguageRegistry.addName(vehicleItem, type.name);
 					}
@@ -469,7 +469,7 @@ public class FlansMod
 					try
 					{
 						AAGunType type = new AAGunType(new BufferedReader(new FileReader(aaGuns[i])), file.getName());
-						Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setItemName(type.shortName);
+						Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						aaGunItems.add(aaGunItem);
 						LanguageRegistry.addName(aaGunItem, type.name);
 					} catch (Exception e)
@@ -529,7 +529,7 @@ public class FlansMod
 					try
 					{
 						ArmourType type = new ArmourType(new BufferedReader(new FileReader(armours[i])), file.getName());
-						Item armourItem = new ItemTeamArmour(type).setItemName(type.shortName);
+						Item armourItem = new ItemTeamArmour(type).setUnlocalizedName(type.iconPath);
 						armourItems.add(armourItem);
 						LanguageRegistry.addName(armourItem, type.name);
 					} catch (Exception e)
