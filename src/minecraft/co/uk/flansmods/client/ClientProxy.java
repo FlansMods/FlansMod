@@ -96,6 +96,10 @@ public class ClientProxy extends CommonProxy
 	{
 		// this stuff is only done client side.
 		File tempImageDir = new File(FlansMod.flanDir.getParentFile(), "/temp/Flan/");
+		if(!tempImageDir.exists())
+		{
+			tempImageDir.mkdirs();
+		}
 		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
@@ -116,6 +120,7 @@ public class ClientProxy extends CommonProxy
 							File newFile = new File(tempImageDir, "/textures/" + (i == 1 ? "items/" : "blocks/") + imageFile.getName());
 							if(!newFile.exists())
 							{
+								newFile.mkdirs();
 								newFile.createNewFile();
 								FileChannel source = null;
 								FileChannel destination = null;
@@ -170,17 +175,17 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadDefaultGraphics()
 	{
-		MinecraftForgeClient.preloadTexture("/spriteSheets/bullets.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/bullets.png");
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/guns.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/guns.png");
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/parts.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/parts.png");
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/planes.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/planes.png");
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/vehicles.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/vehicles.png");
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
 		
@@ -188,9 +193,9 @@ public class ClientProxy extends CommonProxy
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
 		
-		MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
+		//MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
 
