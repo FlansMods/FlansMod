@@ -29,10 +29,10 @@ public class GuiPlaneMenu extends GuiContainer
 	public void initGui()
 	{
 		super.initGui();
-		controlList.add(new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Guns"));
-		controlList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, (entity instanceof EntityPlane ? "Bombs" : "Shells")));
-		controlList.add(new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel"));
-		controlList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, "Cargo"));
+		buttonList.add(new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Guns"));
+		buttonList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, (entity instanceof EntityPlane ? "Bombs" : "Shells")));
+		buttonList.add(new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel"));
+		buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, "Cargo"));
 	}
 	
 	protected void actionPerformed(GuiButton button)
@@ -68,9 +68,8 @@ public class GuiPlaneMenu extends GuiContainer
 
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
-        int i = mc.renderEngine.getTexture("/gui/planeMenu.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(i);
+        mc.renderEngine.func_98187_b("/gui/planeMenu.png");
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

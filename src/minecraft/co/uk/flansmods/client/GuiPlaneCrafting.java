@@ -36,9 +36,8 @@ public class GuiPlaneCrafting extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
-        int i = mc.renderEngine.getTexture(big ? "/gui/planeCraftingLarge.png" : "/gui/planeCrafting.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(i);
+        mc.renderEngine.func_98187_b(big ? "/gui/planeCraftingLarge.png" : "/gui/planeCrafting.png");
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

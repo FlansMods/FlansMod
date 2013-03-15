@@ -33,9 +33,8 @@ public class GuiVehicleCrafting extends GuiContainer
 
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
-        int i = mc.renderEngine.getTexture("/gui/vehicleCrafting.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(i);
+        mc.renderEngine.func_98187_b("/gui/vehicleCrafting.png");
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

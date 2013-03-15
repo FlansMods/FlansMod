@@ -60,7 +60,7 @@ public class GuiTeamSelect extends GuiScreen
 			for(int i = 0; i < classChoices.length; i++)
 			{
 				if(classChoices[i] != null)
-					controlList.add(new GuiButton(i, width / 2 - 128 + 9, height / 2 - guiHeight / 2 + 24 + 24 * i, 73, 20, classChoices[i].name));
+					buttonList.add(new GuiButton(i, width / 2 - 128 + 9, height / 2 - guiHeight / 2 + 24 + 24 * i, 73, 20, classChoices[i].name));
 			}
 		}
 		else
@@ -73,18 +73,16 @@ public class GuiTeamSelect extends GuiScreen
 			for(int i = 0; i < teamChoices.length; i++)
 			{
 				if(teamChoices[i] != null)
-					controlList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
+					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
 			}
 		}
 	}
 	
 	public void drawScreen(int i, int j, float f)
 	{
-		
 		//TODO : Draw the inventory BG and slots for the class menu
-		int texID = mc.renderEngine.getTexture("/gui/teams.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(texID);
+        mc.renderEngine.func_98187_b("/gui/teams.png");
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
 		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		if(classMenu)
