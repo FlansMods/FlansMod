@@ -21,7 +21,6 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	{
 		super(t.itemID - 256, EnumArmorMaterial.CLOTH, 0, t.type);
 		type = t;
-		setIconIndex(type.iconIndex);
 		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 
@@ -52,11 +51,6 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	public String getArmorTextureFile(ItemStack itemstack) 
 	{
 		return "/armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
-	}
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/armour.png";
 	}
 	
     @SideOnly(Side.CLIENT)

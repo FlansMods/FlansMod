@@ -19,15 +19,9 @@ public class ItemVehicle extends ItemMapBase
     {
         super(i);
         maxStackSize = 1;
-		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanVehicles);
-    }
-	
-	public String getTextureFile()
-    {
-        return "/spriteSheets/vehicles.png";
     }
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

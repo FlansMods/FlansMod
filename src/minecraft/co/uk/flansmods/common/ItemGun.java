@@ -35,7 +35,6 @@ public class ItemGun extends Item
 	public ItemGun(int i, GunType gun)
 	{
 		super(i);
-		setIconIndex(gun.iconIndex);
 		maxStackSize = 1;
 		type = gun;
 		type.item = this;
@@ -44,12 +43,6 @@ public class ItemGun extends Item
 			setMaxDamage(type.loadIntoGun);
 		}
 		setCreativeTab(FlansMod.tabFlanGuns);
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return "/spriteSheets/guns.png";
 	}
 
 	@SideOnly(Side.CLIENT)

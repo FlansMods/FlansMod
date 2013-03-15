@@ -12,18 +12,12 @@ public class ItemBullet extends Item
 	public ItemBullet(int i, int j, int k, BulletType type1)
 	{
 		super(i);
-		setIconIndex(j);
 		colour = k;
 		type = type1;
 		setMaxDamage(type.roundsPerItem);
 		setMaxStackSize(type.maxStackSize);
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanGuns);
-	}
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/bullets.png";
 	}
 
     @SideOnly(Side.CLIENT)

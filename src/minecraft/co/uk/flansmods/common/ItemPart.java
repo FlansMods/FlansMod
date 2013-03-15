@@ -15,7 +15,6 @@ public class ItemPart extends Item
 	{
 		super(i);
 		type = type1;
-		setIconIndex(type.iconIndex);
 		setMaxStackSize(type.stackSize);
 		if (type.category == 9)
 		{
@@ -32,11 +31,6 @@ public class ItemPart extends Item
 		{
 			par3List.add("Fuel Stored: " + (type.fuel - par1ItemStack.getItemDamage()) + " / " + type.fuel);
 		}
-	}
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/parts.png";
 	}
 
     @SideOnly(Side.CLIENT)

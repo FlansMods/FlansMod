@@ -19,12 +19,12 @@ public class ItemGunBox extends ItemBlock {
 	}
 	
 	@Override
-    public String getItemNameIS(ItemStack stack)
+    public String getUnlocalizedName(ItemStack stack)
     {
 		GunBoxType type = GunBoxType.getBox(stack.getItemDamage());
 		if(type == null)
 			return "";
-    	return type.shortName;
+    	return type.iconPath;
     }
     
     /**
