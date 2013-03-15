@@ -1723,7 +1723,7 @@ public class ModelRendererTurbo extends ModelRenderer
     			curTexGroup.loadTexture();
     			GL11.glCallList(displayListArray[i]);
     			if(!defaultTexture.equals(""))
-    				renderEngine.bindTexture(renderEngine.getTexture(defaultTexture));
+    				renderEngine.func_98187_b(defaultTexture);
     		}
     	}
     }

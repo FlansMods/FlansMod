@@ -45,7 +45,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer {
             GL11.glShadeModel(GL11.GL_FLAT);
         }
 
-        ForgeHooksClient.beforeBlockRender(FlansMod.spawner, blockRenderer);
+        //ForgeHooksClient.beforeBlockRender(FlansMod.spawner, blockRenderer);
         var10.startDrawingQuads();
         var10.setTranslation((double)((float)x - (float)te.xCoord), (double)((float)y - (float)te.yCoord), (double)((float)z - (float)te.zCoord));
         var10.setColorOpaque(1, 1, 1);
@@ -54,7 +54,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer {
         blockRenderer.renderBlockAllFaces(FlansMod.spawner, te.xCoord, te.yCoord, te.zCoord);        
         var10.setTranslation(0.0D, 0.0D, 0.0D);
         var10.draw();
-        ForgeHooksClient.afterBlockRender(FlansMod.spawner, blockRenderer);
+        //ForgeHooksClient.afterBlockRender(FlansMod.spawner, blockRenderer);
         RenderHelper.enableStandardItemLighting();
 		
 		

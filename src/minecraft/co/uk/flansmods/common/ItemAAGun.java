@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,15 +20,9 @@ public class ItemAAGun extends Item
 	{
 		super(i);
 		maxStackSize = 1;
-		setIconIndex(type1.iconIndex);
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanGuns);
-	}
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/planes.png";
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
