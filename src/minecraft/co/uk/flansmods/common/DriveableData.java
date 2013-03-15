@@ -8,6 +8,18 @@ import net.minecraft.world.WorldSavedData;
 
 public class DriveableData extends WorldSavedData implements IInventory
 {
+	public int numGuns;
+	public int numBombs;
+	public int numCargo;
+	public String type;
+	public PartType engine;
+	public GunType[] guns;
+	public ItemStack[] ammo;
+	public ItemStack[] bombs;
+	public ItemStack[] cargo;
+	public ItemStack fuel;
+	public int fuelInTank;
+	
 	public DriveableData(String s, int n, int o, int p)
 	{
 		super(s);
@@ -223,16 +235,16 @@ public class DriveableData extends WorldSavedData implements IInventory
 	{
 		return ammo.length + bombs.length + cargo.length;
 	}
-	
-	public int numGuns;
-	public int numBombs;
-	public int numCargo;
-	public String type;
-	public PartType engine;
-	public GunType[] guns;
-	public ItemStack[] ammo;
-	public ItemStack[] bombs;
-	public ItemStack[] cargo;
-	public ItemStack fuel;
-	public int fuelInTank;
+
+	@Override
+	public boolean func_94042_c() 
+	{
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack) 
+	{
+		return true;
+	}
 }
