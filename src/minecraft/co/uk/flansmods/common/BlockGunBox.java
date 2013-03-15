@@ -23,8 +23,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockGunBox extends BlockContainer
 {
-	@SideOnly(Side.CLIENT)
-    private Icon[][] icons;
     
 	public BlockGunBox(int i)
 	{
