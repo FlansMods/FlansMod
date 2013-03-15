@@ -1,35 +1,35 @@
 package co.uk.flansmods.common.teams;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemOpStick extends Item
 {
+	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
+    @SideOnly(Side.CLIENT)
+    private Icon[] icons;
+    
 	public ItemOpStick(int i)
 	{
 		super(i - 256);
-		setItemName("opStick");
+		setUnlocalizedName("opStick");
 		setHasSubtypes(true);
 	}
 	
-	public String getItemNameIS(ItemStack stack)
-	{
-		return getItemName() + stack.getItemDamage();
-	}
-	
-	public int getIconFromDamage(int damage)
+    public Icon getIconFromDamage(int damage)
     {
-        return 8 + damage;
+        int j = MathHelper.clamp_int(damage, 0, 15);
+        return icons[j];
     }
-
-	public String getTextureFile()
-	{
-		return "/spriteSheets/armour.png";
-	}
 	
     public boolean shouldRotateAroundWhenRendering()
     {
@@ -192,4 +192,15 @@ public class ItemOpStick extends Item
 	    	}
     	}
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public void func_94581_a(IconRegister register)
+    {
+    	icons = new Icon[stickNames.length];
+
+        for(int i = 0; i < stickNames.length; ++i)
+        {
+        	icons[i] = register.func_94245_a(stickNames[i]);
+        }
+    }
 }
