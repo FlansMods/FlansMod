@@ -35,7 +35,7 @@ public class BlockPlaneWorkbench extends Block
     {
         if(i == 1)
         {
-            return top[j + 1];
+            return top[j];
         } else
         {
             return side;
