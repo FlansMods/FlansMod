@@ -65,7 +65,7 @@ public class PlayerClass
 				int damage = 0;
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						matchingItem = item;
 				}
 				if(matchingItem == null)

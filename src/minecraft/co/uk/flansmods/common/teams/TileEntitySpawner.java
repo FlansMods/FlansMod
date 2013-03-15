@@ -199,7 +199,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public void destroy() 
 	{
-		worldObj.setBlockWithNotify(xCoord, yCoord, zCoord, 0);
+		worldObj.setBlockAndMetadataWithNotify(xCoord, yCoord, zCoord, 0, 0, 0);
 	}
 
 	@Override

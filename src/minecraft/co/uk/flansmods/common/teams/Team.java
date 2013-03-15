@@ -133,7 +133,7 @@ public class Team {
 					return;
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						hat = new ItemStack(item);
 				}
 			}
@@ -143,7 +143,7 @@ public class Team {
 					return;
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						chest = new ItemStack(item);
 				}
 			}
@@ -153,7 +153,7 @@ public class Team {
 					return;
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						legs = new ItemStack(item);
 				}
 			}
@@ -163,7 +163,7 @@ public class Team {
 					return;
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getItemName() != null && (item.getItemName().equals(split[1]) || (item.getItemName().split("\\.").length > 1 && item.getItemName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						shoes = new ItemStack(item);
 				}
 			}
