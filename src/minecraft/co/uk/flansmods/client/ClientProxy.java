@@ -1,7 +1,10 @@
 package co.uk.flansmods.client;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -92,6 +95,7 @@ public class ClientProxy extends CommonProxy
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		// this stuff is only done client side.
+		File tempImageDir = new File(FlansMod.flanDir.getParentFile(), "/temp/Flan/");
 		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
@@ -103,6 +107,38 @@ public class ClientProxy extends CommonProxy
 							{ file.toURI().toURL() });
 					method.invoke(classloader, new Object[]
 							{ new File(file, "/models/").toURI().toURL() });
+					//Loop over the images and copy them to a temporary image folder to be connected to the classpath
+					//Its a roundabout hack to avoid having to make every content pack change its folder structure
+					for(File imageFile : new File(file, "/icons/").listFiles())
+					{
+						for(int i = 0; i < 2; i++)
+						{
+							File newFile = new File(tempImageDir, "/textures/" + (i == 1 ? "items/" : "blocks/") + imageFile.getName());
+							if(!newFile.exists())
+							{
+								newFile.createNewFile();
+								FileChannel source = null;
+								FileChannel destination = null;
+								try 
+								{
+									source = new FileInputStream(imageFile).getChannel();
+									destination = new FileOutputStream(newFile).getChannel();
+									destination.transferFrom(source, 0, source.size());
+								}
+								finally 
+								{
+									if(source != null) 
+									{
+										source.close();
+									}
+									if(destination != null) 
+									{
+										destination.close();
+									}
+								}
+							}		
+						}
+					}
 				} catch (Exception e)
 				{
 					FlansMod.log("Failed to load images for content pack : " + file.getName());
@@ -112,6 +148,15 @@ public class ClientProxy extends CommonProxy
 				FlansMod.log("Loaded content pack : " + file.getName());
 				contentPacks.add(file);
 			}
+		}
+		try
+		{
+			method.invoke(classloader, new Object[] { tempImageDir.toURI().toURL() });
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to add item images to classpath");
+			e.printStackTrace();
 		}
 		FlansMod.log("Loaded textures and models.");
 		return contentPacks;
