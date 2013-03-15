@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 
 public class GunBoxType extends InfoType
 {
@@ -18,9 +21,12 @@ public class GunBoxType extends InfoType
 	public String topTexturePath;
 	public String sideTexturePath;
 	public String bottomTexturePath;
-	public int topTextureIndex;
-	public int sideTextureIndex;
-	public int bottomTextureIndex;
+	@SideOnly(Side.CLIENT)
+	public Icon top;
+	@SideOnly(Side.CLIENT)
+	public Icon side;
+	@SideOnly(Side.CLIENT)
+	public Icon bottom;
 	//Unique to this box. Used to determine its damage value.
 	public int gunBoxID;
 	public int numGuns;
@@ -66,16 +72,6 @@ public class GunBoxType extends InfoType
 		
 		gunBoxMap.put(this.shortName, this);
 		shortNameList.add(this.shortName);
-		
-		if (topTexturePath.equals("/icons/boxTop.png"))
-			topTextureIndex = 0;
-		else
-			topTextureIndex = lastIconIndex++;
-		sideTextureIndex = lastIconIndex++;
-		if (bottomTexturePath.equals("/icons/boxBottom.png"))
-			bottomTextureIndex = 1;
-		else
-			bottomTextureIndex = lastIconIndex++;
 	}
 
 	protected void read(String[] split, BufferedReader file)
@@ -86,11 +82,11 @@ public class GunBoxType extends InfoType
 			if (split[0].equals("Material"))
 				material = getMaterial(split[1]);
 			if (split[0].equals("TopTexture"))
-				topTexturePath = "/icons/" + split[1] + ".png";
+				topTexturePath = split[1];
 			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = "/icons/" + split[1] + ".png";
+				bottomTexturePath = split[1];
 			if (split[0].equals("SideTexture"))
-				sideTexturePath = "/icons/" + split[1] + ".png";
+				sideTexturePath = split[1];
 			if (split[0].equals("GunBoxID") || split[0].equals("BlockID"))
 				gunBoxID = Integer.parseInt(split[1]);
 			if (split[0].equals("NumGuns"))

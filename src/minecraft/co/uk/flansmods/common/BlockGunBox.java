@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,23 +14,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 public class BlockGunBox extends BlockContainer
 {
+	@SideOnly(Side.CLIENT)
+    private Icon[][] icons;
+    
 	public BlockGunBox(int i)
 	{
 		//super(i, boxType.material);
 		// set specific material.
 		super(i, Material.wood);
-		
 		setCreativeTab(FlansMod.tabFlanGuns);
-		this.setTextureFile("/spriteSheets/gunBoxes.png");
 	}
 	
 	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
@@ -185,43 +187,43 @@ public class BlockGunBox extends BlockContainer
 	
 	@SideOnly(value = Side.CLIENT)
 	@Override
-	public int getBlockTexture(IBlockAccess iba, int x,int y, int z, int side)
+	public Icon getBlockTexture(IBlockAccess iba, int x,int y, int z, int side)
 	{
 		TileEntityGunBox TE = (TileEntityGunBox) iba.getBlockTileEntity(x, y, z);
 		GunBoxType type = TE.getType();
 		
 		if (type == null)
-			return 0;
+			return null;
 		
 		if (side == 1)
 		{
-			return type.topTextureIndex;
+			return type.top;
 		}
 		if (side == 0)
 		{
-			return type.bottomTextureIndex;
+			return type.bottom;
 		}
-		return type.sideTextureIndex;
+		return type.side;
 	}
 	
 	@SideOnly(value = Side.CLIENT)
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
 		GunBoxType type = GunBoxType.getBox(metadata);
 		
 		if (type == null)
-			return 0;
+			return null;
 		
 		if (side == 1)
 		{
-			return type.topTextureIndex;
+			return type.top;
 		}
 		if (side == 0)
 		{
-			return type.bottomTextureIndex;
+			return type.bottom;
 		}
-		return type.sideTextureIndex;
+		return type.side;
 	}
 
 	@Override
@@ -281,5 +283,16 @@ public class BlockGunBox extends BlockContainer
 		TileEntityGunBox te = (TileEntityGunBox)world.getBlockTileEntity(x, y, z);
     	if(te != null && te.getType() != null)    		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, new ItemStack(blockID, 1, te.getType().gunBoxID)));
         super.breakBlock(world, x, y, z, par5, par6);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public void func_94581_a(IconRegister register)
+    {
+    	for(GunBoxType type : GunBoxType.gunBoxMap.values())
+    	{
+    		type.top = register.func_94245_a(type.topTexturePath);
+    		type.side = register.func_94245_a(type.sideTexturePath);
+    		type.bottom = register.func_94245_a(type.bottomTexturePath);
+    	}
     }
 }
