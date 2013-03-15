@@ -3,12 +3,16 @@ package co.uk.flansmods.common.teams;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.TileEntityGunBox;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,12 +20,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSpawner extends BlockContainer 
 {
 	public static boolean colouredPass = false;
+	
+	public Icon[][] icons;
 	
 	public BlockSpawner(int i, Material material) 
 	{
@@ -36,17 +43,11 @@ public class BlockSpawner extends BlockContainer
         list.add(new ItemStack(i, 1, 1));
         list.add(new ItemStack(i, 1, 2));
     }
-	
-    @Override
-	public String getTextureFile()
-    {
-        return "/spriteSheets/armour.png";
-    }
     
     @Override
-    public int getBlockTextureFromSideAndMetadata(int i, int j)
+    public Icon getBlockTextureFromSideAndMetadata(int i, int j)
     {
-    	return j * 2 + (colouredPass ? 1 : 0);
+    	return icons[colouredPass ? 1 : 0][j];
     }
     
     @Override
@@ -158,5 +159,19 @@ public class BlockSpawner extends BlockContainer
     		}
     	}
         return true;
+    }
+    
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void func_94332_a(IconRegister register)
+    {
+    	icons = new Icon[2][3];
+    	for(int i = 0; i < 2; i++)
+    	{
+    		icons[i][0] = register.func_94245_a("spawner_item_" + (i + 1));
+    		icons[i][1] = register.func_94245_a("spawner_player_" + (i + 1));
+    		icons[i][2] = register.func_94245_a("spawner_vehicle_" + (i + 1));
+    	}
     }
 }
