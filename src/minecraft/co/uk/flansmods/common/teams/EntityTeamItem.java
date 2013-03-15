@@ -137,7 +137,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			//Flan, as EntityItem's itemstack (previously the field was called 'item') field is now only managed
 			//by datawatchers, there are now getters and setters, both currently still unmapped by Forge. This
 			//method sets the itemstack.
-			func_92058_a(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
+			setEntityItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
 		}
 		catch(Exception e)
 		{
