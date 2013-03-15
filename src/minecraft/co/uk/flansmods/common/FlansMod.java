@@ -224,9 +224,9 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
-		flag = new ItemFlagpole(23541).setIconIndex(6).setUnlocalizedName("flagpole");
+		flag = new ItemFlagpole(23541).setUnlocalizedName("flagpole");
 		LanguageRegistry.addName(flag, "Flag");
-		spawner = new BlockSpawner(spawnerID, Material.iron).setBlockName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
+		spawner = new BlockSpawner(spawnerID, Material.iron).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F);
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamSpawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 0), "Item Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");

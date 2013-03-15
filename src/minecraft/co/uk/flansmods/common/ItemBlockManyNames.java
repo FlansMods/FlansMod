@@ -1,6 +1,8 @@
 package co.uk.flansmods.common;
 
+import net.minecraft.block.BlockCloth;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockManyNames extends ItemBlock {
@@ -12,14 +14,14 @@ public class ItemBlockManyNames extends ItemBlock {
 	}
 	
 	@Override
-	public String getItemNameIS(ItemStack stack)
-	{
-		int damage = stack.getItemDamage();
-		return getItemName() + damage;
-	}
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        return super.getUnlocalizedName() + "." + stack.getItemDamage();
+    }
 	
 	@Override
-	public int getMetadata(int par1) {
+	public int getMetadata(int par1) 
+	{
 		return par1;
 	}
 }
