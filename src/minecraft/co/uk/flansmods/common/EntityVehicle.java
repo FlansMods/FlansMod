@@ -767,7 +767,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				attackEntityFrom(DamageSource.inWall, (int)damage);
 				if(damage <= 20F && damage > 0F)
 				{
-					worldObj.setBlockWithNotify(i, j, k, 0);
+					worldObj.setBlockAndMetadataWithNotify(i, j, k, 0, 0, 0);
 					// TODO: breakBlock effects.
 					//mc.effectRenderer.addBlockHitEffects(i, j, k, 1);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
