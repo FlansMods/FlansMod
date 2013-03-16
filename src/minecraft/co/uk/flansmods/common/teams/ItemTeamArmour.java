@@ -58,5 +58,11 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
     {
     	return type.colour;
     }
+    
+    @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses()
+    {
+        return false;
+    }
 
 }
