@@ -49,6 +49,10 @@ public class GuiGunBox extends GuiScreen
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
+		
+		//No idea why this works, but it makes the text bind its texture correctly
+		mc.renderEngine.func_98187_b("/terrain.png");
+		
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
 		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));
 		// Draw the gun slots in the second gun panel if there is a second gun
@@ -93,20 +97,6 @@ public class GuiGunBox extends GuiScreen
 		{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			//fontRenderer.drawString(type.guns[q].name, m + 9, n + 22, 0xffffffff);
-			RenderHelper.disableStandardItemLighting();
-			String name = type.guns[q].name;
-			if (name.length() > 12)
-			{
-				int nextSpace = name.indexOf(" ", 10);
-				if (nextSpace != -1)
-				{
-					drawCenteredString(fontrenderer, name.substring(0, nextSpace), m + 46, n + 22, 0xffffff);
-					drawCenteredString(fontrenderer, name.substring(nextSpace + 1, name.length()), m + 46, n + 32, 0xffffff);
-				} else
-					drawCenteredString(fontrenderer, name, m + 46, n + 25, 0xffffff);
-			} else
-				drawCenteredString(fontrenderer, name, m + 46, n + 25, 0xffffff);
-			RenderHelper.enableGUIStandardItemLighting();
 			drawSlotInventory(new ItemStack(type.guns[q].getItem()), m + 9, n + 44);
 			drawSlotInventory(new ItemStack(type.bullets[q].getItem()), m + 9, n + 66);
 			if (type.altBullets[q] != null)
@@ -146,6 +136,21 @@ public class GuiGunBox extends GuiScreen
 					drawSlotInventory(type.altBulletParts[q].get(startPart + p), m + 30 + p * 19, n + 88);
 				}
 			}
+			RenderHelper.disableStandardItemLighting();
+			String name = type.guns[q].name;
+			if (name.length() > 12)
+			{
+				int nextSpace = name.indexOf(" ", 10);
+				if (nextSpace != -1)
+				{
+					drawCenteredString(fontrenderer, name.substring(0, nextSpace), m + 46, n + 22, 0xffffff);
+					drawCenteredString(fontrenderer, name.substring(nextSpace + 1, name.length()), m + 46, n + 32, 0xffffff);
+				} else
+					drawCenteredString(fontrenderer, name, m + 46, n + 25, 0xffffff);
+			} else
+				drawCenteredString(fontrenderer, name, m + 46, n + 25, 0xffffff);
+			RenderHelper.enableGUIStandardItemLighting();
+
 		}
 	}
 
