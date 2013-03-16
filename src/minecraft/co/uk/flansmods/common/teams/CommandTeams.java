@@ -287,7 +287,19 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer("Vehicles will " + (FlansMod.vehiclesNeedFuel ? "now" : "no longer") + " require fuel");
 			return;
 		}
-
+		if(split[0].equals("mgLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.mgLife = Integer.parseInt(split[1]);
+			if(FlansMod.mgLife > 0)
+				sender.sendChatToPlayer("MGs will despawn after " + FlansMod.mgLife + " seconds");
+			else sender.sendChatToPlayer("MGs will not despawn");
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentGametype == null)
@@ -325,6 +337,7 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer("/teams armourDrops <true / false>");
 		sender.sendChatToPlayer("/teams weaponDrops <off / on / smart>");
 		sender.sendChatToPlayer("/teams fuelNeeded <true / false>");
+		sender.sendChatToPlayer("/teams mgLife <time>");
 		/*
 		sender.sendChatToPlayer("Listing teams commands");
 		sender.sendChatToPlayer("/teams listGametypes - see the gametypes available on this server");

@@ -80,6 +80,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
+		if(FlansMod.mgLife > 0 && ticksExisted > FlansMod.mgLife * 20)
+		{
+			setDead();
+		}
 		if (worldObj.getBlockId(blockX, blockY - 1, blockZ) == 0)
 		{
 			if(!worldObj.isRemote)

@@ -104,6 +104,7 @@ public class FlansMod
 	public static boolean armourDrops = true;
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	public static boolean vehiclesNeedFuel = true;
+	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not dissapear at all.
 
 	public static Block craftingTable;
 	public static Block spawner;
