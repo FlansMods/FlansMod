@@ -24,7 +24,7 @@ public class ItemGunBox extends ItemBlock {
 		GunBoxType type = GunBoxType.getBox(stack.getItemDamage());
 		if(type == null)
 			return "";
-    	return type.iconPath;
+    	return type.shortName;
     }
     
     /**
