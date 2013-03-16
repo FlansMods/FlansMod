@@ -24,7 +24,8 @@ public class GuiVehicleCrafting extends GuiContainer
         inventorySlots.onCraftGuiClosed(mc.thePlayer);
     }
 
-    protected void drawGuiContainerForegroundLayer()
+    @Override
+    protected void drawGuiContainerForegroundLayer(int i, int j)
     {
         fontRenderer.drawString("Vehicle Crafting", 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);

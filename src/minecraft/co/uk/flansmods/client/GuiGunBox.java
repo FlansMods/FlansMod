@@ -92,8 +92,7 @@ public class GuiGunBox extends GuiScreen
 		if (type.guns[q] != null)
 		{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			// fontRenderer.drawString(type.guns[q].name, m + 9, n + 22,
-			// 0xffffffff);
+			//fontRenderer.drawString(type.guns[q].name, m + 9, n + 22, 0xffffffff);
 			RenderHelper.disableStandardItemLighting();
 			String name = type.guns[q].name;
 			if (name.length() > 12)
