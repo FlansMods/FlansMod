@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
 
 public class PlayerClass 
 {
@@ -67,6 +68,11 @@ public class PlayerClass
 				{
 					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
 						matchingItem = item;
+				}
+				for(InfoType type : InfoType.infoTypes)
+				{
+					if(type.shortName.equals(split[1]))
+						matchingItem = type.item;
 				}
 				if(matchingItem == null)
 				{

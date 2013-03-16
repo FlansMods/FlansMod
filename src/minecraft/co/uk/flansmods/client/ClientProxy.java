@@ -113,7 +113,7 @@ public class ClientProxy extends CommonProxy
 							{ new File(file, "/models/").toURI().toURL() });
 					//Loop over the images and copy them to a temporary image folder to be connected to the classpath
 					//Its a roundabout hack to avoid having to make every content pack change its folder structure
-					for(File imageFile : new File(file, "/icons/").listFiles())
+					/*for(File imageFile : new File(file, "/icons/").listFiles())
 					{
 						for(int i = 0; i < 2; i++)
 						{
@@ -143,7 +143,7 @@ public class ClientProxy extends CommonProxy
 								}
 							}		
 						}
-					}
+					}*/
 				} catch (Exception e)
 				{
 					FlansMod.log("Failed to load images for content pack : " + file.getName());
