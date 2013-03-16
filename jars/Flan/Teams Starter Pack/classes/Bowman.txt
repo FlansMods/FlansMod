@@ -1,4 +1,0 @@
-Name Bowman
-ShortName bowman
-AddItem bow 1
-AddItem arrow 64
