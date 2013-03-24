@@ -1,4 +1,4 @@
-# Flan's Mod for Minecraft v1.5 #
+# Flan's Mod for Minecraft v1.5.1 #
 
 Here you will find the source code from the Minecraft modification, Flan's Mod.  If you want to pitch in,
 just submit a pull request, and either _aidancbrady_ or _jamioflan_ will review and merge.  If you are here
