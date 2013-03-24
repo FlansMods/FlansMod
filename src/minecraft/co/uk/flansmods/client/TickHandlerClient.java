@@ -164,7 +164,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			String playerUsername = FlansModClient.minecraft.thePlayer.username;
 			//No idea why this works, but it makes the text bind its texture correctly
-			mc.renderEngine.func_98187_b("/terrain.png");
+			mc.renderEngine.bindTexture("/terrain.png");
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);

@@ -69,7 +69,7 @@ public class GuiPlaneMenu extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.func_98187_b("/gui/planeMenu.png");
+        mc.renderEngine.bindTexture("/gui/planeMenu.png");
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

@@ -51,7 +51,7 @@ public class GuiGunBox extends GuiScreen
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
 		
 		//No idea why this works, but it makes the text bind its texture correctly
-		mc.renderEngine.func_98187_b("/terrain.png");
+		mc.renderEngine.bindTexture("/terrain.png");
 		
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
 		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));

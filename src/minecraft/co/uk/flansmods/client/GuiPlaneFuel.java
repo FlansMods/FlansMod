@@ -37,7 +37,7 @@ public class GuiPlaneFuel extends GuiContainer
 				anim++;
 		}
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.func_98187_b("/gui/planeFuel.png");
+        mc.renderEngine.bindTexture("/gui/planeFuel.png");
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
