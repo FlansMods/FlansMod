@@ -32,6 +32,7 @@ public class ItemAAGun extends Item
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 
+    @Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
 		float f = 1.0F;
@@ -82,6 +83,7 @@ public class ItemAAGun extends Item
     	return entity;
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

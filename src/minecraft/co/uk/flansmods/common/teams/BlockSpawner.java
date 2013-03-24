@@ -164,14 +164,14 @@ public class BlockSpawner extends BlockContainer
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void func_94332_a(IconRegister register)
+    public void registerIcons(IconRegister register)
     {
     	icons = new Icon[2][3];
     	for(int i = 0; i < 2; i++)
     	{
-    		icons[i][0] = register.func_94245_a("spawner_item_" + (i + 1));
-    		icons[i][1] = register.func_94245_a("spawner_player_" + (i + 1));
-    		icons[i][2] = register.func_94245_a("spawner_vehicle_" + (i + 1));
+    		icons[i][0] = register.registerIcon("spawner_item_" + (i + 1));
+    		icons[i][1] = register.registerIcon("spawner_player_" + (i + 1));
+    		icons[i][2] = register.registerIcon("spawner_vehicle_" + (i + 1));
     	}
     }
 }

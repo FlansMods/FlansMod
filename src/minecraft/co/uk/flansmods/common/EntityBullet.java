@@ -183,7 +183,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			{
 				if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
-					worldObj.setBlockAndMetadataWithNotify(xTile, yTile, zTile, 0, 0, 0);
+					worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
 					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 				}
 				if (!type.penetrates)
@@ -285,7 +285,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					boolean killBullet = true;
 					if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
-						worldObj.setBlockAndMetadataWithNotify(xTile, yTile, zTile, 0, 0, 0);
+						worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 						if (type.penetrates)
 							killBullet = false;
@@ -392,7 +392,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					{
 						if (worldObj.getBlockMaterial(i, j, k) == Material.air)
 						{
-							worldObj.setBlockAndMetadataWithNotify(i, j, k, Block.fire.blockID, 0, 0);
+							worldObj.setBlock(i, j, k, Block.fire.blockID, 0, 5);
 						}
 					}
 				}

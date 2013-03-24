@@ -21,6 +21,7 @@ public class ItemBullet extends Item
 	}
 
     @SideOnly(Side.CLIENT)
+    @Override
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;

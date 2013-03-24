@@ -915,7 +915,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				attackEntityFrom(DamageSource.inWall, (int)damage);
 				if(damage <= 20F && damage > 0F)
 				{
-					worldObj.setBlockAndMetadataWithNotify(i, j, k, 0, 0, 0);
+					worldObj.setBlock(i, j, k, 0, 0, 5);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
 					FlansMod.proxy.playBlockBreakSound(i, j, k, blockID);
 					velocityYaw += rand.nextFloat() * 1F - 0.5F;

@@ -193,14 +193,15 @@ public class ItemOpStick extends Item
     	}
 	}
 	
+	@Override
     @SideOnly(Side.CLIENT)
-    public void func_94581_a(IconRegister register)
+    public void updateIcons(IconRegister register)
     {
     	icons = new Icon[stickNames.length];
 
         for(int i = 0; i < stickNames.length; ++i)
         {
-        	icons[i] = register.func_94245_a(stickNames[i]);
+        	icons[i] = register.registerIcon(stickNames[i]);
         }
     }
 }

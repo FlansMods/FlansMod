@@ -285,13 +285,13 @@ public class BlockGunBox extends BlockContainer
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void func_94332_a(IconRegister register)
+    public void registerIcons(IconRegister register)
     {
     	for(GunBoxType type : GunBoxType.gunBoxMap.values())
     	{
-    		type.top = register.func_94245_a(type.topTexturePath);
-    		type.side = register.func_94245_a(type.sideTexturePath);
-    		type.bottom = register.func_94245_a(type.bottomTexturePath);
+    		type.top = register.registerIcon(type.topTexturePath);
+    		type.side = register.registerIcon(type.sideTexturePath);
+    		type.bottom = register.registerIcon(type.bottomTexturePath);
     	}
     }
 }

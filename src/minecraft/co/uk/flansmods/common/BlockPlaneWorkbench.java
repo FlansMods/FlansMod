@@ -52,13 +52,13 @@ public class BlockPlaneWorkbench extends Block
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void func_94332_a(IconRegister register)
+    public void registerIcons(IconRegister register)
     {
     	top = new Icon[3];
-    	top[0] = register.func_94245_a("planeCraftingTableSmall");
-    	top[1] = register.func_94245_a("planeCraftingTableLarge");
-    	top[2] = register.func_94245_a("vehicleCraftingTable");
-    	side = register.func_94245_a("planeCraftingTableSide");
+    	top[0] = register.registerIcon("planeCraftingTableSmall");
+    	top[1] = register.registerIcon("planeCraftingTableLarge");
+    	top[2] = register.registerIcon("vehicleCraftingTable");
+    	side = register.registerIcon("planeCraftingTableSide");
     }
     
 	private Icon side;

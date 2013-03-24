@@ -60,7 +60,7 @@ public class EntityCollisionBox extends Entity
 				attackEntityFrom(DamageSource.inWall, (int)(damage * speed));
 				if(damage <= 20F && damage > 0F && speed > 0.3D)
 				{
-					worldObj.setBlockAndMetadataWithNotify(i, j, k, 0, 0, 0);
+					worldObj.setBlock(i, j, k, 0, 0, 5);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
 					FlansMod.proxy.playBlockBreakSound(i, j, k, block.blockID);
 				}
@@ -88,7 +88,7 @@ public class EntityCollisionBox extends Entity
 		int tileY = MathHelper.floor_double(posY + 0.5D);
 		int tileZ = MathHelper.floor_double(posZ + 0.5D);
 		if(FlansMod.explosions && worldObj.getBlockId(tileX, tileY, tileZ) == 0)
-			worldObj.setBlockAndMetadataWithNotify(tileX, tileY, tileZ, Block.fire.blockID, 0, 0);
+			worldObj.setBlock(tileX, tileY, tileZ, Block.fire.blockID, 0, 5);
 		for(int j = 0; j < 50; j++)
 		{				
 			worldObj.spawnParticle("smoke", posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian());
