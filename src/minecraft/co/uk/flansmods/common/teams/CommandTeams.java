@@ -9,6 +9,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.network.PacketTeamSelect;
+import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class CommandTeams extends CommandBase {
@@ -86,6 +87,72 @@ public class CommandTeams extends CommandBase {
 				teamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
 			}
 			gametype.initGametype();
+			return;
+		}
+		if(split[0].equals("listMaps"))
+		{
+			if(teamsManager.maps == null)
+			{
+				sender.sendChatToPlayer("The map list is null");
+				return;
+			}
+			sender.sendChatToPlayer("\u00a72Listing maps and corresponding IDs");
+			for(int i = 0; i < teamsManager.maps.size(); i++)
+			{
+				TeamsMap map = teamsManager.maps.get(i);
+				sender.sendChatToPlayer((map == teamsManager.currentMap ? "\u00a74" : "") + i + ". " + map.name + " (" + map.shortName + ")");
+			}
+			return;
+		}
+		if(split[0].equals("addMap"))
+		{
+			if(split.length < 3)
+			{
+				sender.sendChatToPlayer("You need to specify a map name");
+				return;
+			}
+			String shortName = split[1];
+			String name = split[2];
+			for(int i = 3; i < split.length; i++)
+			{
+				name += " " + split[i];
+			}
+			teamsManager.maps.add(new TeamsMap(shortName, name));
+			sender.sendChatToPlayer("Added new map : " + name + " (" + shortName + ")");
+			return;
+		}
+		if(split[0].equals("removeMap"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("You need to specify a map's short name");
+				return;
+			}
+			TeamsMap map = teamsManager.getTeamsMap(split[1]);
+			if(map != null)
+			{
+				teamsManager.maps.remove(map);
+			}
+			sender.sendChatToPlayer("Removed map " + split[1]);
+			return;
+		}
+		if(split[0].equals("setMap"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("You need to specify a map's short name");
+				return;
+			}
+			TeamsMap map = teamsManager.getTeamsMap(split[1]);
+			if(map != null)
+			{
+				teamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
+				teamsManager.currentMap = map;
+				if(teamsManager.currentGametype != null)
+				{
+					teamsManager.currentGametype.startNewRound();
+				}
+			}
 			return;
 		}
 		if(split[0].equals("listTeams"))
@@ -166,12 +233,12 @@ public class CommandTeams extends CommandBase {
 			{
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 0));
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 1));
-				//player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
+				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 2));
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 3));
 				sender.sendChatToPlayer("\u00a72Enjoy your op sticks.");
 				sender.sendChatToPlayer("\u00a77The Stick of Connecting connects objects (spawners, banners etc) to bases (flagpoles etc)");
 				sender.sendChatToPlayer("\u00a77The Stick of Ownership sets the team that currently owns a base");
-				//sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
+				sender.sendChatToPlayer("\u00a77The Stick of Mapping sets the map that a base is currently associated with");
 				sender.sendChatToPlayer("\u00a77The Stick of Destruction deletes bases and team objects");
 			}
 			return;

@@ -19,7 +19,7 @@ public class GametypeDM extends Gametype
 
 	public GametypeDM() 
 	{
-		super("Deathmatch", "DM", 1);
+		super("Deathmatch", "DM", 2);
 	}
 
 	@Override
@@ -211,19 +211,37 @@ public class GametypeDM extends Gametype
 	@Override
 	public Vec3 getSpawnPoint(EntityPlayerMP player) 
 	{
-		FlansModPlayerData data = getPlayerData(player);
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
-		for(Team team : teamsManager.teams)
+		FlansModPlayerData data = getPlayerData(player);
+		if(data != null && data.team == Team.spectators)
 		{
-			for(ITeamBase base : data.team.bases)
+			for(ITeamBase base : Team.spectators.bases)
 			{
+				if(base.getMap() != teamsManager.currentMap)
+					continue;
 				for(ITeamObject object : base.getObjects())
 				{
 					if(object.isSpawnPoint())
 						validSpawnPoints.add(object);
 				}
 			}
-		}	
+		}
+		else
+		{
+			for(Team team : teamsManager.teams)
+			{
+				for(ITeamBase base : team.bases)
+				{
+					if(base.getMap() != teamsManager.currentMap)
+						continue;
+					for(ITeamObject object : base.getObjects())
+					{
+						if(object.isSpawnPoint())
+							validSpawnPoints.add(object);
+					}
+				}
+			}	
+		}
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));

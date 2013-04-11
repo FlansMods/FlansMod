@@ -2,6 +2,8 @@ package co.uk.flansmods.common.teams;
 
 import java.util.List;
 
+import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -19,10 +21,10 @@ public interface ITeamBase {
 	public Team getOwner();
 	
 	//Return the map that this base is a part of
-	public String getMap();
+	public TeamsMap getMap();
 	
 	//Set the map that this base is a part of
-	public void setMap(String newMap);
+	public void setMap(TeamsMap newMap);
 	
 	//Return the base name
 	public String getName();

@@ -60,11 +60,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class TeamsManager implements IPlayerTracker
 {
 	public Gametype currentGametype;
+	public TeamsMap currentMap;
 	public Team[] teams;
 	public static TeamsManager instance;
 	public List<ITeamBase> bases;
 	public List<ITeamObject> objects;
-	public List<String> maps;
+	public List<TeamsMap> maps;
 	private int nextBaseID = 1;
 	private long time;
 	
@@ -76,7 +77,9 @@ public class TeamsManager implements IPlayerTracker
 
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
-		maps = new ArrayList<String>();
+		maps = new ArrayList<TeamsMap>();
+		maps.add(TeamsMap.def);
+		currentMap = TeamsMap.def;
 		
 		
 		//Testing stuff. TODO : Replace with automatic Gametype loader
@@ -89,10 +92,12 @@ public class TeamsManager implements IPlayerTracker
 	public void reset()
 	{
 		currentGametype = null;
+		currentMap = TeamsMap.def;
 		teams = null;
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
-		maps = new ArrayList<String>();
+		maps = new ArrayList<TeamsMap>();
+		maps.add(TeamsMap.def);
 	}
 	
 	public static TeamsManager getInstance()
@@ -348,6 +353,14 @@ public class TeamsManager implements IPlayerTracker
 		{
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
 			nextBaseID = tags.getInteger("NextBaseID");
+			for(int i = 0; i < tags.getInteger("NumMaps"); i++)
+			{
+				String shortName = tags.getString("MapShortName " + i);
+				if(shortName.equals("default"))
+					continue;
+				maps.add(new TeamsMap(shortName, tags.getString("MapName " + i)));
+			}
+			currentMap = getTeamsMap(tags.getString("Map"));
 			currentGametype = Gametype.getGametype(tags.getString("Gametype"));
 			if(currentGametype != null)
 			{
@@ -385,6 +398,20 @@ public class TeamsManager implements IPlayerTracker
 		{
 			NBTTagCompound tags = new NBTTagCompound();
 			tags.setInteger("NextBaseID", nextBaseID);
+			tags.setInteger("NumMaps", maps.size());
+			if(maps != null)
+			{
+				for(int i = 0; i < maps.size(); i++)
+				{
+					if(maps.get(i) != null)
+					{
+						tags.setString("MapShortName " + i, maps.get(i).shortName);
+						tags.setString("MapName " + i, maps.get(i).name);
+					}
+				}
+			}
+			if(currentMap != null)
+				tags.setString("Map", currentMap.shortName);
 			tags.setString("Gametype", currentGametype == null ? "None" : currentGametype.shortName);
 			if(currentGametype != null)
 			{
@@ -445,6 +472,7 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(base.getID() == 0)
 			base.setID(nextBaseID++);
+		base.setMap(currentMap);
 		bases.add(base);
 	}	
 	
@@ -511,7 +539,7 @@ public class TeamsManager implements IPlayerTracker
 	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
 	{
 		Team previousTeam = Gametype.getPlayerData(player).team;
-		if(previousTeam.shortName.equals(teamName))
+		if(previousTeam != null && previousTeam.shortName.equals(teamName))
 		{
 			Gametype.sendClassMenuToPlayer(player);
 			return;
@@ -612,5 +640,28 @@ public class TeamsManager implements IPlayerTracker
 				return false;
 		}
 		return true;
+	}
+	
+	public static class TeamsMap
+	{
+		public static TeamsMap def = new TeamsMap("default", "Default");
+		public String name;
+		public String shortName;
+		
+		public TeamsMap(String s1, String s2)
+		{
+			shortName = s1;
+			name = s2;
+		}
+	}
+	
+	public TeamsMap getTeamsMap(String s)
+	{
+		for(TeamsMap map : maps)
+		{
+			if(map.shortName.equals(s))
+				return map;
+		}
+		return null;
 	}
 }

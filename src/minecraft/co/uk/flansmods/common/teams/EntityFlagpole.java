@@ -3,6 +3,8 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -15,7 +17,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	//This is the team that currently holds this base, reset it to default team at the end of each round
 	public Team currentTeam;
 	//The map this base is a part of
-	public String map = "Default Map";
+	public TeamsMap map;
 	//List of all TeamObjects associated with this base
 	public List<ITeamObject> objects = new ArrayList<ITeamObject>();
 	//The name of this base, changeable by the baseList and baseRename commands
@@ -70,7 +72,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		currentTeam = defaultTeam = Team.getTeam(tags.getString("Team"));
 		if(currentTeam != null)
 			currentTeam.bases.add(this);
-		map = tags.getString("Map");
+		map = teamsManager.getTeamsMap(tags.getString("Map"));
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
@@ -79,7 +81,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		if(defaultTeam != null)
 			tags.setString("Team", defaultTeam.shortName);
-		tags.setString("Map", map);
+		tags.setString("Map", map.shortName);
 		tags.setInteger("ID", getID());
 	}
 
@@ -90,13 +92,13 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	}
 
 	@Override
-	public String getMap() 
+	public TeamsMap getMap() 
 	{
 		return map;
 	}
 
 	@Override
-	public void setMap(String newMap) 
+	public void setMap(TeamsMap newMap) 
 	{
 		map = newMap;
 	}

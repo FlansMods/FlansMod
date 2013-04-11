@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.teams;
 
+import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -129,7 +130,11 @@ public class ItemOpStick extends Item
 	    	}
 	    	case 2 : //Stick of Mapping
 	    	{
-	    		
+	    		TeamsMap currentMap = base.getMap();
+	    		int mapID = teamsManager.maps.indexOf(currentMap);
+	    		TeamsMap newMap = teamsManager.maps.get((mapID + 1) % teamsManager.maps.size());
+	    		base.setMap(newMap);
+	    		teamsManager.messagePlayer(player, "Set map for this base to " + newMap.name + ".");
 	    		break;
 	    	}
 	    	case 3 : //Stick of Destruction

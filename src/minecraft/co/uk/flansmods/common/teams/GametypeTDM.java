@@ -140,8 +140,8 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
-		//if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-		//	return false;
+		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+			return false;
 		if(autoBalance)
 		{
 			int membersOnTeamTheyWantToJoin = team.members.size();
@@ -270,6 +270,8 @@ public class GametypeTDM extends Gametype
 			return null;
 		for(ITeamBase base : data.team.bases)
 		{
+			if(base.getMap() != teamsManager.currentMap)
+				continue;
 			for(ITeamObject object : base.getObjects())
 			{
 				if(object.isSpawnPoint())
