@@ -139,7 +139,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x000000);
 		}
-		if(FlansModClient.minecraft.thePlayer != null && GuiTeamScores.numTeams > 0 && GuiTeamScores.getPlayerData(FlansModClient.minecraft.thePlayer.username) != null)
+		if(FlansModClient.minecraft.thePlayer != null && (GuiTeamScores.numTeams > 0 || !GuiTeamScores.sortedByTeam) && GuiTeamScores.getPlayerData(FlansModClient.minecraft.thePlayer.username) != null)
 		{
 			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 			int i = scaledresolution.getScaledWidth();

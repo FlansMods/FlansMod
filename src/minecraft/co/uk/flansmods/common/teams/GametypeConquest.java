@@ -390,5 +390,10 @@ public class GametypeConquest extends Gametype {
 		tags.setBoolean("AutoBalance", autoBalance);
 		tags.setInteger("CaptureTime", captureTimerLimit);
 	}
-
+	
+	@Override
+	public boolean sortScoreboardByTeam()
+	{
+		return true;
+	}
 }

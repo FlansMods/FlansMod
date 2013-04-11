@@ -3,6 +3,8 @@ package co.uk.flansmods.common.network;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +16,7 @@ import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
+import co.uk.flansmods.common.teams.Team.ComparatorScore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -39,45 +42,85 @@ public class PacketTeamInfo extends FlanPacketCommon
         	else
         	{
         		data.writeUTF(TeamsManager.getInstance().currentGametype.name);
-	        	if(TeamsManager.getInstance().teams == null)
-	        	{
-	        		data.writeInt(0);
-	        	}
-	        	else
-	        	{
-		        	data.writeInt(TeamsManager.getInstance().teams.length);
-		        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+        		if(TeamsManager.getInstance().currentGametype.sortScoreboardByTeam())
+        		{
+        			data.writeBoolean(true);
+		        	if(TeamsManager.getInstance().teams == null)
+		        	{
+		        		data.writeInt(0);
+		        	}
+		        	else
+		        	{
+			        	data.writeInt(TeamsManager.getInstance().teams.length);
+			        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+			        	{
+			        		Team team = TeamsManager.getInstance().teams[i];
+			        		if(team == null)
+			        		{
+			        			data.writeUTF("none");
+			        			continue;
+			        		}
+			        		data.writeUTF(team.shortName);
+			        		data.writeInt(team.score);
+			        		team.sortPlayers();
+			        		data.writeInt(team.members.size());
+			        		for(int j = 0; j < team.members.size(); j++)
+			        		{
+			        			String username = team.members.get(j);
+			        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(username, Side.SERVER);
+			        			data.writeUTF(username);
+			        			if(playerData == null)
+			        			{
+			        				data.writeInt(0);
+			        				data.writeInt(0);
+			        				data.writeInt(0);
+			        			}
+			        			else
+			        			{
+				        			data.writeInt(playerData.score);
+				        			data.writeInt(playerData.kills);
+				        			data.writeInt(playerData.deaths);
+			        			}
+			        		}
+			        	}
+		        	}
+        		}
+        		else
+        		{
+        			data.writeBoolean(false);
+        			ArrayList<String> playerNames = new ArrayList<String>();
+        			for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
 		        	{
 		        		Team team = TeamsManager.getInstance().teams[i];
-		        		if(team == null)
+		        		if(team == null || team.members == null)
 		        		{
-		        			data.writeUTF("none");
 		        			continue;
 		        		}
-		        		data.writeUTF(team.shortName);
-		        		data.writeInt(team.score);
-		        		team.sortPlayers();
-		        		data.writeInt(team.members.size());
-		        		for(int j = 0; j < team.members.size(); j++)
-		        		{
-		        			String username = team.members.get(j);
-		        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(username, Side.SERVER);
-		        			data.writeUTF(username);
-		        			if(playerData == null)
-		        			{
-		        				data.writeInt(0);
-		        				data.writeInt(0);
-		        				data.writeInt(0);
-		        			}
-		        			else
-		        			{
-			        			data.writeInt(playerData.score);
-			        			data.writeInt(playerData.kills);
-			        			data.writeInt(playerData.deaths);
-		        			}
-		        		}
+		        		playerNames.addAll(team.members);
 		        	}
-	        	}
+        			
+        			Collections.sort(playerNames, new Team.ComparatorScore());
+	        		data.writeInt(playerNames.size());
+	        		for(int j = 0; j < playerNames.size(); j++)
+	        		{
+	        			String username = playerNames.get(j);
+	        			FlansModPlayerData playerData = FlansModPlayerHandler.getPlayerData(username, Side.SERVER);
+	        			data.writeUTF(username);
+	        			if(playerData == null)
+	        			{
+	        				data.writeInt(0);
+	        				data.writeInt(0);
+	        				data.writeInt(0);
+	        			}
+	        			else
+	        			{
+		        			data.writeInt(playerData.score);
+		        			data.writeInt(playerData.kills);
+		        			data.writeInt(playerData.deaths);
+	        			}
+	        		}
+		        	
+        		}
         	}
         	
         	packet.data = bytes.toByteArray();

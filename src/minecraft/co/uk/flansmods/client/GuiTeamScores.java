@@ -20,6 +20,7 @@ public class GuiTeamScores extends GuiScreen
 	public static String gametype;
 	public static int numTeams;
 	public static TeamData[] teamData;
+	public static boolean sortedByTeam;
 	
 	//Number of lines (for rendering)
 	public static int numLines;
@@ -48,7 +49,7 @@ public class GuiTeamScores extends GuiScreen
 				return null;
 			for(PlayerData player : team.playerData)
 			{
-				if(player != null && player.username.equals(username))
+				if(player != null && player.username != null && player.username.equals(username))
 					return player;
 			}
 		}
@@ -61,28 +62,50 @@ public class GuiTeamScores extends GuiScreen
 		try
 		{
 			gametype = stream.readUTF();
-			numLines = numTeams = stream.readInt();
-			if(numTeams == 0)
-				return;
-			teamData = new TeamData[numTeams];
-			for(int i = 0; i < numTeams; i++)
+			sortedByTeam = stream.readBoolean();
+			if(sortedByTeam)
 			{
-				teamData[i] = new TeamData();
-				String teamName = stream.readUTF();
-				if(teamName.equals("none"))
-					continue;
-				teamData[i].team = Team.getTeam(teamName);
-				teamData[i].score = stream.readInt();
-				teamData[i].numPlayers = stream.readInt();
-				teamData[i].playerData = new PlayerData[teamData[i].numPlayers];
-				numLines += teamData[i].numPlayers;
-				for(int j = 0; j < teamData[i].numPlayers; j++)
+				numLines = numTeams = stream.readInt();
+				if(numTeams == 0)
+					return;
+				teamData = new TeamData[numTeams];
+				for(int i = 0; i < numTeams; i++)
 				{
-					teamData[i].playerData[j] = new PlayerData();
-					teamData[i].playerData[j].username = stream.readUTF();
-					teamData[i].playerData[j].score = stream.readInt();
-					teamData[i].playerData[j].kills = stream.readInt();
-					teamData[i].playerData[j].deaths = stream.readInt();
+					teamData[i] = new TeamData();
+					String teamName = stream.readUTF();
+					if(teamName.equals("none"))
+						continue;
+					teamData[i].team = Team.getTeam(teamName);
+					teamData[i].score = stream.readInt();
+					teamData[i].numPlayers = stream.readInt();
+					teamData[i].playerData = new PlayerData[teamData[i].numPlayers];
+					numLines += teamData[i].numPlayers;
+					for(int j = 0; j < teamData[i].numPlayers; j++)
+					{
+						teamData[i].playerData[j] = new PlayerData();
+						teamData[i].playerData[j].username = stream.readUTF();
+						teamData[i].playerData[j].score = stream.readInt();
+						teamData[i].playerData[j].kills = stream.readInt();
+						teamData[i].playerData[j].deaths = stream.readInt();
+					}
+				}
+			}
+			else
+			{
+				numLines = 0;
+				teamData = new TeamData[] { new TeamData() };
+				teamData[0].team = null;
+				teamData[0].score = 0;
+				teamData[0].numPlayers = stream.readInt();
+				teamData[0].playerData = new PlayerData[teamData[0].numPlayers];
+				numLines += teamData[0].numPlayers;
+				for(int j = 0; j < teamData[0].numPlayers; j++)
+				{
+					teamData[0].playerData[j] = new PlayerData();
+					teamData[0].playerData[j].username = stream.readUTF();
+					teamData[0].playerData[j].score = stream.readInt();
+					teamData[0].playerData[j].kills = stream.readInt();
+					teamData[0].playerData[j].deaths = stream.readInt();
 				}
 			}
 		}
@@ -121,19 +144,33 @@ public class GuiTeamScores extends GuiScreen
 		drawString(fontRenderer, "Kills", m + 150, n + 14, 0xffffff);
 		drawString(fontRenderer, "Deaths", m + 200, n + 14, 0xffffff);
 		int line = 0;
-		for(int p = 0; p < numTeams; p++)
+		if(sortedByTeam)
 		{
-			if(teamData[p] == null || teamData[p].team == null)
-				continue;
-			drawString(fontRenderer, "\u00a7" + teamData[p].team.textColour + teamData[p].team.name, m + 8, n + 25 + 9 * line, 0xffffff);
-			drawString(fontRenderer, "" + teamData[p].team.score, m + 100, n + 25 + 9 * line, 0xffffff);
-			line++;
-			for(int q = 0; q < teamData[p].numPlayers; q++)
+			for(int p = 0; p < numTeams; p++)
 			{
-				drawString(fontRenderer, teamData[p].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamData[p].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamData[p].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamData[p].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
+				if(teamData[p] == null || teamData[p].team == null)
+					continue;
+				drawString(fontRenderer, "\u00a7" + teamData[p].team.textColour + teamData[p].team.name, m + 8, n + 25 + 9 * line, 0xffffff);
+				drawString(fontRenderer, "" + teamData[p].team.score, m + 100, n + 25 + 9 * line, 0xffffff);
+				line++;
+				for(int q = 0; q < teamData[p].numPlayers; q++)
+				{
+					drawString(fontRenderer, teamData[p].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
+					drawString(fontRenderer, "" + teamData[p].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
+					drawString(fontRenderer, "" + teamData[p].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
+					drawString(fontRenderer, "" + teamData[p].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
+					line++;
+				}
+			}
+		}
+		else
+		{
+			for(int q = 0; q < teamData[0].numPlayers; q++)
+			{
+				drawString(fontRenderer, teamData[0].playerData[q].username, m + 8, n + 25 + 9 * line, 0xffffff);
+				drawString(fontRenderer, "" + teamData[0].playerData[q].score, m + 100, n + 25 + 9 * line, 0xffffff);
+				drawString(fontRenderer, "" + teamData[0].playerData[q].kills, m + 150, n + 25 + 9 * line, 0xffffff);
+				drawString(fontRenderer, "" + teamData[0].playerData[q].deaths, m + 200, n + 25 + 9 * line, 0xffffff);
 				line++;
 			}
 		}

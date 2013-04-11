@@ -250,7 +250,7 @@ public class Team {
 		Collections.sort(members, new ComparatorScore());
 	}
 	
-	private class ComparatorScore implements Comparator<String>
+	public static class ComparatorScore implements Comparator<String>
 	{
 		@Override
 		public int compare(String a, String b) 

@@ -219,4 +219,6 @@ public abstract class Gametype {
 	public abstract void readFromNBT(NBTTagCompound tags);
 	
 	public abstract void saveToNBT(NBTTagCompound tags);
+	
+	public abstract boolean sortScoreboardByTeam();
 }
