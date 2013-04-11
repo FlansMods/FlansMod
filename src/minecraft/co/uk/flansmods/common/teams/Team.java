@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 
@@ -131,9 +132,10 @@ public class Team {
 			{
 				if(split[1].equals("None"))
 					return;
-				for(Item item : Item.itemsList)
+				for(Item item : FlansMod.armourItems)
 				{
-					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
+					ArmourType armour = ((ItemTeamArmour)item).type;
+					if(armour != null && armour.shortName.equals(split[1]))
 						hat = new ItemStack(item);
 				}
 			}
@@ -141,9 +143,10 @@ public class Team {
 			{
 				if(split[1].equals("None"))
 					return;
-				for(Item item : Item.itemsList)
+				for(Item item : FlansMod.armourItems)
 				{
-					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
+					ArmourType armour = ((ItemTeamArmour)item).type;
+					if(armour != null && armour.shortName.equals(split[1]))
 						chest = new ItemStack(item);
 				}
 			}
@@ -151,9 +154,10 @@ public class Team {
 			{
 				if(split[1].equals("None"))
 					return;
-				for(Item item : Item.itemsList)
+				for(Item item : FlansMod.armourItems)
 				{
-					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
+					ArmourType armour = ((ItemTeamArmour)item).type;
+					if(armour != null && armour.shortName.equals(split[1]))
 						legs = new ItemStack(item);
 				}
 			}
@@ -161,9 +165,10 @@ public class Team {
 			{
 				if(split[1].equals("None"))
 					return;
-				for(Item item : Item.itemsList)
+				for(Item item : FlansMod.armourItems)
 				{
-					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
+					ArmourType armour = ((ItemTeamArmour)item).type;
+					if(armour != null && armour.shortName.equals(split[1]))
 						shoes = new ItemStack(item);
 				}
 			}

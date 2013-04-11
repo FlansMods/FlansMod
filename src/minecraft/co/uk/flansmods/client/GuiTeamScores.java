@@ -111,6 +111,10 @@ public class GuiTeamScores extends GuiScreen
 		for(int p = 0; p < numLines; p++)
 			drawTexturedModalRect(m, n + 24 + 9 * p, 0, 71, 256, 9);
 		drawTexturedModalRect(m, l / 2 + guiHeight / 2 - 10, 0, 87, 256, 10);
+		
+		//No idea why this works, but it makes the text bind its texture correctly
+		mc.renderEngine.bindTexture("/terrain.png");
+		
 		drawCenteredString(fontRenderer, gametype, k / 2, n + 4, 0xffffff);
 		drawString(fontRenderer, "Name", m + 8, n + 14, 0xffffff);
 		drawString(fontRenderer, "Score", m + 100, n + 14, 0xffffff);

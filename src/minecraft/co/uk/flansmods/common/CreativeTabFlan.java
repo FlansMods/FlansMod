@@ -23,7 +23,7 @@ public class CreativeTabFlan extends CreativeTabs
 	public ItemStack getIconItemStack()
 	{
 		time++;
-		if(time % 40 == 0)
+		if(time % 200 == 0)
 			icon++;
 		switch(type)
 		{

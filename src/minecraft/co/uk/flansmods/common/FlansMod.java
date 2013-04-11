@@ -55,7 +55,7 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.1")
 @NetworkMod(
 		clientSideRequired = true,
-		serverSideRequired = true,
+		serverSideRequired = false,
 		channels = {"flansmods"},
 	    versionBounds = "[2.1,]",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
