@@ -17,8 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet10Flying;
 import net.minecraft.network.packet.Packet11PlayerPosition;
 import net.minecraft.network.packet.Packet34EntityTeleport;
+import net.minecraft.network.packet.Packet39AttachEntity;
 import net.minecraft.network.packet.Packet6SpawnPosition;
 import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
@@ -53,6 +55,7 @@ import co.uk.flansmods.common.ItemAAGun;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPlane;
 import co.uk.flansmods.common.ItemVehicle;
+import co.uk.flansmods.common.network.PacketPlayerSpawn;
 import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -125,6 +128,21 @@ public class TeamsManager implements IPlayerTracker
 		{
 			object.tick();
 		}
+		for(Object obj : MinecraftServer.getServerConfigurationManager(FMLCommonHandler.instance().getMinecraftServerInstance()).playerEntityList)
+		{
+			EntityPlayerMP player = (EntityPlayerMP)obj;
+			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
+			if(data.spawnDelay == 0)
+			{
+		        WorldServer world = (WorldServer)player.worldObj;
+		        world.getEntityTracker().sendPacketToAllPlayersTrackingEntity(player, new Packet34EntityTeleport(player));	
+			}
+		}
+	}
+	
+	public EntityPlayerMP getPlayer(String username)
+	{
+		return MinecraftServer.getServerConfigurationManager(FMLCommonHandler.instance().getMinecraftServerInstance()).getPlayerForUsername(username);
 	}
 	
 	public static void log(String s)
@@ -521,15 +539,10 @@ public class TeamsManager implements IPlayerTracker
 			if(spawnPoint != null)
 			{
 				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
-				//playerMP.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
-		        //WorldServer world = (WorldServer)player.worldObj;
-		        //world.getEntityTracker().removeEntityFromAllTrackingPlayers(player);
-		        //world.getEntityTracker().addEntityToTracker(player);
-		        //world.getEntityTracker().sendPacketToAllAssociatedPlayers(player, new Packet11PlayerPosition(player.posX, player.posY, 0, player.posZ, true));
-				playerMP.mountEntity((Entity)null);
-				playerMP.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
+				
+				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
+				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
 			}
 			
 			

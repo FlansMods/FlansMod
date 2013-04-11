@@ -3,6 +3,7 @@ package co.uk.flansmods.common;
 import net.minecraft.entity.player.EntityPlayer;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
 
 public class FlansModPlayerData 
 {
@@ -14,6 +15,10 @@ public class FlansModPlayerData
 	public boolean isShooting;
 	public int shootTime;
 	public int shootClickDelay;
+	public int spawnDelay;
+	public double spawnX;
+	public double spawnY;
+	public double spawnZ;
 	//For use by the currentGametype
 	public int score;
 	public int kills;
@@ -33,6 +38,15 @@ public class FlansModPlayerData
 			shootTime--;
 		if(shootClickDelay > 0)
 			shootClickDelay--;
+		spawnDelay--;
+	}
+	
+	public void setSpawn(double x, double y, double z, int t)
+	{
+		spawnX = x;
+		spawnY = y;
+		spawnZ = z;
+		spawnDelay = t;
 	}
 	
 	public PlayerClass getPlayerClass()
