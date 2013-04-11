@@ -153,7 +153,7 @@ public class GuiTeamScores extends GuiScreen
 				if(teamData[p] == null || teamData[p].team == null)
 					continue;
 				drawString(fontRenderer, "\u00a7" + teamData[p].team.textColour + teamData[p].team.name, m + 8, n + 25 + 9 * line, 0xffffff);
-				drawString(fontRenderer, "" + teamData[p].team.score, m + 100, n + 25 + 9 * line, 0xffffff);
+				drawString(fontRenderer, "" + teamData[p].score, m + 100, n + 25 + 9 * line, 0xffffff);
 				line++;
 				for(int q = 0; q < teamData[p].numPlayers; q++)
 				{
