@@ -41,6 +41,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		EntityFlag flag = new EntityFlag(worldObj, this);
 		objects.add(flag);
 		worldObj.spawnEntityInWorld(flag);
+		map = teamsManager.currentMap;
 	}	
 	
 	public EntityFlagpole(World world, int x, int y, int z) 

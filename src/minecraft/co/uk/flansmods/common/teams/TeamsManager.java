@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet11PlayerPosition;
 import net.minecraft.network.packet.Packet34EntityTeleport;
 import net.minecraft.network.packet.Packet6SpawnPosition;
@@ -27,6 +28,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
@@ -164,7 +166,8 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
 		{
-			currentGametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+			EntityPlayerMP killed = (EntityPlayerMP)event.entity;
+			currentGametype.playerKilled(killed, event.source);
 			if(event.source instanceof EntityDamageSource)
 			{
 				Entity entity = event.source.getSourceOfDamage();
@@ -172,7 +175,7 @@ public class TeamsManager implements IPlayerTracker
 				{
 					ItemStack stack = ((EntityPlayer)entity).getCurrentEquippedItem();
 					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
-						messageAll("flanDeath." + ((ItemGun)stack.getItem()).type.shortName + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)event.entity).team.textColour + event.entity.getEntityName() + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityName());
+						messageAll("flanDeath." + ((ItemGun)stack.getItem()).type.shortName + "." + FlansModPlayerHandler.getPlayerData(killed).team.textColour + event.entity.getEntityName() + "." + FlansModPlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityName());
 				}
 			}
 		}
@@ -472,7 +475,6 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(base.getID() == 0)
 			base.setID(nextBaseID++);
-		base.setMap(currentMap);
 		bases.add(base);
 	}	
 	
@@ -519,8 +521,15 @@ public class TeamsManager implements IPlayerTracker
 			if(spawnPoint != null)
 			{
 				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
+				//playerMP.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
+		        //WorldServer world = (WorldServer)player.worldObj;
+		        //world.getEntityTracker().removeEntityFromAllTrackingPlayers(player);
+		        //world.getEntityTracker().addEntityToTracker(player);
+		        //world.getEntityTracker().sendPacketToAllAssociatedPlayers(player, new Packet11PlayerPosition(player.posX, player.posY, 0, player.posZ, true));
+				playerMP.mountEntity((Entity)null);
 				playerMP.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+				playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
 			}
 			
 			
