@@ -43,6 +43,8 @@ public class GuiTeamScores extends GuiScreen
 	
 	public static PlayerData getPlayerData(String username)
 	{
+		if(teamData == null)
+			return null;
 		for(TeamData team : teamData)
 		{
 			if(team == null || team.playerData == null)

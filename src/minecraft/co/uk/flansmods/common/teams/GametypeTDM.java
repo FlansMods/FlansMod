@@ -50,9 +50,15 @@ public class GametypeTDM extends Gametype
 			if(getPlayerData((EntityPlayerMP)player).team != null)
 				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
 		}
-		showTeamsMenuToAll(false);
 		resetScores();
 		teamsManager.messageAll("\u00a7fA new round has started!");
+		if(teamsManager.teams != null)
+		{
+			for(Team team : teamsManager.teams)
+				if(team == null)
+					return;
+			showTeamsMenuToAll(false);
+		}
 	}
 
 	@Override

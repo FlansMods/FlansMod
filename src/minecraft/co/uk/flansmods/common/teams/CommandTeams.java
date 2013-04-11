@@ -74,7 +74,7 @@ public class CommandTeams extends CommandBase {
 				teamsManager.currentGametype.stopGametype();
 			}
 			teamsManager.currentGametype = gametype;
-			gametype.initGametype();
+
 			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the gametype to \u00a72" + gametype.name);
 			if(teamsManager.teams != null && gametype.numTeamsRequired == teamsManager.teams.length)
 			{
@@ -85,6 +85,7 @@ public class CommandTeams extends CommandBase {
 				teamsManager.teams = new Team[gametype.numTeamsRequired];
 				teamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
 			}
+			gametype.initGametype();
 			return;
 		}
 		if(split[0].equals("listTeams"))
