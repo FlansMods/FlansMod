@@ -200,7 +200,7 @@ public class ItemOpStick extends Item
 	
 	@Override
     @SideOnly(Side.CLIENT)
-    public void updateIcons(IconRegister register)
+    public void registerIcons(IconRegister register)
     {
     	icons = new Icon[stickNames.length];
 

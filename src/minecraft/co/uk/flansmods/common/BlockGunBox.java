@@ -206,7 +206,7 @@ public class BlockGunBox extends BlockContainer
 	
 	@SideOnly(value = Side.CLIENT)
 	@Override
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+	public Icon getIcon(int side, int metadata)
 	{
 		GunBoxType type = GunBoxType.getBox(metadata);
 		

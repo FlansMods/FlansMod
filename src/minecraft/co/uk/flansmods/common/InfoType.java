@@ -227,7 +227,7 @@ public class InfoType
 	{
 		if (arg0.equals("doorIron"))
 		{
-			return new ItemStack(Item.doorSteel, 1);
+			return new ItemStack(Item.doorIron, 1);
 		}
 		if (arg0.equals("doorWood"))
 		{
