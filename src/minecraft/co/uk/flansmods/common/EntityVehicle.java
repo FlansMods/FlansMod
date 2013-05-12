@@ -917,7 +917,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	public int gunDelay;
 	
 	public float gunYaw;
-	public float gunPitch;
+	public float gunPitch = 180F;
 	
 	//Jumping motion caused by driving over a block. Independent of motionY to stop speedhacking on edges
 	public double motionJ;
