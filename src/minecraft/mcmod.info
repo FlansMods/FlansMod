@@ -1,0 +1,17 @@
+[
+{
+  "modid": "FlansMod",
+  "name": "Flans Mod",
+  "description": "Planes, guns and other vehicles",
+  "version": "@VERSION@",
+  "mcversion": "@MCVERSION@",
+  "logoFile": "/flansmod.png",
+  "url": "http://www.minecraftforum.net/topic/182918-",
+  "updateUrl": "",
+  "authors": ["jamioflan"],
+  "credits": "Created by jamioflan",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": ["mod_MinecraftForge"]
+}
+]
