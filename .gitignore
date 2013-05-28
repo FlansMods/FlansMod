@@ -20,9 +20,9 @@ Thumbs.db
 /src/minecraft/*
 /src/minecraft_server/*
 
-!/src/minecraft/com/
-!/src/common/co/
 !/src/minecraft/co/
+!/src/minecraft/mcmod.info
+!/src/minecraft/flansmod.png
 !/jars/Flan/
 !/eclipse/Minecraft/bin/gui/
 !/eclipse/Minecraft/bin/spritesheets/
