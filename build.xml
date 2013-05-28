@@ -1,0 +1,173 @@
+<project name="FlansMod" default="main">
+	<property environment="env"/>
+	<!-- Properties -->
+
+	<property name="build.dir" value="build"/>
+	<property name="src.dir" value="src"/>
+	<property name="resources.dir" value="eclipse/Minecraft/bin"/>
+
+	<property name="download.dir" value="${build.dir}/download"/>
+
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/out"/>
+
+	<property name="forge.dir" value="${build.dir}/forge"/>
+	<property name="mcp.dir" value="${forge.dir}/mcp"/>
+
+	<property name="mcpsrc.dir" value="${mcp.dir}/src"/>
+    
+    <!-- Get version numbers -->
+    <property file="build.properties" />
+    
+    <property name="flansmod.verion" value="${flansmod.version}" />
+    <property name="flansmod.versionbounds" value="${flansmod.versionbounds}"/>
+	<property name="mc.version" value="${mc.version}"/>
+	<property name="forge.version" value="${forge.version}"/>
+
+
+	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+
+	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
+
+	<condition property="out-of-date">
+		<not>
+			<and>
+				<available file="${download.dir}/${forge.name}"/>
+				<available file="${mcpsrc.dir}"/>
+			</and>
+		</not>
+	</condition>
+
+	<mkdir dir="${download.dir}"/>
+
+	<!-- Targets -->
+
+	<!-- Clear build directory -->
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<!-- Download necessary files -->
+	<target name="download-files" depends="download-forge"/>
+
+	<!-- Download forge (if it doesn't exist) -->
+	<target name="download-forge" unless="forge-exists">
+		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+	</target>
+
+	<!-- Setup mcp and forge -->
+	<target name="setup" depends="download-files" if="out-of-date">
+
+		<delete dir="${forge.dir}" failonerror="false"/>
+
+		<unzip dest="${forge.dir}/.." src="${download.dir}/${forge.name}"/>
+
+		<!-- Fix executable permissions -->
+		<chmod dir="${forge.dir}" perm="ugo+rx" includes="**.sh"/>
+
+		<!-- Install forge -->
+		<exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c install.cmd"/>
+		</exec>
+
+		<exec dir="${forge.dir}" executable="sh" osfamily="unix">
+			<arg value="install.sh"/>
+		</exec>
+
+	</target>
+
+	<target name="copy-src">
+		<!-- Copy sources -->
+		<copy todir="${mcpsrc.dir}/minecraft">
+			<fileset dir="${src.dir}/minecraft"/>
+			<filterset>
+				<filter token="VERSION" value="${flansmod.version}" />
+                <filter token="MCVERSION" value="${mc.version}" />
+                <filter token="VERSIONBOUNDS" value="${flansmod.versionbounds}" />
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="compile" depends="setup,copy-src">
+
+		<delete dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}"/>
+
+		<!-- Recompile -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c recompile.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="recompile.sh"/>
+		</exec>
+
+		<!-- Check for failure -->
+		<fail message="MCP failed to build">
+			<condition>
+				<resourcecontains resource="${mcp.dir}/logs/client_compile.log" substring="error:"/>
+			</condition>
+		</fail>
+
+	</target>
+
+	<target name="reobf" depends="compile">
+
+		<!-- Reobfuscate -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate_srg.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="reobfuscate_srg.sh"/>
+		</exec>
+
+		<!-- Copy classes -->
+		<copy todir="${classes.dir}">
+			<fileset dir="${mcp.dir}/reobf/minecraft"/>
+		</copy>
+        
+        <!-- Copy forge mod info files -->
+        <copy todir="${classes.dir}">
+            <fileset file="${mcpsrc.dir}/minecraft/flansmod.png"/>
+            <fileset file="${mcpsrc.dir}/minecraft/mcmod.info"/>
+        </copy>
+        
+		<!-- Copy resources -->
+		<copy todir="${classes.dir}">
+			<fileset dir="${resources.dir}"/>
+		</copy>
+
+		<!-- Reset src dir to post-forge-install state -->
+		<delete dir="${mcpsrc.dir}/minecraft/co"/>
+
+	</target>
+
+	<!-- Package the compiled files -->
+	<target name="package" depends="reobf">
+
+		<delete dir="${jar.dir}"/>
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.dir}/FlansMod-${flansmod.version}.jar" basedir="${classes.dir}"/>
+
+	</target>
+
+	<target name="run">
+
+		<!-- Start Client -->
+		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
+			<arg line="/c startclient.bat"/>
+		</exec>
+
+		<exec dir="${mcp.dir}" executable="sh" osfamily="unix">
+			<arg value="startclient.sh"/>
+		</exec>
+
+	</target>
+
+	<target name="test-run" depends="compile,run"/>
+
+	<!-- Default target to run -->
+	<target name="main" depends="package"/>
+
+</project>
