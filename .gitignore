@@ -3,6 +3,8 @@ CHANGELOG
 LICENSE.txt
 Thumbs.db
 
+/build/*
+
 /bin/*
 /conf/*
 /docs/*
