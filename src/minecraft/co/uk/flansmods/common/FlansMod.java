@@ -52,12 +52,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.3.1")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "@VERSION@")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[2.3,2.3.1]",
+	    versionBounds = "[@VERSIONBOUNDS@]",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)

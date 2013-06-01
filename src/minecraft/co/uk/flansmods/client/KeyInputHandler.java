@@ -35,6 +35,9 @@ public class KeyInputHandler extends KeyHandler
 	//Manus
 	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Q);
 	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_E);
+	protected static KeyBinding gearKey = new KeyBinding("Change Gear Status Key", Keyboard.KEY_L);
+	protected static KeyBinding doorKey = new KeyBinding("Change Door Status Key", Keyboard.KEY_K);
+	protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
 
 	Minecraft mc;
 	
@@ -55,6 +58,9 @@ public class KeyInputHandler extends KeyHandler
 				controlSwitchKey,
 				leftRollKey,
 				rightRollKey,
+				gearKey,
+				doorKey,
+				wingKey,
 				teamsMenuKey,
 				teamsScoresKey
 				},
@@ -73,6 +79,9 @@ public class KeyInputHandler extends KeyHandler
 				false, // control switch
 				true, //left Roll
 				true, //right Roll
+				false, // gear
+				false, // door
+				false, //wing
 				false, // teams menu
 				false // teams scores menu
 						});
@@ -121,6 +130,12 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 11;
 		else if(kb == rightRollKey)
 			keyNum = 12;
+		else if(kb == gearKey)
+			keyNum = 13;
+		else if(kb == doorKey)
+			keyNum = 14;
+		else if(kb == wingKey)
+			keyNum = 15;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
@@ -147,7 +162,7 @@ public class KeyInputHandler extends KeyHandler
 				mc.gameSettings.keyBindInventory.pressed = false;
 				mc.gameSettings.keyBindInventory.pressTime = 0;
 			}
-			handled = entity.pressKey(keyNum);
+			handled = entity.pressKey(keyNum, player);
 			
 			//if (handled)
 			//	PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));

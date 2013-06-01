@@ -52,7 +52,7 @@ public static final byte packetID = 4;
 			int key = stream.readInt();
 			if(player.ridingEntity != null && player.ridingEntity instanceof EntityDriveable)
 			{
-				((EntityDriveable)player.ridingEntity).pressKey(key);
+				((EntityDriveable)player.ridingEntity).pressKey(key, player);
 			}
 			
 		}
