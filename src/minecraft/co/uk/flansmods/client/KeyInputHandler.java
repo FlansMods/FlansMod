@@ -29,8 +29,10 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
-	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
-	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
+	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_T);
+	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_G);
+	
+	//Manus
 	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Q);
 	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_E);
 
