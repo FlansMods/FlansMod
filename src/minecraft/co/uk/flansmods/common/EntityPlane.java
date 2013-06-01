@@ -384,6 +384,26 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
 				return true;
 			}
+			case 11 : //Roll Left
+			{
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getRoll() > -75F))
+				{
+					velocityRoll += type.turnLeftModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed - propSpeed) * 0.15F;
+					flapsPitchLeft -= 5F;
+					flapsPitchRight += 5F;
+				}
+				return true;
+			}
+			case 12 : //Roll Right
+			{
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getRoll() < 75F))
+				{
+					velocityRoll -= type.turnRightModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed  - propSpeed) * 0.15F;
+					flapsPitchLeft += 5F;
+					flapsPitchRight -= 5F;
+				}
+				return true;
+			}
 		}
 		
 		return false;
