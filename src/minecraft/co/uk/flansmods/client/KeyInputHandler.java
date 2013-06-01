@@ -24,13 +24,15 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D);
 	protected static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE);
 	protected static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LSHIFT);
-	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_E);
+	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_X);
 	protected static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R);
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
 	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
 	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
+	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Q);
+	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_E);
 
 	Minecraft mc;
 	
@@ -49,6 +51,8 @@ public class KeyInputHandler extends KeyHandler
 				bombKey,
 				gunKey,
 				controlSwitchKey,
+				leftRollKey,
+				rightRollKey,
 				teamsMenuKey,
 				teamsScoresKey
 				},
@@ -65,6 +69,8 @@ public class KeyInputHandler extends KeyHandler
 				true, // bomb
 				true, // gun
 				false, // control switch
+				true, //left Roll
+				true, //right Roll
 				false, // teams menu
 				false // teams scores menu
 						});
@@ -109,6 +115,10 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 9;
 		else if(kb == controlSwitchKey)
 			keyNum = 10;
+		else if(kb == leftRollKey)
+			keyNum = 11;
+		else if(kb == rightRollKey)
+			keyNum = 12;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
