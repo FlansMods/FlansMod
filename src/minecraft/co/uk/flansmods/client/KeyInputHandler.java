@@ -38,6 +38,8 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding gearKey = new KeyBinding("Change Gear Status Key", Keyboard.KEY_L);
 	protected static KeyBinding doorKey = new KeyBinding("Change Door Status Key", Keyboard.KEY_K);
 	protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
+	protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
+	protected static KeyBinding parkKey = new KeyBinding("Park Key", Keyboard.KEY_P);
 
 	Minecraft mc;
 	
@@ -61,6 +63,8 @@ public class KeyInputHandler extends KeyHandler
 				gearKey,
 				doorKey,
 				wingKey,
+				trimKey,
+				parkKey,
 				teamsMenuKey,
 				teamsScoresKey
 				},
@@ -82,6 +86,8 @@ public class KeyInputHandler extends KeyHandler
 				false, // gear
 				false, // door
 				false, //wing
+				false, // trim button
+				false, //park
 				false, // teams menu
 				false // teams scores menu
 						});
@@ -136,6 +142,10 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 14;
 		else if(kb == wingKey)
 			keyNum = 15;
+		else if(kb == trimKey)
+			keyNum = 16;
+		else if(kb == parkKey)
+			keyNum = 17;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
