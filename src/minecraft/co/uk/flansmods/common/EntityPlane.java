@@ -684,11 +684,12 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}
 		FlansModClient.planeSpeed = propSpeed;
 
-		double rotHead = Math.rint(riddenByEntity.rotationYaw);//
+		double rotHead = Math.rint(axes.getYaw());//riddenByEntity.rotationYaw
 		double rotHead2 = Math.ceil(rotHead /360);
 		rotHead = 180 + rotHead - (360 * rotHead2);
 		if(rotHead < 0)
 		{ rotHead += 360;}
+		rotHead = 360 - rotHead;
 		FlansModClient.planeHeading = rotHead;
 
 		//Plane movement
