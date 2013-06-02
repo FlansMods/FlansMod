@@ -696,7 +696,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		
 		if(!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
-			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketVehicleControl.buildUpdatePacket(this));
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 196, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
 	
