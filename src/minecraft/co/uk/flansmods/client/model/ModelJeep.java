@@ -82,16 +82,7 @@ public class ModelJeep extends ModelVehicle
 		
 		//This should be defined even when not used.
 		turretModel = new ModelRendererTurbo[0];	
-<<<<<<< HEAD
 		barrelModel = new ModelRendererTurbo[0];	
-=======
-		barrelModel = new ModelRendererTurbo[0];
-		
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		trailerModel = new ModelRendererTurbo[0];
-		wheelAniModel = new ModelRendererTurbo[0];
->>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 		
 		flipAll(); //For old models
 		translateAll(-4);

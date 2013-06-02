@@ -34,24 +34,6 @@ public class ModelVehicle extends ModelBase
 			rightFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 10F;
 			rightFrontWheelModel[i].render(f5);
 		}
-<<<<<<< HEAD
-=======
-		for(int i = 0; i < bodyDoorOpenModel.length; i++)
-		{
-			if(vehicle.varDoor == true)
-				bodyDoorOpenModel[i].render(f5);
-		}
-		for(int i = 0; i < bodyDoorCloseModel.length; i++)
-		{
-			if(vehicle.varDoor == false)
-				bodyDoorCloseModel[i].render(f5);
-		}
-		for(int i = 0; i < wheelAniModel.length; i++)
-		{
-			wheelAniModel[i].rotateAngleZ = vehicle.wheelsAngle;
-			wheelAniModel[i].render(f5);
-		}
->>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 	}
 	
     public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float gunYaw, float gunPitch)
@@ -122,25 +104,6 @@ public class ModelVehicle extends ModelBase
 			rightBackWheelModel[i].doMirror(false, true, true);
 			rightBackWheelModel[i].setRotationPoint(rightBackWheelModel[i].rotationPointX, - rightBackWheelModel[i].rotationPointY, - rightBackWheelModel[i].rotationPointZ);
 		}
-<<<<<<< HEAD
-=======
-		for(int i = 0; i < bodyDoorOpenModel.length; i++)
-		{
-			bodyDoorOpenModel[i].doMirror(false, true, true);
-			bodyDoorOpenModel[i].setRotationPoint(bodyDoorOpenModel[i].rotationPointX, - bodyDoorOpenModel[i].rotationPointY, - bodyDoorOpenModel[i].rotationPointZ);
-		}
-		for(int i = 0; i < bodyDoorCloseModel.length; i++)
-		{
-			bodyDoorCloseModel[i].doMirror(false, true, true);
-			bodyDoorCloseModel[i].setRotationPoint(bodyDoorCloseModel[i].rotationPointX, - bodyDoorCloseModel[i].rotationPointY, - bodyDoorCloseModel[i].rotationPointZ);
-		}
-		//Animated Wheels
-		for(int i = 0; i < wheelAniModel.length; i++)
-		{
-			wheelAniModel[i].doMirror(false, true, true);
-			wheelAniModel[i].setRotationPoint(wheelAniModel[i].rotationPointX, - wheelAniModel[i].rotationPointY, - wheelAniModel[i].rotationPointZ);
-		}
->>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 	}	
 	
 	public void translateAll(int y)
@@ -181,25 +144,6 @@ public class ModelVehicle extends ModelBase
 		{
 			mod.rotationPointY += y;
 		}
-<<<<<<< HEAD
-=======
-		for(ModelRendererTurbo mod : bodyDoorOpenModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : bodyDoorCloseModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : wheelAniModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : trailerModel)
-		{
-			mod.rotationPointY += y;
-		}
->>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 	}
 
     public ModelRendererTurbo bodyModel[];				//The main body of the vehicle
@@ -211,12 +155,4 @@ public class ModelVehicle extends ModelBase
     public ModelRendererTurbo rightFrontWheelModel[];
     public ModelRendererTurbo leftBackWheelModel[];
     public ModelRendererTurbo rightBackWheelModel[];
-<<<<<<< HEAD
-=======
-	
-	public ModelRendererTurbo bodyDoorOpenModel[];
-	public ModelRendererTurbo bodyDoorCloseModel[];
-	public ModelRendererTurbo wheelAniModel[];	
-	public ModelRendererTurbo trailerModel[];
->>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 }
