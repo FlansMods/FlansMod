@@ -910,7 +910,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		
 		if(!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
-			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 196, dimension, PacketVehicleControl.buildUpdatePacket(this));
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 192, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
 
