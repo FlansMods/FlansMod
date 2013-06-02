@@ -63,7 +63,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	@Override
     public boolean canBePushed()
     {
-        return true;
+        return false;
     }
 
 	@Override
