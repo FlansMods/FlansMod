@@ -39,9 +39,6 @@ public class ModelSherman extends ModelVehicle
 		rightFrontWheelModel = new ModelRendererTurbo[0];	
 		rightBackWheelModel = new ModelRendererTurbo[0];
 		
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		
 		flipAll(); //For old models
 		translateAll(-4);
     }

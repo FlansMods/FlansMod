@@ -207,21 +207,6 @@ public class ModelLancaster extends ModelPlane
 
 		topWingModel = new ModelRendererTurbo[0];
 		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
-
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
-		
 		translateAll(52);
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.

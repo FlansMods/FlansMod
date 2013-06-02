@@ -74,13 +74,6 @@ public class PlaneType extends DriveableType
 			if(split[0].equals("YOffset"))
 				yOffset = Float.parseFloat(split[1]);
 
-			if(split[0].equals("HasGear"))
-				hasGear = split[1].equals("True");
-			if(split[0].equals("HasDoor"))
-				hasDoor = split[1].equals("True");
-			if(split[0].equals("HasWing"))
-				hasWing = split[1].equals("True");
-
 			if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
 				
@@ -314,10 +307,6 @@ public class PlaneType extends DriveableType
 	public boolean allowTailGuns = false; //Large planes only
 	public boolean allowDorsalGun = false;
 	public int propSetup = 0; //0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
-
-	public boolean hasGear = false;
-	public boolean hasDoor = false;
-	public boolean hasWing = false;
 
 	public static int nextIconIndex = 5;
 	public static HashMap<String, PlaneType> types = new HashMap<String, PlaneType>();
