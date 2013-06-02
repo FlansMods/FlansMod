@@ -34,7 +34,7 @@ public class KeyInputHandler extends KeyHandler
 	
 	//Manus
 	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Y);
-	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_C);
+	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X);
 	protected static KeyBinding gearKey = new KeyBinding("Change Gear Status Key", Keyboard.KEY_L);
 	protected static KeyBinding doorKey = new KeyBinding("Change Door Status Key", Keyboard.KEY_K);
 	protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
