@@ -41,6 +41,14 @@ public class ModelPanzer extends ModelVehicle
 		rightFrontWheelModel = new ModelRendererTurbo[0];	
 		rightBackWheelModel = new ModelRendererTurbo[0];
 		
+<<<<<<< HEAD
+=======
+		bodyDoorOpenModel = new ModelRendererTurbo[0];
+		bodyDoorCloseModel = new ModelRendererTurbo[0];
+		trailerModel = new ModelRendererTurbo[0];
+		wheelAniModel = new ModelRendererTurbo[0];
+
+>>>>>>> 1b8bb8f... Added: Spinning Wheels for Vehicle
 		flipAll(); //For old models
 		translateAll(-8);
     }
