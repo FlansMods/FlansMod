@@ -44,6 +44,11 @@ public class ModelVehicle extends ModelBase
 			if(vehicle.varDoor == false)
 				bodyDoorCloseModel[i].render(f5);
 		}
+		for(int i = 0; i < wheelAniModel.length; i++)
+		{
+			wheelAniModel[i].rotateAngleZ = vehicle.wheelsAngle;
+			wheelAniModel[i].render(f5);
+		}
 	}
 	
     public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float gunYaw, float gunPitch)
@@ -124,6 +129,12 @@ public class ModelVehicle extends ModelBase
 			bodyDoorCloseModel[i].doMirror(false, true, true);
 			bodyDoorCloseModel[i].setRotationPoint(bodyDoorCloseModel[i].rotationPointX, - bodyDoorCloseModel[i].rotationPointY, - bodyDoorCloseModel[i].rotationPointZ);
 		}
+		//Animated Wheels
+		for(int i = 0; i < wheelAniModel.length; i++)
+		{
+			wheelAniModel[i].doMirror(false, true, true);
+			wheelAniModel[i].setRotationPoint(wheelAniModel[i].rotationPointX, - wheelAniModel[i].rotationPointY, - wheelAniModel[i].rotationPointZ);
+		}
 	}	
 	
 	public void translateAll(int y)
@@ -172,6 +183,14 @@ public class ModelVehicle extends ModelBase
 		{
 			mod.rotationPointY += y;
 		}
+		for(ModelRendererTurbo mod : wheelAniModel)
+		{
+			mod.rotationPointY += y;
+		}
+		for(ModelRendererTurbo mod : trailerModel)
+		{
+			mod.rotationPointY += y;
+		}
 	}
 
     public ModelRendererTurbo bodyModel[];				//The main body of the vehicle
@@ -186,4 +205,6 @@ public class ModelVehicle extends ModelBase
 	
 	public ModelRendererTurbo bodyDoorOpenModel[];
 	public ModelRendererTurbo bodyDoorCloseModel[];
+	public ModelRendererTurbo wheelAniModel[];	
+	public ModelRendererTurbo trailerModel[];
 }
