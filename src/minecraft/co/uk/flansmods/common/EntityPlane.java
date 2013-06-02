@@ -625,7 +625,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		velocityRoll *= 0.8F;
 
 		//Rotate the propeller
-		propAngle += propSpeed / 10F;
+		propAngle += propSpeed / 7F;
 
 		//Return the flaps to their resting position
 		flapsYaw *= 0.8F;
