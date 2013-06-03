@@ -24,7 +24,7 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D);
 	protected static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE);
 	protected static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LSHIFT);
-	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_X);
+	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_E);
 	protected static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R);
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
