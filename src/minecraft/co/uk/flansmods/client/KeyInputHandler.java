@@ -29,8 +29,18 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
-	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
-	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
+	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_F);
+	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_G);
+	
+	//Manus
+	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Y);
+	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X);
+	protected static KeyBinding gearKey = new KeyBinding("Change Gear Status Key", Keyboard.KEY_L);
+	protected static KeyBinding doorKey = new KeyBinding("Change Door Status Key", Keyboard.KEY_K);
+	protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
+	protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
+	protected static KeyBinding parkKey = new KeyBinding("Park Key", Keyboard.KEY_P);
+	protected static KeyBinding hudKey = new KeyBinding("Hud Key", Keyboard.KEY_H);
 
 	Minecraft mc;
 	
@@ -49,6 +59,14 @@ public class KeyInputHandler extends KeyHandler
 				bombKey,
 				gunKey,
 				controlSwitchKey,
+				leftRollKey,
+				rightRollKey,
+				gearKey,
+				doorKey,
+				wingKey,
+				trimKey,
+				parkKey,
+				hudKey,
 				teamsMenuKey,
 				teamsScoresKey
 				},
@@ -65,6 +83,14 @@ public class KeyInputHandler extends KeyHandler
 				true, // bomb
 				true, // gun
 				false, // control switch
+				true, //left Roll
+				true, //right Roll
+				false, // gear
+				false, // door
+				false, //wing
+				false, // trim button
+				false, //park
+				false, //hud
 				false, // teams menu
 				false // teams scores menu
 						});
@@ -109,6 +135,22 @@ public class KeyInputHandler extends KeyHandler
 			keyNum = 9;
 		else if(kb == controlSwitchKey)
 			keyNum = 10;
+		else if(kb == leftRollKey)
+			keyNum = 11;
+		else if(kb == rightRollKey)
+			keyNum = 12;
+		else if(kb == gearKey)
+			keyNum = 13;
+		else if(kb == doorKey)
+			keyNum = 14;
+		else if(kb == wingKey)
+			keyNum = 15;
+		else if(kb == trimKey)
+			keyNum = 16;
+		else if(kb == parkKey)
+			keyNum = 17;
+		else if(kb == hudKey)
+			keyNum = 18;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
@@ -135,7 +177,7 @@ public class KeyInputHandler extends KeyHandler
 				mc.gameSettings.keyBindInventory.pressed = false;
 				mc.gameSettings.keyBindInventory.pressTime = 0;
 			}
-			handled = entity.pressKey(keyNum);
+			handled = entity.pressKey(keyNum, player);
 			
 			//if (handled)
 			//	PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildVehicleControlButton(keyNum));

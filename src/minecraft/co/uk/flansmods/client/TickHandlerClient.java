@@ -114,6 +114,13 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		}
+		if (FlansModClient.planeGUI == true && FMLClientHandler.instance().getClient().currentScreen == null)
+		{
+			mc.fontRenderer.drawString("Heading: " + (FlansModClient.planeHeading) + " °" , 10, 10, 0xFFFFFF);
+			mc.fontRenderer.drawString("Speed  : " + (Math.rint(FlansModClient.planeSpeed * 10) / 10.) + " m/s" , 10, 20, 0xFFFFFF);
+			mc.fontRenderer.drawString("Altitude: " + (FlansModClient.planeHeight -1) + ".0 m" , 10, 30, 0xFFFFFF);
+			mc.fontRenderer.drawString("Change : " + (Math.rint(FlansModClient.planeHChange * 10) / 10.) + " m/s" , 10, 40, 0xFFFFFF);
+		}
 		if (FlansModClient.errorString != null && FlansModClient.errorStringTimer > 0)
 		{
 			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);

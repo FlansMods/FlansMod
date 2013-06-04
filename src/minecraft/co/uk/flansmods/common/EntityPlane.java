@@ -28,6 +28,9 @@ import co.uk.flansmods.common.vector.Vector3f;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import co.uk.flansmods.client.FlansModClient;
+import cpw.mods.fml.client.FMLClientHandler;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -43,6 +46,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	{
 		this(world, x, y, z, type1, data1);
 		rotateYaw(180F + placer.rotationYaw);
+		rotatePitch(-type1.posPark);
 	}
     
 	public EntityPlane(World world, double x, double y, double z, PlaneType type1, PlaneData data1)
@@ -64,6 +68,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	
 	protected void initType(PlaneType type)
 	{
+		varGear = true; //Add manus
+		varDoor = true;
+		varWing = true;
+
 		health = type.health;
 		rightWingHealth = leftWingHealth = tailHealth = health;
 		seats = new EntityPassengerSeat[type.numPassengers];
@@ -218,7 +226,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     }
     
     @Override
-	public boolean pressKey(int key)
+	public boolean pressKey(int key, EntityPlayer player)
 	{
     	PlaneType type = this.getPlaneType();
     	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && (key == 6 || key == 8 || key == 9))
@@ -307,12 +315,21 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 6 : //Exit
 			{
 				riddenByEntity.mountEntity(this);
+				FlansModClient.planeGUI = false;
 				return true;
 			}
 			case 7 :
 			{
-				if(worldObj.isRemote)
+				if(type.invInflight == false)
+				{
+					if(worldObj.isRemote && propSpeed < 0.1 && FlansModClient.planeHeight < 2)
 					FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
+				}
+				else
+				{
+					if(worldObj.isRemote)
+					FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
+				}
 				return true;
 			}
 			case 8 : //Bomb
@@ -382,6 +399,93 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 10 :
 			{
 				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
+				return true;
+			}
+			case 11 : //Roll Left
+			{
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getRoll() > -75F))
+				{
+					velocityRoll += type.turnLeftModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed - propSpeed) * 0.15F;
+					flapsPitchLeft -= 5F;
+					flapsPitchRight += 5F;
+				}
+				return true;
+			}
+			case 12 : //Roll Right
+			{
+				if(tailHealth > 0 && propSpeed > type.takeOffSpeed && (FlansMod.proxy.mouseControlEnabled() || axes.getRoll() < 75F))
+				{
+					velocityRoll -= type.turnRightModifier * (1F + type.maxPropSpeed + data.engine.engineSpeed  - propSpeed) * 0.15F;
+					flapsPitchLeft += 5F;
+					flapsPitchRight -= 5F;
+				}
+				return true;
+			}
+			case 13 : // Gear
+			{
+				if(varGear == true && propSpeed > type.takeOffSpeed && type.hasGear == true)
+				{
+					varGear = false;
+					player.addChatMessage("Main Gear now Up.");
+				}
+				else if(varGear == false && type.hasGear == true)
+				{
+					varGear = true;
+					player.addChatMessage("Main Gear now Down.");
+				}
+				return false;
+			}
+			case 14 : // Door
+			{
+				if(varDoor == true && type.hasDoor == true)
+				{
+					varDoor = false;
+					player.addChatMessage("Doors now Closed.");
+				}
+				else if(varDoor == false && type.hasDoor == true)
+				{
+					varDoor = true;
+					player.addChatMessage("Doors now Open.");
+				}
+				return false;
+			}
+			case 15 : // Wing
+			{
+				if(varWing == true && type.hasWing == true)
+				{
+					varWing = false;
+					player.addChatMessage("Wings now in Position 1.");
+				}
+				else if(varWing == false && type.hasWing == true)
+				{
+					varWing = true;
+					player.addChatMessage("Wings now in Position 2");
+				}
+				return false;
+			}
+			case 16 : // Trim Button
+			{
+				setRotation(-axes.getYaw(),0F, 0F);
+				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
+				riddenByEntity.rotationPitch = axes.getPitch();
+				break;
+			}
+			case 17 : //Park
+			{
+				setRotation(-axes.getYaw(), type.posPark, 0F);
+				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
+				riddenByEntity.rotationPitch = axes.getPitch();
+				break;
+			}
+			case 18 : //Hud
+			{
+				if (FlansModClient.planeGUI == false)
+				{
+					FlansModClient.planeGUI = true;
+				} else
+				{
+					FlansModClient.planeGUI = false;
+				}
 				return true;
 			}
 		}
@@ -568,6 +672,37 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
             return;
         }
         PlaneType type = this.getPlaneType();
+		
+		//Height
+		int blockID;
+		for(int j = 0; j < 513; j++)
+		{
+			blockID = worldObj.getBlockId((int)posX, (int)posY - j, (int)posZ);
+			if(blockID != 0)
+			{
+				FlansModClient.planeHeight = j;
+				break;
+			}
+		}
+		
+		//Height Change
+		flightHC = posY;
+		flightHCcount ++;
+		if(flightHCcount == 19)
+		{
+			FlansModClient.planeHChange =  flightHC - flightHCold;
+			flightHCold = flightHC;
+			flightHCcount = 0;
+		}
+		FlansModClient.planeSpeed = propSpeed;
+
+		double rotHead = Math.rint(axes.getYaw());//riddenByEntity.rotationYaw
+		double rotHead2 = Math.ceil(rotHead /360);
+		rotHead = 180 + rotHead - (360 * rotHead2);
+		if(rotHead < 0)
+		{ rotHead += 360;}
+		rotHead = 360 - rotHead;
+		FlansModClient.planeHeading = rotHead;
 
 		//Plane movement
 		int numPropsWorking = 0;
@@ -605,7 +740,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		velocityRoll *= 0.8F;
 
 		//Rotate the propeller
-		propAngle += propSpeed / 10F;
+		propAngle += propSpeed / 7F;
 
 		//Return the flaps to their resting position
 		flapsYaw *= 0.8F;
@@ -890,7 +1025,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		
 		if(!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
-			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketVehicleControl.buildUpdatePacket(this));
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 196, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
 
@@ -1276,6 +1411,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
  		tag.setInteger("LeftWingHealth", leftWingHealth);
  		tag.setInteger("RightWingHealth", rightWingHealth);
  		tag.setInteger("TailHealth", tailHealth);
+		tag.setBoolean("VarGear", varGear);
+		tag.setBoolean("VarDoor", varDoor);
+		tag.setBoolean("VarWing", varWing);
 		for(int i = 0; i < propBlown.length; i++)
 		{
 			tag.setBoolean("PropBlown " + i, propBlown[i]);
@@ -1300,6 +1438,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		leftWingHealth = tag.getInteger("LeftWingHealth");
 		rightWingHealth = tag.getInteger("RightWingHealth");
 		tailHealth = tag.getInteger("TailHealth");
+		varGear = tag.getBoolean("VarGear");
+		varDoor = tag.getBoolean("VarDoor");
+		varWing = tag.getBoolean("VarWing");
 		for(int i = 0; i < propBlown.length; i++)
 		{
 			propBlown[i] = tag.getBoolean("PropBlown " + i);
@@ -1332,4 +1473,15 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public double propSpeed;
 	public boolean tailOnGround;
 	private boolean spawnedEntities;
+	
+	public boolean varGear;
+	public boolean varDoor;
+	public boolean varWing;
+	
+	public int flightHeight;
+	public double flightHC = 0;
+	public double flightHCold = 0;
+	public int flightHCcount = 0;
+	
+	public boolean varHud;
 }
