@@ -458,11 +458,15 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
             case 16 : // Trim Button
             {
                 setRotation(-axes.getYaw(),0F, 0F);
+                riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
+                riddenByEntity.rotationPitch = axes.getPitch();
                 break;
             }
             case 17 : //Park
             {
                 setRotation(-axes.getYaw(), type.posPark, 0F);
+                riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
+                riddenByEntity.rotationPitch = axes.getPitch();
                 break;
             }
             case 18 : //Hud
