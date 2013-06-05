@@ -43,6 +43,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	{
 		this(world, x, y, z, type1, data1);
 		rotateYaw(180F + placer.rotationYaw);
+        rotatePitch(-type1.posPark);
 	}
     
 	public EntityPlane(World world, double x, double y, double z, PlaneType type1, PlaneData data1)
