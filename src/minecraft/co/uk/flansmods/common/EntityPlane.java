@@ -320,8 +320,16 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 7 :
 			{
-				if(worldObj.isRemote)
+				if(type.invInflight == true)
+                {
+                    if(worldObj.isRemote && propSpeed < 0.1 && FlansModClient.planeHeight < 2)
+                    FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
+                }
+                else
+                {
+                    if(worldObj.isRemote)
 					FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
+                }
 				return true;
 			}
 			case 8 : //Bomb
