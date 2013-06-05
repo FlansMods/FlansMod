@@ -98,6 +98,71 @@ public class ModelPlane extends ModelBase
 			if(plane.tailHealth > 0)
 				tailModel[i].render(f5);
         }
+		//Gear
+		for(int i = 0; i < bodyGearDownModel.length; i++)
+		{
+			if(plane.varGear == true)
+				bodyGearDownModel[i].render(f5);
+		}
+		for(int i = 0; i < tailGearDownModel.length; i++)
+		{
+			if(plane.tailHealth > 0 && plane.varGear == true)
+				tailGearDownModel[i].render(f5);
+		}
+		for(int i = 0; i < rightWingGearDownModel.length; i++)
+		{
+			if(plane.rightWingHealth > 0 && plane.varGear == true)
+				rightWingGearDownModel[i].render(f5);
+		}
+		for(int i = 0; i < leftWingGearDownModel.length; i++)
+		{
+			if(plane.leftWingHealth > 0 && plane.varGear == true)
+				leftWingGearDownModel[i].render(f5);
+		}
+
+		//Doors
+		for(int i = 0; i < bodyDoorOpenModel.length; i++)
+		{
+			if(plane.varDoor == true)
+				bodyDoorOpenModel[i].render(f5);
+		}
+		for(int i = 0; i < bodyDoorCloseModel.length; i++)
+		{
+			if(plane.varDoor == false)
+				bodyDoorCloseModel[i].render(f5);
+		}
+		for(int i = 0; i < tailDoorOpenModel.length; i++)
+		{
+			if(plane.varDoor == true && plane.tailHealth > 0)
+				tailDoorOpenModel[i].render(f5);
+		}
+		for(int i = 0; i < tailDoorCloseModel.length; i++)
+		{
+			if(plane.varDoor == false && plane.tailHealth > 0)
+				tailDoorCloseModel[i].render(f5);
+		}
+
+		//Wing
+		for(int i = 0; i < rightWingPos1Model.length; i++)
+		{
+			if(plane.varWing == true && plane.rightWingHealth > 0)
+				rightWingPos1Model[i].render(f5);
+		}
+		for(int i = 0; i < rightWingPos2Model.length; i++)
+		{
+			if(plane.varWing == false && plane.rightWingHealth > 0)
+				rightWingPos2Model[i].render(f5);
+		}
+		for(int i = 0; i < leftWingPos1Model.length; i++)
+		{
+			if(plane.varWing == true && plane.leftWingHealth > 0)
+				leftWingPos1Model[i].render(f5);
+		}
+		for(int i = 0; i < leftWingPos2Model.length; i++)
+		{
+			if(plane.varWing == false && plane.leftWingHealth > 0)
+				leftWingPos2Model[i].render(f5);
+		}
     }
 	
 	public void flipAll()
@@ -160,6 +225,71 @@ public class ModelPlane extends ModelBase
 			pitchFlapRightWingModel[i].doMirror(false, true, true);
 			pitchFlapRightWingModel[i].setRotationPoint(pitchFlapRightWingModel[i].rotationPointX, - pitchFlapRightWingModel[i].rotationPointY, - pitchFlapRightWingModel[i].rotationPointZ);
 		}
+		//Gear
+		for(int i = 0; i < bodyGearDownModel.length; i++)
+		{
+			bodyGearDownModel[i].doMirror(false, true, true);
+			bodyGearDownModel[i].setRotationPoint(bodyGearDownModel[i].rotationPointX, - bodyGearDownModel[i].rotationPointY, - bodyGearDownModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < tailGearDownModel.length; i++)
+		{
+			tailGearDownModel[i].doMirror(false, true, true);
+			tailGearDownModel[i].setRotationPoint(tailGearDownModel[i].rotationPointX, - tailGearDownModel[i].rotationPointY, - tailGearDownModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < leftWingGearDownModel.length; i++)
+		{
+			leftWingGearDownModel[i].doMirror(false, true, true);
+			leftWingGearDownModel[i].setRotationPoint(leftWingGearDownModel[i].rotationPointX, - leftWingGearDownModel[i].rotationPointY, - leftWingGearDownModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < rightWingGearDownModel.length; i++)
+		{
+			rightWingGearDownModel[i].doMirror(false, true, true);
+			rightWingGearDownModel[i].setRotationPoint(rightWingGearDownModel[i].rotationPointX, - rightWingGearDownModel[i].rotationPointY, - rightWingGearDownModel[i].rotationPointZ);
+		}
+
+		//Door
+		for(int i = 0; i < bodyDoorOpenModel.length; i++)
+		{
+			bodyDoorOpenModel[i].doMirror(false, true, true);
+			bodyDoorOpenModel[i].setRotationPoint(bodyDoorOpenModel[i].rotationPointX, - bodyDoorOpenModel[i].rotationPointY, - bodyDoorOpenModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < bodyDoorCloseModel.length; i++)
+		{
+			bodyDoorCloseModel[i].doMirror(false, true, true);
+			bodyDoorCloseModel[i].setRotationPoint(bodyDoorCloseModel[i].rotationPointX, - bodyDoorCloseModel[i].rotationPointY, - bodyDoorCloseModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < tailDoorOpenModel.length; i++)
+		{
+			tailDoorOpenModel[i].doMirror(false, true, true);
+			tailDoorOpenModel[i].setRotationPoint(tailDoorOpenModel[i].rotationPointX, - tailDoorOpenModel[i].rotationPointY, - tailDoorOpenModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < tailDoorCloseModel.length; i++)
+		{
+			tailDoorCloseModel[i].doMirror(false, true, true);
+			tailDoorCloseModel[i].setRotationPoint(tailDoorCloseModel[i].rotationPointX, - tailDoorCloseModel[i].rotationPointY, - tailDoorCloseModel[i].rotationPointZ);
+		}
+
+		//Wings
+		for(int i = 0; i < rightWingPos1Model.length; i++)
+		{
+			rightWingPos1Model[i].doMirror(false, true, true);
+			rightWingPos1Model[i].setRotationPoint(rightWingPos1Model[i].rotationPointX, - rightWingPos1Model[i].rotationPointY, - rightWingPos1Model[i].rotationPointZ);
+		}
+		for(int i = 0; i < rightWingPos2Model.length; i++)
+		{
+			rightWingPos2Model[i].doMirror(false, true, true);
+			rightWingPos2Model[i].setRotationPoint(rightWingPos2Model[i].rotationPointX, - rightWingPos2Model[i].rotationPointY, - rightWingPos2Model[i].rotationPointZ);
+		}
+		for(int i = 0; i < leftWingPos1Model.length; i++)
+		{
+			leftWingPos1Model[i].doMirror(false, true, true);
+			leftWingPos1Model[i].setRotationPoint(leftWingPos1Model[i].rotationPointX, - leftWingPos1Model[i].rotationPointY, - leftWingPos1Model[i].rotationPointZ);
+		}
+		for(int i = 0; i < leftWingPos2Model.length; i++)
+		{
+			leftWingPos2Model[i].doMirror(false, true, true);
+			leftWingPos2Model[i].setRotationPoint(leftWingPos2Model[i].rotationPointX, - leftWingPos2Model[i].rotationPointY, - leftWingPos2Model[i].rotationPointZ);
+		}
 	}
 
     public ModelRendererTurbo bodyModel[];
@@ -173,4 +303,19 @@ public class ModelPlane extends ModelBase
 	public ModelRendererTurbo pitchFlapRightModel[];
 	public ModelRendererTurbo pitchFlapLeftWingModel[];
 	public ModelRendererTurbo pitchFlapRightWingModel[];
+	
+	public ModelRendererTurbo bodyGearDownModel[];
+	public ModelRendererTurbo tailGearDownModel[];
+	public ModelRendererTurbo leftWingGearDownModel[];
+	public ModelRendererTurbo rightWingGearDownModel[];
+	
+	public ModelRendererTurbo bodyDoorOpenModel[];
+	public ModelRendererTurbo bodyDoorCloseModel[];
+	public ModelRendererTurbo tailDoorOpenModel[];
+	public ModelRendererTurbo tailDoorCloseModel[];
+		
+	public ModelRendererTurbo rightWingPos1Model[];
+	public ModelRendererTurbo rightWingPos2Model[];
+	public ModelRendererTurbo leftWingPos1Model[];
+	public ModelRendererTurbo leftWingPos2Model[];
 }

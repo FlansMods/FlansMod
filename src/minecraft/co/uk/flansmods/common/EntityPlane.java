@@ -64,6 +64,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	
 	protected void initType(PlaneType type)
 	{
+        varGear = true;
+        varDoor = true;
+        varWing = true;
+        
 		health = type.health;
 		rightWingHealth = leftWingHealth = tailHealth = health;
 		seats = new EntityPassengerSeat[type.numPassengers];
@@ -218,7 +222,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     }
     
     @Override
-	public boolean pressKey(int key)
+	public boolean pressKey(int key, EntityPlayer player)
 	{
     	PlaneType type = this.getPlaneType();
     	if(FMLCommonHandler.instance().getEffectiveSide().isClient() && (key == 6 || key == 8 || key == 9))
@@ -403,6 +407,48 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 					flapsPitchRight -= 5F;
 				}
 				return true;
+			}
+			case 13 : // Gear
+			{
+				if(varGear == true && propSpeed > type.takeOffSpeed && type.hasGear == true)
+				{
+					varGear = false;
+					player.addChatMessage("Main Gear now Up.");
+				}
+				else if(varGear == false && type.hasGear == true)
+				{
+					varGear = true;
+					player.addChatMessage("Main Gear now Down.");
+				}
+				return false;
+			}
+			case 14 : // Door
+			{
+				if(varDoor == true && type.hasDoor == true)
+				{
+					varDoor = false;
+					player.addChatMessage("Doors now Closed.");
+				}
+				else if(varDoor == false && type.hasDoor == true)
+				{
+					varDoor = true;
+					player.addChatMessage("Doors now Open.");
+				}
+				return false;
+			}
+			case 15 : // Wing
+			{
+				if(varWing == true && type.hasWing == true)
+				{
+					varWing = false;
+					player.addChatMessage("Wings now in Position 1.");
+				}
+				else if(varWing == false && type.hasWing == true)
+				{
+					varWing = true;
+					player.addChatMessage("Wings now in Position 2");
+				}
+				return false;
 			}
 		}
 		
@@ -1296,6 +1342,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
  		tag.setInteger("LeftWingHealth", leftWingHealth);
  		tag.setInteger("RightWingHealth", rightWingHealth);
  		tag.setInteger("TailHealth", tailHealth);
+        tag.setBoolean("VarGear", varGear);
+        tag.setBoolean("VarDoor", varDoor);
+        tag.setBoolean("VarWing", varWing);
 		for(int i = 0; i < propBlown.length; i++)
 		{
 			tag.setBoolean("PropBlown " + i, propBlown[i]);
@@ -1320,6 +1369,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		leftWingHealth = tag.getInteger("LeftWingHealth");
 		rightWingHealth = tag.getInteger("RightWingHealth");
 		tailHealth = tag.getInteger("TailHealth");
+        varGear = tag.getBoolean("VarGear");
+        varDoor = tag.getBoolean("VarDoor");
+        varWing = tag.getBoolean("VarWing");
 		for(int i = 0; i < propBlown.length; i++)
 		{
 			propBlown[i] = tag.getBoolean("PropBlown " + i);
@@ -1352,4 +1404,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public double propSpeed;
 	public boolean tailOnGround;
 	private boolean spawnedEntities;
+    
+    public boolean varGear;
+    public boolean varDoor;
+    public boolean varWing;
 }

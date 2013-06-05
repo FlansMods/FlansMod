@@ -41,6 +41,11 @@ public class ModelPanzer extends ModelVehicle
 		rightFrontWheelModel = new ModelRendererTurbo[0];	
 		rightBackWheelModel = new ModelRendererTurbo[0];
 		
+		bodyDoorOpenModel = new ModelRendererTurbo[0];
+		bodyDoorCloseModel = new ModelRendererTurbo[0];
+		trailerModel = new ModelRendererTurbo[0];
+		wheelAniModel = new ModelRendererTurbo[0];
+
 		flipAll(); //For old models
 		translateAll(-8);
     }

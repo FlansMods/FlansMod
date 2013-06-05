@@ -185,7 +185,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public boolean pressKey(int key)
+	public boolean pressKey(int key, EntityPlayer player)
 	{
 		VehicleType type = getVehicleType();
     	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
@@ -281,6 +281,36 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			{
 				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
 				return true;
+			}
+			case 11 : // Roll Left
+			{
+				break;
+			}
+			case 12 : // Roll Right
+			{
+				break;
+			}
+			case 13 : // Gear
+			{
+				break;
+			}
+			case 14 : // Door
+			{
+				if(varDoor == true && type.hasDoor == true)
+				{
+					varDoor = false;
+					player.addChatMessage("Doors now Closed.");
+				}
+				else if(varDoor == false && type.hasDoor == true)
+				{
+					varDoor = true;
+					player.addChatMessage("Doors now Open.");
+				}
+				return false;
+			}
+			case 15 : //Wing
+			{
+				break;
 			}
 		}
 		
@@ -796,6 +826,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		tag.setFloat("RotationPitch", axes.getPitch());
 		tag.setFloat("RotationRoll", axes.getRoll());
 		tag.setInteger("Health", health);
+        tag.setBoolean("VarDoor", varDoor);
     }
 
 	@Override
@@ -814,6 +845,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		prevRotationRoll = tag.getFloat("RotationRoll");
 		axes = new RotatedAxes(prevRotationYaw, prevRotationPitch, prevRotationRoll);
 		health = tag.getInteger("Health");
+        varDoor = tag.getBoolean("VarDoor");
     }
 
 	@Override
@@ -930,4 +962,6 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	
 	private boolean spawnedEntities;
 	private Vector3f barrelVector;
+    
+    public boolean varDoor;
 }
