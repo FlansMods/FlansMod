@@ -242,6 +242,7 @@ public class ClientProxy extends CommonProxy
                 player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.keyCode) + " to switch the doors");
                 player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.wingKey.keyCode) + " to switch the wings");
                 player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.trimKey.keyCode) + " to trim the plane");
+                player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.hudKey.keyCode) + " to toggle the HUD");
 			}
 			else if (entityType instanceof EntityVehicle)
 			{
