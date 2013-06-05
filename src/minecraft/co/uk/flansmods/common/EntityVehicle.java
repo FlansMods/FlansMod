@@ -312,6 +312,15 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			{
 				break;
 			}
+            case 16 : // Trim Button
+            {
+                setRotation(-axes.getYaw(),0F, 0F);
+                break;
+            }
+            case 17 : //Park
+            {
+                break;
+            }
 		}
 		
 		return false;
