@@ -487,8 +487,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
                     FlansModClient.planeGUI = false;
                 }
                 return true;
+            }
 		}
-		
+
 		return false;
 	}
     
