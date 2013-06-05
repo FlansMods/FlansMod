@@ -134,10 +134,57 @@ public class ModelRendererTurbo extends ModelRenderer
     	copyTo(verts, new TexturedPolygon[] {addPolygonReturn(verts, u1, v1, u2, v2)});
     }
     
-    private TexturedPolygon addPolygonReturn(PositionTextureVertex[] verts, int u1, int v1, int u2, int v2)
-    {
-    	if(verts.length < 3)
-    		return null;
+    private TexturedPolygon addPolygonReturn(PositionTextureVertex[] verts, int u1, int v1, int u2, int v2, float q1, float q2, float q3, float q4) {
+    	if(verts.length < 3) return null;
+    	
+    	float uOffs = 1.0F / ((float) textureWidth * 10.0F);
+    	float vOffs = 1.0F / ((float) textureHeight * 10.0F);
+    	if(verts.length < 4)
+    	{
+    		float xMin = -1;
+    		float yMin = -1;
+    		float xMax = 0;
+    		float yMax = 0;
+    		
+    		for(int i = 0; i < verts.length; i++)
+    		{
+    			float xPos = verts[i].texturePositionX;
+    			float yPos = verts[i].texturePositionY;
+    			xMax = Math.max(xMax, xPos);
+    			xMin = (xMin < -1 ? xPos : Math.min(xMin, xPos));
+    			yMax = Math.max(yMax, yPos);
+    			yMin = (yMin < -1 ? yPos : Math.min(yMin, yPos));
+    		}
+    		float uMin = (float) u1 / (float) textureWidth + uOffs;
+    		float vMin = (float) v1 / (float) textureHeight + vOffs;
+    		float uSize = (float) (u2 - u1) / (float) textureWidth - uOffs * 2;
+    		float vSize = (float) (v2 - v1) / (float) textureHeight - vOffs * 2;
+    		
+    		float xSize = xMax - xMin;
+    		float ySize = yMax - yMin;
+    		for(int i = 0; i < verts.length; i++)
+    		{
+    			float xPos = verts[i].texturePositionX;
+    			float yPos = verts[i].texturePositionY;
+    			xPos = (xPos - xMin) / xSize;
+    			yPos = (yPos - yMin) / ySize;
+    			verts[i] = verts[i].setTexturePosition(uMin + (xPos * uSize), vMin + (yPos * vSize));
+    		}
+    	}
+    	else
+    	{
+	    	verts[0] = verts[0].setTexturePosition(((float)u2 / (float) textureWidth - uOffs)*q1, ((float)v1 / (float)textureHeight + vOffs)*q1, q1);
+	    	verts[1] = verts[1].setTexturePosition(((float)u1 / (float) textureWidth + uOffs)*q2, ((float)v1 / (float)textureHeight + vOffs)*q2, q2);
+	    	verts[2] = verts[2].setTexturePosition(((float)u1 / (float) textureWidth + uOffs)*q3, ((float)v2 / (float)textureHeight - vOffs)*q3, q3);
+	    	verts[3] = verts[3].setTexturePosition(((float)u2 / (float) textureWidth - uOffs)*q4, ((float)v2 / (float)textureHeight - vOffs)*q4, q4);
+    	}
+    	return new TexturedPolygon(verts);
+    }
+    
+    
+    private TexturedPolygon addPolygonReturn(PositionTextureVertex[] verts, int u1, int v1, int u2, int v2) {
+    	if(verts.length < 3) return null;
+    	
     	float uOffs = 1.0F / ((float) textureWidth * 10.0F);
     	float vOffs = 1.0F / ((float) textureHeight * 10.0F);
     	if(verts.length < 4)
@@ -199,6 +246,28 @@ public class ModelRendererTurbo extends ModelRenderer
      */
     public void addRectShape(float[] v, float[] v1, float[] v2, float[] v3, float[] v4, float[] v5, float[] v6, float[] v7, int w, int h, int d)
     {
+    	float[] var1 = new float[] {1,1,1,1,1,1,1,1,1,1,1,1};
+    	addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, var1);
+    }
+    
+    /**
+     * Adds a rectangular shape. Basically, you can make any eight-pointed shape you want,
+     * as the method requires eight vector coordinates. Also does some special texture mapping.
+     * @param v a float array with three values, the x, y and z coordinates of the vertex
+     * @param v1 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v2 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v3 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v4 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v5 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v6 a float array with three values, the x, y and z coordinates of the vertex
+     * @param v7 a float array with three values, the x, y and z coordinates of the vertex
+     * @param w the width of the shape, used in determining the texture
+     * @param h the height of the shape, used in determining the texture
+     * @param d the depth of the shape, used in determining the texture
+     * @param qParam Array containing the q parameters in the order xBack, xBottom, xFront, xTop, yBack, yFront, yLeft, yRight, zBottom, zLeft, zRight, zTop
+     */
+    public void addRectShape(float[] v, float[] v1, float[] v2, float[] v3, float[] v4, float[] v5, float[] v6, float[] v7, int w, int h, int d, float[] qParam)
+    {
     	PositionTextureVertex[] verts = new PositionTextureVertex[8];
         TexturedPolygon[] poly = new TexturedPolygon[6];
         PositionTextureVertex positionTexturevertex = new PositionTextureVertex(v[0], v[1], v[2], 0.0F, 0.0F);
@@ -217,24 +286,24 @@ public class ModelRendererTurbo extends ModelRenderer
         verts[5] = positionTexturevertex5;
         verts[6] = positionTexturevertex6;
         verts[7] = positionTexturevertex7;
-        poly[0] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex5, positionTexturevertex1, positionTexturevertex2, positionTexturevertex6
-        }, textureOffsetX + d + w, textureOffsetY + d, textureOffsetX + d + w + d, textureOffsetY + d + h);
-        poly[1] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex, positionTexturevertex4, positionTexturevertex7, positionTexturevertex3
-        }, textureOffsetX + 0, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h);
-        poly[2] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex5, positionTexturevertex4, positionTexturevertex, positionTexturevertex1
-        }, textureOffsetX + d, textureOffsetY + 0, textureOffsetX + d + w, textureOffsetY + d);
-        poly[3] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex2, positionTexturevertex3, positionTexturevertex7, positionTexturevertex6
-        }, textureOffsetX + d + w, textureOffsetY + 0, textureOffsetX + d + w + w, textureOffsetY + d);
-        poly[4] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex1, positionTexturevertex, positionTexturevertex3, positionTexturevertex2
-        }, textureOffsetX + d, textureOffsetY + d, textureOffsetX + d + w, textureOffsetY + d + h);
-        poly[5] = addPolygonReturn(new PositionTextureVertex[] {
-            positionTexturevertex4, positionTexturevertex5, positionTexturevertex6, positionTexturevertex7
-        }, textureOffsetX + d + w + d, textureOffsetY + d, textureOffsetX + d + w + d + w, textureOffsetY + d + h);
+        poly[0] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex5, positionTexturevertex1, positionTexturevertex2, positionTexturevertex6},
+        		textureOffsetX + d + w, textureOffsetY + d, textureOffsetX + d + w + d, textureOffsetY + d + h, 1F, qParam[7], qParam[10]*qParam[7], qParam[10]);
+        
+        poly[1] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex, positionTexturevertex4, positionTexturevertex7, positionTexturevertex3},
+        		textureOffsetX + 0, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h, qParam[9]*qParam[6], qParam[9], 1F, qParam[6]);
+        
+        poly[2] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex5, positionTexturevertex4, positionTexturevertex, positionTexturevertex1},
+        		textureOffsetX + d, textureOffsetY + 0, textureOffsetX + d + w, textureOffsetY + d, 1F, qParam[8], qParam[1]*qParam[8], qParam[1]);
+        
+        poly[3] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex2, positionTexturevertex3, positionTexturevertex7, positionTexturevertex6},
+        		textureOffsetX + d + w, textureOffsetY + 0, textureOffsetX + d + w + w, textureOffsetY + d, qParam[3], qParam[3]*qParam[11], qParam[11], 1F);
+        
+        poly[4] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex1, positionTexturevertex, positionTexturevertex3, positionTexturevertex2},
+        		textureOffsetX + d, textureOffsetY + d, textureOffsetX + d + w, textureOffsetY + d + h, qParam[0], qParam[0]*qParam[4], qParam[4], 1F);
+        
+        poly[5] = addPolygonReturn(new PositionTextureVertex[] { positionTexturevertex4, positionTexturevertex5, positionTexturevertex6, positionTexturevertex7},
+        		textureOffsetX + d + w + d, textureOffsetY + d, textureOffsetX + d + w + d + w, textureOffsetY + d + h, qParam[2]*qParam[5], qParam[2], 1F, qParam[5]);
+        
         if(mirror ^ flip)
         {
             for(int l = 0; l < poly.length; l++)
@@ -246,7 +315,7 @@ public class ModelRendererTurbo extends ModelRenderer
         
         copyTo(verts, poly);
     }
-
+    
     /**
      * Adds a new box to the model.
      * @param x the starting x-position
@@ -352,7 +421,7 @@ public class ModelRendererTurbo extends ModelRenderer
         f4 += scale;
         f5 += scale;
         f6 += scale;
-                
+        
         int m = (mirror ? -1 : 1);
         if(mirror)
         {
@@ -382,6 +451,7 @@ public class ModelRendererTurbo extends ModelRenderer
         	v7[1] += bottomScale;
         	v7[2] += bottomScale;
         	break;
+            
         case MR_LEFT:
         	v1[1] -= bottomScale;
         	v1[2] -= bottomScale;
@@ -392,6 +462,7 @@ public class ModelRendererTurbo extends ModelRenderer
         	v6[1] += bottomScale;
         	v6[2] += bottomScale;
         	break;
+            
         case MR_FRONT:
         	v[0] -= m * bottomScale;
         	v[1] -= bottomScale;
@@ -402,6 +473,7 @@ public class ModelRendererTurbo extends ModelRenderer
         	v3[0] -= m * bottomScale;
         	v3[1] += bottomScale;
         	break;
+            
         case MR_BACK:
         	v4[0] -= m * bottomScale;
         	v4[1] -= bottomScale;
@@ -412,6 +484,7 @@ public class ModelRendererTurbo extends ModelRenderer
         	v7[0] -= m * bottomScale;
         	v7[1] += bottomScale;
         	break;
+            
         case MR_TOP:
         	v[0] -= m * bottomScale;
         	v[2] -= bottomScale;
@@ -422,6 +495,7 @@ public class ModelRendererTurbo extends ModelRenderer
         	v5[0] += m * bottomScale;
         	v5[2] += bottomScale;
         	break;
+            
         case MR_BOTTOM:
         	v2[0] += m * bottomScale;
         	v2[2] -= bottomScale;
@@ -431,10 +505,26 @@ public class ModelRendererTurbo extends ModelRenderer
         	v6[2] += bottomScale;
         	v7[0] -= m * bottomScale;
         	v7[2] += bottomScale;
-        	break;
+            break;
         }
-
-        addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
+        
+        float[] qValues = new float[] {
+        		Math.abs((v[0] - v1[0])/(v3[0]-v2[0])),
+        		Math.abs((v[0] - v1[0])/(v4[0]-v5[0])),
+        		Math.abs((v4[0] - v5[0])/(v7[0]-v6[0])),
+        		Math.abs((v3[0] - v2[0])/(v7[0]-v6[0])),
+        		
+        		Math.abs((v[1] - v3[1])/(v1[1]-v2[1])),
+        		Math.abs((v4[1] - v7[1])/(v5[1]-v6[1])),
+        		Math.abs((v[1] - v3[1])/(v4[1]-v7[1])),
+        		Math.abs((v1[1] - v2[1])/(v5[1]-v6[1])),
+        		
+        		Math.abs((v[2] - v4[2])/(v1[2]-v5[2])),
+        		Math.abs((v[2] - v4[2])/(v3[2]-v7[2])),
+        		Math.abs((v1[2] - v5[2])/(v2[2]-v6[2])),
+        		Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
+        };
+        addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
     }
     
     /**
@@ -1723,7 +1813,7 @@ public class ModelRendererTurbo extends ModelRenderer
     			curTexGroup.loadTexture();
     			GL11.glCallList(displayListArray[i]);
     			if(!defaultTexture.equals(""))
-    				renderEngine.bindTexture(defaultTexture);
+    				renderEngine.bindTexture(renderEngine.getTexture(defaultTexture));
     		}
     	}
     }
