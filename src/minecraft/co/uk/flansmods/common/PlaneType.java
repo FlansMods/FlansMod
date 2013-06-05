@@ -83,7 +83,7 @@ public class PlaneType extends DriveableType
             if(split[0].equals("PosPark"))
                 posPark = Float.parseFloat(split[1]);
             if(split[0].equals("InflightInventory"))
-                invInflight = split[1].equals("True");
+                invInflight = split[1].equals("False");
                 
 			if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
@@ -323,7 +323,7 @@ public class PlaneType extends DriveableType
     public boolean hasDoor = false;
     public boolean hasWing = false;
     public float posPark = 0F;
-    public boolean invInflight = false;
+    public boolean invInflight = true;
 
 	public static int nextIconIndex = 5;
 	public static HashMap<String, PlaneType> types = new HashMap<String, PlaneType>();
