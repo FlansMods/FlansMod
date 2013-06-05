@@ -38,6 +38,7 @@ public class KeyInputHandler extends KeyHandler
     protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
     protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
     protected static KeyBinding parkKey = new KeyBinding("Park Key", Keyboard.KEY_P);
+    protected static KeyBinding hudKey = new KeyBinding("Hud Key", Keyboard.KEY_Y);
 
 	Minecraft mc;
 	
@@ -63,6 +64,7 @@ public class KeyInputHandler extends KeyHandler
                 wingKey,
                 trimKey,
                 parkKey,
+                hudKey,
 				teamsMenuKey,
 				teamsScoresKey
 				},
@@ -86,6 +88,7 @@ public class KeyInputHandler extends KeyHandler
                 false, //wing
                 false, // trim button
                 false, //park
+                false, //hud
 				false, // teams menu
 				false // teams scores menu
 						});
@@ -144,6 +147,8 @@ public class KeyInputHandler extends KeyHandler
             keyNum = 16;
         else if(kb == parkKey)
             keyNum = 17;
+        else if(kb == hudKey)
+            keyNum = 18;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());
