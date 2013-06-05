@@ -77,6 +77,9 @@ public class ModelKubel extends ModelVehicle
 		barrelModel = new ModelRendererTurbo[0];	
 		ammoModel = new ModelRendererTurbo[0];
 		
+		bodyDoorOpenModel = new ModelRendererTurbo[0];
+		bodyDoorCloseModel = new ModelRendererTurbo[0];
+		
 		flipAll(); //For old models
     }
 }

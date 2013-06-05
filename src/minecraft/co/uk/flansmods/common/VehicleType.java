@@ -67,7 +67,10 @@ public class VehicleType extends DriveableType
 				tank = split[1].equals("True");
 			if(split[0].equals("SquashMobs"))
 				squashMobs = split[1].equals("True");
-				
+
+			if(split[0].equals("HasDoor")) //Add Manus
+				hasDoor = split[1].equals("True");
+
 			if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
 				
@@ -309,6 +312,8 @@ public class VehicleType extends DriveableType
 	public boolean allowTurretGuns = false;
 	public boolean allowBodyGuns = true;
 	public boolean hasTurret = false;
+	
+	public boolean hasDoor = false; //Add Manus
 	
 	public static int nextIconIndex = 2;
 	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
