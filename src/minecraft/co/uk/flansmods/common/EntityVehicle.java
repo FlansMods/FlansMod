@@ -68,6 +68,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	
 	private void initType(VehicleType type)
 	{
+		gunYaw = 180F;
+		gunPitch = -5F;
 		health = type.health;
 		seats = new EntityPassengerSeat[type.numPassengers];
 		for(int i = 0; i < type.numPassengers; i++)
