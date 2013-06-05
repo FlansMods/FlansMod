@@ -116,7 +116,7 @@ public class TickHandlerClient implements ITickHandler
 		}
         if (FlansModClient.planeGUI == true && FMLClientHandler.instance().getClient().currentScreen == null)
         {
-            mc.fontRenderer.drawString("Heading: " + (FlansModClient.planeHeading) + " °" , 10, 10, 0xFFFFFF);
+            mc.fontRenderer.drawString("Heading: " + (FlansModClient.planeHeading) + " \u00B0" , 10, 10, 0xFFFFFF);
             mc.fontRenderer.drawString("Speed  : " + (Math.rint(FlansModClient.planeSpeed * 10) / 10.) + " m/s" , 10, 20, 0xFFFFFF);
             mc.fontRenderer.drawString("Altitude: " + (FlansModClient.planeHeight -1) + ".0 m" , 10, 30, 0xFFFFFF);
             mc.fontRenderer.drawString("Y Speed : " + (Math.rint(FlansModClient.planeYSpeed * 10) / 10.) + " m/s" , 10, 40, 0xFFFFFF);
