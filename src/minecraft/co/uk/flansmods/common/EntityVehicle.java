@@ -459,6 +459,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		motionY = newSpeed * -zAxis.y * split + actualMotionY * (1D - split); //X component of local Z axis
 		motionZ = newSpeed * -zAxis.z * split + actualMotionZ * (1D - split); //Z component of local Z axis
 
+        wheelsAngle -= acceleration / 8F;
 		//Steer
 		velocityYaw += wheelsYaw / 4F * (acceleration >= 0 ? 1F : -1F);
 		
@@ -973,4 +974,6 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	private Vector3f barrelVector;
     
     public boolean varDoor;
+    public float wheelsAngle;
+    public float trailerAngle;
 }
