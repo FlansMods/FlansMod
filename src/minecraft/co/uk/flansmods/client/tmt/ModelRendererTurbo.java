@@ -433,10 +433,268 @@ public class ModelRendererTurbo extends ModelRenderer
         	v7[2] += bottomScale;
         	break;
         }
-
         addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
     }
-    
+
+	/**
+	* Adds a trapezoid-like shape. It's achieved by expanding the shape on one side.
+	* You can use the static variables <code>MR_RIGHT</code>, <code>MR_LEFT</code>,
+	* <code>MR_FRONT</code>, <code>MR_BACK</code>, <code>MR_TOP</code> and
+	* <code>MR_BOTTOM</code>.
+	* @param x the starting x-position
+	* @param y the starting y-position
+	* @param z the starting z-position
+	* @param w the width (over the x-direction)
+	* @param h the height (over the y-direction)
+	* @param d the depth (over the z-direction)
+	* @param scale the "scale" of the box. It only increases the size in each direction by that many.
+	* @param bScale1 the "scale" of the bottom - Top
+	* @param bScale2 the "scale" of the bottom - Bottom
+	* @param bScale3 the "scale" of the bottom - Left
+	* @param bScale4 the "scale" of the bottom - Right
+	* @param dir the side the scaling is applied to
+	*/
+	public void addFlexBox(float x, float y, float z, int w, int h, int d, float scale, float bScale1, float bScale2, float bScale3, float bScale4, int dir)
+	{
+		float f4 = x + (float)w;
+		float f5 = y + (float)h;
+		float f6 = z + (float)d;
+		x -= scale;
+		y -= scale;
+		z -= scale;
+		f4 += scale;
+		f5 += scale;
+		f6 += scale;
+
+		int m = (mirror ? -1 : 1);
+		if(mirror)
+		{
+			float f7 = f4;
+			f4 = x;
+			x = f7;
+		}
+
+		float[] v = {x, y, z};
+		float[] v1 = {f4, y, z};
+		float[] v2 = {f4, f5, z};
+		float[] v3 = {x, f5, z};
+		float[] v4 = {x, y, f6};
+		float[] v5 = {f4, y, f6};
+		float[] v6 = {f4, f5, f6};
+		float[] v7 = {x, f5, f6};
+
+		switch(dir)
+		{
+			case MR_RIGHT:
+				v[1] -= bScale1;
+				v[2] -= bScale3;
+				v3[1] += bScale2;
+				v3[2] -= bScale3;
+				v4[1] -= bScale1;
+				v4[2] += bScale4;
+				v7[1] += bScale2;
+				v7[2] += bScale4;
+				break;
+			case MR_LEFT:
+				v1[1] -= bScale1;
+				v1[2] -= bScale3;
+				v2[1] += bScale2;
+				v2[2] -= bScale3;
+				v5[1] -= bScale1;
+				v5[2] += bScale4;
+				v6[1] += bScale2;
+				v6[2] += bScale4;
+				break;
+			case MR_FRONT:
+				v[0] -= m * bScale4;
+				v[1] -= bScale1;
+				v1[0] += m * bScale3;
+				v1[1] -= bScale1;
+				v2[0] += m * bScale3;
+				v2[1] += bScale2;
+				v3[0] -= m * bScale4;
+				v3[1] += bScale2;
+				break;
+			case MR_BACK:
+				v4[0] -= m * bScale4;
+				v4[1] -= bScale1;
+				v5[0] += m * bScale3;
+				v5[1] -= bScale1;
+				v6[0] += m * bScale3;
+				v6[1] += bScale2;
+				v7[0] -= m * bScale4;
+				v7[1] += bScale2;
+				break;
+			case MR_TOP:
+				v[0] -= m * bScale1;
+				v[2] -= bScale3;
+				v1[0] += m * bScale2;
+				v1[2] -= bScale3;
+				v4[0] -= m * bScale1;
+				v4[2] += bScale4;
+				v5[0] += m * bScale2;
+				v5[2] += bScale4;
+				break;
+			case MR_BOTTOM:
+				v2[0] += m * bScale2;
+				v2[2] -= bScale3;
+				v3[0] -= m * bScale1;
+				v3[2] -= bScale3;
+				v6[0] += m * bScale2;
+				v6[2] += bScale4;
+				v7[0] -= m * bScale1;
+				v7[2] += bScale4;
+				break;
+		}
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
+	}
+
+	/**
+	* Adds a trapezoid-like shape. It's achieved by expanding the shape on one side.
+	* You can use the static variables <code>MR_RIGHT</code>, <code>MR_LEFT</code>,
+	* <code>MR_FRONT</code>, <code>MR_BACK</code>, <code>MR_TOP</code> and
+	* <code>MR_BOTTOM</code>.
+	* @param x the starting x-position
+	* @param y the starting y-position
+	* @param z the starting z-position
+	* @param w the width (over the x-direction)
+	* @param h the height (over the y-direction)
+	* @param d the depth (over the z-direction)
+	* @param scale the "scale" of the box. It only increases the size in each direction by that many.
+	* @param bScale1 the "scale" of the bottom - Top
+	* @param bScale2 the "scale" of the bottom - Bottom
+	* @param bScale3 the "scale" of the bottom - Left
+	* @param bScale4 the "scale" of the bottom - Right
+	* @param fScale1 the "scale" of the top - Left
+	* @param fScale2 the "scale" of the top - Right
+	* @param dir the side the scaling is applied to
+	*/
+	public void addFlexTrapezoid(float x, float y, float z, int w, int h, int d, float scale, float bScale1, float bScale2, float bScale3, float bScale4, float fScale1, float fScale2, int dir)
+	{
+		float f4 = x + (float)w;
+		float f5 = y + (float)h;
+		float f6 = z + (float)d;
+		x -= scale;
+		y -= scale;
+		z -= scale;
+		f4 += scale;
+		f5 += scale;
+		f6 += scale;
+
+		int m = (mirror ? -1 : 1);
+		if(mirror)
+		{
+			float f7 = f4;
+			f4 = x;
+			x = f7;
+		}
+
+		float[] v = {x, y, z};
+		float[] v1 = {f4, y, z};
+		float[] v2 = {f4, f5, z};
+		float[] v3 = {x, f5, z};
+		float[] v4 = {x, y, f6};
+		float[] v5 = {f4, y, f6};
+		float[] v6 = {f4, f5, f6};
+		float[] v7 = {x, f5, f6};
+
+
+		switch(dir)
+		{
+			case MR_RIGHT:
+				v[2] -= fScale1;
+				v1[2] -= fScale1;
+				v4[2] += fScale2;
+				v5[2] += fScale2;
+
+				v[1] -= bScale1;
+				v[2] -= bScale3;
+				v3[1] += bScale2;
+				v3[2] -= bScale3;
+				v4[1] -= bScale1;
+				v4[2] += bScale4;
+				v7[1] += bScale2;
+				v7[2] += bScale4;
+				break;
+			case MR_LEFT:
+				v[2] -= fScale1;
+				v1[2] -= fScale1;
+				v4[2] += fScale2;
+				v5[2] += fScale2;
+
+				v1[1] -= bScale1;
+				v1[2] -= bScale3;
+				v2[1] += bScale2;
+				v2[2] -= bScale3;
+				v5[1] -= bScale1;
+				v5[2] += bScale4;
+				v6[1] += bScale2;
+				v6[2] += bScale4;
+				break;
+			case MR_FRONT:
+				v2[1] += fScale1;
+				v3[1] += fScale2;
+				v6[1] += fScale2;
+				v7[1] += fScale1;
+
+				v[0] -= m * bScale4;
+				v[1] -= bScale1;
+				v1[0] += m * bScale3;
+				v1[1] -= bScale1;
+				v2[0] += m * bScale3;
+				v2[1] += bScale2;
+				v3[0] -= m * bScale4;
+				v3[1] += bScale2;
+				break;
+			case MR_BACK:
+				v2[1] += fScale1;
+				v3[1] += fScale2;
+				v6[1] += fScale2;
+				v7[1] += fScale1;
+
+				v4[0] -= m * bScale4;
+				v4[1] -= bScale1;
+				v5[0] += m * bScale3;
+				v5[1] -= bScale1;
+				v6[0] += m * bScale3;
+				v6[1] += bScale2;
+				v7[0] -= m * bScale4;
+				v7[1] += bScale2;
+				break;
+			case MR_TOP:
+				v1[2] -= fScale1;
+				v2[2] -= fScale1;
+				v5[2] += fScale2;
+				v6[2] += fScale2;
+
+				v[0] -= m * bScale1;
+				v[2] -= bScale3;
+				v1[0] += m * bScale2;
+				v1[2] -= bScale3;
+				v4[0] -= m * bScale1;
+				v4[2] += bScale4;
+				v5[0] += m * bScale2;
+				v5[2] += bScale4;
+				break;
+			case MR_BOTTOM:
+				v1[2] -= fScale1;
+				v2[2] -= fScale1;
+				v5[2] += fScale2;
+				v6[2] += fScale2;
+
+				v2[0] += m * bScale2;
+				v2[2] -= bScale3;
+				v3[0] -= m * bScale1;
+				v3[2] -= bScale3;
+				v6[0] += m * bScale2;
+				v6[2] += bScale4;
+				v7[0] -= m * bScale1;
+				v7[2] += bScale4;
+				break;
+		}
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
+	}
+
     /**
      * Creates a shape from a 2D vector shape.
      * @param x the starting x position
