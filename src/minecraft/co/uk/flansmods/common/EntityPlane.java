@@ -465,16 +465,24 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
             case 16 : // Trim Button
             {
-                setRotation(-axes.getYaw(),0F, 0F);
-                riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
-                riddenByEntity.rotationPitch = axes.getPitch();
-                break;
+				if(trimButton == 1)
+				{
+					setRotation(-axes.getYaw(),0F, 0F);
+					riddenByEntity.rotationYaw = axes.getYaw();
+					riddenByEntity.rotationPitch = axes.getPitch();
+					trimButton ++;
+				}
+				else if(trimButton == 2)
+				{
+					setRotation(-axes.getYaw(), type.posPark, 0F);
+					riddenByEntity.rotationYaw = axes.getYaw();
+					riddenByEntity.rotationPitch = axes.getPitch();
+					trimButton --;
+				}
+				break;
             }
             case 17 : //Park
             {
-                setRotation(-axes.getYaw(), type.posPark, 0F);
-                riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
-                riddenByEntity.rotationPitch = axes.getPitch();
                 break;
             }
             case 18 : //Hud
@@ -1482,6 +1490,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public double flightHC = 0;
     public double flightHCold = 0;
     public int flightHCcount = 0;
+	
+	public int trimButton = 1;
     
     public boolean varHud;
 }
