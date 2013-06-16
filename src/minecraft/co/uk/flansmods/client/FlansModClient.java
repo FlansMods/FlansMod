@@ -195,18 +195,18 @@ public class FlansModClient extends FlansMod
 					throw new RuntimeException(e);
 				}		
 			}
+			if(minecraft.thePlayer.ridingEntity instanceof EntityVehicle) // Add CameraDistance for Vehicles
+			{
+				try
+				{
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance", "B");
+				} catch (Exception e)
+				{
+					log("I forgot to update obfuscated reflection D:");
+					throw new RuntimeException(e);
+				}
+			}
 		}
-        if(minecraft.thePlayer.ridingEntity instanceof EntityVehicle) // Add CameraDistance for Vehicles
-        {
-            try
-            {
-                ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance", "B");
-            } catch (Exception e)
-            {
-                log("I forgot to update obfuscated reflection D:");
-                throw new RuntimeException(e);
-            }
-        }
 		else if(inPlane)
 		{
 			try
