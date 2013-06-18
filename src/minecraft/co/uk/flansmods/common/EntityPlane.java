@@ -159,7 +159,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			tag.writeNamedTag(tag, data);
 			
 			data.writeFloat(axes.getYaw());
-			data.writeFloat(axes.getPitch());
+			data.writeFloat(-axes.getPitch());
 			data.writeFloat(axes.getRoll());
 		}
 		catch (IOException e)
@@ -1413,7 +1413,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		data.writeToNBT(tag);
 		tag.setString("Type", type);
 		tag.setFloat("RotationYaw2", -axes.getYaw());
-		tag.setFloat("RotationPitch2", axes.getPitch());
+		tag.setFloat("RotationPitch2", -axes.getPitch());
 		tag.setFloat("RotationRoll2", axes.getRoll());
 		tag.setInteger("Health", health);
  		tag.setInteger("LeftWingHealth", leftWingHealth);
