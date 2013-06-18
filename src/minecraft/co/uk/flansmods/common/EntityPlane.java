@@ -28,9 +28,6 @@ import co.uk.flansmods.common.vector.Vector3f;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import co.uk.flansmods.client.FlansModClient;
-import cpw.mods.fml.client.FMLClientHandler;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -159,7 +156,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			tag.writeNamedTag(tag, data);
 			
 			data.writeFloat(axes.getYaw());
-			data.writeFloat(axes.getPitch());
+			data.writeFloat(-axes.getPitch());
 			data.writeFloat(axes.getRoll());
 		}
 		catch (IOException e)
@@ -315,14 +312,13 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			case 6 : //Exit
 			{
 				riddenByEntity.mountEntity(this);
-                FlansModClient.planeGUI = false;
-				return true;
+          		return true;
 			}
 			case 7 :
 			{
 				if(type.invInflight == false)
                 {
-                    if(worldObj.isRemote && propSpeed < 0.1 && FlansModClient.planeHeight < 2)
+                    if(worldObj.isRemote && propSpeed < 0.1 && onGround)
                     FlansMod.proxy.openDriveableMenu((EntityPlayer)riddenByEntity, worldObj, this);
                 }
                 else
@@ -484,17 +480,6 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
             case 17 : //Park
             {
                 break;
-            }
-            case 18 : //Hud
-            {
-                if (FlansModClient.planeGUI == false)
-                {
-                    FlansModClient.planeGUI = true;
-                } else
-                {
-                    FlansModClient.planeGUI = false;
-                }
-                return true;
             }
 		}
 
@@ -680,37 +665,6 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
             return;
         }
         PlaneType type = this.getPlaneType();
-
-		//Height
-		int blockID;
-		for(int j = 0; j < 513; j++)
-		{
-			blockID = worldObj.getBlockId((int)posX, (int)posY - j, (int)posZ);
-			if(blockID != 0)
-			{
-				FlansModClient.planeHeight = j;
-				break;
-			}
-		}
-		
-		//Height Change
-		flightHC = posY;
-		flightHCcount ++;
-		if(flightHCcount == 19)
-		{
-			FlansModClient.planeYSpeed =  flightHC - flightHCold;
-			flightHCold = flightHC;
-			flightHCcount = 0;
-		}
-		FlansModClient.planeSpeed = propSpeed;
-
-		double rotHead = Math.rint(axes.getYaw());//riddenByEntity.rotationYaw
-		double rotHead2 = Math.ceil(rotHead /360);
-		rotHead = 180 + rotHead - (360 * rotHead2);
-		if(rotHead < 0)
-		{ rotHead += 360;}
-        rotHead = 360 - rotHead;
-		FlansModClient.planeHeading = rotHead;   
 
 		//Plane movement
 		int numPropsWorking = 0;
@@ -1413,7 +1367,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		data.writeToNBT(tag);
 		tag.setString("Type", type);
 		tag.setFloat("RotationYaw2", -axes.getYaw());
-		tag.setFloat("RotationPitch2", axes.getPitch());
+		tag.setFloat("RotationPitch2", -axes.getPitch());
 		tag.setFloat("RotationRoll2", axes.getRoll());
 		tag.setInteger("Health", health);
  		tag.setInteger("LeftWingHealth", leftWingHealth);
@@ -1485,13 +1439,6 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     public boolean varGear;
     public boolean varDoor;
     public boolean varWing;
-    
-    public int flightHeight;
-    public double flightHC = 0;
-    public double flightHCold = 0;
-    public int flightHCcount = 0;
-	
+  
 	public int trimButton = 1;
-    
-    public boolean varHud;
 }
