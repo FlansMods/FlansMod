@@ -56,12 +56,6 @@ public class FlansModClient extends FlansMod
 	public static float newZoom = 1.0F;
 	public static float lastPlayerZoom;
     
-    public static boolean planeGUI = false;
-    public static int planeHeight;
-    public static double planeSpeed;
-    public static double planeYSpeed = 0D;
-    public static double planeHeading = 0F;
-	
 	public static float originalMouseSensitivity = 0.5F;
 	public static boolean originalHideGUI = false;
 	public static int originalThirdPerson = 0;
