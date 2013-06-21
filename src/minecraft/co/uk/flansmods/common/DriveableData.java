@@ -143,10 +143,8 @@ public class DriveableData extends WorldSavedData implements IInventory
 					i -= cargo.length;
 					inv = new ItemStack[1];
 					inv[0] = fuel;		
-					if(fuel.getItem() instanceof ItemPart == false )//((ItemPart)fuel.getItem()).type.category != 9 || 
-					{
-						setInventorySlotContents(getFuelSlot(), null);
-					}
+
+					setInventorySlotContents(getFuelSlot(), null);
 				}
 			}	
 		}
