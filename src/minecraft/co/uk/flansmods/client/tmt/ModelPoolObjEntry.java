@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
