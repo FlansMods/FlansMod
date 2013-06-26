@@ -4,23 +4,27 @@
 ####                               ####
 #######################################
 
-- Forge mod information files added
-- Tank barrerls spawn facing the correct way
-- Added roll buttons, default to \ and X
+Changes:
 - Increased propellor spin speed
 - Planes no longer moveable by entities
-- Added spinning wheels for vehicles
-- Added toggleable plane wings, doors and gear to planes/vehicles. Buttons J, K and L
-- Added Trim/Park key "O" to reset plane position to parked or neutral
-- Planes spawn in "park" position set in plane files
+
+Fixes:
+- Fixed tank barrels facing the wrong way when spawned
 - Fixed camera view distance change for third person
-- Added option to restrict access to plane inventories during flight
-- Added FlexBox and FlexTrapezoids to TMT for pack makers
 - Fixed plane pitch switching upon reloading map
 - Fixed a critical dupe exploit
+- Fixed various team spawn issues
+
+Additions:
+- Added Forge mod information files
+- Added roll buttons, default to \ and X
+- Added spinning wheels for vehicles
+- Added toggleable plane wings, doors and gear to planes/vehicles. Buttons J, K and L
+- Added config option to planes for parked position, planes spawn in paked position
+- Added Trim/Park key "O" to reset plane position to parked or neutral
+- Added option to restrict access to plane inventories during flight
+- Added FlexBox and FlexTrapezoids to TMT for pack makers
 - Added scope time setting to guns
 - Added ability to have AAGuns, Planes and Vehicles despawn after a configurable time.
 - Added map rotation for teams games
 - Added Conquest gametype?
-- Fixed various team spawn issues
-
