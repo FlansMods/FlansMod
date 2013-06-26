@@ -390,9 +390,9 @@ public class GametypeConquest extends Gametype {
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		friendlyFire = tags.getBoolean("FriendlyFire");
-		autoBalance = tags.getBoolean("AutoBalance");
-		captureTimerLimit = tags.getInteger("CaptureTime");
+		friendlyFire = tags.getBoolean("ConqFriendlyFire");
+		autoBalance = tags.getBoolean("ConqAutoBalance");
+		captureTimerLimit = tags.getInteger("ConqCaptureTime");
 		if(captureTimerLimit <= 0)
 			captureTimerLimit = 400;
 	}
@@ -400,9 +400,9 @@ public class GametypeConquest extends Gametype {
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setBoolean("FriendlyFire", friendlyFire);
-		tags.setBoolean("AutoBalance", autoBalance);
-		tags.setInteger("CaptureTime", captureTimerLimit);
+		tags.setBoolean("ConqFriendlyFire", friendlyFire);
+		tags.setBoolean("ConqAutoBalance", autoBalance);
+		tags.setInteger("ConqCaptureTime", captureTimerLimit);
 	}
 	
 	@Override

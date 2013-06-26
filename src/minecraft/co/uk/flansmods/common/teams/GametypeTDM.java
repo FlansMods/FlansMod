@@ -326,17 +326,17 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		scoreLimit = tags.getInteger("ScoreLimit");
-		friendlyFire = tags.getBoolean("FriendlyFire");
-		autoBalance = tags.getBoolean("AutoBalance");
+		scoreLimit = tags.getInteger("TDMScoreLimit");
+		friendlyFire = tags.getBoolean("TDMFriendlyFire");
+		autoBalance = tags.getBoolean("TDMAutoBalance");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("ScoreLimit", scoreLimit);
-		tags.setBoolean("FriendlyFire", friendlyFire);
-		tags.setBoolean("AutoBalance", autoBalance);
+		tags.setInteger("TDMScoreLimit", scoreLimit);
+		tags.setBoolean("TDMFriendlyFire", friendlyFire);
+		tags.setBoolean("TDMAutoBalance", autoBalance);
 	}
 	
 	@Override

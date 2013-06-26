@@ -278,13 +278,13 @@ public class GametypeDM extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		scoreLimit = tags.getInteger("ScoreLimit");
+		scoreLimit = tags.getInteger("DMScoreLimit");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("ScoreLimit", scoreLimit);
+		tags.setInteger("DMScoreLimit", scoreLimit);
 	}
 	
 	

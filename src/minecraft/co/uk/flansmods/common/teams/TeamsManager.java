@@ -25,6 +25,7 @@ import net.minecraft.network.packet.Packet6SpawnPosition;
 import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -36,6 +37,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -469,9 +471,9 @@ public class TeamsManager implements IPlayerTracker
 			if(currentMap != null)
 				tags.setString("Map", currentMap.shortName);
 			tags.setString("Gametype", currentGametype == null ? "None" : currentGametype.shortName);
-			if(currentGametype != null)
+			for(Gametype gametype : Gametype.gametypes)
 			{
-				currentGametype.saveToNBT(tags);
+				gametype.saveToNBT(tags);
 			}
 			if(teams != null)
 			{
@@ -595,9 +597,23 @@ public class TeamsManager implements IPlayerTracker
 			{
 				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 				
-				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				/*FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);*/
 				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
+				
+                if (!playerMP.playerNetServerHandler.connectionClosed)
+                {
+                    EnderTeleportEvent event = new EnderTeleportEvent(playerMP, spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+                    event.attackDamage = 0;
+                    if (!MinecraftForge.EVENT_BUS.post(event)){
+                    	playerMP.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
+                    	playerMP.fallDistance = 0.0F;
+                    	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
+                    }
+
+                }
 			}
 			
 			
