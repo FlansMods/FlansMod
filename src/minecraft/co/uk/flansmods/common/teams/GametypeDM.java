@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,7 +67,14 @@ public class GametypeDM extends Gametype
 	{
 		newRoundTimer--;
 		if(newRoundTimer == 0)
+		{
+			if(FlansMod.useRotation)
+			{
+				TeamsManager.getInstance().switchToNextGametype();
+				return;
+			}
 			startNewRound();
+		}
 		if(teamsManager.teams != null)
 		{
 			for(Team team : teamsManager.teams)

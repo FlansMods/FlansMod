@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -77,7 +78,14 @@ public class GametypeConquest extends Gametype {
 	{
 		newRoundTimer--;
 		if(newRoundTimer == 0)
+		{
+			if(FlansMod.useRotation)
+			{
+				TeamsManager.getInstance().switchToNextGametype();
+				return;
+			}
 			startNewRound();
+		}
 		if(teamsManager.teams != null)
 		{
 			for(int i = 0; i < 2; i++)

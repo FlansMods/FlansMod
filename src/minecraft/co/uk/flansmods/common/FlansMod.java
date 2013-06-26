@@ -52,12 +52,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "@VERSION@")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.4")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[@VERSIONBOUNDS@]",
+	    versionBounds = "[2.4, ]",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -95,6 +95,7 @@ public class FlansMod
 	public static long lastTime;
 	
 	// Player changeable stuff
+	public static boolean useRotation = false;
 	public static boolean explosions = false;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;

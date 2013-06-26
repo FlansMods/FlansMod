@@ -73,6 +73,8 @@ public class TeamsManager implements IPlayerTracker
 	public List<TeamsMap> maps;
 	private int nextBaseID = 1;
 	private long time;
+	public List<RotationEntry> rotation;
+	public int currentRotationEntry;
 	
 	public TeamsManager()
 	{
@@ -84,6 +86,7 @@ public class TeamsManager implements IPlayerTracker
 		objects = new ArrayList<ITeamObject>();
 		maps = new ArrayList<TeamsMap>();
 		maps.add(TeamsMap.def);
+		rotation = new ArrayList<RotationEntry>();
 		currentMap = TeamsMap.def;
 		
 		
@@ -103,6 +106,7 @@ public class TeamsManager implements IPlayerTracker
 		objects = new ArrayList<ITeamObject>();
 		maps = new ArrayList<TeamsMap>();
 		maps.add(TeamsMap.def);
+		rotation = new ArrayList<RotationEntry>();
 	}
 	
 	public static TeamsManager getInstance()
@@ -138,6 +142,20 @@ public class TeamsManager implements IPlayerTracker
 		        world.getEntityTracker().sendPacketToAllPlayersTrackingEntity(player, new Packet34EntityTeleport(player));	
 			}
 		}
+	}
+	
+	public void switchToNextGametype()
+	{
+		currentRotationEntry = (currentRotationEntry + 1) % rotation.size();
+		RotationEntry entry = rotation.get(currentRotationEntry);
+		if(currentGametype != null && currentGametype != entry.gametype)
+		{
+			currentGametype.stopGametype();
+		}
+		currentGametype = entry.gametype;
+		currentMap = entry.map;
+		teams = entry.teams;
+		currentGametype.initGametype();
 	}
 	
 	public EntityPlayerMP getPlayer(String username)
@@ -393,6 +411,23 @@ public class TeamsManager implements IPlayerTracker
 					teams[i] = Team.getTeam(tags.getString("Team " + i));
 				}
 			}
+			int rotationSize = tags.getInteger("RotationSize");
+			for(int i = 0; i < rotationSize; i++)
+			{
+				TeamsMap map = getTeamsMap(tags.getString("RotationMap " + i));
+				Gametype gametype = Gametype.getGametype(tags.getString("RotationGametype " + i));
+				int nTeams = tags.getInteger("RotationTeams " + i);
+				Team[] demTeams = new Team[nTeams];
+				for(int j = 0; j < nTeams; j++)
+				{
+					demTeams[j] = Team.getTeam(tags.getString("RotationTeam " + i + " " + j));
+				}
+				if(map != null && gametype != null)
+				{
+					rotation.add(new RotationEntry(map, gametype, demTeams));
+				}
+			}
+			FlansMod.useRotation = tags.getBoolean("UseRotation");
 			FlansMod.bombsEnabled = tags.getBoolean("Bombs");
 			FlansMod.bulletsEnabled = tags.getBoolean("Bullets");
 			FlansMod.explosions = tags.getBoolean("Explosions");
@@ -446,6 +481,26 @@ public class TeamsManager implements IPlayerTracker
 						tags.setString("Team " + i, teams[i].shortName);
 				}
 			}
+			if(rotation != null)
+			{
+				tags.setInteger("RotationSize", rotation.size());
+				for(int i = 0; i < rotation.size(); i++)
+				{
+					RotationEntry entry = rotation.get(i);
+					if(entry != null)
+					{
+						tags.setString("RotationMap " + i, entry.map.shortName);
+						tags.setString("RotationGametype " + i, entry.gametype.shortName);
+						tags.setInteger("RotationTeams " + i, entry.teams.length);
+						for(int j = 0; j < entry.teams.length; j++)
+						{
+							tags.setString("RotationTeam " + i + " " + j, entry.teams[j].shortName);
+						}
+					}
+				}
+			}
+			else tags.setInteger("RotationSize", 0);
+			tags.setBoolean("UseRotation", FlansMod.useRotation);
 			tags.setBoolean("Bombs", FlansMod.bombsEnabled);
 			tags.setBoolean("Bullets", FlansMod.bulletsEnabled);
 			tags.setBoolean("Explosions", FlansMod.explosions);
@@ -685,5 +740,19 @@ public class TeamsManager implements IPlayerTracker
 				return map;
 		}
 		return null;
+	}
+	
+	public static class RotationEntry
+	{
+		public TeamsMap map;
+		public Gametype gametype;
+		public Team[] teams;
+		
+		public RotationEntry(TeamsMap m, Gametype g, Team[] t)
+		{
+			map = m;
+			gametype = g;
+			teams = t;
+		}
 	}
 }
