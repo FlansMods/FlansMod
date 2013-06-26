@@ -52,7 +52,7 @@ public class CommandTeams extends CommandBase {
 				sender.sendChatToPlayer("\u00a74To set the gametype, use \"/teams setGametype <gametype>\" with a valid gametype.");
 				return;
 			}
-			if(split[1].equals("None"))
+			if(split[1].toLowerCase().equals("none"))
 			{
 				if(teamsManager.currentGametype != null)
 					teamsManager.currentGametype.stopGametype();
@@ -366,6 +366,45 @@ public class CommandTeams extends CommandBase {
 			if(FlansMod.mgLife > 0)
 				sender.sendChatToPlayer("MGs will despawn after " + FlansMod.mgLife + " seconds");
 			else sender.sendChatToPlayer("MGs will not despawn");
+			return;
+		}
+		if(split[0].equals("planeLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.planeLife = Integer.parseInt(split[1]);
+			if(FlansMod.planeLife > 0)
+				sender.sendChatToPlayer("Planes will despawn after " + FlansMod.planeLife + " seconds");
+			else sender.sendChatToPlayer("Planes will not despawn");
+			return;
+		}
+		if(split[0].equals("vehicleLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.vehicleLife = Integer.parseInt(split[1]);
+			if(FlansMod.vehicleLife > 0)
+				sender.sendChatToPlayer("Vehicles will despawn after " + FlansMod.vehicleLife + " seconds");
+			else sender.sendChatToPlayer("Vehicles will not despawn");
+			return;
+		}
+		if(split[0].equals("aaLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.aaLife = Integer.parseInt(split[1]);
+			if(FlansMod.aaLife > 0)
+				sender.sendChatToPlayer("AA Guns will despawn after " + FlansMod.aaLife + " seconds");
+			else sender.sendChatToPlayer("AA Guns will not despawn");
 			return;
 		}
 		if(split[0].equals("setVariable"))

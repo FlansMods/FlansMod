@@ -201,10 +201,10 @@ public class GametypeTDM extends Gametype
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
+			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
+				return false;
 			//Spectators may not attack players
 			if(getPlayerData(attacker).team == Team.spectators)
-				return false;
-			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
 				return false;
 			//Check for friendly fire
 			if(getPlayerData(player).team == getPlayerData(attacker).team)

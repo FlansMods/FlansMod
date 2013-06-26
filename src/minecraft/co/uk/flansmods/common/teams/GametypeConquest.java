@@ -26,7 +26,7 @@ public class GametypeConquest extends Gametype {
 
 	public GametypeConquest() 
 	{
-		super("Conquest", "CON", 2);
+		super("Conquest (Broken)", "CON", 2);
 	}
 
 	@Override

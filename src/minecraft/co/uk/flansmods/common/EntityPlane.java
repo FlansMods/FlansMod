@@ -527,6 +527,14 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
         prevRotationPitch = axes.getPitch();
         prevRotationRoll = axes.getRoll();
         
+		ticksSinceUsed++;
+		if(FlansMod.planeLife > 0 && ticksSinceUsed > FlansMod.planeLife * 20)
+		{
+			setDead();
+		}
+		if(riddenByEntity != null)
+			ticksSinceUsed = 0;
+		
         if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
         {
             double x;
@@ -1332,4 +1340,5 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public double propSpeed;
 	public boolean tailOnGround;
 	private boolean spawnedEntities;
+	public int ticksSinceUsed = 0;
 }
