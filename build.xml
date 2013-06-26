@@ -20,7 +20,6 @@
     <property file="build.properties" />
     
     <property name="flansmod.verion" value="${flansmod.version}" />
-    <property name="flansmod.versionbounds" value="${flansmod.versionbounds}"/>
 	<property name="mc.version" value="${mc.version}"/>
 	<property name="forge.version" value="${forge.version}"/>
 
@@ -80,11 +79,6 @@
 		<!-- Copy sources -->
 		<copy todir="${mcpsrc.dir}/minecraft">
 			<fileset dir="${src.dir}/minecraft"/>
-			<filterset>
-				<filter token="VERSION" value="${flansmod.version}" />
-                <filter token="MCVERSION" value="${mc.version}" />
-                <filter token="VERSIONBOUNDS" value="${flansmod.versionbounds}" />
-			</filterset>
 		</copy>
 	</target>
 
