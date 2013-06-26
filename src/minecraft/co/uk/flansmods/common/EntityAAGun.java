@@ -49,6 +49,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public int currentBarrel; // For cycling through firing each barrel
 	public boolean mouseHeld;
 	public boolean wasShooting;
+	
+	public int ticksSinceUsed = 0;
 
 	public EntityAAGun(World world)
 	{
@@ -169,8 +171,15 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
+		ticksSinceUsed++;
+		if(FlansMod.aaLife > 0 && ticksSinceUsed > FlansMod.aaLife * 20)
+		{
+			setDead();
+		}
+
 		if (riddenByEntity != null)
 		{
+			ticksSinceUsed = 0;
 			gunYaw = riddenByEntity.rotationYaw - 90;
 			gunPitch = riddenByEntity.rotationPitch;
 		}

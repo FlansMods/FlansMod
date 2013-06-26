@@ -52,7 +52,7 @@ public class CommandTeams extends CommandBase {
 				sender.sendChatToPlayer("\u00a74To set the gametype, use \"/teams setGametype <gametype>\" with a valid gametype.");
 				return;
 			}
-			if(split[1].equals("None"))
+			if(split[1].toLowerCase().equals("none"))
 			{
 				if(teamsManager.currentGametype != null)
 					teamsManager.currentGametype.stopGametype();
@@ -243,6 +243,71 @@ public class CommandTeams extends CommandBase {
 			}
 			return;
 		}
+		if(split[0].equals("useRotation"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <true/false>");	
+				return;
+			}
+			FlansMod.useRotation = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer("Map rotation is now " + (FlansMod.useRotation ? "enabled" : "disabled"));
+			return;
+		}
+		if(split[0].equals("listRotation"))
+		{
+			sender.sendChatToPlayer("\u00a72Current Map Rotation");
+			for(int i = 0; i < TeamsManager.getInstance().rotation.size(); i++)
+			{
+				TeamsManager.RotationEntry entry = TeamsManager.getInstance().rotation.get(i);
+				String s = i + ". " + entry.map.shortName + ", " + entry.gametype.shortName;
+				if(i == TeamsManager.getInstance().currentRotationEntry)
+				{
+					s = "\u00a74" + s;
+				}
+				for(int j = 0; j < entry.teams.length; j++)
+				{
+					s += ", " + entry.teams[j].shortName;
+				}
+				sender.sendChatToPlayer(s);
+			}
+			return;
+		}
+		if(split[0].equals("removeMapFromRotation") || split[0].equals("removeFromRotation") || split[0].equals("removeRotation"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <ID>");	
+				return;
+			}
+			int map = Integer.parseInt(split[1]);
+			sender.sendChatToPlayer("Removed map " + map + " (" + TeamsManager.getInstance().rotation.get(map).map.shortName + ") from rotation");
+			TeamsManager.getInstance().rotation.remove(map);
+			return;
+		}
+		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation"))
+		{
+			if(split.length < 5)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ...");	
+				return;
+			}
+			TeamsMap map = TeamsManager.getInstance().getTeamsMap(split[1]);
+			Gametype gametype = Gametype.getGametype(split[2]);
+			if(split.length != 3 + gametype.numTeamsRequired)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ...");	
+				return;
+			}
+			Team[] teams = new Team[gametype.numTeamsRequired];
+			for(int i = 0; i < teams.length; i++)
+			{
+				teams[i] = Team.getTeam(split[3 + i]);
+			}
+			sender.sendChatToPlayer("Added map (" + map.shortName + ") to rotation");
+			TeamsManager.getInstance().rotation.add(new TeamsManager.RotationEntry(map, gametype, teams));
+			return;
+		}
 		if(split[0].equals("forceAdventure") || split[0].equals("forceAdventureMode"))
 		{
 			if(split.length != 2)
@@ -273,7 +338,7 @@ public class CommandTeams extends CommandBase {
 				return;
 			}
 			FlansMod.bombsEnabled = Boolean.parseBoolean(split[1]);
-			sender.sendChatToPlayer("Boms are now " + (FlansMod.bombsEnabled ? "enabled" : "disabled"));
+			sender.sendChatToPlayer("Bombs are now " + (FlansMod.bombsEnabled ? "enabled" : "disabled"));
 			return;
 		}
 		if(split[0].equals("bullets") || split[0].equals("bulletsEnabled"))
@@ -366,6 +431,45 @@ public class CommandTeams extends CommandBase {
 			if(FlansMod.mgLife > 0)
 				sender.sendChatToPlayer("MGs will despawn after " + FlansMod.mgLife + " seconds");
 			else sender.sendChatToPlayer("MGs will not despawn");
+			return;
+		}
+		if(split[0].equals("planeLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.planeLife = Integer.parseInt(split[1]);
+			if(FlansMod.planeLife > 0)
+				sender.sendChatToPlayer("Planes will despawn after " + FlansMod.planeLife + " seconds");
+			else sender.sendChatToPlayer("Planes will not despawn");
+			return;
+		}
+		if(split[0].equals("vehicleLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.vehicleLife = Integer.parseInt(split[1]);
+			if(FlansMod.vehicleLife > 0)
+				sender.sendChatToPlayer("Vehicles will despawn after " + FlansMod.vehicleLife + " seconds");
+			else sender.sendChatToPlayer("Vehicles will not despawn");
+			return;
+		}
+		if(split[0].equals("aaLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer("Incorrect Usage : Should be /teams " + split[0] + " <time>");	
+				return;
+			}
+			FlansMod.aaLife = Integer.parseInt(split[1]);
+			if(FlansMod.aaLife > 0)
+				sender.sendChatToPlayer("AA Guns will despawn after " + FlansMod.aaLife + " seconds");
+			else sender.sendChatToPlayer("AA Guns will not despawn");
 			return;
 		}
 		if(split[0].equals("setVariable"))

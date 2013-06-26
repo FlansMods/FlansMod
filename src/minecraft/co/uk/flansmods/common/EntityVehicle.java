@@ -398,6 +398,14 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         prevRotationPitch = axes.getPitch();
         prevRotationRoll = axes.getRoll();
         
+		ticksSinceUsed++;
+		if(FlansMod.vehicleLife > 0 && ticksSinceUsed > FlansMod.vehicleLife * 20)
+		{
+			setDead();
+		}
+		if(riddenByEntity != null)
+			ticksSinceUsed = 0;
+        
         if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
         {
             double x;
@@ -972,6 +980,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	
 	private boolean spawnedEntities;
 	private Vector3f barrelVector;
+	private int ticksSinceUsed = 0;
     
     public boolean varDoor;
     public float wheelsAngle;

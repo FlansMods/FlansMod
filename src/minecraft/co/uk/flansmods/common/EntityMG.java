@@ -44,6 +44,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	//Client side
 	public boolean wasShooting = false;
 	
+	public int ticksSinceUsed = 0;
+	
 	public EntityMG(World world)
 	{
 		super(world);
@@ -80,7 +82,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if(FlansMod.mgLife > 0 && ticksExisted > FlansMod.mgLife * 20)
+		ticksSinceUsed++;
+		if(FlansMod.mgLife > 0 && ticksSinceUsed > FlansMod.mgLife * 20)
 		{
 			setDead();
 		}
@@ -95,6 +98,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		prevRotationPitch = rotationPitch;
 		if (gunner != null)
 		{
+			ticksSinceUsed = 0;
 			rotationYaw = gunner.rotationYaw - direction * 90;
 			for (; rotationYaw < -180; rotationYaw += 360)
 			{

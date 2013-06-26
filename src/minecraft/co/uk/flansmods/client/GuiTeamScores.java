@@ -64,6 +64,12 @@ public class GuiTeamScores extends GuiScreen
 		try
 		{
 			gametype = stream.readUTF();
+			if(gametype.equals("No Gametype"))
+			{
+				numTeams = 0;
+				teamData = new TeamData[0];
+				return;
+			}
 			sortedByTeam = stream.readBoolean();
 			if(sortedByTeam)
 			{

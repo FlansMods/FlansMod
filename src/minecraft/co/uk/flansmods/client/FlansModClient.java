@@ -49,6 +49,7 @@ public class FlansModClient extends FlansMod
 	public static int controlModeSwitchTimer = 20;
 	
 	public static int shootTime;
+	public static int scopeTime;
 	public static String zoomOverlay;
 	public static float playerRecoil;
 	public static float antiRecoil;
@@ -122,6 +123,8 @@ public class FlansModClient extends FlansMod
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
+		if(scopeTime > 0)
+			scopeTime--;
 		if (playerRecoil > 0)
 			playerRecoil *= 0.8F;
 		minecraft.thePlayer.rotationPitch -= playerRecoil;
@@ -258,56 +261,60 @@ public class FlansModClient extends FlansMod
 	private void loadPerWorldData(Event event, World world)
 	{
 		File file = new File("teams.dat");
-		checkFileExists(file);
-		try
+		if(checkFileExists(file))
 		{
-			blueprintsUnlocked = new ArrayList<DriveableType>();
-			vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
-			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-			int numPlaneBlues = tags.getInteger("NumPlaneBlues");
-			for(int i = 0; i < numPlaneBlues; i++)
+			try
 			{
-				blueprintsUnlocked.add(PlaneType.getPlane(tags.getString("PlaneBlue" + i)));
+				blueprintsUnlocked = new ArrayList<DriveableType>();
+				vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
+				NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
+				int numPlaneBlues = tags.getInteger("NumPlaneBlues");
+				for(int i = 0; i < numPlaneBlues; i++)
+				{
+					blueprintsUnlocked.add(PlaneType.getPlane(tags.getString("PlaneBlue" + i)));
+				}
+				int numVehicleBlues = tags.getInteger("NumVehicleBlues");
+				for(int i = 0; i < numVehicleBlues; i++)
+				{
+					vehicleBlueprintsUnlocked.add(VehicleType.getVehicle(tags.getString("VehicleBlue" + i)));
+				}
 			}
-			int numVehicleBlues = tags.getInteger("NumVehicleBlues");
-			for(int i = 0; i < numVehicleBlues; i++)
+			catch(Exception e)
 			{
-				vehicleBlueprintsUnlocked.add(VehicleType.getVehicle(tags.getString("VehicleBlue" + i)));
+				FlansMod.log("Failed to load from teams.dat");
+				e.printStackTrace();
 			}
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to load from teams.dat");
-			e.printStackTrace();
 		}
 	}
 	
 	private void savePerWorldData(Event event, World world)
 	{
 		File file = new File("teams.dat");
-		checkFileExists(file);
-		try
+		if(checkFileExists(file))
 		{
-			NBTTagCompound tags = new NBTTagCompound();
-			tags.setInteger("NumPlaneBlues", blueprintsUnlocked.size());
-			for(int i = 0; i < blueprintsUnlocked.size(); i++)
+			try
 			{
-				tags.setString("PlaneBlue" + i, blueprintsUnlocked.get(i).shortName);
+				NBTTagCompound tags = new NBTTagCompound();
+				tags.setInteger("NumPlaneBlues", blueprintsUnlocked.size());
+				for(int i = 0; i < blueprintsUnlocked.size(); i++)
+				{
+					tags.setString("PlaneBlue" + i, blueprintsUnlocked.get(i).shortName);
+				}
+				tags.setInteger("NumVehicleBlues", vehicleBlueprintsUnlocked.size());
+				for(int i = 0; i < vehicleBlueprintsUnlocked.size(); i++)
+				{
+					tags.setString("VehicleBlue" + i, vehicleBlueprintsUnlocked.get(i).shortName);
+				}
+				CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
 			}
-			tags.setInteger("NumVehicleBlues", vehicleBlueprintsUnlocked.size());
-			for(int i = 0; i < vehicleBlueprintsUnlocked.size(); i++)
+			catch(Exception e)
 			{
-				tags.setString("VehicleBlue" + i, vehicleBlueprintsUnlocked.get(i).shortName);
+				FlansMod.log("Failed to save to teams.dat");
 			}
-			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to save to teams.dat");
 		}
 	}
 	
-	private void checkFileExists(File file)
+	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())
 		{
@@ -320,7 +327,9 @@ public class FlansModClient extends FlansMod
 				FlansMod.log("Failed to create file");
 				FlansMod.log(file.getAbsolutePath());
 			}
+			return false;
 		}	
+		return true;
 	}
 
 	public static void flipControlMode()

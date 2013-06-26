@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,7 +67,14 @@ public class GametypeDM extends Gametype
 	{
 		newRoundTimer--;
 		if(newRoundTimer == 0)
+		{
+			if(FlansMod.useRotation)
+			{
+				TeamsManager.getInstance().switchToNextGametype();
+				return;
+			}
 			startNewRound();
+		}
 		if(teamsManager.teams != null)
 		{
 			for(Team team : teamsManager.teams)
@@ -215,14 +223,15 @@ public class GametypeDM extends Gametype
 		FlansModPlayerData data = getPlayerData(player);
 		if(data != null && data.team == Team.spectators)
 		{
-			for(ITeamBase base : Team.spectators.bases)
+			for(int j = 0; j < data.team.bases.size(); j++)
 			{
+				ITeamBase base = data.team.bases.get(j);
 				if(base.getMap() != teamsManager.currentMap)
 					continue;
-				for(ITeamObject object : base.getObjects())
+				for(int i = 0; i < base.getObjects().size(); i++)
 				{
-					if(object.isSpawnPoint())
-						validSpawnPoints.add(object);
+					if(base.getObjects().get(i).isSpawnPoint())
+						validSpawnPoints.add(base.getObjects().get(i));
 				}
 			}
 		}
@@ -230,14 +239,15 @@ public class GametypeDM extends Gametype
 		{
 			for(Team team : teamsManager.teams)
 			{
-				for(ITeamBase base : team.bases)
+				for(int j = 0; j < data.team.bases.size(); j++)
 				{
+					ITeamBase base = data.team.bases.get(j);
 					if(base.getMap() != teamsManager.currentMap)
 						continue;
-					for(ITeamObject object : base.getObjects())
+					for(int i = 0; i < base.getObjects().size(); i++)
 					{
-						if(object.isSpawnPoint())
-							validSpawnPoints.add(object);
+						if(base.getObjects().get(i).isSpawnPoint())
+							validSpawnPoints.add(base.getObjects().get(i));
 					}
 				}
 			}	
@@ -270,13 +280,13 @@ public class GametypeDM extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		scoreLimit = tags.getInteger("ScoreLimit");
+		scoreLimit = tags.getInteger("DMScoreLimit");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("ScoreLimit", scoreLimit);
+		tags.setInteger("DMScoreLimit", scoreLimit);
 	}
 	
 	

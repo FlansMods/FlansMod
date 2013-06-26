@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +27,7 @@ public class GametypeConquest extends Gametype {
 
 	public GametypeConquest() 
 	{
-		super("Conquest", "CON", 2);
+		super("Conquest (Broken)", "CON", 2);
 	}
 
 	@Override
@@ -77,7 +78,14 @@ public class GametypeConquest extends Gametype {
 	{
 		newRoundTimer--;
 		if(newRoundTimer == 0)
+		{
+			if(FlansMod.useRotation)
+			{
+				TeamsManager.getInstance().switchToNextGametype();
+				return;
+			}
 			startNewRound();
+		}
 		if(teamsManager.teams != null)
 		{
 			for(int i = 0; i < 2; i++)
@@ -382,9 +390,9 @@ public class GametypeConquest extends Gametype {
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		friendlyFire = tags.getBoolean("FriendlyFire");
-		autoBalance = tags.getBoolean("AutoBalance");
-		captureTimerLimit = tags.getInteger("CaptureTime");
+		friendlyFire = tags.getBoolean("ConqFriendlyFire");
+		autoBalance = tags.getBoolean("ConqAutoBalance");
+		captureTimerLimit = tags.getInteger("ConqCaptureTime");
 		if(captureTimerLimit <= 0)
 			captureTimerLimit = 400;
 	}
@@ -392,9 +400,9 @@ public class GametypeConquest extends Gametype {
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setBoolean("FriendlyFire", friendlyFire);
-		tags.setBoolean("AutoBalance", autoBalance);
-		tags.setInteger("CaptureTime", captureTimerLimit);
+		tags.setBoolean("ConqFriendlyFire", friendlyFire);
+		tags.setBoolean("ConqAutoBalance", autoBalance);
+		tags.setInteger("ConqCaptureTime", captureTimerLimit);
 	}
 	
 	@Override

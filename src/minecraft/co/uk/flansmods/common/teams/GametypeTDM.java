@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -72,7 +73,14 @@ public class GametypeTDM extends Gametype
 	{
 		newRoundTimer--;
 		if(newRoundTimer == 0)
+		{
+			if(FlansMod.useRotation)
+			{
+				TeamsManager.getInstance().switchToNextGametype();
+				return;
+			}
 			startNewRound();
+		}
 		if(teamsManager.teams != null)
 		{
 			for(Team team : teamsManager.teams)
@@ -201,10 +209,10 @@ public class GametypeTDM extends Gametype
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
+			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
+				return false;
 			//Spectators may not attack players
 			if(getPlayerData(attacker).team == Team.spectators)
-				return false;
-			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
 				return false;
 			//Check for friendly fire
 			if(getPlayerData(player).team == getPlayerData(attacker).team)
@@ -268,14 +276,15 @@ public class GametypeTDM extends Gametype
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
 		if(data.team == null)
 			return null;
-		for(ITeamBase base : data.team.bases)
+		for(int j = 0; j < data.team.bases.size(); j++)
 		{
+			ITeamBase base = data.team.bases.get(j);
 			if(base.getMap() != teamsManager.currentMap)
 				continue;
-			for(ITeamObject object : base.getObjects())
+			for(int i = 0; i < base.getObjects().size(); i++)
 			{
-				if(object.isSpawnPoint())
-					validSpawnPoints.add(object);
+				if(base.getObjects().get(i).isSpawnPoint())
+					validSpawnPoints.add(base.getObjects().get(i));
 			}
 		}
 		
@@ -318,17 +327,17 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		scoreLimit = tags.getInteger("ScoreLimit");
-		friendlyFire = tags.getBoolean("FriendlyFire");
-		autoBalance = tags.getBoolean("AutoBalance");
+		scoreLimit = tags.getInteger("TDMScoreLimit");
+		friendlyFire = tags.getBoolean("TDMFriendlyFire");
+		autoBalance = tags.getBoolean("TDMAutoBalance");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("ScoreLimit", scoreLimit);
-		tags.setBoolean("FriendlyFire", friendlyFire);
-		tags.setBoolean("AutoBalance", autoBalance);
+		tags.setInteger("TDMScoreLimit", scoreLimit);
+		tags.setBoolean("TDMFriendlyFire", friendlyFire);
+		tags.setBoolean("TDMAutoBalance", autoBalance);
 	}
 	
 	@Override

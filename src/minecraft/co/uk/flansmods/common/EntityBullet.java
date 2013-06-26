@@ -261,8 +261,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 						if (movingobjectposition.entityHit instanceof EntityLiving)
 						{
 							((EntityLiving) movingobjectposition.entityHit).arrowHitTimer++;
-							if (shotgun)
-								((EntityLiving) movingobjectposition.entityHit).hurtResistantTime = ((EntityLiving) movingobjectposition.entityHit).maxHurtResistantTime / 2;
+							//if (shotgun)
+							((EntityLiving) movingobjectposition.entityHit).hurtResistantTime = ((EntityLiving) movingobjectposition.entityHit).maxHurtResistantTime / 2;
 						}
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}

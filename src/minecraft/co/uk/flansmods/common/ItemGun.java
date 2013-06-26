@@ -69,21 +69,7 @@ public class ItemGun extends Item
 			{
 				clientSideShoot();
 			}
-			/*
-			if (type.mode == 1 && mouseHeld) // FullAuto
-			{
-				EntityPlayerMP player = (EntityPlayerMP) entity;
-				if(!player.isInsideOfMaterial(Material.water) || type.canShootUnderwater)
-					itemstack = onItemRightClick2(itemstack, world, player);
-			}
-			if (type.mode == 0 && mouseHeld && !lastMouseHeld) // SemiAuto
-			{
-				EntityPlayerMP player = (EntityPlayerMP) entity;
-				if(!player.isInsideOfMaterial(Material.water) || type.canShootUnderwater) 
-					itemstack = onItemRightClick2(itemstack, world, player);
-			}
-			*/
-			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.shootTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
+			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
 				if (FlansModClient.zoomOverlay == null)
 				{
@@ -102,7 +88,7 @@ public class ItemGun extends Item
 					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansModClient.originalHideGUI;
 					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 				}
-				FlansModClient.shootTime = 10;
+				FlansModClient.scopeTime = 10;
 			}
 			
 			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.zoomOverlay != null && type.hasScope)

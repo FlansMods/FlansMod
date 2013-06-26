@@ -52,12 +52,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "@VERSION@")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.3")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[@VERSIONBOUNDS@]",
+	    versionBounds = "[2.3, ]",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -95,6 +95,7 @@ public class FlansMod
 	public static long lastTime;
 	
 	// Player changeable stuff
+	public static boolean useRotation = false;
 	public static boolean explosions = false;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
@@ -105,6 +106,9 @@ public class FlansMod
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	public static boolean vehiclesNeedFuel = true;
 	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not dissapear at all.
+	public static int planeLife = 0; //How long planes stay around for. Anything 0 or less means they do not dissapear at all.
+	public static int vehicleLife = 0; //How long vehicles stay around for. Anything 0 or less means they do not dissapear at all.
+	public static int aaLife = 0; //How long AA Guns stay around for. Anything 0 or less means they do not dissapear at all.
 
 	public static Block craftingTable;
 	public static Block spawner;
