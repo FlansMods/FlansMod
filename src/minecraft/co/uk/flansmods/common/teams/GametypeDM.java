@@ -223,14 +223,15 @@ public class GametypeDM extends Gametype
 		FlansModPlayerData data = getPlayerData(player);
 		if(data != null && data.team == Team.spectators)
 		{
-			for(ITeamBase base : Team.spectators.bases)
+			for(int j = 0; j < data.team.bases.size(); j++)
 			{
+				ITeamBase base = data.team.bases.get(j);
 				if(base.getMap() != teamsManager.currentMap)
 					continue;
-				for(ITeamObject object : base.getObjects())
+				for(int i = 0; i < base.getObjects().size(); i++)
 				{
-					if(object.isSpawnPoint())
-						validSpawnPoints.add(object);
+					if(base.getObjects().get(i).isSpawnPoint())
+						validSpawnPoints.add(base.getObjects().get(i));
 				}
 			}
 		}
@@ -238,14 +239,15 @@ public class GametypeDM extends Gametype
 		{
 			for(Team team : teamsManager.teams)
 			{
-				for(ITeamBase base : team.bases)
+				for(int j = 0; j < data.team.bases.size(); j++)
 				{
+					ITeamBase base = data.team.bases.get(j);
 					if(base.getMap() != teamsManager.currentMap)
 						continue;
-					for(ITeamObject object : base.getObjects())
+					for(int i = 0; i < base.getObjects().size(); i++)
 					{
-						if(object.isSpawnPoint())
-							validSpawnPoints.add(object);
+						if(base.getObjects().get(i).isSpawnPoint())
+							validSpawnPoints.add(base.getObjects().get(i));
 					}
 				}
 			}	

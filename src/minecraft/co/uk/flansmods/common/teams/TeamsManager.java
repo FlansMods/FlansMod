@@ -597,13 +597,7 @@ public class TeamsManager implements IPlayerTracker
 			{
 				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 				
-				/*FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);*/
-				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
-				
-                if (!playerMP.playerNetServerHandler.connectionClosed)
+                /*if (!playerMP.playerNetServerHandler.connectionClosed)
                 {
                     EnderTeleportEvent event = new EnderTeleportEvent(playerMP, spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
                     event.attackDamage = 0;
@@ -612,9 +606,15 @@ public class TeamsManager implements IPlayerTracker
                     	playerMP.fallDistance = 0.0F;
                     	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
                     }
-
-                }
-			}
+                }*/
+	
+				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+				//FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				//playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
+				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
+				
+		}
 			
 			
 			currentGametype.playerRespawned((EntityPlayerMP)player);

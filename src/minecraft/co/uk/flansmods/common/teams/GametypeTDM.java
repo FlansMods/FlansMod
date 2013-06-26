@@ -276,14 +276,15 @@ public class GametypeTDM extends Gametype
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
 		if(data.team == null)
 			return null;
-		for(ITeamBase base : data.team.bases)
+		for(int j = 0; j < data.team.bases.size(); j++)
 		{
+			ITeamBase base = data.team.bases.get(j);
 			if(base.getMap() != teamsManager.currentMap)
 				continue;
-			for(ITeamObject object : base.getObjects())
+			for(int i = 0; i < base.getObjects().size(); i++)
 			{
-				if(object.isSpawnPoint())
-					validSpawnPoints.add(object);
+				if(base.getObjects().get(i).isSpawnPoint())
+					validSpawnPoints.add(base.getObjects().get(i));
 			}
 		}
 		
