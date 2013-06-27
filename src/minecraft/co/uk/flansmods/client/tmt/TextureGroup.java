@@ -2,7 +2,6 @@ package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.entity.RenderManager;
 
@@ -10,13 +9,13 @@ public class TextureGroup
 {
 	public TextureGroup()
 	{
-		poly = new ArrayList<TexturedQuad>();
+		poly = new ArrayList<TexturedPolygon>();
 		texture = "";
 	}
 	
-	public void addPoly(TexturedQuad quad)
+	public void addPoly(TexturedPolygon polygon)
 	{
-		poly.add(quad);
+		poly.add(polygon);
 	}
 
 	public void loadTexture()
@@ -29,7 +28,7 @@ public class TextureGroup
 		if(!texture.equals(""))
 		{
 			RenderEngine renderengine = RenderManager.instance.renderEngine;
-	        renderengine.bindTexture(texture);
+			renderengine.bindTexture(texture);
 		}
 		else if(defaultTexture > -1)
 		{
@@ -37,6 +36,6 @@ public class TextureGroup
 		}
 	}
 	
-	public ArrayList<TexturedQuad> poly;
+	public ArrayList<TexturedPolygon> poly;
 	public String texture;
 }
