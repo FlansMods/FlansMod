@@ -14,6 +14,7 @@ Fixes:
 - Fixed plane pitch switching upon reloading map
 - Fixed a critical dupe exploit
 - Fixed various team spawn issues
+- Fixed trapezoid textures sheering along triangle edges
 
 Additions:
 - Added Forge mod information files
