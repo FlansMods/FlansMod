@@ -126,7 +126,7 @@ public class DriveableData extends WorldSavedData implements IInventory
 	}
 
     public ItemStack decrStackSize(int i, int j) 
-	{ 
+	{
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
 		if(i >= ammo.length)
@@ -142,7 +142,9 @@ public class DriveableData extends WorldSavedData implements IInventory
 					//Put the fuel stack in a stack array just to simplify the code
 					i -= cargo.length;
 					inv = new ItemStack[1];
-					inv[0] = fuel;
+					inv[0] = fuel;		
+
+					setInventorySlotContents(getFuelSlot(), null);
 				}
 			}	
 		}
@@ -165,6 +167,7 @@ public class DriveableData extends WorldSavedData implements IInventory
         {
             return null;
         }
+		
 	}
 
     public ItemStack getStackInSlotOnClosing(int i) 
