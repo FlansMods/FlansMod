@@ -64,22 +64,6 @@ import cpw.mods.fml.relauncher.Side;
 public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "co.uk.flansmods.client.model.Model";
-	public static final String emptyLines = 
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111" +
-			"1111111111111111";
 	
 	public List<File> contentPacks;
 
