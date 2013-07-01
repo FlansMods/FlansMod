@@ -99,7 +99,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/" + FlansModClient.zoomOverlay + ".png"));
 			Tessellator tessellator = Tessellator.instance;
