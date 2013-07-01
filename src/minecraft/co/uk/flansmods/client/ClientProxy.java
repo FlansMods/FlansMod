@@ -250,8 +250,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void changeControlMode(EntityPlayer player)
 	{
-		FlansModClient.flipControlMode();
-		player.addChatMessage("Mouse Control mode is now set to "+FlansModClient.controlModeMouse);
+		if(FlansModClient.flipControlMode())
+			player.addChatMessage("Mouse Control mode is now set to " + FlansModClient.controlModeMouse);
 	}
 	
 	// --------------- END ABRAR EDITS ----------------------
