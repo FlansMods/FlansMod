@@ -2,7 +2,11 @@ package co.uk.flansmods.common.teams;
 
 import java.util.ArrayList;
 
+import co.uk.flansmods.common.FlansModPlayerHandler;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -10,7 +14,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 public class EntityFlag extends Entity implements ITeamObject {
 	
 	public int baseID;
-	public ITeamBase base;
+	public EntityFlagpole base;
+	public boolean isHome = true;
 
 	public EntityFlag(World world) 
 	{
@@ -47,6 +52,24 @@ public class EntityFlag extends Entity implements ITeamObject {
 		{
 			setBase(TeamsManager.getInstance().getBase(baseID));
 		}
+		if(ridingEntity != null && ridingEntity.isDead)
+		{
+			if(ridingEntity instanceof EntityPlayerMP)
+			{
+				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
+				Team team = FlansModPlayerHandler.getPlayerData(player.username).team;
+				TeamsManager.getInstance().messageAll("\u00a7f" + player.username + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
+			}
+			ridingEntity = null;
+			
+		}
+	}
+	
+	public void reset()
+	{
+		mountEntity(null);
+		setPosition(base.posX, base.posY + 2F, base.posZ);
+		isHome = true;
 	}
 
 	@Override
@@ -74,7 +97,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		if(newOwners != null)
 			dataWatcher.updateObject(16, newOwners.shortName);
 		else dataWatcher.updateObject(16, "none");
-		
+		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
 	@Override
@@ -91,7 +114,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	public void setBase(ITeamBase b) 
 	{
-		base = b;
+		base = (EntityFlagpole)b;
 		if(base != null)
 		{
 			base.addObject(this);
@@ -134,8 +157,17 @@ public class EntityFlag extends Entity implements ITeamObject {
 		return Team.getTeam(getTeamName());
 	}
 	
+	@Override
 	public boolean isSpawnPoint()
 	{
 		return false;
 	}
+	
+	@Override
+    public boolean interact(EntityPlayer player)
+    {
+    	if(player instanceof EntityPlayerMP)
+    		TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
+        return false;
+    }
 }

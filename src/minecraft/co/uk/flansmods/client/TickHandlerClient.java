@@ -67,6 +67,7 @@ public class TickHandlerClient implements ITickHandler
 				killMessages.remove(i);
 			}
 		}
+		RenderFlag.angle += 2F;
 		FlansModClient.tick();
 	}
 	

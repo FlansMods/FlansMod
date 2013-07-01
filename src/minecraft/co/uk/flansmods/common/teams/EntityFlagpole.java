@@ -26,6 +26,8 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	//Do not sync IDs. Not necessary. Only sync team of objects. Much easier than syncing base to object links.
 	private int ID;
 	
+	private EntityFlag flag;
+	
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 
 	public EntityFlagpole(World world) 
@@ -38,7 +40,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		this(world);
 		setPosition(x, y, z);		
-		EntityFlag flag = new EntityFlag(worldObj, this);
+		flag = new EntityFlag(worldObj, this);
 		objects.add(flag);
 		worldObj.spawnEntityInWorld(flag);
 		map = teamsManager.currentMap;
@@ -219,5 +221,11 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		//return dataWatcher.getWatchableObjectInt(16);
 		return ID;
+	}
+
+	@Override
+	public ITeamObject getFlag() 
+	{
+		return flag;
 	}
 }
