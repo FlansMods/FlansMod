@@ -63,7 +63,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	@Override
     public boolean canBePushed()
     {
-        return true;
+        return false;
     }
 
 	@Override
@@ -185,7 +185,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
         velocityZ = motionZ = d2;
     }
 	
-	public abstract boolean pressKey(int key);
+	public abstract boolean pressKey(int key, EntityPlayer player);
 
 	@Override
     public void onUpdate()
