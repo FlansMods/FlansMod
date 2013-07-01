@@ -59,7 +59,7 @@ public class ItemGun extends Item
 			if(mouseHeld && !lastMouseHeld) //Send packet when firing a semi or starting to fire a full
 			{
 				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(true));
-				clientSideShoot();
+				clientSideShoot(itemstack);
 			}
 			if(type.mode == 1 && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
 			{
@@ -67,7 +67,7 @@ public class ItemGun extends Item
 			}
 			if(type.mode == 1 && mouseHeld)
 			{
-				clientSideShoot();
+				clientSideShoot(itemstack);
 			}
 			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
@@ -105,7 +105,7 @@ public class ItemGun extends Item
 		}
 	}
 	
-	public void clientSideShoot()
+	public void clientSideShoot(ItemStack stack)
 	{
 		if(FlansModClient.shootTime <= 0)
 		{
@@ -116,6 +116,10 @@ public class ItemGun extends Item
 				{
 					hasAmmo = true;
 				}
+			}
+			if(type.loadIntoGun > 0)
+			{
+				hasAmmo = stack.getItemDamage() < stack.getMaxDamage() - 1;
 			}
 			if(hasAmmo)
 			{
