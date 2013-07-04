@@ -66,4 +66,7 @@ public interface ITeamBase {
 	
 	//Returns the ID of this base
 	public int getID();
+	
+	//Returns the flag object for CTF like gametypes. May return null, but then this base may not be used in CTF like gametypes
+	public ITeamObject getFlag();
 }

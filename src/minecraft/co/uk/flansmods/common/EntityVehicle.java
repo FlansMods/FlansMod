@@ -279,7 +279,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 			}
 			case 10 : //Change Controls
 			{
-				FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
+				//FlansMod.proxy.changeControlMode((EntityPlayer) this.riddenByEntity);
 				return true;
 			}
 			case 11 : // Roll Left

@@ -96,6 +96,7 @@ public class TeamsManager implements IPlayerTracker
 		new GametypeTDM();
 		new GametypeConquest();
 		new GametypeDM();
+		new GametypeCTF();
 		//-----
 	}
 	
@@ -265,10 +266,8 @@ public class TeamsManager implements IPlayerTracker
 		//First collect together guns and ammo if smart drops are enabled
 		if(FlansMod.weaponDrops == 2)
 		{
-			
-			for(Iterator<EntityItem> iterator = event.drops.listIterator(); iterator.hasNext(); )
+			for(EntityItem entity : event.drops)
 			{
-				EntityItem entity = iterator.next();
 				ItemStack stack = entity.getEntityItem();
 				if(stack != null && stack.getItem() != null)
 				{
@@ -277,9 +276,8 @@ public class TeamsManager implements IPlayerTracker
 						EntityGunItem gunEntity = new EntityGunItem(entity);
 						stack.stackSize = 0;
 						boolean alreadyAdded = false;
-						for(Iterator<EntityItem> checker = dropsToThrow.listIterator(); checker.hasNext(); )
+						for(EntityItem check : dropsToThrow)
 						{
-							EntityItem check = checker.next();
 							if(((ItemGun)stack.getItem()).type == ((ItemGun)check.getEntityItem().getItem()).type)
 								alreadyAdded = true;
 						}
@@ -293,13 +291,12 @@ public class TeamsManager implements IPlayerTracker
 			}
 		}
 		//Now iterate again and look for ammo
-		for(Iterator<EntityItem> gunIterator = dropsToThrow.listIterator(); gunIterator.hasNext(); )
+		for(EntityItem entity : dropsToThrow)
 		{
-			EntityGunItem gunEntity = (EntityGunItem)gunIterator.next();
+			EntityGunItem gunEntity = (EntityGunItem)entity;
 			GunType gunType = ((ItemGun)gunEntity.getEntityItem().getItem()).type;
-			for(Iterator<EntityItem> ammoIterator = event.drops.listIterator(); ammoIterator.hasNext(); )
+			for(EntityItem ammoEntity : event.drops)
 			{
-				EntityItem ammoEntity = ammoIterator.next();
 				ItemStack ammoItemstack = ammoEntity.getEntityItem();
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemBullet)
 				{

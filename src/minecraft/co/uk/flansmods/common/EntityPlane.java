@@ -1340,6 +1340,14 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		}	
         return true;
     }
+    
+    @Override
+    public void applyEntityCollision(Entity entity)
+    {
+    	if(!isPartOfThis(entity))
+    		super.applyEntityCollision(entity);
+    }
+  
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, int i)

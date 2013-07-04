@@ -332,12 +332,13 @@ public class FlansModClient extends FlansMod
 		return true;
 	}
 
-	public static void flipControlMode()
+	public static boolean flipControlMode()
 	{
 		if (controlModeSwitchTimer > 0)
-			return;
+			return false;
 		controlModeMouse = !controlModeMouse;
 		controlModeSwitchTimer = 40;
+		return true;
 	}
 
 	public static void shoot()

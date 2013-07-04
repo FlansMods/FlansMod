@@ -1,10 +1,12 @@
 package co.uk.flansmods.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +20,7 @@ import org.lwjgl.input.Mouse;
 import co.uk.flansmods.common.network.PacketMGFire;
 import co.uk.flansmods.common.network.PacketMGMount;
 import co.uk.flansmods.common.network.PacketPlaySound;
+import co.uk.flansmods.common.teams.EntityGunItem;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -324,10 +327,18 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		// Drop gun
 		if(!worldObj.isRemote)
 		{
-			dropItem(type.getItem().itemID, 1);
-			// Drop ammo box
-			if (ammo != null)
-				entityDropItem(ammo, 0.5F);
+			if(FlansMod.weaponDrops == 2)
+			{
+				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(new ItemStack[] {ammo}));
+				worldObj.spawnEntityInWorld(gunEntity);
+			}
+			else if(FlansMod.weaponDrops == 1)
+			{
+				dropItem(type.getItem().itemID, 1);
+				// Drop ammo box
+				if (ammo != null)
+					entityDropItem(ammo, 0.5F);
+			}
 		}
 		if (gunner != null && FlansModPlayerHandler.getPlayerData(gunner) != null)
 			FlansModPlayerHandler.getPlayerData(gunner).mountingGun = null;
