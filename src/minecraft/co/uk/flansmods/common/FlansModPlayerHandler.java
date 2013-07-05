@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +30,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	@ForgeSubscribe
 	public void onEntityHurt(LivingHurtEvent event) 
 	{
-		EntityLiving entity = event.entityLiving;
+		EntityLivingBase entity = event.entityLiving;
 		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntityPassengerSeat))
 		{
 			event.ammount = 0;
@@ -39,7 +40,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	@ForgeSubscribe
 	public void onEntityKilled(LivingDeathEvent event) 
 	{
-		EntityLiving entity = event.entityLiving;
+		EntityLivingBase entity = event.entityLiving;
 		if(entity instanceof EntityPlayer)
 		{
 			getPlayerData((EntityPlayer)entity).isShooting = false;

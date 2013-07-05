@@ -14,6 +14,7 @@ import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
@@ -2098,7 +2099,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			GL11.glCallList(displayList);
 		else
 		{
-			RenderEngine renderEngine = RenderManager.instance.renderEngine;
+			TextureManager renderEngine = RenderManager.instance.renderEngine;
 			
 			Collection<TextureGroup> textures = textureGroup.values();
 			

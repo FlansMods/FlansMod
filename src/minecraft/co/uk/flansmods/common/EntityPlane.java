@@ -498,7 +498,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     }
     
     @Override
-	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
+	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, float i)
     {
 		if(worldObj.isRemote || isDead)
             return true;
@@ -1205,7 +1205,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		else { return; }
     }
 	
-    public boolean attackEntityFrom(DamageSource damagesource, int i, boolean doDamage)
+    public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
     {
         if(worldObj.isRemote || isDead)
             return true;
@@ -1350,7 +1350,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
   
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource damagesource, int i)
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
 		return attackEntityFrom(damagesource, i, true);
 	}

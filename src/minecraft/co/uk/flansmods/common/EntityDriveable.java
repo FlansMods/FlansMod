@@ -72,10 +72,10 @@ public abstract class EntityDriveable extends Entity implements IControllable
         return (double)height * 0.0D - 0.30000001192092896D;
     }
 	
-	public abstract boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i);
+	public abstract boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, float i);
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource damagesource, int i)
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
 	    if(worldObj.isRemote || isDead)
         {
