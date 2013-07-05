@@ -178,7 +178,8 @@ public class VehicleType extends DriveableType
 				allowBodyGuns = split[1].equals("True");
 			if(split[0].equals("HasTurret"))
 				hasTurret = split[1].equals("True");
-			
+			if(split[0].equals("RotateGunner"))
+				rotateGunner = split[1].equals("True");
 				
 			//Recipe
 			if(split[0].equals("FrontWheels"))
@@ -314,6 +315,7 @@ public class VehicleType extends DriveableType
 	public boolean hasTurret = false;
 	
     public boolean hasDoor = false;
+	public boolean rotateGunner = false;
 
 	public static int nextIconIndex = 2;
 	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();

@@ -794,8 +794,18 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
         } else if(riddenByEntity instanceof EntityLiving)
         {
         	VehicleType type = this.getVehicleType();
-			Vec3 vec = rotate(type.driverX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.driverY / 16D, type.driverZ / 16D);
-            riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
+			if(type.rotateGunner == true)
+			{
+				double offsetX = Math.cos(gunYaw * Math.PI / 180) * (type.driverX / 16D) + Math.sin(gunYaw * Math.PI / 180) * (type.driverZ / 16D);
+				double offsetZ = -Math.sin(gunYaw * Math.PI / 180) * (type.driverX / 16D) + Math.cos(gunYaw * Math.PI / 180) * (type.driverZ / 16D);
+				Vec3 vec = rotate(offsetX, getMountedYOffset() + riddenByEntity.getYOffset() + type.driverY / 16D, offsetZ);
+				riddenByEntity.setPosition(posX - vec.xCoord, posY + vec.yCoord, posZ - vec.zCoord);
+			}
+			else
+			{
+				Vec3 vec = rotate(type.driverX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.driverY / 16D, type.driverZ / 16D);
+				riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
+			}
 			riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
 			//riddenByEntity.rotationPitch -= (axes.getPitch() - prevRotationPitch);
 			return;
