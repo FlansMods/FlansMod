@@ -402,7 +402,7 @@ public class ItemGun extends Item
 	}
 
 	@Override
-	public int getDamageVsEntity(Entity par1Entity)
+	public float getDamageVsEntity(Entity par1Entity, ItemStack itemStack)
 	{
 		return type.meleeDamage;
 	}

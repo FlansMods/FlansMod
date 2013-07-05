@@ -125,7 +125,7 @@ public class EntityCollisionBox extends Entity
 	}
 	
 	@Override
-    public boolean attackEntityFrom(DamageSource damageSource, int i)
+    public boolean attackEntityFrom(DamageSource damageSource, float i)
     {
 		if(plane != null)
 			return plane.attackEntityFromPart(this, damageSource, i);

@@ -122,7 +122,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource damagesource, int i)
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
 		if (damagesource.damageType.equals("player"))
 		{

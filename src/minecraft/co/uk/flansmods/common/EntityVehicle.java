@@ -95,7 +95,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, int i)
+	public boolean attackEntityFromPart(EntityCollisionBox box, DamageSource damagesource, float i)
     {
 		//Simple method. Might add destructible wheels later...
 		
@@ -108,7 +108,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource damagesource, int i)
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
         if(worldObj.isRemote || isDead)
             return true;
