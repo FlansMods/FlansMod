@@ -49,6 +49,11 @@ public class ModelVehicle extends ModelBase
 			wheelAniModel[i].rotateAngleZ = vehicle.wheelsAngle;
 			wheelAniModel[i].render(f5);
 		}
+		for(int i = 0; i < trailerModel.length; i++)
+		{
+			trailerModel[i].rotateAngleY = vehicle.trailerAngle;
+			trailerModel[i].render(f5);
+		}
 	}
 	
     public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float gunYaw, float gunPitch)
@@ -134,6 +139,11 @@ public class ModelVehicle extends ModelBase
 		{
 			wheelAniModel[i].doMirror(false, true, true);
 			wheelAniModel[i].setRotationPoint(wheelAniModel[i].rotationPointX, - wheelAniModel[i].rotationPointY, - wheelAniModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < trailerModel.length; i++)
+		{
+			trailerModel[i].doMirror(false, true, true);
+			trailerModel[i].setRotationPoint(trailerModel[i].rotationPointX, - trailerModel[i].rotationPointY, - trailerModel[i].rotationPointZ);
 		}
 	}	
 	
