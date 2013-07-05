@@ -479,6 +479,9 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		//Return the wheels to their resting position
 		wheelsYaw *= 0.8F;
 		
+		//Move Trailer left/right depending on wheels yaw
+		trailerAngle = wheelsYaw * ((float)acceleration /35);
+		
 		//Limit wheel angles
 		if(wheelsYaw > 10)
 			wheelsYaw = 10;
