@@ -1,13 +1,18 @@
 #######################################
 ####                               ####
-####     Changelog since 2.3.1     ####
+####           Changelog           ####
 ####                               ####
 #######################################
+=== v2.3.3 ===
+Additions:
+- Added missing angle for trailers
+- Added option to rotate gunner with turret
 
+=== v2.3.2 ===
 Changes:
 - Increased propellor spin speed
 - Planes no longer moveable by entities
-
+- Removed mouse control toggle for vehicles
 Fixes:
 - Fixed tank barrels facing the wrong way when spawned
 - Fixed camera view distance change for third person
@@ -15,7 +20,13 @@ Fixes:
 - Fixed a critical dupe exploit
 - Fixed various team spawn issues
 - Fixed trapezoid textures sheering along triangle edges
-
+- Fixed LoadIntoGun and MaxStackSize incompatibility
+- Fixed mouse control option getting stuck
+- Fixed light levels not affecting scope brightness
+- Fixed reload recoil with LoadIntoGun
+- Fixed recoil with LoadIntoGun and no spare ammo
+- Fixed glitchy plane movement with players in certain locations
+- MGs drop smart stacks when smart stacks are enabled
 Additions:
 - Added Forge mod information files
 - Added roll buttons, default to \ and X
@@ -28,4 +39,5 @@ Additions:
 - Added scope time setting to guns
 - Added ability to have AAGuns, Planes and Vehicles despawn after a configurable time.
 - Added map rotation for teams games
-- Added Conquest gametype?
+- Added Conquest gametype
+- Added CTF gametype
