@@ -3,7 +3,9 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
-=== v2.3.3 ===
+=== v2.4 ===
+Changes:
+- Updated to 1.6.2 <---Not yet complete
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
