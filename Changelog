@@ -6,6 +6,7 @@
 === v2.4 ===
 Changes:
 - Updated to 1.6.2 <---Not yet complete
+- Changed "Turbo Model Thingy not installed" error message to reduce confusion.
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
