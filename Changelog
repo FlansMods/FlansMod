@@ -10,6 +10,7 @@ Changes:
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
+- Added an NMT element to allow modifying corners of a box with x/y/z
 
 === v2.3.2 ===
 Changes:
