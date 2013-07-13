@@ -83,7 +83,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
 		{
 			FlansMod.proxy.loadVehicleModel(new String[] {"", type.shortName}, type.shortName, type);
-			FlansMod.logLoudly("TurboModelThingy not installed");
+			FlansMod.logLoudly("Package Error! Please check the installed content package for problems.");
 			return;
 		}
 		
