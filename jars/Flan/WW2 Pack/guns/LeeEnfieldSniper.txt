@@ -19,6 +19,6 @@ ShootDelay 16
 ShootSound leeEnfieldShoot
 ReloadSound leeEnfieldReload
 Mode SemiAuto
-Scope scope
+Scope wwiileeenfieldsniper
 Deployable False
 DeployedModel None
