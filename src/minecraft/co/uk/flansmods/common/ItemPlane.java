@@ -42,7 +42,7 @@ public class ItemPlane extends ItemMapBase
         float f9 = f3 * f5;
         double d3 = 5D;
         Vec3 vec3d1 = vec3d.addVector((double)f7 * d3, (double)f8 * d3, (double)f9 * d3);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks_do(vec3d, vec3d1, true);
+        MovingObjectPosition movingobjectposition = world.clip(vec3d, vec3d1, true);
         if(movingobjectposition == null)
         {
             return itemstack;
