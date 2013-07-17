@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -66,6 +67,8 @@ public class FlansModClient extends FlansMod
 	public static List<DriveableType> blueprintsUnlocked = new ArrayList<DriveableType>();
 	public static List<DriveableType> vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
 	
+	public static ResourceLocation resources;
+	
 	public void load()
 	{
 		if (ABORT)
@@ -78,11 +81,12 @@ public class FlansModClient extends FlansMod
 
 		MinecraftForge.EVENT_BUS.register(this);
 		
+		
 		// Properties
 		// TODO: move to common and proxy-ify
 		try
 		{
-			File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt");
+			File file = new File(FMLClientHandler.instance().getClient().mcDataDir + "/Flan/properties.txt");
 			if (file != null)
 			{
 				BufferedReader properties = new BufferedReader(new FileReader(file));
@@ -371,7 +375,7 @@ public class FlansModClient extends FlansMod
 	{
 		try
 		{
-			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/properties.txt"));
+			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().mcDataDir + "/Flan/properties.txt"));
 			propsOut.write(("Explosions True\r\nBombs True\r\nBullets True").getBytes());
 			propsOut.close();
 		} catch (Exception e)

@@ -880,7 +880,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
     }
 
 	@Override
-    public boolean interact(EntityPlayer entityplayer)
+	public boolean func_130002_c(EntityPlayer entityplayer) //interact : change back when Forge updates
     {
 		if(isDead || worldObj.isRemote)
 			return true;
@@ -898,7 +898,7 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 		{
 			if(canSit(i + 1))
 			{
-				seats[i].interact(entityplayer);	
+				seats[i].func_130002_c(entityplayer);	//interact : change back when Forge updates
 				return true;
 			}
 		}

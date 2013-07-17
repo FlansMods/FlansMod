@@ -191,7 +191,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	}
 	
 	@Override
-    public boolean interact(EntityPlayer entityplayer)
+	public boolean func_130002_c(EntityPlayer entityplayer) //interact : change back when Forge updates
     {
 		if(isDead)
 			return true;

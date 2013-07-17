@@ -247,7 +247,7 @@ public class EntityPassengerSeat extends Entity
     }
 
     @Override
-	public boolean interact(EntityPlayer player)
+	public boolean func_130002_c(EntityPlayer player) //interact : change back when Forge updates
     {
 		if(worldObj.isRemote)
 		{

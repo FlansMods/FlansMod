@@ -254,7 +254,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean interact(EntityPlayer player)
+	public boolean func_130002_c(EntityPlayer player) //interact : change back when Forge updates
 	{
 		// Player right clicked on gun
 		// Mount gun
