@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -146,7 +147,7 @@ public class BlockSpawner extends BlockContainer
     		if(item == null || item.getItem() == null)
     		{
     			spawner.spawnDelay = (spawner.spawnDelay + 200) % 6000;
-    			player.sendChatToPlayer("Set spawn delay to " + spawner.spawnDelay / 20);
+    			player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Set spawn delay to " + spawner.spawnDelay / 20)); //TODO : Check this. No idea if correct one of 3 possible methods
     		}
     		else if(!(item.getItem() instanceof ItemOpStick))
     		{

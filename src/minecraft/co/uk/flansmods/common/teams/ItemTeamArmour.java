@@ -2,18 +2,17 @@ package co.uk.flansmods.common.teams;
 
 import co.uk.flansmods.common.FlansMod;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.IArmorTextureProvider;
 import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTextureProvider {
+public class ItemTeamArmour extends ItemArmor implements ISpecialArmor {
 	
 	public ArmourType type;
 	
@@ -30,7 +29,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	}
 
 	@Override
-	public ArmorProperties getProperties(EntityLiving player, ItemStack armor, DamageSource source, double damage, int slot) 
+	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) 
 	{
 		return new ArmorProperties(1, type.defence, Integer.MAX_VALUE);
 	}
@@ -42,7 +41,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IArmorTe
 	}
 
 	@Override
-	public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot) 
+	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) 
 	{
 		//Do nothing to the armour. It should not break as that would leave the player's team ambiguous
 	}

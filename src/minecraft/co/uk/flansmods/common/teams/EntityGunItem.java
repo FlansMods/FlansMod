@@ -153,7 +153,7 @@ public class EntityGunItem extends EntityItem {
 	}
 	
 	@Override
-    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
     {
      	return false;
     }
