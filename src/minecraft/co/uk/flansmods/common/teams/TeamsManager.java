@@ -181,7 +181,7 @@ public class TeamsManager implements IPlayerTracker
 		FlansMod.log("Teams Announcement : " + s);
 		for(EntityPlayerMP player : (List<EntityPlayerMP>)MinecraftServer.getServer().getConfigurationManager().playerEntityList)
 		{
-			player.sendChatToPlayer(s);
+			player.addChatMessage(s);
 		}
 	}
 	

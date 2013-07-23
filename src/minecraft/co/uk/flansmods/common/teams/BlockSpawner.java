@@ -146,7 +146,7 @@ public class BlockSpawner extends BlockContainer
     		if(item == null || item.getItem() == null)
     		{
     			spawner.spawnDelay = (spawner.spawnDelay + 200) % 6000;
-    			player.sendChatToPlayer("Set spawn delay to " + spawner.spawnDelay / 20);
+    			player.addChatMessage("Set spawn delay to " + spawner.spawnDelay / 20);
     		}
     		else if(!(item.getItem() instanceof ItemOpStick))
     		{
