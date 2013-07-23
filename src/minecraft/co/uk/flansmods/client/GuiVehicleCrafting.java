@@ -21,7 +21,7 @@ public class GuiVehicleCrafting extends GuiContainer
     public void onGuiClosed()
     {
         super.onGuiClosed();
-        inventorySlots.onCraftGuiClosed(mc.thePlayer);
+        inventorySlots.onContainerClosed(mc.thePlayer);
     }
 
     @Override
