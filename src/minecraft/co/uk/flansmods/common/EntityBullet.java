@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,13 +45,13 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Standard handheld gun bullet creation method.
-	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
+	public EntityBullet(World world, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		this(world, shooter, spread, gunDamage, type1, 3.0F, false, shotFrom);
 	}
 
 	// Custom speed handheld gun bullet creation method
-	public EntityBullet(World world, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
+	public EntityBullet(World world, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
 	{
 		super(world);
 		type = type1;
@@ -74,13 +74,13 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Machinegun bullet constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F, shotFrom);
 	}
 
 	// Custom bullet speed constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLiving shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		super(world);
 		firedFrom = shotFrom;
@@ -102,7 +102,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	// Bomb constructor
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLiving shooter, int gunDamage, BulletType type1, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLivingBase shooter, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		super(world);
 		type = type1;
@@ -258,11 +258,11 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					}
 					if (movingobjectposition.entityHit.attackEntityFrom(damagesource, j1))
 					{
-						if (movingobjectposition.entityHit instanceof EntityLiving)
+						if (movingobjectposition.entityHit instanceof EntityLivingBase)
 						{
-							((EntityLiving) movingobjectposition.entityHit).arrowHitTimer++;
+							((EntityLivingBase) movingobjectposition.entityHit).arrowHitTimer++;
 							//if (shotgun)
-							((EntityLiving) movingobjectposition.entityHit).hurtResistantTime = ((EntityLiving) movingobjectposition.entityHit).maxHurtResistantTime / 2;
+							((EntityLivingBase) movingobjectposition.entityHit).hurtResistantTime = ((EntityLivingBase) movingobjectposition.entityHit).maxHurtResistantTime / 2;
 						}
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}
