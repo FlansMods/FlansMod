@@ -511,6 +511,16 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams weaponDrops <off / on / smart>"));
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams fuelNeeded <true / false>"));
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams mgLife <time>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams planeLife <time>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams vehicleLife <time>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addMap <shortName> <longName>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listMaps"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeMap <shortName>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setMap <shortName>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams useRotation <true / false>"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addRotation <map> <gametype> <team1> <team2> ..."));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listRotation"));
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeRotation <ID>"));
 		/*
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Listing teams commands"));
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listGametypes - see the gametypes available on this server"));
@@ -529,5 +539,11 @@ public class CommandTeams extends CommandBase {
 	public EntityPlayerMP getPlayer(String name)
 	{
 		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender icommandsender) 
+	{
+		return "Try \"/teams help\"";
 	}
 }
