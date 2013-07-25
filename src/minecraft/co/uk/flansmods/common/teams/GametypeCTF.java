@@ -197,7 +197,7 @@ public class GametypeCTF extends Gametype
 		}
 		else
 		{
-			player.sendChatToPlayer("You will respawn with the " + playerClass.name.toLowerCase() + " class"); 
+			player.addChatMessage("You will respawn with the " + playerClass.name.toLowerCase() + " class"); 
 		}
 		return true;
 	}

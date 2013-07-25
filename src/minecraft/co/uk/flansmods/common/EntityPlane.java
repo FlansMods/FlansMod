@@ -84,7 +84,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		if(FMLCommonHandler.instance().getSide().isClient() && type.model == null)
 		{
 			FlansMod.proxy.loadPlaneModel(new String[] {"", type.shortName}, type.shortName, type);
-			FlansMod.logLoudly("TurboModelThingy not installed");
+			FlansMod.logLoudly("Package Error! Please check the installed content package for problems.");
 			return;
 		}
 		

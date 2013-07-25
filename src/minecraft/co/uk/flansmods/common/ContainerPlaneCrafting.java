@@ -477,9 +477,9 @@ public class ContainerPlaneCrafting extends Container
 	}
 
 	@Override
-    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    public void onContainerClosed(EntityPlayer entityplayer)
     {
-        super.onCraftGuiClosed(entityplayer);
+        super.onContainerClosed(entityplayer);
         for(int i = 0; i < 35; i++)
         {
             ItemStack itemstack = craftMatrix.getStackInSlot(i);

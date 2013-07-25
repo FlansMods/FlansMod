@@ -825,6 +825,70 @@ public class ModelRendererTurbo extends ModelRenderer
 	}
 
 	/**
+	* Adds a trapezoid-like shape. It's achieved by expanding the shape on one side.
+	* You can use the static variables <code>MR_RIGHT</code>, <code>MR_LEFT</code>,
+	* <code>MR_FRONT</code>, <code>MR_BACK</code>, <code>MR_TOP</code> and
+	* <code>MR_BOTTOM</code>.
+	* @param x the starting x-position
+	* @param y the starting y-position
+	* @param z the starting z-position
+	* @param w the width (over the x-direction)
+	* @param h the height (over the y-direction)
+	* @param d the depth (over the z-direction)
+	* @param scale the "scale" of the box. It only increases the size in each direction by that many.
+	* @param x0,y0,z0 - x7,y7,z7 the modifiers of the box corners. each corner can changed seperat by x/y/z values 
+	*/
+	public void addShapeBox(float x, float y, float z, int w, int h, int d, float scale, float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float x5, float y5, float z5, float x6, float y6, float z6, float x7, float y7, float z7)
+	{
+		float f4 = x + (float)w;
+		float f5 = y + (float)h;
+		float f6 = z + (float)d;
+		x -= scale;
+		y -= scale;
+		z -= scale;
+		f4 += scale;
+		f5 += scale;
+		f6 += scale;
+
+		int m = (mirror ? -1 : 1);
+		if(mirror)
+		{
+			float f7 = f4;
+			f4 = x;
+			x = f7;
+		}
+
+		float[] v  = {x  - x0, y  - y0, z  - z0};
+		float[] v1 = {f4 + x1, y  - y1, z  - z1};
+		float[] v2 = {f4 + x5, f5 + y5, z  - z5};
+		float[] v3 = {x  - x4, f5 + y4, z  - z4};
+		float[] v4 = {x  - x3, y  - y3, f6 + z3};
+		float[] v5 = {f4 + x2, y  - y2, f6 + z2};
+		float[] v6 = {f4 + x6, f5 + y6, f6 + z6};
+		float[] v7 = {x  - x7, f5 + y7, f6 + z7};
+		
+		float[] qValues = new float[] {
+				Math.abs((v[0] - v1[0])/(v3[0]-v2[0])),
+				Math.abs((v[0] - v1[0])/(v4[0]-v5[0])),
+				Math.abs((v4[0] - v5[0])/(v7[0]-v6[0])),
+				Math.abs((v3[0] - v2[0])/(v7[0]-v6[0])),
+				
+				Math.abs((v[1] - v3[1])/(v1[1]-v2[1])),
+				Math.abs((v4[1] - v7[1])/(v5[1]-v6[1])),
+				Math.abs((v[1] - v3[1])/(v4[1]-v7[1])),
+				Math.abs((v1[1] - v2[1])/(v5[1]-v6[1])),
+				
+				Math.abs((v[2] - v4[2])/(v1[2]-v5[2])),
+				Math.abs((v[2] - v4[2])/(v3[2]-v7[2])),
+				Math.abs((v1[2] - v5[2])/(v2[2]-v6[2])),
+				Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
+		};
+		
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
+	}
+
+
+	/**
 	 * Creates a shape from a 2D vector shape.
 	 * @param x the starting x position
 	 * @param y the starting y position

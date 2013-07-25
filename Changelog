@@ -3,10 +3,15 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
-=== v2.3.3 ===
+=== v2.4 ===
+Changes:
+- Updated to 1.6.2 <---Not yet complete
+- Changed "Turbo Model Thingy not installed" error message to reduce confusion
+- teams.dat now saves in the Flan folder
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
+- Added an NMT element to allow modifying corners of a box with x/y/z
 
 === v2.3.2 ===
 Changes:
@@ -37,7 +42,7 @@ Additions:
 - Added option to restrict access to plane inventories during flight
 - Added FlexBox and FlexTrapezoids to TMT for pack makers
 - Added scope time setting to guns
-- Added ability to have AAGuns, Planes and Vehicles despawn after a configurable time.
+- Added ability to have AAGuns, Planes and Vehicles despawn after a configurable time
 - Added map rotation for teams games
 - Added Conquest gametype
 - Added CTF gametype

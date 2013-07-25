@@ -147,7 +147,7 @@ public class BlockSpawner extends BlockContainer
     		if(item == null || item.getItem() == null)
     		{
     			spawner.spawnDelay = (spawner.spawnDelay + 200) % 6000;
-    			player.sendChatToPlayer(ChatMessageComponent.func_111066_d("Set spawn delay to " + spawner.spawnDelay / 20)); //TODO : Check this. No idea if correct one of 3 possible methods
+    			player.addChatMessage("Set spawn delay to " + spawner.spawnDelay / 20);
     		}
     		else if(!(item.getItem() instanceof ItemOpStick))
     		{
