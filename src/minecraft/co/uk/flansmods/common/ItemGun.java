@@ -73,7 +73,7 @@ public class ItemGun extends Item
 			{
 				if (FlansModClient.zoomOverlay == null)
 				{
-					FlansModClient.zoomOverlay = type.scope;
+					FlansModClient.zoomOverlay = type;
 					FlansModClient.newZoom = type.zoomLevel;
 					float f = FlansModClient.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
 					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = f / (float) Math.sqrt(type.zoomLevel);

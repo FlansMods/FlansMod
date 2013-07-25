@@ -102,7 +102,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/" + FlansModClient.zoomOverlay + ".png"));
+			mc.renderEngine.func_110577_a(FlansModResourceHandler.getScope(FlansModClient.zoomOverlay));
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
@@ -115,31 +115,6 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		}
-		if (FlansModClient.errorString != null && FlansModClient.errorStringTimer > 0)
-		{
-			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
-			int i = scaledresolution.getScaledWidth();
-			int j = scaledresolution.getScaledHeight();
-			GL11.glEnable(3042 /* GL_BLEND */);
-			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/gui.png"));
-			Tessellator tessellator = Tessellator.instance;
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(0, 20, -90D, 0D, 66D / 256D);
-			tessellator.addVertexWithUV(200, 20, -90D, 200D / 256D, 66D / 256D);
-			tessellator.addVertexWithUV(200, 0D, -90D, 200D / 256D, 46D / 256D);
-			tessellator.addVertexWithUV(0, 0D, -90D, 0D, 46D / 256D);
-			tessellator.draw();
-			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			FlansModClient.minecraft.fontRenderer.drawString(FlansModClient.errorString, 6, 6, 0x000000);
-		}
 		if(FlansModClient.minecraft.thePlayer != null && (GuiTeamScores.numTeams > 0 || !GuiTeamScores.sortedByTeam) && GuiTeamScores.getPlayerData(FlansModClient.minecraft.thePlayer.username) != null)
 		{
 			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
@@ -151,7 +126,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/teamsScores.png"));
+			mc.renderEngine.func_110577_a(GuiTeamScores.texture);
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 109D / 256D, 27D / 256D);
@@ -165,7 +140,8 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			String playerUsername = FlansModClient.minecraft.thePlayer.username;
 			//No idea why this works, but it makes the text bind its texture correctly
-			mc.renderEngine.bindTexture("/terrain.png");
+			//mc.renderEngine.bindTexture("/terrain.png");
+			//TODO : Investigate
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);

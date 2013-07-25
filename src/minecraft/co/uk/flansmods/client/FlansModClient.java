@@ -31,6 +31,7 @@ import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
+import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemGun;
 import co.uk.flansmods.common.PlaneType;
@@ -51,7 +52,7 @@ public class FlansModClient extends FlansMod
 	
 	public static int shootTime;
 	public static int scopeTime;
-	public static String zoomOverlay;
+	public static GunType zoomOverlay;
 	public static float playerRecoil;
 	public static float antiRecoil;
 	public static float playerZoom = 1.0F;
