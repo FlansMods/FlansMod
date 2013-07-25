@@ -121,7 +121,7 @@ public class EntityCollisionBox extends Entity
 		{
 			PacketDispatcher.sendPacketToServer(PacketRightClick.buildClickPacket(this));
 		}
-		return plane.interact(player);
+		return plane.func_130002_c(player);
 	}
 	
 	@Override
