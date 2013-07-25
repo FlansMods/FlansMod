@@ -2,6 +2,7 @@ package co.uk.flansmods.client;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,6 +13,8 @@ import co.uk.flansmods.common.PlaneType;
 
 public class RenderPlane extends Render
 {
+	private ResourceLocation TEXTURE = new ResourceLocation("Flan", "textures/mobs/cockatrice/cockatrice.png");
+
     public RenderPlane()
     {
         shadowSize = 0.5F;
@@ -45,4 +48,10 @@ public class RenderPlane extends Render
     {
         render((EntityPlane)entity, d, d1, d2, f, f1);
     }
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return null;
+	}
 }
