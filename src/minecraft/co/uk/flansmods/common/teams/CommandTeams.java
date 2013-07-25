@@ -31,9 +31,11 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
 			return;
 		}
-		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
+		if(split == null || split.length <= 1 || split[0].equals("help") || split[0].equals("?"))
 		{
-			sendHelpInformation(sender);
+			if(split.length == 0)
+				sendHelpInformation(sender, 1);
+			else sendHelpInformation(sender, Integer.parseInt(split[1]));
 			return;
 		}
 		if(split[0].equals("listGametypes"))
@@ -493,34 +495,51 @@ public class CommandTeams extends CommandBase {
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d(split[0] + " is not a valid teams command. Try /teams help"));
 	}
 	
-	public void sendHelpInformation(ICommandSender sender)
+	public void sendHelpInformation(ICommandSender sender, int page)
 	{
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("\u00a72Listing teams commands"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listGametypes"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setGametype <name>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listAllTeams"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listTeams"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setTeams <teamName1> <teamName2>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams getSticks"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setVariable <variable> <value>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams forceAdventure <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams explosions <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams canBreakGuns <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams canBreakGlass <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams armourDrops <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams weaponDrops <off / on / smart>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams fuelNeeded <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams mgLife <time>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams planeLife <time>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams vehicleLife <time>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addMap <shortName> <longName>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listMaps"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeMap <shortName>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setMap <shortName>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams useRotation <true / false>"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addRotation <map> <gametype> <team1> <team2> ..."));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listRotation"));
-		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeRotation <ID>"));
+		
+		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("\u00a72Listing teams commands \u00a7f[Page " + page + " of 3]"));
+		switch(page)
+		{
+		case 1 : 
+		{
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams help [page]"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams getSticks"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listGametypes"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setGametype <name>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listAllTeams"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listTeams"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setTeams <teamName1> <teamName2>"));
+			break;
+		}
+		case 2 :
+		{
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addMap <shortName> <longName>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listMaps"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeMap <shortName>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setMap <shortName>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams useRotation <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams addRotation <map> <gametype> <team1> <team2> ..."));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listRotation"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams removeRotation <ID>"));
+			break;
+		}
+		case 3 :
+		{
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setVariable <variable> <value>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams forceAdventure <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams explosions <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams canBreakGuns <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams canBreakGlass <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams armourDrops <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams weaponDrops <off / on / smart>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams fuelNeeded <true / false>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams mgLife <time>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams planeLife <time>"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams vehicleLife <time>"));
+			break;
+		}
+		}
 		/*
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Listing teams commands"));
 		sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listGametypes - see the gametypes available on this server"));
