@@ -3,6 +3,7 @@ package co.uk.flansmods.client;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -12,6 +13,8 @@ import co.uk.flansmods.common.ContainerVehicleCrafting;
 
 public class GuiVehicleCrafting extends GuiContainer
 {
+	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/vehicleCrafting.png");
+	
     public GuiVehicleCrafting(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
     {
         super(new ContainerVehicleCrafting(inventoryplayer, world, i, j, k));
@@ -35,7 +38,7 @@ public class GuiVehicleCrafting extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture("/gui/vehicleCrafting.png");
+        mc.renderEngine.func_110577_a(texture);
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

@@ -3,6 +3,7 @@ package co.uk.flansmods.client;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -17,6 +18,8 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiPlaneMenu extends GuiContainer
 {
+	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeMenu.png");
+	
     public GuiPlaneMenu(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane)
     {
         super(new ContainerPlaneMenu(inventoryplayer, world1));
@@ -69,7 +72,7 @@ public class GuiPlaneMenu extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture("/gui/planeMenu.png");
+        mc.renderEngine.func_110577_a(texture);
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);

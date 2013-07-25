@@ -3,6 +3,7 @@ package co.uk.flansmods.client;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
@@ -12,6 +13,9 @@ import co.uk.flansmods.common.ContainerPlaneCrafting;
 
 public class GuiPlaneCrafting extends GuiContainer
 {
+	private static final ResourceLocation bigTexture = new ResourceLocation("Flan", "gui/planeCraftingLarge.png");
+	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeCrafting.png");
+	
     public GuiPlaneCrafting(InventoryPlayer inventoryplayer, World world, int i, int j, int k, boolean bigger)
     {
         super(new ContainerPlaneCrafting(inventoryplayer, world, i, j, k, bigger));
@@ -37,7 +41,7 @@ public class GuiPlaneCrafting extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(big ? "/gui/planeCraftingLarge.png" : "/gui/planeCrafting.png");
+        mc.renderEngine.func_110577_a(big ? bigTexture : texture);
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
