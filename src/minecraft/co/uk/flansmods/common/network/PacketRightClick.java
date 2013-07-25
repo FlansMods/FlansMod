@@ -96,8 +96,8 @@ public class PacketRightClick extends FlanPacketCommon
 			if(driveable != null && ((passengerSeat && driveable.seats.length > i) || (!passengerSeat && driveable.boxes.length > i)))
 			{
 				if(passengerSeat)
-					driveable.seats[i].interact(player);
-				else driveable.boxes[i].interact(player);
+					driveable.seats[i].func_130002_c(player); //interact - change back next update
+				else driveable.boxes[i].func_130002_c(player); //interact - change back next update
 			}
 		}
         catch(Exception e)
