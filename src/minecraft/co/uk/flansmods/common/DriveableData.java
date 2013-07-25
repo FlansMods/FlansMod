@@ -246,8 +246,25 @@ public class DriveableData extends WorldSavedData implements IInventory
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) 
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) 
 	{
-		return true;
+		if(i < getBombInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
+		{
+			return true;
+		}		
+		if(i >= getBombInventoryStart() && i < getCargoInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
+		{
+			return true;
+		}
+		if(i >= getCargoInventoryStart() && i < getFuelSlot())
+		{
+			return true;
+		}
+		if(i == getFuelSlot() && itemstack != null && itemstack.getItem() instanceof ItemPart && ((ItemPart)itemstack.getItem()).type.category == 9) //Fuel
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
