@@ -2,11 +2,13 @@ package co.uk.flansmods.client;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.EntityPassengerSeat;
+import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.VehicleType;
 
@@ -25,7 +27,6 @@ public class RenderVehicle extends Render
         GL11.glRotatef(f + 90F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(vehicle.prevRotationPitch + (vehicle.axes.getPitch() - vehicle.prevRotationPitch) * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(-vehicle.prevRotationRoll - (vehicle.axes.getRoll() - vehicle.prevRotationRoll) * f1, 1.0F, 0.0F, 0.0F);
-        loadTexture("/skins/" + type.texture + ".png");
         ModelVehicle modVehicle = (ModelVehicle)type.model;
 		if(modVehicle != null)
 			modVehicle.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
@@ -75,4 +76,10 @@ public class RenderVehicle extends Render
     {
         render((EntityVehicle)entity, d, d1, d2, f, f1);
     }
+    
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return FlansModResourceHandler.getTexture(((EntityVehicle)entity).getVehicleType());
+	}
 }

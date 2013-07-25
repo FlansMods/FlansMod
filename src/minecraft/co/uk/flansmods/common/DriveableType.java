@@ -74,9 +74,7 @@ public class DriveableType extends InfoType
 	}
 	
 	public CollisionBox[] boxes;
-		
-	public String texture;
-			
+
 	public int health;
 
 	public int numCargoSlots;

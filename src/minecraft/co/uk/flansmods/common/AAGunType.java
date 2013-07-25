@@ -25,7 +25,6 @@ public class AAGunType extends InfoType
 	public String shootSound;
 	public String reloadSound;
 	public Object model;
-	public String texture;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
 	public int[] barrelX, barrelY, barrelZ;

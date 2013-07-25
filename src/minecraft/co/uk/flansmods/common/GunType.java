@@ -38,7 +38,6 @@ public class GunType extends InfoType
 	@SideOnly(Side.CLIENT)
 	public ModelMG model;
 	
-	public String texture;
 	public boolean deployable;
 	public float standBackDist = 1.5F;
 	public float topViewLimit = -60F;

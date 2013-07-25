@@ -7,7 +7,6 @@ import java.util.List;
 public class BulletType extends InfoType
 {
 	public Object model;
-	public String texture = "bullet";
 	public float fallSpeed = 1.0F;
 	public int damage = 0;
 	public int explosion = 0;
@@ -32,6 +31,7 @@ public class BulletType extends InfoType
 
 	public BulletType(BufferedReader file)
 	{
+		texture = "defaultBullet";
 		do
 		{
 			String line = null;

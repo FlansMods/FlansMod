@@ -1,11 +1,14 @@
 package co.uk.flansmods.client;
 
+import co.uk.flansmods.common.EntityAAGun;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderNull extends Render
 {
+	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
 
     public RenderNull()
     {
@@ -21,6 +24,12 @@ public class RenderNull extends Render
             float f, float f1)
     {
     }
+    
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return texture;
+	}
 	
     protected ModelBase model;
 }

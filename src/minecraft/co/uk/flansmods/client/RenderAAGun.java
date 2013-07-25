@@ -2,6 +2,7 @@ package co.uk.flansmods.client;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,7 +21,6 @@ public class RenderAAGun extends Render
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		loadTexture("/skins/" + aa.type.texture + ".png");
 		GL11.glScalef(1F, 1F, 1.0F);
 		ModelAAGun modelAAGun = (ModelAAGun) aa.type.model;
 		modelAAGun.renderBase(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, aa);
@@ -32,5 +32,11 @@ public class RenderAAGun extends Render
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 		render((EntityAAGun) entity, d, d1, d2, f, f1);
+	}
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return FlansModResourceHandler.getTexture(((EntityAAGun)entity).type);
 	}
 }

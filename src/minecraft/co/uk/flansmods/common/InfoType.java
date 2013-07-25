@@ -26,7 +26,8 @@ public class InfoType
 	public String smeltableFrom = null;
 	public String name;
 	public String shortName;
-
+	public String texture;
+	
 	public InfoType()
 	{
 		infoTypes.add(this);

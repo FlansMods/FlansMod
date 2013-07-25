@@ -7,14 +7,13 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.PlaneType;
 
 
 public class RenderPlane extends Render
 {
-	private ResourceLocation TEXTURE = new ResourceLocation("Flan", "textures/mobs/cockatrice/cockatrice.png");
-
     public RenderPlane()
     {
         shadowSize = 0.5F;
@@ -28,7 +27,6 @@ public class RenderPlane extends Render
         GL11.glRotatef(f + 90F, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityPlane.prevRotationPitch + (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch) * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(-entityPlane.prevRotationRoll - (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll) * f1, 1.0F, 0.0F, 0.0F);
-        loadTexture("/skins/" + type.texture + ".png");
         ModelPlane modPlane = (ModelPlane)type.model;
 
 		if(modPlane != null)
@@ -52,6 +50,6 @@ public class RenderPlane extends Render
 	@Override
 	protected ResourceLocation func_110775_a(Entity entity) 
 	{
-		return null;
+		return FlansModResourceHandler.getTexture(((EntityPlane)entity).getPlaneType());
 	}
 }

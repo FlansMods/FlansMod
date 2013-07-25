@@ -2,10 +2,12 @@ package co.uk.flansmods.client;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelMG;
+import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityMG;
 
 public class RenderMG extends Render
@@ -21,7 +23,6 @@ public class RenderMG extends Render
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(180F - (float)mg.direction * 90F, 0.0F, 1.0F, 0.0F);
-		loadTexture("/skins/" + mg.type.texture + ".png");
 		ModelMG model = mg.type.model;
 		//GL11.glScalef(-1F, -1F, 1.0F);
 		model.renderBipod(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, mg);
@@ -34,4 +35,10 @@ public class RenderMG extends Render
     {
         render((EntityMG)entity, d, d1, d2, f, f1);
     }
+    
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return FlansModResourceHandler.getTexture(((EntityMG)entity).type);
+	}
 }
