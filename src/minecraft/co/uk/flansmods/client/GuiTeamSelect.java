@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -17,6 +18,8 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiTeamSelect extends GuiScreen 
 {
+	public static final ResourceLocation gui = new ResourceLocation("ic2","textures/gui/teams.png");
+	
 	private static RenderItem itemRenderer = new RenderItem();
 	private boolean classMenu;
 	//This is static so that players may switch teams whenever they wish. 
@@ -82,7 +85,7 @@ public class GuiTeamSelect extends GuiScreen
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture("/gui/teams.png");
+        mc.renderEngine.func_110577_a(gui);
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
 		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		if(classMenu)
