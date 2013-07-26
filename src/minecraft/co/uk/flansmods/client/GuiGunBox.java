@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -20,6 +21,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiGunBox extends GuiScreen
 {
+	public static final ResourceLocation gui = new ResourceLocation("FlansMod","textures/gui/weaponBox.png");
 
 	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{
@@ -44,17 +46,14 @@ public class GuiGunBox extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));
+		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.func_110581_b(gui).func_110552_b());
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
 		
-		//No idea why this works, but it makes the text bind its texture correctly
-		mc.renderEngine.bindTexture("/terrain.png");
-		
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
-		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/weaponBox.png"));
+		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.func_110581_b(gui).func_110552_b());
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
 		if (type.numGuns > page * 2 + 1 && type.guns[page * 2] != null && type.guns[page * 2 + 1] != null)

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -26,6 +27,10 @@ import cpw.mods.fml.common.TickType;
 
 public class TickHandlerClient implements ITickHandler
 {
+	public static final ResourceLocation gui = new ResourceLocation("FlansMod","textures/gui/gui.png");
+	public static final ResourceLocation teamScores = new ResourceLocation("FlansMod","textures/gui/teamScores.png");
+	public static final ResourceLocation zoomOverlay = new ResourceLocation("FlansMod","textures/gui/" + FlansModClient.zoomOverlay + ".png");
+	
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
@@ -102,7 +107,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/" + FlansModClient.zoomOverlay + ".png"));
+			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.func_110581_b(zoomOverlay).func_110552_b());
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
@@ -126,7 +131,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/gui.png"));
+			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.func_110581_b(gui).func_110552_b());
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(0, 20, -90D, 0D, 66D / 256D);
@@ -151,7 +156,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.getTexture("/gui/teamsScores.png"));
+			GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, FlansModClient.minecraft.renderEngine.func_110581_b(teamScores).func_110552_b());
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 109D / 256D, 27D / 256D);
@@ -164,8 +169,6 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			String playerUsername = FlansModClient.minecraft.thePlayer.username;
-			//No idea why this works, but it makes the text bind its texture correctly
-			mc.renderEngine.bindTexture("/terrain.png");
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 			mc.fontRenderer.drawString(GuiTeamScores.getPlayerData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);

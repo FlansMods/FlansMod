@@ -13,9 +13,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiTeamScores extends GuiScreen 
 {
+	public static final ResourceLocation gui = new ResourceLocation("FlansMod","textures/gui/teamScores.png");
+	
 	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used...
 	public static String gametype;
 	public static int numTeams;
@@ -133,7 +136,7 @@ public class GuiTeamScores extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/gui/teamsScores.png"));
+		GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.func_110581_b(gui).func_110552_b());
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int guiHeight = 34 + 9 * numLines;
 		int m = k / 2 - 128;
@@ -142,9 +145,6 @@ public class GuiTeamScores extends GuiScreen
 		for(int p = 0; p < numLines; p++)
 			drawTexturedModalRect(m, n + 24 + 9 * p, 0, 71, 256, 9);
 		drawTexturedModalRect(m, l / 2 + guiHeight / 2 - 10, 0, 87, 256, 10);
-		
-		//No idea why this works, but it makes the text bind its texture correctly
-		mc.renderEngine.bindTexture("/terrain.png");
 		
 		drawCenteredString(fontRenderer, gametype, k / 2, n + 4, 0xffffff);
 		drawString(fontRenderer, "Name", m + 8, n + 14, 0xffffff);
