@@ -8,6 +8,8 @@ import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class FlansModResourceHandler 
 {
@@ -57,9 +59,7 @@ public class FlansModResourceHandler
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", "sounds/" + sound + ".ogg");
 		soundMap.put(contentPack + "." + sound, resLoc);
-		FMLClientHandler.instance().getClient().sndManager.addSound("sounds/" + sound + ".ogg");
+		FMLClientHandler.instance().getClient().sndManager.addSound("flansmod:sounds/" + sound + ".ogg");
 		return resLoc;
 	}
-	
-	
 }

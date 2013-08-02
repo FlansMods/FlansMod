@@ -524,7 +524,7 @@ public class FlansMod
 			File[] armours = armourDir.listFiles();
 			if (armours == null)
 			{
-				logQuietly("No team files found.");
+				logQuietly("No armour files found.");
 			} else
 			{
 				for (int i = 0; i < armours.length; i++)

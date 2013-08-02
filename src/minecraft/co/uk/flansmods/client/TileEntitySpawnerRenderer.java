@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +31,9 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer {
 		BlockSpawner.colouredPass = true;
 		
 		Tessellator var10 = Tessellator.instance;
-        //bindTextureByName("/terrain.png");
+
+		func_110628_a(TextureMap.field_110575_b);
+		
         RenderHelper.disableStandardItemLighting();
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_BLEND);
