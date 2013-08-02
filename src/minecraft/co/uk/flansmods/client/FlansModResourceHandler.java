@@ -57,6 +57,7 @@ public class FlansModResourceHandler
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", "sounds/" + sound + ".ogg");
 		soundMap.put(contentPack + "." + sound, resLoc);
+		FMLClientHandler.instance().getClient().sndManager.addSound("sounds/" + sound + ".ogg");
 		return resLoc;
 	}
 	

@@ -129,8 +129,11 @@ public class GuiTeamScores extends GuiScreen
 	
 	public void drawScreen(int i, int j, float f)
 	{
-		if(gametype == null || gametype.equals("") || teamData == null)
+		if(gametype == null || gametype.equals("") || teamData == null || teamData.length < 1)
+		{
+			mc.displayGuiScreen(null);
 			return;
+		}
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
 		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
