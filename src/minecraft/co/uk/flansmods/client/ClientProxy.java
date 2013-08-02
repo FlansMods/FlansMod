@@ -134,28 +134,14 @@ public class ClientProxy extends CommonProxy
 
 	@Override
 	public void loadDefaultGraphics()
-	{
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/bullets.png");
-		
+	{		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/guns.png");
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/parts.png");
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/planes.png");
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/vehicles.png");
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/gunBoxes.png");
-		
-		//MinecraftForgeClient.preloadTexture("/spriteSheets/armour.png");
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
 
@@ -220,14 +206,10 @@ public class ClientProxy extends CommonProxy
 			player.addChatMessage("Mouse Control mode is now set to " + FlansModClient.controlModeMouse);
 	}
 	
-	// --------------- END ABRAR EDITS ----------------------
-	
 	public boolean mouseControlEnabled()
 	{
 		return FlansModClient.controlModeMouse;
 	}
-	
-	// ------------------ PACKET SENDING OR NOT -------------
 	
 	@Override
 	public void playBlockBreakSound(int x, int y, int z, int blockID)
@@ -253,8 +235,6 @@ public class ClientProxy extends CommonProxy
 			world.spawnParticle(type, x1, y1, z1, x2, y2, z2);
 		}
 	}
-	
-	// ---------------END PACKET SENDING OR NOT -------------
 
 	@Override
 	public void doTickStuff()
@@ -271,8 +251,6 @@ public class ClientProxy extends CommonProxy
 			case 0: return new GuiPlaneCrafting(player.inventory, world, x, y, z, false);
 			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
-			//case 3: return new GuiPlaneMenu(player.inventory, world, (EntityDriveable) player.ridingEntity);
-			//case 4: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
 			case 6: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 0);
 			case 7: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 1);
@@ -329,39 +307,6 @@ public class ClientProxy extends CommonProxy
 			e.printStackTrace();
 		}
 	}
-
-	/*@Override
-	public void shootVehicle(World world, double posX, double posY, double posZ, VehicleType type, VehicleData data, EntityPassengerSeat seat, EntityVehicle entity, RotatedAxes axes, EntityPlayer player)
-	{
-		ModelVehicle vehicleModel = (ModelVehicle)type.model;
-		if(vehicleModel.gunModel.length > 0 && data.guns[1] != null && data.ammo[1] != null && data.ammo[1].getItem() instanceof ItemBullet && data.guns[1].isAmmo(((ItemBullet)data.ammo[1].getItem()).type))
-		{				
-			double cosYaw = Math.cos((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
-			double sinYaw = Math.sin((player.rotationYaw - axes.getYaw()) * 3.14159265F / 180F);
-			double cosPitch = Math.cos((player.rotationPitch - axes.getPitch()) * 3.14159265F / 180F);
-			double sinPitch = Math.sin((player.rotationPitch - axes.getPitch()) * 3.14159265F / 180F);
-
-			double newX = 3D * cosPitch * sinYaw;
-			double newY = -3D * sinPitch;
-			double newZ = 3D * cosPitch * cosYaw;
-			Vec3 gunOriginVec = entity.rotate(type.barrelX / 16D, type.barrelY / 16D, type.barrelZ / 16D);
-			world.spawnEntityInWorld(new EntityBullet(world, gunOriginVec.addVector(posX, posY, posZ), player.rotationYaw, axes.getPitch(), (EntityLiving)seat.riddenByEntity, data.guns[1].accuracy, data.guns[1].damage, ((ItemBullet)data.ammo[1].getItem()).type, 3.0F));
-			if(seat.soundDelay <= 0)
-			{
-				world.playSoundAtEntity(entity, type.shootSound, 1.0F , 1.0F);
-				seat.soundDelay = data.guns[1].shootSoundLength;
-			}
-			int damage = data.ammo[1].getItemDamage();
-			data.ammo[1].setItemDamage(damage + 1);	
-			if(damage + 1 == data.ammo[1].getMaxDamage())
-			{
-				if(player.capabilities.isCreativeMode)
-					data.ammo[1].setItemDamage(0);
-				else data.setInventorySlotContents(1, null);
-			}
-			seat.gunDelay = type.vehicleShootDelay;
-		}
-	}*/
 
 	@Override
 	public void loadVehicleModel(String[] split, String shortName, VehicleType type)
