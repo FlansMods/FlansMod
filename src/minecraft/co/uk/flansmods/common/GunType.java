@@ -101,12 +101,12 @@ public class GunType extends InfoType
 				distortSound = arg0[1].equals("True");
 			if (arg0[0].equals("ShootSound"))
 			{
-				shootSound = "guns." + arg0[1];
+				shootSound = arg0[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", arg0[1]);
 			}
 			if (arg0[0].equals("ReloadSound"))
 			{
-				reloadSound = "guns." + arg0[1];
+				reloadSound = arg0[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", arg0[1]);
 			}
 			if (arg0[0].equals("Mode"))

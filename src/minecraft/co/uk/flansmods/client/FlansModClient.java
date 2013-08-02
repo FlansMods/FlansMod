@@ -82,44 +82,6 @@ public class FlansModClient extends FlansMod
 		log("Loading Flan's mod.");
 
 		MinecraftForge.EVENT_BUS.register(this);
-		
-		
-		// Properties
-		// TODO: move to common and proxy-ify
-		try
-		{
-			File file = new File(FMLClientHandler.instance().getClient().mcDataDir + "/Flan/properties.txt");
-			if (file != null)
-			{
-				BufferedReader properties = new BufferedReader(new FileReader(file));
-				do
-				{
-					String line = null;
-					try
-					{
-						line = properties.readLine();
-					} catch (Exception e)
-					{
-						break;
-					}
-					if (line == null)
-					{
-						break;
-					}
-					if (line.startsWith("//"))
-						continue;
-					String[] split = line.split(" ");
-					if (split.length < 2)
-						continue;
-					readProperties(split, properties);
-				} while (true);
-				log("Loaded properties.");
-			}
-		} catch (Exception e)
-		{
-			log("No properties file found. Using defaults.");
-			createNewProperties();
-		}
 	}
 
 	public static void tick()
@@ -352,40 +314,5 @@ public class FlansModClient extends FlansMod
 		// TODO : SMP guns
 	}
 	
-	private void doPropertyStuff(File file)
-	{
-		
-	}
-
-	private void readProperties(String[] split, BufferedReader file)
-	{
-		try
-		{
-			if (split[0].equals("Explosions"))
-				explosions = split[1].equals("True");
-			if (split[0].equals("Bombs"))
-				bombsEnabled = split[1].equals("True");
-			if (split[0].equals("Bullets"))
-				bulletsEnabled = split[1].equals("True");
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	private void createNewProperties()
-	{
-		try
-		{
-			FileOutputStream propsOut = new FileOutputStream(new File(FMLClientHandler.instance().getClient().mcDataDir + "/Flan/properties.txt"));
-			propsOut.write(("Explosions True\r\nBombs True\r\nBullets True").getBytes());
-			propsOut.close();
-		} catch (Exception e)
-		{
-			log("Failed to write default properties");
-			e.printStackTrace();
-		}
-	}
-
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
 }

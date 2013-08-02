@@ -72,7 +72,7 @@ public static final byte packetID = 8;
         	String sound = stream.readUTF();      
         	boolean distort = stream.readBoolean();
         	
-        	FMLClientHandler.instance().getClient().sndManager.playSound(sound, x, y, z, 10F, distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+        	FMLClientHandler.instance().getClient().sndManager.playSound("flansmod:sounds/" + sound, x, y, z, 10F, distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
         }
         catch(Exception e)
         {

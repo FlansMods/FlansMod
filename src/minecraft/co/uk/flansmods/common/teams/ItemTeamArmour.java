@@ -51,7 +51,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor {
 	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, int layer) 
 	{
-		return "Flan" + type.contentPack + ":/armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
+		return "flansmod:/armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
 	}
 	
     @SideOnly(Side.CLIENT)
