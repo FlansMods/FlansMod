@@ -170,9 +170,9 @@ public class BlockSpawner extends BlockContainer
     	icons = new Icon[2][3];
     	for(int i = 0; i < 2; i++)
     	{
-    		icons[i][0] = register.registerIcon("spawner_item_" + (i + 1));
-    		icons[i][1] = register.registerIcon("spawner_player_" + (i + 1));
-    		icons[i][2] = register.registerIcon("spawner_vehicle_" + (i + 1));
+    		icons[i][0] = register.registerIcon("FlansMod:" + "spawner_item_" + (i + 1));
+    		icons[i][1] = register.registerIcon("FlansMod:" + "spawner_player_" + (i + 1));
+    		icons[i][2] = register.registerIcon("FlansMod:" + "spawner_vehicle_" + (i + 1));
     	}
     }
 }

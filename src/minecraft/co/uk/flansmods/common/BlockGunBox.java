@@ -289,9 +289,9 @@ public class BlockGunBox extends BlockContainer
     {
     	for(GunBoxType type : GunBoxType.gunBoxMap.values())
     	{
-    		type.top = register.registerIcon(type.topTexturePath);
-    		type.side = register.registerIcon(type.sideTexturePath);
-    		type.bottom = register.registerIcon(type.bottomTexturePath);
+    		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
+    		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
+    		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
     	}
     }
 }

@@ -55,10 +55,10 @@ public class BlockPlaneWorkbench extends Block
     public void registerIcons(IconRegister register)
     {
     	top = new Icon[3];
-    	top[0] = register.registerIcon("planeCraftingTableSmall");
-    	top[1] = register.registerIcon("planeCraftingTableLarge");
-    	top[2] = register.registerIcon("vehicleCraftingTable");
-    	side = register.registerIcon("planeCraftingTableSide");
+    	top[0] = register.registerIcon("FlansMod:" + "planeCraftingTableSmall");
+    	top[1] = register.registerIcon("FlansMod:" + "planeCraftingTableLarge");
+    	top[2] = register.registerIcon("FlansMod:" + "vehicleCraftingTable");
+    	side = register.registerIcon("FlansMod:" + "planeCraftingTableSide");
     }
     
 	private Icon side;
