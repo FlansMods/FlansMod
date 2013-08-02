@@ -19,6 +19,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public class GuiTeamSelect extends GuiScreen 
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teams.png");
+
 	
 	private static RenderItem itemRenderer = new RenderItem();
 	private boolean classMenu;

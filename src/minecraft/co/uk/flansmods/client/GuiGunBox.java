@@ -51,13 +51,14 @@ public class GuiGunBox extends GuiScreen
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
 		drawTexturedModalRect(m, n, 0, 0, 176, 204);
-		
+
 		//No idea why this works, but it makes the text bind its texture correctly
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investigate
 		
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
 		mc.renderEngine.func_110577_a(texture);
+		
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
 		if (type.numGuns > page * 2 + 1 && type.guns[page * 2] != null && type.guns[page * 2 + 1] != null)

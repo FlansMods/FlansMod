@@ -7,6 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -19,6 +20,7 @@ import co.uk.flansmods.common.EntityPlane;
 public class GuiPlaneInventory extends GuiContainer
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeInventory.png");
+
 	
     public GuiPlaneInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
     {
@@ -98,7 +100,9 @@ public class GuiPlaneInventory extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         mc.renderEngine.func_110577_a(texture);
+        
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
