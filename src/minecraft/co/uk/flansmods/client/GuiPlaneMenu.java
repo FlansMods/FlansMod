@@ -18,7 +18,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiPlaneMenu extends GuiContainer
 {
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeMenu.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeMenu.png");
 	
     public GuiPlaneMenu(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane)
     {

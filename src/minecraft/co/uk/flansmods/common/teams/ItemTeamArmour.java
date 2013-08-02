@@ -1,7 +1,9 @@
 package co.uk.flansmods.common.teams;
 
 import co.uk.flansmods.common.FlansMod;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
@@ -47,9 +49,9 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor {
 	}
 
 	@Override
-	public String getArmorTextureFile(ItemStack itemstack) 
+	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, int layer) 
 	{
-		return "/armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
+		return "Flan" + type.contentPack + ":/armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -62,6 +64,13 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor {
     public boolean requiresMultipleRenderPasses()
     {
         return false;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
 
 }

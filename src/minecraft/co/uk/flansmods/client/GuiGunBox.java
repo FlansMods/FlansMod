@@ -21,7 +21,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiGunBox extends GuiScreen
 {
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/weaponBox.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
 
 	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{

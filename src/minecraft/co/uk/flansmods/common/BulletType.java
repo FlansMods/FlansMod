@@ -29,8 +29,9 @@ public class BulletType extends InfoType
 	private static int lastIconIndex = 0;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 
-	public BulletType(BufferedReader file)
+	public BulletType(BufferedReader file, String contentPack)
 	{
+		super(contentPack);
 		texture = "defaultBullet";
 		do
 		{

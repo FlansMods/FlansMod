@@ -28,7 +28,7 @@ public class CommonProxy
 	
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		// this stuff is only done client side.
+		// this stuff is only done client side
 		List<File> contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{

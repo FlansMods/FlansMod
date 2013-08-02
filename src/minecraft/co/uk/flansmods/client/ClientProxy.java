@@ -6,14 +6,17 @@ import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -57,6 +60,8 @@ import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLModContainer;
+import cpw.mods.fml.common.MetadataCollection;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -79,11 +84,7 @@ public class ClientProxy extends CommonProxy
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		// this stuff is only done client side.
-		File tempImageDir = new File(FlansMod.flanDir.getParentFile(), "/temp/Flan/");
-		if(!tempImageDir.exists())
-		{
-			tempImageDir.mkdirs();
-		}
+
 		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
@@ -94,40 +95,16 @@ public class ClientProxy extends CommonProxy
 					method.invoke(classloader, new Object[]
 							{ file.toURI().toURL() });
 					method.invoke(classloader, new Object[]
-							{ new File(file, "/models/").toURI().toURL() });
-					//Loop over the images and copy them to a temporary image folder to be connected to the classpath
-					//Its a roundabout hack to avoid having to make every content pack change its folder structure
-					/*for(File imageFile : new File(file, "/icons/").listFiles())
-					{
-						for(int i = 0; i < 2; i++)
-						{
-							File newFile = new File(tempImageDir, "/textures/" + (i == 1 ? "items/" : "blocks/") + imageFile.getName());
-							if(!newFile.exists())
-							{
-								newFile.mkdirs();
-								newFile.createNewFile();
-								FileChannel source = null;
-								FileChannel destination = null;
-								try 
-								{
-									source = new FileInputStream(imageFile).getChannel();
-									destination = new FileOutputStream(newFile).getChannel();
-									destination.transferFrom(source, 0, source.size());
-								}
-								finally 
-								{
-									if(source != null) 
-									{
-										source.close();
-									}
-									if(destination != null) 
-									{
-										destination.close();
-									}
-								}
-							}		
-						}
-					}*/
+							{ new File(file, "/assets/flansmod/models/").toURI().toURL() });
+					
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("modid", "FlansMod");
+					map.put("name", "Flan's Mod : " + file.getName());
+					map.put("version", "1");
+					FMLModContainer container = new FMLModContainer("co.uk.flansmods.common.FlansMod", file, map);
+					container.bindMetadata(MetadataCollection.from(null, ""));
+					FMLClientHandler.instance().addModAsResource(container);
+				
 				} catch (Exception e)
 				{
 					FlansMod.log("Failed to load images for content pack : " + file.getName());
@@ -138,15 +115,14 @@ public class ClientProxy extends CommonProxy
 				contentPacks.add(file);
 			}
 		}
-		try
-		{
-			method.invoke(classloader, new Object[] { tempImageDir.toURI().toURL() });
+		try {
+			Class.forName("co.uk.flansmods.client.model.ModelBF109");
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to add item images to classpath");
 			e.printStackTrace();
 		}
+			
 		FlansMod.log("Loaded textures and models.");
 		return contentPacks;
 	}
@@ -397,7 +373,7 @@ public class ClientProxy extends CommonProxy
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load vehicle model : " + shortName);
+			FlansMod.log("Failed to load vehicle model : " + shortName + " (" + split[1] + ")");
 			e.printStackTrace();
 		}
 	}	
@@ -412,7 +388,7 @@ public class ClientProxy extends CommonProxy
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load plane model : " + shortName);
+			FlansMod.log("Failed to load plane model : " + shortName + " (" + split[1] + ")");
 			e.printStackTrace();
 		}
 	}
@@ -420,7 +396,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadSound(String contentPack, String type, String sound)
 	{
-		FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
+		FlansModResourceHandler.getSound(contentPack, type, sound);
+		//FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
 	}
 	
 	public boolean isThePlayer(EntityPlayer player)

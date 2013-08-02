@@ -153,7 +153,7 @@ public class FlansMod
 		
 		try
 		{
-			Class.forName("net.minecraft.src.World");
+			Class.forName("net.minecraft.src.ModLoader");
 		}
 		catch(Exception e)
 		{
@@ -297,11 +297,11 @@ public class FlansMod
 		}
 
 		List<File> contentPacks = proxy.getContentList(method, classloader);
-
+		
 		if (!event.getSide().equals(Side.CLIENT))
 		{
 			//Gametypes (Server only)
-			// TODO: gameTypes
+			// TODO: gametype loader
 		}
 
 		// Bullets / Bombs
@@ -320,8 +320,8 @@ public class FlansMod
 						continue;
 					try
 					{
-						BulletType type = new BulletType(new BufferedReader(new FileReader(bullets[i])));
-						Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.iconPath);
+						BulletType type = new BulletType(new BufferedReader(new FileReader(bullets[i])), file.getName());
+						Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.shortName);
 						bulletItems.add(bulletItem);
 						LanguageRegistry.addName(bulletItem, type.name);
 					} catch (Exception e)
@@ -381,7 +381,7 @@ public class FlansMod
 						continue;
 					try
 					{
-						PartType type = new PartType(new BufferedReader(new FileReader(parts[i])));
+						PartType type = new PartType(new BufferedReader(new FileReader(parts[i])), file.getName());
 						Item partItem = new ItemPart(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 						partItems.add(partItem);
 						LanguageRegistry.addName(partItem, type.name);
@@ -503,7 +503,7 @@ public class FlansMod
 						continue;
 					try
 					{
-						GunBoxType type = new GunBoxType(new BufferedReader(new FileReader(gunBoxes[i])));
+						GunBoxType type = new GunBoxType(new BufferedReader(new FileReader(gunBoxes[i])), file.getName());
 						type.item = Item.itemsList[gunBoxBlock.blockID];
 						type.itemID = gunBoxBlock.blockID;
 					} catch (Exception e)

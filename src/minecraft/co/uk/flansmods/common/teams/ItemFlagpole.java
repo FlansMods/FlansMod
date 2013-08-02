@@ -1,7 +1,10 @@
 package co.uk.flansmods.common.teams;
 
 import co.uk.flansmods.common.FlansMod;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -71,8 +74,10 @@ public class ItemFlagpole extends Item {
 		return Block.blocksList[blockID].blockMaterial.isSolid() && Block.blocksList[blockID].isOpaqueCube();
 	}
 	
-	public String getTextureFile()
-	{
-		return "/spriteSheets/armour.png";
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:flagpole");
+    }
 }

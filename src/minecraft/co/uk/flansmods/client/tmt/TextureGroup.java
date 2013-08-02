@@ -2,8 +2,9 @@ package co.uk.flansmods.client.tmt;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
 
 public class TextureGroup
 {
@@ -27,12 +28,12 @@ public class TextureGroup
 	{
 		if(!texture.equals(""))
 		{
-			RenderEngine renderengine = RenderManager.instance.renderEngine;
-			renderengine.bindTexture(texture);
+			TextureManager renderengine = RenderManager.instance.renderEngine;
+			renderengine.func_110577_a(new ResourceLocation("", texture)); //TODO : Check. Not sure about this one
 		}
 		else if(defaultTexture > -1)
 		{
-			RenderManager.instance.renderEngine.bindTexture("");
+			RenderManager.instance.renderEngine.func_110577_a(new ResourceLocation("", ""));
 		}
 	}
 	

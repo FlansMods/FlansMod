@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiTeamScores extends GuiScreen 
 {
-	public static final ResourceLocation texture = new ResourceLocation("Flan", "gui/teamsScores.png");
+	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teamsScores.png");
 	
 	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used...
 	public static String gametype;
@@ -129,6 +129,8 @@ public class GuiTeamScores extends GuiScreen
 	
 	public void drawScreen(int i, int j, float f)
 	{
+		if(gametype == null || gametype.equals("") || teamData == null)
+			return;
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
 		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();

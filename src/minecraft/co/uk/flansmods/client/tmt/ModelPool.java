@@ -3,6 +3,8 @@ package co.uk.flansmods.client.tmt;
 import java.io.File;
 import java.util.*;
 
+import cpw.mods.fml.common.Loader;
+
 import net.minecraft.client.Minecraft;
 
 public class ModelPool
@@ -29,7 +31,7 @@ public class ModelPool
 		File modelFile = null;
 		for(int i = 0; i < resourceDir.length && (modelFile == null || !modelFile.exists()); i++)
 		{
-			String absPath = Minecraft.getAppDir(resourceDir[i]).getAbsolutePath();
+			String absPath = new File(Loader.instance().getConfigDir().getParent(), resourceDir[i]).getAbsolutePath();
 			if(!absPath.endsWith("/") || !absPath.endsWith("\\"))
 				absPath+= "/";
 			modelFile = entry.checkValidPath(absPath + file);
@@ -52,8 +54,8 @@ public class ModelPool
 	
     private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
     private static String[] resourceDir = new String[] {
-    					"minecraft/resources/models/",
-    					"minecraft/resources/mod/models/"
+    					"/resources/models/",
+    					"/resources/mod/models/"
     	};
     public static final Class OBJ = ModelPoolObjEntry.class;
 }

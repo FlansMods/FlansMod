@@ -41,6 +41,7 @@ import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod
@@ -265,7 +266,7 @@ public class FlansModClient extends FlansMod
 	
 	private void loadPerWorldData(Event event, World world)
 	{
-		File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/teams.dat");
+		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
 		if(checkFileExists(file))
 		{
 			try
@@ -294,7 +295,7 @@ public class FlansModClient extends FlansMod
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File(FMLClientHandler.instance().getClient().getMinecraftDir() + "/Flan/teams.dat");
+		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
 		if(checkFileExists(file))
 		{
 			try

@@ -25,13 +25,7 @@ public class ItemOpStick extends Item
 		setUnlocalizedName("opStick");
 		setHasSubtypes(true);
 	}
-	
-    public Icon getIconFromDamage(int damage)
-    {
-        int j = MathHelper.clamp_int(damage, 0, 15);
-        return icons[j];
-    }
-	
+		
     public boolean shouldRotateAroundWhenRendering()
     {
         return true;
@@ -206,7 +200,15 @@ public class ItemOpStick extends Item
 
         for(int i = 0; i < stickNames.length; ++i)
         {
-        	icons[i] = register.registerIcon(stickNames[i]);
+        	icons[i] = register.registerIcon("FlansMod:" + stickNames[i]);
+        	itemIcon = icons[i];
         }
+    }
+	
+	@Override
+    public Icon getIconFromDamage(int damage)
+    {
+        int j = MathHelper.clamp_int(damage, 0, 15);
+        return icons[j];
     }
 }

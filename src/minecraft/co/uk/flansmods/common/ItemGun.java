@@ -1,6 +1,7 @@
 package co.uk.flansmods.common;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -424,4 +425,11 @@ public class ItemGun extends Item
 	{
 		return true;
 	}
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    }
 }

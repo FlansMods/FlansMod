@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,14 @@ public class ItemBullet extends Item
     {
     	return type.colour;
     }
-
+        
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    }
+    
 	public int colour;
 	public BulletType type;
 }

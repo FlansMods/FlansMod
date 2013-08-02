@@ -1,10 +1,12 @@
 package co.uk.flansmods.client;
 
+import java.io.File;
 import java.util.HashMap;
 
 import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.util.ResourceLocation;
 
 public class FlansModResourceHandler 
@@ -12,7 +14,7 @@ public class FlansModResourceHandler
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<GunType, ResourceLocation> scopeMap = new HashMap<GunType, ResourceLocation>();
-	
+	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();
 	
 	public static ResourceLocation getIcon(InfoType infoType)
 	{
@@ -38,12 +40,23 @@ public class FlansModResourceHandler
 	
 	public static ResourceLocation getScope(GunType gunType)
 	{
-		if(textureMap.containsKey(gunType))
+		if(scopeMap.containsKey(gunType))
 		{
-			return textureMap.get(gunType);
+			return scopeMap.get(gunType);
 		}
 		ResourceLocation resLoc = new ResourceLocation("Flan/" + gunType.contentPack, "gui/" + gunType.scope + ".png");
-		textureMap.put(gunType, resLoc);
+		scopeMap.put(gunType, resLoc);
+		return resLoc;
+	}
+	
+	public static ResourceLocation getSound(String contentPack, String type, String sound)
+	{
+		if(soundMap.containsKey(contentPack + "." + sound))
+		{
+			return soundMap.get(contentPack + "." + sound);
+		}
+		ResourceLocation resLoc = new ResourceLocation("Flan/" + contentPack, "sounds/" + sound + ".ogg");
+		soundMap.put(contentPack + "." + sound, resLoc);
 		return resLoc;
 	}
 	

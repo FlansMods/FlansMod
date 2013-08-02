@@ -45,8 +45,9 @@ public class GunBoxType extends InfoType
 	//This way unconverted content packs will still work in SP at least
 	public static int nextDefaultID;
 
-	public GunBoxType(BufferedReader file)
+	public GunBoxType(BufferedReader file, String contentPack)
 	{
+		super(contentPack);
 		gunBoxID = nextDefaultID++;
 		do
 		{

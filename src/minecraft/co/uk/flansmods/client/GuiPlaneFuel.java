@@ -13,7 +13,7 @@ import co.uk.flansmods.common.EntityDriveable;
 
 public class GuiPlaneFuel extends GuiContainer
 {
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeFuel.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeFuel.png");
 
     public GuiPlaneFuel(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane)
     {

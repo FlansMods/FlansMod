@@ -14,8 +14,9 @@ public class PartType extends InfoType
 	private static int lastIconIndex = 0;
 	public static List<PartType> parts = new ArrayList<PartType>();
 
-	public PartType(BufferedReader file)
+	public PartType(BufferedReader file, String contentPack)
 	{
+		super(contentPack);
 		do
 		{
 			String line = null;

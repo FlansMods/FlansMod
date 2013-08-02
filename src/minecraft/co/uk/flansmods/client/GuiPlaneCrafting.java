@@ -13,8 +13,8 @@ import co.uk.flansmods.common.ContainerPlaneCrafting;
 
 public class GuiPlaneCrafting extends GuiContainer
 {
-	private static final ResourceLocation bigTexture = new ResourceLocation("Flan", "gui/planeCraftingLarge.png");
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeCrafting.png");
+	private static final ResourceLocation bigTexture = new ResourceLocation("flansmod", "gui/planeCraftingLarge.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeCrafting.png");
 	
     public GuiPlaneCrafting(InventoryPlayer inventoryplayer, World world, int i, int j, int k, boolean bigger)
     {

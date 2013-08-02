@@ -31,11 +31,11 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
 			return;
 		}
-		if(split == null || split.length <= 1 || split[0].equals("help") || split[0].equals("?"))
+		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
 		{
-			if(split.length == 0)
-				sendHelpInformation(sender, 1);
-			else sendHelpInformation(sender, Integer.parseInt(split[1]));
+			if(split.length == 2)
+				sendHelpInformation(sender, Integer.parseInt(split[1]));
+			else sendHelpInformation(sender, 1);
 			return;
 		}
 		if(split[0].equals("listGametypes"))

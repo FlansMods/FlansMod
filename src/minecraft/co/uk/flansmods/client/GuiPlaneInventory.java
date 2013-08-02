@@ -18,7 +18,7 @@ import co.uk.flansmods.common.EntityPlane;
 
 public class GuiPlaneInventory extends GuiContainer
 {
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "gui/planeInventory.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeInventory.png");
 	
     public GuiPlaneInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
     {

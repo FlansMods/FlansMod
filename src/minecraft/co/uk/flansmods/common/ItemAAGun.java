@@ -89,6 +89,13 @@ public class ItemAAGun extends Item
     {
     	return type.colour;
     }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    }
 
 	public AAGunType type;
 }
