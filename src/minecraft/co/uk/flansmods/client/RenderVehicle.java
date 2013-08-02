@@ -21,6 +21,7 @@ public class RenderVehicle extends Render
 
     public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
     {
+    	func_110777_b(vehicle);
     	VehicleType type = vehicle.getVehicleType();
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);

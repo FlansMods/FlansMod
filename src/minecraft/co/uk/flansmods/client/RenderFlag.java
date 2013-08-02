@@ -15,7 +15,7 @@ import co.uk.flansmods.common.teams.Team;
 
 public class RenderFlag extends Render 
 {
-	private static final ResourceLocation texture = new ResourceLocation("Flan", "teamsMod/Flagpole.png");
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "teamsMod/Flagpole.png");
 	
 	public ModelFlagpole modelFlagpole;
 	public static float angle;
@@ -28,6 +28,7 @@ public class RenderFlag extends Render
 	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
 	{
+		func_110777_b(entity);
 		EntityFlag flag = (EntityFlag)entity;
 		Team team = flag.getTeam();
 		if(team == null)

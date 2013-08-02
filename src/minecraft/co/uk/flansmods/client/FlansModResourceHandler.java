@@ -22,7 +22,7 @@ public class FlansModResourceHandler
 		{
 			return iconMap.get(infoType);
 		}
-		ResourceLocation resLoc = new ResourceLocation("Flan/" + infoType.contentPack, "textures/items/" + infoType.iconPath + ".png");
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "textures/items/" + infoType.iconPath + ".png");
 		iconMap.put(infoType, resLoc);
 		return resLoc;
 	}	
@@ -33,7 +33,7 @@ public class FlansModResourceHandler
 		{
 			return textureMap.get(infoType);
 		}
-		ResourceLocation resLoc = new ResourceLocation("Flan/" + infoType.contentPack, "skins/" + infoType.texture + ".png");
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + infoType.texture + ".png");
 		textureMap.put(infoType, resLoc);
 		return resLoc;
 	}
@@ -44,7 +44,7 @@ public class FlansModResourceHandler
 		{
 			return scopeMap.get(gunType);
 		}
-		ResourceLocation resLoc = new ResourceLocation("Flan/" + gunType.contentPack, "gui/" + gunType.scope + ".png");
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "gui/" + gunType.scope + ".png");
 		scopeMap.put(gunType, resLoc);
 		return resLoc;
 	}
@@ -55,7 +55,7 @@ public class FlansModResourceHandler
 		{
 			return soundMap.get(contentPack + "." + sound);
 		}
-		ResourceLocation resLoc = new ResourceLocation("Flan/" + contentPack, "sounds/" + sound + ".ogg");
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "sounds/" + sound + ".ogg");
 		soundMap.put(contentPack + "." + sound, resLoc);
 		return resLoc;
 	}

@@ -21,6 +21,7 @@ public class RenderPlane extends Render
 
     public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
     {
+    	func_110777_b(entityPlane);
     	PlaneType type = entityPlane.getPlaneType();
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
