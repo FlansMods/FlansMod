@@ -91,6 +91,19 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	protected void entityInit()
 	{
 	}
+	
+	@Override
+    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
+	{
+		
+	}
+	
+	@Override
+	public void applyEntityCollision(Entity entity)
+	{
+		//if(entity != riddenByEntity)
+			//super.applyEntityCollision(entity);
+	}
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
@@ -129,7 +142,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			Entity player = ((EntityDamageSource) damagesource).getEntity();
 			if (player == riddenByEntity)
 			{
-
+				
 			} else if(riddenByEntity != null)
 			{
 				return riddenByEntity.attackEntityFrom(damagesource, i);
@@ -197,8 +210,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 		// apply gravity
 
-		if (!onGround)
-			motionY -= 9.8D / 400D;
+		//if (!onGround && !worldObj.isRemote)
+		//	motionY -= 9.8D / 400D;
 
 		// update motion
 		motionX *= 0.5;
@@ -443,4 +456,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+    public boolean canRiderInteract()
+    {
+        return false;
+    }
 }

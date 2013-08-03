@@ -14,6 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -61,9 +62,9 @@ public class ItemAAGun extends Item
 			int i = movingobjectposition.blockX;
 			int j = movingobjectposition.blockY;
 			int k = movingobjectposition.blockZ;
-			if (!world.isRemote)
+			if (!world.isRemote && world.isBlockSolidOnSide(i, j, k, ForgeDirection.UP))
 			{
-				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 2.5F, (double) k + 0.5F));
+				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F));
 			}
 			if (!entityplayer.capabilities.isCreativeMode)
 			{

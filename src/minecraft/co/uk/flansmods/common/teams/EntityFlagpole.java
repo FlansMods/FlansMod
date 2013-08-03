@@ -1,14 +1,22 @@
 package co.uk.flansmods.common.teams;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 
 public class EntityFlagpole extends Entity implements ITeamBase {
 	
@@ -29,6 +37,11 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	private EntityFlag flag;
 	
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
+	
+	//Chunk loading
+	private Ticket chunkTicket;
+	private boolean uninitialized = true;
+	private int loadDistance = 1;
 
 	public EntityFlagpole(World world) 
 	{
@@ -227,5 +240,52 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	public ITeamObject getFlag() 
 	{
 		return flag;
+	}
+	
+	@Override
+	public void onUpdate()
+	{
+		super.onUpdate();
+    	updateChunkLoading();
+	}
+	
+	//Chunk loading
+	public void forceChunkLoading(Ticket ticket) 
+	{
+		chunkTicket = ticket;
+		for (ChunkCoordIntPair coord : getLoadArea()) {
+			FlansMod.log(String.format("Force loading chunk %s in %s",coord, worldObj.provider.getClass()));
+			ForgeChunkManager.forceChunk(ticket, coord);
+		}
+	}
+	
+	public List<ChunkCoordIntPair> getLoadArea() 
+	{
+		List<ChunkCoordIntPair> loadArea = new LinkedList<ChunkCoordIntPair>();
+		Chunk centerChunk = worldObj.getChunkFromBlockCoords(MathHelper.floor_double(posX), MathHelper.floor_double(posZ));
+		loadArea.add(new ChunkCoordIntPair(centerChunk.xPosition, centerChunk.zPosition));
+		return loadArea;
+	}
+	
+	public void updateChunkLoading()
+	{
+		if (worldObj.isRemote)
+			return;
+		if (uninitialized && chunkTicket == null) 
+		{
+			chunkTicket = ForgeChunkManager.requestTicket(FlansMod.instance, worldObj, Type.NORMAL);
+			if (chunkTicket != null) 
+			{
+				forceChunkLoading(chunkTicket);
+			}
+			uninitialized = false;
+		}
+	}
+	
+	@Override
+	public void setDead() 
+	{
+		super.setDead();
+		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
 }

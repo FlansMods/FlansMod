@@ -104,15 +104,15 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 					ItemStack stack = stacksToSpawn.get(i);
 					if(stack != null && stack.getItem() instanceof ItemPlane)
 					{
-						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, stack);
 					}					
 					if(stack != null && stack.getItem() instanceof ItemVehicle)
 					{
-						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, stack);
 					}
 					if(stack != null && stack.getItem() instanceof ItemAAGun)
 					{
-						spawnedEntity = ((ItemAAGun)stack.getItem()).spawnAAGun(worldObj, xCoord + 0.5F, yCoord + 2.5F, zCoord + 0.5F, stack);
+						spawnedEntity = ((ItemAAGun)stack.getItem()).spawnAAGun(worldObj, xCoord + 0.5F, yCoord, zCoord + 0.5F, stack);
 					}
 				}
 				else
