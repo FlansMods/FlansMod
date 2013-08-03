@@ -4,12 +4,12 @@
 
 	<property name="build.dir" value="build"/>
 	<property name="src.dir" value="src"/>
-	<property name="resources.dir" value="eclipse/Minecraft/bin"/>
+	<property name="resources.dir" value="${src.dir}/minecraft/assets"/>
 
 	<property name="download.dir" value="${build.dir}/download"/>
 
 	<property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="jar.dir" value="${build.dir}/out"/>
+	<property name="jar.dir" value="${build.dir}/bin"/>
 
 	<property name="forge.dir" value="${build.dir}/forge"/>
 	<property name="mcp.dir" value="${forge.dir}/mcp"/>
@@ -31,7 +31,7 @@
 	<condition property="out-of-date">
 		<not>
 			<and>
-				<available file="${download.dir}/${forge.name}"/>
+				<isset property="forge-exists"/>
 				<available file="${mcpsrc.dir}"/>
 			</and>
 		</not>
@@ -75,17 +75,30 @@
 
 	</target>
 
-	<target name="copy-src">
+	<target name="clean-src">
+		<delete verbose="true">
+			<fileset dir="${mcpsrc.dir}/minecraft">
+				<present present="both" targetdir="${src.dir}/minecraft" /> 
+			</fileset>
+		</delete>
+	</target>
+	<target name="copy-src" depends="clean-src">
 		<!-- Copy sources -->
-		<copy todir="${mcpsrc.dir}/minecraft">
+		<copy todir="${mcpsrc.dir}/minecraft" verbose="true">
 			<fileset dir="${src.dir}/minecraft"/>
+			<filterset>
+				<filter token="VERSION" value="${flansmod.version}" />
+				<filter token="MCVERSION" value="${mc.version}" />
+			</filterset>
 		</copy>
 	</target>
 
 	<target name="compile" depends="setup,copy-src">
 
-		<delete dir="${classes.dir}"/>
 		<mkdir dir="${classes.dir}"/>
+		<delete includeemptydirs="true">
+			<fileset dir="${classes.dir}" includes="**/*"/>
+		</delete>
 
 		<!-- Recompile -->
 		<exec dir="${mcp.dir}" executable="cmd" osfamily="windows">
@@ -128,12 +141,15 @@
         </copy>
         
 		<!-- Copy resources -->
-		<copy todir="${classes.dir}">
+		<copy todir="${classes.dir}/assets">
 			<fileset dir="${resources.dir}"/>
 		</copy>
 
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/co"/>
+        <delete dir="${mcpsrc.dir}/minecraft/assets"/>
+        <delete file="${mcpsrc.dir}/minecraft/flansmod.png"/>
+        <delete file="${mcpsrc.dir}/minecraft/mcmod.info"/>
 
 	</target>
 
