@@ -5,13 +5,17 @@
 #######################################
 === v2.4 ===
 Changes:
-- Updated to 1.6.2 <---Not yet complete
+- Updated to 1.6.2
 - Changed "Turbo Model Thingy not installed" error message to reduce confusion
 - teams.dat now saves in the Flan folder
+- Packs now have a resource pack layout instead
+- Teams help info is now shown in pages
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
 - Added an NMT element to allow modifying corners of a box with x/y/z
+Removals:
+- Properties file
 
 === v2.3.2 ===
 Changes:
