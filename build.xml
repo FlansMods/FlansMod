@@ -136,7 +136,7 @@
         
         <!-- Copy forge mod info files -->
         <copy todir="${classes.dir}">
-            <fileset file="${mcpsrc.dir}/minecraft/flansmod.png"/>
+            <fileset file="${src.dir}/minecraft/flansmod.png"/>
             <fileset file="${mcpsrc.dir}/minecraft/mcmod.info"/>
         </copy>
         
