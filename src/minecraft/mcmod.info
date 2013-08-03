@@ -2,7 +2,7 @@
 {
   "modid": "FlansMod",
   "name": "Flans Mod",
-  "description": "Planes, guns and other vehicles",
+  "description": "Guns, planes and other vehicles in Minecraft",
   "version": "@VERSION@",
   "mcversion": "@MCVERSION@",
   "logoFile": "/flansmod.png",
