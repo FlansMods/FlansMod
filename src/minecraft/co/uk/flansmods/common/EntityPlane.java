@@ -462,20 +462,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
             case 16 : // Trim Button
             {
-				if(trimButton == 1)
-				{
-					setRotation(-axes.getYaw(),0F, 0F);
-					riddenByEntity.rotationYaw = axes.getYaw();
-					riddenByEntity.rotationPitch = axes.getPitch();
-					trimButton ++;
-				}
-				else if(trimButton == 2)
-				{
-					setRotation(-axes.getYaw(), type.posPark, 0F);
-					riddenByEntity.rotationYaw = axes.getYaw();
-					riddenByEntity.rotationPitch = axes.getPitch();
-					trimButton --;
-				}
+				velocityRoll += axes.getRoll() / 10;
 				break;
             }
             case 17 : //Park
