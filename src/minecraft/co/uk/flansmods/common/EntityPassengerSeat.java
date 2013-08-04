@@ -34,6 +34,23 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class EntityPassengerSeat extends Entity implements IControllable
 {
+	public EntityDriveable vehicle;
+	public int seatID;
+	public int seatX;
+	public int seatY;
+	public int seatZ;
+	public int gunnerID;
+	
+	public int gunDelay;
+	public int soundDelay;
+	public int reloadTimer;
+	
+	public float rotationRoll;
+	public float prevRotationRoll;
+	
+	public float gunYaw;
+	public float gunPitch;
+	
     public EntityPassengerSeat(World world)
     {
         super(world);
@@ -62,18 +79,6 @@ public class EntityPassengerSeat extends Entity implements IControllable
 			setDead();
 		else
 			updatePosition();
-		
-		if(worldObj.isRemote)
-		{
-			riddenByEntity = theRealRiddenByEntity;
-			if(riddenByEntity != null)
-				riddenByEntity.ridingEntity = this;
-		}
-		
-		/*
-		if(riddenByEntity == FMLClientHandler.instance().getClient().thePlayer && Keyboard.isKeyDown(FlansMod.exitKey))
-			riddenByEntity.mountEntity(this);
-			*/
 		
 		if(gunDelay > 0)
 			gunDelay--;
@@ -362,25 +367,6 @@ public class EntityPassengerSeat extends Entity implements IControllable
 		}
         return this == entity || vehicle == entity || vehicle.riddenByEntity == entity;
     }
-    
-	public EntityDriveable vehicle;
-	public int seatID;
-	public int seatX;
-	public int seatY;
-	public int seatZ;
-	public int gunnerID;
-	
-	public int gunDelay;
-	public int soundDelay;
-	public int reloadTimer;
-	
-	public float rotationRoll;
-	public float prevRotationRoll;
-	
-	public float gunYaw;
-	public float gunPitch;
-	
-	private Entity theRealRiddenByEntity;
 
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY) 
