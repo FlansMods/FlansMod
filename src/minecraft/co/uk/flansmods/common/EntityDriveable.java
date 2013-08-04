@@ -114,6 +114,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	@Override
     public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
     {
+		/*
 		if(riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity))
 		{
 		    motionX = velocityX;
@@ -121,7 +122,7 @@ public abstract class EntityDriveable extends Entity implements IControllable
 		    motionZ = velocityZ;
 		}
 		else
-		{
+		{				
 			if(syncFromServer)
 	        {
 	            boatPosRotationIncrements = i + 5;
@@ -148,12 +149,12 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	        motionX = velocityX;
 	        motionY = velocityY;
 	        motionZ = velocityZ;
-		}
+		}*/
     }
 	
 	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ)
 	{
-		if(worldObj.isRemote)
+		if(worldObj.isRemote && ticksExisted > 5)
 		{
 	        boatX = x;
 	        boatY = y;
@@ -169,6 +170,9 @@ public abstract class EntityDriveable extends Entity implements IControllable
 		else
 		{
 			setPosition(x, y, z);
+			prevRotationYaw = yaw;
+			prevRotationPitch = pitch;
+			prevRotationRoll = roll;
 			setRotation(yaw, pitch, roll);
 			motionX = motX;
 			motionY = motY;

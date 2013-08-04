@@ -43,7 +43,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type1, PlaneData data1)
 	{
 		this(world, x, y, z, type1, data1);
-		rotateYaw(180F + placer.rotationYaw);
+		rotateYaw(-placer.rotationYaw);
         rotatePitch(-type1.posPark);
 	}
     
@@ -1198,8 +1198,8 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			else
 			{
-				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
-				riddenByEntity.rotationPitch -= 2F * (axes.getPitch() - prevRotationPitch);
+				riddenByEntity.rotationYaw -= (axes.getYaw() - prevRotationYaw);
+				riddenByEntity.rotationPitch += (axes.getPitch() - prevRotationPitch);
 			}
 			
 			return;
