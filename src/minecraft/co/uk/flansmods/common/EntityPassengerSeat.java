@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITempt;
@@ -20,14 +21,18 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 
+import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.network.PacketRightClick;
 import co.uk.flansmods.common.network.PacketSeatMount;
+import co.uk.flansmods.common.network.PacketSeatUpdates;
+import co.uk.flansmods.common.network.PacketVehicleKey;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class EntityPassengerSeat extends Entity
+public class EntityPassengerSeat extends Entity implements IControllable
 {
     public EntityPassengerSeat(World world)
     {
@@ -229,7 +234,7 @@ public class EntityPassengerSeat extends Entity
         if(riddenByEntity == null)
         {
             return;
-        } else if(riddenByEntity instanceof EntityLiving)
+        } else if(riddenByEntity instanceof EntityLivingBase)
         {	
 			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
@@ -317,23 +322,27 @@ public class EntityPassengerSeat extends Entity
     
     public void sitInSeat(Entity entity, boolean sit)
     {
-    	if(!worldObj.isRemote)
-    	{
-    		PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(entity, this, sit), dimension);
-    	}
     	if(sit)
     	{
     		if(riddenByEntity != null)
+    		{
     			riddenByEntity.ridingEntity = null;
+    			//riddenByEntity.mountEntity(null);
+    		}
     		entity.ridingEntity = this;
     		riddenByEntity = entity;
-    		theRealRiddenByEntity = entity;
+    		//entity.mountEntity(this);
     	}
     	else
     	{
-    		entity.ridingEntity = null;
+    		riddenByEntity.ridingEntity = null;
     		riddenByEntity = null;
-    		theRealRiddenByEntity = null;
+    		//riddenByEntity.mountEntity(null);
+    	}
+    	if(!worldObj.isRemote)
+    	{
+    		PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
+    		//PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(entity, this, sit), dimension);
     	}
     }
    
@@ -368,5 +377,33 @@ public class EntityPassengerSeat extends Entity
 	public float rotationRoll;
 	public float prevRotationRoll;
 	
+	public float gunYaw;
+	public float gunPitch;
+	
 	private Entity theRealRiddenByEntity;
+
+	@Override
+	public void onMouseMoved(int deltaX, int deltaY) 
+	{
+		
+	}
+
+	@Override
+	public boolean pressKey(int key, EntityPlayer player) 
+	{		
+		if(key == 6)
+		{		
+			if(FMLCommonHandler.instance().getEffectiveSide().isClient() && key == 6)
+				PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
+
+			else
+			{	
+				riddenByEntity.mountEntity(null);
+				PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
+				//PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(riddenByEntity, this, false), dimension);
+			}
+			return true;
+		}
+		return false;
+	}
 }

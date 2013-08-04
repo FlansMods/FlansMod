@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.relauncher.Side;
@@ -50,9 +51,9 @@ public static final byte packetID = 4;
 			EntityPlayer player =  (EntityPlayer)extradata[0];
 			
 			int key = stream.readInt();
-			if(player.ridingEntity != null && player.ridingEntity instanceof EntityDriveable)
+			if(player.ridingEntity != null && player.ridingEntity instanceof IControllable)
 			{
-				((EntityDriveable)player.ridingEntity).pressKey(key, player);
+				((IControllable)player.ridingEntity).pressKey(key, player);
 			}
 			
 		}

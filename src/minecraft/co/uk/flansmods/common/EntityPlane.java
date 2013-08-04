@@ -109,6 +109,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			return;
 		if(!FlansMod.proxy.mouseControlEnabled())
 			return;
+		/*
 		if(deltaX > 100)
 			deltaX = 100;
 		if(deltaX < -100)
@@ -117,19 +118,19 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			deltaY = 100;
 		if(deltaY < -100)
 			deltaY = -100;
-		
+		*/
 		PlaneType type = this.getPlaneType();
 		double pitchModifier = deltaY > 0 ? type.lookUpModifier : type.lookDownModifier;
 		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityPitch -= pitchModifier * (this.propSpeed - type.takeOffSpeed) * 0.002F * deltaY;
+			this.velocityPitch -= pitchModifier * (this.propSpeed - type.takeOffSpeed) * 0.0005F * deltaY;
 			this.flapsPitchLeft += 1F * deltaY;
 			this.flapsPitchRight += 1F * deltaY;
 		}
 		double rollModifier = deltaX > 0 ? type.lookUpModifier : type.lookDownModifier;
 		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityRoll -= rollModifier * (this.propSpeed - type.takeOffSpeed) * 0.002F * deltaX;
+			this.velocityRoll -= rollModifier * (this.propSpeed - type.takeOffSpeed) * 0.0005F * deltaX;
 			this.flapsPitchLeft += 1F * deltaX;
 			this.flapsPitchRight -= 1F * deltaX;
 		}
@@ -312,7 +313,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			}
 			case 6 : //Exit
 			{
-				riddenByEntity.mountEntity(this);
+				riddenByEntity.mountEntity(null);
           		return true;
 			}
 			case 7 :

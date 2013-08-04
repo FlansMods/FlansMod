@@ -197,11 +197,11 @@ public class FlansMod
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 100, true);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 500, true);
 		
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 100, 5, true);
-		
+				
 		EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, true);
 		
