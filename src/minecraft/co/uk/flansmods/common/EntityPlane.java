@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -1177,7 +1178,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
         if(riddenByEntity == null)
         {
             return;
-        } else if(riddenByEntity instanceof EntityLiving)
+        } else if(riddenByEntity instanceof EntityLivingBase)
         {
         	PlaneType type = this.getPlaneType();
 			Vec3 vec = rotate(type.pilotX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.pilotY / 16D, type.pilotZ / 16D);
@@ -1198,6 +1199,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			else
 			{
 				riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
+				riddenByEntity.rotationPitch -= 2F * (axes.getPitch() - prevRotationPitch);
 			}
 			
 			return;
