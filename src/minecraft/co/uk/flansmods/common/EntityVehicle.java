@@ -809,8 +809,8 @@ public class EntityVehicle extends EntityDriveable implements IEntityAdditionalS
 				Vec3 vec = rotate(type.driverX / 16D, getMountedYOffset() + riddenByEntity.getYOffset() + type.driverY / 16D, type.driverZ / 16D);
 				riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
 			}
-			riddenByEntity.rotationYaw -= 2F * (axes.getYaw() - prevRotationYaw);
-			//riddenByEntity.rotationPitch -= (axes.getPitch() - prevRotationPitch);
+			riddenByEntity.rotationYaw -= (axes.getYaw() - prevRotationYaw);
+			riddenByEntity.rotationPitch += (axes.getPitch() - prevRotationPitch);
 			return;
         }
     }
