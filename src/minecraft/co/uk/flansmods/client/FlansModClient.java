@@ -88,6 +88,9 @@ public class FlansModClient extends FlansMod
 	{
 		if (minecraft.thePlayer == null)
 			return;
+		
+		if(minecraft.thePlayer.ridingEntity instanceof EntityPlane && controlModeMouse && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiPlaneController((EntityPlane)minecraft.thePlayer.ridingEntity));
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
@@ -305,6 +308,7 @@ public class FlansModClient extends FlansMod
 		if (controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
+		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiPlaneController((EntityPlane)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}

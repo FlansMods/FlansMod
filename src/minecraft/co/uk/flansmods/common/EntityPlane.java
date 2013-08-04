@@ -122,14 +122,14 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		double pitchModifier = deltaY > 0 ? type.lookUpModifier : type.lookDownModifier;
 		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityPitch -= pitchModifier * (this.propSpeed - type.takeOffSpeed) * 0.001F * deltaY;
+			this.velocityPitch -= pitchModifier * (this.propSpeed - type.takeOffSpeed) * 0.002F * deltaY;
 			this.flapsPitchLeft += 1F * deltaY;
 			this.flapsPitchRight += 1F * deltaY;
 		}
 		double rollModifier = deltaX > 0 ? type.lookUpModifier : type.lookDownModifier;
 		if(this.tailHealth > 0 && this.propSpeed > type.takeOffSpeed)
 		{
-			this.velocityRoll -= rollModifier * (this.propSpeed - type.takeOffSpeed) * 0.001F * deltaX;
+			this.velocityRoll -= rollModifier * (this.propSpeed - type.takeOffSpeed) * 0.002F * deltaX;
 			this.flapsPitchLeft += 1F * deltaX;
 			this.flapsPitchRight -= 1F * deltaX;
 		}
