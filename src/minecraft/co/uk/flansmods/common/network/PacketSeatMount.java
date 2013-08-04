@@ -30,7 +30,7 @@ public class PacketSeatMount extends FlanPacketCommon
         {
         	data.write(packetID);
         	data.writeInt(entity.entityId);
-        	data.writeInt(seat.vehicle.entityId);
+        	data.writeInt(seat.getDriveable().entityId);
         	data.writeInt(seat.seatID);
         	data.writeBoolean(mounting);
         	

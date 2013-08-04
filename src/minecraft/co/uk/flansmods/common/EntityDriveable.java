@@ -94,7 +94,8 @@ public abstract class EntityDriveable extends Entity implements IControllable
 		for(EntityCollisionBox box : boxes)
 			box.setDead();
 		for(EntityPassengerSeat seat : seats)
-			seat.setDead();
+			if(seat != null)
+				seat.setDead();
 	}
 	
 	@Override
@@ -300,6 +301,8 @@ public abstract class EntityDriveable extends Entity implements IControllable
 	{
 		for(EntityPassengerSeat seat : seats)
 		{
+			if(seat == null)
+				continue;
 			if(ent == seat)
 				return true;
 			if(seat.riddenByEntity != null && seat.riddenByEntity == ent)

@@ -57,7 +57,7 @@ public class PacketRightClick extends FlanPacketCommon
         {
         	data.write(packetID);
         	data.writeBoolean(true);
-        	data.writeInt(seat.vehicle.entityId);
+        	data.writeInt(seat.getDriveable().entityId);
         	data.writeInt(seat.seatID);
         	
         	packet.data = bytes.toByteArray();

@@ -21,6 +21,9 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.network.PacketRightClick;
 import co.uk.flansmods.common.network.PacketSeatMount;
@@ -31,10 +34,12 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityPassengerSeat extends Entity implements IControllable
+public class EntityPassengerSeat extends Entity implements IControllable, IEntityAdditionalSpawnData
 {
-	public EntityDriveable vehicle;
+	private int driveableID;
+	private EntityDriveable driveable;
 	public int seatID;
 	public int seatX;
 	public int seatY;
@@ -62,7 +67,7 @@ public class EntityPassengerSeat extends Entity implements IControllable
 	public EntityPassengerSeat(World world, EntityDriveable plane1, int seat, int x, int y, int z, int guns)
 	{
 		this(world);
-		vehicle = plane1;
+		setDriveable(plane1);
 		seatID = seat;
 		seatX = x;
 		seatY = y;
@@ -75,8 +80,12 @@ public class EntityPassengerSeat extends Entity implements IControllable
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if(vehicle == null || vehicle.isDead)
-			setDead();
+		if(getDriveable() == null || getDriveable().isDead)
+		{
+			if(!worldObj.isRemote)
+				setDead();
+			return;
+		}
 		else
 			updatePosition();
 		
@@ -87,20 +96,20 @@ public class EntityPassengerSeat extends Entity implements IControllable
 		//Decrement the reload timer and reload
 		if(reloadTimer > 0)
 			reloadTimer--;
-		GunType type = vehicle.superData.guns[1];
+		GunType type = getDriveable().superData.guns[1];
 		if(type != null)
 		{
-			if(vehicle.superData.ammo[1] != null && vehicle.superData.ammo[1].getItemDamage() == vehicle.superData.ammo[1].getMaxDamage())
+			if(getDriveable().superData.ammo[1] != null && getDriveable().superData.ammo[1].getItemDamage() == getDriveable().superData.ammo[1].getMaxDamage())
 			{
-				vehicle.superData.ammo[1] = null;
+				getDriveable().superData.ammo[1] = null;
 				//Scrap metal output?
 			}
-			if(vehicle.superData.ammo == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+			if(getDriveable().superData.ammo == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
 			{
 				int slot = findAmmo(((EntityPlayer)riddenByEntity), type);
 				if(slot >= 0)
 				{
-					vehicle.superData.ammo[1] = ((EntityPlayer)riddenByEntity).inventory.getStackInSlot(slot);
+					getDriveable().superData.ammo[1] = ((EntityPlayer)riddenByEntity).inventory.getStackInSlot(slot);
 					if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 						((EntityPlayer)riddenByEntity).inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
@@ -144,19 +153,19 @@ public class EntityPassengerSeat extends Entity implements IControllable
 	
 	private void updatePosition()
 	{
-		prevRotationYaw = vehicle.prevRotationYaw;
-		prevRotationPitch = vehicle.prevRotationPitch;
-		prevRotationRoll = vehicle.prevRotationRoll;
+		prevRotationYaw = getDriveable().prevRotationYaw;
+		prevRotationPitch = getDriveable().prevRotationPitch;
+		prevRotationRoll = getDriveable().prevRotationRoll;
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
-		setRotation(vehicle.axes.getYaw(), vehicle.axes.getPitch());
-		rotationRoll = vehicle.axes.getRoll();
-		Vec3 posVec = vehicle.rotate((double)seatX / 16D, (double)seatY / 16D, (double)seatZ / 16D).addVector(vehicle.posX, vehicle.posY, vehicle.posZ);
+		setRotation(getDriveable().axes.getYaw(), getDriveable().axes.getPitch());
+		rotationRoll = getDriveable().axes.getRoll();
+		Vec3 posVec = getDriveable().rotate((double)seatX / 16D, (double)seatY / 16D, (double)seatZ / 16D).addVector(getDriveable().posX, getDriveable().posY, getDriveable().posZ);
 		setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
         if(worldObj.isRemote && riddenByEntity != null)
         {
-			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
+			Vec3 vec = getDriveable().rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
         }
 		//updateRiderPosition();
@@ -220,17 +229,17 @@ public class EntityPassengerSeat extends Entity implements IControllable
 			{
 				if(reloadTimer > 0)
 					return true;
-				vehicle.useGun(gunnerID, player, this);
+				getDriveable().useGun(gunnerID, player, this);
 				return true;
 			}
 		}
-		return vehicle.attackEntityFrom(damagesource, i);
+		return getDriveable().attackEntityFrom(damagesource, i);
     }
 	
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i)
     {	
-		return vehicle.attackEntityFrom(damagesource, i);
+		return getDriveable().attackEntityFrom(damagesource, i);
     }
 	
     @Override
@@ -241,7 +250,7 @@ public class EntityPassengerSeat extends Entity implements IControllable
             return;
         } else if(riddenByEntity instanceof EntityLivingBase)
         {	
-			Vec3 vec = vehicle.rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
+			Vec3 vec = getDriveable().rotate(0D, getMountedYOffset() + riddenByEntity.getYOffset() - 0.5D, 0D);
             riddenByEntity.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
         }
     }
@@ -264,7 +273,7 @@ public class EntityPassengerSeat extends Entity implements IControllable
 			PacketDispatcher.sendPacketToServer(PacketRightClick.buildClickPacket(this));
 			return true;
 		}
-		if(worldObj.isRemote || isDead || vehicle == null || vehicle.isDead)
+		if(worldObj.isRemote || isDead || getDriveable() == null || getDriveable().isDead)
 			return true;
 		ItemStack stack = player.inventory.getCurrentItem();
 		Entity following = null;
@@ -331,22 +340,22 @@ public class EntityPassengerSeat extends Entity implements IControllable
     	{
     		if(riddenByEntity != null)
     		{
-    			riddenByEntity.ridingEntity = null;
-    			//riddenByEntity.mountEntity(null);
+    			//riddenByEntity.ridingEntity = null;
+    			riddenByEntity.mountEntity(null);
     		}
-    		entity.ridingEntity = this;
-    		riddenByEntity = entity;
-    		//entity.mountEntity(this);
+    		//entity.ridingEntity = this;
+    		//riddenByEntity = entity;
+    		entity.mountEntity(this);
     	}
     	else
     	{
-    		riddenByEntity.ridingEntity = null;
-    		riddenByEntity = null;
-    		//riddenByEntity.mountEntity(null);
+    		//riddenByEntity.ridingEntity = null;
+    		//riddenByEntity = null;
+    		riddenByEntity.mountEntity(null);
     	}
     	if(!worldObj.isRemote)
     	{
-    		PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
+    		//PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
     		//PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(entity, this, sit), dimension);
     	}
     }
@@ -355,17 +364,17 @@ public class EntityPassengerSeat extends Entity implements IControllable
 	@Override
     public boolean isEntityEqual(Entity entity)
     {
-		for(EntityCollisionBox box : vehicle.boxes)
+		for(EntityCollisionBox box : getDriveable().boxes)
 		{
 			if(entity == box)
 				return true;
 		}
-		for(EntityPassengerSeat seat : vehicle.seats)
+		for(EntityPassengerSeat seat : getDriveable().seats)
 		{
 			if(entity == seat || entity == seat.riddenByEntity)
 				return true;
 		}
-        return this == entity || vehicle == entity || vehicle.riddenByEntity == entity;
+        return this == entity || getDriveable() == entity || getDriveable().riddenByEntity == entity;
     }
 
 	@Override
@@ -385,11 +394,50 @@ public class EntityPassengerSeat extends Entity implements IControllable
 			else
 			{	
 				riddenByEntity.mountEntity(null);
-				PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
+				//PacketDispatcher.sendPacketToAllInDimension(PacketSeatUpdates.buildUpdatePacket(vehicle), dimension);
 				//PacketDispatcher.sendPacketToAllInDimension(PacketSeatMount.buildMountPacket(riddenByEntity, this, false), dimension);
 			}
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void writeSpawnData(ByteArrayDataOutput data) 
+	{
+		data.writeInt(getDriveable().entityId);
+		data.writeInt(seatID);
+		data.writeInt(seatX);
+		data.writeInt(seatY);
+		data.writeInt(seatZ);
+		data.writeInt(gunnerID);
+	}
+
+	@Override
+	public void readSpawnData(ByteArrayDataInput data) 
+	{
+		driveableID = data.readInt();
+		getDriveable();
+		seatID = data.readInt();
+		seatX = data.readInt();
+		seatY = data.readInt();
+		seatZ = data.readInt();
+		gunnerID = data.readInt();
+	}
+
+	public EntityDriveable getDriveable() 
+	{
+		if(driveable == null && worldObj.isRemote)
+		{
+			driveable = (EntityDriveable)worldObj.getEntityByID(driveableID);
+			if(driveable != null)
+				driveable.seats[seatID] = this;
+		}
+		return driveable;
+	}
+
+	public void setDriveable(EntityDriveable vehicle) 
+	{
+		driveable = vehicle;
 	}
 }

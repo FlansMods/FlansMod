@@ -92,11 +92,11 @@ public class PacketSeatUpdates extends FlanPacketCommon
 	        				{
 	        					if(((Entity)obj).entityId == riddenById)
 	        					{
-	        						((Entity)obj).ridingEntity = driveable.seats[i];
-	        						driveable.seats[i].riddenByEntity = ((Entity)obj);
-	        						//((Entity)obj).mountEntity(driveable.seats[i]);
+	        						//((Entity)obj).ridingEntity = driveable.seats[i];
+	        						//driveable.seats[i].riddenByEntity = ((Entity)obj);
+	        						((Entity)obj).mountEntity(driveable.seats[i]);
 	        					}
-	        				}
+	        				}	        				
 	        			}
 	        		}
 	        		driveable.seats[i].gunYaw = yaw;

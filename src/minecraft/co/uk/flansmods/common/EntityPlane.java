@@ -61,10 +61,10 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			FlansMod.log("Failed to retrieve plane data ID from plane data. " + data.mapName);
 		}
 		type = type1.shortName;
-		initType(type1);
+		initType(type1, false);
 	}
 	
-	protected void initType(PlaneType type)
+	protected void initType(PlaneType type, boolean clientSide)
 	{
         varGear = true;
         varDoor = true;
@@ -75,8 +75,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		seats = new EntityPassengerSeat[type.numPassengers];
 		for(int i = 0; i < type.numPassengers; i++)
 		{
-			seats[i] = new EntityPassengerSeat(worldObj, this, i, type.seatsX[i], type.seatsY[i], type.seatsZ[i], type.gunner[i]);
-			worldObj.spawnEntityInWorld(seats[i]);
+			if(!clientSide)
+			{
+				seats[i] = new EntityPassengerSeat(worldObj, this, i, type.seatsX[i], type.seatsY[i], type.seatsZ[i], type.gunner[i]);
+				worldObj.spawnEntityInWorld(seats[i]);
+			}
 		}
 		
 		yOffset = type.yOffset;
@@ -176,7 +179,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			dataID = datData.readInt();
 			superData = data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
 			data.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(datData));
-			initType(PlaneType.getPlane(type));
+			initType(PlaneType.getPlane(type), true);
 			
 			axes.setAngles(datData.readFloat(), datData.readFloat(), datData.readFloat());
 			prevRotationYaw = axes.getYaw();
@@ -963,10 +966,13 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 		//Fix non-spawning sub-entities
 		if(!spawnedEntities)
 		{
-			for(int i = 0; i < seats.length; i++)
+			if(!worldObj.isRemote)
 			{
-				if(!worldObj.loadedEntityList.contains(seats[i]))
-					worldObj.spawnEntityInWorld(seats[i]);
+				for(int i = 0; i < seats.length; i++)
+				{
+					if(!worldObj.loadedEntityList.contains(seats[i]))
+						worldObj.spawnEntityInWorld(seats[i]);
+				}
 			}
 			for(int i = 0; i < boxes.length; i++)
 			{
@@ -1392,7 +1398,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		type = tag.getString("Type");
-		initType(PlaneType.getPlane(type));
+		initType(PlaneType.getPlane(type), false);
 		dataID = tag.getInteger("DataID");
 		data = new PlaneData("plane_" + dataID, PlaneType.getPlane(type));
 		data.readFromNBT(tag);
