@@ -16,6 +16,7 @@ public class PlayerClass
 	public String name;
 	public String shortName;
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
+	public boolean horse = false;
 	
 	public PlayerClass(BufferedReader file, String pack)
 	{

@@ -11,8 +11,10 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -586,14 +588,15 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(currentGametype != null)
 		{		
-			resetInventory(player);
-			if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
-				player.setGameType(EnumGameType.ADVENTURE);
-			Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
+			EntityPlayerMP playerMP = ((EntityPlayerMP)player);
+			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(playerMP);
+			if(data.team == Team.spectators && MinecraftServer.getServerConfigurationManager(playerMP.mcServer).areCommandsAllowed(playerMP.username))
+			{
+				return;
+			}
+			Vec3 spawnPoint = currentGametype.getSpawnPoint(playerMP);
 			if(spawnPoint != null)
 			{
-				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
-				
                 /*if (!playerMP.playerNetServerHandler.connectionClosed)
                 {
                     EnderTeleportEvent event = new EnderTeleportEvent(playerMP, spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
@@ -604,12 +607,27 @@ public class TeamsManager implements IPlayerTracker
                     	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
                     }
                 }*/
-	
-				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 				//FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				//playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
+				
+				if(data.playerClass != null && data.playerClass.horse)
+				{
+					EntityHorse horse = new EntityHorse(playerMP.worldObj);
+					horse.setPosition(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
+					horse.func_110234_j(true);
+					player.inventory.mainInventory[0] = new ItemStack(Item.saddle);
+					horse.interact(playerMP);
+					playerMP.worldObj.spawnEntityInWorld(horse);
+					playerMP.mountEntity(horse);
+					
+				}
+				
+				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+					player.setGameType(EnumGameType.ADVENTURE);
+				resetInventory(player);
 				
 		}
 			
