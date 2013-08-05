@@ -2,10 +2,22 @@ package co.uk.flansmods.common;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import com.google.common.collect.Sets;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -121,8 +133,7 @@ public class FlansMod
 	public static FlansModPlayerHandler playerHandler;
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<Item> vehicleItems = new ArrayList<Item>();
-
-	
+		
 	//GunBoxBlock
 	public static BlockGunBox gunBoxBlock;
 	
@@ -278,6 +289,101 @@ public class FlansMod
 		handler.registerCommand(new CommandTeams());
 	}
 	
+	
+	
+	private void getTypeFiles(List<File> contentPacks)
+	{
+		for (File contentPack : contentPacks)
+		{
+			if(contentPack.isDirectory())
+			{				
+				for(EnumType typeToCheckFor : EnumType.values())
+				{
+					File typesDir = new File(contentPack, "/" + typeToCheckFor.folderName + "/");
+					if(!typesDir.exists())
+						continue;
+					for(File file : typesDir.listFiles())
+					{
+						try
+						{
+							BufferedReader reader = new BufferedReader(new FileReader(file));
+							String[] splitName = file.getName().split("/");
+							TypeFile typeFile = new TypeFile(typeToCheckFor, splitName[splitName.length - 1].split("\\.")[0]);
+							for(;;)
+							{
+								String line = null;
+								try
+								{
+									line = reader.readLine();
+								} 
+								catch (Exception e)
+								{
+									break;
+								}
+								if (line == null)
+									break;
+								typeFile.lines.add(line);
+							}
+						}
+						catch(FileNotFoundException e)
+						{
+							
+						}
+					}		
+				}
+			}
+			else
+			{
+				try
+				{
+					ZipFile zip = new ZipFile(contentPack);
+					ZipInputStream zipStream = new ZipInputStream(new FileInputStream(contentPack));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(zipStream));
+					ZipEntry zipEntry = zipStream.getNextEntry();
+					do
+					{
+						zipEntry = zipStream.getNextEntry();
+						if(zipEntry == null)
+							continue;
+						TypeFile typeFile = null;
+						for(EnumType type : EnumType.values())
+						{
+							if(zipEntry.getName().startsWith(type.folderName + "/") && zipEntry.getName().split(type.folderName + "/").length > 1 && zipEntry.getName().split(type.folderName + "/")[1].length() > 0)
+							{
+								String[] splitName = zipEntry.getName().split("/");
+								typeFile = new TypeFile(type, splitName[splitName.length - 1].split("\\.")[0]);
+							}
+						}
+						if(typeFile == null)
+						{
+							continue;
+						}
+						for(;;)
+						{
+							String line = null;
+							try
+							{
+								line = reader.readLine();
+							} 
+							catch (Exception e)
+							{
+								break;
+							}
+							if (line == null)
+								break;
+							typeFile.lines.add(line);
+						}
+					}
+					while(zipEntry != null);
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+		
 	/**
 	 * reads and loads the content packs.
 	 */
@@ -305,304 +411,183 @@ public class FlansMod
 			//Gametypes (Server only)
 			// TODO: gametype loader
 		}
+		
+		getTypeFiles(contentPacks);
+		
 
 		// Bullets / Bombs
-		for (File file : contentPacks)
+		for(TypeFile bulletFile : TypeFile.files.get(EnumType.bullet))
 		{
-			File bulletsDir = new File(file, "/bullets/");
-			File[] bullets = bulletsDir.listFiles();
-			if (bullets == null)
+			try
 			{
-				logQuietly("No bullet files found.");
-			} else
+				BulletType type = new BulletType(bulletFile);
+				Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.shortName);
+				bulletItems.add(bulletItem);
+				LanguageRegistry.addName(bulletItem, type.name);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < bullets.length; i++)
-				{
-					if (bullets[i].isDirectory())
-						continue;
-					try
-					{
-						BulletType type = new BulletType(new BufferedReader(new FileReader(bullets[i])), file.getName());
-						Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.shortName);
-						bulletItems.add(bulletItem);
-						LanguageRegistry.addName(bulletItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add bullet : " + bullets[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add bullet : " + bulletFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded bullets.");
 
 		// Guns
-		for (File file : contentPacks)
+		for(TypeFile gunFile : TypeFile.files.get(EnumType.gun))
 		{
-			File gunsDir = new File(file, "/guns/");
-			File[] guns = gunsDir.listFiles();
-			if (guns == null)
+			try
 			{
-				logQuietly("No gun files found.");
-			} else
+				GunType type = new GunType(gunFile);
+				Item gunItem = new ItemGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				gunItems.add(gunItem);
+				LanguageRegistry.addName(gunItem, type.name);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < guns.length; i++)
-				{
-					if (guns[i].isDirectory())
-						continue;
-					try
-					{
-						// TO BE MADE BETTER
-						GunType type = new GunType(new BufferedReader(new FileReader(guns[i])), file.getName());
-						Item gunItem = new ItemGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-						gunItems.add(gunItem);
-						LanguageRegistry.addName(gunItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add gun : " + guns[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add gun : " + gunFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded guns.");
-
-		// Parts
-		for (File file : contentPacks)
-		{
-			File partsDir = new File(file, "/parts/");
-			File[] parts = partsDir.listFiles();
-			if (parts == null)
-			{
-				logQuietly("No part files found.");
-			} else
-			{
-				for (int i = 0; i < parts.length; i++)
-				{
-					if (parts[i].isDirectory())
-						continue;
-					try
-					{
-						PartType type = new PartType(new BufferedReader(new FileReader(parts[i])), file.getName());
-						Item partItem = new ItemPart(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-						partItems.add(partItem);
-						LanguageRegistry.addName(partItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add part : " + parts[i].getName());
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		log("Loaded parts.");
-
-		// Planes
-		for (File file : contentPacks)
-		{
-			File planesDir = new File(file, "/planes/");
-			File[] planes = planesDir.listFiles();
-			if (planes == null)
-			{
-				logQuietly("No plane files found.");
-			} else
-			{
-				for (int i = 0; i < planes.length; i++)
-				{
-					if (planes[i].isDirectory())
-						continue;
-					try
-					{
-						PlaneType type = new PlaneType(new BufferedReader(new FileReader(planes[i])), file.getName());
-						Item planeItem = new ItemPlane(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-						planeItems.add(planeItem);
-						LanguageRegistry.addName(planeItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add plane : " + planes[i].getName());
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		log("Loaded planes.");
 		
-		//Vehicles
-		for(File file : contentPacks)
+		// Parts
+		for(TypeFile partFile : TypeFile.files.get(EnumType.part))
 		{
-			File vehiclesDir = new File(file, "/vehicles/");
-			File[] vehicles = vehiclesDir.listFiles();
-			if(vehicles == null)
+			try
 			{
-				logQuietly("No vehicle files found.");
-			}
-			else
+				PartType type = new PartType(partFile);
+				Item partItem = new ItemPart(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				partItems.add(partItem);
+				LanguageRegistry.addName(partItem, type.name);
+			} 
+			catch (Exception e)
 			{
-				for(int i = 0; i < vehicles.length; i++)
-				{
-					if(vehicles[i].isDirectory())
-						continue;
-					try
-					{
-						VehicleType type = new VehicleType(new BufferedReader(new FileReader(vehicles[i])), file.getName());
-						Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-						vehicleItems.add(vehicleItem);
-						LanguageRegistry.addName(vehicleItem, type.name);
-					}
-					catch(Exception e)
-					{
-						log("Failed to add vehicle : " + vehicles[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add part : " + partFile.name);
+				e.printStackTrace();
 			}
 		}
-		log("Loaded vehicles.");
-
-		// AAGuns
-		for (File file : contentPacks)
+		log("Loaded parts.");		
+		
+		// Planes
+		for(TypeFile planeFile : TypeFile.files.get(EnumType.plane))
 		{
-			File aaGunsDir = new File(file, "/aaguns/");
-			File[] aaGuns = aaGunsDir.listFiles();
-			if (aaGuns == null)
+			try
 			{
-				logQuietly("No aa gun files found.");
-			} else
+				PlaneType type = new PlaneType(planeFile);
+				Item planeItem = new ItemPlane(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				planeItems.add(planeItem);
+				LanguageRegistry.addName(planeItem, type.name);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < aaGuns.length; i++)
-				{
-					if (aaGuns[i].isDirectory())
-						continue;
-					try
-					{
-						AAGunType type = new AAGunType(new BufferedReader(new FileReader(aaGuns[i])), file.getName());
-						Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-						aaGunItems.add(aaGunItem);
-						LanguageRegistry.addName(aaGunItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add AA gun : " + aaGuns[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add plane : " + planeFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded planes.");		
+		
+		// Vehicles
+		for(TypeFile vehicleFile : TypeFile.files.get(EnumType.vehicle))
+		{
+			try
+			{
+				VehicleType type = new VehicleType(vehicleFile);
+				Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				vehicleItems.add(vehicleItem);
+				LanguageRegistry.addName(vehicleItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add vehicle : " + vehicleFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded vehicles.");		
+		
+		// AAGuns
+		for(TypeFile aaFile : TypeFile.files.get(EnumType.aa))
+		{
+			try
+			{
+				AAGunType type = new AAGunType(aaFile);
+				Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				aaGunItems.add(aaGunItem);
+				LanguageRegistry.addName(aaGunItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add AA gun : " + aaFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded AA guns.");
 
 		// Gun Boxes
-		for (File file : contentPacks)
+		for(TypeFile boxFile : TypeFile.files.get(EnumType.box))
 		{
-			File boxesDir = new File(file, "/boxes/");
-			File[] gunBoxes = boxesDir.listFiles();
-			if (gunBoxes == null)
+			try
 			{
-				logQuietly("No gun box files found.");
-			} else
+				GunBoxType type = new GunBoxType(boxFile);
+				type.item = Item.itemsList[gunBoxBlock.blockID];
+				type.itemID = gunBoxBlock.blockID;
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < gunBoxes.length; i++)
-				{
-					if (gunBoxes[i].isDirectory())
-						continue;
-					try
-					{
-						GunBoxType type = new GunBoxType(new BufferedReader(new FileReader(gunBoxes[i])), file.getName());
-						type.item = Item.itemsList[gunBoxBlock.blockID];
-						type.itemID = gunBoxBlock.blockID;
-					} catch (Exception e)
-					{
-						log("Failed to add gun box : " + gunBoxes[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add gun box : " + boxFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded gun boxes.");
 		
-		//Armour
-		for (File file : contentPacks)
+		// Armour
+		for(TypeFile armourFile : TypeFile.files.get(EnumType.armour))
 		{
-			//Directory is armorFiles because armor is already the set directory for armour skins
-			File armourDir = new File(file, "/armorFiles/");
-			File[] armours = armourDir.listFiles();
-			if (armours == null)
+			try
 			{
-				logQuietly("No armour files found.");
-			} else
+				ArmourType type = new ArmourType(armourFile);
+				Item armourItem = new ItemTeamArmour(type).setUnlocalizedName(type.iconPath);
+				armourItems.add(armourItem);
+				LanguageRegistry.addName(armourItem, type.name);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < armours.length; i++)
-				{
-					if (armours[i].isDirectory())
-						continue;
-					try
-					{
-						ArmourType type = new ArmourType(new BufferedReader(new FileReader(armours[i])), file.getName());
-						Item armourItem = new ItemTeamArmour(type).setUnlocalizedName(type.iconPath);
-						armourItems.add(armourItem);
-						LanguageRegistry.addName(armourItem, type.name);
-					} catch (Exception e)
-					{
-						log("Failed to add armour : " + armours[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add armour : " + armourFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded armour.");
 		
-		//Classes
-		for(File file : contentPacks)
+		// Classes
+		for(TypeFile classFile : TypeFile.files.get(EnumType.playerClass))
 		{
-			File classesDir = new File(file, "/classes/");
-			File[] classes = classesDir.listFiles();
-			if (classes == null)
+			try
 			{
-				logQuietly("No player class files found.");
-			} else
+				PlayerClass playerClass = new PlayerClass(classFile);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < classes.length; i++)
-				{
-					if (classes[i].isDirectory())
-						continue;
-					try
-					{
-						PlayerClass playerClass = new PlayerClass(new BufferedReader(new FileReader(classes[i])), file.getName());
-					} catch (Exception e)
-					{
-						log("Failed to add player class : " + classes[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add class : " + classFile.name);
+				e.printStackTrace();
 			}
 		}
-		log("Loaded player classes.");	
+		log("Loaded classes.");
 		
-		//Teams
-		for (File file : contentPacks)
+		// Teams
+		for(TypeFile teamFile : TypeFile.files.get(EnumType.team))
 		{
-			File teamsDir = new File(file, "/teams/");
-			File[] teams = teamsDir.listFiles();
-			if (teams == null)
+			try
 			{
-				logQuietly("No team files found.");
-			} else
+				Team team = new Team(teamFile);
+			} 
+			catch (Exception e)
 			{
-				for (int i = 0; i < teams.length; i++)
-				{
-					if (teams[i].isDirectory())
-						continue;
-					try
-					{
-						Team team = new Team(new BufferedReader(new FileReader(teams[i])), file.getName());
-					} catch (Exception e)
-					{
-						log("Failed to add team : " + teams[i].getName());
-						e.printStackTrace();
-					}
-				}
+				log("Failed to add team : " + teamFile.name);
+				e.printStackTrace();
 			}
 		}
 		log("Loaded teams.");
-		
+						
 		// Recipes
 		for (InfoType type : InfoType.infoTypes)
 		{
@@ -640,7 +625,7 @@ public class FlansMod
 	/** Logger. */
 	public static void log(Object arg0)
 	{
-		// TODO: get a propper logger class/instance
+		// TODO: get a proper logger class/instance
 		System.out.println("Flan's Mod : " + arg0);
 	}
 }

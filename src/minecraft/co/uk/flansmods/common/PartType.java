@@ -14,37 +14,18 @@ public class PartType extends InfoType
 	private static int lastIconIndex = 0;
 	public static List<PartType> parts = new ArrayList<PartType>();
 
-	public PartType(BufferedReader file, String contentPack)
+	public PartType(TypeFile file)
 	{
-		super(contentPack);
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+		super(file);
+		read(file);
 		parts.add(this);
 		if (category == 2 && defaultEngine == null)
 			defaultEngine = this;
 		iconIndex = lastIconIndex++;
 	}
 
-	protected void read(String[] split, BufferedReader file)
+	@Override
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try

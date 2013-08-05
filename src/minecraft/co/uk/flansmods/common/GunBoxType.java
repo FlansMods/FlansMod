@@ -45,37 +45,18 @@ public class GunBoxType extends InfoType
 	//This way unconverted content packs will still work in SP at least
 	public static int nextDefaultID;
 
-	public GunBoxType(BufferedReader file, String contentPack)
+	public GunBoxType(TypeFile file)
 	{
-		super(contentPack);
-		gunBoxID = nextDefaultID++;
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
-		
+		super(file);
+		read(file);
+		if(gunBoxID == 0)
+			gunBoxID = nextDefaultID++;		
 		gunBoxMap.put(this.shortName, this);
 		shortNameList.add(this.shortName);
 	}
 
-	protected void read(String[] split, BufferedReader file)
+	@Override
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try

@@ -4,6 +4,8 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -17,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy
 {
-
+	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
 	
 	public void load()
 	{
@@ -32,7 +34,7 @@ public class CommonProxy
 		List<File> contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
-			if (file.isDirectory())
+			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
 				// Add the images to the classpath so they can be loaded
 				FlansMod.log("Not client. images and models skipped.");

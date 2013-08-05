@@ -48,35 +48,16 @@ public class GunType extends InfoType
 	public boolean canShootUnderwater;
 	public static List<GunType> guns = new ArrayList<GunType>();
 
-	public GunType(BufferedReader file, String pack)
+	public GunType(TypeFile file)
 	{
-		super(pack);
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+		super(file);
+		read(file);
 		guns.add(this);
 		iconIndex = lastIconIndex++;
 	}
-
-	protected void read(String[] arg0, BufferedReader file)
+	
+	@Override
+	protected void read(String[] arg0, TypeFile file)
 	{
 		super.read(arg0, file);
 		try
@@ -141,7 +122,7 @@ public class GunType extends InfoType
 			if (arg0[0].equals("Ammo"))
 			{
 				BulletType type = BulletType.getBullet(arg0[1]);
-				if (type != null)
+				if(type != null)
 					ammo.add(type);
 			}
 			if (arg0[0].equals("LoadIntoGun"))

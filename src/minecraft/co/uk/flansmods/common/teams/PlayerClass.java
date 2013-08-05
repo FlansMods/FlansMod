@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.TypeFile;
 
 public class PlayerClass 
 {
@@ -18,7 +19,7 @@ public class PlayerClass
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public boolean horse = false;
 	
-	public PlayerClass(BufferedReader file, String pack)
+	public PlayerClass(TypeFile file)
 	{
 		do
 		{
@@ -44,7 +45,7 @@ public class PlayerClass
 		classes.add(this);
 	}
 	
-	protected void read(String[] split, BufferedReader file)
+	protected void read(String[] split, TypeFile file)
 	{
 		try
 		{

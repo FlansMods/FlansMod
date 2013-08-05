@@ -30,36 +30,16 @@ public class AAGunType extends InfoType
 	public int[] barrelX, barrelY, barrelZ;
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 
-	public AAGunType(BufferedReader file, String pack)
+	public AAGunType(TypeFile file)
 	{
-		super(pack);
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+		super(file);
+		read(file);
 		iconIndex = PlaneType.nextIconIndex++;
 		infoTypes.add(this);
 	}
 
 	@Override
-	protected void read(String[] arg0, BufferedReader file)
+	protected void read(String[] arg0, TypeFile file)
 	{
 		super.read(arg0, file);
 		try

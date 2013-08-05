@@ -8,13 +8,26 @@ import java.io.File;
 
 public class DriveableType extends InfoType
 {
-    public DriveableType(String pack)
+	public CollisionBox[] boxes;
+
+	public int health;
+
+	public int numCargoSlots;
+	public int numBombSlots;
+	public int tankSize = 100;
+
+	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
+	public static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
+	
+    public DriveableType(TypeFile file)
     {
-		super(pack);
+		super(file);
+		read(file);
 		typeList.add(this);
     }
 	
-	protected void read(String[] split, BufferedReader file)
+    @Override
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
@@ -69,18 +82,5 @@ public class DriveableType extends InfoType
 				VehicleType.types.put(type.shortName, (VehicleType) type);
 			}
 		}
-		
-		//typeList = null;
 	}
-	
-	public CollisionBox[] boxes;
-
-	public int health;
-
-	public int numCargoSlots;
-	public int numBombSlots;
-	public int tankSize = 100;
-
-	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
-	public static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
 }

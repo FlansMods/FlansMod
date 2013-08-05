@@ -29,36 +29,17 @@ public class BulletType extends InfoType
 	private static int lastIconIndex = 0;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 
-	public BulletType(BufferedReader file, String contentPack)
+	public BulletType(TypeFile file)
 	{
-		super(contentPack);
+		super(file);
 		texture = "defaultBullet";
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+		read(file);
 		bullets.add(this);
 		iconIndex = lastIconIndex++;
 	}
 
-	protected void read(String[] arg0, BufferedReader file)
+	@Override
+	protected void read(String[] arg0, TypeFile file)
 	{
 		super.read(arg0, file);
 		try

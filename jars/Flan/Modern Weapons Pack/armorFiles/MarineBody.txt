@@ -1,8 +1,0 @@
-Name U.S. Marine Bodyarmour
-ShortName marineBody
-ItemID 23886
-Icon MarineBody
-Colour 255 255 255
-Type Chest
-Defence 0.1
-ArmourTexture Marine

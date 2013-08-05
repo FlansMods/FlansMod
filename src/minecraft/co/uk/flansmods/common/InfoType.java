@@ -1,6 +1,5 @@
 package co.uk.flansmods.common;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +27,31 @@ public class InfoType
 	public String shortName;
 	public String texture;
 	
-	public InfoType()
+	public InfoType(TypeFile file)
 	{
+		contentPack = file.name;
 		infoTypes.add(this);
 	}
-
-	public InfoType(String pack)
+	
+	protected void read(TypeFile file)
 	{
-		this();
-		contentPack = pack;
+		for(;;)
+		{
+			String line = null;
+			line = file.readLine();
+			if(line == null)
+				break;
+			if(line.startsWith("//"))
+				continue;
+			String[] split = line.split(" ");
+			if(split.length < 2)
+				continue;
+			read(split, file);
+		}
 	}
 
 	/** Pack reader */
-	protected void read(String[] arg0, BufferedReader file)
+	protected void read(String[] arg0, TypeFile file)
 	{
 		try
 		{

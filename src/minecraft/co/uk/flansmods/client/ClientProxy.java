@@ -88,7 +88,7 @@ public class ClientProxy extends CommonProxy
 		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
-			if (file.isDirectory())
+			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
 				try
 				{

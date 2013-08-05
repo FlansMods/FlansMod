@@ -11,36 +11,113 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class VehicleType extends DriveableType
 {
-    public VehicleType(BufferedReader file, String pack)
+	@SideOnly(Side.CLIENT)
+	public ModelVehicle model;
+	
+	public float maxSpeed = 1F;
+	public double turnLeftModifier = 1F;
+	public double turnRightModifier = 1F;
+	public double acceleration = 1F;
+	public double decceleration = 1F;
+	public float yOffset = 10F / 16F;
+	//Unused boolean supposedly for an alternate movement system
+	public boolean tank = false;
+	public boolean squashMobs = false;
+	public float cameraDistance = 5F;
+		
+	public int gunX;
+	public int gunY;
+	public int gunZ;
+	
+	public int barrelX;
+	public int barrelY;
+	public int barrelZ;
+		
+	public int numPassengers;
+	public int[] seatsX;
+	public int[] seatsY;
+	public int[] seatsZ;
+	public int[] gunner; //Denotes the gunner position of the passenger
+	//0 = No gun, 1 = Turret gunner
+	
+	//For the passenger controlled MG
+	public float gunYawMin;
+	public float gunYawMax;
+	public float gunPitchMin;
+	public float gunPitchMax;	
+	
+	//For the tank turret
+	public float turretYawMin = 180F;
+	public float turretYawMax = -180F;
+	public float turretPitchMin = -45F;
+	public float turretPitchMax = 0F;
+	
+	public int driverX;
+	public int driverY;
+	public int driverZ;
+	
+	public int[] wheelsX = new int[] {-16, 16, 16, -16};
+	public int[] wheelsY = new int[] {0, 0, 0, 0};
+	public int[] wheelsZ = new int[] {16, 16, -16, -16};
+	
+	public int vehicleShootDelay;
+	public int vehicleShellDelay;
+
+	public String startSound;
+	public int startSoundLength;
+	public String engineSound;
+	public int engineSoundLength;
+	public String shootSound;
+	public String shellSound;
+
+	public boolean dyes = false;
+	public int dyeColour = 0;
+	public PartType frontWheels;
+	public PartType backWheels;
+	public PartType tracks;
+	public PartType chassis;
+	public PartType turret;
+	public boolean allowTurretGuns = false;
+	public boolean allowBodyGuns = true;
+	public boolean hasTurret = false;
+	
+    public boolean hasDoor = false;
+	public boolean rotateGunner = false;
+
+	public static int nextIconIndex = 2;
+	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
+	
+    public VehicleType(TypeFile file)
     {
-		super(pack);
-		do
+		super(file);
+		for(String line : file.lines)
 		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			}
-			catch(Exception e)
-			{
-				break;
-			}
 			if(line == null)
-			{
 				break;
-			}
 			if(line.startsWith("//"))
 				continue;
 			String[] split = line.split(" ");
 			if(split.length < 2)
 				continue;
-			read(split, file);
+			
+			if(split[0].equals("Passengers"))
+			{
+				numPassengers = Integer.parseInt(split[1]);
+				if(numPassengers > 0)
+				{
+					seatsX = new int[numPassengers];
+					seatsY = new int[numPassengers];
+					seatsZ = new int[numPassengers];
+					gunner = new int[numPassengers];
+				}
+			}
 		}
-		while(true);
+		read(file);
 		iconIndex = nextIconIndex++;
     }
 	
-	protected void read(String[] split, BufferedReader file)
+    @Override
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
@@ -243,80 +320,4 @@ public class VehicleType extends DriveableType
 	{
 		return types.get(find);
 	}
-		
-	@SideOnly(Side.CLIENT)
-	public ModelVehicle model;
-	
-	public float maxSpeed = 1F;
-	public double turnLeftModifier = 1F;
-	public double turnRightModifier = 1F;
-	public double acceleration = 1F;
-	public double decceleration = 1F;
-	public float yOffset = 10F / 16F;
-	//Unused boolean supposedly for an alternate movement system
-	public boolean tank = false;
-	public boolean squashMobs = false;
-	public float cameraDistance = 5F;
-		
-	public int gunX;
-	public int gunY;
-	public int gunZ;
-	
-	public int barrelX;
-	public int barrelY;
-	public int barrelZ;
-		
-	public int numPassengers;
-	public int[] seatsX;
-	public int[] seatsY;
-	public int[] seatsZ;
-	public int[] gunner; //Denotes the gunner position of the passenger
-	//0 = No gun, 1 = Turret gunner
-	
-	//For the passenger controlled MG
-	public float gunYawMin;
-	public float gunYawMax;
-	public float gunPitchMin;
-	public float gunPitchMax;	
-	
-	//For the tank turret
-	public float turretYawMin = 180F;
-	public float turretYawMax = -180F;
-	public float turretPitchMin = -45F;
-	public float turretPitchMax = 0F;
-	
-	public int driverX;
-	public int driverY;
-	public int driverZ;
-	
-	public int[] wheelsX = new int[] {-16, 16, 16, -16};
-	public int[] wheelsY = new int[] {0, 0, 0, 0};
-	public int[] wheelsZ = new int[] {16, 16, -16, -16};
-	
-	public int vehicleShootDelay;
-	public int vehicleShellDelay;
-
-	public String startSound;
-	public int startSoundLength;
-	public String engineSound;
-	public int engineSoundLength;
-	public String shootSound;
-	public String shellSound;
-
-	public boolean dyes = false;
-	public int dyeColour = 0;
-	public PartType frontWheels;
-	public PartType backWheels;
-	public PartType tracks;
-	public PartType chassis;
-	public PartType turret;
-	public boolean allowTurretGuns = false;
-	public boolean allowBodyGuns = true;
-	public boolean hasTurret = false;
-	
-    public boolean hasDoor = false;
-	public boolean rotateGunner = false;
-
-	public static int nextIconIndex = 2;
-	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
 }
