@@ -317,6 +317,7 @@ public class ItemGun extends Item
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && type.shootSound != null)
 		{
+			//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
 			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound));
 			soundDelay = type.shootSoundLength;
 		}
