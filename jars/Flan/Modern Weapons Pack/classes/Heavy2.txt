@@ -1,0 +1,11 @@
+Name RPD
+ShortName heavy2
+AddItem rpd
+AddItem rpg
+AddItem m9
+AddItem mwKnife
+AddItem rpdAmmo
+AddItem rpdAmmo
+AddItem m9Ammo
+AddItem m9Ammo
+AddItem rpgAmmo

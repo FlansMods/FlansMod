@@ -1,0 +1,8 @@
+Name Russian Spetsnaz Boots
+ShortName spetsnazBoots
+ItemID 23884
+Icon SpetsnazBoots
+Colour 255 255 255
+Type Boots
+Defence 0.1
+ArmourTexture Spetsnaz

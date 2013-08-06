@@ -1,0 +1,11 @@
+Name Barrett
+ShortName sniper1
+AddItem barrett
+AddItem m9
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem barrettAmmo
+AddItem barrettAmmo
+AddItem barrettAmmo
+AddItem m9Ammo
+AddItem m9Ammo
