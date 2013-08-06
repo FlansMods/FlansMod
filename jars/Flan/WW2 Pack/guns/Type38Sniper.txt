@@ -13,12 +13,12 @@ Recoil 12
 //Damage in half hearts
 Damage 13
 //The higher this value, the more the bullets spread
-Accuracy 4
+Accuracy 1
 //Time in ticks between rounds
 ShootDelay 20
 ShootSound Type38Shoot
 ReloadSound kar98kReload
 Mode SemiAuto
-Scope scope
+Scope wwiitype38sniper
 Deployable False
 DeployedModel None

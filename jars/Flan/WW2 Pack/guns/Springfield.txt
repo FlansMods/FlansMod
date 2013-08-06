@@ -13,12 +13,12 @@ Recoil 20
 //Damage in half hearts
 Damage 18
 //The higher this value, the more the bullets spread
-Accuracy 3
+Accuracy 1
 //Time in ticks between rounds
 ShootDelay 20
 ShootSound springfieldShoot
 ReloadSound springfieldReload
 Mode SemiAuto
-Scope scope
+Scope wwiispringfieldsniper
 Deployable False
 DeployedModel None
