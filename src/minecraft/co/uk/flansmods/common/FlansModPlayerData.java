@@ -23,6 +23,7 @@ public class FlansModPlayerData
 	public int score;
 	public int kills;
 	public int deaths;
+	public boolean out; //For Nerf gametypes
 
 	
 	//TODO Unknown purpose!

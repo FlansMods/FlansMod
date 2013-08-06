@@ -99,6 +99,7 @@ public class TeamsManager implements IPlayerTracker
 		new GametypeConquest();
 		new GametypeDM();
 		new GametypeCTF();
+		new GametypeNerf();
 		//-----
 	}
 	

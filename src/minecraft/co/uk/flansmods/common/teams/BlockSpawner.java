@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -140,6 +141,7 @@ public class BlockSpawner extends BlockContainer
     {
     	if(world.isRemote)
     		return true;
+    	TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getBlockTileEntity(x, y, z), (EntityPlayerMP)player);
     	if(MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer()).areCommandsAllowed(player.username))
     	{
     		TileEntitySpawner spawner = (TileEntitySpawner)world.getBlockTileEntity(x, y, z);

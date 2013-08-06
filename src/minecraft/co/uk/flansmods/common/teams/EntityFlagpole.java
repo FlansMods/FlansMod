@@ -8,6 +8,8 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -288,4 +290,12 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		super.setDead();
 		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
+	
+	@Override
+    public boolean func_130002_c(EntityPlayer player) //interact
+    {
+    	if(player instanceof EntityPlayerMP)
+    		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
+        return false;
+    }
 }
