@@ -41,7 +41,7 @@ public class ItemGun extends Item
 		type.item = this;
 		if (type.loadIntoGun > 0)
 		{
-			setMaxDamage(type.loadIntoGun * type.ammo.get(0).maxStackSize);
+			setMaxDamage(type.loadIntoGun);
 		}
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
@@ -188,7 +188,7 @@ public class ItemGun extends Item
 				BulletType bullet = type.ammo.get(0);
 				int i = itemstack.getItemDamage();
 				// Make sure the gun has bullets in
-				if (i < type.loadIntoGun * type.ammo.get(0).maxStackSize)
+				if (i < type.loadIntoGun)
 				{
 					// Shoot
 					shoot(world, bullet, entityplayer);

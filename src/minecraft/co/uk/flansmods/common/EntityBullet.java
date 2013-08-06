@@ -264,7 +264,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 							//if (shotgun)
 							((EntityLivingBase) movingobjectposition.entityHit).hurtResistantTime = ((EntityLivingBase) movingobjectposition.entityHit).maxHurtResistantTime / 2;
 						}
-						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
+						//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}
 					if (type.penetrates)
 					{
@@ -402,7 +402,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		if(type.flak > 0)
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketFlak.buildFlakPacket(posX, posY, posZ, type.flak));
 		// Drop item on hitting if bullet requires it
-		if (type.dropItemOnHit != null && worldObj.getWorldInfo().getGameType() != EnumGameType.CREATIVE)
+		if (type.dropItemOnHit != null)
 		{
 			String itemName = type.dropItemOnHit;
 			int damage = 0;

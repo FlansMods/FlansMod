@@ -1,0 +1,8 @@
+Name Scout
+ShortName nerfRecon
+AddItem recon
+AddItem maverick
+AddItem 6DartClip
+AddItem 6DartClip
+AddItem 6DartClip
+AddItem whistlerDart 12

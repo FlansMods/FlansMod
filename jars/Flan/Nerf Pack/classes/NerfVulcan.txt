@@ -1,0 +1,7 @@
+Name Heavy Support
+ShortName nerfVulcan
+AddItem vulcan
+AddItem maverick
+AddItem 25DartBelt
+AddItem 25DartBelt
+AddItem whistlerDart 12
