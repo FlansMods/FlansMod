@@ -149,6 +149,7 @@
         <copy todir="${classes.dir}">
             <fileset file="${src.dir}/minecraft/flansmod.png"/>
             <fileset file="${mcpsrc.dir}/minecraft/mcmod.info"/>
+			<fileset file="${mcpsrc.dir}/minecraft/pack.mcmeta"/>
         </copy>
         
 		<!-- Copy resources -->
