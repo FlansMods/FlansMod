@@ -1,0 +1,11 @@
+Name M249 SAW
+ShortName heavy1
+AddItem m249
+AddItem rpg
+AddItem m1911
+AddItem mwKnife
+AddItem m249Ammo
+AddItem m249Ammo
+AddItem m1911Ammo
+AddItem m1911Ammo
+AddItem rpgAmmo

@@ -1,0 +1,11 @@
+Name M60E4
+ShortName heavy3
+AddItem m60
+AddItem rpg
+AddItem usp
+AddItem mwKnife
+AddItem m60Ammo
+AddItem m60Ammo
+AddItem rpgAmmo
+AddItem uspAmmo
+AddItem uspAmmo

@@ -1,0 +1,10 @@
+Name M16A4
+ShortName assault2
+AddItem m16a4
+AddItem m1911
+AddItem mwKnife
+AddItem m16a4Ammo
+AddItem m16a4Ammo
+AddItem m16a4Ammo
+AddItem m1911Ammo
+AddItem m1911Ammo
