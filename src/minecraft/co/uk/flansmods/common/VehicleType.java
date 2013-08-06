@@ -218,9 +218,9 @@ public class VehicleType extends DriveableType
 			if(split[0].equals("WheelPosition"))
 			{
 				int id = Integer.parseInt(split[1]);
-				wheelsX[id] = Integer.parseInt(split[2]);
+				wheelsX[id] = Integer.parseInt(split[4]);
 				wheelsY[id] = Integer.parseInt(split[3]);
-				wheelsZ[id] = Integer.parseInt(split[4]);
+				wheelsZ[id] = Integer.parseInt(split[2]);
 			}
 			
 			//Sound

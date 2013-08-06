@@ -332,7 +332,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionX *= f4;
 		motionY *= f4;
 		motionZ *= f4;
-		motionY -= f6 * type.fallSpeed * 0.25F;
+		motionY -= f6 * type.fallSpeed;
 		setPosition(posX, posY, posZ);
 		if (type.smokeTrail)
 		{

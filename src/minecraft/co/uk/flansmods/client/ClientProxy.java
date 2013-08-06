@@ -94,8 +94,6 @@ public class ClientProxy extends CommonProxy
 				{
 					method.invoke(classloader, new Object[]
 							{ file.toURI().toURL() });
-					method.invoke(classloader, new Object[]
-							{ new File(file, "/assets/flansmod/models/").toURI().toURL() });
 					
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("modid", "FlansMod");
