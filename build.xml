@@ -19,7 +19,7 @@
 	<property name="mcpflan.dir" value="${mcp.dir}/jars/Flan"/>
 	<property name="reobfmodels.dir" value="${mcp.dir}/reobf/minecraft/co/uk/flansmods/client/model"/>
 	
-	<property name="packmodels.dir" value="assets/flansmod/models/co/uk/flansmods/client/model"/>
+	<property name="packmodels.dir" value="co/uk/flansmods/client/model"/>
 	
 	<property name="packs.dir" value="${jar.dir}/packs"/>
     
