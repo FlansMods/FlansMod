@@ -294,7 +294,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
     public boolean func_130002_c(EntityPlayer player) //interact
     {
-    	if(player instanceof EntityPlayerMP)
+    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
         return false;
     }

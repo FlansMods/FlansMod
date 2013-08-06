@@ -166,7 +166,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
     public boolean func_130002_c(EntityPlayer player) //interact
     {
-    	if(player instanceof EntityPlayerMP)
+    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
         return false;
     }
