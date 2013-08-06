@@ -1,0 +1,7 @@
+Name Heavy Assault
+ShortName nerfNitron
+AddItem nitron
+AddItem maverick
+AddItem 20DiscClip
+AddItem 20DiscClip
+AddItem whistlerDart 12

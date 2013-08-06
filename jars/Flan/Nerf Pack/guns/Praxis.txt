@@ -1,13 +1,13 @@
-Name Nerf Vortex Nitron
-ShortName nitron
+Name Nerf Vortex Praxis
+ShortName praxis
 //The ammo this gun uses (shortName)
 Ammo 10DiscClip
 Ammo 20DiscClip
 Ammo 40DiscDrum
-Icon Nitron
+Icon Praxis
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23937
+ItemID 23938
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 48
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -15,15 +15,14 @@ Recoil 0
 //Damage in half hearts
 Damage 0
 //The higher this value, the more the bullets spread
-Accuracy 6
+Accuracy 4
 //Time in ticks between rounds
-ShootDelay 12
-ShootSound NitronShoot
-ReloadSound NitronReload
-DistortSound false
-Mode FullAuto
+ShootDelay 10
+ShootSound PraxisShoot
+ReloadSound PraxisReload
+Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
 //Bullet Speed, default 3.0
-BulletSpeed 1.0
+BulletSpeed 1.3
