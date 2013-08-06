@@ -19,7 +19,7 @@
 	<property name="mcpflan.dir" value="${mcp.dir}/jars/Flan"/>
 	<property name="binmodels.dir" value="${classes.dir}/co/uk/flansmods/client/model"/>
 	
-	<property name="packmodels.dir" value="assets/flansmod/models/co/uk/flansmod/client/model"/>
+	<property name="packmodels.dir" value="assets/flansmod/models/co/uk/flansmods/client/model"/>
 	
 	<property name="packs.dir" value="${jar.dir}/packs"/>
     
@@ -201,7 +201,7 @@
 		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}" failonerror="false">
 			<fileset dir="${binmodels.dir}/modernweapons"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons"/>
+		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
 		
 		<!-- Nerf -->
 		<delete dir="${mcpflan.dir}/Nerf Pack"/>
