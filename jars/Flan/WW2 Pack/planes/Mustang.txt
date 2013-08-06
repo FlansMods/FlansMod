@@ -2,7 +2,7 @@ Name P-51 Mustang
 ShortName Mustang
 ItemID 23324
 Icon Mustang
-Model BF109
+Model ww2.BF109
 Texture Mustang
 MaxPropellerSpeed 4.8
 TakeOffSpeed 3.0

@@ -68,7 +68,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
 {
-	public static String modelDir = "co.uk.flansmods.client.model.Model";
+	public static String modelDir = "co.uk.flansmods.client.model.";
 	
 	public List<File> contentPacks;
 
@@ -114,13 +114,6 @@ public class ClientProxy extends CommonProxy
 				FlansMod.log("Loaded content pack : " + file.getName());
 				contentPacks.add(file);
 			}
-		}
-		try {
-			Class.forName("co.uk.flansmods.client.model.ModelBF109");
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
 		}
 			
 		FlansMod.log("Loaded textures and models.");
@@ -268,13 +261,30 @@ public class ClientProxy extends CommonProxy
 	{
 		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(player.inventory, world, driveable));
 	}
+	
+	private String getModelName(String in)
+	{
+		String[] split = in.split("\\.");
+		if(split.length == 1)
+			return "Model" + in;
+		if(split.length > 1)
+		{
+			String out = "Model" + split[split.length - 1];
+			for(int i = split.length - 2; i >= 0; i--)
+			{
+				out = split[i] + "." + out;
+			}
+			return out;
+		}
+		return in;
+	}
 
 	@Override
 	public void loadBulletModel(String[] split, String shortName, BulletType type)
 	{
 		try
 		{
-			ModelBase model = (ModelBase) Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			ModelBase model = (ModelBase) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
 			type.model = model;
 		} catch (Exception e)
 		{
@@ -288,7 +298,7 @@ public class ClientProxy extends CommonProxy
 	{
 		try
 		{
-			ModelMG model = (ModelMG) Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			ModelMG model = (ModelMG) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
 			type.model = model;
 		} catch (Exception e)
 		{
@@ -302,7 +312,7 @@ public class ClientProxy extends CommonProxy
 	{
 		try
 		{
-			ModelAAGun model = (ModelAAGun) Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			ModelAAGun model = (ModelAAGun) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
 			type.model = model;
 		} catch (Exception e)
 		{
@@ -316,7 +326,7 @@ public class ClientProxy extends CommonProxy
 	{
 		try 
 		{	
-			ModelVehicle model = (ModelVehicle)Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			ModelVehicle model = (ModelVehicle)Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
 			type.model = model;
 		}
 		catch(Exception e)
@@ -331,7 +341,7 @@ public class ClientProxy extends CommonProxy
 	{
 		try 
 		{	
-			ModelPlane model = (ModelPlane)Class.forName(modelDir + split[1]).getConstructor().newInstance();
+			ModelPlane model = (ModelPlane)Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
 			type.model = model;
 		}
 		catch(Exception e)

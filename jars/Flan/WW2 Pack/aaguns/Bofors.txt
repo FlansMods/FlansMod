@@ -4,7 +4,7 @@ ShortName bofors
 Ammo boforsAmmo
 Icon Bofors
 ItemID 23287
-Model Bofors
+Model ww2.Bofors
 //Place the texture .png in the skins folder
 Texture Bofors
 NumBarrels 1

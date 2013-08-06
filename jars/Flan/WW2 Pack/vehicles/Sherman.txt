@@ -2,7 +2,7 @@ Name Sherman
 ShortName Sherman
 ItemID 23489
 Icon Sherman
-Model Sherman
+Model ww2.Sherman
 Texture Sherman
 MaxSpeed 1.0
 //Delays are in ticks or 1/20ths of seconds

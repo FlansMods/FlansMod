@@ -2,7 +2,7 @@ Name Willy's Jeep
 ShortName Jeep
 ItemID 23488
 Icon Jeep
-Model Jeep
+Model ww2.Jeep
 Texture Jeep
 MaxSpeed 2.0
 //Delays are in ticks or 1/20ths of seconds

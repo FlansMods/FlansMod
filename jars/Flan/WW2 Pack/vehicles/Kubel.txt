@@ -2,7 +2,7 @@ Name Kubelwagen
 ShortName Kubel
 ItemID 23487
 Icon Kubelwagen
-Model Kubel
+Model ww2.Kubel
 Texture kubelwagen
 MaxSpeed 2.0
 //Delays are in ticks or 1/20ths of seconds

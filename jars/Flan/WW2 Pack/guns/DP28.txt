@@ -28,7 +28,7 @@ Deployable True
 //All the following is for deployables only. Other guns do not need any of this
 //-----------------------------------------------------------------------------
 //Place the compiled model class in the models folder
-DeployedModel DP28
+DeployedModel ww2.DP28
 //Place the texture .png in the skins folder
 DeployedTexture DP28
 //The length from the bipod to the trigger of the gun. Deployables only.

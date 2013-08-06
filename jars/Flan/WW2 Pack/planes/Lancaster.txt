@@ -2,7 +2,7 @@ Name Lancaster Bomber
 ShortName Lancaster
 ItemID 23325
 Icon Lancaster
-Model Lancaster
+Model ww2.Lancaster
 Texture Lancaster
 MaxPropellerSpeed 1.5
 TakeOffSpeed 1.5

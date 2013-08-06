@@ -2,7 +2,7 @@ Name Sopwith Camel
 ShortName Camel
 ItemID 23319
 Icon Camel
-Model Camel
+Model ww2.Camel
 Texture Camel
 MaxPropellerSpeed 2.0
 TakeOffSpeed 2.0

@@ -400,7 +400,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			if (riddenByEntity == entityplayer)
 			{
-				entityplayer.mountEntity(this);
+				entityplayer.mountEntity(null);
 				return true;
 			}
 			entityplayer.mountEntity(this);

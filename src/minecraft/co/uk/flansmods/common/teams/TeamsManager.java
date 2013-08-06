@@ -627,11 +627,8 @@ public class TeamsManager implements IPlayerTracker
 				
 				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
 					player.setGameType(EnumGameType.ADVENTURE);
-				resetInventory(player);
-				
-		}
-			
-			
+				resetInventory(player);	
+			}
 			currentGametype.playerRespawned((EntityPlayerMP)player);
 		}
 	}
@@ -641,6 +638,8 @@ public class TeamsManager implements IPlayerTracker
 		player.inventory.armorInventory = new ItemStack[4];
 		player.inventory.mainInventory = new ItemStack[36];
 		player.heal(9001);
+		if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+			player.setGameType(EnumGameType.ADVENTURE);
 		onPlayerRespawn(player);
 	}
 	

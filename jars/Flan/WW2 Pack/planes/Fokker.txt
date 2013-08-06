@@ -2,7 +2,7 @@ Name Fokker Dr.1
 ShortName Fokker
 ItemID 23318
 Icon Fokker
-Model Fokker
+Model ww2.Fokker
 Texture Fokker
 MaxPropellerSpeed 2.0
 TakeOffSpeed 2.0

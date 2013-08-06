@@ -2,7 +2,7 @@ Name Two Seat Biplane
 ShortName TwoSeatBiplane
 ItemID 23321
 Icon TwoSeaterBiplane
-Model TwoSeatBiplane
+Model yeolde.TwoSeatBiplane
 Texture TwoSeaterBiplane
 MaxPropellerSpeed 1.0
 TakeOffSpeed 1.5

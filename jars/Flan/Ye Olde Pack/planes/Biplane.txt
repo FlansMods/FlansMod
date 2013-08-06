@@ -2,7 +2,7 @@ Name Biplane
 ShortName Biplane
 ItemID 23317
 Icon Biplane
-Model Biplane
+Model yeolde.Biplane
 Texture Biplane
 MaxPropellerSpeed 1.0
 TakeOffSpeed 1.0

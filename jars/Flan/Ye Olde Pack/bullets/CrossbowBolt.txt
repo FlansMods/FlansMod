@@ -1,7 +1,7 @@
 Name Crossbow Bolt
 ShortName crossbowBolt
 //TODO : Change model
-Model Arrow
+Model yeolde.Arrow
 Texture arrows
 //Colour of icon and model
 Colour 255 255 255
