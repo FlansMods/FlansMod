@@ -17,7 +17,7 @@
 	<property name="mcpsrc.dir" value="${mcp.dir}/src"/>
 	
 	<property name="mcpflan.dir" value="${mcp.dir}/jars/Flan"/>
-	<property name="binmodels.dir" value="${classes.dir}/co/uk/flansmods/client/model"/>
+	<property name="reobfmodels.dir" value="${mcp.dir}/reobf/minecraft/co/uk/flansmods/client/model"/>
 	
 	<property name="packmodels.dir" value="assets/flansmod/models/co/uk/flansmods/client/model"/>
 	
@@ -199,56 +199,56 @@
 		
 		<!-- Modern Warfare -->
 		<delete dir="${mcpflan.dir}/Modern Weapons Pack"/>
-		<mkdir dir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}"/>
+		<mkdir dir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}/modernweapons"/>
 		<copy todir="${mcpflan.dir}/Modern Weapons Pack">
 			<fileset dir="jars/Flan/Modern Weapons Pack"/>
 		</copy>
-		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}" failonerror="false">
-			<fileset dir="${binmodels.dir}/modernweapons"/>
+		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}modernweapons" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/modernweapons"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
 		
 		<!-- Nerf -->
 		<delete dir="${mcpflan.dir}/Nerf Pack"/>
-		<mkdir dir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}"/>
+		<mkdir dir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}/nerf"/>
 		<copy todir="${mcpflan.dir}/Nerf Pack">
 			<fileset dir="jars/Flan/Nerf Pack"/>
 		</copy>
-		<copy todir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}" failonerror="false">
-			<fileset dir="${binmodels.dir}/nerf"/>
+		<copy todir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}/nerf" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/nerf"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/Nerf Pack.zip" basedir="${mcpflan.dir}/Nerf Pack"/>
 		
 		<!-- Parts -->
 		<delete dir="${mcpflan.dir}/Parts Pack"/>
-		<mkdir dir="${mcpflan.dir}/Parts Pack/${packmodels.dir}"/>
+		<mkdir dir="${mcpflan.dir}/Parts Pack/${packmodels.dir}/parts"/>
 		<copy todir="${mcpflan.dir}/Parts Pack">
 			<fileset dir="jars/Flan/Parts Pack"/>
 		</copy>
-		<copy todir="${mcpflan.dir}/Parts Pack/${packmodels.dir}" failonerror="false">
-			<fileset dir="${binmodels.dir}/parts"/>
+		<copy todir="${mcpflan.dir}/Parts Pack/${packmodels.dir}/parts" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/parts"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/Parts Pack.zip" basedir="${mcpflan.dir}/Parts Pack"/>
 		
 		<!-- WW2 -->
 		<delete dir="${mcpflan.dir}/WW2 Pack"/>
-		<mkdir dir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}"/>
+		<mkdir dir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}/ww2"/>
 		<copy todir="${mcpflan.dir}/WW2 Pack">
 			<fileset dir="jars/Flan/WW2 Pack"/>
 		</copy>
-		<copy todir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}" failonerror="false">
-			<fileset dir="${binmodels.dir}/ww2"/>
+		<copy todir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}/ww2" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/ww2"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/WW2 Pack.zip" basedir="${mcpflan.dir}/WW2 Pack"/>
 		
 		<!-- Ye Olde -->
 		<delete dir="${mcpflan.dir}/Ye Olde Pack"/>
-		<mkdir dir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}"/>
+		<mkdir dir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}/yeolde"/>
 		<copy todir="${mcpflan.dir}/Ye Olde Pack">
 			<fileset dir="jars/Flan/Ye Olde Pack"/>
 		</copy>
-		<copy todir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}" failonerror="false">
-			<fileset dir="${binmodels.dir}/yeolde"/>
+		<copy todir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}/yeolde" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/yeolde"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/Ye Olde Pack.zip" basedir="${mcpflan.dir}/Ye Olde Pack"/>
 	</target>
