@@ -4,7 +4,7 @@ Model Bullet
 Texture eliteBullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23929
+ItemID 23941
 Icon 6DartEliteClip
 //How affected by gravity the bullet is
 FallSpeed 1

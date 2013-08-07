@@ -8,7 +8,7 @@ Ammo 25DartEliteDrum
 Icon Stryfe
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23942
+ItemID 23966
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 50
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20

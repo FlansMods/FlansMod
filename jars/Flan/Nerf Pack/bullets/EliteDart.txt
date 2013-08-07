@@ -4,7 +4,7 @@ Model Bullet
 Texture eliteBullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23927
+ItemID 23940
 Icon EliteDart
 //How affected by gravity the bullet is
 FallSpeed 1

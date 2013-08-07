@@ -11,7 +11,6 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -616,14 +615,14 @@ public class TeamsManager implements IPlayerTracker
 				
 				if(data.playerClass != null && data.playerClass.horse)
 				{
-					EntityHorse horse = new EntityHorse(playerMP.worldObj);
+					/*EntityHorse horse = new EntityHorse(playerMP.worldObj);
 					horse.setPosition(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
 					horse.func_110234_j(true);
 					player.inventory.mainInventory[0] = new ItemStack(Item.saddle);
 					horse.interact(playerMP);
 					playerMP.worldObj.spawnEntityInWorld(horse);
 					playerMP.mountEntity(horse);
-					
+					*/
 				}
 				
 				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)

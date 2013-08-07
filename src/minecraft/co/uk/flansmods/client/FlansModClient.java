@@ -132,7 +132,7 @@ public class FlansModClient extends FlansMod
 		{
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "Y", "field_78503_V");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -146,7 +146,7 @@ public class FlansModClient extends FlansMod
 			inPlane = true;
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll() * (minecraft.thePlayer.ridingEntity instanceof EntityVehicle ? -1 : 1), "camRoll");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll() * (minecraft.thePlayer.ridingEntity instanceof EntityVehicle ? -1 : 1), "camRoll", "N", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -156,7 +156,7 @@ public class FlansModClient extends FlansMod
 			{
 				try
 				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityPlane)minecraft.thePlayer.ridingEntity).getPlaneType().cameraDistance, "thirdPersonDistance");
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityPlane)minecraft.thePlayer.ridingEntity).getPlaneType().cameraDistance, "thirdPersonDistance", "A", "field_78490_B");
 				} catch (Exception e)
 				{
 					log("I forgot to update obfuscated reflection D:");
@@ -167,7 +167,7 @@ public class FlansModClient extends FlansMod
 			{
 				try
 				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance");
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance", "A", "field_78490_B");
 				} catch (Exception e)
 				{
 					log("I forgot to update obfuscated reflection D:");
@@ -179,7 +179,7 @@ public class FlansModClient extends FlansMod
 		{
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "N", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -187,7 +187,7 @@ public class FlansModClient extends FlansMod
 			}			
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "A", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
