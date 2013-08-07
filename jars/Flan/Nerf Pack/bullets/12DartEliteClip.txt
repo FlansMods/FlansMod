@@ -5,7 +5,7 @@ Texture eliteBullet
 //Colour of icon and model
 Colour 255 255 255
 ItemID 23930
-Icon 6DartEliteClip
+Icon 12DartEliteClip
 //How affected by gravity the bullet is
 FallSpeed 1
 //The number of rounds each item has. Limited to 32000.

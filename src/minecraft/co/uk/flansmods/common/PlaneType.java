@@ -92,6 +92,7 @@ public class PlaneType extends DriveableType
     public PlaneType(TypeFile file)
     {
 		super(file);
+		//Make sure the passenger and prop arrays are set up first
 		for(String line : file.lines)
 		{
 			if(line == null)

@@ -1,4 +1,4 @@
-Name Heavy Assault
+Name Support
 ShortName nerfNitron
 AddItem nitron
 AddItem maverick

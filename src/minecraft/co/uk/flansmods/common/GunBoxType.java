@@ -48,6 +48,34 @@ public class GunBoxType extends InfoType
 	public GunBoxType(TypeFile file)
 	{
 		super(file);
+		//Make sure NumGuns is read before anything else
+		for(String line : file.lines)
+		{
+			if(line == null)
+				break;
+			if(line.startsWith("//"))
+				continue;
+			String[] split = line.split(" ");
+			if(split.length < 2)
+				continue;
+			
+			if (split[0].equals("NumGuns"))
+			{
+				numGuns = Integer.parseInt(split[1]);
+				guns = new InfoType[numGuns];
+				bullets = new BulletType[numGuns];
+				altBullets = new BulletType[numGuns];
+				gunParts = new List[numGuns];
+				bulletParts = new List[numGuns];
+				altBulletParts = new List[numGuns];
+				for (int i = 0; i < numGuns; i++)
+				{
+					gunParts[i] = new ArrayList<ItemStack>();
+					bulletParts[i] = new ArrayList<ItemStack>();
+					altBulletParts[i] = new ArrayList<ItemStack>();
+				}
+			}
+		}
 		read(file);
 		if(gunBoxID == 0)
 			gunBoxID = nextDefaultID++;		
@@ -71,22 +99,6 @@ public class GunBoxType extends InfoType
 				sideTexturePath = split[1];
 			if (split[0].equals("GunBoxID") || split[0].equals("BlockID"))
 				gunBoxID = Integer.parseInt(split[1]);
-			if (split[0].equals("NumGuns"))
-			{
-				numGuns = Integer.parseInt(split[1]);
-				guns = new InfoType[numGuns];
-				bullets = new BulletType[numGuns];
-				altBullets = new BulletType[numGuns];
-				gunParts = new List[numGuns];
-				bulletParts = new List[numGuns];
-				altBulletParts = new List[numGuns];
-				for (int i = 0; i < numGuns; i++)
-				{
-					gunParts[i] = new ArrayList<ItemStack>();
-					bulletParts[i] = new ArrayList<ItemStack>();
-					altBulletParts[i] = new ArrayList<ItemStack>();
-				}
-			}
 			if (split[0].equals("AddGun"))
 			{
 				if (gunParts[nextGun] == null)

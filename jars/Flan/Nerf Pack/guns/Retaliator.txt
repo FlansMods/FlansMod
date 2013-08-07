@@ -1,13 +1,16 @@
-Name Nerf Strongarm
-ShortName strongarm
+Name Nerf Elite Retaliator
+ShortName retaliator
 //The ammo this gun uses (shortName)
-Ammo eliteDart
-Icon Strongarm
+Ammo 6DartEliteClip
+Ammo 12DartEliteClip
+Ammo 18DartEliteClip
+Ammo 25DartEliteDrum
+Icon Retaliator
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23943
+ItemID 23941
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 120
+ReloadTime 75
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 0
 //Damage in half hearts
@@ -16,13 +19,11 @@ Damage 0
 Accuracy 2
 //Time in ticks between rounds
 ShootDelay 20
-ShootSound StrongarmShoot
-ReloadSound MaverickReload
+ShootSound RetaliatorShoot
+ReloadSound RetaliatorReload
 Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
-//For guns in which the magazine is integrated
-LoadIntoGun 6
-//Bullet speed, default 3.0
-BulletSpeed 1.5
+//Bullet Speed, default 3.0
+BulletSpeed 2.0

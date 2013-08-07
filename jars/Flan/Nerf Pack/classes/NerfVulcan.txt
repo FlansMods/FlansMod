@@ -1,4 +1,4 @@
-Name Heavy Support
+Name Support
 ShortName nerfVulcan
 AddItem vulcan
 AddItem maverick
