@@ -19,6 +19,6 @@ ShootDelay 20
 ShootSound springfieldShoot
 ReloadSound springfieldReload
 Mode SemiAuto
-Scope scope
+Scope wwiispringfieldsniper
 Deployable False
 DeployedModel None

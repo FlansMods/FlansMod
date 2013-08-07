@@ -12,13 +12,15 @@ Changes:
 - Teams help info is now shown in pages
 - Mod is now packaged in a jar file
 - Packs can now be loaded as zip files
+- Improved WW2 gun and scope names and textures
+- Changed bullet drop stats in Flan's packs
 Fixes:
-- Sounds work in multiplayer
+- Crosshairs properly locked in mouse control mode
 Additions:
 - Added missing angle for trailers
 - Added option to rotate gunner with turret
 - Added an NMT element to allow modifying corners of a box with x/y/z
-- Added Nerf gamemode, armour, classes etc
+- Added Nerf gamemode, armour, classes, guns etc
 Removals:
 - Properties file
 
