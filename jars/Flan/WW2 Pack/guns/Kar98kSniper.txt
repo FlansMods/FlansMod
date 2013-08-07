@@ -19,6 +19,6 @@ ShootDelay 30
 ShootSound kar98kSniperShoot
 ReloadSound kar98kSniperReload
 Mode SemiAuto
-Scope scope
+Scope wwiikar98ksniper
 Deployable False
 DeployedModel None
