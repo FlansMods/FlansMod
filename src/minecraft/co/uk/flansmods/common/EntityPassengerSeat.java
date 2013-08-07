@@ -405,7 +405,9 @@ public class EntityPassengerSeat extends Entity implements IControllable, IEntit
 	@Override
 	public void writeSpawnData(ByteArrayDataOutput data) 
 	{
-		data.writeInt(getDriveable().entityId);
+		if(getDriveable() == null)
+			data.writeInt(0);
+		else data.writeInt(getDriveable().entityId);
 		data.writeInt(seatID);
 		data.writeInt(seatX);
 		data.writeInt(seatY);
