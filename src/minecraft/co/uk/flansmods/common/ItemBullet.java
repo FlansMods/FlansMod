@@ -17,6 +17,7 @@ public class ItemBullet extends Item
 		type = type1;
 		setMaxDamage(type.roundsPerItem);
 		setMaxStackSize(type.maxStackSize);
+		setHasSubtypes(true);
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
