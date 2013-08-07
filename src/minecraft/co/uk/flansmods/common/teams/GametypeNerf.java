@@ -231,6 +231,7 @@ public class GametypeNerf extends Gametype {
 				getPlayerData(attacker).kills++;
 				getPlayerData(player).deaths++;
 				player.addChatMessage("You are hit. Go back to base to respawn");
+				attacker.addChatMessage("You hit " + player.username + ". He is out until he returns to base");
 			}
 		}
 		return false;

@@ -239,7 +239,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (soundDelay <= 0)
 				{
 					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
-					worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
+					//worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
+					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, type.distortSound));
+
 					soundDelay = type.shootSoundLength;
 				}
 			} else if(gunner != null)
@@ -295,6 +297,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	
 	public void mountGun(EntityPlayer player, boolean mounting)
 	{
+		if(player == null)
+			return;
 		Side side = worldObj.isRemote ? Side.CLIENT : Side.SERVER;
 		if(mounting)
 		{

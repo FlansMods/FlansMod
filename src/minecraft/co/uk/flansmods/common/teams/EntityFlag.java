@@ -21,6 +21,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		super(world);
 		setSize(1F, 1F);
+		renderDistanceWeight = 100D;
 		ignoreFrustumCheck = true;
 	}
 	

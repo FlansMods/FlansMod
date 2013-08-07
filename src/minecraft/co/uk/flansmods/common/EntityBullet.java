@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,6 +20,7 @@ import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
+import co.uk.flansmods.common.teams.TeamsManager;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -256,6 +258,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					{
 						damagesource = getBulletDamage();
 					}
+					if(j1 == 0 && movingobjectposition.entityHit instanceof EntityPlayerMP)
+						TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)movingobjectposition.entityHit, damagesource);
 					if (movingobjectposition.entityHit.attackEntityFrom(damagesource, j1))
 					{
 						if (movingobjectposition.entityHit instanceof EntityLivingBase)

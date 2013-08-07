@@ -49,6 +49,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		super(world);
 		setSize(1F, 2F);
+		renderDistanceWeight = 100D;
 	}	
 	
 	public EntityFlagpole(World world, double x, double y, double z) 
