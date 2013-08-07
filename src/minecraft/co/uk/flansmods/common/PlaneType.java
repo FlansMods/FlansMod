@@ -65,8 +65,8 @@ public class PlaneType extends DriveableType
 	public String bombSound;
 
 	//Single wing on small table = Inner wing on big table
-	public boolean bigTable = false;
-	public boolean dyes = false;
+	public boolean bigTable;
+	public boolean dyes;
 	public int dyeColour = 0;
 	public PartType bay;
 	public PartType tail;
@@ -125,7 +125,6 @@ public class PlaneType extends DriveableType
 				propellerZ = new int[numProps];
 			}
 		}
-		read(file);
 		iconIndex = nextIconIndex++;
     }
     

@@ -421,6 +421,7 @@ public class FlansMod
 			try
 			{
 				BulletType type = new BulletType(bulletFile);
+				type.read(bulletFile);
 				Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.shortName);
 				bulletItems.add(bulletItem);
 				LanguageRegistry.addName(bulletItem, type.name);
@@ -439,6 +440,7 @@ public class FlansMod
 			try
 			{
 				GunType type = new GunType(gunFile);
+				type.read(gunFile);
 				Item gunItem = new ItemGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				gunItems.add(gunItem);
 				LanguageRegistry.addName(gunItem, type.name);
@@ -457,6 +459,7 @@ public class FlansMod
 			try
 			{
 				PartType type = new PartType(partFile);
+				type.read(partFile);
 				Item partItem = new ItemPart(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				partItems.add(partItem);
 				LanguageRegistry.addName(partItem, type.name);
@@ -475,6 +478,7 @@ public class FlansMod
 			try
 			{
 				PlaneType type = new PlaneType(planeFile);
+				type.read(planeFile);
 				Item planeItem = new ItemPlane(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				planeItems.add(planeItem);
 				LanguageRegistry.addName(planeItem, type.name);
@@ -493,6 +497,7 @@ public class FlansMod
 			try
 			{
 				VehicleType type = new VehicleType(vehicleFile);
+				type.read(vehicleFile);
 				Item vehicleItem = new ItemVehicle(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				vehicleItems.add(vehicleItem);
 				LanguageRegistry.addName(vehicleItem, type.name);
@@ -511,6 +516,7 @@ public class FlansMod
 			try
 			{
 				AAGunType type = new AAGunType(aaFile);
+				type.read(aaFile);
 				Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				aaGunItems.add(aaGunItem);
 				LanguageRegistry.addName(aaGunItem, type.name);
@@ -529,6 +535,7 @@ public class FlansMod
 			try
 			{
 				GunBoxType type = new GunBoxType(boxFile);
+				type.read(boxFile);
 				type.item = Item.itemsList[gunBoxBlock.blockID];
 				type.itemID = gunBoxBlock.blockID;
 			} 
@@ -546,6 +553,7 @@ public class FlansMod
 			try
 			{
 				ArmourType type = new ArmourType(armourFile);
+				type.read(armourFile);
 				Item armourItem = new ItemTeamArmour(type).setUnlocalizedName(type.iconPath);
 				armourItems.add(armourItem);
 				LanguageRegistry.addName(armourItem, type.name);

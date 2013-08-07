@@ -19,7 +19,6 @@ public class ArmourType extends InfoType
 	public ArmourType(TypeFile file)
 	{
 		super(file);
-		read(file);
 		armours.add(this);
 		iconIndex = lastIconIndex++;
 	}

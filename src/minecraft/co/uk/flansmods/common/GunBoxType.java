@@ -76,7 +76,12 @@ public class GunBoxType extends InfoType
 				}
 			}
 		}
-		read(file);
+	}
+	
+	@Override
+	protected void read(TypeFile file)
+	{
+		super.read(file);
 		if(gunBoxID == 0)
 			gunBoxID = nextDefaultID++;		
 		gunBoxMap.put(this.shortName, this);

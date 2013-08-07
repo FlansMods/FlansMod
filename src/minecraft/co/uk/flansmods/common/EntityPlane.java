@@ -259,11 +259,11 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 			{
 				if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode || !FlansMod.vehiclesNeedFuel)
 				{
-					propSpeed -= type.acceleration / 100D;
+					propSpeed -= type.decceleration / 100D;
 				}
 				else if(data.fuelInTank > 0)
 				{
-					propSpeed -= type.acceleration / 100D;
+					propSpeed -= type.decceleration / 100D;
 					data.fuelInTank--;
 				}
 				
@@ -354,8 +354,9 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)data.getStackInSlot(slot).getItem()).type, type));
 						if(type.bombSound != null)
 						{
-							try {
-								worldObj.playSoundAtEntity(this, type.bombSound, 1.0F , 1.0F);
+							try 
+							{
+								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.bombSound, false));
 							}
 							catch(Exception e)
 							{
@@ -381,7 +382,7 @@ public class EntityPlane extends EntityDriveable implements IEntityAdditionalSpa
 							//For some reason -Z, -Y, X are the correct coordinates to use, this is based off experiments with the plane renderer
 							Vec3 gunVec = rotateGunBarrelPosition(-type.barrelZ[i] / 16D, -type.barrelY[i] / 16D, type.barrelX[i] / 16D);
 							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), -axes.getPitch(), (EntityLiving)riddenByEntity, data.guns[i].accuracy, data.guns[i].damage, ((ItemBullet)data.ammo[i].getItem()).type, 3.0F, type));
-							worldObj.playSoundAtEntity(this, type.shootSound, 1.0F , 1.0F);
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
 							int damage = data.ammo[i].getItemDamage();
 							data.ammo[i].setItemDamage(damage + 1);	
 							if(damage + 1 == data.ammo[i].getMaxDamage())

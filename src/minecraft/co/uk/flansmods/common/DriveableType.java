@@ -22,7 +22,6 @@ public class DriveableType extends InfoType
     public DriveableType(TypeFile file)
     {
 		super(file);
-		read(file);
 		typeList.add(this);
     }
 	

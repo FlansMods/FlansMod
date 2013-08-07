@@ -33,7 +33,6 @@ public class BulletType extends InfoType
 	{
 		super(file);
 		texture = "defaultBullet";
-		read(file);
 		bullets.add(this);
 		iconIndex = lastIconIndex++;
 	}

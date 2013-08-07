@@ -17,11 +17,16 @@ public class PartType extends InfoType
 	public PartType(TypeFile file)
 	{
 		super(file);
-		read(file);
 		parts.add(this);
+		iconIndex = lastIconIndex++;
+	}
+	
+	@Override
+	protected void read(TypeFile file)
+	{
+		super.read(file);
 		if (category == 2 && defaultEngine == null)
 			defaultEngine = this;
-		iconIndex = lastIconIndex++;
 	}
 
 	@Override

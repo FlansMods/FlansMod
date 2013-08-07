@@ -204,9 +204,10 @@ public class FlansModClient extends FlansMod
 	@ForgeSubscribe
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.startsWith("flanDeath."))
+		if(event.message.startsWith("{\"translate\":\"flanDeath."))
 		{
 			String[] split = event.message.split("\\.");
+			split[split.length - 1] = split[split.length - 1].split("\"}")[0];
 			event.setCanceled(true);
 			TickHandlerClient.addKillMessage(split);
 			//FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[3] + " killed " + split[2] + " with a " + InfoType.getType(split[1]).name);

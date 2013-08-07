@@ -51,7 +51,6 @@ public class GunType extends InfoType
 	public GunType(TypeFile file)
 	{
 		super(file);
-		read(file);
 		guns.add(this);
 		iconIndex = lastIconIndex++;
 	}

@@ -112,7 +112,6 @@ public class VehicleType extends DriveableType
 				}
 			}
 		}
-		read(file);
 		iconIndex = nextIconIndex++;
     }
 	
