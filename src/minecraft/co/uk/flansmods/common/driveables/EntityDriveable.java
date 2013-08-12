@@ -20,7 +20,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import co.uk.flansmods.api.IControllable;
-import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -29,13 +28,12 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 public abstract class EntityDriveable extends Entity implements IControllable, IEntityAdditionalSpawnData
 {
 	public boolean syncFromServer = true;
+	/** Ticks since last server update. Use to smoothly transition to new position */
 	public int serverPositionTransitionTicker;
-    public double serverPosX;
-    public double serverPosY;
-    public double serverPosZ;
-    public double serverYaw;
-    public double serverPitch;
-    public double serverRoll;
+	/** Server side position, as synced by PacketVehicleControl packets */
+    public double serverPosX, serverPosY, serverPosZ;
+	/** Server side rotation, as synced by PacketVehicleControl packets */
+    public double serverYaw, serverPitch, serverRoll;
     
     private double velocityX;
     private double velocityY;
@@ -112,7 +110,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		driveableData = getData(dataID);
 		driveableData.readFromNBT(tag);
 		
-		prevRotationYaw = -tag.getFloat("RotationYaw");
+		prevRotationYaw = tag.getFloat("RotationYaw");
 		prevRotationPitch = tag.getFloat("RotationPitch");
 		prevRotationRoll = tag.getFloat("RotationRoll");
 		axes = new RotatedAxes(prevRotationYaw, prevRotationPitch, prevRotationRoll);
@@ -253,9 +251,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			return;
 		if(riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity))
 		{
-		    motionX = velocityX;
-		    motionY = velocityY;
-		    motionZ = velocityZ;
 		}
 		else
 		{				
@@ -282,9 +277,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        serverPosZ = d2;
 	        serverYaw = (double)f;
 	        serverPitch = (double)f1;
-	        motionX = velocityX;
-	        motionY = velocityY;
-	        motionZ = velocityZ;
 		}
     }
 	
@@ -320,9 +312,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     public void setVelocity(double d, double d1, double d2)
     {
-        velocityX = motionX = d;
-        velocityY = motionY = d1;
-        velocityZ = motionZ = d2;
+        motionX = d;
+        motionY = d1;
+        motionZ = d2;
     }
 	
 	public abstract boolean pressKey(int key, EntityPlayer player);
@@ -331,6 +323,17 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public void onUpdate()
     {
         super.onUpdate();
+        if(!worldObj.isRemote)
+        {
+        	for(int i = 0; i < getDriveableType().numPassengers; i++)
+        	{
+        		if(seats[i] == null || !seats[i].addedToChunk)
+        		{
+        			seats[i] = new EntitySeat(worldObj, this, i);
+    				worldObj.spawnEntityInWorld(seats[i]);
+        		}
+        	}
+        }
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
@@ -436,8 +439,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		return ent == this;	
 	}
-	
-	public abstract void useGun(int gunID, EntityPlayer player, EntityPassengerSeat seat);
 
 	@Override
     public float getShadowSize()
@@ -448,6 +449,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public DriveableType getDriveableType()
     {
     	return DriveableType.getDriveable(driveableType);
+    }
+    
+    public DriveableData getDriveableData()
+    {
+    	return driveableData;
     }
 	
 	@Override

@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -28,8 +29,6 @@ public class PlaneType extends DriveableType
 	/** Co-efficients of drag and lift which determine how the plane flies */
 	public float drag = 1F, lift = 1F;
 	
-	/** Whether to shoot nose / wing guns alternately or together */
-	public boolean shootAlternately = false;
 	/** Vectors representing the 4 guns operated by the driver. (Nose and wing) */
 	public Vector3f[] barrelPositions = new Vector3f[4];
 	/** The point at which bomb entities spawn */
@@ -73,6 +72,9 @@ public class PlaneType extends DriveableType
 	public boolean allowSideGuns = false;
 	public boolean allowTailGuns = false; //Large planes only
 	public boolean allowDorsalGun = false;
+	
+	/** Nose and wing guns */
+	public GunType[] guns = new GunType[4];
 	
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
@@ -132,8 +134,6 @@ public class PlaneType extends DriveableType
 			{
 				bombPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);	
 			}
-			if(split[0].equals("ShootAlternately"))
-				shootAlternately = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("ShootDelay"))
 				planeShootDelay = Integer.parseInt(split[1]);
 			if(split[0].equals("BombDelay"))

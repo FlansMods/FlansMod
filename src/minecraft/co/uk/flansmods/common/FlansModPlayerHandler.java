@@ -12,6 +12,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -32,7 +33,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 	public void onEntityHurt(LivingHurtEvent event) 
 	{
 		EntityLivingBase entity = event.entityLiving;
-		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntityPassengerSeat))
+		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
 		{
 			event.ammount = 0;
 		}

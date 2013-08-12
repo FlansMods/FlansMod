@@ -33,7 +33,6 @@ import co.uk.flansmods.common.CommonProxy;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.EntityMG;
-import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.GunType;

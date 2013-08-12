@@ -52,13 +52,13 @@ public class FlanPacketCommon implements IPacketHandler
 	    		case 8: (new PacketPlaySound()).interpret(stream, null, Side.SERVER); break;
 	    		case 9: (new PacketBlueprint()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	    		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-	    		case 11: (new PacketRightClick()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+	    		case 11: break; //FREE PACKET ID
 	    		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	    		case 13: (new PacketGunFire()).interpret(stream, new Object[] {player, world}, Side.SERVER); break;
 	    		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.SERVER); break;
 	    		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	    		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 17: (new PacketSeatMount()).interpret(stream, new Object[] {world}, Side.SERVER); break;
+	    		case 17: break; //FREE PACKET ID
 	       		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.SERVER); break;
 	       		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	       		case 20: (new PacketPlayerSpawn()).interpret(stream, null, Side.SERVER); break;

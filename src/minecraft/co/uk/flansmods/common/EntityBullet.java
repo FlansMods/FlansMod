@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.teams.TeamsManager;
+import co.uk.flansmods.common.vector.Vector3f;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -45,52 +46,35 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		ticksInAir = 0;
 		setSize(0.5F, 0.5F);
 	}
-
-	// Standard handheld gun bullet creation method.
-	public EntityBullet(World world, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
+	
+	/** Private partial constructor to avoid repeated code */
+	private EntityBullet(World world, EntityLivingBase shooter, int gunDamage, BulletType bulletType, InfoType shotFrom)
 	{
-		this(world, shooter, spread, gunDamage, type1, 3.0F, false, shotFrom);
+		this(world);
+		owner = shooter;
+		type = bulletType;
+		firedFrom = shotFrom;
+		damage = gunDamage;
 	}
 
-	// Custom speed handheld gun bullet creation method
+	/** Method called by ItemGun for creating bullets from a hand held weapon */
 	public EntityBullet(World world, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
 	{
-		super(world);
-		type = type1;
-		firedFrom = shotFrom;
-		ticksInAir = 0;
-		owner = shooter;
-		damage = gunDamage;
-		setSize(0.5F, 0.5F);
-		setLocationAndAngles(shooter.posX, shooter.posY + (double) shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
-		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		posY -= 0.10000000149011612D;
-		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		setPosition(posX, posY, posZ);
-		yOffset = 0.0F;
-		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
-		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
-		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);
+		this(world, Vec3.createVectorHelper(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw, shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
 		shotgun = shot;
-		setArrowHeading(motionX, motionY, motionZ, spread, speed);
 	}
 
-	// Machinegun bullet constructor
+	/** Machinegun / AAGun bullet constructor */
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F, shotFrom);
 	}
 
-	// Custom bullet speed constructor
+	/** More generalised bullet constructor */
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
-		super(world);
-		firedFrom = shotFrom;
-		type = type1;
-		ticksInAir = 0;
-		owner = shooter;
+		this(world, shooter, gunDamage, type1, shotFrom);
 		damage = gunDamage;
-		setSize(0.5F, 0.5F);
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
 		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;
 		posY -= 0.10000000149011612D;
@@ -102,8 +86,15 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);
 		setArrowHeading(motionX, motionY, motionZ, spread, speed);
 	}
+	
+	/**  */
+	public EntityBullet(World world, Vector3f origin, Vector3f direction, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	{
+		this(world, shooter, gunDamage, type1, shotFrom);
+		
+	}
 
-	// Bomb constructor
+	/** Bomb constructor. Inherits the motion and rotation of the plane */
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLivingBase shooter, int gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		super(world);
@@ -132,9 +123,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		d /= f2;
 		d1 /= f2;
 		d2 /= f2;
-		d += rand.nextGaussian() * 0.0074999998323619366D * (double) spread;
-		d1 += rand.nextGaussian() * 0.0074999998323619366D * (double) spread;
-		d2 += rand.nextGaussian() * 0.0074999998323619366D * (double) spread;
+		d += rand.nextGaussian() * 0.005D * (double) spread;
+		d1 += rand.nextGaussian() * 0.005D * (double) spread;
+		d2 += rand.nextGaussian() * 0.005D * (double) spread;
 		d *= speed;
 		d1 *= speed;
 		d2 *= speed;

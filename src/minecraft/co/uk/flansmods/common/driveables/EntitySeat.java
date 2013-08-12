@@ -5,8 +5,10 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.network.PacketPlaySound;
@@ -49,6 +51,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	/** A set of axes used to calculate where the player is looking, x axis is the direction of looking, y is up */
 	public RotatedAxes looking;
+	/** Delay ticker for shooting guns */
+	public int gunDelay;
 	
 	/** For smoothness */
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
@@ -70,7 +74,14 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.entityId;
 		seatInfo = driveable.getDriveableType().seats[id];
 		driver = id == 0;
+		//setPosition(d.posX, d.posY, d.posZ);
 		updatePosition();
+	}
+	
+	@Override
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
+	{
+		
 	}
 	
 	@Override
@@ -253,24 +264,53 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(key == 9) //Shoot
 		{
+			
 			if(worldObj.isRemote)
 			{
 				PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
+				//DEBUG
 				Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
-				Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, 1.6F, 0F));
+				Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getYOffset(), 0F));
 				for(int i = 0; i < 10; i++)
 				{
 					worldObj.spawnParticle("reddust", 	posX + shootVec.x * i * 0.3D + yOffset.x, posY + shootVec.y * i * 0.3D + yOffset.y, posZ + shootVec.z * i * 0.3D + yOffset.z, 0, 0, 0);
 				}
+				//
 			}
-			else
+			else if(gunDelay <= 0 && FlansMod.bulletsEnabled)
 			{
-				if(seatInfo.gunType != null)
+				//Get the gun from the plane type and the ammo from the data
+				GunType gun = seatInfo.gunType;
+				ItemStack bulletItemStack = driveable.getDriveableData().ammo[3 + seatID];
+				//Check that neither is null and that the bullet item is actually a bullet
+				if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 				{
-					Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
+					BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+					if(gun.isAmmo(bullet))
+					{
+						//Calculate the look axes globally
+						RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+						//Calculate the origin of the bullets
+						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getYOffset(), 0F));
+						//Spawn a new bullet item
+						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, yOffset.toVec3().addVector(posX, posY, posZ), -90F + globalLookAxes.getYaw(), globalLookAxes.getPitch(), (EntityLiving)riddenByEntity, gun.accuracy, gun.damage, bullet, 3.0F, driveable.getDriveableType()));
+						//Play the shoot sound
+						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, gun.shootSound, false));
+						//Get the bullet item damage and increment it
+						int damage = bulletItemStack.getItemDamage();
+						bulletItemStack.setItemDamage(damage + 1);	
+						//If the bullet item is completely damaged (empty)
+						if(damage + 1 == bulletItemStack.getMaxDamage())
+						{
+							//Set the damage to 0 and consume one ammo item (unless in creative)
+							bulletItemStack.setItemDamage(0);
+							if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+								driveable.getDriveableData().decrStackSize(3 + seatID, 1);
+						}
+						//Reset the shoot delay
+						gunDelay = gun.shootDelay;
+					}
 				}
-				
-				
 			}
 		}
 		return false;

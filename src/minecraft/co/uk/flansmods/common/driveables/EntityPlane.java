@@ -24,8 +24,8 @@ import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.EntityBullet;
-import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.RotatedAxes;
@@ -324,20 +324,35 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 				{
 					for(int i = 0; i < 4; i++)
 					{
-						if(getPlaneData().guns[i] != null && getPlaneData().ammo[i] != null && getPlaneData().ammo[i].getItem() instanceof ItemBullet && getPlaneData().guns[i].isAmmo(((ItemBullet)getPlaneData().ammo[i].getItem()).type))
+						//Get the gun from the plane type and the ammo from the data
+						GunType gun = getPlaneType().guns[i];
+						ItemStack bulletItemStack = getPlaneData().ammo[i];
+						//Check that neither is null and that the bullet item is actually a bullet
+						if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 						{
-							Vec3 gunVec = rotate(type.barrelPositions[i]).toVec3();
-							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, getPlaneData().guns[i].accuracy, getPlaneData().guns[i].damage, ((ItemBullet)getPlaneData().ammo[i].getItem()).type, 3.0F, type));
-							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
-							int damage = getPlaneData().ammo[i].getItemDamage();
-							getPlaneData().ammo[i].setItemDamage(damage + 1);	
-							if(damage + 1 == getPlaneData().ammo[i].getMaxDamage())
+							BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+							if(gun.isAmmo(bullet))
 							{
-								if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-									getPlaneData().ammo[i].setItemDamage(0);
-								else getPlaneData().setInventorySlotContents(i, null);
+								//Rotate the gun vector to global axes
+								Vec3 gunVec = rotate(type.barrelPositions[i]).toVec3();
+								//Spawn a new bullet item
+								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, gun.accuracy, gun.damage, bullet, 3.0F, type));
+								//Play the shoot sound
+								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
+								//Get the bullet item damage and increment it
+								int damage = bulletItemStack.getItemDamage();
+								bulletItemStack.setItemDamage(damage + 1);	
+								//If the bullet item is completely damaged (empty)
+								if(damage + 1 == bulletItemStack.getMaxDamage())
+								{
+									//Set the damage to 0 and consume one ammo item (unless in creative)
+									bulletItemStack.setItemDamage(0);
+									if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+										getPlaneData().decrStackSize(i, 1);
+								}
+								//Reset the shoot delay
+								gunDelay = type.planeShootDelay;
 							}
-							gunDelay = type.planeShootDelay;
 						}
 					}
 					return true;
@@ -361,88 +376,37 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 				flapsPitchRight -= 5F;
 				return true;
 			}
-			/*
-			case 9 : //Shoot
-			{
-				if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
-				{
-					for(int i = 0; i < 4; i++)
-					{
-						if(getPlaneData().guns[i] != null && getPlaneData().ammo[i] != null && getPlaneData().ammo[i].getItem() instanceof ItemBullet && getPlaneData().guns[i].isAmmo(((ItemBullet)getPlaneData().ammo[i].getItem()).type))
-						{
-							//For some reason -Z, -Y, X are the correct coordinates to use, this is based off experiments with the plane renderer
-							Vec3 gunVec = rotateGunBarrelPosition(-type.barrelZ[i] / 16D, -type.barrelY[i] / 16D, type.barrelX[i] / 16D);
-							worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), -axes.getPitch(), (EntityLiving)riddenByEntity, getPlaneData().guns[i].accuracy, getPlaneData().guns[i].damage, ((ItemBullet)getPlaneData().ammo[i].getItem()).type, 3.0F, type));
-							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
-							int damage = getPlaneData().ammo[i].getItemDamage();
-							getPlaneData().ammo[i].setItemDamage(damage + 1);	
-							if(damage + 1 == getPlaneData().ammo[i].getMaxDamage())
-							{
-								if(((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-									getPlaneData().ammo[i].setItemDamage(0);
-								else getPlaneData().setInventorySlotContents(i, null);
-							}
-							gunDelay = type.planeShootDelay;
-						}
-					}
-					return true;
-				}
-				return false;
-			}
 			case 13 : // Gear
 			{
-				if(varGear == true && propSpeed > type.takeOffSpeed && type.hasGear == true)
-				{
-					varGear = false;
-					player.addChatMessage("Main Gear now Up.");
-				}
-				else if(varGear == false && type.hasGear == true)
-				{
-					varGear = true;
-					player.addChatMessage("Main Gear now Down.");
-				}
-				return false;
+				varGear = !varGear;
+				if(type.hasGear)
+					player.addChatMessage("Landing gear " + (varGear ? "up" : "down"));
+				return true;
 			}
 			case 14 : // Door
 			{
-				if(varDoor == true && type.hasDoor == true)
-				{
-					varDoor = false;
-					player.addChatMessage("Doors now Closed.");
-				}
-				else if(varDoor == false && type.hasDoor == true)
-				{
-					varDoor = true;
-					player.addChatMessage("Doors now Open.");
-				}
-				return false;
+				varDoor = !varDoor;
+				if(type.hasDoor)
+					player.addChatMessage("Doors " + (varDoor ? "open" : "closed"));
+				return true;
 			}
 			case 15 : // Wing
 			{
-				if(varWing == true && type.hasWing == true)
-				{
-					varWing = false;
-					player.addChatMessage("Wings now in Position 1.");
-				}
-				else if(varWing == false && type.hasWing == true)
-				{
-					varWing = true;
-					player.addChatMessage("Wings now in Position 2");
-				}
-				return false;
+				varWing = !varWing;
+				if(type.hasWing)
+					player.addChatMessage("Toggling wings");
+				return true;
 			}
             case 16 : // Trim Button
             {
 				velocityRoll += axes.getRoll() / 10;
-				break;
+				return true;
             }
             case 17 : //Park
             {
                 break;
             }
-            */
 		}
-
 		return false;
 	}
         
@@ -659,7 +623,7 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 			//applyRotationalForce(axes.getZAxis(), (Vector3f)axes.getYAxis().scale(pitch));
 			
 			//Roll according to the difference between flapsPitchLeft and flapsPitchRight / 2
-			float flapsRoll = (flapsPitchLeft - flapsPitchRight) / 2F;
+			float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
 			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * 0.1F;
 			//applyRotationalForce(axes.getXAxis(), (Vector3f)axes.getYAxis().scale(roll));
 			
@@ -1104,12 +1068,6 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
-
-	@Override
-	public void useGun(int gunID, EntityPlayer player, EntityPassengerSeat seat)
-	{
-		// TODO: guns.
-	}
 	
 	private void smashIntoBlock(int i, int j, int k)
 	{

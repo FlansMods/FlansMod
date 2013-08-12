@@ -17,7 +17,6 @@ public class DriveableData extends WorldSavedData implements IInventory
 	public int numCargo;
 	public String type;
 	public PartType engine;
-	public GunType[] guns;
 	public ItemStack[] ammo;
 	public ItemStack[] bombs;
 	public ItemStack[] cargo;
@@ -31,7 +30,6 @@ public class DriveableData extends WorldSavedData implements IInventory
 		numBombs = o;
 		numCargo = p;
 		type = type1;
-		guns = new GunType[n];
 		ammo = new ItemStack[n];
 		bombs = new ItemStack[numBombs];
 		cargo = new ItemStack[numCargo];
@@ -49,7 +47,6 @@ public class DriveableData extends WorldSavedData implements IInventory
 		engine = PartType.getPart(tag.getString("Engine"));
 		for(int i = 0; i < numGuns; i++)
 		{
-			guns[i] = GunType.getGun(tag.getString("Gun " + i));
 			ammo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Ammo " + i));
 		}
 		bombs = new ItemStack[numBombs];
@@ -70,10 +67,8 @@ public class DriveableData extends WorldSavedData implements IInventory
     {
 		tag.setString("Type", type);
 		tag.setString("Engine", engine.shortName);
-		for(int i = 0; i < guns.length; i++)
+		for(int i = 0; i < ammo.length; i++)
 		{
-			if(guns[i] != null)
-				tag.setString("Gun " + i, guns[i].shortName);
 			if(ammo[i] != null)
 				tag.setCompoundTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
