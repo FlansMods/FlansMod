@@ -24,18 +24,19 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
+import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.BlockGunBox;
-import co.uk.flansmods.common.DriveableType;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.EntityPlane;
-import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemGun;
-import co.uk.flansmods.common.PlaneType;
-import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.Team;
@@ -89,8 +90,8 @@ public class FlansModClient extends FlansMod
 		if (minecraft.thePlayer == null)
 			return;
 		
-		if(minecraft.thePlayer.ridingEntity instanceof EntityPlane && controlModeMouse && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiPlaneController((EntityPlane)minecraft.thePlayer.ridingEntity));
+		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
@@ -127,7 +128,6 @@ public class FlansModClient extends FlansMod
 			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
 		}
 
-		String field = inMCP ? "cameraZoom" : "V";
 		if (Math.abs(playerZoom - lastPlayerZoom) > 1F / 64F)
 		{
 			try
@@ -140,13 +140,12 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		lastPlayerZoom = playerZoom;
-		field = inMCP ? "camRoll" : "O";
-		if (minecraft.thePlayer.ridingEntity instanceof EntityDriveable)
+		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
 			inPlane = true;
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll() * (minecraft.thePlayer.ridingEntity instanceof EntityVehicle ? -1 : 1), "camRoll", "N", "field_78495_O");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getPlayerRoll(), "camRoll", "N", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -309,7 +308,7 @@ public class FlansModClient extends FlansMod
 		if (controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiPlaneController((EntityPlane)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
+		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}

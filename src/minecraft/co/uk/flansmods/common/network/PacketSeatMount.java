@@ -9,10 +9,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketSeatMount extends FlanPacketCommon 
@@ -76,7 +76,7 @@ public class PacketSeatMount extends FlanPacketCommon
 			}
 			int seatID = stream.readInt();
 			boolean mounting = stream.readBoolean();
-			driveable.seats[seatID].sitInSeat(entity, mounting);
+			//driveable.seats[seatID].sitInSeat(entity, mounting);
         }
         catch(Exception e)
         {

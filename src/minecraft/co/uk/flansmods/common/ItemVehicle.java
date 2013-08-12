@@ -1,5 +1,8 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.VehicleData;
+import co.uk.flansmods.common.driveables.VehicleType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -72,7 +75,7 @@ public class ItemVehicle extends ItemMapBase
 	public VehicleData getVehicleData(ItemStack itemstack, World world)
     {
         String s = (new StringBuilder()).append("vehicle_").append(itemstack.getItemDamage()).toString();
-        VehicleData vehicleData = (VehicleData)world.loadItemData(co.uk.flansmods.common.VehicleData.class, "vehicle_" + itemstack.getItemDamage());
+        VehicleData vehicleData = (VehicleData)world.loadItemData(co.uk.flansmods.common.driveables.VehicleData.class, "vehicle_" + itemstack.getItemDamage());
         if(itemstack.getItemDamage() == 0 || vehicleData == null)
 		{
 			int dataID = world.getUniqueDataId("vehicle");

@@ -1,5 +1,6 @@
 package co.uk.flansmods.api;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IControllable
@@ -17,4 +18,15 @@ public interface IControllable
 	 * @return boolean to indicate it this key was handled.
 	 */
 	boolean pressKey(int key, EntityPlayer player);
+	
+	/** 
+	 * @return riddenByEntity
+	 * 
+	 */
+	Entity getControllingEntity();
+	
+	boolean isDead();
+	
+	/** @return The player's view roll */
+	float getPlayerRoll();
 }

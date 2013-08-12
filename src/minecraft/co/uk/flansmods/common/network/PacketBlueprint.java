@@ -10,10 +10,10 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.common.ContainerPlaneCrafting;
 import co.uk.flansmods.common.ContainerVehicleCrafting;
-import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.PlaneType;
-import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleType;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketBlueprint extends FlanPacketCommon 

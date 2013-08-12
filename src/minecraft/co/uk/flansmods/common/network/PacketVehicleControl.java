@@ -8,8 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketVehicleControl extends FlanPacketCommon

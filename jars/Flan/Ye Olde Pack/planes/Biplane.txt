@@ -17,7 +17,7 @@ CargoSlots 36
 BombSlots 0
 Health 300
 CollisionBoxes 3
-AddCollisionBox 0 0 0 -32 3
+AddCollisionBox 0 0 0 -44 3
 AddCollisionBox 1 40 0 0 2
 AddCollisionBox 2 -40 0 0 1
 //Whether or not guns can be placed in these slots

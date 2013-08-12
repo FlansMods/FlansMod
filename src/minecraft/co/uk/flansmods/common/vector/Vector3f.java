@@ -34,6 +34,8 @@ package co.uk.flansmods.common.vector;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
+import net.minecraft.util.Vec3;
+
 /**
  *
  * Holds a 3-tuple vector.
@@ -68,6 +70,11 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 */
 	public Vector3f(float x, float y, float z) {
 		set(x, y, z);
+	}
+	
+	public Vec3 toVec3()
+	{
+		return Vec3.createVectorHelper(x, y, z);
 	}
 
 	/* (non-Javadoc)

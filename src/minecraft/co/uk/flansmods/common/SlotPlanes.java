@@ -3,6 +3,9 @@ package co.uk.flansmods.common;
 import java.util.List;
 
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.PlaneData;
+import co.uk.flansmods.common.driveables.PlaneType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

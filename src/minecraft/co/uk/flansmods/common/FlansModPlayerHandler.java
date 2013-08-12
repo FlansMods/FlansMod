@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.registry.GameRegistry;

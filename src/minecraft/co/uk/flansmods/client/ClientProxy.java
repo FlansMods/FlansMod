@@ -30,26 +30,25 @@ import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.AAGunType;
 import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.CommonProxy;
-import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.EntityBullet;
-import co.uk.flansmods.common.EntityCollisionBox;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.EntityPassengerSeat;
-import co.uk.flansmods.common.EntityPlane;
-import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.PartType;
-import co.uk.flansmods.common.PlaneType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.TileEntityGunBox;
-import co.uk.flansmods.common.VehicleData;
-import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleData;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
@@ -138,9 +137,7 @@ public class ClientProxy extends CommonProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityCollisionBox.class, new RenderNull());
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityPassengerSeat.class, new RenderNull());
+		//RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 	}
@@ -175,11 +172,11 @@ public class ClientProxy extends CommonProxy
 				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.inventoryKey.keyCode) + " to open the menu");
 				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.exitKey.keyCode) + " to get out");
 				player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.keyCode) + " to switch controls");
-				if(PlaneType.getPlane(((EntityPlane)entityType).type).hasGear)
+				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasGear)
 					player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.gearKey.keyCode) + " to switch the gear");
-				if(PlaneType.getPlane(((EntityPlane)entityType).type).hasDoor)
+				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasDoor)
 					player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.keyCode) + " to switch the doors");
-				if(PlaneType.getPlane(((EntityPlane)entityType).type).hasWing)
+				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasWing)
 					player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.wingKey.keyCode) + " to switch the wings");
                 player.addChatMessage("Press " + Keyboard.getKeyName(KeyInputHandler.trimKey.keyCode) + " to reposition the plane");
 			}

@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.ContainerPlaneMenu;
-import co.uk.flansmods.common.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 
 
 public class GuiPlaneFuel extends GuiContainer
@@ -27,7 +27,7 @@ public class GuiPlaneFuel extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer(int i, int j)
     {
-        fontRenderer.drawString(plane.getSuperType().name + " - Fuel", 6, 6, 0x404040);
+        fontRenderer.drawString(plane.getDriveableType().name + " - Fuel", 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 
@@ -47,8 +47,8 @@ public class GuiPlaneFuel extends GuiContainer
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
-		int fuelTankSize = plane.getSuperType().tankSize;
-		int fuelInTank = plane.superData.fuelInTank;
+		int fuelTankSize = plane.getDriveableType().fuelTankSize;
+		int fuelInTank = plane.driveableData.fuelInTank;
 		if(plane.fuelling)
 			drawTexturedModalRect(j + 15, k + 44, 176 + 15 * (anim % 4), 0, 15, 16);
 		if(fuelInTank < fuelTankSize / 8 && (anim % 4) > 1)

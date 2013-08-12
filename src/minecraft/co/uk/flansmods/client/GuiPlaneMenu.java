@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.ContainerPlaneMenu;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.EntityPlane;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -66,7 +66,7 @@ public class GuiPlaneMenu extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer(int i, int j)
     {
-        fontRenderer.drawString(entity.getSuperType().name, 6, 6, 0x404040);
+        fontRenderer.drawString(entity.getDriveableType().name, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 

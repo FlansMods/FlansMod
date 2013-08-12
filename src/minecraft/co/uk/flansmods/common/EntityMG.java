@@ -163,8 +163,6 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			//Send a packet!
 			checkForShooting();
 		}
-		//if(!worldObj.isRemote)
-			//System.out.println(isShooting);
 		if(!worldObj.isRemote && isShooting)
 		{
 			if(gunner == null || gunner.isDead)

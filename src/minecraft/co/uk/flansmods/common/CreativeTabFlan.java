@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.teams.ArmourType;
 
 import net.minecraft.block.Block;

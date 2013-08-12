@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.common.driveables.PlaneType;
+
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
 

@@ -2,7 +2,7 @@ package co.uk.flansmods.client.model.yeolde;
 
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import co.uk.flansmods.common.CollisionBox;
+import co.uk.flansmods.common.driveables.CollisionPoint;
 
 public class ModelTwoSeatBiplane extends ModelPlane
 {

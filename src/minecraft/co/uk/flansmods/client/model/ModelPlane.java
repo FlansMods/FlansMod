@@ -1,8 +1,12 @@
 package co.uk.flansmods.client.model;
 
+import java.util.HashMap;
+
 import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import co.uk.flansmods.common.EntityPlane;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.vector.Vector3f;
 
 //Extensible ModelPlane class for rendering plane models
 public class ModelPlane extends ModelBase
@@ -13,61 +17,43 @@ public class ModelPlane extends ModelBase
 		float angle = plane.propAngle;
 		for(int i = 0; i < propellerModels.length; i++)
 		{	
-			if(plane.propBlown.length > i && !plane.propBlown[i])
+			int numParts = propellerModels[i].length;
+			for(int j = 0; j < numParts; j++)
 			{
-				int numParts = propellerModels[i].length;
-				for(int j = 0; j < numParts; j++)
-				{
-					//propellerModels[i][j].setPosition(plane.plane.propellerX, plane.type.propellerY, plane.plane.propellerZ * (i % 2 == 0 ? 1 : -1));			//Set the point about which the box rotates, the centre of the propeller
-					propellerModels[i][j].rotateAngleX = angle + (j * 2F * 3.1415926535F) / (numParts);
-					propellerModels[i][j].render(f5);
-				}
+				//propellerModels[i][j].setPosition(plane.plane.propellerX, plane.type.propellerY, plane.plane.propellerZ * (i % 2 == 0 ? 1 : -1));			//Set the point about which the box rotates, the centre of the propeller
+				propellerModels[i][j].rotateAngleX = angle + (j * 2F * 3.1415926535F) / (numParts);
+				propellerModels[i][j].render(f5);
 			}
 		}
 		//Rotating the yaw flap
 		for(int i = 0; i < yawFlapModel.length; i++)
 		{
-			if(plane.tailHealth > 0)
-			{
-				yawFlapModel[i].rotateAngleY = plane.flapsYaw * 3.14159265F / 180F;
-				yawFlapModel[i].render(f5);
-			}
+			yawFlapModel[i].rotateAngleY = plane.flapsYaw * 3.14159265F / 180F;
+			yawFlapModel[i].render(f5);
 		}
 		//Rotating the left pitch flap
 		for(int i = 0; i < pitchFlapLeftModel.length; i++)
 		{
-			if(plane.tailHealth > 0)
-			{
-				pitchFlapLeftModel[i].rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
-				pitchFlapLeftModel[i].render(f5);
-			}
+			pitchFlapLeftModel[i].rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
+			pitchFlapLeftModel[i].render(f5);
 		}
 		//Rotating the right pitch flap
 		for(int i = 0; i < pitchFlapRightModel.length; i++)
 		{
-			if(plane.tailHealth > 0)
-			{
-				pitchFlapRightModel[i].rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
-				pitchFlapRightModel[i].render(f5);
-			}
+			pitchFlapRightModel[i].rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
+			pitchFlapRightModel[i].render(f5);
 		}
 		//Rotating the left wing pitch flap
 		for(int i = 0; i < pitchFlapLeftWingModel.length; i++)
 		{
-			if(plane.leftWingHealth > 0)
-			{
-				pitchFlapLeftWingModel[i].rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
-				pitchFlapLeftWingModel[i].render(f5);
-			}
+			pitchFlapLeftWingModel[i].rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
+			pitchFlapLeftWingModel[i].render(f5);
 		}
 		//Rotating the right wing pitch flap
 		for(int i = 0; i < pitchFlapRightWingModel.length; i++)
 		{
-			if(plane.rightWingHealth > 0)
-			{
-				pitchFlapRightWingModel[i].rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
-				pitchFlapRightWingModel[i].render(f5);
-			}
+			pitchFlapRightWingModel[i].rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
+			pitchFlapRightWingModel[i].render(f5);
 		}
 		//Rendering the body
         for(int i = 0; i < bodyModel.length; i++)
@@ -77,27 +63,57 @@ public class ModelPlane extends ModelBase
 		//Rendering the right wing
         for(int i = 0; i < rightWingModel.length; i++)
         {
-			if(plane.rightWingHealth > 0)
-				rightWingModel[i].render(f5);
+			rightWingModel[i].render(f5);
         }
 		//Rendering the left wing
         for(int i = 0; i < leftWingModel.length; i++)
         {
-			if(plane.leftWingHealth > 0)
-				leftWingModel[i].render(f5);
+			leftWingModel[i].render(f5);
         }	
 		//Rendering the top wing
         for(int i = 0; i < topWingModel.length; i++)
         {
-			if(plane.rightWingHealth > 0 && plane.leftWingHealth > 0)
-				topWingModel[i].render(f5);
+			topWingModel[i].render(f5);
         }
 		//Rendering the tail
         for(int i = 0; i < tailModel.length; i++)
         {
-			if(plane.tailHealth > 0)
-				tailModel[i].render(f5);
+			tailModel[i].render(f5);
         }
+        //Render guns
+        for(EntitySeat seat : plane.seats)
+        {
+        	//If the seat has a gun model attached
+        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null)
+        	{
+        		//Iterate over the parts of that model
+        		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
+        		//Yaw only parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[0])
+    			{
+    				//Yaw and render
+        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw and pitch, no recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[1])
+    			{
+    				//Yaw, pitch and render
+        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -seat.looking.getPitch() * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw, pitch and recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[2])
+    			{
+    				//Yaw, pitch, recoil and render
+        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -seat.looking.getPitch() * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        	}
+        }
+        
 		//Gear
 		for(int i = 0; i < bodyGearDownModel.length; i++)
 		{
@@ -200,6 +216,17 @@ public class ModelPlane extends ModelBase
 				propellerModels[i][j].setRotationPoint(propellerModels[i][j].rotationPointX, - propellerModels[i][j].rotationPointY, - propellerModels[i][j].rotationPointZ);
 			}
 		}
+		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
+		{
+			for(ModelRendererTurbo[] mods : modsOfMods)
+			{
+				for(ModelRendererTurbo mod : mods)
+				{
+					mod.doMirror(false, true, true);
+					mod.setRotationPoint(mod.rotationPointX, - mod.rotationPointY, - mod.rotationPointZ);
+				}
+			}
+		}
 		for(int i = 0; i < yawFlapModel.length; i++)
 		{
 			yawFlapModel[i].doMirror(false, true, true);
@@ -291,6 +318,11 @@ public class ModelPlane extends ModelBase
 			leftWingPos2Model[i].setRotationPoint(leftWingPos2Model[i].rotationPointX, - leftWingPos2Model[i].rotationPointY, - leftWingPos2Model[i].rotationPointZ);
 		}
 	}
+	
+	public void registerGunModel(String name, ModelRendererTurbo[][] gunModel)
+	{
+		gunModels.put(name, gunModel);
+	}
 
     public ModelRendererTurbo bodyModel[];
     public ModelRendererTurbo leftWingModel[];	
@@ -303,6 +335,8 @@ public class ModelPlane extends ModelBase
 	public ModelRendererTurbo pitchFlapRightModel[];
 	public ModelRendererTurbo pitchFlapLeftWingModel[];
 	public ModelRendererTurbo pitchFlapRightWingModel[];
+	
+	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
 	
 	public ModelRendererTurbo bodyGearDownModel[];
 	public ModelRendererTurbo tailGearDownModel[];

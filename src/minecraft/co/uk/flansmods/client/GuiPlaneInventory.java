@@ -13,8 +13,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.ContainerPlaneInventory;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.EntityPlane;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityPlane;
 
 
 public class GuiPlaneInventory extends GuiContainer
@@ -40,7 +40,7 @@ public class GuiPlaneInventory extends GuiContainer
 		String wololo = " - Guns";
 		if(screen == 1) wololo = (plane instanceof EntityPlane ? " - Bombs" : " - Shells");
 		if(screen == 2) wololo = " - Cargo";
-        fontRenderer.drawString(plane.getSuperType().name + wololo, 6, 6, 0x404040);
+        fontRenderer.drawString(plane.getDriveableType().name + wololo, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -48,16 +48,16 @@ public class GuiPlaneInventory extends GuiContainer
 		if(screen == 0)
 		{
 			int slotsDone = 0;
-			for(int i = 0; i < plane.superData.guns.length; i++)
+			for(int i = 0; i < plane.driveableData.guns.length; i++)
 			{
 				if(slotsDone >= 3 + scroll)
 					continue;
-				if(plane.superData.guns[i] != null)
+				if(plane.driveableData.guns[i] != null)
 				{
 					if(slotsDone >= scroll)
 					{
 						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
-						drawStack(new ItemStack(plane.superData.guns[i].getItem()), 10, 25 + 19 * (slotsDone - scroll));
+						drawStack(new ItemStack(plane.driveableData.guns[i].getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
 				}

@@ -3,10 +3,10 @@ package co.uk.flansmods.client;
 import java.io.File;
 import java.util.HashMap;
 
-import co.uk.flansmods.common.DriveableType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.driveables.DriveableType;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;

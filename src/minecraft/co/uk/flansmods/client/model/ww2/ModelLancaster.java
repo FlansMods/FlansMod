@@ -94,6 +94,19 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[17] = new ModelRendererTurbo(this,144, 279, textureX, textureY);
 		bodyModel[17].flip = true;
 		bodyModel[17].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, ModelRendererTurbo.MR_TOP); //Gunner Window Inside
+		
+		ModelRendererTurbo[][] dorsalModel = new ModelRendererTurbo[3][];
+		//No yaw only part
+		dorsalModel[0] = new ModelRendererTurbo[0];
+		//A single no recoil part
+		dorsalModel[1] = new ModelRendererTurbo[1];
+		dorsalModel[1][0] = new ModelRendererTurbo(this, 174, 123, textureX, textureY);
+		dorsalModel[1][0].addBox(8, -1, -1, 24, 2, 2, 0F); 
+		dorsalModel[1][0].setRotationPoint(48, -104, 0);
+		//No recoil part just yet
+		dorsalModel[2] = new ModelRendererTurbo[0];
+		
+		registerGunModel("dorsal", dorsalModel);
 			
 		//Underside
 		bodyModel[13] = new ModelRendererTurbo(this,52, 362, textureX, textureY);
@@ -271,6 +284,16 @@ public class ModelLancaster extends ModelPlane
 			for(ModelRendererTurbo mod : mods)
 			{
 				mod.rotationPointY += y;
+			}
+		}
+		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
+		{
+			for(ModelRendererTurbo[] mods : modsOfMods)
+			{
+				for(ModelRendererTurbo mod : mods)
+				{
+					mod.rotationPointY += y;
+				}
 			}
 		}
 	}

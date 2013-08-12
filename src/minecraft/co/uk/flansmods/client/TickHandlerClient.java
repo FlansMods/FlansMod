@@ -19,8 +19,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;

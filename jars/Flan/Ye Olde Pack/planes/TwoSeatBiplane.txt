@@ -17,7 +17,7 @@ CargoSlots 16
 BombSlots 0
 Health 450
 CollisionBoxes 3
-AddCollisionBox 0 0 0 -32 3
+AddCollisionBox 0 0 0 -44 3
 AddCollisionBox 1 40 0 0 2
 AddCollisionBox 2 -40 0 0 1
 //Whether or not guns can be placed in these slots
@@ -43,11 +43,11 @@ PropSound propSound
 PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
-Pilot 0 0 0
+Pilot 0 -16 0
 Passengers 1
 //Passenger <id> <x> <y> <z> <gun>
 //The gun id is 0 : No gun, 1 : Left Bay, 2 : Right Bay, 3 : Tail, 4 : Dorsal
-Passenger 0 0 -8 -24 0
+Passenger 0 0 -16 -24 0
 //Recipe
 Propeller woodenPropeller
 Cockpit woodenCockpit

@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -21,9 +22,9 @@ public class ContainerPlaneInventory extends Container
 		{
 			case 0 :
 			{
-				for(int j = 0; j < plane.superData.guns.length; j++)
+				for(int j = 0; j < plane.driveableData.guns.length; j++)
 				{
-					if(plane.superData.guns[j] != null)
+					if(plane.driveableData.guns[j] != null)
 						numItems++;
 				}	
 				maxScroll = (numItems > 3 ? numItems - 3 : 0);
@@ -31,13 +32,13 @@ public class ContainerPlaneInventory extends Container
 			}
 			case 1 : 
 			{
-				numItems = plane.getSuperType().numBombSlots;
+				numItems = plane.getDriveableType().numBombSlots;
 				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
 				break;
 			}
 			case 2 : 
 			{
-				numItems = plane.getSuperType().numCargoSlots;
+				numItems = plane.getDriveableType().numCargoSlots;
 				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
 				break;
 			}	
@@ -49,14 +50,14 @@ public class ContainerPlaneInventory extends Container
 			case 0 : //Guns
 			{
 				int slotsDone = 0;
-				for(int j = 0; j < plane.superData.guns.length; j++)
+				for(int j = 0; j < plane.driveableData.guns.length; j++)
 				{
-					if(plane.superData.guns[j] != null)
+					if(plane.driveableData.guns[j] != null)
 					{
 						int yPos = -1000;
 						if(slotsDone < 3 + scroll && slotsDone >= scroll)
 							yPos = 25 + 19 * slotsDone;
-						addSlotToContainer(new Slot(plane.superData, j, 29, yPos));
+						addSlotToContainer(new Slot(plane.driveableData, j, 29, yPos));
 						slotsDone++;
 					}
 				}	
@@ -65,9 +66,9 @@ public class ContainerPlaneInventory extends Container
 			case 1 : //Bombs
 			case 2 : //Cargo
 			{
-				int startSlot = plane.superData.getBombInventoryStart();
+				int startSlot = plane.driveableData.getBombInventoryStart();
 				if(screen == 2)
-					startSlot = plane.superData.getCargoInventoryStart();
+					startSlot = plane.driveableData.getCargoInventoryStart();
 				int m = (int)((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
 				{
@@ -76,7 +77,7 @@ public class ContainerPlaneInventory extends Container
 						yPos = 25 + 19 * (row - scroll);
 					for(int col = 0; col < ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8); col++)
 					{
-						addSlotToContainer(new Slot(plane.superData, startSlot + row * 8 + col, 10 + 18 * col, yPos));
+						addSlotToContainer(new Slot(plane.driveableData, startSlot + row * 8 + col, 10 + 18 * col, yPos));
 					}
 				}
 				break;
@@ -107,9 +108,9 @@ public class ContainerPlaneInventory extends Container
 			case 0 :
 			{
 				int slotsDone = 0;
-				for(int i = 0; i < plane.superData.guns.length; i++)
+				for(int i = 0; i < plane.driveableData.guns.length; i++)
 				{
-					if(plane.superData.guns[i] != null)
+					if(plane.driveableData.guns[i] != null)
 					{
 						int yPos = -1000;
 						if(slotsDone < 3 + scroll && slotsDone >= scroll)

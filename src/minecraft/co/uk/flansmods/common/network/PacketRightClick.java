@@ -8,43 +8,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityCollisionBox;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketRightClick extends FlanPacketCommon 
 {
 	public static final byte packetID = 11;
-	
-	public static Packet buildClickPacket(EntityCollisionBox box)
-	{
-		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = channelFlan;
-		
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DataOutputStream data = new DataOutputStream(bytes);
-        try
-        {
-        	data.write(packetID);
-        	data.writeBoolean(false);
-        	data.writeInt(box.plane.entityId);
-        	data.writeInt(box.part);
-        	
-        	packet.data = bytes.toByteArray();
-        	packet.length = packet.data.length;
-        	
-        	data.close();
-        	bytes.close();
-        }
-        catch(Exception e)
-        {
-        	e.printStackTrace();
-        }
-        
-        return packet;
-	}	
 	
 	public static Packet buildClickPacket(EntityPassengerSeat seat)
 	{
@@ -93,11 +64,10 @@ public class PacketRightClick extends FlanPacketCommon
 					break;
 				}
 			}
-			if(driveable != null && ((passengerSeat && driveable.seats.length > i) || (!passengerSeat && driveable.boxes.length > i)))
+			if(driveable != null && ((passengerSeat && driveable.seats.length > i)))
 			{
 				if(passengerSeat)
 					driveable.seats[i].func_130002_c(player); //interact - change back next update
-				else driveable.boxes[i].func_130002_c(player); //interact - change back next update
 			}
 		}
         catch(Exception e)

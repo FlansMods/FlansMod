@@ -8,8 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketSeatUpdates extends FlanPacketCommon 
@@ -30,8 +30,8 @@ public class PacketSeatUpdates extends FlanPacketCommon
         	for(int i = 0; i < driveable.seats.length; i++)
         	{
         		data.writeInt(driveable.seats[i].riddenByEntity == null ? -1 : driveable.seats[i].riddenByEntity.entityId);
-        		data.writeFloat(driveable.seats[i].gunYaw);
-        		data.writeFloat(driveable.seats[i].gunPitch);
+        		//data.writeFloat(driveable.seats[i].gunYaw);
+        		//data.writeFloat(driveable.seats[i].gunPitch);
         	}
         	
         	packet.data = bytes.toByteArray();
@@ -99,8 +99,8 @@ public class PacketSeatUpdates extends FlanPacketCommon
 	        				}	        				
 	        			}
 	        		}
-	        		driveable.seats[i].gunYaw = yaw;
-	        		driveable.seats[i].gunPitch = pitch;
+	        		//driveable.seats[i].gunYaw = yaw;
+	        		//driveable.seats[i].gunPitch = pitch;
 	        	}
 			}
 		}

@@ -1,5 +1,8 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.PlaneData;
+import co.uk.flansmods.common.driveables.PlaneType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -72,7 +75,7 @@ public class ItemPlane extends ItemMapBase
 	public PlaneData getPlaneData(ItemStack itemstack, World world)
     {
         String s = (new StringBuilder()).append("plane_").append(itemstack.getItemDamage()).toString();
-        PlaneData planeData = (PlaneData)world.loadItemData(co.uk.flansmods.common.PlaneData.class, "plane_" + itemstack.getItemDamage());
+        PlaneData planeData = (PlaneData)world.loadItemData(co.uk.flansmods.common.driveables.PlaneData.class, "plane_" + itemstack.getItemDamage());
         if(itemstack.getItemDamage() == 0 || planeData == null)
 		{
 			int dataID = world.getUniqueDataId("plane");

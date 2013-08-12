@@ -22,10 +22,19 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
@@ -45,6 +54,7 @@ import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
@@ -62,6 +72,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.4")
@@ -208,19 +219,19 @@ public class FlansMod
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 500, true);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 500, false);
 		
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 100, 5, true);
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 100, 5, false);
 		
-		EntityRegistry.registerModEntity(EntityPassengerSeat.class, "PassengerSeat", 99, this, 100, 1000, true);
+		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 100, 10, false);
 				
-		EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
+		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, true);
 		
 		// default aa guns stuff
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 5, true);
+		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		
 		// gunBxStuff.. must be done after content packs.
 		// GunBox Block       ID=???  200 is temporary one
@@ -274,7 +285,7 @@ public class FlansMod
 		
 		log("Loading complete.");
 	}
-	
+		
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event)
 	{

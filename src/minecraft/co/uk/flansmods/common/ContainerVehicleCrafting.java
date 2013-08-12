@@ -10,6 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBlueprint;
 import cpw.mods.fml.common.network.PacketDispatcher;
 

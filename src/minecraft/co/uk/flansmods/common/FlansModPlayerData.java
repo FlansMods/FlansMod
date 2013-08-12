@@ -19,6 +19,10 @@ public class FlansModPlayerData
 	public double spawnX;
 	public double spawnY;
 	public double spawnZ;
+
+	public float prevRotationRoll;
+	public float rotationRoll;
+	
 	//For use by the currentGametype
 	public int score;
 	public int kills;

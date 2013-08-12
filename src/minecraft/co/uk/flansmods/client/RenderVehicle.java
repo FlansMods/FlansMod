@@ -8,9 +8,10 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.EntityPassengerSeat;
-import co.uk.flansmods.common.EntityPlane;
-import co.uk.flansmods.common.EntityVehicle;
-import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render
 {
@@ -36,7 +37,7 @@ public class RenderVehicle extends Render
 		GL11.glPushMatrix();
 		if(modVehicle != null && modVehicle.gunModel.length > 0 && vehicle.data.guns[1] != null)
 		{
-			for(EntityPassengerSeat seat : vehicle.seats)
+			for(EntitySeat seat : vehicle.seats)
 			{
 				if(seat.gunnerID == 1 && seat.riddenByEntity != null)
 				{
