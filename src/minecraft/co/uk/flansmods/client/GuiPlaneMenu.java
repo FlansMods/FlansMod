@@ -37,6 +37,7 @@ public class GuiPlaneMenu extends GuiContainer
 		buttonList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, (entity instanceof EntityPlane ? "Bombs" : "Shells")));
 		buttonList.add(new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel"));
 		buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, "Cargo"));
+		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
 	}
 	
 	protected void actionPerformed(GuiButton button)

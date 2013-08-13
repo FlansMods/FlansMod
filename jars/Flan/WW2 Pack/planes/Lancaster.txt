@@ -29,10 +29,10 @@ Mass 16.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
 //Nose and Wing Guns (not present)
-//AddGunPosition 0 0 0 0
-//AddGunPosition 1 0 0 0
-//AddGunPosition 2 0 0 0
-//AddGunPosition 3 0 0 0
+//AddNoseGun 0 0 0 0 browning
+//AddNoseGun 1 0 0 0 mg42
+//AddWingGun 2 0 0 0 dp28
+//AddWingGun 3 0 0 0 bren
 //ShootDelay 999
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)

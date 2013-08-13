@@ -48,24 +48,19 @@ public class GuiPlaneInventory extends GuiContainer
 		if(screen == 0)
 		{
 			int slotsDone = 0;
-			for(int i = 0; i < plane.driveableData.guns.length; i++)
+			for(int i = 0; i < plane.getDriveableType().seats.length; i++)
 			{
 				if(slotsDone >= 3 + scroll)
 					continue;
-				if(plane.driveableData.guns[i] != null)
+				if(plane.getDriveableType().seats[i].gunType != null)
 				{
 					if(slotsDone >= scroll)
 					{
 						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
-						drawStack(new ItemStack(plane.driveableData.guns[i].getItem()), 10, 25 + 19 * (slotsDone - scroll));
+						drawStack(new ItemStack(plane.getDriveableType().seats[i].gunType.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
 				}
-			}
-			if(slotsDone == 0)
-			{
-				fontRenderer.drawString("Add guns in the crafting", 10, 29, 0x000000);
-				fontRenderer.drawString("table", 10, 39, 0x000000);
 			}
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

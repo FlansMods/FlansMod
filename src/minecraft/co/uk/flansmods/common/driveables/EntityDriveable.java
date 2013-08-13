@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -46,8 +47,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
 	public float throttle;
 	
-	//TODO : Overhaul health
-	public int health;
+	/** Each driveable part has a small class that holds its current status */
+	public HashMap<EnumDriveablePart, DriveablePart> parts = new HashMap<EnumDriveablePart, DriveablePart>();
 
 	public boolean fuelling;
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
@@ -88,6 +89,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnEntityInWorld(seats[i]);
 			}
 		}
+		for(EnumDriveablePart part : EnumDriveablePart.values())
+		{
+			parts.put(part, new DriveablePart(part, type.health.get(part)));
+		}
 		yOffset = type.yOffset;
 	}
 	
@@ -103,7 +108,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		tag.setFloat("RotationYaw", axes.getYaw());
 		tag.setFloat("RotationPitch", axes.getPitch());
 		tag.setFloat("RotationRoll", axes.getRoll());
-		tag.setInteger("Health", health);
+		for(DriveablePart part : parts.values())
+		{
+			part.writeToNBT(tag);
+		}
     }
 
 	@Override
@@ -119,7 +127,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		prevRotationPitch = tag.getFloat("RotationPitch");
 		prevRotationRoll = tag.getFloat("RotationRoll");
 		axes = new RotatedAxes(prevRotationYaw, prevRotationPitch, prevRotationRoll);
-		health = tag.getInteger("Health");
+		for(DriveablePart part : parts.values())
+		{
+			part.readFromNBT(tag);
+		}
     }
 	
 	@Override
@@ -214,15 +225,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 	
 	@Override
+	/** Do nothing when attacked by standard methods. It'll take more than that to break a genuine Flan's Mod Driveable (TM) */
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
 	    if(worldObj.isRemote || isDead)
         {
             return true;
         }
-		health -= i;
-		if(health <= 0)
-			setDead();
 		return true;
 	}
 	

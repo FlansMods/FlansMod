@@ -158,177 +158,192 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F)
-		{
-			float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-			prevRotationYaw = rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-			prevRotationPitch = rotationPitch = (float) ((Math.atan2(motionY, f) * 180D) / 3.1415927410125732D);
-		}
+
+		//Get the block that the bullet is currently in
 		int xTile = MathHelper.floor_double(posX);
 		int yTile = MathHelper.floor_double(posY);
 		int zTile = MathHelper.floor_double(posZ);
 		int blockID = worldObj.getBlockId(xTile, yTile, zTile);
+		//If its not air
 		if (blockID > 0)
 		{
+			//Get the block bounding box
 			Block.blocksList[blockID].setBlockBoundsBasedOnState(worldObj, xTile, yTile, zTile);
 			AxisAlignedBB axisalignedbb = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
+			//If the bullet lies inside the block bounds
 			if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ)))
 			{
+				//If this bullet can break glass and this block is glass and breaking glass is enabled, break it
 				if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 				{
 					worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
 					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 				}
+				//If the bullet does not penetrate blocks, kill it
 				if (!type.penetrates)
+					setDead();
+				//If the bullet explodes on impact, kill it
+				if(type.explodeOnImpact)
 					setDead();
 			}
 		}
+		//Check the fuse to see if the bullet should explode
 		ticksInAir++;
 		if (ticksInAir > type.fuse && type.fuse > 0 && !isDead)
 		{
 			setDead();
 		}
-		Vec3 vec3d = Vec3.createVectorHelper(posX, posY, posZ);
-		Vec3 vec3d1 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-		MovingObjectPosition movingobjectposition = worldObj.rayTraceBlocks_do_do(vec3d, vec3d1, false, true);
-		vec3d = Vec3.createVectorHelper(posX, posY, posZ);
-		vec3d1 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-		if (movingobjectposition != null)
+		
+		//Ray trace the bullet by comparing its next position to its current position
+		Vec3 posVec = Vec3.createVectorHelper(posX, posY, posZ);
+		Vec3 nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
+		MovingObjectPosition hit = worldObj.rayTraceBlocks_do_do(posVec, nextPosVec, false, true);
+		
+		//Reset the position vectors since the ray tracer messes them up
+		posVec = Vec3.createVectorHelper(posX, posY, posZ);
+		nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
+		
+		//If there is something in the way of the bullet's motion, put the bullet at that position next tick
+		if(hit != null && !type.penetrates)
 		{
-			vec3d1 = Vec3.createVectorHelper(movingobjectposition.hitVec.xCoord, movingobjectposition.hitVec.yCoord, movingobjectposition.hitVec.zCoord);
+			nextPosVec = Vec3.createVectorHelper(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 		}
-		Entity entity = null;
+		
+		//Iterate over entities close to the bullet to see if any of them have been hit
+		Entity closestEntity = null;
+		double closestDistance = 1000D;
 		List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
-		double d = 0.0D;
+		
+
 		for (int l = 0; l < list.size(); l++)
 		{
-			Entity entity1 = (Entity) list.get(l);
-			if (!entity1.canBeCollidedWith() || isPartOfOwner(entity1) && ticksInAir < 20)
+			Entity checkEntity = (Entity) list.get(l);
+			//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
+			if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
 			{
 				continue;
 			}
 			float f5 = 0.3F;
-			AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand(f5, f5, f5);
-			MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec3d, vec3d1);
-			if (movingobjectposition1 == null)
+			AxisAlignedBB axisalignedbb1 = checkEntity.boundingBox.expand(f5, f5, f5);
+			//Find the point at which the bullet trajectory hits the bounds of the entity
+			MovingObjectPosition hitEntity = axisalignedbb1.calculateIntercept(posVec, nextPosVec);
+			if (hitEntity == null)
 			{
 				continue;
 			}
-			double d1 = vec3d.distanceTo(movingobjectposition1.hitVec);
-			if (d1 < d || d == 0.0D)
+			//If its closer than the previously closest entity, take its place
+			double distance = posVec.distanceTo(hitEntity.hitVec);
+			if (distance < closestDistance)
 			{
-				entity = entity1;
-				d = d1;
+				closestEntity = checkEntity;
+				closestDistance = distance;
 			}
 		}
 
-		if (entity != null && !(entity instanceof EntityBullet))
+		//If we hit an entity, replace the old block raytrace with the closer entity
+		if (closestEntity != null && !(closestEntity instanceof EntityBullet))
 		{
-			movingobjectposition = new MovingObjectPosition(entity);
+			hit = new MovingObjectPosition(closestEntity);
 		}
-		if (movingobjectposition != null)
+		
+		//If we hit something
+		if (hit != null)
 		{
-			if (type.explodeOnImpact && ticksInAir > 2)
+			//If the bullet should explode on impact and the hit is not the shooter, explode!
+			if (type.explodeOnImpact && ticksInAir > 5 && (hit.entityHit == null || !isPartOfOwner(hit.entityHit)))
+				setDead();
+			else
 			{
-				if (movingobjectposition.entityHit == null || !isPartOfOwner(movingobjectposition.entityHit))
-					setDead();
-			} else
-			{
-				if (movingobjectposition.entityHit != null && !isPartOfOwner(movingobjectposition.entityHit))
+				//If we hit a valid entity
+				if(hit.entityHit != null && !isPartOfOwner(hit.entityHit))
 				{
-					// float f1 = MathHelper.sqrt_double(motionX * motionX +
-					// motionY * motionY + motionZ * motionZ);
-					int j1 = 1; // = (int)Math.ceil((double)f1 * 2D);
-					j1 *= damage;
-					j1 *= type.damage;
-					DamageSource damagesource = null;
-					if (owner == null)
+					//Calculate the hit damage
+					int hitDamage = damage * type.damage;
+					//Create a damage source object
+					DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
+
+					//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
+					if(hitDamage == 0 && hit.entityHit instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+						TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)hit.entityHit, damagesource);
+					
+					//Attack the entity!
+					if(hit.entityHit.attackEntityFrom(damagesource, hitDamage))
 					{
-						damagesource = DamageSource.generic;
-					} else
-					{
-						damagesource = getBulletDamage();
-					}
-					if(j1 == 0 && movingobjectposition.entityHit instanceof EntityPlayerMP)
-						TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)movingobjectposition.entityHit, damagesource);
-					if (movingobjectposition.entityHit.attackEntityFrom(damagesource, j1))
-					{
-						if (movingobjectposition.entityHit instanceof EntityLivingBase)
+						//If the attack was allowed and the entity is alive, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+						if (hit.entityHit instanceof EntityLivingBase)
 						{
-							((EntityLivingBase) movingobjectposition.entityHit).arrowHitTimer++;
-							//if (shotgun)
-							((EntityLivingBase) movingobjectposition.entityHit).hurtResistantTime = ((EntityLivingBase) movingobjectposition.entityHit).maxHurtResistantTime / 2;
+							((EntityLivingBase) hit.entityHit).arrowHitTimer++;
+							((EntityLivingBase) hit.entityHit).hurtResistantTime = ((EntityLivingBase) hit.entityHit).maxHurtResistantTime / 2;
 						}
+						//Yuck.
 						//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}
-					if (type.penetrates)
+					//Unless the bullet penetrates, kill it
+					if(!type.penetrates)
 					{
-						motionX *= 0.8D;
-						motionY *= 0.8D;
-						motionZ *= 0.8D;
-					} else
-					{
-						setPosition(movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY, movingobjectposition.entityHit.posZ);
+						setPosition(hit.entityHit.posX, hit.entityHit.posY, hit.entityHit.posZ);
 						setDead();
 					}
-				} else
+				} 
+				//If the hit wasn't an entity hit, then it must've been a block hit
+				if(hit.entityHit == null)
 				{
-					xTile = movingobjectposition.blockX;
-					yTile = movingobjectposition.blockY;
-					zTile = movingobjectposition.blockZ;
+					xTile = hit.blockX;
+					yTile = hit.blockY;
+					zTile = hit.blockZ;
 					blockID = worldObj.getBlockId(xTile, yTile, zTile);
-					boolean killBullet = true;
+					//If the bullet breaks glass, and can do so according to FlansMod, do so.
 					if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
 						if (type.penetrates)
-							killBullet = false;
-					}
-					if (killBullet)
-					{
-						setPosition(xTile, yTile, zTile);
-						setDead();
+						{
+							setPosition(xTile, yTile, zTile);
+							setDead();
+						}
 					}
 				}
 			}
 		}
+		//Apply motion
 		posX += motionX;
 		posY += motionY;
 		posZ += motionZ;
-		float f3 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+		
+		//Recalculate the angles from the new motion
+		float motionXZ = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
 		rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-		for (rotationPitch = (float) ((Math.atan2(motionY, f3) * 180D) / 3.1415927410125732D); rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F)
-		{
-		}
-		for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F)
-		{
-		}
-		for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F)
-		{
-		}
-		for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F)
-		{
-		}
+		rotationPitch = (float) ((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
+		//Reset the range of the angles
+		for (; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F){}
+		for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F){}
+		for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F){}
+		for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F){}
 		rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
-		float f4 = 0.99F;
-		float f6 = 0.02F;
+		
+		//Movement dampening variables
+		float drag = 0.99F;
+		float gravity = 0.02F;
+		//If the bullet is in water, spawn particles and increase the drag
 		if (isInWater())
 		{
-			for (int k1 = 0; k1 < 4; k1++)
+			for(int i = 0; i < 4; i++)
 			{
-				float f7 = 0.25F;
-				worldObj.spawnParticle("bubble", posX - motionX * (double) f7, posY - motionY * (double) f7, posZ - motionZ * (double) f7, motionX, motionY, motionZ);
+				float bubbleMotion = 0.25F;
+				worldObj.spawnParticle("bubble", posX - motionX * (double) bubbleMotion, posY - motionY * (double) bubbleMotion, posZ - motionZ * (double) bubbleMotion, motionX, motionY, motionZ);
 			}
-
-			f4 = 0.8F;
+			drag = 0.8F;
 		}
-		motionX *= f4;
-		motionY *= f4;
-		motionZ *= f4;
-		motionY -= f6 * type.fallSpeed;
+		motionX *= drag;
+		motionY *= drag;
+		motionZ *= drag;
+		motionY -= gravity * type.fallSpeed;
 		setPosition(posX, posY, posZ);
+		
+		//Smoke particles 
+		//TODO : Make the particles generalised
 		if (type.smokeTrail)
 		{
 			double dX = (posX - prevPosX) / 10;

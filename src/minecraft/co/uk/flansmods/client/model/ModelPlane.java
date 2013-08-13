@@ -117,66 +117,66 @@ public class ModelPlane extends ModelBase
 		//Gear
 		for(int i = 0; i < bodyGearDownModel.length; i++)
 		{
-			if(plane.varGear == true)
+			if(plane.varGear)
 				bodyGearDownModel[i].render(f5);
 		}
 		for(int i = 0; i < tailGearDownModel.length; i++)
 		{
-			if(plane.tailHealth > 0 && plane.varGear == true)
+			if(plane.varGear)
 				tailGearDownModel[i].render(f5);
 		}
 		for(int i = 0; i < rightWingGearDownModel.length; i++)
 		{
-			if(plane.rightWingHealth > 0 && plane.varGear == true)
+			if(plane.varGear)
 				rightWingGearDownModel[i].render(f5);
 		}
 		for(int i = 0; i < leftWingGearDownModel.length; i++)
 		{
-			if(plane.leftWingHealth > 0 && plane.varGear == true)
+			if(plane.varGear)
 				leftWingGearDownModel[i].render(f5);
 		}
 
 		//Doors
 		for(int i = 0; i < bodyDoorOpenModel.length; i++)
 		{
-			if(plane.varDoor == true)
+			if(plane.varDoor)
 				bodyDoorOpenModel[i].render(f5);
 		}
 		for(int i = 0; i < bodyDoorCloseModel.length; i++)
 		{
-			if(plane.varDoor == false)
+			if(!plane.varDoor)
 				bodyDoorCloseModel[i].render(f5);
 		}
 		for(int i = 0; i < tailDoorOpenModel.length; i++)
 		{
-			if(plane.varDoor == true && plane.tailHealth > 0)
+			if(plane.varDoor)
 				tailDoorOpenModel[i].render(f5);
 		}
 		for(int i = 0; i < tailDoorCloseModel.length; i++)
 		{
-			if(plane.varDoor == false && plane.tailHealth > 0)
+			if(!plane.varDoor)
 				tailDoorCloseModel[i].render(f5);
 		}
 
 		//Wing
 		for(int i = 0; i < rightWingPos1Model.length; i++)
 		{
-			if(plane.varWing == true && plane.rightWingHealth > 0)
+			if(plane.varWing)
 				rightWingPos1Model[i].render(f5);
 		}
 		for(int i = 0; i < rightWingPos2Model.length; i++)
 		{
-			if(plane.varWing == false && plane.rightWingHealth > 0)
+			if(!plane.varWing)
 				rightWingPos2Model[i].render(f5);
 		}
 		for(int i = 0; i < leftWingPos1Model.length; i++)
 		{
-			if(plane.varWing == true && plane.leftWingHealth > 0)
+			if(plane.varWing)
 				leftWingPos1Model[i].render(f5);
 		}
 		for(int i = 0; i < leftWingPos2Model.length; i++)
 		{
-			if(plane.varWing == false && plane.leftWingHealth > 0)
+			if(!plane.varWing)
 				leftWingPos2Model[i].render(f5);
 		}
     }

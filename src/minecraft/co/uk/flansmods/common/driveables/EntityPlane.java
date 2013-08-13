@@ -44,12 +44,6 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityPlane extends EntityDriveable
 {
-	//Damage handling
-	public boolean[] propBlown;
-	public int tailHealth;
-	public int leftWingHealth;
-	public int rightWingHealth;
-	
 	/** The flap positions, used for renderering and for controlling the plane rotations */
 	public float flapsYaw, flapsPitchLeft, flapsPitchRight;	
 	
@@ -110,11 +104,6 @@ public class EntityPlane extends EntityDriveable
         varGear = true;
         varDoor = true;
         varWing = true;
-        
-		health = type.health;
-		rightWingHealth = leftWingHealth = tailHealth = health;
-
-		//propBlown = new boolean[planeType.numProps];
 		
 		if(FMLCommonHandler.instance().getSide().isClient() && planeType.model == null)
 		{
@@ -128,32 +117,18 @@ public class EntityPlane extends EntityDriveable
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
 		super.writeEntityToNBT(tag);
- 		tag.setInteger("LeftWingHealth", leftWingHealth);
- 		tag.setInteger("RightWingHealth", rightWingHealth);
- 		tag.setInteger("TailHealth", tailHealth);
         tag.setBoolean("VarGear", varGear);
         tag.setBoolean("VarDoor", varDoor);
         tag.setBoolean("VarWing", varWing);
-		//for(int i = 0; i < propBlown.length; i++)
-		//{
-		//	tag.setBoolean("PropBlown " + i, propBlown[i]);
-		//}
     }
 
 	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		super.readEntityFromNBT(tag);
-		leftWingHealth = tag.getInteger("LeftWingHealth");
-		rightWingHealth = tag.getInteger("RightWingHealth");
-		tailHealth = tag.getInteger("TailHealth");
         varGear = tag.getBoolean("VarGear");
         varDoor = tag.getBoolean("VarDoor");
         varWing = tag.getBoolean("VarWing");
-		//for(int i = 0; i < propBlown.length; i++)
-		//{
-		//	propBlown[i] = tag.getBoolean("PropBlown " + i);
-		//}
     }
 
 	/**
@@ -973,11 +948,8 @@ public class EntityPlane extends EntityDriveable
 		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
 			
-			if(leftWingHealth > 0 && rightWingHealth > 0 && tailHealth > 0)
-			{
-				entityDropItem(new ItemStack(type.itemID, 1, dataID), 0.5F);
-				getPlaneData().markDirty();
-			}
+			entityDropItem(new ItemStack(type.itemID, 1, dataID), 0.5F);
+			getPlaneData().markDirty();
 			/*
 			} else
 			{
@@ -1027,9 +999,7 @@ public class EntityPlane extends EntityDriveable
 	 		setDead();
 			return true;
 		}
-		if(doDamage)
-			health -= i;
-		if(health < 0)
+		//if(health < 0)
 		{
 			//Dont explode too much, dont want to cause out of memory errors
 			float amountExploded = 0F;

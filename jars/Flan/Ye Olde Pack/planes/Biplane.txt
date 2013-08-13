@@ -29,10 +29,10 @@ Mass 1.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1000
 //Nose and Wing Guns (not present)
-//AddGunPosition 0 0 0 0
-//AddGunPosition 1 0 0 0
-//AddGunPosition 2 0 0 0
-//AddGunPosition 3 0 0 0
+//AddNoseGun 0 0 0 0 browning
+//AddNoseGun 1 0 0 0 mg42
+//AddWingGun 2 0 0 0 dp28
+//AddWingGun 3 0 0 0 bren
 //ShootDelay 999
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
@@ -50,8 +50,8 @@ NosePropellerPos 14 0 0
 //Passengers
 Pilot 0 -4 0
 Passengers 0
-//Collision points (Each collision point has a position, a part and a strength)
-//The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//Collision points (Each collision point has a position, a section and a strength)
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddCollisionPoint -44 0 0 core 1.0
 AddCollisionPoint 0 0 40 leftWing 1.0
@@ -64,10 +64,16 @@ PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
 //Recipe
-Propeller woodenPropeller
-Cockpit woodenCockpit
-Wings biplaneWing
-Bay None
-Tail woodenTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes None
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 woodenCockpit
+AddRecipeParts nose 1 woodenPropeller 1 <engine>
+AddRecipeParts rightWing 1 woodenWing
+AddRecipeParts leftWing 1 woodenWing
+AddRecipeParts topWing 2 woodenWing
+AddRecipeParts tail 1 woodenTail
+//Health and collision
+SetupPart core 100 -16 -16 -16 32 32 32
+Health core 100
+Health tail 100

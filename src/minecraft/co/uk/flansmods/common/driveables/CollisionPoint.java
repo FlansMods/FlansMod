@@ -1,7 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 public class CollisionPoint
-{
+{	
 	public int posX;
 	public int posY;
 	public int posZ;

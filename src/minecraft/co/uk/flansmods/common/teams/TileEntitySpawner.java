@@ -186,7 +186,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	public void setBase(ITeamBase b) 
 	{
 		base = b;
-		baseID = b.getID();
+		if(b != null)
+			baseID = b.getID();
 		PacketDispatcher.sendPacketToAllInDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 

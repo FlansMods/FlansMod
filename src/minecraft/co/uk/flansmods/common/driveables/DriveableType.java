@@ -15,8 +15,8 @@ public class DriveableType extends InfoType
 	/** Points for calculating collision. Each one is tied to a part of the driveable */
 	public ArrayList<CollisionPoint> points = new ArrayList<CollisionPoint>();
 
-	//TODO : New damage code
-	public int health;
+	/** Health of each driveable part */
+	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
 	
 	/** The number of passengers, not including the pilot */
 	public int numPassengers = 0;	
@@ -99,7 +99,10 @@ public class DriveableType extends InfoType
 
 			//Health
 			if(split[0].equals("Health"))
-				health = Integer.parseInt(split[1]);
+			{
+				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
+				health.put(part, new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8])));
+			}
 			
 			//Driver Position
 			if(split[0].equals("Driver") || split[0].equals("Pilot"))
