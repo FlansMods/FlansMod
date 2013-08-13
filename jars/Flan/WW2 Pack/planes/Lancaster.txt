@@ -9,7 +9,7 @@ Texture Lancaster
 //Third Person Camera Distance
 CameraDistance 25.0
 //Throttle
-MaxThrottle 16.0
+MaxThrottle 4.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -24,7 +24,7 @@ RollRightSpeed 1
 Drag 16.0
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
 Lift 16.0
-//Mass
+//Mass (In tons)
 Mass 16.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
@@ -44,9 +44,9 @@ BombSlots 16
 //Propeller Positions
 //NosePropellerPos 0 0 0 (not present)
 LeftWingPropellerPos 114 0 52
-LeftWingPropellerPosition 98 0 116
-RightWingPropellerPosition 114 0 -52
-RightWingPropellerPosition 98 0 -116
+LeftWingPropellerPos 98 0 116
+RightWingPropellerPos 114 0 -52
+RightWingPropellerPos 98 0 -116
 //Passengers
 Pilot 115 20 0
 Passengers 5

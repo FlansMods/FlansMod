@@ -1,55 +1,68 @@
+//Naming
 Name Biplane
 ShortName Biplane
 ItemID 23317
+//Visuals
 Icon Biplane
 Model yeolde.Biplane
 Texture Biplane
-MaxPropellerSpeed 1.0
-TakeOffSpeed 1.0
-//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
-PropSetup 0
-//Propeller number, x, y, z. Numbering starts at 0.
-PropellerPos 0 0 0 14
-//Delays are in ticks or 1/20ths of seconds
-ShootDelay 999
-BombDelay 999
-CargoSlots 36
-BombSlots 0
-Health 300
-CollisionBoxes 3
-AddCollisionBox 0 0 0 -44 3
-AddCollisionBox 1 40 0 0 2
-AddCollisionBox 2 -40 0 0 1
-//Whether or not guns can be placed in these slots
-AllowWingGuns False
-AllowNoseGuns True
-//Next 3 are for large planes only
-AllowSideGuns False
-AllowTailGuns False
-AllowDorsalGun False
-//Add positions for the pilot controlled guns. That is, nose and wing guns.
-//AddGunPosition <type> <x> <y> <Z> where type is one of the corresponding numbers
-//0 : Left Nose, 1 : Right Nose, 2 : Left Wing, 3 : Right Wing
-AddGunPosition 0 -5 3 10
-AddGunPosition 1 5 3 10
+//Third Person Camera Distance
+CameraDistance 5.0
+//Throttle
+MaxThrottle 1.0
+MaxNegativeThrottle 0.0
+//Yaw modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
-RollLeftSpeed 1
-RollRightSpeed 1
+//Pitch modifiers
 LookUpSpeed 1
 LookDownSpeed 1
-Acceleration 1
-Decceleration 1
+//Roll modifiers
+RollLeftSpeed 1
+RollRightSpeed 1
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 should keep the plane going at 1m/s at max speed
+Drag 1.0
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 1.0
+//Mass (In tons)
+Mass 1.0
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1000
-MaxHeight 256
+//Nose and Wing Guns (not present)
+//AddGunPosition 0 0 0 0
+//AddGunPosition 1 0 0 0
+//AddGunPosition 2 0 0 0
+//AddGunPosition 3 0 0 0
+//ShootDelay 999
+//ShootAlternately False
+//Bombs (Bomb delay is in 1/20ths of seconds)
+//BombDelay 999
+//BombPosition 0 0 0
+//Inventory Slots
+CargoSlots 36
+BombSlots 0
+//Propeller Positions
+NosePropellerPos 14 0 0 
+//LeftWingPropellerPos 0 0 0 (not present)
+//LeftWingPropellerPos 0 0 0 (not present)
+//RightWingPropellerPos 0 0 0 (not present)
+//RightWingPropellerPos 0 0 0 (not present)
+//Passengers
+Pilot 0 -4 0
+Passengers 0
+//Collision points (Each collision point has a position, a part and a strength)
+//The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddCollisionPoint -44 0 0 core 1.0
+AddCollisionPoint 0 0 40 leftWing 1.0
+AddCollisionPoint 0 0 -40 rightWing 1.0
+//Sounds
 StartSound propStart
 StartSoundLength 20
 PropSound propSound
 PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
-Pilot 0 0 0
-Passengers 0
 //Recipe
 Propeller woodenPropeller
 Cockpit woodenCockpit

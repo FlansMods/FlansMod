@@ -34,21 +34,25 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public double serverPosX, serverPosY, serverPosZ;
 	/** Server side rotation, as synced by PacketVehicleControl packets */
     public double serverYaw, serverPitch, serverRoll;
-    
-    private double velocityX;
-    private double velocityY;
-    private double velocityZ;
 	
+    /** The dataID, for obtaining the driveable data */
 	public int dataID;
+	/** The driveable data which contains the inventory, the engine and the fuel */
 	public DriveableData driveableData;
+	/** The shortName of the driveable type, used to obtain said type */
 	public String driveableType;
+	
+	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
+	public float throttle;
+	
+	//TODO : Overhaul health
 	public int health;
 
 	public boolean fuelling;
+	/** Extra prevRoation field for smoothness in all 3 rotational axes */
 	public float prevRotationRoll;
-	public float velocityYaw;
-	public float velocityPitch;
-	public float velocityRoll;
+	/** Angular velocity */
+	public float velocityYaw, velocityPitch, velocityRoll;
 	
 	public RotatedAxes axes;
 	
@@ -280,7 +284,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
     }
 	
-	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ)
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throt)
 	{
 		if(worldObj.isRemote)
 		{
@@ -290,9 +294,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        serverYaw = yaw;
 	        serverPitch = pitch;
 	        serverRoll = roll;
-	        motionX = motX;
-	        motionY = motY;
-	        motionZ = motZ;
 	        serverPositionTransitionTicker = 5;
 		}
 		else
@@ -302,10 +303,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			prevRotationPitch = pitch;
 			prevRotationRoll = roll;
 			setRotation(yaw, pitch, roll);
-			motionX = motX;
-			motionY = motY;
-			motionZ = motZ;
 		}
+		//Set the motions regardless of side.
+        motionX = motX;
+        motionY = motY;
+        motionZ = motZ;
+        velocityYaw = velYaw;
+        velocityPitch = velPitch;
+        velocityRoll = velRoll;
+        throttle = throt;
 	}
 	
 
@@ -347,10 +353,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         }
 		if(riddenByEntity != null && isDead)
 		{
-			riddenByEntity.mountEntity(this);
+			riddenByEntity.mountEntity(null);
 		}
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
+		
+		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
+		if(!worldObj.isRemote && seats[0].riddenByEntity == null)
+		{
+			throttle *= 0.9F;
+		}
     }
 	
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */

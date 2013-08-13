@@ -50,15 +50,11 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 	public int leftWingHealth;
 	public int rightWingHealth;
 	
-	//Movement variables
-	public float throttle;
-	
+	/** The flap positions, used for renderering and for controlling the plane rotations */
+	public float flapsYaw, flapsPitchLeft, flapsPitchRight;	
 	
 	//Aesthetic variables
 	public int soundPosition;
-	public float flapsYaw;
-	public float flapsPitchLeft;
-	public float flapsPitchRight;
 	public float propAngle;
 	
 	//Weaponry
@@ -630,11 +626,17 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 			applyTorque(new Vector3f(yaw, pitch, roll));
 		}
 		
+		//Co-efficients of formulae
+		float thrustFormulaCoefficient = 1F;
+		float dragFormulaCoefficient = 10F;
+		float gravity = 9.81F / 20F;
+		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellerPositions.size());
+				
 		//Apply thrust
 		for(Vector3f propellerVector : type.propellerPositions)
 		{
 			//TODO : Factor in engine type
-			float thrust = 100F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
+			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
 			applyForce(rotate(propellerVector), (Vector3f)axes.getXAxis().scale(thrust));
 		}
 				
@@ -642,10 +644,10 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 		{
 			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
 			//Avoid zero errors by not applying drag when going too slow
-			if(velocityVector.lengthSquared() > 0.001F)
+			if(velocityVector.lengthSquared() > 0.0000001F)
 			{
 				//Drag formula is 1/2 * v^2 * dragCoefficient
-				float drag = 100F * 0.5F * type.drag * velocityVector.lengthSquared();
+				float drag = dragFormulaCoefficient * type.drag * velocityVector.lengthSquared();
 				//Apply in the direction opposite to the motion of the plane
 				applyForce(new Vector3f(), (Vector3f)velocityVector.normalise().negate().scale(drag));
 			}
@@ -654,11 +656,15 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 		//Apply lift
 		{
 			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
+			//Get the velocity in the local XZ plane (the plane the wings lie on)
+			float xVelocity = Vector3f.dot(velocityVector, axes.getXAxis());
+			float zVelocity = Vector3f.dot(velocityVector, axes.getZAxis());
+			float perpendicularVelocity = xVelocity * xVelocity + zVelocity * zVelocity;
 			//Avoid zero errors by not applying lift when going too slow
-			if(velocityVector.lengthSquared() > 0.001F)
+			if(velocityVector.lengthSquared() > 0.0000001F)
 			{
 				//Lift formula is 1/2 * v^2 * liftCoefficient
-				float lift = 100F * 0.5F * type.lift * velocityVector.lengthSquared();
+				float lift = liftFormulaCoefficient * type.lift * perpendicularVelocity;
 				//Apply to the yAxis of the plane
 				applyForce(new Vector3f(), (Vector3f)axes.getYAxis().scale(lift));
 			}
@@ -667,7 +673,7 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 		//Apply gravity
 		{
 			//Work out mg
-			float gravitationalForce = type.mass * 9.81F / 20F;
+			float gravitationalForce = type.mass * gravity;
 			//Apply it downwards
 			applyForce(new Vector3f(), new Vector3f(0F, -gravitationalForce, 0F));
 		}
@@ -677,279 +683,13 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 		velocityPitch *= 0.9F;
 		velocityRoll *= 0.9F;
 
-
 		//Apply motion to position and rotation
 		moveEntity(motionX, motionY, motionZ);
 		rotateYaw(velocityYaw);
 		rotatePitch(velocityPitch);
 		rotateRoll(-velocityRoll);
 		
-		//If on the client
-		/*
-		if(worldObj.isRemote)
-		{
-			//DEBUG : Spawn particles along axes
-			Vector3f xAxis = axes.getXAxis();
-			Vector3f yAxis = axes.getYAxis();
-			Vector3f zAxis = axes.getZAxis();
-			for(int i = 0; i < 10; i++)
-			{
-				worldObj.spawnParticle("enchantmenttable", posX + xAxis.x * i * 0.3D, posY + xAxis.y * i * 0.3D, posZ + xAxis.z * i * 0.3D, 0, 0, 0);
-				worldObj.spawnParticle("smoke", posX + yAxis.x * i * 0.3D, posY + yAxis.y * i * 0.3D, posZ + yAxis.z * i * 0.3D, 0, 0, 0);
-				worldObj.spawnParticle("reddust", posX + zAxis.x * i * 0.3D, posY + zAxis.y * i * 0.3D, posZ + zAxis.z * i * 0.3D, 0, 0, 0);
-			}
-		}*/
-		
-		//axes.rotate(velocityYaw, axes.findLocalVectorGlobally(axes.getYAxis()));
-		
-        /*if(worldObj.isRemote && (riddenByEntity == null || !(riddenByEntity instanceof EntityPlayer) || !FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity)))
-        {
-            double x;
-            double y;
-            double var12;
-            double z;
-            if (boatPosRotationIncrements > 0)
-            {
-            	
-                x = posX + (boatX - posX) / (double)boatPosRotationIncrements;
-                y = posY + (boatY - posY) / (double)boatPosRotationIncrements;
-                z = posZ + (boatZ - posZ) / (double)boatPosRotationIncrements;
-                var12 = MathHelper.wrapAngleTo180_double(-boatYaw - (double)rotationYaw);
-                rotationYaw = (float)((double)rotationYaw + var12 / (double)boatPosRotationIncrements);
-                rotationPitch = (float)((double)rotationPitch + (-boatPitch - (double)rotationPitch) / (double)boatPosRotationIncrements);
-                float rotationRoll = (float)((double)axes.getRoll() + (-boatRoll - (double)axes.getRoll()) / (double)boatPosRotationIncrements);
-                --boatPosRotationIncrements;
-                setPosition(x, y, z);
-                setRotation(rotationYaw, rotationPitch, rotationRoll);
-            }
-            else
-            {
-                x = posX + motionX;
-                y = posY + motionY;
-                z = posZ + motionZ;
-                setPosition(x, y, z);
-
-                if (onGround)
-                {
-                    motionX *= 0.5D;
-                    motionY *= 0.5D;
-                    motionZ *= 0.5D;
-                }
-
-                motionX *= 0.9900000095367432D;
-                motionY *= 0.949999988079071D;
-                motionZ *= 0.9900000095367432D;
-                setRotation(rotationYaw, rotationPitch, axes.getRoll());
-                
-            }
-            return;
-        }*/
-
-
-        
-        
-		//Plane movement
         /*
-		int numPropsWorking = 0;
-		for(int j = 0; j < type.numProps; j++)
-		{
-			if(!propBlown[j])
-				numPropsWorking++;
-		}
-
-		if(riddenByEntity == null)
-			propSpeed *= 0.8D;
-
-		double acceleration = propSpeed * numPropsWorking * 0.01D;
-		double oldSpeed = getSpeedXYZ();
-		double lastMotionX = motionX;
-		double lastMotionY = motionY;
-		double lastMotionZ = motionZ;
-		double newSpeed = oldSpeed * 0.9D + acceleration;
-		double split = propSpeed / (type.maxPropSpeed + getPlaneData().engine.engineSpeed);
-		double yComponent = propSpeed - type.takeOffSpeed;
-		if(leftWingHealth <= 0 && rightWingHealth <= 0)
-			yComponent = 0D;
-		if(yComponent < 0D)
-			yComponent = 0D;
-		if(yComponent > 1D)
-			yComponent = 1D;
-		Vector3f zAxis = axes.getZAxis();
-
-		motionX = newSpeed * zAxis.x * split + lastMotionX * (1D - split); //X component of local Z axis
-		motionY = yComponent * newSpeed * zAxis.y * split + lastMotionY * (1D - split); //Y component of local Z axis
-		motionZ = newSpeed * zAxis.z * split + lastMotionZ * (1D - split); //Z component of local Z axis
-
-		velocityYaw *= 0.8F;
-		velocityPitch *= 0.8F;
-		velocityRoll *= 0.8F;
-
-		//Rotate the propeller
-		propAngle += propSpeed / 7F;
-
-		//Return the flaps to their resting position
-		flapsYaw *= 0.8F;
-		flapsPitchLeft *= 0.8F;
-		flapsPitchRight *= 0.8F;
-		//Limit flap angles
-		if(flapsYaw > 10)
-			flapsYaw = 10;
-		if(flapsYaw < -10)
-			flapsYaw = -10;
-		if(flapsPitchRight > 10)
-			flapsPitchRight = 10;
-		if(flapsPitchRight < -10)
-			flapsPitchRight = -10;
-		if(flapsPitchLeft > 10)
-			flapsPitchLeft = 10;
-		if(flapsPitchLeft < -10)
-			flapsPitchLeft = -10;
-
-		//Decrement bomb and gun timers
-		if(bombDelay > 0)
-			bombDelay--;
-		if(gunDelay > 0)
-			gunDelay--;
-
-		//Rise in water and fall by gravity
-		double motionG = 0D;
-		int wetness = 0;
-        for(int j = 0; j < 5; j++)
-        {
-            double d2 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)j / 5D)) + 1D;
-            double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (double)(j + 1)) / 5D) + 1D;
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d2, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
-            if(worldObj.isAABBInMaterial(axisalignedbb, Material.water))
-            {
-                motionG += 0.05D;
-				wetness++;
-            }
-        }		
-		if(!onGround)
-			motionG -= (9.81D / 400D);
-		if(numPropsWorking > 0 && (leftWingHealth > 0 || rightWingHealth > 0))
-			motionG *= (1D - getSpeedXYZ() > 0D ? 1D - getSpeedXYZ() : 0D);
-		motionY += motionG;
-
-		if(onGround && propSpeed < 0.1D)
-		{
-			motionX *= 0.9D;
-			motionZ *= 0.9D;
-		}
-
-		//Turning moment caused by blown propellers
-		int turn = 0;
-		switch(type.propSetup)
-		{
-			case 0 : break; //Single propeller
-			case 3 : //4 propellers
-			{
-				if(propBlown[2]) turn++;
-				if(propBlown[3]) turn--;
-			}
-			case 1 : //2 propellers
-			case 2 :
-			{
-				if(propBlown[0]) turn++;
-				if(propBlown[1]) turn--;
-				break;
-			}		
-		}
-		if(leftWingHealth <= 0)
-			turn++;
-		if(rightWingHealth <= 0)
-			turn--;
-		if(!onGround)
-			velocityYaw += turn * getSpeedXYZ();
-
-		//Collision Handling
-		int tileX = MathHelper.floor_double(posX + 0.5D);
-		int tileY= MathHelper.floor_double(posY + 0.5D);
-		int tileZ = MathHelper.floor_double(posZ + 0.5D);
-		smashIntoBlock(tileX, tileY, tileZ);
-		if(getSpeedXYZ() > 0.2D)
-        {
-			if(motionX > motionZ && motionX > -motionZ && motionX > motionY && motionX > -motionY) //Moving in +x
-			{
-				int i = tileX + 1;
-				for(int j = tileY - 1; j < tileY + 2; j++)
-				{
-					for(int k = tileZ - 1; k < tileZ + 2; k++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-			if(-motionX > motionZ && -motionX > -motionZ && -motionX > motionY && -motionX > -motionY) //Moving in -x
-			{
-				int i = tileX - 1;
-				for(int j = tileY - 1; j < tileY + 2; j++)
-				{
-					for(int k = tileZ - 1; k < tileZ + 2; k++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-			if(motionZ > motionX && motionZ > -motionX && motionZ > motionY && motionZ > -motionY) //Moving in +z
-			{
-				int k = tileZ + 1;
-				for(int i = tileX - 1; i < tileX + 2; i++)
-				{
-					for(int j = tileY - 1; j < tileY + 2; j++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-			if(-motionZ > motionX && -motionZ > -motionX && -motionZ > motionY && -motionZ > -motionY) //Moving in -z
-			{
-				int k = tileZ - 1;
-				for(int i = tileX - 1; i < tileX + 2; i++)
-				{
-					for(int j = tileY - 1; j < tileY + 2; j++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-			if(motionY > motionX && motionY > -motionX && motionY > motionZ && motionY > -motionZ) //Moving in +y
-			{
-				int j = tileY + 1;
-				for(int i = tileX - 1; i < tileX + 2; i++)
-				{
-					for(int k = tileZ - 1; k < tileZ + 2; k++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-			if(-motionY > motionX && -motionY > -motionX && -motionY > motionZ && -motionY > -motionZ) //Moving in -y
-			{
-				int j = tileY - 1;
-				for(int i = tileX - 1; i < tileX + 2; i++)
-				{
-					for(int k = tileZ - 1; k < tileZ + 2; k++)
-					{
-						smashIntoBlock(i, j, k);
-					}
-				}
-			}
-        }
-
-
-		//More movement
-
-        
-		rotateYaw(velocityYaw);
-		rotatePitch(velocityPitch);
-		rotateRoll(velocityRoll);
-
-		moveEntity(motionX, motionY, motionZ);
-
-		rotationYaw = axes.getYaw();
-		rotationPitch = axes.getPitch();
-
 		//Fuel Handling
 		if(getPlaneData().fuel != null && getPlaneData().fuel.stackSize <= 0)
 			getPlaneData().fuel = null;
@@ -1039,20 +779,6 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 			FlansMod.proxy.spawnParticle("smoke", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
 			if(health < type.health / 8)
 					FlansMod.proxy.spawnParticle("flame", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
-		}
-
-		//Fix non-spawning sub-entities
-		if(!spawnedEntities)
-		{
-			if(!worldObj.isRemote)
-			{
-				for(int i = 0; i < seats.length; i++)
-				{
-					if(!worldObj.loadedEntityList.contains(seats[i]))
-						worldObj.spawnEntityInWorld(seats[i]);
-				}
-			}
-			spawnedEntities = true;
 		}
 		*/
 		
