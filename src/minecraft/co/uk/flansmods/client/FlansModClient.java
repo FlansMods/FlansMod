@@ -151,27 +151,16 @@ public class FlansModClient extends FlansMod
 				log("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
 			}			
-			if(minecraft.thePlayer.ridingEntity instanceof EntityPlane)
+			if(minecraft.thePlayer.ridingEntity instanceof IControllable)
 			{
 				try
 				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityPlane)minecraft.thePlayer.ridingEntity).getPlaneType().cameraDistance, "thirdPersonDistance", "A", "field_78490_B");
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "A", "field_78490_B");
 				} catch (Exception e)
 				{
 					log("I forgot to update obfuscated reflection D:");
 					throw new RuntimeException(e);
 				}		
-			}
-			if(minecraft.thePlayer.ridingEntity instanceof EntityVehicle) // Add CameraDistance for Vehicles
-			{
-				try
-				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance", "A", "field_78490_B");
-				} catch (Exception e)
-				{
-					log("I forgot to update obfuscated reflection D:");
-					throw new RuntimeException(e);
-				}
 			}
 		}
 		else if(inPlane)

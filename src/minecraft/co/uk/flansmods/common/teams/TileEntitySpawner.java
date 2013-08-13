@@ -129,8 +129,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     {
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
-		if(base != null)
-			nbt.setInteger("Base", base.getID());
+		nbt.setInteger("Base", baseID);
 		nbt.setInteger("dim", worldObj.provider.dimensionId);
 		nbt.setInteger("numStacks", stacksToSpawn.size());
 		for(int i = 0; i < stacksToSpawn.size(); i++)
@@ -187,6 +186,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	public void setBase(ITeamBase b) 
 	{
 		base = b;
+		baseID = b.getID();
 		PacketDispatcher.sendPacketToAllInDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 

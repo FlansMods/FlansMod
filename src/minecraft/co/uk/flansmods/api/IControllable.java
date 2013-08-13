@@ -29,4 +29,7 @@ public interface IControllable
 	
 	/** @return The player's view roll */
 	float getPlayerRoll();
+	
+	/** @return The player's 3rd person view distance */
+	float getCameraDistance();
 }

@@ -409,6 +409,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
+	public float getCameraDistance()
+	{
+		return foundDriveable ? driveable.getDriveableType().cameraDistance : 5F;
+	}
+	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float f)
 	{
 		if(worldObj.isRemote && !foundDriveable)

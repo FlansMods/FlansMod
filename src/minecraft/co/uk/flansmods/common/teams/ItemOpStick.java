@@ -168,7 +168,7 @@ public class ItemOpStick extends Item
 	    					object.setBase(base);
 	    					base.addObject(object);
 	    					line.setDead();
-	    					player.fishEntity = null;
+	    					//player.fishEntity = null;
 	    					teamsManager.messagePlayer(player, "Successfully connected.");
 	    				}
 	    				else

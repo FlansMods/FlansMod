@@ -42,7 +42,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityPlane extends EntityDriveable implements IExplodeable
+public class EntityPlane extends EntityDriveable
 {
 	//Damage handling
 	public boolean[] propBlown;
@@ -1125,17 +1125,5 @@ public class EntityPlane extends EntityDriveable implements IExplodeable
 	public PlaneData getPlaneData() 
 	{
 		return (PlaneData)driveableData;
-	}
-	
-	@Override
-	public float getPlayerRoll() 
-	{
-		return axes.getRoll();
-	}
-
-	@Override
-	public void explode() 
-	{
-		
 	}
 }

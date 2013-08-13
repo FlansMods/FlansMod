@@ -20,12 +20,13 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class EntityDriveable extends Entity implements IControllable, IEntityAdditionalSpawnData
+public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
 {
 	public boolean syncFromServer = true;
 	/** Ticks since last server update. Use to smoothly transition to new position */
@@ -593,5 +594,23 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public boolean attackPoint(CollisionPoint point, DamageSource damagesource, float i)
 	{
 		return false;
+	}
+	
+	@Override
+	public float getPlayerRoll() 
+	{
+		return axes.getRoll();
+	}
+
+	@Override
+	public void explode() 
+	{
+		
+	}
+	
+	@Override
+	public float getCameraDistance()
+	{
+		return getDriveableType().cameraDistance;
 	}
 }
