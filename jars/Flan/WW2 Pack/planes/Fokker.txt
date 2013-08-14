@@ -1,60 +1,77 @@
+//Naming
 Name Fokker Dr.1
 ShortName Fokker
 ItemID 23318
+//Visuals
 Icon Fokker
 Model ww2.Fokker
 Texture Fokker
-MaxPropellerSpeed 2.0
-TakeOffSpeed 2.0
-//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
-PropSetup 0
-//Propeller number, x, y, z. Numbering starts at 0.
-PropellerPos 0 0 0 29
-//Delays are in ticks or 1/20ths of seconds
-ShootDelay 4
-BombDelay 999
-CargoSlots 8
-BombSlots 0
-Health 600
-CollisionBoxes 3
-AddCollisionBox 0 0 0 -32 3
-AddCollisionBox 1 40 10 0 2
-AddCollisionBox 2 -40 10 0 1
-//Whether or not guns can be placed in these slots
-AllowWingGuns False
-AllowNoseGuns True
-//Next 3 are for large planes only
-AllowSideGuns False
-AllowTailGuns False
-AllowDorsalGun False
-//Add positions for the pilot controlled guns. That is, nose and wing guns.
-//AddGunPosition <type> <x> <y> <Z> where type is one of the corresponding numbers
-//0 : Left Nose, 1 : Right Nose, 2 : Left Wing, 3 : Right Wing
-AddGunPosition 0 -5 3 48
-AddGunPosition 1 5 3 48
+//Third Person Camera Distance
+CameraDistance 10.0
+//Throttle
+MaxThrottle 0.4
+MaxNegativeThrottle 0.0
+//Yaw modifiers
 TurnLeftSpeed 1.5
 TurnRightSpeed 1.5
-RollLeftSpeed 1.5
-RollRightSpeed 1.5
+//Pitch modifiers
 LookUpSpeed 1
 LookDownSpeed 1
-Acceleration 3
-Decceleration 2
+//Roll modifiers
+RollLeftSpeed 1.5
+RollRightSpeed 1.5
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 0.4
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 0.4
+//Mass (In tons)
+Mass 0.4
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1500
-MaxHeight 256
+//Nose and Wing Guns (not present)
+//AddNoseGun 0 0 0 0 browning
+//AddNoseGun 1 0 0 0 mg42
+//AddWingGun 2 0 0 0 dp28
+//AddWingGun 3 0 0 0 bren
+ShootDelay 4
+//ShootAlternately False
+//Bombs (Bomb delay is in 1/20ths of seconds)
+//BombDelay 999
+//BombPosition 0 0 0
+//Inventory Slots
+CargoSlots 8
+BombSlots 0
+//Propeller Positions
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 29 0 0 core woodenPropeller
+//Passengers
+Pilot 0 0 0
+Passengers 0
+//Collision points (Each collision point has a position, a section and a strength)
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddCollisionPoint -44 0 0 core 1.0
+AddCollisionPoint 0 0 40 leftWing 1.0
+AddCollisionPoint 0 0 -40 rightWing 1.0
+//Sounds
 StartSound propStart
 StartSoundLength 20
 PropSound propSound
 PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
-Pilot 0 0 0
-Passengers 0
 //Recipe
-Propeller woodenPropeller
-Cockpit woodenCockpit
-Wings triplaneWing
-Bay None
-Tail woodenTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Red
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 woodenCockpit
+AddRecipeParts rightWing 1 triplaneWing
+AddRecipeParts leftWing 1 triplaneWing
+AddRecipeParts tail 1 woodenTail
+//Health and collision
+SetupPart core 50 -12 -5 -9 24 10 18
+SetupPart rightWing 25 -9 0 -50 18 2 41
+SetupPart leftWing 25 -9 0 9 18 2 41
+SetupPart topWing 50 -9 18 -50 18 2 100
+SetupPart tail 50 -51 -2 -5 40 8 10
+BulletDetection 5

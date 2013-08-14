@@ -9,7 +9,7 @@ Texture Lancaster
 //Third Person Camera Distance
 CameraDistance 25.0
 //Throttle
-MaxThrottle 4.0
+MaxThrottle 4.2
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -20,12 +20,12 @@ LookDownSpeed 1
 //Roll modifiers
 RollLeftSpeed 1
 RollRightSpeed 1
-//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 should keep the plane going at some reasonable speed at full throttle
-Drag 16.0
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 16.7
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 16.0
+Lift 16.7
 //Mass (In tons)
-Mass 16.0
+Mass 16.7
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
 //Nose and Wing Guns (not present)
@@ -42,39 +42,17 @@ BombPosition 0 -32 0
 CargoSlots 0
 BombSlots 16
 //Propeller Positions
-//NosePropellerPos 0 0 0 (not present)
-LeftWingPropellerPos 114 0 52
-LeftWingPropellerPos 98 0 116
-RightWingPropellerPos 114 0 -52
-RightWingPropellerPos 98 0 -116
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 14 0 0 core metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
-Passenger 1 145 0 0 -360 360 -89 89 browning nose
-Passenger 2 90 10 0
-Passenger 3 70 10 0
-Passenger 4 -48 40 0 -360 360 0 89 browning dorsal
-Passenger 5 -120 16 0
-//Collision points (Each collision point has a position, a part and a strength)
-//The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//Collision points (Each collision point has a position, a section and a strength)
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddCollisionPoint 0 0 -32 core 1.0
-//AddCollisionBox 0 0 0 -32 3
-//AddCollisionBox 1 0 10 -80 3
-//AddCollisionBox 2 0 20 -110 3
-//AddCollisionBox 3 80 20 -112 3
-//AddCollisionBox 4 -80 20 -112 3
-//AddCollisionBox 5 55 5 75 2
-//AddCollisionBox 6 115 5 65 2
-//AddCollisionBox 7 200 20 20 2
-//AddCollisionBox 8 -55 5 75 1
-//AddCollisionBox 9 -115 5 65 1
-//AddCollisionBox 10 -200 20 20 1
-//AddCollisionBox 11 0 0 40 0
-//AddCollisionBox 12 0 0 70 0
-//AddCollisionBox 13 0 0 100 0
-//AddCollisionBox 14 0 0 130 0
-//AddCollisionBox 15 0 20 115 0
+AddCollisionPoint -44 0 0 core 1.0
+AddCollisionPoint 0 0 40 leftWing 1.0
+AddCollisionPoint 0 0 -40 rightWing 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20
@@ -83,11 +61,18 @@ PropSoundLength 49
 ShootSound PlaneShoot
 BombSound bomb
 //Recipe
-BigTable True
-Propeller metalPropeller
-Cockpit metalCockpit
-Wings metalWingSection
-Bay bombBay
-Tail metalTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Green
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit
+AddRecipeParts rightWing 1 metalWingSection
+AddRecipeParts leftWing 1 metalWingSection
+AddRecipeParts bay 1 bombBay
+AddRecipeParts tail 1 metalTail
+//Health and collision
+SetupPart core 50 -12 -5 -9 24 10 18
+SetupPart rightWing 25 -9 0 -50 18 2 41
+SetupPart leftWing 25 -9 0 9 18 2 41
+SetupPart topWing 50 -9 18 -50 18 2 100
+SetupPart tail 50 -51 -2 -5 40 8 10
+BulletDetection 5
