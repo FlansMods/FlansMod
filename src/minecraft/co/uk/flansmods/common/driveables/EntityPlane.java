@@ -1031,42 +1031,6 @@ public class EntityPlane extends EntityDriveable
 			}
 			
 			//setDead();
-			/*
-			if(type.cockpit != null)
-				entityDropItem(new ItemStack(type.cockpit.getItem(), 1), 1.0F);
-			if(type.bay != null)
-				entityDropItem(new ItemStack(type.bay.getItem(), 1), 1.0F);
-			if(type.tail != null && tailHealth > 0)
-				entityDropItem(new ItemStack(type.tail.getItem(), 1), 1.0F);
-			if(type.dyes)
-				entityDropItem(new ItemStack(Item.dyePowder, (type.bigTable ? 10 : 6), type.dyeColour), 1.0F);
-			if(leftWingHealth > 0)
-				entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 2 : 1)), 1.0F);
-			if(rightWingHealth > 0)
-				entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 4 : 2)), 1.0F);
-			for(int j = 0; j < type.numProps; j++)
-			{
-				if(!propBlown[j] && ((type.propSetup == 0) || (j % 2 == 0 && leftWingHealth > 0) || (j % 2 == 1 && rightWingHealth > 0)))
-				{
-					entityDropItem(new ItemStack(type.propeller.getItem(), 1), 1.0F);
-					entityDropItem(new ItemStack(getPlaneData().engine.getItem(), 1), 1.0F);
-				}
-			}
-			
-			//Guns
-			for(int j = 0; j < 8; j++)
-			{
-				if(j == 2 && leftWingHealth <= 0)
-					continue;
-				if(j == 3 && rightWingHealth <= 0)
-					continue;
-				if(j == 4 && tailHealth <= 0)
-					continue;
-				if(getPlaneData().guns[j] != null)
-					entityDropItem(new ItemStack(getPlaneData().guns[j].getItem()), 1.0F);
-				if(getPlaneData().ammo[j] != null)
-					entityDropItem(getPlaneData().ammo[j], 1.0F);
-			*/
 		}	
         return true;
     }
@@ -1093,5 +1057,11 @@ public class EntityPlane extends EntityDriveable
 	public PlaneData getPlaneData() 
 	{
 		return (PlaneData)driveableData;
+	}
+
+	@Override
+	protected void dropItemsOnPartDeath(DriveablePart part) 
+	{
+		
 	}
 }

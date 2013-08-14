@@ -6,9 +6,12 @@ import java.util.HashMap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -17,6 +20,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -356,14 +360,52 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         
         for(DriveablePart part : parts.values())
         {
-        	part.update(this);
-        	if(worldObj.isRemote && part.box != null)// && part.onFire)
+        	if(part.box != null)
         	{
-        		//Rotate the box midpoint to global axes
-        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
-        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+        		
+	        	part.update(this);
+	        	//Client side particles
+	        	if(worldObj.isRemote)
+	        	{
+	           		if(part.onFire)
+	        		{
+	        			//Pick a random position within the bounding box and spawn a flame there
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + rand.nextFloat() * (float)part.box.w / 16F, (float)part.box.y / 16F + rand.nextFloat() * (float)part.box.h / 16F, (float)part.box.z / 16F + rand.nextFloat() * (float)part.box.d / 16F));
+		        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+	        		}
+	           		if(part.health > 0 && part.health < part.maxHealth / 2)
+	        		{
+	        			//Pick a random position within the bounding box and spawn a flame there
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + rand.nextFloat() * (float)part.box.w / 16F, (float)part.box.y / 16F + rand.nextFloat() * (float)part.box.h / 16F, (float)part.box.z / 16F + rand.nextFloat() * (float)part.box.d / 16F));
+		        		worldObj.spawnParticle(part.health < part.maxHealth / 4 ? "largesmoke" : "smoke", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+	        		}
+	        	}
+	        	//Server side fire handling
+	        	if(part.onFire)
+	        	{
+	        		//Rain can put out fire
+	        		if(worldObj.isRaining() && rand.nextInt(40) == 0)
+	        			part.onFire = false;
+	        		//Also water blocks
+	        		//Get the centre point of the part
+	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	        		if(worldObj.getBlockMaterial(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)) == Material.water)
+	        		{
+	        			part.onFire = false;
+	        		}
+	        	}
+	        	else
+	        	{
+	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	        		if(worldObj.getBlockMaterial(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)) == Material.lava)
+	        		{
+	        			part.onFire = true;
+	        		}
+	        	}
         	}
         }
+        
+        checkParts();
         
         prevPosX = posX;
         prevPosY = posY;
@@ -633,6 +675,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Ray trace the bullet
 			if(part.rayTrace(bullet, rotatedPosVector, rotatedMotVector))
 			{
+				//This is server side bsns
+				if(worldObj.isRemote)
+					return true;
+				checkParts();
+
 				//If it hit, send a damage update packet
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
 				return true;
@@ -640,6 +687,57 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		return false;
 	}
+	
+	/** Internal method for checking that all parts are ok, destroying broken ones, dropping items and making sure that child parts are destroyed when their parents are */
+	private void checkParts()
+	{
+		for(DriveablePart part : parts.values())
+		{
+			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
+			{
+				killPart(part);
+			}
+		}
+		//If the core was destroyed, kill the driveable
+		if(parts.get(EnumDriveablePart.core).dead)			
+			setDead();
+	}
+	
+	/** Internal method for killing driveable parts */
+	private void killPart(DriveablePart part)
+	{
+		if(part.dead)
+			return;
+		part.health = 0;
+		part.dead = true;
+		
+		//Drop items
+		DriveableType type = getDriveableType();
+		if(!worldObj.isRemote)
+		{
+			ItemStack[] drops = type.recipe.get(part.type);
+			if(drops != null)
+			{
+				//Get the midpoint of the part
+        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+				//Drop each itemstack 
+        		for(ItemStack stack : drops)
+				{
+					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + pos.x, posY + pos.y, posZ + pos.z, stack.copy()));
+				}
+			}
+			dropItemsOnPartDeath(part);
+		}
+		
+		//Kill all child parts to stop things floating unconnected
+		for(EnumDriveablePart child : part.type.getChildren())
+		{
+			killPart(parts.get(child));
+		}
+	}
+	
+	/** Method for planes, vehicles and whatnot to drop their own specific items if they wish */
+	protected abstract void dropItemsOnPartDeath(DriveablePart part);
 	
 	@Override
 	public float getPlayerRoll() 

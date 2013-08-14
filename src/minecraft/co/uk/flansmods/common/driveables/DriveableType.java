@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
+import net.minecraft.item.ItemStack;
+
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -17,6 +19,8 @@ public class DriveableType extends InfoType
 
 	/** Health of each driveable part */
 	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
+	/** Recipe parts associated to each driveable part */
+	public HashMap<EnumDriveablePart, ItemStack[]> recipe = new HashMap<EnumDriveablePart, ItemStack[]>();
 	
 	/** The number of passengers, not including the pilot */
 	public int numPassengers = 0;	
@@ -103,6 +107,22 @@ public class DriveableType extends InfoType
 			if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
 
+			//Recipe
+			if(split[0].equals("AddRecipeParts"))
+			{
+				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
+				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
+				for(int i = 0; i < (split.length - 2) / 2; i++)
+				{
+					int amount = Integer.parseInt(split[2 * i + 2]);
+					boolean damaged = split[2 * i + 3].contains(".");
+					String itemName = damaged ? split[2 * i + 3].split("\\.")[0] : split[2 * i + 3];
+					int damage = damaged ? Integer.parseInt(split[2 * i + 3].split("\\.")[1]) : 0;
+					stacks[i] = getRecipeElement(itemName, amount, damage);
+				}
+				recipe.put(part, stacks);
+			}
+			
 			//Health
 			if(split[0].equals("SetupPart"))
 			{

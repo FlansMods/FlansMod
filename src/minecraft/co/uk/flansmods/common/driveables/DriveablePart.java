@@ -12,6 +12,8 @@ public class DriveablePart
 	public int maxHealth;
 	public int health;
 	public boolean onFire;
+	/** Keeps track of whether death code has been called or not */
+	public boolean dead;
 	
 	public DriveablePart(EnumDriveablePart e, CollisionBox b)
 	{
@@ -45,7 +47,7 @@ public class DriveablePart
 	 * @return Whether the bullet should consider itself to have hit something (which would mean destroying the bullet unless it penetrates) */
 	public boolean rayTrace(EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
-		if(box == null)
+		if(box == null || health <= 0)
 			return false;
 		//Complicated. Will explain later. Someone remind me.
 		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);

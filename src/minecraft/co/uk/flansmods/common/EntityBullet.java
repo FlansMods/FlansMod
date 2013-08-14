@@ -186,12 +186,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					//Raytrace the bullet and if it hits, kill the bullet
 					if(driveable.attackFromBullet(this, new Vector3f((float)posX, (float)posY, (float)posZ), new Vector3f((float)motionX, (float)motionY, (float)motionZ)))
 					{
-						driveable.rotateYaw(10);
-						for(int j = 0; j < 10; j++)
-						{
-							worldObj.spawnParticle("reddust", posX, posY, posZ, 0, 0, 0);
-						}
-						setDead();
+						if(!type.penetratesEntities)
+							setDead();
 					}
 				}
 			}
