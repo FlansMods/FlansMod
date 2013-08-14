@@ -40,10 +40,7 @@ public class PlaneType extends DriveableType
 	
 	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
-	
-	/** The positions of the propellers, a union of the nose and wing propeller lists */
-	public ArrayList<Vector3f> propellerPositions = new ArrayList<Vector3f>();
-			
+				
 	/** Sounds */
 	//TODO : Overhaul sounds
 	public String startSound;
@@ -52,22 +49,6 @@ public class PlaneType extends DriveableType
 	public int propSoundLength;
 	public String shootSound;
 	public String bombSound;
-
-	//Single wing on small table = Inner wing on big table
-	//TODO : Overhaul crafting
-	public boolean bigTable;
-	public boolean dyes;
-	public int dyeColour = 0;
-	public PartType bay;
-	public PartType tail;
-	public PartType cockpit;
-	public PartType propeller;
-	public PartType wings;
-	public boolean allowWingGuns = false;
-	public boolean allowNoseGuns = true;
-	public boolean allowSideGuns = false;
-	public boolean allowTailGuns = false; //Large planes only
-	public boolean allowDorsalGun = false;
 	
 	/** Nose and wing guns */
 	public GunType[] guns = new GunType[4];
@@ -168,6 +149,7 @@ public class PlaneType extends DriveableType
 			}
 				
 			//Recipe
+			/*
 			if(split[0].equals("BigTable"))
 				bigTable = split[1].equals("True");
 			if(split[0].equals("AllowWingGuns"))
@@ -230,7 +212,7 @@ public class PlaneType extends DriveableType
 					if(split[1].equals("White"))
 						dyeColour = 15;
 				}
-			}
+			}*/
 			
 			//Aesthetics
             if(split[0].equals("HasGear"))

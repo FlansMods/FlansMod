@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import co.uk.flansmods.common.PartType;
+import co.uk.flansmods.common.vector.Vector3f;
 
 public class Propeller 
 {
@@ -21,5 +22,10 @@ public class Propeller
 		this.z = z;
 		planePart = part;
 		itemType = type;
+	}
+	
+	public Vector3f getPosition()
+	{
+		return new Vector3f((float)x / 16F, (float)y / 16F, (float)z / 16F);
 	}
 }

@@ -603,14 +603,14 @@ public class EntityPlane extends EntityDriveable
 		float thrustFormulaCoefficient = 1F;
 		float dragFormulaCoefficient = 10F;
 		float gravity = 9.81F / 20F;
-		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellerPositions.size());
+		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());
 				
 		//Apply thrust
-		for(Vector3f propellerVector : type.propellerPositions)
+		for(Propeller propeller : type.propellers)
 		{
 			//TODO : Factor in engine type
 			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-			applyForce(rotate(propellerVector), (Vector3f)axes.getXAxis().scale(thrust));
+			applyForce(rotate(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
 		}
 				
 		//Apply drag
