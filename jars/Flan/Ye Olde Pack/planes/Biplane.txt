@@ -42,11 +42,8 @@ FuelTankSize 1000
 CargoSlots 36
 BombSlots 0
 //Propeller Positions
-NosePropellerPos 14 0 0 
-//LeftWingPropellerPos 0 0 0 (not present)
-//LeftWingPropellerPos 0 0 0 (not present)
-//RightWingPropellerPos 0 0 0 (not present)
-//RightWingPropellerPos 0 0 0 (not present)
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 14 0 0 core woodenPropeller
 //Passengers
 Pilot 0 -4 0
 Passengers 0
@@ -68,12 +65,14 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 woodenCockpit
-AddRecipeParts nose 1 woodenPropeller 1 <engine>
 AddRecipeParts rightWing 1 woodenWing
 AddRecipeParts leftWing 1 woodenWing
 AddRecipeParts topWing 2 woodenWing
 AddRecipeParts tail 1 woodenTail
 //Health and collision
-SetupPart core 100 -16 -16 -16 32 32 32
-Health core 100
-Health tail 100
+SetupPart core 50 -12 -5 -9 24 10 18
+SetupPart rightWing 25 -9 0 -50 18 2 41
+SetupPart leftWing 25 -9 0 9 18 2 41
+SetupPart topWing 50 -9 18 -50 18 2 100
+SetupPart tail 50 -51 -2 -5 40 8 10
+BulletDetection 5

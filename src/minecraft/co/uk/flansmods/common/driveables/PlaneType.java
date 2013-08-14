@@ -38,16 +38,9 @@ public class PlaneType extends DriveableType
 	/** The time in ticks between bombs dropped */
 	public int planeBombDelay;
 	
-	/** The positions of the propellers, used to calculate forces and spawn damage particles */
-	public Vector3f nosePropellerPosition;
-	/** The positions of the left wing propellers, used to calculate forces and spawn damage particles */
-	public ArrayList<Vector3f> leftWingPropellerPositions = new ArrayList<Vector3f>();
-	/** The positions of the left wing propellers, used to calculate forces and spawn damage particles */
-	public ArrayList<Vector3f> rightWingPropellerPositions = new ArrayList<Vector3f>();
-	
-	/** The positions of the propellers, a union of the nose and wing propeller lists */
-	public ArrayList<Vector3f> propellerPositions = new ArrayList<Vector3f>();
-			
+	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
+	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
+				
 	/** Sounds */
 	//TODO : Overhaul sounds
 	public String startSound;
@@ -56,22 +49,6 @@ public class PlaneType extends DriveableType
 	public int propSoundLength;
 	public String shootSound;
 	public String bombSound;
-
-	//Single wing on small table = Inner wing on big table
-	//TODO : Overhaul crafting
-	public boolean bigTable;
-	public boolean dyes;
-	public int dyeColour = 0;
-	public PartType bay;
-	public PartType tail;
-	public PartType cockpit;
-	public PartType propeller;
-	public PartType wings;
-	public boolean allowWingGuns = false;
-	public boolean allowNoseGuns = true;
-	public boolean allowSideGuns = false;
-	public boolean allowTailGuns = false; //Large planes only
-	public boolean allowDorsalGun = false;
 	
 	/** Nose and wing guns */
 	public GunType[] guns = new GunType[4];
@@ -139,23 +116,10 @@ public class PlaneType extends DriveableType
 			if(split[0].equals("BombDelay"))
 				planeBombDelay = Integer.parseInt(split[1]);
 			
-			//Propeller positions
-			if(split[0].equals("NosePropellerPos"))
+			//Propellers
+			if(split[0].equals("Propeller"))
 			{
-				nosePropellerPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);	
-				propellerPositions.add(nosePropellerPosition);
-			}
-			if(split[0].equals("LeftWingPropellerPos") || split[0].equals("AddLeftWingPropellerPos"))
-			{
-				Vector3f propellerPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
-				leftWingPropellerPositions.add(propellerPosition);
-				propellerPositions.add(propellerPosition);
-			}
-			if(split[0].equals("RightWingPropellerPos") || split[0].equals("AddRightWingPropellerPos"))
-			{
-				Vector3f propellerPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
-				rightWingPropellerPositions.add(propellerPosition);
-				propellerPositions.add(propellerPosition);
+				propellers.add(new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6])));
 			}
 
 			//Sound
@@ -185,6 +149,7 @@ public class PlaneType extends DriveableType
 			}
 				
 			//Recipe
+			/*
 			if(split[0].equals("BigTable"))
 				bigTable = split[1].equals("True");
 			if(split[0].equals("AllowWingGuns"))
@@ -247,7 +212,7 @@ public class PlaneType extends DriveableType
 					if(split[1].equals("White"))
 						dyeColour = 15;
 				}
-			}
+			}*/
 			
 			//Aesthetics
             if(split[0].equals("HasGear"))

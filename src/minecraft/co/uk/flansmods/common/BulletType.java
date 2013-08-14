@@ -18,7 +18,8 @@ public class BulletType extends InfoType
 	public String dropItemOnShoot = null;
 	public String dropItemOnHit = null;
 	public boolean breaksGlass = false;
-	public boolean penetrates = false;
+	public boolean penetratesEntities = false;
+	public boolean penetratesBlocks = false;
 	public boolean smokeTrail = false;
 	public boolean isBomb = false;
 	public boolean isShell = false;
@@ -70,7 +71,7 @@ public class BulletType extends InfoType
 			if (arg0[0].equals("HitSound"))
 				hitSound = arg0[1];
 			if (arg0[0].equals("Penetrates"))
-				penetrates = arg0[1].equals("True");
+				penetratesEntities = arg0[1].equals("True");
 			if (arg0[0].equals("SmokeTrail"))
 				smokeTrail = arg0[1].equals("True");
 			if (arg0[0].equals("RoundsPerItem"))

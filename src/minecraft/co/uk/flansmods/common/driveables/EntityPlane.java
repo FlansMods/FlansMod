@@ -55,8 +55,6 @@ public class EntityPlane extends EntityDriveable
 	public int bombDelay;
 	public int gunDelay;
 	
-	
-	
 	public boolean tailOnGround;
 	private boolean spawnedEntities;
 	public int ticksSinceUsed = 0;
@@ -605,14 +603,14 @@ public class EntityPlane extends EntityDriveable
 		float thrustFormulaCoefficient = 1F;
 		float dragFormulaCoefficient = 10F;
 		float gravity = 9.81F / 20F;
-		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellerPositions.size());
+		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());
 				
 		//Apply thrust
-		for(Vector3f propellerVector : type.propellerPositions)
+		for(Propeller propeller : type.propellers)
 		{
 			//TODO : Factor in engine type
 			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-			applyForce(rotate(propellerVector), (Vector3f)axes.getXAxis().scale(thrust));
+			applyForce(rotate(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
 		}
 				
 		//Apply drag
@@ -1032,43 +1030,7 @@ public class EntityPlane extends EntityDriveable
 				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)getPlaneData().fuelInTank / 200F, false);
 			}
 			
-			setDead();
-			/*
-			if(type.cockpit != null)
-				entityDropItem(new ItemStack(type.cockpit.getItem(), 1), 1.0F);
-			if(type.bay != null)
-				entityDropItem(new ItemStack(type.bay.getItem(), 1), 1.0F);
-			if(type.tail != null && tailHealth > 0)
-				entityDropItem(new ItemStack(type.tail.getItem(), 1), 1.0F);
-			if(type.dyes)
-				entityDropItem(new ItemStack(Item.dyePowder, (type.bigTable ? 10 : 6), type.dyeColour), 1.0F);
-			if(leftWingHealth > 0)
-				entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 2 : 1)), 1.0F);
-			if(rightWingHealth > 0)
-				entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 4 : 2)), 1.0F);
-			for(int j = 0; j < type.numProps; j++)
-			{
-				if(!propBlown[j] && ((type.propSetup == 0) || (j % 2 == 0 && leftWingHealth > 0) || (j % 2 == 1 && rightWingHealth > 0)))
-				{
-					entityDropItem(new ItemStack(type.propeller.getItem(), 1), 1.0F);
-					entityDropItem(new ItemStack(getPlaneData().engine.getItem(), 1), 1.0F);
-				}
-			}
-			
-			//Guns
-			for(int j = 0; j < 8; j++)
-			{
-				if(j == 2 && leftWingHealth <= 0)
-					continue;
-				if(j == 3 && rightWingHealth <= 0)
-					continue;
-				if(j == 4 && tailHealth <= 0)
-					continue;
-				if(getPlaneData().guns[j] != null)
-					entityDropItem(new ItemStack(getPlaneData().guns[j].getItem()), 1.0F);
-				if(getPlaneData().ammo[j] != null)
-					entityDropItem(getPlaneData().ammo[j], 1.0F);
-			*/
+			//setDead();
 		}	
         return true;
     }
@@ -1095,5 +1057,11 @@ public class EntityPlane extends EntityDriveable
 	public PlaneData getPlaneData() 
 	{
 		return (PlaneData)driveableData;
+	}
+
+	@Override
+	protected void dropItemsOnPartDeath(DriveablePart part) 
+	{
+		
 	}
 }

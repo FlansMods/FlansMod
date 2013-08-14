@@ -18,6 +18,8 @@ public class Seat
 	public GunType gunType;
 	/** The name of the gun model this seat is connected to. Gun model names are specified in the model files */
 	public String gunName;
+	/** The part of the driveable this seat is connected to. */
+	public EnumDriveablePart part;
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z
@@ -41,16 +43,17 @@ public class Seat
 		x = Integer.parseInt(split[2]);
 		y = Integer.parseInt(split[3]);
 		z = Integer.parseInt(split[4]);
-		if(split.length > 5)
+		part = EnumDriveablePart.getPart(split[5]);
+		if(split.length > 6)
 		{
-			minYaw = Float.parseFloat(split[5]);
-			maxYaw = Float.parseFloat(split[6]);
-			minPitch = Float.parseFloat(split[7]);
-			maxPitch = Float.parseFloat(split[8]);
-			if(split.length > 9)
+			minYaw = Float.parseFloat(split[6]);
+			maxYaw = Float.parseFloat(split[7]);
+			minPitch = Float.parseFloat(split[8]);
+			maxPitch = Float.parseFloat(split[9]);
+			if(split.length > 10)
 			{
-				gunType = GunType.getGun(split[9]);
-				gunName = split[10];
+				gunType = GunType.getGun(split[10]);
+				gunName = split[11];
 			}
 		}
 	}
@@ -65,5 +68,6 @@ public class Seat
 		x = dx;
 		y = dy;
 		z = dz;
+		part = EnumDriveablePart.core;
 	}
 }

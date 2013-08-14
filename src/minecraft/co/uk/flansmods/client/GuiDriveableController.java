@@ -1,5 +1,10 @@
 package co.uk.flansmods.client;
 
+import java.util.ArrayList;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Controller;
+import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -12,6 +17,24 @@ import net.minecraft.entity.player.EntityPlayer;
 public class GuiDriveableController extends GuiScreen 
 {
 	private IControllable plane;
+	/*private static ArrayList<Controller> joySticks = new ArrayList<Controller>();
+	
+	static
+	{
+		try
+		{
+			Controllers.create();
+			for(int i = 0; i < Controllers.getControllerCount(); i++)
+			{
+				if(Controllers.getController(i).getAxisCount() >= 2)
+					joySticks.add(Controllers.getController(i));
+			}
+		}
+		catch(LWJGLException e)
+		{
+			e.printStackTrace();
+		}
+	}*/
 	
 	public GuiDriveableController(IControllable thePlane)
 	{
@@ -44,6 +67,7 @@ public class GuiDriveableController extends GuiScreen
 		{
 			plane.pressKey(8, player); //Bomb
 		}
+
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();
 		
@@ -101,6 +125,20 @@ public class GuiDriveableController extends GuiScreen
 		}
         for(; Mouse.next(); handleMouseInput()) { }
         for(; Keyboard.next(); handleKeyboardInput()) { }
+        /*
+        for(Controller joyStick : joySticks)
+        {
+			int dy = (int)(800F * joyStick.getAxisValue(0));
+			int dx = (int)(800F * joyStick.getAxisValue(1));
+			if(dx != 0 || dy != 0)
+			{
+				plane.onMouseMoved(dx, dy);
+				System.out.println(joyStick.getAxisValue(0) + " " + joyStick.getAxisValue(1));
+				break;
+			}
+        }
+         */
+        
 		if(plane != null && !plane.isDead() && plane.getControllingEntity() != null && plane.getControllingEntity() instanceof EntityPlayer)
 		{
 			if(Keyboard.isKeyDown(KeyInputHandler.accelerateKey.keyCode))

@@ -13,6 +13,7 @@ import co.uk.flansmods.common.network.PacketBlueprint;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketContentPackList;
+import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketGunBoxTE;
 import co.uk.flansmods.common.network.PacketGunFire;
@@ -71,7 +72,7 @@ public class FlanPacketClient implements IPacketHandler
     		case 8: (new PacketPlaySound()).interpret(stream, null, Side.CLIENT); break;
     		case 9: (new PacketBlueprint()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
-    		case 11: break; //FREE PACKET ID
+    		case 11: (new PacketDriveableDamage()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 13: (new PacketGunFire()).interpret(stream, new Object[] {player, world}, Side.CLIENT); break;
     		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
@@ -81,7 +82,7 @@ public class FlanPacketClient implements IPacketHandler
        		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.CLIENT); break;
        		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
        		case 20: (new PacketPlayerSpawn()).interpret(stream, null, Side.CLIENT); break;
-       		case 21: (new PacketSeatUpdates()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+       		case 21: (new PacketSeatUpdates()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
        	    default: FlansMod.logLoudly("Unknown packet type recieved : " + ID); break;
     		}
     		

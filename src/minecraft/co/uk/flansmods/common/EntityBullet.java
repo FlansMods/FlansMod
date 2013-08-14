@@ -18,6 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.teams.TeamsManager;
@@ -33,6 +34,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 {
+	private static int bulletLife = 600; //Kill bullets after 30 seconds
 	public Entity owner;
 	private int ticksInAir;
 	public BulletType type;
@@ -158,40 +160,37 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
-
-		//Get the block that the bullet is currently in
-		int xTile = MathHelper.floor_double(posX);
-		int yTile = MathHelper.floor_double(posY);
-		int zTile = MathHelper.floor_double(posZ);
-		int blockID = worldObj.getBlockId(xTile, yTile, zTile);
-		//If its not air
-		if (blockID > 0)
-		{
-			//Get the block bounding box
-			Block.blocksList[blockID].setBlockBoundsBasedOnState(worldObj, xTile, yTile, zTile);
-			AxisAlignedBB axisalignedbb = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
-			//If the bullet lies inside the block bounds
-			if (axisalignedbb != null && axisalignedbb.isVecInside(Vec3.createVectorHelper(posX, posY, posZ)))
-			{
-				//If this bullet can break glass and this block is glass and breaking glass is enabled, break it
-				if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
-				{
-					worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
-					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
-				}
-				//If the bullet does not penetrate blocks, kill it
-				if (!type.penetrates)
-					setDead();
-				//If the bullet explodes on impact, kill it
-				if(type.explodeOnImpact)
-					setDead();
-			}
-		}
+		
 		//Check the fuse to see if the bullet should explode
 		ticksInAir++;
 		if (ticksInAir > type.fuse && type.fuse > 0 && !isDead)
 		{
 			setDead();
+		}
+		
+		if(ticksExisted > bulletLife)
+		{
+			setDead();
+		}
+		
+		//Iterate over all EntityDriveables
+		for(int i = 0; i < worldObj.loadedEntityList.size(); i++)
+		{
+			Object obj = worldObj.loadedEntityList.get(i);
+			if(obj instanceof EntityDriveable)
+			{
+				EntityDriveable driveable = (EntityDriveable)obj;
+				//If this bullet is within the driveable's detection range
+				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
+				{
+					//Raytrace the bullet and if it hits, kill the bullet
+					if(driveable.attackFromBullet(this, new Vector3f((float)posX, (float)posY, (float)posZ), new Vector3f((float)motionX, (float)motionY, (float)motionZ)))
+					{
+						if(!type.penetratesEntities)
+							setDead();
+					}
+				}
+			}
 		}
 		
 		//Ray trace the bullet by comparing its next position to its current position
@@ -204,50 +203,12 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
 		
 		//If there is something in the way of the bullet's motion, put the bullet at that position next tick
-		if(hit != null && !type.penetrates)
+		if(hit != null && !(hit.entityHit == null ? type.penetratesBlocks : type.penetratesEntities))
 		{
 			nextPosVec = Vec3.createVectorHelper(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 		}
-		
-		//Iterate over entities close to the bullet to see if any of them have been hit
-		Entity closestEntity = null;
-		double closestDistance = 1000D;
-		List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
-		
-
-		for (int l = 0; l < list.size(); l++)
-		{
-			Entity checkEntity = (Entity) list.get(l);
-			//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
-			if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
-			{
-				continue;
-			}
-			float f5 = 0.3F;
-			AxisAlignedBB axisalignedbb1 = checkEntity.boundingBox.expand(f5, f5, f5);
-			//Find the point at which the bullet trajectory hits the bounds of the entity
-			MovingObjectPosition hitEntity = axisalignedbb1.calculateIntercept(posVec, nextPosVec);
-			if (hitEntity == null)
-			{
-				continue;
-			}
-			//If its closer than the previously closest entity, take its place
-			double distance = posVec.distanceTo(hitEntity.hitVec);
-			if (distance < closestDistance)
-			{
-				closestEntity = checkEntity;
-				closestDistance = distance;
-			}
-		}
-
-		//If we hit an entity, replace the old block raytrace with the closer entity
-		if (closestEntity != null && !(closestEntity instanceof EntityBullet))
-		{
-			hit = new MovingObjectPosition(closestEntity);
-		}
-		
 		//If we hit something
-		if (hit != null)
+		if (!isDead && hit != null)
 		{
 			//If the bullet should explode on impact and the hit is not the shooter, explode!
 			if (type.explodeOnImpact && ticksInAir > 5 && (hit.entityHit == null || !isPartOfOwner(hit.entityHit)))
@@ -279,7 +240,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 						//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 					}
 					//Unless the bullet penetrates, kill it
-					if(!type.penetrates)
+					if(!type.penetratesEntities)
 					{
 						setPosition(hit.entityHit.posX, hit.entityHit.posY, hit.entityHit.posZ);
 						setDead();
@@ -288,24 +249,68 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				//If the hit wasn't an entity hit, then it must've been a block hit
 				if(hit.entityHit == null)
 				{
-					xTile = hit.blockX;
-					yTile = hit.blockY;
-					zTile = hit.blockZ;
-					blockID = worldObj.getBlockId(xTile, yTile, zTile);
+					int xTile = hit.blockX;
+					int yTile = hit.blockY;
+					int zTile = hit.blockZ;
+					int blockID = worldObj.getBlockId(xTile, yTile, zTile);
 					//If the bullet breaks glass, and can do so according to FlansMod, do so.
-					if (type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
+					if(type.breaksGlass && FlansMod.canBreakGlass && (blockID == Block.glass.blockID || blockID == Block.thinGlass.blockID || blockID == Block.glowStone.blockID))
 					{
 						worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
 						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
-						if (type.penetrates)
-						{
-							setPosition(xTile, yTile, zTile);
-							setDead();
-						}
+					}
+					if(!type.penetratesBlocks)
+					{
+						setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+						setDead();
 					}
 				}
 			}
 		}
+		//If the bullet was not stopped by a block
+		if(!isDead)
+		{
+			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
+			for (int l = 0; l < list.size(); l++)
+			{
+				Entity checkEntity = (Entity) list.get(l);
+				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
+				if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
+				{
+					continue;
+				}
+				//Calculate the hit damage
+				int hitDamage = damage * type.damage;
+				//Create a damage source object
+				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
+	
+				//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
+				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+					TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
+				
+				//Attack the entity!
+				if(checkEntity.attackEntityFrom(damagesource, hitDamage))
+				{
+					//If the attack was allowed and the entity is alive, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+					if (checkEntity instanceof EntityLivingBase)
+					{
+						((EntityLivingBase) checkEntity).arrowHitTimer++;
+						((EntityLivingBase) checkEntity).hurtResistantTime = ((EntityLivingBase) checkEntity).maxHurtResistantTime / 2;
+					}
+					//Yuck.
+					//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
+				}
+				//Unless the bullet penetrates, kill it
+				if(!type.penetratesEntities)
+				{
+					setPosition(checkEntity.posX, checkEntity.posY, checkEntity.posZ);
+					setDead();
+					break;
+				}
+			}
+		}
+	
 		//Apply motion
 		posX += motionX;
 		posY += motionY;

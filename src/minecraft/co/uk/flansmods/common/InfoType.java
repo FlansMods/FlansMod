@@ -234,42 +234,47 @@ public class InfoType
 	{
 		return item;
 	}
-
-	public static ItemStack getRecipeElement(String arg0, int damage)
+	
+	public static ItemStack getRecipeElement(String s, int damage)
 	{
-		if (arg0.equals("doorIron"))
+		return getRecipeElement(s, 0, damage);
+	}
+	
+	public static ItemStack getRecipeElement(String s, int amount, int damage)
+	{
+		if (s.equals("doorIron"))
 		{
-			return new ItemStack(Item.doorIron, 1);
+			return new ItemStack(Item.doorIron, amount);
 		}
-		if (arg0.equals("doorWood"))
+		if (s.equals("doorWood"))
 		{
-			return new ItemStack(Item.doorWood, 1);
+			return new ItemStack(Item.doorWood, amount);
 		}
-		if (arg0.equals("clayItem"))
+		if (s.equals("clayItem"))
 		{
-			return new ItemStack(Item.clay, 1);
+			return new ItemStack(Item.clay, amount);
 		}
 		for (Item item : Item.itemsList)
 		{
-			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + arg0) || item.getUnlocalizedName().equals("tile." + arg0)))
+			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
 			{
-				return new ItemStack(item, 1, damage);
+				return new ItemStack(item, amount, damage);
 			}
 		}
 		for(InfoType type : infoTypes)
 		{
-			if(type.shortName.equals(arg0))
-				return new ItemStack(type.item, 1, damage);
+			if(type.shortName.equals(s))
+				return new ItemStack(type.item, amount, damage);
 		}
-		if (arg0.equals("gunpowder"))
+		if (s.equals("gunpowder"))
 		{
-			return new ItemStack(Item.gunpowder, 1);
+			return new ItemStack(Item.gunpowder, amount);
 		}
-		if (arg0.equals("iron"))
+		if (s.equals("iron"))
 		{
-			return new ItemStack(Item.ingotIron, 1);
+			return new ItemStack(Item.ingotIron, amount);
 		}
-		FlansMod.log("Could not find " + arg0 + " when adding recipe");
+		FlansMod.log("Could not find " + s + " when adding recipe");
 		return null;
 	}
 	
