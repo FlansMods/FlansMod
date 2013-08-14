@@ -22,6 +22,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -602,6 +603,23 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public boolean attackPoint(CollisionPoint point, DamageSource damagesource, float i)
 	{
+		return false;
+	}
+	
+	/** Attack method called by bullets hitting the plane. Does advanced raytracing to detect which part of the plane is hit */
+	public boolean attackFromBullet(EntityBullet bullet, Vector3f origin, Vector3f motion)
+	{
+		//Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
+		Vector3f relativePosVector = Vector3f.sub(origin, new Vector3f((float)posX, (float)posY, (float)posZ), null);
+		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
+		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
+		//Check each part
+		for(DriveablePart part : parts.values())
+		{
+			//Ray trace the bullet
+			if(part.rayTrace(bullet, rotatedPosVector, rotatedMotVector))
+				return true;
+		}
 		return false;
 	}
 	

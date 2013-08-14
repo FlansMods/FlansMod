@@ -186,46 +186,6 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		{
 			nextPosVec = Vec3.createVectorHelper(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 		}
-		
-		//Iterate over entities close to the bullet to see if any of them have been hit and hit them
-		List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
-		for (int l = 0; l < list.size(); l++)
-		{
-			Entity checkEntity = (Entity) list.get(l);
-			//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
-			if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
-			{
-				continue;
-			}
-			//Calculate the hit damage
-			int hitDamage = damage * type.damage;
-			//Create a damage source object
-			DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
-
-			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
-			if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-				TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
-			
-			//Attack the entity!
-			if(checkEntity.attackEntityFrom(damagesource, hitDamage))
-			{
-				//If the attack was allowed and the entity is alive, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
-				if (checkEntity instanceof EntityLivingBase)
-				{
-					((EntityLivingBase) checkEntity).arrowHitTimer++;
-					((EntityLivingBase) checkEntity).hurtResistantTime = ((EntityLivingBase) checkEntity).maxHurtResistantTime / 2;
-				}
-				//Yuck.
-				//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
-			}
-			//Unless the bullet penetrates, kill it
-			if(!type.penetratesEntities)
-			{
-				setPosition(checkEntity.posX, checkEntity.posY, checkEntity.posZ);
-				setDead();
-			}
-		}
-		
 		//If we hit something
 		if (hit != null)
 		{
@@ -280,12 +240,56 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					}
 					if(!type.penetratesBlocks)
 					{
-						setPosition(xTile, yTile, zTile);
+						setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 						setDead();
 					}
 				}
 			}
 		}
+		//If the bullet was not stopped by a block
+		if(hit == null || hit.entityHit != null || type.penetratesBlocks)
+		{
+			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
+			for (int l = 0; l < list.size(); l++)
+			{
+				Entity checkEntity = (Entity) list.get(l);
+				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
+				if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
+				{
+					continue;
+				}
+				//Calculate the hit damage
+				int hitDamage = damage * type.damage;
+				//Create a damage source object
+				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
+	
+				//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
+				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+					TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
+				
+				//Attack the entity!
+				if(checkEntity.attackEntityFrom(damagesource, hitDamage))
+				{
+					//If the attack was allowed and the entity is alive, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+					if (checkEntity instanceof EntityLivingBase)
+					{
+						((EntityLivingBase) checkEntity).arrowHitTimer++;
+						((EntityLivingBase) checkEntity).hurtResistantTime = ((EntityLivingBase) checkEntity).maxHurtResistantTime / 2;
+					}
+					//Yuck.
+					//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
+				}
+				//Unless the bullet penetrates, kill it
+				if(!type.penetratesEntities)
+				{
+					setPosition(checkEntity.posX, checkEntity.posY, checkEntity.posZ);
+					setDead();
+					break;
+				}
+			}
+		}
+	
 		//Apply motion
 		posX += motionX;
 		posY += motionY;
