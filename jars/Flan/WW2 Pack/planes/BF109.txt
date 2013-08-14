@@ -1,66 +1,79 @@
+//Naming
 Name BF109
 ShortName BF109
 ItemID 23323
+//Visuals
 Icon BF109
 Model ww2.BF109
 Texture BF109
-MaxPropellerSpeed 4.5
-TakeOffSpeed 3.0
+//Third Person Camera Distance
 CameraDistance 10.0
-//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
-PropSetup 0
-//Propeller number, x, y, z. Numbering starts at 0.
-PropellerPos 0 0 0 54
-//Delays are in ticks or 1/20ths of seconds
-ShootDelay 7
-BombDelay 100
-CargoSlots 0
-BombSlots 3
-Health 1800
-CollisionBoxes 7
-AddCollisionBox 0 0 0 -32 3
-AddCollisionBox 1 0 0 -80 3
-AddCollisionBox 2 40 0 10 2
-AddCollisionBox 3 70 0 10 2
-AddCollisionBox 4 -40 0 10 1
-AddCollisionBox 5 -70 0 10 1
-AddCollisionBox 6 0 0 0 0
-//Whether or not guns can be placed in these slots
-AllowWingGuns False
-AllowNoseGuns True
-//Next 3 are for large planes only
-AllowSideGuns False
-AllowTailGuns False
-AllowDorsalGun False
-//Add positions for the pilot controlled guns. That is, nose and wing guns.
-//AddGunPosition <type> <x> <y> <Z> where type is one of the corresponding numbers
-//0 : Left Nose, 1 : Right Nose, 2 : Left Wing, 3 : Right Wing
-AddGunPosition 0 -5 3 80
-AddGunPosition 1 5 3 80
-BombPosition 0 16 0
+//Throttle
+MaxThrottle 2.0
+MaxNegativeThrottle 0.0
+//Yaw modifiers
 TurnLeftSpeed 2
 TurnRightSpeed 2
-RollLeftSpeed 2
-RollRightSpeed 2
+//Pitch modifiers
 LookUpSpeed 2
 LookDownSpeed 2
-Acceleration 3
-Decceleration 3
+//Roll modifiers
+RollLeftSpeed 2
+RollRightSpeed 2
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 2.0
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 2.0
+//Mass (In tons)
+Mass 2.0
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 6000
-MaxHeight 256
+//Nose and Wing Guns (not present)
+//AddNoseGun 0 0 0 0 browning
+//AddNoseGun 1 0 0 0 mg42
+//AddWingGun 2 0 0 0 dp28
+//AddWingGun 3 0 0 0 bren
+ShootDelay 7
+//ShootAlternately False
+//Bombs (Bomb delay is in 1/20ths of seconds)
+BombDelay 100
+//BombPosition 0 0 0
+//Inventory Slots
+CargoSlots 0
+BombSlots 3
+//Propeller Positions
+NosePropellerPos 54 0 0 
+//LeftWingPropellerPos 0 0 0 (not present)
+//LeftWingPropellerPos 0 0 0 (not present)
+//RightWingPropellerPos 0 0 0 (not present)
+//RightWingPropellerPos 0 0 0 (not present)
+//Passengers
+Pilot 0 0 0
+Passengers 0
+//Collision points (Each collision point has a position, a section and a strength)
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddCollisionPoint -44 0 0 core 1.0
+AddCollisionPoint 0 0 40 leftWing 1.0
+AddCollisionPoint 0 0 -40 rightWing 1.0
+//Sounds
 StartSound propStart
 StartSoundLength 20
 PropSound propSound
 PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
-Pilot 0 0 0
-Passengers 0
 //Recipe
-Propeller metalPropeller
-Cockpit metalCockpit
-Wings metalWingSmall
-Bay bombBay
-Tail metalTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Grey
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit
+AddRecipeParts core 1 bombBay
+AddRecipeParts nose 1 metalPropeller 1 <engine>
+AddRecipeParts rightWing 1 metalWingSmall
+AddRecipeParts leftWing 1 metalWingSmall
+AddRecipeParts tail 1 metalTail
+//Health and collision
+SetupPart core 100 -16 -16 -16 32 32 32
+Health core 900
+Health tail 900
