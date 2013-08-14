@@ -658,4 +658,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return getDriveableType().cameraDistance;
 	}
+	
+	public boolean isPartIntact(EnumDriveablePart part)
+	{
+		return parts.get(part).maxHealth == 0 || parts.get(part).health > 0; 
+	}
 }
