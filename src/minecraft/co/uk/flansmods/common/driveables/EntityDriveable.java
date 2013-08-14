@@ -25,7 +25,9 @@ import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.vector.Vector3f;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
@@ -351,6 +353,18 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		}
         	}
         }
+        
+        for(DriveablePart part : parts.values())
+        {
+        	part.update(this);
+        	if(worldObj.isRemote && part.box != null)// && part.onFire)
+        	{
+        		//Rotate the box midpoint to global axes
+        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+        	}
+        }
+        
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
@@ -618,7 +632,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			//Ray trace the bullet
 			if(part.rayTrace(bullet, rotatedPosVector, rotatedMotVector))
+			{
+				//If it hit, send a damage update packet
+				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
 				return true;
+			}
 		}
 		return false;
 	}

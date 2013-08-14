@@ -55,8 +55,6 @@ public class EntityPlane extends EntityDriveable
 	public int bombDelay;
 	public int gunDelay;
 	
-	
-	
 	public boolean tailOnGround;
 	private boolean spawnedEntities;
 	public int ticksSinceUsed = 0;

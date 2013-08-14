@@ -2,6 +2,7 @@ package co.uk.flansmods.common.driveables;
 
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.vector.Vector3f;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class DriveablePart 
