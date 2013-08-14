@@ -1032,7 +1032,7 @@ public class EntityPlane extends EntityDriveable
 				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)getPlaneData().fuelInTank / 200F, false);
 			}
 			
-			setDead();
+			//setDead();
 			/*
 			if(type.cockpit != null)
 				entityDropItem(new ItemStack(type.cockpit.getItem(), 1), 1.0F);

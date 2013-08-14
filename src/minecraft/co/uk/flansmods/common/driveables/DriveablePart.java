@@ -46,10 +46,14 @@ public class DriveablePart
 	{
 		if(box == null)
 			return false;
-		boolean hitX = rayTraceCoord(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);
-		boolean hitY = rayTraceCoord(origin.y, origin.y + motion.y, (float)box.y / 16F, (float)(box.y + box.h) / 16F);
-		boolean hitZ = rayTraceCoord(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
-		boolean hit = hitX && hitY && hitZ;
+		//Complicated. Will explain later. Someone remind me.
+		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);
+		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, (float)box.y / 16F, (float)(box.y + box.h) / 16F);
+		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
+		boolean inX = coordIsIn(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);
+		boolean inY = coordIsIn(origin.y, origin.y + motion.y, (float)box.y / 16F, (float)(box.y + box.h) / 16F);
+		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
+		boolean hit = (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
 		//If the bullet hits, perform damage code here, and then tell the bullet that it hit
 		if(hit)
 		{
@@ -63,17 +67,35 @@ public class DriveablePart
 	/** Ray traces a single co-ordinate 
 	 * But only returns true once upon entering the box, and not while in or exiting
 	 * @param start The start of the ray in this co-ordinate 
-	 * @param diff The end of the ray in this co-ordinate
+	 * @param end The end of the ray in this co-ordinate
 	 * @param min The start of the box in this co-ordinate
 	 * @param max The end of the box in this co-ordinate 
 	 * @return true if the ray hits in this co-ordinate */
-	private boolean rayTraceCoord(float start, float end, float min, float max)
+	private boolean coordIsEntering(float start, float end, float min, float max)
 	{
 		//Check to see if ray entered from the left hand side
 		if(start < min && end >= min)
 			return true;
 		//Check to see if ray entered from the right hand side
 		if(start > max && end <= max)
+			return true;
+		return false;	
+	}
+	
+	/** Ray traces a single co-ordinate 
+	 * Returns true if the ray is in the bounds at some point along its length
+	 * @param start The start of the ray in this co-ordinate 
+	 * @param end The end of the ray in this co-ordinate
+	 * @param min The start of the box in this co-ordinate
+	 * @param max The end of the box in this co-ordinate 
+	 * @return true if the ray hits in this co-ordinate */
+	private boolean coordIsIn(float start, float end, float min, float max)
+	{
+		//Check to see if the start point is in
+		if(start >= min && start <= max)
+			return true;
+		//Check to see if the end point is in
+		if(end >= min && end <= max)
 			return true;
 		return false;	
 	}

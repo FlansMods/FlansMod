@@ -74,6 +74,8 @@ AddRecipeParts leftWing 1 woodenWing
 AddRecipeParts topWing 2 woodenWing
 AddRecipeParts tail 1 woodenTail
 //Health and collision
-SetupPart core 100 -16 -16 -16 32 32 32
+//SetupPart core 100 -16 -16 -16 32 32 32
+SetupPart rightWing 100 -9 0 -9 18 2 41
 Health core 100
 Health tail 100
+BulletDetection 5

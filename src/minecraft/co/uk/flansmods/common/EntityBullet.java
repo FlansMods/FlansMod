@@ -18,6 +18,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.teams.TeamsManager;
@@ -172,6 +173,30 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			setDead();
 		}
 		
+		//Iterate over all EntityDriveables
+		for(int i = 0; i < worldObj.loadedEntityList.size(); i++)
+		{
+			Object obj = worldObj.loadedEntityList.get(i);
+			if(obj instanceof EntityDriveable)
+			{
+				EntityDriveable driveable = (EntityDriveable)obj;
+				//If this bullet is within the driveable's detection range
+				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
+				{
+					//Raytrace the bullet and if it hits, kill the bullet
+					if(driveable.attackFromBullet(this, new Vector3f((float)posX, (float)posY, (float)posZ), new Vector3f((float)motionX, (float)motionY, (float)motionZ)))
+					{
+						driveable.rotateYaw(10);
+						for(int j = 0; j < 10; j++)
+						{
+							worldObj.spawnParticle("reddust", posX, posY, posZ, 0, 0, 0);
+						}
+						setDead();
+					}
+				}
+			}
+		}
+		
 		//Ray trace the bullet by comparing its next position to its current position
 		Vec3 posVec = Vec3.createVectorHelper(posX, posY, posZ);
 		Vec3 nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
@@ -187,7 +212,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			nextPosVec = Vec3.createVectorHelper(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 		}
 		//If we hit something
-		if (hit != null)
+		if (!isDead && hit != null)
 		{
 			//If the bullet should explode on impact and the hit is not the shooter, explode!
 			if (type.explodeOnImpact && ticksInAir > 5 && (hit.entityHit == null || !isPartOfOwner(hit.entityHit)))
@@ -247,7 +272,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		//If the bullet was not stopped by a block
-		if(hit == null || hit.entityHit != null || type.penetratesBlocks)
+		if(!isDead)
 		{
 			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
 			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));

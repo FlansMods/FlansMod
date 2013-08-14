@@ -38,6 +38,9 @@ public class DriveableType extends InfoType
 	/** Mass in tons */
 	public float mass = 1;
 	
+	/** The radius within which to check for bullets */
+	public float bulletDetectionRadius = 5F;
+	
 	
 	/** Static DriveableType map for obtaining Types from Strings */
 	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
@@ -96,9 +99,12 @@ public class DriveableType extends InfoType
 				numBombSlots = Integer.parseInt(split[1]);
 			if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);
+			
+			if(split[0].equals("BulletDetection"))
+				bulletDetectionRadius = Integer.parseInt(split[1]);
 
 			//Health
-			if(split[0].equals("Health"))
+			if(split[0].equals("SetupPart"))
 			{
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
 				health.put(part, new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8])));
