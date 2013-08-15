@@ -6,18 +6,22 @@ import java.nio.FloatBuffer;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.EntityBullet;
+import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PlaneType;
-
 
 public class RenderPlane extends Render
 {
+	public static boolean DEBUG = true;
+	
     public RenderPlane()
     {
         shadowSize = 0.5F;
@@ -46,8 +50,25 @@ public class RenderPlane extends Render
 		{
 			modPlane.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, entityPlane);
 		}
+		if(DEBUG)
+		{
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glColor4f(1F, 0F, 0F, 0.3F);
+			GL11.glScalef(-1F, 1F, -1F);
+			for(DriveablePart part : entityPlane.parts.values())
+			{
+				if(part.box == null)
+					continue;
+				
+				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
+			}
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+		}
         GL11.glPopMatrix();
-    }
+    }   
 
     public void doRender(Entity entity, double d, double d1, double d2, 
             float f, float f1)

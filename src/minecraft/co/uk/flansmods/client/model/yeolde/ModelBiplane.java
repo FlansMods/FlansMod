@@ -120,25 +120,6 @@ public class ModelBiplane extends ModelPlane
 		
         tailModel[0].addBox(11F, -2F , -5F, 40, 8, 10, 0.0F);		//Tail
 		tailModel[1].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
-		
-		//These two must still be initialized even when not used to avoid errors.
-		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
-		pitchFlapRightWingModel = new ModelRendererTurbo[0];
-		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
-
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }
