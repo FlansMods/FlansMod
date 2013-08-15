@@ -54,9 +54,22 @@ public class PacketReload extends FlanPacketCommon
 	{
 		if (side.equals(Side.CLIENT))
 			interpretClient(stream, extradata);	
-		else FlansMod.log("Reload packet recieved on server. Skipping interpretation.");
+		else interpretServer(stream, extradata);
 	}
 	
+	/** The player pressed the reload key */
+	private void interpretServer(DataInputStream stream, Object[] extradata)
+	{
+    	EntityPlayer player = (EntityPlayer)extradata[0];
+    	ItemStack stack = player.getCurrentEquippedItem();
+    	if(stack != null && stack.getItem() instanceof ItemGun)
+    	{
+    		GunType type = ((ItemGun)stack.getItem()).type;
+    		((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
+    	}
+	}
+	
+	/** The player's gun was reloaded server side. Apply reload delay timers and whatnot */
 	@SideOnly(value = Side.CLIENT)
 	private void interpretClient(DataInputStream stream, Object[] extradata)
 	{

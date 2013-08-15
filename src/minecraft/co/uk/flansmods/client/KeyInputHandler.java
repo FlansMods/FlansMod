@@ -10,8 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.network.PacketReload;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,6 +32,7 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
 	protected static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C);
+	protected static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R);
 	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
 	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
 	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_BACKSLASH);
@@ -64,7 +68,8 @@ public class KeyInputHandler extends KeyHandler
                 trimKey,
                 parkKey,
 				teamsMenuKey,
-				teamsScoresKey
+				teamsScoresKey,
+				reloadKey
 				},
 				new boolean[]
 						{
@@ -87,7 +92,8 @@ public class KeyInputHandler extends KeyHandler
                 false, // trim button
                 false, //park
 				false, // teams menu
-				false // teams scores menu
+				false, // teams scores menu
+				false //reload
 						});
 		
 		mc = Minecraft.getMinecraft();
@@ -107,6 +113,9 @@ public class KeyInputHandler extends KeyHandler
 		
 		int keyNum = -1;
 		boolean handled = true;
+		
+		EntityPlayer player = mc.thePlayer;
+		Entity entityTest  = player.ridingEntity;
 		
 		if(kb == accelerateKey)
 			keyNum = 0;
@@ -154,13 +163,17 @@ public class KeyInputHandler extends KeyHandler
 			mc.displayGuiScreen(new GuiTeamScores());
 			return;
 		}
+		else if(kb == reloadKey && !(entityTest instanceof EntitySeat) && FlansModClient.shootTime <= 0)
+		{
+			PacketDispatcher.sendPacketToServer(PacketReload.buildReloadPacket());
+			return;
+		}
 		else
 			handled = false;
 		
 		
 		
-		EntityPlayer player = mc.thePlayer;
-		Entity entityTest  = player.ridingEntity;
+
 		
 		if (entityTest != null && entityTest instanceof IControllable && handled == true)
 		{

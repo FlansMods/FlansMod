@@ -308,7 +308,7 @@ public class ItemGun extends Item
 	}
 	
 	/** Reload method. Called automatically when firing with an empty clip */
-	private void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload)
+	public void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload)
 	{
 		//Keep the Flan's Mod player data handy
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
@@ -345,8 +345,12 @@ public class ItemGun extends Item
 					ItemStack newBulletStack = player.inventory.getStackInSlot(bestSlot);
 					BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
 					//Unload the old magazine (Drop an item if it is required and the player is not in creative mode)
-					if(newBulletType.dropItemOnReload != null && !player.capabilities.isCreativeMode)
-						dropItem(world, player, newBulletType.dropItemOnReload);
+					if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet && ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload != null && !player.capabilities.isCreativeMode)
+						dropItem(world, player, ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload);
+					//The magazine was not finished, pull it out and give it back to the player or, failing that, drop it
+					if(bulletStack != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+						if(!player.inventory.addItemStackToInventory(bulletStack))
+							player.entityDropItem(bulletStack, 0.5F);
 					
 					//Load the new magazine
 					setBulletItemStack(gunStack, newBulletStack, i);					
@@ -489,7 +493,7 @@ public class ItemGun extends Item
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
-		return true;
+		return type.meleeDamage == 0 || type.hasScope;
 	}
 	
 	@Override
