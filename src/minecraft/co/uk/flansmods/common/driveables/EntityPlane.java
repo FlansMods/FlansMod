@@ -461,18 +461,20 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
+			float sensitivityAdjust = 0.05F;
+			
 			//Yaw according to the flapsYaw
-			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * 0.1F;
+			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
 			//applyRotationalForce(axes.getZAxis(), (Vector3f)axes.getXAxis().scale(yaw));
 			
 			//Pitch according to the sum of flapsPitchLeft and flapsPitchRight / 2
 			float flapsPitch = (flapsPitchLeft + flapsPitchRight) / 2F;
-			float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * 0.1F;
+			float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * sensitivityAdjust;
 			//applyRotationalForce(axes.getZAxis(), (Vector3f)axes.getYAxis().scale(pitch));
 			
 			//Roll according to the difference between flapsPitchLeft and flapsPitchRight / 2
 			float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
-			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * 0.1F;
+			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
 			//applyRotationalForce(axes.getXAxis(), (Vector3f)axes.getYAxis().scale(roll));
 			
 			applyTorque(new Vector3f(yaw, pitch, roll));

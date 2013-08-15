@@ -30,17 +30,6 @@ public class Seat
 	 * */
 	public Seat(String[] split)
 	{
-		//Old driveable files were of the form "AddPassengerSeat ID z y x gunID", but the gunID is now defunct
-		if(split.length == 6)
-		{
-			FlansMod.log("Old plane / vehicle file detected. Loading anyway.");
-			id = Integer.parseInt(split[1]) + 1;
-			z = Integer.parseInt(split[2]);
-			y = Integer.parseInt(split[3]);
-			x = Integer.parseInt(split[4]);
-			return;
-		}
-		//This a nice new driveable file. Yay
 		id = Integer.parseInt(split[1]);
 		x = Integer.parseInt(split[2]);
 		y = Integer.parseInt(split[3]);

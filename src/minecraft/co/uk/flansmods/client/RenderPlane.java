@@ -16,7 +16,9 @@ import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
+import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.Propeller;
 
 public class RenderPlane extends Render
 {
@@ -63,6 +65,16 @@ public class RenderPlane extends Render
 					continue;
 				
 				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
+			}
+			GL11.glColor4f(0F, 1F, 0F, 0.3F);
+			for(Propeller prop : type.propellers)
+			{				
+				renderAABB(AxisAlignedBB.getBoundingBox((float)prop.x / 16F - 0.25F, (float)prop.y / 16F - 0.25F, (float)prop.z / 16F - 0.25F, (float)prop.x / 16F + 0.25F, (float)prop.y / 16F + 0.25F, (float)prop.z / 16F + 0.25F));
+			}
+			GL11.glColor4f(0F, 0F, 1F, 0.3F);
+			for(PilotGun gun : type.guns)
+			{				
+				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x / 16F - 0.25F, (float)gun.position.y / 16F - 0.25F, (float)gun.position.z / 16F - 0.25F, (float)gun.position.x / 16F + 0.25F, (float)gun.position.y / 16F + 0.25F, (float)gun.position.z / 16F + 0.25F));
 			}
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

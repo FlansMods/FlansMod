@@ -38,7 +38,7 @@ public class ModelLancaster extends ModelPlane
 		//(Dont forget the crazy shapes you can make with it)
 		
 		//Section 0
-		bodyModel[0] = new ModelRendererTurbo(this,0, 0, textureX, textureY);
+		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		bodyModel[0].addTrapezoid(-160, -80, -16, 16, 32, 32, 0.0F, -4.0F, ModelRendererTurbo.MR_RIGHT); //Front gunner window outside
 		bodyModel[18] = new ModelRendererTurbo(this,0, 0, textureX, textureY);
 		bodyModel[18].flip = true;

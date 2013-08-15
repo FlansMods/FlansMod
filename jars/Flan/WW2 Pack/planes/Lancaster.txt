@@ -29,10 +29,7 @@ Mass 16.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
 //Nose and Wing Guns (not present)
-//AddNoseGun 0 0 0 0 browning
-//AddNoseGun 1 0 0 0 mg42
-//AddWingGun 2 0 0 0 dp28
-//AddWingGun 3 0 0 0 bren
+//AddGun 0 0 0 nose browning
 //ShootDelay 999
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
@@ -42,39 +39,22 @@ BombPosition 0 -32 0
 CargoSlots 0
 BombSlots 16
 //Propeller Positions
-//NosePropellerPos 0 0 0 (not present)
-LeftWingPropellerPos 114 0 52
-LeftWingPropellerPos 98 0 116
-RightWingPropellerPos 114 0 -52
-RightWingPropellerPos 98 0 -116
+Propeller 0 114 16 -52 rightWing metalPropeller
+Propeller 1 114 16 52 leftWing metalPropeller
+Propeller 2 98 16 -116 rightWing metalPropeller
+Propeller 3 98 16 116 leftWing metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
-Passenger 1 145 0 0 -360 360 -89 89 browning nose
-Passenger 2 90 10 0
-Passenger 3 70 10 0
-Passenger 4 -48 40 0 -360 360 0 89 browning dorsal
-Passenger 5 -120 16 0
+Passenger 1 145 0 0 nose -360 360 -89 89 browning nose
+Passenger 2 90 10 0 core
+Passenger 3 70 10 0 core
+Passenger 4 -48 40 0 bay -360 360 0 89 browning dorsal
+Passenger 5 -120 16 0 tail
 //Collision points (Each collision point has a position, a part and a strength)
 //The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddCollisionPoint 0 0 -32 core 1.0
-//AddCollisionBox 0 0 0 -32 3
-//AddCollisionBox 1 0 10 -80 3
-//AddCollisionBox 2 0 20 -110 3
-//AddCollisionBox 3 80 20 -112 3
-//AddCollisionBox 4 -80 20 -112 3
-//AddCollisionBox 5 55 5 75 2
-//AddCollisionBox 6 115 5 65 2
-//AddCollisionBox 7 200 20 20 2
-//AddCollisionBox 8 -55 5 75 1
-//AddCollisionBox 9 -115 5 65 1
-//AddCollisionBox 10 -200 20 20 1
-//AddCollisionBox 11 0 0 40 0
-//AddCollisionBox 12 0 0 70 0
-//AddCollisionBox 13 0 0 100 0
-//AddCollisionBox 14 0 0 130 0
-//AddCollisionBox 15 0 20 115 0
 //Sounds
 StartSound propStart
 StartSoundLength 20
@@ -83,11 +63,17 @@ PropSoundLength 49
 ShootSound PlaneShoot
 BombSound bomb
 //Recipe
-BigTable True
-Propeller metalPropeller
-Cockpit metalCockpit
-Wings metalWingSection
-Bay bombBay
-Tail metalTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Green
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit 1 bombBay
+AddRecipeParts rightWing 2 metalWingSection
+AddRecipeParts leftWing 2 metalWingSection
+AddRecipeParts tail 1 metalTail
+//Health and collision
+SetupPart core 500 -64 -4 -16 208 48 32
+SetupPart nose 200 144 -4 -16 16 32 32
+SetupPart rightWing 300 -16 26 -240 80 4 224
+SetupPart leftWing 300 -16 26 16 80 4 224
+SetupPart tail 200 -144 12 -16 80 32 32
+BulletDetection 5
