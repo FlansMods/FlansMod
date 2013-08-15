@@ -10,7 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.GunType;
+import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -63,7 +66,37 @@ public class PacketReload extends FlanPacketCommon
         	ItemStack stack = player.getCurrentEquippedItem();
         	if(stack != null && stack.getItem() instanceof ItemGun)
         	{
-        		FlansModClient.shootTime = ((ItemGun)stack.getItem()).type.reloadTime;
+        		GunType type = ((ItemGun)stack.getItem()).type;
+        		FlansModClient.shootTime = type.reloadTime;
+        		
+				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
+				int bestSlot = -1;
+				int bulletsInBestSlot = 0;
+				for (int j = 0; j < player.inventory.getSizeInventory(); j++)
+				{
+					ItemStack item = player.inventory.getStackInSlot(j);
+					if (item != null && item.getItem() instanceof ItemBullet && type.isAmmo(((ItemBullet)(item.getItem())).type))
+					{
+						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
+						if(bulletsInThisSlot > bulletsInBestSlot)
+						{
+							bestSlot = j;
+							bulletsInBestSlot = bulletsInThisSlot;
+						}
+					}
+				}
+				//If there was a valid non-empty magazine / bullet item somewhere in the inventory, take one to put in the gun
+				if(bestSlot != -1)
+				{
+					ItemStack newBulletStack = player.inventory.getStackInSlot(bestSlot);
+					BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
+					//Remove the magazine from the inventory
+					if(!player.capabilities.isCreativeMode)
+						newBulletStack.stackSize--;
+					if(newBulletStack.stackSize <= 0)
+						newBulletStack = null;
+					player.inventory.setInventorySlotContents(bestSlot, newBulletStack);
+				}
         	}
         }
         catch(Exception e)

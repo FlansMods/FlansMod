@@ -26,10 +26,9 @@ public class GunType extends InfoType
 	public int shootSoundLength;
 	public boolean distortSound = true;
 	public String reloadSound;
-	// When greater than 0, the ammo is placed in the gun item as the gun's
-	// damage value and then fired from there.
-	// This only works when the gun has only one ammo type
-	public int loadIntoGun = 0;
+	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
+	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
+	public int numAmmoItemsInGun = 1;
 	public int mode; // 0 = SemiAuto, 1 = FullAuto
 	public String scope;
 	public boolean hasScope;
@@ -124,8 +123,8 @@ public class GunType extends InfoType
 				if(type != null)
 					ammo.add(type);
 			}
-			if (arg0[0].equals("LoadIntoGun"))
-				loadIntoGun = Integer.parseInt(arg0[1]);
+			if (arg0[0].equals("NumAmmoSlots") || arg0[0].equals("NumAmmoItemsInGun") || arg0[0].equals("LoadIntoGun"))
+				numAmmoItemsInGun = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("BulletSpeed"))
 				speed = Float.parseFloat(arg0[1]);
 			if (arg0[0].equals("CanShootUnderwater"))

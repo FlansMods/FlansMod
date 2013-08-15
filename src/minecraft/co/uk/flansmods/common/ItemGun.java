@@ -1,13 +1,18 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -39,11 +44,97 @@ public class ItemGun extends Item
 		maxStackSize = 1;
 		type = gun;
 		type.item = this;
-		if (type.loadIntoGun > 0)
-		{
-			setMaxDamage(type.loadIntoGun);
-		}
+		setMaxDamage(type.numAmmoItemsInGun);
 		setCreativeTab(FlansMod.tabFlanGuns);
+	}
+	
+	@Override
+	/** Make sure client and server side NBTtags update */
+	public boolean getShareTag()
+	{
+		return true;
+	}
+	
+	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
+	public ItemStack getBulletItemStack(ItemStack gun, int id)
+	{
+		//If the gun has no tags, give it some
+		if(!gun.hasTagCompound())
+		{
+			gun.stackTagCompound = new NBTTagCompound("tag");
+			return null;
+		}
+		//If the gun has no ammo tags, give it some
+		if(!gun.stackTagCompound.hasKey("ammo"))
+		{
+			NBTTagList ammoTagsList = new NBTTagList();
+			for(int i = 0; i < type.numAmmoItemsInGun; i++)
+			{
+				ammoTagsList.appendTag(new NBTTagCompound());
+			}
+			gun.stackTagCompound.setTag("ammo", ammoTagsList);
+			return null;
+		}
+		//Take the list of ammo tags
+		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo");
+		//Get the specific ammo tags required
+		NBTTagCompound ammoTags = (NBTTagCompound)ammoTagsList.tagAt(id);
+		//If the ammo tags have no id key, then there is no ammo stack
+		if(!ammoTags.hasKey("id"))
+			return null;
+		//If all is well, get the stack from the tags
+		return new ItemStack(ammoTags.getShort("id"), ammoTags.getShort("num"), ammoTags.getShort("dam"));
+	}
+	
+	/** Set the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
+	public void setBulletItemStack(ItemStack gun, ItemStack bullet, int id)
+	{
+		//If the gun has no tags, give it some
+		if(!gun.hasTagCompound())
+		{
+			gun.stackTagCompound = new NBTTagCompound("tag");
+		}
+		//If the gun has no ammo tags, give it some
+		if(!gun.stackTagCompound.hasKey("ammo"))
+		{
+			NBTTagList ammoTagsList = new NBTTagList();
+			for(int i = 0; i < type.numAmmoItemsInGun; i++)
+			{
+				ammoTagsList.appendTag(new NBTTagCompound());
+			}
+			gun.stackTagCompound.setTag("ammo", ammoTagsList);
+		}
+		//Take the list of ammo tags
+		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo");
+		//Get the specific ammo tags required
+		NBTTagCompound ammoTags = (NBTTagCompound)ammoTagsList.tagAt(id);
+		//Represent empty slots by nulltypes
+		if(bullet == null)
+		{
+			ammoTags.removeTag("id");
+			ammoTags.removeTag("num");
+			ammoTags.removeTag("dam");
+		}
+		//Set the tags to match the bullet stack
+		ammoTags.setShort("id", (short)bullet.itemID);
+		ammoTags.setShort("num", (short)bullet.stackSize);
+		ammoTags.setShort("dam", (short)bullet.getItemDamage());
+	}
+
+	@Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
+	{
+		for(int i = 0; i < type.numAmmoItemsInGun; i++)
+		{
+			ItemStack bulletStack = getBulletItemStack(stack, i);
+			if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet)
+			{
+				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;					
+				//String line = bulletType.name + (bulletStack.getMaxDamage() == 1 ? "" : " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage());
+				String line = bulletType.name + " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+				lines.add(line);
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -111,16 +202,14 @@ public class ItemGun extends Item
 		if(FlansModClient.shootTime <= 0)
 		{
 			boolean hasAmmo = false;
-			for(int i = 0; i < type.ammo.size(); i++)
+			for(int i = 0; i < type.numAmmoItemsInGun; i++)
 			{
-				if(FlansModClient.minecraft.thePlayer.inventory.hasItem(type.ammo.get(i).itemID))
+				ItemStack bulletStack = getBulletItemStack(stack, i);
+				if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 				{
 					hasAmmo = true;
+					break;
 				}
-			}
-			if(type.loadIntoGun > 0)
-			{
-				hasAmmo = stack.getItemDamage() < stack.getMaxDamage() - 1;
 			}
 			if(hasAmmo)
 			{
@@ -176,126 +265,115 @@ public class ItemGun extends Item
 		return stack;
 	}
 		
-	public ItemStack tryToShoot(ItemStack itemstack, World world, EntityPlayerMP entityplayer)
+	public ItemStack tryToShoot(ItemStack gunStack, World world, EntityPlayerMP entityplayer)
 	{
 		if(type.deployable)
-			return itemstack;
+			return gunStack;
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer);
+		//Shoot delay ticker is at (or below) 0. Try and shoot the next bullet
 		if(data.shootTime <= 0)
 		{
-			if (type.loadIntoGun > 0)
+			//Go through the bullet stacks in the gun and see if any of them are not null
+			int bulletID = 0;
+			ItemStack bulletStack = null;
+			for(; bulletID < type.numAmmoItemsInGun; bulletID++)
 			{
-				BulletType bullet = type.ammo.get(0);
-				int i = itemstack.getItemDamage();
-				// Make sure the gun has bullets in
-				if (i < type.loadIntoGun)
+				ItemStack checkingStack = getBulletItemStack(gunStack, bulletID);
+				if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
 				{
-					// Shoot
-					shoot(world, bullet, entityplayer);
-					if (!world.isRemote)
-					{
-						// Use up one bullet
-						itemstack.setItemDamage(i + 1);
-					}
-				} else
-				{
-					// Reload
-					// Creative mode
-					if (entityplayer.capabilities.isCreativeMode)
-					{
-						// Reset the stack for infinite ammo
-						itemstack.setItemDamage(0);
-					} else
-					{
-						for (int j = 0; j < entityplayer.inventory.getSizeInventory(); j++)
-						{
-							ItemStack item = entityplayer.inventory.getStackInSlot(j);
-							if (item != null && item.getItem() instanceof ItemBullet && ((ItemBullet) (item.getItem())).type == bullet)
-							{
-								ItemStack consumed = entityplayer.inventory.decrStackSize(j, i);
-								i -= consumed.stackSize;
-							}
-						}
-						itemstack.setItemDamage(i);
-						// Drop item on reload if bullet requires it
-						if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
-							dropItem(world, entityplayer, bullet.dropItemOnReload);
-					}
-					// Play the reload sound by this method so that it stays
-					// with the player as they move around
-					if (type.reloadSound != null)
-					{
-						PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
-					}
-					PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)entityplayer);
-					// Reset the shoot delay timer to the reload time of this
-					// gun
-					data.shootTime = type.reloadTime;
+					bulletStack = checkingStack;
+					break;
 				}
-				return itemstack;
 			}
-			for (int j = 0; j < entityplayer.inventory.getSizeInventory(); j++)
+			
+			//If no bullet stack was found, reload
+			if(bulletStack == null)
 			{
-				ItemStack item = entityplayer.inventory.getStackInSlot(j);
-				if (item != null && item.getItem() instanceof ItemBullet && type.isAmmo(((ItemBullet) (item.getItem())).type))
+				reload(gunStack, world, entityplayer, false);				
+			}
+			//A bullet stack was found, so try shooting with it
+			else if(bulletStack.getItem() instanceof ItemBullet)
+			{
+				//Shoot
+				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
+				shoot(world, bulletType, entityplayer);
+				//Damage the bullet item
+				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+				
+				//Update the stack in the gun
+				setBulletItemStack(gunStack, bulletStack, bulletID);
+			}
+		}
+		return gunStack;
+	}
+	
+	/** Reload method. Called automatically when firing with an empty clip */
+	private void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload)
+	{
+		//Keep the Flan's Mod player data handy
+		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
+		//For playing sounds afterwards
+		boolean reloadedSomething = false;
+		//Check each ammo slot, one at a time
+		for(int i = 0; i < type.numAmmoItemsInGun; i++)
+		{
+			//Get the stack in the slot
+			ItemStack bulletStack = getBulletItemStack(gunStack, i);
+			
+			//If there is no magazine, if the magazine is empty or if this is a forced reload
+			if(bulletStack == null || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
+			{		
+				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
+				int bestSlot = -1;
+				int bulletsInBestSlot = 0;
+				for (int j = 0; j < player.inventory.getSizeInventory(); j++)
 				{
-					// Get the bullet type
-					BulletType bullet = BulletType.getBullet(item.itemID);
-					int i = item.getItemDamage();
-					if (i >= item.getMaxDamage())
-						continue;
-					// Shoot
-					shoot(world, bullet, entityplayer);
-					if (!world.isRemote)
+					ItemStack item = player.inventory.getStackInSlot(j);
+					if (item != null && item.getItem() instanceof ItemBullet && type.isAmmo(((ItemBullet)(item.getItem())).type))
 					{
-						// Use up one bullet
-						item.setItemDamage(i + 1);
-						entityplayer.inventory.setInventorySlotContents(j, item);
-						// Check if the clip has run out of ammo
-						if (i + 1 == item.getMaxDamage())
+						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
+						if(bulletsInThisSlot > bulletsInBestSlot)
 						{
-							if (entityplayer.capabilities.isCreativeMode)
-							{
-								// Reset the stack for infinite ammo
-								item.setItemDamage(0);
-								entityplayer.inventory.setInventorySlotContents(j, item);
-							} else
-							{
-								// Decrease the stack size and reset damage to 0
-								item.setItemDamage(0);
-								item.stackSize--;
-								// Check for empty stacks
-								if (item.stackSize == 0)
-									item = null;
-								entityplayer.inventory.setInventorySlotContents(j, item);
-								// Drop item on reload if bullet requires it
-								if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
-									dropItem(world, entityplayer, bullet.dropItemOnReload);
-							}
-							
-							// Drop item on reload if bullet requires it
-							if(bullet.dropItemOnReload != null && !entityplayer.capabilities.isCreativeMode)
-								dropItem(world, entityplayer, bullet.dropItemOnReload);
-							if (type.reloadSound != null)
-							{
-								PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.reloadSound, true));
-							}
-							// Reset the shoot delay timer to the reload time of
-							// this gun
-							PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)entityplayer);
-
-							data.shootTime = type.reloadTime;
-							return itemstack;
+							bestSlot = j;
+							bulletsInBestSlot = bulletsInThisSlot;
 						}
 					}
-					return itemstack;
+				}
+				//If there was a valid non-empty magazine / bullet item somewhere in the inventory, load it
+				if(bestSlot != -1)
+				{
+					ItemStack newBulletStack = player.inventory.getStackInSlot(bestSlot);
+					BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
+					//Unload the old magazine (Drop an item if it is required and the player is not in creative mode)
+					if(newBulletType.dropItemOnReload != null && !player.capabilities.isCreativeMode)
+						dropItem(world, player, newBulletType.dropItemOnReload);
+					
+					//Load the new magazine
+					setBulletItemStack(gunStack, newBulletStack, i);					
+					
+					//Remove the magazine from the inventory
+					if(!player.capabilities.isCreativeMode)
+						newBulletStack.stackSize--;
+					if(newBulletStack.stackSize <= 0)
+						newBulletStack = null;
+					player.inventory.setInventorySlotContents(bestSlot, newBulletStack);
+										
+					//Tell the sound player that we reloaded something
+					reloadedSomething = true;
+					//Set player shoot delay to be the reload delay
+					data.shootTime = type.reloadTime;
+					//Send reload packet to induce reload effects client side
+					PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
 				}
 			}
 		}
-		return itemstack;
+		//Play reload sound
+		if (reloadedSomething && type.reloadSound != null)
+			PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, true));
+
 	}
 
-	/** Method for dropping the gun */
+	/** Method for dropping items on reload and on shoot */
 	private void dropItem(World world, EntityPlayer entityplayer, String itemName)
 	{
 		if (itemName != null)
@@ -333,7 +411,6 @@ public class ItemGun extends Item
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
 		FlansModPlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
-		
 	}
 
 	/** Deployable guns only */
@@ -408,6 +485,18 @@ public class ItemGun extends Item
 	{
 		return true;
 	}
+	
+	@Override
+	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
+	{
+		return true;
+	}
+	
+	@Override
+    public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
+    {
+        return true;
+    }
 
 	@Override
     @SideOnly(Side.CLIENT)
