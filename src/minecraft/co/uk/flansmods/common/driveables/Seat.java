@@ -20,6 +20,8 @@ public class Seat
 	public String gunName;
 	/** The part of the driveable this seat is connected to. */
 	public EnumDriveablePart part;
+	/** Auto assigned by driveable type. Indicates what ammo slot the gun should take from */
+	public int gunnerID;
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z

@@ -281,7 +281,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			{
 				//Get the gun from the plane type and the ammo from the data
 				GunType gun = seatInfo.gunType;
-				ItemStack bulletItemStack = driveable.getDriveableData().ammo[3 + seatID];
+				ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
 				//Check that neither is null and that the bullet item is actually a bullet
 				if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 				{

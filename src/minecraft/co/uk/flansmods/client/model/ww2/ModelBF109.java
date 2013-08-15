@@ -14,8 +14,6 @@ public class ModelBF109 extends ModelPlane
         bodyModel = new ModelRendererTurbo[8];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
-		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
-		//It is recommended however as the base mod requires it so you will have it anyway and it allows you to use textures larger than 64 square. 
 		//(Dont forget the crazy shapes you can make with it)
 			
         bodyModel[0] = new ModelRendererTurbo(this, 0, 38, textureX, textureY);

@@ -29,8 +29,6 @@ public class PlaneType extends DriveableType
 	/** Co-efficients of drag and lift which determine how the plane flies */
 	public float drag = 1F, lift = 1F;
 	
-	/** Vectors representing the 4 guns operated by the driver. (Nose and wing) */
-	public Vector3f[] barrelPositions = new Vector3f[4];
 	/** The point at which bomb entities spawn */
 	public Vector3f bombPosition;
 	/** The time in ticks between bullets fired by the nose / wing guns */
@@ -49,9 +47,6 @@ public class PlaneType extends DriveableType
 	public int propSoundLength;
 	public String shootSound;
 	public String bombSound;
-	
-	/** Nose and wing guns */
-	public GunType[] guns = new GunType[4];
 	
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
@@ -102,11 +97,6 @@ public class PlaneType extends DriveableType
 				lift = Float.parseFloat(split[1]);
 				
 			//Propellers and Armaments
-			if(split[0].equals("AddGunPosition"))
-			{
-				int i = Integer.parseInt(split[1]);
-				barrelPositions[i] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
-			}
 			if(split[0].equals("BombPosition"))
 			{
 				bombPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);	

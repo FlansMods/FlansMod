@@ -26,10 +26,16 @@ public class DriveableType extends InfoType
 	public int numPassengers = 0;	
 	/** Seat objects for holding information about the position and gun setup of each seat */
 	public Seat[] seats;
+	/** Automatic counter used to setup ammo inventory for gunners */
+	public int numPassengerGunners = 0;
+	/** Automatic counter used to setup ammo inventory for pilot guns */
+	public int nextGunID = 0;
 	/** Inventory sizes */
 	public int numCargoSlots, numBombSlots;
 	/** The fuel tank size */
 	public int fuelTankSize = 100;
+	/** The guns controlled by the driver */
+	public ArrayList<PilotGun> guns = new ArrayList<PilotGun>();
 	
 	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
 	public float yOffset = 10F / 16F;
@@ -141,6 +147,18 @@ public class DriveableType extends InfoType
 			{
 				Seat seat = new Seat(split);
 				seats[seat.id] = seat;
+				if(seat.gunType != null)
+				{
+					seat.gunnerID = numPassengerGunners++;
+				}
+			}
+			
+			//Driver guns
+			if(split[0].equals("AddGun"))
+			{
+				PilotGun gun = new PilotGun(split);
+				guns.add(gun);
+				gun.gunID = nextGunID++;
 			}
 			
 			//Y offset for badly built models :P
@@ -154,6 +172,12 @@ public class DriveableType extends InfoType
 		{
 		}
 	}
+    
+    public int ammoSlots()
+    {
+    	return numPassengerGunners + guns.size();
+    }
+    
 	
 	public static DriveableType getDriveable(String find)
 	{

@@ -237,7 +237,7 @@ public class InfoType
 	
 	public static ItemStack getRecipeElement(String s, int damage)
 	{
-		return getRecipeElement(s, 0, damage);
+		return getRecipeElement(s, 1, damage);
 	}
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage)

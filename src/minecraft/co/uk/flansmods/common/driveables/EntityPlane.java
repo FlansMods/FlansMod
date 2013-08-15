@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -291,21 +292,21 @@ public class EntityPlane extends EntityDriveable
 			{
 				if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
 				{
-					for(int i = 0; i < 4; i++)
+					for(PilotGun gun : getDriveableType().guns)
 					{
 						//Get the gun from the plane type and the ammo from the data
-						GunType gun = getPlaneType().guns[i];
-						ItemStack bulletItemStack = getPlaneData().ammo[i];
+						GunType gunType = gun.type;
+						ItemStack bulletItemStack = getPlaneData().ammo[getDriveableType().numPassengerGunners + gun.gunID];
 						//Check that neither is null and that the bullet item is actually a bullet
-						if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
+						if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 						{
 							BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
-							if(gun.isAmmo(bullet))
+							if(gunType.isAmmo(bullet))
 							{
 								//Rotate the gun vector to global axes
-								Vec3 gunVec = rotate(type.barrelPositions[i]).toVec3();
+								Vec3 gunVec = rotate(gun.position).toVec3();
 								//Spawn a new bullet item
-								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, gun.accuracy, gun.damage, bullet, 3.0F, type));
+								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, gunVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), (EntityLiving)riddenByEntity, gunType.accuracy, gunType.damage, bullet, 3.0F, type));
 								//Play the shoot sound
 								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
 								//Get the bullet item damage and increment it
@@ -317,7 +318,7 @@ public class EntityPlane extends EntityDriveable
 									//Set the damage to 0 and consume one ammo item (unless in creative)
 									bulletItemStack.setItemDamage(0);
 									if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-										getPlaneData().decrStackSize(i, 1);
+										getPlaneData().decrStackSize(getDriveableType().numPassengerGunners + gun.gunID, 1);
 								}
 								//Reset the shoot delay
 								gunDelay = type.planeShootDelay;
@@ -378,128 +379,6 @@ public class EntityPlane extends EntityDriveable
 		}
 		return false;
 	}
-        
-    /*
-    @Override
-	public boolean attackEntityFromPart(CollisionPoint point, DamageSource damagesource, float i)
-    {
-		if(worldObj.isRemote || isDead)
-            return true;
-		
-		PlaneType type = PlaneType.getPlane(driveableType);
-		
-		if((box.part != 0 || health <= 0) && (box.part != 1 || leftWingHealth <= 0) && (box.part != 2 || rightWingHealth <= 0) && (box.part != 3 || tailHealth <= 0))
-			return false;
-		switch(box.part)
-		{
-			case 0 : //Body
-				return attackEntityFrom(damagesource, i, true);
-			case 1 : //Left Wing
-			{
-				if(leftWingHealth > 0)
-				{	
-					leftWingHealth -= i;
-					if(leftWingHealth <= 0)
-					{
-						if(type.wings != null)
-							entityDropItem(new ItemStack(type.wings.getItem(), type.bigTable ? 2 : 1), 1.0F);
-						int numProps = 0;
-						if(type.propSetup > 0)
-						{
-							numProps++;
-							propBlown[1] = true;
-						}
-						if(type.propSetup == 3)
-						{
-							numProps++;
-							propBlown[3] = true;
-						}
-						if(type.propeller != null && numProps > 0)
-							entityDropItem(new ItemStack(type.propeller.getItem(), numProps), 1.0F);
-						if(numProps > 0)
-							entityDropItem(new ItemStack(getPlaneData().engine.getItem(), numProps), 1.0F);
-						if(getPlaneData().guns[2] != null)
-						{
-							entityDropItem(new ItemStack(getPlaneData().guns[2].getItem(), 1), 1.0F);
-							getPlaneData().guns[2] = null;
-							if(getPlaneData().ammo[2] != null)
-							{
-								entityDropItem(getPlaneData().ammo[2], 1.0F);
-								getPlaneData().ammo[2] = null;
-							}
-						}
-					}		
-				}
-				
-				break;
-			}
-			case 2 : //Right Wing
-			{
-				if(rightWingHealth > 0)
-				{	
-					rightWingHealth -= i;
-					if(rightWingHealth <= 0)
-					{
-						if(type.wings != null)
-							entityDropItem(new ItemStack(type.wings.getItem(), type.bigTable ? 2 : 1), 1.0F);
-						int numProps = 0;
-						if(type.propSetup > 0)
-						{
-							numProps++;
-							propBlown[0] = true;
-						}
-						if(type.propSetup == 3)
-						{
-							numProps++;
-							propBlown[2] = true;
-						}
-						if(type.propeller != null && numProps > 0)
-							entityDropItem(new ItemStack(type.propeller.getItem(), numProps), 1.0F);
-						if(numProps > 0)
-							entityDropItem(new ItemStack(getPlaneData().engine.getItem(), numProps), 1.0F);
-						if(getPlaneData().guns[3] != null)
-						{
-							entityDropItem(new ItemStack(getPlaneData().guns[3].getItem(), 1), 1.0F);
-							getPlaneData().guns[3] = null;
-							if(getPlaneData().ammo[3] != null)
-							{
-								entityDropItem(getPlaneData().ammo[3], 1.0F);
-								getPlaneData().ammo[3] = null;
-							}
-						}
-					}	
-				}
-				break;
-			}
-			case 3 : //Tail Wing
-			{
-				if(tailHealth > 0)
-				{	
-					tailHealth -= i;
-					if(tailHealth <= 0)
-					{
-						if(type.tail != null)
-							entityDropItem(new ItemStack(type.tail.getItem(), 1), 1.0F);
-						if(getPlaneData().guns[4] != null)
-						{
-							entityDropItem(new ItemStack(getPlaneData().guns[4].getItem(), 1), 1.0F);
-							getPlaneData().guns[4] = null;
-							if(getPlaneData().ammo[4] != null)
-							{
-								entityDropItem(getPlaneData().ammo[4], 1.0F);
-								getPlaneData().ammo[4] = null;
-							}
-						}
-					}	
-				}
-				break;
-			}
-		}
-		destroyBrokenParts();
-		return attackEntityFrom(damagesource, i, false);
-	}
-    */
-
     
     public void onUpdate()
     {
@@ -1060,8 +939,16 @@ public class EntityPlane extends EntityDriveable
 	}
 
 	@Override
-	protected void dropItemsOnPartDeath(DriveablePart part) 
+	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) 
 	{
-		
+		for(Propeller propeller : getPlaneType().propellers)
+		{
+			//If the propeller is connected to this part, drop it
+			if(propeller.planePart == part.type)
+			{
+				worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, new ItemStack(propeller.itemType.item)));
+				worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, new ItemStack(getDriveableData().engine.item)));
+			}
+		}
 	}
 }

@@ -28,16 +28,14 @@ Lift 2.0
 Mass 2.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 6000
-//Nose and Wing Guns (not present)
-//AddNoseGun 0 0 0 0 browning
-//AddNoseGun 1 0 0 0 mg42
-//AddWingGun 2 0 0 0 dp28
-//AddWingGun 3 0 0 0 bren
+//Nose and Wing Guns
+AddGun 80 3 -5 nose mg42
+AddGun 80 3 5 nose mg42
 ShootDelay 7
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 100
-//BombPosition 0 0 0
+BombPosition 0 -16 0
 //Inventory Slots
 CargoSlots 0
 BombSlots 3
@@ -71,5 +69,3 @@ AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts tail 1 metalTail
 //Health and collision
 SetupPart core 100 -16 -16 -16 32 32 32
-Health core 900
-Health tail 900

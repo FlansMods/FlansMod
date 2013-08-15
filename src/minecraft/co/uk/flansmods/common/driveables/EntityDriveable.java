@@ -715,18 +715,35 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		DriveableType type = getDriveableType();
 		if(!worldObj.isRemote)
 		{
-			ItemStack[] drops = type.recipe.get(part.type);
-			if(drops != null)
+			Vector3f pos = new Vector3f(0, 0, 0);
+					
+			//Get the midpoint of the part
+			if(part.box != null)
+	    		pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	    		
+    		ItemStack[] drops = type.recipe.get(part.type);
+    		if(drops != null)
 			{
-				//Get the midpoint of the part
-        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
 				//Drop each itemstack 
         		for(ItemStack stack : drops)
 				{
 					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + pos.x, posY + pos.y, posZ + pos.z, stack.copy()));
 				}
 			}
-			dropItemsOnPartDeath(part);
+			dropItemsOnPartDeath(pos, part);
+			
+			//Inventory is in the core, so drop it if the core is broken
+			if(part.type == EnumDriveablePart.core)
+			{
+				for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
+				{
+					ItemStack stack = getDriveableData().getStackInSlot(i);
+					if(stack != null)
+					{
+						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), stack));
+					}
+				}
+			}
 		}
 		
 		//Kill all child parts to stop things floating unconnected
@@ -737,7 +754,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	/** Method for planes, vehicles and whatnot to drop their own specific items if they wish */
-	protected abstract void dropItemsOnPartDeath(DriveablePart part);
+	protected abstract void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part);
 	
 	@Override
 	public float getPlayerRoll() 
