@@ -484,14 +484,18 @@ public class EntityPlane extends EntityDriveable
 		float thrustFormulaCoefficient = 1F;
 		float dragFormulaCoefficient = 10F;
 		float gravity = 9.81F / 20F;
-		float liftFormulaCoefficient = 1F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());
+		float liftFormulaCoefficient = 1.2F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());
 				
 		//Apply thrust
 		for(Propeller propeller : type.propellers)
 		{
 			//TODO : Factor in engine type
-			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-			applyForce(rotate(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+			//Check the propeller is still around
+			if(!parts.get(propeller.planePart).dead)
+			{
+				float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
+				applyForce(rotate(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+			}
 		}
 				
 		//Apply drag
@@ -602,37 +606,6 @@ public class EntityPlane extends EntityDriveable
 	
 			if(soundPosition > 0)
 				soundPosition--;
-		}
-		
-		//Damage plane
-		if(health < type.health / 4)
-		{
-			if(health > 0 && rand.nextInt(20 * health) == 0)
-			{
-				//Blow up a propeller!
-				int propNum = rand.nextInt(type.numProps);
-				if(!propBlown[propNum])
-				{
-					propBlown[propNum] = true;
-					Vec3 propVec = rotate((double)(type.propellerX[propNum]) / 16D, (double)(type.propellerY[propNum]) / 16D, (double)(type.propellerZ[propNum]) / 16D);
-					if(FlansMod.explosions)
-						worldObj.createExplosion(this, posX + propVec.xCoord, posY + propVec.yCoord, posZ + propVec.zCoord, 1F, false);
-				}
-			}
-			for(int i = 0; i < type.numProps; i++)
-			{
-				if(propBlown[i])
-				{
-					for(int j = 0; j < 3; j++)
-					{				
-						Vec3 propVec = rotate((double)(type.propellerX[i]) / 16D, (double)(type.propellerY[i]) / 16D, (double)(type.propellerZ[i]) / 16D);
-						FlansMod.proxy.spawnParticle("smoke", posX + propVec.xCoord + rand.nextGaussian(), posY + propVec.yCoord + rand.nextGaussian(), posZ + propVec.zCoord + rand.nextGaussian(), 0D, 0D, 0D, 1);
-					}
-				}
-			}
-			FlansMod.proxy.spawnParticle("smoke", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
-			if(health < type.health / 8)
-					FlansMod.proxy.spawnParticle("flame", posX + rand.nextGaussian() / 4D, posY + rand.nextGaussian() / 4D, posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, 10);
 		}
 		*/
 		

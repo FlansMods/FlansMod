@@ -155,6 +155,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			data.writeFloat(axes.getYaw());
 			data.writeFloat(axes.getPitch());
 			data.writeFloat(axes.getRoll());
+			
+			//Write damage
+        	for(EnumDriveablePart ep : EnumDriveablePart.values())
+        	{
+        		DriveablePart part = parts.get(ep);
+        		data.writeShort((short)part.health);
+        		data.writeBoolean(part.onFire);
+        	}
 		}
 		catch (IOException e)
 		{
@@ -177,6 +185,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			prevRotationYaw = axes.getYaw();
 			prevRotationPitch = axes.getPitch();
 			prevRotationRoll = axes.getRoll();
+			
+			//Read damage
+        	for(EnumDriveablePart ep : EnumDriveablePart.values())
+        	{
+        		DriveablePart part = parts.get(ep);
+        		part.health = inputData.readShort();
+        		part.onFire = inputData.readBoolean();
+        	}
 
 		}
 		catch(Exception e)
@@ -348,7 +364,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         super.onUpdate();
         if(!worldObj.isRemote)
         {
-        	for(int i = 0; i < getDriveableType().numPassengers; i++)
+        	for(int i = 0; i < getDriveableType().numPassengers + 1; i++)
         	{
         		if(seats[i] == null || !seats[i].addedToChunk)
         		{

@@ -9,7 +9,7 @@ Texture Lancaster
 //Third Person Camera Distance
 CameraDistance 25.0
 //Throttle
-MaxThrottle 4.2
+MaxThrottle 8.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -76,4 +76,4 @@ SetupPart nose 200 144 -4 -16 16 32 32
 SetupPart rightWing 300 -16 26 -240 80 4 224
 SetupPart leftWing 300 -16 26 16 80 4 224
 SetupPart tail 200 -144 12 -16 80 32 32
-BulletDetection 5
+BulletDetection 25

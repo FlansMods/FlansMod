@@ -23,7 +23,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -74,14 +76,14 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveableID = d.entityId;
 		seatInfo = driveable.getDriveableType().seats[id];
 		driver = id == 0;
-		//setPosition(d.posX, d.posY, d.posZ);
-		updatePosition();
+		setPosition(d.posX, d.posY, d.posZ);
+		//updatePosition();
 	}
 	
 	@Override
 	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
 	{
-		
+		//setPosition(x, y, z);
 	}
 	
 	@Override
@@ -351,6 +353,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public void readSpawnData(ByteArrayDataInput data) 
 	{
 		driveableID = data.readInt();
+		driveable = (EntityDriveable)worldObj.getEntityByID(driveableID);
 		seatID = data.readInt();
 		driver = seatID == 0;
 	}
@@ -358,7 +361,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
     public void updateRiderPosition()
     {
-		if(riddenByEntity == null || !foundDriveable)
+		if(riddenByEntity == null || (worldObj.isRemote && !foundDriveable))
         {
             return;
         } else

@@ -3,9 +3,9 @@ Name Two Seat Biplane
 ShortName TwoSeatBiplane
 ItemID 23321
 //Visuals
-Icon TwoSeaterBiplane
-Model yeolde.TwoSeaterBiplane
-Texture TwoSeaterBiplane
+Icon TwoSeatBiplane
+Model yeolde.TwoSeatBiplane
+Texture TwoSeatBiplane
 //Third Person Camera Distance
 CameraDistance 5.0
 //Throttle
