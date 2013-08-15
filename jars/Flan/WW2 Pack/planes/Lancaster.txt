@@ -9,7 +9,7 @@ Texture Lancaster
 //Third Person Camera Distance
 CameraDistance 25.0
 //Throttle
-MaxThrottle 4.0
+MaxThrottle 4.2
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -20,12 +20,12 @@ LookDownSpeed 1
 //Roll modifiers
 RollLeftSpeed 1
 RollRightSpeed 1
-//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 should keep the plane going at some reasonable speed at full throttle
-Drag 16.0
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 16.7
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 16.0
+Lift 16.7
 //Mass (In tons)
-Mass 16.0
+Mass 16.7
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
 //Nose and Wing Guns (not present)

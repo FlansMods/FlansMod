@@ -9,7 +9,7 @@ Texture Biplane
 //Third Person Camera Distance
 CameraDistance 5.0
 //Throttle
-MaxThrottle 1.0
+MaxThrottle 0.2
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -20,12 +20,12 @@ LookDownSpeed 1
 //Roll modifiers
 RollLeftSpeed 1
 RollRightSpeed 1
-//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 should keep the plane going at some reasonable speed at full throttle
-Drag 1.0
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 0.2
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 1.0
+Lift 0.2
 //Mass (In tons)
-Mass 1.0
+Mass 0.2
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1000
 //Nose and Wing Guns (not present)

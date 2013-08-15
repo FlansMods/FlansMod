@@ -9,7 +9,7 @@ Texture BF109
 //Third Person Camera Distance
 CameraDistance 10.0
 //Throttle
-MaxThrottle 2.0
+MaxThrottle 2.7
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 2
@@ -21,11 +21,11 @@ LookDownSpeed 2
 RollLeftSpeed 2
 RollRightSpeed 2
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
-Drag 2.0
+Drag 2.7
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 2.0
+Lift 2.7
 //Mass (In tons)
-Mass 2.0
+Mass 2.7
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 6000
 //Nose and Wing Guns
@@ -35,7 +35,7 @@ ShootDelay 7
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 100
-BombPosition 0 -16 0
+BombPosition 0 16 0
 //Inventory Slots
 CargoSlots 0
 BombSlots 3
@@ -43,7 +43,7 @@ BombSlots 3
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
 Propeller 0 54 0 0 nose metalPropeller
 //Passengers
-Pilot 0 0 0
+Pilot 0 -4 0
 Passengers 0
 //Collision points (Each collision point has a position, a section and a strength)
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
@@ -62,11 +62,11 @@ BombSound bomb
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 1 metalCockpit 
+AddRecipeParts core 1 woodenCockpit
+AddRecipeParts rightWing 1 biplaneWing
+AddRecipeParts leftWing 1 biplaneWing
 AddRecipeParts bay 1 bombBay
-AddRecipeParts rightWing 1 metalWingSmall
-AddRecipeParts leftWing 1 metalWingSmall
-AddRecipeParts tail 1 metalTail
+AddRecipeParts tail 1 woodenTail
 //Health and collision
 SetupPart core 200 -17 -7 -10 20 24 20
 SetupPart nose 100 3 -7 -10 48 18 20
