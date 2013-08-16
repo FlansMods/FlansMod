@@ -128,7 +128,7 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[15].rotateAngleX = (float)Math.PI;
 		
 		//Tail (8 / 9)
-		tailModel = new ModelRendererTurbo[6];
+		tailModel = new ModelRendererTurbo[7];
 		tailModel[0] = new ModelRendererTurbo(this,0, 279, textureX, textureY);
 		tailModel[0].addBox(96, 16, -82, 16, 64, 2, 0.0F); //Right Tail Flat
 		tailModel[0].rotateAngleX = -(float)Math.PI / 2;
@@ -143,7 +143,10 @@ public class ModelLancaster extends ModelPlane
 		tailModel[4] = new ModelRendererTurbo(this,240, 279, textureX, textureY);
 		tailModel[4].addBox(64, -96, -15, 64, 1, 30, 0.0F); //Top Panel
 		tailModel[5] = new ModelRendererTurbo(this,304, 111, textureX, textureY);
-		tailModel[5].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, ModelRendererTurbo.MR_LEFT); //Rear Gunner Window
+		tailModel[5].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, ModelRendererTurbo.MR_LEFT); //Rear Gunner Window Outside
+		tailModel[6] = new ModelRendererTurbo(this,304, 111, textureX, textureY);
+		tailModel[6].flip = true;
+		tailModel[6].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, ModelRendererTurbo.MR_LEFT); //Rear Gunner Window Inside
 		
 		rightWingModel = new ModelRendererTurbo[6];
 		rightWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);

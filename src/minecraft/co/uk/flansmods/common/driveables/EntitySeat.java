@@ -12,6 +12,7 @@ import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.network.PacketPlaySound;
+import co.uk.flansmods.common.network.PacketSeatUpdates;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -55,6 +56,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public RotatedAxes looking;
 	/** Delay ticker for shooting guns */
 	public int gunDelay;
+	/** Sound delay ticker for looping sounds */
+	public int soundDelay;
 	
 	/** For smoothness */
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
@@ -103,6 +106,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			driveable.seats[seatID] = this;
 			seatInfo = driveable.getDriveableType().seats[seatID];
 		}
+		
+		//Update gun delay ticker
+		if(gunDelay > 0)
+			gunDelay--;
+		//Update sound delay ticker
+		if(soundDelay > 0)
+			soundDelay--;
 		
 		updatePosition();
 		
@@ -183,7 +193,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		if(!foundDriveable)
 			return;
-		
+				
 		//Driver seat should pass input to driveable
 		if(driver)
 		{
@@ -238,6 +248,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}
 			//Now set the new angles
 			looking.setAngles(newYaw, newPitch, 0F);
+			
+			PacketDispatcher.sendPacketToServer(PacketSeatUpdates.buildUpdatePacket(this));
 		}
 	}
 
@@ -275,7 +287,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getYOffset(), 0F));
 				for(int i = 0; i < 10; i++)
 				{
-					worldObj.spawnParticle("reddust", 	posX + shootVec.x * i * 0.3D + yOffset.x, posY + shootVec.y * i * 0.3D + yOffset.y, posZ + shootVec.z * i * 0.3D + yOffset.z, 0, 0, 0);
+					//worldObj.spawnParticle("reddust", 	posX + shootVec.x * i * 0.3D + yOffset.x, posY + shootVec.y * i * 0.3D + yOffset.y, posZ + shootVec.z * i * 0.3D + yOffset.z, 0, 0, 0);
 				}
 				//
 			}
@@ -292,12 +304,17 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					{
 						//Calculate the look axes globally
 						RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+						Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
 						//Calculate the origin of the bullets
-						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getYOffset(), 0F));
+						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, -(float)player.getYOffset(), 0F));
 						//Spawn a new bullet item
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, yOffset.toVec3().addVector(posX, posY, posZ), -90F + globalLookAxes.getYaw(), globalLookAxes.getPitch(), (EntityLiving)riddenByEntity, gun.accuracy, gun.damage, bullet, 3.0F, driveable.getDriveableType()));
+						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(yOffset, new Vector3f((float)posX, (float)posY, (float)posZ), null), shootVec, (EntityLivingBase)riddenByEntity, gun.accuracy, gun.damage, bullet, 1.0F, driveable.getDriveableType()));
 						//Play the shoot sound
-						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, gun.shootSound, false));
+						if(soundDelay <= 0)
+						{
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, gun.shootSound, false));
+							soundDelay = gun.shootSoundLength;
+						}
 						//Get the bullet item damage and increment it
 						int damage = bulletItemStack.getItemDamage();
 						bulletItemStack.setItemDamage(damage + 1);	
@@ -414,7 +431,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getCameraDistance()
 	{
-		return foundDriveable ? driveable.getDriveableType().cameraDistance : 5F;
+		return foundDriveable && seatID == 0 ? driveable.getDriveableType().cameraDistance : 5F;
 	}
 	
 	@Override
