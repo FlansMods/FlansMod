@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.network.PacketBlueprint;
+import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -358,7 +358,7 @@ public class ContainerPlaneCrafting extends Container
 	@SideOnly(Side.CLIENT)
 	public void clickedBlueprint(int blueprint)
 	{
-		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansMod.proxy.getBlueprints(true).get(blueprint).shortName));
+		PacketDispatcher.sendPacketToServer(PacketDriveableCrafting.buildCraftingPacket(FlansMod.proxy.getBlueprints(true).get(blueprint).shortName));
 		//clickedBlueprint(FlansMod.blueprintsUnlocked.get(blueprint));
 	}
 	

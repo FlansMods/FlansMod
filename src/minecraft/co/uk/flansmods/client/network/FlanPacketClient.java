@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.network.PacketBlueprint;
+import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketContentPackList;
@@ -70,7 +70,7 @@ public class FlanPacketClient implements IPacketHandler
     		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		case 8: (new PacketPlaySound()).interpret(stream, null, Side.CLIENT); break;
-    		case 9: (new PacketBlueprint()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
+    		case 9: (new PacketDriveableCrafting()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		case 11: (new PacketDriveableDamage()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, Side.CLIENT); break;

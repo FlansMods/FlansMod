@@ -49,6 +49,7 @@ import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
+import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -375,5 +376,14 @@ public class ClientProxy extends CommonProxy
 	public List<DriveableType> getBlueprints(boolean vehicle)
 	{
 		return vehicle ? FlansModClient.vehicleBlueprintsUnlocked : FlansModClient.blueprintsUnlocked;
+	}
+	
+	@Override
+	public void craftDriveable(EntityPlayer player, DriveableType type)
+	{
+		//Craft it this side (so the inventory updates immediately) and then send a packet to the server so that it is crafted that side too
+		super.craftDriveable(player, type);
+		if(player.worldObj.isRemote)
+			PacketDispatcher.sendPacketToServer(PacketDriveableCrafting.buildCraftingPacket(type.shortName));
 	}
 }

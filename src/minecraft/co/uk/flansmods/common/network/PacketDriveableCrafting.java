@@ -16,11 +16,12 @@ import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import cpw.mods.fml.relauncher.Side;
 
-public class PacketBlueprint extends FlanPacketCommon 
+/** Sent from client to server when the player clicks the "Craft" button in the driveable crafting GUI */
+public class PacketDriveableCrafting extends FlanPacketCommon 
 {
 	public static final byte packetID = 9;
 	
-	public static Packet buildBlueprintPacket(String s)
+	public static Packet buildCraftingPacket(String s)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -54,16 +55,9 @@ public class PacketBlueprint extends FlanPacketCommon
 			//Read the type's shortName from the packet
 			DriveableType type = DriveableType.getDriveable(stream.readUTF());   
 			EntityPlayer player = (EntityPlayer)extradata[0];
-			Container openContainer = player.openContainer;
-			if(openContainer instanceof ContainerPlaneCrafting && type instanceof PlaneType)
-			{
-				((ContainerPlaneCrafting)openContainer).clickedBlueprint((PlaneType)type);
-			}
-			if(openContainer instanceof ContainerVehicleCrafting && type instanceof VehicleType)
-			{
-				((ContainerVehicleCrafting)openContainer).clickedBlueprint((VehicleType)type);
-			}
-        	   
+			
+			//Try to craft the driveable
+			FlansMod.proxy.craftDriveable(player, type);
         }
         catch(Exception e)
         {

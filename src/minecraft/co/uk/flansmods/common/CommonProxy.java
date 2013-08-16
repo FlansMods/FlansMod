@@ -3,12 +3,16 @@ package co.uk.flansmods.common;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
@@ -198,5 +202,140 @@ public class CommonProxy
 	public List<DriveableType> getBlueprints(boolean vehicle)
 	{
 		return null;
+	}
+	
+	public void craftDriveable(EntityPlayer player, DriveableType type)
+	{
+		//Create a temporary copy of the player inventory for backup purposes
+		InventoryPlayer temporaryInventory = new InventoryPlayer(null);
+		temporaryInventory.copyInventory(player.inventory);
+		
+		//This becomes false if some recipe element is not found on the player
+		boolean canCraft = true;
+		//Iterate over rows then columns
+		for(ItemStack recipeStack : type.recipe)
+		{
+			//The total amount of items found that match this recipe stack
+			int totalAmountFound = 0;
+			//Iterate over the player's inventory
+			for(int n = 0; n < player.inventory.getSizeInventory(); n++)
+			{
+				//Get the stack in each slot
+				ItemStack stackInSlot = player.inventory.getStackInSlot(n);
+				//If the stack is what we want
+				if(stackInSlot != null && stackInSlot.itemID == recipeStack.itemID && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
+				{
+					//Work out the amount to take from the stack
+					int amountFound = Math.min(stackInSlot.stackSize, recipeStack.stackSize - totalAmountFound);
+					//Take it
+					stackInSlot.stackSize -= amountFound;
+					//Check for empty stacks
+					if(stackInSlot.stackSize <= 0)
+						stackInSlot = null;
+					//Put the modified stack back in the inventory
+					player.inventory.setInventorySlotContents(n, stackInSlot);
+					//Increase the amount found counter
+					totalAmountFound += amountFound;
+					//If we have enough, stop looking
+					if(totalAmountFound == recipeStack.stackSize)
+						break;
+				}
+			}
+			//If we didn't find enough, give the stack a red outline
+			if(totalAmountFound < recipeStack.stackSize)
+			{
+				//For some reason, the player sent a craft packet, despite being unable to
+				canCraft = false;
+				break;
+			}
+		}
+		
+		//Some item was missing. Restore inventory and return
+		if(!canCraft)
+		{
+			player.inventory.copyInventory(temporaryInventory);
+			return;
+		}
+		
+		//Now we no longer need the temporary inventory backup, so we will use it to find the best stack of engines		
+		//Collect up all the engines into neat and tidy stacks so we can find if any of them are big enough and which of those stacks are best
+		HashMap<PartType, ItemStack> engines = new HashMap<PartType, ItemStack>();
+		
+		//Find some suitable engines
+		for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
+		{
+			//Get the stack in each slot
+			ItemStack stackInSlot = temporaryInventory.getStackInSlot(n);
+			//Check to see if its a part
+			if(stackInSlot != null && stackInSlot.getItem() instanceof ItemPart)
+			{
+				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
+				//Check its an engine
+				if(partType.category == 2)
+				{
+					//If we already have engines of this type, add these ones to the stack
+					if(engines.containsKey(partType))
+					{
+						engines.get(partType).stackSize += stackInSlot.stackSize;
+					}
+					//Else, make this the first stack
+					else engines.put(partType, stackInSlot);
+				}
+			}
+		}
+		
+		//Find the stack of engines that is fastest but which also has enough for this driveable
+		int bestEngineSpeed = -1;
+		ItemStack bestEngineStack = null;
+		for(PartType part : engines.keySet())
+		{
+			//If this engine outperforms the currently selected best one and there are enough of them, swap
+			if(part.engineSpeed > bestEngineSpeed && engines.get(part).stackSize >= type.numEngines())
+			{
+				bestEngineSpeed = part.engineSpeed;
+				bestEngineStack = engines.get(part);
+			}
+		}
+		
+		//If the player doesn't have any suitable engines, return
+		if(bestEngineStack == null)
+		{
+			return;
+		}
+		
+		//Remove the engines from the inventory
+		int numEnginesAcquired = 0;
+		for(int n = 0; n < player.inventory.getSizeInventory(); n++)
+		{
+			//Get the stack in each slot
+			ItemStack stackInSlot = player.inventory.getStackInSlot(n);
+			//Check to see if its the engine we want
+			if(stackInSlot != null && stackInSlot.itemID == bestEngineStack.itemID)
+			{
+				//Work out the amount to take from the stack
+				int amountFound = Math.min(stackInSlot.stackSize, type.numEngines() - numEnginesAcquired);
+				//Take it
+				stackInSlot.stackSize -= amountFound;
+				//Check for empty stacks
+				if(stackInSlot.stackSize <= 0)
+					stackInSlot = null;
+				//Put the modified stack back in the inventory
+				player.inventory.setInventorySlotContents(n, stackInSlot);
+				//Increase the amount found counter
+				numEnginesAcquired += amountFound;
+				//If we have enough, stop looking
+				if(numEnginesAcquired == type.numEngines())
+					break;
+			}
+		}
+		
+		//Give them their brand new shiny driveable item :D
+		ItemStack driveableStack = new ItemStack(type.item);
+		NBTTagCompound tags = new NBTTagCompound();
+		tags.setString("Engine", ((ItemPart)bestEngineStack.getItem()).type.shortName);
+		tags.setString("Type", type.shortName);
+		driveableStack.stackTagCompound = tags;
+		if(!player.inventory.addItemStackToInventory(driveableStack))
+			player.dropPlayerItem(driveableStack);
 	}
 }

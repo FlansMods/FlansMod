@@ -5,12 +5,15 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -66,6 +69,15 @@ public class GuiDriveableCrafting extends GuiScreen
 		super.initGui();
 		buttonList.add(new GuiButton(0, width / 2 + 22, height / 2 + 63, 40, 20, "Craft"));
 	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button)
+    {
+        if (button.id == 0)
+        {
+        	FlansMod.proxy.craftDriveable(inventory.player, DriveableType.typeList.get(selectedBlueprint));
+        }
+    }
 		
 	@Override
 	public void drawScreen(int i, int j, float f)

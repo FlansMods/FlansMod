@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.driveables.VehicleType;
-import co.uk.flansmods.common.network.PacketBlueprint;
+import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ContainerVehicleCrafting extends Container
@@ -143,7 +143,7 @@ public class ContainerVehicleCrafting extends Container
 	
 	public void clickedBlueprint(int blueprint)
 	{
-		PacketDispatcher.sendPacketToServer(PacketBlueprint.buildBlueprintPacket(FlansMod.proxy.getBlueprints(false).get(blueprint).shortName));
+		PacketDispatcher.sendPacketToServer(PacketDriveableCrafting.buildCraftingPacket(FlansMod.proxy.getBlueprints(false).get(blueprint).shortName));
 		//clickedBlueprint(FlansMod.vehicleBlueprintsUnlocked.get(blueprint));
 	}
 	
