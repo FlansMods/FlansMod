@@ -29,7 +29,7 @@ public class ItemPlane extends Item
         maxStackSize = 1;
 		type = type1;
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanVehicles);
+		setCreativeTab(FlansMod.tabFlanDriveables);
     }
     
 	@Override

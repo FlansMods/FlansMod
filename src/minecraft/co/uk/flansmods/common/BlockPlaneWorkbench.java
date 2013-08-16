@@ -19,7 +19,7 @@ public class BlockPlaneWorkbench extends Block
     public BlockPlaneWorkbench(int i, int j, int k)
     {
         super(i, Material.iron);
-        setCreativeTab(FlansMod.tabFlanVehicles);
+        setCreativeTab(FlansMod.tabFlanDriveables);
     }
     
     @Override

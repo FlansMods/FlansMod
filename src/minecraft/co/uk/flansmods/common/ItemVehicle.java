@@ -24,7 +24,7 @@ public class ItemVehicle extends ItemMapBase
         maxStackSize = 1;
 		type = type1;
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanVehicles);
+		setCreativeTab(FlansMod.tabFlanDriveables);
     }
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

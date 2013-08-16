@@ -101,7 +101,7 @@ public class FlansMod
 	public static int craftingTableID = 255, spawnerID = 254, gunBoxID = 200;
 	
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0);
-	public static CreativeTabFlan tabFlanVehicles = new CreativeTabFlan(1);
+	public static CreativeTabFlan tabFlanDriveables = new CreativeTabFlan(1);
 	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
