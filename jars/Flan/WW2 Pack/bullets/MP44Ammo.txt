@@ -9,6 +9,8 @@ Icon mp44Ammo
 FallSpeed 0.25
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 30
+//Maximum number that can be stacked
+MaxStackSize 4
 //The damage multiplier caused by the bullet on hitting an entity
 Damage 1
 //Size of explosion caused

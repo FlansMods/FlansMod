@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldSavedData;
 
-public class DriveableData extends WorldSavedData implements IInventory
+public class DriveableData implements IInventory
 {
 	public int numGuns;
 	public int numBombs;
@@ -23,21 +23,16 @@ public class DriveableData extends WorldSavedData implements IInventory
 	public ItemStack fuel;
 	public int fuelInTank;
 		
-    public DriveableData(String s, String type1, int n, int o, int p)
-    {
-        super(s);
-		numGuns = n;
-		numBombs = o;
-		numCargo = p;
-		type = type1;
-		ammo = new ItemStack[n];
-		bombs = new ItemStack[numBombs];
-		cargo = new ItemStack[numCargo];
-    }
+	public DriveableData(NBTTagCompound tags)
+	{
+		readFromNBT(tags);
+	}
 
 	public void readFromNBT(NBTTagCompound tag)
     {
-    	if (!tag.hasKey("Type"))
+		if(tag == null)
+			return;
+    	if(!tag.hasKey("Type"))
     		return;
     	
 		type = tag.getString("Type");

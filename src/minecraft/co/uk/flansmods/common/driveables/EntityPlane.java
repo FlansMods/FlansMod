@@ -71,28 +71,18 @@ public class EntityPlane extends EntityDriveable
         super(world);
     }
     
-	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type, PlaneData data)
+	public EntityPlane(World world, double x, double y, double z, PlaneType type, DriveableData data)
+	{
+		super(world, type, data);
+		setPosition(x, y, z);
+		initType(type, false);
+	}
+    
+	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type, DriveableData data)
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
         //rotatePitch(-type.posPark);
-	}
-    
-	public EntityPlane(World world, double x, double y, double z, PlaneType type, PlaneData data)
-	{
-		super(world, type, data);
-		setPosition(x, y, z);
-		driveableData = data;
-		try
-		{
-			dataID = Integer.parseInt(getPlaneData().mapName.split("_")[1]);
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to retrieve plane data ID from plane data. " + getPlaneData().mapName);
-		}
-		driveableType = type.shortName;
-		initType(type, false);
 	}
 	
 	@Override
@@ -154,12 +144,6 @@ public class EntityPlane extends EntityDriveable
 	private boolean canSit(int seat)
 	{
 		return getPlaneType().numPassengers >= seat && seats[seat].riddenByEntity == null;
-	}
-	
-	@Override
-	protected DriveableData getData(int dataID)
-	{
-		return new PlaneData("plane_" + dataID, getPlaneType());
 	}
 		
 	@Override
@@ -256,9 +240,9 @@ public class EntityPlane extends EntityDriveable
 				{
 					int slot = -1;
 					int bombType = 0;
-					for(int i = getPlaneData().getBombInventoryStart(); i < getPlaneData().getBombInventoryStart() + type.numBombSlots; i++)
+					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
 					{
-						ItemStack bomb = getPlaneData().getStackInSlot(i);
+						ItemStack bomb = driveableData.getStackInSlot(i);
 						if(bomb != null && bomb.getItem() instanceof ItemBullet && ((ItemBullet)bomb.getItem()).type.isBomb)
 						{
 							slot = i;
@@ -268,7 +252,7 @@ public class EntityPlane extends EntityDriveable
 					if(slot != -1)
 					{
 						Vec3 bombVec = rotate(type.bombPosition).toVec3();
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)getPlaneData().getStackInSlot(slot).getItem()).type, type));
+						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, type));
 						if(type.bombSound != null)
 						{
 							try 
@@ -281,7 +265,7 @@ public class EntityPlane extends EntityDriveable
 							}						
 						}
 						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							getPlaneData().decrStackSize(slot, 1);
+							driveableData.decrStackSize(slot, 1);
 						bombDelay = type.planeBombDelay;
 					}
 					return true;
@@ -296,7 +280,7 @@ public class EntityPlane extends EntityDriveable
 					{
 						//Get the gun from the plane type and the ammo from the data
 						GunType gunType = gun.type;
-						ItemStack bulletItemStack = getPlaneData().ammo[getDriveableType().numPassengerGunners + gun.gunID];
+						ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + gun.gunID];
 						//Check that neither is null and that the bullet item is actually a bullet
 						if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 						{
@@ -322,7 +306,7 @@ public class EntityPlane extends EntityDriveable
 										bulletItemStack.stackSize--;
 										if(bulletItemStack.stackSize <= 0)
 											bulletItemStack = null;
-										getPlaneData().setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
+										driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
 									}
 								}
 								//Reset the shoot delay
@@ -804,59 +788,14 @@ public class EntityPlane extends EntityDriveable
         
 		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
-			
-			entityDropItem(new ItemStack(type.itemID, 1, dataID), 0.5F);
-			getPlaneData().markDirty();
-			/*
-			} else
-			{
-				if(type.cockpit != null)
-					entityDropItem(new ItemStack(type.cockpit.getItem(), 1), 1.0F);
-				if(type.bay != null)
-					entityDropItem(new ItemStack(type.bay.getItem(), 1), 1.0F);
-				if(type.tail != null && tailHealth > 0)
-					entityDropItem(new ItemStack(type.tail.getItem(), 1), 1.0F);
-				if(type.dyes)
-					entityDropItem(new ItemStack(Item.dyePowder, (type.bigTable ? 10 : 6), type.dyeColour), 1.0F);
-				if(leftWingHealth > 0)
-					entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 2 : 1)), 1.0F);
-				if(rightWingHealth > 0)
-					entityDropItem(new ItemStack(type.wings.getItem(), (type.bigTable ? 4 : 2)), 1.0F);
-				for(int j = 0; j < type.numProps; j++)
-				{
-					if(!propBlown[j] && ((type.propSetup == 0) || (j % 2 == 0 && leftWingHealth > 0) || (j % 2 == 1 && rightWingHealth > 0)))
-					{
-						entityDropItem(new ItemStack(type.propeller.getItem(), 1), 1.0F);
-						entityDropItem(new ItemStack(getPlaneData().engine.getItem(), 1), 1.0F);
-					}
-				}
-				
-				//Guns
-				for(int j = 0; j < 8; j++)
-				{
-					if(j == 2 && leftWingHealth <= 0)
-						continue;
-					if(j == 3 && rightWingHealth <= 0)
-						continue;
-					if(j == 4 && tailHealth <= 0)
-						continue;
-					if(getPlaneData().guns[j] != null)
-						entityDropItem(new ItemStack(getPlaneData().guns[j].getItem()), 1.0F);
-					if(getPlaneData().ammo[j] != null)
-						entityDropItem(getPlaneData().ammo[j], 1.0F);
-				}
-				//Inventory
-				for(int j = 0; j < getPlaneData().getFuelSlot() + 1; j++)
-				{
-					ItemStack stack = getPlaneData().getStackInSlot(j);
-					if(stack != null)
-						entityDropItem(stack, 1.0F);
-				}
-			}*/
+			ItemStack planeStack = new ItemStack(type.itemID, 1, 0);
+			planeStack.stackTagCompound = new NBTTagCompound();
+			driveableData.writeToNBT(planeStack.stackTagCompound);
+			entityDropItem(planeStack, 0.5F);
 	 		setDead();
 			return true;
 		}
-		//if(health < 0)
+		/* if(health < 0)
 		{
 			//Dont explode too much, dont want to cause out of memory errors
 			float amountExploded = 0F;
@@ -888,9 +827,8 @@ public class EntityPlane extends EntityDriveable
 			{
 				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)getPlaneData().fuelInTank / 200F, false);
 			}
-			
 			//setDead();
-		}	
+		}	*/
         return true;
     }
     
@@ -911,11 +849,6 @@ public class EntityPlane extends EntityDriveable
 	public PlaneType getPlaneType()
 	{
 		return PlaneType.getPlane(driveableType);
-	}
-
-	public PlaneData getPlaneData() 
-	{
-		return (PlaneData)driveableData;
 	}
 
 	@Override

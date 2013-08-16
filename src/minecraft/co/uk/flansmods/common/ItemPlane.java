@@ -1,14 +1,18 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
+import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.driveables.PlaneData;
 import co.uk.flansmods.common.driveables.PlaneType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -17,7 +21,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemPlane extends ItemMapBase
+public class ItemPlane extends Item
 {
     public ItemPlane(int i, PlaneType type1)
     {
@@ -27,6 +31,13 @@ public class ItemPlane extends ItemMapBase
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanVehicles);
     }
+    
+	@Override
+	/** Make sure client and server side NBTtags update */
+	public boolean getShareTag()
+	{
+		return true;
+	}
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
@@ -72,34 +83,9 @@ public class ItemPlane extends ItemMapBase
     	return entity;
     }
 	
-	public PlaneData getPlaneData(ItemStack itemstack, World world)
+	public DriveableData getPlaneData(ItemStack itemstack, World world)
     {
-        String s = (new StringBuilder()).append("plane_").append(itemstack.getItemDamage()).toString();
-        PlaneData planeData = (PlaneData)world.loadItemData(co.uk.flansmods.common.driveables.PlaneData.class, "plane_" + itemstack.getItemDamage());
-        if(itemstack.getItemDamage() == 0 || planeData == null)
-		{
-			int dataID = world.getUniqueDataId("plane");
-			planeData = new PlaneData("plane_" + dataID, type);
-			//Avoid dataID 0 : default for TMI / Creative
-			if(dataID == 0)
-			{
-				dataID = world.getUniqueDataId("plane");
-				planeData = new PlaneData("plane_" + dataID, type);
-			}
-			world.setItemData("plane_" + dataID, planeData);
-			planeData.markDirty();
-			itemstack.setItemDamage(dataID);
-			try
-			{
-				planeData.engine = PartType.defaultEngine;
-			}
-			catch(Exception e)
-			{
-				System.out.println("Tried spawning plane without engine. Default engine not found.");
-				return null;
-			}
-		}
-		return planeData;
+		return new DriveableData(itemstack.stackTagCompound);
     }
 	
     @SideOnly(Side.CLIENT)
@@ -113,6 +99,19 @@ public class ItemPlane extends ItemMapBase
     public void registerIcons(IconRegister icon) 
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    }
+    
+    /** Make sure that creatively spawned planes have nbt data */
+    @Override
+    public void getSubItems(int i, CreativeTabs tabs, List list)
+    {
+    	ItemStack planeStack = new ItemStack(i, 1, 0);
+    	NBTTagCompound tags = new NBTTagCompound();
+    	tags.setString("Type", type.shortName);
+    	if(PartType.defaultEngine != null)
+    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	planeStack.stackTagCompound = tags;
+        list.add(planeStack);
     }
     
 	public PlaneType type;

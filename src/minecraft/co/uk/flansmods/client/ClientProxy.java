@@ -47,7 +47,6 @@ import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.driveables.VehicleData;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;

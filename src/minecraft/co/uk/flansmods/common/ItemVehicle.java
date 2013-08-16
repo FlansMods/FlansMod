@@ -1,7 +1,6 @@
 package co.uk.flansmods.common;
 
 import co.uk.flansmods.common.driveables.EntityVehicle;
-import co.uk.flansmods.common.driveables.VehicleData;
 import co.uk.flansmods.common.driveables.VehicleType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;

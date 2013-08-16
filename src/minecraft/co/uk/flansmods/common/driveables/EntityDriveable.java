@@ -44,8 +44,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Server side rotation, as synced by PacketVehicleControl packets */
     public double serverYaw, serverPitch, serverRoll;
 	
-    /** The dataID, for obtaining the driveable data */
-	public int dataID;
 	/** The driveable data which contains the inventory, the engine and the fuel */
 	public DriveableData driveableData;
 	/** The shortName of the driveable type, used to obtain said type */
@@ -103,13 +101,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		yOffset = type.yOffset;
 	}
 	
-	/** Make the plane / vehicle / helicopter / whatever class provide a data file that will suit its needs */
-	protected abstract DriveableData getData(int dataID);
-	
 	@Override
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
-		tag.setInteger("DataID", dataID);
 		driveableData.writeToNBT(tag);
 		tag.setString("Type", driveableType);
 		tag.setFloat("RotationYaw", axes.getYaw());
@@ -126,9 +120,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     {
 		driveableType = tag.getString("Type");
 		initType(DriveableType.getDriveable(driveableType), false);
-		dataID = tag.getInteger("DataID");
-		driveableData = getData(dataID);
-		driveableData.readFromNBT(tag);
+		driveableData = new DriveableData(tag);
 		
 		prevRotationYaw = tag.getFloat("RotationYaw");
 		prevRotationPitch = tag.getFloat("RotationPitch");
@@ -146,7 +138,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		try
 		{
 			data.writeUTF(driveableType);
-			data.writeInt(dataID);
 			
 			NBTTagCompound tag = new NBTTagCompound();
 			driveableData.writeToNBT(tag);
@@ -176,9 +167,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		try
 		{
 			driveableType = inputData.readUTF();
-			dataID = inputData.readInt();
-			driveableData = getData(dataID);
-			driveableData.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(inputData));
+			driveableData = new DriveableData((NBTTagCompound)NBTBase.readNamedTag(inputData));
 			initType(getDriveableType(), true);
 			
 			axes.setAngles(inputData.readFloat(), inputData.readFloat(), inputData.readFloat());
@@ -566,7 +555,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     public ItemStack getPickedResult(MovingObjectPosition target)
     {
-		return new ItemStack(getDriveableType().itemID, 1, dataID);
+		return new ItemStack(getDriveableType().itemID, 1, 0);
     }
 	
     
