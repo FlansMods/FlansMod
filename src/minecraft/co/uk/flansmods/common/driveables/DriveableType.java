@@ -6,21 +6,34 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 
+import co.uk.flansmods.client.model.ModelDriveable;
+import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class DriveableType extends InfoType
 {
+	@SideOnly(value = Side.CLIENT)
+	/** The plane model */
+	public ModelDriveable model;
+	
 	/** Points for calculating collision. Each one is tied to a part of the driveable */
 	public ArrayList<CollisionPoint> points = new ArrayList<CollisionPoint>();
 
 	/** Health of each driveable part */
 	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
 	/** Recipe parts associated to each driveable part */
-	public HashMap<EnumDriveablePart, ItemStack[]> recipe = new HashMap<EnumDriveablePart, ItemStack[]>();
+	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<EnumDriveablePart, ItemStack[]>();
+	/** Recipe parts as one complete list */
+	public ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
 	
 	/** The number of passengers, not including the pilot */
 	public int numPassengers = 0;	
@@ -125,9 +138,29 @@ public class DriveableType extends InfoType
 					String itemName = damaged ? split[2 * i + 3].split("\\.")[0] : split[2 * i + 3];
 					int damage = damaged ? Integer.parseInt(split[2 * i + 3].split("\\.")[1]) : 0;
 					stacks[i] = getRecipeElement(itemName, amount, damage);
+					recipe.add(stacks[i]);
 				}
-				recipe.put(part, stacks);
+				partwiseRecipe.put(part, stacks);
 			}
+			
+			//Dyes
+			if(split[0].equals("AddDye"))
+			{
+				int amount = Integer.parseInt(split[1]);
+				int damage = -1;
+				for(int i = 0; i < ItemDye.dyeColorNames.length; i++)
+				{
+					if(ItemDye.dyeColorNames[i].equals(split[2]))
+						damage = i;
+				}
+				if(damage == -1)
+				{
+					FlansMod.log("Failed to find dye colour : " + split[2] + " while adding " + file.name);
+					return;
+				}
+				recipe.add(new ItemStack(Item.dyePowder, amount, damage));
+			}
+			
 			
 			//Health
 			if(split[0].equals("SetupPart"))
@@ -150,6 +183,7 @@ public class DriveableType extends InfoType
 				if(seat.gunType != null)
 				{
 					seat.gunnerID = numPassengerGunners++;
+					recipe.add(new ItemStack(seat.gunType.item));
 				}
 			}
 			
@@ -159,6 +193,7 @@ public class DriveableType extends InfoType
 				PilotGun gun = new PilotGun(split);
 				guns.add(gun);
 				gun.gunID = nextGunID++;
+				recipe.add(new ItemStack(gun.type.item));
 			}
 			
 			//Y offset for badly built models :P
@@ -172,6 +207,11 @@ public class DriveableType extends InfoType
 		{
 		}
 	}
+    
+    public int numEngines()
+    {
+    	return 1;
+    }
     
     public int ammoSlots()
     {

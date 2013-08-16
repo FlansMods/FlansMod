@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
@@ -11,9 +12,46 @@ import co.uk.flansmods.common.driveables.Propeller;
 import co.uk.flansmods.common.vector.Vector3f;
 
 /** Extensible ModelPlane class for rendering plane models */
-public class ModelPlane extends ModelBase
+public class ModelPlane extends ModelDriveable
 {
-    public void render(float f, float f1, float f2, float f3, float f4, float f5, EntityPlane plane)
+	@Override
+	public void render(EntityDriveable driveable)
+	{
+		render(0.0625F, (EntityPlane)driveable);
+	}
+	
+	@Override
+	/** GUI render method */
+	public void render()
+	{
+		renderPart(bodyModel);
+		renderPart(noseModel);
+		renderPart(leftWingModel);
+		renderPart(rightWingModel);
+		renderPart(topWingModel);
+		renderPart(bayModel);
+		renderPart(tailModel);
+		for(ModelRendererTurbo[] prop : propellerModels)
+			renderPart(prop);
+		renderPart(yawFlapModel);
+		renderPart(pitchFlapLeftModel);
+		renderPart(pitchFlapRightModel);
+		renderPart(pitchFlapLeftWingModel);
+		renderPart(pitchFlapRightWingModel);
+		for(ModelRendererTurbo[][] gun : gunModels.values())
+			for(ModelRendererTurbo[] gunPart : gun)
+				renderPart(gunPart);
+		renderPart(bodyGearDownModel);
+		renderPart(tailGearDownModel);
+		renderPart(leftWingGearDownModel);
+		renderPart(rightWingGearDownModel);
+		renderPart(bodyDoorCloseModel);
+		renderPart(tailDoorCloseModel);
+		renderPart(rightWingPos1Model);
+		renderPart(leftWingPos1Model);
+	}
+	
+    public void render(float f5, EntityPlane plane)
     {
 		//Rotating the propeller
 		float angle = plane.propAngle;

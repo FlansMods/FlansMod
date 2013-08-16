@@ -238,9 +238,9 @@ public class ClientProxy extends CommonProxy
 	{
 		switch(ID) 
 		{
-			case 0: return new GuiPlaneCrafting(player.inventory, world, x, y, z, false);
-			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
-			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
+			case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
+			//case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
+			//case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
 			case 6: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
 			case 7: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);

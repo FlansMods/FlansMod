@@ -132,8 +132,8 @@ public class CommonProxy
 		switch(ID) 
 		{
 			case 0: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, false);
-			case 1: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, true);
-			case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
+			//case 1: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, true);
+			//case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
 			case 3: return new ContainerPlaneMenu(player.inventory, world);
 			case 4: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
 			

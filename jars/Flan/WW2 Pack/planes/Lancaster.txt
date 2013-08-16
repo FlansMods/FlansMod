@@ -70,6 +70,8 @@ AddRecipeParts core 1 metalCockpit 1 bombBay
 AddRecipeParts rightWing 2 metalWingSection
 AddRecipeParts leftWing 2 metalWingSection
 AddRecipeParts tail 1 metalTail
+AddDye 10 green
+AddDye 5 yellow
 //Health and collision
 SetupPart core 500 -64 -4 -16 208 48 32
 SetupPart nose 200 144 -4 -16 16 32 32

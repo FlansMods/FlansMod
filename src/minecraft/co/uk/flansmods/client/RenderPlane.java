@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.model.ModelDriveable;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.driveables.DriveablePart;
@@ -47,10 +48,10 @@ public class RenderPlane extends Render
         GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-        ModelPlane modPlane = (ModelPlane)type.model;
+        ModelDriveable modPlane = type.model;
 		if(modPlane != null)
 		{
-			modPlane.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, entityPlane);
+			modPlane.render(entityPlane);
 		}
 		if(DEBUG)
 		{

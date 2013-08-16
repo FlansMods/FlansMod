@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.item.ItemStack;
+
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunType;
@@ -16,10 +18,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class PlaneType extends DriveableType
 {
-	@SideOnly(value = Side.CLIENT)
-	/** The plane model */
-	public ModelPlane model;
-	
 	/** Pitch modifiers */
 	public float lookDownModifier = 1F, lookUpModifier = 1F;
 	/** Roll modifiers */
@@ -109,7 +107,9 @@ public class PlaneType extends DriveableType
 			//Propellers
 			if(split[0].equals("Propeller"))
 			{
-				propellers.add(new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6])));
+				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+				propellers.add(propeller);
+				recipe.add(new ItemStack(propeller.itemType.item));
 			}
 
 			//Sound
@@ -137,73 +137,7 @@ public class PlaneType extends DriveableType
 				bombSound = contentPack + "planes." + split[1];
 				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
 			}
-				
-			//Recipe
-			/*
-			if(split[0].equals("BigTable"))
-				bigTable = split[1].equals("True");
-			if(split[0].equals("AllowWingGuns"))
-				allowWingGuns = split[1].equals("True");
-			if(split[0].equals("AllowNoseGuns"))
-				allowNoseGuns = split[1].equals("True");
-			if(split[0].equals("AllowSideGuns"))
-				allowSideGuns = split[1].equals("True");
-			if(split[0].equals("AllowTailGuns"))
-				allowTailGuns = split[1].equals("True");
-			if(split[0].equals("AllowDorsalGun"))
-				allowDorsalGun = split[1].equals("True");
-			if(split[0].equals("Propeller"))
-				propeller = PartType.getPart(split[1]);
-			if(split[0].equals("Cockpit"))
-				cockpit = PartType.getPart(split[1]);
-			if(split[0].equals("Wings"))
-				wings = PartType.getPart(split[1]);
-			if(split[0].equals("Bay"))
-				bay = PartType.getPart(split[1]);
-			if(split[0].equals("Tail"))
-				tail = PartType.getPart(split[1]);
-			if(split[0].equals("Dyes"))
-			{
-				if(split[1].equals("None"))
-					dyes = false;
-				else
-				{
-					dyes = true;
-					if(split[1].equals("Black"))
-						dyeColour = 0;
-					if(split[1].equals("Red"))
-						dyeColour = 1;
-					if(split[1].equals("Green"))
-						dyeColour = 2;
-					if(split[1].equals("Brown"))
-						dyeColour = 3;
-					if(split[1].equals("Blue"))
-						dyeColour = 4;
-					if(split[1].equals("Purple"))
-						dyeColour = 5;
-					if(split[1].equals("Cyan"))
-						dyeColour = 6;
-					if(split[1].equals("LGrey"))
-						dyeColour = 7;
-					if(split[1].equals("Grey"))
-						dyeColour = 8;
-					if(split[1].equals("Pink"))
-						dyeColour = 9;
-					if(split[1].equals("Lime"))
-						dyeColour = 10;
-					if(split[1].equals("Yellow"))
-						dyeColour = 11;
-					if(split[1].equals("LBlue"))
-						dyeColour = 12;
-					if(split[1].equals("Magenta"))
-						dyeColour = 13;
-					if(split[1].equals("Orange"))
-						dyeColour = 14;
-					if(split[1].equals("White"))
-						dyeColour = 15;
-				}
-			}*/
-			
+							
 			//Aesthetics
             if(split[0].equals("HasGear"))
                 hasGear = split[1].equals("True");
@@ -222,6 +156,12 @@ public class PlaneType extends DriveableType
 		{
 		}
 	}
+    
+    @Override
+    public int numEngines()
+    {
+    	return propellers.size();
+    }
 	
 	public static PlaneType getPlane(String find)
 	{

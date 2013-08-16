@@ -726,7 +726,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(part.box != null)
 	    		pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
 	    		
-    		ItemStack[] drops = type.recipe.get(part.type);
+    		ItemStack[] drops = type.partwiseRecipe.get(part.type);
     		if(drops != null)
 			{
 				//Drop each itemstack 

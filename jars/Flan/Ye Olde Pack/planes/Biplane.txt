@@ -7,7 +7,7 @@ Icon Biplane
 Model yeolde.Biplane
 Texture Biplane
 //Third Person Camera Distance
-CameraDistance 5.0
+CameraDistance 6.0
 //Throttle
 MaxThrottle 0.2
 MaxNegativeThrottle 0.0

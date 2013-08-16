@@ -30,6 +30,7 @@ public class GuiPlaneMenu extends GuiContainer
 		inventory = inventoryplayer;
     }
 	
+    @Override
 	public void initGui()
 	{
 		super.initGui();
