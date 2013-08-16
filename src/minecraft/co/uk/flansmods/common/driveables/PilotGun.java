@@ -13,7 +13,7 @@ public class PilotGun
 	
 	public PilotGun(String[] split)
 	{
-		position = new Vector3f(Float.parseFloat(split[1]), Float.parseFloat(split[2]), Float.parseFloat(split[3]));
+		position = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 		driveablePart = EnumDriveablePart.getPart(split[4]);
 		type = GunType.getGun(split[5]);
 	}

@@ -74,7 +74,7 @@ public class RenderPlane extends Render
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x / 16F - 0.25F, (float)gun.position.y / 16F - 0.25F, (float)gun.position.z / 16F - 0.25F, (float)gun.position.x / 16F + 0.25F, (float)gun.position.y / 16F + 0.25F, (float)gun.position.z / 16F + 0.25F));
+				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
 			}
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

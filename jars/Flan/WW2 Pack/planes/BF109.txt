@@ -9,7 +9,7 @@ Texture BF109
 //Third Person Camera Distance
 CameraDistance 10.0
 //Throttle
-MaxThrottle 2.7
+MaxThrottle 5.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 2
@@ -23,7 +23,7 @@ RollRightSpeed 2
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
 Drag 2.7
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 2.7
+Lift 3.2
 //Mass (In tons)
 Mass 2.7
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)

@@ -46,12 +46,13 @@ public class DriveableData extends WorldSavedData implements IInventory
 		numCargo = dType.numCargoSlots;
 		numGuns = dType.numPassengerGunners + dType.guns.size();
 		engine = PartType.getPart(tag.getString("Engine"));
+		ammo = new ItemStack[numGuns];
+		bombs = new ItemStack[numBombs];
+		cargo = new ItemStack[numCargo];
 		for(int i = 0; i < numGuns; i++)
 		{
 			ammo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Ammo " + i));
 		}
-		bombs = new ItemStack[numBombs];
-		cargo = new ItemStack[numCargo];
 		for(int i = 0; i < numBombs; i++)
 		{
 			bombs[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Bombs " + i));

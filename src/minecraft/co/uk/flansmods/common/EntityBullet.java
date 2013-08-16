@@ -93,7 +93,12 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public EntityBullet(World world, Vector3f origin, Vector3f direction, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		this(world, shooter, gunDamage, type1, shotFrom);
-		
+		damage = gunDamage;
+		setPosition(origin.x, origin.y, origin.z);
+		motionX = direction.x;
+		motionY = direction.y;
+		motionZ = direction.z;
+		setArrowHeading(motionX, motionY, motionZ, spread, speed);
 	}
 
 	/** Bomb constructor. Inherits the motion and rotation of the plane */
