@@ -44,6 +44,7 @@ import co.uk.flansmods.common.TileEntityGunBox;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleData;
@@ -242,10 +243,10 @@ public class ClientProxy extends CommonProxy
 			case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
-			case 6: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 0);
-			case 7: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 1);
-			case 8: return new GuiPlaneFuel(player.inventory, world, (EntityDriveable) player.ridingEntity);
-			case 9: return new GuiPlaneInventory(player.inventory, world, (EntityDriveable) player.ridingEntity, 2);
+			case 6: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
+			case 7: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
+			case 8: return new GuiPlaneFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
+			case 9: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
 		}
 		return null;
 	}

@@ -44,6 +44,7 @@ public class DriveableData extends WorldSavedData implements IInventory
 		DriveableType dType = DriveableType.getDriveable(type);
 		numBombs = dType.numBombSlots;
 		numCargo = dType.numCargoSlots;
+		numGuns = dType.numPassengerGunners + dType.guns.size();
 		engine = PartType.getPart(tag.getString("Engine"));
 		for(int i = 0; i < numGuns; i++)
 		{

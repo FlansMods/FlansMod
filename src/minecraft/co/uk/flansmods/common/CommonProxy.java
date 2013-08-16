@@ -12,6 +12,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketBreakSound;
@@ -134,18 +135,19 @@ public class CommonProxy
 			case 1: return new ContainerPlaneCrafting(player.inventory, world, x, y, z, true);
 			case 2: return new ContainerVehicleCrafting(player.inventory, world, x, y, z);
 			case 3: return new ContainerPlaneMenu(player.inventory, world);
-			case 4: return new ContainerPlaneMenu(player.inventory, world, true, (EntityDriveable)player.ridingEntity);
-			case 6: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 0);
-			case 7: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 1);
-			case 8: return new ContainerPlaneMenu(player.inventory, world, true, (EntityDriveable)player.ridingEntity);
-			case 9: return new ContainerPlaneInventory(player.inventory, world, (EntityDriveable)player.ridingEntity, 2);
+			case 4: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
+			
+			//Plane inventory screens
+			case 6: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
+			case 7: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
+			case 8: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
+			case 9: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
 		}
 		return null;
 	}
 	
 	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
-		
 	}
 
 	public void loadBulletModel(String[] split, String shortName, BulletType type)

@@ -25,7 +25,7 @@ public class GuiPlaneInventory extends GuiContainer
     public GuiPlaneInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
     {
         super(new ContainerPlaneInventory(inventoryplayer, world1, entPlane, i));
-		plane = entPlane;
+		driveable = entPlane;
 		inventory = inventoryplayer;
 		world = world1;
 		container = (ContainerPlaneInventory)inventorySlots;
@@ -38,9 +38,9 @@ public class GuiPlaneInventory extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int x, int y)
     {
 		String wololo = " - Guns";
-		if(screen == 1) wololo = (plane instanceof EntityPlane ? " - Bombs" : " - Shells");
+		if(screen == 1) wololo = " - " + driveable.getBombInventoryName();
 		if(screen == 2) wololo = " - Cargo";
-        fontRenderer.drawString(plane.getDriveableType().name + wololo, 6, 6, 0x404040);
+        fontRenderer.drawString(driveable.getDriveableType().name + wololo, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -48,16 +48,30 @@ public class GuiPlaneInventory extends GuiContainer
 		if(screen == 0)
 		{
 			int slotsDone = 0;
-			for(int i = 0; i < plane.getDriveableType().seats.length; i++)
+			for(int i = 0; i < driveable.getDriveableType().seats.length; i++)
 			{
 				if(slotsDone >= 3 + scroll)
 					continue;
-				if(plane.getDriveableType().seats[i].gunType != null)
+				if(driveable.getDriveableType().seats[i].gunType != null)
 				{
 					if(slotsDone >= scroll)
 					{
 						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
-						drawStack(new ItemStack(plane.getDriveableType().seats[i].gunType.getItem()), 10, 25 + 19 * (slotsDone - scroll));
+						drawStack(new ItemStack(driveable.getDriveableType().seats[i].gunType.getItem()), 10, 25 + 19 * (slotsDone - scroll));
+					}
+					slotsDone++;
+				}
+			}
+			for(int i = 0; i < driveable.getDriveableType().guns.size(); i++)
+			{
+				if(slotsDone >= 3 + scroll)
+					continue;
+				if(driveable.getDriveableType().guns.get(i).type != null)
+				{
+					if(slotsDone >= scroll)
+					{
+						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
+						drawStack(new ItemStack(driveable.getDriveableType().guns.get(i).type.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
 				}
@@ -144,7 +158,7 @@ public class GuiPlaneInventory extends GuiContainer
 			container.updateScroll(scroll);
 		}
 		if(m > 161 && m < 171 && n > 5 && n < 15)
-			 mc.displayGuiScreen(new GuiPlaneMenu(inventory, world, plane));
+			 mc.displayGuiScreen(new GuiPlaneMenu(inventory, world, driveable));
 	}
 
 	public ContainerPlaneInventory container;
@@ -153,6 +167,6 @@ public class GuiPlaneInventory extends GuiContainer
 	public int scroll;
 	public int numItems;
 	public int maxScroll;
-	public EntityDriveable plane;
+	public EntityDriveable driveable;
 	public int screen; //0 = Guns, 1 = Bombs, 2 = Cargo
 }

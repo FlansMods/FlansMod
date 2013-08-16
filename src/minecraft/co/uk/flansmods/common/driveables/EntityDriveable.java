@@ -794,4 +794,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return parts.get(part).maxHealth == 0 || parts.get(part).health > 0; 
 	}
+	
+	public abstract String getBombInventoryName();
 }

@@ -22,11 +22,7 @@ public class ContainerPlaneInventory extends Container
 		{
 			case 0 :
 			{
-				for(int j = 0; j < plane.driveableData.guns.length; j++)
-				{
-					if(plane.driveableData.guns[j] != null)
-						numItems++;
-				}	
+				numItems = plane.driveableData.numGuns;
 				maxScroll = (numItems > 3 ? numItems - 3 : 0);
 				break;
 			}
@@ -50,16 +46,13 @@ public class ContainerPlaneInventory extends Container
 			case 0 : //Guns
 			{
 				int slotsDone = 0;
-				for(int j = 0; j < plane.driveableData.guns.length; j++)
+				for(int j = 0; j < plane.driveableData.numGuns; j++)
 				{
-					if(plane.driveableData.guns[j] != null)
-					{
-						int yPos = -1000;
-						if(slotsDone < 3 + scroll && slotsDone >= scroll)
-							yPos = 25 + 19 * slotsDone;
-						addSlotToContainer(new Slot(plane.driveableData, j, 29, yPos));
-						slotsDone++;
-					}
+					int yPos = -1000;
+					if(slotsDone < 3 + scroll && slotsDone >= scroll)
+						yPos = 25 + 19 * slotsDone;
+					addSlotToContainer(new Slot(plane.driveableData, j, 29, yPos));
+					slotsDone++;
 				}	
 				break;
 			}
@@ -108,16 +101,13 @@ public class ContainerPlaneInventory extends Container
 			case 0 :
 			{
 				int slotsDone = 0;
-				for(int i = 0; i < plane.driveableData.guns.length; i++)
+				for(int i = 0; i < plane.driveableData.numGuns; i++)
 				{
-					if(plane.driveableData.guns[i] != null)
-					{
-						int yPos = -1000;
-						if(slotsDone < 3 + scroll && slotsDone >= scroll)
-							yPos = 25 + 19 * (slotsDone - scroll);
-						((Slot)inventorySlots.get(slotsDone)).yDisplayPosition = yPos;
-						slotsDone++;
-					}
+					int yPos = -1000;
+					if(slotsDone < 3 + scroll && slotsDone >= scroll)
+						yPos = 25 + 19 * (slotsDone - scroll);
+					((Slot)inventorySlots.get(slotsDone)).yDisplayPosition = yPos;
+					slotsDone++;
 				}	
 				break;
 			}

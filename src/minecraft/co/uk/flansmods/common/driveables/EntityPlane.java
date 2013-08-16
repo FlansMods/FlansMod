@@ -926,4 +926,10 @@ public class EntityPlane extends EntityDriveable
 			}
 		}
 	}
+
+	@Override
+	public String getBombInventoryName() 
+	{
+		return "Bombs";
+	}
 }
