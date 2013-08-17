@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.model.ModelFlagpole;
 import co.uk.flansmods.common.EntityAAGun;
 import co.uk.flansmods.common.teams.EntityFlagpole;
 
