@@ -3,8 +3,5 @@ ShortName assault4
 AddItem g3
 AddItem desertEagle
 AddItem mwKnife
-AddItem g3Ammo
-AddItem g3Ammo
-AddItem g3Ammo
-AddItem desertEagleAmmo
-AddItem desertEagleAmmo
+AddItem g3Ammo 3
+AddItem desertEagleAmmo 2

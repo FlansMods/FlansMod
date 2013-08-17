@@ -3,8 +3,5 @@ ShortName assault3
 AddItem g36
 AddItem m1911
 AddItem mwKnife
-AddItem g36Ammo
-AddItem g36Ammo
-AddItem g36Ammo
-AddItem m1911Ammo
-AddItem m1911Ammo
+AddItem g36Ammo 3
+AddItem m1911Ammo 2

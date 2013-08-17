@@ -3,9 +3,5 @@ ShortName germanAssault1
 AddItem mp40
 AddItem luger
 AddItem ww2Knife
-AddItem mp40Ammo
-AddItem mp40Ammo
-AddItem mp40Ammo
-AddItem mp40Ammo
-AddItem lugerAmmo
-AddItem lugerAmmo
+AddItem mp40Ammo 4
+AddItem lugerAmmo 2

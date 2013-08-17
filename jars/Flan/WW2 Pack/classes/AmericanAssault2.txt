@@ -3,9 +3,5 @@ ShortName americanAssault2
 AddItem BAR
 AddItem colt
 AddItem ww2Knife
-AddItem BARAmmo
-AddItem BARAmmo
-AddItem BARAmmo
-AddItem BARAmmo
-AddItem coltAmmo
-AddItem coltAmmo
+AddItem BARAmmo 4
+AddItem coltAmmo 2

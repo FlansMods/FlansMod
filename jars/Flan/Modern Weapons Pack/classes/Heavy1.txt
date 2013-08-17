@@ -4,8 +4,6 @@ AddItem m249
 AddItem rpg
 AddItem m1911
 AddItem mwKnife
-AddItem m249Ammo
-AddItem m249Ammo
-AddItem m1911Ammo
-AddItem m1911Ammo
-AddItem rpgAmmo
+AddItem m249Ammo 2
+AddItem rpgAmmo 2
+AddItem m1911Ammo 2

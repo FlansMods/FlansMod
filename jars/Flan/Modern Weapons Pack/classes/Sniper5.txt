@@ -4,8 +4,5 @@ AddItem m40a3
 AddItem m9
 AddItem mwKnife
 AddItem mwBinoculars
-AddItem m40a3Ammo
-AddItem m40a3Ammo
-AddItem m40a3Ammo
-AddItem m9Ammo
-AddItem m9Ammo
+AddItem m40a3Ammo 3
+AddItem m9Ammo 2

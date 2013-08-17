@@ -353,7 +353,9 @@ public class ItemGun extends Item
 							player.entityDropItem(bulletStack, 0.5F);
 					
 					//Load the new magazine
-					setBulletItemStack(gunStack, newBulletStack, i);					
+					ItemStack stackToLoad = newBulletStack.copy();
+					stackToLoad.stackSize = 1;
+					setBulletItemStack(gunStack, stackToLoad, i);					
 					
 					//Remove the magazine from the inventory
 					if(!player.capabilities.isCreativeMode)

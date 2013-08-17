@@ -3,9 +3,5 @@ ShortName shotgun2
 AddItem m1014
 AddItem desertEagle
 AddItem mwKnife
-AddItem m1014Ammo
-AddItem m1014Ammo
-AddItem m1014Ammo
-AddItem m1014Ammo
-AddItem desertEagleAmmo
-AddItem desertEagleAmmo
+AddItem m1014Ammo 4
+AddItem desertEagleAmmo 2

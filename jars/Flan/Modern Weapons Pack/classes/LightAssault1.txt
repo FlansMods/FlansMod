@@ -3,9 +3,5 @@ ShortName lightAssault1
 AddItem mp5
 AddItem desertEagle
 AddItem mwKnife
-AddItem mp5Ammo
-AddItem mp5Ammo
-AddItem mp5Ammo
-AddItem mp5Ammo
-AddItem desertEagleAmmo
-AddItem desertEagleAmmo
+AddItem mp5Ammo 4
+AddItem desertEagleAmmo 2

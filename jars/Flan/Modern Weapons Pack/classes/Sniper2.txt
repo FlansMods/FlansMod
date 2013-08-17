@@ -4,8 +4,5 @@ AddItem dragunov
 AddItem m1911
 AddItem mwKnife
 AddItem mwBinoculars
-AddItem dragunovAmmo
-AddItem dragunovAmmo
-AddItem dragunovAmmo
-AddItem m1911Ammo
-AddItem m1911Ammo
+AddItem dragunovAmmo 3
+AddItem m1911Ammo 2

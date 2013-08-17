@@ -3,9 +3,5 @@ ShortName americanAssault1
 AddItem thompson
 AddItem colt
 AddItem ww2Knife
-AddItem thompsonAmmo
-AddItem thompsonAmmo
-AddItem thompsonAmmo
-AddItem thompsonAmmo
-AddItem coltAmmo
-AddItem coltAmmo
+AddItem thompsonAmmo 4
+AddItem coltAmmo 2
