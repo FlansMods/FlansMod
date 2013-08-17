@@ -243,10 +243,10 @@ public class ClientProxy extends CommonProxy
 			//case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
 			//case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
-			case 6: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
-			case 7: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
-			case 8: return new GuiPlaneFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
-			case 9: return new GuiPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
+			case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
+			case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
+			case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
+			case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
 		}
 		return null;
 	}
@@ -254,7 +254,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiPlaneMenu(player.inventory, world, driveable));
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiDriveableMenu(player.inventory, world, driveable));
 	}
 	
 	private String getModelName(String in)
