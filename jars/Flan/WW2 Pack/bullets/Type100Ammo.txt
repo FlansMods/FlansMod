@@ -7,6 +7,8 @@ ItemID 23650
 Icon Type100Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
+//The maximum stack size
+MaxStackSize 4
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 30
 //The damage multiplier caused by the bullet on hitting an entity

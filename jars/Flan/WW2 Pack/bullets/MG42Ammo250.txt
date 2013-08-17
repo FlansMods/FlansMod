@@ -7,6 +7,8 @@ ItemID 23568
 Icon MG42Ammo250
 //How affected by gravity the bullet is
 FallSpeed 0.25
+//The maximum stack size
+MaxStackSize 1
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 250
 //The damage multiplier caused by the bullet on hitting an entity

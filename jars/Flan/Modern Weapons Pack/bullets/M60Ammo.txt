@@ -7,6 +7,8 @@ ItemID 23838
 Icon M60E4Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
+//The maximum stack size
+MaxStackSize 2
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 100
 //The damage multiplier caused by the bullet on hitting an entity
