@@ -1,8 +1,12 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.TypeFile;
 
 public class BulletType extends InfoType
 {
@@ -20,6 +24,8 @@ public class BulletType extends InfoType
 	public boolean breaksGlass = false;
 	public boolean penetratesEntities = false;
 	public boolean penetratesBlocks = false;
+	public String trailParticles = "smoke";
+	public String flakParticles = "largeSmoke";
 	public boolean smokeTrail = false;
 	public boolean isBomb = false;
 	public boolean isShell = false;

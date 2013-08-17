@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -26,9 +27,9 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
-import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -435,6 +436,22 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			throttle *= 0.9F;
 		}
+		
+		//DEBUG
+		/*
+		if(worldObj.isRemote)
+		{
+			Vector3f xAxis = axes.getXAxis();
+			Vector3f yAxis = axes.getYAxis();
+			Vector3f zAxis = axes.getZAxis();
+			for(int i = 0; i < 10; i++)
+			{
+				worldObj.spawnParticle("enchantmenttable", 	posX + xAxis.x * i * 0.3D, posY + xAxis.y * i * 0.3D, posZ + xAxis.z * i * 0.3D, 0, 0, 0);
+				worldObj.spawnParticle("smoke", 			posX + yAxis.x * i * 0.3D, posY + yAxis.y * i * 0.3D, posZ + yAxis.z * i * 0.3D, 0, 0, 0);
+				worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D, posY + zAxis.y * i * 0.3D, posZ + zAxis.z * i * 0.3D , 0, 0, 0);
+			}
+		}
+		*/
     }
 	
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */
@@ -694,7 +711,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	/** Internal method for checking that all parts are ok, destroying broken ones, dropping items and making sure that child parts are destroyed when their parents are */
-	private void checkParts()
+	public void checkParts()
 	{
 		for(DriveablePart part : parts.values())
 		{
@@ -726,7 +743,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(part.box != null)
 	    		pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
 	    		
-    		ItemStack[] drops = type.partwiseRecipe.get(part.type);
+			ArrayList<ItemStack> drops = type.getItemsRequired(part, getDriveableData().engine);
     		if(drops != null)
 			{
 				//Drop each itemstack 

@@ -1,4 +1,4 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -6,6 +6,10 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.model.ModelMG;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.TypeFile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,6 +33,7 @@ public class GunType extends InfoType
 	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
 	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
 	public int numAmmoItemsInGun = 1;
+	public boolean deployable;
 	public int mode; // 0 = SemiAuto, 1 = FullAuto
 	public String scope;
 	public boolean hasScope;
@@ -37,7 +42,6 @@ public class GunType extends InfoType
 	@SideOnly(Side.CLIENT)
 	public ModelMG model;
 	
-	public boolean deployable;
 	public float standBackDist = 1.5F;
 	public float topViewLimit = -60F;
 	public float bottomViewLimit = 30F;

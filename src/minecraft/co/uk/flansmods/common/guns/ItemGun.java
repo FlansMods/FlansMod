@@ -1,4 +1,4 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.util.List;
 
@@ -22,6 +22,11 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketReload;

@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -161,6 +161,24 @@ public class PlaneType extends DriveableType
     public int numEngines()
     {
     	return propellers.size();
+    }
+    
+    /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+    @Override
+    public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+    {
+    	//Get the list of items required by the driveable
+    	ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
+    	//Add the propellers and engines
+    	for(Propeller propeller : propellers)
+    	{
+    		if(propeller.planePart == part.type)
+    		{
+	    		stacks.add(new ItemStack(propeller.itemType.item));
+	    		stacks.add(new ItemStack(engine.item));
+    		}
+    	}
+    	return stacks;
     }
 	
 	public static PlaneType getPlane(String find)

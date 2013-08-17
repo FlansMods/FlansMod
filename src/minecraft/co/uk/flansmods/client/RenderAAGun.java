@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelAAGun;
-import co.uk.flansmods.common.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityAAGun;
 
 
 public class RenderAAGun extends Render

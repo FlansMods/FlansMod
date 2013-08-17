@@ -27,20 +27,15 @@ import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
-import co.uk.flansmods.common.AAGunType;
-import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.CommonProxy;
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityBullet;
-import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.TileEntityGunBox;
+import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
@@ -48,8 +43,15 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.EntityMG;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketDriveableCrafting;
+import co.uk.flansmods.common.network.PacketRepairDriveable;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
@@ -240,7 +242,7 @@ public class ClientProxy extends CommonProxy
 		switch(ID) 
 		{
 			case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
-			//case 1: return new GuiPlaneCrafting(player.inventory, world, x, y, z, true);
+			case 1: return new GuiDriveableRepair(player);
 			//case 2: return new GuiVehicleCrafting(player.inventory, world, x, y, z);
 			case 5: return new GuiGunBox(player.inventory, ((TileEntityGunBox)world.getBlockTileEntity(x, y, z)).getType());
 			case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
@@ -385,5 +387,14 @@ public class ClientProxy extends CommonProxy
 		super.craftDriveable(player, type);
 		if(player.worldObj.isRemote)
 			PacketDispatcher.sendPacketToServer(PacketDriveableCrafting.buildCraftingPacket(type.shortName));
+	}
+	
+	@Override
+	public void repairDriveable(EntityPlayer driver, EntityDriveable driving, DriveablePart part)
+	{
+		//Repair it this side (so the inventory updates immediately) and then send a packet to the server so that it is repaired that side too
+		super.repairDriveable(driver, driving, part);
+		if(driver.worldObj.isRemote)
+			PacketDispatcher.sendPacketToServer(PacketRepairDriveable.buildRepairPacket(part.type));
 	}
 }

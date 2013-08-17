@@ -21,13 +21,13 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import co.uk.flansmods.api.IExplodeable;
-import co.uk.flansmods.common.BulletType;
-import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.EntityPassengerSeat;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;

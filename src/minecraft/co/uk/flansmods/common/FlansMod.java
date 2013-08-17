@@ -35,6 +35,14 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.EntityMG;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
@@ -138,6 +146,7 @@ public class FlansMod
 	public static Item opStick;
 	public static Item flag;
 
+	public static int ticker; //General use ticker
 
 	public static String errorString = "";
 	public static int errorStringTimer = 0;

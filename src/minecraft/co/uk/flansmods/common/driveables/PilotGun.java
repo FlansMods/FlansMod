@@ -1,6 +1,6 @@
 package co.uk.flansmods.common.driveables;
 
-import co.uk.flansmods.common.GunType;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.vector.Vector3f;
 
 public class PilotGun 

@@ -13,13 +13,13 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelDriveable;
 import co.uk.flansmods.client.model.ModelPlane;
-import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.Propeller;
+import co.uk.flansmods.common.guns.EntityBullet;
 
 public class RenderPlane extends Render
 {

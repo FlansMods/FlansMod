@@ -4,22 +4,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveableType;
-import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import cpw.mods.fml.relauncher.Side;
 
-/** Sent from client to server when the player clicks the "Craft" button in the driveable crafting GUI */
-public class PacketDriveableCrafting extends FlanPacketCommon 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet250CustomPayload;
+
+public class PacketRepairDriveable extends FlanPacketCommon 
 {
-	public static final byte packetID = 9;
+	public static final byte packetID = 17;
 	
-	public static Packet buildCraftingPacket(String s)
+	public static Packet buildRepairPacket(EnumDriveablePart part)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -29,7 +28,7 @@ public class PacketDriveableCrafting extends FlanPacketCommon
         try
         {
         	data.write(packetID);
-        	data.writeUTF(s);
+        	data.writeUTF(part.getShortName());
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -44,22 +43,22 @@ public class PacketDriveableCrafting extends FlanPacketCommon
         
         return packet;
 	}
-
+	
 	@Override
 	public void interpret(DataInputStream stream, Object[] extradata, Side side)
 	{
 		try
         {
-			//Read the type's shortName from the packet
-			DriveableType type = DriveableType.getDriveable(stream.readUTF());   
+			//Read the part's shortName from the packet
+			EnumDriveablePart part = EnumDriveablePart.getPart(stream.readUTF());   
 			EntityPlayer player = (EntityPlayer)extradata[0];
 			
 			//Try to craft the driveable
-			FlansMod.proxy.craftDriveable(player, type);
+			FlansMod.proxy.repairDriveable(player, ((EntitySeat)player.ridingEntity).driveable, ((EntitySeat)player.ridingEntity).driveable.parts.get(part));
         }
         catch(Exception e)
         {
-        	FlansMod.log("Error crafting driveable");
+        	FlansMod.log("Error repairing driveable");
         	e.printStackTrace();
         }
 	}

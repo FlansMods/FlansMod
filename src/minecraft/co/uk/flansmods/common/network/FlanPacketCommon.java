@@ -58,7 +58,7 @@ public class FlanPacketCommon implements IPacketHandler
 	    		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.SERVER); break;
 	    		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	    		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 17: break; //FREE PACKET ID
+	    		case 17: (new PacketRepairDriveable()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	       		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.SERVER); break;
 	       		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, Side.SERVER); break;
 	       		case 20: (new PacketPlayerSpawn()).interpret(stream, null, Side.SERVER); break;

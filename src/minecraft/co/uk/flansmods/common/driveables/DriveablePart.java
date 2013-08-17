@@ -1,6 +1,6 @@
 package co.uk.flansmods.common.driveables;
 
-import co.uk.flansmods.common.EntityBullet;
+import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,14 +33,14 @@ public class DriveablePart
 	
 	public void writeToNBT(NBTTagCompound tags)
 	{
-		tags.setInteger(type.getName() + "_Health", health);
-		tags.setBoolean(type.getName() + "_Fire", onFire);
+		tags.setInteger(type.getShortName() + "_Health", health);
+		tags.setBoolean(type.getShortName() + "_Fire", onFire);
 	}
 	
 	public void readFromNBT(NBTTagCompound tags)
 	{
-		health = tags.getInteger(type.getName() + "_Health");
-		onFire = tags.getBoolean(type.getName() + "_Fire");
+		health = tags.getInteger(type.getShortName() + "_Health");
+		onFire = tags.getBoolean(type.getShortName() + "_Fire");
 	}
 	
 	/** Called by bullets that may have hit the plane 

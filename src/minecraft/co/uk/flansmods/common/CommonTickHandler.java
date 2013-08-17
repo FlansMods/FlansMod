@@ -33,6 +33,7 @@ public class CommonTickHandler implements ITickHandler {
 		/* Server */
 		TeamsManager.getInstance().tick();
 		FlansMod.playerHandler.tick();
+		FlansMod.ticker++;
 	}
 	
 	public EnumSet<TickType> ticks()

@@ -1,9 +1,9 @@
 package co.uk.flansmods.common.driveables;
 
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
+import co.uk.flansmods.common.guns.GunType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,7 @@
 package co.uk.flansmods.common;
 
 import net.minecraft.entity.player.EntityPlayer;
+import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;

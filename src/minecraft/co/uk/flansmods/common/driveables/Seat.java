@@ -1,7 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunType;
+import co.uk.flansmods.common.guns.GunType;
 
 public class Seat 
 {

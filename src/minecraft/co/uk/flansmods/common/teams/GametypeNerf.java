@@ -3,9 +3,9 @@ package co.uk.flansmods.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.uk.flansmods.common.EntityDamageSourceGun;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.guns.EntityDamageSourceGun;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;

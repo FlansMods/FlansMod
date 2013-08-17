@@ -44,26 +44,31 @@ public class GuiDriveableMenu extends GuiContainer
 	protected void actionPerformed(GuiButton button)
     {
 		//Replace with a packet requesting the GUI from the server
-        if (button.id == 0) //Guns
+        if(button.id == 0) //Guns
         {
         	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(0));
         	inventory.player.openGui(FlansMod.instance, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
-        if (button.id == 1) //Bombs
+        if(button.id == 1) //Bombs
         {
         	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(1));
         	inventory.player.openGui(FlansMod.instance, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
-        if (button.id == 2) //Fuel
+        if(button.id == 2) //Fuel
         {
         	PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(2));
         	inventory.player.openGui(FlansMod.instance, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         } 
-		if (button.id == 3) //Cargo
+		if(button.id == 3) //Cargo
         {
 			PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(3));
 			inventory.player.openGui(FlansMod.instance, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
+		if(button.id == 4) //Repair
+		{
+			//No server side required. No interactive slots in this one
+			inventory.player.openGui(FlansMod.instance, 1, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+		}
     }
 
     protected void drawGuiContainerForegroundLayer(int i, int j)

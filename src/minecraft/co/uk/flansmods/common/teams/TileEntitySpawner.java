@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.ItemAAGun;
 import co.uk.flansmods.common.ItemPlane;
 import co.uk.flansmods.common.ItemVehicle;
+import co.uk.flansmods.common.guns.ItemAAGun;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

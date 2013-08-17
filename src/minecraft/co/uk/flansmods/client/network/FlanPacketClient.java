@@ -23,6 +23,7 @@ import co.uk.flansmods.common.network.PacketParticleSpawn;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketPlayerSpawn;
 import co.uk.flansmods.common.network.PacketReload;
+import co.uk.flansmods.common.network.PacketRepairDriveable;
 import co.uk.flansmods.common.network.PacketSeatUpdates;
 import co.uk.flansmods.common.network.PacketTeamInfo;
 import co.uk.flansmods.common.network.PacketTeamSelect;
@@ -78,7 +79,7 @@ public class FlanPacketClient implements IPacketHandler
     		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.CLIENT); break;
     		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
     		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
-       		case 17: break; //FREE PACKET ID
+       		case 17: (new PacketRepairDriveable()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
        		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.CLIENT); break;
        		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, Side.CLIENT); break;
        		case 20: (new PacketPlayerSpawn()).interpret(stream, null, Side.CLIENT); break;

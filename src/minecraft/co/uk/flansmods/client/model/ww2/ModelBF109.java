@@ -67,25 +67,25 @@ public class ModelBF109 extends ModelPlane
 		tailModel[0].addBox(79F, 6F, -2F, 6, 6, 4, 0.0F);
 		tailModel[1].addBox(81F, 0F, -1F, 2, 8, 2, 0.0F);		
 		
-		//Left wing
-		leftWingModel = new ModelRendererTurbo[2];
-	    leftWingModel[0] = new ModelRendererTurbo(this, 58, 48, textureX, textureY);
-		leftWingModel[1] = new ModelRendererTurbo(this, 172, 0, textureX, textureY);	
-		
-		leftWingModel[0].addBox(-25F, 3F, 0F, 32, 2, 78, 0.0F);	//Wing
-        leftWingModel[1].addTrapezoid(-25F, 3F , 78F, 32, 2, 10, 0.0F, -1.0F, ModelRendererTurbo.MR_BACK);	//Wingtip	
-		
-        //Right wing
+		//Right wing
 		rightWingModel = new ModelRendererTurbo[2];
 		rightWingModel[0] = new ModelRendererTurbo(this, 58, 48, textureX, textureY);
 		rightWingModel[1] = new ModelRendererTurbo(this, 172, 0, textureX, textureY);	
+		
+		rightWingModel[0].addBox(-25F, 3F, 0F, 32, 2, 78, 0.0F);	//Wing
+		rightWingModel[1].addTrapezoid(-25F, 3F , 78F, 32, 2, 10, 0.0F, -1.0F, ModelRendererTurbo.MR_BACK);	//Wingtip	
+		
+        //Left wing
+        leftWingModel = new ModelRendererTurbo[2];
+        leftWingModel[0] = new ModelRendererTurbo(this, 58, 48, textureX, textureY);
+        leftWingModel[1] = new ModelRendererTurbo(this, 172, 0, textureX, textureY);	
 				
-		rightWingModel[0].addBox(-32F, -2F, -78F, 32, 2, 78); //Wing
-		rightWingModel[0].rotateAngleY = 3.14159265358979F;
-		rightWingModel[0].setPosition(-25F, 5F, -78F);
-        rightWingModel[1].addTrapezoid(-32F, 3F , -88F, 32, 2, 10, 0.0F, -1.0F, ModelRendererTurbo.MR_BACK);	//Wingtip
-		rightWingModel[1].rotateAngleY = 3.14159265258979F;
-		rightWingModel[1].setPosition(-25F,0F,-166F);
+        leftWingModel[0].addBox(-32F, -2F, -78F, 32, 2, 78); //Wing
+        leftWingModel[0].rotateAngleY = 3.14159265358979F;
+        leftWingModel[0].setPosition(-25F, 5F, -78F);
+        leftWingModel[1].addTrapezoid(-32F, 3F , -88F, 32, 2, 10, 0.0F, -1.0F, ModelRendererTurbo.MR_BACK);	//Wingtip
+        leftWingModel[1].rotateAngleY = 3.14159265258979F;
+        leftWingModel[1].setPosition(-25F,0F,-166F);
 
 		//Propellers
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts

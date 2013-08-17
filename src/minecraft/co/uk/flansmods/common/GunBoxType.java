@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.GunType;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -1,6 +1,8 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.util.ArrayList;
+
+import co.uk.flansmods.common.FlansMod;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;

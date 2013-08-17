@@ -1,4 +1,4 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.network.PacketMGFire;
 import co.uk.flansmods.common.network.PacketMGMount;
 import co.uk.flansmods.common.network.PacketPlaySound;

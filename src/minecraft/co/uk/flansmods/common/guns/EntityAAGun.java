@@ -1,4 +1,4 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import org.lwjgl.input.Mouse;
 
@@ -13,6 +13,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.network.PacketMGFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 

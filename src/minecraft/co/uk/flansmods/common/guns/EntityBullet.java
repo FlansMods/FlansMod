@@ -1,4 +1,4 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.util.List;
 
@@ -18,6 +18,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
@@ -352,8 +355,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionY -= gravity * type.fallSpeed;
 		setPosition(posX, posY, posZ);
 		
-		//Smoke particles 
-		//TODO : Make the particles generalised
+		//Particles 
 		if (type.smokeTrail)
 		{
 			double dX = (posX - prevPosX) / 10;
@@ -361,7 +363,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			double dZ = (posZ - prevPosZ) / 10;
 			for (int i = 0; i < 10; i++)
 			{
-				worldObj.spawnParticle("smoke", prevPosX + dX * (double) i, prevPosY + dY * (double) i, prevPosZ + dZ * (double) i, 0, 0, 0);
+				worldObj.spawnParticle(type.trailParticles, prevPosX + dX * (double) i, prevPosY + dY * (double) i, prevPosZ + dZ * (double) i, 0, 0, 0);
 			}
 		}
 	}
@@ -420,7 +422,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		}
 		//Send flak packet
 		if(type.flak > 0)
-			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketFlak.buildFlakPacket(posX, posY, posZ, type.flak));
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketFlak.buildFlakPacket(posX, posY, posZ, type.flak, type.flakParticles));
 		// Drop item on hitting if bullet requires it
 		if (type.dropItemOnHit != null)
 		{

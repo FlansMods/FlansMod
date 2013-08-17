@@ -5,12 +5,12 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.client.FlansModClient;
-import co.uk.flansmods.common.BulletType;
-import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketSeatUpdates;
 import co.uk.flansmods.common.network.PacketVehicleKey;

@@ -1,6 +1,6 @@
 package co.uk.flansmods.client;
 
-import co.uk.flansmods.common.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityAAGun;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;

@@ -14,11 +14,15 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketParticleSpawn;
@@ -334,5 +338,59 @@ public class CommonProxy
 		driveableStack.stackTagCompound = tags;
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropPlayerItem(driveableStack);
+	}
+
+	public void repairDriveable(EntityPlayer driver, EntityDriveable driving, DriveablePart part) 
+	{
+		//Create a temporary copy of the player inventory for backup purposes
+		InventoryPlayer temporaryInventory = new InventoryPlayer(null);
+		temporaryInventory.copyInventory(driver.inventory);
+		
+		//This becomes false if some recipe element is not found on the player
+		boolean canRepair = true;
+		
+		//Get the array of stacks needed
+		ArrayList<ItemStack> stacksNeeded = driving.getDriveableType().getItemsRequired(part, driving.getDriveableData().engine);
+		//Draw the stacks that should be in each slot
+		for(ItemStack stackNeeded : stacksNeeded)
+		{
+			//The total amount of items found that match this recipe stack
+			int totalAmountFound = 0;
+			//Iterate over the temporary inventory
+			for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
+			{
+				//Get the stack in each slot
+				ItemStack stackInSlot = temporaryInventory.getStackInSlot(m);
+				//If the stack is what we want
+				if(stackInSlot != null && stackInSlot.itemID == stackNeeded.itemID && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+				{
+					//Work out the amount to take from the stack
+					int amountFound = Math.min(stackInSlot.stackSize, stackNeeded.stackSize - totalAmountFound);
+					//Take it
+					stackInSlot.stackSize -= amountFound;
+					//Check for empty stacks
+					if(stackInSlot.stackSize <= 0)
+						stackInSlot = null;
+					//Put the modified stack back in the inventory
+					temporaryInventory.setInventorySlotContents(m, stackInSlot);
+					//Increase the amount found counter
+					totalAmountFound += amountFound;
+					//If we have enough, stop looking
+					if(totalAmountFound == stackNeeded.stackSize)
+						break;
+				}
+			}
+			if(totalAmountFound < stackNeeded.stackSize)
+				canRepair = false;
+		}
+		
+		if(canRepair)
+		{
+			driver.inventory.copyInventory(temporaryInventory);
+			part.health = Math.max(1, part.maxHealth / 10);
+			part.onFire = false;
+			part.dead = false;
+			driving.checkParts();
+		}
 	}
 }

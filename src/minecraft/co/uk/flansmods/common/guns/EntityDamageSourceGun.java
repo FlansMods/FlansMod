@@ -1,5 +1,7 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.teams.Team;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

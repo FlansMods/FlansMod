@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.guns.BulletType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

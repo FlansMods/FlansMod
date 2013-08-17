@@ -23,13 +23,13 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
-import co.uk.flansmods.common.BulletType;
-import co.uk.flansmods.common.EntityBullet;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.RotatedAxes;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
@@ -854,15 +854,6 @@ public class EntityPlane extends EntityDriveable
 	@Override
 	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) 
 	{
-		for(Propeller propeller : getPlaneType().propellers)
-		{
-			//If the propeller is connected to this part, drop it
-			if(propeller.planePart == part.type)
-			{
-				worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, new ItemStack(propeller.itemType.item)));
-				worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, new ItemStack(getDriveableData().engine.item)));
-			}
-		}
 	}
 
 	@Override

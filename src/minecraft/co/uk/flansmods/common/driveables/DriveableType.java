@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import java.io.BufferedReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import co.uk.flansmods.client.model.ModelDriveable;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.relauncher.Side;
@@ -218,6 +220,31 @@ public class DriveableType extends InfoType
     	return numPassengerGunners + guns.size();
     }
     
+    /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+    public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+    {
+    	ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+    	//Start with the items required to build this part
+    	if(partwiseRecipe.get(part.type) != null)
+    	{
+	    	for(ItemStack stack : partwiseRecipe.get(part.type))
+	    	{
+	    		stacks.add(stack.copy());
+	    	}
+    	}
+    	//Add the items required for the guns connected to this part
+    	for(PilotGun gun : guns)
+    	{
+    		if(gun.driveablePart == part.type)
+    			stacks.add(new ItemStack(gun.type.item));
+    	}
+    	for(Seat seat : seats)
+    	{
+    		if(seat.part == part.type && seat.gunType != null)
+    			stacks.add(new ItemStack(seat.gunType.item));
+    	}
+    	return stacks;
+    }
 	
 	public static DriveableType getDriveable(String find)
 	{
