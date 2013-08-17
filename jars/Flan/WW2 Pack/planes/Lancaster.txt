@@ -46,11 +46,11 @@ Propeller 3 98 16 116 leftWing metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
-Passenger 1 145 0 0 nose -30 30 -30 30 browning nose
+Passenger 1 145 0 0 nose -30 30 -30 30 browning Nose
 Passenger 2 90 10 0 core
 Passenger 3 70 10 0 core
-Passenger 4 -48 40 0 bay -360 360 0 89 browning dorsal
-Passenger 5 -120 16 0 tail 135 225 -30 30 browning tail
+Passenger 4 -48 40 0 bay -360 360 0 89 browning Dorsal
+Passenger 5 -120 16 0 tail 135 225 -30 30 browning Tail
 //Collision points (Each collision point has a position, a part and a strength)
 //The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core

@@ -56,7 +56,7 @@ public class GuiDriveableInventory extends GuiContainer
 				{
 					if(slotsDone >= scroll)
 					{
-						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
+						fontRenderer.drawString(driveable.getDriveableType().seats[i].gunName, 53, 29 + 19 * (slotsDone - scroll), 0x000000);
 						drawStack(new ItemStack(driveable.getDriveableType().seats[i].gunType.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
@@ -70,7 +70,7 @@ public class GuiDriveableInventory extends GuiContainer
 				{
 					if(slotsDone >= scroll)
 					{
-						fontRenderer.drawString(getGunSlotName(i), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
+						fontRenderer.drawString("Driver's gun " + (i + 1), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
 						drawStack(new ItemStack(driveable.getDriveableType().guns.get(i).type.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;

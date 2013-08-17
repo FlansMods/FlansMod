@@ -106,7 +106,7 @@ public class ModelLancaster extends ModelPlane
 		//No recoil part just yet
 		dorsalModel[2] = new ModelRendererTurbo[0];
 		
-		registerGunModel("dorsal", dorsalModel);
+		registerGunModel("Dorsal", dorsalModel);
 			
 		//Underside
 		bodyModel[13] = new ModelRendererTurbo(this,52, 362, textureX, textureY);
