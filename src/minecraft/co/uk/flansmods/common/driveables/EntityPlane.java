@@ -134,11 +134,13 @@ public class EntityPlane extends EntityDriveable
 		if(!FlansMod.proxy.mouseControlEnabled())
 			return;
 
-		flapsPitchLeft -= 1F * deltaY;
-		flapsPitchRight -= 1F * deltaY;
+		float sensitivity = 0.02F;
 		
-		flapsPitchLeft -= 1F * deltaX;
-		flapsPitchRight += 1F * deltaX;
+		flapsPitchLeft -= sensitivity * deltaY;
+		flapsPitchRight -= sensitivity * deltaY;
+		
+		flapsPitchLeft -= sensitivity * deltaX;
+		flapsPitchRight += sensitivity * deltaX;
 	}
 
 	private boolean canSit(int seat)
@@ -201,24 +203,24 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 2 : //Left : Yaw the flaps left
 			{
-				flapsYaw -= 5F;
+				flapsYaw -= 1F;
 				return true;
 			}
 			case 3 : //Right : Yaw the flaps right
 			{
-				flapsYaw += 5F;
+				flapsYaw += 1F;
 				return true;
 			}
 			case 4 : //Up : Pitch the flaps up
 			{
-				flapsPitchLeft += 5F;
-				flapsPitchRight += 5F;
+				flapsPitchLeft += 1F;
+				flapsPitchRight += 1F;
 				return true;
 			}
 			case 5 : //Down : Pitch the flaps down
 			{
-				flapsPitchLeft -= 5F;
-				flapsPitchRight -= 5F;
+				flapsPitchLeft -= 1F;
+				flapsPitchRight -= 1F;
 				return true;
 			}
 			case 6 : //Exit : Get out
@@ -325,14 +327,14 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 11 : //Roll left
 			{
-				flapsPitchLeft -= 5F;
-				flapsPitchRight += 5F;
+				flapsPitchLeft -= 1F;
+				flapsPitchRight += 1F;
 				return true;
 			}
 			case 12 : //Roll right
 			{
-				flapsPitchLeft += 5F;
-				flapsPitchRight -= 5F;
+				flapsPitchLeft += 1F;
+				flapsPitchRight -= 1F;
 				return true;
 			}
 			case 13 : // Gear
@@ -358,7 +360,7 @@ public class EntityPlane extends EntityDriveable
 			}
             case 16 : // Trim Button
             {
-				velocityRoll += axes.getRoll() / 10;
+				applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
 				return true;
             }
             case 17 : //Park
@@ -390,7 +392,7 @@ public class EntityPlane extends EntityDriveable
 		{
 			setDead();
 		}
-		if(riddenByEntity != null)
+		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
 			ticksSinceUsed = 0;
 		
 		//Shooting, inventories, etc.
@@ -405,23 +407,23 @@ public class EntityPlane extends EntityDriveable
 		propAngle += throttle / 7F;	
 		
 		//Return the flaps to their resting position
-		flapsYaw *= 0.8F;
-		flapsPitchLeft *= 0.8F;
-		flapsPitchRight *= 0.8F;
+		flapsYaw *= 0.9F;
+		flapsPitchLeft *= 0.9F;
+		flapsPitchRight *= 0.9F;
 		
 		//Limit flap angles
-		if(flapsYaw > 10)
-			flapsYaw = 10;
-		if(flapsYaw < -10)
-			flapsYaw = -10;
-		if(flapsPitchRight > 10)
-			flapsPitchRight = 10;
-		if(flapsPitchRight < -10)
-			flapsPitchRight = -10;
-		if(flapsPitchLeft > 10)
-			flapsPitchLeft = 10;
-		if(flapsPitchLeft < -10)
-			flapsPitchLeft = -10;
+		if(flapsYaw > 20)
+			flapsYaw = 20;
+		if(flapsYaw < -20)
+			flapsYaw = -20;
+		if(flapsPitchRight > 20)
+			flapsPitchRight = 20;
+		if(flapsPitchRight < -20)
+			flapsPitchRight = -20;
+		if(flapsPitchLeft > 20)
+			flapsPitchLeft = 20;
+		if(flapsPitchLeft < -20)
+			flapsPitchLeft = -20;
 		
 		//Player is not driving this. Update its position from server update packets 
 		if(worldObj.isRemote && !thePlayerIsDrivingThis)
@@ -450,7 +452,7 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 0.05F;
+			float sensitivityAdjust = 100F * type.mass;
 			
 			//Yaw according to the flapsYaw
 			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
@@ -466,7 +468,7 @@ public class EntityPlane extends EntityDriveable
 			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
 			//applyRotationalForce(axes.getXAxis(), (Vector3f)axes.getYAxis().scale(roll));
 			
-			applyTorque(new Vector3f(yaw, pitch, roll));
+			applyTorque(axes.findLocalVectorGlobally(new Vector3f(-roll, yaw, -pitch)));
 		}
 		
 		//Co-efficients of formulae
@@ -483,7 +485,7 @@ public class EntityPlane extends EntityDriveable
 			if(!parts.get(propeller.planePart).dead)
 			{
 				float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-				applyForce(rotate(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+				applyForce(axes.findLocalVectorGlobally(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
 			}
 		}
 				
@@ -526,15 +528,11 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Smooth off rotational motion
-		velocityYaw *= 0.9F;
-		velocityPitch *= 0.9F;
-		velocityRoll *= 0.9F;
-
-		//Apply motion to position and rotation
-		moveEntity(motionX, motionY, motionZ);
-		rotateYaw(velocityYaw);
-		rotatePitch(velocityPitch);
-		rotateRoll(-velocityRoll);
+		angularVelocity.scale(0.95F);
+		
+		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
+		moveDriveable();
+		
 		
         /*
 		//Fuel Handling
@@ -629,155 +627,10 @@ public class EntityPlane extends EntityDriveable
 					worldObj.setBlock(i, j, k, 0, 0, 5);
 					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
 					FlansMod.proxy.playBlockBreakSound(i, j, k, blockID);
-					velocityYaw += rand.nextFloat() * 1F - 0.5F;
-					velocityPitch += rand.nextFloat() * 1F - 0.5F;
-					velocityRoll += rand.nextFloat() * 1F - 0.5F;
 				}
 			}
 		}
 	}
-
-	/*
-	@Override
-	public void updateCollisionBox(EntityCollisionBox box)
-	{
-		if(tailHealth <= 0 && box.part == 3)
-			box.setDead();
-		if(rightWingHealth <= 0 && box.part == 2)
-			box.setDead();
-		if(leftWingHealth <= 0 && box.part == 1)
-			box.setDead();
-		
-		PlaneType type = this.getPlaneType();
-		
-		//Particles!
-		if((tailHealth < type.health / 4 && box.part == 3)
-		|| (rightWingHealth < type.health / 4 && box.part == 2)
-		|| (leftWingHealth < type.health / 4 && box.part == 1))
-		{
-			FlansMod.proxy.spawnParticle("smoke", box.posX + rand.nextGaussian() / 4D, box.posY + rand.nextGaussian() / 4D, box.posZ + rand.nextGaussian() / 4D, 0D, 0D, 0D, (byte) 5);
-		}
-		
-		
-		Vec3 vec = rotate(box.x / 16D, box.y / 16D, box.z / 16D);
-		box.setPosition(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord);
-		box.motionX = box.posX - box.prevPosX;
-		box.motionY = box.posY - box.prevPosY;
-		box.motionZ = box.posZ - box.prevPosZ;
-		
-		
-		//Collision for takeoff
-		int tileX = MathHelper.floor_double(box.posX + 0.5D);
-		int tileY = MathHelper.floor_double(box.posY + 0.5D);
-		int tileZ = MathHelper.floor_double(box.posZ + 0.5D);	
-		if((box.part == 0 || box.part == 3) && Math.abs(motionY) < 0.2D && propSpeed > 1F)
-		{
-			Block block = Block.blocksList[worldObj.getBlockId(tileX, MathHelper.floor_double(box.boundingBox.minY), tileZ)];
-			if(block != null && block.blockMaterial.isSolid())
-				motionY += 0.1D;
-			block = Block.blocksList[worldObj.getBlockId(tileX, MathHelper.floor_double(box.boundingBox.maxY), tileZ)];
-			if(block != null && block.blockMaterial.isSolid())
-				motionY -= 0.1D;		
-		}
-		
-		
-		//Hurtful collision
-		else
-		{
-			box.inBlock = worldObj.getBlockId(tileX, tileY, tileZ) != 0;
-			
-			smashIntoBlock(tileX, tileY, tileZ);
-			
-			if(box.motionX * box.motionX + box.motionY * box.motionY + box.motionZ * box.motionZ > 0.25D)
-			{
-				if(box.motionX > box.motionZ && box.motionX > -box.motionZ && box.motionX > box.motionY && box.motionX > -box.motionY) //Moving in +x
-				{
-					int i = tileX + 1;
-					for(int j = tileY - 1; j < tileY + 2; j++)
-					{
-						for(int k = tileZ - 1; k < tileZ + 2; k++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-				if(-box.motionX > box.motionZ && -box.motionX > -box.motionZ && -box.motionX > box.motionY && -box.motionX > -box.motionY) //Moving in -x
-				{
-					int i = tileX - 1;
-					for(int j = tileY - 1; j < tileY + 2; j++)
-					{
-						for(int k = tileZ - 1; k < tileZ + 2; k++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-				if(box.motionZ > box.motionX && box.motionZ > -box.motionX && box.motionZ > box.motionY && box.motionZ > -box.motionY) //Moving in +z
-				{
-					int k = tileZ + 1;
-					for(int i = tileX - 1; i < tileX + 2; i++)
-					{
-						for(int j = tileY - 1; j < tileY + 2; j++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-				if(-box.motionZ > box.motionX && -box.motionZ > -box.motionX && -box.motionZ > box.motionY && -box.motionZ > -box.motionY) //Moving in -z
-				{
-					int k = tileZ - 1;
-					for(int i = tileX - 1; i < tileX + 2; i++)
-					{
-						for(int j = tileY - 1; j < tileY + 2; j++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-				if(box.motionY > box.motionX && box.motionY > -box.motionX && box.motionY > box.motionZ && box.motionY > -box.motionZ) //Moving in +y
-				{
-					int j = tileY + 1;
-					for(int i = tileX - 1; i < tileX + 2; i++)
-					{
-						for(int k = tileZ - 1; k < tileZ + 2; k++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-				if(-box.motionY > box.motionX && -box.motionY > -box.motionX && -box.motionY > box.motionZ && -box.motionY > -box.motionZ) //Moving in -y
-				{
-					int j = tileY - 1;
-					for(int i = tileX - 1; i < tileX + 2; i++)
-					{
-						for(int k = tileZ - 1; k < tileZ + 2; k++)
-						{
-							box.smashIntoBlock(i, j, k);
-						}
-					}
-				}
-			}
-			//Entity Collision
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(box, box.boundingBox);
-			if(list != null && list.size() > 0)
-			{
-				for(int j1 = 0; j1 < list.size(); j1++)
-				{
-					Entity entity = (Entity)list.get(j1);
-					if(!isPartOfThis(entity) && entity.canBePushed())
-					{
-						int damage = (int)((box.motionX * box.motionX + box.motionY * box.motionY + box.motionZ * box.motionZ) * 10D);
-						if(damage > 1)
-						{
-							entity.attackEntityFrom(new EntityDamageSource("plane", box), damage);
-							box.attackEntityFrom(new EntityDamageSource("entity", box), damage);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
 	
     public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
     {
@@ -793,42 +646,7 @@ public class EntityPlane extends EntityDriveable
 			driveableData.writeToNBT(planeStack.stackTagCompound);
 			entityDropItem(planeStack, 0.5F);
 	 		setDead();
-			return true;
 		}
-		/* if(health < 0)
-		{
-			//Dont explode too much, dont want to cause out of memory errors
-			float amountExploded = 0F;
-			//Detonate all bombs and fuel
-			for(int j = 0; j < type.numBombSlots; j++)
-			{
-				ItemStack bomb = getPlaneData().getStackInSlot(getPlaneData().getBombInventoryStart() + j);
-				if(bomb != null && bomb.getItem() instanceof ItemBullet)
-				{
-					BulletType bombType = ((ItemBullet)bomb.getItem()).type;
-					if(FlansMod.explosions && (bombType.explodeOnImpact || bombType.fuse > 0) && rand.nextBoolean() && amountExploded < 10F)
-					{
-						worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, bombType.explosion, false);
-						amountExploded += bombType.explosion;
-					}
-					else
-						entityDropItem(bomb, 1.0F);
-				}
-				else if(bomb != null)
-					entityDropItem(bomb, 1.0F);
-			}
-			for(int j = type.numBombSlots; j < getPlaneData().getFuelSlot() + 1; j++)
-			{
-				ItemStack stack = getPlaneData().getStackInSlot(j);
-				if(stack != null)
-					entityDropItem(stack, 1.0F);
-			}
-			if(FlansMod.explosions && getPlaneData().fuelInTank > 0 && rand.nextBoolean() && amountExploded < 10F)
-			{
-				worldObj.createExplosion(this, posX + (double)rand.nextGaussian() * 2D, posY + (double)rand.nextGaussian() * 2D, posZ + (double)rand.nextGaussian() * 2D, (float)getPlaneData().fuelInTank / 200F, false);
-			}
-			//setDead();
-		}	*/
         return true;
     }
     

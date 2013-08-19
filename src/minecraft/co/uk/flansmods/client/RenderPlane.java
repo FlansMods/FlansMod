@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelDriveable;
 import co.uk.flansmods.client.model.ModelPlane;
+import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.CollisionPoint;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
@@ -22,9 +24,7 @@ import co.uk.flansmods.common.driveables.Propeller;
 import co.uk.flansmods.common.guns.EntityBullet;
 
 public class RenderPlane extends Render
-{
-	public static boolean DEBUG = true;
-	
+{	
     public RenderPlane()
     {
         shadowSize = 0.5F;
@@ -53,7 +53,7 @@ public class RenderPlane extends Render
 		{
 			modPlane.render(entityPlane);
 		}
-		if(DEBUG)
+		if(FlansMod.DEBUG)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
@@ -76,6 +76,11 @@ public class RenderPlane extends Render
 			for(PilotGun gun : type.guns)
 			{				
 				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+			}
+			GL11.glColor4f(0F, 0F, 0F, 0.3F);
+			for(CollisionPoint point : type.points)
+			{				
+				renderAABB(AxisAlignedBB.getBoundingBox((float)point.posX / 16F - 0.25F, (float)point.posY / 16F - 0.25F, (float)point.posZ / 16F - 0.25F, (float)point.posX / 16F + 0.25F, (float)point.posY / 16F + 0.25F, (float)point.posZ / 16F + 0.25F));
 			}
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

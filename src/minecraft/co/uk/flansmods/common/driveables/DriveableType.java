@@ -106,7 +106,7 @@ public class DriveableType extends InfoType
 			}
 			if(split[0].equals("AddCollisionPoint"))
 			{
-				points.add(new CollisionPoint(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), split[4], Integer.parseInt(split[5])));
+				points.add(new CollisionPoint(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), split[4], Float.parseFloat(split[5])));
 			}
 			
 			//Movement Variables
@@ -207,6 +207,7 @@ public class DriveableType extends InfoType
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 		}
 	}
     
@@ -240,7 +241,7 @@ public class DriveableType extends InfoType
     	}
     	for(Seat seat : seats)
     	{
-    		if(seat.part == part.type && seat.gunType != null)
+    		if(seat != null && seat.part == part.type && seat.gunType != null)
     			stacks.add(new ItemStack(seat.gunType.item));
     	}
     	return stacks;

@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketReload;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
@@ -42,6 +43,7 @@ public class KeyInputHandler extends KeyHandler
     protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
     protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
     protected static KeyBinding parkKey = new KeyBinding("Park Key", Keyboard.KEY_P);
+    protected static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10);
 
 	Minecraft mc;
 	
@@ -69,7 +71,8 @@ public class KeyInputHandler extends KeyHandler
                 parkKey,
 				teamsMenuKey,
 				teamsScoresKey,
-				reloadKey
+				reloadKey,
+				debugKey
 				},
 				new boolean[]
 						{
@@ -93,7 +96,8 @@ public class KeyInputHandler extends KeyHandler
                 false, //park
 				false, // teams menu
 				false, // teams scores menu
-				false //reload
+				false, //reload
+				false //debug
 						});
 		
 		mc = Minecraft.getMinecraft();
@@ -167,6 +171,10 @@ public class KeyInputHandler extends KeyHandler
 		{
 			PacketDispatcher.sendPacketToServer(PacketReload.buildReloadPacket());
 			return;
+		}
+		else if(kb == debugKey)
+		{
+			FlansMod.DEBUG = !FlansMod.DEBUG;
 		}
 		else
 			handled = false;

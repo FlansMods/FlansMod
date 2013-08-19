@@ -36,9 +36,9 @@ public class PacketVehicleControl extends FlanPacketCommon
         	data.writeDouble(driveable.motionX);
         	data.writeDouble(driveable.motionY);
         	data.writeDouble(driveable.motionZ);
-        	data.writeFloat(driveable.velocityYaw);
-        	data.writeFloat(driveable.velocityPitch);
-        	data.writeFloat(driveable.velocityRoll);
+        	data.writeFloat(driveable.angularVelocity.x);
+        	data.writeFloat(driveable.angularVelocity.y);
+        	data.writeFloat(driveable.angularVelocity.z);
         	data.writeFloat(driveable.throttle);
         	        	
         	packet.data = bytes.toByteArray();

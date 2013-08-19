@@ -25,8 +25,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -60,8 +62,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
 	public float prevRotationRoll;
 	/** Angular velocity */
-	public float velocityYaw, velocityPitch, velocityRoll;
+	public Vector3f angularVelocity = new Vector3f(0F, 0F, 0F);
 	
+	public RotatedAxes prevAxes;
 	public RotatedAxes axes;
 	
 	public EntitySeat[] seats;
@@ -331,9 +334,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         motionX = motX;
         motionY = motY;
         motionZ = motZ;
-        velocityYaw = velYaw;
-        velocityPitch = velPitch;
-        velocityRoll = velRoll;
+        angularVelocity = new Vector3f(velYaw, velPitch, velRoll);
         throttle = throt;
 	}
 	
@@ -352,6 +353,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public void onUpdate()
     {
         super.onUpdate();
+        
+        DriveableType type = getDriveableType();
+        
         if(!worldObj.isRemote)
         {
         	for(int i = 0; i < getDriveableType().numPassengers + 1; i++)
@@ -419,6 +423,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		prevRotationYaw = axes.getYaw();
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();		
+		prevAxes = axes.clone();
 		
         if(riddenByEntity != null && riddenByEntity.isDead)
         {
@@ -437,9 +442,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			throttle *= 0.9F;
 		}
 		
-		//DEBUG
-		/*
-		if(worldObj.isRemote)
+		/*if(worldObj.isRemote && FlansMod.DEBUG)
 		{
 			Vector3f xAxis = axes.getXAxis();
 			Vector3f yAxis = axes.getYAxis();
@@ -450,9 +453,47 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnParticle("smoke", 			posX + yAxis.x * i * 0.3D, posY + yAxis.y * i * 0.3D, posZ + yAxis.z * i * 0.3D, 0, 0, 0);
 				worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D, posY + zAxis.y * i * 0.3D, posZ + zAxis.z * i * 0.3D , 0, 0, 0);
 			}
-		}
-		*/
+		}*/
     }
+	
+	/* Return the collision mesh formed by the world around the given vector
+	public ArrayList<AxisAlignedBB> getLocalCollisionMesh(Vector3f position, Vector3f direction)
+	{
+        DriveableType type = getDriveableType();
+        
+        if(worldObj.isRemote)
+        {
+        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, Vector3f.add(position, new Vector3f((float)posX, (float)posY, (float)posZ), null), direction, 2));
+        }
+        
+        int x1 = MathHelper.floor_double(posX + position.x);
+        int y1 = MathHelper.floor_double(posY + position.y);
+        int z1 = MathHelper.floor_double(posZ + position.z);
+        
+        int x2 = MathHelper.ceiling_double_int(posX + position.x + direction.x);
+        int y2 = MathHelper.ceiling_double_int(posY + position.y + direction.y);
+        int z2 = MathHelper.ceiling_double_int(posZ + position.z + direction.z);
+        		
+		ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+		
+		//Iterate over the nearby blocks
+		for(int i = x1; i <= x2; i++)
+		{
+			for(int j = y1; j <= y2; j++)
+			{
+				for(int k = z1; k <= z2; k++)
+				{
+					int blockID = worldObj.getBlockId(i, j, k);
+					if(blockID > 0)
+					{
+						Block block = Block.blocksList[blockID];
+						block.addCollisionBoxesToList(worldObj, i, j, k, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2), aabbs, this);
+					}
+				}
+			}
+		}
+		return aabbs;
+	}*/
 	
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */
 	public Vector3f rotate(Vector3f inVec)
@@ -649,15 +690,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Applies a rotational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
 	public void applyRotationalForce(Vector3f forceOrigin, Vector3f forceVector)
 	{
-		
+		Vector3f torqueVector = Vector3f.cross((Vector3f)forceVector.scale(1), forceOrigin, null);
+		applyTorque(torqueVector);
 	}
 	
-	/** Applies a rotational force of forceVector.x in the yaw axis, forceVector.y in the pitch axis and forceVector.z in the roll axis */
-	public void applyTorque(Vector3f forceVector)
+	/** Applies a rotational torque */
+	public void applyTorque(Vector3f torqueVector)
 	{
-		velocityYaw += forceVector.x;
-		velocityPitch += forceVector.y;
-		velocityRoll += forceVector.z;
+		float deltaTime = 1F / 20F;
+		float momentOfInertia = getDriveableType().mass; //TODO : Add constant
+		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
 	/** Applies a translational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
@@ -669,6 +711,91 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		motionX += accelerationVector.x * deltaTime;
 		motionY += accelerationVector.y * deltaTime;
 		motionZ += accelerationVector.z * deltaTime;
+	}
+	
+	public void moveDriveable()
+	{		
+        float deltaTime = 1F / 20F;
+
+		DriveableType type = getDriveableType();
+        
+		Vector3f position = new Vector3f((float)posX, (float)posY, (float)posZ);
+        Vector3f motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
+        
+      	int numHits = 0;
+        
+		for(CollisionPoint point : type.points)
+		{
+			Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
+			Vector3f origin =	Vector3f.add(position, pointVec, null);
+			Vector3f ray = 		Vector3f.add(origin, motion, null);
+			
+			MovingObjectPosition hit = worldObj.clip(origin.toVec3(), ray.toVec3());
+						
+			if(hit != null)
+			{
+				numHits++;
+			}
+		}
+        
+		if(numHits > 0)
+		{
+			for(CollisionPoint point : type.points)
+			{
+				//motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
+				Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
+				Vector3f origin =	Vector3f.add(position, pointVec, null);
+				
+				if(Math.abs(origin.y - MathHelper.ceiling_float_int(origin.y)) < 0.01F)
+				{
+					origin.y = MathHelper.floor_float(origin.y) + 0.01F;
+				}
+				
+				Vector3f ray = 		Vector3f.add(origin, motion, null);
+				
+		        if(worldObj.isRemote)
+		        {
+		        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, origin, (Vector3f)Vector3f.sub(ray, origin, null).scale(4F), 2, 1F, 0F, 0F));
+		        }
+				
+				MovingObjectPosition hit = worldObj.clip(origin.toVec3(), ray.toVec3());
+							
+				if(hit != null)
+				{
+					Vector3f hitVec = new Vector3f(hit.hitVec);
+					
+					Vector3f normal = null;
+					switch(hit.sideHit)
+					{
+					case 0 : normal = new Vector3f(0F, -1F, 0F); break;
+					case 1 : normal = new Vector3f(0F, 1F, 0F); break;
+					case 2 : normal = new Vector3f(0F, 0F, -1F); break;
+					case 3 : normal = new Vector3f(0F, 0F, 1F); break;
+					case 4 : normal = new Vector3f(-1F, 0F, 0F); break;
+					case 5 : normal = new Vector3f(1F, 0F, 0F); break;
+					}
+					
+			        if(worldObj.isRemote)
+			        {
+			        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, hitVec, normal, 2, 0F, 1F, 0F));
+			        }
+			        
+	
+			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
+			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
+			        
+			        applyForce(origin, (Vector3f)normal.scale(forceMagnitude));	        
+				}
+			}
+		}
+		
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
+
+		//Apply motion to position and rotation
+		if(angularVelocity.lengthSquared() >= 0.0000001F)
+			axes.rotate(angularVelocity.length() * deltaTime, (Vector3f)angularVelocity.normalise());
 	}
 	
 	/** Whether or not the plane is on the ground 

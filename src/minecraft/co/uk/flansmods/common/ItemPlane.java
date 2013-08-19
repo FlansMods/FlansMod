@@ -69,7 +69,9 @@ public class ItemPlane extends Item
             int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getPlaneData(itemstack, world)));
+            	DriveableData data = getPlaneData(itemstack, world);
+            	if(data != null)
+            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
@@ -81,19 +83,28 @@ public class ItemPlane extends Item
     
     public Entity spawnPlane(World world, double x, double y, double z, ItemStack stack)
     {
-    	Entity entity = new EntityPlane(world, x, y, z, type, getPlaneData(stack, world));
-    	if(!world.isRemote)
-        {
-			world.spawnEntityInWorld(entity);
-        }
-    	return entity;
+    	DriveableData data = getPlaneData(stack, world);
+    	if(data != null)
+    	{
+	    	Entity entity = new EntityPlane(world, x, y, z, type, data);
+	    	if(!world.isRemote)
+	        {
+				world.spawnEntityInWorld(entity);
+	        }
+	    	return entity;
+    	}
+    	return null;
     }
 	
 	public DriveableData getPlaneData(ItemStack itemstack, World world)
     {
+		if(itemstack.stackTagCompound == null || !itemstack.stackTagCompound.hasKey("Type"))
+		{
+			return null;
+		}
 		return new DriveableData(itemstack.stackTagCompound);
     }
-	
+		
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
