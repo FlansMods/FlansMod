@@ -54,7 +54,7 @@ Passenger 5 -120 16 0 tail 135 225 -30 30 browning Tail
 //Collision points (Each collision point has a position, a part and a strength)
 //The parts are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddCollisionPoint 0 0 -32 core 1.0
+AddCollisionPoint 0 0 0 core 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20

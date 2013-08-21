@@ -47,9 +47,9 @@ Passengers 0
 //Collision points (Each collision point has a position, a section and a strength)
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddCollisionPoint -44 -16 0 core 1.0
-AddCollisionPoint 0 0 40 leftWing 1.0
-AddCollisionPoint 0 0 -40 rightWing 1.0
+AddCollisionPoint -46 -10 0 core 1.0
+AddCollisionPoint 2 -10 4 leftWing 1.0
+AddCollisionPoint 2 -10 -4 rightWing 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20

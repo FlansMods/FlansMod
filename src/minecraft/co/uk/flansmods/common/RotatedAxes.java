@@ -115,7 +115,14 @@ public class RotatedAxes
 	}
 	
 	//Rotate by some angle around some axis
-	public void rotate(float rotateBy, Vector3f rotateAround)
+	public void rotateLocal(float rotateBy, Vector3f rotateAround)
+	{
+		rotationMatrix.rotate(rotateBy * 3.14159265F / 180F, findLocalVectorGlobally(rotateAround));
+		convertMatrixToAngles();
+	}
+	
+	//Rotate by some angle around some axis
+	public void rotateGlobal(float rotateBy, Vector3f rotateAround)
 	{
 		rotationMatrix.rotate(rotateBy * 3.14159265F / 180F, rotateAround);
 		convertMatrixToAngles();
