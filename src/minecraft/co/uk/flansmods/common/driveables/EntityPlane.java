@@ -452,7 +452,7 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 100F * type.mass;
+			float sensitivityAdjust = 1000F * type.mass;
 			
 			//Yaw according to the flapsYaw
 			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;

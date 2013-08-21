@@ -28,7 +28,7 @@ public class GuiTeamScores extends GuiScreen
 	//Number of lines (for rendering)
 	public static int numLines;
 
-	private static class TeamData
+	public static class TeamData
 	{
 		public Team team;
 		public int score;
