@@ -26,7 +26,7 @@ public class DriveableType extends InfoType
 	@SideOnly(value = Side.CLIENT)
 	/** The plane model */
 	public ModelDriveable model;
-	
+		
 	/** Points for calculating collision. Each one is tied to a part of the driveable */
 	public ArrayList<CollisionPoint> points = new ArrayList<CollisionPoint>();
 
@@ -61,7 +61,9 @@ public class DriveableType extends InfoType
 	public float maxThrottle = 1F, maxNegativeThrottle = 0F;
 	
 	/** Mass in tons */
-	public float mass = 1;
+	public float mass = 1F;
+	/** Moment of inertia in metre tons or whatnot */
+	public float momentOfInertia = 1F;
 	
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
@@ -104,10 +106,6 @@ public class DriveableType extends InfoType
 			{
 				texture = split[1];
 			}
-			if(split[0].equals("AddCollisionPoint"))
-			{
-				points.add(new CollisionPoint(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), split[4], Float.parseFloat(split[5])));
-			}
 			
 			//Movement Variables
 			if(split[0].equals("MaxThrottle"))
@@ -116,6 +114,8 @@ public class DriveableType extends InfoType
 				maxNegativeThrottle = Float.parseFloat(split[1]);
 			if(split[0].equals("Mass"))
 				mass = Float.parseFloat(split[1]);
+			if(split[0].equals("MomentOfInertia"))
+				momentOfInertia = Float.parseFloat(split[1]);
 			
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
@@ -168,7 +168,12 @@ public class DriveableType extends InfoType
 			if(split[0].equals("SetupPart"))
 			{
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
-				health.put(part, new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8])));
+				CollisionBox box = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8]));
+				health.put(part, box);
+				for(int i = 0; i < 2; i++)
+					for(int j = 0; j < 2; j++)
+						for(int k = 0; k < 2; k++)
+							points.add(new CollisionPoint(box.x + i * box.w, box.y + j * box.h, box.z + k * box.d, part.getShortName(), 1.0F));
 			}
 			
 			//Driver Position

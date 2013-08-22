@@ -50,4 +50,9 @@ public enum EnumDriveablePart
 				return part;
 		return null;
 	}
+	
+	public static boolean isWheel(EnumDriveablePart part)
+	{
+		return part == coreWheel || part == tailWheel || part == leftWingWheel || part == rightWingWheel;
+	}
 }

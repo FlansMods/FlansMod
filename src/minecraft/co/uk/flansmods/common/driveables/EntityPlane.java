@@ -609,6 +609,11 @@ public class EntityPlane extends EntityDriveable
 		}
     }
 	
+	public boolean gearDown()
+	{
+		return varGear;
+	}
+    
 	private void smashIntoBlock(int i, int j, int k)
 	{
 		if(worldObj.isRemote || !FlansMod.explosions)

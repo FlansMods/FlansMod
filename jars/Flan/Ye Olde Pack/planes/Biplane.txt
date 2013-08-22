@@ -26,6 +26,7 @@ Drag 0.2
 Lift 0.2
 //Mass (In tons)
 Mass 0.2
+MomentOfInertia 1.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1000
 //Nose and Wing Guns (not present)
@@ -44,12 +45,6 @@ Propeller 0 14 0 0 core woodenPropeller
 //Passengers
 Pilot 0 -4 0
 Passengers 0
-//Collision points (Each collision point has a position, a section and a strength)
-//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
-//rightWing, nose, turret, coreWheel, core
-AddCollisionPoint -46 -10 0 core 1.0
-AddCollisionPoint 2 -15 6 leftWing 1.0
-AddCollisionPoint 2 -15 -6 rightWing 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20
@@ -72,4 +67,5 @@ SetupPart rightWing 25 -9 -2 -50 18 2 41
 SetupPart leftWing 25 -9 -2 9 18 2 41
 SetupPart topWing 50 -9 18 -50 18 2 100
 SetupPart tail 50 -51 -6 -5 40 8 10
+SetupPart tailWheel 10 -48 -10 -1 4 4 2
 BulletDetection 5

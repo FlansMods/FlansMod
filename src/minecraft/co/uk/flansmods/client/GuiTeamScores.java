@@ -20,6 +20,7 @@ public class GuiTeamScores extends GuiScreen
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teamsScores.png");
 
 	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used...
+	public static String map;
 	public static String gametype;
 	public static int numTeams;
 	public static TeamData[] teamData;
@@ -73,6 +74,7 @@ public class GuiTeamScores extends GuiScreen
 				teamData = new TeamData[0];
 				return;
 			}
+			map = stream.readUTF();
 			sortedByTeam = stream.readBoolean();
 			if(sortedByTeam)
 			{

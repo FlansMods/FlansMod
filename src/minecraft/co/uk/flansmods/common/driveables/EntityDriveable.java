@@ -455,46 +455,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}*/
     }
-	
-	/* Return the collision mesh formed by the world around the given vector
-	public ArrayList<AxisAlignedBB> getLocalCollisionMesh(Vector3f position, Vector3f direction)
-	{
-        DriveableType type = getDriveableType();
-        
-        if(worldObj.isRemote)
-        {
-        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, Vector3f.add(position, new Vector3f((float)posX, (float)posY, (float)posZ), null), direction, 2));
-        }
-        
-        int x1 = MathHelper.floor_double(posX + position.x);
-        int y1 = MathHelper.floor_double(posY + position.y);
-        int z1 = MathHelper.floor_double(posZ + position.z);
-        
-        int x2 = MathHelper.ceiling_double_int(posX + position.x + direction.x);
-        int y2 = MathHelper.ceiling_double_int(posY + position.y + direction.y);
-        int z2 = MathHelper.ceiling_double_int(posZ + position.z + direction.z);
-        		
-		ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
 		
-		//Iterate over the nearby blocks
-		for(int i = x1; i <= x2; i++)
-		{
-			for(int j = y1; j <= y2; j++)
-			{
-				for(int k = z1; k <= z2; k++)
-				{
-					int blockID = worldObj.getBlockId(i, j, k);
-					if(blockID > 0)
-					{
-						Block block = Block.blocksList[blockID];
-						block.addCollisionBoxesToList(worldObj, i, j, k, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2), aabbs, this);
-					}
-				}
-			}
-		}
-		return aabbs;
-	}*/
-	
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */
 	public Vector3f rotate(Vector3f inVec)
 	{
@@ -644,43 +605,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return 0.5D * getDriveableType().mass * getSpeedXYZ();
 	}
-	
-	/** Attempts to move the driveable by this vector, and checks for collision in the process */
-	public void move(Vec3 move)
-	{
-		DriveableType type = getDriveableType();
-		//Create an array to store the hits of the collision points
-		MovingObjectPosition[] hits = new MovingObjectPosition[type.points.size()];
-		int i = 0;
-		for(CollisionPoint point : type.points)
-		{
-			i++;
-			//Find the point in global coordinates
-			Vec3 pointVec = rotate(point.posX / 16D, point.posY / 16D, point.posZ / 16D).toVec3();
-			//Ray trace
-			hits[i] = worldObj.clip(pointVec, pointVec.addVector(move.xCoord, move.yCoord, move.zCoord));
-			
-			if(hits[i].typeOfHit == EnumMovingObjectType.ENTITY)
-			{
-				Entity entity = hits[i].entityHit;
-				//If its a living Entity, deal it some damage and deal some back to the driveable
-				if(entity instanceof EntityLivingBase)
-				{
-					//Attack the collision point based on Entity health and plane energy
-					attackPoint(point, EntityDamageSource.causeMobDamage((EntityLivingBase)entity), ((EntityLivingBase)entity).func_110143_aJ() * (float)getKineticEnergy());
-					//Attack the entity based on the point strength and the plane energy
-					entity.attackEntityFrom(new EntityDamageSourceCollision(this), point.strength * (float)getKineticEnergy());
-				}
-			}
-			if(hits[i].typeOfHit == EnumMovingObjectType.TILE)
-			{
-				//Now things get complicated. The idea is that when a collision point hits a block, the plane stops moving in the direction it was going in
-				//and instead pivots about the hit point, at least until the block is broken, if block breaking is enabled
-				
-			}
-		}
-	}
-	
+		
 	/** Applies both a translational and rotational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
 	public void applyForce(Vector3f forceOrigin, Vector3f forceVector)
 	{
@@ -701,7 +626,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().mass; //TODO : Add constant
+		float momentOfInertia = getDriveableType().mass / 1; //TODO : Add constant
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -725,8 +650,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f position = new Vector3f((float)posX, (float)posY, (float)posZ);
         Vector3f motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
         
-        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, motion, 2, 1F, 0F, 1F));
-        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, angularVelocity, 2, 1F, 0F, 1F));
+        if(worldObj.isRemote && FlansMod.DEBUG)
+        {
+	        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, motion, 2, 0F, 0F, 1F));
+	        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, (Vector3f)new Vector3f(angularVelocity).scale(1F / 10F), 2, 1F, 0F, 1F));
+        }
         
       	RotatedAxes newAxes = axes.clone();
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
@@ -736,6 +664,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         
 		for(CollisionPoint point : type.points)
 		{
+      		if(!isPartIntact(point.part))
+      			continue;
+			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+				continue;
 			Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
 			Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
 			Vector3f origin = Vector3f.add(position, pointVec, null);
@@ -743,10 +675,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
 			Vector3f ray = Vector3f.add(newOrigin, motion, null);
 			
-	        if(worldObj.isRemote)
+	        if(worldObj.isRemote && FlansMod.DEBUG)
 	        {
 	        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, origin, (Vector3f)Vector3f.sub(ray, origin, null).scale(1F), 2, 1F, 0F, 0F));
-	        	//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, rayOrigin, (Vector3f)Vector3f.sub(origin, rayOrigin, null).scale(1F), 2, 0F, 0F, 1F));
 	        }
 			
 			MovingObjectPosition hit = worldObj.clip(rayOrigin.toVec3(), ray.toVec3());
@@ -761,11 +692,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			for(CollisionPoint point : type.points)
 			{
+	      		if(!isPartIntact(point.part))
+	      			continue;
+				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+					continue;
 				Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
 				Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
 				Vector3f origin = Vector3f.add(position, pointVec, null);
 				Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
-				//Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
 				Vector3f ray = Vector3f.add(newOrigin, motion, null);
 				
 				MovingObjectPosition hit = worldObj.clip(newOrigin.toVec3(), ray.toVec3());
@@ -785,11 +719,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					case 5 : normal = new Vector3f(1F, 0F, 0F); break;
 					}
 					
-			        if(worldObj.isRemote)
+			        if(worldObj.isRemote && FlansMod.DEBUG)
 			        {
 			        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, hitVec, normal, 2, 0F, 1F, 0F));
 			        }
-			        
 	
 			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
 			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
@@ -808,11 +741,40 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
 			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
       	
+      	numHits = 0;
+      	
       	for(CollisionPoint point : type.points)
       	{
+      		if(!isPartIntact(point.part))
+      			continue;
+			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+				continue;
+			
       		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-      		
-      		//pushOutOfBlocks(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z);
+      		int blockX = MathHelper.floor_double(posX + pointVec.x);
+      		int blockY = MathHelper.floor_double(posY + pointVec.y);
+      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
+      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
+      		if(blockID > 0)
+      		{
+      			Block block = Block.blocksList[blockID];
+      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
+      			if(aabbs.size() > 0)
+      			{
+      				numHits++;  
+      			}
+      		}
+      	}
+      	
+      	for(CollisionPoint point : type.points)
+      	{
+      		if(!isPartIntact(point.part))
+      			continue;
+			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+				continue;
+			
+      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
       		int blockX = MathHelper.floor_double(posX + pointVec.x);
       		int blockY = MathHelper.floor_double(posY + pointVec.y);
       		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
@@ -849,10 +811,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     			        applyForce(pointVec, new Vector3f(0F, (float)dmaxZ * type.mass / deltaTime, 0F));	  
     			        */
       				
-      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / deltaTime, 0F));	  
+      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits), 0F));	  
       			}
       		}
       	}
+	}
+	
+	/** Overriden by planes for wheel parts */
+	public boolean gearDown()
+	{
+		return true;
 	}
 	
 	/** Whether or not the plane is on the ground 

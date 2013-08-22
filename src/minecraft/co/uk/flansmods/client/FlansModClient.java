@@ -12,6 +12,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -23,6 +24,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.BlockGunBox;
@@ -66,9 +68,6 @@ public class FlansModClient extends FlansMod
 	public static int originalThirdPerson = 0;
 	
 	public static boolean inPlane = false;
-	
-	public static List<DriveableType> blueprintsUnlocked = new ArrayList<DriveableType>();
-	public static List<DriveableType> vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
 	
 	public static ResourceLocation resources;
 	
@@ -203,77 +202,16 @@ public class FlansModClient extends FlansMod
 	}
 	
 	@ForgeSubscribe
-	public void worldData(WorldEvent event)
+	public void entitySpawn(EntityJoinWorldEvent event)
 	{
-		if(!event.world.isRemote)
-			return;
-		if(event instanceof WorldEvent.Load)
-		{
-			loadPerWorldData(event, event.world);
-			savePerWorldData(event, event.world);
-		}
-		if(event instanceof WorldEvent.Save)
-		{
-			savePerWorldData(event, event.world);
-		}
+		/*
+		if(event.entity.worldObj.isRemote && event.entity == Minecraft.getMinecraft().thePlayer)
+			System.out.println(event.entity.toString());
+		if(event.entity.worldObj.isRemote && event.entity instanceof EntityHorse)
+			System.out.println(event.entity.toString());
+		*/
 	}
-	
-	private void loadPerWorldData(Event event, World world)
-	{
-		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
-		if(checkFileExists(file))
-		{
-			try
-			{
-				blueprintsUnlocked = new ArrayList<DriveableType>();
-				vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
-				NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-				int numPlaneBlues = tags.getInteger("NumPlaneBlues");
-				for(int i = 0; i < numPlaneBlues; i++)
-				{
-					blueprintsUnlocked.add(PlaneType.getPlane(tags.getString("PlaneBlue" + i)));
-				}
-				int numVehicleBlues = tags.getInteger("NumVehicleBlues");
-				for(int i = 0; i < numVehicleBlues; i++)
-				{
-					vehicleBlueprintsUnlocked.add(VehicleType.getVehicle(tags.getString("VehicleBlue" + i)));
-				}
-			}
-			catch(Exception e)
-			{
-				FlansMod.log("Failed to load from teams.dat");
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private void savePerWorldData(Event event, World world)
-	{
-		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
-		if(checkFileExists(file))
-		{
-			try
-			{
-				NBTTagCompound tags = new NBTTagCompound();
-				tags.setInteger("NumPlaneBlues", blueprintsUnlocked.size());
-				for(int i = 0; i < blueprintsUnlocked.size(); i++)
-				{
-					tags.setString("PlaneBlue" + i, blueprintsUnlocked.get(i).shortName);
-				}
-				tags.setInteger("NumVehicleBlues", vehicleBlueprintsUnlocked.size());
-				for(int i = 0; i < vehicleBlueprintsUnlocked.size(); i++)
-				{
-					tags.setString("VehicleBlue" + i, vehicleBlueprintsUnlocked.get(i).shortName);
-				}
-				CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
-			}
-			catch(Exception e)
-			{
-				FlansMod.log("Failed to save to teams.dat");
-			}
-		}
-	}
-	
+		
 	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())

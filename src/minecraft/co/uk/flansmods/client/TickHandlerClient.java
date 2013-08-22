@@ -135,8 +135,16 @@ public class TickHandlerClient implements ITickHandler
 				
 				//Draw the team scores
 				mc.fontRenderer.drawString(GuiTeamScores.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
+				mc.fontRenderer.drawString(GuiTeamScores.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
 				mc.fontRenderer.drawString(GuiTeamScores.teamData[1].score + "", i / 2 + 35 - mc.fontRenderer.getStringWidth(GuiTeamScores.teamData[1].score + ""), 9, 0x000000);
+				mc.fontRenderer.drawString(GuiTeamScores.teamData[1].score + "", i / 2 + 34 - mc.fontRenderer.getStringWidth(GuiTeamScores.teamData[1].score + ""), 8, 0xffffff);
 			}
+			
+			mc.fontRenderer.drawString(GuiTeamScores.gametype + "", i / 2 + 48, 9, 0x000000);
+			mc.fontRenderer.drawString(GuiTeamScores.gametype + "", i / 2 + 47, 8, 0xffffff);
+			mc.fontRenderer.drawString(GuiTeamScores.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(GuiTeamScores.map + ""), 9, 0x000000);
+			mc.fontRenderer.drawString(GuiTeamScores.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(GuiTeamScores.map + ""), 8, 0xffffff);
+
 			
 			GL11.glDepthMask(true);
 			GL11.glEnable(2929 /* GL_DEPTH_TEST */);

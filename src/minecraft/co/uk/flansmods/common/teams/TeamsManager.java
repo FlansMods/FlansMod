@@ -65,6 +65,7 @@ import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker
@@ -606,13 +607,19 @@ public class TeamsManager implements IPlayerTracker
 				if(data.playerClass != null && !data.playerClass.horse)
 				{
 					EntityHorse horse = new EntityHorse(playerMP.worldObj);
-					playerMP.worldObj.spawnEntityInWorld(horse);
+					
 					NBTTagCompound tags = new NBTTagCompound();
 					horse.writeToNBT(tags);
 					tags.setBoolean("Tame", true);
 					tags.setInteger("Temper", 0);
+					tags.setString("OwnerName", playerMP.username);
+					tags.setTag("SaddleItem", new ItemStack(Item.saddle).writeToNBT(new NBTTagCompound("SaddleItem")));
+					tags.setInteger("Type", 0);
+					tags.setInteger("Variant", 0);
 					horse.readFromNBT(tags);
-					//playerMP.mountEntity(horse);
+					horse.setPosition(playerMP.posX, playerMP.posY, playerMP.posZ);
+					playerMP.worldObj.spawnEntityInWorld(horse);
+					playerMP.mountEntity(horse);
 				}
 				
 				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)

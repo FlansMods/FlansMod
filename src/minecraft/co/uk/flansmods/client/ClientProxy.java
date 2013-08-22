@@ -379,12 +379,6 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public List<DriveableType> getBlueprints(boolean vehicle)
-	{
-		return vehicle ? FlansModClient.vehicleBlueprintsUnlocked : FlansModClient.blueprintsUnlocked;
-	}
-	
-	@Override
 	public void craftDriveable(EntityPlayer player, DriveableType type)
 	{
 		//Craft it this side (so the inventory updates immediately) and then send a packet to the server so that it is crafted that side too
