@@ -90,12 +90,6 @@ public class ModelPlane extends ModelDriveable
 	        {
 				tailModel[i].render(f5);
 	        }
-	        //Gear
-			for(int i = 0; i < tailGearDownModel.length; i++)
-			{
-				if(plane.varGear)
-					tailGearDownModel[i].render(f5);
-			}
 			//Doors
 			for(int i = 0; i < tailDoorOpenModel.length; i++)
 			{
@@ -126,6 +120,15 @@ public class ModelPlane extends ModelDriveable
 				pitchFlapRightModel[i].render(f5);
 			}
 		}
+		if(plane.isPartIntact(EnumDriveablePart.tailWheel))
+		{
+			//Gear
+			for(int i = 0; i < tailGearDownModel.length; i++)
+			{
+				if(plane.varGear)
+					tailGearDownModel[i].render(f5);
+			}
+		}
 		if(plane.isPartIntact(EnumDriveablePart.leftWing))
 		{
 			//Rendering the left wing
@@ -133,12 +136,6 @@ public class ModelPlane extends ModelDriveable
 	        {
 				leftWingModel[i].render(f5);
 	        }	
-			//Gear
-			for(int i = 0; i < leftWingGearDownModel.length; i++)
-			{
-				if(plane.varGear)
-					leftWingGearDownModel[i].render(f5);
-			}
 			//Changeable Wings
 			for(int i = 0; i < leftWingPos1Model.length; i++)
 			{
@@ -164,12 +161,6 @@ public class ModelPlane extends ModelDriveable
 	        {
 				rightWingModel[i].render(f5);
 	        }
-	        //Gear
-			for(int i = 0; i < rightWingGearDownModel.length; i++)
-			{
-				if(plane.varGear)
-					rightWingGearDownModel[i].render(f5);
-			}
 			//Changeable Wings
 			for(int i = 0; i < rightWingPos1Model.length; i++)
 			{
@@ -188,6 +179,24 @@ public class ModelPlane extends ModelDriveable
 				pitchFlapRightWingModel[i].render(f5);
 			}
 		}
+		if(plane.isPartIntact(EnumDriveablePart.leftWingWheel))
+		{
+			//Gear
+			for(int i = 0; i < leftWingGearDownModel.length; i++)
+			{
+				if(plane.varGear)
+					leftWingGearDownModel[i].render(f5);
+			}
+		}
+		if(plane.isPartIntact(EnumDriveablePart.rightWingWheel))
+		{
+	        //Gear
+			for(int i = 0; i < rightWingGearDownModel.length; i++)
+			{
+				if(plane.varGear)
+					rightWingGearDownModel[i].render(f5);
+			}
+		}
 		if(plane.isPartIntact(EnumDriveablePart.core))
 		{
 			//Rendering the body
@@ -195,12 +204,6 @@ public class ModelPlane extends ModelDriveable
 	        {
 	            bodyModel[i].render(f5);
 	        }
-			//Gear
-			for(int i = 0; i < bodyGearDownModel.length; i++)
-			{
-				if(plane.varGear)
-					bodyGearDownModel[i].render(f5);
-			}
 			//Doors
 			for(int i = 0; i < bodyDoorOpenModel.length; i++)
 			{
@@ -211,6 +214,15 @@ public class ModelPlane extends ModelDriveable
 			{
 				if(!plane.varDoor)
 					bodyDoorCloseModel[i].render(f5);
+			}
+		}
+		if(plane.isPartIntact(EnumDriveablePart.coreWheel))
+		{
+			//Gear
+			for(int i = 0; i < bodyGearDownModel.length; i++)
+			{
+				if(plane.varGear)
+					bodyGearDownModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.topWing))

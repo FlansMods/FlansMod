@@ -452,7 +452,7 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 1000F * type.mass;
+			float sensitivityAdjust = 10F * type.mass;
 			
 			//Yaw according to the flapsYaw
 			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
@@ -472,7 +472,7 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Co-efficients of formulae
-		float thrustFormulaCoefficient = 1F;
+		float thrustFormulaCoefficient = 2F;
 		float dragFormulaCoefficient = 10F;
 		float gravity = 9.81F / 20F;
 		float liftFormulaCoefficient = 1.2F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());

@@ -765,10 +765,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
 				Vector3f origin = Vector3f.add(position, pointVec, null);
 				Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
-				Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
+				//Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
 				Vector3f ray = Vector3f.add(newOrigin, motion, null);
 				
-				MovingObjectPosition hit = worldObj.clip(rayOrigin.toVec3(), ray.toVec3());
+				MovingObjectPosition hit = worldObj.clip(newOrigin.toVec3(), ray.toVec3());
 							
 				if(hit != null)
 				{
@@ -807,6 +807,52 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//Apply motion to rotation
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
 			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
+      	
+      	for(CollisionPoint point : type.points)
+      	{
+      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
+      		
+      		//pushOutOfBlocks(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z);
+      		int blockX = MathHelper.floor_double(posX + pointVec.x);
+      		int blockY = MathHelper.floor_double(posY + pointVec.y);
+      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
+      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
+      		if(blockID > 0)
+      		{
+      			Block block = Block.blocksList[blockID];
+      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
+      			if(aabbs.size() > 0)
+      			{
+      				AxisAlignedBB aabb = aabbs.get(0);
+      				double dminX = Math.abs(posX + pointVec.x - aabb.minX);
+      				double dmaxX = Math.abs(posX + pointVec.x - aabb.maxX);
+      				double dminY = Math.abs(posY + pointVec.y - aabb.minY);
+      				double dmaxY = Math.abs(posY + pointVec.y - aabb.maxY);
+      				double dminZ = Math.abs(posZ + pointVec.z - aabb.minZ);
+      				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
+      				
+      				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
+      				
+      				/*
+      				if(Math.abs(dminX - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dminX * type.mass / deltaTime, 0F));	  
+      				if(Math.abs(dmaxX - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxX * type.mass / deltaTime, 0F));	  
+      				if(Math.abs(dminY - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dminY * type.mass / deltaTime, 0F));	  
+      				if(Math.abs(dmaxY - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / deltaTime, 0F));	  
+      				if(Math.abs(dminZ - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dminZ * type.mass / deltaTime, 0F));	  
+      				if(Math.abs(dmaxZ - min) < 0.000001D)
+    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxZ * type.mass / deltaTime, 0F));	  
+    			        */
+      				
+      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / deltaTime, 0F));	  
+      			}
+      		}
+      	}
 	}
 	
 	/** Whether or not the plane is on the ground 
