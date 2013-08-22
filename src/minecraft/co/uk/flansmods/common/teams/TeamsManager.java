@@ -27,6 +27,7 @@ import net.minecraft.network.packet.Packet6SpawnPosition;
 import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
@@ -598,23 +599,11 @@ public class TeamsManager implements IPlayerTracker
 			Vec3 spawnPoint = currentGametype.getSpawnPoint(playerMP);
 			if(spawnPoint != null)
 			{
-                /*if (!playerMP.playerNetServerHandler.connectionClosed)
-                {
-                    EnderTeleportEvent event = new EnderTeleportEvent(playerMP, spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-                    event.attackDamage = 0;
-                    if (!MinecraftForge.EVENT_BUS.post(event)){
-                    	playerMP.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
-                    	playerMP.fallDistance = 0.0F;
-                    	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
-                    }
-                }*/
+				player.setSpawnChunk(new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), true);
 				data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				//FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-				//playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
-				
-				/*if(data.playerClass != null && !data.playerClass.horse)
+
+				if(data.playerClass != null && !data.playerClass.horse)
 				{
 					EntityHorse horse = new EntityHorse(playerMP.worldObj);
 					playerMP.worldObj.spawnEntityInWorld(horse);
@@ -624,7 +613,7 @@ public class TeamsManager implements IPlayerTracker
 					tags.setInteger("Temper", 0);
 					horse.readFromNBT(tags);
 					//playerMP.mountEntity(horse);
-				}*/
+				}
 				
 				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
 					player.setGameType(EnumGameType.ADVENTURE);

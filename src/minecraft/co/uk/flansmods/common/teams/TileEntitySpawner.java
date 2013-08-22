@@ -79,6 +79,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 				newBase.addObject(this);
 			}
 		}
+		if(worldObj.getBlockId(xCoord, yCoord, zCoord) != FlansMod.spawnerID)
+		{
+			destroy();
+			return;
+		}
 		if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
 			return;
 		for(int i = itemEntities.size() - 1; i >= 0; i--)
