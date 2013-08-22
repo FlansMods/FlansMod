@@ -613,7 +613,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     public ItemStack getPickedResult(MovingObjectPosition target)
     {
-		return new ItemStack(getDriveableType().itemID, 1, 0);
+		ItemStack stack = new ItemStack(getDriveableType().itemID, 1, 0);
+		stack.stackTagCompound = new NBTTagCompound();
+		driveableData.writeToNBT(stack.stackTagCompound);
+		return stack;
     }
 	
     
@@ -722,14 +725,23 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f position = new Vector3f((float)posX, (float)posY, (float)posZ);
         Vector3f motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
         
+        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, motion, 2, 1F, 0F, 1F));
+        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, angularVelocity, 2, 1F, 0F, 1F));
+        
+      	RotatedAxes newAxes = axes.clone();
+      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
+      		newAxes.rotateLocal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
+		
       	int numHits = 0;
         
 		for(CollisionPoint point : type.points)
 		{
 			Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-			Vector3f origin =	Vector3f.add(position, pointVec, null);
-			Vector3f rayOrigin = Vector3f.sub(origin, motion, null);
-			Vector3f ray = Vector3f.add(origin, motion, null);
+			Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
+			Vector3f origin = Vector3f.add(position, pointVec, null);
+			Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
+			Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
+			Vector3f ray = Vector3f.add(newOrigin, motion, null);
 			
 	        if(worldObj.isRemote)
 	        {
@@ -749,11 +761,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			for(CollisionPoint point : type.points)
 			{
-				//motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
 				Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-				Vector3f origin =	Vector3f.add(position, pointVec, null);				
-				Vector3f rayOrigin = Vector3f.sub(origin, motion, null);
-				Vector3f ray = Vector3f.add(origin, motion, null);
+				Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
+				Vector3f origin = Vector3f.add(position, pointVec, null);
+				Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
+				Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
+				Vector3f ray = Vector3f.add(newOrigin, motion, null);
 				
 				MovingObjectPosition hit = worldObj.clip(rayOrigin.toVec3(), ray.toVec3());
 							
@@ -791,81 +804,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		posY += motionY;
 		posZ += motionZ;
 		
-		position = new Vector3f((float)posX, (float)posY, (float)posZ);
-		
-		//Check for rotational collision
-		if(angularVelocity.lengthSquared() >= 0.0000001F)
-		{
-	      	numHits = 0;
-	      	RotatedAxes newAxes = axes.clone();
-			newAxes.rotateLocal(angularVelocity.length() * deltaTime, (Vector3f)angularVelocity.normalise());
-			
-			for(CollisionPoint point : type.points)
-			{
-				Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-				Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
-				Vector3f origin =	Vector3f.add(position, pointVec, null);
-				//Vector3f rayOrigin = Vector3f.sub(origin, motion, null);
-				Vector3f ray = Vector3f.add(position, newPointVec, null);
-				
-		        if(worldObj.isRemote)
-		        {
-		        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, origin, (Vector3f)Vector3f.sub(ray, origin, null).scale(5F), 2, 0F, 0F, 1F));
-		        	//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, rayOrigin, (Vector3f)Vector3f.sub(origin, rayOrigin, null).scale(1F), 2, 0F, 0F, 1F));
-		        }
-				
-				MovingObjectPosition hit = worldObj.clip(origin.toVec3(), ray.toVec3());
-							
-				if(hit != null)
-				{
-					numHits++;
-				}
-			}
-	        
-			if(numHits > 0)
-			{
-				for(CollisionPoint point : type.points)
-				{
-					Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-					Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
-					Vector3f origin =	Vector3f.add(position, pointVec, null);
-					Vector3f rayOrigin = Vector3f.add(position, Vector3f.sub(pointVec, newPointVec, null), null);
-					Vector3f ray = Vector3f.add(position, newPointVec, null);	
-					
-					MovingObjectPosition hit = worldObj.clip(rayOrigin.toVec3(), ray.toVec3());
-								
-					if(hit != null)
-					{
-						Vector3f hitVec = new Vector3f(hit.hitVec);
-						
-						Vector3f normal = null;
-						switch(hit.sideHit)
-						{
-						case 0 : normal = new Vector3f(0F, -1F, 0F); break;
-						case 1 : normal = new Vector3f(0F, 1F, 0F); break;
-						case 2 : normal = new Vector3f(0F, 0F, -1F); break;
-						case 3 : normal = new Vector3f(0F, 0F, 1F); break;
-						case 4 : normal = new Vector3f(-1F, 0F, 0F); break;
-						case 5 : normal = new Vector3f(1F, 0F, 0F); break;
-						}
-						
-				        if(worldObj.isRemote)
-				        {
-				        	//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, hitVec, normal, 2, 0F, 1F, 0F));
-				        }
-				        
-		
-				        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
-				        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
-				        
-				        applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	        
-					}
-				}
-			}
-			
-			//Apply motion to rotation
-			axes.rotateLocal(angularVelocity.length() * deltaTime, (Vector3f)angularVelocity.normalise());
-		}
+		//Apply motion to rotation
+      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
+			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 	}
 	
 	/** Whether or not the plane is on the ground 

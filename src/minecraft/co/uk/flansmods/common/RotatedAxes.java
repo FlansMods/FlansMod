@@ -26,6 +26,7 @@ public class RotatedAxes
 	{
 		RotatedAxes newAxes = new RotatedAxes();
 		newAxes.rotationMatrix.load(getMatrix());
+		newAxes.convertMatrixToAngles();
 		return newAxes;
 	}
 	
