@@ -54,7 +54,7 @@ public class ModelBF109 extends ModelPlane
 		//Propeller centre
 		noseModel[1] = new ModelRendererTurbo(this, 172, 12, textureX, textureY);
 		noseModel[1].addBox(0F, -2F , 0F, 4, 4, 4, 0.0F);
-		noseModel[1].setPosition(-55F, 0F, -2F);
+		noseModel[1].setPosition(-55F, -2F, -2F);
 		
 		
 		//Bay
@@ -101,9 +101,9 @@ public class ModelBF109 extends ModelPlane
         propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
         propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
         propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		
-        propellerModels[0][0].setRotationPoint(-54, 0, 0);	//Set the position of the propeller
-        propellerModels[0][1].setRotationPoint(-54, 0, 0);	
-        propellerModels[0][2].setRotationPoint(-54, 0, 0);	
+        propellerModels[0][0].setRotationPoint(-54, -2, 0);	//Set the position of the propeller
+        propellerModels[0][1].setRotationPoint(-54, -2, 0);	
+        propellerModels[0][2].setRotationPoint(-54, -2, 0);	
 		
 		yawFlapModel = new ModelRendererTurbo[1]; //Only one part to the yaw flap
 		yawFlapModel[0] = new ModelRendererTurbo(this, 220, 12, textureX, textureY);

@@ -528,7 +528,7 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Smooth off rotational motion
-		angularVelocity.scale(0.98F);
+		angularVelocity.scale(0.95F);
 		
 		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
 		moveDriveable();

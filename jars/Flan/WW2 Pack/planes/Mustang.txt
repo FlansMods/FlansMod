@@ -45,9 +45,9 @@ CargoSlots 0
 BombSlots 4
 //Propeller Positions
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
-Propeller 0 54 0 0 nose metalPropeller
+Propeller 0 54 2 0 nose metalPropeller
 //Passengers
-Pilot -8 -4 0
+Pilot -4 -4 0
 Passengers 0
 //Sounds
 StartSound propStart
