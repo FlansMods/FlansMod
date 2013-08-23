@@ -14,6 +14,40 @@ import co.uk.flansmods.common.vector.Vector3f;
 /** Extensible ModelPlane class for rendering plane models */
 public class ModelPlane extends ModelDriveable
 {
+	public static final float pi = 3.14159265F;
+	public static final float tau = 2 * pi;
+	
+    public ModelRendererTurbo bodyModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo noseModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo leftWingModel[] = new ModelRendererTurbo[0];	
+    public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo topWingModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo bayModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo tailModel[] = new ModelRendererTurbo[0];	
+	public ModelRendererTurbo propellerModels[][] = new ModelRendererTurbo[0][0]; //Propeller array [numProps][prop blades]
+	public ModelRendererTurbo yawFlapModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo pitchFlapLeftModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo pitchFlapRightModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo pitchFlapLeftWingModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo pitchFlapRightWingModel[] = new ModelRendererTurbo[0];
+	
+	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
+	
+	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo leftWingWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo rightWingWheelModel[] = new ModelRendererTurbo[0];
+	
+	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo tailDoorOpenModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo tailDoorCloseModel[] = new ModelRendererTurbo[0];
+		
+	public ModelRendererTurbo rightWingPos1Model[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo rightWingPos2Model[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo leftWingPos1Model[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo leftWingPos2Model[] = new ModelRendererTurbo[0];
+	
 	@Override
 	public void render(EntityDriveable driveable)
 	{
@@ -321,35 +355,4 @@ public class ModelPlane extends ModelDriveable
 	{
 		gunModels.put(name, gunModel);
 	}
-
-    public ModelRendererTurbo bodyModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo noseModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo leftWingModel[] = new ModelRendererTurbo[0];	
-    public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo topWingModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo bayModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailModel[] = new ModelRendererTurbo[0];	
-	public ModelRendererTurbo propellerModels[][] = new ModelRendererTurbo[0][0]; //Propeller array [numProps][prop blades]
-	public ModelRendererTurbo yawFlapModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo pitchFlapLeftModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo pitchFlapRightModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo pitchFlapLeftWingModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo pitchFlapRightWingModel[] = new ModelRendererTurbo[0];
-	
-	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
-	
-	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo leftWingWheelModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo rightWingWheelModel[] = new ModelRendererTurbo[0];
-	
-	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailDoorOpenModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailDoorCloseModel[] = new ModelRendererTurbo[0];
-		
-	public ModelRendererTurbo rightWingPos1Model[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo rightWingPos2Model[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo leftWingPos1Model[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo leftWingPos2Model[] = new ModelRendererTurbo[0];
 }

@@ -26,13 +26,15 @@ Drag 0.4
 Lift 0.4
 //Mass (In tons)
 Mass 0.4
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 2.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1500
-//Nose and Wing Guns (not present)
-//AddNoseGun 0 0 0 0 browning
-//AddNoseGun 1 0 0 0 mg42
-//AddWingGun 2 0 0 0 dp28
-//AddWingGun 3 0 0 0 bren
+//Nose and Wing Guns
+AddGun 30 3 -5 nose browning
+AddGun 30 3 5 nose browning
 ShootDelay 6
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
@@ -43,16 +45,10 @@ CargoSlots 8
 BombSlots 0
 //Propeller Positions
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
-Propeller 0 14 0 0 core woodenPropeller
+Propeller 0 27 0 0 nose woodenPropeller
 //Passengers
-Pilot 0 0 0
+Pilot 0 -4 0
 Passengers 0
-//Collision points (Each collision point has a position, a section and a strength)
-//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
-//rightWing, nose, turret, coreWheel, core
-AddCollisionPoint -44 0 0 core 1.0
-AddCollisionPoint 0 0 40 leftWing 1.0
-AddCollisionPoint 0 0 -40 rightWing 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20
@@ -69,9 +65,12 @@ AddRecipeParts rightWing 1 biplaneWing
 AddRecipeParts leftWing 1 biplaneWing
 AddRecipeParts tail 1 woodenTail
 //Health and collision
-SetupPart core 50 -12 -5 -9 24 10 18
-SetupPart rightWing 25 -9 0 -50 18 2 41
-SetupPart leftWing 25 -9 0 9 18 2 41
-SetupPart topWing 50 -9 18 -50 18 2 100
-SetupPart tail 50 -51 -2 -5 40 8 10
+SetupPart core 100 -12 -7 -11 24 10 22
+SetupPart coreWheel 20 0 -15 -7 4 8 14
+SetupPart nose 50 12 -7 -9 12 10 18
+SetupPart rightWing 40 -9 -2 -50 18 2 41
+SetupPart leftWing 40 -9 -2 9 18 2 41
+SetupPart topWing 60 -9 18 -50 18 2 100
+SetupPart tail 60 -51 -6 -5 40 8 10
+SetupPart tailWheel 10 -48 -10 -1 4 4 2
 BulletDetection 5
