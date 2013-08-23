@@ -39,7 +39,7 @@ ShootDelay 7
 //ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 100
-BombPosition 0 16 0
+BombPosition -30 -12 0
 //Inventory Slots
 CargoSlots 0
 BombSlots 3
