@@ -49,7 +49,7 @@ public class PlaneType extends DriveableType
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
     /** Default pitch for when parked. Will implement better system soon */
-    public float posPark = 0F;
+    public float restingPitch = 0F;
     
     /** Whether the player can access the inventory while in the air */
     public boolean invInflight = true;
@@ -145,8 +145,8 @@ public class PlaneType extends DriveableType
                 hasDoor = split[1].equals("True");
             if(split[0].equals("HasWing"))
                 hasWing = split[1].equals("True");
-            if(split[0].equals("PosPark"))
-                posPark = Float.parseFloat(split[1]);
+            if(split[0].equals("RestingPitch"))
+                restingPitch = Float.parseFloat(split[1]);
             
             //In-flight inventory
             if(split[0].equals("InflightInventory"))

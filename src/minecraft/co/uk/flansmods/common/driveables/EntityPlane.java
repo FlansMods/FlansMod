@@ -82,7 +82,7 @@ public class EntityPlane extends EntityDriveable
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
-        //rotatePitch(-type.posPark);
+        rotatePitch(type.restingPitch);
 	}
 	
 	@Override
@@ -528,7 +528,7 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Smooth off rotational motion
-		angularVelocity.scale(0.95F);
+		angularVelocity.scale(0.98F);
 		
 		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
 		moveDriveable();

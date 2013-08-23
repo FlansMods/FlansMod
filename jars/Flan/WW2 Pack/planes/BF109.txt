@@ -26,6 +26,10 @@ Drag 2.7
 Lift 3.2
 //Mass (In tons)
 Mass 2.7
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 10.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 6000
 //Nose and Wing Guns
@@ -45,12 +49,6 @@ Propeller 0 54 0 0 nose metalPropeller
 //Passengers
 Pilot -8 -4 0
 Passengers 0
-//Collision points (Each collision point has a position, a section and a strength)
-//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
-//rightWing, nose, turret, coreWheel, core
-AddCollisionPoint -44 0 0 core 1.0
-AddCollisionPoint 0 0 40 leftWing 1.0
-AddCollisionPoint 0 0 -40 rightWing 1.0
 //Sounds
 StartSound propStart
 StartSoundLength 20
@@ -69,9 +67,11 @@ AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
 //Health and collision
 SetupPart core 200 -17 -7 -10 20 24 20
+SetupPart coreWheel 50 0 -20 -8 6 13 16
 SetupPart nose 100 3 -7 -10 48 18 20
 SetupPart rightWing 100 -7 -5 10 32 2 78
 SetupPart leftWing 100 -7 -5 -88 32 2 78
 SetupPart bay 200 -70 -7 -10 53 18 20
 SetupPart tail 100 -93 -5 -8 23 14 16
+SetupPart tailWheel 50 -85 -12 -2 6 7 4
 BulletDetection 10

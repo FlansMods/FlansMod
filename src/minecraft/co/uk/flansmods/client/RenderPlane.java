@@ -77,10 +77,10 @@ public class RenderPlane extends Render
 			{				
 				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
 			}
-			GL11.glColor4f(0F, 0F, 0F, 0.3F);
-			for(CollisionPoint point : type.points)
+			//GL11.glColor4f(0F, 0F, 0F, 0.3F);
+			//for(CollisionPoint point : type.points)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)point.posX / 16F - 0.25F, (float)point.posY / 16F - 0.25F, (float)point.posZ / 16F - 0.25F, (float)point.posX / 16F + 0.25F, (float)point.posY / 16F + 0.25F, (float)point.posZ / 16F + 0.25F));
+				//renderAABB(AxisAlignedBB.getBoundingBox((float)point.posX / 16F - 0.25F, (float)point.posY / 16F - 0.25F, (float)point.posZ / 16F - 0.25F, (float)point.posX / 16F + 0.25F, (float)point.posY / 16F + 0.25F, (float)point.posZ / 16F + 0.25F));
 			}
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

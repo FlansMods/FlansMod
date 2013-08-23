@@ -122,10 +122,10 @@ public class ModelSpitfire extends ModelPlane
 		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
 		pitchFlapRightWingModel = new ModelRendererTurbo[0];
 		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
+		bodyWheelModel = new ModelRendererTurbo[0];
+		tailWheelModel = new ModelRendererTurbo[0];
+		rightWingWheelModel = new ModelRendererTurbo[0];
+		leftWingWheelModel = new ModelRendererTurbo[0];
 
 		bodyDoorOpenModel = new ModelRendererTurbo[0];
 		bodyDoorCloseModel = new ModelRendererTurbo[0];

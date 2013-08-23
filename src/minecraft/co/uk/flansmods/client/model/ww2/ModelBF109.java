@@ -15,14 +15,11 @@ public class ModelBF109 extends ModelPlane
 		//(Dont forget the crazy shapes you can make with it)
 		
 		//Body
-        bodyModel = new ModelRendererTurbo[6];
+        bodyModel = new ModelRendererTurbo[4];
         bodyModel[0] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);
         bodyModel[1] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
         bodyModel[2] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
-        
-		bodyModel[3] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
-		bodyModel[4] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
-		bodyModel[5] = new ModelRendererTurbo(this, 0, 76, textureX, textureY);
+		bodyModel[3] = new ModelRendererTurbo(this, 0, 76, textureX, textureY);
 
 		//Cockpit Bottom
 		bodyModel[0].addBox(-3F, 5F, -10F, 20, 2, 20);
@@ -33,14 +30,21 @@ public class ModelBF109 extends ModelPlane
 		bodyModel[2].rotateAngleY = 3.14159265358979F;
 		bodyModel[2].setPosition(0F, 5F, 0F);
 
-		//Wheels
-        bodyModel[3].addBox(4F, 6F, 5F, 6, 6, 4, 0.0F);
-		bodyModel[4].addBox(4F, 6F, -8F, 6, 6, 4, 0.0F);
-
 		//Cockpit top
-		bodyModel[5].addTrapezoid(-3F, -19F, -10F, 20, 8, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_TOP);
+		bodyModel[3].addTrapezoid(-3F, -19F, -10F, 20, 8, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_TOP);
 		
+		//Wheels
+		bodyWheelModel = new ModelRendererTurbo[4];
+		bodyWheelModel[0] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
+		bodyWheelModel[1] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
+		bodyWheelModel[2] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
+		bodyWheelModel[3] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
 		
+		bodyWheelModel[0].addBox(-6F, 14F, 4F, 6, 6, 4, 0.0F);
+		bodyWheelModel[1].addBox(-6F, 14F, -8F, 6, 6, 4, 0.0F);
+		bodyWheelModel[2].addBox(-4F, 6F, 5F, 2, 8, 2, 0.0F);	
+		bodyWheelModel[3].addBox(-4F, 6F, -7F, 2, 8, 2, 0.0F);	
+			
 		//Nose
 		noseModel = new ModelRendererTurbo[2];
 		//Nose fuselage
@@ -58,14 +62,16 @@ public class ModelBF109 extends ModelPlane
 		bayModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		bayModel[0].addTrapezoid(17F, -16F, -10F, 76, 18, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_LEFT);
 		bayModel[0].setPosition(0F, 5F, 0F);
-		
-		//Tail
-		tailModel = new ModelRendererTurbo[2];
-		tailModel[0] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);	
-		tailModel[1] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
+		 
+		//Tail wheel
+		tailWheelModel = new ModelRendererTurbo[2];
+		tailWheelModel[0] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);	
+		tailWheelModel[1] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
 
-		tailModel[0].addBox(79F, 6F, -2F, 6, 6, 4, 0.0F);
-		tailModel[1].addBox(81F, 0F, -1F, 2, 8, 2, 0.0F);		
+		tailWheelModel[0].addBox(79F, 6F, -2F, 6, 6, 4, 0.0F);
+		tailWheelModel[1].addBox(81F, 0F, -1F, 2, 8, 2, 0.0F);	
+
+		
 		
 		//Right wing
 		rightWingModel = new ModelRendererTurbo[2];

@@ -141,7 +141,7 @@ public class ClientProxy extends CommonProxy
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
 		
-		//RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 		

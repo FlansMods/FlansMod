@@ -41,10 +41,10 @@ public class ModelPlane extends ModelDriveable
 		for(ModelRendererTurbo[][] gun : gunModels.values())
 			for(ModelRendererTurbo[] gunPart : gun)
 				renderPart(gunPart);
-		renderPart(bodyGearDownModel);
-		renderPart(tailGearDownModel);
-		renderPart(leftWingGearDownModel);
-		renderPart(rightWingGearDownModel);
+		renderPart(bodyWheelModel);
+		renderPart(tailWheelModel);
+		renderPart(leftWingWheelModel);
+		renderPart(rightWingWheelModel);
 		renderPart(bodyDoorCloseModel);
 		renderPart(tailDoorCloseModel);
 		renderPart(rightWingPos1Model);
@@ -123,10 +123,10 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.tailWheel))
 		{
 			//Gear
-			for(int i = 0; i < tailGearDownModel.length; i++)
+			for(int i = 0; i < tailWheelModel.length; i++)
 			{
 				if(plane.varGear)
-					tailGearDownModel[i].render(f5);
+					tailWheelModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.leftWing))
@@ -182,19 +182,19 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.leftWingWheel))
 		{
 			//Gear
-			for(int i = 0; i < leftWingGearDownModel.length; i++)
+			for(int i = 0; i < leftWingWheelModel.length; i++)
 			{
 				if(plane.varGear)
-					leftWingGearDownModel[i].render(f5);
+					leftWingWheelModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.rightWingWheel))
 		{
 	        //Gear
-			for(int i = 0; i < rightWingGearDownModel.length; i++)
+			for(int i = 0; i < rightWingWheelModel.length; i++)
 			{
 				if(plane.varGear)
-					rightWingGearDownModel[i].render(f5);
+					rightWingWheelModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.core))
@@ -219,10 +219,10 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.coreWheel))
 		{
 			//Gear
-			for(int i = 0; i < bodyGearDownModel.length; i++)
+			for(int i = 0; i < bodyWheelModel.length; i++)
 			{
 				if(plane.varGear)
-					bodyGearDownModel[i].render(f5);
+					bodyWheelModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.topWing))
@@ -291,10 +291,10 @@ public class ModelPlane extends ModelDriveable
 		flip(pitchFlapRightModel);
 		flip(pitchFlapLeftWingModel);
 		flip(pitchFlapRightWingModel);
-		flip(bodyGearDownModel);
-		flip(tailGearDownModel);
-		flip(leftWingGearDownModel);
-		flip(rightWingGearDownModel);
+		flip(bodyWheelModel);
+		flip(tailWheelModel);
+		flip(leftWingWheelModel);
+		flip(rightWingWheelModel);
 		flip(bodyDoorOpenModel);
 		flip(bodyDoorCloseModel);
 		flip(tailDoorOpenModel);
@@ -338,10 +338,10 @@ public class ModelPlane extends ModelDriveable
 	
 	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
 	
-	public ModelRendererTurbo bodyGearDownModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailGearDownModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo leftWingGearDownModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo rightWingGearDownModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo leftWingWheelModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo rightWingWheelModel[] = new ModelRendererTurbo[0];
 	
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
