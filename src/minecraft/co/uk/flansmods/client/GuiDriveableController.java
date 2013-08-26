@@ -51,7 +51,6 @@ public class GuiDriveableController extends GuiScreen
 	@Override
     public void handleMouseInput()
     {
-        int k = Mouse.getEventButton();
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.thePlayer)
 		{
@@ -59,11 +58,11 @@ public class GuiDriveableController extends GuiScreen
 			return;
 		}
 
-		if(k == 0) //Left mouse
+		if(Mouse.isButtonDown(0)) //Left mouse
 		{
 			plane.pressKey(9, player); //Shoot
 		}
-		if(k == 1) //Right mouse
+		if(Mouse.isButtonDown(1)) //Right mouse
 		{
 			plane.pressKey(8, player); //Bomb
 		}

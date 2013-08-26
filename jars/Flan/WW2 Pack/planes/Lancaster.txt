@@ -48,11 +48,11 @@ Propeller 3 98 16 116 leftWing metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
-Passenger 1 145 0 0 nose -30 30 -30 30 browning Nose
+Passenger 1 148 2 0 nose -30 30 -25 25 browning Nose
 Passenger 2 90 10 0 core
 Passenger 3 70 10 0 core
-Passenger 4 -48 36 0 bay -360 360 0 45 browning Dorsal
-Passenger 5 -120 16 0 tail 135 225 -30 30 browning Tail
+Passenger 4 -48 36 0 tail -360 360 0 45 browning Dorsal
+Passenger 5 -128 20 0 tail 135 225 -30 30 browning Tail
 //Sounds
 StartSound propStart
 StartSoundLength 20

@@ -30,7 +30,7 @@ public class ModelLancaster extends ModelPlane
     {
 		//Initializing Model
 	
-        bodyModel = new ModelRendererTurbo[19];	//number of blocks in your model (0 is a block so its highest number block + 1)
+        bodyModel = new ModelRendererTurbo[25];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
 		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
@@ -61,6 +61,36 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[5].setRotationPoint(-176, 0, 0);
 		bodyModel[5].rotateAngleY = (float)Math.PI;
 		
+		//Pilot chair
+		bodyModel[19] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		bodyModel[19].addBox(-8, 16, -8, 16, 2, 16, 0F); 
+		bodyModel[19].setRotationPoint(-116, -88, 0);		
+		bodyModel[19].rotateAngleY = pi;
+		bodyModel[20] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		bodyModel[20].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		bodyModel[20].setRotationPoint(-116, -88, 0);
+		bodyModel[20].rotateAngleY = pi;
+
+		//First passenger chair
+		bodyModel[21] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		bodyModel[21].addBox(-8, 16, -8, 16, 2, 16, 0F); 
+		bodyModel[21].setRotationPoint(-90, -76, 0);		
+		bodyModel[21].rotateAngleY = pi;
+		bodyModel[22] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		bodyModel[22].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		bodyModel[22].setRotationPoint(-90, -76, 0);
+		bodyModel[22].rotateAngleY = pi;
+		
+		//Second passenger chair
+		bodyModel[23] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		bodyModel[23].addBox(-8, 16, -8, 16, 2, 16, 0F); 
+		bodyModel[23].setRotationPoint(-68, -76, 0);		
+		bodyModel[23].rotateAngleY = pi;
+		bodyModel[24] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		bodyModel[24].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		bodyModel[24].setRotationPoint(-68, -76, 0);
+		bodyModel[24].rotateAngleY = pi;
+
 		//Wings (4 / 5)
 
 		bodyModel[6] = new ModelRendererTurbo(this,226, 80, textureX, textureY);
@@ -96,40 +126,94 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[17].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, ModelRendererTurbo.MR_TOP); //Gunner Window Inside
 		
 		ModelRendererTurbo[][] dorsalModel = new ModelRendererTurbo[3][];
-		//A swivel chair for the dorsal gunner
-		dorsalModel[0] = new ModelRendererTurbo[6];
+		//A swivel chair for the dorsal gunner with some gun supports
+		dorsalModel[0] = new ModelRendererTurbo[4];
 		dorsalModel[0][0] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
-		dorsalModel[0][0].addBox(-8, 16, -8, 16, 2, 16, 0F); 
-		dorsalModel[0][0].setRotationPoint(48, -104, 0);		
+		dorsalModel[0][0].addBox(-8, 16, -8, 16, 2, 16, 0F); 	
 		dorsalModel[0][1] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
 		dorsalModel[0][1].addBox(-8, 0, -8, 2, 16, 16, 0F); 
-		dorsalModel[0][1].setRotationPoint(48, -104, 0);
 		dorsalModel[0][2] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
-		dorsalModel[0][2].addBox(8, -6, -3, 2, 24, 2, 0F); 
-		dorsalModel[0][2].setRotationPoint(48, -104, 0);
+		dorsalModel[0][2].addBox(8, -6, -7, 2, 24, 2, 0F); 
 		dorsalModel[0][3] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
-		dorsalModel[0][3].addBox(8, -6, 1, 2, 24, 2, 0F); 
-		dorsalModel[0][3].setRotationPoint(48, -104, 0);
-		dorsalModel[0][4] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
-		dorsalModel[0][4].addBox(8, -4, -7, 2, 22, 2, 0F); 
-		dorsalModel[0][4].setRotationPoint(48, -104, 0);
-		dorsalModel[0][5] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
-		dorsalModel[0][5].addBox(8, -4, 5, 2, 22, 2, 0F); 
-		dorsalModel[0][5].setRotationPoint(48, -104, 0);
+		dorsalModel[0][3].addBox(8, -6, 5, 2, 24, 2, 0F); 
 
 		//A single barrel with no recoil effects
-		dorsalModel[1] = new ModelRendererTurbo[2];
+		dorsalModel[1] = new ModelRendererTurbo[3];
 		dorsalModel[1][0] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
 		dorsalModel[1][0].addBox(8, -1, 3, 24, 2, 2, 0F); 
-		dorsalModel[1][0].setRotationPoint(48, -100, 0);
 		dorsalModel[1][1] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
 		dorsalModel[1][1].addBox(8, -1, -5, 24, 2, 2, 0F); 
-		dorsalModel[1][1].setRotationPoint(48, -100, 0);
+		dorsalModel[1][2] = new ModelRendererTurbo(this, 40, 415, textureX, textureY);
+		dorsalModel[1][2].addBox(8, -1, -3, 2, 2, 6, 0F); 
 		
 		//No recoil part just yet
 		dorsalModel[2] = new ModelRendererTurbo[0];
 		
+		for(ModelRendererTurbo[] dorsalGunParts : dorsalModel)
+			for(ModelRendererTurbo dorsalGunPart : dorsalGunParts)
+				dorsalGunPart.setRotationPoint(48, -104, 0);
+		
 		registerGunModel("Dorsal", dorsalModel);
+		
+		ModelRendererTurbo[][] noseGunModel = new ModelRendererTurbo[3][];
+		//A swivel chair for the nose gunner with some gun supports
+		noseGunModel[0] = new ModelRendererTurbo[4];
+		noseGunModel[0][0] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		noseGunModel[0][0].addBox(-8, 16, -8, 16, 2, 16, 0F); 	
+		noseGunModel[0][1] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		noseGunModel[0][1].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		noseGunModel[0][2] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		noseGunModel[0][2].addBox(8, -6, -7, 2, 24, 2, 0F); 
+		noseGunModel[0][3] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		noseGunModel[0][3].addBox(8, -6, 5, 2, 24, 2, 0F); 
+		
+		//A single barrel with no recoil effects
+		noseGunModel[1] = new ModelRendererTurbo[3];
+		noseGunModel[1][0] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		noseGunModel[1][0].addBox(8, -1, 3, 24, 2, 2, 0F); 
+		noseGunModel[1][1] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		noseGunModel[1][1].addBox(8, -1, -5, 24, 2, 2, 0F); 
+		noseGunModel[1][2] = new ModelRendererTurbo(this, 40, 415, textureX, textureY);
+		noseGunModel[1][2].addBox(8, -1, -3, 2, 2, 6, 0F); 
+		
+		//No recoil part just yet
+		noseGunModel[2] = new ModelRendererTurbo[0];
+		
+		for(ModelRendererTurbo[] noseGunParts : noseGunModel)
+			for(ModelRendererTurbo noseGunPart : noseGunParts)
+				noseGunPart.setRotationPoint(-148, -70, 0);
+		
+		registerGunModel("Nose", noseGunModel);
+					
+		ModelRendererTurbo[][] tailGunModel = new ModelRendererTurbo[3][];
+		//A swivel chair for the tail gunner with some gun supports
+		tailGunModel[0] = new ModelRendererTurbo[4];
+		tailGunModel[0][0] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		tailGunModel[0][0].addBox(-8, 16, -8, 16, 2, 16, 0F); 	
+		tailGunModel[0][1] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		tailGunModel[0][1].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		tailGunModel[0][2] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		tailGunModel[0][2].addBox(8, -6, -7, 2, 24, 2, 0F); 
+		tailGunModel[0][3] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		tailGunModel[0][3].addBox(8, -6, 5, 2, 24, 2, 0F); 
+		
+		//A single barrel with no recoil effects
+		tailGunModel[1] = new ModelRendererTurbo[3];
+		tailGunModel[1][0] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		tailGunModel[1][0].addBox(8, -1, 3, 24, 2, 2, 0F); 
+		tailGunModel[1][1] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		tailGunModel[1][1].addBox(8, -1, -5, 24, 2, 2, 0F); 
+		tailGunModel[1][2] = new ModelRendererTurbo(this, 40, 415, textureX, textureY);
+		tailGunModel[1][2].addBox(8, -1, -3, 2, 2, 6, 0F); 
+		
+		//No recoil part just yet
+		tailGunModel[2] = new ModelRendererTurbo[0];
+		
+		for(ModelRendererTurbo[] tailGunParts : tailGunModel)
+			for(ModelRendererTurbo tailGunPart : tailGunParts)
+				tailGunPart.setRotationPoint(128, -88, 0);
+		
+		registerGunModel("Tail", tailGunModel);
 			
 		//Underside
 		bodyModel[13] = new ModelRendererTurbo(this,52, 362, textureX, textureY);

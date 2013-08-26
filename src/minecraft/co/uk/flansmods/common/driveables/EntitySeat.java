@@ -82,6 +82,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		seatInfo = driveable.getDriveableType().seats[id];
 		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
+		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
 		//updatePosition();
 	}
 	
@@ -109,6 +110,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			foundDriveable = true;
 			driveable.seats[seatID] = this;
 			seatInfo = driveable.getDriveableType().seats[seatID];
+			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
 		}
 		
 		//Update gun delay ticker
@@ -312,7 +314,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 						RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 						Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
 						//Calculate the origin of the bullets
-						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, -(float)player.getYOffset(), 0F));
+						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
 						//Spawn a new bullet item
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(yOffset, new Vector3f((float)posX, (float)posY, (float)posZ), null), shootVec, (EntityLivingBase)riddenByEntity, gun.accuracy, gun.damage, bullet, 1.0F, driveable.getDriveableType()));
 						//Play the shoot sound
@@ -379,6 +381,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveable = (EntityDriveable)worldObj.getEntityByID(driveableID);
 		seatID = data.readInt();
 		driver = seatID == 0;
+		if(driveable != null)
+		{
+			seatInfo = driveable.getDriveableType().seats[seatID];
+			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
+		}
 	}
 	
 	@Override
