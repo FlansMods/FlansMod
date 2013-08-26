@@ -49,9 +49,9 @@ public class ModelPlane extends ModelDriveable
 	public ModelRendererTurbo leftWingPos2Model[] = new ModelRendererTurbo[0];
 	
 	@Override
-	public void render(EntityDriveable driveable)
+	public void render(EntityDriveable driveable, float f1)
 	{
-		render(0.0625F, (EntityPlane)driveable);
+		render(0.0625F, (EntityPlane)driveable, f1);
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class ModelPlane extends ModelDriveable
 		renderPart(leftWingPos1Model);
 	}
 	
-    public void render(float f5, EntityPlane plane)
+    public void render(float f5, EntityPlane plane, float f)
     {
 		//Rotating the propeller
 		float angle = plane.propAngle;
@@ -273,29 +273,32 @@ public class ModelPlane extends ModelDriveable
         	//If the seat has a gun model attached
         	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && plane.isPartIntact(seat.seatInfo.part))
         	{
+        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
+        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;
+        		
         		//Iterate over the parts of that model
         		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
         		//Yaw only parts
     			for(ModelRendererTurbo gunModelPart : gunModel[0])
     			{
     				//Yaw and render
-        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
         			gunModelPart.render(f5);
     			}
         		//Yaw and pitch, no recoil parts
     			for(ModelRendererTurbo gunModelPart : gunModel[1])
     			{
     				//Yaw, pitch and render
-        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
-        			gunModelPart.rotateAngleZ = -seat.looking.getPitch() * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
         			gunModelPart.render(f5);
     			}
         		//Yaw, pitch and recoil parts
     			for(ModelRendererTurbo gunModelPart : gunModel[2])
     			{
     				//Yaw, pitch, recoil and render
-        			gunModelPart.rotateAngleY = (180F - seat.looking.getYaw()) * 3.14159265F / 180F;
-        			gunModelPart.rotateAngleZ = -seat.looking.getPitch() * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
         			gunModelPart.render(f5);
     			}
         	}

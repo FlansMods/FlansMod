@@ -54,6 +54,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	/** A set of axes used to calculate where the player is looking, x axis is the direction of looking, y is up */
 	public RotatedAxes looking;
+	/** For smooth renderering */
+	public RotatedAxes prevLooking;
 	/** Delay ticker for shooting guns */
 	public int gunDelay;
 	/** Sound delay ticker for looping sounds */
@@ -68,7 +70,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		super(world);
 		setSize(1F, 1F);
-		looking = new RotatedAxes();
+		prevLooking = looking = new RotatedAxes();
 	}
 		
 	/** Server side seat constructor */
@@ -95,6 +97,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
+		
+		
 
 		//If on the client and the driveable parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundDriveable)
@@ -193,6 +197,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		if(!foundDriveable)
 			return;
+		
+		prevLooking = looking.clone();
 				
 		//Driver seat should pass input to driveable
 		if(driver)

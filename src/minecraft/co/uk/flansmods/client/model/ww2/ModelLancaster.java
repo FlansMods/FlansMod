@@ -96,13 +96,36 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[17].addTrapezoid(32, -112, -16, 32, 16, 32, 0.0F, -8.0F, ModelRendererTurbo.MR_TOP); //Gunner Window Inside
 		
 		ModelRendererTurbo[][] dorsalModel = new ModelRendererTurbo[3][];
-		//No yaw only part
-		dorsalModel[0] = new ModelRendererTurbo[0];
-		//A single no recoil part
-		dorsalModel[1] = new ModelRendererTurbo[1];
-		dorsalModel[1][0] = new ModelRendererTurbo(this, 174, 123, textureX, textureY);
-		dorsalModel[1][0].addBox(8, -1, -1, 24, 2, 2, 0F); 
-		dorsalModel[1][0].setRotationPoint(48, -104, 0);
+		//A swivel chair for the dorsal gunner
+		dorsalModel[0] = new ModelRendererTurbo[6];
+		dorsalModel[0][0] = new ModelRendererTurbo(this, 0, 445, textureX, textureY);
+		dorsalModel[0][0].addBox(-8, 16, -8, 16, 2, 16, 0F); 
+		dorsalModel[0][0].setRotationPoint(48, -104, 0);		
+		dorsalModel[0][1] = new ModelRendererTurbo(this, 0, 463, textureX, textureY);
+		dorsalModel[0][1].addBox(-8, 0, -8, 2, 16, 16, 0F); 
+		dorsalModel[0][1].setRotationPoint(48, -104, 0);
+		dorsalModel[0][2] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		dorsalModel[0][2].addBox(8, -6, -3, 2, 24, 2, 0F); 
+		dorsalModel[0][2].setRotationPoint(48, -104, 0);
+		dorsalModel[0][3] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		dorsalModel[0][3].addBox(8, -6, 1, 2, 24, 2, 0F); 
+		dorsalModel[0][3].setRotationPoint(48, -104, 0);
+		dorsalModel[0][4] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		dorsalModel[0][4].addBox(8, -4, -7, 2, 22, 2, 0F); 
+		dorsalModel[0][4].setRotationPoint(48, -104, 0);
+		dorsalModel[0][5] = new ModelRendererTurbo(this, 40, 381, textureX, textureY);
+		dorsalModel[0][5].addBox(8, -4, 5, 2, 22, 2, 0F); 
+		dorsalModel[0][5].setRotationPoint(48, -104, 0);
+
+		//A single barrel with no recoil effects
+		dorsalModel[1] = new ModelRendererTurbo[2];
+		dorsalModel[1][0] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		dorsalModel[1][0].addBox(8, -1, 3, 24, 2, 2, 0F); 
+		dorsalModel[1][0].setRotationPoint(48, -100, 0);
+		dorsalModel[1][1] = new ModelRendererTurbo(this, 40, 411, textureX, textureY);
+		dorsalModel[1][1].addBox(8, -1, -5, 24, 2, 2, 0F); 
+		dorsalModel[1][1].setRotationPoint(48, -100, 0);
+		
 		//No recoil part just yet
 		dorsalModel[2] = new ModelRendererTurbo[0];
 		

@@ -51,7 +51,7 @@ public class RenderPlane extends Render
         ModelDriveable modPlane = type.model;
 		if(modPlane != null)
 		{
-			modPlane.render(entityPlane);
+			modPlane.render(entityPlane, f1);
 		}
 		if(FlansMod.DEBUG)
 		{

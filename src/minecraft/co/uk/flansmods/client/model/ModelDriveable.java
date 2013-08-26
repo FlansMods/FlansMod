@@ -8,7 +8,7 @@ import net.minecraft.client.model.ModelBase;
 public class ModelDriveable extends ModelBase 
 {
 	/** For rendering a specific entity */
-	public void render(EntityDriveable driveable)
+	public void render(EntityDriveable driveable, float f1)
 	{
 	}
 	   
