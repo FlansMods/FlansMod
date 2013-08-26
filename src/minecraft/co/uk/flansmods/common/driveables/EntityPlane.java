@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -60,9 +62,12 @@ public class EntityPlane extends EntityDriveable
 	private boolean spawnedEntities;
 	public int ticksSinceUsed = 0;
     
-    public boolean varGear;
-    public boolean varDoor;
-    public boolean varWing;
+    public boolean varGear = true;
+    public boolean varDoor = false;
+    public boolean varWing = false;
+    
+    //Used to stop multiple presses of gear, door and wing buttons
+    public int toggleTimer = 0;
   
 	public int trimButton = 1;
 	
@@ -119,7 +124,37 @@ public class EntityPlane extends EntityDriveable
         varDoor = tag.getBoolean("VarDoor");
         varWing = tag.getBoolean("VarWing");
     }
-
+	
+	@Override
+	public void writeUpdateData(DataOutputStream out)
+	{
+		try
+		{
+			out.writeBoolean(varGear);
+			out.writeBoolean(varDoor);
+			out.writeBoolean(varWing);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void readUpdateData(DataInputStream in)
+	{
+		try
+		{
+			varGear = in.readBoolean();
+			varDoor = in.readBoolean();
+			varWing = in.readBoolean();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
 	 * @param deltaY 
@@ -178,7 +213,7 @@ public class EntityPlane extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
     	PlaneType type = this.getPlaneType();
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))// || key == 13 || key == 14 || key == 15))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
     		return true;
@@ -339,23 +374,37 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 13 : // Gear
 			{
-				varGear = !varGear;
-				if(type.hasGear)
-					player.addChatMessage("Landing gear " + (varGear ? "up" : "down"));
+				if(toggleTimer <= 0)
+				{
+					varGear = !varGear;
+					player.addChatMessage("Landing gear " + (varGear ? "down" : "up"));
+					toggleTimer = 10;
+					PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+				}
 				return true;
 			}
 			case 14 : // Door
 			{
-				varDoor = !varDoor;
-				if(type.hasDoor)
-					player.addChatMessage("Doors " + (varDoor ? "open" : "closed"));
+				if(toggleTimer <= 0)
+				{
+					varDoor = !varDoor;
+					if(type.hasDoor)
+						player.addChatMessage("Doors " + (varDoor ? "open" : "closed"));
+					toggleTimer = 10;
+					PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+				}
 				return true;
 			}
 			case 15 : // Wing
 			{
-				varWing = !varWing;
-				if(type.hasWing)
-					player.addChatMessage("Toggling wings");
+				if(toggleTimer <= 0)
+				{
+					varWing = !varWing;
+					if(type.hasWing)
+						player.addChatMessage("Toggling wings");
+					toggleTimer = 10;
+					PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+				}
 				return true;
 			}
             case 16 : // Trim Button
@@ -401,6 +450,8 @@ public class EntityPlane extends EntityDriveable
 			bombDelay--;
 		if(gunDelay > 0)
 			gunDelay--;
+		if(toggleTimer > 0)
+			toggleTimer--;
 		
 		//Aesthetics
 		//Rotate the propellers
@@ -662,7 +713,12 @@ public class EntityPlane extends EntityDriveable
     		super.applyEntityCollision(entity);
     }
   
-	
+    @Override
+	public boolean canHitPart(EnumDriveablePart part)
+	{
+    	return varGear || (part != EnumDriveablePart.coreWheel && part != EnumDriveablePart.leftWingWheel && part != EnumDriveablePart.rightWingWheel && part != EnumDriveablePart.tailWheel);
+	}
+    
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {

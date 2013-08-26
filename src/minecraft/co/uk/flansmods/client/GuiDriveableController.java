@@ -184,6 +184,30 @@ public class GuiDriveableController extends GuiScreen
 			{
 				plane.pressKey(10, player);
 			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.leftRollKey.keyCode))
+			{
+				plane.pressKey(11, player);
+			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.rightRollKey.keyCode))
+			{
+				plane.pressKey(12, player);
+			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.gearKey.keyCode))
+			{
+				plane.pressKey(13, player);
+			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.doorKey.keyCode))
+			{
+				plane.pressKey(14, player);
+			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.wingKey.keyCode))
+			{
+				plane.pressKey(15, player);
+			}				
+			if(Keyboard.isKeyDown(KeyInputHandler.trimKey.keyCode))
+			{
+				plane.pressKey(16, player);
+			}				
 	
 		}
 		else

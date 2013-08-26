@@ -32,11 +32,10 @@ MomentOfInertia 10.0
 RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 5000
-//Nose and Wing Guns (not present)
+//Nose and Wing Guns
 AddGun 40 -4 -44 wing browning
 AddGun 40 -4 44 wing browning
 ShootDelay 5
-//ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 100
 BombPosition -30 -12 0
@@ -65,6 +64,8 @@ AddRecipeParts rightWing 1 metalWingSmall
 AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 6 green
 //Health and collision
 SetupPart core 200 -17 -7 -10 20 24 20
 SetupPart coreWheel 50 0 -20 -8 6 13 16

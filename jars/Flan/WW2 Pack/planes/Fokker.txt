@@ -64,6 +64,8 @@ AddRecipeParts core 1 woodenCockpit
 AddRecipeParts rightWing 1 triplaneWing
 AddRecipeParts leftWing 1 triplaneWing
 AddRecipeParts tail 1 woodenTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 red
 //Health and collision
 SetupPart core 100 -12 -7 -11 24 14 22
 SetupPart coreWheel 20 0 -15 -7 4 8 14

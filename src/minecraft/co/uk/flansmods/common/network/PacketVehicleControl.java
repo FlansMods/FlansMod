@@ -40,6 +40,7 @@ public class PacketVehicleControl extends FlanPacketCommon
         	data.writeFloat(driveable.angularVelocity.y);
         	data.writeFloat(driveable.angularVelocity.z);
         	data.writeFloat(driveable.throttle);
+        	driveable.writeUpdateData(data);
         	        	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -76,6 +77,7 @@ public class PacketVehicleControl extends FlanPacketCommon
 			if(driveable != null)
 			{
 				driveable.setPositionRotationAndMotion(stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readFloat());
+				driveable.readUpdateData(stream);
 			}
 		}
         catch(Exception e)

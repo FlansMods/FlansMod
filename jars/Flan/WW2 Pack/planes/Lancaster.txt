@@ -7,7 +7,7 @@ Icon Lancaster
 Model ww2.Lancaster
 Texture Lancaster
 //Third Person Camera Distance
-CameraDistance 25.0
+CameraDistance 15.0
 //Throttle
 MaxThrottle 8.0
 MaxNegativeThrottle 0.0
@@ -26,14 +26,12 @@ Drag 16.7
 Lift 16.7
 //Mass (In tons)
 Mass 16.7
-//Moment of Inertia 
-MomentOfInertia 8.0
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 10.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
-//Nose and Wing Guns (not present)
-//AddGun 0 0 0 nose browning
-//ShootDelay 999
-//ShootAlternately False
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 1
 BombPosition 0 -32 0
@@ -41,10 +39,10 @@ BombPosition 0 -32 0
 CargoSlots 0
 BombSlots 16
 //Propeller Positions
-Propeller 0 114 16 -52 rightWing metalPropeller
-Propeller 1 114 16 52 leftWing metalPropeller
-Propeller 2 98 16 -116 rightWing metalPropeller
-Propeller 3 98 16 116 leftWing metalPropeller
+Propeller 0 114 16 -52 leftWing metalPropeller
+Propeller 1 114 16 52 rightWing metalPropeller
+Propeller 2 98 16 -116 leftWing metalPropeller
+Propeller 3 98 16 116 rightWing metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
@@ -68,12 +66,16 @@ AddRecipeParts core 1 metalCockpit 1 bombBay
 AddRecipeParts rightWing 2 metalWingSection
 AddRecipeParts leftWing 2 metalWingSection
 AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 AddDye 5 yellow
 //Health and collision
 SetupPart core 500 -64 -4 -16 208 48 32
 SetupPart nose 200 144 -4 -16 16 32 32
-SetupPart rightWing 300 -16 26 -240 80 4 224
-SetupPart leftWing 300 -16 26 16 80 4 224
+SetupPart leftWing 300 -16 26 -240 80 4 224
+SetupPart leftWingWheel 100 68 -32 -58 24 36 12
+SetupPart rightWing 300 -16 26 16 80 4 224
+SetupPart rightWingWheel 100 68 -32 46 24 36 12
 SetupPart tail 200 -144 12 -16 80 32 32
+SetupPart tailWheel 100 -106 -11 -3 12 24 6
 BulletDetection 25

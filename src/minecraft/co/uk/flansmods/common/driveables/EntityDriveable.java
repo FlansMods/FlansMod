@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +102,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		for(EnumDriveablePart part : EnumDriveablePart.values())
 		{
-			parts.put(part, new DriveablePart(part, type.health.get(part)));
+			parts.put(part, new DriveablePart(this, part, type.health.get(part)));
 		}
 		yOffset = type.yOffset;
 	}
@@ -195,6 +197,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			e.printStackTrace();
 		}
 	}
+	
+	public abstract void writeUpdateData(DataOutputStream out);
+	
+	public abstract void readUpdateData(DataInputStream in);
 	
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
@@ -860,6 +866,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 		return false;
+	}
+	
+	/** For overriding for toggles such as gear up / down on planes */
+	public boolean canHitPart(EnumDriveablePart part)
+	{
+		return true;
 	}
 	
 	/** Internal method for checking that all parts are ok, destroying broken ones, dropping items and making sure that child parts are destroyed when their parents are */

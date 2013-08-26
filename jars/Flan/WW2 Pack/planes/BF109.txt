@@ -65,6 +65,9 @@ AddRecipeParts rightWing 1 metalWingSmall
 AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 5 silver
+AddDye 1 yellow
 //Health and collision
 SetupPart core 200 -17 -7 -10 20 24 20
 SetupPart coreWheel 50 0 -20 -8 6 13 16

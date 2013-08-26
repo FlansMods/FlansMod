@@ -14,9 +14,11 @@ public class DriveablePart
 	public boolean onFire;
 	/** Keeps track of whether death code has been called or not */
 	public boolean dead;
+	public EntityDriveable driveable;
 	
-	public DriveablePart(EnumDriveablePart e, CollisionBox b)
+	public DriveablePart(EntityDriveable d, EnumDriveablePart e, CollisionBox b)
 	{
+		driveable = d;
 		type = e;
 		box = b;
 		health = maxHealth = b == null ? 0 : b.health;
@@ -48,6 +50,8 @@ public class DriveablePart
 	public boolean rayTrace(EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
 		if(box == null || health <= 0 || dead)
+			return false;
+		if(!driveable.canHitPart(type))
 			return false;
 		//Complicated. Will explain later. Someone remind me.
 		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);

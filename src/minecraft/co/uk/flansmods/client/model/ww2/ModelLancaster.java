@@ -255,39 +255,58 @@ public class ModelLancaster extends ModelPlane
 		tailModel[6].flip = true;
 		tailModel[6].addTrapezoid(128, -96, -16, 16, 32, 32, 0.0F, -6.0F, ModelRendererTurbo.MR_LEFT); //Rear Gunner Window Inside
 		
-		rightWingModel = new ModelRendererTurbo[6];
-		rightWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);
-		rightWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Right Wing Inner
-		rightWingModel[0].rotateAngleX = -(float)Math.PI / 2;		
-		rightWingModel[1] = new ModelRendererTurbo(this,136, 113, textureX, textureY);
-		rightWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Wing Outer
-		rightWingModel[1].rotateAngleX = -(float)Math.PI / 2;		
-		rightWingModel[2] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
-		rightWingModel[2].addTrapezoid(-112, -80, -64, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Inner Engine
-		rightWingModel[3] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
-		rightWingModel[3].addTrapezoid(-96, -80, -128, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Outer Engine
-		rightWingModel[4] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
-		rightWingModel[4].addBox(-115, -76, -60, 6, 16, 16, 0.0F); //Right Inner Engine Propeller Centre
-		rightWingModel[5] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
-		rightWingModel[5].addBox(-99, -76, -124, 6, 16, 16, 0.0F); //Right Outer Engine Propeller Centre
+		tailWheelModel = new ModelRendererTurbo[2];
+		tailWheelModel[0] = new ModelRendererTurbo(this, 36, 463, textureX, textureY);
+		tailWheelModel[0].addBox(98, -10, -3, 4, 16, 6);
+		tailWheelModel[1] = new ModelRendererTurbo(this, 84, 447, textureX, textureY);
+		tailWheelModel[1].addBox(94, -1, -2, 12, 12, 4);
+	
 		
 		leftWingModel = new ModelRendererTurbo[6];
-		leftWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);	
-		leftWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Left Wing Inner
-		leftWingModel[0].doMirror(false, true, false);
+		leftWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);
+		leftWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Right Wing Inner
 		leftWingModel[0].rotateAngleX = -(float)Math.PI / 2;		
 		leftWingModel[1] = new ModelRendererTurbo(this,136, 113, textureX, textureY);
-		leftWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Wing Outer
-		leftWingModel[1].doMirror(false, true, false);
-		leftWingModel[1].rotateAngleX = -(float)Math.PI / 2;
+		leftWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Wing Outer
+		leftWingModel[1].rotateAngleX = -(float)Math.PI / 2;		
 		leftWingModel[2] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
-		leftWingModel[2].addTrapezoid(-112, -80, 40, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Inner Engine
+		leftWingModel[2].addTrapezoid(-112, -80, -64, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Inner Engine
 		leftWingModel[3] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
-		leftWingModel[3].addTrapezoid(-96, -80, 104, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Outer Engine		
+		leftWingModel[3].addTrapezoid(-96, -80, -128, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Right Outer Engine
 		leftWingModel[4] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
-		leftWingModel[4].addBox(-115, -76, 44, 6, 16, 16, 0.0F); //Left Inner Engine Propeller Centre
+		leftWingModel[4].addBox(-115, -76, -60, 6, 16, 16, 0.0F); //Right Inner Engine Propeller Centre
 		leftWingModel[5] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
-		leftWingModel[5].addBox(-99, -76, 108, 6, 16, 16, 0.0F); //Left Outer Engine Propeller Centre		
+		leftWingModel[5].addBox(-99, -76, -124, 6, 16, 16, 0.0F); //Right Outer Engine Propeller Centre
+		
+		leftWingWheelModel = new ModelRendererTurbo[2];
+		leftWingWheelModel[0] = new ModelRendererTurbo(this, 48, 415, textureX, textureY);
+		leftWingWheelModel[0].addBox(-82, -4, -58, 4, 24, 12);
+		leftWingWheelModel[1] = new ModelRendererTurbo(this, 80, 415, textureX, textureY);
+		leftWingWheelModel[1].addBox(-92, 8, -56, 24, 24, 8);
+		
+		rightWingModel = new ModelRendererTurbo[6];
+		rightWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);	
+		rightWingModel[0].addBox(-64, 16, -82, 64, 96, 4, 0.0F); //Left Wing Inner
+		rightWingModel[0].doMirror(false, true, false);
+		rightWingModel[0].rotateAngleX = -(float)Math.PI / 2;		
+		rightWingModel[1] = new ModelRendererTurbo(this,136, 113, textureX, textureY);
+		rightWingModel[1].addTrapezoid(-64, 112, -82, 80, 128, 4, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Wing Outer
+		rightWingModel[1].doMirror(false, true, false);
+		rightWingModel[1].rotateAngleX = -(float)Math.PI / 2;
+		rightWingModel[2] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
+		rightWingModel[2].addTrapezoid(-112, -80, 40, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Inner Engine
+		rightWingModel[3] = new ModelRendererTurbo(this,256, 32, textureX, textureY);
+		rightWingModel[3].addTrapezoid(-96, -80, 104, 64, 24, 24, 0.0F, -2.0F, ModelRendererTurbo.MR_BOTTOM); //Left Outer Engine		
+		rightWingModel[4] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
+		rightWingModel[4].addBox(-115, -76, 44, 6, 16, 16, 0.0F); //Left Inner Engine Propeller Centre
+		rightWingModel[5] = new ModelRendererTurbo(this,408, 24, textureX, textureY);
+		rightWingModel[5].addBox(-99, -76, 108, 6, 16, 16, 0.0F); //Left Outer Engine Propeller Centre	
+		
+		rightWingWheelModel = new ModelRendererTurbo[2];
+		rightWingWheelModel[0] = new ModelRendererTurbo(this, 48, 415, textureX, textureY);
+		rightWingWheelModel[0].addBox(-82, -4, 46, 4, 24, 12);
+		rightWingWheelModel[1] = new ModelRendererTurbo(this, 80, 415, textureX, textureY);
+		rightWingWheelModel[1].addBox(-92, 8, 48, 24, 24, 8);
 
 		propellerModels = new ModelRendererTurbo[4][3]; //4 propellers
 		propellerModels[1] = makeProp(-114, -68, 52);
@@ -304,11 +323,11 @@ public class ModelLancaster extends ModelPlane
 		yawFlapModel[1].addBox(0F, -48F , -1F, 16, 64, 2, 0.0F);
 		yawFlapModel[1].setPosition(112F, -80F, -81F);			
 	
-		pitchFlapRightWingModel = new ModelRendererTurbo[1];
-		pitchFlapRightWingModel[0] = new ModelRendererTurbo(this,0, 345, textureX, textureY);
-		pitchFlapRightWingModel[0].addBox(0F, -48F , -2F, 16, 96, 4, 0.0F);
-        pitchFlapRightWingModel[0].rotateAngleX = 1.570796F;
-		pitchFlapRightWingModel[0].setPosition(0F, -80F, -64F);
+		pitchFlapLeftWingModel = new ModelRendererTurbo[1];
+		pitchFlapLeftWingModel[0] = new ModelRendererTurbo(this,0, 345, textureX, textureY);
+		pitchFlapLeftWingModel[0].addBox(0F, -48F , -2F, 16, 96, 4, 0.0F);
+		pitchFlapLeftWingModel[0].rotateAngleX = 1.570796F;
+		pitchFlapLeftWingModel[0].setPosition(0F, -80F, -64F);
 		
 		pitchFlapLeftModel = new ModelRendererTurbo[1];		
 		pitchFlapLeftModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
@@ -316,35 +335,18 @@ public class ModelLancaster extends ModelPlane
 	    pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
 		pitchFlapLeftModel[0].setPosition(112F, -81F, 48F);	
 		
-		pitchFlapLeftWingModel = new ModelRendererTurbo[1]; //Two right pitch flaps
-		pitchFlapLeftWingModel[0] = new ModelRendererTurbo(this,0, 345, textureX, textureY);
-		pitchFlapLeftWingModel[0].addBox(0F, -48F , -2F, 16, 96, 4, 0.0F);
-		pitchFlapLeftWingModel[0].doMirror(false, true, false);
-        pitchFlapLeftWingModel[0].rotateAngleX = 1.570796F;
-		pitchFlapLeftWingModel[0].setPosition(0F, -80F, 64F);
+		pitchFlapRightWingModel = new ModelRendererTurbo[1]; //Two right pitch flaps
+		pitchFlapRightWingModel[0] = new ModelRendererTurbo(this,0, 345, textureX, textureY);
+		pitchFlapRightWingModel[0].addBox(0F, -48F , -2F, 16, 96, 4, 0.0F);
+		pitchFlapRightWingModel[0].doMirror(false, true, false);
+		pitchFlapRightWingModel[0].rotateAngleX = 1.570796F;
+		pitchFlapRightWingModel[0].setPosition(0F, -80F, 64F);
 		
 		pitchFlapRightModel = new ModelRendererTurbo[1];		
 		pitchFlapRightModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0, -32, -1, 16, 64, 2, 0.0F);
 	    pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(112F, -81F, -48F);
-
-		topWingModel = new ModelRendererTurbo[0];
-		
-		bodyWheelModel = new ModelRendererTurbo[0];
-		tailWheelModel = new ModelRendererTurbo[0];
-		rightWingWheelModel = new ModelRendererTurbo[0];
-		leftWingWheelModel = new ModelRendererTurbo[0];
-
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
 		
 		translateAll(52);
 		
