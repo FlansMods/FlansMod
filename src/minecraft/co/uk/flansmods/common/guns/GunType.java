@@ -14,7 +14,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-
 public class GunType extends InfoType
 {
 	public List<BulletType> ammo = new ArrayList<BulletType>();
