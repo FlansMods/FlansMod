@@ -39,7 +39,6 @@ public class AAGunType extends InfoType
 	public AAGunType(TypeFile file)
 	{
 		super(file);
-		iconIndex = PlaneType.nextIconIndex++;
 		infoTypes.add(this);
 	}
 

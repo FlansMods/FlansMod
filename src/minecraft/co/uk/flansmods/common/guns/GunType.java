@@ -47,7 +47,6 @@ public class GunType extends InfoType
 	public float bottomViewLimit = 30F;
 	public float sideViewLimit = 45F;
 	public float pivotHeight = 0.375F;
-	private static int lastIconIndex = 0;
 	public boolean canShootUnderwater;
 	public static List<GunType> guns = new ArrayList<GunType>();
 
@@ -55,7 +54,6 @@ public class GunType extends InfoType
 	{
 		super(file);
 		guns.add(this);
-		iconIndex = lastIconIndex++;
 	}
 	
 	@Override

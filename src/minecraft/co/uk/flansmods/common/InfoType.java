@@ -17,7 +17,6 @@ public class InfoType
 	public int colour = 0xffffff;
 	public int itemID;
 	public String iconPath;
-	public int iconIndex;
 	public Object[] recipe;
 	public String[] recipeLine;
 	public int recipeOutput = 1;

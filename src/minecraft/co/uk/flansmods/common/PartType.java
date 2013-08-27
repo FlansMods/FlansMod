@@ -11,14 +11,12 @@ public class PartType extends InfoType
 	public int engineSpeed = 1;
 	public int fuel = 0;
 	public static PartType defaultEngine;
-	private static int lastIconIndex = 0;
 	public static List<PartType> parts = new ArrayList<PartType>();
 
 	public PartType(TypeFile file)
 	{
 		super(file);
 		parts.add(this);
-		iconIndex = lastIconIndex++;
 	}
 	
 	@Override

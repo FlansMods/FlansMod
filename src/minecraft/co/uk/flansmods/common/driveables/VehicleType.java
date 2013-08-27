@@ -83,7 +83,6 @@ public class VehicleType extends DriveableType
     public boolean hasDoor = false;
 	public boolean rotateGunner = false;
 
-	public static int nextIconIndex = 2;
 	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
 	
     public VehicleType(TypeFile file)
@@ -111,7 +110,6 @@ public class VehicleType extends DriveableType
 				}
 			}
 		}
-		iconIndex = nextIconIndex++;
     }
 	
     @Override

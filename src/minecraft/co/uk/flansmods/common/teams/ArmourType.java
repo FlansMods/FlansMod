@@ -10,7 +10,6 @@ import co.uk.flansmods.common.TypeFile;
 public class ArmourType extends InfoType
 {
 	public static List<ArmourType> armours = new ArrayList<ArmourType>();
-	private static int lastIconIndex = 12;
 	
 	public int type;
 	public double defence;
@@ -20,7 +19,6 @@ public class ArmourType extends InfoType
 	{
 		super(file);
 		armours.add(this);
-		iconIndex = lastIconIndex++;
 	}
 
 	@Override

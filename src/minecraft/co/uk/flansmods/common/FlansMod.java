@@ -347,7 +347,7 @@ public class FlansMod
 						}
 						catch(FileNotFoundException e)
 						{
-							
+							e.printStackTrace();
 						}
 					}		
 				}
@@ -442,7 +442,7 @@ public class FlansMod
 			{
 				BulletType type = new BulletType(bulletFile);
 				type.read(bulletFile);
-				Item bulletItem = new ItemBullet(type.itemID - 256, type.iconIndex, type.colour, type).setUnlocalizedName(type.shortName);
+				Item bulletItem = new ItemBullet(type.itemID - 256, type.colour, type).setUnlocalizedName(type.shortName);
 				bulletItems.add(bulletItem);
 				LanguageRegistry.addName(bulletItem, type.name);
 			} 
@@ -548,6 +548,25 @@ public class FlansMod
 			}
 		}
 		log("Loaded AA guns.");
+		
+		//Tools
+		for(TypeFile toolFile : TypeFile.files.get(EnumType.tool))
+		{
+			try
+			{
+				ToolType type = new ToolType(toolFile);
+				type.read(toolFile);
+				//Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				//aaGunItems.add(aaGunItem);
+				//LanguageRegistry.addName(aaGunItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add tool : " + toolFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded tools.");
 
 		// Gun Boxes
 		for(TypeFile boxFile : TypeFile.files.get(EnumType.box))

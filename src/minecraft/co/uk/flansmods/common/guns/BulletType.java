@@ -33,7 +33,6 @@ public class BulletType extends InfoType
 	public String hitSound;
 	public int roundsPerItem = 1;
 	public int maxStackSize = 1;
-	private static int lastIconIndex = 0;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 
 	public BulletType(TypeFile file)
@@ -41,7 +40,6 @@ public class BulletType extends InfoType
 		super(file);
 		texture = "defaultBullet";
 		bullets.add(this);
-		iconIndex = lastIconIndex++;
 	}
 
 	@Override

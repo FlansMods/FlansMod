@@ -54,13 +54,11 @@ public class PlaneType extends DriveableType
     /** Whether the player can access the inventory while in the air */
     public boolean invInflight = true;
 
-	public static int nextIconIndex = 5;
 	public static HashMap<String, PlaneType> types = new HashMap<String, PlaneType>();
 	
     public PlaneType(TypeFile file)
     {
 		super(file);
-		iconIndex = nextIconIndex++;
     }
     
     @Override
