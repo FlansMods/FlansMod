@@ -23,7 +23,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.input.Keyboard;
 
+import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
+import co.uk.flansmods.client.debug.RenderDebugAABB;
 import co.uk.flansmods.client.debug.RenderDebugVector;
 import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.client.model.ModelMG;
@@ -146,6 +148,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
 	}
 	
 	@Override

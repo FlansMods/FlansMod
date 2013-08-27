@@ -77,6 +77,11 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 		this((float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord);
 	}
 	
+	public Vector3f(double x, double y, double z) 
+	{
+		this((float)x, (float)y, (float)z);
+	}
+
 	public Vec3 toVec3()
 	{
 		return Vec3.createVectorHelper(x, y, z);

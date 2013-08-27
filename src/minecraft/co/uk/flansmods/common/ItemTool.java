@@ -2,21 +2,29 @@ package co.uk.flansmods.common;
 
 import java.util.List;
 
+import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.network.PacketFlak;
+import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -60,17 +68,17 @@ public class ItemTool extends Item
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
-        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
+        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
+        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
+        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
+        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
         double length = -5D;
         Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         
         if(world.isRemote)
         {
-        	world.spawnEntityInWorld(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(lookVec.subtract(posVec)), 100));
+        	world.spawnEntityInWorld(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
         }
         
         if(type.healDriveables)
@@ -100,7 +108,7 @@ public class ItemTool extends Item
 								itemstack.setItemDamage(itemstack.getItemDamage() + 1);
 							//If the tool is damagable and is destroyed upon being used up, then destroy it
 							if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
-								itemstack = null;
+								itemstack.stackSize--;
 							//Our work here is done. Let's be off
 							return itemstack;
 						}
@@ -109,35 +117,41 @@ public class ItemTool extends Item
 			}
         }
 
-        if(type.healPlayers)
+        if(!world.isRemote && type.healPlayers)
         {
-	        MovingObjectPosition hit = world.clip(posVec, lookVec, true);
-	        EntityLivingBase hitLiving = null;
+        	//By default, heal the player
+	        EntityLivingBase hitLiving = entityplayer;
 	        
-	        //Result check
-	        //If we hit nothing, heal the player
-	        if(hit == null)
-	        {
-	            hitLiving = entityplayer;
-	        }
-	        //If we hit a living entity, heal it
-	        else if(hit.typeOfHit == EnumMovingObjectType.ENTITY)
-	        {
-	        	if(hit.entityHit instanceof EntityLivingBase)
-	        	{
-	        		hitLiving = (EntityLivingBase)hit.entityHit;
-	            }
-	        }
+			//Iterate over entities within range of the ray
+			List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
+					Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
+					Math.max(posVec.xCoord, lookVec.xCoord), Math.max(posVec.yCoord, lookVec.yCoord), Math.max(posVec.zCoord, lookVec.zCoord)));
+			for (int l = 0; l < list.size(); l++)
+			{
+				if(!(list.get(l) instanceof EntityLivingBase))
+					continue;
+				EntityLivingBase checkEntity = (EntityLivingBase)list.get(l);
+				//Don't check the player using it
+				if(checkEntity == entityplayer)
+					continue;
+				//Do a more accurate ray trace on this entity
+				MovingObjectPosition hit = checkEntity.boundingBox.calculateIntercept(posVec, lookVec);
+				//If it hit, heal it
+				if(hit != null)
+					hitLiving = checkEntity;
+			}
 	        //Now heal whatever it was we just decided to heal
 	        if(hitLiving != null)
 	        {        		
 	        	hitLiving.heal(type.healAmount);
+	        	PacketDispatcher.sendPacketToAllAround(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F, hitLiving.dimension, PacketFlak.buildFlakPacket(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"));
+	        	
 				//If not in creative and the tool should decay, damage it
 				if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
 					itemstack.setItemDamage(itemstack.getItemDamage() + 1);
 				//If the tool is damagable and is destroyed upon being used up, then destroy it
 				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
-					itemstack = null;
+					itemstack.stackSize--;
 	        }
         }
         return itemstack;

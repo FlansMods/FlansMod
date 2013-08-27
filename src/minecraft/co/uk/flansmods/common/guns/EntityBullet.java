@@ -223,37 +223,6 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				setDead();
 			else
 			{
-				//If we hit a valid entity
-				if(hit.entityHit != null && !isPartOfOwner(hit.entityHit))
-				{
-					//Calculate the hit damage
-					int hitDamage = damage * type.damage;
-					//Create a damage source object
-					DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
-
-					//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
-					if(hitDamage == 0 && hit.entityHit instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-						TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)hit.entityHit, damagesource);
-					
-					//Attack the entity!
-					if(hit.entityHit.attackEntityFrom(damagesource, hitDamage))
-					{
-						//If the attack was allowed and the entity is alive, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
-						if (hit.entityHit instanceof EntityLivingBase)
-						{
-							((EntityLivingBase) hit.entityHit).arrowHitTimer++;
-							((EntityLivingBase) hit.entityHit).hurtResistantTime = ((EntityLivingBase) hit.entityHit).maxHurtResistantTime / 2;
-						}
-						//Yuck.
-						//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
-					}
-					//Unless the bullet penetrates, kill it
-					if(!type.penetratesEntities)
-					{
-						setPosition(hit.entityHit.posX, hit.entityHit.posY, hit.entityHit.posZ);
-						setDead();
-					}
-				} 
 				//If the hit wasn't an entity hit, then it must've been a block hit
 				if(hit.entityHit == null)
 				{
