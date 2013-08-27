@@ -632,7 +632,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / 1; //TODO : Add constant
+		float momentOfInertia = getDriveableType().momentOfInertia / 1;
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -866,6 +866,25 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 		return false;
+	}
+	
+	/** A simple raytracer for the driveable */
+	public DriveablePart raytraceParts(Vector3f origin, Vector3f motion)
+	{
+		//Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
+		Vector3f relativePosVector = Vector3f.sub(origin, new Vector3f((float)posX, (float)posY, (float)posZ), null);
+		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
+		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
+		//Check each part
+		for(DriveablePart part : parts.values())
+		{
+			//Ray trace the bullet
+			if(part.rayTrace(null, rotatedPosVector, rotatedMotVector))
+			{
+				return part;
+			}
+		}
+		return null;
 	}
 	
 	/** For overriding for toggles such as gear up / down on planes */

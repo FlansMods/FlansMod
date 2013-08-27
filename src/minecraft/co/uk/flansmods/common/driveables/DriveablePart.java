@@ -46,6 +46,7 @@ public class DriveablePart
 	}
 	
 	/** Called by bullets that may have hit the plane 
+	 * Pass in a null bullet to simply do a raytrace check
 	 * @return Whether the bullet should consider itself to have hit something (which would mean destroying the bullet unless it penetrates) */
 	public boolean rayTrace(EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
@@ -62,7 +63,7 @@ public class DriveablePart
 		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
 		boolean hit = (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
 		//If the bullet hits, perform damage code here, and then tell the bullet that it hit
-		if(hit)
+		if(bullet != null && hit)
 		{
 			health -= bullet.damage * bullet.type.damage;
 			if(bullet.type.fire > 0)

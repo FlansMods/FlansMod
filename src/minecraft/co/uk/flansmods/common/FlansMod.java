@@ -114,12 +114,12 @@ public class FlansMod
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
 	public static boolean DEBUG = true;
-	public static List<Item> bulletItems = new ArrayList<Item>();
-	public static List<Item> partItems = new ArrayList<Item>();
-	
-	public static List<Item> gunItems = new ArrayList<Item>();
-	public static List<Item> aaGunItems = new ArrayList<Item>();
-	public static List<Item> armourItems = new ArrayList<Item>();
+	public static ArrayList<Item> bulletItems = new ArrayList<Item>();
+	public static ArrayList<Item> partItems = new ArrayList<Item>();
+	public static ArrayList<Item> toolItems = new ArrayList<Item>();	
+	public static ArrayList<Item> gunItems = new ArrayList<Item>();
+	public static ArrayList<Item> aaGunItems = new ArrayList<Item>();
+	public static ArrayList<Item> armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
 	public static boolean ABORT = false;
 
@@ -556,9 +556,9 @@ public class FlansMod
 			{
 				ToolType type = new ToolType(toolFile);
 				type.read(toolFile);
-				//Item aaGunItem = new ItemAAGun(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
-				//aaGunItems.add(aaGunItem);
-				//LanguageRegistry.addName(aaGunItem, type.name);
+				Item toolItem = new ItemTool(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				toolItems.add(toolItem);
+				LanguageRegistry.addName(toolItem, type.name);
 			} 
 			catch (Exception e)
 			{

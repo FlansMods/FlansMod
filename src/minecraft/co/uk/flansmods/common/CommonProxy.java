@@ -18,6 +18,7 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.AAGunType;
@@ -342,6 +343,13 @@ public class CommonProxy
 
 	public void repairDriveable(EntityPlayer driver, EntityDriveable driving, DriveablePart part) 
 	{
+		//If any of this parts parent parts are broken, then it cannot be repaired
+		for(EnumDriveablePart parent : part.type.getParents())
+		{
+			if(!driving.isPartIntact(parent))
+				return;
+		}
+		
 		//Create a temporary copy of the player inventory for backup purposes
 		InventoryPlayer temporaryInventory = new InventoryPlayer(null);
 		temporaryInventory.copyInventory(driver.inventory);

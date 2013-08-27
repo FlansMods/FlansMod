@@ -45,6 +45,7 @@ public class ItemPlane extends Item
 		lines.add(PartType.getPart(stack.stackTagCompound.getString("Engine")).name);
 	}
 	
+	@Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing

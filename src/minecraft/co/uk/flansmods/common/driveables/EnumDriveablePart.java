@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
+import java.util.ArrayList;
+
 public enum EnumDriveablePart 
 {
 	tailWheel(new EnumDriveablePart[] { }, "tailWheel", "Wheel (Tail)"),
@@ -30,6 +32,21 @@ public enum EnumDriveablePart
 	public EnumDriveablePart[] getChildren()
 	{
 		return children;
+	}
+	
+	/** Used to determine when parts can be stuck back on */
+	public EnumDriveablePart[] getParents()
+	{
+		ArrayList<EnumDriveablePart> parents = new ArrayList<EnumDriveablePart>();
+		for(EnumDriveablePart part : values())
+		{
+			for(EnumDriveablePart childPart : part.getChildren())
+			{
+				if(childPart == this)
+					parents.add(part);
+			}
+		}
+		return parents.toArray(new EnumDriveablePart[0]);
 	}
 	
 	public String getShortName()
