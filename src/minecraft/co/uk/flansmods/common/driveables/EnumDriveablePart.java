@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public enum EnumDriveablePart 
 {
+	//Plane parts
 	tailWheel(new EnumDriveablePart[] { }, "tailWheel", "Wheel (Tail)"),
 	tail(new EnumDriveablePart[] { tailWheel }, "tail", "Tail"),
 	bay(new EnumDriveablePart[] { tail }, "bay", "Bay"),
@@ -13,9 +14,21 @@ public enum EnumDriveablePart
 	rightWingWheel(new EnumDriveablePart[] { }, "rightWingWheel", "Wheel (Right Wing)"),
 	rightWing(new EnumDriveablePart[] { topWing, rightWingWheel }, "rightWing", "Right Wing"),
 	nose(new EnumDriveablePart[] { }, "nose", "Nose"),
-	turret(new EnumDriveablePart[] { }, "turret", "Turret"),	//For vehicles
 	coreWheel(new EnumDriveablePart[] { }, "coreWheel", "Wheel (Core)"),
-	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel }, "core", "Core");
+	
+	//Vehicle parts
+	turret(new EnumDriveablePart[] { }, "turret", "Turret"),
+	backWheel(new EnumDriveablePart[] { }, "backWheel", "Back Wheel"),
+	frontWheel(new EnumDriveablePart[] { }, "frontWheel", "Front Wheel"),
+	backLeftWheel(new EnumDriveablePart[] { }, "backLeftWheel", "Back Left Wheel"),	
+	frontLeftWheel(new EnumDriveablePart[] { }, "frontLeftWheel", "Front Left Wheel"),
+	backRightWheel(new EnumDriveablePart[] { }, "backRightWheel", "Back Right Wheel"),
+	frontRightWheel(new EnumDriveablePart[] { }, "frontRightWheel", "Front Right Wheel"),
+	trailer(new EnumDriveablePart[] { }, "trailer", "Trailer"),	
+
+	//Shared part
+	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, trailer }, "core", "Core");
+		
 	
 	private String shortName;
 	private String name;

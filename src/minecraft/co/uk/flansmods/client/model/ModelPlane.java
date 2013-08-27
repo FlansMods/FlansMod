@@ -14,10 +14,6 @@ import co.uk.flansmods.common.vector.Vector3f;
 /** Extensible ModelPlane class for rendering plane models */
 public class ModelPlane extends ModelDriveable
 {
-	public static final float pi = 3.14159265F;
-	public static final float tau = 2 * pi;
-	
-    public ModelRendererTurbo bodyModel[] = new ModelRendererTurbo[0];
     public ModelRendererTurbo noseModel[] = new ModelRendererTurbo[0];
     public ModelRendererTurbo leftWingModel[] = new ModelRendererTurbo[0];	
     public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
@@ -30,16 +26,12 @@ public class ModelPlane extends ModelDriveable
 	public ModelRendererTurbo pitchFlapRightModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo pitchFlapLeftWingModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo pitchFlapRightWingModel[] = new ModelRendererTurbo[0];
-	
-	public HashMap<String, ModelRendererTurbo[][]> gunModels = new HashMap<String, ModelRendererTurbo[][]>();
-	
+		
 	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo rightWingWheelModel[] = new ModelRendererTurbo[0];
 	
-	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailDoorCloseModel[] = new ModelRendererTurbo[0];
 		
@@ -58,7 +50,7 @@ public class ModelPlane extends ModelDriveable
 	/** GUI render method */
 	public void render()
 	{
-		renderPart(bodyModel);
+		super.render();
 		renderPart(noseModel);
 		renderPart(leftWingModel);
 		renderPart(rightWingModel);
@@ -72,14 +64,10 @@ public class ModelPlane extends ModelDriveable
 		renderPart(pitchFlapRightModel);
 		renderPart(pitchFlapLeftWingModel);
 		renderPart(pitchFlapRightWingModel);
-		for(ModelRendererTurbo[][] gun : gunModels.values())
-			for(ModelRendererTurbo[] gunPart : gun)
-				renderPart(gunPart);
 		renderPart(bodyWheelModel);
 		renderPart(tailWheelModel);
 		renderPart(leftWingWheelModel);
 		renderPart(rightWingWheelModel);
-		renderPart(bodyDoorCloseModel);
 		renderPart(tailDoorCloseModel);
 		renderPart(rightWingPos1Model);
 		renderPart(leftWingPos1Model);
@@ -309,18 +297,11 @@ public class ModelPlane extends ModelDriveable
         }
     }
     
-    private void flip(ModelRendererTurbo[] model)
-    {
-    	for(ModelRendererTurbo part : model)
-		{
-    		part.doMirror(false, true, true);
-    		part.setRotationPoint(part.rotationPointX, - part.rotationPointY, - part.rotationPointZ);
-		}
-    }
-	
+
+	@Override
 	public void flipAll()
 	{
-		flip(bodyModel);
+		super.flipAll();
 		flip(noseModel);
 		flip(leftWingModel);
 		flip(rightWingModel);
@@ -336,8 +317,6 @@ public class ModelPlane extends ModelDriveable
 		flip(tailWheelModel);
 		flip(leftWingWheelModel);
 		flip(rightWingWheelModel);
-		flip(bodyDoorOpenModel);
-		flip(bodyDoorCloseModel);
 		flip(tailDoorOpenModel);
 		flip(tailDoorCloseModel);
 		flip(rightWingPos1Model);
@@ -349,17 +328,5 @@ public class ModelPlane extends ModelDriveable
 		{
 			flip(propellerModel);
 		}
-		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
-		{
-			for(ModelRendererTurbo[] mods : modsOfMods)
-			{
-				flip(mods);
-			}
-		}
-	}
-	
-	public void registerGunModel(String name, ModelRendererTurbo[][] gunModel)
-	{
-		gunModels.put(name, gunModel);
 	}
 }
