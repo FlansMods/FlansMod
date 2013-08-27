@@ -46,6 +46,7 @@ Propeller 3 98 16 116 rightWing metalPropeller
 //Passengers
 Pilot 115 20 0
 Passengers 5
+//Passenger <ID> <x> <y> <z> <part> [minYaw] [maxYaw] [minPitch] [maxPitch] [gunType] [gunModelName]
 Passenger 1 148 2 0 nose -30 30 -25 25 browning Nose
 Passenger 2 90 10 0 core
 Passenger 3 70 10 0 core
