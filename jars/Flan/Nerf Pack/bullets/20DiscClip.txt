@@ -1,6 +1,6 @@
 Name Nerf 20 Disc Clip
 ShortName 20DiscClip
-Model Bullet
+Model nerf.Disc
 Texture vortexDisc
 //Colour of icon and model
 Colour 255 255 255

@@ -1,6 +1,6 @@
 Name Nerf 40 Disc Drum
 ShortName 40DiscDrum
-Model Bullet
+Model nerf.Disc
 Texture pyragonDisc
 //Colour of icon and model
 Colour 255 255 255

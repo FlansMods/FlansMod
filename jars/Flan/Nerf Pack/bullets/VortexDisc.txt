@@ -1,6 +1,6 @@
 Name Nerf Vortex Disc
 ShortName vortexDisc
-Model Bullet
+Model nerf.Disc
 Texture vortexDisc
 //Colour of icon and model
 Colour 255 255 255
