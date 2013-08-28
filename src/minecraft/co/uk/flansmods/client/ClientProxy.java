@@ -51,6 +51,7 @@ import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
@@ -83,14 +84,10 @@ public class ClientProxy extends CommonProxy
 	{
 		new FlansModClient().load();
 	}
-	
-	// BEGIN ABRAR EDITS --------------------------------------
 
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		// this stuff is only done client side.
-
 		contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
@@ -133,23 +130,15 @@ public class ClientProxy extends CommonProxy
 	public void loadDefaultGraphics()
 	{		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
-
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
 	}
 	
@@ -157,12 +146,6 @@ public class ClientProxy extends CommonProxy
 	public void registerTileEntityRenderers() 
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
-	}
-
-	@Override
-	public void loadContentPackGraphics(Method method, ClassLoader classloader)
-	{
-		//No longer necessary since sprite sheets are no more
 	}
 	
 	@Override
@@ -224,20 +207,6 @@ public class ClientProxy extends CommonProxy
     	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 	}
 	
-	@Override
-	public void spawnParticle(String type, double x1, double y1, double z1, double x2, double y2, double z2, int number)
-	{
-		World world = FMLClientHandler.instance().getClient().theWorld;
-		
-		if (world == null)
-			return;
-		
-		for (int i = 0; i < number; i++)
-		{
-			world.spawnParticle(type, x1, y1, z1, x2, y2, z2);
-		}
-	}
-
 	@Override
 	public void doTickStuff()
 	{

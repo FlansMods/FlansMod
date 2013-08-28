@@ -31,7 +31,7 @@ public class GrenadeType extends InfoType
 	
 	//Physics
 	/** True implies that the grenade will explode the moment it hits something */
-	public boolean explodeOnImpact = false;
+	public boolean detonateOnImpact = false;
 	/** Upon hitting a block or entity, the grenade will be deflected and its motion will be multiplied by this constant */
 	public float bounciness = 0.9F;
 	/** The damage to impart upon bouncing off an entity */
@@ -52,7 +52,7 @@ public class GrenadeType extends InfoType
 	public String bounceSound = "";
 	
 	//Conditions for detonation
-	/** If > 0 this will act like a mine and explode when a living entity comes within this radius of the grenade */
+	/** If > 0 this will act like a mine and explode when an entity comes within this radius of the grenade */
 	public float proximityTrigger = -1F;
 	/** If 0, then the grenade will last until some other detonation condition is met, else the grenade will detonate after this time (in ticks) */
 	public int fuse = 0;
@@ -61,11 +61,13 @@ public class GrenadeType extends InfoType
 	/** The radius in which to spread fire */
 	public float fireRadius = 0F;
 	/** The size of explosion to produce */
-	public float explosionRadius = -1F;
+	public float explosionRadius = 0F;
 	/** Whether the explosion can destroy blocks */
 	public boolean explosionBreaksBlocks = false;
 	/** The name of the item to drop upon detonating */
 	public String dropItemOnDetonate = null;
+	/** Sound to play upon detonation */
+	public String detonateSound = "";
 	
 	//Aesthetics
 	/** The model to render for this grenade in the world */
@@ -108,8 +110,8 @@ public class GrenadeType extends InfoType
 				throwSound = split[1];
 			if(split[0].equals("DropItemOnThrow"))
 				dropItemOnThrow = split[1];
-			if(split[0].equals("ExplodeOnImpact"))
-				explodeOnImpact = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("DetonateOnImpact"))
+				detonateOnImpact = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("Bounciness"))
 				bounciness = Float.parseFloat(split[1]);
 			if(split[0].equals("HitEntityDamage"))
@@ -133,13 +135,15 @@ public class GrenadeType extends InfoType
 			if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
 			if(split[0].equals("FireRadius"))
-				fireRadius = Integer.parseInt(split[1]);
+				fireRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionRadius"))
-				explosionRadius = Integer.parseInt(split[1]);
+				explosionRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionBreaksBlocks"))
 				explosionBreaksBlocks = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("DropItemOnDetonate"))
 				dropItemOnDetonate = split[1];
+			if(split[0].equals("DetonateSound"))
+				detonateSound = split[1];
 			if(split[0].equals("HasTrailParticles"))
 				trailParticles = Boolean.parseBoolean(split[1]);	
 			if(split[0].equals("TrailParticles"))

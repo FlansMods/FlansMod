@@ -28,7 +28,6 @@ import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
-import co.uk.flansmods.common.network.PacketParticleSpawn;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -36,31 +35,28 @@ import cpw.mods.fml.relauncher.Side;
 public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
-	
-	public void load()
-	{
-		
-	}
-	
-	// BEGIN ABRAR EDITS --------------------------------------
-	
+
+	/** Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath */
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
-		// this stuff is only done client side
 		List<File> contentPacks = new ArrayList<File>();
 		for (File file : FlansMod.flanDir.listFiles())
 		{
+			//Load folders and valid zip files
 			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
-				// Add the images to the classpath so they can be loaded
-				FlansMod.log("Not client. images and models skipped.");
-				// Add the directory to the content pack list
+				//Add the directory to the content pack list
 				FlansMod.log("Loaded content pack : " + file.getName());
 				contentPacks.add(file);
 			}
 		}
-		FlansMod.log("Loaded textures and models.");
+		FlansMod.log("Loaded content pack list server side.");
 		return contentPacks;
+	}
+	
+	/** A ton of client only methods follow */
+	public void load()
+	{
 	}
 	
 	public List<File> getContentList()
@@ -74,70 +70,58 @@ public class CommonProxy
 	
 	public void loadDefaultGraphics()
 	{
-		FlansMod.log("Not client. Graphic loading skipped.");
-	}
-	
-	public void loadContentPackGraphics(Method method, ClassLoader classloader)
-	{
-		FlansMod.log("Not client. ContentPack graphic loading skipped.");
 	}
 	
 	public void loadKeyBindings()
 	{
-		FlansMod.log("Not client. Key Bindings skipped.");
 	}
 	
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
-		// FlansMod.log("Tutorial skipped on server");
 	}
 	
 	public void changeControlMode(EntityPlayer player)
 	{
 	}
-	
-	// --------------- END ABRAR EDITS ----------------------
-	
+
 	public boolean mouseControlEnabled()
 	{
 		return false;
 	}
 	
-	// ------------------ PACKET SENDING OR NOT -------------
-	
-	public void playBlockBreakSound(int x, int y, int z, int blockID)
+	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
-		PacketDispatcher.sendPacketToAllPlayers(PacketBreakSound.buildBreakSoundPacket(x, y, z, blockID));
 	}
 	
-	public void spawnParticle(String type, double x1, double y1, double z1, double x2, double y2, double z2, int number)
+	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
 	{
-		PacketDispatcher.sendPacketToAllPlayers(PacketParticleSpawn.buildParticleSpawnPacket(type, x1, y1, z1, x2, y2, z2, number));
+		return null;
 	}
 	
-	// ---------------END PACKET SENDING OR NOT -------------	
+	public void loadSound(String contentPack, String type, String sound)
+	{
+	}
+	
+	public boolean isThePlayer(EntityPlayer player)
+	{
+		return false;
+	}
+	
+	public void buyGun(GunBoxType type, int gun)
+	{
+	}
 
-	public void doTickStuff()
+	public void buyAmmo(GunBoxType box, int ammo, int type)
 	{
-		// overriden in client
-		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 	}
-
-	/**
-	 * Gets the client GUI element from ClientProxy.
-	 * @param ID
-	 * @param player
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
-	 */
+	
+	/** Gets the client GUI element from ClientProxy */
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		return null;
 	}
 
+	/** Gets the container for the specified GUI */
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		switch(ID) 
@@ -154,38 +138,16 @@ public class CommonProxy
 		return null;
 	}
 	
-	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
+	/** Play a block break sound here */
+	public void playBlockBreakSound(int x, int y, int z, int blockID)
 	{
+		PacketDispatcher.sendPacketToAllPlayers(PacketBreakSound.buildBreakSoundPacket(x, y, z, blockID));
 	}
 	
-	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
+	/** Register the sided tick handler */
+	public void doTickStuff()
 	{
-		return null;
-	}
-	
-	public void loadSound(String contentPack, String type, String sound)
-	{
-		
-	}
-	
-	public boolean isThePlayer(EntityPlayer player)
-	{
-		return false;
-	}
-	
-	public void buyGun(GunBoxType type, int gun)
-	{
-		//Client only
-	}
-
-	public void buyAmmo(GunBoxType box, int ammo, int type)
-	{
-		//Client only
-	}
-	
-	public List<DriveableType> getBlueprints(boolean vehicle)
-	{
-		return null;
+		TickRegistry.registerTickHandler(new CommonTickHandler(), Side.SERVER);
 	}
 	
 	public void craftDriveable(EntityPlayer player, DriveableType type)

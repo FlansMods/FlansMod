@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,16 +25,16 @@ public class FlanPacketCommon implements IPacketHandler
 		String name = ((EntityPlayer) player).username;
 		EntityPlayer playerEntity = FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(name);
 		
-		recieve(packet, playerEntity, manager);
-	}
-	
-	public static final void recieve(Packet250CustomPayload packet, EntityPlayer player, INetworkManager manager)
-	{
 		if (!packet.channel.equals(channelFlan))
 			return;
 		
-		WorldServer world = (WorldServer) player.worldObj;
+		WorldServer world = (WorldServer) playerEntity.worldObj;
 		
+		receive(packet, playerEntity, manager, Side.SERVER, world);
+	}
+	
+	public static final void receive(Packet250CustomPayload packet, EntityPlayer player, INetworkManager manager, Side side, World world)
+	{
         try
         {
 			DataInputStream stream = new DataInputStream(new ByteArrayInputStream(packet.data));
@@ -42,27 +43,27 @@ public class FlanPacketCommon implements IPacketHandler
         	
     		switch(ID)
     		{
-	    		case 1: (new PacketBreakSound()).interpret(stream, null, Side.SERVER); break;
-	    		case 2: (new PacketParticleSpawn()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-	    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 4: (new PacketVehicleKey()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, Side.SERVER); break;
-	    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-	    		case 8: (new PacketPlaySound()).interpret(stream, null, Side.SERVER); break;
-	    		case 9: (new PacketDriveableCrafting()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-	    		case 11: (new PacketDriveableDamage()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 13: (new PacketGunFire()).interpret(stream, new Object[] {player, world}, Side.SERVER); break;
-	    		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, Side.SERVER); break;
-	    		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	    		case 17: (new PacketRepairDriveable()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	       		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, Side.SERVER); break;
-	       		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, Side.SERVER); break;
-	       		case 20: (new PacketPlayerSpawn()).interpret(stream, null, Side.SERVER); break;
-	       		case 21: (new PacketSeatUpdates()).interpret(stream, new Object[] {player}, Side.SERVER); break;
+	    		case 1: (new PacketBreakSound()).interpret(stream, null, side); break;
+	    		case 2: break; //Free packet ID
+	    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, side); break;
+	    		case 4: (new PacketVehicleKey()).interpret(stream, new Object[] {player}, side); break;
+	    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, side); break;
+	    		case 6: (new PacketTeamSelect()).interpret(stream, new Object[] {player}, side); break;
+	    		case 7: (new PacketGunBoxTE()).interpret(stream, new Object[] {world}, side); break;
+	    		case 8: (new PacketPlaySound()).interpret(stream, null, side); break;
+	    		case 9: (new PacketDriveableCrafting()).interpret(stream, new Object[] {player}, side); break;
+	    		case 10: (new PacketMGMount()).interpret(stream, new Object[] {world}, side); break;
+	    		case 11: (new PacketDriveableDamage()).interpret(stream, new Object[] {player}, side); break;
+	    		case 12: (new PacketMGFire()).interpret(stream, new Object[] {player}, side); break;
+	    		case 13: (new PacketGunFire()).interpret(stream, new Object[] {player, world}, side); break;
+	    		case 14: (new PacketFlak()).interpret(stream, new Object[] {world}, side); break;
+	    		case 15: (new PacketVehicleGUI()).interpret(stream, new Object[] {player}, side); break;
+	    		case 16: (new PacketContentPackList()).interpret(stream, new Object[] {player}, side); break;
+	    		case 17: (new PacketRepairDriveable()).interpret(stream, new Object[] {player}, side); break;
+	       		case 18: (new PacketTeamInfo()).interpret(stream, new Object[] {}, side); break;
+	       		case 19: (new PacketReload()).interpret(stream, new Object[] {player}, side); break;
+	       		case 20: (new PacketPlayerSpawn()).interpret(stream, null, side); break;
+	       		case 21: (new PacketSeatUpdates()).interpret(stream, new Object[] {player}, side); break;
 	    		default: FlansMod.logLoudly("Unknown packet type recieved"); break;
     		}
     		

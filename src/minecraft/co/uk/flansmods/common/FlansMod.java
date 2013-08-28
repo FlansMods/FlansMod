@@ -40,8 +40,10 @@ import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.EntityMG;
+import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemGrenade;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
@@ -114,12 +116,9 @@ public class FlansMod
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
 	public static boolean DEBUG = true;
-	public static ArrayList<Item> bulletItems = new ArrayList<Item>();
-	public static ArrayList<Item> partItems = new ArrayList<Item>();
-	public static ArrayList<Item> toolItems = new ArrayList<Item>();	
-	public static ArrayList<Item> gunItems = new ArrayList<Item>();
-	public static ArrayList<Item> aaGunItems = new ArrayList<Item>();
-	public static ArrayList<Item> armourItems = new ArrayList<Item>();
+	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), partItems = new ArrayList<Item>(),
+				toolItems = new ArrayList<Item>(), gunItems = new ArrayList<Item>(), aaGunItems = new ArrayList<Item>(), 
+				grenadeItems = new ArrayList<Item>(), armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
 	public static boolean ABORT = false;
 
@@ -473,6 +472,25 @@ public class FlansMod
 		}
 		log("Loaded guns.");
 		
+		//Grenades
+		for(TypeFile grenadeFile : TypeFile.files.get(EnumType.grenade))
+		{
+			try
+			{
+				GrenadeType type = new GrenadeType(grenadeFile);
+				type.read(grenadeFile);
+				Item grenadeItem = new ItemGrenade(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				grenadeItems.add(grenadeItem);
+				LanguageRegistry.addName(grenadeItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add grenade : " + grenadeFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded grenades.");
+		
 		// Parts
 		for(TypeFile partFile : TypeFile.files.get(EnumType.part))
 		{
@@ -643,9 +661,6 @@ public class FlansMod
 		log("Loaded recipes.");
 		
 		DriveableType.populate();
-		
-		// LOAD GRAPHICS
-		proxy.loadContentPackGraphics(method, classloader);
 	}
 	
 	public static void loadProperties()

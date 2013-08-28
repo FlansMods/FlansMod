@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 
-
 public class RenderBullet extends Render
 {
 	public RenderBullet()
