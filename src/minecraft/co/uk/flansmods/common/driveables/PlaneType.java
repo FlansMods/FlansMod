@@ -66,10 +66,7 @@ public class PlaneType extends DriveableType
 	{
 		super.read(split, file);
 		try
-		{
-			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				FlansMod.proxy.loadPlaneModel(split, shortName, this);
-			
+		{		
 			//Yaw modifiers
 			if(split[0].equals("TurnLeftSpeed"))
 				turnLeftModifier = Float.parseFloat(split[1]);

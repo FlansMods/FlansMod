@@ -52,6 +52,7 @@ import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.EntityMG;
+import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketDriveableCrafting;
@@ -283,77 +284,20 @@ public class ClientProxy extends CommonProxy
 		}
 		return in;
 	}
-
+	
 	@Override
-	public void loadBulletModel(String[] split, String shortName, BulletType type)
-	{
-		try
-		{
-			ModelBase model = (ModelBase) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
-			type.model = model;
-		} catch (Exception e)
-		{
-			FlansMod.log("Failed to load bullet model : " + shortName);
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void loadMGModel(String[] split, String shortName, GunType type)
-	{
-		try
-		{
-			ModelMG model = (ModelMG) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
-			type.model = model;
-		} catch (Exception e)
-		{
-			FlansMod.log("Failed to load deployable MG model : " + shortName);
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void loadAAGunModel(String[] split, String shortName, AAGunType type)
-	{
-		try
-		{
-			ModelAAGun model = (ModelAAGun) Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
-			type.model = model;
-		} catch (Exception e)
-		{
-			FlansMod.log("Failed to load AA gun model : " + shortName);
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void loadVehicleModel(String[] split, String shortName, VehicleType type)
+	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
 	{
 		try 
 		{	
-			ModelVehicle model = (ModelVehicle)Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
-			type.model = model;
+			return typeClass.cast(Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance());
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load vehicle model : " + shortName + " (" + split[1] + ")");
+			FlansMod.log("Failed to load model : " + shortName + " (" + split[1] + ")");
 			e.printStackTrace();
 		}
-	}	
-
-	@Override
-	public void loadPlaneModel(String[] split, String shortName, PlaneType type)
-	{
-		try 
-		{	
-			ModelPlane model = (ModelPlane)Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance();
-			type.model = model;
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to load plane model : " + shortName + " (" + split[1] + ")");
-			e.printStackTrace();
-		}
+		return null;
 	}
 	
 	@Override

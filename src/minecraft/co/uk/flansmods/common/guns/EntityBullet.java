@@ -257,7 +257,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				}
 				//Calculate the hit damage
-				int hitDamage = damage * type.damage;
+				int hitDamage = damage * type.damageVsLiving;
 				//Create a damage source object
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	

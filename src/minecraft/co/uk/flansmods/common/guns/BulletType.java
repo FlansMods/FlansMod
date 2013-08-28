@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
+
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
@@ -12,7 +14,8 @@ public class BulletType extends InfoType
 {
 	public Object model;
 	public float fallSpeed = 1.0F;
-	public int damage = 0;
+	public int damageVsLiving = 0;
+	public int damageVsDriveable = 0;
 	public int explosion = 0;
 	public boolean explodeOnImpact = false;
 	public int fuse = 0;
@@ -50,14 +53,16 @@ public class BulletType extends InfoType
 		{
 			if (arg0[0].equals("Model"))
 			{
-				FlansMod.proxy.loadBulletModel(arg0, shortName, this);
+				model = FlansMod.proxy.loadModel(arg0, shortName, ModelBase.class);
 			}
 			if (arg0[0].equals("Texture"))
 				texture = arg0[1];
 			if (arg0[0].equals("FallSpeed"))
 				fallSpeed = Float.parseFloat(arg0[1]);
-			if (arg0[0].equals("Damage"))
-				damage = Integer.parseInt(arg0[1]);
+			if (arg0[0].equals("Damage") || arg0[0].equals("DamageVsLiving") || arg0[0].equals("DamageVsPlayer"))
+				damageVsLiving = Integer.parseInt(arg0[1]);
+			if (arg0[0].equals("DamageVsVehicles"))
+				damageVsDriveable = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("Explosion"))
 				explosion = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("FlakParticles"))

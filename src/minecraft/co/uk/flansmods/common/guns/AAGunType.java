@@ -5,12 +5,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.driveables.PlaneType;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -30,7 +32,7 @@ public class AAGunType extends InfoType
 	public int gunnerZ;
 	public String shootSound;
 	public String reloadSound;
-	public Object model;
+	public ModelAAGun model;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
 	public int[] barrelX, barrelY, barrelZ;
@@ -50,7 +52,7 @@ public class AAGunType extends InfoType
 		{
 			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("Model"))
 			{
-				FlansMod.proxy.loadAAGunModel(arg0, shortName, this);
+				model = FlansMod.proxy.loadModel(arg0, shortName, ModelAAGun.class);
 			}
 			if (arg0[0].equals("Texture"))
 			{

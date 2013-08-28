@@ -104,7 +104,7 @@ public class GunType extends InfoType
 				deployable = arg0[1].equals("True");
 			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("DeployedModel") && deployable)
 			{
-				FlansMod.proxy.loadMGModel(arg0, shortName, this);
+				model = FlansMod.proxy.loadModel(arg0, shortName, ModelMG.class);
 			}
 			if (arg0[0].equals("DeployedTexture"))
 				texture = arg0[1];

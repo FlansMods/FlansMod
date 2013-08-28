@@ -101,8 +101,9 @@ public class EntityPlane extends EntityDriveable
 		
 		if(FMLCommonHandler.instance().getSide().isClient() && planeType.model == null)
 		{
-			FlansMod.proxy.loadPlaneModel(new String[] {"", planeType.shortName}, planeType.shortName, planeType);
-			FlansMod.logLoudly("Package Error! Please check the installed content package for problems.");
+			//What is this? I'm sure I never wrote this
+			//FlansMod.proxy.loadModel(new String[] {"", planeType.shortName}, planeType.shortName, planeType);
+			//FlansMod.logLoudly("Package Error! Please check the installed content package for problems.");
 			return;
 		}
 	}

@@ -14,9 +14,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class VehicleType extends DriveableType
 {
-	@SideOnly(Side.CLIENT)
-	public ModelVehicle model;
-	
 	public float maxSpeed = 1F;
 	public double turnLeftModifier = 1F;
 	public double turnRightModifier = 1F;
@@ -117,12 +114,7 @@ public class VehicleType extends DriveableType
 	{
 		super.read(split, file);
 		try
-		{
-			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-			{
-				FlansMod.proxy.loadVehicleModel(split, shortName, this);
-			}
-					
+		{					
 			//Movement modifiers
 			if(split[0].equals("MaxSpeed"))
 				maxSpeed = Float.parseFloat(split[1]);

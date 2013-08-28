@@ -2,10 +2,14 @@ package co.uk.flansmods.common.guns;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.model.ModelBase;
+
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GrenadeType extends InfoType 
 {
@@ -64,6 +68,9 @@ public class GrenadeType extends InfoType
 	public String dropItemOnDetonate = null;
 	
 	//Aesthetics
+	/** The model to render for this grenade in the world */
+	@SideOnly(Side.CLIENT)
+	public ModelBase model = null;
 	/** Trail particles given off by the grenade while being thrown */
 	public boolean trailParticles = false;
 	public String trailParticleType = "smoke";
@@ -87,6 +94,10 @@ public class GrenadeType extends InfoType
 		super.read(split, file);
 		try
 		{
+			if (split[0].equals("Model"))
+			{
+				model = FlansMod.proxy.loadModel(split, shortName, ModelBase.class);
+			}
 			if(split[0].equals("MeleeDamage"))
 				meleeDamage = Integer.parseInt(split[1]);
 			if(split[0].equals("StackSize"))

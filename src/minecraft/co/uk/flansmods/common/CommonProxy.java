@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -23,6 +24,7 @@ import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
@@ -155,30 +157,10 @@ public class CommonProxy
 	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
 	}
-
-	public void loadBulletModel(String[] split, String shortName, BulletType type)
-	{
-		return;
-	}
-
-	public void loadMGModel(String[] split, String shortName, GunType type)
-	{
-		return;
-	}
-
-	public void loadAAGunModel(String[] split, String shortName, AAGunType type)
-	{
-		return;
-	}
-
-	public void loadVehicleModel(String[] split, String shortName, VehicleType type)
-	{
-		return;
-	}
 	
-	public void loadPlaneModel(String[] split, String shortName, PlaneType type)
+	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
 	{
-		return;
+		return null;
 	}
 	
 	public void loadSound(String contentPack, String type, String sound)

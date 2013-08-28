@@ -18,6 +18,7 @@ import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -102,6 +103,9 @@ public class DriveableType extends InfoType
 		super.read(split, file);
 		try
 		{
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
+				model = FlansMod.proxy.loadModel(split, shortName, ModelDriveable.class);
+			
 			if(split[0].equals("Texture"))
 			{
 				texture = split[1];
