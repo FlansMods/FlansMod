@@ -32,7 +32,7 @@ public class ModelArrow extends ModelBase
         float var19 = (float)(10 + var11 * 10) / 32.0F;
         float var20 = 0.05625F;
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-
+        GL11.glRotatef(90F, 0.0F, 0.0F, 1.0F);
         GL11.glRotatef(45.0F, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(var20, var20, var20);
         GL11.glTranslatef(-4.0F, 0.0F, 0.0F);
@@ -63,7 +63,7 @@ public class ModelArrow extends ModelBase
             var10.draw();
         }
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        //bulletModel.render(f5);
+
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)

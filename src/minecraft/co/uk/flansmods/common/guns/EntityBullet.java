@@ -158,8 +158,6 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			float f = MathHelper.sqrt_double(d * d + d2 * d2);
 			prevRotationYaw = rotationYaw = (float) ((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
 			prevRotationPitch = rotationPitch = (float) ((Math.atan2(d1, f) * 180D) / 3.1415927410125732D);
-			prevRotationPitch = rotationPitch;
-			prevRotationYaw = rotationYaw;
 			setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
 		}
 	}

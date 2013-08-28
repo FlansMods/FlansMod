@@ -54,7 +54,7 @@ public class ModelKubel extends ModelVehicle
 		rightFrontWheelModel[0].setRotationPoint(16F, 6F, -15F);	
 		
 		//Gun model not used yet
- 		gunModel = new ModelRendererTurbo[0];
+ 		//gunModel = new ModelRendererTurbo[0];
 		/*
 		gunModel[0] = new ModelRendererTurbo(this, 66, 55, textureX, textureY);
 		gunModel[1] = new ModelRendererTurbo(this, 66, 70, textureX, textureY);
@@ -72,16 +72,6 @@ public class ModelKubel extends ModelVehicle
 		ammoModel[0].addBox(-6F, -3F, -2F, 5, 4, 2);
 		ammoModel[0].setRotationPoint(-6F, 18F, 0F);			
 		*/
-		
-		//This should be defined even when not used.
-		turretModel = new ModelRendererTurbo[0];	
-		barrelModel = new ModelRendererTurbo[0];	
-		ammoModel = new ModelRendererTurbo[0];
-		
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		trailerModel = new ModelRendererTurbo[0];
-		wheelAniModel = new ModelRendererTurbo[0];
 		
 		flipAll(); //For old models
     }

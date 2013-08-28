@@ -32,19 +32,6 @@ public class ModelSherman extends ModelVehicle
 		barrelModel[0].addBox(-2F, -2F, -2F, 60, 4, 4, 0.0F);
 		barrelModel[0].setRotationPoint(15F, -38F, 0F);	
 		
-		//This should be defined even when not used.
-		gunModel = new ModelRendererTurbo[0];
-		ammoModel = new ModelRendererTurbo[0];
-		leftFrontWheelModel = new ModelRendererTurbo[0];	
-		leftBackWheelModel = new ModelRendererTurbo[0];	
-		rightFrontWheelModel = new ModelRendererTurbo[0];	
-		rightBackWheelModel = new ModelRendererTurbo[0];
-		
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		trailerModel = new ModelRendererTurbo[0];
-		wheelAniModel = new ModelRendererTurbo[0];
-		
 		flipAll(); //For old models
 		translateAll(-4);
     }
