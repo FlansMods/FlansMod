@@ -55,9 +55,9 @@ public class GrenadeType extends InfoType
 	
 	//Detonation
 	/** The radius in which to spread fire */
-	public float fire = 0F;
+	public float fireRadius = 0F;
 	/** The size of explosion to produce */
-	public int explosionSize = 0;
+	public float explosionRadius = -1F;
 	/** Whether the explosion can destroy blocks */
 	public boolean explosionBreaksBlocks = false;
 	/** The name of the item to drop upon detonating */
@@ -70,6 +70,10 @@ public class GrenadeType extends InfoType
 	/** Particles given off in the detonation */
 	public int explodeParticles = 0;
 	public String explodeParticleType = "largeSmoke";
+	/** Time to remain after detonation */
+	public int smokeTime = 0;
+	/** Particles given off after detonation */
+	public String smokeParticleType = "largeSmoke";
 	
 	public GrenadeType(TypeFile file) 
 	{
@@ -83,7 +87,60 @@ public class GrenadeType extends InfoType
 		super.read(split, file);
 		try
 		{
-			
+			if(split[0].equals("MeleeDamage"))
+				meleeDamage = Integer.parseInt(split[1]);
+			if(split[0].equals("StackSize"))
+				maxStackSize = Integer.parseInt(split[1]);
+			if(split[0].equals("ThrowDelay"))
+				throwDelay = Integer.parseInt(split[1]);
+			if(split[0].equals("ThrowSound"))
+				throwSound = split[1];
+			if(split[0].equals("DropItemOnThrow"))
+				dropItemOnThrow = split[1];
+			if(split[0].equals("ExplodeOnImpact"))
+				explodeOnImpact = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("Bounciness"))
+				bounciness = Float.parseFloat(split[1]);
+			if(split[0].equals("HitEntityDamage"))
+				hitEntityDamage = Integer.parseInt(split[1]);
+			if(split[0].equals("ThrowSpeed"))
+				throwSpeed = Float.parseFloat(split[1]);
+			if(split[0].equals("FallSpeed"))
+				fallSpeed = Float.parseFloat(split[1]);
+			if(split[0].equals("BreaksGlass"))
+				breaksGlass = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("PenetratesEntities"))
+				penetratesEntities = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("PenetratesBlocks"))
+				penetratesBlocks = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("HitBoxSize"))
+				hitBoxSize = Float.parseFloat(split[1]);
+			if(split[0].equals("BounceSound"))
+				bounceSound = split[1];
+			if(split[0].equals("ProximityTrigger"))
+				proximityTrigger = Float.parseFloat(split[1]);	
+			if(split[0].equals("Fuse"))
+				fuse = Integer.parseInt(split[1]);
+			if(split[0].equals("FireRadius"))
+				fireRadius = Integer.parseInt(split[1]);
+			if(split[0].equals("ExplosionRadius"))
+				explosionRadius = Integer.parseInt(split[1]);
+			if(split[0].equals("ExplosionBreaksBlocks"))
+				explosionBreaksBlocks = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("DropItemOnDetonate"))
+				dropItemOnDetonate = split[1];
+			if(split[0].equals("HasTrailParticles"))
+				trailParticles = Boolean.parseBoolean(split[1]);	
+			if(split[0].equals("TrailParticles"))
+				trailParticleType = split[1];
+			if(split[0].equals("NumExplodeParticles"))
+				explodeParticles = Integer.parseInt(split[1]);	
+			if(split[0].equals("ExplodeParticles"))
+				explodeParticleType = split[1];
+			if(split[0].equals("SmokeTime"))
+				smokeTime = Integer.parseInt(split[1]);
+			if(split[0].equals("SmokeParticles"))
+				smokeParticleType = split[1];
 		} 
 		catch (Exception e)
 		{
