@@ -96,10 +96,10 @@ public class GrenadeType extends InfoType
 		super.read(split, file);
 		try
 		{
-			if (split[0].equals("Model"))
-			{
+			if(split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split, shortName, ModelBase.class);
-			}
+			if(split[0].equals("Texture"))
+				texture = split[1];
 			if(split[0].equals("MeleeDamage"))
 				meleeDamage = Integer.parseInt(split[1]);
 			if(split[0].equals("StackSize"))

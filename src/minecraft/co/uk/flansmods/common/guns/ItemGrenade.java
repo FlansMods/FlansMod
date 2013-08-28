@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class ItemGrenade extends Item {
 
@@ -39,6 +40,14 @@ public class ItemGrenade extends Item {
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
 		return type.meleeDamage == 0;
+	}
+	
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	{
+		if(!world.isRemote)
+			world.spawnEntityInWorld(new EntityGrenade(world, type, player));
+		return stack;
 	}
 	
 	@Override

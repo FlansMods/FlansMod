@@ -39,6 +39,7 @@ import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
@@ -199,60 +200,58 @@ public class FlansMod
 	{
 		log("Loading Flan's mod.");
 				
-		// Tick handlers
+		//Tick handlers
 		TickRegistry.registerTickHandler(new ServerTickHandler(), event.getSide());
 		proxy.doTickStuff();
 		
+		//Creative tabs
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan0", "Flan's Mod Guns");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan1", "Flan's Mod Vehicles");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan2", "Flan's Mod Parts");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan3", "Flan's Mod Team Stuff");
 		
-		//Content pack handler
+		//TODO : Content pack handler
 		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());
-		
-		// default stuff
-		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
-
-		
-		// default planes stuff
+				
+		//Register driveable crafting table and add recipes
 		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setUnlocalizedName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Small Plane Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Large Plane Crafting Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Vehicle Crafting Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Vehicle Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
 		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
+		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 500, false);
-		
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 100, 5, false);
-		
 		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 100, 10, false);
 				
+		//Register bullets and grenades
 		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, true);
+		EntityRegistry.registerGlobalEntityID(EntityGrenade.class, "Grenade", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
 		
-		// default aa guns stuff
+		//Register MGs and AA guns
+		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		
-		// gunBxStuff.. must be done after content packs.
-		// GunBox Block       ID=???  200 is temporary one
+		// GunBox block 
 		gunBoxBlock = (BlockGunBox) new BlockGunBox(gunBoxID);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 
-		
 		// GUI handler		
 		NetworkRegistry.instance().registerGuiHandler(this, new CommonGuiHandler());
 		
-		// Default teams stuff
+		//Teams stuff
 		opStick = new ItemOpStick(23540);
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 0), "Stick of Ownership");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 1), "Stick of Connecting");
@@ -270,27 +269,25 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
-		//EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
 		EntityRegistry.registerModEntity(EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
 		
+		//Register the chunk loader
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
 		
 		proxy.registerTileEntityRenderers();
 		proxy.loadDefaultGraphics();
 		
-		// read Content Packs
+		//Read content packs
 		readContentPacks(event);
 		
-		for (GunBoxType type : GunBoxType.gunBoxMap.values())
-		{
+		//Add gun box names
+		for(GunBoxType type : GunBoxType.gunBoxMap.values())
 			LanguageRegistry.addName(new ItemStack(gunBoxBlock, 1, type.gunBoxID), type.name);
-		}
-				
+			
+		//Do proxy loading
 		proxy.load();
-		
 		proxy.loadKeyBindings();
-
 		
 		log("Loading complete.");
 	}

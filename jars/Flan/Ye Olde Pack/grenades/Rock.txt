@@ -11,6 +11,7 @@ ShapelessRecipe stonebrick
 StackSize 64
 ////Visuals
 Model yeolde.Rock
+Texture Rock
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0
