@@ -64,6 +64,7 @@ import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -158,7 +159,7 @@ public class FlansMod
 	
 	public static File flanDir;
 	
-	@PreInit
+	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		log("Preinitializing Flan's mod.");
@@ -193,7 +194,7 @@ public class FlansMod
 		log("Preinitializing complete.");
 	}
 	
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
 		log("Loading Flan's mod.");
@@ -294,21 +295,19 @@ public class FlansMod
 		log("Loading complete.");
 	}
 		
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		hooks.hook();
 		System.out.println("[Flan] Hooking complete.");
 	}
 		
-	@ServerStarted
+	@EventHandler
 	public void registerCommand(FMLServerStartedEvent e)
 	{
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
 	}
-	
-	
 	
 	private void getTypeFiles(List<File> contentPacks)
 	{
