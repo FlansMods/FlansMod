@@ -391,7 +391,8 @@ public class TeamsManager implements IPlayerTracker
 		reset();
 		//Read the teams dat file
 		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
-		checkFileExists(file);
+		if(!checkFileExists(file))
+			return;
 		try
 		{
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
@@ -522,7 +523,7 @@ public class TeamsManager implements IPlayerTracker
 		}
 	}
 	
-	private void checkFileExists(File file)
+	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())
 		{
@@ -535,7 +536,9 @@ public class TeamsManager implements IPlayerTracker
 				FlansMod.log("Failed to create file");
 				FlansMod.log(file.getAbsolutePath());
 			}
+			return false;
 		}	
+		return true;
 	}
 	
 	public ITeamBase getBase(int ID)

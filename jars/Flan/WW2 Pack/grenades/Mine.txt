@@ -1,49 +1,47 @@
 ////Name and icon
-Name Rock
-ShortName rock
-Icon Rock
+Name Anti-Tank Mine
+ShortName ww2Mine
+Icon WW2Mine
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
-ItemID 23712
-RecipeOutput 8
-ShapelessRecipe stonebrick
-StackSize 64
+ItemID 23698
+StackSize 4
 ////Visuals
-Model yeolde.Rock
-Texture Rock
+Model ww2.Mine
+Texture WW2Mine
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0
 //ExplodeParticleType <particleType>
 SmokeTime 0
 //SmokeParticleType <particleType>
-SpinWhenThrown true
+SpinWhenThrown false
 ////Throwing
 ThrowDelay 10
 //ThrowSound <sound>
 //DropItemOnThrow <itemID.damage>
 ////Physics
 DetonateOnImpact false
-Bounciness 1.0
-HitEntityDamage 4
-ThrowSpeed 1.0
+Bounciness 0.0
+HitEntityDamage 0
+ThrowSpeed 0.0
 FallSpeed 1.0
-BreaksGlass true
+BreaksGlass false
 PenetratesBlocks false
 HitBoxSize 0.5
 Sticky false
 //BounceSound <sound>
 ////Detonation conditions
-VehicleProximityTrigger -1.0
-LivingProximityTrigger 0.5
-Fuse 1200
-DetonateWhenShot false
+VehicleProximityTrigger 1.0
+LivingProximityTrigger -1.0
+Fuse 0
+DetonateWhenShot true
 ////Detonation
 FireRadius 0.0
-ExplosionRadius 0.0
-ExplosionBreaksBlocks false
-DropItemOnDetonate rock
+ExplosionRadius 5.0
+ExplosionBreaksBlocks true
+//DropItemOnDetonate <itemID.damage>
 //Detonate Sound <sound>
 ////Misc
-MeleeDamage 3
+MeleeDamage 2

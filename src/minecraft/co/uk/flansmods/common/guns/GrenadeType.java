@@ -50,12 +50,18 @@ public class GrenadeType extends InfoType
 	public float hitBoxSize = 0.5F;
 	/** The sound to play upon bouncing off a surface */
 	public String bounceSound = "";
+	/** Whether the grenade should stick to surfaces */
+	public boolean sticky = false;
 	
 	//Conditions for detonation
-	/** If > 0 this will act like a mine and explode when an entity comes within this radius of the grenade */
-	public float proximityTrigger = -1F;
+	/** If > 0 this will act like a mine and explode when a living entity comes within this radius of the grenade */
+	public float livingProximityTrigger = -1F;
+	/** If > 0 this will act like a mine and explode when a driveable comes within this radius of the grenade */
+	public float driveableProximityTrigger = -1F;
 	/** If 0, then the grenade will last until some other detonation condition is met, else the grenade will detonate after this time (in ticks) */
 	public int fuse = 0;
+	/**  If true, then anything attacking this entity will detonate it */
+	public boolean detonateWhenShot = false;
 	
 	//Detonation
 	/** The radius in which to spread fire */
@@ -78,11 +84,13 @@ public class GrenadeType extends InfoType
 	public String trailParticleType = "smoke";
 	/** Particles given off in the detonation */
 	public int explodeParticles = 0;
-	public String explodeParticleType = "largeSmoke";
+	public String explodeParticleType = "largesmoke";
 	/** Time to remain after detonation */
 	public int smokeTime = 0;
 	/** Particles given off after detonation */
-	public String smokeParticleType = "largeSmoke";
+	public String smokeParticleType = "explode";
+	/** Whether the grenade should spin when thrown. Generally false for mines or things that should lie flat */
+	public boolean spinWhenThrown = true;
 	
 	public GrenadeType(TypeFile file) 
 	{
@@ -130,10 +138,16 @@ public class GrenadeType extends InfoType
 				hitBoxSize = Float.parseFloat(split[1]);
 			if(split[0].equals("BounceSound"))
 				bounceSound = split[1];
-			if(split[0].equals("ProximityTrigger"))
-				proximityTrigger = Float.parseFloat(split[1]);	
+			if(split[0].equals("Sticky"))
+				sticky = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("LivingProximityTrigger"))
+				livingProximityTrigger = Float.parseFloat(split[1]);	
+			if(split[0].equals("VehicleProximityTrigger"))
+				driveableProximityTrigger = Float.parseFloat(split[1]);	
 			if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
+			if(split[0].equals("DetonateWhenShot"))
+				detonateWhenShot = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("FireRadius"))
 				fireRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionRadius"))
@@ -156,11 +170,23 @@ public class GrenadeType extends InfoType
 				smokeTime = Integer.parseInt(split[1]);
 			if(split[0].equals("SmokeParticles"))
 				smokeParticleType = split[1];
+			if(split[0].equals("SpinWhenThrown"))
+				spinWhenThrown = Boolean.parseBoolean(split[1]);
 		} 
 		catch (Exception e)
 		{
 			System.out.println("Reading grenade file failed.");
 			e.printStackTrace();
 		}
+	}
+	
+	public static GrenadeType getGrenade(String s)
+	{
+		for(GrenadeType grenade : grenades)
+		{
+			if(grenade.shortName.equals(s))
+				return grenade;
+		}
+		return null;
 	}
 }

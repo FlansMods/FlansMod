@@ -230,10 +230,11 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					int blockID = worldObj.getBlockId(xTile, yTile, zTile);
 					Material mat = worldObj.getBlockMaterial(xTile, yTile, zTile);
 					//If the bullet breaks glass, and can do so according to FlansMod, do so.
-					if(type.breaksGlass && FlansMod.canBreakGlass && mat == Material.glass)
+					if(type.breaksGlass && mat == Material.glass)
 					{
-						worldObj.setBlock(xTile, yTile, zTile, 0, 0, 5);
-						PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, Block.glass.stepSound.getBreakSound(), true));
+						if(FlansMod.canBreakGlass)
+							worldObj.setBlockToAir(xTile, yTile, zTile);
+						FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, blockID);
 					}
 					if(!type.penetratesBlocks)
 					{

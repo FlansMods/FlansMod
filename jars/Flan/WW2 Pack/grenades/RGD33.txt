@@ -1,17 +1,15 @@
 ////Name and icon
-Name Rock
-ShortName rock
-Icon Rock
+Name RGD33
+ShortName RGD33
+Icon RGD33
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
-ItemID 23712
-RecipeOutput 8
-ShapelessRecipe stonebrick
-StackSize 64
+ItemID 23675
+StackSize 4
 ////Visuals
-Model yeolde.Rock
-Texture Rock
+Model ww2.StickGrenade
+Texture RGD33
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0
@@ -26,8 +24,8 @@ ThrowDelay 10
 ////Physics
 DetonateOnImpact false
 Bounciness 1.0
-HitEntityDamage 4
-ThrowSpeed 1.0
+HitEntityDamage 1
+ThrowSpeed 2.0
 FallSpeed 1.0
 BreaksGlass true
 PenetratesBlocks false
@@ -36,14 +34,14 @@ Sticky false
 //BounceSound <sound>
 ////Detonation conditions
 VehicleProximityTrigger -1.0
-LivingProximityTrigger 0.5
-Fuse 1200
-DetonateWhenShot false
+LivingProximityTrigger -1.0
+Fuse 100
+DetonateWhenShot true
 ////Detonation
 FireRadius 0.0
-ExplosionRadius 0.0
-ExplosionBreaksBlocks false
-DropItemOnDetonate rock
+ExplosionRadius 4.0
+ExplosionBreaksBlocks true
+//DropItemOnDetonate <itemID.damage>
 //Detonate Sound <sound>
 ////Misc
-MeleeDamage 3
+MeleeDamage 4

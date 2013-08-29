@@ -1,11 +1,15 @@
 package co.uk.flansmods.common.guns;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.InfoType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,8 +49,32 @@ public class ItemGrenade extends Item {
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
-		if(!world.isRemote)
-			world.spawnEntityInWorld(new EntityGrenade(world, type, player));
+		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player, world.isRemote ? Side.CLIENT : Side.SERVER);
+		//If can throw grenade
+		if(data.shootTime <= 0)
+		{
+			//Delay the next throw / weapon fire / whatnot
+			data.shootTime = type.throwDelay;
+			//Spawn the entity server side
+			if(!world.isRemote)
+				world.spawnEntityInWorld(new EntityGrenade(world, type, player));
+			//Consume an item
+			if(!player.capabilities.isCreativeMode)
+				stack.stackSize--;
+			//Drop an item upon throwing if necessary
+			if(type.dropItemOnThrow != null)
+			{
+				String itemName = type.dropItemOnDetonate;
+				int damage = 0;
+				if (itemName.contains("."))
+				{
+					damage = Integer.parseInt(itemName.split("\\.")[1]);
+					itemName = itemName.split("\\.")[0];
+				}
+				ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
+				world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
+			}
+		}
 		return stack;
 	}
 	
