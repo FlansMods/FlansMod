@@ -36,8 +36,8 @@ public class RenderNull extends Render
             GL11.glTranslatef((float)d, (float)d1, (float)d2);      
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glColor4f(1F, 1F, 1F, 0.3F);
+			//GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glColor4f(0F, 0F, 1F, 1F);
 			GL11.glScalef(-1F, 1F, -1F);
 			renderAABB(AxisAlignedBB.getBoundingBox(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F));
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

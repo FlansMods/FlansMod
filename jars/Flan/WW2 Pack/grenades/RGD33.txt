@@ -1,5 +1,5 @@
 ////Name and icon
-Name RGD33
+Name RGD-33 Stick Grenade
 ShortName RGD33
 Icon RGD33
 //Colour in Red, Green, Blue, each going up to 255

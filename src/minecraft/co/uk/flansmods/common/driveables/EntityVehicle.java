@@ -174,7 +174,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					throttle = 1F;
 				return true;
 			}
-			case 1 : //Decelerate : Decrease the throttle, down to -1, or 0 if the plane cannot reverse
+			case 1 : //Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
 			{
 				throttle -= 0.01F;
 				if(throttle < -1F)
@@ -206,7 +206,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				seats[0].riddenByEntity.mountEntity(null);
           		return true;
 			}
-			case 7 : //Inventory : Check to see if this plane allows in-flight inventory editing or if the plane is on the ground
+			case 7 : //Inventory
 			{
 				if(worldObj.isRemote)
                 {
@@ -446,7 +446,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Smooth off rotational motion
 		angularVelocity.scale(0.95F);
 		
-		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
+		//Call the movement method in EntityDriveable to move the driveable according to the forces we just applied
 		moveDriveable();
 		
 		
@@ -530,14 +530,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         if(worldObj.isRemote || isDead)
             return true;
         
-        PlaneType type = PlaneType.getPlane(driveableType);
+        VehicleType type = getVehicleType();
         
 		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
-			ItemStack planeStack = new ItemStack(type.itemID, 1, 0);
-			planeStack.stackTagCompound = new NBTTagCompound();
-			driveableData.writeToNBT(planeStack.stackTagCompound);
-			entityDropItem(planeStack, 0.5F);
+			ItemStack vehicleStack = new ItemStack(type.itemID, 1, 0);
+			vehicleStack.stackTagCompound = new NBTTagCompound();
+			driveableData.writeToNBT(vehicleStack.stackTagCompound);
+			entityDropItem(vehicleStack, 0.5F);
 	 		setDead();
 		}
         return true;

@@ -136,7 +136,7 @@ public class DriveableType extends InfoType
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);
-			if(split[0].equals("BombSlots"))
+			if(split[0].equals("BombSlots") || split[0].equals("ShellSlots"))
 				numBombSlots = Integer.parseInt(split[1]);
 			if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);

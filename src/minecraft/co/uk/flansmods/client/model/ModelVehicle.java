@@ -49,12 +49,12 @@ public class ModelVehicle extends ModelDriveable
 		}
 		for(int i = 0; i < leftFrontWheelModel.length; i++)
 		{
-			leftFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 10F;
+			leftFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
 			leftFrontWheelModel[i].render(f5);
 		}
 		for(int i = 0; i < rightFrontWheelModel.length; i++)
 		{
-			rightFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 10F;
+			rightFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
 			rightFrontWheelModel[i].render(f5);
 		}
 		for(int i = 0; i < bodyDoorOpenModel.length; i++)
