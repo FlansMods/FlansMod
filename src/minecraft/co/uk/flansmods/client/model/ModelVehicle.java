@@ -69,7 +69,7 @@ public class ModelVehicle extends ModelDriveable
 		}
 		for(int i = 0; i < trailerModel.length; i++)
 		{
-			trailerModel[i].rotateAngleY = vehicle.trailerAngle;
+			//trailerModel[i].rotateAngleY = vehicle.trailerAngle;
 			trailerModel[i].render(f5);
 		}
 	}

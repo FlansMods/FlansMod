@@ -149,7 +149,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		if(worldObj.isRemote && !foundDriveable)
 			return;
-		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(new Vector3f((float)seatInfo.x / 16F, (float)seatInfo.y / 16F, (float)seatInfo.z / 16F));
+		Vector3f localPosition = new Vector3f((float)seatInfo.x / 16F, (float)seatInfo.y / 16F, (float)seatInfo.z / 16F);
+		if(driver)
+			Vector3f.add(localPosition, looking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset), localPosition);
+		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(localPosition);
 		setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y, driveable.posZ + relativePosition.z);
 	}
 

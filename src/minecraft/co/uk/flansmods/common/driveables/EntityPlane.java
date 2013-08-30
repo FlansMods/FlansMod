@@ -49,27 +49,18 @@ public class EntityPlane extends EntityDriveable
 {
 	/** The flap positions, used for renderering and for controlling the plane rotations */
 	public float flapsYaw, flapsPitchLeft, flapsPitchRight;	
-	
-	//Aesthetic variables
+	/** Position of looping engine sound */
 	public int soundPosition;
+	/** The angle of the propeller for the renderer */
 	public float propAngle;
-	
-	//Weaponry
-	public int bombDelay;
-	public int gunDelay;
-	
-	public boolean tailOnGround;
-	private boolean spawnedEntities;
+	/** Weapon delays */
+	public int bombDelay, gunDelay;
+	/** Despawn timer */
 	public int ticksSinceUsed = 0;
-    
-    public boolean varGear = true;
-    public boolean varDoor = false;
-    public boolean varWing = false;
-    
-    //Used to stop multiple presses of gear, door and wing buttons
+	/** Mostly aesthetic model variables. Gear actually has a variable hitbox */
+    public boolean varGear = true, varDoor = false, varWing = false;
+    /** Delayer for gear, door and wing buttons */
     public int toggleTimer = 0;
-  
-	public int trimButton = 1;
 	
     public EntityPlane(World world)
     {
@@ -88,24 +79,6 @@ public class EntityPlane extends EntityDriveable
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
         rotatePitch(type.restingPitch);
-	}
-	
-	@Override
-	protected void initType(DriveableType type, boolean clientSide)
-	{
-		super.initType(type, clientSide);
-		PlaneType planeType = (PlaneType)type;
-        varGear = true;
-        varDoor = true;
-        varWing = true;
-		
-		if(FMLCommonHandler.instance().getSide().isClient() && planeType.model == null)
-		{
-			//What is this? I'm sure I never wrote this
-			//FlansMod.proxy.loadModel(new String[] {"", planeType.shortName}, planeType.shortName, planeType);
-			//FlansMod.logLoudly("Package Error! Please check the installed content package for problems.");
-			return;
-		}
 	}
 	
 	@Override
@@ -160,7 +133,6 @@ public class EntityPlane extends EntityDriveable
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
 	 * @param deltaY 
 	 * @param deltaX 
-	 * @return if mouse movement was handled.
 	 */
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY)
@@ -178,14 +150,9 @@ public class EntityPlane extends EntityDriveable
 		flapsPitchLeft -= sensitivity * deltaX;
 		flapsPitchRight += sensitivity * deltaX;
 	}
-
-	private boolean canSit(int seat)
-	{
-		return getPlaneType().numPassengers >= seat && seats[seat].riddenByEntity == null;
-	}
 		
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer) //interact : change back when Forge updates
+	public boolean func_130002_c(EntityPlayer entityplayer)
     {
 		if(isDead)
 			return true;
@@ -214,7 +181,8 @@ public class EntityPlane extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
     	PlaneType type = this.getPlaneType();
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))// || key == 13 || key == 14 || key == 15))
+    	//Send keys which require server side updates to the server
+    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
     		return true;
@@ -291,17 +259,8 @@ public class EntityPlane extends EntityDriveable
 					{
 						Vec3 bombVec = rotate(type.bombPosition).toVec3();
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, type));
-						if(type.bombSound != null)
-						{
-							try 
-							{
-								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.bombSound, false));
-							}
-							catch(Exception e)
-							{
-								FlansMod.log("Failed to play sound : " + type.bombSound);
-							}						
-						}
+						if(type.shootSecondarySound != null)
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));					
 						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 							driveableData.decrStackSize(slot, 1);
 						bombDelay = type.planeBombDelay;
@@ -330,7 +289,7 @@ public class EntityPlane extends EntityDriveable
 								//Spawn a new bullet item
 								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLiving)riddenByEntity, gunType.accuracy / 2, gunType.damage, bullet, 2.0F, type));
 								//Play the shoot sound
-								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound, false));
+								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));
 								//Get the bullet item damage and increment it
 								int damage = bulletItemStack.getItemDamage();
 								bulletItemStack.setItemDamage(damage + 1);	
@@ -705,13 +664,6 @@ public class EntityPlane extends EntityDriveable
 	 		setDead();
 		}
         return true;
-    }
-    
-    @Override
-    public void applyEntityCollision(Entity entity)
-    {
-    	if(!isPartOfThis(entity))
-    		super.applyEntityCollision(entity);
     }
   
     @Override

@@ -61,4 +61,18 @@ public class Seat
 		z = dz;
 		part = EnumDriveablePart.core;
 	}
+	
+	/** Type file driver seat constructor with yaw and pitch limiters */
+	public Seat(int dx, int dy, int dz, float y1, float y2, float p1, float p2)
+	{
+		id = 0;
+		x = dx;
+		y = dy;
+		z = dz;
+		part = EnumDriveablePart.core;
+		minYaw = y1;
+		maxYaw = y2;
+		minPitch = p1;
+		maxPitch = p2;
+	}
 }

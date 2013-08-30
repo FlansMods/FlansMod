@@ -211,6 +211,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public abstract void onMouseMoved(int deltaX, int deltaY);
 
+	protected boolean canSit(int seat)
+	{
+		return getDriveableType().numPassengers >= seat && seats[seat].riddenByEntity == null;
+	}
+	
 	@Override
     protected boolean canTriggerWalking()
     {
@@ -278,6 +283,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public boolean canBeCollidedWith()
     {
         return !isDead;
+    }
+	
+    @Override
+    public void applyEntityCollision(Entity entity)
+    {
+    	if(!isPartOfThis(entity))
+    		super.applyEntityCollision(entity);
     }
 	
 	@Override

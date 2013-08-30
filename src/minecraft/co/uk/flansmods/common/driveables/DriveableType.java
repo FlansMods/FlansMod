@@ -53,6 +53,9 @@ public class DriveableType extends InfoType
 	/** The guns controlled by the driver */
 	public ArrayList<PilotGun> guns = new ArrayList<PilotGun>();
 	
+	/** The offset of the driver from their point of rotation. Used in tank turrets where the player is in a rotating turret, but on one side of the gun */
+	public Vector3f rotatedDriverOffset = new Vector3f();
+	
 	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
 	public float yOffset = 10F / 16F;
 	/** Third person render distance */
@@ -68,6 +71,15 @@ public class DriveableType extends InfoType
 	
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
+	
+	/** Sounds */
+	//TODO : Overhaul sounds
+	public String startSound;
+	public int startSoundLength;
+	public String engineSound;
+	public int engineSoundLength;
+	public String shootMainSound;
+	public String shootSecondarySound;
 	
 	
 	/** Static DriveableType map for obtaining Types from Strings */
@@ -183,7 +195,14 @@ public class DriveableType extends InfoType
 			//Driver Position
 			if(split[0].equals("Driver") || split[0].equals("Pilot"))
 			{
-				seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+				if(split.length > 4)
+					seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]), Float.parseFloat(split[6]), Float.parseFloat(split[7]));
+				else seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+			}
+			
+			if(split[0].equals("RotatedDriverOffset"))
+			{
+				rotatedDriverOffset = new Vector3f((float)Integer.parseInt(split[1]) / 16F, (float)Integer.parseInt(split[2]) / 16F, (float)Integer.parseInt(split[3]) / 16F);
 			}
 			
 			//Passengers / Gunner Seats
@@ -213,6 +232,32 @@ public class DriveableType extends InfoType
             //Third person camera distance
 			if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
+			
+			//Sound
+			if(split[0].equals("StartSoundLength"))
+				startSoundLength = Integer.parseInt(split[1]);
+			if(split[0].equals("EngineSoundLength"))
+				engineSoundLength = Integer.parseInt(split[1]);
+			if(split[0].equals("StartSound"))
+			{
+				startSound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+			}
+			if(split[0].equals("EngineSound"))
+			{
+				engineSound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+			}
+			if(split[0].equals("ShootMainSound"))
+			{
+				shootMainSound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+			}
+			if(split[0].equals("ShootSecondarySound"))
+			{
+				shootSecondarySound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+			}
 		}
 		catch (Exception e)
 		{

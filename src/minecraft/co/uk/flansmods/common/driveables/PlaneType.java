@@ -37,15 +37,6 @@ public class PlaneType extends DriveableType
 	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
 				
-	/** Sounds */
-	//TODO : Overhaul sounds
-	public String startSound;
-	public int startSoundLength;
-	public String propSound;
-	public int propSoundLength;
-	public String shootSound;
-	public String bombSound;
-	
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
     /** Default pitch for when parked. Will implement better system soon */
@@ -108,31 +99,24 @@ public class PlaneType extends DriveableType
 			}
 
 			//Sound
-			if(split[0].equals("StartSoundLength"))
-				startSoundLength = Integer.parseInt(split[1]);
 			if(split[0].equals("PropSoundLength"))
-				propSoundLength = Integer.parseInt(split[1]);
-			if(split[0].equals("StartSound"))
-			{
-				startSound = contentPack + "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
-			}
+				engineSoundLength = Integer.parseInt(split[1]);
 			if(split[0].equals("PropSound"))
 			{
-				propSound = contentPack + "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
+				engineSound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
 			}
 			if(split[0].equals("ShootSound"))
 			{
-				shootSound = contentPack + "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
+				shootMainSound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
-				bombSound = contentPack + "planes." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "planes", split[1]);
+				shootSecondarySound = contentPack + "driveables." + split[1];
+				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
 			}
-							
+			
 			//Aesthetics
             if(split[0].equals("HasGear"))
                 hasGear = split[1].equals("True");

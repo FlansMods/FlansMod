@@ -1,5 +1,8 @@
 package co.uk.flansmods.common;
 
+import java.util.List;
+
+import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.VehicleType;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -8,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -27,6 +31,19 @@ public class ItemVehicle extends ItemMapBase
 		setCreativeTab(FlansMod.tabFlanDriveables);
     }
 
+	@Override
+	/** Make sure client and server side NBTtags update */
+	public boolean getShareTag()
+	{
+		return true;
+	}
+
+	@Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
+	{
+		lines.add(PartType.getPart(stack.stackTagCompound.getString("Engine")).name);
+	}
+	
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
@@ -51,7 +68,7 @@ public class ItemVehicle extends ItemMapBase
             int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getVehicleData(itemstack, world)));
+				world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
@@ -63,7 +80,7 @@ public class ItemVehicle extends ItemMapBase
     
     public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)
     {
-    	Entity entity = new EntityVehicle(world, x, y, z, type, getVehicleData(stack, world));
+    	Entity entity = new EntityVehicle(world, x, y, z, type, getData(stack, world));
     	if(!world.isRemote)
         {
 			world.spawnEntityInWorld(entity);
@@ -71,34 +88,13 @@ public class ItemVehicle extends ItemMapBase
     	return entity;
     }
 	
-	public VehicleData getVehicleData(ItemStack itemstack, World world)
+	public DriveableData getData(ItemStack itemstack, World world)
     {
-        String s = (new StringBuilder()).append("vehicle_").append(itemstack.getItemDamage()).toString();
-        VehicleData vehicleData = (VehicleData)world.loadItemData(co.uk.flansmods.common.driveables.VehicleData.class, "vehicle_" + itemstack.getItemDamage());
-        if(itemstack.getItemDamage() == 0 || vehicleData == null)
+		if(itemstack.stackTagCompound == null || !itemstack.stackTagCompound.hasKey("Type"))
 		{
-			int dataID = world.getUniqueDataId("vehicle");
-			vehicleData = new VehicleData("vehicle_" + dataID, type);
-			//Avoid dataID 0 : default for TMI / Creative
-			if(dataID == 0)
-			{
-				dataID = world.getUniqueDataId("vehicle");
-				vehicleData = new VehicleData("vehicle_" + dataID, type);
-			}
-			world.setItemData("vehicle_" + dataID, vehicleData);
-			vehicleData.markDirty();
-			itemstack.setItemDamage(dataID);
-			try
-			{
-				vehicleData.engine = PartType.defaultEngine;
-			}
-			catch(Exception e)
-			{
-				System.out.println("Tried spawning vehicle without engine. Default engine not found.");
-				return null;
-			}
+			return null;
 		}
-		return vehicleData;
+		return new DriveableData(itemstack.stackTagCompound);
     }
 	
     @SideOnly(Side.CLIENT)
@@ -112,6 +108,19 @@ public class ItemVehicle extends ItemMapBase
     public void registerIcons(IconRegister icon) 
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    }
+    
+    /** Make sure that creatively spawned planes have nbt data */
+    @Override
+    public void getSubItems(int i, CreativeTabs tabs, List list)
+    {
+    	ItemStack planeStack = new ItemStack(i, 1, 0);
+    	NBTTagCompound tags = new NBTTagCompound();
+    	tags.setString("Type", type.shortName);
+    	if(PartType.defaultEngine != null)
+    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	planeStack.stackTagCompound = tags;
+        list.add(planeStack);
     }
 	
 	public VehicleType type;

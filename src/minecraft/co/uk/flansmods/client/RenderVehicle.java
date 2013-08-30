@@ -30,7 +30,8 @@ public class RenderVehicle extends Render
 		GL11.glRotatef(-vehicle.prevRotationRoll - (vehicle.axes.getRoll() - vehicle.prevRotationRoll) * f1, 1.0F, 0.0F, 0.0F);
         ModelVehicle modVehicle = (ModelVehicle)type.model;
 		if(modVehicle != null)
-			modVehicle.render(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
+			modVehicle.render(vehicle, f1);
+		/*
 		float gunYaw = 90F;
 		float gunPitch = 0;
 		GL11.glPushMatrix();
@@ -70,6 +71,7 @@ public class RenderVehicle extends Render
 			GL11.glTranslatef(-modVehicle.turretModel[0].rotationPointX / 16F, -modVehicle.turretModel[0].rotationPointY / 16F, -modVehicle.turretModel[0].rotationPointZ / 16F);
 			modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, gunYaw, gunPitch);
 		}
+		*/
         GL11.glPopMatrix();
     }
 
