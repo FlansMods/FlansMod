@@ -24,8 +24,8 @@ public class PlaneType extends DriveableType
 	public float rollLeftModifier = 1F, rollRightModifier = 1F;
 	/** Yaw modifiers */
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
-	/** Co-efficients of drag and lift which determine how the plane flies */
-	public float drag = 1F, lift = 1F;
+	/** Co-efficient of lift which determines how the plane flies */
+	public float lift = 1F;
 	
 	/** The point at which bomb entities spawn */
 	public Vector3f bombPosition;
@@ -74,9 +74,7 @@ public class PlaneType extends DriveableType
 			if(split[0].equals("RollRightSpeed"))
 				rollRightModifier = Float.parseFloat(split[1]);
 			
-			//Drag and Lift
-			if(split[0].equals("Drag"))
-				drag = Float.parseFloat(split[1]);
+			//Lift
 			if(split[0].equals("Lift"))
 				lift = Float.parseFloat(split[1]);
 				

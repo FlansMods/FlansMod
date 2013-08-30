@@ -411,7 +411,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 10F * type.mass;
+			float sensitivityAdjust = 1F * type.mass;
 			
 			//Yaw according to the wheelsYaw
 			float yaw = wheelsYaw * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;	
@@ -420,20 +420,36 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Co-efficients of formulae
-		float thrustFormulaCoefficient = 2F;
+		float thrustFormulaCoefficient = 0.1F;
+		float dragFormulaCoefficient = 1F;
 		float gravity = 9.81F / 20F;
 				
 		//Apply thrust
-		/*for(Propeller propeller : type.propellers)
 		{
-			//TODO : Factor in engine type
-			//Check the propeller is still around
-			if(!parts.get(propeller.planePart).dead)
+			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
+			applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
+			applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
+			applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
+			if(type.fourWheelDrive)
 			{
-				float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-				applyForce(axes.findLocalVectorGlobally(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+				applyThrust(parts.get(EnumDriveablePart.frontLeftWheel), thrust);
+				applyThrust(parts.get(EnumDriveablePart.frontRightWheel), thrust);
+				applyThrust(parts.get(EnumDriveablePart.frontWheel), thrust);
 			}
-		}*/
+		}
+		
+		//Apply drag
+		{
+			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
+			//Avoid zero errors by not applying drag when going too slow
+			if(velocityVector.lengthSquared() > 0.0000001F)
+			{
+				//Drag formula is 1/2 * v^2 * dragCoefficient
+				float drag = dragFormulaCoefficient * type.drag * velocityVector.lengthSquared();
+				//Apply in the direction opposite to the motion of the plane
+				applyForce(new Vector3f(), (Vector3f)velocityVector.normalise().negate().scale(drag));
+			}
+		}
 		
 		//Apply gravity
 		{
@@ -525,6 +541,27 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
     }
     
+    private void applyThrust(DriveablePart part, float thrust)
+    {
+    	if(part.maxHealth > 0 && part.health <= 0)
+    		return;
+    	if(part.box == null)
+    		return;
+    	
+    	Vector3f midPoint = part.box.getCentre();
+    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
+    	
+    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
+    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelRadius);
+    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
+    	
+    	if(worldObj.getBlockId(x, y, z) > 0)
+    	{
+    		Vector3f xAxis = axes.getXAxis();
+    		applyForce(globalMidPoint, (Vector3f)new Vector3f(xAxis.x, 0F, xAxis.z).scale(thrust));
+    	}
+    }
+
     public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
     {
         if(worldObj.isRemote || isDead)
@@ -569,5 +606,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public String getBombInventoryName() 
 	{
 		return null;
+	}
+	
+	public boolean hasMouseControlMode()
+	{
+		return false;
 	}
 }

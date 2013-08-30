@@ -463,7 +463,7 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 10F * type.mass;
+			float sensitivityAdjust = 0.5F * type.mass;
 			
 			//Yaw according to the flapsYaw
 			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
@@ -692,5 +692,10 @@ public class EntityPlane extends EntityDriveable
 	public String getBombInventoryName() 
 	{
 		return "Bombs";
+	}
+	
+	public boolean hasMouseControlMode()
+	{
+		return true;
 	}
 }

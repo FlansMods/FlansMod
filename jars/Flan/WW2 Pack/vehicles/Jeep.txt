@@ -14,10 +14,16 @@ MaxNegativeThrottle 0.0
 //Steering modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
+//Drag
+Drag 0.2
 //Mass (In tons)
 Mass 0.2
 //Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
-MomentOfInertia 1.0
+MomentOfInertia 2.0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 0.35355
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 1000
 //Inventory Slots

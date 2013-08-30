@@ -66,6 +66,8 @@ public class DriveableType extends InfoType
 	
 	/** Mass in tons */
 	public float mass = 1F;
+	/** Coefficient of drag */
+	public float drag = 1F;
 	/** Moment of inertia in metre tons or whatnot */
 	public float momentOfInertia = 1F;
 	
@@ -132,6 +134,8 @@ public class DriveableType extends InfoType
 				mass = Float.parseFloat(split[1]);
 			if(split[0].equals("MomentOfInertia"))
 				momentOfInertia = Float.parseFloat(split[1]);
+			if(split[0].equals("Drag"))
+				drag = Float.parseFloat(split[1]);
 			
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))

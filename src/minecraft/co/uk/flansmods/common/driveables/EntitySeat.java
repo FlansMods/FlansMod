@@ -211,7 +211,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			driveable.onMouseMoved(deltaX, deltaY);
 		}
 		//Other seats should look around, but also the driver seat if mouse control mode is disabled
-		if(!driver || !FlansModClient.controlModeMouse)
+		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
 			

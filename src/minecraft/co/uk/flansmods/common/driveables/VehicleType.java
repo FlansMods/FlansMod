@@ -20,6 +20,10 @@ public class VehicleType extends DriveableType
 	public boolean squashMobs = false;
 	/** The origin of the tank barrel */
 	public Vector3f barrelPosition;
+	/** The wheel radius for onGround checks */
+	public float wheelRadius = 1.0F;
+	/** If this is true, the vehicle will drive from all wheels */
+	public boolean fourWheelDrive = false;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -45,9 +49,13 @@ public class VehicleType extends DriveableType
 			if(split[0].equals("TurnRightSpeed"))
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
-				squashMobs = split[1].equals("True");
+				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
             if(split[0].equals("HasDoor"))
-                hasDoor = split[1].equals("True");
+                hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
+            if(split[0].equals("WheelRadius"))
+            	wheelRadius = Float.parseFloat(split[1]);
+            if(split[0].equals("FourWheelDrive"))
+            	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
 
 			//Armaments
 			if(split[0].equals("BarrelPosition"))

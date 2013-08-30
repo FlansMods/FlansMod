@@ -644,7 +644,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / 1;
+		float momentOfInertia = getDriveableType().momentOfInertia / 100;
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -829,7 +829,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     			        applyForce(pointVec, new Vector3f(0F, (float)dmaxZ * type.mass / deltaTime, 0F));	  
     			        */
       				
-      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits), 0F));	  
+      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * 0.4F, 0F));	  
       			}
       		}
       	}
@@ -995,6 +995,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return parts.get(part).maxHealth == 0 || parts.get(part).health > 0; 
 	}
+	
+	public abstract boolean hasMouseControlMode();
 	
 	public abstract String getBombInventoryName();
 }
