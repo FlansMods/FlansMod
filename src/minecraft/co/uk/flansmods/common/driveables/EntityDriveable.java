@@ -814,7 +814,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
       				      				
-      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * 0.4F, 0F));	  
+      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
       			}
       		}
       	}

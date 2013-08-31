@@ -70,9 +70,13 @@ public class DriveableType extends InfoType
 	public float drag = 1F;
 	/** Moment of inertia in metre tons or whatnot */
 	public float momentOfInertia = 1F;
+	/** Couldn't decide on the best value for this constant, so now it is variable. 
+	 * This scales the push-out-of-blocks force exerted on driveables */
+	public float bounciness = 0.4F;
 	
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
+
 	
 	/** Sounds */
 	//TODO : Overhaul sounds
@@ -136,6 +140,8 @@ public class DriveableType extends InfoType
 				momentOfInertia = Float.parseFloat(split[1]);
 			if(split[0].equals("Drag"))
 				drag = Float.parseFloat(split[1]);
+			if(split[0].equals("Bounciness"))
+				bounciness = Float.parseFloat(split[1]);
 			
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
