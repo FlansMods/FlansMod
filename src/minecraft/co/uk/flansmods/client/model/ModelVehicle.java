@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 
 //Extensible ModelVehicle class for rendering vehicle models
@@ -72,6 +73,47 @@ public class ModelVehicle extends ModelDriveable
 			//trailerModel[i].rotateAngleY = vehicle.trailerAngle;
 			trailerModel[i].render(f5);
 		}
+		
+        //Render guns
+        for(EntitySeat seat : vehicle.seats)
+        {
+        	//If the seat has a gun model attached
+        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part))
+        	{
+        		//float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
+        		//float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;
+     
+        		float yaw = seat.looking.getYaw();
+        		float pitch = seat.looking.getPitch();
+     
+        		
+        		//Iterate over the parts of that model
+        		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
+        		//Yaw only parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[0])
+    			{
+    				//Yaw and render
+        			gunModelPart.rotateAngleY = ( - yaw) * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw and pitch, no recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[1])
+    			{
+    				//Yaw, pitch and render
+        			gunModelPart.rotateAngleY = ( - yaw) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw, pitch and recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[2])
+    			{
+    				//Yaw, pitch, recoil and render
+        			gunModelPart.rotateAngleY = ( - yaw) * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        	}
+        }
 	}
 		
 	public void renderTurret(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float gunYaw, float gunPitch)

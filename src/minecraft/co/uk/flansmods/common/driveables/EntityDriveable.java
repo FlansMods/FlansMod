@@ -813,23 +813,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				
-      				/*
-      				if(Math.abs(dminX - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dminX * type.mass / deltaTime, 0F));	  
-      				if(Math.abs(dmaxX - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxX * type.mass / deltaTime, 0F));	  
-      				if(Math.abs(dminY - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dminY * type.mass / deltaTime, 0F));	  
-      				if(Math.abs(dmaxY - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / deltaTime, 0F));	  
-      				if(Math.abs(dminZ - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dminZ * type.mass / deltaTime, 0F));	  
-      				if(Math.abs(dmaxZ - min) < 0.000001D)
-    			        applyForce(pointVec, new Vector3f(0F, (float)dmaxZ * type.mass / deltaTime, 0F));	  
-    			        */
-      				
-      				 applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * 0.4F, 0F));	  
+      				      				
+      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * 0.4F, 0F));	  
       			}
       		}
       	}
