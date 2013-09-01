@@ -128,7 +128,8 @@ public class FlansMod
 	
 	// Player changeable stuff
 	public static boolean useRotation = false;
-	public static boolean explosions = false;
+	public static boolean explosions = true;
+	public static boolean driveablesBreakBlocks = true;
 	public static boolean bombsEnabled = true;
 	public static boolean bulletsEnabled = true;
 	public static boolean forceAdventureMode = true;
@@ -226,10 +227,11 @@ public class FlansMod
 		
 		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 100, 500, false);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 100, 5, false);
-		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 100, 10, false);
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 20, false);
+		EntityRegistry.registerGlobalEntityID(EntitySeat.class, "Seat", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 250, 20, false);
 				
 		//Register bullets and grenades
 		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());

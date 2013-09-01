@@ -38,6 +38,41 @@ public class CommandTeams extends CommandBase {
 			else sendHelpInformation(sender, 1);
 			return;
 		}
+		if(split[0].equals("off"))
+		{
+			teamsManager.currentGametype = null;
+			teamsManager.messageAll("Flan's Teams Mod disabled");
+		}
+		if(split[0].equals("survival"))
+		{
+			FlansMod.explosions = true;
+			FlansMod.driveablesBreakBlocks = true;
+			FlansMod.bombsEnabled = true;
+			FlansMod.bulletsEnabled = true;
+			FlansMod.forceAdventureMode = false;
+			FlansMod.canBreakGuns = true;
+			FlansMod.canBreakGlass = true;
+			FlansMod.armourDrops = true;
+			FlansMod.weaponDrops = 1;
+			FlansMod.vehiclesNeedFuel = true;
+			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 0;
+			teamsManager.messageAll("Flan's Mod switching to survival presets");
+		}
+		if(split[0].equals("arena"))
+		{
+			FlansMod.explosions = false;
+			FlansMod.driveablesBreakBlocks = false;
+			FlansMod.bombsEnabled = true;
+			FlansMod.bulletsEnabled = true;
+			FlansMod.forceAdventureMode = true;
+			FlansMod.canBreakGuns = true;
+			FlansMod.canBreakGlass = false;
+			FlansMod.armourDrops = false;
+			FlansMod.weaponDrops = 2;
+			FlansMod.vehiclesNeedFuel = false;
+			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 120;
+			teamsManager.messageAll("Flan's Mod switching to arena mode presets");
+		}
 		if(split[0].equals("listGametypes"))
 		{
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("\u00a72Showing all avaliable gametypes"));
@@ -504,6 +539,9 @@ public class CommandTeams extends CommandBase {
 		case 1 : 
 		{
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams help [page]"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams off"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams arena"));
+			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams survival"));
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams getSticks"));
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams listGametypes"));
 			sender.sendChatToPlayer(ChatMessageComponent.func_111066_d("/teams setGametype <name>"));

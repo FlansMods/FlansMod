@@ -624,30 +624,7 @@ public class EntityPlane extends EntityDriveable
 	{
 		return varGear;
 	}
-    
-	private void smashIntoBlock(int i, int j, int k)
-	{
-		if(worldObj.isRemote || !FlansMod.explosions)
-			return;
-		int blockID = worldObj.getBlockId(i, j, k);
-		if(blockID != 0)
-		{
-			int meta = worldObj.getBlockMetadata(i, j, k);
-			Block block = Block.blocksList[blockID];
-			if(block.blockMaterial.isSolid())
-			{
-				float damage = block.getBlockHardness(worldObj, i, j, k) * 20F;
-				attackEntityFrom(DamageSource.inWall, (int)damage);
-				if(damage <= 20F && damage > 0F)
-				{
-					worldObj.setBlock(i, j, k, 0, 0, 5);
-					block.dropBlockAsItem(worldObj, i, j, k, meta, 1);
-					FlansMod.proxy.playBlockBreakSound(i, j, k, blockID);
-				}
-			}
-		}
-	}
-	
+    	
     public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
     {
         if(worldObj.isRemote || isDead)

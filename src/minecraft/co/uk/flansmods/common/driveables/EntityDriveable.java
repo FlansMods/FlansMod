@@ -373,6 +373,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     {
         super.onUpdate();
         
+        //System.out.println(((int)posX) + " " + ((int)posY) + " " + ((int)posZ) + " " + worldObj.isRemote);
+        
         DriveableType type = getDriveableType();
         
         if(!worldObj.isRemote)
@@ -765,7 +767,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			        	float smashyForceVsBlock = part.smashIntoGround(damageModifier * smashyForce);
 			        	int blockIDHit = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 			        	Block blockHit = Block.blocksList[blockIDHit];
-			        	if(smashyForceVsBlock > blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ))
+			        	if(FlansMod.driveablesBreakBlocks && smashyForceVsBlock > blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ))
 			        	{
 			        		blockHit.dropBlockAsItem(worldObj, hit.blockX, hit.blockY, hit.blockZ, worldObj.getBlockMetadata(hit.blockX, hit.blockY, hit.blockZ), 1);
 							FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockIDHit);
