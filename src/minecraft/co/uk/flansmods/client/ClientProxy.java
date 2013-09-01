@@ -32,6 +32,7 @@ import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.CommonProxy;
+import co.uk.flansmods.common.EntityParachute;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.InfoType;
@@ -138,6 +139,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
 	}

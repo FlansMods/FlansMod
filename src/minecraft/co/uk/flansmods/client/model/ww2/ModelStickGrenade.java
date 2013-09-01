@@ -18,14 +18,11 @@ public class ModelStickGrenade extends ModelBase
 		stickModel.rotateAngleX = -3.14159265F / 2F;
 		headModel.rotateAngleX = -3.14159265F / 2F;
 	}
-
+	
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		headModel.render(f5);
 		stickModel.render(f5);
-	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
 	}
 }

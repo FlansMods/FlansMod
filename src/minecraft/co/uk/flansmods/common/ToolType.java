@@ -2,14 +2,24 @@ package co.uk.flansmods.common;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import co.uk.flansmods.client.model.ModelDriveable;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ToolType extends InfoType 
 {
 	public static ArrayList<ToolType> tools = new ArrayList<ToolType>();
+	
+	@SideOnly(value = Side.CLIENT)
+	/** The parachute model */
+	public ModelBase model;
 	
 	/** Boolean switches that decide whether the tool should heal players and / or driveables */
 	public boolean healPlayers = false, healDriveables = false;
@@ -23,6 +33,8 @@ public class ToolType extends InfoType
 	public ArrayList<ItemStack> rechargeRecipe = new ArrayList<ItemStack>();
 	/** Not yet implemented. For making tools chargeable with IC2 EU */
 	public int EUPerCharge = 0;
+	/** If true, then this tool will deploy a parachute upon use (and consume itself) */
+	public boolean parachute = false;
 	
 	public ToolType(TypeFile file) 
 	{
@@ -37,10 +49,16 @@ public class ToolType extends InfoType
 		super.read(split, file);
 		try
 		{
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
+				model = FlansMod.proxy.loadModel(split, shortName, ModelBase.class);
+			if(split[0].equals("Texture"))
+				texture = split[1];
+			if(split[0].equals("Parachute"))
+				parachute = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Heal") || split[0].equals("HealPlayers"))
-				healPlayers = Boolean.parseBoolean(split[1]);
+				healPlayers = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Repair") || split[0].equals("RepairVehicles"))
-				healDriveables = Boolean.parseBoolean(split[1]);
+				healDriveables = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("HealAmount") || split[0].equals("RepairAmount"))
 				healAmount = Integer.parseInt(split[1]);
 			if(split[0].equals("ToolLife") || split[0].equals("ToolUses"))
@@ -59,7 +77,7 @@ public class ToolType extends InfoType
 				}
 			}
 			if(split[0].equals("DestroyOnEmpty"))
-				destroyOnEmpty = Boolean.parseBoolean(split[1]);
+				destroyOnEmpty = Boolean.parseBoolean(split[1].toLowerCase());
 		} 
 		catch (Exception e)
 		{
@@ -77,5 +95,15 @@ public class ToolType extends InfoType
 			return;
 		rechargeRecipe.add(new ItemStack(item, 1, toolLife));
 		GameRegistry.addShapelessRecipe(new ItemStack(item, 1, 0), rechargeRecipe.toArray());
+	}
+	
+	public static ToolType getType(String shortName)
+	{
+		for(ToolType type : tools)
+		{
+			if(type.shortName.equals(shortName))
+				return type;
+		}
+		return null;
 	}
 }

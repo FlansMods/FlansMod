@@ -22,15 +22,12 @@ public class ModelMine extends ModelBase
 		buttonModel = new ModelRendererTurbo(this, 0, 0, 32, 8);
 		buttonModel.addBox(-0.5F, 1.5F, -0.5F, 1, 1, 1);
 	}
-
+	
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		for(ModelRendererTurbo mineModelBit : mineModel)
 			mineModelBit.render(f5);
 		buttonModel.render(f5);
-	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
 	}
 }

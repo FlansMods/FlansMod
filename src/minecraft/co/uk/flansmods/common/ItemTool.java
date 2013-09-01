@@ -67,6 +67,21 @@ public class ItemTool extends Item
 	@Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
+		if(type.parachute)
+		{
+			//Create a parachute, spawn it and put the player in it
+			if(!world.isRemote)
+			{
+				EntityParachute parachute = new EntityParachute(world, type, entityplayer);
+				world.spawnEntityInWorld(parachute);
+				entityplayer.mountEntity(parachute);
+			}
+			//Consume the item if not in creative mode
+			if(!entityplayer.capabilities.isCreativeMode)
+				itemstack.stackSize--;
+			return itemstack;
+		}
+		
     	//Raytracing
         float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
         float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
