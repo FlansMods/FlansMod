@@ -317,7 +317,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 						RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 						Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
 						//Calculate the origin of the bullets
-						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));
+						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));						
 						//Spawn a new bullet item
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(yOffset, new Vector3f((float)posX, (float)posY, (float)posZ), null), shootVec, (EntityLivingBase)riddenByEntity, gun.accuracy, gun.damage, bullet, 1.0F, driveable.getDriveableType()));
 						//Play the shoot sound

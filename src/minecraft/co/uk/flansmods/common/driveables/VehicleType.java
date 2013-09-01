@@ -24,6 +24,8 @@ public class VehicleType extends DriveableType
 	public float wheelRadius = 1.0F;
 	/** If this is true, the vehicle will drive from all wheels */
 	public boolean fourWheelDrive = false;
+	/** If true, then wheels will rotate as the vehicle drives */
+	public boolean rotateWheels = false;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -50,12 +52,16 @@ public class VehicleType extends DriveableType
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("HasDoor"))
-                hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
             if(split[0].equals("WheelRadius"))
             	wheelRadius = Float.parseFloat(split[1]);
             if(split[0].equals("FourWheelDrive"))
             	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
+            
+            //Visuals
+            if(split[0].equals("HasDoor"))
+                hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
+            if(split[0].equals("RotateWheels"))
+            	rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
 
 			//Armaments
 			if(split[0].equals("BarrelPosition"))

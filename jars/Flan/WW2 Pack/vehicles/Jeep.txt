@@ -6,20 +6,23 @@ ItemID 23488
 Icon Jeep
 Model ww2.Jeep
 Texture Jeep
+RotateWheels false
 //Third Person Camera Distance
 CameraDistance 5.0
 //Throttle
-MaxThrottle 0.5
+MaxThrottle 1.8
 MaxNegativeThrottle 0.0
 //Steering modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
 //Drag
-Drag 0.2
+Drag 1.0
 //Mass (In tons)
-Mass 0.2
+Mass 1.0
 //Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
-MomentOfInertia 2.0
+MomentOfInertia 10.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 0.3
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 0.35355
 //If true, then all wheels will apply drive forces
@@ -31,6 +34,7 @@ CargoSlots 36
 ShellSlots 0
 //Driver and passenger positions
 Driver 0 -6 -8
+RotatedDriverOffset 0 0 0
 Passengers 2
 Passenger 1 0 -6 8 core
 Passenger 2 -16 6 0 core -60 60 -30 60 browning Browning

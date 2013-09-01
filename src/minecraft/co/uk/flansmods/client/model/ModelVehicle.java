@@ -33,6 +33,8 @@ public class ModelVehicle extends ModelDriveable
 	
     public void render(float f5, EntityVehicle vehicle, float f)
     {
+    	boolean rotateWheels = vehicle.getVehicleType().rotateWheels;
+    	
 		//Rendering the body
         for(int i = 0; i < bodyModel.length; i++)
         {
@@ -42,19 +44,23 @@ public class ModelVehicle extends ModelDriveable
 		//Wheels
 		for(int i = 0; i < leftBackWheelModel.length; i++)
 		{
+			leftBackWheelModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 			leftBackWheelModel[i].render(f5);
 		}
 		for(int i = 0; i < rightBackWheelModel.length; i++)
 		{
+			rightBackWheelModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 			rightBackWheelModel[i].render(f5);
 		}
 		for(int i = 0; i < leftFrontWheelModel.length; i++)
 		{
+			leftFrontWheelModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 			leftFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
 			leftFrontWheelModel[i].render(f5);
 		}
 		for(int i = 0; i < rightFrontWheelModel.length; i++)
 		{
+			rightFrontWheelModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 			rightFrontWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
 			rightFrontWheelModel[i].render(f5);
 		}

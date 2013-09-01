@@ -28,8 +28,9 @@ public class DriveablePart
 	{
 		if(onFire)
 			health--;
-		if(health <= 0)
+		if(health <= 0 && maxHealth > 0)
 		{
+			dead = true;
 		}
 	}
 	
@@ -43,6 +44,23 @@ public class DriveablePart
 	{
 		health = tags.getInteger(type.getShortName() + "_Health");
 		onFire = tags.getBoolean(type.getShortName() + "_Fire");
+	}
+	
+	/** Called when a corner of this part hits the ground.
+	 * @return The amount of damage to do to the block */
+	public float smashIntoGround(float damage)
+	{
+		//In these cases, there was no collision, so don't damage this or the block
+		if(box == null || dead)
+			return 0;
+		if(!driveable.canHitPart(type))
+			return 0;
+		//This part is immortal. Smash that block into oblivion
+		if(maxHealth == 0)
+			return damage;
+		//As standard, take half damage and return the other half
+		health -= (int)(damage / 2F);
+		return damage / 2F;
 	}
 	
 	/** Called by bullets that may have hit the plane 

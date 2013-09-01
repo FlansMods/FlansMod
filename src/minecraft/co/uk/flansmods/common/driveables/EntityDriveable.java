@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
@@ -722,19 +723,25 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				
 				MovingObjectPosition hit = worldObj.clip(newOrigin.toVec3(), ray.toVec3());
 							
-				if(hit != null)
+				if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
 				{
 					Vector3f hitVec = new Vector3f(hit.hitVec);
 					
 					Vector3f normal = null;
+					int x = 0, y = 0, z = 0;
 					switch(hit.sideHit)
 					{
-					case 0 : normal = new Vector3f(0F, -1F, 0F); break;
-					case 1 : normal = new Vector3f(0F, 1F, 0F); break;
-					case 2 : normal = new Vector3f(0F, 0F, -1F); break;
-					case 3 : normal = new Vector3f(0F, 0F, 1F); break;
-					case 4 : normal = new Vector3f(-1F, 0F, 0F); break;
-					case 5 : normal = new Vector3f(1F, 0F, 0F); break;
+					case 0 : normal = new Vector3f(0F, -1F, 0F); y = -1; break;
+					case 1 : normal = new Vector3f(0F, 1F, 0F); y = 1; break;
+					case 2 : normal = new Vector3f(0F, 0F, -1F); z = -1; break;
+					case 3 : normal = new Vector3f(0F, 0F, 1F); z = 1; break;
+					case 4 : normal = new Vector3f(-1F, 0F, 0F); x = -1; break;
+					case 5 : normal = new Vector3f(1F, 0F, 0F); x = 1; break;
+					}
+					
+					if(worldObj.isBlockSolidOnSide(hit.blockX + x, hit.blockY + y, hit.blockZ + z, ForgeDirection.getOrientation(hit.sideHit).getOpposite()))
+					{
+						continue;
 					}
 					
 			        if(worldObj.isRemote && FlansMod.DEBUG)
@@ -745,10 +752,31 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
 			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
 			        
-			        applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	        
+			        applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	   
+			        
+			        //After taking this much force, the plane will take damage (scales with mass)
+			        float damagePoint = 2F;
+			        float damageModifier = 1F;
+			        
+			        if(forceMagnitude > damagePoint * type.mass)
+			        {
+			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
+			        	DriveablePart part = parts.get(point.part);
+			        	float smashyForceVsBlock = part.smashIntoGround(damageModifier * smashyForce);
+			        	int blockIDHit = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
+			        	Block blockHit = Block.blocksList[blockIDHit];
+			        	if(smashyForceVsBlock > blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ))
+			        	{
+			        		blockHit.dropBlockAsItem(worldObj, hit.blockX, hit.blockY, hit.blockZ, worldObj.getBlockMetadata(hit.blockX, hit.blockY, hit.blockZ), 1);
+							FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockIDHit);
+							worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
+			        	}
+			        }
 				}
 			}
 		}
+		
+		checkParts();
 		
 		//Apply motion to position
 		posX += motionX;

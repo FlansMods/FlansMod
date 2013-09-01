@@ -39,7 +39,7 @@ public class ModelJeep extends ModelVehicle
 		bodyModel[9].addBox(-4F, -4F, -1F, 8, 8, 2, 0.0F);			//Spare Wheel
 		bodyModel[9].rotateAngleY = 3.14159265F / 2F;
 		bodyModel[9].setRotationPoint(-25F, -6F, 0F);
-		bodyModel[10].addBox(-6F, -22F, -1F, 1, 14, 1, 0.0F);		//Gun pole
+		bodyModel[10].addBox(-6F, -22F, -0.5F, 1, 14, 1, 0.0F);		//Gun pole
 		
 		leftBackWheelModel = new ModelRendererTurbo[1];
 		leftBackWheelModel[0] = new ModelRendererTurbo(this, 90, 22, textureX, textureY);
@@ -71,11 +71,6 @@ public class ModelJeep extends ModelVehicle
 		browningModel[1][1] = new ModelRendererTurbo(this, 66, 79, textureX, textureY);
 		browningModel[1][2] = new ModelRendererTurbo(this, 80, 68, textureX, textureY);
 		browningModel[1][3] = new ModelRendererTurbo(this, 66, 64, textureX, textureY);	//Ammo box
-		
-		//browningModel[1][0].addBox(-1.5F, -1.5F, -4F, 3, 3, 12);
-		//browningModel[1][1].addBox(-0.5F, -0.5F, -12F, 1, 1, 10);
-		//browningModel[1][2].addBox(-1F, -3F, 8F, 2, 3, 2);		
-		//browningModel[1][3].addBox(-6F, -3F, -2F, 5, 4, 2);
 		
 		browningModel[1][0].addBox(-8F, -1.5F, -1.5F, 12, 3, 3);
 		browningModel[1][1].addBox(4F, -0.5F, -0.5F, 10, 1, 1);

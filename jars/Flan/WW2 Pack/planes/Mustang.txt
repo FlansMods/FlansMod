@@ -28,6 +28,8 @@ Lift 3.5
 Mass 3.5
 //Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
 MomentOfInertia 10.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 1.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
 RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
