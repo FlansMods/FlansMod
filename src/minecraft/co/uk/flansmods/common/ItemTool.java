@@ -9,6 +9,7 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -76,10 +77,37 @@ public class ItemTool extends Item
 				world.spawnEntityInWorld(parachute);
 				entityplayer.mountEntity(parachute);
 			}
-			//Consume the item if not in creative mode
-			if(!entityplayer.capabilities.isCreativeMode)
+			
+			//If not in creative and the tool should decay, damage it
+			if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
+				itemstack.setItemDamage(itemstack.getItemDamage() + 1);
+			//If the tool is damagable and is destroyed upon being used up, then destroy it
+			if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
 				itemstack.stackSize--;
+			//Our work here is done. Let's be off
 			return itemstack;
+		}
+		
+		if(type.remote)
+		{
+			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer, world.isRemote ? Side.CLIENT : Side.SERVER);
+			//If we have some remote explosives out there
+			if(data.remoteExplosives.size() > 0)
+			{
+				//Detonate it
+				data.remoteExplosives.get(0).detonate();
+				//Remove it from the list to detonate
+				data.remoteExplosives.remove(0);
+				
+				//If not in creative and the tool should decay, damage it
+				if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
+					itemstack.setItemDamage(itemstack.getItemDamage() + 1);
+				//If the tool is damagable and is destroyed upon being used up, then destroy it
+				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
+					itemstack.stackSize--;
+				//Our work here is done. Let's be off
+				return itemstack;
+			}
 		}
 		
     	//Raytracing

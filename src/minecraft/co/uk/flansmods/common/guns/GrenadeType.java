@@ -20,6 +20,8 @@ public class GrenadeType extends InfoType
 	public int meleeDamage = 1;
 	/** The maximum number of grenades that can be stacked together */
 	public int maxStackSize = 1;
+	/** After this time the grenade will despawn quietly. 0 means no despawn time */
+	public int despawnTime = 0;
 	
 	//Throwing
 	/** The delay between subsequent grenade throws */
@@ -62,6 +64,8 @@ public class GrenadeType extends InfoType
 	public int fuse = 0;
 	/**  If true, then anything attacking this entity will detonate it */
 	public boolean detonateWhenShot = false;
+	/** If true, then this grenade can be detonated by any remote detonator tool */
+	public boolean remote = false;
 	
 	//Detonation
 	/** The radius in which to spread fire */
@@ -70,6 +74,8 @@ public class GrenadeType extends InfoType
 	public float explosionRadius = 0F;
 	/** Whether the explosion can destroy blocks */
 	public boolean explosionBreaksBlocks = false;
+	/** Explosion damage vs various classes of entities */
+	public float explosionDamageVsLiving = 0F, explosionDamageVsDriveable = 0F;
 	/** The name of the item to drop upon detonating */
 	public String dropItemOnDetonate = null;
 	/** Sound to play upon detonation */
@@ -119,7 +125,7 @@ public class GrenadeType extends InfoType
 			if(split[0].equals("DropItemOnThrow"))
 				dropItemOnThrow = split[1];
 			if(split[0].equals("DetonateOnImpact"))
-				detonateOnImpact = Boolean.parseBoolean(split[1]);
+				detonateOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Bounciness"))
 				bounciness = Float.parseFloat(split[1]);
 			if(split[0].equals("HitEntityDamage"))
@@ -129,11 +135,11 @@ public class GrenadeType extends InfoType
 			if(split[0].equals("FallSpeed"))
 				fallSpeed = Float.parseFloat(split[1]);
 			if(split[0].equals("BreaksGlass"))
-				breaksGlass = Boolean.parseBoolean(split[1]);
+				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("PenetratesEntities"))
-				penetratesEntities = Boolean.parseBoolean(split[1]);
+				penetratesEntities = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("PenetratesBlocks"))
-				penetratesBlocks = Boolean.parseBoolean(split[1]);
+				penetratesBlocks = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("HitBoxSize"))
 				hitBoxSize = Float.parseFloat(split[1]);
 			if(split[0].equals("BounceSound"))
@@ -147,19 +153,27 @@ public class GrenadeType extends InfoType
 			if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
 			if(split[0].equals("DetonateWhenShot"))
-				detonateWhenShot = Boolean.parseBoolean(split[1]);
+				detonateWhenShot = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("FireRadius"))
 				fireRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionRadius"))
 				explosionRadius = Float.parseFloat(split[1]);
+			
+			if(split[0].equals("ExplosionDamageVsLiving"))
+				explosionRadius = Float.parseFloat(split[1]);
+			if(split[0].equals("ExplosionDamageVsLiving"))
+				explosionRadius = Float.parseFloat(split[1]);
+			if(split[0].equals("ExplosionDamageVsLiving"))
+				explosionRadius = Float.parseFloat(split[1]);
+			
 			if(split[0].equals("ExplosionBreaksBlocks"))
-				explosionBreaksBlocks = Boolean.parseBoolean(split[1]);
+				explosionBreaksBlocks = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("DropItemOnDetonate"))
 				dropItemOnDetonate = split[1];
 			if(split[0].equals("DetonateSound"))
 				detonateSound = split[1];
 			if(split[0].equals("HasTrailParticles"))
-				trailParticles = Boolean.parseBoolean(split[1]);	
+				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());	
 			if(split[0].equals("TrailParticles"))
 				trailParticleType = split[1];
 			if(split[0].equals("NumExplodeParticles"))
@@ -171,7 +185,11 @@ public class GrenadeType extends InfoType
 			if(split[0].equals("SmokeParticles"))
 				smokeParticleType = split[1];
 			if(split[0].equals("SpinWhenThrown"))
-				spinWhenThrown = Boolean.parseBoolean(split[1]);
+				spinWhenThrown = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Remote"))
+				remote = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("DespawnTime"))
+				despawnTime = Integer.parseInt(split[1]);		
 		} 
 		catch (Exception e)
 		{

@@ -258,7 +258,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				}
 				//Calculate the hit damage
-				int hitDamage = damage * type.damageVsLiving;
+				int hitDamage = damage * (checkEntity instanceof EntityDriveable ? type.damageVsDriveable : type.damageVsLiving);
 				//Create a damage source object
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	
@@ -371,7 +371,15 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		super.setDead();
 		if (type.explosion > 0)
 		{
-			worldObj.createExplosion(owner, posX, posY, posZ, type.explosion, FlansMod.explosions);
+	        if(owner instanceof EntityPlayer)
+	        {
+	        	FlansModExplosion explosion = new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosion);
+		        explosion.isFlaming = false;
+		        explosion.isSmoking = FlansMod.explosions;
+		        explosion.doExplosionA();
+		        explosion.doExplosionB(true);
+	        }
+	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosion, FlansMod.explosions);
 		}
 		if (type.fire > 0)
 		{

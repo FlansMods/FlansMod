@@ -35,6 +35,8 @@ public class ToolType extends InfoType
 	public int EUPerCharge = 0;
 	/** If true, then this tool will deploy a parachute upon use (and consume itself) */
 	public boolean parachute = false;
+	/** If true, then this will detonate the least recently placed remote explosive */
+	public boolean remote = false;
 	
 	public ToolType(TypeFile file) 
 	{
@@ -55,6 +57,8 @@ public class ToolType extends InfoType
 				texture = split[1];
 			if(split[0].equals("Parachute"))
 				parachute = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ExplosiveRemote"))
+				remote = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Heal") || split[0].equals("HealPlayers"))
 				healPlayers = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Repair") || split[0].equals("RepairVehicles"))

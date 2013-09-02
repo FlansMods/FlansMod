@@ -373,7 +373,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void setDead()
 	{
-		System.out.println("Aw hell no.");
+		super.setDead();
 	}
 	
 	@Override

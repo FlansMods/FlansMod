@@ -83,7 +83,7 @@ public class DriveablePart
 		//If the bullet hits, perform damage code here, and then tell the bullet that it hit
 		if(bullet != null && hit)
 		{
-			health -= bullet.damage * bullet.type.damageVsLiving;
+			health -= bullet.damage * bullet.type.damageVsDriveable;
 			if(bullet.type.fire > 0)
 				onFire = true;
 		}

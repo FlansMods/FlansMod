@@ -73,6 +73,14 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	{
 		super.onUpdate();
 		
+		//Quiet despawning
+		if(type.despawnTime > 0 && ticksExisted > type.despawnTime)
+		{
+			detonated = true;
+			setDead();
+			return;
+		}
+		
 		//Visuals
 		if(worldObj.isRemote)
 		{
@@ -264,7 +272,15 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
-			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, FlansMod.explosions && type.explosionBreaksBlocks);
+	        if(thrower instanceof EntityPlayer)
+	        {
+	        	FlansModExplosion explosion = new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius);
+		        explosion.isFlaming = false;
+		        explosion.isSmoking = FlansMod.explosions && type.explosionBreaksBlocks;
+		        explosion.doExplosionA();
+		        explosion.doExplosionB(true);
+	        }
+	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, FlansMod.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire

@@ -55,9 +55,14 @@ public class ItemGrenade extends Item {
 		{
 			//Delay the next throw / weapon fire / whatnot
 			data.shootTime = type.throwDelay;
+			//Create a new grenade entity
+			EntityGrenade grenade = new EntityGrenade(world, type, player);
 			//Spawn the entity server side
 			if(!world.isRemote)
-				world.spawnEntityInWorld(new EntityGrenade(world, type, player));
+				world.spawnEntityInWorld(grenade);
+			//If this can be remotely detonated, add it to the players detonate list
+			if(type.remote)
+				data.remoteExplosives.add(grenade);
 			//Consume an item
 			if(!player.capabilities.isCreativeMode)
 				stack.stackSize--;
