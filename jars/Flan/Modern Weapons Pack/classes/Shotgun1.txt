@@ -3,8 +3,5 @@ ShortName shotgun1
 AddItem w1200
 AddItem usp
 AddItem mwKnife
-AddItem w1200Ammo
-AddItem w1200Ammo
-AddItem w1200Ammo
-AddItem uspAmmo
-AddItem uspAmmo
+AddItem w1200Ammo 3
+AddItem uspAmmo 2

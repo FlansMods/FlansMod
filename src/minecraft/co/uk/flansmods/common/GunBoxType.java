@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.GunType;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -45,51 +49,20 @@ public class GunBoxType extends InfoType
 	//This way unconverted content packs will still work in SP at least
 	public static int nextDefaultID;
 
-	public GunBoxType(BufferedReader file, String contentPack)
+	public GunBoxType(TypeFile file)
 	{
-		super(contentPack);
-		gunBoxID = nextDefaultID++;
-		do
+		super(file);
+		//Make sure NumGuns is read before anything else
+		for(String line : file.lines)
 		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
+			if(line == null)
 				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
+			if(line.startsWith("//"))
 				continue;
 			String[] split = line.split(" ");
-			if (split.length < 2)
+			if(split.length < 2)
 				continue;
-			read(split, file);
-		} while (true);
-		
-		gunBoxMap.put(this.shortName, this);
-		shortNameList.add(this.shortName);
-	}
-
-	protected void read(String[] split, BufferedReader file)
-	{
-		super.read(split, file);
-		try
-		{		
-			if (split[0].equals("Material"))
-				material = getMaterial(split[1]);
-			if (split[0].equals("TopTexture"))
-				topTexturePath = split[1];
-			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = split[1];
-			if (split[0].equals("SideTexture"))
-				sideTexturePath = split[1];
-			if (split[0].equals("GunBoxID") || split[0].equals("BlockID"))
-				gunBoxID = Integer.parseInt(split[1]);
+			
 			if (split[0].equals("NumGuns"))
 			{
 				numGuns = Integer.parseInt(split[1]);
@@ -106,6 +79,35 @@ public class GunBoxType extends InfoType
 					altBulletParts[i] = new ArrayList<ItemStack>();
 				}
 			}
+		}
+	}
+	
+	@Override
+	protected void read(TypeFile file)
+	{
+		super.read(file);
+		if(gunBoxID == 0)
+			gunBoxID = nextDefaultID++;		
+		gunBoxMap.put(this.shortName, this);
+		shortNameList.add(this.shortName);
+	}
+
+	@Override
+	protected void read(String[] split, TypeFile file)
+	{
+		super.read(split, file);
+		try
+		{		
+			if (split[0].equals("Material"))
+				material = getMaterial(split[1]);
+			if (split[0].equals("TopTexture"))
+				topTexturePath = split[1];
+			if (split[0].equals("BottomTexture"))
+				bottomTexturePath = split[1];
+			if (split[0].equals("SideTexture"))
+				sideTexturePath = split[1];
+			if (split[0].equals("GunBoxID") || split[0].equals("BlockID"))
+				gunBoxID = Integer.parseInt(split[1]);
 			if (split[0].equals("AddGun"))
 			{
 				if (gunParts[nextGun] == null)

@@ -42,6 +42,7 @@ public class PacketTeamInfo extends FlanPacketCommon
         	else
         	{
         		data.writeUTF(TeamsManager.getInstance().currentGametype.name);
+        		data.writeUTF(TeamsManager.getInstance().currentMap.name);
         		if(TeamsManager.getInstance().currentGametype.sortScoreboardByTeam())
         		{
         			data.writeBoolean(true);

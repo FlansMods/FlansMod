@@ -4,7 +4,7 @@ ShortName flakvierling
 Ammo flakvierlingAmmo
 Icon Flakvierling
 ItemID 23286
-Model Flakvierling
+Model ww2.Flakvierling
 //Place the texture .png in the skins folder
 Texture Flakvierling
 NumBarrels 4

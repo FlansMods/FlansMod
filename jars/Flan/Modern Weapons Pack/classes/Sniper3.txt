@@ -4,8 +4,5 @@ AddItem r700
 AddItem desertEagle
 AddItem mwKnife
 AddItem mwBinoculars
-AddItem r700Ammo
-AddItem r700Ammo
-AddItem r700Ammo
-AddItem desertEagleAmmo
-AddItem desertEagleAmmo
+AddItem r700Ammo 3
+AddItem desertEagleAmmo 2

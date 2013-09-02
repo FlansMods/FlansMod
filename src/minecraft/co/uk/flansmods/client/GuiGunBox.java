@@ -1,5 +1,7 @@
 package co.uk.flansmods.client;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -18,11 +20,19 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
 import cpw.mods.fml.client.FMLClientHandler;
 
-
 public class GuiGunBox extends GuiScreen
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
-
+	private InventoryPlayer inventory;
+	private Minecraft mc;
+	private static RenderItem itemRenderer = new RenderItem();
+	private GunBoxType type;
+	private int page;
+	private int guiOriginX;
+	private int guiOriginY;
+	private int scroll;
+	private long lastTime;
+	
 	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{
 		inventory = playerinventory;
@@ -31,6 +41,7 @@ public class GuiGunBox extends GuiScreen
 		page = 0;
 	}
 
+	@Override
 	public void drawScreen(int i, int j, float f)
 	{
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
@@ -164,6 +175,8 @@ public class GuiGunBox extends GuiScreen
 			return;
 		itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
+		GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
 	protected void mouseClicked(int i, int j, int k)
@@ -221,6 +234,7 @@ public class GuiGunBox extends GuiScreen
 		}
 	}
 
+	@Override
 	protected void keyTyped(char c, int i)
 	{
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.keyCode)
@@ -229,18 +243,9 @@ public class GuiGunBox extends GuiScreen
 		}
 	}
 
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;
 	}
-
-	private InventoryPlayer inventory;
-	private Minecraft mc;
-	private static RenderItem itemRenderer = new RenderItem();
-	private GunBoxType type;
-	private int page;
-	private int guiOriginX;
-	private int guiOriginY;
-	private int scroll;
-	private long lastTime;
 }

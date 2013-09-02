@@ -3,9 +3,5 @@ ShortName britishAssault1
 AddItem sten
 AddItem webley
 AddItem ww2Knife
-AddItem stenAmmo
-AddItem stenAmmo
-AddItem stenAmmo
-AddItem stenAmmo
-AddItem webleyAmmo
-AddItem webleyAmmo
+AddItem stenAmmo 4
+AddItem webleyAmmo 2

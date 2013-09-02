@@ -3,9 +3,5 @@ ShortName lightAssault3
 AddItem uzi
 AddItem usp
 AddItem mwKnife
-AddItem uziAmmo
-AddItem uziAmmo
-AddItem uziAmmo
-AddItem uziAmmo
-AddItem uziAmmo
+AddItem uziAmmo 5
 AddItem uspAmmo

@@ -3,8 +3,5 @@ ShortName lightAssault5
 AddItem p90
 AddItem m9
 AddItem mwKnife
-AddItem p90Ammo
-AddItem p90Ammo
-AddItem p90Ammo
-AddItem m9Ammo
-AddItem m9Ammo
+AddItem p90Ammo 3
+AddItem m9Ammo 2

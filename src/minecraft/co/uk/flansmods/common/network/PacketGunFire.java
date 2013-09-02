@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
-import co.uk.flansmods.common.ItemGun;
+import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketGunFire extends FlanPacketCommon 

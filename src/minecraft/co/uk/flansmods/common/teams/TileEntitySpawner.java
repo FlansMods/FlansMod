@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.ItemAAGun;
 import co.uk.flansmods.common.ItemPlane;
 import co.uk.flansmods.common.ItemVehicle;
+import co.uk.flansmods.common.guns.ItemAAGun;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -79,6 +79,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 				newBase.addObject(this);
 			}
 		}
+		if(worldObj.getBlockId(xCoord, yCoord, zCoord) != FlansMod.spawnerID)
+		{
+			destroy();
+			return;
+		}
 		if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
 			return;
 		for(int i = itemEntities.size() - 1; i >= 0; i--)
@@ -129,8 +134,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     {
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
-		if(base != null)
-			nbt.setInteger("Base", base.getID());
+		nbt.setInteger("Base", baseID);
 		nbt.setInteger("dim", worldObj.provider.dimensionId);
 		nbt.setInteger("numStacks", stacksToSpawn.size());
 		for(int i = 0; i < stacksToSpawn.size(); i++)
@@ -187,6 +191,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	public void setBase(ITeamBase b) 
 	{
 		base = b;
+		if(b != null)
+			baseID = b.getID();
 		PacketDispatcher.sendPacketToAllInDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 

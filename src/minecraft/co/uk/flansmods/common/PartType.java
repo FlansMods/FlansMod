@@ -4,78 +4,64 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 
-public class PartType extends InfoType
-{
+public class PartType extends InfoType {
+	/** Category (TODO : Replace with Enum) */
 	public int category;
+	/** Max stack size of item */
 	public int stackSize;
-	public int engineSpeed = 1;
+	/** (Engine) Multiplier applied to the thrust of the driveable */
+	public float engineSpeed = 1.0F;
+	/** (Engine) Rate at which this engine consumes fuel */
+	public float fuelConsumption = 1.0F;
+	/** (Fuel) The amount of fuel this fuel tank gives */
 	public int fuel = 0;
+
+	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
 	public static PartType defaultEngine;
-	private static int lastIconIndex = 0;
+	/** The list of all PartTypes */
 	public static List<PartType> parts = new ArrayList<PartType>();
 
-	public PartType(BufferedReader file, String contentPack)
-	{
-		super(contentPack);
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+	public PartType(TypeFile file) {
+		super(file);
 		parts.add(this);
-		if (category == 2 && defaultEngine == null)
-			defaultEngine = this;
-		iconIndex = lastIconIndex++;
 	}
 
-	protected void read(String[] split, BufferedReader file)
-	{
+	@Override
+	protected void read(TypeFile file) {
+		super.read(file);
+		if (category == 2 && defaultEngine == null)
+			defaultEngine = this;
+	}
+
+	@Override
+	protected void read(String[] split, TypeFile file) {
 		super.read(split, file);
-		try
-		{
+		try {
 			if (split[0].equals("Category"))
 				category = getCategory(split[1]);
 			if (split[0].equals("StackSize"))
 				stackSize = Integer.parseInt(split[1]);
 			if (split[0].equals("EngineSpeed"))
-				engineSpeed = Integer.parseInt(split[1]);
+				engineSpeed = Float.parseFloat(split[1]);
+			if (split[0].equals("FuelConsumption"))
+				fuelConsumption = Float.parseFloat(split[1]);
 			if (split[0].equals("Fuel"))
 				fuel = Integer.parseInt(split[1]);
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			System.out.println("Reading part file failed.");
 			e.printStackTrace();
 		}
 	}
 
-	public static PartType getPart(String s)
-	{
-		for (PartType part : parts)
-		{
+	public static PartType getPart(String s) {
+		for (PartType part : parts) {
 			if (part.shortName.equals(s))
 				return part;
 		}
 		return null;
 	}
 
-	private int getCategory(String s)
-	{
+	private int getCategory(String s) {
 		if (s.equals("Cockpit"))
 			return 0;
 		if (s.equals("Wing"))

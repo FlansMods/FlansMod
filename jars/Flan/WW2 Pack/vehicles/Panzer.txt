@@ -2,7 +2,7 @@ Name Panzer IV
 ShortName Panzer
 ItemID 23490
 Icon Panzer
-Model Panzer
+Model ww2.Panzer
 Texture Panzer
 MaxSpeed 1.0
 //Delays are in ticks or 1/20ths of seconds

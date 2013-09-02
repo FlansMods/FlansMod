@@ -2039,14 +2039,15 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
-			if(rotateAngleZ != 0.0F)
-			{
-				GL11.glRotatef(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
-			}
 			if(rotateAngleY != 0.0F)
 			{
 				GL11.glRotatef(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 			}
+			if(rotateAngleZ != 0.0F)
+			{
+				GL11.glRotatef(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+			}
+
 			if(rotateAngleX != 0.0F)
 			{
 				GL11.glRotatef(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);

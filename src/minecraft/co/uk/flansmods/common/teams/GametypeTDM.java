@@ -165,7 +165,6 @@ public class GametypeTDM extends Gametype
 			getPlayerData(player).playerClass = null;
 			getPlayerData(player).newPlayerClass = null;
 		}
-		
 		sendClassMenuToPlayer((EntityPlayerMP)player);
 		if(team != previousTeam)
 			teamsManager.forceRespawn(player);

@@ -7,8 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelMG;
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityMG;
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityMG;
 
 public class RenderMG extends Render
 {

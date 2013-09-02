@@ -1,6 +1,10 @@
 package co.uk.flansmods.common;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.EntityPlayer;
+import co.uk.flansmods.common.guns.EntityGrenade;
+import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
@@ -19,10 +23,18 @@ public class FlansModPlayerData
 	public double spawnX;
 	public double spawnY;
 	public double spawnZ;
+
+	public float prevRotationRoll;
+	public float rotationRoll;
+	
+	/** When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates */
+	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
+	
 	//For use by the currentGametype
 	public int score;
 	public int kills;
 	public int deaths;
+	public boolean out; //For Nerf gametypes
 
 	
 	//TODO Unknown purpose!

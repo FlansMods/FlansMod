@@ -11,8 +11,10 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +27,7 @@ import net.minecraft.network.packet.Packet6SpawnPosition;
 import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
@@ -46,22 +49,23 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import co.uk.flansmods.common.BulletType;
-import co.uk.flansmods.common.EntityDamageSourceGun;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
-import co.uk.flansmods.common.GunType;
-import co.uk.flansmods.common.ItemGun;
-import co.uk.flansmods.common.ItemAAGun;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPlane;
 import co.uk.flansmods.common.ItemVehicle;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityDamageSourceGun;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketPlayerSpawn;
 import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker
@@ -97,6 +101,7 @@ public class TeamsManager implements IPlayerTracker
 		new GametypeConquest();
 		new GametypeDM();
 		new GametypeCTF();
+		new GametypeNerf();
 		//-----
 	}
 	
@@ -386,7 +391,8 @@ public class TeamsManager implements IPlayerTracker
 		reset();
 		//Read the teams dat file
 		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
-		checkFileExists(file);
+		if(!checkFileExists(file))
+			return;
 		try
 		{
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
@@ -517,7 +523,7 @@ public class TeamsManager implements IPlayerTracker
 		}
 	}
 	
-	private void checkFileExists(File file)
+	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())
 		{
@@ -530,7 +536,9 @@ public class TeamsManager implements IPlayerTracker
 				FlansMod.log("Failed to create file");
 				FlansMod.log(file.getAbsolutePath());
 			}
+			return false;
 		}	
+		return true;
 	}
 	
 	public ITeamBase getBase(int ID)
@@ -586,34 +594,41 @@ public class TeamsManager implements IPlayerTracker
 	{
 		if(currentGametype != null)
 		{		
-			resetInventory(player);
-			if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
-				player.setGameType(EnumGameType.ADVENTURE);
-			Vec3 spawnPoint = currentGametype.getSpawnPoint((EntityPlayerMP)player);
+			EntityPlayerMP playerMP = ((EntityPlayerMP)player);
+			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(playerMP);
+			if(data.team == Team.spectators && MinecraftServer.getServerConfigurationManager(playerMP.mcServer).areCommandsAllowed(playerMP.username))
+			{
+				return;
+			}
+			Vec3 spawnPoint = currentGametype.getSpawnPoint(playerMP);
 			if(spawnPoint != null)
 			{
-				EntityPlayerMP playerMP = ((EntityPlayerMP)player);
-				
-                /*if (!playerMP.playerNetServerHandler.connectionClosed)
-                {
-                    EnderTeleportEvent event = new EnderTeleportEvent(playerMP, spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-                    event.attackDamage = 0;
-                    if (!MinecraftForge.EVENT_BUS.post(event)){
-                    	playerMP.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
-                    	playerMP.fallDistance = 0.0F;
-                    	playerMP.attackEntityFrom(DamageSource.fall, event.attackDamage);
-                    }
-                }*/
-	
-				FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
+				player.setSpawnChunk(new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), true);
+				data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				//FlansModPlayerHandler.getPlayerData(playerMP).setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-				//playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-				//playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F);
+
+				if(data.playerClass != null && !data.playerClass.horse)
+				{
+					EntityHorse horse = new EntityHorse(playerMP.worldObj);
+					
+					NBTTagCompound tags = new NBTTagCompound();
+					horse.writeToNBT(tags);
+					tags.setBoolean("Tame", true);
+					tags.setInteger("Temper", 0);
+					tags.setString("OwnerName", playerMP.username);
+					tags.setTag("SaddleItem", new ItemStack(Item.saddle).writeToNBT(new NBTTagCompound("SaddleItem")));
+					tags.setInteger("Type", 0);
+					tags.setInteger("Variant", 0);
+					horse.readFromNBT(tags);
+					horse.setPosition(playerMP.posX, playerMP.posY, playerMP.posZ);
+					playerMP.worldObj.spawnEntityInWorld(horse);
+					playerMP.mountEntity(horse);
+				}
 				
-		}
-			
-			
+				if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+					player.setGameType(EnumGameType.ADVENTURE);
+				resetInventory(player);	
+			}
 			currentGametype.playerRespawned((EntityPlayerMP)player);
 		}
 	}
@@ -623,6 +638,8 @@ public class TeamsManager implements IPlayerTracker
 		player.inventory.armorInventory = new ItemStack[4];
 		player.inventory.mainInventory = new ItemStack[36];
 		player.heal(9001);
+		if(FlansMod.forceAdventureMode && player.capabilities.allowEdit)
+			player.setGameType(EnumGameType.ADVENTURE);
 		onPlayerRespawn(player);
 	}
 	
@@ -717,6 +734,10 @@ public class TeamsManager implements IPlayerTracker
 		for(ItemStack stack : playerClass.startingItems)
 		{
 			player.inventory.addItemStackToInventory(stack.copy());
+			//Load up as many guns as possible
+			if(stack.getItem() instanceof ItemBullet)
+			{
+			}
 		}
 	}
 	

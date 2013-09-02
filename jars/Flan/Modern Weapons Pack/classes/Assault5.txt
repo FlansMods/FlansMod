@@ -3,8 +3,5 @@ ShortName assault5
 AddItem m14
 AddItem m1911
 AddItem mwKnife
-AddItem m14Ammo
-AddItem m14Ammo
-AddItem m14Ammo
-AddItem m1911Ammo
-AddItem m1911Ammo
+AddItem m14Ammo 3
+AddItem m1911Ammo 2
