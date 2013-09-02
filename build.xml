@@ -204,7 +204,7 @@
 			<fileset dir="jars/Flan/Modern Weapons Pack"/>
 		</copy>
 		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}/mw" failonerror="false">
-			<fileset dir="${reobfmodels.dir}/modernweapons"/>
+			<fileset dir="${reobfmodels.dir}/mw"/>
 		</copy>
 		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
 		
