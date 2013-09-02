@@ -21,7 +21,7 @@ public class DriveableData implements IInventory
 	public ItemStack[] bombs;
 	public ItemStack[] cargo;
 	public ItemStack fuel;
-	public int fuelInTank;
+	public float fuelInTank;
 		
 	public DriveableData(NBTTagCompound tags)
 	{
@@ -81,7 +81,7 @@ public class DriveableData implements IInventory
 		}
 		if(fuel != null)
 			tag.setCompoundTag("Fuel", fuel.writeToNBT(new NBTTagCompound()));
-		tag.setInteger("FuelInTank", fuelInTank);
+		tag.setInteger("FuelInTank", (int)fuelInTank);
     }
 	
 	public int getSizeInventory() 

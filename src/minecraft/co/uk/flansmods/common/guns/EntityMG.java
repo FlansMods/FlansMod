@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -414,4 +415,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(type.itemID, 1, 0);
+		return stack;
+    }
 }

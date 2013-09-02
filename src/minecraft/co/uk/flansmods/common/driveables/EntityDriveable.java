@@ -735,10 +735,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					{
 					case 0 : normal = new Vector3f(0F, -1F, 0F); y = -1; break;
 					case 1 : normal = new Vector3f(0F, 1F, 0F); y = 1; break;
-					case 2 : normal = new Vector3f(0F, 0F, -1F); z = -1; break;
-					case 3 : normal = new Vector3f(0F, 0F, 1F); z = 1; break;
-					case 4 : normal = new Vector3f(-1F, 0F, 0F); x = -1; break;
-					case 5 : normal = new Vector3f(1F, 0F, 0F); x = 1; break;
+					case 2 : normal = new Vector3f(0F, 0F, -1F); z = 1; break;
+					case 3 : normal = new Vector3f(0F, 0F, 1F); z = -1; break;
+					case 4 : normal = new Vector3f(-1F, 0F, 0F); x = 1; break;
+					case 5 : normal = new Vector3f(1F, 0F, 0F); x = -1; break;
 					}
 					
 					if(worldObj.isBlockSolidOnSide(hit.blockX + x, hit.blockY + y, hit.blockZ + z, ForgeDirection.getOrientation(hit.sideHit).getOpposite()))

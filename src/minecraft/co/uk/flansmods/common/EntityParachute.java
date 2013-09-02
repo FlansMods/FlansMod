@@ -7,7 +7,9 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData
@@ -85,4 +87,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		type = ToolType.getType(data.readUTF());
 	}
 
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(type.itemID, 1, 0);
+		return stack;
+    }
 }

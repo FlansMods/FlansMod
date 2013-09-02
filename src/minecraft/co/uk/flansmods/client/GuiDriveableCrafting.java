@@ -243,7 +243,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			}
 			
 			//Find the stack of engines that is fastest but which also has enough for this driveable
-			int bestEngineSpeed = -1;
+			float bestEngineSpeed = -1F;
 			ItemStack bestEngineStack = null;
 			for(PartType part : engines.keySet())
 			{

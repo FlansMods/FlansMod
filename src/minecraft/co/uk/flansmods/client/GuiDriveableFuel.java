@@ -48,13 +48,13 @@ public class GuiDriveableFuel extends GuiContainer
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		int fuelTankSize = plane.getDriveableType().fuelTankSize;
-		int fuelInTank = plane.driveableData.fuelInTank;
+		float fuelInTank = plane.driveableData.fuelInTank;
 		if(plane.fuelling)
 			drawTexturedModalRect(j + 15, k + 44, 176 + 15 * (anim % 4), 0, 15, 16);
 		if(fuelInTank < fuelTankSize / 8 && (anim % 4) > 1)
 			drawTexturedModalRect(j + 16, k + 25, 176, 16, 6, 6);
 		if(fuelInTank > 0)
-			drawTexturedModalRect(j + 26, k + 21, 0, 161, (129 * fuelInTank) / fuelTankSize, 15);
+			drawTexturedModalRect(j + 26, k + 21, 0, 161, (int)((129 * fuelInTank) / fuelTankSize), 15);
     }
 	
 	protected void mouseClicked(int i, int j, int k)

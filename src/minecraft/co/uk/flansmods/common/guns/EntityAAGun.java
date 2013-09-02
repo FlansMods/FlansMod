@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -462,5 +463,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
     public boolean canRiderInteract()
     {
         return false;
+    }
+	
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(type.itemID, 1, 0);
+		return stack;
     }
 }

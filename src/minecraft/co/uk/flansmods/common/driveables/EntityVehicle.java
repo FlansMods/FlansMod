@@ -21,6 +21,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.common.FlansMod;
@@ -411,7 +412,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 1F * type.mass;
+			float sensitivityAdjust = 1F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
 			
 			//Yaw according to the wheelsYaw
 			float yaw = wheelsYaw * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;	
@@ -426,7 +427,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				
 		//Apply thrust
 		{
-			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
+			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * getDriveableData().engine.engineSpeed;
 			applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
 			applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
 			applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
@@ -466,67 +467,64 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		moveDriveable();
 		
 		
-        /*
 		//Fuel Handling
-		if(getPlaneData().fuel != null && getPlaneData().fuel.stackSize <= 0)
-			getPlaneData().fuel = null;
-		if(!fuelling && getPlaneData().fuel != null && getPlaneData().fuel.stackSize > 0 && getPlaneData().fuel.getItem() instanceof ItemPart && ((ItemPart)getPlaneData().fuel.getItem()).type.category == 9)// && onGround && getSpeedXYZ() < 0.1D)
-		{
-			fuelling = true;
-		}
+		DriveableData data = getDriveableData();
+		
+		//If the fuel item has stack size <= 0, delete it
+		if(data.fuel != null && data.fuel.stackSize <= 0)
+			data.fuel = null;
+		
+		//Work out if we are fuelling (from a Flan's Mod fuel item)
+		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
+		
+		//If we are fuelling
 		if(fuelling)
 		{
-			if(getPlaneData().fuel == null || getPlaneData().fuel.stackSize <= 0 || getPlaneData().fuelInTank >= type.tankSize)// || !onGround || getSpeedXYZ() > 0.1D)
+			int damage = data.fuel.getItemDamage();
+			//Consume 10 points of fuel (1 damage)
+			data.fuel.setItemDamage(damage + 1);
+			//Put 10 points of fuel 
+			data.fuelInTank += 10;
+			//If we have finished this fuel item
+			if(damage >= data.fuel.getMaxDamage())
 			{
-				fuelling = false;
-			}
-			else
-			{
-				int damage = getPlaneData().fuel.getItemDamage();
-				getPlaneData().fuel.setItemDamage(damage + 1);
-				getPlaneData().fuelInTank += 5;
-				if(damage >= ((ItemPart)getPlaneData().fuel.getItem()).type.fuel)
-				{
-					getPlaneData().fuel.setItemDamage(0);
-					getPlaneData().fuel.stackSize--;
-					if(getPlaneData().fuel.stackSize <= 0)
-						getPlaneData().setInventorySlotContents(getPlaneData().getFuelSlot(), null);
-					fuelling = false;
-				}	
-			}
+				//Reset the damage to 0
+				data.fuel.setItemDamage(0);
+				//Consume one item
+				data.fuel.stackSize--;
+				//If we consumed the last one, destroy the stack
+				if(data.fuel.stackSize <= 0)
+					data.fuel = null;
+			}	
 		}
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && getPlaneData().fuel != null && getPlaneData().fuel.stackSize > 0)
+		//Check fuel slot for builcraft buckets and if found, take fuel from them
+		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
 		{
-			if(getPlaneData().fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && getPlaneData().fuelInTank+500 <= type.tankSize)
+			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
 			{
-				getPlaneData().fuelInTank += 500;
-				getPlaneData().fuel = new ItemStack(Item.bucketEmpty);
+				data.fuelInTank += 500;
+				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
-			else if(getPlaneData().fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && getPlaneData().fuelInTank+1000 <= type.tankSize)
+			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
 			{
-				getPlaneData().fuelInTank += 1000;
-				getPlaneData().fuel = new ItemStack(Item.bucketEmpty);
+				data.fuelInTank += 1000;
+				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
 		}
 
 		//Sounds
-		if(worldObj.isRemote)
+		//Starting sound
+		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0)
 		{
-			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
-			{
-				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.startSound, false));
-				soundPosition = type.startSoundLength;
-			}
-			if (propSpeed > 1 && soundPosition == 0)
-			{
-				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.propSound, false));
-				soundPosition = type.propSoundLength;
-			}
-	
-			if(soundPosition > 0)
-				soundPosition--;
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
+			soundPosition = type.startSoundLength;
 		}
-		*/
+		//Flying sound
+		if (throttle > 0.2F && soundPosition == 0)
+		{
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
+			soundPosition = type.engineSoundLength;
+		}
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
@@ -548,18 +546,33 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     	if(part.box == null)
     		return;
     	
-    	Vector3f midPoint = part.box.getCentre();
-    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
+    	DriveableData data = getDriveableData();
     	
-    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
-    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelRadius);
-    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
-    	
-    	if(worldObj.getBlockId(x, y, z) > 0)
-    	{
-    		Vector3f xAxis = axes.getXAxis();
-    		applyForce(globalMidPoint, (Vector3f)new Vector3f(xAxis.x, 0F, xAxis.z).scale(thrust));
-    	}
+		//If the player driving this is in creative, then we can thrust, no matter what
+		boolean canThrustCreatively = seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+		//Otherwise, check the fuel tanks!
+		if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+		{
+			//Find the block we are resting on
+			Vector3f midPoint = part.box.getCentre();
+	    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
+	    	
+	    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
+	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelRadius);
+	    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
+	    	
+	    	//If its solid on top
+	    	if(worldObj.isBlockSolidOnSide(x, y, z, ForgeDirection.UP))
+	    	{
+	    		//Apply the thrust
+	    		Vector3f xAxis = axes.getXAxis();
+	    		applyForce(globalMidPoint, (Vector3f)new Vector3f(xAxis.x, 0F, xAxis.z).scale(thrust));				
+	    	}
+	    	
+			//If we can't thrust creatively, we must thrust using fuel. Nom.
+			if(!canThrustCreatively)
+				data.fuelInTank -= data.engine.fuelConsumption * throttle;
+		}
     }
 
     public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)

@@ -2,12 +2,15 @@ package co.uk.flansmods.common.teams;
 
 import java.util.ArrayList;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -170,5 +173,12 @@ public class EntityFlag extends Entity implements ITeamObject {
     	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
         return false;
+    }
+	
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(FlansMod.flag.itemID, 1, 0);
+		return stack;
     }
 }

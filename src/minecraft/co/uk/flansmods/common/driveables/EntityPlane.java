@@ -385,7 +385,8 @@ public class EntityPlane extends EntityDriveable
         super.onUpdate();
         
 		//Get plane type
-        PlaneType type = this.getPlaneType();
+        PlaneType type = getPlaneType();
+        DriveableData data = getDriveableData();
         if(type == null)
         {
         	FlansMod.log("Plane type null. Not ticking plane");
@@ -463,21 +464,18 @@ public class EntityPlane extends EntityDriveable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 0.5F * type.mass;
+			float sensitivityAdjust = 0.5F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
 			
 			//Yaw according to the flapsYaw
 			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
-			//applyRotationalForce(axes.getZAxis(), (Vector3f)axes.getXAxis().scale(yaw));
 			
 			//Pitch according to the sum of flapsPitchLeft and flapsPitchRight / 2
 			float flapsPitch = (flapsPitchLeft + flapsPitchRight) / 2F;
 			float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * sensitivityAdjust;
-			//applyRotationalForce(axes.getZAxis(), (Vector3f)axes.getYAxis().scale(pitch));
 			
 			//Roll according to the difference between flapsPitchLeft and flapsPitchRight / 2
 			float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
 			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
-			//applyRotationalForce(axes.getXAxis(), (Vector3f)axes.getYAxis().scale(roll));
 			
 			applyTorque(axes.findLocalVectorGlobally(new Vector3f(-roll, yaw, -pitch)));
 		}
@@ -491,12 +489,22 @@ public class EntityPlane extends EntityDriveable
 		//Apply thrust
 		for(Propeller propeller : type.propellers)
 		{
-			//TODO : Factor in engine type
 			//Check the propeller is still around
 			if(!parts.get(propeller.planePart).dead)
 			{
-				float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle);
-				applyForce(axes.findLocalVectorGlobally(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+				//If the player driving this is in creative, then we can thrust, no matter what
+				boolean canThrustCreatively = seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+				//Otherwise, check the fuel tanks!
+				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+				{
+					//Calculate the thrust
+					float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+					//Apply the thrust
+					applyForce(axes.findLocalVectorGlobally(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
+					//If we can't thrust creatively, we must thrust using fuel. Nom.
+					if(!canThrustCreatively)
+						data.fuelInTank -= data.engine.fuelConsumption * throttle;
+				}
 			}
 		}
 				
@@ -544,68 +552,67 @@ public class EntityPlane extends EntityDriveable
 		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
 		moveDriveable();
 		
-		
-        /*
 		//Fuel Handling
-		if(getPlaneData().fuel != null && getPlaneData().fuel.stackSize <= 0)
-			getPlaneData().fuel = null;
-		if(!fuelling && getPlaneData().fuel != null && getPlaneData().fuel.stackSize > 0 && getPlaneData().fuel.getItem() instanceof ItemPart && ((ItemPart)getPlaneData().fuel.getItem()).type.category == 9)// && onGround && getSpeedXYZ() < 0.1D)
-		{
-			fuelling = true;
-		}
+		
+		//If the fuel item has stack size <= 0, delete it
+		if(data.fuel != null && data.fuel.stackSize <= 0)
+			data.fuel = null;
+		
+		//Work out if we are fuelling (from a Flan's Mod fuel item)
+		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
+		
+		//If we are fuelling
 		if(fuelling)
 		{
-			if(getPlaneData().fuel == null || getPlaneData().fuel.stackSize <= 0 || getPlaneData().fuelInTank >= type.tankSize)// || !onGround || getSpeedXYZ() > 0.1D)
+			int damage = data.fuel.getItemDamage();
+			//Consume 10 points of fuel (1 damage)
+			data.fuel.setItemDamage(damage + 1);
+			//Put 10 points of fuel 
+			data.fuelInTank += 10;
+			//If we have finished this fuel item
+			if(damage >= data.fuel.getMaxDamage())
 			{
-				fuelling = false;
-			}
-			else
-			{
-				int damage = getPlaneData().fuel.getItemDamage();
-				getPlaneData().fuel.setItemDamage(damage + 1);
-				getPlaneData().fuelInTank += 5;
-				if(damage >= ((ItemPart)getPlaneData().fuel.getItem()).type.fuel)
-				{
-					getPlaneData().fuel.setItemDamage(0);
-					getPlaneData().fuel.stackSize--;
-					if(getPlaneData().fuel.stackSize <= 0)
-						getPlaneData().setInventorySlotContents(getPlaneData().getFuelSlot(), null);
-					fuelling = false;
-				}	
-			}
+				//Reset the damage to 0
+				data.fuel.setItemDamage(0);
+				//Consume one item
+				data.fuel.stackSize--;
+				//If we consumed the last one, destroy the stack
+				if(data.fuel.stackSize <= 0)
+					data.fuel = null;
+			}	
 		}
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && getPlaneData().fuel != null && getPlaneData().fuel.stackSize > 0)
+		//Check fuel slot for builcraft buckets and if found, take fuel from them
+		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
 		{
-			if(getPlaneData().fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && getPlaneData().fuelInTank+500 <= type.tankSize)
+			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
 			{
-				getPlaneData().fuelInTank += 500;
-				getPlaneData().fuel = new ItemStack(Item.bucketEmpty);
+				data.fuelInTank += 500;
+				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
-			else if(getPlaneData().fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && getPlaneData().fuelInTank+1000 <= type.tankSize)
+			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
 			{
-				getPlaneData().fuelInTank += 1000;
-				getPlaneData().fuel = new ItemStack(Item.bucketEmpty);
+				data.fuelInTank += 1000;
+				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
 		}
 
 		//Sounds
-		if(worldObj.isRemote)
+		//Starting sound
+		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0)
 		{
-			if (propSpeed > 0.2D && propSpeed < 1 && soundPosition == 0)
-			{
-				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.startSound, false));
-				soundPosition = type.startSoundLength;
-			}
-			if (propSpeed > 1 && soundPosition == 0)
-			{
-				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.propSound, false));
-				soundPosition = type.propSoundLength;
-			}
-	
-			if(soundPosition > 0)
-				soundPosition--;
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
+			soundPosition = type.startSoundLength;
 		}
-		*/
+		//Flying sound
+		if (throttle > 0.2F && soundPosition == 0)
+		{
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
+			soundPosition = type.engineSoundLength;
+		}
+
+		//Sound decrementer
+		if(soundPosition > 0)
+			soundPosition--;
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
