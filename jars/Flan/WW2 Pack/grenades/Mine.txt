@@ -39,6 +39,7 @@ Fuse 0
 DetonateWhenShot true
 Remote false
 DespawnTime 12000
+PrimeDelay 100
 ////Detonation
 FireRadius 0.0
 ExplosionRadius 5.0

@@ -6,17 +6,22 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.teams.Team;
+import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -99,26 +104,35 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		}
 		
 		//Detonation conditions
-		if(ticksExisted > type.fuse && type.fuse > 0)
-			detonate();
-		//If this grenade has a proximity trigger, check for living entities within it's range
-		if(type.livingProximityTrigger > 0 || type.driveableProximityTrigger > 0)
+		if(!worldObj.isRemote)
 		{
-			float checkRadius = Math.max(type.livingProximityTrigger, type.driveableProximityTrigger);
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(checkRadius, checkRadius, checkRadius));
-			for(Object obj : list)
+			if(ticksExisted > type.fuse && type.fuse > 0)
+				detonate();
+			//If this grenade has a proximity trigger, check for living entities within it's range
+			if(type.livingProximityTrigger > 0 || type.driveableProximityTrigger > 0)
 			{
-				if(obj == thrower && ticksExisted < 10)
-					continue;
-				if(obj instanceof EntityLivingBase && getDistanceToEntity((Entity)obj) < type.livingProximityTrigger)
+				float checkRadius = Math.max(type.livingProximityTrigger, type.driveableProximityTrigger);
+				List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(checkRadius, checkRadius, checkRadius));
+				for(Object obj : list)
 				{
-					detonate();
-					break;
-				}
-				if(obj instanceof EntityDriveable && getDistanceToEntity((Entity)obj) < type.driveableProximityTrigger)
-				{
-					detonate();
-					break;
+					if(obj == thrower && ticksExisted < 10)
+						continue;
+					if(obj instanceof EntityLivingBase && getDistanceToEntity((Entity)obj) < type.livingProximityTrigger)
+					{
+						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
+						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentGametype != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
+						{
+							if(!TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
+								continue;
+						}
+						detonate();
+						break;
+					}
+					if(obj instanceof EntityDriveable && getDistanceToEntity((Entity)obj) < type.driveableProximityTrigger)
+					{
+						detonate();
+						break;
+					}
 				}
 			}
 		}
@@ -261,6 +275,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 	public void detonate()
 	{
+		//Do not detonate before grenade is primed
+		if(ticksExisted < type.primeDelay)
+			return;
+		
 		//Stop repeat detonations
 		if(detonated)
 			return;
@@ -272,14 +290,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
-	        if(thrower instanceof EntityPlayer)
-	        {
-	        	FlansModExplosion explosion = new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius);
-		        explosion.isFlaming = false;
-		        explosion.isSmoking = FlansMod.explosions && type.explosionBreaksBlocks;
-		        explosion.doExplosionA();
-		        explosion.doExplosionB(true);
-	        }
+	        if((thrower instanceof EntityPlayer))
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, FlansMod.explosions && type.explosionBreaksBlocks);
 	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, FlansMod.explosions && type.explosionBreaksBlocks);
 		}
 		

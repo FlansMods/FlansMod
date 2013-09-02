@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 
 import net.minecraft.block.Block;
@@ -15,6 +16,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.packet.Packet60Explosion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -32,12 +35,31 @@ public class FlansModExplosion extends Explosion
     public InfoType type;
     public EntityPlayer player;
     
-	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r) 
+	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r, boolean breakBlocks) 
 	{
 		super(w, e, x, y, z, r);
 		worldObj = w;
 		type = t;
 		player = p;
+        isFlaming = false;
+        isSmoking = breakBlocks;
+        doExplosionA();
+        doExplosionB(true);
+        
+        if(!worldObj.isRemote)
+        {
+	        if (!breakBlocks)
+	            affectedBlockPositions.clear();
+	
+	        Iterator iterator = worldObj.playerEntities.iterator();
+	
+	        while (iterator.hasNext())
+	        {
+	            EntityPlayer entityplayer = (EntityPlayer)iterator.next();
+	            if (entityplayer.getDistanceSq(x, y, z) < 4096.0D)
+	                ((EntityPlayerMP)entityplayer).playerNetServerHandler.sendPacketToPlayer(new Packet60Explosion(x, y, z, r, affectedBlockPositions, (Vec3)func_77277_b().get(entityplayer)));
+	        }
+        }
 	}
 
 	@Override

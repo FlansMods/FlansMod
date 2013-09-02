@@ -372,13 +372,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		if (type.explosion > 0)
 		{
 	        if(owner instanceof EntityPlayer)
-	        {
-	        	FlansModExplosion explosion = new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosion);
-		        explosion.isFlaming = false;
-		        explosion.isSmoking = FlansMod.explosions;
-		        explosion.doExplosionA();
-		        explosion.doExplosionB(true);
-	        }
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosion, FlansMod.explosions);
 	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosion, FlansMod.explosions);
 		}
 		if (type.fire > 0)

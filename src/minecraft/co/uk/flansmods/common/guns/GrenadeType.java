@@ -80,6 +80,8 @@ public class GrenadeType extends InfoType
 	public String dropItemOnDetonate = null;
 	/** Sound to play upon detonation */
 	public String detonateSound = "";
+	/** Detonation will not occur until after this time */
+	public int primeDelay = 0;
 	
 	//Aesthetics
 	/** The model to render for this grenade in the world */
@@ -154,6 +156,8 @@ public class GrenadeType extends InfoType
 				fuse = Integer.parseInt(split[1]);
 			if(split[0].equals("DetonateWhenShot"))
 				detonateWhenShot = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("PrimeDelay") || split[0].equals("TriggerDelay"))
+				primeDelay = Integer.parseInt(split[1]);		
 			if(split[0].equals("FireRadius"))
 				fireRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionRadius"))

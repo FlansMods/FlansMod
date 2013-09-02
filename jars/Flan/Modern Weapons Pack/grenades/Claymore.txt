@@ -1,50 +1,50 @@
 ////Name and icon
-Name Mk. 2 Frag Grenade
-ShortName mk2Frag
-Icon Mk2Grenade
+Name M18 Claymore
+ShortName claymore
+Icon Claymore
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
-ItemID 23632
-StackSize 4
+ItemID 23853
+StackSize 3
 ////Visuals
-Model ww2.FragGrenade
-Texture Mk2Frag
+Model mw.Claymore
+Texture Claymore
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0
 //ExplodeParticleType <particleType>
 SmokeTime 0
 //SmokeParticleType <particleType>
-SpinWhenThrown true
+SpinWhenThrown false
 ////Throwing
 ThrowDelay 10
 //ThrowSound <sound>
 //DropItemOnThrow <itemID.damage>
 ////Physics
 DetonateOnImpact false
-Bounciness 1.0
-HitEntityDamage 1
-ThrowSpeed 2.0
+Bounciness 0.0
+HitEntityDamage 0
+ThrowSpeed 0.0
 FallSpeed 1.0
-BreaksGlass true
+BreaksGlass false
 PenetratesBlocks false
 HitBoxSize 0.5
 Sticky false
 //BounceSound <sound>
 ////Detonation conditions
 VehicleProximityTrigger -1.0
-LivingProximityTrigger -1.0
-Fuse 100
+LivingProximityTrigger 2.0
+Fuse 0
 DetonateWhenShot true
 Remote false
-//DespawnTime 0
-PrimeDelay 0
+DespawnTime 12000
+PrimeDelay 100
 ////Detonation
 FireRadius 0.0
-ExplosionRadius 4.0
-ExplosionBreaksBlocks true
+ExplosionRadius 2.5
+ExplosionBreaksBlocks false
 //DropItemOnDetonate <itemID.damage>
 //Detonate Sound <sound>
 ////Misc
-MeleeDamage 4
+MeleeDamage 2
