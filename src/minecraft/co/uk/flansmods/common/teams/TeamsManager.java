@@ -47,6 +47,7 @@ import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.FlansMod;
@@ -241,6 +242,12 @@ public class TeamsManager implements IPlayerTracker
 	@ForgeSubscribe
 	public void playerInteracted(PlayerInteractEvent event)
 	{
+		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit)
+		{
+			event.setCanceled(true);
+			return;	
+		}
+		
 		if(event.entityPlayer.worldObj.isRemote)
 			return;
 		TileEntity te = event.entityPlayer.worldObj.getBlockTileEntity(event.x, event.y, event.z);
@@ -607,7 +614,7 @@ public class TeamsManager implements IPlayerTracker
 				data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
 				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
 
-				if(data.playerClass != null && !data.playerClass.horse)
+				if(data.playerClass != null && data.playerClass.horse)
 				{
 					EntityHorse horse = new EntityHorse(playerMP.worldObj);
 					
