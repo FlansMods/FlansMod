@@ -1,0 +1,9 @@
+Name Heavy Sniper
+ShortName spetsnazSniper1
+AddItem dragunov
+AddItem usp
+AddItem m67 2
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem dragunovAmmo 3
+AddItem uspAmmo 2

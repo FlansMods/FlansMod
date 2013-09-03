@@ -1,8 +1,0 @@
-Name Dragunov
-ShortName sniper2
-AddItem dragunov
-AddItem m1911
-AddItem mwKnife
-AddItem mwBinoculars
-AddItem dragunovAmmo 3
-AddItem m1911Ammo 2

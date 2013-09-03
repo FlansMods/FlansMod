@@ -1,7 +1,0 @@
-Name MP5
-ShortName lightAssault2
-AddItem skorpion
-AddItem usp
-AddItem mwKnife
-AddItem skorpionAmmo 4
-AddItem uspAmmo 2

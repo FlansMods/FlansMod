@@ -1,7 +1,0 @@
-Name G3
-ShortName assault4
-AddItem g3
-AddItem desertEagle
-AddItem mwKnife
-AddItem g3Ammo 3
-AddItem desertEagleAmmo 2

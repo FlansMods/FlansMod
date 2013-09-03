@@ -1,7 +1,8 @@
-Name Barrett
-ShortName sniper1
+Name Heavy Sniper
+ShortName marineSniper1
 AddItem barrett
 AddItem m9
+AddItem m67 1
 AddItem mwKnife
 AddItem mwBinoculars
 AddItem barrettAmmo 3

@@ -71,12 +71,12 @@ public class ToolType extends InfoType
 				EUPerCharge = Integer.parseInt(split[1]);
 			if(split[0].equals("RechargeRecipe"))
 			{
-				for(int i = 0; i < (split.length - 2) / 2; i++)
+				for(int i = 0; i < (split.length - 1) / 2; i++)
 				{
-					int amount = Integer.parseInt(split[2 * i + 2]);
-					boolean damaged = split[2 * i + 3].contains(".");
-					String itemName = damaged ? split[2 * i + 3].split("\\.")[0] : split[2 * i + 3];
-					int damage = damaged ? Integer.parseInt(split[2 * i + 3].split("\\.")[1]) : 0;
+					int amount = Integer.parseInt(split[2 * i + 1]);
+					boolean damaged = split[2 * i + 2].contains(".");
+					String itemName = damaged ? split[2 * i + 2].split("\\.")[0] : split[2 * i + 2];
+					int damage = damaged ? Integer.parseInt(split[2 * i + 2].split("\\.")[1]) : 0;
 					rechargeRecipe.add(getRecipeElement(itemName, amount, damage));
 				}
 			}

@@ -1,7 +1,0 @@
-Name G36
-ShortName assault3
-AddItem g36
-AddItem m1911
-AddItem mwKnife
-AddItem g36Ammo 3
-AddItem m1911Ammo 2

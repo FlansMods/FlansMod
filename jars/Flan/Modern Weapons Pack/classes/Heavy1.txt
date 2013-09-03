@@ -1,9 +1,0 @@
-Name M249 SAW
-ShortName heavy1
-AddItem m249
-AddItem rpg
-AddItem m1911
-AddItem mwKnife
-AddItem m249Ammo 2
-AddItem rpgAmmo 2
-AddItem m1911Ammo 2

@@ -1,7 +1,0 @@
-Name P90
-ShortName lightAssault5
-AddItem p90
-AddItem m9
-AddItem mwKnife
-AddItem p90Ammo 3
-AddItem m9Ammo 2

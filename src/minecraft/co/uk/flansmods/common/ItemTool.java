@@ -200,4 +200,10 @@ public class ItemTool extends Item
         }
         return itemstack;
     }
+	
+	@Override
+	public String toString()
+	{
+		return type == null ? itemID + "" : type.name;
+	}
 }

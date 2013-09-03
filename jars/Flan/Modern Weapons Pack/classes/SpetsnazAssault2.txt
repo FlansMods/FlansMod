@@ -1,0 +1,9 @@
+Name Heavy Assault
+ShortName spetsnazAssault2
+AddItem rpd
+AddItem m9
+AddItem rpg
+AddItem mwKnife
+AddItem rpdAmmo 2
+AddItem m9Ammo 2
+AddItem rpgAmmo 2

@@ -1,9 +1,0 @@
-Name M60E4
-ShortName heavy3
-AddItem m60
-AddItem rpg
-AddItem usp
-AddItem mwKnife
-AddItem m60Ammo 2
-AddItem rpgAmmo 2
-AddItem uspAmmo 2

@@ -1,7 +1,0 @@
-Name Mini-Uzi
-ShortName lightAssault3
-AddItem uzi
-AddItem usp
-AddItem mwKnife
-AddItem uziAmmo 5
-AddItem uspAmmo

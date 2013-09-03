@@ -1,7 +1,0 @@
-Name AK-74u
-ShortName lightAssault4
-AddItem ak74
-AddItem m1911
-AddItem mwKnife
-AddItem ak74Ammo 3
-AddItem m1911Ammo 2
