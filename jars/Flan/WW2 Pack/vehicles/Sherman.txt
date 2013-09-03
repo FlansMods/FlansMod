@@ -30,11 +30,11 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 20 0 -360 360 0 45
-RotatedDriverOffset 0 0 16
+Driver 0 16 0 -360 360 0 45
+RotatedDriverOffset 0 0 -8
 Passengers 1
-Passenger 1 -16 6 0 turret -60 60 -30 60 browning Browning
-BarrelPosition 15 34 0
+Passenger 1 0 36 0 turret -360 360 -30 60 browning Browning
+BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 5
 ShellDelay 100
@@ -56,8 +56,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 //Health and collision
-SetupPart core 500 -40 0 -24 80 36 48
-SetupPart turret 400 -12 36 -12 32 12 32
-SetupPart leftTrack 200 -20 -10 -16 8 8 2
-SetupPart rightTrack 200 -20 -10 14 8 8 2
+SetupPart core 500 -40 -8 -20 80 36 40
+SetupPart turret 400 -12 28 -12 32 12 32
+SetupPart leftTrack 200 -40 -8 -24 80 20 4
+SetupPart rightTrack 200 -40 -8 20 80 20 4
 BulletDetection 7

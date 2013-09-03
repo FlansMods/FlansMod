@@ -18,7 +18,7 @@ public class VehicleType extends DriveableType
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
 	/** If true, this will crush any living entity under the wheels */
 	public boolean squashMobs = false;
-	/** The origin of the tank barrel */
+	/** The origin of the tank turret */
 	public Vector3f barrelPosition;
 	/** The wheel radius for onGround checks */
 	public float wheelRadius = 1.0F;
@@ -26,6 +26,8 @@ public class VehicleType extends DriveableType
 	public boolean fourWheelDrive = false;
 	/** If true, then wheels will rotate as the vehicle drives */
 	public boolean rotateWheels = false;
+	/** Tank movement system. Uses track collision box for thrust, rather than the wheels */
+	public boolean tank = false;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -56,6 +58,8 @@ public class VehicleType extends DriveableType
             	wheelRadius = Float.parseFloat(split[1]);
             if(split[0].equals("FourWheelDrive"))
             	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
+            if(split[0].equals("Tank") || split[0].equals("TankMode"))
+            	tank = Boolean.parseBoolean(split[1].toLowerCase());
             
             //Visuals
             if(split[0].equals("HasDoor"))

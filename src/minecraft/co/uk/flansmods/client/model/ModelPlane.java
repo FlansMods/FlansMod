@@ -261,12 +261,8 @@ public class ModelPlane extends ModelDriveable
         	//If the seat has a gun model attached
         	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && plane.isPartIntact(seat.seatInfo.part))
         	{
-        		//float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
-        		//float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;
-     
-        		float yaw = seat.looking.getYaw();
-        		float pitch = seat.looking.getPitch();
-     
+        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
+        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;  
         		
         		//Iterate over the parts of that model
         		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);

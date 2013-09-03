@@ -13,6 +13,7 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.Propeller;
 import co.uk.flansmods.common.driveables.VehicleType;
@@ -46,47 +47,20 @@ public class RenderVehicle extends Render
         ModelVehicle modVehicle = (ModelVehicle)type.model;
 		if(modVehicle != null)
 			modVehicle.render(vehicle, f1);
-		/*
-		float gunYaw = 90F;
-		float gunPitch = 0;
+		
 		GL11.glPushMatrix();
-		if(modVehicle != null && modVehicle.gunModel.length > 0 && vehicle.data.guns[1] != null)
+		if(vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 		{
-			for(EntitySeat seat : vehicle.seats)
-			{
-				if(seat.gunnerID == 1 && seat.riddenByEntity != null)
-				{
-					gunYaw = -seat.riddenByEntity.rotationYaw - f + 90F; 
-					gunPitch = seat.riddenByEntity.rotationPitch - vehicle.axes.getPitch();					
-				}
-			}
-			for(; gunYaw > 90F; gunYaw -= 360F) {}
-			for(; gunYaw <= -270F; gunYaw += 360F) {}
-			if(gunYaw > type.gunYawMax - 90F)
-				gunYaw = type.gunYawMax - 90F; 
-			if(gunYaw < type.gunYawMin - 90F)
-				gunYaw = type.gunYawMin - 90F;
-			if(gunPitch < type.gunPitchMax)
-				gunPitch = type.gunPitchMax;
-			if(gunPitch > type.gunPitchMin)
-				gunPitch = type.gunPitchMin;
-			GL11.glTranslatef(modVehicle.gunModel[0].rotationPointX / 16F, modVehicle.gunModel[0].rotationPointY / 16F, modVehicle.gunModel[0].rotationPointZ / 16F);
-			GL11.glRotatef(180F + gunYaw, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(-modVehicle.gunModel[0].rotationPointX / 16F, -modVehicle.gunModel[0].rotationPointY / 16F, -modVehicle.gunModel[0].rotationPointZ / 16F);
-			//Re-add this later
-			//modVehicle.renderGun(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, gunYaw, gunPitch);
+    		float yaw = vehicle.seats[0].prevLooking.getYaw() + (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw()) * f1;
+    		
+    		GL11.glTranslatef(type.barrelPosition.x, type.barrelPosition.y, type.barrelPosition.z);
+			GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
+			GL11.glTranslatef(-type.barrelPosition.x, -type.barrelPosition.y, -type.barrelPosition.z);
+			
+			modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
 		}
 		GL11.glPopMatrix();
-		if(modVehicle != null && modVehicle.barrelModel.length > 0 && type.hasTurret)
-		{
-			gunYaw = vehicle.gunYaw;
-			gunPitch = vehicle.gunPitch;
-			GL11.glTranslatef(modVehicle.turretModel[0].rotationPointX / 16F, modVehicle.turretModel[0].rotationPointY / 16F, modVehicle.turretModel[0].rotationPointZ / 16F);
-			GL11.glRotatef(180F + gunYaw, 0.0F, 1.0F, 0.0F);
-			GL11.glTranslatef(-modVehicle.turretModel[0].rotationPointX / 16F, -modVehicle.turretModel[0].rotationPointY / 16F, -modVehicle.turretModel[0].rotationPointZ / 16F);
-			modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, gunYaw, gunPitch);
-		}
-		*/
+		
 		if(FlansMod.DEBUG)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -102,6 +76,7 @@ public class RenderVehicle extends Render
 				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
 			}
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
+			renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				

@@ -98,8 +98,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
-		
-    	//System.out.println(((int)posX) + " " + ((int)posY) + " " + ((int)posZ) + " " + worldObj.isRemote);
 
 		//If on the client and the driveable parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundDriveable)
@@ -202,6 +200,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		if(!foundDriveable)
 			return;
+		
 		
 		prevLooking = looking.clone();
 				

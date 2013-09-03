@@ -428,14 +428,22 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Apply thrust
 		{
 			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * getDriveableData().engine.engineSpeed;
-			applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
-			applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
-			applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
-			if(type.fourWheelDrive)
+			
+			if(type.tank)
 			{
-				applyThrust(parts.get(EnumDriveablePart.frontLeftWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.frontRightWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.frontWheel), thrust);
+				
+			}
+			else
+			{
+				applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
+				applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
+				applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
+				if(type.fourWheelDrive)
+				{
+					applyThrust(parts.get(EnumDriveablePart.frontLeftWheel), thrust);
+					applyThrust(parts.get(EnumDriveablePart.frontRightWheel), thrust);
+					applyThrust(parts.get(EnumDriveablePart.frontWheel), thrust);
+				}
 			}
 		}
 		

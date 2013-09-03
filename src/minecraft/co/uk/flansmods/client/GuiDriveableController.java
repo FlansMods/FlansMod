@@ -66,11 +66,6 @@ public class GuiDriveableController extends GuiScreen
 		{
 			plane.pressKey(8, player); //Bomb
 		}
-
-		int l = Mouse.getDX();
-		int m = Mouse.getDY();
-		
-		plane.onMouseMoved(l, m);
     }
 	
 	protected void keyTyped(char c, int i)
@@ -124,6 +119,11 @@ public class GuiDriveableController extends GuiScreen
 		}
         for(; Mouse.next(); handleMouseInput()) { }
         for(; Keyboard.next(); handleKeyboardInput()) { }
+        
+		int l = Mouse.getDX();
+		int m = Mouse.getDY();
+		
+		plane.onMouseMoved(l, m);
         /*
         for(Controller joyStick : joySticks)
         {
