@@ -37,24 +37,24 @@ public class ModelSherman extends ModelVehicle
 		//Gun model stolen from the browning
 		ModelRendererTurbo[][] browningModel = new ModelRendererTurbo[3][];
 		
-		//No yaw only part
+		//Yaw only part
 		browningModel[0] = new ModelRendererTurbo[0];
 		
 		//The main gun part
 		browningModel[1] = new ModelRendererTurbo[4];
-		browningModel[1][0] = new ModelRendererTurbo(this, 66, 73, textureX, textureY);
-		browningModel[1][1] = new ModelRendererTurbo(this, 66, 79, textureX, textureY);
-		browningModel[1][2] = new ModelRendererTurbo(this, 80, 68, textureX, textureY);
-		browningModel[1][3] = new ModelRendererTurbo(this, 66, 64, textureX, textureY);	//Ammo box
+		browningModel[1][0] = new ModelRendererTurbo(this, 0, 24, textureX, textureY);
+		browningModel[1][1] = new ModelRendererTurbo(this, 0, 30, textureX, textureY);
+		browningModel[1][2] = new ModelRendererTurbo(this, 14, 19, textureX, textureY);
+		browningModel[1][3] = new ModelRendererTurbo(this, 0, 15, textureX, textureY);	//Ammo box
 		
-		browningModel[1][0].addBox(-4F, -1.5F, -1.5F, 12, 3, 3);
-		browningModel[1][1].addBox(8F, -0.5F, -0.5F, 10, 1, 1);
-		browningModel[1][2].addBox(-6F, 0F, -1F, 2, 3, 2);		
-		browningModel[1][3].addBox(4F, -1F, -6F, 2, 4, 5);
+		browningModel[1][0].addBox(0F, 2.5F, -1.5F, 12, 3, 3);
+		browningModel[1][1].addBox(12F, 3.5F, -0.5F, 10, 1, 1);
+		browningModel[1][2].addBox(-2F, 4F, -1F, 2, 3, 2);		
+		browningModel[1][3].addBox(8F, 3F, -6F, 2, 4, 5);
 		
 		//Set the origin
 		for(ModelRendererTurbo gunPart : browningModel[1])
-			gunPart.setRotationPoint(0F, -50F, 0F);
+			gunPart.setRotationPoint(0F, -52F, 0F);
 		
 		//No recoil part
 		browningModel[2] = new ModelRendererTurbo[0];

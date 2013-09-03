@@ -49,7 +49,7 @@ public class RenderVehicle extends Render
 			modVehicle.render(vehicle, f1);
 		
 		GL11.glPushMatrix();
-		if(vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
+		if(type.barrelPosition != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 		{
     		float yaw = vehicle.seats[0].prevLooking.getYaw() + (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw()) * f1;
     		
@@ -76,7 +76,8 @@ public class RenderVehicle extends Render
 				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
 			}
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
-			renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
+			if(type.barrelPosition != null)
+				renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				

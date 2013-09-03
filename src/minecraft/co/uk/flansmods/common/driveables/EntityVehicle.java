@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.RotatedAxes;
@@ -215,17 +217,15 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
                 }
 				return true;
 			}
-			case 8 : //Drop bomb
+			case 9 : //Shoot shell
 			{
-				/*
-				if(!worldObj.isRemote && bombDelay <= 0 && FlansMod.bombsEnabled)
+				if(!worldObj.isRemote && shellDelay <= 0 && FlansMod.bombsEnabled)
 				{
 					int slot = -1;
-					int bombType = 0;
 					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
 					{
-						ItemStack bomb = driveableData.getStackInSlot(i);
-						if(bomb != null && bomb.getItem() instanceof ItemBullet && ((ItemBullet)bomb.getItem()).type.isBomb)
+						ItemStack shell = driveableData.getStackInSlot(i);
+						if(shell != null && shell.getItem() instanceof ItemBullet && ((ItemBullet)shell.getItem()).type.isShell)
 						{
 							slot = i;
 						}
@@ -233,20 +233,23 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					
 					if(slot != -1)
 					{
-						Vec3 bombVec = rotate(type.bombPosition).toVec3();
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, type));
-						if(type.shootSecondarySound != null)
-							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));					
+						int spread = 0;
+						int damageMultiplier = 1;
+						float shellSpeed = 1F;
+
+						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, shellSpeed, type));
+						
+						if(type.shootMainSound != null)
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));					
 						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 							driveableData.decrStackSize(slot, 1);
-						bombDelay = type.planeBombDelay;
+						shellDelay = type.vehicleShellDelay;
 					}
 					return true;
 				}
-				*/
 				return false;
 			}
-			case 9 : //Shoot bullet
+			case 8 : //Shoot bullet
 			{
 				/*
 				if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
@@ -431,7 +434,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			if(type.tank)
 			{
-				
+				applyThrust(parts.get(EnumDriveablePart.leftTrack), thrust);
+				applyThrust(parts.get(EnumDriveablePart.rightTrack), thrust);
 			}
 			else
 			{
@@ -626,7 +630,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	@Override
 	public String getBombInventoryName() 
 	{
-		return null;
+		return "Shells";
 	}
 	
 	public boolean hasMouseControlMode()

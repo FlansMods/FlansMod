@@ -438,9 +438,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         
         checkParts();
         
-        prevPosX = posX;
-        prevPosY = posY;
-        prevPosZ = posZ;
+        if(Math.abs(prevPosX - posX) > 0.001F)
+        	prevPosX = posX;
+        if(Math.abs(prevPosY - posY) > 0.001F)
+        	prevPosY = posY;
+        if(Math.abs(prevPosZ - posZ) > 0.001F)
+        	prevPosZ = posZ;
 		prevRotationYaw = axes.getYaw();
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();		
@@ -558,7 +561,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				continue;
 			if(ent == seat)
 				return true;
-			if(seat.riddenByEntity != null && seat.riddenByEntity == ent)
+			if(seat.riddenByEntity == ent)
 				return true;
 		}
 		return ent == this;	
@@ -680,7 +683,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       	RotatedAxes newAxes = axes.clone();
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
       		newAxes.rotateLocal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
-		
+
       	int numHits = 0;
         
 		for(CollisionPoint point : type.points)
@@ -695,14 +698,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
 			Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
 			Vector3f ray = Vector3f.add(newOrigin, motion, null);
-			
+
 	        if(worldObj.isRemote && FlansMod.DEBUG)
 	        {
 	        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, origin, (Vector3f)Vector3f.sub(ray, origin, null).scale(1F), 2, 1F, 0F, 0F));
 	        }
-			
+
 			MovingObjectPosition hit = worldObj.clip(rayOrigin.toVec3(), ray.toVec3());
-						
+
 			if(hit != null)
 			{
 				numHits++;
@@ -722,13 +725,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				Vector3f origin = Vector3f.add(position, pointVec, null);
 				Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
 				Vector3f ray = Vector3f.add(newOrigin, motion, null);
-				
+
 				MovingObjectPosition hit = worldObj.clip(newOrigin.toVec3(), ray.toVec3());
-							
+
 				if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
 				{
 					Vector3f hitVec = new Vector3f(hit.hitVec);
-					
+
 					Vector3f normal = null;
 					int x = 0, y = 0, z = 0;
 					switch(hit.sideHit)
@@ -740,26 +743,26 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					case 4 : normal = new Vector3f(-1F, 0F, 0F); x = 1; break;
 					case 5 : normal = new Vector3f(1F, 0F, 0F); x = -1; break;
 					}
-					
+
 					if(worldObj.isBlockSolidOnSide(hit.blockX + x, hit.blockY + y, hit.blockZ + z, ForgeDirection.getOrientation(hit.sideHit).getOpposite()))
 					{
 						continue;
 					}
-					
+
 			        if(worldObj.isRemote && FlansMod.DEBUG)
 			        {
 			        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, hitVec, normal, 2, 0F, 1F, 0F));
 			        }
-	
+
 			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
 			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
-			        
+
 			        applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	   
-			        
+
 			        //After taking this much force, the plane will take damage (scales with mass)
 			        float damagePoint = 2F;
 			        float damageModifier = 1F;
-			        
+
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
 			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
@@ -777,14 +780,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			}
 		}
-		
+
 		checkParts();
-		
+
 		//Apply motion to position
 		posX += motionX;
 		posY += motionY;
 		posZ += motionZ;
-		
+
 		//Apply motion to rotation
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
 			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
@@ -797,7 +800,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       			continue;
 			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
 				continue;
-			
+
       		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
       		int blockX = MathHelper.floor_double(posX + pointVec.x);
       		int blockY = MathHelper.floor_double(posY + pointVec.y);
@@ -821,7 +824,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       			continue;
 			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
 				continue;
-			
+
       		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
       		int blockX = MathHelper.floor_double(posX + pointVec.x);
       		int blockY = MathHelper.floor_double(posY + pointVec.y);
@@ -1014,4 +1017,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public abstract boolean hasMouseControlMode();
 	
 	public abstract String getBombInventoryName();
+	
+	public boolean rotateWithTurret(Seat seat)
+	{
+		return seat.part == EnumDriveablePart.turret;
+	}
 }

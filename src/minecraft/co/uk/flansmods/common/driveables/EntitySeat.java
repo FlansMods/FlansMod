@@ -39,7 +39,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 {
 	/** Set this to true when the client has found the parent driveable and connected them */
 	@SideOnly(Side.CLIENT)
-	private boolean foundDriveable = false;
+	public boolean foundDriveable = false;
 	@SideOnly(Side.CLIENT)
 	private int driveableID;
 	@SideOnly(Side.CLIENT)
@@ -145,12 +145,23 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	/** Set the position to be that of the driveable plus the local position, rotated */
 	private void updatePosition()
 	{
+		//If we haven't found our driveable, give up
 		if(worldObj.isRemote && !foundDriveable)
 			return;
+		//Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f((float)seatInfo.x / 16F, (float)seatInfo.y / 16F, (float)seatInfo.z / 16F);
+		//If this is the drivers seat, add the offset vector
 		if(driver)
-			Vector3f.add(localPosition, looking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset), localPosition);
+		{
+			Vector3f rotatedOffset = looking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset);
+			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
+		}
+		//If this seat is connected to the turret, then its position vector on the driveable axes needs an extra rotation in it
+		//if(driveable.rotateWithTurret(seatInfo) && driveable.seats[0] != null)
+			//localPosition = driveable.seats[0].looking.findLocalVectorGlobally(localPosition);
+		//Get the position of this seat globally, but positionally relative to the driveable
 		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(localPosition);
+		//Set the absol
 		setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y, driveable.posZ + relativePosition.z);
 	}
 

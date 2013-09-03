@@ -146,7 +146,7 @@ public class ModelVehicle extends ModelDriveable
         for(EntitySeat seat : vehicle.seats)
         {
         	//If the seat has a gun model attached
-        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part))
+        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part))// && !vehicle.rotateWithTurret(seat.seatInfo))
         	{
         		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
         		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;     
@@ -183,18 +183,58 @@ public class ModelVehicle extends ModelDriveable
     /** Render the tank turret */
 	public void renderTurret(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle)
     {		
-		float yaw = vehicle.seats[0].looking.getYaw();
-		float pitch = vehicle.seats[0].looking.getPitch();
-		
-		for(int i = 0; i < turretModel.length; i++)
+		//Render main turret barrel
 		{
-			turretModel[i].render(f5);
-		}		
-		for(int i = 0; i < barrelModel.length; i++)
-		{
-			barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
-			barrelModel[i].render(f5);
+			float yaw = vehicle.seats[0].looking.getYaw();
+			float pitch = vehicle.seats[0].looking.getPitch();
+			
+			for(int i = 0; i < turretModel.length; i++)
+			{
+				turretModel[i].render(f5);
+			}		
+			for(int i = 0; i < barrelModel.length; i++)
+			{
+				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
+				barrelModel[i].render(f5);
+			}
 		}
+		
+        //Render turret guns
+        /*for(EntitySeat seat : vehicle.seats)
+        {
+        	//If the seat has a gun model attached
+        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part) && vehicle.rotateWithTurret(seat.seatInfo))
+        	{
+        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
+        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;     
+        		
+        		//Iterate over the parts of that model
+        		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
+        		//Yaw only parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[0])
+    			{
+    				//Yaw and render
+        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw and pitch, no recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[1])
+    			{
+    				//Yaw, pitch and render
+        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        		//Yaw, pitch and recoil parts
+    			for(ModelRendererTurbo gunModelPart : gunModel[2])
+    			{
+    				//Yaw, pitch, recoil and render
+        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+        			gunModelPart.render(f5);
+    			}
+        	}
+        }*/
     }
 	
 	@Override

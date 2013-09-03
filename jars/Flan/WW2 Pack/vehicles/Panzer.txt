@@ -1,65 +1,67 @@
+//Naming
 Name Panzer IV
 ShortName Panzer
 ItemID 23490
+//Visuals
 Icon Panzer
 Model ww2.Panzer
 Texture Panzer
-MaxSpeed 1.0
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 5.0
+MaxNegativeThrottle 0.0
+//Steering modifiers
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
+//Drag
+Drag 90.0
+//Mass (In tons)
+Mass 30.0
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 30.0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 0
+ShellSlots 5
+//Driver and passenger positions
+Driver 0 14 0 -360 360 0 45
+RotatedDriverOffset 12 0 -8
+Passengers 1
+Passenger 1 0 34 0 turret -360 360 -15 60 mg42 MG42
+BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 5
 ShellDelay 110
-CargoSlots 0
-//Actually shell slots
-BombSlots 5
-Health 1000
-CollisionBoxes 5
-AddCollisionBox 0 -16 8 -30 0
-AddCollisionBox 1 16 8 -30 0
-AddCollisionBox 2 16 8 30 0
-AddCollisionBox 3 -16 8 30 0
-AddCollisionBox 4 0 32 0 4
-//Whether or not guns can be placed in these slots
-//Body is for the driver, turret is for a designated gunner
-AllowBodyGuns True
-AllowTurretGuns False
-TurnLeftSpeed 1
-TurnRightSpeed 1
-Acceleration 1
-Decceleration 1
-FuelTankSize 2000
+//Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
 ShootSound bullet
 ShellSound TankShell
-HasTurret True
-SquashMobs True
-Tank True
-Driver 0 20 0
-Passengers 0
-//For the passenger's gun
-GunYawMin -180
-GunYawMax 180
-GunPitchMin -45
-GunPitchMax 45
-//For the tank turret
-TurretYawMin -180
-TurretYawMax 180
-TurretPitchMin 0
-TurretPitchMax 45
-GunPosition 15 40 0
-BarrelPosition 15 30 0
-//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -14 2 -22
-WheelPosition 1 -14 2 22
-WheelPosition 2 14 2 22
-WheelPosition 3 14 2 -22
 //Recipe
-FrontWheels None
-BackWheels None
-Tracks catTrack
-Chassis tankBody
-Turret tankTurret
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Grey
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 tankTurret
+AddRecipeParts core 1 tankBody
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 gray
+//Health and collision
+SetupPart core 500 -40 -8 -20 80 36 40
+SetupPart turret 400 -16 28 -16 32 12 32
+SetupPart leftTrack 200 -40 -8 -24 80 20 4
+SetupPart rightTrack 200 -40 -8 20 80 20 4
+BulletDetection 7

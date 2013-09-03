@@ -73,6 +73,7 @@ public class PacketSeatUpdates extends FlanPacketCommon
         		//If this is the player who sent the packet in the first place, don't read it
         		if(side == Side.CLIENT && driveable.seats[seatID].riddenByEntity == player)
         			return;
+        		driveable.seats[seatID].prevLooking = driveable.seats[seatID].looking.clone();
         		driveable.seats[seatID].looking.setAngles(yaw, pitch, 0F);
         		//If on the server, update all surrounding players with these new angles
 				if(side == Side.SERVER)

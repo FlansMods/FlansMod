@@ -22,6 +22,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.teams.TeamsManager;
@@ -186,6 +187,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			if(obj instanceof EntityDriveable)
 			{
 				EntityDriveable driveable = (EntityDriveable)obj;
+				
+				if(driveable.isPartOfThis(owner))
+					continue;
+				
 				//If this bullet is within the driveable's detection range
 				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
 				{
@@ -252,13 +257,17 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			for (int l = 0; l < list.size(); l++)
 			{
 				Entity checkEntity = (Entity) list.get(l);
+				//Driveable collisions are handled earlier
+				if(checkEntity instanceof EntityDriveable)
+					continue;
+				
 				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
-				if (!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity) && ticksInAir < 20)
+				if ((!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity)) && ticksInAir < 20)
 				{
 					continue;
 				}
 				//Calculate the hit damage
-				int hitDamage = damage * (checkEntity instanceof EntityDriveable ? type.damageVsDriveable : type.damageVsLiving);
+				int hitDamage = damage * type.damageVsLiving;
 				//Create a damage source object
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	
@@ -359,6 +368,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			{
 				return true;
 			}
+		}
+		if(owner.ridingEntity instanceof EntitySeat)
+		{
+			return ((EntitySeat)owner.ridingEntity).driveable == null || ((EntitySeat)owner.ridingEntity).driveable.isPartOfThis(entity);
 		}
 		return false;
 	}
