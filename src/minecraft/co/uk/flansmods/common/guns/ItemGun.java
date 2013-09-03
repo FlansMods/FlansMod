@@ -294,7 +294,7 @@ public class ItemGun extends Item
 			//If no bullet stack was found, reload
 			if(bulletStack == null)
 			{
-				reload(gunStack, world, entityplayer, false);				
+				reload(gunStack, world, entityplayer, false, false);				
 			}
 			//A bullet stack was found, so try shooting with it
 			else if(bulletStack.getItem() instanceof ItemBullet)
@@ -313,7 +313,7 @@ public class ItemGun extends Item
 	}
 	
 	/** Reload method. Called automatically when firing with an empty clip */
-	public void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload)
+	public void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload, boolean instant)
 	{
 		//Keep the Flan's Mod player data handy
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
@@ -369,12 +369,16 @@ public class ItemGun extends Item
 						newBulletStack = null;
 					player.inventory.setInventorySlotContents(bestSlot, newBulletStack);
 										
-					//Tell the sound player that we reloaded something
-					reloadedSomething = true;
-					//Set player shoot delay to be the reload delay
-					data.shootTime = type.reloadTime;
-					//Send reload packet to induce reload effects client side
-					PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
+					//With intant reloads, we don't want to impose a delay or play reload sounds
+					if(!instant)
+					{
+						//Tell the sound player that we reloaded something
+						reloadedSomething = true;
+						//Set player shoot delay to be the reload delay
+						data.shootTime = type.reloadTime;
+						//Send reload packet to induce reload effects client side
+						PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
+					}
 				}
 			}
 		}

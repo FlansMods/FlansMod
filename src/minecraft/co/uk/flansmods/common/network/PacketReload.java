@@ -65,7 +65,7 @@ public class PacketReload extends FlanPacketCommon
     	if(stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
-    		((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
+    		((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true, false);
     	}
 	}
 	

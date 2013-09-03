@@ -735,8 +735,15 @@ public class TeamsManager implements IPlayerTracker
 		{
 			player.inventory.addItemStackToInventory(stack.copy());
 			//Load up as many guns as possible
-			if(stack.getItem() instanceof ItemBullet)
+		}
+		
+		//Preload each gun
+		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+		{
+			ItemStack stack = player.inventory.getStackInSlot(i);
+			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
+				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true, true);
 			}
 		}
 	}
