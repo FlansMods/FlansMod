@@ -11,10 +11,10 @@ ToolLife 1
 DestroyOnEmpty true
 StackSize 1
 RecipeOutput 1
-Recipe L leather P potion.8229
-LLL
-PPP
-LLL
+Recipe W cloth S string
+WWW
+W W
+SSS
 //Parachute bits
 Parachute true
 Model ww2.WW2Parachute

@@ -97,7 +97,8 @@ public class ItemTool extends Item
 				//Detonate it
 				data.remoteExplosives.get(0).detonate();
 				//Remove it from the list to detonate
-				data.remoteExplosives.remove(0);
+				if(data.remoteExplosives.get(0).detonated)
+					data.remoteExplosives.remove(0);
 				
 				//If not in creative and the tool should decay, damage it
 				if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)

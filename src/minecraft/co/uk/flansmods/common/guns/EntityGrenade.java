@@ -137,7 +137,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
-		if(type.hitEntityDamage > 0)
+		//(Don't attack entities when stuck to stuff)
+		if(type.hitEntityDamage > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
 			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
@@ -242,8 +243,19 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 						//Stop all motion of the grenade
 						motionX = motionY = motionZ = 0;
 						angularVelocity.set(0F, 0F, 0F);
-						prevRotationYaw = rotationYaw = axes.getYaw();
-						prevRotationPitch = rotationPitch = axes.getPitch();
+						
+						float yaw = axes.getYaw();
+						
+						switch(hit.sideHit)
+						{
+						case 0 : axes.setAngles(yaw, 180F, 0F); break;
+						case 1 : axes.setAngles(yaw, 0F, 0F); break;
+						case 2 : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 3 : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 4 : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 5 : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						}
+
 						//Set the stuck flag on
 						stuck = true;
 					}
@@ -348,6 +360,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
+	@Override
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
+	{
+		
+	}
+	
 	private DamageSource getGrenadeDamage()
 	{
 		if(thrower instanceof EntityPlayer)
@@ -366,6 +384,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	{
 		type = GrenadeType.getGrenade(tags.getString("Type"));
 		thrower = worldObj.getPlayerEntityByName(tags.getString("Thrower"));
+		rotationYaw = tags.getFloat("RotationYaw");
+		rotationPitch = tags.getFloat("RotationPitch");
+		axes.setAngles(rotationYaw, rotationPitch, 0F);
 	}
 
 	@Override
@@ -374,6 +395,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		tags.setString("Type", type.shortName);
 		if(thrower != null)
 			tags.setString("Thrower", thrower.getEntityName());
+		tags.setFloat("RotationYaw", axes.getYaw());
+		tags.setFloat("RotationPitch", axes.getPitch());
 	}
 
 	@Override
