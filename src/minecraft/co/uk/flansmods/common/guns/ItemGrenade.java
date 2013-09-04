@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.guns;
 
+import com.google.common.collect.Multimap;
+
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
@@ -9,6 +11,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,7 +37,15 @@ public class ItemGrenade extends Item {
 	{
 		return type.meleeDamage;
 	}
-
+	
+	@Override
+    public Multimap func_111205_h()
+    {
+        Multimap multimap = super.func_111205_h();
+        multimap.put(SharedMonsterAttributes.field_111264_e.func_111108_a(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        return multimap;
+    }
+	
 	@Override
 	public boolean isFull3D()
 	{

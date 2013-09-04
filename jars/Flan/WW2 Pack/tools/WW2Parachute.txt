@@ -1,5 +1,5 @@
 Name Parachute
-ShortName WW2Parachute
+ShortName ww2Parachute
 Icon WW2Parachute
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

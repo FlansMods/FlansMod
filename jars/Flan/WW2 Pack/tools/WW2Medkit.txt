@@ -1,5 +1,5 @@
 Name Medical Kit
-ShortName WW2MedKit
+ShortName ww2MedKit
 Icon WW2MedKit
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -8,7 +8,7 @@ Heal true
 Repair false
 HealAmount 10
 ToolLife 3
-DestroyOnEmpty false
+DestroyOnEmpty true
 StackSize 1
 RecipeOutput 1
 Recipe L leather P potion.8229

@@ -1,7 +1,8 @@
 Name Assault
-ShortName germanAssault2
+ShortName germanAssault
 AddItem mp44
 AddItem luger
+AddItem stielhandgranate 2
 AddItem ww2Knife
 AddItem mp44Ammo 3
 AddItem lugerAmmo 2

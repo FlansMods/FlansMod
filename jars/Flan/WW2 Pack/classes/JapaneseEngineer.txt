@@ -1,0 +1,9 @@
+Name Engineer
+ShortName japaneseEngineer
+AddItem type100
+AddItem luger
+AddItem type97 2
+AddItem ww2Mine 2
+AddItem ww2Knife
+AddItem type100Ammo 2
+AddItem lugerAmmo 2

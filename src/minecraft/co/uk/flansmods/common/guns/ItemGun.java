@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -20,6 +22,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
+
+import com.google.common.collect.Multimap;
 
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.FlansMod;
@@ -494,6 +498,14 @@ public class ItemGun extends Item
 	{
 		return type.meleeDamage;
 	}
+	
+	@Override
+    public Multimap func_111205_h()
+    {
+        Multimap multimap = super.func_111205_h();
+        multimap.put(SharedMonsterAttributes.field_111264_e.func_111108_a(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        return multimap;
+    }
 
 	@Override
 	public boolean isFull3D()

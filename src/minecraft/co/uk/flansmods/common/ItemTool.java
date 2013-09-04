@@ -187,6 +187,10 @@ public class ItemTool extends Item
 	        //Now heal whatever it was we just decided to heal
 	        if(hitLiving != null)
 	        {        		
+	        	//If its finished, don't use it
+	        	if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
+	        		return itemstack;
+	        	
 	        	hitLiving.heal(type.healAmount);
 	        	PacketDispatcher.sendPacketToAllAround(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F, hitLiving.dimension, PacketFlak.buildFlakPacket(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"));
 	        	
@@ -194,7 +198,7 @@ public class ItemTool extends Item
 				if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
 					itemstack.setItemDamage(itemstack.getItemDamage() + 1);
 				//If the tool is damagable and is destroyed upon being used up, then destroy it
-				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() == itemstack.getMaxDamage())
+				if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() >= itemstack.getMaxDamage())
 					itemstack.stackSize--;
 	        }
         }
