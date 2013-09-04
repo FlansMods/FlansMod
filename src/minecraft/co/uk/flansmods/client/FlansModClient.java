@@ -12,6 +12,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -23,19 +24,21 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.BlockGunBox;
-import co.uk.flansmods.common.DriveableType;
-import co.uk.flansmods.common.EntityDriveable;
-import co.uk.flansmods.common.EntityPlane;
-import co.uk.flansmods.common.EntityVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.ItemGun;
-import co.uk.flansmods.common.PlaneType;
-import co.uk.flansmods.common.VehicleType;
+import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntityPlane;
+import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.Team;
@@ -66,9 +69,6 @@ public class FlansModClient extends FlansMod
 	
 	public static boolean inPlane = false;
 	
-	public static List<DriveableType> blueprintsUnlocked = new ArrayList<DriveableType>();
-	public static List<DriveableType> vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
-	
 	public static ResourceLocation resources;
 	
 	public void load()
@@ -89,8 +89,8 @@ public class FlansModClient extends FlansMod
 		if (minecraft.thePlayer == null)
 			return;
 		
-		if(minecraft.thePlayer.ridingEntity instanceof EntityPlane && controlModeMouse && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiPlaneController((EntityPlane)minecraft.thePlayer.ridingEntity));
+		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
@@ -127,12 +127,11 @@ public class FlansModClient extends FlansMod
 			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
 		}
 
-		String field = inMCP ? "cameraZoom" : "V";
 		if (Math.abs(playerZoom - lastPlayerZoom) > 1F / 64F)
 		{
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "X");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "Y", "field_78503_V");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -140,46 +139,34 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		lastPlayerZoom = playerZoom;
-		field = inMCP ? "camRoll" : "O";
-		if (minecraft.thePlayer.ridingEntity instanceof EntityDriveable)
+		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
 			inPlane = true;
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityDriveable)minecraft.thePlayer.ridingEntity).axes.getRoll() * (minecraft.thePlayer.ridingEntity instanceof EntityVehicle ? -1 : 1), "camRoll", "O");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getPlayerRoll(), "camRoll", "N", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
 			}			
-			if(minecraft.thePlayer.ridingEntity instanceof EntityPlane)
+			if(minecraft.thePlayer.ridingEntity instanceof IControllable)
 			{
 				try
 				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityPlane)minecraft.thePlayer.ridingEntity).getPlaneType().cameraDistance, "thirdPersonDistance", "B");
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "A", "field_78490_B");
 				} catch (Exception e)
 				{
 					log("I forgot to update obfuscated reflection D:");
 					throw new RuntimeException(e);
 				}		
 			}
-			if(minecraft.thePlayer.ridingEntity instanceof EntityVehicle) // Add CameraDistance for Vehicles
-			{
-				try
-				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((EntityVehicle)minecraft.thePlayer.ridingEntity).getVehicleType().cameraDistance, "thirdPersonDistance", "B");
-				} catch (Exception e)
-				{
-					log("I forgot to update obfuscated reflection D:");
-					throw new RuntimeException(e);
-				}
-			}
 		}
 		else if(inPlane)
 		{
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "O");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "N", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -187,7 +174,7 @@ public class FlansModClient extends FlansMod
 			}			
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "B");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "A", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -204,9 +191,10 @@ public class FlansModClient extends FlansMod
 	@ForgeSubscribe
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.startsWith("flanDeath."))
+		if(event.message.startsWith("{\"translate\":\"flanDeath."))
 		{
 			String[] split = event.message.split("\\.");
+			split[split.length - 1] = split[split.length - 1].split("\"}")[0];
 			event.setCanceled(true);
 			TickHandlerClient.addKillMessage(split);
 			//FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[3] + " killed " + split[2] + " with a " + InfoType.getType(split[1]).name);
@@ -214,77 +202,16 @@ public class FlansModClient extends FlansMod
 	}
 	
 	@ForgeSubscribe
-	public void worldData(WorldEvent event)
+	public void entitySpawn(EntityJoinWorldEvent event)
 	{
-		if(!event.world.isRemote)
-			return;
-		if(event instanceof WorldEvent.Load)
-		{
-			loadPerWorldData(event, event.world);
-			savePerWorldData(event, event.world);
-		}
-		if(event instanceof WorldEvent.Save)
-		{
-			savePerWorldData(event, event.world);
-		}
+		/*
+		if(event.entity.worldObj.isRemote && event.entity == Minecraft.getMinecraft().thePlayer)
+			System.out.println(event.entity.toString());
+		if(event.entity.worldObj.isRemote && event.entity instanceof EntityHorse)
+			System.out.println(event.entity.toString());
+		*/
 	}
-	
-	private void loadPerWorldData(Event event, World world)
-	{
-		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
-		if(checkFileExists(file))
-		{
-			try
-			{
-				blueprintsUnlocked = new ArrayList<DriveableType>();
-				vehicleBlueprintsUnlocked = new ArrayList<DriveableType>();
-				NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-				int numPlaneBlues = tags.getInteger("NumPlaneBlues");
-				for(int i = 0; i < numPlaneBlues; i++)
-				{
-					blueprintsUnlocked.add(PlaneType.getPlane(tags.getString("PlaneBlue" + i)));
-				}
-				int numVehicleBlues = tags.getInteger("NumVehicleBlues");
-				for(int i = 0; i < numVehicleBlues; i++)
-				{
-					vehicleBlueprintsUnlocked.add(VehicleType.getVehicle(tags.getString("VehicleBlue" + i)));
-				}
-			}
-			catch(Exception e)
-			{
-				FlansMod.log("Failed to load from teams.dat");
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private void savePerWorldData(Event event, World world)
-	{
-		File file = new File(Loader.instance().getConfigDir().getParent() + "/Flan/teams.dat");
-		if(checkFileExists(file))
-		{
-			try
-			{
-				NBTTagCompound tags = new NBTTagCompound();
-				tags.setInteger("NumPlaneBlues", blueprintsUnlocked.size());
-				for(int i = 0; i < blueprintsUnlocked.size(); i++)
-				{
-					tags.setString("PlaneBlue" + i, blueprintsUnlocked.get(i).shortName);
-				}
-				tags.setInteger("NumVehicleBlues", vehicleBlueprintsUnlocked.size());
-				for(int i = 0; i < vehicleBlueprintsUnlocked.size(); i++)
-				{
-					tags.setString("VehicleBlue" + i, vehicleBlueprintsUnlocked.get(i).shortName);
-				}
-				CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
-			}
-			catch(Exception e)
-			{
-				FlansMod.log("Failed to save to teams.dat");
-			}
-		}
-	}
-	
+		
 	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())
@@ -308,7 +235,7 @@ public class FlansModClient extends FlansMod
 		if (controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiPlaneController((EntityPlane)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
+		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}

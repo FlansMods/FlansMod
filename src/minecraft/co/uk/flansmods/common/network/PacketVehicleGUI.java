@@ -7,8 +7,9 @@ import java.io.DataOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketVehicleGUI extends FlanPacketCommon {
@@ -50,9 +51,9 @@ public class PacketVehicleGUI extends FlanPacketCommon {
 			EntityPlayer player =  (EntityPlayer)extradata[0];
 			
 			int guiID = stream.readInt();
-			if(player.ridingEntity != null && player.ridingEntity instanceof EntityDriveable)
+			if(player.ridingEntity != null && player.ridingEntity instanceof EntitySeat)
 			{
-				EntityDriveable d = ((EntityDriveable)player.ridingEntity);
+				EntityDriveable d = ((EntitySeat)player.ridingEntity).driveable;
 				switch(guiID)
 				{
 				case 0 : //Guns

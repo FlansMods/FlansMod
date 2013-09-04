@@ -20,6 +20,7 @@ public class GuiTeamScores extends GuiScreen
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teamsScores.png");
 
 	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used...
+	public static String map;
 	public static String gametype;
 	public static int numTeams;
 	public static TeamData[] teamData;
@@ -28,7 +29,7 @@ public class GuiTeamScores extends GuiScreen
 	//Number of lines (for rendering)
 	public static int numLines;
 
-	private static class TeamData
+	public static class TeamData
 	{
 		public Team team;
 		public int score;
@@ -73,6 +74,7 @@ public class GuiTeamScores extends GuiScreen
 				teamData = new TeamData[0];
 				return;
 			}
+			map = stream.readUTF();
 			sortedByTeam = stream.readBoolean();
 			if(sortedByTeam)
 			{
@@ -142,7 +144,7 @@ public class GuiTeamScores extends GuiScreen
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int guiHeight = 34 + 9 * numLines;

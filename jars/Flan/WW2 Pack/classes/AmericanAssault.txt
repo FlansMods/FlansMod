@@ -1,0 +1,8 @@
+Name Assault
+ShortName americanAssault
+AddItem BAR
+AddItem colt
+AddItem mk2Frag 2
+AddItem ww2Knife
+AddItem BARAmmo 4
+AddItem coltAmmo 2

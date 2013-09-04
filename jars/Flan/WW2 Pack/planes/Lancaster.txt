@@ -1,82 +1,84 @@
+//Naming
 Name Lancaster Bomber
 ShortName Lancaster
 ItemID 23325
+//Visuals
 Icon Lancaster
-Model Lancaster
+Model ww2.Lancaster
 Texture Lancaster
-MaxPropellerSpeed 1.5
-TakeOffSpeed 1.5
-CameraDistance 25.0
-//0 - Nose propeller, 1 - Inner Wing Propellers, 2 - Outer Wing Propellers, 3 - Inner and Outer Propellers
-PropSetup 3
-//Propeller number, x, y, z. Numbering starts at 0.
-PropellerPos 0 52 0 114
-PropellerPos 1 -52 0 114
-PropellerPos 2 116 0 98
-PropellerPos 3 -116 0 98
-//Delays are in ticks or 1/20ths of seconds
-ShootDelay 999
-BombDelay 1
-CargoSlots 0
-BombSlots 16
-Health 2500
-CollisionBoxes 16
-AddCollisionBox 0 0 0 -32 3
-AddCollisionBox 1 0 10 -80 3
-AddCollisionBox 2 0 20 -110 3
-AddCollisionBox 3 80 20 -112 3
-AddCollisionBox 4 -80 20 -112 3
-AddCollisionBox 5 55 5 75 2
-AddCollisionBox 6 115 5 65 2
-AddCollisionBox 7 200 20 20 2
-AddCollisionBox 8 -55 5 75 1
-AddCollisionBox 9 -115 5 65 1
-AddCollisionBox 10 -200 20 20 1
-AddCollisionBox 11 0 0 40 0
-AddCollisionBox 12 0 0 70 0
-AddCollisionBox 13 0 0 100 0
-AddCollisionBox 14 0 0 130 0
-AddCollisionBox 15 0 20 115 0
-//Whether or not guns can be placed in these slots
-AllowWingGuns False
-AllowNoseGuns False
-//Next 3 are for large planes only
-AllowSideGuns True
-AllowTailGuns True
-AllowDorsalGun True
-//Add positions for the pilot controlled guns. That is, nose and wing guns.
-//AddGunPosition <type> <x> <y> <Z> where type is one of the corresponding numbers
-//0 : Left Nose, 1 : Right Nose, 2 : Left Wing, 3 : Right Wing
-BombPosition 0 -32 0
+//Third Person Camera Distance
+CameraDistance 15.0
+//Throttle
+MaxThrottle 8.0
+MaxNegativeThrottle 0.0
+//Yaw modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
-RollLeftSpeed 1
-RollRightSpeed 1
+//Pitch modifiers
 LookUpSpeed 1
 LookDownSpeed 1
-Acceleration 2
-Decceleration 2
-FuelTankSize 20000
-MaxHeight 256
+//Roll modifiers
+RollLeftSpeed 1
+RollRightSpeed 1
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 16.7
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 16.7
+//Mass (In tons)
+Mass 16.7
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 80.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 1.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 32000
+//Bombs (Bomb delay is in 1/20ths of seconds)
+BombDelay 1
+BombPosition 0 -32 0
+//Inventory Slots
+CargoSlots 0
+BombSlots 16
+//Propeller Positions
+Propeller 0 114 16 -52 leftWing metalPropeller
+Propeller 1 114 16 52 rightWing metalPropeller
+Propeller 2 98 16 -116 leftWing metalPropeller
+Propeller 3 98 16 116 rightWing metalPropeller
+//Passengers
+Pilot 115 20 0
+Passengers 5
+//Passenger <ID> <x> <y> <z> <part> [minYaw] [maxYaw] [minPitch] [maxPitch] [gunType] [gunModelName]
+Passenger 1 148 2 0 nose -30 30 -25 25 browning Nose
+Passenger 2 90 10 0 core
+Passenger 3 70 10 0 core
+Passenger 4 -48 36 0 tail -360 360 0 45 browning Dorsal
+Passenger 5 -128 20 0 tail 135 225 -30 30 browning Tail
+//Sounds
 StartSound propStart
 StartSoundLength 20
 PropSound LancasterProp
 PropSoundLength 49
 ShootSound PlaneShoot
 BombSound bomb
-Pilot 0 20 115
-Passengers 5
-Passenger 0 0 0 145 0
-Passenger 1 0 10 100 0
-Passenger 2 0 10 70 0
-Passenger 3 0 30 -50 0
-Passenger 4 0 16 -120 0
 //Recipe
-BigTable True
-Propeller metalPropeller
-Cockpit metalCockpit
-Wings metalWingSection
-Bay bombBay
-Tail metalTail
-//Dyes are None, Black, Red, Green, Brown, Blue, Purple, Cyan, LGrey, Grey, Pink, Lime, Yellow, LBlue, Magenta, Orange, White
-Dyes Green
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit 1 bombBay
+AddRecipeParts rightWing 2 metalWingSection
+AddRecipeParts leftWing 2 metalWingSection
+AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 green
+AddDye 5 yellow
+//Health and collision
+SetupPart core 500 -64 -4 -16 208 48 32
+SetupPart nose 200 144 -4 -16 16 32 32
+SetupPart leftWing 300 -16 26 -240 80 4 224
+SetupPart leftWingWheel 100 68 -32 -58 24 36 12
+SetupPart rightWing 300 -16 26 16 80 4 224
+SetupPart rightWingWheel 100 68 -32 46 24 36 12
+SetupPart tail 200 -144 12 -16 80 32 32
+SetupPart tailWheel 100 -106 -11 -3 12 24 6
+BulletDetection 25

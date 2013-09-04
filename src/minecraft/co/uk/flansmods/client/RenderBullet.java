@@ -7,9 +7,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityBullet;
-
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityBullet;
 
 public class RenderBullet extends Render
 {
@@ -20,11 +19,11 @@ public class RenderBullet extends Render
 
 	public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)
 	{
-		func_110777_b(bullet);
+		bindEntityTexture(bullet);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		GL11.glRotatef(f + 90F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(bullet.prevRotationPitch + (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(90F -bullet.prevRotationPitch - (bullet.rotationPitch - bullet.prevRotationPitch) * f1, 1.0F, 0.0F, 0.0F);
 		ModelBase model = (ModelBase) bullet.type.model;
 		model.render(bullet, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
@@ -36,7 +35,7 @@ public class RenderBullet extends Render
 	}
 	
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityBullet)entity).type);
 	}

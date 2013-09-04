@@ -6,7 +6,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import co.uk.flansmods.common.EntityAAGun;
+import co.uk.flansmods.client.model.ModelFlagpole;
+import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.teams.EntityFlagpole;
 
 public class RenderFlagpole extends Render
@@ -23,7 +24,7 @@ public class RenderFlagpole extends Render
 	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
 	{
-		func_110777_b(entity);
+		bindEntityTexture(entity);
 		EntityFlagpole flagpole = (EntityFlagpole)entity;
 		GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -37,7 +38,7 @@ public class RenderFlagpole extends Render
 	}
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return texture;
 	}
