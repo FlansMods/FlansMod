@@ -63,10 +63,13 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 metalCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts nose 1 metalNose
 AddRecipeParts rightWing 1 metalWingSmall
 AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
+AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 lightBlue
 //Health and collision

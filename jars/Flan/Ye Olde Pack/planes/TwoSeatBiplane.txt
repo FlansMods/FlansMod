@@ -57,10 +57,13 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 woodenCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts bay 1 woodenCockpit
 AddRecipeParts rightWing 1 biplaneWing
 AddRecipeParts leftWing 1 biplaneWing
-AddRecipeParts bay 1 woodenCockpit
+AddRecipeParts topWing 2 string
 AddRecipeParts tail 1 woodenTail
+AddRecipeParts tailWheel 1 wheel
 //Health and collision
 SetupPart core 50 -12 -7 -11 24 10 22
 SetupPart coreWheel 20 0 -15 -7 4 8 14

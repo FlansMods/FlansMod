@@ -65,10 +65,14 @@ BombSound bomb
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 1 metalCockpit 1 bombBay
+AddRecipeParts nose 1 vehicleSeat
+AddRecipeParts core 1 metalCockpit 1 bombBay 3 vehicleSeat
 AddRecipeParts rightWing 2 metalWingSection
+AddRecipeParts rightWingWheel 1 largeWheel
 AddRecipeParts leftWing 2 metalWingSection
-AddRecipeParts tail 1 metalTail
+AddRecipeParts leftWingWheel 1 largeWheel
+AddRecipeParts tail 1 metalTail 2 vehicleSeat
+AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 AddDye 5 yellow

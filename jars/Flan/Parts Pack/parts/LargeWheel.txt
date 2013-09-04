@@ -1,14 +1,14 @@
-Name Wooden Tail
-ShortName woodenTail
-Icon WoodenTail
+Name Large Wheel
+ShortName largeWheel
+Icon LargeWheel
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23257
+ItemID 23465
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
-Category Tail
-StackSize 4
+Category Wheel
+StackSize 8
 RecipeOutput 1
-Recipe W wood S stick
-  W
-WWW
-  S
+Recipe I iron L leather
+LLL
+LIL
+LLL

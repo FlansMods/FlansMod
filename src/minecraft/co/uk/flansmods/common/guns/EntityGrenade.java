@@ -136,22 +136,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 		}
-		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
-		//(Don't attack entities when stuck to stuff)
-		if(type.hitEntityDamage > 0 && !stuck)
-		{
-			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
-			for(Object obj : list)
-			{
-				if(obj == thrower && ticksExisted < 10 && motVec.lengthSquared() > 0.1D)
-					continue;
-				if(obj instanceof EntityLivingBase)
-				{
-					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
-				}
-			}
-		}
+
 		
 		//Physics and motion (Don't move if stuck)
 		if(!stuck)
@@ -271,6 +256,23 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 			//Update the grenade position
 			setPosition(posX, posY, posZ);
+		}
+		
+		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
+		//(Don't attack entities when stuck to stuff)
+		if(type.hitEntityDamage > 0 && !stuck)
+		{
+			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
+			for(Object obj : list)
+			{
+				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
+					continue;
+				if(obj instanceof EntityLivingBase)
+				{
+					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
+				}
+			}
 		}
 	
 		//Apply gravity

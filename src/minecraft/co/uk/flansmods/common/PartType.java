@@ -27,7 +27,8 @@ public class PartType extends InfoType {
 	}
 
 	@Override
-	protected void read(TypeFile file) {
+	protected void read(TypeFile file) 
+	{
 		super.read(file);
 		if (category == 2 && defaultEngine == null)
 			defaultEngine = this;

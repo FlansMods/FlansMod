@@ -344,8 +344,13 @@ public class FlansMod
 									break;
 								typeFile.lines.add(line);
 							}
+							reader.close();
 						}
 						catch(FileNotFoundException e)
+						{
+							e.printStackTrace();
+						}
+						catch(IOException e)
 						{
 							e.printStackTrace();
 						}
@@ -395,6 +400,8 @@ public class FlansMod
 						}
 					}
 					while(zipEntry != null);
+					reader.close();
+					zipStream.close();
 				}
 				catch(IOException e)
 				{

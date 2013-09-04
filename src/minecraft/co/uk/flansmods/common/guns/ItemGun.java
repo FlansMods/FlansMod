@@ -543,4 +543,6 @@ public class ItemGun extends Item
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
+    
+    
 }

@@ -933,6 +933,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				killPart(part);
 			}
 		}
+		
+		
+		for(EntitySeat seat : seats)
+		{
+			
+		}
+		
 		//If the core was destroyed, kill the driveable
 		if(parts.get(EnumDriveablePart.core).dead)			
 			setDead();
