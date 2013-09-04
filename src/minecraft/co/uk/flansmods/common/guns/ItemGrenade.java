@@ -39,10 +39,10 @@ public class ItemGrenade extends Item {
 	}
 	
 	@Override
-    public Multimap func_111205_h()
+    public Multimap getItemAttributeModifiers()
     {
-        Multimap multimap = super.func_111205_h();
-        multimap.put(SharedMonsterAttributes.field_111264_e.func_111108_a(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        Multimap multimap = super.getItemAttributeModifiers();
+        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
 	

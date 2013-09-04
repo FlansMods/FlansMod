@@ -110,7 +110,7 @@ public class GuiDriveableInventory extends GuiContainer
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        mc.renderEngine.func_110577_a(texture);
+        mc.renderEngine.bindTexture(texture);
         
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;

@@ -603,7 +603,7 @@ public class TeamsManager implements IPlayerTracker
 		{		
 			EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 			FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(playerMP);
-			if(data.team == Team.spectators && MinecraftServer.getServerConfigurationManager(playerMP.mcServer).areCommandsAllowed(playerMP.username))
+			if(data.team == Team.spectators && MinecraftServer.getServerConfigurationManager(playerMP.mcServer).isPlayerOpped(playerMP.username))
 			{
 				return;
 			}

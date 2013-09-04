@@ -19,7 +19,7 @@ public class RenderBullet extends Render
 
 	public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)
 	{
-		func_110777_b(bullet);
+		bindEntityTexture(bullet);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
 		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
@@ -35,7 +35,7 @@ public class RenderBullet extends Render
 	}
 	
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityBullet)entity).type);
 	}

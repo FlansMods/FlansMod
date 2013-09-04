@@ -19,7 +19,7 @@ public class RenderParachute extends Render
 	public void doRender(Entity entity, double d0, double d1, double d2,
 			float f, float f1) 
 	{
-		func_110777_b(entity);
+		bindEntityTexture(entity);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d0, (float) d1, (float) d2);
 		GL11.glRotatef(-f, 0.0F, 1.0F, 0.0F);
@@ -30,7 +30,7 @@ public class RenderParachute extends Render
 	}
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityParachute)entity).type);
 	}

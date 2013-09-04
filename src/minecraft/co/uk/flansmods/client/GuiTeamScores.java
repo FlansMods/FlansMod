@@ -144,7 +144,7 @@ public class GuiTeamScores extends GuiScreen
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int guiHeight = 34 + 9 * numLines;

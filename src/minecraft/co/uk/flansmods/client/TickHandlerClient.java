@@ -96,7 +96,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
-			mc.renderEngine.func_110577_a(GuiTeamScores.texture);
+			mc.renderEngine.bindTexture(GuiTeamScores.texture);
 
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
@@ -253,7 +253,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
-			mc.renderEngine.func_110577_a(FlansModResourceHandler.getScope(FlansModClient.zoomOverlay));
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.zoomOverlay));
 
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();

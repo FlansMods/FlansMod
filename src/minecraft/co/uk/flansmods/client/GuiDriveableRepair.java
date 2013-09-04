@@ -105,7 +105,7 @@ public class GuiDriveableRepair extends GuiScreen
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		
 		//Bind the background texture
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		//Calculate the gui origin
 		guiOriginX = w / 2 - guiWidth / 2;
@@ -125,7 +125,7 @@ public class GuiDriveableRepair extends GuiScreen
 		{
 			boolean broken = part.health <= 0;
 			//Render the background for this section
-			mc.renderEngine.func_110577_a(texture);
+			mc.renderEngine.bindTexture(texture);
 			drawTexturedModalRect(guiOriginX, guiOriginY + y, 0, 24, 202, broken ? 40 : 20);
 			
 			//Render the damage bar
@@ -184,7 +184,7 @@ public class GuiDriveableRepair extends GuiScreen
 						//If we did not find enough in the inventory
 						if(totalAmountFound < stackNeeded.stackSize)
 						{
-							mc.renderEngine.func_110577_a(texture);
+							mc.renderEngine.bindTexture(texture);
 							drawTexturedModalRect(guiOriginX + 67 + 18 * n, guiOriginY + y + 22, 202, 0, 16, 16);
 						}
 						drawSlotInventory(stacksNeeded.get(stackNum), guiOriginX + 67 + 18 * n, guiOriginY + y + 22);

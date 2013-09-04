@@ -152,7 +152,7 @@ public class EntityPlane extends EntityDriveable
 	}
 		
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer)
+	public boolean interactFirst(EntityPlayer entityplayer)
     {
 		if(isDead)
 			return true;

@@ -88,7 +88,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		//Bind the background texture
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		guiOriginX = w / 2 - 88;
 		guiOriginY = h / 2 - 99;
@@ -109,7 +109,7 @@ public class GuiDriveableCrafting extends GuiScreen
 				if(blueprintNumber == selectedBlueprint)
 				{
 					//Bind the gui texture and draw in the green highlighted panel behind the driveable item
-					mc.renderEngine.func_110577_a(texture);
+					mc.renderEngine.bindTexture(texture);
 					drawTexturedModalRect(guiOriginX + 8 + n * 18, guiOriginY + 18 + m * 18, 213, 11, 16, 16);
 				}
 				//If the number is within the bounds of the list
@@ -147,7 +147,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glRotatef(180F, 0F, 0F, 1F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
 			GL11.glRotatef(spinner, 0F, 1F, 0F);
-			mc.renderEngine.func_110577_a(FlansModResourceHandler.getTexture(selectedType));
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render();
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
@@ -206,7 +206,7 @@ public class GuiDriveableCrafting extends GuiScreen
 						//If we didn't find enough, give the stack a red outline
 						if(totalAmountFound < recipeStack.stackSize)
 						{
-							mc.renderEngine.func_110577_a(texture);
+							mc.renderEngine.bindTexture(texture);
 							drawTexturedModalRect(guiOriginX + 8 + c * 18, guiOriginY + 138 + r * 18, 195, 11, 16, 16);
 							canCraft = false;
 						}
@@ -256,7 +256,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			}
 			
 			//If we didn't find a suitable stack of engines, red the box out
-			mc.renderEngine.func_110577_a(texture);
+			mc.renderEngine.bindTexture(texture);
 			if(bestEngineStack == null)
 			{
 				drawTexturedModalRect(guiOriginX + 152, guiOriginY + 138, 195, 11, 16, 16);
@@ -273,7 +273,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		//If we can't craft it, draw a red box around the craft button
 		if(!canCraft)
 		{
-			mc.renderEngine.func_110577_a(texture);
+			mc.renderEngine.bindTexture(texture);
 			drawTexturedModalRect(guiOriginX + 108, guiOriginY + 160, 176, 28, 44, 24);
 			drawString(fontRenderer, "Craft", guiOriginX + 116, guiOriginY + 168, 0xa0a0a0);
 		}

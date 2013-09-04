@@ -390,7 +390,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer) //interact : change back when Forge updates
+	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
 	{
 		// Player right clicked on gun
 		// Mount gun
