@@ -8,15 +8,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketSeatUpdates extends FlanPacketCommon 
 {
 	public static final byte packetID = 21;
 	
-	public static Packet buildUpdatePacket(EntityDriveable driveable)
+	public static Packet buildUpdatePacket(EntitySeat seat)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -26,13 +28,10 @@ public class PacketSeatUpdates extends FlanPacketCommon
         try
         {
         	data.write(packetID);
-        	data.writeInt(driveable.entityId);
-        	for(int i = 0; i < driveable.seats.length; i++)
-        	{
-        		data.writeInt(driveable.seats[i].riddenByEntity == null ? -1 : driveable.seats[i].riddenByEntity.entityId);
-        		data.writeFloat(driveable.seats[i].gunYaw);
-        		data.writeFloat(driveable.seats[i].gunPitch);
-        	}
+        	data.writeInt(seat.driveable.entityId);
+        	data.writeInt(seat.seatInfo.id);
+        	data.writeFloat(seat.looking.getYaw());
+        	data.writeFloat(seat.looking.getPitch());
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -68,40 +67,19 @@ public class PacketSeatUpdates extends FlanPacketCommon
 			}
 			if(driveable != null)
 			{
-	        	for(int i = 0; i < driveable.seats.length; i++)
-	        	{
-	        		int riddenById = stream.readInt();
-	        		float yaw = stream.readFloat();	        		
-	        		float pitch = stream.readFloat();
-	        		
-	        		if(riddenById == -1 && driveable.seats[i].riddenByEntity != null)
-	        			driveable.seats[i].riddenByEntity.mountEntity(null);
-	        		if(riddenById != -1)
-	        		{
-	        			//If wrong entity is in seat
-	        			if(driveable.seats[i].riddenByEntity != null && driveable.seats[i].riddenByEntity.entityId != riddenById)
-	        			{
-	        				//Dismount
-	        				driveable.seats[i].riddenByEntity.mountEntity(null);
-	        			}
-	        			//If seat is empty
-	        			if(driveable.seats[i].riddenByEntity == null)
-	        			{
-	        				//Find entity and mount
-	        				for(Object obj : player.worldObj.loadedEntityList)
-	        				{
-	        					if(((Entity)obj).entityId == riddenById)
-	        					{
-	        						//((Entity)obj).ridingEntity = driveable.seats[i];
-	        						//driveable.seats[i].riddenByEntity = ((Entity)obj);
-	        						((Entity)obj).mountEntity(driveable.seats[i]);
-	        					}
-	        				}	        				
-	        			}
-	        		}
-	        		driveable.seats[i].gunYaw = yaw;
-	        		driveable.seats[i].gunPitch = pitch;
-	        	}
+	        	int seatID = stream.readInt();
+        		float yaw = stream.readFloat();	        		
+        		float pitch = stream.readFloat();
+        		//If this is the player who sent the packet in the first place, don't read it
+        		if(side == Side.CLIENT && driveable.seats[seatID].riddenByEntity == player)
+        			return;
+        		driveable.seats[seatID].prevLooking = driveable.seats[seatID].looking.clone();
+        		driveable.seats[seatID].looking.setAngles(yaw, pitch, 0F);
+        		//If on the server, update all surrounding players with these new angles
+				if(side == Side.SERVER)
+				{
+					PacketDispatcher.sendPacketToAllAround(driveable.posX, driveable.posY, driveable.posZ, 50, driveable.dimension, buildUpdatePacket(driveable.seats[seatID]));
+				}
 			}
 		}
         catch(Exception e)

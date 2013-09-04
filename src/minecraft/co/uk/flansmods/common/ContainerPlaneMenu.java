@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -25,7 +26,7 @@ public class ContainerPlaneMenu extends Container
 		//Fuel slot
 		if(isFuel)
 		{
-			addSlotToContainer(new Slot(plane.superData, plane.superData.getFuelSlot(), 35, 44));
+			addSlotToContainer(new Slot(plane.driveableData, plane.driveableData.getFuelSlot(), 35, 44));
 		}
 		
 		//Main inventory slots

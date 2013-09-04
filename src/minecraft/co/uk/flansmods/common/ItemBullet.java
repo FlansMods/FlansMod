@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import co.uk.flansmods.common.guns.BulletType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -10,7 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /** Implemented from old source. */
 public class ItemBullet extends Item
 {
-	public ItemBullet(int i, int j, int k, BulletType type1)
+	public ItemBullet(int i, int k, BulletType type1)
 	{
 		super(i);
 		colour = k;

@@ -11,9 +11,9 @@ Chest americanCoat
 Legs americanPants
 Shoes americanBoots
 AddClass americanScout
-AddClass americanAssault1
-AddClass americanAssault2
+AddClass americanAssault
 AddClass americanSupport
+AddClass americanEngineer
 AddClass americanMedic
 
 

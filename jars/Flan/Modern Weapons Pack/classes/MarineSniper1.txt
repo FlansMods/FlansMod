@@ -1,0 +1,9 @@
+Name Heavy Sniper
+ShortName marineSniper1
+AddItem barrett
+AddItem m9
+AddItem m67 1
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem barrettAmmo 3
+AddItem m9Ammo 2

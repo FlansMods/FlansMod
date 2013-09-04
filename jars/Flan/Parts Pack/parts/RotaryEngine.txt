@@ -6,7 +6,8 @@ Colour 255 255 255
 ItemID 23278
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Engine
-EngineSpeed 4
+EngineSpeed 1.5
+FuelConsumption 1.8
 StackSize 4
 RecipeOutput 1
 Recipe I blockIron P enginePiston

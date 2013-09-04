@@ -2,6 +2,5 @@ Name Support
 ShortName nerfNitron
 AddItem nitron
 AddItem maverick
-AddItem 20DiscClip
-AddItem 20DiscClip
+AddItem 20DiscClip 2
 AddItem whistlerDart 12

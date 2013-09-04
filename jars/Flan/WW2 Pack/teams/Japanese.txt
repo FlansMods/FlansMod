@@ -11,7 +11,8 @@ Chest japaneseCoat
 Legs japanesePants
 Shoes japaneseBoots
 AddClass japaneseScout
-AddClass japaneseAssault1
+AddClass japaneseAssault
 AddClass japaneseSupport
+AddClass japaneseEngineer
 AddClass japaneseMedic
 

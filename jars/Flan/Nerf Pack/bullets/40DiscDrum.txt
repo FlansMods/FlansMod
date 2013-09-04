@@ -1,6 +1,6 @@
 Name Nerf 40 Disc Drum
 ShortName 40DiscDrum
-Model Bullet
+Model nerf.Disc
 Texture pyragonDisc
 //Colour of icon and model
 Colour 255 255 255
@@ -8,6 +8,8 @@ ItemID 23953
 Icon 40DiscDrum
 //How affected by gravity the bullet is
 FallSpeed 0.8
+//The maximum stack size
+MaxStackSize 1
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 40
 //The damage multiplier caused by the bullet on hitting an entity

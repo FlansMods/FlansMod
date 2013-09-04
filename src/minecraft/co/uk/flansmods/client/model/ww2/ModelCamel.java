@@ -8,7 +8,7 @@ public class ModelCamel extends ModelPlane
     public ModelCamel()
     {	
 		int textureX = 128; //The x-size of the texture
-		int textureY = 64;	//The y-size of the texture
+		int textureY = 128;	//The y-size of the texture
 	
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
         propellerModels[0][0] = new ModelRendererTurbo(this, 56, 8, textureX, textureY); //Propeller 0 - Blade 0 : 56, 8 is the texture origin
@@ -38,24 +38,14 @@ public class ModelCamel extends ModelPlane
         pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(40F, 3F, 0F);
 				
-        bodyModel = new ModelRendererTurbo[16]; //Defining lots of texture origins for the body model
+		//Body
+        bodyModel = new ModelRendererTurbo[5]; //Defining lots of texture origins for the body model
         bodyModel[0] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
         bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-        bodyModel[5] = new ModelRendererTurbo(this, 44, 0, textureX, textureY);
-		bodyModel[6] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		bodyModel[7] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		bodyModel[8] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);		
-		bodyModel[9] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);
-		bodyModel[10] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);
-		bodyModel[11] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);
-		bodyModel[12] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);
-		bodyModel[13] = new ModelRendererTurbo(this, 90, 46, textureX, textureY);
-		bodyModel[14] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
-		bodyModel[15] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
-		
+
         byte length = 24;
         byte sidePieceHeight = 6;
         byte width = 20;
@@ -74,34 +64,37 @@ public class ModelCamel extends ModelPlane
 
         bodyModel[4].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
         bodyModel[4].setPosition(0.0F, 0 + boatDepth, width / 2 - 1);
-		
-		bodyModel[5].addBox(0F, 0F , 0F, 4, 4, 4, 0.0F);		//Propeller Centre
-		bodyModel[5].setPosition(-28F, -2F, -2F);
-
-        bodyModel[6].addBox(-3F, 6F, 5F, 4, 4, 2, 0.0F);		//wheel
-		bodyModel[7].addBox(-3F, 6F, -7F, 4, 4, 2, 0.0F);		//wheel
-
+        
         bodyModel[0].rotateAngleX = 1.570796F;
         bodyModel[1].rotateAngleY = 4.712389F;
         bodyModel[2].rotateAngleY = 1.570796F;
         bodyModel[3].rotateAngleY = 3.141593F;
 		
-		//This block is so bad... meh.
-		bodyModel[8].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 2
-		bodyModel[8].setPosition(-24F, -3F, -9F);
-		bodyModel[9].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 2
-		bodyModel[9].setPosition(-24F, -3F, -6F);
-		bodyModel[10].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 3
-		bodyModel[10].setPosition(-24F, -3F, -3F);
-		bodyModel[11].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 4
-		bodyModel[11].setPosition(-24F, -3F, 0F);
-		bodyModel[12].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 5
-		bodyModel[12].setPosition(-24F, -3F, 3F);
-		bodyModel[13].addBox(0F, 0F , 0F, 12, 10, 3, 0.0F);		//front block segment 6
-		bodyModel[13].setPosition(-24F, -3F, 6F);
-	
-		bodyModel[14].addBox(-24F, -5F, 2F, 14, 2, 2, 0.0F);		//gun
-		bodyModel[15].addBox(-24F, -5F, -4F, 14, 2, 2, 0.0F);		//gun
+        //Nose
+        noseModel = new ModelRendererTurbo[4];   
+        noseModel[0] = new ModelRendererTurbo(this, 44, 0, textureX, textureY);
+        noseModel[1] = new ModelRendererTurbo(this, 0, 64, textureX, textureY);		
+        noseModel[2] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
+        noseModel[3] = new ModelRendererTurbo(this, 12, 32, textureX, textureY);
+        
+        noseModel[0].addBox(0F, 0F , 0F, 4, 4, 4, 0.0F);		//Propeller Centre
+        noseModel[0].setPosition(-28F, -2F, -2F);
+        noseModel[1].addBox(0F, 0F , 0F, 12, 10, 18, 0.0F);		//Front block
+        noseModel[1].setPosition(-24F, -3F, -9F);
+        noseModel[2].addBox(-24F, -5F, 2F, 14, 2, 2, 0.0F);		//gun
+        noseModel[3].addBox(-24F, -5F, -4F, 14, 2, 2, 0.0F);	//gun
+		
+		//Front wheels with struts
+		bodyWheelModel = new ModelRendererTurbo[4];
+		bodyWheelModel[0] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+		bodyWheelModel[1] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+	    bodyWheelModel[2] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
+	    bodyWheelModel[3] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
+
+        bodyWheelModel[0].addBox(-4F, 11F, 5F, 4, 4, 2, 0.0F);		//Left wheel
+		bodyWheelModel[1].addBox(-4F, 11F, -7F, 4, 4, 2, 0.0F);		//Right wheel
+		bodyWheelModel[2].addBox(-3F, 6F , 5F, 2, 5, 2, 0.0F);		//Left Strut		
+		bodyWheelModel[3].addBox(-3F, 6F , -7F, 2, 5, 2, 0.0F);		//Right Strut
 
 		rightWingModel = new ModelRendererTurbo[2];	
 		rightWingModel[0] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
@@ -139,31 +132,13 @@ public class ModelCamel extends ModelPlane
 		topWingModel[2].rotateAngleX = -1.570796F;
 		topWingModel[2].setPosition(-9F, -20F, -9F);
 
-		tailModel = new ModelRendererTurbo[2];
+		tailModel = new ModelRendererTurbo[1];
 		tailModel[0] = new ModelRendererTurbo(this, 0, 43, textureX, textureY);
-		tailModel[1] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		
         tailModel[0].addBox(11F, -2F , -5F, 40, 8, 10, 0.0F);		//Tail
-		tailModel[1].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
-		
-		//These two must still be initialized even when not used to avoid errors.
-		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
-		pitchFlapRightWingModel = new ModelRendererTurbo[0];
-		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
-
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
+        
+        tailWheelModel = new ModelRendererTurbo[1];
+		tailWheelModel[0] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+		tailWheelModel[0].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }

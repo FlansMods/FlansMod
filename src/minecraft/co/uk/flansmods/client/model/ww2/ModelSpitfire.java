@@ -11,61 +11,74 @@ public class ModelSpitfire extends ModelPlane
 		int textureY = 128;	//The y-size of the texture
 		//Initializing Model
 	
-        bodyModel = new ModelRendererTurbo[8];	//number of blocks in your model (0 is a block so its highest number block + 1)
+        bodyModel = new ModelRendererTurbo[4];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
 		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
 		//It is recommended however as the base mod requires it so you will have it anyway and it allows you to use textures larger than 64 square. 
 		//(Dont forget the crazy shapes you can make with it)
 			
-        bodyModel[0] = new ModelRendererTurbo(this, 0, 38, textureX, textureY);
-        bodyModel[1] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);
+        
+        bodyModel[0] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);
+        bodyModel[1] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
         bodyModel[2] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
-        bodyModel[3] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
-        bodyModel[4] = new ModelRendererTurbo(this, 172, 12, textureX, textureY);
-		bodyModel[5] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
-		bodyModel[6] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
-		bodyModel[7] = new ModelRendererTurbo(this, 0, 76, textureX, textureY);
+		bodyModel[3] = new ModelRendererTurbo(this, 0, 76, textureX, textureY);
 
-		//Front block
-		bodyModel[0].addTrapezoid(-51F, -16F, -10F, 48, 18, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_RIGHT);
-		bodyModel[0].setPosition(0F, 5F, 0F);
-		
-		//Cockpit Bottom
-		bodyModel[1].addBox(-3F, 0F, -31F, 20, 2, 20);
-		bodyModel[1].setPosition(0F, 5F, 21F);
+		//Cockpit bottom
+		bodyModel[0].addBox(-3F, 0F, -31F, 20, 2, 20);
+		bodyModel[0].setPosition(0F, 5F, 21F);
 		
 		//Cockpit sides
-		bodyModel[2].addBox(-3F, -16F, -10F, 20, 16, 2);
+		bodyModel[1].addBox(-3F, -16F, -10F, 20, 16, 2);
+		bodyModel[1].setPosition(0F, 5F, 0F);
+		
+		bodyModel[2].addBox(-17F, -16F, -10F, 20, 16, 2);
+		bodyModel[2].rotateAngleY = 3.14159265358979F;
 		bodyModel[2].setPosition(0F, 5F, 0F);
-		
-		bodyModel[3].addBox(-17F, -16F, -10F, 20, 16, 2);
-		bodyModel[3].rotateAngleY = 3.14159265358979F;
-		bodyModel[3].setPosition(0F, 5F, 0F);
-		
-		//Propeller Centre
-        bodyModel[4].addBox(0F, -2F , 0F, 4, 4, 4, 0.0F);
-		bodyModel[4].setPosition(-55F, 0F, -2F);
 
+		//Cockpit top
+		bodyModel[3].addTrapezoid(-3F, -19F, -10F, 20, 8, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_TOP);
+		
+		
 		//Wheels
-        bodyModel[5].addBox(4F, 6F, 5F, 6, 6, 4, 0.0F);
-		bodyModel[6].addBox(4F, 6F, -8F, 6, 6, 4, 0.0F);
-
-		//Cockpit
-		bodyModel[7].addTrapezoid(-3F, -19F, -10F, 20, 8, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_TOP);
+		bodyWheelModel = new ModelRendererTurbo[4];
+		bodyWheelModel[0] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
+		bodyWheelModel[1] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);
+		bodyWheelModel[2] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
+		bodyWheelModel[3] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
 		
-
+		bodyWheelModel[0].addBox(-6F, 14F, 4F, 6, 6, 4, 0.0F);
+		bodyWheelModel[1].addBox(-6F, 14F, -8F, 6, 6, 4, 0.0F);
+		bodyWheelModel[2].addBox(-4F, 6F, 5F, 2, 8, 2, 0.0F);	
+		bodyWheelModel[3].addBox(-4F, 6F, -7F, 2, 8, 2, 0.0F);	
 		
-		tailModel = new ModelRendererTurbo[3];
+		//Nose
+		noseModel = new ModelRendererTurbo[2];
+		//Nose fuselage
+		noseModel[0] = new ModelRendererTurbo(this, 0, 38, textureX, textureY);
+		noseModel[0].addTrapezoid(-51F, -16F, -10F, 48, 18, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_RIGHT);
+		noseModel[0].setPosition(0F, 5F, 0F);
+		//Propeller Centre
+		noseModel[1] = new ModelRendererTurbo(this, 172, 12, textureX, textureY);
+		noseModel[1].addBox(0F, -2F , 0F, 4, 4, 4, 0.0F);
+		noseModel[1].setPosition(-55F, 0F, -2F);
+		
+		//Tail
+		tailModel = new ModelRendererTurbo[1];
 		tailModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		tailModel[1] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);	
-		tailModel[2] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
 				
 		tailModel[0].addTrapezoid(17F, -16F, -10F, 76, 18, 20, 0.0F, -3.0F, ModelRendererTurbo.MR_LEFT);
 		tailModel[0].setPosition(0F, 5F, 0F);
-		tailModel[1].addBox(79F, 6F, -2F, 6, 6, 4, 0.0F);
-		tailModel[2].addBox(81F, 0F, -1F, 2, 8, 2, 0.0F);		
 		
+		//Tail wheel
+		tailWheelModel = new ModelRendererTurbo[2];
+		tailWheelModel[0] = new ModelRendererTurbo(this, 116, 48, textureX, textureY);	
+		tailWheelModel[1] = new ModelRendererTurbo(this, 200, 12, textureX, textureY);
+
+		tailWheelModel[0].addBox(79F, 6F, -2F, 6, 6, 4, 0.0F);
+		tailWheelModel[1].addBox(81F, 0F, -1F, 2, 8, 2, 0.0F);	
+		
+		//Left wing
 		leftWingModel = new ModelRendererTurbo[3];
 	    leftWingModel[0] = new ModelRendererTurbo(this, 58, 48, textureX, textureY);
 		leftWingModel[1] = new ModelRendererTurbo(this, 172, 0, textureX, textureY);	
@@ -76,6 +89,7 @@ public class ModelSpitfire extends ModelPlane
         leftWingModel[1].addTrapezoid(-25F, 3F , 78F, 32, 2, 10, 0.0F, -1.0F, ModelRendererTurbo.MR_BACK);	//Wingtip	
 		leftWingModel[2].addBox(-37F, 3F, 43F, 12, 2, 2, 0.0F);	//Machinegun
 		
+		//Right wing
 		rightWingModel = new ModelRendererTurbo[3];
 		rightWingModel[0] = new ModelRendererTurbo(this, 58, 48, textureX, textureY);
 		rightWingModel[1] = new ModelRendererTurbo(this, 172, 0, textureX, textureY);
@@ -89,6 +103,7 @@ public class ModelSpitfire extends ModelPlane
 		rightWingModel[1].setPosition(-25F,0F,-166F);
 		rightWingModel[2].addBox(-37F, 3F, -45F, 12, 2, 2, 0.0F);	//Machinegun
 
+		//Propellers
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
         propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
         propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
@@ -116,26 +131,6 @@ public class ModelSpitfire extends ModelPlane
 		pitchFlapRightModel[0].addBox(0F, 0F , 0F, 16, 22, 2, 0.0F);
         pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(76F, 1F, 0F);
-		
-		//These three must still be initialized even when not used to avoid errors.
-		topWingModel = new ModelRendererTurbo[0];
-		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
-		pitchFlapRightWingModel = new ModelRendererTurbo[0];
-		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
-
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }
