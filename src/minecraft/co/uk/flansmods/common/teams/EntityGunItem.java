@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import co.uk.flansmods.common.BulletType;
 import co.uk.flansmods.common.FlansModPlayerHandler;
-import co.uk.flansmods.common.GunType;
 import co.uk.flansmods.common.ItemBullet;
-import co.uk.flansmods.common.ItemGun;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -193,7 +193,7 @@ public class EntityGunItem extends EntityItem {
     }
     
     @Override
-    public boolean func_130002_c(EntityPlayer player) //interact
+    public boolean interactFirst(EntityPlayer player) //interact
     {
 		if(worldObj.isRemote)
 			return true;

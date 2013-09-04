@@ -23,7 +23,7 @@ public class ModelJeep extends ModelVehicle
         bodyModel[7] = new ModelRendererTurbo(this, 60, 0, textureX, textureY);
 		bodyModel[8] = new ModelRendererTurbo(this, 32, 49, textureX, textureY);
         bodyModel[9] = new ModelRendererTurbo(this, 90, 28, textureX, textureY);
-        bodyModel[10] = new ModelRendererTurbo(this, 66, 55, textureX, textureY);
+        bodyModel[10] = new ModelRendererTurbo(this, 66, 49, textureX, textureY);
 
 	
 		bodyModel[0].addBox(8F, -10F , -14F, 16, 12, 28, 0.0F);		//Bonnet
@@ -39,7 +39,7 @@ public class ModelJeep extends ModelVehicle
 		bodyModel[9].addBox(-4F, -4F, -1F, 8, 8, 2, 0.0F);			//Spare Wheel
 		bodyModel[9].rotateAngleY = 3.14159265F / 2F;
 		bodyModel[9].setRotationPoint(-25F, -6F, 0F);
-		bodyModel[10].addBox(-6F, -18F, -1F, 1, 10, 1, 0.0F);		//Gun pole
+		bodyModel[10].addBox(-6F, -22F, -0.5F, 1, 14, 1, 0.0F);		//Gun pole
 		
 		leftBackWheelModel = new ModelRendererTurbo[1];
 		leftBackWheelModel[0] = new ModelRendererTurbo(this, 90, 22, textureX, textureY);
@@ -60,35 +60,31 @@ public class ModelJeep extends ModelVehicle
 		rightFrontWheelModel[0].setRotationPoint(16F, 2F, -15F);		
 		
 		//Gun model stolen from the browning
- 		gunModel = new ModelRendererTurbo[0];
-		/*
-		gunModel[0] = new ModelRendererTurbo(this, 66, 55, textureX, textureY);
-		gunModel[1] = new ModelRendererTurbo(this, 66, 70, textureX, textureY);
-		gunModel[2] = new ModelRendererTurbo(this, 70, 55, textureX, textureY);
-
-		gunModel[0].addBox(-1.5F, -1.5F, -4F, 3, 3, 12);
-		gunModel[0].setRotationPoint(-6F, 18F, 0F);
-		gunModel[1].addBox(-0.5F, -0.5F, -12F, 1, 1, 10);
-		gunModel[1].setRotationPoint(-6F, 18F, 0F);
-		gunModel[2].addBox(-1F, -3F, 8F, 2, 3, 2);
-		gunModel[2].setRotationPoint(-6F, 18F, 0F);			
-		*/
+		ModelRendererTurbo[][] browningModel = new ModelRendererTurbo[3][];
 		
-		ammoModel = new ModelRendererTurbo[0];
-		/*
-		ammoModel[0] = new ModelRendererTurbo(this, 84, 55, textureX, textureY);
-		ammoModel[0].addBox(-6F, -3F, -2F, 5, 4, 2);
-		ammoModel[0].setRotationPoint(-6F, 18F, 0F);			
-		*/
+		//No yaw only part
+		browningModel[0] = new ModelRendererTurbo[0];
 		
-		//This should be defined even when not used.
-		turretModel = new ModelRendererTurbo[0];	
-		barrelModel = new ModelRendererTurbo[0];
+		//The main gun part
+		browningModel[1] = new ModelRendererTurbo[4];
+		browningModel[1][0] = new ModelRendererTurbo(this, 66, 73, textureX, textureY);
+		browningModel[1][1] = new ModelRendererTurbo(this, 66, 79, textureX, textureY);
+		browningModel[1][2] = new ModelRendererTurbo(this, 80, 68, textureX, textureY);
+		browningModel[1][3] = new ModelRendererTurbo(this, 66, 64, textureX, textureY);	//Ammo box
 		
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		trailerModel = new ModelRendererTurbo[0];
-		wheelAniModel = new ModelRendererTurbo[0];
+		browningModel[1][0].addBox(-8F, -1.5F, -1.5F, 12, 3, 3);
+		browningModel[1][1].addBox(4F, -0.5F, -0.5F, 10, 1, 1);
+		browningModel[1][2].addBox(-10F, 0F, -1F, 2, 3, 2);		
+		browningModel[1][3].addBox(0F, -1F, -6F, 2, 4, 5);
+		
+		//Set the origin
+		for(ModelRendererTurbo gunPart : browningModel[1])
+			gunPart.setRotationPoint(-6F, -18F, 0F);
+		
+		//No recoil part
+		browningModel[2] = new ModelRendererTurbo[0];
+				
+		registerGunModel("Browning", browningModel);
 		
 		flipAll(); //For old models
 		translateAll(-4);

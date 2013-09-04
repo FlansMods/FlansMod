@@ -2,10 +2,8 @@ Name Scout
 ShortName russianScout
 AddItem nagantSniper
 AddItem tt33
+AddItem rgd33 2
 AddItem ww2Knife
 AddItem ww2Binoculars
-AddItem nagantAmmo
-AddItem nagantAmmo
-AddItem nagantAmmo
-AddItem tt33Ammo
-AddItem tt33Ammo
+AddItem nagantAmmo 3
+AddItem tt33Ammo 2

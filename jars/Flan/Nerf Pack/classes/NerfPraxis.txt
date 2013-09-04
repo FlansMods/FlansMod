@@ -2,7 +2,5 @@ Name Scout
 ShortName nerfPraxis
 AddItem praxis
 AddItem maverick
-AddItem 10DiscClip
-AddItem 10DiscClip
-AddItem 10DiscClip
+AddItem 10DiscClip 3
 AddItem whistlerDart 12

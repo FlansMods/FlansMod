@@ -11,8 +11,9 @@ Chest britishDesertCoat
 Legs britishDesertPants
 Shoes britishDesertBoots
 AddClass britishScout
-AddClass britishAssault1
+AddClass britishAssault
 AddClass britishSupport
+AddClass britishEngineer
 AddClass britishMedic
 
 

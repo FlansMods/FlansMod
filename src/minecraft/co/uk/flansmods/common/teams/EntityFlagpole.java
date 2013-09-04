@@ -10,9 +10,11 @@ import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -293,10 +295,17 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	}
 	
 	@Override
-    public boolean func_130002_c(EntityPlayer player) //interact
+    public boolean interactFirst(EntityPlayer player) //interact
     {
     	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
         return false;
+    }
+	
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(FlansMod.flag.itemID, 1, 0);
+		return stack;
     }
 }

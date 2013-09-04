@@ -8,9 +8,9 @@ import java.io.IOException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityMG;
 import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityMG;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketMGFire extends FlanPacketCommon 

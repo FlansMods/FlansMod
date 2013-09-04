@@ -2,7 +2,5 @@ Name Scout
 ShortName nerfRecon
 AddItem recon
 AddItem maverick
-AddItem 6DartClip
-AddItem 6DartClip
-AddItem 6DartClip
+AddItem 6DartClip 3
 AddItem whistlerDart 12

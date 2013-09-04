@@ -2,10 +2,8 @@ Name Scout
 ShortName americanScout
 AddItem springfield
 AddItem colt
+AddItem mk2Frag 2
 AddItem ww2Knife
 AddItem ww2Binoculars
-AddItem springfieldAmmo
-AddItem springfieldAmmo
-AddItem springfieldAmmo
-AddItem coltAmmo
-AddItem coltAmmo
+AddItem springfieldAmmo 3
+AddItem coltAmmo 2

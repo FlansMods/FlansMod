@@ -5,7 +5,5 @@ AddItem bazooka
 AddItem colt
 AddItem ww2Knife
 AddItem browningAmmo
-AddItem bazookaAmmo
-AddItem coltAmmo
-AddItem coltAmmo
-AddItem coltAmmo
+AddItem bazookaAmmo 2
+AddItem coltAmmo 3

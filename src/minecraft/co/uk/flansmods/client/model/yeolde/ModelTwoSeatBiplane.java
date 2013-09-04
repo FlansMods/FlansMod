@@ -2,7 +2,7 @@ package co.uk.flansmods.client.model.yeolde;
 
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import co.uk.flansmods.common.CollisionBox;
+import co.uk.flansmods.common.driveables.CollisionPoint;
 
 public class ModelTwoSeatBiplane extends ModelPlane
 {
@@ -39,20 +39,13 @@ public class ModelTwoSeatBiplane extends ModelPlane
         pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(44F, 3F, 0F);
 				
-        bodyModel = new ModelRendererTurbo[13]; //Defining lots of texture origins for the body model
+        bodyModel = new ModelRendererTurbo[6]; //Defining lots of texture origins for the body model
         bodyModel[0] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
         bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
         bodyModel[5] = new ModelRendererTurbo(this, 44, 0, textureX, textureY);
-		bodyModel[6] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		bodyModel[7] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		bodyModel[8] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-        bodyModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-        bodyModel[10] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-        bodyModel[11] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-        bodyModel[12] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 
         byte length = 24;
         byte sidePieceHeight = 6;
@@ -76,29 +69,46 @@ public class ModelTwoSeatBiplane extends ModelPlane
 		bodyModel[5].addBox(0F, 0F , 0F, 4, 4, 4, 0.0F);		//Propeller Centre
 		bodyModel[5].setPosition(-15F, -2F, -2F);
 
-        bodyModel[6].addBox(-3F, 6F, 5F, 4, 4, 2, 0.0F);		//wheel
-		bodyModel[7].addBox(-3F, 6F, -7F, 4, 4, 2, 0.0F);		//wheel
-
         bodyModel[0].rotateAngleX = 1.570796F;
         bodyModel[1].rotateAngleY = 4.712389F;
         bodyModel[2].rotateAngleY = 1.570796F;
         bodyModel[3].rotateAngleY = 3.141593F;
-		
-		
-		bodyModel[8].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
-        bodyModel[8].setPosition(length, 0 + boatDepth, 0.0F);
-        bodyModel[9].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[9].setPosition(length - length / 2 + 1, 0 + boatDepth, 0.0F);
-        bodyModel[10].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[10].setPosition(length + length / 2 - 1, 0 + boatDepth, 0.0F);
-        bodyModel[11].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[11].setPosition(length, 0 + boatDepth, -width / 2 + 1);
-        bodyModel[12].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[12].setPosition(length, 0 + boatDepth, width / 2 - 1);
-		bodyModel[8].rotateAngleX = 1.570796F;
-        bodyModel[9].rotateAngleY = 4.712389F;
-        bodyModel[10].rotateAngleY = 1.570796F;
-        bodyModel[11].rotateAngleY = 3.141593F;
+        
+        
+        bayModel = new ModelRendererTurbo[5];
+        bayModel[0] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
+        bayModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bayModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bayModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bayModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        
+        bayModel[0].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
+        bayModel[0].setPosition(length, 0 + boatDepth, 0.0F);
+        bayModel[1].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
+        bayModel[1].setPosition(length - length / 2 + 1, 0 + boatDepth, 0.0F);
+        bayModel[2].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
+        bayModel[2].setPosition(length + length / 2 - 1, 0 + boatDepth, 0.0F);
+        bayModel[3].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
+        bayModel[3].setPosition(length, 0 + boatDepth, -width / 2 + 1);
+        bayModel[4].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
+        bayModel[4].setPosition(length, 0 + boatDepth, width / 2 - 1);
+        
+        bayModel[0].rotateAngleX = 1.570796F;
+        bayModel[1].rotateAngleY = 4.712389F;
+        bayModel[2].rotateAngleY = 1.570796F;
+        bayModel[3].rotateAngleY = 3.141593F;
+        
+        //Front wheels with struts
+  		bodyWheelModel = new ModelRendererTurbo[4];
+  		bodyWheelModel[0] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+  		bodyWheelModel[1] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+  	    bodyWheelModel[2] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
+  	    bodyWheelModel[3] = new ModelRendererTurbo(this, 56, 15, textureX, textureY);
+
+        bodyWheelModel[0].addBox(-4F, 11F, 5F, 4, 4, 2, 0.0F);		//Left wheel
+  		bodyWheelModel[1].addBox(-4F, 11F, -7F, 4, 4, 2, 0.0F);		//Right wheel
+  		bodyWheelModel[2].addBox(-3F, 6F , 5F, 2, 5, 2, 0.0F);		//Left Strut		
+  		bodyWheelModel[3].addBox(-3F, 6F , -7F, 2, 5, 2, 0.0F);		//Right Strut
 
 		rightWingModel = new ModelRendererTurbo[2];	
 		rightWingModel[0] = new ModelRendererTurbo(this, 64 , 0, textureX, textureY);
@@ -136,31 +146,14 @@ public class ModelTwoSeatBiplane extends ModelPlane
 		topWingModel[2].rotateAngleX = -1.570796F;
 		topWingModel[2].setPosition(-9F, -20F, -9F);
 
-		tailModel = new ModelRendererTurbo[2];
+		tailModel = new ModelRendererTurbo[1];
 		tailModel[0] = new ModelRendererTurbo(this, 0, 43, textureX, textureY);
-		tailModel[1] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
-		
         tailModel[0].addBox(35F, -2F , -5F, 20, 8, 10, 0.0F);		//Tail
-		tailModel[1].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
-		
-		//These two must still be initialized even when not used to avoid errors.
-		pitchFlapLeftWingModel = new ModelRendererTurbo[0];
-		pitchFlapRightWingModel = new ModelRendererTurbo[0];
-		
-		bodyGearDownModel = new ModelRendererTurbo[0];
-		tailGearDownModel = new ModelRendererTurbo[0];
-		rightWingGearDownModel = new ModelRendererTurbo[0];
-		leftWingGearDownModel = new ModelRendererTurbo[0];
+        
+		tailWheelModel = new ModelRendererTurbo[1];
+		tailWheelModel[0] = new ModelRendererTurbo(this, 0, 32, textureX, textureY);
+		tailWheelModel[0].addBox(44F, 6F, -1F, 4, 4, 2, 0.0F);			//Tail Wheel
 
-		bodyDoorOpenModel = new ModelRendererTurbo[0];
-		bodyDoorCloseModel = new ModelRendererTurbo[0];
-		tailDoorOpenModel = new ModelRendererTurbo[0];
-		tailDoorCloseModel = new ModelRendererTurbo[0];
-
-		rightWingPos1Model = new ModelRendererTurbo[0];
-		rightWingPos2Model = new ModelRendererTurbo[0];
-		leftWingPos1Model = new ModelRendererTurbo[0];
-		leftWingPos2Model = new ModelRendererTurbo[0];
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.	
     }
