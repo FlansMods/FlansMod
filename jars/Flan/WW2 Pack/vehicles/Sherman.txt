@@ -36,6 +36,8 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 16 0 -360 360 0 45
 RotatedDriverOffset 10 0 -8
+//Secondary gun
+AddGun 8 34 8 turret browning
 Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 browning Browning
 BarrelPosition 0 34 0

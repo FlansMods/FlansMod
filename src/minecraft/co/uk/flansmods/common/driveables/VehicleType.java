@@ -80,12 +80,12 @@ public class VehicleType extends DriveableType
 			//Sound
 			if(split[0].equals("ShootSound"))
 			{
-				shootMainSound = "driveables." + split[1];
+				shootMainSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("ShellSound"))
 			{
-				shootSecondarySound = "driveables." + split[1];
+				shootSecondarySound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 		}
