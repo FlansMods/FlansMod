@@ -117,7 +117,7 @@ public class FlansMod
 	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), partItems = new ArrayList<Item>(),
 				toolItems = new ArrayList<Item>(), gunItems = new ArrayList<Item>(), aaGunItems = new ArrayList<Item>(), 
 				grenadeItems = new ArrayList<Item>(), armourItems = new ArrayList<Item>();

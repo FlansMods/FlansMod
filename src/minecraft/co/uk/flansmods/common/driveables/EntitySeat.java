@@ -123,7 +123,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//If on the client
 		if(worldObj.isRemote)
 		{
-			if(driver && riddenByEntity == Minecraft.getMinecraft().thePlayer && FlansModClient.controlModeMouse)
+			if(driver && riddenByEntity == Minecraft.getMinecraft().thePlayer && FlansModClient.controlModeMouse && driveable.hasMouseControlMode())
 			{
 				looking = new RotatedAxes();
 			}

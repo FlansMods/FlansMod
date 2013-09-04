@@ -86,7 +86,7 @@ public class GrenadeType extends InfoType
 	//Aesthetics
 	/** The model to render for this grenade in the world */
 	@SideOnly(Side.CLIENT)
-	public ModelBase model = null;
+	public ModelBase model;
 	/** Trail particles given off by the grenade while being thrown */
 	public boolean trailParticles = false;
 	public String trailParticleType = "smoke";
@@ -112,7 +112,7 @@ public class GrenadeType extends InfoType
 		super.read(split, file);
 		try
 		{
-			if(split[0].equals("Model"))
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split, shortName, ModelBase.class);
 			if(split[0].equals("Texture"))
 				texture = split[1];

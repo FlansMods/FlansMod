@@ -761,7 +761,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 			        //After taking this much force, the plane will take damage (scales with mass)
 			        float damagePoint = 2F;
-			        float damageModifier = 1F;
+			        float damageModifier = 50F;
 
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
@@ -781,16 +781,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 
-		checkParts();
 
-		//Apply motion to position
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-
-		//Apply motion to rotation
-      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
-			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
       	
       	numHits = 0;
       	
@@ -846,11 +837,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				      				
+      				      			      				
       				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
       			}
       		}
       	}
+      	
+		checkParts();
+
+		//Apply motion to position
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
+		
+		setPosition(posX, posY, posZ);
+
+		//Apply motion to rotation
+      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
+			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 	}
 	
 	/** Overriden by planes for wheel parts */

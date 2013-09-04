@@ -48,7 +48,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			motionX += (moveForwards * sinYaw + moveStrafing * cosYaw) * speedMultiplier;
 			motionZ += (moveForwards * cosYaw - moveStrafing * sinYaw) * speedMultiplier;
 			
-			prevRotationYaw = riddenByEntity.prevRotationYaw;
+			prevRotationYaw = rotationYaw;
 			rotationYaw = riddenByEntity.rotationYaw;
 		}		
 		
