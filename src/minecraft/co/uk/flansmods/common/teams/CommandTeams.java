@@ -42,6 +42,7 @@ public class CommandTeams extends CommandBase {
 		{
 			teamsManager.currentGametype = null;
 			teamsManager.messageAll("Flan's Teams Mod disabled");
+			return;
 		}
 		if(split[0].equals("survival"))
 		{
@@ -57,6 +58,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.vehiclesNeedFuel = true;
 			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 0;
 			teamsManager.messageAll("Flan's Mod switching to survival presets");
+			return;
 		}
 		if(split[0].equals("arena"))
 		{
@@ -72,6 +74,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.vehiclesNeedFuel = false;
 			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 120;
 			teamsManager.messageAll("Flan's Mod switching to arena mode presets");
+			return;
 		}
 		if(split[0].equals("listGametypes"))
 		{
