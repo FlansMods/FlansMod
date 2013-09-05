@@ -117,26 +117,13 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.mouseHelper.grabMouseCursor();
 		}
-        for(; Mouse.next(); handleMouseInput()) { }
+		handleMouseInput();
         for(; Keyboard.next(); handleKeyboardInput()) { }
         
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();
 		
 		plane.onMouseMoved(l, m);
-        /*
-        for(Controller joyStick : joySticks)
-        {
-			int dy = (int)(800F * joyStick.getAxisValue(0));
-			int dx = (int)(800F * joyStick.getAxisValue(1));
-			if(dx != 0 || dy != 0)
-			{
-				plane.onMouseMoved(dx, dy);
-				System.out.println(joyStick.getAxisValue(0) + " " + joyStick.getAxisValue(1));
-				break;
-			}
-        }
-         */
         
 		if(plane != null && !plane.isDead() && plane.getControllingEntity() != null && plane.getControllingEntity() instanceof EntityPlayer)
 		{
