@@ -9,6 +9,7 @@ import java.util.List;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.TypeFile;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -47,7 +48,7 @@ public class Team {
 		teams.add(this);
 	}
 	
-	public Team(BufferedReader file, String pack)
+	public Team(TypeFile file)
 	{
 		do
 		{
@@ -73,7 +74,7 @@ public class Team {
 		teams.add(this);
 	}
 	
-	protected void read(String[] split, BufferedReader file)
+	protected void read(String[] split, TypeFile file)
 	{
 		try
 		{

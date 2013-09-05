@@ -15,6 +15,13 @@
 	<property name="mcp.dir" value="${forge.dir}/mcp"/>
 
 	<property name="mcpsrc.dir" value="${mcp.dir}/src"/>
+	
+	<property name="mcpflan.dir" value="${mcp.dir}/jars/Flan"/>
+	<property name="reobfmodels.dir" value="${mcp.dir}/reobf/minecraft/co/uk/flansmods/client/model"/>
+	
+	<property name="packmodels.dir" value="co/uk/flansmods/client/model"/>
+	
+	<property name="packs.dir" value="${jar.dir}/packs"/>
     
     <!-- Get version numbers -->
     <property file="build.properties" />
@@ -131,13 +138,18 @@
 
 		<!-- Copy classes -->
 		<copy todir="${classes.dir}">
-			<fileset dir="${mcp.dir}/reobf/minecraft"/>
+			<fileset dir="${mcp.dir}/reobf/minecraft">
+				<exclude name="**/nerf/**"/>
+				<exclude name="**/ww2/**"/>
+				<exclude name="**/yeolde/**"/>
+			</fileset>
 		</copy>
         
         <!-- Copy forge mod info files -->
         <copy todir="${classes.dir}">
             <fileset file="${src.dir}/minecraft/flansmod.png"/>
             <fileset file="${mcpsrc.dir}/minecraft/mcmod.info"/>
+			<fileset file="${mcpsrc.dir}/minecraft/pack.mcmeta"/>
         </copy>
         
 		<!-- Copy resources -->
@@ -147,16 +159,16 @@
 
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/co"/>
-        <delete dir="${mcpsrc.dir}/minecraft/assets"/>
-        <delete file="${mcpsrc.dir}/minecraft/flansmod.png"/>
-        <delete file="${mcpsrc.dir}/minecraft/mcmod.info"/>
+		<delete dir="${mcpsrc.dir}/minecraft/assets"/>
+		<delete file="${mcpsrc.dir}/minecraft/flansmod.png"/>
+		<delete file="${mcpsrc.dir}/minecraft/mcmod.info"/>
 
 	</target>
 
 	<!-- Package the compiled files -->
 	<target name="package" depends="reobf">
 
-		<delete dir="${jar.dir}"/>
+		<delete file="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/FlansMod-${flansmod.version}.jar" basedir="${classes.dir}"/>
 
@@ -176,8 +188,74 @@
 	</target>
 
 	<target name="test-run" depends="compile,run"/>
-
+    
+    
+	<target name="packs" depends="reobf,packagepacks"/>
+    <target name="packagepacks">
+	
+		<!-- Flans packs packaging -->
+		<mkdir dir="${packs.dir}"/>
+		<mkdir dir="${mcpflan.dir}"/>
+		
+		<!-- Modern Warfare -->
+		<delete dir="${mcpflan.dir}/Modern Weapons Pack"/>
+		<mkdir dir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}/mw"/>
+		<copy todir="${mcpflan.dir}/Modern Weapons Pack">
+			<fileset dir="jars/Flan/Modern Weapons Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}/mw" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/mw"/>
+		</copy>
+		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
+		
+		<!-- Nerf -->
+		<delete dir="${mcpflan.dir}/Nerf Pack"/>
+		<mkdir dir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}/nerf"/>
+		<copy todir="${mcpflan.dir}/Nerf Pack">
+			<fileset dir="jars/Flan/Nerf Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}/nerf" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/nerf"/>
+		</copy>
+		<zip destfile="${jar.dir}/packs/Nerf Pack.zip" basedir="${mcpflan.dir}/Nerf Pack"/>
+		
+		<!-- Parts -->
+		<delete dir="${mcpflan.dir}/Parts Pack"/>
+		<mkdir dir="${mcpflan.dir}/Parts Pack/${packmodels.dir}/parts"/>
+		<copy todir="${mcpflan.dir}/Parts Pack">
+			<fileset dir="jars/Flan/Parts Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/Parts Pack/${packmodels.dir}/parts" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/parts"/>
+		</copy>
+		<zip destfile="${jar.dir}/packs/Parts Pack.zip" basedir="${mcpflan.dir}/Parts Pack"/>
+		
+		<!-- WW2 -->
+		<delete dir="${mcpflan.dir}/WW2 Pack"/>
+		<mkdir dir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}/ww2"/>
+		<copy todir="${mcpflan.dir}/WW2 Pack">
+			<fileset dir="jars/Flan/WW2 Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}/ww2" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/ww2"/>
+		</copy>
+		<zip destfile="${jar.dir}/packs/WW2 Pack.zip" basedir="${mcpflan.dir}/WW2 Pack"/>
+		
+		<!-- Ye Olde -->
+		<delete dir="${mcpflan.dir}/Ye Olde Pack"/>
+		<mkdir dir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}/yeolde"/>
+		<copy todir="${mcpflan.dir}/Ye Olde Pack">
+			<fileset dir="jars/Flan/Ye Olde Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}/yeolde" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/yeolde"/>
+		</copy>
+		<zip destfile="${jar.dir}/packs/Ye Olde Pack.zip" basedir="${mcpflan.dir}/Ye Olde Pack"/>
+	</target>
+	
+	<!-- Target for full releases -->
+	<target name="full" depends="package,packagepacks"/>
+	
 	<!-- Default target to run -->
 	<target name="main" depends="package"/>
-
 </project>

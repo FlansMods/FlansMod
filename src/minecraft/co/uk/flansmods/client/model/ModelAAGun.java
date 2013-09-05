@@ -2,7 +2,7 @@ package co.uk.flansmods.client.model;
 
 import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import co.uk.flansmods.common.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityAAGun;
 
 public class ModelAAGun extends ModelBase
 {

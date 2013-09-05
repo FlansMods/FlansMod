@@ -5,45 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.TypeFile;
 
 public class ArmourType extends InfoType
 {
 	public static List<ArmourType> armours = new ArrayList<ArmourType>();
-	private static int lastIconIndex = 12;
 	
 	public int type;
 	public double defence;
 	public String armourTextureName;
 	
-	public ArmourType(BufferedReader file, String pack)
+	public ArmourType(TypeFile file)
 	{
-		super(pack);
-		do
-		{
-			String line = null;
-			try
-			{
-				line = file.readLine();
-			} catch (Exception e)
-			{
-				break;
-			}
-			if (line == null)
-			{
-				break;
-			}
-			if (line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if (split.length < 2)
-				continue;
-			read(split, file);
-		} while (true);
+		super(file);
 		armours.add(this);
-		iconIndex = lastIconIndex++;
 	}
 
-	protected void read(String[] split, BufferedReader file)
+	@Override
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try

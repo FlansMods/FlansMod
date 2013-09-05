@@ -9,6 +9,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.common.FlansMod;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -17,11 +18,15 @@ public class PacketPlaySound extends FlanPacketCommon {
 public static Random rand = new Random();
 public static final byte packetID = 8;
 	
+	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean distort)
+	{
+		PacketDispatcher.sendPacketToAllAround(x, y, z, range, dimension, buildSoundPacket(x, y, z, s, distort));
+	}
+
 	public static Packet buildSoundPacket(double x, double y, double z, String s)
 	{
 		return buildSoundPacket(x, y, z, s, false);
 	}
-
 
 	public static Packet buildSoundPacket(double x, double y, double z, String s, boolean distort)
 	{
@@ -71,8 +76,8 @@ public static final byte packetID = 8;
         	float z = stream.readFloat();
         	String sound = stream.readUTF();      
         	boolean distort = stream.readBoolean();
-        	
-        	FMLClientHandler.instance().getClient().sndManager.playSound("flansmod:sounds/" + sound, x, y, z, 10F, distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+               	
+        	FMLClientHandler.instance().getClient().sndManager.playSound("flansmod:" + sound, x, y, z, 10F, distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
         }
         catch(Exception e)
         {

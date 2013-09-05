@@ -11,8 +11,9 @@ Chest britishCoat
 Legs britishPants
 Shoes britishBoots
 AddClass britishScout
-AddClass britishAssault1
+AddClass britishAssault
 AddClass britishSupport
+AddClass britishEngineer
 AddClass britishMedic
 
 

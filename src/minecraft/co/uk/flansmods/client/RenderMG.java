@@ -7,8 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelMG;
-import co.uk.flansmods.common.EntityAAGun;
-import co.uk.flansmods.common.EntityMG;
+import co.uk.flansmods.common.guns.EntityAAGun;
+import co.uk.flansmods.common.guns.EntityMG;
 
 public class RenderMG extends Render
 {
@@ -20,7 +20,7 @@ public class RenderMG extends Render
 
     public void render(EntityMG mg, double d, double d1, double d2, float f, float f1)
     {
-    	func_110777_b(mg);
+    	bindEntityTexture(mg);
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(180F - (float)mg.direction * 90F, 0.0F, 1.0F, 0.0F);
@@ -38,7 +38,7 @@ public class RenderMG extends Render
     }
     
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityMG)entity).type);
 	}

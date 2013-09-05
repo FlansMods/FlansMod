@@ -11,9 +11,9 @@ Chest germanDesertCoat
 Legs germanDesertPants
 Shoes germanDesertBoots
 AddClass germanScout
-AddClass germanAssault1
-AddClass germanAssault2
+AddClass germanAssault
 AddClass germanSupport
+AddClass germanEngineer
 AddClass germanMedic
 
 
