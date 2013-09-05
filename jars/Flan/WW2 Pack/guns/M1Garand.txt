@@ -16,8 +16,8 @@ Damage 7
 Accuracy 3
 //Time in ticks between rounds
 ShootDelay 5
-ShootSound m1GarandShoot
-ReloadSound m1GarandReload
+ShootSound m1garandShoot
+ReloadSound m1garandReload
 Mode SemiAuto
 Scope None
 Deployable False

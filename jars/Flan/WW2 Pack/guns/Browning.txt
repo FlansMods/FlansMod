@@ -20,8 +20,8 @@ ShootDelay 2
 SoundLength 21
 //Whether or not to distort the sound. This works well for single shots but not for loops
 DistortSound False
-ShootSound browningShoot
-ReloadSound browningReload
+ShootSound BrowningShoot
+ReloadSound BrowningReload
 Mode FullAuto
 Scope None
 Deployable True
