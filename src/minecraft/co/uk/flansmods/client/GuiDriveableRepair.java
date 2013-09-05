@@ -198,6 +198,15 @@ public class GuiDriveableRepair extends GuiScreen
 		super.drawScreen(i, j, f);
     }	
     
+	protected void mouseClicked(int i, int j, int k)
+    {
+        super.mouseClicked(i, j, k);
+		int m = i - guiOriginX;
+		int n = j - guiOriginY;
+		if(m > 185 && m < 195 && n > 5 && n < 15)
+			 mc.displayGuiScreen(new GuiDriveableMenu(driver.inventory, driver.worldObj, driving));
+	}
+    
 	/** Item stack renderering method */
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{

@@ -41,6 +41,7 @@ import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
@@ -199,11 +200,11 @@ public class TeamsManager implements IPlayerTracker
 	}	
 	
 	@ForgeSubscribe
-	public void onEntityHurt(LivingHurtEvent event) 
+	public void onEntityHurt(LivingAttackEvent event) 
 	{
 		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
 			if(!currentGametype.playerAttacked((EntityPlayerMP)event.entity, event.source))
-				event.ammount = 0;
+				event.setCanceled(true);
 	}
 	
 	@ForgeSubscribe
@@ -329,7 +330,7 @@ public class TeamsManager implements IPlayerTracker
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
 				{
-					if(FlansMod.weaponDrops > 0)
+					if(FlansMod.weaponDrops != 1)
 						dropsToThrow.add(entity);
 				}
 				else if(stack.getItem() instanceof ItemTeamArmour)

@@ -7,6 +7,7 @@ import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -39,8 +40,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 {
 	/** Set this to true when the client has found the parent driveable and connected them */
 	@SideOnly(Side.CLIENT)
-	public boolean foundDriveable = false;
-	@SideOnly(Side.CLIENT)
+	public boolean foundDriveable;
 	private int driveableID;
 	@SideOnly(Side.CLIENT)
 	private int seatID;
@@ -82,7 +82,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		seatInfo = driveable.getDriveableType().seats[id];
 		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
-		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
+		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		//updatePosition();
 	}
 	
@@ -108,7 +108,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			foundDriveable = true;
 			driveable.seats[seatID] = this;
 			seatInfo = driveable.getDriveableType().seats[seatID];
-			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
+			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		}
 		
 		//Update gun delay ticker
@@ -363,6 +363,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return true;
 		if(worldObj.isRemote)
 			return true;
+		//If they are using a repair tool, don't put them in
+		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+			return true;
+		//Put them in the seat
 		if(riddenByEntity == null)
 			entityplayer.mountEntity(this);
         return true;
@@ -403,7 +408,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(driveable != null)
 		{
 			seatInfo = driveable.getDriveableType().seats[seatID];
-			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, (seatInfo.minPitch + seatInfo.maxPitch) / 2, 0F);
+			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		}
 	}
 	
@@ -433,8 +438,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			//Set the player's rotation based on this
 			riddenByEntity.rotationYaw = -90F + globalLookAxes.getYaw();
 			riddenByEntity.rotationPitch = globalLookAxes.getPitch();
+	
 			//If the entity is a player, roll its view accordingly
-			playerRoll = -globalLookAxes.getRoll();
+			if(worldObj.isRemote)
+				playerRoll = -globalLookAxes.getRoll();
+			
 			double dYaw = riddenByEntity.rotationYaw - riddenByEntity.prevRotationYaw;
 			if(dYaw > 180)
 				riddenByEntity.prevRotationYaw += 360F;

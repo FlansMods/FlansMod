@@ -146,7 +146,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glScalef(-50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance);
 			GL11.glRotatef(180F, 0F, 0F, 1F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
-			GL11.glRotatef(spinner, 0F, 1F, 0F);
+			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.func_110577_a(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render();
 			GL11.glDisable(GL11.GL_DEPTH_TEST);

@@ -38,11 +38,23 @@ public class ItemPlane extends Item
 	{
 		return true;
 	}
+	
+	private NBTTagCompound getTagCompound(ItemStack stack)
+	{
+		if(stack.stackTagCompound == null)
+		{
+			stack.stackTagCompound = new NBTTagCompound();
+			stack.stackTagCompound.setString("Type", PlaneType.types.get(0).shortName);
+			stack.stackTagCompound.setString("Engine", PartType.defaultEngine.shortName);
+		}
+		
+		return stack.stackTagCompound;
+	}
 
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
-		lines.add(PartType.getPart(stack.stackTagCompound.getString("Engine")).name);
+		lines.add(PartType.getPart(getTagCompound(stack).getString("Engine")).name);
 	}
 	
 	@Override
@@ -99,11 +111,7 @@ public class ItemPlane extends Item
 	
 	public DriveableData getPlaneData(ItemStack itemstack, World world)
     {
-		if(itemstack.stackTagCompound == null || !itemstack.stackTagCompound.hasKey("Type"))
-		{
-			return null;
-		}
-		return new DriveableData(itemstack.stackTagCompound);
+		return new DriveableData(getTagCompound(itemstack));
     }
 		
     @SideOnly(Side.CLIENT)

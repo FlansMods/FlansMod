@@ -28,6 +28,7 @@ import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
+import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -157,6 +158,11 @@ public class EntityPlane extends EntityDriveable
 		if(isDead)
 			return true;
 		if(worldObj.isRemote)
+			return true;
+		
+		//If they are using a repair tool, don't put them in
+		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
 		
 		PlaneType type = this.getPlaneType();

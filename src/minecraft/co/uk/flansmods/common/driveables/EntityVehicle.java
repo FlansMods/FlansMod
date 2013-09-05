@@ -29,6 +29,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
+import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -140,6 +141,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(worldObj.isRemote)
 			return true;
 		
+		//If they are using a repair tool, don't put them in
+		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+			return true;
+		
 		VehicleType type = getVehicleType();
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
@@ -235,12 +241,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					{
 						int spread = 0;
 						int damageMultiplier = 1;
-						float shellSpeed = 1F;
+						float shellSpeed = 3F;
 
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, shellSpeed, type));
 						
-						if(type.shootMainSound != null)
-							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));					
+						if(type.shootSecondarySound != null)
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));					
 						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 							driveableData.decrStackSize(slot, 1);
 						shellDelay = type.vehicleShellDelay;
@@ -279,7 +285,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 								//Spawn a new bullet item
 								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVec, (EntityLiving)riddenByEntity, gunType.accuracy / 2, gunType.damage, bullet, 2.0F, type));
 								//Play the shoot sound
-								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));
+								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));
 								//Get the bullet item damage and increment it
 								int damage = bulletItemStack.getItemDamage();
 								bulletItemStack.setItemDamage(damage + 1);	

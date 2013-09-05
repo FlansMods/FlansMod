@@ -27,7 +27,7 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 	@Override
     public ChatMessageComponent getDeathMessage(EntityLivingBase living)
     {
-		if(!(living instanceof EntityPlayer))
+		if(!(living instanceof EntityPlayer) || shooter == null || FlansModPlayerHandler.getPlayerData(shooter) == null)
 		{
 			return super.getDeathMessage(living);
 		}

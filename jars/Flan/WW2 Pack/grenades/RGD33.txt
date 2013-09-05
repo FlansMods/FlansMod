@@ -23,7 +23,7 @@ ThrowDelay 10
 //DropItemOnThrow <itemID.damage>
 ////Physics
 DetonateOnImpact false
-Bounciness 1.0
+Bounciness 0.8
 HitEntityDamage 1
 ThrowSpeed 2.0
 FallSpeed 1.0

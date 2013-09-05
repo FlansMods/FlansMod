@@ -27,8 +27,8 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A);
 	protected static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D);
 	protected static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE);
-	protected static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LSHIFT);
-	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_E);
+	protected static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL);
+	protected static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_LSHIFT);
 	protected static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R);
 	protected static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V);
 	protected static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_LCONTROL);
@@ -36,13 +36,12 @@ public class KeyInputHandler extends KeyHandler
 	protected static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R);
 	protected static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G);
 	protected static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H);
-	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_BACKSLASH);
+	protected static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z);
 	protected static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X);
-    protected static KeyBinding gearKey = new KeyBinding("Change Gear Status Key", Keyboard.KEY_L);
-    protected static KeyBinding doorKey = new KeyBinding("Change Door Status Key", Keyboard.KEY_K);
-    protected static KeyBinding wingKey = new KeyBinding("Change Wing Position Key", Keyboard.KEY_J);
+    protected static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L);
+    protected static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K);
+    protected static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J);
     protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
-    protected static KeyBinding parkKey = new KeyBinding("Park Key", Keyboard.KEY_P);
     protected static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10);
 
 	Minecraft mc;
@@ -68,7 +67,6 @@ public class KeyInputHandler extends KeyHandler
                 doorKey,
                 wingKey,
                 trimKey,
-                parkKey,
 				teamsMenuKey,
 				teamsScoresKey,
 				reloadKey,
@@ -93,7 +91,6 @@ public class KeyInputHandler extends KeyHandler
                 false, // door
                 false, //wing
                 false, // trim button
-                false, //park
 				false, // teams menu
 				false, // teams scores menu
 				false, //reload
@@ -155,8 +152,6 @@ public class KeyInputHandler extends KeyHandler
             keyNum = 15;
         else if(kb == trimKey)
             keyNum = 16;
-        else if(kb == parkKey)
-            keyNum = 17;
 		else if(kb == teamsMenuKey)
 		{
 			mc.displayGuiScreen(new GuiTeamSelect());

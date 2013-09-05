@@ -164,8 +164,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				if(type.breaksGlass && mat == Material.glass)
 				{
 					if(FlansMod.canBreakGlass)
+					{
 						worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
-					FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
+						FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
+					}
 				}
 				
 				//If this grenade detonates on impact, do so

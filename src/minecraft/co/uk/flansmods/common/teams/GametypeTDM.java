@@ -150,6 +150,10 @@ public class GametypeTDM extends Gametype
 	{
 		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
 			return false;
+		if(team == Team.spectators)
+		{
+			return true;
+		}
 		if(autoBalance)
 		{
 			int membersOnTeamTheyWantToJoin = team.members.size();

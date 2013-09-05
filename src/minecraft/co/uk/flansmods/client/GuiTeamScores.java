@@ -19,7 +19,7 @@ public class GuiTeamScores extends GuiScreen
 {
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teamsScores.png");
 
-	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used...
+	//Store the client side teams data statically in the Gui. Seems untidy, but its the only place its going to be used... or so I thought
 	public static String map;
 	public static String gametype;
 	public static int numTeams;
@@ -43,6 +43,7 @@ public class GuiTeamScores extends GuiScreen
 		public int score;
 		public int kills;
 		public int deaths;
+		public TeamData team;
 	}
 	
 	public static PlayerData getPlayerData(String username)
@@ -96,6 +97,7 @@ public class GuiTeamScores extends GuiScreen
 					for(int j = 0; j < teamData[i].numPlayers; j++)
 					{
 						teamData[i].playerData[j] = new PlayerData();
+						teamData[i].playerData[j].team = teamData[i];
 						teamData[i].playerData[j].username = stream.readUTF();
 						teamData[i].playerData[j].score = stream.readInt();
 						teamData[i].playerData[j].kills = stream.readInt();
@@ -115,12 +117,16 @@ public class GuiTeamScores extends GuiScreen
 				for(int j = 0; j < teamData[0].numPlayers; j++)
 				{
 					teamData[0].playerData[j] = new PlayerData();
+					teamData[0].playerData[j].team = teamData[0];
 					teamData[0].playerData[j].username = stream.readUTF();
 					teamData[0].playerData[j].score = stream.readInt();
 					teamData[0].playerData[j].kills = stream.readInt();
 					teamData[0].playerData[j].deaths = stream.readInt();
 				}
 			}
+			
+			FlansMod.canBreakGlass = stream.readBoolean();
+			FlansMod.vehiclesNeedFuel = stream.readBoolean();
 		}
         catch(Exception e)
         {

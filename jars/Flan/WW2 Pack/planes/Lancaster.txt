@@ -7,7 +7,7 @@ Icon Lancaster
 Model ww2.Lancaster
 Texture Lancaster
 //Third Person Camera Distance
-CameraDistance 15.0
+CameraDistance 20.0
 //Throttle
 MaxThrottle 8.0
 MaxNegativeThrottle 0.0
