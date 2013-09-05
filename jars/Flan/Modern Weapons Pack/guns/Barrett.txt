@@ -19,6 +19,6 @@ ShootDelay 12
 ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
-Scope scope
+Scope mwbarrett
 Deployable False
 DeployedModel None

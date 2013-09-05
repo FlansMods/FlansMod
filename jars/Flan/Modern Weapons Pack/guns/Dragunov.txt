@@ -19,6 +19,6 @@ ShootDelay 8
 ShootSound DragunovShoot
 ReloadSound BARReload
 Mode SemiAuto
-Scope scope
+Scope mwdragunov
 Deployable False
 DeployedModel None
