@@ -29,11 +29,11 @@ public class TextureGroup
 		if(!texture.equals(""))
 		{
 			TextureManager renderengine = RenderManager.instance.renderEngine;
-			renderengine.func_110577_a(new ResourceLocation("", texture)); //TODO : Check. Not sure about this one
+			renderengine.bindTexture(new ResourceLocation("", texture)); //TODO : Check. Not sure about this one
 		}
 		else if(defaultTexture > -1)
 		{
-			RenderManager.instance.renderEngine.func_110577_a(new ResourceLocation("", ""));
+			RenderManager.instance.renderEngine.bindTexture(new ResourceLocation("", ""));
 		}
 	}
 	

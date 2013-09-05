@@ -27,7 +27,7 @@ public class RenderVehicle extends Render
 
     public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
     {
-    	func_110777_b(vehicle);
+    	bindEntityTexture(vehicle);
     	VehicleType type = vehicle.getVehicleType();
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -109,7 +109,7 @@ public class RenderVehicle extends Render
     }
     
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityVehicle)entity).getVehicleType());
 	}

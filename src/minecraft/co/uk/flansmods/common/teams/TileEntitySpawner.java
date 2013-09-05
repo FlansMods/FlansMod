@@ -60,7 +60,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     @Override
     public void onDataPacket(INetworkManager net, Packet132TileEntityData packet)
     {
-    	team = packet.customParam1.getString("Team");
+    	team = packet.data.getString("Team");
     }
     
     @Override

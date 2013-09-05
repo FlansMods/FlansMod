@@ -193,7 +193,7 @@ public class EntityGunItem extends EntityItem {
     }
     
     @Override
-    public boolean func_130002_c(EntityPlayer player) //interact
+    public boolean interactFirst(EntityPlayer player) //interact
     {
 		if(worldObj.isRemote)
 			return true;

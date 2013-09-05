@@ -29,7 +29,7 @@ public class RenderFlag extends Render
 	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
 	{
-		func_110777_b(entity);
+		bindEntityTexture(entity);
 		EntityFlag flag = (EntityFlag)entity;
 		Team team = flag.getTeam();
 		if(team == null)
@@ -57,7 +57,7 @@ public class RenderFlag extends Render
 	}
 	
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return texture;
 	}

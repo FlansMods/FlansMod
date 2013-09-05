@@ -195,13 +195,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-    public boolean addEntityID(NBTTagCompound tags)
+    public boolean writeToNBTOptional(NBTTagCompound tags)
     {
         return false;
     }
 	
 	@Override
-    public boolean addNotRiddenEntityID(NBTTagCompound tags)
+    public boolean writeMountToNBT(NBTTagCompound tags)
     {
         return false;
     }
@@ -357,7 +357,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer) //interact : change back when Forge updates
+	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
     {
 		if(isDead)
 			return true;

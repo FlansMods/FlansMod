@@ -134,7 +134,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 		
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer)
+	public boolean interactFirst(EntityPlayer entityplayer)
     {
 		if(isDead)
 			return true;

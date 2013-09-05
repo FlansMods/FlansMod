@@ -153,7 +153,7 @@ public class EntityPlane extends EntityDriveable
 	}
 		
 	@Override
-	public boolean func_130002_c(EntityPlayer entityplayer)
+	public boolean interactFirst(EntityPlayer entityplayer)
     {
 		if(isDead)
 			return true;
@@ -328,14 +328,14 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 11 : //Roll left
 			{
-				flapsPitchLeft -= 1F;
-				flapsPitchRight += 1F;
+				flapsPitchLeft += 1F;
+				flapsPitchRight -= 1F;
 				return true;
 			}
 			case 12 : //Roll right
 			{
-				flapsPitchLeft += 1F;
-				flapsPitchRight -= 1F;
+				flapsPitchLeft -= 1F;
+				flapsPitchRight += 1F;
 				return true;
 			}
 			case 13 : // Gear

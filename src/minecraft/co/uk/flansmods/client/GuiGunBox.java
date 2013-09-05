@@ -57,7 +57,7 @@ public class GuiGunBox extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
 		int n = guiOriginY = l / 2 - 102;
@@ -68,7 +68,7 @@ public class GuiGunBox extends GuiScreen
 		//TODO : Investigate
 		
 		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
-		mc.renderEngine.func_110577_a(texture);
+		mc.renderEngine.bindTexture(texture);
 		
 		// Draw the gun slots in the second gun panel if there is a second gun
 		// on this page
