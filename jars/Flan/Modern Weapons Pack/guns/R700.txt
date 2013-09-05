@@ -19,6 +19,6 @@ ShootDelay 20
 ShootSound R700Shoot
 ReloadSound springfieldReload
 Mode SemiAuto
-Scope scope
+Scope mwr700
 Deployable False
 DeployedModel None

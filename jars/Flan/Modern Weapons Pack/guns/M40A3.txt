@@ -19,6 +19,6 @@ ShootDelay 10
 ShootSound R700Shoot
 ReloadSound springfieldReload
 Mode SemiAuto
-Scope scope
+Scope mwm40a3
 Deployable False
 DeployedModel None
