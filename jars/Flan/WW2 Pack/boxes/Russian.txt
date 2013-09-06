@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 7
+NumGuns 8
 AddGun nagant 10 iron 15 log
 AddAmmo nagantAmmo 5 iron 2 gunpowder
 AddGun nagantSniper 10 iron 15 log 4 glass
@@ -29,3 +29,4 @@ AddGun dp28 20 iron 5 log
 AddAmmo dp28Ammo 4 iron 3 gunpowder
 AddGun bofors 1 aaBarrel 1 leather 1 blockIron 2 wheel
 AddAmmo boforsAmmo 1 iron 2 gunpowder
+AddGun rgd33 4 iron 2 gunpowder

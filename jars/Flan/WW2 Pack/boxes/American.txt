@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 9
+NumGuns 10
 AddGun m1Carbine 8 iron 12 log
 AddAmmo m1CarbineAmmo 3 iron 1 gunpowder
 AddGun m1Garand 10 iron 15 log
@@ -33,3 +33,4 @@ AddGun browning 30 iron 5 log
 AddAmmo browningAmmo 25 iron 15 gunpowder
 AddGun bofors 1 aaBarrel 1 leather 1 blockIron 2 wheel
 AddAmmo boforsAmmo 1 iron 2 gunpowder
+AddGun mk2Frag 4 iron 2 gunpowder
