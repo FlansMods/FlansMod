@@ -16,8 +16,8 @@ Damage 6
 Accuracy 3
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound brenShoot
-ReloadSound brenReload
+ShootSound BrenShoot
+ReloadSound BrenReload
 Mode FullAuto
 Scope None
 Deployable True
