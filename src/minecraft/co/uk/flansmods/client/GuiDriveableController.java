@@ -57,6 +57,12 @@ public class GuiDriveableController extends GuiScreen
 			mc.displayGuiScreen(null);
 			return;
 		}
+		
+		int dWheel = Mouse.getDWheel();
+		if(dWheel != 0)
+		{
+			player.inventory.changeCurrentItem(dWheel);
+		}
 
 		if(Mouse.isButtonDown(0)) //Left mouse
 		{
