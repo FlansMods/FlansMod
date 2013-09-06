@@ -349,6 +349,25 @@ public class CommandTeams extends CommandBase {
 			TeamsManager.getInstance().rotation.add(new TeamsManager.RotationEntry(map, gametype, teams));
 			return;
 		}
+		if(split[0].equals("nextMap"))
+		{
+			teamsManager.switchToNextGametype();
+			return;
+		}
+		if(split[0].equals("goToMap"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Incorrect Usage : Should be /teams " + split[0] + " <ID>"));	
+				return;
+			}
+			int prevRotation = Integer.parseInt(split[1]) - 1;
+			if(prevRotation == -1)
+				prevRotation = teamsManager.rotation.size() - 1;
+			teamsManager.currentRotationEntry = prevRotation;
+			teamsManager.switchToNextGametype();
+			return;
+		}
 		if(split[0].equals("forceAdventure") || split[0].equals("forceAdventureMode"))
 		{
 			if(split.length != 2)
@@ -563,6 +582,8 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams addRotation <map> <gametype> <team1> <team2> ..."));
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams listRotation"));
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams removeRotation <ID>"));
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams nextMap"));			
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams goToMap <ID>"));			
 			break;
 		}
 		case 3 :
