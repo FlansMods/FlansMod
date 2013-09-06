@@ -43,7 +43,7 @@ public class ItemTool extends Item
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
-		setCreativeTab(FlansMod.tabFlanParts);
+		setCreativeTab(type.remote ? FlansMod.tabFlanGuns : FlansMod.tabFlanParts);
     }
     
 	@Override

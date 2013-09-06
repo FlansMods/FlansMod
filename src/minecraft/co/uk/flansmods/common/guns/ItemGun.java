@@ -319,6 +319,9 @@ public class ItemGun extends Item
 	/** Reload method. Called automatically when firing with an empty clip */
 	public void reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload, boolean instant)
 	{
+		//Deployable guns cannot be reloaded in the inventory
+		if(type.deployable)
+			return;
 		//Keep the Flan's Mod player data handy
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
 		//For playing sounds afterwards
