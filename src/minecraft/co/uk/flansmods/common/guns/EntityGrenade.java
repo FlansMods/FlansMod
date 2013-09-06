@@ -45,6 +45,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	public boolean smoking = false;
 	/** Set to true when a sticky grenade sticks. Impedes further movement */
 	public boolean stuck = false;
+	/** Stores the position of the block this grenade is stuck to. Used to determine when to unstick */
+	public int stuckToX, stuckToY, stuckToZ;
 	/** Stop repeat detonations */
 	public boolean detonated = false;
 	
@@ -137,6 +139,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 
+		//If the block we were stuck to is gone, unstick
+		if(stuck && worldObj.isAirBlock(stuckToX, stuckToY, stuckToZ))
+			stuck = false;
 		
 		//Physics and motion (Don't move if stuck)
 		if(!stuck)
@@ -160,8 +165,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				int blockID = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 				Material mat = worldObj.getBlockMaterial(hit.blockX, hit.blockY, hit.blockZ);
 				
+				//If this grenade detonates on impact, do so
+				if(type.detonateOnImpact)
+					detonate();
+				
 				//If we hit glass and can break it, do so
-				if(type.breaksGlass && mat == Material.glass)
+				else if(type.breaksGlass && mat == Material.glass)
 				{
 					if(FlansMod.canBreakGlass)
 					{
@@ -170,9 +179,6 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 					}
 				}
 				
-				//If this grenade detonates on impact, do so
-				if(type.detonateOnImpact)
-					detonate();
 				//If this grenade does not penetrate blocks, hit the block instead
 				//The grenade cannot bounce if it detonated on impact, so hence the "else" condition
 				else if(!type.penetratesBlocks)
@@ -245,6 +251,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 
 						//Set the stuck flag on
 						stuck = true;
+						stuckToX = hit.blockX;
+						stuckToY = hit.blockY;
+						stuckToZ = hit.blockZ;
 					}
 				}
 			}
