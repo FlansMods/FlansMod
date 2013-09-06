@@ -670,8 +670,6 @@ public class FlansMod
 			type.addRecipe();
 		}
 		log("Loaded recipes.");
-		
-		DriveableType.populate();
 	}
 	
 	public static void loadProperties()

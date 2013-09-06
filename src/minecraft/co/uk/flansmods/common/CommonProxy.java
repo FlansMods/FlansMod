@@ -280,6 +280,11 @@ public class CommonProxy
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setString("Engine", ((ItemPart)bestEngineStack.getItem()).type.shortName);
 		tags.setString("Type", type.shortName);
+    	for(EnumDriveablePart part : EnumDriveablePart.values())
+    	{
+    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part).health);
+    		tags.setBoolean(part.getShortName() + "_Fire", false);
+    	}
 		driveableStack.stackTagCompound = tags;
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropPlayerItem(driveableStack);

@@ -1,6 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import co.uk.flansmods.client.model.ModelVehicle;
@@ -34,11 +35,12 @@ public class VehicleType extends DriveableType
 	/** Aesthetic door variable */
     public boolean hasDoor = false;
 
-	public static HashMap<String, VehicleType> types = new HashMap<String, VehicleType>();
+	public static ArrayList<VehicleType> types = new ArrayList<VehicleType>();
 	
     public VehicleType(TypeFile file)
     {
 		super(file);
+		types.add(this);
     }
 	
     @Override
@@ -96,6 +98,11 @@ public class VehicleType extends DriveableType
 	
 	public static VehicleType getVehicle(String find)
 	{
-		return types.get(find);
+		for(VehicleType type : types)
+		{
+			if(type.shortName.equals(find))
+				return type;
+		}
+		return null;
 	}
 }

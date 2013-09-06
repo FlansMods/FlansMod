@@ -496,7 +496,7 @@ public class EntityPlane extends EntityDriveable
 		for(Propeller propeller : type.propellers)
 		{
 			//Check the propeller is still around
-			if(!parts.get(propeller.planePart).dead)
+			if(!getDriveableData().parts.get(propeller.planePart).dead)
 			{
 				//If the player driving this is in creative, then we can thrust, no matter what
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;

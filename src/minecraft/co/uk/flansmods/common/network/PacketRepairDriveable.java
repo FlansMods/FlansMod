@@ -54,7 +54,7 @@ public class PacketRepairDriveable extends FlanPacketCommon
 			EntityPlayer player = (EntityPlayer)extradata[0];
 			
 			//Try to craft the driveable
-			FlansMod.proxy.repairDriveable(player, ((EntitySeat)player.ridingEntity).driveable, ((EntitySeat)player.ridingEntity).driveable.parts.get(part));
+			FlansMod.proxy.repairDriveable(player, ((EntitySeat)player.ridingEntity).driveable, ((EntitySeat)player.ridingEntity).driveable.getDriveableData().parts.get(part));
         }
         catch(Exception e)
         {

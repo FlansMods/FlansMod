@@ -450,19 +450,19 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			if(type.tank)
 			{
-				applyThrust(parts.get(EnumDriveablePart.leftTrack), thrust);
-				applyThrust(parts.get(EnumDriveablePart.rightTrack), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.leftTrack), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.rightTrack), thrust);
 			}
 			else
 			{
-				applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backLeftWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backRightWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backWheel), thrust);
 				if(type.fourWheelDrive)
 				{
-					applyThrust(parts.get(EnumDriveablePart.frontLeftWheel), thrust);
-					applyThrust(parts.get(EnumDriveablePart.frontRightWheel), thrust);
-					applyThrust(parts.get(EnumDriveablePart.frontWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontLeftWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontRightWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontWheel), thrust);
 				}
 			}
 		}

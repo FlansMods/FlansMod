@@ -57,9 +57,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
 	public float throttle;
-	
-	/** Each driveable part has a small class that holds its current status */
-	public HashMap<EnumDriveablePart, DriveablePart> parts = new HashMap<EnumDriveablePart, DriveablePart>();
 
 	public boolean fuelling;
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
@@ -101,10 +98,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnEntityInWorld(seats[i]);
 			}
 		}
-		for(EnumDriveablePart part : EnumDriveablePart.values())
-		{
-			parts.put(part, new DriveablePart(this, part, type.health.get(part)));
-		}
 		yOffset = type.yOffset;
 	}
 	
@@ -116,27 +109,19 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		tag.setFloat("RotationYaw", axes.getYaw());
 		tag.setFloat("RotationPitch", axes.getPitch());
 		tag.setFloat("RotationRoll", axes.getRoll());
-		for(DriveablePart part : parts.values())
-		{
-			part.writeToNBT(tag);
-		}
     }
 
 	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		driveableType = tag.getString("Type");
-		initType(DriveableType.getDriveable(driveableType), false);
 		driveableData = new DriveableData(tag);
+		initType(DriveableType.getDriveable(driveableType), false);
 		
 		prevRotationYaw = tag.getFloat("RotationYaw");
 		prevRotationPitch = tag.getFloat("RotationPitch");
 		prevRotationRoll = tag.getFloat("RotationRoll");
 		axes = new RotatedAxes(prevRotationYaw, prevRotationPitch, prevRotationRoll);
-		for(DriveablePart part : parts.values())
-		{
-			part.readFromNBT(tag);
-		}
     }
 	
 	@Override
@@ -157,7 +142,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Write damage
         	for(EnumDriveablePart ep : EnumDriveablePart.values())
         	{
-        		DriveablePart part = parts.get(ep);
+        		DriveablePart part = getDriveableData().parts.get(ep);
         		data.writeShort((short)part.health);
         		data.writeBoolean(part.onFire);
         	}
@@ -185,7 +170,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Read damage
         	for(EnumDriveablePart ep : EnumDriveablePart.values())
         	{
-        		DriveablePart part = parts.get(ep);
+        		DriveablePart part = getDriveableData().parts.get(ep);
         		part.health = inputData.readShort();
         		part.onFire = inputData.readBoolean();
         	}
@@ -389,7 +374,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         	}
         }
         
-        for(DriveablePart part : parts.values())
+        for(DriveablePart part : getDriveableData().parts.values())
         {
         	if(part.box != null)
         	{
@@ -766,8 +751,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
 			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
-			        	DriveablePart part = parts.get(point.part);
-			        	float smashyForceVsBlock = part.smashIntoGround(damageModifier * smashyForce);
+			        	DriveablePart part = getDriveableData().parts.get(point.part);
+			        	float smashyForceVsBlock = part.smashIntoGround(this, damageModifier * smashyForce);
 			        	int blockIDHit = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 			        	Block blockHit = Block.blocksList[blockIDHit];
 			        	float blockHardness = blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ);
@@ -782,8 +767,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 
-
-      	
       	numHits = 0;
       	
       	for(CollisionPoint point : type.points)
@@ -885,10 +868,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
 		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
 		//Check each part
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(bullet, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, bullet, rotatedPosVector, rotatedMotVector))
 			{
 				//This is server side bsns
 				if(worldObj.isRemote)
@@ -911,10 +894,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
 		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
 		//Check each part
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(null, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, null, rotatedPosVector, rotatedMotVector))
 			{
 				return part;
 			}
@@ -931,7 +914,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Internal method for checking that all parts are ok, destroying broken ones, dropping items and making sure that child parts are destroyed when their parents are */
 	public void checkParts()
 	{
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
 			{
@@ -946,7 +929,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		
 		//If the core was destroyed, kill the driveable
-		if(parts.get(EnumDriveablePart.core).dead)			
+		if(getDriveableData().parts.get(EnumDriveablePart.core).dead)
 			setDead();
 	}
 	
@@ -996,7 +979,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//Kill all child parts to stop things floating unconnected
 		for(EnumDriveablePart child : part.type.getChildren())
 		{
-			killPart(parts.get(child));
+			killPart(getDriveableData().parts.get(child));
 		}
 	}
 	
@@ -1023,7 +1006,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public boolean isPartIntact(EnumDriveablePart part)
 	{
-		return parts.get(part).maxHealth == 0 || parts.get(part).health > 0; 
+		return getDriveableData().parts.get(part).maxHealth == 0 || getDriveableData().parts.get(part).health > 0; 
 	}
 	
 	public abstract boolean hasMouseControlMode();

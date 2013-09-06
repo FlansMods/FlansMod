@@ -164,7 +164,7 @@ public class FlansModClient extends FlansMod
 
 		float dZoom = newZoom - playerZoom;
 		playerZoom += dZoom / 3F;
-		if (playerZoom < 1.01F && zoomOverlay != null)
+		if (playerZoom < 1.1F && zoomOverlay != null)
 		{
 			minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
 			playerZoom = 1.0F;

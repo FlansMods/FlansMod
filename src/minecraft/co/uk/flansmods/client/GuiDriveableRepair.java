@@ -43,7 +43,7 @@ public class GuiDriveableRepair extends GuiScreen
 	{
 		driver = player;
 		driving = ((EntitySeat)player.ridingEntity).driveable;
-    	for(DriveablePart part : driving.parts.values())
+    	for(DriveablePart part : driving.getDriveableData().parts.values())
     	{
     		//Check to see if the part is actually damageable
     		if(part.maxHealth > 0)
