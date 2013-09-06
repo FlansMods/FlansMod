@@ -156,6 +156,7 @@ public class TeamsManager implements IPlayerTracker
 	
 	public void switchToNextGametype()
 	{
+		FlansModPlayerHandler.roundEnded();
 		currentRotationEntry = (currentRotationEntry + 1) % rotation.size();
 		RotationEntry entry = rotation.get(currentRotationEntry);
 		if(currentGametype != null && currentGametype != entry.gametype)

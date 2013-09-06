@@ -180,9 +180,35 @@ public abstract class Gametype {
 	
 	public abstract void initGametype();
 	
-	public abstract void startNewRound();
+	public void startNewRound()
+	{
+		FlansModPlayerHandler.roundEnded();
+		for(ITeamBase base : teamsManager.bases)
+		{
+			base.startRound();
+		}
+		respawnAll();
+		for(EntityPlayer player : getPlayers())
+		{
+			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
+			if(getPlayerData((EntityPlayerMP)player).team != null)
+				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
+		}
+		resetScores();
+		teamsManager.messageAll("\u00a7fA new round has started!");
+		if(teamsManager.teams != null)
+		{
+			for(Team team : teamsManager.teams)
+				if(team == null)
+					return;
+			showTeamsMenuToAll(false);
+		}
+	}
 	
-	public abstract void stopGametype();
+	public void stopGametype()
+	{
+		FlansModPlayerHandler.roundEnded();
+	}
 	
 	public abstract void tick();
 	
