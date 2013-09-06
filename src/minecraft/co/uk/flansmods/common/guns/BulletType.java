@@ -28,7 +28,7 @@ public class BulletType extends InfoType
 	public boolean penetratesEntities = false;
 	public boolean penetratesBlocks = false;
 	public String trailParticles = "smoke";
-	public String flakParticles = "largeSmoke";
+	public String flakParticles = "largesmoke";
 	public boolean smokeTrail = false;
 	public boolean isBomb = false;
 	public boolean isShell = false;

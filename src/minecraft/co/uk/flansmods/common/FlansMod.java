@@ -274,7 +274,10 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
+		
+		EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
+		EntityRegistry.registerGlobalEntityID(EntityGunItem.class, "GunItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
 		
 		//Register the chunk loader

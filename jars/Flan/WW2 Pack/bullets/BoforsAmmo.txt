@@ -18,7 +18,7 @@ Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
 ExplodeOnImpact True
 Fuse 40
-FlakParticles 1000
+FlakParticles 100
 //Amount of fire to spread on exploding; for each increment, it will increase the dimensions of the burning area by 2. i.e. 1 will burn a 3x3 square, 2 will burn a 5x5 square
 Fire 0
 BreaksGlass True
