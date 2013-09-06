@@ -21,7 +21,7 @@ LookDownSpeed 1
 RollLeftSpeed 1.5
 RollRightSpeed 1.5
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
-Drag 0.4
+Drag 0.25
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
 Lift 0.4
 //Mass (In tons)
