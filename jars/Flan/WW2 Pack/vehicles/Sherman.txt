@@ -6,7 +6,7 @@ Model Sherman
 Texture Sherman
 MaxSpeed 1.0
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 5
+ShootDelay 2
 ShellDelay 100
 CargoSlots 0
 //Actually shell slots
@@ -31,7 +31,7 @@ StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 30
-ShootSound bullet
+ShootSound BrowningShoot
 ShellSound TankShell
 HasTurret True
 SquashMobs True

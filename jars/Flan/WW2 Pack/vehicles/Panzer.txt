@@ -6,7 +6,7 @@ Model Panzer
 Texture Panzer
 MaxSpeed 1.0
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 5
+ShootDelay 1
 ShellDelay 110
 CargoSlots 0
 //Actually shell slots
@@ -31,7 +31,7 @@ StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound bullet
+ShootSound MG42Shoot
 ShellSound TankShell
 HasTurret True
 SquashMobs True
