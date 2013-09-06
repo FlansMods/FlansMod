@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GunType extends InfoType
 {
 	public List<BulletType> ammo = new ArrayList<BulletType>();
+	public boolean canForceReload = true;
 	public int reloadTime;
 	public int recoil;
 	public int accuracy;
@@ -65,6 +66,8 @@ public class GunType extends InfoType
 				damage = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("MeleeDamage"))
 				meleeDamage = Integer.parseInt(arg0[1]);
+			if (arg0[0].equals("CanForceReload"))
+				canForceReload = Boolean.parseBoolean(arg0[1].toLowerCase());
 			if (arg0[0].equals("ReloadTime"))
 				reloadTime = Integer.parseInt(arg0[1]);
 			if (arg0[0].equals("Recoil"))

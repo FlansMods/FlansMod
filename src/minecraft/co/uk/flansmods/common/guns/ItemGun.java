@@ -322,6 +322,9 @@ public class ItemGun extends Item
 		//Deployable guns cannot be reloaded in the inventory
 		if(type.deployable)
 			return;
+		//If you cannot reload half way through a clip, reject the player for trying to do so
+		if(forceReload && !type.canForceReload)
+			return;
 		//Keep the Flan's Mod player data handy
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
 		//For playing sounds afterwards
