@@ -262,6 +262,8 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 1), "Stick of Connecting");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 2), "Stick of Mapping");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 3), "Stick of Destruction");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 4), "Stick of Redness");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 5), "Stick of Blueness");
 		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
@@ -312,6 +314,7 @@ public class FlansMod
 	{
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
+		handler.registerCommand(new CommandBuild());
 	}
 	
 	private void getTypeFiles(List<File> contentPacks)
