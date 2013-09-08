@@ -141,6 +141,14 @@ public class ModelVehicle extends ModelDriveable
 				trailerModel[i].render(f5);
 			}
         }
+        if(vehicle.isPartIntact(EnumDriveablePart.steeringWheel))
+        {
+			for(int i = 0; i < steeringWheelModel.length; i++)
+			{
+				steeringWheelModel[i].rotateAngleX = vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
+				steeringWheelModel[i].render(f5);
+			}
+        }
         
         //Render guns
         for(EntitySeat seat : vehicle.seats)
@@ -254,6 +262,7 @@ public class ModelVehicle extends ModelDriveable
 		flip(rightTrackWheelModels);
 		flip(leftTrackWheelModels);
 		flip(trailerModel);
+		flip(steeringWheelModel);
 	}	
 	
 	public void translateAll(int y)
@@ -272,6 +281,7 @@ public class ModelVehicle extends ModelDriveable
 		translate(rightTrackWheelModels, y);
 		translate(leftTrackWheelModels, y);
 		translate(trailerModel, y);
+		translate(steeringWheelModel, y);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, int y)
@@ -298,4 +308,5 @@ public class ModelVehicle extends ModelDriveable
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo trailerModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo steeringWheelModel[] = new ModelRendererTurbo[0];
 }
