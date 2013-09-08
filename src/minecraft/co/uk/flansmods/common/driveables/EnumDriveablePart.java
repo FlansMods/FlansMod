@@ -27,9 +27,10 @@ public enum EnumDriveablePart
 	leftTrack(new EnumDriveablePart[] { }, "leftTrack", "Left Track"),
 	rightTrack(new EnumDriveablePart[] { }, "rightTrack", "Right Track"),
 	trailer(new EnumDriveablePart[] { }, "trailer", "Trailer"),	
+	steeringWheel(new EnumDriveablePart[] { }, "steeringWheel", "Steering Wheel"),
 
 	//Shared part
-	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
+	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer, steeringWheel }, "core", "Core");
 		
 	
 	private String shortName;
