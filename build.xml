@@ -169,7 +169,7 @@
 	<!-- Package the compiled files -->
 	<target name="package" depends="reobf">
 
-		<delete file="${jar.dir}"/>
+		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/FlansMod-${flansmod.version}.jar" basedir="${classes.dir}"/>
 
