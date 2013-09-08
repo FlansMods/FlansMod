@@ -30,6 +30,7 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(trailerModel);
 		renderPart(turretModel);
 		renderPart(barrelModel);
+		renderPart(steeringWheelModel);
 	}
 	
     public void render(float f5, EntityVehicle vehicle, float f)
@@ -52,6 +53,11 @@ public class ModelVehicle extends ModelDriveable
 			{
 				if(vehicle.varDoor == false)
 					bodyDoorCloseModel[i].render(f5);
+			}
+			for(int i = 0; i < steeringWheelModel.length; i++)
+			{
+				steeringWheelModel[i].rotateAngleX = vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
+				steeringWheelModel[i].render(f5);
 			}
         }
 		
@@ -139,14 +145,6 @@ public class ModelVehicle extends ModelDriveable
 			for(int i = 0; i < trailerModel.length; i++)
 			{
 				trailerModel[i].render(f5);
-			}
-        }
-        if(vehicle.isPartIntact(EnumDriveablePart.steeringWheel))
-        {
-			for(int i = 0; i < steeringWheelModel.length; i++)
-			{
-				steeringWheelModel[i].rotateAngleX = vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
-				steeringWheelModel[i].render(f5);
 			}
         }
         
