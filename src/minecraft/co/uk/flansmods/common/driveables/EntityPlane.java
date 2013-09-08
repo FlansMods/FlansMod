@@ -39,10 +39,6 @@ import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Matrix3f;
 import co.uk.flansmods.common.vector.Vector3f;
 
-import icbm.api.*;
-import icbm.api.sentry.IAATarget;
-import universalelectricity.core.vector.Vector3;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
@@ -50,7 +46,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityPlane extends EntityDriveable implements IAATarget, IMissileLockable
+public class EntityPlane extends EntityDriveable
 {
 	/** The flap positions, used for renderering and for controlling the plane rotations */
 	public float flapsYaw, flapsPitchLeft, flapsPitchRight;	
@@ -77,10 +73,6 @@ public class EntityPlane extends EntityDriveable implements IAATarget, IMissileL
 		super(world, type, data);
 		setPosition(x, y, z);
 		initType(type, false);
-
-		//Register Plane to Radar on Spawning
-		if(type.onRadar == true)
-			RadarRegistry.register(this);
 	}
     
 	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type, DriveableData data)
@@ -416,8 +408,6 @@ public class EntityPlane extends EntityDriveable implements IAATarget, IMissileL
 		ticksSinceUsed++;
 		if(!worldObj.isRemote && FlansMod.planeLife > 0 && ticksSinceUsed > FlansMod.planeLife * 20)
 		{
-			//Unregister to Radar
-			RadarRegistry.unregister(this);
 			setDead();
 		}
 		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
@@ -663,7 +653,6 @@ public class EntityPlane extends EntityDriveable implements IAATarget, IMissileL
 			planeStack.stackTagCompound = new NBTTagCompound();
 			driveableData.writeToNBT(planeStack.stackTagCompound);
 			entityDropItem(planeStack, 0.5F);
-			RadarRegistry.unregister(this); //Unregister to Radar
 	 		setDead();
 		}
         return true;
@@ -700,76 +689,5 @@ public class EntityPlane extends EntityDriveable implements IAATarget, IMissileL
 	public boolean hasMouseControlMode()
 	{
 		return true;
-	}
-	
-	// Destroys the target with a boom. This is a forced way for the sentry too kill the target if
-	// it doesn't take damage
-	// Not needed in Flan due to plane is detroyed when HP = 0
-	public void destroyCraft()
-	{
-
-	}
-
-	// Applies damage to the the target
-	// 
-	// @param damage - damage in half HP
-	// @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
-	// killed. Return 0 if this target is dead and destroyCraft() will be called.
-
-	public int doDamage(int damage)
-	{
-		attackEntityFrom(DamageSource.generic, damage, true); 	// Requires a Damage Source that can damage the plane
-		return damage;											// Remaining HP
-	}
-
-	// Can this be targeted by automated targeting systems or AIs. Used to implement radar jammers,
-	// cloaking devices, and other addons for the Entity being targeted
-	//
-	// @param entity - entity that is targeting this, can be an Entity, EntityLiving, or TileEntity
-	// @return true if it can
-	public boolean canBeTargeted(Object entity)
-	{
-		//Check config for option to show plane on radar
-		PlaneType type = this.getPlaneType();
-		if(type.onRadar == true)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	// Can this entity be locked on by a missile?
-	// 
-	// @return True if so.
-	public boolean canLock(IMissile imissile)
-	{
-		//Check config for option to show plane on radar
-		PlaneType type = this.getPlaneType();
-		if(type.onRadar == true)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	// Gets the predicted position of this entity after a specified amount of ticks.
-	// 
-	// @param ticks - The amount of time.
-	// @return The predicted Vector, or if not predictable, the current position.
-	public Vector3 getPredictedPosition(int t)
-	{
-		Vector3 predicPlanePos = new Vector3(this);
-        
-		predicPlanePos.x = (float)posX + 4 * (float)motionX;
-		predicPlanePos.y = (float)posY + 4 * (float)motionY;
-		predicPlanePos.z = (float)posZ + 4 * (float)motionZ;
-
-		return predicPlanePos;
 	}
 }

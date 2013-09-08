@@ -87,7 +87,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.02")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.0.2")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,

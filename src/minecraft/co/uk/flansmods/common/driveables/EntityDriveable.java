@@ -1017,4 +1017,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return seat.part == EnumDriveablePart.turret;
 	}
+	
+	@Override
+	public String getEntityName()
+	{
+		return getDriveableType().name;
+	}
 }
