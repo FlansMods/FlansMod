@@ -96,7 +96,7 @@ public class FlansModClient extends FlansMod
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;
 		
-		if(event.entity instanceof EntityPlayer && !GuiTeamScores.gametype.equals("No Gametype"))
+		if(event.entity instanceof EntityPlayer && GuiTeamScores.gametype != null && !GuiTeamScores.gametype.equals("No Gametype"))
 		{
 			GuiTeamScores.PlayerData rendering = GuiTeamScores.getPlayerData(event.entity.getEntityName());
 			GuiTeamScores.PlayerData thePlayer = GuiTeamScores.getPlayerData(minecraft.thePlayer.username);

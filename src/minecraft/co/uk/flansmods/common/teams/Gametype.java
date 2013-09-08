@@ -171,7 +171,7 @@ public abstract class Gametype {
 		if(source instanceof EntityDamageSourceIndirect)
 		{
 			if(((EntityDamageSourceIndirect)source).getSourceOfDamage() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)((EntityDamageSourceIndirect)source).getEntity(); 
+				attacker = (EntityPlayerMP)((EntityDamageSourceIndirect)source).getSourceOfDamage(); 
 		}
 		return attacker;
 	}

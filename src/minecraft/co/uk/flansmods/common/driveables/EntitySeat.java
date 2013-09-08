@@ -42,7 +42,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@SideOnly(Side.CLIENT)
 	public boolean foundDriveable;
 	private int driveableID;
-	@SideOnly(Side.CLIENT)
 	private int seatID;
 	public EntityDriveable driveable;
 	
