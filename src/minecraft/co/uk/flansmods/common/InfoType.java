@@ -1,6 +1,5 @@
 package co.uk.flansmods.common;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ public class InfoType
 	public int colour = 0xffffff;
 	public int itemID;
 	public String iconPath;
-	public int iconIndex;
 	public Object[] recipe;
 	public String[] recipeLine;
 	public int recipeOutput = 1;
@@ -28,19 +26,31 @@ public class InfoType
 	public String shortName;
 	public String texture;
 	
-	public InfoType()
+	public InfoType(TypeFile file)
 	{
+		contentPack = file.name;
 		infoTypes.add(this);
 	}
-
-	public InfoType(String pack)
+	
+	protected void read(TypeFile file)
 	{
-		this();
-		contentPack = pack;
+		for(;;)
+		{
+			String line = null;
+			line = file.readLine();
+			if(line == null)
+				break;
+			if(line.startsWith("//"))
+				continue;
+			String[] split = line.split(" ");
+			if(split.length < 2)
+				continue;
+			read(split, file);
+		}
 	}
 
 	/** Pack reader */
-	protected void read(String[] arg0, BufferedReader file)
+	protected void read(String[] arg0, TypeFile file)
 	{
 		try
 		{
@@ -223,42 +233,47 @@ public class InfoType
 	{
 		return item;
 	}
-
-	public static ItemStack getRecipeElement(String arg0, int damage)
+	
+	public static ItemStack getRecipeElement(String s, int damage)
 	{
-		if (arg0.equals("doorIron"))
+		return getRecipeElement(s, 1, damage);
+	}
+	
+	public static ItemStack getRecipeElement(String s, int amount, int damage)
+	{
+		if (s.equals("doorIron"))
 		{
-			return new ItemStack(Item.doorIron, 1);
+			return new ItemStack(Item.doorIron, amount);
 		}
-		if (arg0.equals("doorWood"))
+		if (s.equals("doorWood"))
 		{
-			return new ItemStack(Item.doorWood, 1);
+			return new ItemStack(Item.doorWood, amount);
 		}
-		if (arg0.equals("clayItem"))
+		if (s.equals("clayItem"))
 		{
-			return new ItemStack(Item.clay, 1);
+			return new ItemStack(Item.clay, amount);
 		}
 		for (Item item : Item.itemsList)
 		{
-			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + arg0) || item.getUnlocalizedName().equals("tile." + arg0)))
+			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
 			{
-				return new ItemStack(item, 1, damage);
+				return new ItemStack(item, amount, damage);
 			}
 		}
 		for(InfoType type : infoTypes)
 		{
-			if(type.shortName.equals(arg0))
-				return new ItemStack(type.item, 1, damage);
+			if(type.shortName.equals(s))
+				return new ItemStack(type.item, amount, damage);
 		}
-		if (arg0.equals("gunpowder"))
+		if (s.equals("gunpowder"))
 		{
-			return new ItemStack(Item.gunpowder, 1);
+			return new ItemStack(Item.gunpowder, amount);
 		}
-		if (arg0.equals("iron"))
+		if (s.equals("iron"))
 		{
-			return new ItemStack(Item.ingotIron, 1);
+			return new ItemStack(Item.ingotIron, amount);
 		}
-		FlansMod.log("Could not find " + arg0 + " when adding recipe");
+		FlansMod.log("Could not find " + s + " when adding recipe");
 		return null;
 	}
 	

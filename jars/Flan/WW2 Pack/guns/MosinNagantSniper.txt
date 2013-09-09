@@ -19,6 +19,6 @@ ShootDelay 30
 ShootSound MosinNagantSniperShoot
 ReloadSound kar98kReload
 Mode SemiAuto
-Scope scope
+Scope wwiim9130sniper
 Deployable False
 DeployedModel None

@@ -23,4 +23,4 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
-MeleeDamage 5
+MeleeDamage 10

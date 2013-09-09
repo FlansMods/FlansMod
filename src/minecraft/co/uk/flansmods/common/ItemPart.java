@@ -19,7 +19,7 @@ public class ItemPart extends Item
 		setMaxStackSize(type.stackSize);
 		if (type.category == 9)
 		{
-			setMaxDamage(type.fuel);
+			setMaxDamage(type.fuel / 10);
 			setHasSubtypes(true);
 		}
 		type.item = this;

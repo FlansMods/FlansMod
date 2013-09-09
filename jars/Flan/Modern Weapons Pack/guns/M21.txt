@@ -19,6 +19,6 @@ ShootDelay 10
 ShootSound M21Shoot
 ReloadSound BARReload
 Mode SemiAuto
-Scope scope
+Scope mwm21
 Deployable False
 DeployedModel None

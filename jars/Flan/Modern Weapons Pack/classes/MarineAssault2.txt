@@ -1,0 +1,9 @@
+Name Heavy Assault
+ShortName marineAssault2
+AddItem m249
+AddItem usp
+AddItem rpg
+AddItem mwKnife
+AddItem m249Ammo 2
+AddItem uspAmmo 2
+AddItem rpgAmmo 2

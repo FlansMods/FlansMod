@@ -2,9 +2,8 @@ Name Medic
 ShortName japaneseMedic
 AddItem type38
 AddItem luger
+AddItem type97 2
+AddItem ww2MedKit
 AddItem ww2Knife
-AddItem potion 2 16421
-AddItem type38Ammo
-AddItem type38Ammo
-AddItem lugerAmmo
-AddItem lugerAmmo
+AddItem type38Ammo 2
+AddItem lugerAmmo 2

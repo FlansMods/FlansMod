@@ -1,0 +1,7 @@
+Name Assault
+ShortName nerfRampage
+AddItem rampage
+AddItem strongarm
+AddItem 25DartEliteDrum
+AddItem 12DartEliteClip
+AddItem eliteDart 12

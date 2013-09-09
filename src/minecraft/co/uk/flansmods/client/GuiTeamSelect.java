@@ -86,7 +86,7 @@ public class GuiTeamSelect extends GuiScreen
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.func_110577_a(texture);
+        mc.renderEngine.bindTexture(texture);
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
 		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		if(classMenu)

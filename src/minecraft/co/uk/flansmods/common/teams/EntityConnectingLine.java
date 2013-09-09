@@ -49,7 +49,7 @@ public class EntityConnectingLine extends EntityFishHook {
     public void onUpdate()
     {          
     	ItemStack currentItemstack = angler.inventory.getCurrentItem();
-    	if(!(currentItemstack.getItem() instanceof ItemOpStick) || currentItemstack.getItemDamage() != 1)
+    	if(currentItemstack == null || !(currentItemstack.getItem() instanceof ItemOpStick) || currentItemstack.getItemDamage() != 1)
     	{
     		setDead();
     		angler.fishEntity = null;

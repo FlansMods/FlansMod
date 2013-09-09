@@ -8,8 +8,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import co.uk.flansmods.common.EntityDriveable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketVehicleControl extends FlanPacketCommon
@@ -36,7 +36,12 @@ public class PacketVehicleControl extends FlanPacketCommon
         	data.writeDouble(driveable.motionX);
         	data.writeDouble(driveable.motionY);
         	data.writeDouble(driveable.motionZ);
-        	
+        	data.writeFloat(driveable.angularVelocity.x);
+        	data.writeFloat(driveable.angularVelocity.y);
+        	data.writeFloat(driveable.angularVelocity.z);
+        	data.writeFloat(driveable.throttle);
+        	driveable.writeUpdateData(data);
+        	        	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
         	
@@ -71,7 +76,8 @@ public class PacketVehicleControl extends FlanPacketCommon
 			}
 			if(driveable != null)
 			{
-				driveable.setPositionRotationAndMotion(stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readDouble(), stream.readDouble(), stream.readDouble());
+				driveable.setPositionRotationAndMotion(stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readFloat());
+				driveable.readUpdateData(stream);
 			}
 		}
         catch(Exception e)
