@@ -9,7 +9,8 @@
 	<property name="download.dir" value="${build.dir}/download"/>
 
 	<property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="jar.dir" value="${build.dir}/bin"/>
+	<property name="output.dir" value="${build.dir}/bin"/>
+	<property name="jar.dir" value="${output.dir}/mods"/>
 
 	<property name="forge.dir" value="${build.dir}/forge"/>
 	<property name="mcp.dir" value="${forge.dir}/mcp"/>
@@ -21,7 +22,7 @@
 	
 	<property name="packmodels.dir" value="co/uk/flansmods/client/model"/>
 	
-	<property name="packs.dir" value="${jar.dir}/packs"/>
+	<property name="packs.dir" value="${output.dir}/Flan"/>
     
     <!-- Get version numbers -->
     <property file="build.properties" />
@@ -168,7 +169,7 @@
 	<!-- Package the compiled files -->
 	<target name="package" depends="reobf">
 
-		<delete file="${jar.dir}"/>
+		<delete dir="${jar.dir}"/>
 		<mkdir dir="${jar.dir}"/>
 		<jar destfile="${jar.dir}/FlansMod-${flansmod.version}.jar" basedir="${classes.dir}"/>
 
@@ -206,7 +207,7 @@
 		<copy todir="${mcpflan.dir}/Modern Weapons Pack/${packmodels.dir}/mw" failonerror="false">
 			<fileset dir="${reobfmodels.dir}/mw"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
+		<zip destfile="${packs.dir}/Modern Weapons Pack.zip" basedir="${mcpflan.dir}/Modern Weapons Pack"/>
 		
 		<!-- Nerf -->
 		<delete dir="${mcpflan.dir}/Nerf Pack"/>
@@ -217,7 +218,7 @@
 		<copy todir="${mcpflan.dir}/Nerf Pack/${packmodels.dir}/nerf" failonerror="false">
 			<fileset dir="${reobfmodels.dir}/nerf"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/Nerf Pack.zip" basedir="${mcpflan.dir}/Nerf Pack"/>
+		<zip destfile="${packs.dir}/Nerf Pack.zip" basedir="${mcpflan.dir}/Nerf Pack"/>
 		
 		<!-- Parts -->
 		<delete dir="${mcpflan.dir}/Parts Pack"/>
@@ -228,7 +229,7 @@
 		<copy todir="${mcpflan.dir}/Parts Pack/${packmodels.dir}/parts" failonerror="false">
 			<fileset dir="${reobfmodels.dir}/parts"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/Parts Pack.zip" basedir="${mcpflan.dir}/Parts Pack"/>
+		<zip destfile="${packs.dir}/Parts Pack.zip" basedir="${mcpflan.dir}/Parts Pack"/>
 		
 		<!-- WW2 -->
 		<delete dir="${mcpflan.dir}/WW2 Pack"/>
@@ -239,7 +240,7 @@
 		<copy todir="${mcpflan.dir}/WW2 Pack/${packmodels.dir}/ww2" failonerror="false">
 			<fileset dir="${reobfmodels.dir}/ww2"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/WW2 Pack.zip" basedir="${mcpflan.dir}/WW2 Pack"/>
+		<zip destfile="${packs.dir}/WW2 Pack.zip" basedir="${mcpflan.dir}/WW2 Pack"/>
 		
 		<!-- Ye Olde -->
 		<delete dir="${mcpflan.dir}/Ye Olde Pack"/>
@@ -250,7 +251,7 @@
 		<copy todir="${mcpflan.dir}/Ye Olde Pack/${packmodels.dir}/yeolde" failonerror="false">
 			<fileset dir="${reobfmodels.dir}/yeolde"/>
 		</copy>
-		<zip destfile="${jar.dir}/packs/Ye Olde Pack.zip" basedir="${mcpflan.dir}/Ye Olde Pack"/>
+		<zip destfile="${packs.dir}/Ye Olde Pack.zip" basedir="${mcpflan.dir}/Ye Olde Pack"/>
 	</target>
 	
 	<!-- Target for full releases -->

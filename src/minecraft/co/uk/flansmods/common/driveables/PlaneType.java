@@ -45,11 +45,15 @@ public class PlaneType extends DriveableType
     /** Whether the player can access the inventory while in the air */
     public boolean invInflight = true;
 
-	public static HashMap<String, PlaneType> types = new HashMap<String, PlaneType>();
+	/** Plane is shown on ICBM Radar and engaged by AA Guns */
+    public boolean onRadar = false;
+
+	public static ArrayList<PlaneType> types = new ArrayList<PlaneType>();
 	
     public PlaneType(TypeFile file)
     {
 		super(file);
+		types.add(this);
     }
     
     @Override
@@ -101,18 +105,18 @@ public class PlaneType extends DriveableType
 				engineSoundLength = Integer.parseInt(split[1]);
 			if(split[0].equals("PropSound"))
 			{
-				engineSound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				engineSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("ShootSound"))
 			{
-				shootMainSound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				shootMainSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
-				shootSecondarySound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				shootSecondarySound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			
 			//Aesthetics
@@ -128,6 +132,10 @@ public class PlaneType extends DriveableType
             //In-flight inventory
             if(split[0].equals("InflightInventory"))
                 invInflight = split[1].equals("False");
+
+			// ICBM Mod Radar
+            if(split[0].equals("OnRadar"))
+                onRadar = split[1].equals("True");
 		}
 		catch (Exception e)
 		{
@@ -160,6 +168,11 @@ public class PlaneType extends DriveableType
 	
 	public static PlaneType getPlane(String find)
 	{
-		return types.get(find);
+		for(PlaneType type : types)
+		{
+			if(type.shortName.equals(find))
+				return type;
+		}
+		return null;
 	}
 }

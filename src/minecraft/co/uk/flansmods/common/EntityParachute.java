@@ -4,11 +4,14 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -33,6 +36,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		if(riddenByEntity == null || riddenByEntity.ridingEntity != this)
+			setDead();
+		
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
@@ -48,14 +55,21 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			motionX += (moveForwards * sinYaw + moveStrafing * cosYaw) * speedMultiplier;
 			motionZ += (moveForwards * cosYaw - moveStrafing * sinYaw) * speedMultiplier;
 			
-			prevRotationYaw = riddenByEntity.prevRotationYaw;
+			prevRotationYaw = rotationYaw;
 			rotationYaw = riddenByEntity.rotationYaw;
 		}		
 		
 		moveEntity(motionX, motionY, motionZ);
 		
-		if(onGround)
+		if(onGround || worldObj.getBlockMaterial(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) == Material.water)
 			setDead();
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float f)
+	{
+		setDead();
+		return true;
 	}
 	
 	@Override

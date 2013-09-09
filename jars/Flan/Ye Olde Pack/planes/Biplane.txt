@@ -21,7 +21,7 @@ LookDownSpeed 1
 RollLeftSpeed 1
 RollRightSpeed 1
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
-Drag 0.2
+Drag 0.165
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
 Lift 0.2
 //Mass (In tons)
@@ -55,9 +55,12 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 woodenCockpit
+AddRecipeParts coreWheel 2 wheel
 AddRecipeParts rightWing 1 biplaneWing
 AddRecipeParts leftWing 1 biplaneWing
+AddRecipeParts topWing 2 string
 AddRecipeParts tail 1 woodenTail
+AddRecipeParts tailWheel 1 wheel
 //Health and collision
 SetupPart core 50 -12 -7 -11 24 10 22
 SetupPart coreWheel 20 0 -15 -7 4 8 14

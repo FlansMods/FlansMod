@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
+import java.util.HashMap;
+
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
@@ -22,9 +24,12 @@ public class DriveableData implements IInventory
 	public ItemStack[] cargo;
 	public ItemStack fuel;
 	public float fuelInTank;
+	/** Each driveable part has a small class that holds its current status */
+	public HashMap<EnumDriveablePart, DriveablePart> parts;
 		
 	public DriveableData(NBTTagCompound tags)
 	{
+		parts = new HashMap<EnumDriveablePart, DriveablePart>();
 		readFromNBT(tags);
 	}
 
@@ -58,6 +63,14 @@ public class DriveableData implements IInventory
 		}
 		fuel = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Fuel"));
 		fuelInTank = tag.getInteger("FuelInTank");
+		for(EnumDriveablePart part : EnumDriveablePart.values())
+		{
+			parts.put(part, new DriveablePart(part, dType.health.get(part)));
+		}
+		for(DriveablePart part : parts.values())
+		{
+			part.readFromNBT(tag);
+		}
     }
 
     public void writeToNBT(NBTTagCompound tag)
@@ -82,6 +95,10 @@ public class DriveableData implements IInventory
 		if(fuel != null)
 			tag.setCompoundTag("Fuel", fuel.writeToNBT(new NBTTagCompound()));
 		tag.setInteger("FuelInTank", (int)fuelInTank);
+		for(DriveablePart part : parts.values())
+		{
+			part.writeToNBT(tag);
+		}
     }
 	
 	public int getSizeInventory() 

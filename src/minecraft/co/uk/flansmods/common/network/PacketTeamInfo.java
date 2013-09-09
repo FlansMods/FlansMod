@@ -124,6 +124,9 @@ public class PacketTeamInfo extends FlanPacketCommon
         		}
         	}
         	
+        	data.writeBoolean(FlansMod.canBreakGlass);
+        	data.writeBoolean(FlansMod.vehiclesNeedFuel);
+        	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
         	

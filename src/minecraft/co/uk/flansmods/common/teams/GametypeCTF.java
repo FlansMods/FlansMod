@@ -42,41 +42,9 @@ public class GametypeCTF extends Gametype
 	}
 	
 	@Override
-	public void startNewRound() 
-	{
-		respawnAll();
-		for(EntityPlayer player : getPlayers())
-		{
-			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
-			if(getPlayerData((EntityPlayerMP)player).team != null)
-				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
-		}
-		resetScores();
-		teamsManager.messageAll("\u00a7fA new round has started!");
-		//Check that all the required teams exist and then send out team selection menus
-		if(teamsManager.teams != null)
-		{
-			for(Team team : teamsManager.teams)
-			{
-				if(team == null)
-					return;
-			}
-			showTeamsMenuToAll(false);
-		}
-		//Reset all flags to their poles
-		for(ITeamBase base : teamsManager.bases)
-		{
-			if(base.getMap() != null && base.getMap().shortName.equals(teamsManager.currentMap))
-			{
-				if(base.getFlag() != null)
-					base.getFlag().onBaseSet(base.getOwner());
-			}
-		}
-	}
-
-	@Override
 	public void stopGametype() 
 	{
+		super.stopGametype();
 		resetScores();
 	}
 

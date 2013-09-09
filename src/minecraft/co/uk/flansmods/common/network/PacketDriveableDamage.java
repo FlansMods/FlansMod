@@ -31,7 +31,7 @@ public class PacketDriveableDamage extends FlanPacketCommon
         	data.writeInt(driveable.entityId);
         	for(EnumDriveablePart ep : EnumDriveablePart.values())
         	{
-        		DriveablePart part = driveable.parts.get(ep);
+        		DriveablePart part = driveable.getDriveableData().parts.get(ep);
         		data.writeShort((short)part.health);
         		data.writeBoolean(part.onFire);
         	}
@@ -72,7 +72,7 @@ public class PacketDriveableDamage extends FlanPacketCommon
 			{
 	        	for(EnumDriveablePart ep : EnumDriveablePart.values())
 	        	{
-	        		DriveablePart part = driveable.parts.get(ep);
+	        		DriveablePart part = driveable.getDriveableData().parts.get(ep);
 	        		part.health = stream.readShort();
 	        		part.onFire = stream.readBoolean();
 	        	}

@@ -42,29 +42,9 @@ public class GametypeTDM extends Gametype
 	}
 	
 	@Override
-	public void startNewRound() 
-	{
-		respawnAll();
-		for(EntityPlayer player : getPlayers())
-		{
-			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
-			if(getPlayerData((EntityPlayerMP)player).team != null)
-				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
-		}
-		resetScores();
-		teamsManager.messageAll("\u00a7fA new round has started!");
-		if(teamsManager.teams != null)
-		{
-			for(Team team : teamsManager.teams)
-				if(team == null)
-					return;
-			showTeamsMenuToAll(false);
-		}
-	}
-
-	@Override
 	public void stopGametype() 
 	{
+		super.stopGametype();
 		resetScores();
 	}
 
@@ -150,6 +130,10 @@ public class GametypeTDM extends Gametype
 	{
 		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
 			return false;
+		if(team == Team.spectators)
+		{
+			return true;
+		}
 		if(autoBalance)
 		{
 			int membersOnTeamTheyWantToJoin = team.members.size();

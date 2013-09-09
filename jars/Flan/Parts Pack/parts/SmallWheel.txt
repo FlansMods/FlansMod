@@ -1,6 +1,6 @@
-Name Wheel
+Name Small Wheel
 ShortName wheel
-Icon Wheel
+Icon SmallWheel
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 ItemID 23260

@@ -75,7 +75,7 @@ public class GuiDriveableCrafting extends GuiScreen
     {
         if (button.id == 0)
         {
-        	FlansMod.proxy.craftDriveable(inventory.player, DriveableType.typeList.get(selectedBlueprint));
+        	FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
         }
     }
 		
@@ -113,10 +113,10 @@ public class GuiDriveableCrafting extends GuiScreen
 					drawTexturedModalRect(guiOriginX + 8 + n * 18, guiOriginY + 18 + m * 18, 213, 11, 16, 16);
 				}
 				//If the number is within the bounds of the list
-				if(blueprintNumber < DriveableType.typeList.size())
+				if(blueprintNumber < DriveableType.types.size())
 				{
 					//Draw the driveable item
-					DriveableType type = DriveableType.typeList.get(blueprintNumber);
+					DriveableType type = DriveableType.types.get(blueprintNumber);
 					drawSlotInventory(new ItemStack(type.item), guiOriginX + 8 + n * 18, guiOriginY + 18 + m * 18);
 				}
 			}
@@ -127,7 +127,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		
 
 		//Return if the selectedBlueprint is invalid
-		if(selectedBlueprint >= DriveableType.typeList.size())
+		if(selectedBlueprint >= DriveableType.types.size())
 		{
 			return;
 		}
@@ -136,7 +136,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		canCraft = true;
 		
 		//Get the currently selected driveable type and check its not null
-		DriveableType selectedType = DriveableType.typeList.get(selectedBlueprint);
+		DriveableType selectedType = DriveableType.types.get(selectedBlueprint);
 		if(selectedType != null)
 		{
 			//Render rotating driveable model
@@ -146,7 +146,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glScalef(-50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance);
 			GL11.glRotatef(180F, 0F, 0F, 1F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
-			GL11.glRotatef(spinner, 0F, 1F, 0F);
+			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render();
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -330,11 +330,11 @@ public class GuiDriveableCrafting extends GuiScreen
 			//Blueprints forwards button
 			if(x >= 157 && x <= 167 && y >= 39 && y <= 49)
 			{
-				if(blueprintsScroll * 8 + 16 < DriveableType.typeList.size())
+				if(blueprintsScroll * 8 + 16 < DriveableType.types.size())
 					blueprintsScroll++;
 			}
 			//Return if the selectedBlueprint is invalid
-			if(selectedBlueprint >= DriveableType.typeList.size())
+			if(selectedBlueprint >= DriveableType.types.size())
 			{
 				return;
 			}
@@ -347,7 +347,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			//Recipe forwards button
 			if(x >= 83 && x <= 93 && y >= 177 && y <= 187)
 			{
-				DriveableType selectedType = DriveableType.typeList.get(selectedBlueprint);
+				DriveableType selectedType = DriveableType.types.get(selectedBlueprint);
 				if(selectedType != null && recipeScroll * 4 + 12 < selectedType.recipe.size())
 					recipeScroll++;
 			}

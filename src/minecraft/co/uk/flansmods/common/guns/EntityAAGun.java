@@ -256,27 +256,30 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		// Decrement the reload timer and reload
 		if (reloadTimer > 0)
 			reloadTimer--;
-		for (int i = 0; i < type.numBarrels; i++)
+		//If it is 0 or less, go ahead and reload
+		else
 		{
-			if (ammo[i] != null && ammo[i].getItemDamage() == ammo[i].getMaxDamage())
+			for (int i = 0; i < type.numBarrels; i++)
 			{
-				ammo[i] = null;
-				// Scrap metal output?
-			}
-			if (ammo[i] == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
-			{
-				int slot = findAmmo(((EntityPlayer) riddenByEntity));
-				if (slot >= 0)
+				if (ammo[i] != null && ammo[i].getItemDamage() == ammo[i].getMaxDamage())
 				{
-					ammo[i] = ((EntityPlayer) riddenByEntity).inventory.getStackInSlot(slot);
-					if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-						((EntityPlayer) riddenByEntity).inventory.decrStackSize(slot, 1);
-					reloadTimer = type.reloadTime;
-					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+					ammo[i] = null;
+					// Scrap metal output?
+				}
+				if (ammo[i] == null && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+				{
+					int slot = findAmmo(((EntityPlayer) riddenByEntity));
+					if (slot >= 0)
+					{
+						ammo[i] = ((EntityPlayer) riddenByEntity).inventory.getStackInSlot(slot);
+						if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+							((EntityPlayer) riddenByEntity).inventory.decrStackSize(slot, 1);
+						reloadTimer = type.reloadTime;
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.reloadSound, true);
+					}
 				}
 			}
 		}
-		
 
 		
 		if (!worldObj.isRemote && mouseHeld && riddenByEntity != null && riddenByEntity instanceof EntityPlayer && reloadTimer <= 0 && shootDelay <= 0)
@@ -293,7 +296,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					shootDelay = type.shootDelay;
 					barrelRecoil[j] = type.recoil;
 					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, bullet, type));
-					PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSound));
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 				}
 			}
 			currentBarrel = (currentBarrel + 1) % type.numBarrels;

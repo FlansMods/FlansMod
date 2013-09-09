@@ -12,7 +12,9 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -21,6 +23,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -82,6 +86,48 @@ public class FlansModClient extends FlansMod
 		log("Loading Flan's mod.");
 
 		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	
+	
+	@ForgeSubscribe
+	public void renderLiving(RenderPlayerEvent.Pre event)
+	{
+		RendererLivingEntity.NAME_TAG_RANGE = 64F;
+		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;
+		
+		if(event.entity instanceof EntityPlayer && GuiTeamScores.gametype != null && !GuiTeamScores.gametype.equals("No Gametype"))
+		{
+			GuiTeamScores.PlayerData rendering = GuiTeamScores.getPlayerData(event.entity.getEntityName());
+			GuiTeamScores.PlayerData thePlayer = GuiTeamScores.getPlayerData(minecraft.thePlayer.username);
+			
+			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
+			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
+			
+			//Spectators see all
+			if(thePlayerTeam == Team.spectators)
+				return;
+			//Nobody sees spectators
+			if(renderingTeam == Team.spectators)
+			{
+				event.setCanceled(true);
+				return;
+			}
+			//If we are on the other team, don't render the name tag
+			if(renderingTeam != thePlayerTeam)
+			{
+				RendererLivingEntity.NAME_TAG_RANGE = 0F;
+				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
+				return;
+			}
+			//If its DM, don't render the name tag
+			if(!GuiTeamScores.sortedByTeam)
+			{
+				RendererLivingEntity.NAME_TAG_RANGE = 0F;
+				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
+				return;
+			}
+		}
 	}
 
 	public static void tick()

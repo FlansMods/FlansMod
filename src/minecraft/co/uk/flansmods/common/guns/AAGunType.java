@@ -80,12 +80,12 @@ public class AAGunType extends InfoType
 			}
 			if (arg0[0].equals("ShootSound"))
 			{
-				shootSound = "aaguns." + arg0[1];
+				shootSound = arg0[1];
 				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
 			}
 			if (arg0[0].equals("ReloadSound"))
 			{
-				reloadSound = "aaguns." + arg0[1];
+				reloadSound = arg0[1];
 				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
 			}
 			if (arg0[0].equals("FireAlternately"))

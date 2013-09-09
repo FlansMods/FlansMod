@@ -1,14 +1,14 @@
-Name Wooden Tail
-ShortName woodenTail
-Icon WoodenTail
+Name Seat
+ShortName vehicleSeat
+Icon VehicleSeat
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23257
+ItemID 23464
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
-Category Tail
-StackSize 4
-RecipeOutput 1
-Recipe W wood S stick
-  W
-WWW
-  S
+Category Misc
+StackSize 8
+RecipeOutput 2
+Recipe I iron L leather
+ LI
+LLI
+III
