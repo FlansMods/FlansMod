@@ -58,6 +58,16 @@ public class RenderVehicle extends Render
 			GL11.glTranslatef(-type.barrelPosition.x, -type.barrelPosition.y, -type.barrelPosition.z);
 			
 			modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
+			
+			if(FlansMod.DEBUG)
+			{
+				GL11.glColor4f(0F, 0F, 1F, 0.3F);
+				for(PilotGun gun : type.guns)
+				{		
+					if(gun.driveablePart == EnumDriveablePart.turret)
+						renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+				}
+			}
 		}
 		GL11.glPopMatrix();
 		
@@ -68,7 +78,7 @@ public class RenderVehicle extends Render
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(1F, 0F, 0F, 0.3F);
 			GL11.glScalef(1F, 1F, 1F);
-			for(DriveablePart part : vehicle.parts.values())
+			for(DriveablePart part : vehicle.getDriveableData().parts.values())
 			{
 				if(part.box == null)
 					continue;
@@ -81,7 +91,8 @@ public class RenderVehicle extends Render
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+				if(gun.driveablePart != EnumDriveablePart.turret)
+					renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
 			}
 			GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

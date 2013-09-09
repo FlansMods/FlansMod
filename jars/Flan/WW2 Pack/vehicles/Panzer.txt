@@ -39,6 +39,8 @@ RotatedDriverOffset 12 0 -8
 Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 mg42 MG42
 BarrelPosition 0 34 0
+//Secondary gun
+AddGun 8 34 8 turret mg42
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 5
 ShellDelay 110
@@ -53,8 +55,8 @@ ShellSound TankShell
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret
-AddRecipeParts core 1 tankBody
+AddRecipeParts turret 1 tankTurret 1 vehicleSeat
+AddRecipeParts core 1 tankBody 1 vehicleSeat
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"

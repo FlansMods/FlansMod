@@ -16,8 +16,8 @@ Damage 6
 Accuracy 3
 //Time in ticks between rounds
 ShootDelay 5
-ShootSound m1CarbineShoot
-ReloadSound m1CarbineReload
+ShootSound m1carbineShoot
+ReloadSound m1carbineReload
 Mode SemiAuto
 Scope None
 Deployable False

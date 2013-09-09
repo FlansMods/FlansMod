@@ -36,6 +36,8 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 16 0 -360 360 0 45
 RotatedDriverOffset 10 0 -8
+//Secondary gun
+AddGun 8 34 8 turret browning
 Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 browning Browning
 BarrelPosition 0 34 0
@@ -53,8 +55,8 @@ ShellSound TankShell
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret
-AddRecipeParts core 1 tankBody
+AddRecipeParts turret 1 tankTurret 1 vehicleSeat
+AddRecipeParts core 1 tankBody 1 vehicleSeat
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"

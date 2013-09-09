@@ -52,7 +52,7 @@ ShellSound shell
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 1 smallChassis
+AddRecipeParts core 1 smallChassis 3 vehicleSeat
 AddRecipeParts frontLeftWheel 1 wheel
 AddRecipeParts frontRightWheel 1 wheel
 AddRecipeParts backLeftWheel 1 wheel

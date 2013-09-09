@@ -125,6 +125,7 @@ public class PacketFlak extends FlanPacketCommon
 		return packetID;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public EntityFX getParticle(String s, World w, double x, double y, double z)
 	{
 					

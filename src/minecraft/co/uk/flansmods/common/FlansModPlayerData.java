@@ -36,12 +36,12 @@ public class FlansModPlayerData
 	public int deaths;
 	public boolean out; //For Nerf gametypes
 
+	//For my quick world edit hack thingy
+	public int x1, y1, z1, x2, y2, z2;
 	
-	//TODO Unknown purpose!
 	public FlansModPlayerData(String name) 
 	{
-		username = name;
-		
+		username = name;	
 	}
 	
 	public void tick()

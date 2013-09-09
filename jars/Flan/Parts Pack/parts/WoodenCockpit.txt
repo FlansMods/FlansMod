@@ -8,7 +8,4 @@ ItemID 23269
 Category Cockpit
 StackSize 4
 RecipeOutput 1
-Recipe B boat W wheel
-   
- B 
-W W
+ShapelessRecipe boat

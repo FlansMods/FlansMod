@@ -60,7 +60,7 @@ public class RenderPlane extends Render
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(1F, 0F, 0F, 0.3F);
 			GL11.glScalef(-1F, 1F, -1F);
-			for(DriveablePart part : entityPlane.parts.values())
+			for(DriveablePart part : entityPlane.getDriveableData().parts.values())
 			{
 				if(part.box == null)
 					continue;

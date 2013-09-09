@@ -57,9 +57,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
 	public float throttle;
-	
-	/** Each driveable part has a small class that holds its current status */
-	public HashMap<EnumDriveablePart, DriveablePart> parts = new HashMap<EnumDriveablePart, DriveablePart>();
 
 	public boolean fuelling;
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
@@ -101,10 +98,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnEntityInWorld(seats[i]);
 			}
 		}
-		for(EnumDriveablePart part : EnumDriveablePart.values())
-		{
-			parts.put(part, new DriveablePart(this, part, type.health.get(part)));
-		}
 		yOffset = type.yOffset;
 	}
 	
@@ -116,27 +109,19 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		tag.setFloat("RotationYaw", axes.getYaw());
 		tag.setFloat("RotationPitch", axes.getPitch());
 		tag.setFloat("RotationRoll", axes.getRoll());
-		for(DriveablePart part : parts.values())
-		{
-			part.writeToNBT(tag);
-		}
     }
 
 	@Override
     protected void readEntityFromNBT(NBTTagCompound tag)
     {
 		driveableType = tag.getString("Type");
-		initType(DriveableType.getDriveable(driveableType), false);
 		driveableData = new DriveableData(tag);
+		initType(DriveableType.getDriveable(driveableType), false);
 		
 		prevRotationYaw = tag.getFloat("RotationYaw");
 		prevRotationPitch = tag.getFloat("RotationPitch");
 		prevRotationRoll = tag.getFloat("RotationRoll");
 		axes = new RotatedAxes(prevRotationYaw, prevRotationPitch, prevRotationRoll);
-		for(DriveablePart part : parts.values())
-		{
-			part.readFromNBT(tag);
-		}
     }
 	
 	@Override
@@ -157,7 +142,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Write damage
         	for(EnumDriveablePart ep : EnumDriveablePart.values())
         	{
-        		DriveablePart part = parts.get(ep);
+        		DriveablePart part = getDriveableData().parts.get(ep);
         		data.writeShort((short)part.health);
         		data.writeBoolean(part.onFire);
         	}
@@ -185,7 +170,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Read damage
         	for(EnumDriveablePart ep : EnumDriveablePart.values())
         	{
-        		DriveablePart part = parts.get(ep);
+        		DriveablePart part = getDriveableData().parts.get(ep);
         		part.health = inputData.readShort();
         		part.onFire = inputData.readBoolean();
         	}
@@ -389,7 +374,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         	}
         }
         
-        for(DriveablePart part : parts.values())
+        for(DriveablePart part : getDriveableData().parts.values())
         {
         	if(part.box != null)
         	{
@@ -650,7 +635,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / 100;
+		float momentOfInertia = getDriveableType().momentOfInertia / 1000;
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -761,16 +746,17 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 			        //After taking this much force, the plane will take damage (scales with mass)
 			        float damagePoint = 2F;
-			        float damageModifier = 1F;
+			        float damageModifier = 20F;
 
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
 			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
-			        	DriveablePart part = parts.get(point.part);
-			        	float smashyForceVsBlock = part.smashIntoGround(damageModifier * smashyForce);
+			        	DriveablePart part = getDriveableData().parts.get(point.part);
+			        	float smashyForceVsBlock = part.smashIntoGround(this, damageModifier * smashyForce);
 			        	int blockIDHit = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 			        	Block blockHit = Block.blocksList[blockIDHit];
-			        	if(FlansMod.driveablesBreakBlocks && smashyForceVsBlock > blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ))
+			        	float blockHardness = blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ);
+			        	if(FlansMod.driveablesBreakBlocks && smashyForceVsBlock > blockHardness && blockHardness >= 0)
 			        	{
 			        		blockHit.dropBlockAsItem(worldObj, hit.blockX, hit.blockY, hit.blockZ, worldObj.getBlockMetadata(hit.blockX, hit.blockY, hit.blockZ), 1);
 							FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockIDHit);
@@ -780,18 +766,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			}
 		}
-
-		checkParts();
-
+		
 		//Apply motion to position
 		posX += motionX;
 		posY += motionY;
 		posZ += motionZ;
-
+		
 		//Apply motion to rotation
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
 			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
-      	
+
       	numHits = 0;
       	
       	for(CollisionPoint point : type.points)
@@ -846,11 +830,69 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				      				
-      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
+      				      		
+      				float pushiness = 1F;
+      				float bounciness = type.bounciness;
+      				
+      				if(landVehicle())
+      				{
+      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
+      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
+      					else
+      					{
+      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
+      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX - 1, blockY, blockZ))
+      						{
+      							if(motionX > 0)
+      								motionX = 0;
+      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX + 1, blockY, blockZ))
+      						{
+      							if(motionX < 0)
+      								motionX = 0;
+		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ - 1))
+      						{
+      							if(motionZ > 0)
+      								motionZ = 0;
+		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ + 1))
+      						{
+      							if(motionZ < 0)
+      								motionZ = 0;
+		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+      					}
+      				}
+      				else
+      				{
+	      				if(Math.abs(dminX - min) < 0.00001F)
+	      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxX - min) < 0.00001F)
+	      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxY - min) < 0.00001F)
+	      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dminZ - min) < 0.00001F)
+	      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxZ - min) < 0.00001F)
+	      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
+      				}
       			}
       		}
       	}
+      	
+		checkParts();
+		
+		setPosition(posX, posY, posZ);
+	}
+	
+	/** To be overriden by vehicles to get alternate collision system */
+	public boolean landVehicle()
+	{
+		return false;
 	}
 	
 	/** Overriden by planes for wheel parts */
@@ -880,10 +922,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
 		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
 		//Check each part
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(bullet, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, bullet, rotatedPosVector, rotatedMotVector))
 			{
 				//This is server side bsns
 				if(worldObj.isRemote)
@@ -906,10 +948,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
 		Vector3f rotatedMotVector = axes.findGlobalVectorLocally(motion);
 		//Check each part
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(null, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, null, rotatedPosVector, rotatedMotVector))
 			{
 				return part;
 			}
@@ -926,15 +968,22 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	/** Internal method for checking that all parts are ok, destroying broken ones, dropping items and making sure that child parts are destroyed when their parents are */
 	public void checkParts()
 	{
-		for(DriveablePart part : parts.values())
+		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
 			{
 				killPart(part);
 			}
 		}
+		
+		
+		for(EntitySeat seat : seats)
+		{
+			
+		}
+		
 		//If the core was destroyed, kill the driveable
-		if(parts.get(EnumDriveablePart.core).dead)			
+		if(getDriveableData().parts.get(EnumDriveablePart.core).dead)
 			setDead();
 	}
 	
@@ -984,7 +1033,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//Kill all child parts to stop things floating unconnected
 		for(EnumDriveablePart child : part.type.getChildren())
 		{
-			killPart(parts.get(child));
+			killPart(getDriveableData().parts.get(child));
 		}
 	}
 	
@@ -1011,7 +1060,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public boolean isPartIntact(EnumDriveablePart part)
 	{
-		return parts.get(part).maxHealth == 0 || parts.get(part).health > 0; 
+		return getDriveableData().parts.get(part).maxHealth == 0 || getDriveableData().parts.get(part).health > 0; 
 	}
 	
 	public abstract boolean hasMouseControlMode();
@@ -1021,5 +1070,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public boolean rotateWithTurret(Seat seat)
 	{
 		return seat.part == EnumDriveablePart.turret;
+	}
+	
+	@Override
+	public String getEntityName()
+	{
+		return getDriveableType().name;
 	}
 }

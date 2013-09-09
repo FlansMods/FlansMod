@@ -3,7 +3,7 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
-=== v2.4 ===
+=== v3.0 ===
 Changes:
 - Updated to 1.6.2
 - Changed "Turbo Model Thingy not installed" error message to reduce confusion
@@ -14,6 +14,9 @@ Changes:
 - Packs can now be loaded as zip files
 - Improved WW2 gun and scope names and textures
 - Changed bullet drop stats in Flan's packs
+- Rewrote the laws of physics
+- Rewrote vehicle damage mechanics
+- Tons more
 Fixes:
 - Crosshairs properly locked in mouse control mode
 Additions:
@@ -21,6 +24,10 @@ Additions:
 - Added option to rotate gunner with turret
 - Added an NMT element to allow modifying corners of a box with x/y/z
 - Added Nerf gamemode, armour, classes, guns etc
+- Added grenades, proximity mines etc
+- Added repair tools and medkits
+- Added parachutes
+- Loads more
 Removals:
 - Properties file
 

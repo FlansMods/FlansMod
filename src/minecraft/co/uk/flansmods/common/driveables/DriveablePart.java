@@ -14,11 +14,9 @@ public class DriveablePart
 	public boolean onFire;
 	/** Keeps track of whether death code has been called or not */
 	public boolean dead;
-	public EntityDriveable driveable;
 	
-	public DriveablePart(EntityDriveable d, EnumDriveablePart e, CollisionBox b)
+	public DriveablePart(EnumDriveablePart e, CollisionBox b)
 	{
-		driveable = d;
 		type = e;
 		box = b;
 		health = maxHealth = b == null ? 0 : b.health;
@@ -42,13 +40,19 @@ public class DriveablePart
 	
 	public void readFromNBT(NBTTagCompound tags)
 	{
+		if(!tags.hasKey(type.getShortName() + "_Health"))
+		{
+			health = maxHealth;
+			onFire = false;
+			return;
+		}
 		health = tags.getInteger(type.getShortName() + "_Health");
 		onFire = tags.getBoolean(type.getShortName() + "_Fire");
 	}
 	
 	/** Called when a corner of this part hits the ground.
 	 * @return The amount of damage to do to the block */
-	public float smashIntoGround(float damage)
+	public float smashIntoGround(EntityDriveable driveable, float damage)
 	{
 		//In these cases, there was no collision, so don't damage this or the block
 		if(box == null || dead)
@@ -66,7 +70,7 @@ public class DriveablePart
 	/** Called by bullets that may have hit the plane 
 	 * Pass in a null bullet to simply do a raytrace check
 	 * @return Whether the bullet should consider itself to have hit something (which would mean destroying the bullet unless it penetrates) */
-	public boolean rayTrace(EntityBullet bullet, Vector3f origin, Vector3f motion)
+	public boolean rayTrace(EntityDriveable driveable, EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
 		if(box == null || health <= 0 || dead)
 			return false;

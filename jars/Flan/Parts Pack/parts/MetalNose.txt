@@ -1,14 +1,14 @@
-Name Wooden Tail
-ShortName woodenTail
-Icon WoodenTail
+Name Metal Nose
+ShortName metalNose
+Icon MetalNose
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23257
+ItemID 23466
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
-Category Tail
+Category Misc
 StackSize 4
 RecipeOutput 1
-Recipe W wood S stick
-  W
-WWW
-  S
+Recipe I iron
+II 
+  I
+II 

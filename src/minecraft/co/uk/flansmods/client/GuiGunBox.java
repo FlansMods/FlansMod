@@ -113,11 +113,10 @@ public class GuiGunBox extends GuiScreen
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			//fontRenderer.drawString(type.guns[q].name, m + 9, n + 22, 0xffffffff);
 			drawSlotInventory(new ItemStack(type.guns[q].getItem()), m + 9, n + 44);
-			drawSlotInventory(new ItemStack(type.bullets[q].getItem()), m + 9, n + 66);
-			if (type.altBullets[q] != null)
-			{
+			if(type.bullets[q] != null)
+				drawSlotInventory(new ItemStack(type.bullets[q].getItem()), m + 9, n + 66);
+			if(type.altBullets[q] != null)
 				drawSlotInventory(new ItemStack(type.altBullets[q].getItem()), m + 9, n + 88);
-			}
 			int numParts = type.gunParts[q].size();
 			int startPart = 0;
 			if (numParts >= 4)
@@ -128,17 +127,20 @@ public class GuiGunBox extends GuiScreen
 			{
 				drawSlotInventory(type.gunParts[q].get(startPart + p), m + 30 + p * 19, n + 44);
 			}
-			numParts = type.bulletParts[q].size();
-			startPart = 0;
-			if (numParts >= 4)
+			if(type.bullets[q] != null)
 			{
-				startPart = scroll % (numParts - 2);
+				numParts = type.bulletParts[q].size();
+				startPart = 0;
+				if (numParts >= 4)
+				{
+					startPart = scroll % (numParts - 2);
+				}
+				for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
+				{
+					drawSlotInventory(type.bulletParts[q].get(startPart + p), m + 30 + p * 19, n + 66);
+				}
 			}
-			for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
-			{
-				drawSlotInventory(type.bulletParts[q].get(startPart + p), m + 30 + p * 19, n + 66);
-			}
-			if (type.altBullets[q] != null)
+			if(type.altBullets[q] != null)
 			{
 				numParts = type.altBulletParts[q].size();
 				startPart = 0;

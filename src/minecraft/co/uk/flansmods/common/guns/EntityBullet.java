@@ -19,12 +19,14 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketFlak;
 import co.uk.flansmods.common.network.PacketPlaySound;
+import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
 
@@ -260,6 +262,13 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				//Driveable collisions are handled earlier
 				if(checkEntity instanceof EntityDriveable)
 					continue;
+				
+				if(checkEntity instanceof EntityPlayer)
+				{
+					FlansModPlayerData data = FlansModPlayerHandler.getPlayerData((EntityPlayer)checkEntity, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+					if(data != null && data.team == Team.spectators)
+						return;
+				}
 				
 				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
 				if ((!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity)) && ticksInAir < 20)
