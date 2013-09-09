@@ -14,8 +14,8 @@ public class BulletType extends InfoType
 {
 	public Object model;
 	public float fallSpeed = 1.0F;
-	public int damageVsLiving = 0;
-	public int damageVsDriveable = 0;
+	public int damageVsLiving = 1;
+	public int damageVsDriveable = 1;
 	public int explosion = 0;
 	public boolean explodeOnImpact = false;
 	public int fuse = 0;
@@ -28,7 +28,7 @@ public class BulletType extends InfoType
 	public boolean penetratesEntities = false;
 	public boolean penetratesBlocks = false;
 	public String trailParticles = "smoke";
-	public String flakParticles = "largeSmoke";
+	public String flakParticles = "largesmoke";
 	public boolean smokeTrail = false;
 	public boolean isBomb = false;
 	public boolean isShell = false;

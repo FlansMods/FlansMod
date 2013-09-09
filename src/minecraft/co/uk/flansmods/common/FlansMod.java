@@ -87,12 +87,12 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "2.4")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.0.2")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[2.4]",
+	    versionBounds = "[3.0,3.1)",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -117,7 +117,7 @@ public class FlansMod
 	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), partItems = new ArrayList<Item>(),
 				toolItems = new ArrayList<Item>(), gunItems = new ArrayList<Item>(), aaGunItems = new ArrayList<Item>(), 
 				grenadeItems = new ArrayList<Item>(), armourItems = new ArrayList<Item>();
@@ -262,6 +262,8 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 1), "Stick of Connecting");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 2), "Stick of Mapping");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 3), "Stick of Destruction");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 4), "Stick of Redness");
+		LanguageRegistry.addName(new ItemStack(opStick, 1, 5), "Stick of Blueness");
 		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
@@ -274,7 +276,10 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 1), "Player Spawner");
 		LanguageRegistry.addName(new ItemStack(spawner, 1, 2), "Vehicle Spawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "TeamsSpawner");
+		
+		EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
+		EntityRegistry.registerGlobalEntityID(EntityGunItem.class, "GunItem", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
 		
 		//Register the chunk loader
@@ -309,6 +314,7 @@ public class FlansMod
 	{
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
+		handler.registerCommand(new CommandBuild());
 	}
 	
 	private void getTypeFiles(List<File> contentPacks)
@@ -344,8 +350,13 @@ public class FlansMod
 									break;
 								typeFile.lines.add(line);
 							}
+							reader.close();
 						}
 						catch(FileNotFoundException e)
+						{
+							e.printStackTrace();
+						}
+						catch(IOException e)
 						{
 							e.printStackTrace();
 						}
@@ -395,6 +406,8 @@ public class FlansMod
 						}
 					}
 					while(zipEntry != null);
+					reader.close();
+					zipStream.close();
 				}
 				catch(IOException e)
 				{
@@ -660,8 +673,6 @@ public class FlansMod
 			type.addRecipe();
 		}
 		log("Loaded recipes.");
-		
-		DriveableType.populate();
 	}
 	
 	public static void loadProperties()

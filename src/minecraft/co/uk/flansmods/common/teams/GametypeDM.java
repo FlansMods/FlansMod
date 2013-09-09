@@ -159,10 +159,10 @@ public class GametypeDM extends Gametype
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
+			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
+				return false;
 			//Spectators may not attack players
 			if(getPlayerData(attacker).team == Team.spectators)
-				return false;
-			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
 				return false;
 		}
 		//Players may not attack spectators

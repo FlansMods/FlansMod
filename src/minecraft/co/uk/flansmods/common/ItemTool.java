@@ -43,7 +43,7 @@ public class ItemTool extends Item
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
-		setCreativeTab(FlansMod.tabFlanParts);
+		setCreativeTab(type.remote ? FlansMod.tabFlanGuns : FlansMod.tabFlanParts);
     }
     
 	@Override
@@ -135,7 +135,7 @@ public class ItemTool extends Item
 				{
 					EntityDriveable driveable = (EntityDriveable)obj;
 					//Raytrace
-					DriveablePart part = driveable.raytraceParts(new Vector3f(posVec), new Vector3f(lookVec.subtract(posVec)));
+					DriveablePart part = driveable.raytraceParts(new Vector3f(posVec), Vector3f.sub(new Vector3f(posVec), new Vector3f(lookVec), null));
 					//If we hit something that is healable
 					if(part != null && part.maxHealth > 0)
 					{

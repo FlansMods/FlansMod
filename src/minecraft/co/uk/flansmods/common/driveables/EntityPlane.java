@@ -28,6 +28,7 @@ import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
+import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -79,6 +80,8 @@ public class EntityPlane extends EntityDriveable
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
         rotatePitch(type.restingPitch);
+		
+
 	}
 	
 	@Override
@@ -157,6 +160,11 @@ public class EntityPlane extends EntityDriveable
 		if(isDead)
 			return true;
 		if(worldObj.isRemote)
+			return true;
+		
+		//If they are using a repair tool, don't put them in
+		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
 		
 		PlaneType type = this.getPlaneType();
@@ -490,7 +498,7 @@ public class EntityPlane extends EntityDriveable
 		for(Propeller propeller : type.propellers)
 		{
 			//Check the propeller is still around
-			if(!parts.get(propeller.planePart).dead)
+			if(!getDriveableData().parts.get(propeller.planePart).dead)
 			{
 				//If the player driving this is in creative, then we can thrust, no matter what
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;

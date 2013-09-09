@@ -21,7 +21,7 @@ LookDownSpeed 2
 RollLeftSpeed 2
 RollRightSpeed 2
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
-Drag 2.7
+Drag 0.98
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
 Lift 3.2
 //Mass (In tons)
@@ -63,10 +63,13 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 metalCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts nose 1 metalNose
 AddRecipeParts rightWing 1 metalWingSmall
 AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
+AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 5 silver
 AddDye 1 yellow

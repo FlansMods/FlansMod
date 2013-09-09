@@ -1,5 +1,6 @@
 package co.uk.flansmods.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 {
 	public static Map<String, FlansModPlayerData> serverSideData = new HashMap<String, FlansModPlayerData>();
 	public static Map<String, FlansModPlayerData> clientSideData = new HashMap<String, FlansModPlayerData>();
+	public static ArrayList<String> clientsToRemoveAfterThisRound = new ArrayList<String>();
 	
 	public FlansModPlayerHandler()
 	{
@@ -93,12 +95,16 @@ public class FlansModPlayerHandler implements IPlayerTracker
 			serverSideData.put(player.username, new FlansModPlayerData(player.username));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
 			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
+		if(clientsToRemoveAfterThisRound.contains(player.username))
+			clientsToRemoveAfterThisRound.remove(player.username);
 	}
 
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
-		serverSideData.remove(player.username);
+		if(TeamsManager.getInstance().currentGametype == null)
+			serverSideData.remove(player.username);
+		else clientsToRemoveAfterThisRound.add(player.username);
 	}
 
 	@Override
@@ -106,4 +112,13 @@ public class FlansModPlayerHandler implements IPlayerTracker
 
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) {}
+	
+	/** Called by teams manager to remove lingering player data */
+	public static void roundEnded()
+	{
+		for(String username : clientsToRemoveAfterThisRound)
+		{
+			serverSideData.remove(username);
+		}
+	}
 }

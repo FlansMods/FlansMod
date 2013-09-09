@@ -21,7 +21,7 @@ LookDownSpeed 2
 RollLeftSpeed 2
 RollRightSpeed 2
 //Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
-Drag 2.5
+Drag 1.06
 //Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
 Lift 2.5
 //Mass (In tons)
@@ -35,8 +35,8 @@ RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 5000
 //Nose and Wing Guns
-AddGun 40 -4 -44 wing browning
-AddGun 40 -4 44 wing browning
+AddGun 40 -4 -44 leftWing browning
+AddGun 40 -4 44 rightWing browning
 ShootDelay 5
 //Bombs (Bomb delay is in 1/20ths of seconds)
 BombDelay 100
@@ -62,10 +62,13 @@ BombSound bomb
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 metalCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts nose 1 metalNose
 AddRecipeParts rightWing 1 metalWingSmall
 AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts bay 1 bombBay
 AddRecipeParts tail 1 metalTail
+AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 green
 //Health and collision

@@ -37,31 +37,11 @@ public class GametypeNerf extends Gametype {
 	{	
 		startNewRound();
 	}
-	
-	@Override
-	public void startNewRound() 
-	{
-		respawnAll();
-		for(EntityPlayer player : getPlayers())
-		{
-			getPlayerData((EntityPlayerMP)player).newPlayerClass = getPlayerData((EntityPlayerMP)player).playerClass = null;
-			if(getPlayerData((EntityPlayerMP)player).team != null)
-				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
-		}
-		resetScores();
-		teamsManager.messageAll("\u00a7fA new round has started!");
-		if(teamsManager.teams != null)
-		{
-			for(Team team : teamsManager.teams)
-				if(team == null)
-					return;
-			showTeamsMenuToAll(false);
-		}
-	}
 
 	@Override
 	public void stopGametype() 
 	{
+		super.stopGametype();
 		resetScores();
 	}
 

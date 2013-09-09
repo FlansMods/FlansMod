@@ -11,4 +11,4 @@ RecipeOutput 1
 Recipe C minecart W wheel G glass
  G 
  C 
-W W
+   

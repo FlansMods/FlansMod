@@ -87,10 +87,7 @@ public class DriveableType extends InfoType
 	public String shootMainSound;
 	public String shootSecondarySound;
 	
-	
-	/** Static DriveableType map for obtaining Types from Strings */
-	public static HashMap<String, DriveableType> types = new HashMap<String, DriveableType>();
-	public static ArrayList<DriveableType> typeList = new ArrayList<DriveableType>();
+	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
 	
     public DriveableType(TypeFile file)
     {
@@ -112,7 +109,7 @@ public class DriveableType extends InfoType
 				seats = new Seat[numPassengers + 1];
 			}
 		}
-		typeList.add(this);
+		types.add(this);
     }
 	
     @Override
@@ -250,23 +247,23 @@ public class DriveableType extends InfoType
 				engineSoundLength = Integer.parseInt(split[1]);
 			if(split[0].equals("StartSound"))
 			{
-				startSound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				startSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("EngineSound"))
 			{
-				engineSound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				engineSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("ShootMainSound"))
 			{
-				shootMainSound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				shootMainSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("ShootSecondarySound"))
 			{
-				shootSecondarySound = contentPack + "driveables." + split[1];
-				FlansMod.proxy.loadSound(contentPack, contentPack + "driveables", split[1]);
+				shootSecondarySound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 		}
 		catch (Exception e)
@@ -313,22 +310,11 @@ public class DriveableType extends InfoType
 	
 	public static DriveableType getDriveable(String find)
 	{
-		return types.get(find);
-	}
-	
-	public static void populate()
-	{
-		for (DriveableType type: typeList)
+		for(DriveableType type : types)
 		{
-			types.put(type.shortName, type);
-			if (type instanceof PlaneType)
-			{
-				PlaneType.types.put(type.shortName, (PlaneType) type);
-			}
-			else if (type instanceof VehicleType)
-			{
-				VehicleType.types.put(type.shortName, (VehicleType) type);
-			}
+			if(type.shortName.equals(find))
+				return type;
 		}
+		return null;
 	}
 }

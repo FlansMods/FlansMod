@@ -29,6 +29,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
+import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -140,6 +141,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(worldObj.isRemote)
 			return true;
 		
+		//If they are using a repair tool, don't put them in
+		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
+			return true;
+		
 		VehicleType type = getVehicleType();
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
@@ -235,12 +241,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					{
 						int spread = 0;
 						int damageMultiplier = 1;
-						float shellSpeed = 1F;
+						float shellSpeed = 3F;
 
 						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, shellSpeed, type));
 						
-						if(type.shootMainSound != null)
-							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));					
+						if(type.shootSecondarySound != null)
+							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));					
 						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 							driveableData.decrStackSize(slot, 1);
 						shellDelay = type.vehicleShellDelay;
@@ -251,7 +257,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 			case 8 : //Shoot bullet
 			{
-				/*
 				if(!worldObj.isRemote && gunDelay <= 0 && FlansMod.bulletsEnabled)
 				{
 					for(PilotGun gun : getDriveableType().guns)
@@ -266,9 +271,19 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 							if(gunType.isAmmo(bullet))
 							{
 								//Rotate the gun vector to global axes
-								Vector3f gunVec = rotate(gun.position);
+								Vector3f localGunVec = gun.position;
+								
+								Vector3f lookVec = axes.getXAxis();
+								
+								if(gun.driveablePart == EnumDriveablePart.turret)
+								{
+									localGunVec = seats[0].looking.findLocalVectorGlobally(localGunVec);
+									lookVec = axes.findLocalVectorGlobally(seats[0].looking.getXAxis());
+								}
+								
+								Vector3f gunVec = rotate(localGunVec);
 								//Spawn a new bullet item
-								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLiving)riddenByEntity, gunType.accuracy / 2, gunType.damage, bullet, 2.0F, type));
+								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVec, (EntityLiving)riddenByEntity, gunType.accuracy / 2, gunType.damage, bullet, 2.0F, type));
 								//Play the shoot sound
 								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));
 								//Get the bullet item damage and increment it
@@ -288,13 +303,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 									}
 								}
 								//Reset the shoot delay
-								gunDelay = type.planeShootDelay;
+								gunDelay = type.vehicleShootDelay;
 							}
 						}
 					}
 					return true;
 				}
-				*/
 				return false;
 			}
 			case 10 : //Change control mode : Do nothing
@@ -374,6 +388,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			gunDelay--;
 		if(toggleTimer > 0)
 			toggleTimer--;
+		if(soundPosition > 0)
+			soundPosition--;
 		
 		//Aesthetics
 		//Rotate the wheels
@@ -434,19 +450,19 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			if(type.tank)
 			{
-				applyThrust(parts.get(EnumDriveablePart.leftTrack), thrust);
-				applyThrust(parts.get(EnumDriveablePart.rightTrack), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.leftTrack), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.rightTrack), thrust);
 			}
 			else
 			{
-				applyThrust(parts.get(EnumDriveablePart.backLeftWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.backRightWheel), thrust);
-				applyThrust(parts.get(EnumDriveablePart.backWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backLeftWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backRightWheel), thrust);
+				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backWheel), thrust);
 				if(type.fourWheelDrive)
 				{
-					applyThrust(parts.get(EnumDriveablePart.frontLeftWheel), thrust);
-					applyThrust(parts.get(EnumDriveablePart.frontRightWheel), thrust);
-					applyThrust(parts.get(EnumDriveablePart.frontWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontLeftWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontRightWheel), thrust);
+					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontWheel), thrust);
 				}
 			}
 		}

@@ -34,8 +34,7 @@ public class GunBoxType extends InfoType
 	//Unique to this box. Used to determine its damage value.
 	public int gunBoxID;
 	public int numGuns;
-	public int nextGun = 0;
-	public int nextAmmo = 0;
+	public int nextGun = -1;
 	public InfoType[] guns;
 	public BulletType[] bullets;
 	public BulletType[] altBullets;
@@ -110,11 +109,11 @@ public class GunBoxType extends InfoType
 				gunBoxID = Integer.parseInt(split[1]);
 			if (split[0].equals("AddGun"))
 			{
+				nextGun++;
 				if (gunParts[nextGun] == null)
 					FlansMod.log("NumGuns was not found or was incorrect");
-				guns[nextGun] = GunType.getGun(split[1]);
-				if (guns[nextGun] == null)
-					guns[nextGun] = AAGunType.getAAGun(split[1]);
+				
+				guns[nextGun] = InfoType.getType(split[1]);
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
@@ -122,33 +121,32 @@ public class GunBoxType extends InfoType
 					else
 						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
 				}
-				nextGun++;
+				
 			}
 			if (split[0].equals("AddAmmo"))
 			{
-				if (bulletParts[nextAmmo] == null)
+				if (bulletParts[nextGun] == null)
 					FlansMod.log("NumGuns was not found or was incorrect");
-				bullets[nextAmmo] = BulletType.getBullet(split[1]);
+				bullets[nextGun] = BulletType.getBullet(split[1]);
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
-						bulletParts[nextAmmo].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
+						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
 					else
-						bulletParts[nextAmmo].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
+						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
 				}
-				nextAmmo++;
 			}
 			if (split[0].equals("AddAltAmmo") || split[0].equals("AddAlternateAmmo"))
 			{
-				if (altBulletParts[nextAmmo - 1] == null)
+				if (altBulletParts[nextGun] == null)
 					FlansMod.log("NumGuns was not found or was incorrect");
-				altBullets[nextAmmo - 1] = BulletType.getBullet(split[1]);
+				altBullets[nextGun] = BulletType.getBullet(split[1]);
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
-						altBulletParts[nextAmmo - 1].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
+						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
 					else
-						altBulletParts[nextAmmo - 1].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
+						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
 				}
 			}
 		} catch (Exception e)

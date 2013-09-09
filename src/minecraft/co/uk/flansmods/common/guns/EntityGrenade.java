@@ -45,6 +45,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	public boolean smoking = false;
 	/** Set to true when a sticky grenade sticks. Impedes further movement */
 	public boolean stuck = false;
+	/** Stores the position of the block this grenade is stuck to. Used to determine when to unstick */
+	public int stuckToX, stuckToY, stuckToZ;
 	/** Stop repeat detonations */
 	public boolean detonated = false;
 	
@@ -136,22 +138,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 		}
-		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
-		//(Don't attack entities when stuck to stuff)
-		if(type.hitEntityDamage > 0 && !stuck)
-		{
-			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
-			for(Object obj : list)
-			{
-				if(obj == thrower && ticksExisted < 10 && motVec.lengthSquared() > 0.1D)
-					continue;
-				if(obj instanceof EntityLivingBase)
-				{
-					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
-				}
-			}
-		}
+
+		//If the block we were stuck to is gone, unstick
+		if(stuck && worldObj.isAirBlock(stuckToX, stuckToY, stuckToZ))
+			stuck = false;
 		
 		//Physics and motion (Don't move if stuck)
 		if(!stuck)
@@ -175,17 +165,20 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				int blockID = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 				Material mat = worldObj.getBlockMaterial(hit.blockX, hit.blockY, hit.blockZ);
 				
-				//If we hit glass and can break it, do so
-				if(type.breaksGlass && mat == Material.glass)
-				{
-					if(FlansMod.canBreakGlass)
-						worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
-					FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
-				}
-				
 				//If this grenade detonates on impact, do so
 				if(type.detonateOnImpact)
 					detonate();
+				
+				//If we hit glass and can break it, do so
+				else if(type.breaksGlass && mat == Material.glass)
+				{
+					if(FlansMod.canBreakGlass)
+					{
+						worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
+						FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
+					}
+				}
+				
 				//If this grenade does not penetrate blocks, hit the block instead
 				//The grenade cannot bounce if it detonated on impact, so hence the "else" condition
 				else if(!type.penetratesBlocks)
@@ -258,6 +251,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 
 						//Set the stuck flag on
 						stuck = true;
+						stuckToX = hit.blockX;
+						stuckToY = hit.blockY;
+						stuckToZ = hit.blockZ;
 					}
 				}
 			}
@@ -271,6 +267,23 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 			//Update the grenade position
 			setPosition(posX, posY, posZ);
+		}
+		
+		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
+		//(Don't attack entities when stuck to stuff)
+		if(type.hitEntityDamage > 0 && !stuck)
+		{
+			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
+			for(Object obj : list)
+			{
+				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
+					continue;
+				if(obj instanceof EntityLivingBase)
+				{
+					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
+				}
+			}
 		}
 	
 		//Apply gravity
