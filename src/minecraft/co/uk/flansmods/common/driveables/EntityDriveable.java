@@ -635,7 +635,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / 100;
+		float momentOfInertia = getDriveableType().momentOfInertia / 1000;
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -746,7 +746,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 			        //After taking this much force, the plane will take damage (scales with mass)
 			        float damagePoint = 2F;
-			        float damageModifier = 50F;
+			        float damageModifier = 20F;
 
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
@@ -766,6 +766,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			}
 		}
+		
+		//Apply motion to position
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
+		
+		//Apply motion to rotation
+      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
+			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 
       	numHits = 0;
       	
@@ -821,24 +830,69 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				      			      				
-      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
+      				      		
+      				float pushiness = 1F;
+      				float bounciness = type.bounciness;
+      				
+      				if(landVehicle())
+      				{
+      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
+      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
+      					else
+      					{
+      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
+      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX - 1, blockY, blockZ))
+      						{
+      							if(motionX > 0)
+      								motionX = 0;
+      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX + 1, blockY, blockZ))
+      						{
+      							if(motionX < 0)
+      								motionX = 0;
+		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ - 1))
+      						{
+      							if(motionZ > 0)
+      								motionZ = 0;
+		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+		      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ + 1))
+      						{
+      							if(motionZ < 0)
+      								motionZ = 0;
+		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
+      						}
+      					}
+      				}
+      				else
+      				{
+	      				if(Math.abs(dminX - min) < 0.00001F)
+	      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxX - min) < 0.00001F)
+	      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxY - min) < 0.00001F)
+	      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dminZ - min) < 0.00001F)
+	      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
+	      				else if(Math.abs(dmaxZ - min) < 0.00001F)
+	      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
+      				}
       			}
       		}
       	}
       	
 		checkParts();
-
-		//Apply motion to position
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
 		
 		setPosition(posX, posY, posZ);
-
-		//Apply motion to rotation
-      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
-			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
+	}
+	
+	/** To be overriden by vehicles to get alternate collision system */
+	public boolean landVehicle()
+	{
+		return false;
 	}
 	
 	/** Overriden by planes for wheel parts */
