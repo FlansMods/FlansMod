@@ -17,11 +17,11 @@ Accuracy 6
 //Time in ticks between rounds
 ShootDelay 2
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
-SoundLength 21
+//SoundLength 0
 //Whether or not to distort the sound. This works well for single shots but not for loops
-DistortSound False
-ShootSound BrowningShoot
-ReloadSound BrowningReload
+DistortSound True
+ShootSound browningShoot
+ReloadSound browningReload
 Mode FullAuto
 Scope None
 Deployable True
@@ -29,7 +29,7 @@ Deployable True
 //All the following is for deployables only. Other guns do not need any of this
 //-----------------------------------------------------------------------------
 //Place the compiled model class in the models folder
-DeployedModel ww2.Browning
+DeployedModel Browning
 //Place the texture .png in the skins folder
 DeployedTexture Browning
 //The length from the bipod to the trigger of the gun. Deployables only.
