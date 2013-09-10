@@ -19,9 +19,10 @@ Accuracy 8
 ShootDelay 1
 ShootSound MG42Shoot
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
-SoundLength 15
-DistortSound False
-ReloadSound MG42Reload
+//SoundLength 0
+//Whether or not to distort the sound. This works well for single shots but not for loops
+DistortSound True
+ReloadSound mg42Reload
 Mode FullAuto
 Scope None
 Deployable True
@@ -29,7 +30,7 @@ Deployable True
 //All the following is for deployables only. Other guns do not need any of this
 //-----------------------------------------------------------------------------
 //Place the compiled model class in the models folder
-DeployedModel ww2.MG42
+DeployedModel MG42
 //Place the texture .png in the skins folder
 DeployedTexture MG42
 //The length from the bipod to the trigger of the gun. Deployables only.
