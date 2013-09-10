@@ -89,7 +89,8 @@ public class ItemVehicle extends ItemMapBase
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
-		lines.add(part.name);
+		if(part != null)
+			lines.add(part.name);
 	}
 	
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)

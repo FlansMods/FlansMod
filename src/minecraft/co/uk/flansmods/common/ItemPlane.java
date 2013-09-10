@@ -91,7 +91,11 @@ public class ItemPlane extends Item
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
-		lines.add(PartType.getPart(getTagCompound(stack, player.worldObj).getString("Engine")).name);
+		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
+		String engineName = tags.getString("Engine");
+		PartType part = PartType.getPart(engineName);
+		if(part != null)
+			lines.add(part.name);
 	}
 	
 	@Override
