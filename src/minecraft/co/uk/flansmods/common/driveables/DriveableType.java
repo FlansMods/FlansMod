@@ -77,6 +77,9 @@ public class DriveableType extends InfoType
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
 
+	/** Plane is shown on ICBM Radar and engaged by AA Guns */
+    public boolean onRadar = false;
+
 	
 	/** Sounds */
 	//TODO : Overhaul sounds
@@ -265,6 +268,9 @@ public class DriveableType extends InfoType
 				shootSecondarySound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
+			// ICBM Mod Radar
+            if(split[0].equals("OnRadar"))
+                onRadar = split[1].equals("True");
 		}
 		catch (Exception e)
 		{
