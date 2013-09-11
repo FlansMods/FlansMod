@@ -45,9 +45,6 @@ public class PlaneType extends DriveableType
     /** Whether the player can access the inventory while in the air */
     public boolean invInflight = true;
 
-	/** Plane is shown on ICBM Radar and engaged by AA Guns */
-    public boolean onRadar = false;
-
 	public static ArrayList<PlaneType> types = new ArrayList<PlaneType>();
 	
     public PlaneType(TypeFile file)
@@ -132,10 +129,6 @@ public class PlaneType extends DriveableType
             //In-flight inventory
             if(split[0].equals("InflightInventory"))
                 invInflight = split[1].equals("False");
-
-			// ICBM Mod Radar
-            if(split[0].equals("OnRadar"))
-                onRadar = split[1].equals("True");
 		}
 		catch (Exception e)
 		{
