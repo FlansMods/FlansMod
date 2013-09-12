@@ -40,7 +40,10 @@ import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
+import icbm.api.RadarRegistry;
+import icbm.api.sentry.IAATarget;
+
+public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData, IAATarget
 {
 	public boolean syncFromServer = true;
 	/** Ticks since last server update. Use to smoothly transition to new position */
@@ -99,6 +102,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 		yOffset = type.yOffset;
+		
+		//Register Plane to Radar on Spawning
+		if(type.onRadar == true)
+			RadarRegistry.register(this);
 	}
 	
 	@Override
@@ -252,6 +259,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void setDead()
 	{
 		super.setDead();
+		
+		//Unregister to Radar
+		RadarRegistry.unregister(this);
+		
 		for(EntitySeat seat : seats)
 			if(seat != null)
 				seat.setDead();
@@ -1076,5 +1087,45 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public String getEntityName()
 	{
 		return getDriveableType().name;
+	}
+	
+	
+	// Destroys the target with a boom. This is a forced way for the sentry too kill the target if
+	// it doesn't take damage
+	// Not needed in Flan due to plane is detroyed when HP = 0
+	public void destroyCraft()
+	{
+	
+	}
+	
+	// Applies damage to the the target
+	// 
+	// @param damage - damage in half HP
+	// @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
+	// killed. Return 0 if this target is dead and destroyCraft() will be called.
+	
+	public int doDamage(int damage)
+	{
+		attackEntityFrom(DamageSource.driveable, 100);   // Requires a Damage Source that can damage the plane
+		return damage;                                          // Remaining HP
+	}
+	
+	// Can this be targeted by automated targeting systems or AIs. Used to implement radar jammers,
+	// cloaking devices, and other addons for the Entity being targeted
+	//
+	// @param entity - entity that is targeting this, can be an Entity, EntityLiving, or TileEntity
+	// @return true if it can
+	public boolean canBeTargeted(Object entity)
+	{
+		//Check config for option to show plane on radar
+		DriveableType type = getDriveableType();
+		if(type.onRadar == true)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
