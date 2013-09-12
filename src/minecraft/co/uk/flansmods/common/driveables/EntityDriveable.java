@@ -1106,8 +1106,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public int doDamage(int damage)
 	{
-		attackEntityFrom(DamageSource.driveable, 100);   // Requires a Damage Source that can damage the plane
-		return damage;                                          // Remaining HP
+		DriveablePart core = getDriveableData().parts.get(EnumDriveablePart.core);
+		core.health -= damage;
+		checkParts();
+		return core.health;
 	}
 	
 	// Can this be targeted by automated targeting systems or AIs. Used to implement radar jammers,
