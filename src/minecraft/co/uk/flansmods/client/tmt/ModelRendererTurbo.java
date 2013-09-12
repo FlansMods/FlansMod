@@ -743,10 +743,10 @@ public class ModelRendererTurbo extends ModelRenderer
 				v6[2] += bScale4;
 				break;
 			case MR_FRONT:
-				v2[1] += fScale1;
-				v3[1] += fScale2;
+				v1[1] -= fScale1;
+				v5[1] -= fScale1;
+				v2[1] += fScale2;
 				v6[1] += fScale2;
-				v7[1] += fScale1;
 
 				v[0] -= m * bScale4;
 				v[1] -= bScale1;
@@ -758,10 +758,10 @@ public class ModelRendererTurbo extends ModelRenderer
 				v3[1] += bScale2;
 				break;
 			case MR_BACK:
-				v2[1] += fScale1;
-				v3[1] += fScale2;
+				v1[1] -= fScale1;
+				v5[1] -= fScale1;
+				v2[1] += fScale2;
 				v6[1] += fScale2;
-				v7[1] += fScale1;
 
 				v4[0] -= m * bScale4;
 				v4[1] -= bScale1;

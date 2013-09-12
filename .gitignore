@@ -23,13 +23,12 @@ Thumbs.db
 /src/minecraft_server/*
 
 !/src/minecraft/co/
+!/src/minecraft/icbm/
+!/src/minecraft/universalelectricity/
 !/src/minecraft/mcmod.info
 !/src/minecraft/flansmod.png
 !/src/minecraft/pack.mcmeta
 !/jars/Flan/
-!/eclipse/Minecraft/bin/gui/
-!/eclipse/Minecraft/bin/spritesheets/
-!/eclipse/Minecraft/bin/teamsMod/
 
 *.bat
 *.sh
