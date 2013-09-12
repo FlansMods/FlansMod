@@ -3,6 +3,13 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
+=== v3.0.5 ===
+Fixes:
+- Fixed render issue with parachutes
+Additions:
+- Added ICBM mod API
+- Added hook into Universal Electricity
+
 === v3.0 ===
 Changes:
 - Updated to 1.6.2
