@@ -981,7 +981,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
-			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
+			if(part != null && !part.dead && part.health <= 0 && part.maxHealth > 0)
 			{
 				killPart(part);
 			}
