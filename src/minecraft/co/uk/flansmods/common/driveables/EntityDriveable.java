@@ -880,6 +880,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				}
       				else
       				{
+          				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
+
+      					/*
 	      				if(Math.abs(dminX - min) < 0.00001F)
 	      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
 	      				else if(Math.abs(dmaxX - min) < 0.00001F)
@@ -890,6 +893,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
 	      				else if(Math.abs(dmaxZ - min) < 0.00001F)
 	      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
+	      					*/
       				}
       			}
       		}
@@ -981,7 +985,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
-			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
+			if(part != null && !part.dead && part.health <= 0 && part.maxHealth > 0)
 			{
 				killPart(part);
 			}
