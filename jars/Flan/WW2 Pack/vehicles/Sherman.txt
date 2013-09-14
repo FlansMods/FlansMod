@@ -42,14 +42,14 @@ Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 browning Browning
 BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 5
+ShootDelay 2
 ShellDelay 100
 //Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound bullet
+ShootSound BrowningShoot
 ShellSound TankShell
 //Recipe
 //Each section of the plane may have many parts
