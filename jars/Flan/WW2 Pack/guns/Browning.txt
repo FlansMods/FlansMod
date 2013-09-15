@@ -19,7 +19,7 @@ ShootDelay 2
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
 //SoundLength 21
 //Whether or not to distort the sound. This works well for single shots but not for loops
-DistortSound True
+DistortSound False
 ShootSound BrowningShoot
 ReloadSound BrowningReload
 Mode FullAuto
