@@ -6,6 +6,8 @@
 === v3.0.5 ===
 Fixes:
 - Fixed render issue with parachutes
+- Fixed MG42 and Browning Sounds
+- Fixed some plane movement issues
 Additions:
 - Added ICBM mod API
 - Added hook into Universal Electricity
