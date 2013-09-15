@@ -49,7 +49,7 @@ StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound bullet
+ShootSound MG42Shoot
 ShellSound TankShell
 //Recipe
 //Each section of the plane may have many parts
