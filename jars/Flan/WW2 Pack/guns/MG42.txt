@@ -19,8 +19,8 @@ Accuracy 8
 ShootDelay 1
 ShootSound MG42Shoot
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
-SoundLength 15
-DistortSound False
+//SoundLength 15
+DistortSound True
 ReloadSound MG42Reload
 Mode FullAuto
 Scope None

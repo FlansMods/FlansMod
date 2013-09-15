@@ -42,7 +42,7 @@ BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret mg42
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 5
+ShootDelay 1
 ShellDelay 110
 //Sounds
 StartSound Engine
