@@ -431,7 +431,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		//Apply turning forces
 		{
-			float sensitivityAdjust = 0.1F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
+			float sensitivityAdjust = 1F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
 			
 			//Yaw according to the wheelsYaw
 			float yaw = wheelsYaw * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;	
@@ -590,7 +590,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
 	    	
 	    	//If its solid on top
-	    	if(!worldObj.isAirBlock(x, y, z))
+	    	if(worldObj.isBlockSolidOnSide(x, y, z, ForgeDirection.UP))
 	    	{
 	    		//Apply the thrust
 	    		Vector3f xAxis = axes.getXAxis();
@@ -601,12 +601,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			if(!canThrustCreatively)
 				data.fuelInTank -= data.engine.fuelConsumption * throttle;
 		}
-    }
-    
-    @Override
-    public boolean landVehicle()
-    {
-    	return true;
     }
 
     public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)

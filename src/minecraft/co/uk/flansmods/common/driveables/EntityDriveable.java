@@ -40,10 +40,7 @@ import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-import icbm.api.RadarRegistry;
-import icbm.api.sentry.IAATarget;
-
-public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData, IAATarget
+public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
 {
 	public boolean syncFromServer = true;
 	/** Ticks since last server update. Use to smoothly transition to new position */
@@ -102,10 +99,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 		}
 		yOffset = type.yOffset;
-		
-		//Register Plane to Radar on Spawning
-		if(type.onRadar == true)
-			RadarRegistry.register(this);
 	}
 	
 	@Override
@@ -259,10 +252,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void setDead()
 	{
 		super.setDead();
-		
-		//Unregister to Radar
-		RadarRegistry.unregister(this);
-		
 		for(EntitySeat seat : seats)
 			if(seat != null)
 				seat.setDead();
@@ -646,7 +635,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / 1000;
+		float momentOfInertia = getDriveableType().momentOfInertia / 100;
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -757,7 +746,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 			        //After taking this much force, the plane will take damage (scales with mass)
 			        float damagePoint = 2F;
-			        float damageModifier = 20F;
+			        float damageModifier = 50F;
 
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
@@ -777,15 +766,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				}
 			}
 		}
-		
-		//Apply motion to position
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		
-		//Apply motion to rotation
-      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
-			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 
       	numHits = 0;
       	
@@ -841,73 +821,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
       				
       				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				      		
-      				float pushiness = 1F;
-      				float bounciness = type.bounciness;
-      				
-      				if(landVehicle())
-      				{
-      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
-      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
-      					else
-      					{
-      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
-      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX - 1, blockY, blockZ))
-      						{
-      							if(motionX > 0)
-      								motionX = 0;
-      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX + 1, blockY, blockZ))
-      						{
-      							if(motionX < 0)
-      								motionX = 0;
-		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ - 1))
-      						{
-      							if(motionZ > 0)
-      								motionZ = 0;
-		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ + 1))
-      						{
-      							if(motionZ < 0)
-      								motionZ = 0;
-		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-      					}
-      				}
-      				else
-      				{
-          				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
-
-      					/*
-	      				if(Math.abs(dminX - min) < 0.00001F)
-	      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxX - min) < 0.00001F)
-	      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxY - min) < 0.00001F)
-	      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dminZ - min) < 0.00001F)
-	      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxZ - min) < 0.00001F)
-	      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
-	      					*/
-      				}
+      				      			      				
+      				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
       			}
       		}
       	}
       	
 		checkParts();
+
+		//Apply motion to position
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
 		
 		setPosition(posX, posY, posZ);
-	}
-	
-	/** To be overriden by vehicles to get alternate collision system */
-	public boolean landVehicle()
-	{
-		return false;
+
+		//Apply motion to rotation
+      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
+			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 	}
 	
 	/** Overriden by planes for wheel parts */
@@ -985,7 +916,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
-			if(part != null && !part.dead && part.health <= 0 && part.maxHealth > 0)
+			if(!part.dead && part.health <= 0 && part.maxHealth > 0)
 			{
 				killPart(part);
 			}
@@ -1091,47 +1022,5 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public String getEntityName()
 	{
 		return getDriveableType().name;
-	}
-	
-	
-	// Destroys the target with a boom. This is a forced way for the sentry too kill the target if
-	// it doesn't take damage
-	// Not needed in Flan due to plane is detroyed when HP = 0
-	public void destroyCraft()
-	{
-	
-	}
-	
-	// Applies damage to the the target
-	// 
-	// @param damage - damage in half HP
-	// @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
-	// killed. Return 0 if this target is dead and destroyCraft() will be called.
-	
-	public int doDamage(int damage)
-	{
-		DriveablePart core = getDriveableData().parts.get(EnumDriveablePart.core);
-		core.health -= damage;
-		checkParts();
-		return core.health;
-	}
-	
-	// Can this be targeted by automated targeting systems or AIs. Used to implement radar jammers,
-	// cloaking devices, and other addons for the Entity being targeted
-	//
-	// @param entity - entity that is targeting this, can be an Entity, EntityLiving, or TileEntity
-	// @return true if it can
-	public boolean canBeTargeted(Object entity)
-	{
-		//Check config for option to show plane on radar
-		DriveableType type = getDriveableType();
-		if(type.onRadar == true)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 }
