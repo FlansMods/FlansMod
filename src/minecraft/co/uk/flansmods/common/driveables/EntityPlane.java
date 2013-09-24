@@ -573,10 +573,10 @@ public class EntityPlane extends EntityDriveable
 		if(fuelling)
 		{
 			int damage = data.fuel.getItemDamage();
-			//Consume 10 points of fuel (1 damage)
+			//Consume 100 points of fuel (1 damage)
 			data.fuel.setItemDamage(damage + 1);
-			//Put 10 points of fuel 
-			data.fuelInTank += 10;
+			//Put 100 points of fuel 
+			data.fuelInTank += 100;
 			//If we have finished this fuel item
 			if(damage >= data.fuel.getMaxDamage())
 			{
@@ -594,12 +594,12 @@ public class EntityPlane extends EntityDriveable
 		{
 			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
 			{
-				data.fuelInTank += 500;
+				data.fuelInTank += 5000;
 				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
 			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
 			{
-				data.fuelInTank += 1000;
+				data.fuelInTank += 10000;
 				data.fuel = new ItemStack(Item.bucketEmpty);
 			}
 		}

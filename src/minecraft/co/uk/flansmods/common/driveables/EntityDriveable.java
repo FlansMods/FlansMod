@@ -646,7 +646,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyTorque(Vector3f torqueVector)
 	{
 		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / (landVehicle() ? 1000 : 100);
+		float momentOfInertia = getDriveableType().momentOfInertia / (landVehicle() ? 250 : 100);
 		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
 	}
 	
@@ -753,17 +753,18 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
 			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
 
-			        applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	   
+			       	boolean shouldApplyForce = true; 
 
 			        //After taking this much force, the plane will take damage (scales with mass)
-			        float damagePoint = 2F;
-			        float damageModifier = 20F;
+			        float damagePoint = 1F;
+			        float damageModifier = 5F;
+			        float blockDamageModifier = 50F;
 
 			        if(forceMagnitude > damagePoint * type.mass)
 			        {
 			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
 			        	DriveablePart part = getDriveableData().parts.get(point.part);
-			        	float smashyForceVsBlock = part.smashIntoGround(this, damageModifier * smashyForce);
+			        	float smashyForceVsBlock = blockDamageModifier * part.smashIntoGround(this, damageModifier * smashyForce);
 			        	int blockIDHit = worldObj.getBlockId(hit.blockX, hit.blockY, hit.blockZ);
 			        	Block blockHit = Block.blocksList[blockIDHit];
 			        	float blockHardness = blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ);
@@ -772,8 +773,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			        		blockHit.dropBlockAsItem(worldObj, hit.blockX, hit.blockY, hit.blockZ, worldObj.getBlockMetadata(hit.blockX, hit.blockY, hit.blockZ), 1);
 							FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockIDHit);
 							worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
+							shouldApplyForce = false;
 			        	}
 			        }
+			        
+			        if(shouldApplyForce)
+			        	applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	 
 				}
 			}
 		}
@@ -787,118 +792,120 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
       	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
 			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
 
-      	numHits = 0;
-      	
-      	for(CollisionPoint point : type.points)
+      	if(true)
       	{
-      		if(!isPartIntact(point.part))
-      			continue;
-			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-				continue;
-
-      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-      		int blockX = MathHelper.floor_double(posX + pointVec.x);
-      		int blockY = MathHelper.floor_double(posY + pointVec.y);
-      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
-      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
-      		if(blockID > 0)
-      		{
-      			Block block = Block.blocksList[blockID];
-      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
-      			if(aabbs.size() > 0)
-      			{
-      				numHits++;  
-      			}
-      		}
+	      	numHits = 0;
+	      	
+	      	for(CollisionPoint point : type.points)
+	      	{
+	      		if(!isPartIntact(point.part))
+	      			continue;
+				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+					continue;
+	
+	      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
+	      		int blockX = MathHelper.floor_double(posX + pointVec.x);
+	      		int blockY = MathHelper.floor_double(posY + pointVec.y);
+	      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
+	      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
+	      		if(blockID > 0)
+	      		{
+	      			Block block = Block.blocksList[blockID];
+	      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+	      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
+	      			if(aabbs.size() > 0)
+	      			{
+	      				numHits++;  
+	      			}
+	      		}
+	      	}
+	      	
+	      	for(CollisionPoint point : type.points)
+	      	{
+	      		if(!isPartIntact(point.part))
+	      			continue;
+				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
+					continue;
+	
+	      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
+	      		int blockX = MathHelper.floor_double(posX + pointVec.x);
+	      		int blockY = MathHelper.floor_double(posY + pointVec.y);
+	      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
+	      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
+	      		if(blockID > 0)
+	      		{
+	      			Block block = Block.blocksList[blockID];
+	      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
+	      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
+	      			if(aabbs.size() > 0)
+	      			{
+	      				AxisAlignedBB aabb = aabbs.get(0);
+	      				double dminX = Math.abs(posX + pointVec.x - aabb.minX);
+	      				double dmaxX = Math.abs(posX + pointVec.x - aabb.maxX);
+	      				double dminY = Math.abs(posY + pointVec.y - aabb.minY);
+	      				double dmaxY = Math.abs(posY + pointVec.y - aabb.maxY);
+	      				double dminZ = Math.abs(posZ + pointVec.z - aabb.minZ);
+	      				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
+	      				
+	      				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
+	      				      		
+	      				float pushiness = 1F;
+	      				float bounciness = type.bounciness;
+	      				
+	      				if(false) //Keeping this. May come in handy later
+	      				{
+	      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
+	      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
+	      					else
+	      					{
+	      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
+	      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX - 1, blockY, blockZ))
+	      						{
+	      							if(motionX > 0)
+	      								motionX = 0;
+	      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
+	      						}
+			      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX + 1, blockY, blockZ))
+	      						{
+	      							if(motionX < 0)
+	      								motionX = 0;
+			      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
+	      						}
+			      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ - 1))
+	      						{
+	      							if(motionZ > 0)
+	      								motionZ = 0;
+			      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
+	      						}
+			      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ + 1))
+	      						{
+	      							if(motionZ < 0)
+	      								motionZ = 0;
+			      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
+	      						}
+	      					}
+	      				}
+	      				else
+	      				{
+	          				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
+	
+	      					/*
+		      				if(Math.abs(dminX - min) < 0.00001F)
+		      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
+		      				else if(Math.abs(dmaxX - min) < 0.00001F)
+		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
+		      				else if(Math.abs(dmaxY - min) < 0.00001F)
+		      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
+		      				else if(Math.abs(dminZ - min) < 0.00001F)
+		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
+		      				else if(Math.abs(dmaxZ - min) < 0.00001F)
+		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
+		      					*/
+	      				}
+	      			}
+	      		}
+	      	}
       	}
-      	
-      	for(CollisionPoint point : type.points)
-      	{
-      		if(!isPartIntact(point.part))
-      			continue;
-			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-				continue;
-
-      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-      		int blockX = MathHelper.floor_double(posX + pointVec.x);
-      		int blockY = MathHelper.floor_double(posY + pointVec.y);
-      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
-      		int blockID = worldObj.getBlockId(blockX, blockY, blockZ);
-      		if(blockID > 0)
-      		{
-      			Block block = Block.blocksList[blockID];
-      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
-      			if(aabbs.size() > 0)
-      			{
-      				AxisAlignedBB aabb = aabbs.get(0);
-      				double dminX = Math.abs(posX + pointVec.x - aabb.minX);
-      				double dmaxX = Math.abs(posX + pointVec.x - aabb.maxX);
-      				double dminY = Math.abs(posY + pointVec.y - aabb.minY);
-      				double dmaxY = Math.abs(posY + pointVec.y - aabb.maxY);
-      				double dminZ = Math.abs(posZ + pointVec.z - aabb.minZ);
-      				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
-      				
-      				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-      				      		
-      				float pushiness = 1F;
-      				float bounciness = type.bounciness;
-      				
-      				if(landVehicle())
-      				{
-      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
-      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
-      					else
-      					{
-      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
-      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX - 1, blockY, blockZ))
-      						{
-      							if(motionX > 0)
-      								motionX = 0;
-      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX + 1, blockY, blockZ))
-      						{
-      							if(motionX < 0)
-      								motionX = 0;
-		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ - 1))
-      						{
-      							if(motionZ > 0)
-      								motionZ = 0;
-		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-		      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.isBlockOpaqueCube(blockX, blockY, blockZ + 1))
-      						{
-      							if(motionZ < 0)
-      								motionZ = 0;
-		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
-      						}
-      					}
-      				}
-      				else
-      				{
-          				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
-
-      					/*
-	      				if(Math.abs(dminX - min) < 0.00001F)
-	      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxX - min) < 0.00001F)
-	      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxY - min) < 0.00001F)
-	      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dminZ - min) < 0.00001F)
-	      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
-	      				else if(Math.abs(dmaxZ - min) < 0.00001F)
-	      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
-	      					*/
-      				}
-      			}
-      		}
-      	}
-      	
 		checkParts();
 		
 		setPosition(posX, posY, posZ);
