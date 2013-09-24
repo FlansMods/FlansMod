@@ -164,12 +164,10 @@ public class GrenadeType extends InfoType
 				explosionRadius = Float.parseFloat(split[1]);
 			
 			if(split[0].equals("ExplosionDamageVsLiving"))
-				explosionRadius = Float.parseFloat(split[1]);
-			if(split[0].equals("ExplosionDamageVsLiving"))
-				explosionRadius = Float.parseFloat(split[1]);
-			if(split[0].equals("ExplosionDamageVsLiving"))
-				explosionRadius = Float.parseFloat(split[1]);
-			
+				explosionDamageVsLiving = Float.parseFloat(split[1]);
+			if(split[0].equals("ExplosionDamageVsDrivable"))
+				explosionDamageVsDriveable = Float.parseFloat(split[1]);
+
 			if(split[0].equals("ExplosionBreaksBlocks"))
 				explosionBreaksBlocks = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("DropItemOnDetonate"))

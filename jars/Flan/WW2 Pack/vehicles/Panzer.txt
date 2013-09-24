@@ -42,14 +42,14 @@ BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret mg42
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 5
+ShootDelay 1
 ShellDelay 110
 //Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound bullet
+ShootSound MG42Shoot
 ShellSound TankShell
 //Recipe
 //Each section of the plane may have many parts

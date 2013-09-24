@@ -160,6 +160,8 @@
 
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/co"/>
+		<delete dir="${mcpsrc.dir}/minecraft/icbm"/>
+		<delete dir="${mcpsrc.dir}/minecraft/universalelectricity"/>
 		<delete dir="${mcpsrc.dir}/minecraft/assets"/>
 		<delete file="${mcpsrc.dir}/minecraft/flansmod.png"/>
 		<delete file="${mcpsrc.dir}/minecraft/mcmod.info"/>

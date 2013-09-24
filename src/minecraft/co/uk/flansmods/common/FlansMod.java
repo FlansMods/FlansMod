@@ -92,7 +92,7 @@ import cpw.mods.fml.relauncher.Side;
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[3.0,3.1)",
+	    versionBounds = "[3.1,3.2)",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
