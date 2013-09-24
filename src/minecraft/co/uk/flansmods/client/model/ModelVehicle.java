@@ -109,7 +109,7 @@ public class ModelVehicle extends ModelDriveable
         {
 			for(int i = 0; i < backWheelModel.length; i++)
 			{
-				backWheelModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
+				backWheelModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 				backWheelModel[i].render(f5);
 			}
         }
@@ -122,7 +122,7 @@ public class ModelVehicle extends ModelDriveable
 			}
 			for(int i = 0; i < leftTrackWheelModels.length; i++)
 			{
-				leftTrackModel[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
+				leftTrackModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 				leftTrackModel[i].render(f5);
 			}
         }
@@ -135,7 +135,7 @@ public class ModelVehicle extends ModelDriveable
 			}
 			for(int i = 0; i < rightTrackWheelModels.length; i++)
 			{
-				rightTrackWheelModels[i].rotateAngleY = -vehicle.wheelsYaw * 3.14159265F / 180F * 3F;
+				rightTrackWheelModels[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 				rightTrackWheelModels[i].render(f5);
 			}
         }

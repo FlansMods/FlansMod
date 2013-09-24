@@ -35,4 +35,23 @@ public class ModelMG extends ModelBase
 			ammoPart.render(f5);
 		}
 	}
+	
+	public void flipAll()
+	{
+		for(int i = 0; i < bipodModel.length; i++)
+		{
+			bipodModel[i].doMirror(false, true, true);
+			bipodModel[i].setRotationPoint(bipodModel[i].rotationPointX, - bipodModel[i].rotationPointY, - bipodModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < gunModel.length; i++)
+		{
+			gunModel[i].doMirror(false, true, true);
+			gunModel[i].setRotationPoint(gunModel[i].rotationPointX, - gunModel[i].rotationPointY, - gunModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < ammoModel.length; i++)
+		{
+			ammoModel[i].doMirror(false, true, true);
+			ammoModel[i].setRotationPoint(ammoModel[i].rotationPointX, - ammoModel[i].rotationPointY, - ammoModel[i].rotationPointZ);
+		}
+	}	
 }
