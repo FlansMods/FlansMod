@@ -59,6 +59,9 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			rotationYaw = riddenByEntity.rotationYaw;
 		}		
 		
+		motionX *= 0.8F;
+		motionZ *= 0.8F;
+		
 		moveEntity(motionX, motionY, motionZ);
 		
 		if(onGround || worldObj.getBlockMaterial(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) == Material.water)
