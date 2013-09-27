@@ -73,60 +73,62 @@ public class GuiTeamScores extends GuiScreen
 			{
 				numTeams = 0;
 				teamData = new TeamData[0];
-				return;
-			}
-			map = stream.readUTF();
-			sortedByTeam = stream.readBoolean();
-			if(sortedByTeam)
-			{
-				numLines = numTeams = stream.readInt();
-				if(numTeams == 0)
-					return;
-				teamData = new TeamData[numTeams];
-				for(int i = 0; i < numTeams; i++)
-				{
-					teamData[i] = new TeamData();
-					String teamName = stream.readUTF();
-					if(teamName.equals("none"))
-						continue;
-					teamData[i].team = Team.getTeam(teamName);
-					teamData[i].score = stream.readInt();
-					teamData[i].numPlayers = stream.readInt();
-					teamData[i].playerData = new PlayerData[teamData[i].numPlayers];
-					numLines += teamData[i].numPlayers;
-					for(int j = 0; j < teamData[i].numPlayers; j++)
-					{
-						teamData[i].playerData[j] = new PlayerData();
-						teamData[i].playerData[j].team = teamData[i];
-						teamData[i].playerData[j].username = stream.readUTF();
-						teamData[i].playerData[j].score = stream.readInt();
-						teamData[i].playerData[j].kills = stream.readInt();
-						teamData[i].playerData[j].deaths = stream.readInt();
-					}
-				}
 			}
 			else
 			{
-				numLines = 0;
-				teamData = new TeamData[] { new TeamData() };
-				teamData[0].team = null;
-				teamData[0].score = 0;
-				teamData[0].numPlayers = stream.readInt();
-				teamData[0].playerData = new PlayerData[teamData[0].numPlayers];
-				numLines += teamData[0].numPlayers;
-				for(int j = 0; j < teamData[0].numPlayers; j++)
+				map = stream.readUTF();
+				sortedByTeam = stream.readBoolean();
+				if(sortedByTeam)
 				{
-					teamData[0].playerData[j] = new PlayerData();
-					teamData[0].playerData[j].team = teamData[0];
-					teamData[0].playerData[j].username = stream.readUTF();
-					teamData[0].playerData[j].score = stream.readInt();
-					teamData[0].playerData[j].kills = stream.readInt();
-					teamData[0].playerData[j].deaths = stream.readInt();
+					numLines = numTeams = stream.readInt();
+					if(numTeams == 0)
+						return;
+					teamData = new TeamData[numTeams];
+					for(int i = 0; i < numTeams; i++)
+					{
+						teamData[i] = new TeamData();
+						String teamName = stream.readUTF();
+						if(teamName.equals("none"))
+							continue;
+						teamData[i].team = Team.getTeam(teamName);
+						teamData[i].score = stream.readInt();
+						teamData[i].numPlayers = stream.readInt();
+						teamData[i].playerData = new PlayerData[teamData[i].numPlayers];
+						numLines += teamData[i].numPlayers;
+						for(int j = 0; j < teamData[i].numPlayers; j++)
+						{
+							teamData[i].playerData[j] = new PlayerData();
+							teamData[i].playerData[j].team = teamData[i];
+							teamData[i].playerData[j].username = stream.readUTF();
+							teamData[i].playerData[j].score = stream.readInt();
+							teamData[i].playerData[j].kills = stream.readInt();
+							teamData[i].playerData[j].deaths = stream.readInt();
+						}
+					}
+				}
+				else
+				{
+					numLines = 0;
+					teamData = new TeamData[] { new TeamData() };
+					teamData[0].team = null;
+					teamData[0].score = 0;
+					teamData[0].numPlayers = stream.readInt();
+					teamData[0].playerData = new PlayerData[teamData[0].numPlayers];
+					numLines += teamData[0].numPlayers;
+					for(int j = 0; j < teamData[0].numPlayers; j++)
+					{
+						teamData[0].playerData[j] = new PlayerData();
+						teamData[0].playerData[j].team = teamData[0];
+						teamData[0].playerData[j].username = stream.readUTF();
+						teamData[0].playerData[j].score = stream.readInt();
+						teamData[0].playerData[j].kills = stream.readInt();
+						teamData[0].playerData[j].deaths = stream.readInt();
+					}
 				}
 			}
-			
 			FlansMod.canBreakGlass = stream.readBoolean();
 			FlansMod.vehiclesNeedFuel = stream.readBoolean();
+			FlansMod.driveablesBreakBlocks = stream.readBoolean();
 		}
         catch(Exception e)
         {
