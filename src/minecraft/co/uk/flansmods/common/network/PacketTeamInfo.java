@@ -126,6 +126,7 @@ public class PacketTeamInfo extends FlanPacketCommon
         	
         	data.writeBoolean(FlansMod.canBreakGlass);
         	data.writeBoolean(FlansMod.vehiclesNeedFuel);
+        	data.writeBoolean(FlansMod.driveablesBreakBlocks);
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
