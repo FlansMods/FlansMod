@@ -122,8 +122,8 @@ public class ModelVehicle extends ModelDriveable
 			}
 			for(int i = 0; i < leftTrackWheelModels.length; i++)
 			{
-				leftTrackModel[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
-				leftTrackModel[i].render(f5);
+				leftTrackWheelModels[i].rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
+				leftTrackWheelModels[i].render(f5);
 			}
         }
         
