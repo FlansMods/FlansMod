@@ -87,12 +87,12 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.0.4")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.0.5")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[3.1,3.2)",
+	    versionBounds = "[3.0,3.1)",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -118,9 +118,13 @@ public class FlansMod
 	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
 
 	public static boolean DEBUG = false;
-	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), partItems = new ArrayList<Item>(),
-				toolItems = new ArrayList<Item>(), gunItems = new ArrayList<Item>(), aaGunItems = new ArrayList<Item>(), 
-				grenadeItems = new ArrayList<Item>(), armourItems = new ArrayList<Item>();
+	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), 
+			partItems = new ArrayList<Item>(),
+			toolItems = new ArrayList<Item>(), 
+			gunItems = new ArrayList<Item>(), 
+			aaGunItems = new ArrayList<Item>(), 
+			grenadeItems = new ArrayList<Item>(), 
+			armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
 	public static boolean ABORT = false;
 
