@@ -3,6 +3,14 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
+=== v3.1.1 ===
+Changes:
+- Increased fuel values
+- Center of mass can be moved to a neutral point for planes and vehicles.
+Fixes:
+- Fixed block protections
+- Fixed issues with left wheels
+
 === v3.1 ===
 Changes:
 - Updated to 1.6.4
