@@ -257,9 +257,9 @@ public class ModelLancaster extends ModelPlane
 		
 		tailWheelModel = new ModelRendererTurbo[2];
 		tailWheelModel[0] = new ModelRendererTurbo(this, 36, 463, textureX, textureY);
-		tailWheelModel[0].addBox(98, -10, -3, 4, 16, 6);
+		tailWheelModel[0].addBox(98, -63, -3, 4, 16, 6);
 		tailWheelModel[1] = new ModelRendererTurbo(this, 84, 447, textureX, textureY);
-		tailWheelModel[1].addBox(94, -1, -2, 12, 12, 4);
+		tailWheelModel[1].addBox(94, -53, -2, 12, 12, 4);
 	
 		
 		leftWingModel = new ModelRendererTurbo[6];
@@ -280,9 +280,9 @@ public class ModelLancaster extends ModelPlane
 		
 		leftWingWheelModel = new ModelRendererTurbo[2];
 		leftWingWheelModel[0] = new ModelRendererTurbo(this, 48, 415, textureX, textureY);
-		leftWingWheelModel[0].addBox(-82, -4, -58, 4, 24, 12);
+		leftWingWheelModel[0].addBox(-82, -56, -58, 4, 24, 12);
 		leftWingWheelModel[1] = new ModelRendererTurbo(this, 80, 415, textureX, textureY);
-		leftWingWheelModel[1].addBox(-92, 8, -56, 24, 24, 8);
+		leftWingWheelModel[1].addBox(-92, -44, -56, 24, 24, 8);
 		
 		rightWingModel = new ModelRendererTurbo[6];
 		rightWingModel[0] = new ModelRendererTurbo(this,0, 113, textureX, textureY);	
@@ -304,9 +304,9 @@ public class ModelLancaster extends ModelPlane
 		
 		rightWingWheelModel = new ModelRendererTurbo[2];
 		rightWingWheelModel[0] = new ModelRendererTurbo(this, 48, 415, textureX, textureY);
-		rightWingWheelModel[0].addBox(-82, -4, 46, 4, 24, 12);
+		rightWingWheelModel[0].addBox(-82, -56, 46, 4, 24, 12);
 		rightWingWheelModel[1] = new ModelRendererTurbo(this, 80, 415, textureX, textureY);
-		rightWingWheelModel[1].addBox(-92, 8, 48, 24, 24, 8);
+		rightWingWheelModel[1].addBox(-92, -44, 48, 24, 24, 8);
 
 		propellerModels = new ModelRendererTurbo[4][3]; //4 propellers
 		propellerModels[1] = makeProp(-114, -68, 52);
@@ -348,68 +348,12 @@ public class ModelLancaster extends ModelPlane
 	    pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(112F, -81F, -48F);
 		
-		translateAll(52);
+		translateAll(0, 52, 0);
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
     }
 	
-	private void translateAll(int y)
-	{
-		for(ModelRendererTurbo mod : bodyModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : leftWingModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : rightWingModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : yawFlapModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : pitchFlapRightWingModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : pitchFlapLeftWingModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : pitchFlapLeftModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : pitchFlapRightModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo mod : tailModel)
-		{
-			mod.rotationPointY += y;
-		}
-		for(ModelRendererTurbo[] mods : propellerModels)
-		{
-			for(ModelRendererTurbo mod : mods)
-			{
-				mod.rotationPointY += y;
-			}
-		}
-		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
-		{
-			for(ModelRendererTurbo[] mods : modsOfMods)
-			{
-				for(ModelRendererTurbo mod : mods)
-				{
-					mod.rotationPointY += y;
-				}
-			}
-		}
-	}
-	
+
 	//Return a propeller at the specified position
 	private ModelRendererTurbo[] makeProp(int i, int j, int k)
 	{

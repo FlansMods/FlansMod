@@ -261,32 +261,51 @@ public class ModelVehicle extends ModelDriveable
 		flip(leftTrackWheelModels);
 		flip(trailerModel);
 		flip(steeringWheelModel);
+		flip(frontWheelModel);
+		flip(backWheelModel);
 	}	
 	
-	public void translateAll(int y)
+	public void translateAll(int x, int y, int z)
 	{
-		translate(bodyModel, y);
-		translate(turretModel, y);
-		translate(barrelModel, y);
-		translate(leftFrontWheelModel, y);
-		translate(rightFrontWheelModel, y);
-		translate(leftBackWheelModel, y);
-		translate(rightBackWheelModel, y);
-		translate(bodyDoorOpenModel, y);
-		translate(bodyDoorCloseModel, y);
-		translate(rightTrackModel, y);
-		translate(leftTrackModel, y);
-		translate(rightTrackWheelModels, y);
-		translate(leftTrackWheelModels, y);
-		translate(trailerModel, y);
-		translate(steeringWheelModel, y);
+		translateX(bodyModel, x, y, z);
+		translateX(turretModel, x, y, z);
+		translateX(barrelModel, x, y, z);
+		translateX(leftFrontWheelModel, x, y, z);
+		translateX(rightFrontWheelModel, x, y, z);
+		translateX(leftBackWheelModel, x, y, z);
+		translateX(rightBackWheelModel, x, y, z);
+		translateX(bodyDoorOpenModel, x, y, z);
+		translateX(bodyDoorCloseModel, x, y, z);
+		translateX(rightTrackModel, x, y, z);
+		translateX(leftTrackModel, x, y, z);
+		translateX(rightTrackWheelModels, x, y, z);
+		translateX(leftTrackWheelModels, x, y, z);
+		translateX(trailerModel, x, y, z);
+		translateX(steeringWheelModel, x, y, z);
+		translateX(frontWheelModel, x, y, z);
+		translateX(backWheelModel, x, y, z);
+
+		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
+		{
+			for(ModelRendererTurbo[] mods : modsOfMods)
+			{
+				for(ModelRendererTurbo mod : mods)
+				{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+				}
+			}
+		}
 	}
-	
-	protected void translate(ModelRendererTurbo[] model, int y)
+
+	protected void translateX(ModelRendererTurbo[] model, int x, int y, int z)
 	{
 		for(ModelRendererTurbo mod : model)
 		{
+			mod.rotationPointX += x;
 			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
 		}
 	}
 
