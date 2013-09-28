@@ -265,49 +265,29 @@ public class ModelVehicle extends ModelDriveable
 		flip(backWheelModel);
 	}	
 	
+	@Override
 	public void translateAll(int x, int y, int z)
 	{
-		translateX(bodyModel, x, y, z);
-		translateX(turretModel, x, y, z);
-		translateX(barrelModel, x, y, z);
-		translateX(leftFrontWheelModel, x, y, z);
-		translateX(rightFrontWheelModel, x, y, z);
-		translateX(leftBackWheelModel, x, y, z);
-		translateX(rightBackWheelModel, x, y, z);
-		translateX(bodyDoorOpenModel, x, y, z);
-		translateX(bodyDoorCloseModel, x, y, z);
-		translateX(rightTrackModel, x, y, z);
-		translateX(leftTrackModel, x, y, z);
-		translateX(rightTrackWheelModels, x, y, z);
-		translateX(leftTrackWheelModels, x, y, z);
-		translateX(trailerModel, x, y, z);
-		translateX(steeringWheelModel, x, y, z);
-		translateX(frontWheelModel, x, y, z);
-		translateX(backWheelModel, x, y, z);
-
-		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
-		{
-			for(ModelRendererTurbo[] mods : modsOfMods)
-			{
-				for(ModelRendererTurbo mod : mods)
-				{
-			mod.rotationPointX += x;
-			mod.rotationPointY += y;
-			mod.rotationPointZ += z;
-				}
-			}
-		}
+		super.translateAll(x, y, z);
+		translate(turretModel, x, y, z);
+		translate(barrelModel, x, y, z);
+		translate(leftFrontWheelModel, x, y, z);
+		translate(rightFrontWheelModel, x, y, z);
+		translate(leftBackWheelModel, x, y, z);
+		translate(rightBackWheelModel, x, y, z);
+		translate(bodyDoorOpenModel, x, y, z);
+		translate(bodyDoorCloseModel, x, y, z);
+		translate(rightTrackModel, x, y, z);
+		translate(leftTrackModel, x, y, z);
+		translate(rightTrackWheelModels, x, y, z);
+		translate(leftTrackWheelModels, x, y, z);
+		translate(trailerModel, x, y, z);
+		translate(steeringWheelModel, x, y, z);
+		translate(frontWheelModel, x, y, z);
+		translate(backWheelModel, x, y, z);
 	}
 
-	protected void translateX(ModelRendererTurbo[] model, int x, int y, int z)
-	{
-		for(ModelRendererTurbo mod : model)
-		{
-			mod.rotationPointX += x;
-			mod.rotationPointY += y;
-			mod.rotationPointZ += z;
-		}
-	}
+
 
     public ModelRendererTurbo turretModel[] = new ModelRendererTurbo[0];			//The turret (for tanks)
 	public ModelRendererTurbo barrelModel[] = new ModelRendererTurbo[0];			//The barrel of the main turret
