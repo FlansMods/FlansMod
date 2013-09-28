@@ -68,4 +68,26 @@ public class ModelDriveable extends ModelBase
 			}
 		}
 	}
+	
+	protected void translate(ModelRendererTurbo[] model, int x, int y, int z)
+	{
+		for(ModelRendererTurbo mod : model)
+		{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+		}
+	}
+	
+	public void translateAll(int x, int y, int z)
+	{
+		translate(bodyModel, x, y, z);
+		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
+		{
+			for(ModelRendererTurbo[] mods : modsOfMods)
+			{
+				translate(mods, x, y, z);
+			}
+		}
+	}
 }
