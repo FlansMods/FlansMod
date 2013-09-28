@@ -62,6 +62,6 @@ public class ModelSherman extends ModelVehicle
 		registerGunModel("Browning", browningModel);
 		
 		flipAll(); //For old models
-		translateAll(-4);
+		translateAll(0, -4, 0);
     }
 }

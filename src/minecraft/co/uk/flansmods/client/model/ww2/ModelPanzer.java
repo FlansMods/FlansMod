@@ -65,6 +65,6 @@ public class ModelPanzer extends ModelVehicle
 		registerGunModel("MG42", mg42Model);
 		
 		flipAll(); //For old models
-		translateAll(-8);
+		translateAll(0, -8, 0);
     }
 }

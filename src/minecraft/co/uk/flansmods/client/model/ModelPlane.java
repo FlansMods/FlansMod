@@ -325,4 +325,62 @@ public class ModelPlane extends ModelDriveable
 			flip(propellerModel);
 		}
 	}
+
+	public void translateAll(int x, int y, int z)
+	{
+		translateX(noseModel, x, y, z);
+		translateX(bodyModel, x, y, z);
+		translateX(leftWingModel, x, y, z);
+		translateX(rightWingModel, x, y, z);
+		translateX(topWingModel, x, y, z);
+		translateX(bayModel, x, y, z);
+		translateX(tailModel, x, y, z);
+		translateX(yawFlapModel, x, y, z);
+		translateX(pitchFlapLeftModel, x, y, z);
+		translateX(pitchFlapRightModel, x, y, z);
+		translateX(pitchFlapLeftWingModel, x, y, z);
+		translateX(pitchFlapRightWingModel, x, y, z);
+		translateX(bodyWheelModel, x, y, z);
+		translateX(tailWheelModel, x, y, z);
+		translateX(leftWingWheelModel, x, y, z);
+		translateX(rightWingWheelModel, x, y, z);
+		translateX(tailDoorOpenModel, x, y, z);
+		translateX(tailDoorCloseModel, x, y, z);
+		translateX(rightWingPos1Model, x, y, z);
+		translateX(rightWingPos2Model, x, y, z);
+		translateX(leftWingPos1Model, x, y, z);
+		translateX(leftWingPos2Model, x, y, z);
+
+		for(ModelRendererTurbo[] mods : propellerModels)
+		{
+			for(ModelRendererTurbo mod : mods)
+			{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+			}
+		}
+		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
+		{
+			for(ModelRendererTurbo[] mods : modsOfMods)
+			{
+				for(ModelRendererTurbo mod : mods)
+				{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+				}
+			}
+		}
+	}
+
+	protected void translateX(ModelRendererTurbo[] model, int x, int y, int z)
+	{
+		for(ModelRendererTurbo  mod : model)
+		{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+		}	
+	}
 }
