@@ -3,6 +3,13 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
+=== v3.1.2 ===
+Fixes:
+- Settings for protections are saved/loaded now
+- Fixed some stuff for Manus
+Additions:
+- Added missing commands to help
+
 === v3.1.1 ===
 Changes:
 - Increased fuel values
