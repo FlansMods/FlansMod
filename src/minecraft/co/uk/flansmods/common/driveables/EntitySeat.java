@@ -152,7 +152,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//If this is the drivers seat, add the offset vector
 		if(driver)
 		{
-			Vector3f rotatedOffset = looking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset);
+			RotatedAxes yawOnlyLooking = new RotatedAxes(looking.getYaw(), 0F, 0F);
+			Vector3f rotatedOffset = yawOnlyLooking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset);
 			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
 		}
 		//If this seat is connected to the turret, then its position vector on the driveable axes needs an extra rotation in it
