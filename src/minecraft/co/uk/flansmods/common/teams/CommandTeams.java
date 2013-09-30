@@ -532,6 +532,17 @@ public class CommandTeams extends CommandBase {
 			else sender.sendChatToPlayer(ChatMessageComponent.createFromText("AA Guns will not despawn"));
 			return;
 		}
+		if(split[0].equals("vehiclesBreakBlocks"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			FlansMod.driveablesBreakBlocks = Boolean.parseBoolean(split[1]);
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("Vehicles will " + (FlansMod.vehiclesNeedFuel ? "now" : "no longer") + " break blocks"));
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentGametype == null)
@@ -599,6 +610,8 @@ public class CommandTeams extends CommandBase {
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams mgLife <time>"));
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams planeLife <time>"));
 			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams vehicleLife <time>"));
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams aaLife <time>"));
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("/teams vehiclesBreakBlocks <true / false>"));		
 			break;
 		}
 		}
