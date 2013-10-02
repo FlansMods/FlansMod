@@ -70,6 +70,8 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.MetadataCollection;
+import cpw.mods.fml.common.discovery.ContainerType;
+import cpw.mods.fml.common.discovery.ModCandidate;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -103,7 +105,7 @@ public class ClientProxy extends CommonProxy
 					map.put("modid", "FlansMod");
 					map.put("name", "Flan's Mod : " + file.getName());
 					map.put("version", "1");
-					FMLModContainer container = new FMLModContainer("co.uk.flansmods.common.FlansMod", file, map);
+					FMLModContainer container = new FMLModContainer("co.uk.flansmods.common.FlansMod", new ModCandidate(file, file, file.isDirectory() ? ContainerType.DIR : ContainerType.JAR), map);
 					container.bindMetadata(MetadataCollection.from(null, ""));
 					FMLClientHandler.instance().addModAsResource(container);
 				
