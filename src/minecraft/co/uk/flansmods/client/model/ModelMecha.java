@@ -53,5 +53,26 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
         	}
         }
+        
+        if(mecha.isPartIntact(EnumDriveablePart.hips))
+        {
+        	for(ModelRendererTurbo model : hipsModel)
+        	{
+        		model.render(f5);
+        	}
+        }
+        
+        int legSwingTime = 5;
+        float legsYaw = (float)Math.sin(((float)(mecha.ticksExisted) + f) / (float) legSwingTime);
+        legsYaw = legsYaw * legsYaw;
+        
+        if(mecha.isPartIntact(EnumDriveablePart.leftLeg))
+        {
+        	for(ModelRendererTurbo model : leftLegModel)
+        	{
+        		model.rotateAngleZ = legsYaw;
+        		model.render(f5);
+        	}
+        }
 	}
 }

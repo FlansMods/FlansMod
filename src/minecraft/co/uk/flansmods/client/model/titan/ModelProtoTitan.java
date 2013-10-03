@@ -14,5 +14,11 @@ public class ModelProtoTitan extends ModelMecha
 		
 		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		bodyModel[0].addBox(-10, -10, -10, 20, 20, 20);
+		
+		leftLegModel = new ModelRendererTurbo[1];
+		
+		leftLegModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		leftLegModel[0].addBox(-2, -10, -2, 4, 10, 4);
+		leftLegModel[0].setPosition(-5, -10, 0);
 	}
 }
