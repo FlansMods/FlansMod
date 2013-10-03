@@ -37,7 +37,6 @@ public class EntityMecha extends EntityDriveable
     private int moveX = 0;
     private int moveZ = 0;
     public RotatedAxes legAxes;
-    
 
 
 	public EntityMecha(World world) 
@@ -175,8 +174,9 @@ public class EntityMecha extends EntityDriveable
     		{
     			return true;
     		}
-			case 4 : //Up : Will jump, later
+			case 4 : //Jump
 			{
+				motionY += type.jumpVelocity;
 				return true;
 			}
 			case 5 : //Down : Do nothing

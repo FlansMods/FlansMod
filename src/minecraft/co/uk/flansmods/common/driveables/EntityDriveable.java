@@ -852,6 +852,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	      				float pushiness = 1F;
 	      				float bounciness = type.bounciness;
 	      				
+	      				
 	      				if(false) //Keeping this. May come in handy later
 	      				{
 	      					if(!worldObj.isBlockOpaqueCube(blockX, blockY + 1, blockZ))
