@@ -20,7 +20,7 @@ MoveSpeed 1
 //Y Offset for model
 YOffset 0
 //How quickly the legs react to a change in direction
-Inertia 1
+RotateSpeed 14
 //Will it squash puny mobs?
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
