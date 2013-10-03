@@ -562,7 +562,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
 		}
 		
-		//If this is the server, send position updates to everyone, having recieved them from the driver
+		//If this is the server, send position updates to everyone, having received them from the driver
 		if(!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));

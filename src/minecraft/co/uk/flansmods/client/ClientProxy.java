@@ -311,4 +311,24 @@ public class ClientProxy extends CommonProxy
 		if(driver.worldObj.isRemote)
 			PacketDispatcher.sendPacketToServer(PacketRepairDriveable.buildRepairPacket(part.type));
 	}
+	
+	@Override
+	public boolean isKeyDown(int key)
+	{
+		switch(key)
+		{
+		case 0 : //Press Forwards
+			return Keyboard.isKeyDown(KeyInputHandler.accelerateKey.keyCode);
+			
+		case 1 : //Press Backwards
+			return Keyboard.isKeyDown(KeyInputHandler.decelerateKey.keyCode);
+			
+		case 2 : //Press Left
+			return Keyboard.isKeyDown(KeyInputHandler.leftKey.keyCode);
+			
+		case 3 : //Press Right
+			return Keyboard.isKeyDown(KeyInputHandler.rightKey.keyCode);
+		}
+		return false;
+	}
 }
