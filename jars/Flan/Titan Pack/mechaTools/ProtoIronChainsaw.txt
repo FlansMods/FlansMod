@@ -1,7 +1,7 @@
 Name Proto Iron Chainsaw
 ShortName protoIronChainsaw
 Icon ProtoIronChainsaw
-Model titan.chainsaw
+Model titan.Drill
 Texture ProtoIronChainsaw
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
