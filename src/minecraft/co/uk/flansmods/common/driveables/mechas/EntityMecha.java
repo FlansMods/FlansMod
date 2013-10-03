@@ -327,40 +327,47 @@ public class EntityMecha extends EntityDriveable
 			
 			Vector3f intent = new Vector3f(moveX, 0, moveZ);
 			
-			if(Math.abs(intent.lengthSquared()) > 0.1) intent.normalise();
-			
-			intent = axes.findLocalVectorGlobally(intent);
-			
-			float angleBetween = Vector3f.angle(legAxes.getXAxis(), intent);
-			float signBetween = Math.signum(angleBetween);
-			
-			angleBetween = Math.abs(angleBetween);
-			
-			if(angleBetween > 0.1)
+			if(Math.abs(intent.lengthSquared()) > 0.1) 
 			{
-				legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*-signBetween);
-			}
+				intent.normalise();
 			
-			Vector3f motion = legAxes.getXAxis();
-			
-			motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
-			
-	    	DriveableData data = getDriveableData();
-			
-			boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-
-			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
-			{
-		    	//Move!
-		    	posX += motion.x;
-		    	posY += motion.y;
-		    	posZ += motion.z;
-		    	
-		    	setPosition(posX, posY, posZ);
+				intent = axes.findLocalVectorGlobally(intent);
+							
+				Vector3f intentOnLegAxes = legAxes.findGlobalVectorLocally(intent);
+				float intentAngle = (float)Math.atan2(intent.z, intent.x) * 180F / 3.14159265F;
+				float angleBetween = intentAngle - legAxes.getYaw();
+				if(angleBetween > 180F) angleBetween -= 360F;
+				if(angleBetween < -180F) angleBetween += 360F;
+									
+				float signBetween = Math.signum(angleBetween);
+				angleBetween = Math.abs(angleBetween);
 				
-				//If we can't thrust creatively, we must thrust using fuel. Nom.
-				if(!canThrustCreatively)
-					data.fuelInTank -= data.engine.fuelConsumption * throttle;
+				if(angleBetween > 0.1)
+				{
+					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
+				}
+				
+				Vector3f motion = legAxes.getXAxis();
+				
+				motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
+			
+		    	DriveableData data = getDriveableData();
+				
+				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+	
+				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+				{
+			    	//Move!
+			    	posX += motion.x;
+			    	posY += motion.y;
+			    	posZ += motion.z;
+			    	
+			    	setPosition(posX, posY, posZ);
+					
+					//If we can't thrust creatively, we must thrust using fuel. Nom.
+					if(!canThrustCreatively)
+						data.fuelInTank -= data.engine.fuelConsumption * throttle;
+				}
 			}
 		}
 		
