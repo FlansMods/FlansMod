@@ -57,7 +57,8 @@ public class RenderVehicle extends Render
 			GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(-type.barrelPosition.x, -type.barrelPosition.y, -type.barrelPosition.z);
 			
-			modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
+			if(modVehicle != null)
+				modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle);
 			
 			if(FlansMod.DEBUG)
 			{

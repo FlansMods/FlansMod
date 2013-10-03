@@ -1,0 +1,13 @@
+Name Proto Iron Chainsaw
+ShortName protoIronChainsaw
+Icon ProtoIronChainsaw
+Model titan.chainsaw
+Texture ProtoIronChainsaw
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23414
+RecipeOutput 1
+Recipe P ironAxe I ironIngot
+ P 
+IRI
+IRI
