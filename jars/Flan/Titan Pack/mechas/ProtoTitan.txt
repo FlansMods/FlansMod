@@ -24,3 +24,13 @@ SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
 StepHeight 1
 JumpHeight 2.5
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 smallChassis 3 vehicleSeat
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 5 gray
+//Health and collision
+//SetupPart core 100 -12 -12 -12 24 24 24
+BulletDetection 3

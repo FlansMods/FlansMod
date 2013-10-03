@@ -8,7 +8,7 @@ ItemID 23411
 Category Misc
 StackSize 8
 RecipeOutput 1
-Recipe I ironIngot R redstone
+Recipe I ingotIron R redstone
 IRI
 IRI
 IRI

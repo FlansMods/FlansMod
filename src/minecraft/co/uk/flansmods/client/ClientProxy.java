@@ -31,6 +31,7 @@ import co.uk.flansmods.client.model.ModelAAGun;
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.client.model.ModelVehicle;
+import co.uk.flansmods.client.model.RenderMecha;
 import co.uk.flansmods.common.CommonProxy;
 import co.uk.flansmods.common.EntityParachute;
 import co.uk.flansmods.common.FlansMod;
@@ -48,6 +49,7 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
@@ -144,6 +146,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha());
 	}
 	
 	@Override

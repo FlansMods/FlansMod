@@ -8,7 +8,7 @@ ItemID 23410
 Category Cockpit
 StackSize 4
 RecipeOutput 1
-Recipe G glass I ironIngot R redstone
+Recipe G glass I ingotIron R redstone
 GGI
 GRI
 III
