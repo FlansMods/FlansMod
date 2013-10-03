@@ -2,6 +2,7 @@ package co.uk.flansmods.common.driveables.mechas;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
@@ -18,6 +19,7 @@ import co.uk.flansmods.client.KeyInputHandler;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
+import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
@@ -37,13 +39,16 @@ public class EntityMecha extends EntityDriveable
     public int toggleTimer = 0;
     private int moveX = 0;
     private int moveZ = 0;
+    public RotatedAxes legAxes;
 
 	public EntityMecha(World world) {
 		super(world);
+		legAxes = new RotatedAxes();
 	}
 	
 	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data) {
 		super(world, type, data);
+		legAxes = new RotatedAxes();
 		setPosition(x, y, z);
 		initType(type, false);
 	}
@@ -52,15 +57,45 @@ public class EntityMecha extends EntityDriveable
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
 	}
+	
+	@Override
+    protected void writeEntityToNBT(NBTTagCompound tag)
+    {
+        super.writeEntityToNBT(tag);
+        tag.setFloat("LegsYaw", legAxes.getYaw());
+    }
+
+	@Override
+    protected void readEntityFromNBT(NBTTagCompound tag)
+    {
+        super.readEntityFromNBT(tag);
+        legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
+    }
 
 	@Override
 	public void writeUpdateData(DataOutputStream out)
 	{
+		try
+		{
+			out.writeFloat(legAxes.getYaw());
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void readUpdateData(DataInputStream in)
 	{
+		try
+		{
+			legAxes.setAngles(in.readFloat(), 0, 0);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -290,16 +325,17 @@ public class EntityMecha extends EntityDriveable
 				if(entity.moveStrafing < 0.2) moveZ = -1;
 			}
 			
-			Vector3f motion = new Vector3f(moveX, 0, moveZ);
+			Vector3f intent = new Vector3f(moveX, 0, moveZ);
 			
-			if(Math.abs(motion.lengthSquared()) > 0.1) motion.normalise();
+			if(Math.abs(intent.lengthSquared()) > 0.1) intent.normalise();
 			
-			motion.scale((type.moveSpeed)*(4.3F/20F));
+			intent = axes.findLocalVectorGlobally(intent);
 			
-			motion = axes.findLocalVectorGlobally(motion);
+			Vector3f motion = legAxes.getXAxis();
+			
+			motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
 			
 	    	DriveableData data = getDriveableData();
-
 			
 			boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 
