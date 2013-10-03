@@ -294,7 +294,7 @@ public class EntityMecha extends EntityDriveable
 			
 			if(Math.abs(motion.lengthSquared()) > 0.1) motion.normalise();
 			
-			motion.scale(type.moveSpeed);
+			motion.scale((type.moveSpeed)*(4.3F/20F));
 			
 			motion = axes.findLocalVectorGlobally(motion);
 			
