@@ -350,4 +350,9 @@ public class CommonProxy
 			driving.checkParts();
 		}
 	}
+	
+	public boolean isKeyDown(int key)
+	{
+		return false;
+	}
 }
