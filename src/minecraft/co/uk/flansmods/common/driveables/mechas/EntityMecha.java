@@ -41,19 +41,26 @@ public class EntityMecha extends EntityDriveable
     private int moveZ = 0;
     public RotatedAxes legAxes;
 
-	public EntityMecha(World world) {
+	public EntityMecha(World world) 
+	{
 		super(world);
+		setSize(1F, 1F);
+		stepHeight = 1;
 		legAxes = new RotatedAxes();
 	}
 	
-	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data) {
+	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data) 
+	{
 		super(world, type, data);
 		legAxes = new RotatedAxes();
+		setSize(1F, 1F);
+		stepHeight = 1;
 		setPosition(x, y, z);
 		initType(type, false);
 	}
 	
-	public EntityMecha(World world, double x, double y, double z, EntityPlayer placer, MechaType type, DriveableData data) {
+	public EntityMecha(World world, double x, double y, double z, EntityPlayer placer, MechaType type, DriveableData data) 
+	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
 	}
@@ -307,6 +314,8 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
+		Vector3f actualMotion = new Vector3f(0F, -9.81F / 20F, 0F);
+		
 		if(driverIsLiving)
 		{
 			EntityLivingBase entity = (EntityLivingBase)seats[0].riddenByEntity;
@@ -358,11 +367,9 @@ public class EntityMecha extends EntityDriveable
 				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
 				{
 			    	//Move!
-			    	posX += motion.x;
-			    	posY += motion.y;
-			    	posZ += motion.z;
-			    	
-			    	setPosition(posX, posY, posZ);
+					Vector3f.add(actualMotion, motion, actualMotion);
+
+
 					
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
@@ -370,11 +377,10 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
 		}
+				
+		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
-		//Gravity
-		{
-			float gravitationalAcceleration = (9.81F/20F);
-		}
+    	setPosition(posX, posY, posZ);
 		
 		//Fuel Handling
 		DriveableData data = getDriveableData();
