@@ -1,0 +1,13 @@
+Name Proto Iron Drill
+ShortName protoIronDrill
+Icon ProtoIronDrill
+Model titan.Drill
+Texture ProtoIronDrill
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23413
+RecipeOutput 1
+Recipe P ironPickaxe I ironIngot
+ P 
+IRI
+IRI

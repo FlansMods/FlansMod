@@ -37,6 +37,8 @@ import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ItemMecha;
+import co.uk.flansmods.common.driveables.mechas.ItemMechaTool;
+import co.uk.flansmods.common.driveables.mechas.MechaToolType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
@@ -126,6 +128,7 @@ public class FlansMod
 			toolItems = new ArrayList<Item>(), 
 			gunItems = new ArrayList<Item>(), 
 			aaGunItems = new ArrayList<Item>(), 
+			mechaToolItems = new ArrayList<Item>(),
 			mechaItems = new ArrayList<Item>(),
 			grenadeItems = new ArrayList<Item>(), 
 			armourItems = new ArrayList<Item>();
@@ -592,6 +595,25 @@ public class FlansMod
 		}
 		log("Loaded AA guns.");
 		
+		//Mecha Tools
+		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaTool))
+		{
+			try
+			{
+				MechaToolType type = new MechaToolType(mechaToolFile);
+				type.read(mechaToolFile);
+				Item mechaToolItem = new ItemMechaTool(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				mechaToolItems.add(mechaToolItem);
+				LanguageRegistry.addName(mechaToolItem, type.name);
+			}
+			catch(Exception e)
+			{
+				log("Failed to add mecha tool : " + mechaToolFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded mecha tools.");
+		
 		// Mechas
 		for(TypeFile mechaFile : TypeFile.files.get(EnumType.mecha))
 		{
@@ -605,10 +627,11 @@ public class FlansMod
 			}
 			catch (Exception e)
 			{
-				log("Failed to add Mecha : " + mechaFile.name);
+				log("Failed to add mecha : " + mechaFile.name);
 				e.printStackTrace();
 			}
 		}
+		log("Loaded mechas.");
 		
 		//Tools
 		for(TypeFile toolFile : TypeFile.files.get(EnumType.tool))
