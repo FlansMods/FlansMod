@@ -43,5 +43,15 @@ public class ModelMecha extends ModelDriveable
 				bodyModel[i].render(f5);
 	        }	
         }
+        
+        if(mecha.isPartIntact(EnumDriveablePart.head))
+        {
+        	for(ModelRendererTurbo model : headModel)
+        	{
+        		if(mecha.seats[0] != null)
+        			model.rotateAngleX = mecha.seats[0].looking.getPitch();
+        		model.render(f5);
+        	}
+        }
 	}
 }

@@ -622,6 +622,12 @@ public class EntityPlane extends EntityDriveable
 		if(soundPosition > 0)
 			soundPosition--;
 		
+		for(EntitySeat seat : seats)
+		{
+			if(seat != null)
+				seat.updatePosition();
+		}
+		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
 		{

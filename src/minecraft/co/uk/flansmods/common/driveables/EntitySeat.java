@@ -60,8 +60,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	/** Sound delay ticker for looping sounds */
 	public int soundDelay;
 	
+	
+	private double playerPosX, playerPosY, playerPosZ;
+	private float playerYaw, playerPitch;
 	/** For smoothness */
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
+	private float prevPlayerYaw, prevPlayerPitch;
+	
 	
 	/** Default constructor for spawning client side 
 	 * Should not be called server side EVER */
@@ -81,6 +86,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		seatInfo = driveable.getDriveableType().seats[id];
 		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
+		playerPosX = prevPlayerPosX = posX;
+		playerPosY = prevPlayerPosY = posY;
+		playerPosZ = prevPlayerPosZ = posZ;
 		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		//updatePosition();
 	}
@@ -108,6 +116,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			driveable.seats[seatID] = this;
 			seatInfo = driveable.getDriveableType().seats[seatID];
 			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
+			playerPosX = prevPlayerPosX = posX = driveable.posX;
+			playerPosY = prevPlayerPosY = posY = driveable.posY;
+			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
+			setPosition(posX, posY, posZ);
 		}
 		
 		//Update gun delay ticker
@@ -117,7 +129,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(soundDelay > 0)
 			soundDelay--;
 		
-		updatePosition();
+		//updatePosition();
 		
 		//If on the client
 		if(worldObj.isRemote)
@@ -142,11 +154,19 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	/** Set the position to be that of the driveable plus the local position, rotated */
-	private void updatePosition()
+	public void updatePosition()
 	{
 		//If we haven't found our driveable, give up
 		if(worldObj.isRemote && !foundDriveable)
 			return;
+		
+		prevPlayerPosX = playerPosX;
+		prevPlayerPosY = playerPosY;
+		prevPlayerPosZ = playerPosZ;
+		
+		prevPlayerYaw = playerYaw;
+		prevPlayerPitch = playerPitch;
+
 		//Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f((float)seatInfo.x / 16F, (float)seatInfo.y / 16F, (float)seatInfo.z / 16F);
 		//If this is the drivers seat, add the offset vector
@@ -163,6 +183,45 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		Vector3f relativePosition = driveable.axes.findLocalVectorGlobally(localPosition);
 		//Set the absol
 		setPosition(driveable.posX + relativePosition.x, driveable.posY + relativePosition.y, driveable.posZ + relativePosition.z);
+		
+		if(riddenByEntity != null)
+		{
+	    	DriveableType type = driveable.getDriveableType();
+			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
+			
+			playerPosX = posX + yOffset.xCoord;
+			playerPosY = posY + yOffset.yCoord;
+			playerPosZ = posZ + yOffset.zCoord;
+			
+			riddenByEntity.prevPosX = prevPlayerPosX;
+			riddenByEntity.prevPosY = prevPlayerPosY;
+			riddenByEntity.prevPosZ = prevPlayerPosZ;
+            riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);  
+            
+            //Calculate the local look axes globally
+			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+			//Set the player's rotation based on this
+			playerYaw = -90F + globalLookAxes.getYaw();
+			playerPitch = globalLookAxes.getPitch();
+			
+			riddenByEntity.prevRotationYaw = prevPlayerYaw;
+			riddenByEntity.prevRotationPitch = prevPlayerPitch;
+			
+			riddenByEntity.rotationYaw = playerYaw;
+			riddenByEntity.rotationPitch = playerPitch;
+			
+
+	
+			//If the entity is a player, roll its view accordingly
+			if(worldObj.isRemote)
+				playerRoll = -globalLookAxes.getRoll();
+			
+			double dYaw = riddenByEntity.rotationYaw - riddenByEntity.prevRotationYaw;
+			if(dYaw > 180)
+				riddenByEntity.prevRotationYaw += 360F;
+			if(dYaw < -180)
+				riddenByEntity.prevRotationYaw -= 360F;
+		}
 	}
 
 	@Override
@@ -409,6 +468,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		{
 			seatInfo = driveable.getDriveableType().seats[seatID];
 			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
+			playerPosX = prevPlayerPosX = posX = driveable.posX;
+			playerPosY = prevPlayerPosY = posY = driveable.posY;
+			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
+			setPosition(posX, posY, posZ);
 		}
 	}
 	
@@ -422,32 +485,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
         {
         	DriveableType type = driveable.getDriveableType();
 			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
-			riddenByEntity.prevPosX = prevPlayerPosX;
-			riddenByEntity.prevPosY = prevPlayerPosY;
-			riddenByEntity.prevPosZ = prevPlayerPosZ;
-            riddenByEntity.setPosition(posX + yOffset.xCoord, posY + yOffset.yCoord, posZ + yOffset.zCoord);
-            prevPlayerPosX = posX + yOffset.xCoord;
-            prevPlayerPosY = posY + yOffset.yCoord;
-            prevPlayerPosZ = posZ + yOffset.zCoord;
+        
             
-            
-			riddenByEntity.prevRotationYaw = riddenByEntity.rotationYaw;
-			riddenByEntity.prevRotationPitch = riddenByEntity.rotationPitch;
-			//Calculate the local look axes globally
-			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
-			//Set the player's rotation based on this
-			riddenByEntity.rotationYaw = -90F + globalLookAxes.getYaw();
-			riddenByEntity.rotationPitch = globalLookAxes.getPitch();
-	
-			//If the entity is a player, roll its view accordingly
-			if(worldObj.isRemote)
-				playerRoll = -globalLookAxes.getRoll();
-			
-			double dYaw = riddenByEntity.rotationYaw - riddenByEntity.prevRotationYaw;
-			if(dYaw > 180)
-				riddenByEntity.prevRotationYaw += 360F;
-			if(dYaw < -180)
-				riddenByEntity.prevRotationYaw -= 360F;
+
 			return;
         }
     }

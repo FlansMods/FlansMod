@@ -22,6 +22,7 @@ import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
@@ -262,7 +263,11 @@ public class EntityMecha extends EntityDriveable
 		//Movement
 		
 		if(seats[0] != null)
-			axes.setAngles(seats[0].looking.getYaw(), 0, 0);
+		{
+			float yaw = seats[0].looking.getYaw() - seats[0].prevLooking.getYaw();
+			axes.rotateGlobalYaw(yaw);
+			seats[0].looking.rotateGlobalYaw(-yaw);
+		}
 		
 		moveX = 0;
 		moveZ = 0;
@@ -272,10 +277,10 @@ public class EntityMecha extends EntityDriveable
 			EntityLivingBase entity = (EntityLivingBase)seats[0].riddenByEntity;
 			if(thePlayerIsDrivingThis)
 			{
-				if(FlansMod.proxy.isKeyDown(0)) moveX = -1;
-				if(FlansMod.proxy.isKeyDown(1)) moveX = 1;
-				if(FlansMod.proxy.isKeyDown(2)) moveZ = 1;
-				if(FlansMod.proxy.isKeyDown(3)) moveZ = -1;
+				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
+				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
+				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
+				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
 			}
 			else
 			{
@@ -363,6 +368,12 @@ public class EntityMecha extends EntityDriveable
 			}
 		}
 		
+		for(EntitySeat seat : seats)
+		{
+			if(seat != null)
+				seat.updatePosition();
+		}
+		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
 		{
@@ -374,6 +385,7 @@ public class EntityMecha extends EntityDriveable
 		{
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
+		
 	}
 	
 	@Override

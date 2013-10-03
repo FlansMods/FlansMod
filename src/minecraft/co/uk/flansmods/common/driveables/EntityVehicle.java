@@ -556,6 +556,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			soundPosition = type.engineSoundLength;
 		}
 		
+		for(EntitySeat seat : seats)
+		{
+			if(seat != null)
+				seat.updatePosition();
+		}
+		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
 		{
