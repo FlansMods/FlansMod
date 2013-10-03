@@ -37,7 +37,7 @@ public class EntityMecha extends EntityDriveable
     private int moveX = 0;
     private int moveZ = 0;
     public RotatedAxes legAxes;
-    public RotatedAxes prevLegAxes;
+    public float prevLegsYaw = 0F;
     private int jumpDelay = 0;
     
     public ItemStack leftStack, rightStack;
@@ -281,6 +281,8 @@ public class EntityMecha extends EntityDriveable
 			FlansMod.log("Mecha type null. Not ticking mecha");
 			return;
 		}
+		
+		prevLegsYaw = legAxes.getYaw();
 		
 		//Work out of this is client side and the player is driving
 		boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);

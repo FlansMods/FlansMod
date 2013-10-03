@@ -43,13 +43,18 @@ public class ModelMecha extends ModelDriveable
 				bodyModel[i].render(f5);
 	        }	
         }
+            
+        float smoothedPitch = 0F;
+        
+        if(mecha.seats[0] != null)
+        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f;
         
         if(mecha.isPartIntact(EnumDriveablePart.head))
         {
         	for(ModelRendererTurbo model : headModel)
         	{
         		if(mecha.seats[0] != null)
-        			model.rotateAngleX = mecha.seats[0].looking.getPitch();
+        			model.rotateAngleX = smoothedPitch;
         		model.render(f5);
         	}
         }
@@ -59,7 +64,7 @@ public class ModelMecha extends ModelDriveable
         	for(ModelRendererTurbo model : leftArmModel)
         	{
         		if(mecha.seats[0] != null)
-        			model.rotateAngleZ = (90F - mecha.seats[0].looking.getPitch()) * 3.14159265F / 180F;
+        			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
         		model.render(f5);
         	}
         	
@@ -71,7 +76,7 @@ public class ModelMecha extends ModelDriveable
         	for(ModelRendererTurbo model : rightArmModel)
         	{
         		if(mecha.seats[0] != null)
-        			model.rotateAngleZ = (90F - mecha.seats[0].looking.getPitch()) * 3.14159265F / 180F;
+        			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
         		model.render(f5);
         	}
         }

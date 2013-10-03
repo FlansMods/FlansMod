@@ -75,7 +75,10 @@ public class RenderMecha extends Render
         
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
-		GL11.glRotatef(-mecha.legAxes.getYaw(), 0F, 1F, 0F);
+        dYaw = mecha.legAxes.getYaw() - mecha.prevLegsYaw;
+        for(; dYaw > 180F; dYaw -= 360F) {}
+        for(; dYaw <= -180F; dYaw += 360F) {}
+		GL11.glRotatef(- dYaw * f1 - mecha.prevLegsYaw, 0F, 1F, 0F);
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		if(model != null)
