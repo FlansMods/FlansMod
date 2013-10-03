@@ -44,7 +44,7 @@ public class RenderMecha extends Render
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
 		if(model != null)
-			model.render(mecha, f1);
+			model.render(mecha, f1);		
 		
 		if(FlansMod.DEBUG)
 		{
@@ -72,6 +72,15 @@ public class RenderMecha extends Render
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 		}
         GL11.glPopMatrix();
+        
+		GL11.glPushMatrix();
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		GL11.glRotatef(mecha.legAxes.getYaw(), 0F, 1F, 0F);
+        GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+		if(model != null)
+			model.renderLegs(0.0625F, mecha, f1);		
+		GL11.glPopMatrix();
     }
 	
 	@Override

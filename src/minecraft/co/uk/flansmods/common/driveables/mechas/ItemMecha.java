@@ -75,7 +75,7 @@ public class ItemMecha extends Item {
             int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
+				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 1F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
