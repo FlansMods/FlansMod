@@ -37,12 +37,15 @@ public class EntityMecha extends EntityDriveable
     private int moveX = 0;
     private int moveZ = 0;
     public RotatedAxes legAxes;
+    public RotatedAxes prevLegAxes;
+    
+    public ItemStack leftStack, rightStack;
 
 
 	public EntityMecha(World world) 
 	{
 		super(world);
-		setSize(3F, 2F);
+		setSize(2F, 3F);
 		stepHeight = 3;
 		legAxes = new RotatedAxes();
 	}
@@ -51,7 +54,7 @@ public class EntityMecha extends EntityDriveable
 	{
 		super(world, type, data);
 		legAxes = new RotatedAxes();
-		setSize(3F, 2F);
+		setSize(2F, 3F);
 		stepHeight = 3;
 		setPosition(x, y, z);
 		initType(type, false);
@@ -320,7 +323,7 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
-		Vector3f actualMotion = new Vector3f(0F, -9.81F / 20F, 0F);
+		Vector3f actualMotion = new Vector3f(0F, motionY - 9.81F / 400F, 0F);
 		
 		if(driverIsLiving)
 		{
@@ -381,8 +384,10 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
 		}
-				
+		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
+		
+		
 		
     	setPosition(posX, posY, posZ);
 		
