@@ -185,7 +185,7 @@ public class EntityMecha extends EntityDriveable
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption))
 				{
 					motionY += type.jumpVelocity;
-					jumpDelay = 20;
+					jumpDelay = 10;
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption;					
 				}

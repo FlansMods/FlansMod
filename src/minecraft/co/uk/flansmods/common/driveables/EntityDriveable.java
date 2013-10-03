@@ -76,6 +76,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     {
         super(world);
 		axes = new RotatedAxes();
+		prevAxes = new RotatedAxes();
         preventEntitySpawning = true;
         setSize(1F, 1F);
         yOffset = 6F / 16F;
