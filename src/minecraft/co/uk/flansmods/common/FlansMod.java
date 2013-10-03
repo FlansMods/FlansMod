@@ -35,6 +35,8 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.driveables.mechas.ItemMecha;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
@@ -123,6 +125,7 @@ public class FlansMod
 			toolItems = new ArrayList<Item>(), 
 			gunItems = new ArrayList<Item>(), 
 			aaGunItems = new ArrayList<Item>(), 
+			mechaItems = new ArrayList<Item>(),
 			grenadeItems = new ArrayList<Item>(), 
 			armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
@@ -584,6 +587,24 @@ public class FlansMod
 			}
 		}
 		log("Loaded AA guns.");
+		
+		// Mechas
+		for(TypeFile mechaFile : TypeFile.files.get(EnumType.mecha))
+		{
+			try
+			{
+				MechaType type = new MechaType(mechaFile);
+				type.read(mechaFile);
+				Item mechaItem = new ItemMecha(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				mechaItems.add(mechaItem);
+				LanguageRegistry.addName(mechaItem, type.name);
+			}
+			catch (Exception e)
+			{
+				log("Failed to add Mecha : " + mechaFile.name);
+				e.printStackTrace();
+			}
+		}
 		
 		//Tools
 		for(TypeFile toolFile : TypeFile.files.get(EnumType.tool))
