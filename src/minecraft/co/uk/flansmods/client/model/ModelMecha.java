@@ -53,7 +53,29 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
         	}
         }
-	}
+        
+        if(mecha.isPartIntact(EnumDriveablePart.leftArm))
+        {
+        	for(ModelRendererTurbo model : leftArmModel)
+        	{
+        		if(mecha.seats[0] != null)
+        			model.rotateAngleZ = (90F - mecha.seats[0].looking.getPitch()) * 3.14159265F / 180F;
+        		model.render(f5);
+        	}
+        	
+        	
+        }
+	
+        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
+        {
+        	for(ModelRendererTurbo model : rightArmModel)
+        	{
+        		if(mecha.seats[0] != null)
+        			model.rotateAngleZ = (90F - mecha.seats[0].looking.getPitch()) * 3.14159265F / 180F;
+        		model.render(f5);
+        	}
+        }
+}
 	
 	public void renderLegs(float f5, EntityMecha mecha, float f)
 	{        
@@ -67,7 +89,6 @@ public class ModelMecha extends ModelDriveable
         
         int legSwingTime = 5;
         float legsYaw = (float)Math.sin(((float)(mecha.ticksExisted) + f) / (float) legSwingTime);
-        //legsYaw = legsYaw * legsYaw;
         
         if(mecha.isPartIntact(EnumDriveablePart.leftLeg))
         {
