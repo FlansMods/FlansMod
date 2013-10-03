@@ -16,6 +16,7 @@ public class MechaType extends DriveableType
 	public int stepHeight = 0;
 	/** Jump Height (set 0 for no jump) */
 	public float jumpHeight = 1F;
+	public float jumpVelocity = 1F;
 	/** Speed of Rotation */
 	public float rotateSpeed = 10F;
 	
@@ -45,7 +46,10 @@ public class MechaType extends DriveableType
 			if(split[0].equals("StepHeight"))
 				stepHeight = Integer.parseInt(split[1]);
 			if(split[0].equals("JumpHeight"))
+			{
 				jumpHeight = Float.parseFloat(split[1]);
+				jumpVelocity = (float) Math.sqrt(Math.abs(9.81F * (jumpHeight + 0.2F) / 200F));
+			}
 			if(split[0].equals("RotateSpeed"))
 				rotateSpeed = Float.parseFloat(split[1]);
 		}

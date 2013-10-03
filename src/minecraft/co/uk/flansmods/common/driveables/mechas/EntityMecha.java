@@ -38,6 +38,7 @@ public class EntityMecha extends EntityDriveable
     private int moveZ = 0;
     public RotatedAxes legAxes;
     public float prevLegsYaw = 0F;
+    private int jumpDelay = 0;
     
     public ItemStack leftStack, rightStack;
 
@@ -153,6 +154,7 @@ public class EntityMecha extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		MechaType type = getMechaType();
+    	DriveableData data = getDriveableData();
 		//send keys which require server side updates to the server
     	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
     	{
@@ -177,8 +179,16 @@ public class EntityMecha extends EntityDriveable
     		{
     			return true;
     		}
-			case 4 : //Up : Will jump, later
+			case 4 : //Jump
 			{
+				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption))
+				{
+					motionY += type.jumpVelocity;
+					jumpDelay = 20;
+					if(!canThrustCreatively)
+						data.fuelInTank -= data.engine.fuelConsumption;					
+				}
 				return true;
 			}
 			case 5 : //Down : Do nothing
@@ -261,6 +271,8 @@ public class EntityMecha extends EntityDriveable
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		if(jumpDelay > 0) --jumpDelay;
 		
 		//Get Mecha Type
 		MechaType type = this.getMechaType();
