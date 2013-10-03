@@ -331,6 +331,16 @@ public class EntityMecha extends EntityDriveable
 			
 			intent = axes.findLocalVectorGlobally(intent);
 			
+			float angleBetween = Vector3f.angle(legAxes.getXAxis(), intent);
+			float signBetween = Math.signum(angleBetween);
+			
+			angleBetween = Math.abs(angleBetween);
+			
+			if(angleBetween > 0.1)
+			{
+				legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*-signBetween);
+			}
+			
 			Vector3f motion = legAxes.getXAxis();
 			
 			motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
