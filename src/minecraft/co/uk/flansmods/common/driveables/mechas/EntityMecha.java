@@ -37,7 +37,7 @@ public class EntityMecha extends EntityDriveable
     private int moveX = 0;
     private int moveZ = 0;
     public RotatedAxes legAxes;
-    public RotatedAxes prevLegAxes;
+    public float prevLegsYaw = 0F;
     
     public ItemStack leftStack, rightStack;
 
@@ -270,6 +270,8 @@ public class EntityMecha extends EntityDriveable
 			return;
 		}
 		
+		prevLegsYaw = legAxes.getYaw();
+		
 		//Work out of this is client side and the player is driving
 		boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
 		boolean driverIsLiving = seats[0] != null && seats[0].riddenByEntity instanceof EntityLivingBase;
@@ -372,14 +374,14 @@ public class EntityMecha extends EntityDriveable
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
-				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption)
 				{
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
-						data.fuelInTank -= data.engine.fuelConsumption * throttle;
+						data.fuelInTank -= data.engine.fuelConsumption;
 				}
 			}
 		}
