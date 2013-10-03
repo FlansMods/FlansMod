@@ -1,0 +1,26 @@
+//Naming
+Name ProtoTitan
+ShortName ProtoTitan
+ItemID 23400
+//Visuals
+Icon ProtoTitan
+Model titan.ProtoTitan
+Texture ProtoTitan
+//Third Person Camera Distance
+CameraDistance 5.0
+//Driver and passenger positions
+Driver 0 0 0
+Passengers 0
+//Offset of driver from the point of rotation
+RotatedDriverOffset 0 0 0
+//Steering Modifiers
+TurnLeftSpeed 1
+TurnRightSpeed 1
+MoveSpeed 1
+//How quickly the legs react to a change in direction
+Inertia 1
+//Will it squash puny mobs?
+SquashMobs true
+//Step Height (Integer) and Jump Height (Float)
+StepHeight 1
+JumpHeight 2.5

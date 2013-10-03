@@ -70,6 +70,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         super(world);
     }
     
+    //This one deals with spawning from a vehicle spawner
 	public EntityVehicle(World world, double x, double y, double z, VehicleType type, DriveableData data)
 	{
 		super(world, type, data);
@@ -77,6 +78,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		initType(type, false);
 	}
     
+	//This one allows you to deal with spawning from items
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type, DriveableData data)
 	{
 		this(world, x, y, z, type, data);
@@ -137,9 +139,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public boolean interactFirst(EntityPlayer entityplayer)
     {
 		if(isDead)
-			return true;
+			return false;
 		if(worldObj.isRemote)
-			return true;
+			return false;
 		
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
@@ -161,7 +163,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				return true;
 			}
 		}
-        return true;
+        return false;
     }
 	
     @Override
@@ -373,12 +375,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
                 
         //Despawning
 		ticksSinceUsed++;
+		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
+			ticksSinceUsed = 0;
 		if(!worldObj.isRemote && FlansMod.vehicleLife > 0 && ticksSinceUsed > FlansMod.vehicleLife * 20)
 		{
 			setDead();
 		}
-		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
-			ticksSinceUsed = 0;
 		
 		//Shooting, inventories, etc.
 		//Decrement shell and gun timers
@@ -609,7 +611,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     	return true;
     }
 
-    public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
+    @Override
+    public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
         if(worldObj.isRemote || isDead)
             return true;
@@ -626,12 +629,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
         return true;
     }
-        
-	@Override
-	public boolean attackEntityFrom(DamageSource damagesource, float i)
-    {
-		return attackEntityFrom(damagesource, i, true);
-	}
 		
 	public VehicleType getVehicleType()
 	{

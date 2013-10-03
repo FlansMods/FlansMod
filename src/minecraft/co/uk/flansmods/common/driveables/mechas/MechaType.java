@@ -38,19 +38,29 @@ public class MechaType extends DriveableType
 				turnLeftModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("TurnRightSpeed"))
 				turnRightModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("moveSpeed"))
+			if(split[0].equals("MoveSpeed"))
 				moveSpeed = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("inertia"))
+			if(split[0].equals("Inertia"))
 				inertia = Float.parseFloat(split[1]);
-			if(split[0].equals("stepHeight"))
+			if(split[0].equals("StepHeight"))
 				stepHeight = Integer.parseInt(split[1]);
-			if(split[0].equals("jumpHeight"))
-				jumpHeight = Integer.parseInt(split[1]);
+			if(split[0].equals("JumpHeight"))
+				jumpHeight = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{
 		}
     }
+    
+	public static MechaType getMecha(String find)
+	{
+		for(MechaType type : types)
+		{
+			if(type.shortName.equals(find))
+				return type;
+		}
+		return null;
+	}
 }

@@ -406,12 +406,12 @@ public class EntityPlane extends EntityDriveable
                 
         //Despawning
 		ticksSinceUsed++;
+		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
+			ticksSinceUsed = 0;
 		if(!worldObj.isRemote && FlansMod.planeLife > 0 && ticksSinceUsed > FlansMod.planeLife * 20)
 		{
 			setDead();
 		}
-		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
-			ticksSinceUsed = 0;
 		
 		//Shooting, inventories, etc.
 		//Decrement bomb and gun timers

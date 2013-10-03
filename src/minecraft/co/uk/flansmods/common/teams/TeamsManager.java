@@ -453,6 +453,7 @@ public class TeamsManager implements IPlayerTracker
 			FlansMod.mgLife = tags.getInteger("MGLife");
 			FlansMod.aaLife = tags.getInteger("AALife");
 			FlansMod.vehicleLife = tags.getInteger("VehicleLife");
+			FlansMod.mechaLove = tags.getInteger("MechaLove");
 			FlansMod.planeLife = tags.getInteger("PlaneLife");
 			FlansMod.driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
 		}
@@ -530,6 +531,7 @@ public class TeamsManager implements IPlayerTracker
 			tags.setInteger("MGLife", FlansMod.mgLife);
 			tags.setInteger("AALife", FlansMod.aaLife);
 			tags.setInteger("VehicleLife", FlansMod.vehicleLife);
+			tags.setInteger("MechaLove", FlansMod.mechaLove);
 			tags.setInteger("PlaneLife", FlansMod.planeLife);
 			tags.setBoolean("BreakBlocks", FlansMod.driveablesBreakBlocks);
 			

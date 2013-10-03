@@ -35,6 +35,7 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ItemMecha;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
@@ -145,10 +146,11 @@ public class FlansMod
 	public static boolean armourDrops = true;
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	public static boolean vehiclesNeedFuel = true;
-	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int planeLife = 0; //How long planes stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int vehicleLife = 0; //How long vehicles stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int aaLife = 0; //How long AA Guns stay around for. Anything 0 or less means they do not dissapear at all.
+	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not disappear at all.
+	public static int planeLife = 0; //Ditto for Planes
+	public static int vehicleLife = 0; //Ditto for Vehicles
+	public static int mechaLove = 0;  //Ditto for Mechas. Also a reference to a great song.
+	public static int aaLife = 0; //Ditto for AA Guns
 
 	public static Block craftingTable;
 	public static Block spawner;
@@ -234,13 +236,15 @@ public class FlansMod
 		
 		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 20, false);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 15, false);
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntitySeat.class, "Seat", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntityParachute.class, "Parachute", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityParachute.class, "Parachute", 101, this, 40, 20, false);
+		EntityRegistry.registerGlobalEntityID(EntityMecha.class, "Mecha", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityMecha.class, "Mecha", 102, this, 250, 20, false);
 		
 		//Register bullets and grenades
 		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());

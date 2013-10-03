@@ -56,7 +56,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.armourDrops = true;
 			FlansMod.weaponDrops = 1;
 			FlansMod.vehiclesNeedFuel = true;
-			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 0;
+			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = FlansMod.mechaLove = 0;
 			teamsManager.messageAll("Flan's Mod switching to survival presets");
 			return;
 		}
@@ -72,7 +72,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.armourDrops = false;
 			FlansMod.weaponDrops = 2;
 			FlansMod.vehiclesNeedFuel = false;
-			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = 120;
+			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = FlansMod.mechaLove = 120;
 			teamsManager.messageAll("Flan's Mod switching to arena mode presets");
 			return;
 		}
@@ -517,6 +517,19 @@ public class CommandTeams extends CommandBase {
 			if(FlansMod.vehicleLife > 0)
 				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Vehicles will despawn after " + FlansMod.vehicleLife + " seconds"));
 			else sender.sendChatToPlayer(ChatMessageComponent.createFromText("Vehicles will not despawn"));
+			return;
+		}
+		if(split[0].equals("mechaLife"))
+		{
+			if(split.length != 2)
+			{
+				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			FlansMod.mechaLove = Integer.parseInt(split[1]);
+			if(FlansMod.mechaLove > 0)
+				sender.sendChatToPlayer(ChatMessageComponent.createFromText("Mechas will despawn after " + FlansMod.mechaLove + " seconds"));
+			else sender.sendChatToPlayer(ChatMessageComponent.createFromText("Mechas will not despawn"));
 			return;
 		}
 		if(split[0].equals("aaLife"))
