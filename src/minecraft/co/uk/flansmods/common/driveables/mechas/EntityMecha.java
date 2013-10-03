@@ -3,9 +3,6 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -40,6 +37,8 @@ public class EntityMecha extends EntityDriveable
     private int moveX = 0;
     private int moveZ = 0;
     public RotatedAxes legAxes;
+    
+
 
 	public EntityMecha(World world) 
 	{
@@ -64,6 +63,13 @@ public class EntityMecha extends EntityDriveable
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
 	}
+	
+    @Override
+    protected void initType(DriveableType type, boolean clientSide)
+    {
+    	super.initType(type, clientSide);
+    	stepHeight = ((MechaType)type).stepHeight;
+    }
 	
 	@Override
     protected void writeEntityToNBT(NBTTagCompound tag)
