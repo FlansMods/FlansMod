@@ -261,6 +261,9 @@ public class EntityMecha extends EntityDriveable
 		
 		//Movement
 		
+		if(seats[0] != null)
+			axes.setAngles(seats[0].looking.getYaw(), 0, 0);
+		
 		moveX = 0;
 		moveZ = 0;
 		
@@ -269,15 +272,15 @@ public class EntityMecha extends EntityDriveable
 			EntityLivingBase entity = (EntityLivingBase)seats[0].riddenByEntity;
 			if(thePlayerIsDrivingThis)
 			{
-				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
-				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
+				if(FlansMod.proxy.isKeyDown(0)) moveX = -1;
+				if(FlansMod.proxy.isKeyDown(1)) moveX = 1;
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = 1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = -1;
 			}
 			else
 			{
-				if(entity.moveForward > 0.2) moveX = 1;
-				if(entity.moveForward < 0.2) moveX = -1;
+				if(entity.moveForward > 0.2) moveX = -1;
+				if(entity.moveForward < 0.2) moveX = 1;
 				if(entity.moveStrafing > 0.2) moveZ = 1;
 				if(entity.moveStrafing < 0.2) moveZ = -1;
 			}
@@ -287,6 +290,8 @@ public class EntityMecha extends EntityDriveable
 			if(Math.abs(motion.lengthSquared()) > 0.1) motion.normalise();
 			
 			motion.scale(type.moveSpeed);
+			
+			motion = axes.findLocalVectorGlobally(motion);
 			
 	    	DriveableData data = getDriveableData();
 
