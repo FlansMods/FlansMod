@@ -43,8 +43,8 @@ public class EntityMecha extends EntityDriveable
 	public EntityMecha(World world) 
 	{
 		super(world);
-		setSize(1F, 1F);
-		stepHeight = 1;
+		setSize(3F, 2F);
+		stepHeight = 3;
 		legAxes = new RotatedAxes();
 	}
 	
@@ -52,8 +52,8 @@ public class EntityMecha extends EntityDriveable
 	{
 		super(world, type, data);
 		legAxes = new RotatedAxes();
-		setSize(1F, 1F);
-		stepHeight = 1;
+		setSize(3F, 2F);
+		stepHeight = 3;
 		setPosition(x, y, z);
 		initType(type, false);
 	}
@@ -375,8 +375,6 @@ public class EntityMecha extends EntityDriveable
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
 
-
-					
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption * throttle;
