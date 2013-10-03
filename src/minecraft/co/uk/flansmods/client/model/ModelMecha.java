@@ -54,4 +54,37 @@ public class ModelMecha extends ModelDriveable
         	}
         }
 	}
+	
+	public void renderLegs(float f5, EntityMecha mecha, float f)
+	{        
+        if(mecha.isPartIntact(EnumDriveablePart.hips))
+        {
+        	for(ModelRendererTurbo model : hipsModel)
+        	{
+        		model.render(f5);
+        	}
+        }
+        
+        int legSwingTime = 5;
+        float legsYaw = (float)Math.sin(((float)(mecha.ticksExisted) + f) / (float) legSwingTime);
+        //legsYaw = legsYaw * legsYaw;
+        
+        if(mecha.isPartIntact(EnumDriveablePart.leftLeg))
+        {
+        	for(ModelRendererTurbo model : leftLegModel)
+        	{
+        		model.rotateAngleZ = legsYaw;
+        		model.render(f5);
+        	}
+        }
+        
+        if(mecha.isPartIntact(EnumDriveablePart.rightLeg))
+        {
+        	for(ModelRendererTurbo model : rightLegModel)
+        	{
+        		model.rotateAngleZ = -legsYaw;
+        		model.render(f5);
+        	}
+        }
+	}
 }

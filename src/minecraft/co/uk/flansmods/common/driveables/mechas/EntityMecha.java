@@ -317,7 +317,7 @@ public class EntityMecha extends EntityDriveable
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
 			}
-			else
+			else if(!(seats[0].riddenByEntity instanceof EntityPlayer))
 			{
 				if(entity.moveForward > 0.2) moveX = -1;
 				if(entity.moveForward < 0.2) moveX = 1;
