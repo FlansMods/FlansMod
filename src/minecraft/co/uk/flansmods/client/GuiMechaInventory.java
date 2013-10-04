@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,6 +23,8 @@ public class GuiMechaInventory extends GuiContainer
 	public int numItems;
 	public int maxScroll;
 	public EntityMecha mecha;
+	private int anim = 0;
+	private long lastTime;
 	
     public GuiMechaInventory(InventoryPlayer inventoryplayer, World world1, EntityMecha entMecha)
     {
@@ -39,7 +42,7 @@ public class GuiMechaInventory extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y)
     {
-        fontRenderer.drawString(mecha.getMechaType().name, 6, 6, 0x404040);
+        fontRenderer.drawString(mecha.getMechaType().name, 9, 9, 0x404040);
         fontRenderer.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
     }
 	
@@ -62,6 +65,18 @@ public class GuiMechaInventory extends GuiContainer
 			drawTexturedModalRect(j + 336, k + 41, 350, 0, 10, 10);
 		if(scroll == maxScroll)
 			drawTexturedModalRect(j + 336, k + 53, 350, 10, 10, 10);
+	
+		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
+		if(newTime > lastTime)
+		{
+			lastTime = newTime;
+			if(newTime % 5 == 0)
+				anim++;
+		}
+		int fuelTankSize = mecha.getMechaType().fuelTankSize;
+		float fuelInTank = mecha.driveableData.fuelInTank;
+		if(fuelInTank < fuelTankSize / 8 && (anim % 4) > 1)
+			drawTexturedModalRect(width / 2 - 14, height / 2 - 59, 360, 0, 6, 6);
 	}
 	
 	@Override
@@ -78,6 +93,14 @@ public class GuiMechaInventory extends GuiContainer
         tessellator.draw();
     }
 
+    @Override
+	public void initGui()
+	{
+		super.initGui();
+		buttonList.add(new GuiButton(5, width / 2 - 166, height / 2 + 63, 93, 20, "Passenger Guns"));
+		buttonList.add(new GuiButton(6, width / 2 - 68, height / 2 + 63, 68, 20, "Repair"));
+	}
+	
 	@Override
 	protected void mouseClicked(int i, int j, int k)
 	{

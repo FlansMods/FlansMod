@@ -39,11 +39,26 @@ public class ContainerMechaInventory extends Container
 		}
 		
 		//Equipment Slots
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftArm.ordinal(), 36, 82));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftTool.ordinal(), 36, 58));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightArm.ordinal(), 132, 82));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightTool.ordinal(), 132, 58));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.hips.ordinal(), 84, 128));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftLeg.ordinal(), 60, 128));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftArm.ordinal(), 36, 80));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftTool.ordinal(), 36, 56));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftShoulder.ordinal(), 60, 32));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.head.ordinal(), 84, 32));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightLeg.ordinal(), 108, 128));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightArm.ordinal(), 132, 80));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightTool.ordinal(), 132, 56));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightShoulder.ordinal(), 108, 32));
+		
+		//Upgrade Slots
+		
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u1.ordinal(), 10, 32));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u2.ordinal(), 10, 56));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u3.ordinal(), 10, 80));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u4.ordinal(), 10, 104));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u5.ordinal(), 10, 128));
 
+		
 		//Main inventory slots
         for(int row = 0; row < 3; row++)
         {
