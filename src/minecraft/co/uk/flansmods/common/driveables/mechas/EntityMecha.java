@@ -3,6 +3,9 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -39,6 +42,7 @@ public class EntityMecha extends EntityDriveable
     public RotatedAxes legAxes;
     public float prevLegsYaw = 0F;
     private int jumpDelay = 0;
+    public float legSwing = 0;
     
     public ItemStack leftStack, rightStack;
 
@@ -65,6 +69,8 @@ public class EntityMecha extends EntityDriveable
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
+		legAxes.rotateGlobalYaw(placer.rotationYaw + 90F);
+		prevLegsYaw = legAxes.getYaw();
 	}
 	
     @Override
@@ -99,6 +105,14 @@ public class EntityMecha extends EntityDriveable
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void readSpawnData(ByteArrayDataInput inputData)
+	{
+		super.readSpawnData(inputData);
+		legAxes.rotateGlobalYaw(axes.getYaw());
+		prevLegsYaw = legAxes.getYaw();
 	}
 
 	@Override
@@ -361,6 +375,8 @@ public class EntityMecha extends EntityDriveable
 			if(Math.abs(intent.lengthSquared()) > 0.1) 
 			{
 				intent.normalise();
+				
+				++legSwing;
 			
 				intent = axes.findLocalVectorGlobally(intent);
 							
@@ -466,6 +482,8 @@ public class EntityMecha extends EntityDriveable
 		{
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
+		
+		legSwing = legSwing / 2F;
 		
 	}
 	
