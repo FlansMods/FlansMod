@@ -77,7 +77,7 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
         	}
         	
-        	ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftArm);
+        	ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
         	if(holdingStack == null)
         	{
             	for(ModelRendererTurbo model : leftHandModel)

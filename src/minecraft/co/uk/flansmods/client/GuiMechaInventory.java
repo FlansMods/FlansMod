@@ -56,12 +56,12 @@ public class GuiMechaInventory extends GuiContainer
 		int numRows = ((numItems + 7) / 8);
 		for(int row = 0; row < (numRows > 3 ? 3 : numRows); row++)
 		{
-			drawTexturedModalRect(j + 184, k + 24 + 19 * row, 182, 97, 18 * ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8), 18);
+			drawTexturedModalRect(j + 185, k + 24 + 19 * row, 181, 97, 18 * ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8), 18);
 		}
 		if(scroll == 0)
-			drawTexturedModalRect(j + 336, k + 41, 351, 0, 10, 10);
+			drawTexturedModalRect(j + 336, k + 41, 350, 0, 10, 10);
 		if(scroll == maxScroll)
-			drawTexturedModalRect(j + 336, k + 53, 351, 10, 10, 10);
+			drawTexturedModalRect(j + 336, k + 53, 350, 10, 10, 10);
 	}
 	
 	@Override

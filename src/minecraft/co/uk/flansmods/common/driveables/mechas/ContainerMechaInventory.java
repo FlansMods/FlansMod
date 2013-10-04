@@ -34,10 +34,16 @@ public class ContainerMechaInventory extends Container
 				yPos = 25 + 19 * (row - scroll);
 			for(int col = 0; col < ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8); col++)
 			{
-				addSlotToContainer(new Slot(mecha.driveableData, startSlot + row * 8 + col, 10 + 18 * col, yPos));
+				addSlotToContainer(new Slot(mecha.driveableData, startSlot + row * 8 + col, 186 + 18 * col, yPos));
 			}
 		}
 		
+		//Equipment Slots
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftArm.ordinal(), 36, 82));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftTool.ordinal(), 36, 58));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightArm.ordinal(), 132, 82));
+		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightTool.ordinal(), 132, 58));
+
 		//Main inventory slots
         for(int row = 0; row < 3; row++)
         {
