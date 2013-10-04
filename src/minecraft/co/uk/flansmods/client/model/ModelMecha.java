@@ -1,9 +1,11 @@
 package co.uk.flansmods.client.model;
 
+import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
 
 public class ModelMecha extends ModelDriveable 
 {
@@ -29,6 +31,8 @@ public class ModelMecha extends ModelDriveable
 		super.render();
 		renderPart(leftArmModel);
 		renderPart(rightArmModel);
+		renderPart(leftHandModel);
+		renderPart(rightHandModel);
 		renderPart(hipsModel);
 		renderPart(leftLegModel);
 		renderPart(rightLegModel);
@@ -70,7 +74,16 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
         	}
         	
-        	
+        	ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftArm);
+        	if(holdingStack == null)
+        	{
+            	for(ModelRendererTurbo model : leftHandModel)
+            	{
+            		if(mecha.seats[0] != null)
+            			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
+            		model.render(f5);
+            	}
+        	}
         }
 	
         if(mecha.isPartIntact(EnumDriveablePart.rightArm))
