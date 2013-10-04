@@ -18,6 +18,8 @@ import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
+import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -125,6 +127,7 @@ public class CommonProxy
 			case 7: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
 			case 8: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
 			case 9: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
+			case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		}
 		return null;
 	}

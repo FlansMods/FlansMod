@@ -6,6 +6,7 @@ import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -62,6 +63,20 @@ public class GuiMechaInventory extends GuiContainer
 		if(scroll == maxScroll)
 			drawTexturedModalRect(j + 336, k + 53, 351, 10, 10, 10);
 	}
+	
+	@Override
+    public void drawTexturedModalRect(int par1, int par2, int par3, int par4, int par5, int par6)
+    {
+        float f = 1F / 512F;
+        float f1 = 1F / 256F;
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + par6) * f1));
+        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
+        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + 0) * f1));
+        tessellator.addVertexWithUV((double)(par1 + 0), (double)(par2 + 0), (double)this.zLevel, (double)((float)(par3 + 0) * f), (double)((float)(par4 + 0) * f1));
+        tessellator.draw();
+    }
 
 	@Override
 	protected void mouseClicked(int i, int j, int k)

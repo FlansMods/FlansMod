@@ -64,6 +64,8 @@ public class PacketVehicleGUI extends FlanPacketCommon {
 					player.openGui(FlansMod.instance, 8, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 				case 3 : //Cargo
 					player.openGui(FlansMod.instance, 9, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
+				case 4 : //Mecha
+					player.openGui(FlansMod.instance, 10, player.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 				}
 			}
 			
