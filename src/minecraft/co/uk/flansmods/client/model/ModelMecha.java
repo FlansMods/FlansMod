@@ -43,60 +43,38 @@ public class ModelMecha extends ModelDriveable
 	{
 		//Rendering the body
         if(mecha.isPartIntact(EnumDriveablePart.core))
-        {
 	        for(int i = 0; i < bodyModel.length; i++)
-	        {
 				bodyModel[i].render(f5);
-	        }	
-        }
             
-         
         if(mecha.isPartIntact(EnumDriveablePart.head))
-        {
         	for(ModelRendererTurbo model : headModel)
-        	{
         		model.render(f5);
-        	}
-        }
         
         if(mecha.isPartIntact(EnumDriveablePart.rightArm))
-        {
         	for(ModelRendererTurbo model : rightArmModel)
-        	{
-        		model.render(f5);
-        	}
-        }
+        		//model.render(f5);
+        		;
 	}
-	
+		
 	public void renderLeftArm(float f5, EntityMecha mecha, float f)
 	{
         if(mecha.isPartIntact(EnumDriveablePart.leftArm))
-        {
         	for(ModelRendererTurbo model : leftArmModel)
-        	{
         		model.render(f5);
-        	}
-        	
-        	ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftArm);
-        	if(holdingStack == null)
-        	{
-            	for(ModelRendererTurbo model : leftHandModel)
-            	{
-            		model.render(f5);
-            	}
-        	}
-        }
+	}
+	
+	public void renderLeftHand(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.leftArm))
+        	for(ModelRendererTurbo model : leftHandModel)
+        		model.render(f5);
 	}
 	
 	public void renderLegs(float f5, EntityMecha mecha, float f)
 	{        
         if(mecha.isPartIntact(EnumDriveablePart.hips))
-        {
         	for(ModelRendererTurbo model : hipsModel)
-        	{
         		model.render(f5);
-        	}
-        }
         
         int legSwingTime = 5;
         float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f) / legSwingTime) * mecha.legSwing;
