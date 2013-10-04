@@ -63,4 +63,21 @@ public class GuiMechaInventory extends GuiContainer
 			drawTexturedModalRect(j + 336, k + 53, 351, 10, 10, 10);
 	}
 
+	@Override
+	protected void mouseClicked(int i, int j, int k)
+	{
+		super.mouseClicked(i, j, k);
+		int m = i - (width - xSize) / 2;
+		int n = j - (height - ySize) / 2;
+		if(scroll > 0 && m > 336 && m < 346 && n > 41 && n < 51)
+		{
+			scroll--;
+			container.updateScroll(scroll);
+		}
+		if(scroll < maxScroll && m > 336 & m < 346 && n > 53 && n < 63)
+		{
+			scroll++;
+			container.updateScroll(scroll);
+		}
+	}
 }
