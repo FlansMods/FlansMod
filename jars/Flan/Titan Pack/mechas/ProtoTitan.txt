@@ -31,8 +31,8 @@ SquashMobs true
 StepHeight 1
 JumpHeight 2
 //Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
-LeftArmOrigin 0 40 16
-RightArmOrigin 0 40 -16
+LeftArmOrigin 0 40 -16
+RightArmOrigin 0 40 16
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
 ArmLength 20
 //The scale multiplier for rendering the items and tools being held
