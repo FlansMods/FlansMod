@@ -9,6 +9,8 @@ public class ModelMecha extends ModelDriveable
 {
 	public ModelRendererTurbo[] leftArmModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightArmModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] leftHandModel = new ModelRendererTurbo[0]; //Renderered when the mecha is not holding anything
+	public ModelRendererTurbo[] rightHandModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] hipsModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] leftLegModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightLegModel = new ModelRendererTurbo[0];
