@@ -11,6 +11,7 @@ import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
 import co.uk.flansmods.common.driveables.mechas.ItemMechaTool;
+import co.uk.flansmods.common.driveables.mechas.MechaToolType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -35,7 +36,8 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 public class RenderMecha extends Render 
 {
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-
+    private static final ItemRenderer renderer = new ItemRenderer(Minecraft.getMinecraft());
+    
 	public RenderMecha()
 	{
 		shadowSize = 0.5F;
@@ -61,50 +63,77 @@ public class RenderMecha extends Render
 		//GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
-        //model = new ModelProtoTitan();
+        //type.model = new ModelProtoTitan();
 		if(model != null)
 			model.render(mecha, f1);	
 		
-		GL11.glPushMatrix();
-
-		float smoothedPitch = 0F;
-        
-        if(mecha.seats[0] != null)
-        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
-		
-		GL11.glTranslatef(type.leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
-		GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
-		model.renderLeftArm(0.0625F, mecha, f1);
-		GL11.glTranslatef(type.armLength, 0F, 0F);
-		
-		ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftArm);
-		if(holdingStack == null)
+		//Left arm render
 		{
-			model.renderLeftHand(0.0625F, mecha, f1);
-		}
-		else
-		{
-			GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
-			Item item = holdingStack.getItem();
-			if(item instanceof ItemMechaTool)
+			bindEntityTexture(mecha);
+			GL11.glPushMatrix();
+	
+			//Get the arm pitch from the mecha entity
+			float smoothedPitch = 0F;
+	        if(mecha.seats[0] != null)
+	        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
+			
+	        //Translate to the arm origin, rotate and render
+			GL11.glTranslatef(type.leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
+			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
+			model.renderLeftArm(0.0625F, mecha, f1);
+			
+			//Move to the end of the arm and render the held item
+			GL11.glTranslatef(0F, -type.armLength, 0F);
+			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+			if(holdingStack == null)
 			{
+				model.renderLeftHand(0.0625F, mecha, f1);
 			}
 			else
 			{
-				renderItem(holdingStack, 0);
+				GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
+				renderItem(mecha, holdingStack, 0, f1);
 			}
+			GL11.glPopMatrix();
 		}
 		
-		
-		GL11.glPopMatrix();
-		
+		//Right arm render
+		{
+			bindEntityTexture(mecha);
+			GL11.glPushMatrix();
+	
+			//Get the arm pitch from the mecha entity
+			float smoothedPitch = 0F;
+	        if(mecha.seats[0] != null)
+	        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
+			
+	        //Translate to the arm origin, rotate and render
+			GL11.glTranslatef(type.rightArmOrigin.x, mecha.getMechaType().rightArmOrigin.y, mecha.getMechaType().rightArmOrigin.z);
+			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
+			model.renderRightArm(0.0625F, mecha, f1);
+			
+			//Move to the end of the arm and render the held item
+			GL11.glTranslatef(0F, -type.armLength, 0F);
+			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+			if(holdingStack == null)
+			{
+				model.renderRightHand(0.0625F, mecha, f1);
+			}
+			else
+			{
+				GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
+				renderItem(mecha, holdingStack, 0, f1);
+			}
+			GL11.glPopMatrix();
+		}
+				
+		//Debug rendering
 		if(FlansMod.DEBUG)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(1F, 0F, 0F, 0.3F);
-			GL11.glScalef(1F, 1F, 1F);
 			for(DriveablePart part : mecha.getDriveableData().parts.values())
 			{
 				if(part.box == null)
@@ -125,6 +154,8 @@ public class RenderMecha extends Render
 		}
         GL11.glPopMatrix();
         
+        //Leg render
+        bindEntityTexture(mecha);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
         dYaw = mecha.legAxes.getYaw() - mecha.prevLegsYaw;
@@ -151,69 +182,84 @@ public class RenderMecha extends Render
 	}
 
 	
-    private void renderItem(ItemStack stack, int par3)
+    private void renderItem(EntityMecha mecha, ItemStack stack, int par3, float dT)
     {
         GL11.glPushMatrix();
         TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-        ItemRenderer renderer = new ItemRenderer(Minecraft.getMinecraft());
+		Item item = stack.getItem();
+		
+		//Render tools
+		if(item instanceof ItemMechaTool)
+		{
 
-        Icon icon = stack.getIconIndex();
-        if (icon == null)
-        {
-            GL11.glPopMatrix();
-            return;
-        }
-
-        texturemanager.bindTexture(texturemanager.getResourceLocation(stack.getItemSpriteNumber()));
-        Tessellator tessellator = Tessellator.instance;
-        float f = icon.getMinU();
-        float f1 = icon.getMaxU();
-        float f2 = icon.getMinV();
-        float f3 = icon.getMaxV();
-        float f4 = 0.0F;
-        float f5 = 0.3F;
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glTranslatef(-f4, -f5, 0.0F);
-        float f6 = 1.5F;
-        GL11.glScalef(f6, f6, f6);
-        GL11.glRotatef(50.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(335.0F, 0.0F, 0.0F, 1.0F);
-        GL11.glTranslatef(-0.9375F, -0.0625F, 0.0F);
-        renderer.renderItemIn2D(tessellator, f1, f2, f, f3, icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
-
-        if (stack.hasEffect(par3))
-        {
-            GL11.glDepthFunc(GL11.GL_EQUAL);
-            GL11.glDisable(GL11.GL_LIGHTING);
-            texturemanager.bindTexture(RES_ITEM_GLINT);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-            float f7 = 0.76F;
-            GL11.glColor4f(0.5F * f7, 0.25F * f7, 0.8F * f7, 1.0F);
-            GL11.glMatrixMode(GL11.GL_TEXTURE);
-            GL11.glPushMatrix();
-            float f8 = 0.125F;
-            GL11.glScalef(f8, f8, f8);
-            float f9 = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
-            GL11.glTranslatef(f9, 0.0F, 0.0F);
-            GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
-            renderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
-            GL11.glPopMatrix();
-            GL11.glPushMatrix();
-            GL11.glScalef(f8, f8, f8);
-            f9 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
-            GL11.glTranslatef(-f9, 0.0F, 0.0F);
-            GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
-            renderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
-            GL11.glPopMatrix();
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
-            GL11.glDisable(GL11.GL_BLEND);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glDepthFunc(GL11.GL_LEQUAL);
-        }
-
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-
+			GL11.glRotatef(-90F, 0F, 0F, 1F);
+			GL11.glTranslatef(0F, 0F, 0F);
+			ItemMechaTool toolItem = (ItemMechaTool)item;
+			MechaToolType toolType = toolItem.type;
+			bindTexture(FlansModResourceHandler.getTexture(toolType));
+			if(toolType.model != null)
+				toolType.model.render(mecha, true, dT);
+		}
+		else
+		{
+	        Icon icon = stack.getIconIndex();
+	        if (icon == null)
+	        {
+	            GL11.glPopMatrix();
+	            return;
+	        }
+	
+	        texturemanager.bindTexture(texturemanager.getResourceLocation(stack.getItemSpriteNumber()));
+	        Tessellator tessellator = Tessellator.instance;
+	        float f = icon.getMinU();
+	        float f1 = icon.getMaxU();
+	        float f2 = icon.getMinV();
+	        float f3 = icon.getMaxV();
+	        float f4 = 0.0F;
+	        float f5 = 0.3F;
+	        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+	        GL11.glTranslatef(-f4, -f5, 0.0F);
+	        float f6 = 1.5F;
+	        GL11.glScalef(f6, f6, f6);
+	        GL11.glTranslatef(0.2F, 0.7F, 0.0F);
+	        GL11.glRotatef(0.0F, 0.0F, 1.0F, 0.0F);
+	        GL11.glRotatef(-133.0F, 0.0F, 0.0F, 1.0F);
+	        
+	        renderer.renderItemIn2D(tessellator, f1, f2, f, f3, icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
+	
+	        if (stack.hasEffect(par3))
+	        {
+	            GL11.glDepthFunc(GL11.GL_EQUAL);
+	            GL11.glDisable(GL11.GL_LIGHTING);
+	            texturemanager.bindTexture(RES_ITEM_GLINT);
+	            GL11.glEnable(GL11.GL_BLEND);
+	            GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+	            float f7 = 0.76F;
+	            GL11.glColor4f(0.5F * f7, 0.25F * f7, 0.8F * f7, 1.0F);
+	            GL11.glMatrixMode(GL11.GL_TEXTURE);
+	            GL11.glPushMatrix();
+	            float f8 = 0.125F;
+	            GL11.glScalef(f8, f8, f8);
+	            float f9 = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
+	            GL11.glTranslatef(f9, 0.0F, 0.0F);
+	            GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
+	            renderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
+	            GL11.glPopMatrix();
+	            GL11.glPushMatrix();
+	            GL11.glScalef(f8, f8, f8);
+	            f9 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
+	            GL11.glTranslatef(-f9, 0.0F, 0.0F);
+	            GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
+	            renderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F, 256, 256, 0.0625F);
+	            GL11.glPopMatrix();
+	            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	            GL11.glDisable(GL11.GL_BLEND);
+	            GL11.glEnable(GL11.GL_LIGHTING);
+	            GL11.glDepthFunc(GL11.GL_LEQUAL);
+	        }
+	
+	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		}
         GL11.glPopMatrix();
     }
 }

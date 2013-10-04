@@ -13,15 +13,17 @@ public class ModelMechaTool extends ModelBase
 	
 	public void render(EntityMecha mecha, boolean leftHand, float f1)
 	{
+		float f5 = 1F / 16F;
+		
 		for(ModelRendererTurbo model : baseModel)
 		{
-			model.render(f1);
+			model.render(f5);
 		}
 		
 		for(ModelRendererTurbo model : drillModel)
 		{
 			//Rotate
-			model.render(f1);
+			model.render(f5);
 		}
 	}
 }

@@ -70,6 +70,20 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
 	}
 	
+	public void renderRightArm(float f5, EntityMecha mecha, float f)
+	{
+        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
+        	for(ModelRendererTurbo model : rightArmModel)
+        		model.render(f5);
+	}
+	
+	public void renderRightHand(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.rightArm))
+        	for(ModelRendererTurbo model : rightHandModel)
+        		model.render(f5);
+	}
+	
 	public void renderLegs(float f5, EntityMecha mecha, float f)
 	{        
         if(mecha.isPartIntact(EnumDriveablePart.hips))
