@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
 import net.minecraft.client.model.ModelBase;
 
 public class ModelDriveable extends ModelBase 

@@ -2,7 +2,6 @@ package co.uk.flansmods.common.driveables;
 
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.vector.Vector3f;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class DriveablePart 
@@ -77,12 +76,12 @@ public class DriveablePart
 		if(!driveable.canHitPart(type))
 			return false;
 		//Complicated. Will explain later. Someone remind me.
-		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);
-		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, (float)box.y / 16F, (float)(box.y + box.h) / 16F);
-		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
-		boolean inX = coordIsIn(origin.x, origin.x + motion.x, (float)box.x / 16F, (float)(box.x + box.w) / 16F);
-		boolean inY = coordIsIn(origin.y, origin.y + motion.y, (float)box.y / 16F, (float)(box.y + box.h) / 16F);
-		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, (float)box.z / 16F, (float)(box.z + box.d) / 16F);
+		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
+		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
+		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
+		boolean inX = coordIsIn(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
+		boolean inY = coordIsIn(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
+		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
 		boolean hit = (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
 		//If the bullet hits, perform damage code here, and then tell the bullet that it hit
 		if(bullet != null && hit)

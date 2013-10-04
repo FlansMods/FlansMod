@@ -26,6 +26,6 @@ public class Propeller
 	
 	public Vector3f getPosition()
 	{
-		return new Vector3f((float)x / 16F, (float)y / 16F, (float)z / 16F);
+		return new Vector3f(x / 16F, y / 16F, z / 16F);
 	}
 }

@@ -4,16 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +17,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -30,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
-import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
@@ -141,7 +135,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			NBTTagCompound tag = new NBTTagCompound();
 			driveableData.writeToNBT(tag);
-			tag.writeNamedTag(tag, data);
+			NBTBase.writeNamedTag(tag, data);
 			
 			data.writeFloat(axes.getYaw());
 			data.writeFloat(axes.getPitch());
@@ -321,8 +315,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        serverPosX = d;
 	        serverPosY = d1;
 	        serverPosZ = d2;
-	        serverYaw = (double)f;
-	        serverPitch = (double)f1;
+	        serverYaw = f;
+	        serverPitch = f1;
 		}
     }
 	
@@ -363,6 +357,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         motionZ = d2;
     }
 	
+	@Override
 	public abstract boolean pressKey(int key, EntityPlayer player);
 
 	@Override
@@ -398,13 +393,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	           		if(part.onFire)
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
-		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + rand.nextFloat() * (float)part.box.w / 16F, (float)part.box.y / 16F + rand.nextFloat() * (float)part.box.h / 16F, (float)part.box.z / 16F + rand.nextFloat() * (float)part.box.d / 16F));
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + rand.nextFloat() * part.box.w / 16F, part.box.y / 16F + rand.nextFloat() * part.box.h / 16F, part.box.z / 16F + rand.nextFloat() * part.box.d / 16F));
 		        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	           		if(part.health > 0 && part.health < part.maxHealth / 2)
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
-		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + rand.nextFloat() * (float)part.box.w / 16F, (float)part.box.y / 16F + rand.nextFloat() * (float)part.box.h / 16F, (float)part.box.z / 16F + rand.nextFloat() * (float)part.box.d / 16F));
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + rand.nextFloat() * part.box.w / 16F, part.box.y / 16F + rand.nextFloat() * part.box.h / 16F, part.box.z / 16F + rand.nextFloat() * part.box.d / 16F));
 		        		worldObj.spawnParticle(part.health < part.maxHealth / 4 ? "largesmoke" : "smoke", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	        	}
@@ -416,7 +411,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        			part.onFire = false;
 	        		//Also water blocks
 	        		//Get the centre point of the part
-	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
 	        		if(worldObj.getBlockMaterial(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)) == Material.water)
 	        		{
 	        			part.onFire = false;
@@ -424,7 +419,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        	}
 	        	else
 	        	{
-	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
 	        		if(worldObj.getBlockMaterial(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)) == Material.lava)
 	        		{
 	        			part.onFire = true;
@@ -1027,7 +1022,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					
 			//Get the midpoint of the part
 			if(part.box != null)
-	    		pos = axes.findLocalVectorGlobally(new Vector3f((float)part.box.x / 16F + (float)part.box.w / 32F, (float)part.box.y / 16F + (float)part.box.h / 32F, (float)part.box.z / 16F + (float)part.box.d / 32F));
+	    		pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
 	    		
 			ArrayList<ItemStack> drops = type.getItemsRequired(part, getDriveableData().engine);
     		if(drops != null)
@@ -1106,6 +1101,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	// Destroys the target with a boom. This is a forced way for the sentry too kill the target if
 	// it doesn't take damage
 	// Not needed in Flan due to plane is detroyed when HP = 0
+	@Override
 	public void destroyCraft()
 	{
 	
@@ -1117,6 +1113,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	// @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
 	// killed. Return 0 if this target is dead and destroyCraft() will be called.
 	
+	@Override
 	public int doDamage(int damage)
 	{
 		DriveablePart core = getDriveableData().parts.get(EnumDriveablePart.core);
@@ -1130,6 +1127,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	//
 	// @param entity - entity that is targeting this, can be an Entity, EntityLiving, or TileEntity
 	// @return true if it can
+	@Override
 	public boolean canBeTargeted(Object entity)
 	{
 		//Check config for option to show plane on radar

@@ -93,7 +93,7 @@ public class ModelMecha extends ModelDriveable
         }
         
         int legSwingTime = 5;
-        float legsYaw = (float)Math.sin(((float)(mecha.ticksExisted) + f) / (float) legSwingTime) * mecha.legSwing;
+        float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f) / legSwingTime) * mecha.legSwing;
         
         if(mecha.isPartIntact(EnumDriveablePart.leftLeg))
         {

@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
@@ -15,7 +14,6 @@ import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

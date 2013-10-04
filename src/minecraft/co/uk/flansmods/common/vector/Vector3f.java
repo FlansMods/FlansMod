@@ -90,6 +90,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.util.vector.WritableVector2f#set(float, float)
 	 */
+	@Override
 	public void set(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -98,6 +99,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.util.vector.WritableVector3f#set(float, float, float)
 	 */
+	@Override
 	public void set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
@@ -119,6 +121,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/**
 	 * @return the length squared of the vector
 	 */
+	@Override
 	public float lengthSquared() {
 		return x * x + y * y + z * z;
 	}
@@ -202,6 +205,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * Negate a vector
 	 * @return this
 	 */
+	@Override
 	public Vector negate() {
 		x = -x;
 		y = -y;
@@ -269,6 +273,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#load(FloatBuffer)
 	 */
+	@Override
 	public Vector load(FloatBuffer buf) {
 		x = buf.get();
 		y = buf.get();
@@ -279,6 +284,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#scale(float)
 	 */
+	@Override
 	public Vector scale(float scale) {
 
 		x *= scale;
@@ -292,6 +298,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see org.lwjgl.vector.Vector#store(FloatBuffer)
 	 */
+	@Override
 	public Vector store(FloatBuffer buf) {
 
 		buf.put(x);
@@ -304,6 +311,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(64);
 
@@ -320,6 +328,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/**
 	 * @return x
 	 */
+	@Override
 	public final float getX() {
 		return x;
 	}
@@ -327,6 +336,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/**
 	 * @return y
 	 */
+	@Override
 	public final float getY() {
 		return y;
 	}
@@ -335,6 +345,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * Set X
 	 * @param x
 	 */
+	@Override
 	public final void setX(float x) {
 		this.x = x;
 	}
@@ -343,6 +354,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * Set Y
 	 * @param y
 	 */
+	@Override
 	public final void setY(float y) {
 		this.y = y;
 	}
@@ -351,6 +363,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 * Set Z
 	 * @param z
 	 */
+	@Override
 	public void setZ(float z) {
 		this.z = z;
 	}
@@ -358,6 +371,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	/* (Overrides)
 	 * @see org.lwjgl.vector.ReadableVector3f#getZ()
 	 */
+	@Override
 	public float getZ() {
 		return z;
 	}

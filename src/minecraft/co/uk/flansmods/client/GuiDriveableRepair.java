@@ -1,19 +1,12 @@
 package co.uk.flansmods.client;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveablePart;
-import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
-import co.uk.flansmods.common.driveables.PilotGun;
-import co.uk.flansmods.common.driveables.Seat;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -198,6 +191,7 @@ public class GuiDriveableRepair extends GuiScreen
 		super.drawScreen(i, j, f);
     }	
     
+	@Override
 	protected void mouseClicked(int i, int j, int k)
     {
         super.mouseClicked(i, j, k);

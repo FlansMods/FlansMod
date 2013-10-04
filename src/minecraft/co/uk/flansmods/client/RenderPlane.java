@@ -1,9 +1,5 @@
 package co.uk.flansmods.client;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -12,16 +8,12 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.model.ModelDriveable;
-import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.driveables.CollisionPoint;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.Propeller;
-import co.uk.flansmods.common.guns.EntityBullet;
 
 public class RenderPlane extends Render
 {	
@@ -65,17 +57,17 @@ public class RenderPlane extends Render
 				if(part.box == null)
 					continue;
 				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
+				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
 			}
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)prop.x / 16F - 0.25F, (float)prop.y / 16F - 0.25F, (float)prop.z / 16F - 0.25F, (float)prop.x / 16F + 0.25F, (float)prop.y / 16F + 0.25F, (float)prop.z / 16F + 0.25F));
+				renderAABB(AxisAlignedBB.getBoundingBox(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F));
 			}
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+				renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
 			}
 			GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			if(type.bombPosition != null)
@@ -88,7 +80,8 @@ public class RenderPlane extends Render
         GL11.glPopMatrix();
     }   
 
-    public void doRender(Entity entity, double d, double d1, double d2, 
+    @Override
+	public void doRender(Entity entity, double d, double d1, double d2, 
             float f, float f1)
     {
         render((EntityPlane)entity, d, d1, d2, f, f1);

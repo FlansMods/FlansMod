@@ -1,7 +1,5 @@
 package co.uk.flansmods.common.guns;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +8,6 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.TypeFile;
-import co.uk.flansmods.common.driveables.PlaneType;
-
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
 

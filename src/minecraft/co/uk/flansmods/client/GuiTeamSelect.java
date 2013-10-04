@@ -12,7 +12,6 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.common.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
-import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -56,6 +55,7 @@ public class GuiTeamSelect extends GuiScreen
 		guiHeight = 29 + 24 * classes.length;
 	}
 		
+	@Override
 	public void initGui()
 	{
 		super.initGui();
@@ -82,6 +82,7 @@ public class GuiTeamSelect extends GuiScreen
 		}
 	}
 	
+	@Override
 	public void drawScreen(int i, int j, float f)
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
@@ -118,6 +119,7 @@ public class GuiTeamSelect extends GuiScreen
 		}
 	}
 	
+	@Override
 	protected void actionPerformed(GuiButton button)
     {
 		if(classMenu)
@@ -133,11 +135,13 @@ public class GuiTeamSelect extends GuiScreen
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
 	}
 	
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;
 	}
 	
+	@Override
 	protected void keyTyped(char c, int i)
 	{
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.keyCode)
@@ -152,7 +156,8 @@ public class GuiTeamSelect extends GuiScreen
 		}
 	}
 	
-    public void onGuiClosed() 
+    @Override
+	public void onGuiClosed() 
     {
 
     }

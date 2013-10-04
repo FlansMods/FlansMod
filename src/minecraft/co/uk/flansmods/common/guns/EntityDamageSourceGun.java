@@ -4,13 +4,10 @@ import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.teams.Team;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.StatCollector;
 
 public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 

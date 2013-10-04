@@ -1,17 +1,9 @@
 package co.uk.flansmods.common.driveables;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class VehicleType extends DriveableType
 {
@@ -72,7 +64,7 @@ public class VehicleType extends DriveableType
 			//Armaments
 			if(split[0].equals("BarrelPosition"))
 			{
-				barrelPosition = new Vector3f((float)Integer.parseInt(split[1]) / 16F, (float)Integer.parseInt(split[2]) / 16F, (float)Integer.parseInt(split[3]) / 16F);
+				barrelPosition = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
 			}
 			if(split[0].equals("ShootDelay"))
 				vehicleShootDelay = Integer.parseInt(split[1]);

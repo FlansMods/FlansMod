@@ -79,9 +79,9 @@ public class GametypeConquest extends Gametype {
 					if(!teamHasPlayersAlive)
 					{
 						Team winners = teamsManager.teams[1 - i];
-						teamsManager.messageAll("\u00a7" + winners.textColour + winners.name + "\u00a7f won!");
+						TeamsManager.messageAll("\u00a7" + winners.textColour + winners.name + "\u00a7f won!");
 						newRoundTimer = 200;
-						teamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
+						TeamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
 						time = -300;
 					}
 
@@ -91,7 +91,7 @@ public class GametypeConquest extends Gametype {
 		time++;
 		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
 		{
-			teamsManager.messageAll("\u00a7fAutobalancing teams...");
+			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
 		}
 		if(autoBalance && time % autoBalanceInterval == 0 && needAutobalance())
 		{
@@ -206,7 +206,7 @@ public class GametypeConquest extends Gametype {
 			getPlayerData(player).newPlayerClass = null;
 		}
 		
-		sendClassMenuToPlayer((EntityPlayerMP)player);
+		sendClassMenuToPlayer(player);
 		if(team != previousTeam)
 			teamsManager.forceRespawn(player);
 		return true;

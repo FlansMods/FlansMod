@@ -2,7 +2,6 @@ package co.uk.flansmods.common;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.io.BufferedReader;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */

@@ -10,12 +10,9 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveablePart;
-import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
-import co.uk.flansmods.common.driveables.Propeller;
 import co.uk.flansmods.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render
@@ -66,7 +63,7 @@ public class RenderVehicle extends Render
 				for(PilotGun gun : type.guns)
 				{		
 					if(gun.driveablePart == EnumDriveablePart.turret)
-						renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+						renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
 				}
 			}
 		}
@@ -84,7 +81,7 @@ public class RenderVehicle extends Render
 				if(part.box == null)
 					continue;
 				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
+				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
 			}
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			if(type.barrelPosition != null)
@@ -93,7 +90,7 @@ public class RenderVehicle extends Render
 			for(PilotGun gun : type.guns)
 			{				
 				if(gun.driveablePart != EnumDriveablePart.turret)
-					renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+					renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
 			}
 			GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -104,7 +101,8 @@ public class RenderVehicle extends Render
         GL11.glPopMatrix();
     }
 
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
+    @Override
+	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
     {
         render((EntityVehicle)entity, d, d1, d2, f, f1);
     }

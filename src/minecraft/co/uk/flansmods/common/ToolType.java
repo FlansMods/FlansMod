@@ -2,8 +2,6 @@ package co.uk.flansmods.common;
 
 import java.util.ArrayList;
 
-import co.uk.flansmods.client.model.ModelDriveable;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;

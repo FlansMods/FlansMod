@@ -5,14 +5,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.ContainerPlaneMenu;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -44,6 +41,7 @@ public class GuiDriveableMenu extends GuiContainer
 		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
 	}
 	
+	@Override
 	protected void actionPerformed(GuiButton button)
     {
 		//Replace with a packet requesting the GUI from the server
@@ -74,13 +72,15 @@ public class GuiDriveableMenu extends GuiContainer
 		}
     }
 
-    protected void drawGuiContainerForegroundLayer(int i, int j)
+    @Override
+	protected void drawGuiContainerForegroundLayer(int i, int j)
     {
         fontRenderer.drawString(entity.getDriveableType().name, 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 
-    protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
+    @Override
+	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(texture);

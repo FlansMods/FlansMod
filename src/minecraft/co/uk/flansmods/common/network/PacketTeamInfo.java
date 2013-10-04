@@ -6,8 +6,6 @@ import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.GuiTeamScores;
@@ -16,7 +14,6 @@ import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
-import co.uk.flansmods.common.teams.Team.ComparatorScore;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
@@ -14,7 +13,6 @@ import net.minecraft.client.particle.EntityBreakingFX;
 import net.minecraft.client.particle.EntityBubbleFX;
 import net.minecraft.client.particle.EntityCloudFX;
 import net.minecraft.client.particle.EntityCritFX;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.particle.EntityDropParticleFX;
 import net.minecraft.client.particle.EntityEnchantmentTableParticleFX;
 import net.minecraft.client.particle.EntityExplodeFX;

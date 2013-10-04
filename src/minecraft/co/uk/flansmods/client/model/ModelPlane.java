@@ -1,15 +1,11 @@
 package co.uk.flansmods.client.model;
 
-import java.util.HashMap;
-
-import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.Propeller;
-import co.uk.flansmods.common.vector.Vector3f;
 
 /** Extensible ModelPlane class for rendering plane models */
 public class ModelPlane extends ModelDriveable

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.driveables.DriveableType;
-import co.uk.flansmods.common.driveables.VehicleType;
 
 public class MechaType extends DriveableType 
 {

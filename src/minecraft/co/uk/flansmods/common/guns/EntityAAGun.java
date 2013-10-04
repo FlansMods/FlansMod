@@ -3,7 +3,6 @@ package co.uk.flansmods.common.guns;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,6 +72,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		setPosition(d, d1, d2);
 	}
 
+	@Override
 	public void setPosition(double d, double d1, double d2)
 	{
 		posX = d;
@@ -80,7 +80,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		boundingBox.setBounds(d - (double) f, (d1 - (double) yOffset) + (double) ySize, d2 - (double) f, d + (double) f, (d1 - (double) yOffset) + (double) ySize + (double) f1, d2 + (double) f);
+		boundingBox.setBounds(d - f, (d1 - yOffset) + ySize, d2 - f, d + f, (d1 - yOffset) + ySize + f1, d2 + f);
 	}
 
 	public void initType()
@@ -90,6 +90,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		ammo = new ItemStack[type.numBarrels];
 	}
 
+	@Override
 	protected void entityInit()
 	{
 	}
@@ -229,18 +230,18 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			if (field_9394_d > 0)
 			{
-				double d1 = posX + (field_9393_e - posX) / (double) field_9394_d;
-				double d5 = posY + (field_9392_f - posY) / (double) field_9394_d;
-				double d9 = posZ + (field_9391_g - posZ) / (double) field_9394_d;
+				double d1 = posX + (field_9393_e - posX) / field_9394_d;
+				double d5 = posY + (field_9392_f - posY) / field_9394_d;
+				double d9 = posZ + (field_9391_g - posZ) / field_9394_d;
 				double d12;
-				for (d12 = field_9390_h - (double) rotationYaw; d12 < -180D; d12 += 360D)
+				for (d12 = field_9390_h - rotationYaw; d12 < -180D; d12 += 360D)
 				{
 				}
 				for (; d12 >= 180D; d12 -= 360D)
 				{
 				}
-				rotationYaw += d12 / (double) field_9394_d;
-				rotationPitch += (field_9389_i - (double) rotationPitch) / (double) field_9394_d;
+				rotationYaw += d12 / field_9394_d;
+				rotationPitch += (field_9389_i - rotationPitch) / field_9394_d;
 				field_9394_d--;
 				setPosition(d1, d5, d9);
 				setRotation(rotationYaw, rotationPitch);

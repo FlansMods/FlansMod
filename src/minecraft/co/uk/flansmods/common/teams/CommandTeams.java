@@ -8,9 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
-import co.uk.flansmods.common.network.PacketTeamSelect;
 import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.util.ChatMessageComponent;
 
 public class CommandTeams extends CommandBase {
@@ -41,7 +39,7 @@ public class CommandTeams extends CommandBase {
 		if(split[0].equals("off"))
 		{
 			teamsManager.currentGametype = null;
-			teamsManager.messageAll("Flan's Teams Mod disabled");
+			TeamsManager.messageAll("Flan's Teams Mod disabled");
 			return;
 		}
 		if(split[0].equals("survival"))
@@ -57,7 +55,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.weaponDrops = 1;
 			FlansMod.vehiclesNeedFuel = true;
 			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = FlansMod.mechaLove = 0;
-			teamsManager.messageAll("Flan's Mod switching to survival presets");
+			TeamsManager.messageAll("Flan's Mod switching to survival presets");
 			return;
 		}
 		if(split[0].equals("arena"))
@@ -73,7 +71,7 @@ public class CommandTeams extends CommandBase {
 			FlansMod.weaponDrops = 2;
 			FlansMod.vehiclesNeedFuel = false;
 			FlansMod.mgLife = FlansMod.planeLife = FlansMod.vehicleLife = FlansMod.aaLife = FlansMod.mechaLove = 120;
-			teamsManager.messageAll("Flan's Mod switching to arena mode presets");
+			TeamsManager.messageAll("Flan's Mod switching to arena mode presets");
 			return;
 		}
 		if(split[0].equals("listGametypes"))
@@ -117,15 +115,15 @@ public class CommandTeams extends CommandBase {
 			}
 			teamsManager.currentGametype = gametype;
 
-			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the gametype to \u00a72" + gametype.name);
+			TeamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the gametype to \u00a72" + gametype.name);
 			if(teamsManager.teams != null && gametype.numTeamsRequired == teamsManager.teams.length)
 			{
-				teamsManager.messageAll("\u00a7fTeams will remain the same unless altered by an op.");
+				TeamsManager.messageAll("\u00a7fTeams will remain the same unless altered by an op.");
 			}
 			else
 			{
 				teamsManager.teams = new Team[gametype.numTeamsRequired];
-				teamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
+				TeamsManager.messageAll("\u00a7fTeams must be reassigned for this gametype. Please wait for an op to do so.");
 			}
 			gametype.initGametype();
 			return;
@@ -187,7 +185,7 @@ public class CommandTeams extends CommandBase {
 			TeamsMap map = teamsManager.getTeamsMap(split[1]);
 			if(map != null)
 			{
-				teamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
+				TeamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
 				teamsManager.currentMap = map;
 				if(teamsManager.currentGametype != null)
 				{
@@ -264,7 +262,7 @@ public class CommandTeams extends CommandBase {
 			}
 			teamsManager.teams = teams;
 			teamsManager.currentGametype.teamsSet();
-			teamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
+			TeamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
 			return;
 		}
 		if(split[0].equals("getSticks") || split[0].equals("getOpSticks") || split[0].equals("getOpKit"))

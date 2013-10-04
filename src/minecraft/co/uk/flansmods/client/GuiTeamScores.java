@@ -3,16 +3,11 @@ package co.uk.flansmods.client;
 import java.io.DataInputStream;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.teams.Team;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiTeamScores extends GuiScreen 
@@ -137,6 +132,7 @@ public class GuiTeamScores extends GuiScreen
         }
 	}
 	
+	@Override
 	public void drawScreen(int i, int j, float f)
 	{
 		if(gametype == null || gametype.equals("") || teamData == null || teamData.length < 1)

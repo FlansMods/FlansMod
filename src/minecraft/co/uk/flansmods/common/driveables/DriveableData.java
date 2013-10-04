@@ -5,12 +5,10 @@ import java.util.HashMap;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
-import co.uk.flansmods.common.guns.GunType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldSavedData;
 
 public class DriveableData implements IInventory
 {
@@ -101,12 +99,14 @@ public class DriveableData implements IInventory
 		}
     }
 	
+	@Override
 	public int getSizeInventory() 
 	{ 
 		return getFuelSlot() + 1; 
 	}
 
-    public ItemStack getStackInSlot(int i) 
+    @Override
+	public ItemStack getStackInSlot(int i) 
 	{ 
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
@@ -128,7 +128,8 @@ public class DriveableData implements IInventory
 		return inv[i];
 	}
 
-    public ItemStack decrStackSize(int i, int j) 
+    @Override
+	public ItemStack decrStackSize(int i, int j) 
 	{
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
@@ -173,12 +174,14 @@ public class DriveableData implements IInventory
 		
 	}
 
-    public ItemStack getStackInSlotOnClosing(int i) 
+    @Override
+	public ItemStack getStackInSlotOnClosing(int i) 
 	{ 
 		return getStackInSlot(i);	
 	}
 
-    public void setInventorySlotContents(int i, ItemStack stack) 
+    @Override
+	public void setInventorySlotContents(int i, ItemStack stack) 
 	{ 
 		//Find the correct inventory
 		ItemStack[] inv = ammo;
@@ -201,26 +204,32 @@ public class DriveableData implements IInventory
 		inv[i] = stack;
 	}
 
-    public String getInvName() 
+    @Override
+	public String getInvName() 
 	{ 
 		return "Flan's Secret Data"; 
 	}
 
-    public int getInventoryStackLimit() 
+    @Override
+	public int getInventoryStackLimit() 
 	{ 
 		return 64; 
 	}
 
-    public void onInventoryChanged() {}
+    @Override
+	public void onInventoryChanged() {}
 
-    public boolean isUseableByPlayer(EntityPlayer player) 
+    @Override
+	public boolean isUseableByPlayer(EntityPlayer player) 
 	{ 
 		return true; 
 	}
 
-    public void openChest() {}
+    @Override
+	public void openChest() {}
 
-    public void closeChest() {}
+    @Override
+	public void closeChest() {}
 	
 	public int getAmmoInventoryStart()
 	{

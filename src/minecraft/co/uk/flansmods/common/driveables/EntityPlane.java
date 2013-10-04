@@ -3,48 +3,30 @@ package co.uk.flansmods.common.driveables;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import co.uk.flansmods.api.IExplodeable;
-import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
-import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
-import co.uk.flansmods.common.vector.Matrix3f;
 import co.uk.flansmods.common.vector.Vector3f;
-
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityPlane extends EntityDriveable
 {
@@ -388,7 +370,8 @@ public class EntityPlane extends EntityDriveable
 		return false;
 	}
     
-    public void onUpdate()
+    @Override
+	public void onUpdate()
     {
         super.onUpdate();
         
@@ -451,15 +434,15 @@ public class EntityPlane extends EntityDriveable
 			//The driveable is currently moving towards its server position. Continue doing so.
             if (serverPositionTransitionTicker > 0)
             {
-                double x = posX + (serverPosX - posX) / (double)serverPositionTransitionTicker;
-                double y = posY + (serverPosY - posY) / (double)serverPositionTransitionTicker;
-                double z = posZ + (serverPosZ - posZ) / (double)serverPositionTransitionTicker;
-                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - (double)axes.getYaw());
-                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - (double)axes.getPitch());
-                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - (double)axes.getRoll());
-                rotationYaw = (float)((double)axes.getYaw() + dYaw / (double)serverPositionTransitionTicker);
-                rotationPitch = (float)((double)axes.getPitch() + dPitch / (double)serverPositionTransitionTicker);
-                float rotationRoll = (float)((double)axes.getRoll() + dRoll / (double)serverPositionTransitionTicker);
+                double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+                double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+                double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
+                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
+                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+                rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+                rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+                float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
                 --serverPositionTransitionTicker;
                 setPosition(x, y, z);
                 setRotation(rotationYaw, rotationPitch, rotationRoll);
@@ -641,6 +624,7 @@ public class EntityPlane extends EntityDriveable
 		}
     }
 	
+	@Override
 	public boolean gearDown()
 	{
 		return varGear;
@@ -692,6 +676,7 @@ public class EntityPlane extends EntityDriveable
 		return "Bombs";
 	}
 	
+	@Override
 	public boolean hasMouseControlMode()
 	{
 		return true;

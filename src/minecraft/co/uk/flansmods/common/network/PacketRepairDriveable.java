@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import cpw.mods.fml.relauncher.Side;

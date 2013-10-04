@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -66,10 +65,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		blockX = x;
 		blockY = y;
 		blockZ = z;
-		prevPosX = (double) x + 0.5D;
-		prevPosY = (double) y;
-		prevPosZ = (double) z + 0.5D;
-		setPosition((double) x + 0.5D, (double) y, (double) z + 0.5D);
+		prevPosX = x + 0.5D;
+		prevPosY = y;
+		prevPosZ = z + 0.5D;
+		setPosition(x + 0.5D, y, z + 0.5D);
 		direction = dir;
 		rotationYaw = 0;
 		rotationPitch = -60;
@@ -120,10 +119,10 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				prevRotationYaw = rotationYaw = -type.sideViewLimit;
 
 			// Keep user standing behind the gun
-			float angle = (float) direction * 90F + rotationYaw;
-			double dX = (double) (type.standBackDist * Math.sin(angle * 3.1415926535F / 180F));
-			double dZ = -(double) (type.standBackDist * Math.cos(angle * 3.1415926535F / 180F));
-			gunner.setPosition((double) (blockX + 0.5D + dX), blockY + gunner.getYOffset() - 0.5D, (double) (blockZ + 0.5D + dZ));
+			float angle = direction * 90F + rotationYaw;
+			double dX = (type.standBackDist * Math.sin(angle * 3.1415926535F / 180F));
+			double dZ = -(type.standBackDist * Math.cos(angle * 3.1415926535F / 180F));
+			gunner.setPosition((blockX + 0.5D + dX), blockY + gunner.getYOffset() - 0.5D, (blockZ + 0.5D + dZ));
 			// gunner.setPosition((double)(blockX + (direction == 1 ? 1 : 0) -
 			// (direction == 3 ? 1 : 0)) + 0.5D, blockY + gunner.getYOffset() -
 			// 0.5D, (double)(blockZ - (direction == 0 ? 1 : 0) + (direction ==
@@ -230,7 +229,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				}
 				// Fire
 				BulletType bullet = BulletType.getBullet(ammo.itemID);
-				if (gunner != null && !((EntityPlayer)gunner).capabilities.isCreativeMode)
+				if (gunner != null && !gunner.capabilities.isCreativeMode)
 					ammo.damageItem(1, (EntityLiving) player);
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)

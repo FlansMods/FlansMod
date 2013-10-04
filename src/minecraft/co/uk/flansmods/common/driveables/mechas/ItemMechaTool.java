@@ -21,11 +21,13 @@ public class ItemMechaTool extends Item
 		setCreativeTab(FlansMod.tabFlanParts);
 	}
 	
+	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 	}
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;

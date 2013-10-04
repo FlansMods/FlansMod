@@ -5,7 +5,6 @@ import java.util.List;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableData;
-import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,7 +50,8 @@ public class ItemMecha extends Item {
 		return stack.stackTagCompound;
 	}
 	
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    @Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
         float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
@@ -59,7 +59,7 @@ public class ItemMecha extends Item {
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.clip(posVec, lookVec, true);
         
@@ -90,7 +90,8 @@ public class ItemMecha extends Item {
 		return new DriveableData(getTagCompound(itemstack, world));
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;

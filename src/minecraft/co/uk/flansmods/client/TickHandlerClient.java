@@ -111,7 +111,7 @@ public class TickHandlerClient implements ITickHandler
 			{
 				//Draw team 1 colour bit
 				int colour = GuiTeamScores.teamData[0].team.teamColour;	
-				GL11.glColor4f((float)((colour >> 16) & 0xff) / 256F, (float)((colour >> 8) & 0xff) / 256F, (float)(colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
 				tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
@@ -120,7 +120,7 @@ public class TickHandlerClient implements ITickHandler
 				tessellator.draw();
 				//Draw team 2 colour bit
 				colour = GuiTeamScores.teamData[1].team.teamColour;	
-				GL11.glColor4f((float)((colour >> 16) & 0xff) / 256F, (float)((colour >> 8) & 0xff) / 256F, (float)(colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
@@ -277,11 +277,13 @@ public class TickHandlerClient implements ITickHandler
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
 
+	@Override
 	public EnumSet<TickType> ticks()
 	{
 		return EnumSet.of(TickType.RENDER, TickType.CLIENT);
 	}
 
+	@Override
 	public String getLabel()
 	{
 		return "FlansModClient";

@@ -22,7 +22,8 @@ public class ModelBomb extends ModelBase
         bombModel[3].addBox(-2F, 8F, -2F, 4, 2, 4, 0.0F);		
     }
 
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+    @Override
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
         for(int i = 0; i < 4; i++)
         {

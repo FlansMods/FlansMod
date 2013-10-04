@@ -6,10 +6,7 @@ import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.client.model.titan.ModelProtoTitan;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveablePart;
-import co.uk.flansmods.common.driveables.EntityVehicle;
-import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
-import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import net.minecraft.client.renderer.entity.Render;
@@ -60,12 +57,12 @@ public class RenderMecha extends Render
 				if(part.box == null)
 					continue;
 				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)part.box.x / 16F, (float)part.box.y / 16F, (float)part.box.z / 16F, (float)(part.box.x + part.box.w) / 16F, (float)(part.box.y + part.box.h) / 16F, (float)(part.box.z + part.box.d) / 16F));
+				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
 			}
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(PilotGun gun : type.guns)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox((float)gun.position.x - 0.25F, (float)gun.position.y - 0.25F, (float)gun.position.z - 0.25F, (float)gun.position.x + 0.25F, (float)gun.position.y + 0.25F, (float)gun.position.z + 0.25F));
+				renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
 			}
 			GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

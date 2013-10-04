@@ -1,6 +1,5 @@
 package co.uk.flansmods.common.driveables.mechas;
 
-import co.uk.flansmods.common.driveables.EntityDriveable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -23,7 +22,7 @@ public class ContainerMechaInventory extends Container
 		world = w;
 		mecha = em;
 		numItems = mecha.getDriveableType().numCargoSlots;
-		int numRows = (int)((numItems + 7) / 8);
+		int numRows = ((numItems + 7) / 8);
 		maxScroll = (numRows > 3 ? numRows - 3 : 0);
 		
 		int startSlot = mecha.driveableData.getCargoInventoryStart();
@@ -58,7 +57,7 @@ public class ContainerMechaInventory extends Container
 	public void updateScroll(int scrololol)
 	{
 		scroll = scrololol;
-				int m = (int)((numItems + 7) / 8);
+				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
 				{
 					int yPos = -1000;

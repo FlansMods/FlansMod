@@ -1,7 +1,5 @@
 package co.uk.flansmods.common.teams;
 
-import java.util.ArrayList;
-
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 
@@ -12,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityFlag extends Entity implements ITeamObject {
 	
@@ -35,7 +32,8 @@ public class EntityFlag extends Entity implements ITeamObject {
 		setBase(pole);
 	}
 	
-    public boolean canBeCollidedWith()
+    @Override
+	public boolean canBeCollidedWith()
     {
         return true;
     }
@@ -62,7 +60,8 @@ public class EntityFlag extends Entity implements ITeamObject {
 			{
 				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
 				Team team = FlansModPlayerHandler.getPlayerData(player.username).team;
-				TeamsManager.getInstance().messageAll("\u00a7f" + player.username + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
+				TeamsManager.getInstance();
+				TeamsManager.messageAll("\u00a7f" + player.username + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
 			ridingEntity = null;
 			

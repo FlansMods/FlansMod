@@ -1,7 +1,6 @@
 package co.uk.flansmods.common.teams;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansModPlayerHandler;
@@ -11,20 +10,15 @@ import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 
 public class EntityGunItem extends EntityItem {
 	
@@ -113,9 +107,9 @@ public class EntityGunItem extends EntityItem {
             }
         }
 
-        motionX *= (double)var2;
+        motionX *= var2;
         motionY *= 0.9800000190734863D;
-        motionZ *= (double)var2;
+        motionZ *= var2;
 
         if (onGround)
         {

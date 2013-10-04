@@ -47,6 +47,7 @@ public class TransformGroupBone extends TransformGroup
 		return attachedBone.getPosition();
 	}
 	
+	@Override
 	public double getWeight()
 	{
 		return weight;
@@ -59,6 +60,7 @@ public class TransformGroupBone extends TransformGroup
 		attachedBone = bone;
 	}
 	
+	@Override
 	public Vec3 doTransformation(PositionTransformVertex vertex)
 	{
 		Vec3 vector = Vec3.createVectorHelper(vertex.neutralVector.xCoord, vertex.neutralVector.yCoord, vertex.neutralVector.zCoord);

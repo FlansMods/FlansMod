@@ -52,9 +52,9 @@ public class Shape2D
 		{
 			Coord2D curCoord = coords.get(idx);
 			Coord2D nextCoord = coords.get((idx + 1) % coords.size());
-			float texU1 = ((float)(curCoord.uCoord + u) / (float)textureWidth);
-			float texU2 = ((float)(shapeTextureWidth * 2 - curCoord.uCoord + u) / (float)textureWidth);
-			float texV = ((float)(curCoord.vCoord + v) / (float)textureHeight);
+			float texU1 = ((curCoord.uCoord + u) / textureWidth);
+			float texU2 = ((shapeTextureWidth * 2 - curCoord.uCoord + u) / textureWidth);
+			float texV = ((curCoord.vCoord + v) / textureHeight);
 			
 			Vec3 vecCoord = Vec3.createVectorHelper(curCoord.xCoord, curCoord.yCoord, 0);
 			
@@ -93,10 +93,10 @@ public class Shape2D
 			float ratioPosition = currentLengthPosition / totalLength;
 			float ratioLength = (currentLengthPosition - currentLength) / totalLength;
 			
-			float texU1 = ((float)(ratioLength * (float)sideTextureWidth + u) / (float)textureWidth);
-			float texU2 = ((float)(ratioPosition * (float)sideTextureWidth + u) / (float)textureWidth);
-			float texV1 = (((float)v + (float)shapeTextureHeight) / (float)textureHeight);
-			float texV2 = (((float)v + (float)shapeTextureHeight + (float)sideTextureHeight) / (float)textureHeight);
+			float texU1 = ((ratioLength * sideTextureWidth + u) / textureWidth);
+			float texU2 = ((ratioPosition * sideTextureWidth + u) / textureWidth);
+			float texV1 = (((float)v + (float)shapeTextureHeight) / textureHeight);
+			float texV2 = (((float)v + (float)shapeTextureHeight + sideTextureHeight) / textureHeight);
 
 			PositionTransformVertex[] polySide = new PositionTransformVertex[4];
 			

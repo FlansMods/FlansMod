@@ -1,54 +1,24 @@
 package co.uk.flansmods.client;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.api.IControllable;
-import co.uk.flansmods.common.BlockGunBox;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.driveables.DriveableType;
-import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.driveables.EntityVehicle;
-import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
-import co.uk.flansmods.common.network.PacketBuyWeapon;
-import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod

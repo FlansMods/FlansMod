@@ -1,10 +1,5 @@
 package co.uk.flansmods.client;
 
-import java.util.ArrayList;
-
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Controller;
-import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -74,6 +69,7 @@ public class GuiDriveableController extends GuiScreen
 		}
     }
 	
+	@Override
 	protected void keyTyped(char c, int i)
     {
 		if(i == 1)
@@ -111,7 +107,8 @@ public class GuiDriveableController extends GuiScreen
 		}
     }
 	
-    public void handleInput()
+    @Override
+	public void handleInput()
     {
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.thePlayer)
@@ -210,12 +207,14 @@ public class GuiDriveableController extends GuiScreen
 		}
     }
 	
+	@Override
 	public void drawBackground(int i)
     {
 		//Plane gauges overlay
     }
 
-    public boolean doesGuiPauseGame()
+    @Override
+	public boolean doesGuiPauseGame()
     {
         return false;
     }

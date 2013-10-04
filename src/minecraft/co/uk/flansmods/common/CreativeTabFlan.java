@@ -2,11 +2,8 @@ package co.uk.flansmods.common;
 
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.guns.GunType;
-import co.uk.flansmods.common.teams.ArmourType;
-
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class CreativeTabFlan extends CreativeTabs

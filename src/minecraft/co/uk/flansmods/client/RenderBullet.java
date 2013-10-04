@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 
 public class RenderBullet extends Render
@@ -29,6 +28,7 @@ public class RenderBullet extends Render
 		GL11.glPopMatrix();
 	}
 
+	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 		render((EntityBullet) entity, d, d1, d2, f, f1);

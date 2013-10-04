@@ -48,10 +48,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
 		{
 			float speedMultiplier = 0.002F;
-			double moveForwards = (double)((EntityLivingBase)this.riddenByEntity).moveForward;
-			double moveStrafing = (double)((EntityLivingBase)this.riddenByEntity).moveStrafing;
-			double sinYaw = -Math.sin((double)(riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
-			double cosYaw = Math.cos((double)(this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+			double moveForwards = ((EntityLivingBase)this.riddenByEntity).moveForward;
+			double moveStrafing = ((EntityLivingBase)this.riddenByEntity).moveStrafing;
+			double sinYaw = -Math.sin((riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
+			double cosYaw = Math.cos((this.riddenByEntity.rotationYaw * (float)Math.PI / 180.0F));
 			motionX += (moveForwards * sinYaw + moveStrafing * cosYaw) * speedMultiplier;
 			motionZ += (moveForwards * cosYaw - moveStrafing * sinYaw) * speedMultiplier;
 			

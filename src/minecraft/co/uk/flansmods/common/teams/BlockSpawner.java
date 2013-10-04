@@ -3,12 +3,9 @@ package co.uk.flansmods.common.teams;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.TileEntityGunBox;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
@@ -21,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -137,7 +133,8 @@ public class BlockSpawner extends BlockContainer
 		}
 	}
 	
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
+    @Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
     {
     	if(world.isRemote)
     		return true;

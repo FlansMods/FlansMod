@@ -6,16 +6,9 @@ import java.io.DataOutputStream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.FlansModPlayerData;
-import co.uk.flansmods.common.FlansModPlayerHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

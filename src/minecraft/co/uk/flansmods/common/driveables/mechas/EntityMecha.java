@@ -15,7 +15,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import co.uk.flansmods.client.KeyInputHandler;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
@@ -25,7 +24,6 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
-import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -281,6 +279,7 @@ public class EntityMecha extends EntityDriveable
         return true;
     }
 	
+	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -320,15 +319,15 @@ public class EntityMecha extends EntityDriveable
 			//The driveable is currently moving towards its server position. Continue doing so.
             if (serverPositionTransitionTicker > 0)
             {
-                double x = posX + (serverPosX - posX) / (double)serverPositionTransitionTicker;
-                double y = posY + (serverPosY - posY) / (double)serverPositionTransitionTicker;
-                double z = posZ + (serverPosZ - posZ) / (double)serverPositionTransitionTicker;
-                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - (double)axes.getYaw());
-                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - (double)axes.getPitch());
-                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - (double)axes.getRoll());
-                rotationYaw = (float)((double)axes.getYaw() + dYaw / (double)serverPositionTransitionTicker);
-                rotationPitch = (float)((double)axes.getPitch() + dPitch / (double)serverPositionTransitionTicker);
-                float rotationRoll = (float)((double)axes.getRoll() + dRoll / (double)serverPositionTransitionTicker);
+                double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+                double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+                double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
+                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
+                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+                rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+                rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+                float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
                 --serverPositionTransitionTicker;
                 setPosition(x, y, z);
                 setRotation(rotationYaw, rotationPitch, rotationRoll);

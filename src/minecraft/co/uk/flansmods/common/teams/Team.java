@@ -1,6 +1,5 @@
 package co.uk.flansmods.common.teams;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +11,6 @@ import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.TypeFile;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

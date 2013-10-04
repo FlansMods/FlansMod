@@ -27,6 +27,6 @@ public class CollisionBox
 	/** @return The centre (in global co-ordinates) */
 	public Vector3f getCentre()
 	{
-		return new Vector3f((float)x / 16F + (float)w / 32F, (float)y / 16F + (float)h / 32F, (float)z / 16F + (float)d / 32F);
+		return new Vector3f(x / 16F + w / 32F, y / 16F + h / 32F, z / 16F + d / 32F);
 	}
 }

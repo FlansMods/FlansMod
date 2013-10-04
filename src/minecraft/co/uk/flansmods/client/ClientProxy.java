@@ -1,45 +1,23 @@
 package co.uk.flansmods.client;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.lang.reflect.Method;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipFile;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.client.debug.RenderDebugAABB;
 import co.uk.flansmods.client.debug.RenderDebugVector;
-import co.uk.flansmods.client.model.ModelAAGun;
-import co.uk.flansmods.client.model.ModelMG;
-import co.uk.flansmods.client.model.ModelPlane;
-import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.client.model.RenderMecha;
 import co.uk.flansmods.common.CommonProxy;
 import co.uk.flansmods.common.EntityParachute;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.GunBoxType;
-import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.ItemBullet;
-import co.uk.flansmods.common.PartType;
-import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.TileEntityGunBox;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
@@ -48,25 +26,18 @@ import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
-import co.uk.flansmods.common.guns.AAGunType;
-import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.guns.EntityMG;
-import co.uk.flansmods.common.guns.GrenadeType;
-import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import co.uk.flansmods.common.network.PacketRepairDriveable;
-import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.EntityFlag;
 import co.uk.flansmods.common.teams.EntityFlagpole;
 import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.TextureFXManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -126,6 +97,7 @@ public class ClientProxy extends CommonProxy
 		return contentPacks;
 	}
 	
+	@Override
 	public List<File> getContentList()
 	{
 		return contentPacks;
@@ -198,6 +170,7 @@ public class ClientProxy extends CommonProxy
 			player.addChatMessage("Mouse Control mode is now set to " + FlansModClient.controlModeMouse);
 	}
 	
+	@Override
 	public boolean mouseControlEnabled()
 	{
 		return FlansModClient.controlModeMouse;
@@ -278,6 +251,7 @@ public class ClientProxy extends CommonProxy
 		//FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
 	}
 	
+	@Override
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return player == FMLClientHandler.instance().getClient().thePlayer;

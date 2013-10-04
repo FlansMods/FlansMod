@@ -10,13 +10,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumGameType;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
@@ -25,7 +23,6 @@ import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketFlak;
-import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -136,9 +133,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		d /= f2;
 		d1 /= f2;
 		d2 /= f2;
-		d += rand.nextGaussian() * 0.005D * (double) spread;
-		d1 += rand.nextGaussian() * 0.005D * (double) spread;
-		d2 += rand.nextGaussian() * 0.005D * (double) spread;
+		d += rand.nextGaussian() * 0.005D * spread;
+		d1 += rand.nextGaussian() * 0.005D * spread;
+		d2 += rand.nextGaussian() * 0.005D * spread;
 		d *= speed;
 		d1 *= speed;
 		d2 *= speed;
@@ -255,7 +252,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		if(!isDead)
 		{
 			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand((double) type.hitBoxSize, (double) type.hitBoxSize, (double) type.hitBoxSize));
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(type.hitBoxSize, type.hitBoxSize, type.hitBoxSize));
 			for (int l = 0; l < list.size(); l++)
 			{
 				Entity checkEntity = (Entity) list.get(l);
@@ -332,7 +329,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			for(int i = 0; i < 4; i++)
 			{
 				float bubbleMotion = 0.25F;
-				worldObj.spawnParticle("bubble", posX - motionX * (double) bubbleMotion, posY - motionY * (double) bubbleMotion, posZ - motionZ * (double) bubbleMotion, motionX, motionY, motionZ);
+				worldObj.spawnParticle("bubble", posX - motionX * bubbleMotion, posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
 			}
 			drag = 0.8F;
 		}
@@ -350,7 +347,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			double dZ = (posZ - prevPosZ) / 10;
 			for (int i = 0; i < 10; i++)
 			{
-				worldObj.spawnParticle(type.trailParticles, prevPosX + dX * (double) i, prevPosY + dY * (double) i, prevPosZ + dZ * (double) i, 0, 0, 0);
+				worldObj.spawnParticle(type.trailParticles, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i, 0, 0, 0);
 			}
 		}
 	}

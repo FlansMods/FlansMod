@@ -1,7 +1,6 @@
 package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
-import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import net.minecraft.client.model.ModelBase;
 

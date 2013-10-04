@@ -1,7 +1,5 @@
 package co.uk.flansmods.client;
 
-import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -181,6 +179,7 @@ public class GuiGunBox extends GuiScreen
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
+	@Override
 	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);

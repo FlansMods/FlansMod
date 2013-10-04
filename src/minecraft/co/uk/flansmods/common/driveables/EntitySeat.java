@@ -16,21 +16,16 @@ import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketSeatUpdates;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -168,7 +163,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		prevPlayerPitch = playerPitch;
 
 		//Get the position of this seat on the driveable axes
-		Vector3f localPosition = new Vector3f((float)seatInfo.x / 16F, (float)seatInfo.y / 16F, (float)seatInfo.z / 16F);
+		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
 		//If this is the drivers seat, add the offset vector
 		if(driver)
 		{

@@ -3,19 +3,12 @@ package co.uk.flansmods.client;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableType;
-import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.network.PacketVehicleGUI;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

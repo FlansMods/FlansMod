@@ -2,31 +2,20 @@ package co.uk.flansmods.common;
 
 import java.util.List;
 
-import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
-import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.network.PacketFlak;
-import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -52,7 +41,8 @@ public class ItemTool extends Item
 		
 	}
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
@@ -117,7 +107,7 @@ public class ItemTool extends Item
         float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
         double length = -5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         
         if(world.isRemote && FlansMod.DEBUG)

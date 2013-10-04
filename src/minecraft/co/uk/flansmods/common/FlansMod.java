@@ -9,27 +9,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
-import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
@@ -52,7 +43,6 @@ import co.uk.flansmods.common.guns.ItemAAGun;
 import co.uk.flansmods.common.guns.ItemGrenade;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
-import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.BlockSpawner;
 import co.uk.flansmods.common.teams.ChunkLoadingHandler;
@@ -71,12 +61,7 @@ import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -89,7 +74,6 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.1.2")
@@ -263,7 +247,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		
 		// GunBox block 
-		gunBoxBlock = (BlockGunBox) new BlockGunBox(gunBoxID);
+		gunBoxBlock = new BlockGunBox(gunBoxID);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 

@@ -69,13 +69,15 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		this(world, x + 0.5D, y, z + 0.5D);
 	}
 		
-    public AxisAlignedBB getBoundingBox()
+    @Override
+	public AxisAlignedBB getBoundingBox()
     {
     	return null;
         //return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
     }
     
-    public boolean canBeCollidedWith()
+    @Override
+	public boolean canBeCollidedWith()
     {
         return true;
     }
@@ -142,7 +144,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		updateOwners(newOwners);
 		currentTeam = newOwners;
-		teamsManager.messageAll("\u00a7" + newOwners.textColour + newOwners.name + "\u00a7f captured " + name + "!");
+		TeamsManager.messageAll("\u00a7" + newOwners.textColour + newOwners.name + "\u00a7f captured " + name + "!");
 	}
 	
 	public void updateOwners(Team newOwners)
@@ -198,6 +200,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		setDead();
 	}
 
+	@Override
 	public Entity getEntity()
 	{
 		return this;

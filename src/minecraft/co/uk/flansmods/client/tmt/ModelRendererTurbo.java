@@ -111,7 +111,7 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			for(int i = 0; i < verts.length; i++)
 			{
-				verts[i] = verts[i].setTexturePosition((float)uv[i][0] / textureWidth, (float)uv[i][1] / textureHeight);
+				verts[i] = verts[i].setTexturePosition(uv[i][0] / textureWidth, uv[i][1] / textureHeight);
 			}
 		}
 		finally
@@ -137,8 +137,8 @@ public class ModelRendererTurbo extends ModelRenderer
 	{
 		if(verts.length < 3)
 			return null;
-		float uOffs = 1.0F / ((float) textureWidth * 10.0F);
-		float vOffs = 1.0F / ((float) textureHeight * 10.0F);
+		float uOffs = 1.0F / (textureWidth * 10.0F);
+		float vOffs = 1.0F / (textureHeight * 10.0F);
 		if(verts.length < 4)
 		{
 			float xMin = -1;
@@ -155,10 +155,10 @@ public class ModelRendererTurbo extends ModelRenderer
 				yMax = Math.max(yMax, yPos);
 				yMin = (yMin < -1 ? yPos : Math.min(yMin, yPos));
 			}
-			float uMin = (float) u1 / (float) textureWidth + uOffs;
-			float vMin = (float) v1 / (float) textureHeight + vOffs;
-			float uSize = (float) (u2 - u1) / (float) textureWidth - uOffs * 2;
-			float vSize = (float) (v2 - v1) / (float) textureHeight - vOffs * 2;
+			float uMin = u1 / textureWidth + uOffs;
+			float vMin = v1 / textureHeight + vOffs;
+			float uSize = (u2 - u1) / textureWidth - uOffs * 2;
+			float vSize = (v2 - v1) / textureHeight - vOffs * 2;
 			
 			float xSize = xMax - xMin;
 			float ySize = yMax - yMin;
@@ -173,10 +173,10 @@ public class ModelRendererTurbo extends ModelRenderer
 		}
 		else
 		{
-			verts[0] = verts[0].setTexturePosition(((float)u2 / (float) textureWidth - uOffs)*q1, ((float)v1 / (float)textureHeight + vOffs)*q1, q1);
-			verts[1] = verts[1].setTexturePosition(((float)u1 / (float) textureWidth + uOffs)*q2, ((float)v1 / (float)textureHeight + vOffs)*q2, q2);
-			verts[2] = verts[2].setTexturePosition(((float)u1 / (float) textureWidth + uOffs)*q3, ((float)v2 / (float)textureHeight - vOffs)*q3, q3);
-			verts[3] = verts[3].setTexturePosition(((float)u2 / (float) textureWidth - uOffs)*q4, ((float)v2 / (float)textureHeight - vOffs)*q4, q4);
+			verts[0] = verts[0].setTexturePosition((u2 / textureWidth - uOffs)*q1, (v1 / textureHeight + vOffs)*q1, q1);
+			verts[1] = verts[1].setTexturePosition((u1 / textureWidth + uOffs)*q2, (v1 / textureHeight + vOffs)*q2, q2);
+			verts[2] = verts[2].setTexturePosition((u1 / textureWidth + uOffs)*q3, (v2 / textureHeight - vOffs)*q3, q3);
+			verts[3] = verts[3].setTexturePosition((u2 / textureWidth - uOffs)*q4, (v2 / textureHeight - vOffs)*q4, q4);
 		}
 		return new TexturedPolygon(verts);
 	}
@@ -185,8 +185,8 @@ public class ModelRendererTurbo extends ModelRenderer
 	{
 		if(verts.length < 3)
 			return null;
-		float uOffs = 1.0F / ((float) textureWidth * 10.0F);
-		float vOffs = 1.0F / ((float) textureHeight * 10.0F);
+		float uOffs = 1.0F / (textureWidth * 10.0F);
+		float vOffs = 1.0F / (textureHeight * 10.0F);
 		if(verts.length < 4)
 		{
 			float xMin = -1;
@@ -203,10 +203,10 @@ public class ModelRendererTurbo extends ModelRenderer
 				yMax = Math.max(yMax, yPos);
 				yMin = (yMin < -1 ? yPos : Math.min(yMin, yPos));
 			}
-			float uMin = (float) u1 / (float) textureWidth + uOffs;
-			float vMin = (float) v1 / (float) textureHeight + vOffs;
-			float uSize = (float) (u2 - u1) / (float) textureWidth - uOffs * 2;
-			float vSize = (float) (v2 - v1) / (float) textureHeight - vOffs * 2;
+			float uMin = u1 / textureWidth + uOffs;
+			float vMin = v1 / textureHeight + vOffs;
+			float uSize = (u2 - u1) / textureWidth - uOffs * 2;
+			float vSize = (v2 - v1) / textureHeight - vOffs * 2;
 			
 			float xSize = xMax - xMin;
 			float ySize = yMax - yMin;
@@ -221,10 +221,10 @@ public class ModelRendererTurbo extends ModelRenderer
 		}
 		else
 		{
-			verts[0] = verts[0].setTexturePosition((float)u2 / (float) textureWidth - uOffs, (float)v1 / (float)textureHeight + vOffs);
-			verts[1] = verts[1].setTexturePosition((float)u1 / (float) textureWidth + uOffs, (float)v1 / (float)textureHeight + vOffs);
-			verts[2] = verts[2].setTexturePosition((float)u1 / (float) textureWidth + uOffs, (float)v2 / (float)textureHeight - vOffs);
-			verts[3] = verts[3].setTexturePosition((float)u2 / (float) textureWidth - uOffs, (float)v2 / (float)textureHeight - vOffs);
+			verts[0] = verts[0].setTexturePosition(u2 / textureWidth - uOffs, v1 / textureHeight + vOffs);
+			verts[1] = verts[1].setTexturePosition(u1 / textureWidth + uOffs, v1 / textureHeight + vOffs);
+			verts[2] = verts[2].setTexturePosition(u1 / textureWidth + uOffs, v2 / textureHeight - vOffs);
+			verts[3] = verts[3].setTexturePosition(u2 / textureWidth - uOffs, v2 / textureHeight - vOffs);
 		}
 		return new TexturedPolygon(verts);
 	}
@@ -331,6 +331,7 @@ public class ModelRendererTurbo extends ModelRenderer
 	 * @param h the height (over the y-direction)
 	 * @param d the depth (over the z-direction)
 	 */
+	@Override
 	public ModelRendererTurbo addBox(float x, float y, float z, int w, int h, int d)
 	{
 		addBox(x, y, z, w, h, d, 0.0F);
@@ -347,6 +348,7 @@ public class ModelRendererTurbo extends ModelRenderer
 	 * @param d the depth (over the z-direction)
 	 * @param expansion the expansion of the box. It increases the size in each direction by that many.
 	 */
+	@Override
 	public void addBox(float x, float y, float z, int w, int h, int d, float expansion)
 	{
 		addBox(x, y, z, w, h, d, expansion, 1F);
@@ -365,17 +367,17 @@ public class ModelRendererTurbo extends ModelRenderer
 	 */
 	public void addBox(float x, float y, float z, int w, int h, int d, float expansion, float scale)
 	{
-		float scaleX = (float)w * scale;
-		float scaleY = (float)h * scale;
-		float scaleZ = (float)d * scale;
+		float scaleX = w * scale;
+		float scaleY = h * scale;
+		float scaleZ = d * scale;
 		
 		float x1 = x + scaleX;
 		float y1 = y + scaleY;
 		float z1 = z + scaleZ;
 		
-		float expX = expansion + scaleX - (float)w;
-		float expY = expansion + scaleY - (float)h;
-		float expZ = expansion + scaleZ - (float)d;
+		float expX = expansion + scaleX - w;
+		float expY = expansion + scaleY - h;
+		float expZ = expansion + scaleZ - d;
 		
 		x -= expX;
 		y -= expY;
@@ -418,9 +420,9 @@ public class ModelRendererTurbo extends ModelRenderer
 	 */
 	public void addTrapezoid(float x, float y, float z, int w, int h, int d, float scale, float bottomScale, int dir)
 	{
-		float f4 = x + (float)w;
-		float f5 = y + (float)h;
-		float f6 = z + (float)d;
+		float f4 = x + w;
+		float f5 = y + h;
+		float f6 = z + d;
 		x -= scale;
 		y -= scale;
 		z -= scale;
@@ -549,9 +551,9 @@ public class ModelRendererTurbo extends ModelRenderer
 	*/
 	public void addFlexBox(float x, float y, float z, int w, int h, int d, float scale, float bScale1, float bScale2, float bScale3, float bScale4, int dir)
 	{
-		float f4 = x + (float)w;
-		float f5 = y + (float)h;
-		float f6 = z + (float)d;
+		float f4 = x + w;
+		float f5 = y + h;
+		float f6 = z + d;
 		x -= scale;
 		y -= scale;
 		z -= scale;
@@ -682,9 +684,9 @@ public class ModelRendererTurbo extends ModelRenderer
 	*/
 	public void addFlexTrapezoid(float x, float y, float z, int w, int h, int d, float scale, float bScale1, float bScale2, float bScale3, float bScale4, float fScale1, float fScale2, int dir)
 	{
-		float f4 = x + (float)w;
-		float f5 = y + (float)h;
-		float f6 = z + (float)d;
+		float f4 = x + w;
+		float f5 = y + h;
+		float f6 = z + d;
 		x -= scale;
 		y -= scale;
 		z -= scale;
@@ -840,9 +842,9 @@ public class ModelRendererTurbo extends ModelRenderer
 	*/
 	public void addShapeBox(float x, float y, float z, int w, int h, int d, float scale, float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float x5, float y5, float z5, float x6, float y6, float z6, float x7, float y7, float z7)
 	{
-		float f4 = x + (float)w;
-		float f5 = y + (float)h;
-		float f6 = z + (float)d;
+		float f4 = x + w;
+		float f5 = y + h;
+		float f6 = z + d;
 		x -= scale;
 		y -= scale;
 		z -= scale;
@@ -1272,8 +1274,8 @@ public class ModelRendererTurbo extends ModelRenderer
 		int hDir = 0;
 		int dDir = 0;
 		
-		float wScale = 1F + (expansion / ((float) w * pixelScale));
-		float hScale = 1F + (expansion / ((float) h * pixelScale));
+		float wScale = 1F + (expansion / (w * pixelScale));
+		float hScale = 1F + (expansion / (h * pixelScale));
 						
 		if(!rotX)
 		{
@@ -1393,14 +1395,14 @@ public class ModelRendererTurbo extends ModelRenderer
 		tempVerts[0] = new PositionTextureVertex(x, y - r, z, 0, 0);
 		tempVerts[tempVerts.length - 1] = new PositionTextureVertex(x, y + r, z, 0, 0);
 		
-		float uOffs = 1.0F / ((float) textureWidth * 10.0F);
-		float vOffs = 1.0F / ((float) textureHeight * 10.0F);
-		float texW = (float) textureW / (float)textureWidth - 2F * uOffs;
-		float texH = (float) textureH / (float)textureHeight - 2F * vOffs;
-		float segW = texW / (float) segs;
-		float segH = texH / (float) rings;
-		float startU = (float) textureOffsetX / (float) textureWidth;
-		float startV = (float) textureOffsetY / (float) textureHeight;
+		float uOffs = 1.0F / (textureWidth * 10.0F);
+		float vOffs = 1.0F / (textureHeight * 10.0F);
+		float texW = textureW / textureWidth - 2F * uOffs;
+		float texH = textureH / textureHeight - 2F * vOffs;
+		float segW = texW / segs;
+		float segH = texH / rings;
+		float startU = textureOffsetX / textureWidth;
+		float startV = textureOffsetY / textureHeight;
 				
 		int currentFace = 0;
 		
@@ -1408,10 +1410,10 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			for(int i = 0; i < segs; i++)
 			{
-				float yWidth = MathHelper.cos(-pi / 2 + (pi / (float)rings) * (float) j);
-				float yHeight = MathHelper.sin(-pi / 2 + (pi / (float)rings) * (float) j);
-				float xSize = MathHelper.sin((pi / (float)segs) * i * 2F + pi) * yWidth;
-				float zSize = -MathHelper.cos((pi / (float)segs) * i * 2F + pi) * yWidth;
+				float yWidth = MathHelper.cos(-pi / 2 + (pi / rings) * j);
+				float yHeight = MathHelper.sin(-pi / 2 + (pi / rings) * j);
+				float xSize = MathHelper.sin((pi / segs) * i * 2F + pi) * yWidth;
+				float zSize = -MathHelper.cos((pi / segs) * i * 2F + pi) * yWidth;
 				int curVert = 1 + i + segs * (j - 1);
 				tempVerts[curVert] = new PositionTextureVertex(x + xSize * r, y + yHeight * r, z + zSize * r, 0, 0);
 				if(i > 0)
@@ -1675,8 +1677,8 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			for(int index = 0; index < segments; index++)
 			{
-				float xSize = (mirror ^ dirMirror ? -1 : 1) * MathHelper.sin((pi / (float)segments) * index * 2F + pi) * radius * sCur;
-				float zSize = -MathHelper.cos((pi / (float)segments) * index * 2F + pi) * radius * sCur;
+				float xSize = (mirror ^ dirMirror ? -1 : 1) * MathHelper.sin((pi / segments) * index * 2F + pi) * radius * sCur;
+				float zSize = -MathHelper.cos((pi / segments) * index * 2F + pi) * radius * sCur;
 				
 				float xPlace = xCur + (!dirSide ? xSize : 0);
 				float yPlace = yCur + (!dirTop ? zSize : 0);
@@ -1690,25 +1692,25 @@ public class ModelRendererTurbo extends ModelRenderer
 			sCur = topScale;
 		}
 	  
-		float uScale = 1.0F / (float) textureWidth;
-		float vScale = 1.0F / (float) textureHeight;
+		float uScale = 1.0F / textureWidth;
+		float vScale = 1.0F / textureHeight;
 		float uOffset = uScale / 20.0F;
 		float vOffset = vScale / 20.0F;
-		float uCircle = (float)textureCircleDiameterW * uScale;
-		float vCircle = (float)textureCircleDiameterH * vScale;
-		float uWidth = (uCircle * 2F - uOffset * 2F) / (float) segments;
-		float vHeight = (float)textureH * vScale - uOffset * 2f;
-		float uStart = (float)textureOffsetX * uScale;
-		float vStart = (float)textureOffsetY * vScale;
+		float uCircle = textureCircleDiameterW * uScale;
+		float vCircle = textureCircleDiameterH * vScale;
+		float uWidth = (uCircle * 2F - uOffset * 2F) / segments;
+		float vHeight = textureH * vScale - uOffset * 2f;
+		float uStart = textureOffsetX * uScale;
+		float vStart = textureOffsetY * vScale;
 				
 		PositionTextureVertex[] vert;
 		for(int index = 0; index < segments; index++)
 		{
 			int index2 = (index + 1) % segments;
-			float uSize = MathHelper.sin((pi / (float)segments) * index * 2F + (!dirTop ? 0 : pi)) * (0.5F * uCircle - 2F * uOffset);
-			float vSize = MathHelper.cos((pi / (float)segments) * index * 2F + (!dirTop ? 0 : pi)) * (0.5F * vCircle - 2F * vOffset);
-			float uSize1 = MathHelper.sin((pi / (float)segments) * index2 * 2F + (!dirTop ? 0 : pi)) * (0.5F * uCircle - 2F * uOffset);
-			float vSize1 = MathHelper.cos((pi / (float)segments) * index2 * 2F + (!dirTop ? 0 : pi)) * (0.5F * vCircle - 2F * vOffset);
+			float uSize = MathHelper.sin((pi / segments) * index * 2F + (!dirTop ? 0 : pi)) * (0.5F * uCircle - 2F * uOffset);
+			float vSize = MathHelper.cos((pi / segments) * index * 2F + (!dirTop ? 0 : pi)) * (0.5F * vCircle - 2F * vOffset);
+			float uSize1 = MathHelper.sin((pi / segments) * index2 * 2F + (!dirTop ? 0 : pi)) * (0.5F * uCircle - 2F * uOffset);
+			float vSize1 = MathHelper.cos((pi / segments) * index2 * 2F + (!dirTop ? 0 : pi)) * (0.5F * vCircle - 2F * vOffset);
 			vert = new PositionTextureVertex[3];
 						
 			vert[0] = tempVerts[0].setTexturePosition(uStart + 0.5F * uCircle, vStart + 0.5F * vCircle);
@@ -1723,10 +1725,10 @@ public class ModelRendererTurbo extends ModelRenderer
 			{
 				vert = new PositionTextureVertex[4];
 				
-				vert[0] = tempVerts[1 + index].setTexturePosition(uStart + uOffset + uWidth * (float)index, vStart + vOffset + vCircle);
-				vert[1] = tempVerts[1 + index2].setTexturePosition(uStart + uOffset + uWidth * (float)(index + 1), vStart + vOffset + vCircle);
-				vert[2] = tempVerts[1 + segments + index2].setTexturePosition(uStart + uOffset + uWidth * (float)(index + 1), vStart + vOffset + vCircle + vHeight);
-				vert[3] = tempVerts[1 + segments + index].setTexturePosition(uStart + uOffset + uWidth * (float)index, vStart + vOffset + vCircle + vHeight);
+				vert[0] = tempVerts[1 + index].setTexturePosition(uStart + uOffset + uWidth * index, vStart + vOffset + vCircle);
+				vert[1] = tempVerts[1 + index2].setTexturePosition(uStart + uOffset + uWidth * (index + 1), vStart + vOffset + vCircle);
+				vert[2] = tempVerts[1 + segments + index2].setTexturePosition(uStart + uOffset + uWidth * (index + 1), vStart + vOffset + vCircle + vHeight);
+				vert[3] = tempVerts[1 + segments + index].setTexturePosition(uStart + uOffset + uWidth * index, vStart + vOffset + vCircle + vHeight);
 				poly[index + segments] = new TexturedPolygon(vert);
 				if(mirror ^ flip)
 					poly[index + segments].flipFace();
@@ -1784,6 +1786,7 @@ public class ModelRendererTurbo extends ModelRenderer
 	 * @param x the x-coordinate of the texture start
 	 * @param y the y-coordinate of the texture start
 	 */
+	@Override
 	public ModelRendererTurbo setTextureOffset(int x, int y)
 	{
 		textureOffsetX = x;
@@ -2021,6 +2024,7 @@ public class ModelRendererTurbo extends ModelRenderer
 	 * Renders the shape.
 	 * @param worldScale the scale of the shape. Usually is 0.0625.
 	 */
+	@Override
 	public void render(float worldScale)
 	{
 		if(field_1402_i)
@@ -2090,6 +2094,7 @@ public class ModelRendererTurbo extends ModelRenderer
 		}
 	}
 	
+	@Override
 	public void renderWithRotation(float f)
 	{
 		if(field_1402_i)
@@ -2122,6 +2127,7 @@ public class ModelRendererTurbo extends ModelRenderer
 		GL11.glPopMatrix();
 	}
 
+	@Override
 	public void postRender(float f)
 	{
 		if(field_1402_i)
@@ -2171,7 +2177,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			Iterator<TextureGroup> itr = textures.iterator();
 			for(int i = 0; itr.hasNext(); i++)
 			{
-				TextureGroup curTexGroup = (TextureGroup)itr.next();
+				TextureGroup curTexGroup = itr.next();
 				curTexGroup.loadTexture();
 				GL11.glCallList(displayListArray[i]);
 				if(!defaultTexture.equals(""))
@@ -2196,7 +2202,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				GL11.glNewList(displayListArray[i], GL11.GL_COMPILE);
 				TmtTessellator tessellator = TmtTessellator.instance;
 				
-				TextureGroup usedGroup = (TextureGroup)itr.next();
+				TextureGroup usedGroup = itr.next();
 				for(int j = 0; j < usedGroup.poly.size(); j++)
 				{
 					usedGroup.poly.get(j).draw(tessellator, worldScale);

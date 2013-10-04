@@ -2,12 +2,10 @@ package co.uk.flansmods.common;
 
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
 import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.teams.PlayerClass;
 import co.uk.flansmods.common.teams.Team;
-import co.uk.flansmods.common.teams.TeamsManager;
 
 public class FlansModPlayerData 
 {
