@@ -1,8 +1,11 @@
-package co.uk.flansmods.client.model.titan;
+package co.uk.flansmods.client;
+
+import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -35,13 +38,29 @@ public class GuiMechaInventory extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y)
     {
-    	
+        fontRenderer.drawString(mecha.getMechaType().name, 6, 6, 0x404040);
+        fontRenderer.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
     }
 	
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		// TODO Auto-generated method stub
+	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
+	{
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        
+        mc.renderEngine.bindTexture(texture);
 
+        int j = (width - xSize) / 2;
+        int k = (height - ySize) / 2;
+        drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
+		int numRows = ((numItems + 7) / 8);
+		for(int row = 0; row < (numRows > 3 ? 3 : numRows); row++)
+		{
+			drawTexturedModalRect(j + 184, k + 24 + 19 * row, 182, 97, 18 * ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8), 18);
+		}
+		if(scroll == 0)
+			drawTexturedModalRect(j + 336, k + 41, 351, 0, 10, 10);
+		if(scroll == maxScroll)
+			drawTexturedModalRect(j + 336, k + 53, 351, 10, 10, 10);
 	}
 
 }
