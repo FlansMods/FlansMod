@@ -39,9 +39,7 @@ public class EntityMecha extends EntityDriveable
     public RotatedAxes legAxes;
     public float prevLegsYaw = 0F;
     private int jumpDelay = 0;
-    
-    public ItemStack leftStack, rightStack;
-
+    public MechaInventory inventory;
 
 	public EntityMecha(World world) 
 	{
@@ -59,6 +57,7 @@ public class EntityMecha extends EntityDriveable
 		stepHeight = 3;
 		setPosition(x, y, z);
 		initType(type, false);
+		inventory = new MechaInventory(this);
 	}
 	
 	public EntityMecha(World world, double x, double y, double z, EntityPlayer placer, MechaType type, DriveableData data) 
