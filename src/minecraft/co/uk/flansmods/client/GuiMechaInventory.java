@@ -1,4 +1,4 @@
-package co.uk.flansmods.client.model.titan;
+package co.uk.flansmods.client;
 
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
