@@ -3,6 +3,7 @@ package co.uk.flansmods.client.model;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.client.FlansModResourceHandler;
+import co.uk.flansmods.client.model.titan.ModelProtoTitan;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.EntityVehicle;
@@ -43,6 +44,7 @@ public class RenderMecha extends Render
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
+        model = new ModelProtoTitan();
 		if(model != null)
 			model.render(mecha, f1);		
 		

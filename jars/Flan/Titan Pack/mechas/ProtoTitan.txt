@@ -25,7 +25,7 @@ RotateSpeed 14
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
 StepHeight 1
-JumpHeight 3
+JumpHeight 2
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
