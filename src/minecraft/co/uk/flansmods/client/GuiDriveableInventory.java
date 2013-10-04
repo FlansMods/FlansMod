@@ -3,24 +3,27 @@ package co.uk.flansmods.client;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.ContainerPlaneInventory;
 import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
-
 
 public class GuiDriveableInventory extends GuiContainer
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeInventory.png");
 
+	public ContainerPlaneInventory container;
+	public InventoryPlayer inventory;
+	public World world;
+	public int scroll;
+	public int numItems;
+	public int maxScroll;
+	public EntityDriveable driveable;
+	public int screen; //0 = Guns, 1 = Bombs, 2 = Cargo
 	
     public GuiDriveableInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
     {
@@ -35,7 +38,8 @@ public class GuiDriveableInventory extends GuiContainer
 		numItems = container.numItems;
     }
 	
-    protected void drawGuiContainerForegroundLayer(int x, int y)
+    @Override
+	protected void drawGuiContainerForegroundLayer(int x, int y)
     {
 		String wololo = " - Guns";
 		if(screen == 1) wololo = " - " + driveable.getBombInventoryName();
@@ -106,7 +110,8 @@ public class GuiDriveableInventory extends GuiContainer
 		return "Not a Gun";
 	}
 
-    protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
+    @Override
+	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -128,7 +133,7 @@ public class GuiDriveableInventory extends GuiContainer
 			case 1 :
 			case 2 :
 			{
-				int m = (int)((numItems + 7) / 8);
+				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < (m > 3 ? 3 : m); row++)
 				{
 					drawTexturedModalRect(j + 9, k + 24 + 19 * row, 7, 97, 18 * ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8), 18);
@@ -142,6 +147,7 @@ public class GuiDriveableInventory extends GuiContainer
 			drawTexturedModalRect(j + 161, k + 53, 176, 28, 10, 10);
     }
 	
+	@Override
 	protected void mouseClicked(int i, int j, int k)
     {
         super.mouseClicked(i, j, k);
@@ -160,13 +166,4 @@ public class GuiDriveableInventory extends GuiContainer
 		if(m > 161 && m < 171 && n > 5 && n < 15)
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, driveable));
 	}
-
-	public ContainerPlaneInventory container;
-	public InventoryPlayer inventory;
-	public World world;
-	public int scroll;
-	public int numItems;
-	public int maxScroll;
-	public EntityDriveable driveable;
-	public int screen; //0 = Guns, 1 = Bombs, 2 = Cargo
 }
