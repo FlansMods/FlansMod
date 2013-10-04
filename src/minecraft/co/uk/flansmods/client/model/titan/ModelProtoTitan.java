@@ -36,6 +36,7 @@ public class ModelProtoTitan extends ModelMecha
 		leftArmModel[0].addBox(-4, -20, -4, 8, 20, 8);
 		leftArmModel[0].setPosition(0, 40, 16);
 		
+		
 		//Right Arm
 		rightArmModel = new ModelRendererTurbo[1];
 		

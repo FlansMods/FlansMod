@@ -16,10 +16,13 @@ import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-
 public class GuiDriveableMenu extends GuiContainer
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeMenu.png");
+	
+	public World world;
+	public InventoryPlayer inventory;
+	public EntityDriveable entity;
 	
     public GuiDriveableMenu(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane)
     {
@@ -85,8 +88,4 @@ public class GuiDriveableMenu extends GuiContainer
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
     }
-
-	public World world;
-	public InventoryPlayer inventory;
-	public EntityDriveable entity;
 }
