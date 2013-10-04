@@ -49,6 +49,7 @@ public class EntityMecha extends EntityDriveable
 		setSize(2F, 3F);
 		stepHeight = 3;
 		legAxes = new RotatedAxes();
+		inventory = new MechaInventory(this);
 	}
 	
 	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data) 

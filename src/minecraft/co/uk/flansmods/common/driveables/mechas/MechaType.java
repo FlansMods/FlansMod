@@ -18,6 +18,7 @@ public class MechaType extends DriveableType
 	public float jumpVelocity = 1F;
 	/** Speed of Rotation */
 	public float rotateSpeed = 10F;
+	/** Origin of the mecha arms */
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
