@@ -25,6 +25,7 @@ import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketVehicleControl;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -214,6 +215,8 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 7 : //Inventory
 			{
+				PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(4));
+				((EntityPlayer)seats[0].riddenByEntity).openGui(FlansMod.instance, 10, worldObj, chunkCoordX, chunkCoordY, chunkCoordZ);
 				return true;
 			}
 			case 8 : //UseR
