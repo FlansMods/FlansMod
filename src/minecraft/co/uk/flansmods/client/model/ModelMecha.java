@@ -50,27 +50,30 @@ public class ModelMecha extends ModelDriveable
 	        }	
         }
             
-        float smoothedPitch = 0F;
-        
-        if(mecha.seats[0] != null)
-        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f;
-        
+         
         if(mecha.isPartIntact(EnumDriveablePart.head))
         {
         	for(ModelRendererTurbo model : headModel)
         	{
-        		if(mecha.seats[0] != null)
-        			model.rotateAngleX = smoothedPitch;
         		model.render(f5);
         	}
         }
         
+        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
+        {
+        	for(ModelRendererTurbo model : rightArmModel)
+        	{
+        		model.render(f5);
+        	}
+        }
+	}
+	
+	public void renderLeftArm(float f5, EntityMecha mecha, float f)
+	{
         if(mecha.isPartIntact(EnumDriveablePart.leftArm))
         {
         	for(ModelRendererTurbo model : leftArmModel)
         	{
-        		if(mecha.seats[0] != null)
-        			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
         		model.render(f5);
         	}
         	
@@ -79,23 +82,11 @@ public class ModelMecha extends ModelDriveable
         	{
             	for(ModelRendererTurbo model : leftHandModel)
             	{
-            		if(mecha.seats[0] != null)
-            			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
             		model.render(f5);
             	}
         	}
         }
-	
-        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
-        {
-        	for(ModelRendererTurbo model : rightArmModel)
-        	{
-        		if(mecha.seats[0] != null)
-        			model.rotateAngleZ = (90F - smoothedPitch) * 3.14159265F / 180F;
-        		model.render(f5);
-        	}
-        }
-}
+	}
 	
 	public void renderLegs(float f5, EntityMecha mecha, float f)
 	{        

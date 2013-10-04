@@ -37,13 +37,28 @@ public class RenderMecha extends Render
         for(; dRoll > 180F; dRoll -= 360F) {}
         for(; dRoll <= -180F; dRoll += 360F) {}
         GL11.glRotatef(180F - mecha.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
-		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+        //GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+		//GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
         model = new ModelProtoTitan();
 		if(model != null)
-			model.render(mecha, f1);		
+			model.render(mecha, f1);	
+		
+		GL11.glPushMatrix();
+
+		float smoothedPitch = 0F;
+        
+        if(mecha.seats[0] != null)
+        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f;
+		
+		GL11.glTranslatef(mecha.getMechaType().leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
+		GL11.glRotatef(smoothedPitch, 0F, 0F, 1F);
+		
+		model.renderLeftArm(0.0625F, mecha, f1);
+		
+		
+		GL11.glPopMatrix();
 		
 		if(FlansMod.DEBUG)
 		{

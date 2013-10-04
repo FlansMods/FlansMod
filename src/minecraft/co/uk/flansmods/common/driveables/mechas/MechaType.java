@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.vector.Vector3f;
 
 public class MechaType extends DriveableType 
 {
@@ -19,6 +20,11 @@ public class MechaType extends DriveableType
 	/** Speed of Rotation */
 	public float rotateSpeed = 10F;
 	/** Origin of the mecha arms */
+	public Vector3f leftArmOrigin, rightArmOrigin;
+	/** Length of the mecha arms */
+	public float armLength = 1F;
+	/** The amount to scale the held items / tools by when rendering */
+	public float heldItemScale = 1F;
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -52,6 +58,15 @@ public class MechaType extends DriveableType
 			}
 			if(split[0].equals("RotateSpeed"))
 				rotateSpeed = Float.parseFloat(split[1]);
+			
+			if(split[0].equals("LeftArmOrigin"))
+				leftArmOrigin = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+			if(split[0].equals("RightArmOrigin"))
+				rightArmOrigin = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+			if(split[0].equals("ArmLength"))
+				armLength = Float.parseFloat(split[1]) / 16F;
+			if(split[0].equals("HeldItemScale"))
+				heldItemScale = Float.parseFloat(split[1]);	
 		}
 		catch (Exception e)
 		{

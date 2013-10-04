@@ -30,6 +30,13 @@ SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
 StepHeight 1
 JumpHeight 2
+//Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
+LeftArmOrigin 0 40 16
+RightArmOrigin 0 40 -16
+//Arm lengths used to determine where the held items appear (Again in model co-ords)
+ArmLength 20
+//The scale multiplier for rendering the items and tools being held
+HeldItemScale 1
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
