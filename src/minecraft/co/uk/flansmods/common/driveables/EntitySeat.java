@@ -201,29 +201,29 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			playerYaw = -90F + globalLookAxes.getYaw();
 			playerPitch = globalLookAxes.getPitch();
 			
+			double dYaw = playerYaw - prevPlayerYaw;
+			if(dYaw > 180)
+				prevPlayerYaw += 360F;
+			if(dYaw < -180)
+				prevPlayerYaw -= 360F;
+			
 			riddenByEntity.prevRotationYaw = prevPlayerYaw;
 			riddenByEntity.prevRotationPitch = prevPlayerPitch;
 			
 			riddenByEntity.rotationYaw = playerYaw;
 			riddenByEntity.rotationPitch = playerPitch;
-			
 
-	
 			//If the entity is a player, roll its view accordingly
 			if(worldObj.isRemote)
 				playerRoll = -globalLookAxes.getRoll();
-			
-			double dYaw = riddenByEntity.rotationYaw - riddenByEntity.prevRotationYaw;
-			if(dYaw > 180)
-				riddenByEntity.prevRotationYaw += 360F;
-			if(dYaw < -180)
-				riddenByEntity.prevRotationYaw -= 360F;
 		}
 	}
 	
 	@Override
     public void updateRiderPosition()
     {
+		riddenByEntity.rotationYaw = playerYaw;
+		riddenByEntity.rotationPitch = playerPitch;
 		riddenByEntity.prevRotationYaw = prevPlayerYaw;
 		riddenByEntity.prevRotationPitch = prevPlayerPitch;
 		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;

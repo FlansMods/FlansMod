@@ -258,7 +258,7 @@ public class EntityMecha extends EntityDriveable
 				{
 					System.out.println("Help, I'm stuck in Eclipse!");
 					jumpDelay = 10;
-					motionY += 1000000000*type.jumpVelocity;
+					motionY += type.jumpVelocity;
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption;
 				}
