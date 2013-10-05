@@ -74,21 +74,28 @@ public class ContainerMechaInventory extends Container
         	addSlotToContainer(new Slot(inventory, col, 182 + col * 18, 156));
         }
 	}
+	
+	@Override
+    public void onContainerClosed(EntityPlayer par1EntityPlayer)
+    {
+    	super.onContainerClosed(par1EntityPlayer);
+    	mecha.couldNotFindFuel = false;
+    }
 
 	public void updateScroll(int scrololol)
 	{
 		scroll = scrololol;
-				int m = ((numItems + 7) / 8);
-				for(int row = 0; row < m; row++)
-				{
-					int yPos = -1000;
-					if(row < 3 + scroll && row >= scroll)
-						yPos = 25 + 19 * (row - scroll);
-					for(int col = 0; col < ((row + 1) * 8 < numItems ? 8 : numItems % 8); col++)
-					{
-						((Slot)inventorySlots.get(row * 8 + col)).yDisplayPosition = yPos;
-					}
-				}
+		int m = ((numItems + 7) / 8);
+		for(int row = 0; row < m; row++)
+		{
+			int yPos = -1000;
+			if(row < 3 + scroll && row >= scroll)
+				yPos = 25 + 19 * (row - scroll);
+			for(int col = 0; col < ((row + 1) * 8 < numItems ? 8 : numItems % 8); col++)
+			{
+				((Slot)inventorySlots.get(row * 8 + col)).yDisplayPosition = yPos;
+			}
+		}
 	}
 	
 	@Override

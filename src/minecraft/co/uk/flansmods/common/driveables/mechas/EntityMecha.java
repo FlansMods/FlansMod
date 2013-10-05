@@ -10,6 +10,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -71,7 +72,10 @@ public class EntityMecha extends EntityDriveable
     /** Progress made towards breaking each block */
     public float breakingProgress = 0F;
     
+    /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
     private int foundFuel = -1;
+    /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
+    public boolean couldNotFindFuel = false;
 
 	public EntityMecha(World world) 
 	{
@@ -479,6 +483,7 @@ public class EntityMecha extends EntityDriveable
 		
 		//Get Mecha Type
 		MechaType type = this.getMechaType();
+		DriveableData data = getDriveableData();
 		if (type == null)
 		{
 			FlansMod.log("Mecha type null. Not ticking mecha");
@@ -588,8 +593,6 @@ public class EntityMecha extends EntityDriveable
 				Vector3f motion = legAxes.getXAxis();
 				
 				motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
-			
-		    	DriveableData data = getDriveableData();
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
@@ -604,6 +607,7 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
 			
+			//Block breaking
 			if(!worldObj.isRemote)
 			{
 				//Use left and right items on the server side
@@ -615,7 +619,9 @@ public class EntityMecha extends EntityDriveable
 				//Check the left block being mined
 				if(breakingBlock != null)
 				{
+					//Get block and material
 					Block blockHit = Block.blocksList[worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z)];
+					Material material = worldObj.getBlockMaterial(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 					
 					//Get the itemstacks in each hand
 					ItemStack leftStack = inventory.getStackInSlot(EnumMechaSlotType.leftTool);
@@ -624,7 +630,7 @@ public class EntityMecha extends EntityDriveable
 					//Work out if we are actually breaking blocks
 					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaTool;
 					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaTool;
-					boolean breakingBlocks = leftMouseHeld && leftStackIsTool || rightMouseHeld && rightStackIsTool;
+					boolean breakingBlocks = (leftMouseHeld && leftStackIsTool) || (rightMouseHeld && rightStackIsTool);
 					
 					//If we are not breaking blocks, reset everything
 					if(blockHit == null || !breakingBlocks)
@@ -636,16 +642,42 @@ public class EntityMecha extends EntityDriveable
 					{
 						//Calculate the mine speed
 						float mineSpeed = 1F;
+						if(leftStackIsTool)
+						{
+							MechaToolType leftType = ((ItemMechaTool)leftStack.getItem()).type;
+							if(leftType.function.effectiveAgainst(material))
+								mineSpeed *= leftType.toolHardness;
+						}
+
+						if(rightStackIsTool)
+						{
+							MechaToolType rightType = ((ItemMechaTool)rightStack.getItem()).type;
+							if(rightType.function.effectiveAgainst(material))
+								mineSpeed *= rightType.toolHardness;
+						}
 						
-						mineSpeed /= blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						//Get the block hardness
+						float blockHardness = blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						//If this block is immortal, do not break it
+						if(blockHardness < -0.01F)
+							mineSpeed = 0F;
+						//If this block's hardness is zero-ish, then the tool's power is OVER 9000!!!!
+						else if(Math.abs(blockHardness) < 0.01F)
+							mineSpeed = 9001F;
+						else
+						{
+							mineSpeed /= blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						}
 						
+						//Add block digging overlay
 						Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
-						breakingProgress += 0.1F;
+						breakingProgress += 0.1F * mineSpeed;
 						if(breakingProgress >= 1F)
 						{
-			        		blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
-							FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-							worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+			        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
+							//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+							//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+							worldObj.destroyBlock(breakingBlock.x, breakingBlock.y, breakingBlock.z, true);
 						}
 					}
 				}
@@ -658,72 +690,77 @@ public class EntityMecha extends EntityDriveable
     	setPosition(posX, posY, posZ);
 		
 		//Fuel Handling
-		DriveableData data = getDriveableData();
-		
-		ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
-		
-		//If the fuel item has stack size <= 0, delete it
-		if(fuelStack != null && fuelStack.stackSize <= 0)
+		if(!couldNotFindFuel)
 		{
-			driveableData.setInventorySlotContents(foundFuel, null);
-			fuelStack = null;
-		}
-		
-		//Find the next fuelling slot
-		if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
-		{
-			foundFuel = -1;
-			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
+			ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
+			
+			//If the fuel item has stack size <= 0, delete it
+			if(fuelStack != null && fuelStack.stackSize <= 0)
 			{
-				ItemStack tempStack = driveableData.getStackInSlot(i);
-				if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
+				driveableData.setInventorySlotContents(foundFuel, null);
+				fuelStack = null;
+			}
+			
+			//Find the next fuelling slot
+			if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
+			{
+				foundFuel = -1;
+				couldNotFindFuel = true;
+				for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
 				{
-					foundFuel = i;
-					fuelStack = tempStack;
-					break;
+					ItemStack tempStack = driveableData.getStackInSlot(i);
+					if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
+					{
+						foundFuel = i;
+						fuelStack = tempStack;
+						couldNotFindFuel = false;
+						break;
+					}
 				}
 			}
-		}
-		
-		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
-		
-		//If we are fuelling
-		if(fuelling)
-		{
-			int damage = fuelStack.getItemDamage();
-			//Consume 100 points of fuel (1 damage)
-			fuelStack.setItemDamage(damage + 1);
-			//Put 100 points of fuel 
-			data.fuelInTank += 100;
-			//If we have finished this fuel item
-			if(damage >= fuelStack.getMaxDamage())
+			
+			//Work out if we are fuelling (from a Flan's Mod fuel item)
+			fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
+			
+			//If we are fuelling
+			if(fuelling)
 			{
-				//Reset the damage to 0
-				fuelStack.setItemDamage(0);
-				//Consume one item
-				fuelStack.stackSize--;
-				//If we consumed the last one, destroy the stack
-				if(fuelStack.stackSize <= 0)
-					data.fuel = null;
-			}	
-		}
-		
-		//Check inventory slots for buildcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
-		{
-			for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
+				int damage = fuelStack.getItemDamage();
+				//Consume 100 points of fuel (1 damage)
+				fuelStack.setItemDamage(damage + 1);
+				//Put 100 points of fuel 
+				data.fuelInTank += 100;
+				//If we have finished this fuel item
+				if(damage >= fuelStack.getMaxDamage())
+				{
+					//Reset the damage to 0
+					fuelStack.setItemDamage(0);
+					//Consume one item
+					fuelStack.stackSize--;
+					//If we consumed the last one, destroy the stack
+					if(fuelStack.stackSize <= 0)
+						data.fuel = null;
+				}	
+			}
+			
+			//Check inventory slots for buildcraft buckets and if found, take fuel from them
+			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
 			{
-				ItemStack stack = data.getStackInSlot(i);
-				if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
+				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
 				{
-					data.fuelInTank += 5000;
-					data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
-				}
-				else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-				{
-					data.fuelInTank += 10000;
-					data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+					ItemStack stack = data.getStackInSlot(i);
+					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
+					{
+						data.fuelInTank += 5000;
+						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+						couldNotFindFuel = false;
+					}
+					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
+					{
+						data.fuelInTank += 10000;
+						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+						couldNotFindFuel = false;
+					}
 				}
 			}
 		}

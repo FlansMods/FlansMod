@@ -68,6 +68,7 @@ public class MechaInventory implements IInventory
 	@Override
 	public ItemStack decrStackSize(int i, int j) 
 	{
+		onInventoryChanged();
 		ItemStack slot = getStackInSlot(i);
 		if(slot == null)
 			return null;
@@ -93,6 +94,7 @@ public class MechaInventory implements IInventory
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) 
 	{
+		onInventoryChanged();
 		stacks.put(EnumMechaSlotType.values()[i], itemstack);
 	}
 
@@ -117,6 +119,7 @@ public class MechaInventory implements IInventory
 	@Override
 	public void onInventoryChanged() 
 	{
+		mecha.couldNotFindFuel = false;
 	}
 
 	@Override
