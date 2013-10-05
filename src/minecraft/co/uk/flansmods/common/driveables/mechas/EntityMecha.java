@@ -419,8 +419,6 @@ public class EntityMecha extends EntityDriveable
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
-		
-		
     	setPosition(posX, posY, posZ);
 		
 		//Fuel Handling
