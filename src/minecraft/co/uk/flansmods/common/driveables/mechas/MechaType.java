@@ -33,7 +33,7 @@ public class MechaType extends DriveableType
 		super(file);
 		types.add(this);
 	}
-
+	
     @Override
 	protected void read(String[] split, TypeFile file)
     {

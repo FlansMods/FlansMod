@@ -1,13 +1,18 @@
 package co.uk.flansmods.client;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.ContainerPlaneMenu;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 
 public class GuiDriveableFuel extends GuiContainer
@@ -64,7 +69,9 @@ public class GuiDriveableFuel extends GuiContainer
 		int m = i - (width - xSize) / 2;
 		int n = j - (height - ySize) / 2;
 		if(m > 161 && m < 171 && n > 5 && n < 15)
+		{
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, plane));
+		}
 	}
 
 	public World world;

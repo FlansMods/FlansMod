@@ -52,6 +52,7 @@ public class EntityMecha extends EntityDriveable
     public float legSwing = 0;
     /** Used for shooting guns */
     public int shootDelayLeft = 0, shootDelayRight = 0;
+    private int foundFuel = 0;
 
 	public EntityMecha(World world) 
 	{
@@ -554,7 +555,7 @@ public class EntityMecha extends EntityDriveable
 		DriveableData data = getDriveableData();
 		
 		//If the fuel item has stack size <= 0, delete it
-		if(data.fuel != null && data.fuel.stackSize <= 0)
+		if(driveableData.getStackInSlot(foundFuel) != null && data.fuel.stackSize <= 0)
 			data.fuel = null;
 		
 		//Work out if we are fuelling (from a Flan's Mod fuel item)
@@ -580,18 +581,22 @@ public class EntityMecha extends EntityDriveable
 					data.fuel = null;
 			}	
 		}
-		//Check fuel slot for buildcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
+		//Check inventory slots for buildcraft buckets and if found, take fuel from them
+		if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
 		{
-			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
+			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.numCargo + type.numCargoSlots; i++)
 			{
-				data.fuelInTank += 5000;
-				data.fuel = new ItemStack(Item.bucketEmpty);
-			}
-			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 10000;
-				data.fuel = new ItemStack(Item.bucketEmpty);
+				ItemStack stack = driveableData.getStackInSlot(i);
+				if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
+				{
+					data.fuelInTank += 5000;
+					driveableData.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+				}
+				else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
+				{
+					data.fuelInTank += 10000;
+					driveableData.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+				}
 			}
 		}
 		

@@ -20,7 +20,7 @@ MoveSpeed 1.7
 //YOffset
 YOffset 0
 //Fuel Tank Size
-FuelTankSize 1000
+FuelTankSize 10000
 //Inventory Slots
 CargoSlots 36
 //How quickly the legs react to a change in direction
