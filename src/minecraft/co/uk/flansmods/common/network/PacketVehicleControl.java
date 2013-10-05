@@ -71,6 +71,8 @@ public class PacketVehicleControl extends FlanPacketCommon
 				if(obj instanceof EntityDriveable && ((Entity)obj).entityId == entityId)
 				{
 					driveable = (EntityDriveable)obj;
+					if(side.isClient() && driveable.seats[0].riddenByEntity == player)
+						return;
 					break;
 				}
 			}
