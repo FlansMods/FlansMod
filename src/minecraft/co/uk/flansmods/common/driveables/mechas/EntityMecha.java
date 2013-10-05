@@ -57,7 +57,7 @@ public class EntityMecha extends EntityDriveable
     /** Used for gun sounds */
     public int soundDelayLeft = 0, soundDelayRight = 0;
     
-    private int foundFuel = 0;
+    private int foundFuel = -1;
 
 	public EntityMecha(World world) 
 	{
@@ -577,43 +577,47 @@ public class EntityMecha extends EntityDriveable
 		
 		//If the fuel item has stack size <= 0, delete it
 		if(fuelStack != null && fuelStack.stackSize <= 0)
+		{
 			driveableData.setInventorySlotContents(foundFuel, null);
+			fuelStack = null;
+		}
 		
 		//Find the next fuelling slot
 		if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
 		{
 			foundFuel = -1;
-			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.numCargo + type.numCargoSlots; i++)
+			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
 			{
 				ItemStack tempStack = driveableData.getStackInSlot(i);
 				if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
 				{
 					foundFuel = i;
+					fuelStack = tempStack;
 					break;
 				}
 			}
 		}
 		
 		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
+		fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
 		
 		//If we are fuelling
 		if(fuelling)
 		{
-			int damage = data.fuel.getItemDamage();
+			int damage = fuelStack.getItemDamage();
 			//Consume 100 points of fuel (1 damage)
-			data.fuel.setItemDamage(damage + 1);
+			fuelStack.setItemDamage(damage + 1);
 			//Put 100 points of fuel 
 			data.fuelInTank += 100;
 			//If we have finished this fuel item
-			if(damage >= data.fuel.getMaxDamage())
+			if(damage >= fuelStack.getMaxDamage())
 			{
 				//Reset the damage to 0
-				data.fuel.setItemDamage(0);
+				fuelStack.setItemDamage(0);
 				//Consume one item
-				data.fuel.stackSize--;
+				fuelStack.stackSize--;
 				//If we consumed the last one, destroy the stack
-				if(data.fuel.stackSize <= 0)
+				if(fuelStack.stackSize <= 0)
 					data.fuel = null;
 			}	
 		}
