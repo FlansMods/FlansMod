@@ -5,17 +5,20 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.RotatedAxes;
@@ -24,6 +27,10 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import co.uk.flansmods.common.network.PacketVehicleKey;
@@ -43,6 +50,8 @@ public class EntityMecha extends EntityDriveable
     private int jumpDelay = 0;
     public MechaInventory inventory;
     public float legSwing = 0;
+    /** Used for shooting guns */
+    public int shootDelayLeft = 0, shootDelayRight = 0;
 
 	public EntityMecha(World world) 
 	{
@@ -84,6 +93,7 @@ public class EntityMecha extends EntityDriveable
     {
         super.writeEntityToNBT(tag);
         tag.setFloat("LegsYaw", legAxes.getYaw());
+        tag.setCompoundTag("Inventory", inventory.writeToNBT(new NBTTagCompound()));
     }
 
 	@Override
@@ -91,6 +101,7 @@ public class EntityMecha extends EntityDriveable
     {
         super.readEntityFromNBT(tag);
         legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
+        inventory.readFromNBT(tag.getCompoundTag("Inventory"));
     }
 
 	@Override
@@ -107,11 +118,35 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
+	public void writeSpawnData(ByteArrayDataOutput outputData)
+	{
+		super.writeSpawnData(outputData);
+		
+		try
+		{
+			NBTBase.writeNamedTag(inventory.writeToNBT(new NBTTagCompound()), outputData);
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
 	public void readSpawnData(ByteArrayDataInput inputData)
 	{
 		super.readSpawnData(inputData);
 		legAxes.rotateGlobalYaw(axes.getYaw());
 		prevLegsYaw = legAxes.getYaw();
+		
+		try
+		{
+			inventory.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(inputData));
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -221,11 +256,11 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 8 : //UseR
 			{
-				return true;
+				return useItem(false);
 			}
 			case 9 : //UseL
 			{
-				return true;
+				return useItem(true);
 			}
 			case 10 : //Change control mode : Do nothing
 			{
@@ -263,6 +298,96 @@ public class EntityMecha extends EntityDriveable
     	}
 		return false;
 	}
+	
+	private boolean useItem(boolean left)
+	{
+		ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+		if(heldStack == null)
+			return false;
+		
+		Item heldItem = heldStack.getItem();
+		
+		if(heldItem instanceof ItemMechaTool)
+		{
+			MechaToolType toolType = ((ItemMechaTool)heldItem).type;
+			
+		}
+		
+		else if(heldItem instanceof ItemGun)
+		{
+			ItemGun gunItem = (ItemGun)heldItem;
+			GunType gunType = gunItem.type;
+			
+			//Get the correct shoot delay
+			int delay = left ? shootDelayLeft : shootDelayRight;
+			
+			//If we can shoot
+			if(delay <= 0)
+			{
+				//Go through the bullet stacks in the gun and see if any of them are not null
+				int bulletID = 0;
+				ItemStack bulletStack = null;
+				for(; bulletID < gunType.numAmmoItemsInGun; bulletID++)
+				{
+					ItemStack checkingStack = gunItem.getBulletItemStack(heldStack, bulletID);
+					if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+					{
+						bulletStack = checkingStack;
+						break;
+					}
+				}
+				
+				//If no bullet stack was found, reload
+				if(bulletStack == null)
+				{
+					boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
+					gunItem.reload(heldStack, worldObj, this, driveableData, creative, false);				
+				}
+				//A bullet stack was found, so try shooting with it
+				else if(bulletStack.getItem() instanceof ItemBullet)
+				{
+					//Shoot
+					BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
+					shoot(gunType, bulletType, left);
+					//Damage the bullet item
+					bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+					
+					//Update the stack in the gun
+					gunItem.setBulletItemStack(heldStack, bulletStack, bulletID);
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private void shoot(GunType gunType, BulletType bulletType, boolean left)
+	{
+		MechaType mechaType = getMechaType();
+		
+		RotatedAxes a = new RotatedAxes();
+		
+		Vector3f armVector = new Vector3f(mechaType.armLength, 0F, 0F);
+		Vector3f gunVector = new Vector3f(mechaType.armLength + 1.2F * mechaType.heldItemScale, 0.5F * mechaType.heldItemScale, 0F);
+		Vector3f armOrigin = left ?  mechaType.leftArmOrigin : mechaType.rightArmOrigin;
+		
+		a.rotateGlobalYaw(axes.getYaw());
+		armOrigin = a.findLocalVectorGlobally(armOrigin);
+		
+		a.rotateLocalPitch(-seats[0].looking.getPitch());
+		gunVector = a.findLocalVectorGlobally(gunVector);
+		armVector = a.findLocalVectorGlobally(armVector);
+		
+		Vector3f bulletOrigin = Vector3f.add(armOrigin, gunVector, null);
+		
+		bulletOrigin  = Vector3f.add(new Vector3f(posX, posY, posZ), bulletOrigin, null);
+				
+		worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.accuracy / 2, gunType.damage, bulletType, gunType.speed, mechaType));
+		
+		if(left)
+			shootDelayLeft = gunType.shootDelay;
+		
+	}
 
 	@Override
     public boolean attackEntityFrom(DamageSource damagesource, float i)
@@ -288,7 +413,10 @@ public class EntityMecha extends EntityDriveable
 	{
 		super.onUpdate();
 		
-		if(jumpDelay > 0) --jumpDelay;
+		//Decrement delay variables
+		if(jumpDelay > 0) jumpDelay--;
+		if(shootDelayLeft > 0) shootDelayLeft--;
+		if(shootDelayRight > 0) shootDelayRight--;
 		
 		//Get Mecha Type
 		MechaType type = this.getMechaType();

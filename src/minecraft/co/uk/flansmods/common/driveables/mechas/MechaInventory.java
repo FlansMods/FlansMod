@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class MechaInventory implements IInventory 
 {
@@ -23,6 +24,28 @@ public class MechaInventory implements IInventory
 		{
 			stacks.put(type, null);
 		}
+	}
+	
+	public void readFromNBT(NBTTagCompound tags)
+	{
+		if(tags == null)
+			return;
+		for(EnumMechaSlotType type : EnumMechaSlotType.values())
+		{
+			stacks.put(type, ItemStack.loadItemStackFromNBT(tags.getCompoundTag(type.toString())));
+		}
+	}
+	
+	public NBTTagCompound writeToNBT(NBTTagCompound tags)
+	{
+		if(tags == null)
+			return null;
+		for(EnumMechaSlotType type : EnumMechaSlotType.values())
+		{
+			if(stacks.get(type) != null)
+				tags.setCompoundTag(type.toString(), stacks.get(type).writeToNBT(new NBTTagCompound()));
+		}
+		return tags;
 	}
 	
 	@Override
