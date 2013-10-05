@@ -1,0 +1,13 @@
+Name Iron Drill
+ShortName IronDrill
+Icon IronDrill
+Model titan.Drill
+Texture IronDrill
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23413
+RecipeOutput 1
+Recipe P pickaxeIron I ingotIron
+ P 
+IRI
+IRI

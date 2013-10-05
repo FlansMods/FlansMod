@@ -31,10 +31,8 @@ public enum EnumDriveablePart
 	//Mecha parts
 	leftArm(new EnumDriveablePart[] { }, "leftArm", "Left Arm"),
 	rightArm(new EnumDriveablePart[] { }, "rightArm", "Right Arm"),
-	leftLeg(new EnumDriveablePart[] { }, "leftLeg", "Left Leg"),
-	rightLeg(new EnumDriveablePart[] { }, "rightLeg", "Right Leg"),
 	head(new EnumDriveablePart[] { }, "head", "Head"),
-	hips(new EnumDriveablePart[] { leftLeg, rightLeg }, "hips", "Hips"),
+	hips(new EnumDriveablePart[] { }, "hips", "Hips"),
 
 	//Shared part
 	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, leftArm, rightArm, head, hips, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");

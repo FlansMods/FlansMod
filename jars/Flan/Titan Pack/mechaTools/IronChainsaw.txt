@@ -1,0 +1,13 @@
+Name Iron Chainsaw
+ShortName IronChainsaw
+Icon IronChainsaw
+Model titan.Drill
+Texture IronChainsaw
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23414
+RecipeOutput 1
+Recipe P hatchetIron I ingotIron
+ P 
+IRI
+IRI
