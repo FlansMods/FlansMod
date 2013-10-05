@@ -256,7 +256,6 @@ public class EntityMecha extends EntityDriveable
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption))
 				{
-					System.out.println("Help, I'm stuck in Eclipse!");
 					jumpDelay = 10;
 					motionY += type.jumpVelocity;
 					if(!canThrustCreatively)
