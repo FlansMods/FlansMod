@@ -3,10 +3,8 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -575,51 +573,66 @@ public class EntityMecha extends EntityDriveable
 		//Fuel Handling
 		DriveableData data = getDriveableData();
 		
-		if(data != null)
+		ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
+		
+		//If the fuel item has stack size <= 0, delete it
+		if(fuelStack != null && fuelStack.stackSize <= 0)
+			driveableData.setInventorySlotContents(foundFuel, null);
+		
+		//Find the next fuelling slot
+		if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
 		{
-			//If the fuel item has stack size <= 0, delete it
-			if(data.fuel != null && data.fuel.stackSize <= 0)
-				data.fuel = null;
-			
-			//Work out if we are fuelling (from a Flan's Mod fuel item)
-			fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
-			
-			//If we are fuelling
-			if(fuelling)
+			foundFuel = -1;
+			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.numCargo + type.numCargoSlots; i++)
 			{
-				int damage = data.fuel.getItemDamage();
-				//Consume 100 points of fuel (1 damage)
-				data.fuel.setItemDamage(damage + 1);
-				//Put 100 points of fuel 
-				data.fuelInTank += 100;
-				//If we have finished this fuel item
-				if(damage >= data.fuel.getMaxDamage())
+				ItemStack tempStack = driveableData.getStackInSlot(i);
+				if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
 				{
-					//Reset the damage to 0
-					data.fuel.setItemDamage(0);
-					//Consume one item
-					data.fuel.stackSize--;
-					//If we consumed the last one, destroy the stack
-					if(data.fuel.stackSize <= 0)
-						data.fuel = null;
-				}	
+					foundFuel = i;
+					break;
+				}
 			}
-			//Check inventory slots for buildcraft buckets and if found, take fuel from them
-			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
+		}
+		
+		//Work out if we are fuelling (from a Flan's Mod fuel item)
+		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
+		
+		//If we are fuelling
+		if(fuelling)
+		{
+			int damage = data.fuel.getItemDamage();
+			//Consume 100 points of fuel (1 damage)
+			data.fuel.setItemDamage(damage + 1);
+			//Put 100 points of fuel 
+			data.fuelInTank += 100;
+			//If we have finished this fuel item
+			if(damage >= data.fuel.getMaxDamage())
 			{
-				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
+				//Reset the damage to 0
+				data.fuel.setItemDamage(0);
+				//Consume one item
+				data.fuel.stackSize--;
+				//If we consumed the last one, destroy the stack
+				if(data.fuel.stackSize <= 0)
+					data.fuel = null;
+			}	
+		}
+		
+		//Check inventory slots for buildcraft buckets and if found, take fuel from them
+		if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
+		{
+			for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
+			{
+				ItemStack stack = data.getStackInSlot(i);
+				if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
 				{
-					ItemStack stack = data.getStackInSlot(i);
-					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 5000;
-						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
-					}
-					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 10000;
-						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
-					}
+					data.fuelInTank += 5000;
+					data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+				}
+				else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
+				{
+					data.fuelInTank += 10000;
+					data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
 				}
 			}
 		}
