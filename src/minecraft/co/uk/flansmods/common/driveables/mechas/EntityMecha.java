@@ -786,9 +786,6 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		legSwing = legSwing / 2F;
-		
-        if(posX != prevPosX)
-        	System.out.println((posX) + " " + (prevPosX) + " " + worldObj.isRemote);
 	}
 	
 	@Override
