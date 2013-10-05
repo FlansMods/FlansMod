@@ -228,10 +228,10 @@ public class EntityMecha extends EntityDriveable
 		MechaType type = getMechaType();
     	DriveableData data = getDriveableData();
 		//send keys which require server side updates to the server
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+    	if(worldObj.isRemote && (key == 4 || key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
-    		//return true;
+   // 		return true;
     	}
     	switch(key)
     	{
@@ -256,10 +256,11 @@ public class EntityMecha extends EntityDriveable
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption))
 				{
-					motionY += type.jumpVelocity;
+					System.out.println("Help, I'm stuck in Eclipse!");
 					jumpDelay = 10;
+					motionY += 1000000000*type.jumpVelocity;
 					if(!canThrustCreatively)
-						data.fuelInTank -= data.engine.fuelConsumption;					
+						data.fuelInTank -= data.engine.fuelConsumption;
 				}
 				return true;
 			}
