@@ -10,7 +10,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.ContainerPlaneInventory;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiDriveableInventory extends GuiContainer
 {
@@ -164,6 +168,20 @@ public class GuiDriveableInventory extends GuiContainer
 			container.updateScroll(scroll);
 		}
 		if(m > 161 && m < 171 && n > 5 && n < 15)
+		{
+			if(driveable instanceof EntityMecha)
+			{
+				PacketDispatcher.sendPacketToServer(PacketVehicleGUI.buildGUIPacket(4));
+				(inventory.player).openGui(FlansMod.instance, 10, world, driveable.chunkCoordX, driveable.chunkCoordY, driveable.chunkCoordZ);
+			}
+			else
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, driveable));
+		}
+    }
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
 	}
 }

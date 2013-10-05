@@ -2,6 +2,7 @@ package co.uk.flansmods.client;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
 import net.minecraft.client.gui.GuiButton;
@@ -77,6 +78,8 @@ public class GuiMechaInventory extends GuiContainer
 		float fuelInTank = mecha.driveableData.fuelInTank;
 		if(fuelInTank < fuelTankSize / 8 && (anim % 4) > 1)
 			drawTexturedModalRect(width / 2 - 14, height / 2 - 59, 360, 0, 6, 6);
+		if(fuelInTank > 0)
+			drawTexturedModalRect(width / 2 - 18, height / 2 + 45 - (int)((94 * fuelInTank) / fuelTankSize), 350, 20, 15, (int)((94 * fuelInTank) / fuelTankSize));
 	}
 	
 	@Override
@@ -97,10 +100,23 @@ public class GuiMechaInventory extends GuiContainer
 	public void initGui()
 	{
 		super.initGui();
-		buttonList.add(new GuiButton(5, width / 2 - 166, height / 2 + 63, 93, 20, "Passenger Guns"));
-		buttonList.add(new GuiButton(6, width / 2 - 68, height / 2 + 63, 68, 20, "Repair"));
+		buttonList.add(new GuiButton(0, width / 2 - 166, height / 2 + 63, 93, 20, "Passenger Guns"));
+		buttonList.add(new GuiButton(1, width / 2 - 68, height / 2 + 63, 68, 20, "Repair"));
 	}
 	
+    @Override
+    protected void actionPerformed(GuiButton button)
+    {
+    	if(button.id == 0)
+    	{
+    		inventory.player.openGui(FlansMod.instance, 6, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
+    	}
+    	if(button.id == 1)
+    	{
+			inventory.player.openGui(FlansMod.instance, 1, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
+    	}
+    }
+    
 	@Override
 	protected void mouseClicked(int i, int j, int k)
 	{
@@ -117,5 +133,11 @@ public class GuiMechaInventory extends GuiContainer
 			scroll++;
 			container.updateScroll(scroll);
 		}
+	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
 	}
 }
