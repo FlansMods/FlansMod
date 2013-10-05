@@ -750,7 +750,7 @@ public class TeamsManager implements IPlayerTracker
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true, true);
+				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
 			}
 		}
 	}
