@@ -69,7 +69,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		super(world);
 		setSize(1F, 1F);
-		prevLooking = looking = new RotatedAxes();
+		prevLooking = new RotatedAxes();
+		looking = new RotatedAxes();
 	}
 		
 	/** Server side seat constructor */

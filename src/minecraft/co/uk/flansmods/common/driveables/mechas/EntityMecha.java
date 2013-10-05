@@ -640,24 +640,24 @@ public class EntityMecha extends EntityDriveable
 					}
 					else
 					{
+						//Get the block hardness
+						float blockHardness = blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						
 						//Calculate the mine speed
 						float mineSpeed = 1F;
 						if(leftStackIsTool)
 						{
 							MechaToolType leftType = ((ItemMechaTool)leftStack.getItem()).type;
-							if(leftType.function.effectiveAgainst(material))
-								mineSpeed *= leftType.toolHardness;
+							if(leftType.function.effectiveAgainst(material) && leftType.toolHardness > blockHardness)
+								mineSpeed *= leftType.speed;
 						}
-
 						if(rightStackIsTool)
 						{
 							MechaToolType rightType = ((ItemMechaTool)rightStack.getItem()).type;
-							if(rightType.function.effectiveAgainst(material))
-								mineSpeed *= rightType.toolHardness;
+							if(rightType.function.effectiveAgainst(material) && rightType.toolHardness > blockHardness)
+								mineSpeed *= rightType.speed;
 						}
 						
-						//Get the block hardness
-						float blockHardness = blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 						//If this block is immortal, do not break it
 						if(blockHardness < -0.01F)
 							mineSpeed = 0F;

@@ -449,11 +449,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         checkParts();
         
         if(Math.abs(prevPosX - posX) > 0.001F)
-        	prevPosX = posX;
+        	lastTickPosX = prevPosX = posX;
         if(Math.abs(prevPosY - posY) > 0.001F)
-        	prevPosY = posY;
+        	lastTickPosY = prevPosY = posY;
         if(Math.abs(prevPosZ - posZ) > 0.001F)
-        	prevPosZ = posZ;
+        	lastTickPosZ = prevPosZ = posZ;
 		prevRotationYaw = axes.getYaw();
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();		
