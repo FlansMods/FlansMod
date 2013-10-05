@@ -231,7 +231,7 @@ public class EntityMecha extends EntityDriveable
     	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
-    		//return true;
+    		return true;
     	}
     	switch(key)
     	{
@@ -765,11 +765,7 @@ public class EntityMecha extends EntityDriveable
 			}
 		}
 		
-		for(EntitySeat seat : seats)
-		{
-			if(seat != null)
-				seat.updatePosition();
-		}
+
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
@@ -783,8 +779,16 @@ public class EntityMecha extends EntityDriveable
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
 		
+		for(EntitySeat seat : seats)
+		{
+			if(seat != null)
+				seat.updatePosition();
+		}
+		
 		legSwing = legSwing / 2F;
 		
+        if(posX != prevPosX)
+        	System.out.println((posX) + " " + (prevPosX) + " " + worldObj.isRemote);
 	}
 	
 	@Override

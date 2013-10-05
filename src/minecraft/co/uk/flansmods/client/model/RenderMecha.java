@@ -58,10 +58,10 @@ public class RenderMecha extends Render
         float dRoll = (mecha.axes.getRoll() - mecha.prevRotationRoll);
         for(; dRoll > 180F; dRoll -= 360F) {}
         for(; dRoll <= -180F; dRoll += 360F) {}
-        GL11.glRotatef(180F - mecha.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-mecha.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+		//GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
         //type.model = new ModelProtoTitan();
 		if(model != null)

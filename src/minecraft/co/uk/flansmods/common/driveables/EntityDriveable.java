@@ -383,8 +383,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     {
         super.onUpdate();
         
-        //System.out.println(((int)posX) + " " + ((int)posY) + " " + ((int)posZ) + " " + worldObj.isRemote);
-        
         DriveableType type = getDriveableType();
         
         if(!worldObj.isRemote)
@@ -448,12 +446,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         
         checkParts();
         
-        if(Math.abs(prevPosX - posX) > 0.001F)
-        	lastTickPosX = prevPosX = posX;
-        if(Math.abs(prevPosY - posY) > 0.001F)
-        	lastTickPosY = prevPosY = posY;
-        if(Math.abs(prevPosZ - posZ) > 0.001F)
-        	lastTickPosZ = prevPosZ = posZ;
 		prevRotationYaw = axes.getYaw();
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();		

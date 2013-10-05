@@ -98,9 +98,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void onUpdate()
 	{
-		prevPosX = posX;
-		prevPosY = posY;
-		prevPosZ = posZ;
+		super.onUpdate();
+		//prevPosX = posX;
+		//prevPosY = posY;
+		//prevPosZ = posZ;
 
 		//If on the client and the driveable parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundDriveable)
@@ -189,9 +190,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			playerPosY = posY + yOffset.yCoord;
 			playerPosZ = posZ + yOffset.zCoord;
 			
-			riddenByEntity.prevPosX = prevPlayerPosX;
-			riddenByEntity.prevPosY = prevPlayerPosY;
-			riddenByEntity.prevPosZ = prevPlayerPosZ;
+			riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
+			riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
+			riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
             riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);  
             
             //Calculate the local look axes globally
@@ -219,6 +220,16 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				riddenByEntity.prevRotationYaw -= 360F;
 		}
 	}
+	
+	@Override
+    public void updateRiderPosition()
+    {
+		riddenByEntity.prevRotationYaw = prevPlayerYaw;
+		riddenByEntity.prevRotationPitch = prevPlayerPitch;
+		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
+		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
+		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
+    }
 
 	@Override
     public boolean canBeCollidedWith()
@@ -480,6 +491,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		}
 	}
 	
+	/**
 	@Override
     public void updateRiderPosition()
     {
@@ -496,7 +508,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return;
         }
     }
-	
+	**/
 	
 	
 	@Override
