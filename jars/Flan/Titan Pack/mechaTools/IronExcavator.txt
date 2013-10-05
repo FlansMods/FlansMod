@@ -1,5 +1,5 @@
 Name Iron Excavator
-ShortName IronExcavator
+ShortName ironExcavator
 Icon IronExcavator
 Model titan.Drill
 Texture IronExcavator

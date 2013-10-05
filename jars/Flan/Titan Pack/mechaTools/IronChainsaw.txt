@@ -1,5 +1,5 @@
 Name Iron Chainsaw
-ShortName IronChainsaw
+ShortName ironChainsaw
 Icon IronChainsaw
 Model titan.Drill
 Texture IronChainsaw

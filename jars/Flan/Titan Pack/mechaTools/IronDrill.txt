@@ -1,5 +1,5 @@
 Name Iron Drill
-ShortName IronDrill
+ShortName ironDrill
 Icon IronDrill
 Model titan.Drill
 Texture IronDrill
