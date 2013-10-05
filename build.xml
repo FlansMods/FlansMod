@@ -254,6 +254,17 @@
 			<fileset dir="${reobfmodels.dir}/yeolde"/>
 		</copy>
 		<zip destfile="${packs.dir}/Ye Olde Pack.zip" basedir="${mcpflan.dir}/Ye Olde Pack"/>
+		
+		<!-- Titan -->
+		<delete dir="${mcpflan.dir}/Titan Pack"/>
+		<mkdir dir="${mcpflan.dir}/Titan Pack/${packmodels.dir}/titan"/>
+		<copy todir="${mcpflan.dir}/Titan Pack">
+			<fileset dir="jars/Flan/Titan Pack"/>
+		</copy>
+		<copy todir="${mcpflan.dir}/Titan Pack/${packmodels.dir}/titan" failonerror="false">
+			<fileset dir="${reobfmodels.dir}/titan"/>
+		</copy>
+		<zip destfile="${packs.dir}/Titan Pack.zip" basedir="${mcpflan.dir}/Titan Pack"/>
 	</target>
 	
 	<!-- Target for full releases -->
