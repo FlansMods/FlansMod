@@ -1,0 +1,13 @@
+Name Iron Power Sword
+ShortName ironPowerSword
+Icon IronPSword
+Model titan.Drill
+Texture IronPSword
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23420
+RecipeOutput 1
+Recipe S swordIron I ingotIron
+ S 
+IRI
+IRI
