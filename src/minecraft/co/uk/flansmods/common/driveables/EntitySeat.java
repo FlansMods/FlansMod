@@ -327,6 +327,15 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			PacketDispatcher.sendPacketToServer(PacketSeatUpdates.buildUpdatePacket(this));
 		}
 	}
+	
+	@Override
+	public void updateKeyHeldState(int key, boolean held)
+	{
+		if(driver)
+		{
+			driveable.updateKeyHeldState(key, held);
+		}
+	}
 
 	@Override
 	public boolean pressKey(int key, EntityPlayer player) 

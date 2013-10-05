@@ -30,6 +30,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.network.PacketDriveableDamage;
+import co.uk.flansmods.common.network.PacketDriveableKeyHeld;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -60,6 +61,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public float prevRotationRoll;
 	/** Angular velocity */
 	public Vector3f angularVelocity = new Vector3f(0F, 0F, 0F);
+	
+	/** Whether each mouse button is held */
+	public boolean leftMouseHeld = false, rightMouseHeld = false;
 	
 	public RotatedAxes prevAxes;
 	public RotatedAxes axes;
@@ -359,6 +363,20 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	@Override
 	public abstract boolean pressKey(int key, EntityPlayer player);
+	
+	@Override
+	public void updateKeyHeldState(int key, boolean held)
+	{
+		if(worldObj.isRemote)
+		{
+			PacketDispatcher.sendPacketToServer(PacketDriveableKeyHeld.buildKeyPacket(key, held));
+		}
+		switch(key)
+		{
+		case 9 : leftMouseHeld = held; break;
+		case 8 : rightMouseHeld = held; break;
+		}
+	}
 
 	@Override
     public void onUpdate()

@@ -3,8 +3,14 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import org.lwjgl.input.Mouse;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,8 +20,11 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
@@ -37,6 +46,7 @@ import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
+import co.uk.flansmods.common.vector.Vector3i;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class EntityMecha extends EntityDriveable
@@ -56,6 +66,10 @@ public class EntityMecha extends EntityDriveable
     public int shootDelayLeft = 0, shootDelayRight = 0;
     /** Used for gun sounds */
     public int soundDelayLeft = 0, soundDelayRight = 0;
+    /** The coords of the blocks being destroyed */
+    public Vector3i breakingBlock = null;
+    /** Progress made towards breaking each block */
+    public float breakingProgress = 0F;
     
     private int foundFuel = 0;
 
@@ -213,7 +227,7 @@ public class EntityMecha extends EntityDriveable
     	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
     	{
     		PacketDispatcher.sendPacketToServer(PacketVehicleKey.buildKeyPacket(key));
-    		return true;
+    		//return true;
     	}
     	switch(key)
     	{
@@ -262,11 +276,11 @@ public class EntityMecha extends EntityDriveable
 			}
 			case 8 : //UseR
 			{
-				return useItem(false);
+				return true; //useItem(false);
 			}
 			case 9 : //UseL
 			{
-				return useItem(true);
+				return true; //useItem(true);
 			}
 			case 10 : //Change control mode : Do nothing
 			{
@@ -314,10 +328,31 @@ public class EntityMecha extends EntityDriveable
 		
 		Item heldItem = heldStack.getItem();
 		
+		MechaType mechaType = getMechaType();
+		
 		if(heldItem instanceof ItemMechaTool)
 		{
 			MechaToolType toolType = ((ItemMechaTool)heldItem).type;
 			
+			float reach = 100F; //toolType.reach * mechaType.reach;
+			
+			Vector3f lookOrigin = new Vector3f((float)mechaType.seats[0].x / 16F, (float)mechaType.seats[0].y / 16F + seats[0].riddenByEntity.getMountedYOffset(), (float)mechaType.seats[0].z / 16F);
+			lookOrigin = axes.findLocalVectorGlobally(lookOrigin);
+			Vector3f.add(lookOrigin, new Vector3f(posX, posY, posZ), lookOrigin);
+	
+			Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
+			
+			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
+			
+			Vector3f lookTarget = Vector3f.add(lookVector, new Vector3f(posX, posY, posZ), null);
+			
+			MovingObjectPosition hit = worldObj.clip(lookOrigin.toVec3(), lookTarget.toVec3());
+			if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
+			{
+				if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
+					breakingProgress = 0F;
+				breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
+			}
 		}
 		
 		else if(heldItem instanceof ItemGun)
@@ -408,6 +443,8 @@ public class EntityMecha extends EntityDriveable
 			else soundDelayRight = gunType.shootSoundLength;
 		}		
 	}
+	
+
 	
 	@Override
     public boolean attackEntityFrom(DamageSource damagesource, float i)
@@ -513,6 +550,8 @@ public class EntityMecha extends EntityDriveable
 				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
+				
+				
 			}
 			else if(!(seats[0].riddenByEntity instanceof EntityPlayer))
 			{
@@ -564,6 +603,54 @@ public class EntityMecha extends EntityDriveable
 						data.fuelInTank -= data.engine.fuelConsumption;
 				}
 			}
+			
+			if(!worldObj.isRemote)
+			{
+				//Use left and right items on the server side
+				if(leftMouseHeld)
+					useItem(true);
+				if(rightMouseHeld)
+					useItem(false);
+				
+				//Check the left block being mined
+				if(breakingBlock != null)
+				{
+					Block blockHit = Block.blocksList[worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z)];
+					
+					//Get the itemstacks in each hand
+					ItemStack leftStack = inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+					ItemStack rightStack = inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+					
+					//Work out if we are actually breaking blocks
+					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaTool;
+					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaTool;
+					boolean breakingBlocks = leftMouseHeld && leftStackIsTool || rightMouseHeld && rightStackIsTool;
+					
+					//If we are not breaking blocks, reset everything
+					if(blockHit == null || !breakingBlocks)
+					{
+						Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
+						breakingBlock = null;
+					}
+					else
+					{
+						//Calculate the mine speed
+						float mineSpeed = 1F;
+						
+						mineSpeed /= blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						
+						Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
+						breakingProgress += 0.1F;
+						if(breakingProgress >= 1F)
+						{
+			        		blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
+							FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+							worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						}
+					}
+				}
+			}
+			
 		}
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
@@ -676,5 +763,4 @@ public class EntityMecha extends EntityDriveable
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

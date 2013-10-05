@@ -12,24 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 public class GuiDriveableController extends GuiScreen 
 {
 	private IControllable plane;
-	/*private static ArrayList<Controller> joySticks = new ArrayList<Controller>();
-	
-	static
-	{
-		try
-		{
-			Controllers.create();
-			for(int i = 0; i < Controllers.getControllerCount(); i++)
-			{
-				if(Controllers.getController(i).getAxisCount() >= 2)
-					joySticks.add(Controllers.getController(i));
-			}
-		}
-		catch(LWJGLException e)
-		{
-			e.printStackTrace();
-		}
-	}*/
+	private boolean leftMouseHeld;
+	private boolean rightMouseHeld;
 	
 	public GuiDriveableController(IControllable thePlane)
 	{
@@ -59,13 +43,25 @@ public class GuiDriveableController extends GuiScreen
 			player.inventory.changeCurrentItem(dWheel);
 		}
 
-		if(Mouse.isButtonDown(0)) //Left mouse
+		if(!leftMouseHeld&& Mouse.isButtonDown(0)) //Left mouse
 		{
-			plane.pressKey(9, player); //Shoot
+			leftMouseHeld = true;
+			plane.updateKeyHeldState(9, true);
 		}
-		if(Mouse.isButtonDown(1)) //Right mouse
+		if(leftMouseHeld && !Mouse.isButtonDown(0))
 		{
-			plane.pressKey(8, player); //Bomb
+			leftMouseHeld = false;
+			plane.updateKeyHeldState(9, false);
+		}
+		if(!rightMouseHeld && Mouse.isButtonDown(1)) //Right mouse
+		{
+			rightMouseHeld = true;
+			plane.updateKeyHeldState(8, true);
+		}
+		if(rightMouseHeld && !Mouse.isButtonDown(1))
+		{
+			rightMouseHeld = false;
+			plane.updateKeyHeldState(8, false);
 		}
     }
 	
