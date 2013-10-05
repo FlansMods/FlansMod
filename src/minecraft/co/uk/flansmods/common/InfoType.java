@@ -253,8 +253,9 @@ public class InfoType
 		{
 			return new ItemStack(Item.clay, amount);
 		}
-		for (Item item : Item.itemsList)
+		for (int i = Item.itemsList.length - 1; i >= 0; i--)
 		{
+			Item item = Item.itemsList[i];
 			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
 			{
 				return new ItemStack(item, amount, damage);
