@@ -3,10 +3,8 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -552,9 +550,26 @@ public class EntityMecha extends EntityDriveable
 		//Fuel Handling
 		DriveableData data = getDriveableData();
 		
+		ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
+		
 		//If the fuel item has stack size <= 0, delete it
-		if(driveableData.getStackInSlot(foundFuel) != null && data.fuel.stackSize <= 0)
-			data.fuel = null;
+		if(fuelStack != null && fuelStack.stackSize <= 0)
+			driveableData.setInventorySlotContents(foundFuel, null);
+		
+		//Find the next fuelling slot
+		if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
+		{
+			foundFuel = -1;
+			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.numCargo + type.numCargoSlots; i++)
+			{
+				ItemStack tempStack = driveableData.getStackInSlot(i);
+				if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
+				{
+					foundFuel = i;
+					break;
+				}
+			}
+		}
 		
 		//Work out if we are fuelling (from a Flan's Mod fuel item)
 		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
