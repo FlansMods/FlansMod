@@ -483,7 +483,7 @@ public class ItemGun extends Item
 	}
 
 	/** Method for dropping items on reload and on shoot */
-	private void dropItem(World world, Entity entity, String itemName)
+	public static void dropItem(World world, Entity entity, String itemName)
 	{
 		if (itemName != null)
 		{

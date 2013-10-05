@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,6 +19,8 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerHandler;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
@@ -31,6 +34,7 @@ import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
+import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
 import co.uk.flansmods.common.network.PacketVehicleKey;
@@ -52,6 +56,9 @@ public class EntityMecha extends EntityDriveable
     public float legSwing = 0;
     /** Used for shooting guns */
     public int shootDelayLeft = 0, shootDelayRight = 0;
+    /** Used for gun sounds */
+    public int soundDelayLeft = 0, soundDelayRight = 0;
+    
     private int foundFuel = 0;
 
 	public EntityMecha(World world) 
@@ -302,6 +309,7 @@ public class EntityMecha extends EntityDriveable
 	
 	private boolean useItem(boolean left)
 	{
+		boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
 		ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 		if(heldStack == null)
 			return false;
@@ -341,7 +349,6 @@ public class EntityMecha extends EntityDriveable
 				//If no bullet stack was found, reload
 				if(bulletStack == null)
 				{
-					boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
 					gunItem.reload(heldStack, worldObj, this, driveableData, creative, false);				
 				}
 				//A bullet stack was found, so try shooting with it
@@ -349,7 +356,7 @@ public class EntityMecha extends EntityDriveable
 				{
 					//Shoot
 					BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
-					shoot(gunType, bulletType, left);
+					shoot(gunType, bulletType, creative, left);
 					//Damage the bullet item
 					bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 					
@@ -362,7 +369,7 @@ public class EntityMecha extends EntityDriveable
 		return true;
 	}
 	
-	private void shoot(GunType gunType, BulletType bulletType, boolean left)
+	private void shoot(GunType gunType, BulletType bulletType, boolean creative, boolean left)
 	{
 		MechaType mechaType = getMechaType();
 		
@@ -383,13 +390,27 @@ public class EntityMecha extends EntityDriveable
 		
 		bulletOrigin  = Vector3f.add(new Vector3f(posX, posY, posZ), bulletOrigin, null);
 				
-		worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.accuracy / 2, gunType.damage, bulletType, gunType.speed, mechaType));
+		if(!worldObj.isRemote)
+			for (int k = 0; k < gunType.numBullets; k++)
+				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.accuracy / 2, gunType.damage, bulletType, gunType.speed, mechaType));
 		
 		if(left)
 			shootDelayLeft = gunType.shootDelay;
+		else shootDelayRight = gunType.shootDelay;
 		
+		if(bulletType.dropItemOnShoot != null && !creative)
+			ItemGun.dropItem(worldObj, this, bulletType.dropItemOnShoot);
+		
+		// Play a sound if the previous sound has finished
+		if((left ? soundDelayLeft : soundDelayRight) <= 0 && gunType.shootSound != null)
+		{
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, gunType.shootSound, gunType.distortSound));
+			if(left)
+				soundDelayLeft = gunType.shootSoundLength;
+			else soundDelayRight = gunType.shootSoundLength;
+		}		
 	}
-
+	
 	@Override
     public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
@@ -416,8 +437,10 @@ public class EntityMecha extends EntityDriveable
 		
 		//Decrement delay variables
 		if(jumpDelay > 0) jumpDelay--;
-		if(shootDelayLeft > 0) shootDelayLeft--;
+		if(shootDelayLeft > 0)  shootDelayLeft--;
 		if(shootDelayRight > 0) shootDelayRight--;
+		if(soundDelayLeft > 0)  soundDelayLeft--;
+		if(soundDelayRight > 0) soundDelayRight--;
 		
 		//Get Mecha Type
 		MechaType type = this.getMechaType();
@@ -547,55 +570,56 @@ public class EntityMecha extends EntityDriveable
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
-		
-		
     	setPosition(posX, posY, posZ);
 		
 		//Fuel Handling
 		DriveableData data = getDriveableData();
 		
-		//If the fuel item has stack size <= 0, delete it
-		if(driveableData.getStackInSlot(foundFuel) != null && data.fuel.stackSize <= 0)
-			data.fuel = null;
-		
-		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
-		
-		//If we are fuelling
-		if(fuelling)
+		if(data != null)
 		{
-			int damage = data.fuel.getItemDamage();
-			//Consume 100 points of fuel (1 damage)
-			data.fuel.setItemDamage(damage + 1);
-			//Put 100 points of fuel 
-			data.fuelInTank += 100;
-			//If we have finished this fuel item
-			if(damage >= data.fuel.getMaxDamage())
+			//If the fuel item has stack size <= 0, delete it
+			if(data.fuel != null && data.fuel.stackSize <= 0)
+				data.fuel = null;
+			
+			//Work out if we are fuelling (from a Flan's Mod fuel item)
+			fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
+			
+			//If we are fuelling
+			if(fuelling)
 			{
-				//Reset the damage to 0
-				data.fuel.setItemDamage(0);
-				//Consume one item
-				data.fuel.stackSize--;
-				//If we consumed the last one, destroy the stack
-				if(data.fuel.stackSize <= 0)
-					data.fuel = null;
-			}	
-		}
-		//Check inventory slots for buildcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
-		{
-			for(int i = driveableData.getCargoInventoryStart(); i < driveableData.numCargo + type.numCargoSlots; i++)
+				int damage = data.fuel.getItemDamage();
+				//Consume 100 points of fuel (1 damage)
+				data.fuel.setItemDamage(damage + 1);
+				//Put 100 points of fuel 
+				data.fuelInTank += 100;
+				//If we have finished this fuel item
+				if(damage >= data.fuel.getMaxDamage())
+				{
+					//Reset the damage to 0
+					data.fuel.setItemDamage(0);
+					//Consume one item
+					data.fuel.stackSize--;
+					//If we consumed the last one, destroy the stack
+					if(data.fuel.stackSize <= 0)
+						data.fuel = null;
+				}	
+			}
+			//Check inventory slots for buildcraft buckets and if found, take fuel from them
+			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
 			{
-				ItemStack stack = driveableData.getStackInSlot(i);
-				if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
+				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
 				{
-					data.fuelInTank += 5000;
-					driveableData.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
-				}
-				else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-				{
-					data.fuelInTank += 10000;
-					driveableData.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+					ItemStack stack = data.getStackInSlot(i);
+					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
+					{
+						data.fuelInTank += 5000;
+						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+					}
+					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
+					{
+						data.fuelInTank += 10000;
+						data.setInventorySlotContents(i, new ItemStack(Item.bucketEmpty));
+					}
 				}
 			}
 		}
