@@ -231,15 +231,15 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
+	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
 		try 
 		{	
-			return typeClass.cast(Class.forName(modelDir + getModelName(split[1])).getConstructor().newInstance());
+			return typeClass.cast(Class.forName(modelDir + getModelName(s)).getConstructor().newInstance());
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load model : " + shortName + " (" + split[1] + ")");
+			FlansMod.log("Failed to load model : " + shortName + " (" + s + ")");
 			e.printStackTrace();
 		}
 		return null;

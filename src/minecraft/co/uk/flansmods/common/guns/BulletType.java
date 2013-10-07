@@ -52,7 +52,7 @@ public class BulletType extends InfoType
 		{
 			if (arg0[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadModel(arg0, shortName, ModelBase.class);
+				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelBase.class);
 			}
 			if (arg0[0].equals("Texture"))
 				texture = arg0[1];

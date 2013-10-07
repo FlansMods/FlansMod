@@ -113,7 +113,7 @@ public class GrenadeType extends InfoType
 		try
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				model = FlansMod.proxy.loadModel(split, shortName, ModelBase.class);
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
 			if(split[0].equals("Texture"))
 				texture = split[1];
 			if(split[0].equals("MeleeDamage"))

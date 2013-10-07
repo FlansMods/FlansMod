@@ -116,7 +116,7 @@ public class DriveableType extends InfoType
 		try
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				model = FlansMod.proxy.loadModel(split, shortName, ModelDriveable.class);
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelDriveable.class);
 			
 			if(split[0].equals("Texture"))
 			{

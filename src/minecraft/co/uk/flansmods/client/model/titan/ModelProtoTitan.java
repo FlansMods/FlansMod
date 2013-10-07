@@ -13,42 +13,82 @@ public class ModelProtoTitan extends ModelMecha
 		int textureY = 256;
 		
 		//Body
-		bodyModel = new ModelRendererTurbo[4];
+		bodyModel = new ModelRendererTurbo[6];
 		
 		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		bodyModel[0].addBox(-12, 24, -12, 16, 24, 24);
+		bodyModel[0].addBox(-12, 29, -12, 16, 19, 24);
 		
 		bodyModel[1] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
-		bodyModel[1].addShape3D(0, 24, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 0, 0), new Coord2D(12, 0, 8, 0), new Coord2D(12, 12, 8, 12), new Coord2D(4, 24, 0, 12) }), 24, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
-
-		bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		bodyModel[2].flip = true;
-		bodyModel[2].addBox(-12, 24, -12, 16, 24, 24);
+		bodyModel[1].addShape3D(0, 21, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(12, 8, 8, 0), new Coord2D(12, 18, 8, 12), new Coord2D(4, 27, 0, 12) }), 24, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
 		
+		bodyModel[2] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
+		bodyModel[2].addShape3D(0, 21, 12, new Shape2D(new Coord2D[] { new Coord2D(-12, 0, 0, 0), new Coord2D(8, 0, 8, 0), new Coord2D(12, 8, 8, 12), new Coord2D(-12, 8, 0, 12) }), 24, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
+
+		
+		//bodyModel[0].setPosition(100F, 0F, 0F);
+		//bodyModel[1].setPosition(100F, 0F, 0F);
+		//bodyModel[2].setPosition(100F, 0F, 0F);
+		
+		//Body inside
 		bodyModel[3] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
 		bodyModel[3].flip = true;
-		bodyModel[3].addShape3D(0, 24, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 0), new Coord2D(12, 0), new Coord2D(12, 12), new Coord2D(4, 24) }), 24, 24, 12, 66, 24, ModelRendererTurbo.MR_BACK, new float[] { 8, 12, 14, 24 });
+		bodyModel[3].addBox(-12, 29, -11.5F, 16, 19, 23);
+		
+		bodyModel[4] = new ModelRendererTurbo(this, 0, -10, textureX, textureY);
+		bodyModel[4].flip = true;
+		bodyModel[4].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(12, 8, 8, 0), new Coord2D(12, 18, 8, 12), new Coord2D(4, 27, 0, 12) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
+		
+		bodyModel[5] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
+		bodyModel[5].flip = true;
+		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(-12, 2, 0, 0), new Coord2D(9, 2, 8, 0), new Coord2D(12, 8, 8, 12), new Coord2D(-12, 8, 0, 12) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
+
+		//bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		//bodyModel[1].flip = true;
+		//bodyModel[1].addBox(-12, 24, -12, 16, 24, 24);
+		
+		///bodyModel[3] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
+		//bodyModel[3].flip = true;
+		//bodyModel[3].addShape3D(0, 24, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 0), new Coord2D(12, 0), new Coord2D(12, 12), new Coord2D(4, 24) }), 24, 24, 12, 66, 24, ModelRendererTurbo.MR_BACK, new float[] { 8, 12, 14, 24 });
 
 		//Left Arm
-		leftArmModel = new ModelRendererTurbo[1];
+		leftArmModel = new ModelRendererTurbo[5];
 		
 		leftArmModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		leftArmModel[0].addBox(-4, -20, -4, 8, 20, 8);
+		leftArmModel[0].addBox(-2.5F, -2.5F, -2.5F, 5, 5, 5);
 		leftArmModel[0].setPosition(0, 0, 0);
+		
+		leftArmModel[1] = new ModelRendererTurbo(this, 0, 112, textureX, textureY);
+		leftArmModel[1].addBox(-3, -9, -3, 6, 9, 6);
+		leftArmModel[1].setPosition(0.25F, 0, 0);
+		leftArmModel[1].rotateAngleZ = -20F * (float)Math.PI / 180F;
+		
+		leftArmModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		leftArmModel[2].addBox(-2.5F, -2.5F, -2.5F, 5, 5, 5);
+		leftArmModel[2].setPosition(-2.8F, -10F, 0);
+		
+		leftArmModel[3] = new ModelRendererTurbo(this, 0, 112, textureX, textureY);
+		leftArmModel[3].addBox(-3, 0, -3, 6, 9, 6);
+		leftArmModel[3].setPosition(0.25F, -19, 0);
+		leftArmModel[3].rotateAngleZ = 20F * (float)Math.PI / 180F;
+		
+		leftArmModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		leftArmModel[4].addBox(-2.5F, -2.5F, -2.5F, 5, 5, 5);
+		leftArmModel[4].setPosition(0, -20, 0);
+		
 		
 		
 		//Right Arm
-		rightArmModel = new ModelRendererTurbo[1];
+		rightArmModel = leftArmModel; //new ModelRendererTurbo[1];
 		
-		rightArmModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		rightArmModel[0].addBox(-4, -20, -4, 8, 20, 8);
-		rightArmModel[0].setPosition(0, 0, 0);
+		//rightArmModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		//rightArmModel[0].addBox(-4, -20, -4, 8, 20, 8);
+		//rightArmModel[0].setPosition(0, 0, 0);
 		
 		//Hips
 		hipsModel = new ModelRendererTurbo[1];
 		
 		hipsModel[0] = new ModelRendererTurbo(this, 0, 84, textureX, textureY);
-		hipsModel[0].addBox(-10, 16, -10, 20, 8, 20);
+		hipsModel[0].addBox(-10, 15, -10, 20, 6, 20);
 		
 		//Left Leg
 		leftLegModel = new ModelRendererTurbo[1];
