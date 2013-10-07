@@ -15,6 +15,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.teams.Team;
@@ -254,6 +255,14 @@ public class FlansModClient extends FlansMod
 		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
 		controlModeSwitchTimer = 40;
 		return true;
+	}
+	
+	public static void reloadModels()
+	{
+		for(InfoType type : InfoType.infoTypes)
+		{
+			type.reloadModel();
+		}
 	}
 
 	public static void shoot()

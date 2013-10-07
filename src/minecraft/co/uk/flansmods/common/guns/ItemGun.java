@@ -34,6 +34,7 @@ import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketReload;
@@ -267,6 +268,9 @@ public class ItemGun extends Item
 		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
 		if(data.shootClickDelay == 0)
 		{
+			//Drivers can't shoot
+			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
+				return stack;
 			data.isShooting = isShooting;
 			if(type.mode == 0 && isShooting)
 			{

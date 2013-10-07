@@ -2,6 +2,8 @@ package co.uk.flansmods.common.driveables.mechas;
 
 import java.util.ArrayList;
 
+import co.uk.flansmods.client.model.ModelMecha;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -72,6 +74,12 @@ public class MechaType extends DriveableType
 		{
 		}
     }
+    
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelMecha.class);
+	}
     
 	public static MechaType getMecha(String find)
 	{

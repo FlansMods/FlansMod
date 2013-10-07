@@ -47,7 +47,7 @@ public class AAGunType extends InfoType
 		{
 			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadModel(arg0, shortName, ModelAAGun.class);
+				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelAAGun.class);
 			}
 			if (arg0[0].equals("Texture"))
 			{

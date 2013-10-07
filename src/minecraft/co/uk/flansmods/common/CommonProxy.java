@@ -86,7 +86,7 @@ public class CommonProxy
 	{
 	}
 	
-	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
+	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
 		return null;
 	}

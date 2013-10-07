@@ -43,6 +43,7 @@ public class KeyInputHandler extends KeyHandler
     protected static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J);
     protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
     protected static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10);
+    protected static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9);
 
 	Minecraft mc;
 	
@@ -70,7 +71,8 @@ public class KeyInputHandler extends KeyHandler
 				teamsMenuKey,
 				teamsScoresKey,
 				reloadKey,
-				debugKey
+				debugKey,
+				reloadModelsKey
 				},
 				new boolean[]
 						{
@@ -94,7 +96,8 @@ public class KeyInputHandler extends KeyHandler
 				false, // teams menu
 				false, // teams scores menu
 				false, //reload
-				false //debug
+				false, //debug
+				false //reloadModels
 						});
 		
 		mc = Minecraft.getMinecraft();
@@ -170,6 +173,10 @@ public class KeyInputHandler extends KeyHandler
 		else if(kb == debugKey)
 		{
 			FlansMod.DEBUG = !FlansMod.DEBUG;
+		}
+		else if(kb == reloadModelsKey)
+		{
+			FlansModClient.reloadModels();
 		}
 		else
 			handled = false;

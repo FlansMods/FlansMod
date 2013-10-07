@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.common.FlansMod;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -100,6 +101,14 @@ public class GuiDriveableController extends GuiScreen
 		if(i == mc.gameSettings.keyBindChat.keyCode)
 		{
 			mc.displayGuiScreen(new GuiChat());
+		}
+		if(i == KeyInputHandler.debugKey.keyCode)
+		{
+			FlansMod.DEBUG = !FlansMod.DEBUG;
+		}
+		if(i == KeyInputHandler.reloadModelsKey.keyCode)
+		{
+			FlansMod.DEBUG = !FlansMod.DEBUG;
 		}
     }
 	

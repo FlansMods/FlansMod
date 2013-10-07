@@ -25,6 +25,7 @@ public class InfoType
 	public String name;
 	public String shortName;
 	public String texture;
+	public String modelString;
 	
 	public InfoType(TypeFile file)
 	{
@@ -54,6 +55,8 @@ public class InfoType
 	{
 		try
 		{
+			if(arg0[0].toLowerCase().equals("model"))
+				modelString = arg0[1];
 			if (arg0[0].equals("Name"))
 			{
 				name = arg0[1];
@@ -276,6 +279,12 @@ public class InfoType
 		}
 		FlansMod.log("Could not find " + s + " when adding recipe");
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		
 	}
 	
 	public static InfoType getType(String s)
