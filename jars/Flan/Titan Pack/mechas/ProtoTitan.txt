@@ -50,5 +50,14 @@ AddDye 5 black
 AddDye 1 orange
 Add Dye 1 yellow
 //Health and collision
-//SetupPart core 100 -12 -12 -12 24 24 24
-BulletDetection 3
+SetupPart core 200 -12 24 -12 24 24 24
+SetupPart leftArm 30 -4 36 -18 16 8 6
+SetupPart rightArm 30 -4 36 18 16 8 -6
+SetupPart hips 100 -8 0 -8 16 24 16
+//SetupPart head 100 -7 -5 10 32 2 78
+BulletDetection 4
+//Height and Width for world collision
+Height 48
+Width 28
+//Height of chassis above the ground
+ChassisHeight 24

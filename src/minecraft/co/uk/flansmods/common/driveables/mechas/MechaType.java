@@ -25,6 +25,11 @@ public class MechaType extends DriveableType
 	public float armLength = 1F;
 	/** The amount to scale the held items / tools by when rendering */
 	public float heldItemScale = 1F;
+	/** Height and Width of the world collision box */
+	public float height = 3F;
+	public float width = 2F;
+	/** The height of chassis above the ground; for use when legs are gone */
+	public float chassisHeight = 1F;
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -66,7 +71,13 @@ public class MechaType extends DriveableType
 			if(split[0].equals("ArmLength"))
 				armLength = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("HeldItemScale"))
-				heldItemScale = Float.parseFloat(split[1]);	
+				heldItemScale = Float.parseFloat(split[1]);
+			if(split[0].equals("Height"))
+				height = (Float.parseFloat(split[1])/16F);
+			if(split[0].equals("Width"))
+				width = (Float.parseFloat(split[1])/16F);
+			if(split[0].equals("ChassisHeight"))
+				chassisHeight = (Integer.parseInt(split[1]))/16F;
 		}
 		catch (Exception e)
 		{

@@ -7,6 +7,7 @@ import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.client.model.titan.ModelProtoTitan;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.DriveablePart;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;

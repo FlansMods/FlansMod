@@ -38,6 +38,7 @@ import co.uk.flansmods.common.driveables.DriveablePart;
 import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
@@ -109,6 +110,7 @@ public class EntityMecha extends EntityDriveable
     protected void initType(DriveableType type, boolean clientSide)
     {
     	super.initType(type, clientSide);
+    	setSize(((MechaType)type).width, ((MechaType)type).height);
     	stepHeight = ((MechaType)type).stepHeight;
     }
 	
@@ -254,7 +256,7 @@ public class EntityMecha extends EntityDriveable
 			case 4 : //Jump
 			{
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption))
+				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
 					jumpDelay = 10;
 					motionY += type.jumpVelocity;
@@ -492,6 +494,18 @@ public class EntityMecha extends EntityDriveable
 		
 		prevLegsYaw = legAxes.getYaw();
 		
+		//TODO better implement this
+		if(isPartIntact(EnumDriveablePart.hips))
+		{
+			setSize(type.width, type.height);
+			yOffset = type.yOffset;
+		}
+		else
+		{
+			setSize(type.width, type.height - type.chassisHeight);
+			yOffset = type.yOffset - type.chassisHeight;
+		}
+		
 		//Work out of this is client side and the player is driving
 		boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
 		boolean driverIsLiving = seats[0] != null && seats[0].riddenByEntity instanceof EntityLivingBase;
@@ -596,7 +610,7 @@ public class EntityMecha extends EntityDriveable
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
-				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption)
+				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
