@@ -25,22 +25,20 @@ public class ModelProtoTitan extends ModelMecha
 		bodyModel[2].addShape3D(0, 21, 12, new Shape2D(new Coord2D[] { new Coord2D(-12, 0, 0, 0), new Coord2D(8, 0, 8, 0), new Coord2D(12, 8, 8, 12), new Coord2D(-12, 8, 0, 12) }), 24, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
 
 		
-		//bodyModel[0].setPosition(100F, 0F, 0F);
-		//bodyModel[1].setPosition(100F, 0F, 0F);
-		//bodyModel[2].setPosition(100F, 0F, 0F);
+		bodyModel[0].setPosition(100F, 0F, 0F);
+		bodyModel[1].setPosition(100F, 0F, 0F);
+		bodyModel[2].setPosition(100F, 0F, 0F);
 		
 		//Body inside
-		bodyModel[3] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
+		bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		bodyModel[3].flip = true;
 		bodyModel[3].addBox(-12, 29, -11.5F, 16, 19, 23);
 		
 		bodyModel[4] = new ModelRendererTurbo(this, 0, -10, textureX, textureY);
-		bodyModel[4].flip = true;
-		bodyModel[4].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(12, 8, 8, 0), new Coord2D(12, 18, 8, 12), new Coord2D(4, 27, 0, 12) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
+		bodyModel[4].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(4, 27, 0, 12), new Coord2D(12, 18, 8, 12), new Coord2D(12, 8, 8, 0) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
 		
 		bodyModel[5] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
-		bodyModel[5].flip = true;
-		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(-12, 2, 0, 0), new Coord2D(9, 2, 8, 0), new Coord2D(12, 8, 8, 12), new Coord2D(-12, 8, 0, 12) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
+		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(-12, 2, 0, 0),  new Coord2D(-12, 8, 0, 12), new Coord2D(12, 8, 8, 12), new Coord2D(9, 2, 8, 0) }), 23, 24, 12, 58, 24, ModelRendererTurbo.MR_BACK, new float[] { 24, 14, 12, 8 });
 
 		//bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		//bodyModel[1].flip = true;
