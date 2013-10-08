@@ -2,6 +2,7 @@ package co.uk.flansmods.common.driveables.mechas;
 
 import java.util.ArrayList;
 
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.client.model.ModelMechaTool;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
@@ -59,6 +60,11 @@ public class MechaToolType extends InfoType
 				return type;
 		}
 		return null;
+	}
+	
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelMechaTool.class);
 	}
 
 }

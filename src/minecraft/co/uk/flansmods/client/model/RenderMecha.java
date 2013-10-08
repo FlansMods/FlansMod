@@ -93,7 +93,7 @@ public class RenderMecha extends Render
 			else
 			{
 				GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
-				renderItem(mecha, holdingStack, 0, f1);
+				renderItem(mecha, holdingStack, 0, false, f1);
 			}
 			GL11.glPopMatrix();
 		}
@@ -123,7 +123,7 @@ public class RenderMecha extends Render
 			else
 			{
 				GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
-				renderItem(mecha, holdingStack, 0, f1);
+				renderItem(mecha, holdingStack, 0, false, f1);
 			}
 			GL11.glPopMatrix();
 		}
@@ -183,7 +183,7 @@ public class RenderMecha extends Render
 	}
 
 	
-    private void renderItem(EntityMecha mecha, ItemStack stack, int par3, float dT)
+    private void renderItem(EntityMecha mecha, ItemStack stack, int par3, boolean leftHand, float dT)
     {
         GL11.glPushMatrix();
         TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
@@ -199,7 +199,13 @@ public class RenderMecha extends Render
 			MechaToolType toolType = toolItem.type;
 			bindTexture(FlansModResourceHandler.getTexture(toolType));
 			if(toolType.model != null)
-				toolType.model.render(mecha, true, dT);
+			{
+				toolType.model.render(mecha, dT);
+			ItemStack leftStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+			ItemStack rightStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+			
+			toolType.model.renderDrill(mecha, dT);
+			}
 		}
 		else
 		{
