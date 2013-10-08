@@ -11,7 +11,7 @@ public class ModelMechaTool extends ModelBase
 	/** This bit spins */
 	public ModelRendererTurbo[] drillModel = new ModelRendererTurbo[0];
 	
-	public void render(EntityMecha mecha, boolean leftHand, float f1)
+	public void render(EntityMecha mecha, float f1)
 	{
 		float f5 = 1F / 16F;
 		
@@ -19,7 +19,12 @@ public class ModelMechaTool extends ModelBase
 		{
 			model.render(f5);
 		}
-		
+	}
+	
+	public void renderDrill(EntityMecha mecha, float f1)
+	{
+		float f5 = 1F / 16F;
+				
 		for(ModelRendererTurbo model : drillModel)
 		{
 			//Rotate
