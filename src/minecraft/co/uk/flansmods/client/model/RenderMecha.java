@@ -94,7 +94,7 @@ public class RenderMecha extends Render
 			else
 			{
 				GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
-				renderItem(mecha, holdingStack, 0, false, f1);
+				renderItem(mecha, holdingStack, 0, true, f1);
 			}
 			GL11.glPopMatrix();
 		}
