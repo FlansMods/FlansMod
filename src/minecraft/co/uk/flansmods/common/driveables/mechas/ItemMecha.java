@@ -30,7 +30,7 @@ public class ItemMecha extends Item {
 		maxStackSize = 1;
 		type = type1;
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanDriveables);
+		setCreativeTab(FlansMod.tabFlanMechas);
 	}
 	
 	@Override

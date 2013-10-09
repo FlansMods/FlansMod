@@ -23,6 +23,15 @@ public class MechaItemType extends InfoType
 	public float speed = 1F;
 	/** The maximum block hardness you can break with this tool */
 	public float toolHardness = 1F;
+	/** This is multiplied by the mecha reach to calculate the total reach */
+	public float reach = 1F;
+	
+	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
+		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
+		or what certain values should take
+	*/
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false;
+	
 	/** The model */
 	@SideOnly(Side.CLIENT)
 	public ModelMechaTool model;
@@ -48,6 +57,13 @@ public class MechaItemType extends InfoType
 				speed = Float.parseFloat(split[1]);
 			if(split[0].equals("ToolHardness"))
 				toolHardness = Float.parseFloat(split[1]);
+			if(split[0].equals("Reach"))
+				reach = Float.parseFloat(split[1]);
+			
+			if(split[0].equals("StopMechaFallDamage"))
+				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ForceBlockFallDamage"))
+				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception e)
 		{
