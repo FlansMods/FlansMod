@@ -34,7 +34,7 @@ JumpHeight 2
 LeftArmOrigin 0 40 -16
 RightArmOrigin 0 40 16
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
-ArmLength 20
+ArmLength 22
 //The scale multiplier for rendering the items and tools being held
 HeldItemScale 1
 //Recipe

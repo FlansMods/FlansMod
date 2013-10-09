@@ -547,6 +547,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(thePlayerIsDrivingThis)
 		{
 			PacketDispatcher.sendPacketToServer(PacketVehicleControl.buildUpdatePacket(this));
+			serverPosX = posX;
+			serverPosY = posY;
+			serverPosZ = posZ;
+			serverYaw = axes.getYaw();
 		}
 		
 		//If this is the server, send position updates to everyone, having received them from the driver
