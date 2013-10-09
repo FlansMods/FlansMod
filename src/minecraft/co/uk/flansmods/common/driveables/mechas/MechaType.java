@@ -28,10 +28,11 @@ public class MechaType extends DriveableType
 	/** The amount to scale the held items / tools by when rendering */
 	public float heldItemScale = 1F;
 	/** Height and Width of the world collision box */
-	public float height = 3F;
-	public float width = 2F;
+	public float height = 3F, width = 2F;
 	/** The height of chassis above the ground; for use when legs are gone */
 	public float chassisHeight = 1F;
+	/** How much fall damage the mecha takes by default. Overidden by some upgrades */
+	public float fallDamageMultiplier = 1F;
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -80,6 +81,8 @@ public class MechaType extends DriveableType
 				width = (Float.parseFloat(split[1])/16F);
 			if(split[0].equals("ChassisHeight"))
 				chassisHeight = (Integer.parseInt(split[1]))/16F;
+			if(split[0].equals("FallDamageMultiplier"))
+				fallDamageMultiplier = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

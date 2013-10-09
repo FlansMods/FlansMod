@@ -25,6 +25,7 @@ import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import co.uk.flansmods.client.GuiDriveableController;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
@@ -434,8 +435,8 @@ public class EntityMecha extends EntityDriveable
 				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.accuracy / 2, gunType.damage, bulletType, gunType.speed, mechaType));
 		
 		if(left)
-			shootDelayLeft = gunType.shootDelay;
-		else shootDelayRight = gunType.shootDelay;
+			shootDelayLeft = gunType.mode == 0 ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
+		else shootDelayRight = gunType.mode == 0 ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
 		
 		if(bulletType.dropItemOnShoot != null && !creative)
 			ItemGun.dropItem(worldObj, this, bulletType.dropItemOnShoot);
@@ -459,6 +460,12 @@ public class EntityMecha extends EntityDriveable
             return true;
         
         MechaType type = getMechaType();
+        
+        if(damagesource.getDamageType().equals("fall"))
+        {
+        	float damageToInflict = i * type.fallDamageMultiplier;
+        	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
+        }
         
 		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
 		{
@@ -563,14 +570,12 @@ public class EntityMecha extends EntityDriveable
 		if(driverIsLiving)
 		{
 			EntityLivingBase entity = (EntityLivingBase)seats[0].riddenByEntity;
-			if(thePlayerIsDrivingThis)
+			if(thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController)
 			{
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
 				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
-				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
-				
-				
+				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;				
 			}
 			else if(!(seats[0].riddenByEntity instanceof EntityPlayer))
 			{
