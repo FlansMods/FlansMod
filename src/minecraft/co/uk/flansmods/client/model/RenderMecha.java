@@ -11,8 +11,8 @@ import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.PilotGun;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
-import co.uk.flansmods.common.driveables.mechas.ItemMechaTool;
-import co.uk.flansmods.common.driveables.mechas.MechaToolType;
+import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
+import co.uk.flansmods.common.driveables.mechas.MechaItemType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -233,13 +233,13 @@ public class RenderMecha extends Render
 		Item item = stack.getItem();
 		
 		//Render tools
-		if(item instanceof ItemMechaTool)
+		if(item instanceof ItemMechaAddon)
 		{
 
 			GL11.glRotatef(-90F, 0F, 0F, 1F);
 			GL11.glTranslatef(0F, 0F, 0F);
-			ItemMechaTool toolItem = (ItemMechaTool)item;
-			MechaToolType toolType = toolItem.type;
+			ItemMechaAddon toolItem = (ItemMechaAddon)item;
+			MechaItemType toolType = toolItem.type;
 			bindTexture(FlansModResourceHandler.getTexture(toolType));
 			if(toolType.model != null)
 			{

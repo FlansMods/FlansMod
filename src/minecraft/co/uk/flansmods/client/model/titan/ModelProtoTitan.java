@@ -82,15 +82,11 @@ public class ModelProtoTitan extends ModelMecha
 		
 		
 		//Right Arm
-		rightArmModel = leftArmModel.clone(); //new ModelRendererTurbo[1];
+		rightArmModel = leftArmModel.clone();
 		
 		rightArmModel[5] = new ModelRendererTurbo(this, 63, 82, textureX, textureY);
 		rightArmModel[5].addBox(-1.5F, -1.5F, -4F, 3, 3, 2);
 		rightArmModel[5].setPosition(0, 0, 0);
-		
-		//rightArmModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		//rightArmModel[0].addBox(-4, -20, -4, 8, 20, 8);
-		//rightArmModel[0].setPosition(0, 0, 0);
 		
 		//Hips
 		hipsModel = new ModelRendererTurbo[1];

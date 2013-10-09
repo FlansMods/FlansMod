@@ -146,7 +146,7 @@ public class MechaInventory implements IInventory
 			return true;
 		switch(EnumMechaSlotType.values()[i])
 		{
-		case leftTool : case rightTool : return item instanceof ItemGun || item instanceof ItemMechaTool;
+		case leftTool : case rightTool : return item instanceof ItemGun || item instanceof ItemMechaAddon;
 		case leftArm : case rightArm : return item instanceof ItemBullet;
 		
 		}

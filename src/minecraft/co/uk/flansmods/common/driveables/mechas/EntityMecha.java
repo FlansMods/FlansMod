@@ -340,9 +340,9 @@ public class EntityMecha extends EntityDriveable
 		
 		MechaType mechaType = getMechaType();
 		
-		if(heldItem instanceof ItemMechaTool)
+		if(heldItem instanceof ItemMechaAddon)
 		{
-			MechaToolType toolType = ((ItemMechaTool)heldItem).type;
+			MechaItemType toolType = ((ItemMechaAddon)heldItem).type;
 			
 			float reach = 100F; //toolType.reach * mechaType.reach;
 			
@@ -669,8 +669,8 @@ public class EntityMecha extends EntityDriveable
 					ItemStack rightStack = inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 					
 					//Work out if we are actually breaking blocks
-					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaTool;
-					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaTool;
+					boolean leftStackIsTool = leftStack != null && leftStack.getItem() instanceof ItemMechaAddon;
+					boolean rightStackIsTool = rightStack != null && rightStack.getItem() instanceof ItemMechaAddon;
 					boolean breakingBlocks = (leftMouseHeld && leftStackIsTool) || (rightMouseHeld && rightStackIsTool);
 					
 					//If we are not breaking blocks, reset everything
@@ -688,13 +688,13 @@ public class EntityMecha extends EntityDriveable
 						float mineSpeed = 1F;
 						if(leftStackIsTool)
 						{
-							MechaToolType leftType = ((ItemMechaTool)leftStack.getItem()).type;
+							MechaItemType leftType = ((ItemMechaAddon)leftStack.getItem()).type;
 							if(leftType.function.effectiveAgainst(material) && leftType.toolHardness > blockHardness)
 								mineSpeed *= leftType.speed;
 						}
 						if(rightStackIsTool)
 						{
-							MechaToolType rightType = ((ItemMechaTool)rightStack.getItem()).type;
+							MechaItemType rightType = ((ItemMechaAddon)rightStack.getItem()).type;
 							if(rightType.function.effectiveAgainst(material) && rightType.toolHardness > blockHardness)
 								mineSpeed *= rightType.speed;
 						}

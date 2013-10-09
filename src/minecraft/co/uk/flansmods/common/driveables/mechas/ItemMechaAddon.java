@@ -10,9 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemMechaTool extends Item 
+public class ItemMechaAddon extends Item 
 {
-	public ItemMechaTool(int i, MechaToolType type1)
+	public ItemMechaAddon(int i, MechaItemType type1)
 	{
 		super(i);
 		type = type1;
@@ -22,7 +22,7 @@ public class ItemMechaTool extends Item
 	}
 	
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
 	{
 	}
 
@@ -40,5 +40,5 @@ public class ItemMechaTool extends Item
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
 
-	public MechaToolType type;
+	public MechaItemType type;
 }

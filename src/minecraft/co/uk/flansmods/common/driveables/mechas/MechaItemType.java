@@ -11,11 +11,13 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class MechaToolType extends InfoType 
+public class MechaItemType extends InfoType 
 {
-	public static ArrayList<MechaToolType> types = new ArrayList<MechaToolType>();
+	public static ArrayList<MechaItemType> types = new ArrayList<MechaItemType>();
 	
-	/** What type of tool is this? Axe? Pick? */
+	/** The type of item */
+	public EnumMechaItemType type;
+	/** If this is a tool, then what type of tool is this? Axe? Pick? */
 	public EnumMechaToolType function = EnumMechaToolType.sword;
 	/** How quickly this tool works */
 	public float speed = 1F;
@@ -25,7 +27,7 @@ public class MechaToolType extends InfoType
 	@SideOnly(Side.CLIENT)
 	public ModelMechaTool model;
 	
-	public MechaToolType(TypeFile file) 
+	public MechaItemType(TypeFile file) 
 	{
 		super(file);
 	}
@@ -52,9 +54,9 @@ public class MechaToolType extends InfoType
 		}
     }
 	
-	public static MechaToolType getTool(String find)
+	public static MechaItemType getTool(String find)
 	{
-		for(MechaToolType type : types)
+		for(MechaItemType type : types)
 		{
 			if(type.shortName.equals(find))
 				return type;

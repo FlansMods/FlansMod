@@ -28,8 +28,8 @@ import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ItemMecha;
-import co.uk.flansmods.common.driveables.mechas.ItemMechaTool;
-import co.uk.flansmods.common.driveables.mechas.MechaToolType;
+import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
+import co.uk.flansmods.common.driveables.mechas.MechaItemType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
 import co.uk.flansmods.common.guns.BulletType;
@@ -584,9 +584,9 @@ public class FlansMod
 		{
 			try
 			{
-				MechaToolType type = new MechaToolType(mechaToolFile);
+				MechaItemType type = new MechaItemType(mechaToolFile);
 				type.read(mechaToolFile);
-				Item mechaToolItem = new ItemMechaTool(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				Item mechaToolItem = new ItemMechaAddon(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
 				mechaToolItems.add(mechaToolItem);
 				LanguageRegistry.addName(mechaToolItem, type.name);
 			}
