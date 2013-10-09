@@ -1,7 +1,7 @@
 Name Iron Excavator
 ShortName ironExcavator
 Icon IronExcavator
-Model titan.Drill
+Model titan.Excavator
 Texture IronExcavator
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
