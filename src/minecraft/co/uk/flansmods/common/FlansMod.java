@@ -101,10 +101,8 @@ public class FlansMod
 	
 	public static int craftingTableID = 255, spawnerID = 254, gunBoxID = 200;
 	
-	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0);
-	public static CreativeTabFlan tabFlanDriveables = new CreativeTabFlan(1);
-	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
-	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
+	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
+			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
 
 	public static boolean DEBUG = false;
 	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), 
@@ -206,6 +204,7 @@ public class FlansMod
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan1", "Flan's Mod Vehicles");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan2", "Flan's Mod Parts");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan3", "Flan's Mod Team Stuff");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan4", "Flan's Mod Mechas");
 		
 		//TODO : Content pack handler
 		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());
@@ -580,7 +579,7 @@ public class FlansMod
 		log("Loaded AA guns.");
 		
 		//Mecha Tools
-		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaTool))
+		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaItem))
 		{
 			try
 			{

@@ -34,7 +34,10 @@ public class MechaType extends DriveableType
 	/** How much fall damage the mecha takes by default. Overidden by some upgrades */
 	public float fallDamageMultiplier = 1F;
 	/** The size of explosion to cause, per fall damage */
-	public float blockDamageFromFalling = 1F;
+	public float blockDamageFromFalling = 0F;
+	/** The default reach of tools. Tools can multiply this base reach as they wish */
+	public float reach = 10F;
+	
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -89,6 +92,8 @@ public class MechaType extends DriveableType
 				fallDamageMultiplier = Float.parseFloat(split[1]);
 			if(split[0].equals("BlockDamageFromFalling"))
 				blockDamageFromFalling = Float.parseFloat(split[1]);
+			if(split[0].equals("Reach"))
+				reach = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

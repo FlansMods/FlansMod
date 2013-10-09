@@ -3,6 +3,7 @@ package co.uk.flansmods.common.driveables.mechas;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.lwjgl.input.Mouse;
 
@@ -344,7 +345,7 @@ public class EntityMecha extends EntityDriveable
 		{
 			MechaItemType toolType = ((ItemMechaAddon)heldItem).type;
 			
-			float reach = 100F; //toolType.reach * mechaType.reach;
+			float reach = toolType.reach * mechaType.reach;
 			
 			Vector3f lookOrigin = new Vector3f((float)mechaType.seats[0].x / 16F, (float)mechaType.seats[0].y / 16F + seats[0].riddenByEntity.getMountedYOffset(), (float)mechaType.seats[0].z / 16F);
 			lookOrigin = axes.findLocalVectorGlobally(lookOrigin);
@@ -831,6 +832,30 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		legSwing = legSwing / 2F;
+	}
+	
+	/** Check all upgrades to see if any stop fall damage */
+	public boolean stopFallDamage()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.stopMechaFallDamage)
+				return true;
+		}
+		return false;
+	}
+	
+	public ArrayList<MechaItemType> getUpgradeTypes()
+	{
+		ArrayList<MechaItemType> types = new ArrayList<MechaItemType>();
+		for(ItemStack stack : inventory.stacks.values())
+		{
+			if(stack != null && stack.getItem() instanceof ItemMechaAddon)
+			{
+				types.add(((ItemMechaAddon)stack.getItem()).type);
+			}
+		}
+		return types;
 	}
 	
 	@SideOnly(Side.CLIENT)

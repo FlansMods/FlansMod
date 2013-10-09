@@ -18,7 +18,7 @@ public class ItemMechaAddon extends Item
 		type = type1;
 		setMaxStackSize(1);
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanParts);
+		setCreativeTab(FlansMod.tabFlanMechas);
 	}
 	
 	@Override
