@@ -580,7 +580,7 @@ public class FlansMod
 		log("Loaded AA guns.");
 		
 		//Mecha Tools
-		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaTool))
+		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaItem))
 		{
 			try
 			{

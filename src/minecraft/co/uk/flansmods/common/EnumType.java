@@ -2,7 +2,7 @@ package co.uk.flansmods.common;
 
 public enum EnumType 
 {
-	bullet("bullets"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaTool("mechaTools"), mecha("mechas"), gun("guns"), grenade("grenades"), tool("tools"), armour("armorFiles"), playerClass("classes"), team("teams"), box("boxes"), part("parts");
+	bullet("bullets"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaTools"), mecha("mechas"), gun("guns"), grenade("grenades"), tool("tools"), armour("armorFiles"), playerClass("classes"), team("teams"), box("boxes"), part("parts");
 	
 	public String folderName;
 	
