@@ -128,4 +128,11 @@ public class DriveablePart
 			return true;
 		return false;	
 	}
+
+	public void attack(float damage, boolean fireDamage) 
+	{
+		health -= damage;
+		if(fireDamage)
+			onFire = true;
+	}
 }

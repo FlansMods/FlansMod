@@ -8,6 +8,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -15,6 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumMovingObjectType;
@@ -23,6 +26,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ForgeHooks;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.debug.EntityDebugVector;
@@ -480,6 +484,36 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D, posY + zAxis.y * i * 0.3D, posZ + zAxis.z * i * 0.3D , 0, 0, 0);
 			}
 		}*/
+    }
+	
+	@Override
+    protected void fall(float k)
+    {
+        if (k <= 0) 
+        	return;
+        super.fall(k);
+        int i = MathHelper.ceiling_float_int(k - 3F);
+
+        if (i > 0)
+        {
+            if (i > 4)
+            {
+                playSound("damage.fallbig", 1.0F, 1.0F);
+            }
+            else
+            {
+                playSound("damage.fallsmall", 1.0F, 1.0F);
+            }
+
+            attackEntityFrom(DamageSource.fall, (float)i);
+            int j = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY - 0.20000000298023224D - (double)this.yOffset), MathHelper.floor_double(this.posZ));
+
+            if (j > 0)
+            {
+                StepSound stepsound = Block.blocksList[j].stepSound;
+                this.playSound(stepsound.getStepSound(), stepsound.getVolume() * 0.5F, stepsound.getPitch() * 0.75F);
+            }
+        }
     }
 		
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */
