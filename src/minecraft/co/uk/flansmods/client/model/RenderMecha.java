@@ -201,10 +201,13 @@ public class RenderMecha extends Render
 			if(toolType.model != null)
 			{
 				toolType.model.render(mecha, dT);
-			ItemStack leftStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
-			ItemStack rightStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
-			
-			toolType.model.renderDrill(mecha, dT);
+		        GL11.glPushMatrix();
+				if((leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld))
+				{
+					GL11.glRotatef(25F * (float)mecha.ticksExisted, 1F, 0F, 0F);
+				}
+				toolType.model.renderDrill(mecha, dT);
+				GL11.glPopMatrix();
 			}
 		}
 		else
