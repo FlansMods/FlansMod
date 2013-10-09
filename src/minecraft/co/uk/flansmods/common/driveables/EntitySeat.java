@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.driveables;
 
+import java.util.List;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
@@ -22,10 +24,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemLeash;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -102,7 +107,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//prevPosX = posX;
 		//prevPosY = posY;
 		//prevPosZ = posZ;
-
+		
 		//If on the client and the driveable parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundDriveable)
 		{
@@ -117,8 +122,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			playerPosY = prevPlayerPosY = posY = driveable.posY;
 			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
 			setPosition(posX, posY, posZ);
-		}
-		
+		}		
 		//Update gun delay ticker
 		if(gunDelay > 0)
 			gunDelay--;
@@ -207,12 +211,15 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			if(dYaw < -180)
 				prevPlayerYaw -= 360F;
 			
-			riddenByEntity.prevRotationYaw = prevPlayerYaw;
-			riddenByEntity.prevRotationPitch = prevPlayerPitch;
+			if(riddenByEntity instanceof EntityPlayer)
+			{
+				riddenByEntity.prevRotationYaw = prevPlayerYaw;
+				riddenByEntity.prevRotationPitch = prevPlayerPitch;
+				
+				riddenByEntity.rotationYaw = playerYaw;
+				riddenByEntity.rotationPitch = playerPitch;
+			}
 			
-			riddenByEntity.rotationYaw = playerYaw;
-			riddenByEntity.rotationPitch = playerPitch;
-
 			//If the entity is a player, roll its view accordingly
 			if(worldObj.isRemote)
 				playerRoll = -globalLookAxes.getRoll();
@@ -222,10 +229,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
     public void updateRiderPosition()
     {
-		riddenByEntity.rotationYaw = playerYaw;
-		riddenByEntity.rotationPitch = playerPitch;
-		riddenByEntity.prevRotationYaw = prevPlayerYaw;
-		riddenByEntity.prevRotationPitch = prevPlayerPitch;
+		if(riddenByEntity instanceof EntityPlayer)
+		{
+			riddenByEntity.rotationYaw = playerYaw;
+			riddenByEntity.rotationPitch = playerPitch;
+			riddenByEntity.prevRotationYaw = prevPlayerYaw;
+			riddenByEntity.prevRotationPitch = prevPlayerPitch;
+		}
 		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
 		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
 		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
@@ -435,17 +445,43 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
     {
 		if(isDead)
-			return true;
+			return false;
 		if(worldObj.isRemote)
-			return true;
+			return false;
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
 		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
+		if(currentItem != null && currentItem.getItem() instanceof ItemLeash)
+		{
+			if(riddenByEntity != null && riddenByEntity instanceof EntityLiving && !(riddenByEntity instanceof EntityPlayer))
+			{
+				EntityLiving mob = (EntityLiving)riddenByEntity;
+				riddenByEntity.mountEntity(null);
+				mob.setLeashedToEntity(entityplayer, true);
+				return true;
+			}
+			double checkRange = 10;
+			List nearbyMobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange, posY + checkRange, posZ + checkRange));
+			for(Object obj : nearbyMobs)
+			{
+				EntityLiving entity = (EntityLiving)obj;
+				if(entity.getLeashed() && entity.getLeashedToEntity() == entityplayer)
+				{
+					entity.mountEntity(this);
+					looking.setAngles(-entity.rotationYaw, entity.rotationPitch, 0F);
+					entity.clearLeashed(true, !entityplayer.capabilities.isCreativeMode);
+				}
+			}
+			return true;
+		}
 		//Put them in the seat
 		if(riddenByEntity == null)
+		{
 			entityplayer.mountEntity(this);
-        return true;
+			return true;
+		}
+        return false;
     }
 	
 	@Override

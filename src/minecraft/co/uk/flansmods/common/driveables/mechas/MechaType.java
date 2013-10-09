@@ -23,8 +23,8 @@ public class MechaType extends DriveableType
 	public float rotateSpeed = 10F;
 	/** Origin of the mecha arms */
 	public Vector3f leftArmOrigin, rightArmOrigin;
-	/** Length of the mecha arms */
-	public float armLength = 1F;
+	/** Length of the mecha arms and legs */
+	public float armLength = 1F, legLength = 1F;
 	/** The amount to scale the held items / tools by when rendering */
 	public float heldItemScale = 1F;
 	/** Height and Width of the world collision box */
@@ -33,6 +33,8 @@ public class MechaType extends DriveableType
 	public float chassisHeight = 1F;
 	/** How much fall damage the mecha takes by default. Overidden by some upgrades */
 	public float fallDamageMultiplier = 1F;
+	/** The size of explosion to cause, per fall damage */
+	public float blockDamageFromFalling = 1F;
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -73,6 +75,8 @@ public class MechaType extends DriveableType
 				rightArmOrigin = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
 			if(split[0].equals("ArmLength"))
 				armLength = Float.parseFloat(split[1]) / 16F;
+			if(split[0].equals("LegLength"))
+				legLength = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("HeldItemScale"))
 				heldItemScale = Float.parseFloat(split[1]);
 			if(split[0].equals("Height"))
@@ -83,6 +87,8 @@ public class MechaType extends DriveableType
 				chassisHeight = (Integer.parseInt(split[1]))/16F;
 			if(split[0].equals("FallDamageMultiplier"))
 				fallDamageMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("BlockDamageFromFalling"))
+				blockDamageFromFalling = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

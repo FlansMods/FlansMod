@@ -35,6 +35,7 @@ LeftArmOrigin 0 40 -16
 RightArmOrigin 0 40 16
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
 ArmLength 22
+LegLength 16
 //The scale multiplier for rendering the items and tools being held
 HeldItemScale 1
 //Recipe
@@ -60,4 +61,4 @@ BulletDetection 4
 Height 48
 Width 28
 //Height of chassis above the ground
-ChassisHeight 24
+ChassisHeight 21

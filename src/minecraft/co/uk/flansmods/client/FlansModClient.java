@@ -10,12 +10,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.teams.Team;
@@ -65,8 +67,7 @@ public class FlansModClient extends FlansMod
 	public void renderLiving(RenderPlayerEvent.Pre event)
 	{
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
-		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;
-		
+		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
 		if(event.entity instanceof EntityPlayer && GuiTeamScores.gametype != null && !"No Gametype".equals(GuiTeamScores.gametype))
 		{
 			GuiTeamScores.PlayerData rendering = GuiTeamScores.getPlayerData(event.entity.getEntityName());

@@ -29,6 +29,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ForgeHooks;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
+import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.RotatedAxes;
@@ -38,6 +39,8 @@ import co.uk.flansmods.common.network.PacketDriveableKeyHeld;
 import co.uk.flansmods.common.vector.Vector3f;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import icbm.api.RadarRegistry;
 import icbm.api.sentry.IAATarget;
@@ -1141,8 +1144,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return getDriveableType().name;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public boolean showInventory(int seat)
+	{
+		return seat == 0 ? !FlansModClient.controlModeMouse : true;
+	}
 	
-	// Destroys the target with a boom. This is a forced way for the sentry too kill the target if
+	
+	// Destroys the target with a boom. This is a forced way for the sentry to kill the target if
 	// it doesn't take damage
 	// Not needed in Flan due to plane is detroyed when HP = 0
 	@Override

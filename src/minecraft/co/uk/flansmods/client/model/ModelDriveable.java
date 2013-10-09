@@ -81,6 +81,8 @@ public class ModelDriveable extends ModelBase
 	public void translateAll(int x, int y, int z)
 	{
 		translate(bodyModel, x, y, z);
+		translate(bodyDoorOpenModel, x, y, z);
+		translate(bodyDoorCloseModel, x, y, z);
 		for(ModelRendererTurbo[][] modsOfMods : gunModels.values())
 		{
 			for(ModelRendererTurbo[] mods : modsOfMods)

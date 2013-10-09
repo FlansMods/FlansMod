@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +25,9 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiDriveableController;
 import co.uk.flansmods.client.debug.EntityDebugVector;
 import co.uk.flansmods.common.FlansMod;
@@ -40,10 +43,12 @@ import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
+import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleGUI;
@@ -51,6 +56,8 @@ import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
 import co.uk.flansmods.common.vector.Vector3i;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMecha extends EntityDriveable
 {
@@ -58,8 +65,7 @@ public class EntityMecha extends EntityDriveable
 	public int sMotion = 0;
 	private int ticksSinceUsed;
     public int toggleTimer = 0;
-    private int moveX = 0;
-    private int moveZ = 0;
+    private float moveX = 0, moveZ = 0;
     public RotatedAxes legAxes;
     public float prevLegsYaw = 0F;
     private int jumpDelay = 0;
@@ -193,7 +199,7 @@ public class EntityMecha extends EntityDriveable
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 	}
-
+	
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
     {
@@ -211,11 +217,8 @@ public class EntityMecha extends EntityDriveable
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
 		{
-			if(canSit(i))
-			{
-				entityplayer.mountEntity(seats[i]);
+			if(seats[i].interactFirst(entityplayer))
 				return true;
-			}
 		}
         return false;
     }
@@ -464,10 +467,17 @@ public class EntityMecha extends EntityDriveable
         if(damagesource.getDamageType().equals("fall"))
         {
         	float damageToInflict = i * type.fallDamageMultiplier;
+        	float blockDamageFromFalling = i * type.blockDamageFromFalling / 10F;
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
+        	checkParts();
+			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
+        	if(blockDamageFromFalling > 1)
+        	{
+        		worldObj.createExplosion(this, posX, posY, posZ, blockDamageFromFalling, FlansMod.explosions);
+        	}
         }
         
-		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
+		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.itemID, 1, 0);
 			mechaStack.stackTagCompound = new NBTTagCompound();
@@ -557,9 +567,14 @@ public class EntityMecha extends EntityDriveable
 		
 		if(seats[0] != null)
 		{
-			float yaw = seats[0].looking.getYaw() - seats[0].prevLooking.getYaw();
-			axes.rotateGlobalYaw(yaw);
-			seats[0].looking.rotateGlobalYaw(-yaw);
+			if(seats[0].riddenByEntity instanceof EntityLivingBase && !(seats[0].riddenByEntity instanceof EntityPlayer))
+				axes.setAngles(((EntityLivingBase)seats[0].riddenByEntity).renderYawOffset + 90F, 0F, 0F);
+			else
+			{
+				float yaw = seats[0].looking.getYaw() - seats[0].prevLooking.getYaw();
+				axes.rotateGlobalYaw(yaw);
+				seats[0].looking.rotateGlobalYaw(-yaw);
+			}
 		}
 		
 		moveX = 0;
@@ -577,12 +592,19 @@ public class EntityMecha extends EntityDriveable
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
 				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;				
 			}
-			else if(!(seats[0].riddenByEntity instanceof EntityPlayer))
+			else if(seats[0].riddenByEntity instanceof EntityLiving && !(seats[0].riddenByEntity instanceof EntityPlayer))
 			{
-				if(entity.moveForward > 0.2) moveX = -1;
-				if(entity.moveForward < 0.2) moveX = 1;
-				if(entity.moveStrafing > 0.2) moveZ = 1;
-				if(entity.moveStrafing < 0.2) moveZ = -1;
+
+				moveZ = 1;
+				/*
+				EntityLiving ent = (EntityLiving)seats[0].riddenByEntity;
+				//System.out.println(ent.moveForward);
+				Vec3 target = Vec3.createVectorHelper(0D, 0D, 0D);
+				if(ent.getNavigator().getPath() != null)
+					target = ent.getNavigator().getPath().getPosition(ent);
+				moveX = (float) target.xCoord;
+				moveZ = (float) target.zCoord;
+				*/
 			}
 			
 			Vector3f intent = new Vector3f(moveX, 0, moveZ);
@@ -809,6 +831,13 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		legSwing = legSwing / 2F;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean showInventory(int seat)
+	{
+		return seat != 0;
 	}
 	
 	@Override

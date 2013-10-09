@@ -16,6 +16,8 @@ public class ModelMecha extends ModelDriveable
 	public ModelRendererTurbo[] hipsModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] leftLegModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightLegModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] leftFootModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] rightFootModel = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo[] headModel = new ModelRendererTurbo[0];
 	
 	@Override
@@ -36,6 +38,8 @@ public class ModelMecha extends ModelDriveable
 		renderPart(hipsModel);
 		renderPart(leftLegModel);
 		renderPart(rightLegModel);
+		renderPart(leftFootModel);
+		renderPart(rightFootModel);
 		renderPart(headModel);
 	}
 	
@@ -84,24 +88,70 @@ public class ModelMecha extends ModelDriveable
         		model.render(f5);
 	}
 	
-	public void renderLegs(float f5, EntityMecha mecha, float f)
+	public void renderRightFoot(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.hips))
+        	for(ModelRendererTurbo model : rightFootModel)
+        		model.render(f5);
+	}
+	
+	public void renderLeftFoot(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.hips))
+        	for(ModelRendererTurbo model : leftFootModel)
+        		model.render(f5);
+	}
+	
+	public void renderRightLeg(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.hips))
+        	for(ModelRendererTurbo model : rightLegModel)
+        		model.render(f5);
+	}
+	
+	public void renderLeftLeg(float f5, EntityMecha mecha, float f)
+	{
+		if(mecha.isPartIntact(EnumDriveablePart.hips))
+        	for(ModelRendererTurbo model : leftLegModel)
+        		model.render(f5);
+	}
+	
+	public void renderHips(float f5, EntityMecha mecha, float f)
 	{        
         if(mecha.isPartIntact(EnumDriveablePart.hips))
-        {
         	for(ModelRendererTurbo model : hipsModel)
         		model.render(f5);
-        	int legSwingTime = 5;
-        	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f) / legSwingTime) * mecha.legSwing;
-        	for(ModelRendererTurbo model : leftLegModel)
-        	{
-        		model.rotateAngleZ = legsYaw;
-        		model.render(f5);
-        	}
-        	for(ModelRendererTurbo model : rightLegModel)
-        	{
-        		model.rotateAngleZ = -legsYaw;
-        		model.render(f5);
-        	}
-        }
+	}
+	
+	@Override
+	public void flipAll()
+	{
+		super.flipAll();
+		flip(leftArmModel);
+		flip(rightArmModel);
+		flip(leftHandModel);
+		flip(rightHandModel);
+		flip(hipsModel);
+		flip(leftLegModel);
+		flip(rightLegModel);
+		flip(leftFootModel);
+		flip(rightFootModel);
+		flip(headModel);
+	}	
+	
+	@Override
+	public void translateAll(int x, int y, int z)
+	{
+		super.translateAll(x, y, z);
+		translate(leftArmModel, x, y, z);
+		translate(rightArmModel, x, y, z);
+		translate(leftHandModel, x, y, z);
+		translate(rightHandModel, x, y, z);
+		translate(hipsModel, x, y, z);
+		translate(leftLegModel, x, y, z);
+		translate(rightLegModel, x, y, z);
+		translate(leftFootModel, x, y, z);
+		translate(rightFootModel, x, y, z);
+		translate(headModel, x, y, z);
 	}
 }

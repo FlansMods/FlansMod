@@ -26,6 +26,7 @@ import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -46,11 +47,13 @@ public class TickHandlerClient implements ITickHandler
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void eventHandler(RenderGameOverlayEvent event)
 	{
+		Minecraft mc = Minecraft.getMinecraft();
+
 	    if(event.isCancelable() || event.type != ElementType.HOTBAR)
 	    {      
 	    	return;
 	    }
-		Minecraft mc = Minecraft.getMinecraft();
+
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();

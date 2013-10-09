@@ -140,9 +140,9 @@ public class EntityPlane extends EntityDriveable
 	public boolean interactFirst(EntityPlayer entityplayer)
     {
 		if(isDead)
-			return true;
+			return false;
 		if(worldObj.isRemote)
-			return true;
+			return false;
 		
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
@@ -153,9 +153,8 @@ public class EntityPlane extends EntityDriveable
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
 		{
-			if(canSit(i))
+			if(seats[i].interactFirst(entityplayer))
 			{
-				entityplayer.mountEntity(seats[i]);	
 				if(i == 0)
 				{
 					bombDelay = type.planeBombDelay;
@@ -164,7 +163,7 @@ public class EntityPlane extends EntityDriveable
 				return true;
 			}
 		}
-        return true;
+        return false;
     }
     
     @Override
@@ -641,7 +640,7 @@ public class EntityPlane extends EntityDriveable
         
         PlaneType type = PlaneType.getPlane(driveableType);
         
-		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
+		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack planeStack = new ItemStack(type.itemID, 1, 0);
 			planeStack.stackTagCompound = new NBTTagCompound();

@@ -47,6 +47,7 @@ public class RenderMecha extends Render
     public void render(EntityMecha mecha, double d, double d1, double d2, float f, float f1)
     {
     	bindEntityTexture(mecha);
+    	float scale = 1F / 16F;
     	MechaType type = mecha.getMechaType();
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
@@ -81,14 +82,14 @@ public class RenderMecha extends Render
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
 			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
-			model.renderLeftArm(0.0625F, mecha, f1);
+			model.renderLeftArm(scale, mecha, f1);
 			
 			//Move to the end of the arm and render the held item
 			GL11.glTranslatef(0F, -type.armLength, 0F);
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
 			if(holdingStack == null)
 			{
-				model.renderLeftHand(0.0625F, mecha, f1);
+				model.renderLeftHand(scale, mecha, f1);
 			}
 			else
 			{
@@ -111,14 +112,14 @@ public class RenderMecha extends Render
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.rightArmOrigin.x, mecha.getMechaType().rightArmOrigin.y, mecha.getMechaType().rightArmOrigin.z);
 			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
-			model.renderRightArm(0.0625F, mecha, f1);
+			model.renderRightArm(scale, mecha, f1);
 			
 			//Move to the end of the arm and render the held item
 			GL11.glTranslatef(0F, -type.armLength, 0F);
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(holdingStack == null)
 			{
-				model.renderRightHand(0.0625F, mecha, f1);
+				model.renderRightHand(scale, mecha, f1);
 			}
 			else
 			{
@@ -166,7 +167,49 @@ public class RenderMecha extends Render
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		if(model != null)
-			model.renderLegs(0.0625F, mecha, f1);		
+		{
+			float legLength = type.legLength;
+        	int legSwingTime = 5;
+        	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / legSwingTime) * mecha.legSwing;
+        	float footH = (float)Math.sin(legsYaw) * legLength;
+        	float footV = (float)Math.cos(legsYaw) * legLength;
+        	
+			//Hips
+			model.renderHips(scale, mecha, f1);
+			
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(0F, legLength, 0F);
+				
+				//Left Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(footH, -footV, 0F);
+				model.renderLeftFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(-footH, -footV, 0F);
+				model.renderRightFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Left Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F);
+				model.renderLeftLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(-legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F);
+				model.renderRightLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+			}
+			GL11.glPopMatrix();
+			
+		}
 		GL11.glPopMatrix();
     }
 	

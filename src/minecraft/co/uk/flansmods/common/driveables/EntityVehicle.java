@@ -114,7 +114,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 	}
-		
+			
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
     {
@@ -132,9 +132,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
 		{
-			if(canSit(i))
+			if(seats[i].interactFirst(entityplayer))
 			{
-				entityplayer.mountEntity(seats[i]);	
 				if(i == 0)
 				{
 					shellDelay = type.vehicleShellDelay;
@@ -610,7 +609,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         
         VehicleType type = getVehicleType();
         
-		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround)
+		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.itemID, 1, 0);
 			vehicleStack.stackTagCompound = new NBTTagCompound();

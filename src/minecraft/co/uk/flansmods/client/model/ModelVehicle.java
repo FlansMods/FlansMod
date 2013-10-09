@@ -269,8 +269,6 @@ public class ModelVehicle extends ModelDriveable
 		flip(rightFrontWheelModel);
 		flip(leftBackWheelModel);
 		flip(rightBackWheelModel);
-		flip(bodyDoorOpenModel);
-		flip(bodyDoorCloseModel);
 		flip(rightTrackModel);
 		flip(leftTrackModel);
 		flip(rightTrackWheelModels);
@@ -291,8 +289,6 @@ public class ModelVehicle extends ModelDriveable
 		translate(rightFrontWheelModel, x, y, z);
 		translate(leftBackWheelModel, x, y, z);
 		translate(rightBackWheelModel, x, y, z);
-		translate(bodyDoorOpenModel, x, y, z);
-		translate(bodyDoorCloseModel, x, y, z);
 		translate(rightTrackModel, x, y, z);
 		translate(leftTrackModel, x, y, z);
 		translate(rightTrackWheelModels, x, y, z);
