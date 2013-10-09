@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelBase;
 
 public class ModelMechaTool extends ModelBase
 {
-	/** This bit does nothing */
+	/** This is the base, common across all Mecha Tools */
 	public ModelRendererTurbo[] baseModel = new ModelRendererTurbo[0];
 	/** This bit spins */
 	public ModelRendererTurbo[] drillModel = new ModelRendererTurbo[0];
