@@ -2,14 +2,17 @@ package co.uk.flansmods.client;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.model.RenderMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -17,7 +20,13 @@ import net.minecraft.world.World;
 public class GuiMechaInventory extends GuiContainer
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/mechaInventory.png");
-
+	private static final RenderMecha mechaRenderer;
+	static
+	{
+		mechaRenderer = new RenderMecha();
+		mechaRenderer.setRenderManager(RenderManager.instance);
+	}
+	
 	public ContainerMechaInventory container;
 	public InventoryPlayer inventory;
 	public World world;
@@ -42,25 +51,18 @@ public class GuiMechaInventory extends GuiContainer
     }
     
     @Override
+    public void drawScreen(int i, int j, float f)
+    {
+    	super.drawScreen(i, j, f);
+
+		
+    }
+    
+    @Override
     protected void drawGuiContainerForegroundLayer(int x, int y)
     {
         fontRenderer.drawString(mecha.getMechaType().name, 9, 9, 0x404040);
         fontRenderer.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
-        
-        MechaType type = mecha.getMechaType();
-		//Render rotating mecha model
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef(90, 100, 100);
-		GL11.glScalef(-50F / type.cameraDistance, 50F / type.cameraDistance, 50F / type.cameraDistance);
-		GL11.glRotatef(180F, 0F, 0F, 1F);
-		GL11.glRotatef(30F, 1F, 0F, 0F);
-		GL11.glRotatef(FlansMod.ticker, 0F, 1F, 0F);
-		mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
-		type.model.render(type);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glPopMatrix();
     }
 	
 	@Override
@@ -96,6 +98,24 @@ public class GuiMechaInventory extends GuiContainer
 			drawTexturedModalRect(width / 2 - 14, height / 2 - 59, 360, 0, 6, 6);
 		if(fuelInTank > 0)
 			drawTexturedModalRect(width / 2 - 18, height / 2 + 45 - (int)((94 * fuelInTank) / fuelTankSize), 350, 20, 15, (int)((94 * fuelInTank) / fuelTankSize));
+		
+        MechaType type = mecha.getMechaType();
+		//Render rotating mecha model
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef(126, 135, 100);
+		GL11.glScalef(-50F / type.cameraDistance, 50F / type.cameraDistance, 50F / type.cameraDistance);
+		GL11.glRotatef(180F, 0F, 0F, 1F);
+		GL11.glRotatef(30F, 1F, 0F, 0F);
+		GL11.glRotatef(FlansMod.ticker, 0F, 1F, 0F);
+		mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+		mechaRenderer.render(mecha, 0, 0, 0, 0F, 0F);
+		//type.model.render(type);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glPopMatrix();
 	}
 	
 	@Override

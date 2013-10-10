@@ -213,7 +213,7 @@ public class FlansMod
 		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setUnlocalizedName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Vehicle Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Vehicle Crafting Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Part Crafting Table");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
