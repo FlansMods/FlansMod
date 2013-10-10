@@ -3,7 +3,7 @@ ShortName mediumDiamondArm
 Icon MediumDiamondArm
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23411
+ItemID 23424
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Misc
 StackSize 16
