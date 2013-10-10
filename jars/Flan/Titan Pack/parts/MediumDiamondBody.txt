@@ -3,7 +3,7 @@ ShortName mediumDiamondBody
 Icon MediumDiamondBody
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23410
+ItemID 23425
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Cockpit
 StackSize 4

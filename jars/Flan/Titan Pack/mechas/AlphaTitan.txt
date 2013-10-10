@@ -7,35 +7,35 @@ Icon AlphaTitan
 Model titan.ProtoTitan
 Texture AlphaTitan
 //Third Person Camera Distance
-CameraDistance 15.0
+CameraDistance 10.0
 //Driver and passenger positions
-Driver 0 72 0
+Driver 0 48 0
 Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
 //Speed Modifier, 1 is player speed
-MoveSpeed 4
+MoveSpeed 3.2
 //YOffset
 YOffset 0
 //Fuel Tank Size
-FuelTankSize 30000
+FuelTankSize 20000
 //Inventory Slots
-CargoSlots 72
+CargoSlots 32
 //How quickly the legs react to a change in direction
 RotateSpeed 20
 //Will it squash puny mobs?
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
-StepHeight 3
-JumpHeight 6
+StepHeight 2
+JumpHeight 4
 //Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
-LeftArmOrigin 0 120 -48
-RightArmOrigin 0 120 48
+LeftArmOrigin 0 80 -32
+RightArmOrigin 0 80 32
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
-ArmLength 66
-LegLength 48
-//The scale multiplier for rendering the items and tools being held
-HeldItemScale 3
+ArmLength 44
+LegLength 32
+//The scale multiplier for rendering the items and tools being held (1 will automatically scale with model)
+HeldItemScale 1
 //Recipe
 //Each section of the mecha may have many parts
 //The sections are core, leftArm, rightArm, hips, head
@@ -49,19 +49,19 @@ AddDye 5 black
 AddDye 1 purple
 Add Dye 1 blue
 //Health and collision
-SetupPart core 600 -36 72 -36 72 72 72
-SetupPart leftArm 90 -12 108 -54 48 24 18
-SetupPart rightArm 90 -12 108 54 48 24 -18
-SetupPart hips 100 -24 0 -24 48 72 48
+SetupPart core 400 -24 48 -24 48 48 48
+SetupPart leftArm 60 -8 72 -36 32 16 12
+SetupPart rightArm 60 -8 72 36 32 16 -12
+SetupPart hips 200 -16 0 -16 32 48 32
 //SetupPart head 100 -7 -5 10 32 2 78
-BulletDetection 12
+BulletDetection 8
 //Height and Width for world collision
-Height 144
-Width 84
+Height 96
+Width 56
 //Height of chassis above the ground
-ChassisHeight 63
+ChassisHeight 42
 //The amount of damage the mecha should take from falling
-FallDamageMultiplier 3.0
+FallDamageMultiplier 2.0
 //The size of explosion to create per distance fallen upon hitting the ground
 BlockDamageFromFalling 2.0
 //Size Multiplier; scales up the model

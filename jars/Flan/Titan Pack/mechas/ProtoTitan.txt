@@ -34,7 +34,7 @@ RightArmOrigin 0 40 16
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
 ArmLength 22
 LegLength 16
-//The scale multiplier for rendering the items and tools being held
+//The scale multiplier for rendering the items and tools being held (1 will automatically scale with model)
 HeldItemScale 1
 //Recipe
 //Each section of the mecha may have many parts
@@ -63,4 +63,4 @@ ChassisHeight 21
 //The amount of damage the mecha should take from falling
 FallDamageMultiplier 1.0
 //The size of explosion to create per distance fallen upon hitting the ground
-BlockDamageFromFalling 0.0
+BlockDamageFromFalling 1.0
