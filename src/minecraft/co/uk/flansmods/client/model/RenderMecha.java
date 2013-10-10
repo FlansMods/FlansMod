@@ -63,13 +63,13 @@ public class RenderMecha extends Render
         GL11.glRotatef(-mecha.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-		float modelScale = mecha.getMechaType().modelScale;		
+		float modelScale = mecha.getMechaType().modelScale;	
+		GL11.glPushMatrix();
 		GL11.glScalef(modelScale, modelScale, modelScale);
-		//GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
-        //type.model = new ModelProtoTitan();
 		if(model != null)
 			model.render(mecha, f1);	
+		GL11.glPopMatrix();
 		
 		//Left arm render
 		{
@@ -84,11 +84,15 @@ public class RenderMecha extends Render
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
 			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
+			GL11.glPushMatrix();
+			GL11.glScalef(modelScale, modelScale, modelScale);	
 			model.renderLeftArm(scale, mecha, f1);
+			GL11.glPopMatrix();
 			
 			//Move to the end of the arm and render the held item
 			GL11.glTranslatef(0F, -type.armLength, 0F);
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+			GL11.glScalef(modelScale, modelScale, modelScale);			
 			if(holdingStack == null)
 			{
 				model.renderLeftHand(scale, mecha, f1);
@@ -114,10 +118,14 @@ public class RenderMecha extends Render
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.rightArmOrigin.x, mecha.getMechaType().rightArmOrigin.y, mecha.getMechaType().rightArmOrigin.z);
 			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
+			GL11.glPushMatrix();
+			GL11.glScalef(modelScale, modelScale, modelScale);	
 			model.renderRightArm(scale, mecha, f1);
+			GL11.glPopMatrix();
 			
 			//Move to the end of the arm and render the held item
 			GL11.glTranslatef(0F, -type.armLength, 0F);
+			GL11.glScalef(modelScale, modelScale, modelScale);	
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(holdingStack == null)
 			{
