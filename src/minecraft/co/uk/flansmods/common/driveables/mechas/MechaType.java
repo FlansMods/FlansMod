@@ -37,6 +37,7 @@ public class MechaType extends DriveableType
 	public float blockDamageFromFalling = 0F;
 	/** The default reach of tools. Tools can multiply this base reach as they wish */
 	public float reach = 10F;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false;
 	
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
@@ -94,6 +95,10 @@ public class MechaType extends DriveableType
 				blockDamageFromFalling = Float.parseFloat(split[1]);
 			if(split[0].equals("Reach"))
 				reach = Float.parseFloat(split[1]);
+			if(split[0].equals("StopMechaFallDamage"))
+				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ForceBlockFallDamage"))
+				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception e)
 		{
