@@ -3,6 +3,7 @@ package co.uk.flansmods.client.model;
 import java.util.HashMap;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import net.minecraft.client.model.ModelBase;
 
@@ -22,7 +23,7 @@ public class ModelDriveable extends ModelBase
 	}
 	   
 	/** For rendering from GUIs */
-	public void render()
+	public void render(DriveableType type)
 	{
 		renderPart(bodyModel);
 		renderPart(bodyDoorCloseModel);

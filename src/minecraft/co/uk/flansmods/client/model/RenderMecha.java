@@ -63,6 +63,8 @@ public class RenderMecha extends Render
         GL11.glRotatef(-mecha.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+		float modelScale = mecha.getMechaType().modelScale;		
+		GL11.glScalef(modelScale, modelScale, modelScale);
 		//GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
         ModelMecha model = (ModelMecha)type.model;
         //type.model = new ModelProtoTitan();
@@ -166,6 +168,7 @@ public class RenderMecha extends Render
 		GL11.glRotatef(- dYaw * f1 - mecha.prevLegsYaw, 0F, 1F, 0F);
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+		GL11.glScalef(modelScale, modelScale, modelScale);
 		if(model != null)
 		{
 			float legLength = type.legLength;

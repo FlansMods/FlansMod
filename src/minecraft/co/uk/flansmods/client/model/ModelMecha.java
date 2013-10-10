@@ -1,11 +1,15 @@
 package co.uk.flansmods.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 
 public class ModelMecha extends ModelDriveable 
 {
@@ -28,19 +32,26 @@ public class ModelMecha extends ModelDriveable
 	
 	@Override
 	/** GUI render method */
-	public void render()
+	public void render(DriveableType type)
 	{
-		super.render();
-		renderPart(leftArmModel);
-		renderPart(rightArmModel);
-		renderPart(leftHandModel);
-		renderPart(rightHandModel);
+		super.render(type);
+		MechaType mechaType = (MechaType)type;
 		renderPart(hipsModel);
 		renderPart(leftLegModel);
 		renderPart(rightLegModel);
 		renderPart(leftFootModel);
 		renderPart(rightFootModel);
 		renderPart(headModel);
+		GL11.glPushMatrix();
+		GL11.glTranslatef(mechaType.leftArmOrigin.x, mechaType.leftArmOrigin.y, mechaType.leftArmOrigin.z);
+		renderPart(leftArmModel);
+		renderPart(leftHandModel);
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		GL11.glTranslatef(mechaType.rightArmOrigin.x, mechaType.rightArmOrigin.y, mechaType.rightArmOrigin.z);
+		renderPart(rightArmModel);
+		renderPart(rightHandModel);
+		GL11.glPopMatrix();
 	}
 	
 	public void render(float f5, EntityMecha mecha, float f)

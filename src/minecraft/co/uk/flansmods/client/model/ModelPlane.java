@@ -1,6 +1,7 @@
 package co.uk.flansmods.client.model;
 
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
@@ -44,9 +45,9 @@ public class ModelPlane extends ModelDriveable
 	
 	@Override
 	/** GUI render method */
-	public void render()
+	public void render(DriveableType type)
 	{
-		super.render();
+		super.render(type);
 		renderPart(noseModel);
 		renderPart(leftWingModel);
 		renderPart(rightWingModel);

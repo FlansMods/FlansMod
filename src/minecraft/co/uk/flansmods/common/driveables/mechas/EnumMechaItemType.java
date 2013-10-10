@@ -2,7 +2,7 @@ package co.uk.flansmods.common.driveables.mechas;
 
 public enum EnumMechaItemType 
 {
-	upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade, nothing;
+	upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, feetUpgrade, nothing;
 	
 	public static EnumMechaItemType getToolType(String s)
 	{

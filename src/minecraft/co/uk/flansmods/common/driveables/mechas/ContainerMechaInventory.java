@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.driveables.mechas;
 
+import co.uk.flansmods.common.teams.SlotMecha;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -39,24 +40,24 @@ public class ContainerMechaInventory extends Container
 		}
 		
 		//Equipment Slots
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.hips.ordinal(), 84, 128));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftLeg.ordinal(), 60, 128));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftArm.ordinal(), 36, 80));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftTool.ordinal(), 36, 56));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.leftShoulder.ordinal(), 60, 32));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.head.ordinal(), 84, 32));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightLeg.ordinal(), 108, 128));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightArm.ordinal(), 132, 80));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightTool.ordinal(), 132, 56));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.rightShoulder.ordinal(), 108, 32));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.feet, 84, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftLeg, 60, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftArm, 36, 80));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftTool, 36, 56));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftShoulder, 60, 32));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.head, 84, 32));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightLeg, 108, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightArm, 132, 80));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightTool, 132, 56));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightShoulder, 108, 32));
 		
 		//Upgrade Slots
 		
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u1.ordinal(), 10, 32));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u2.ordinal(), 10, 56));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u3.ordinal(), 10, 80));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u4.ordinal(), 10, 104));
-		addSlotToContainer(new Slot(mecha.inventory, EnumMechaSlotType.u5.ordinal(), 10, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u1, 10, 32));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u2, 10, 56));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u3, 10, 80));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u4, 10, 104));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u5, 10, 128));
 
 		
 		//Main inventory slots

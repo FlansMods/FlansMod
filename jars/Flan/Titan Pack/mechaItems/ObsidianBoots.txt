@@ -12,7 +12,7 @@ Recipe O obsidian
 O O
 OOO
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type legUpgrade
+Type feetUpgrade
 //The modifiers this item enacts on the mecha
 StopMechaFallDamage true
 ForceBlockFallDamage true

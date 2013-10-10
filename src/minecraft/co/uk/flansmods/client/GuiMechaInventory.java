@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -45,6 +46,21 @@ public class GuiMechaInventory extends GuiContainer
     {
         fontRenderer.drawString(mecha.getMechaType().name, 9, 9, 0x404040);
         fontRenderer.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
+        
+        MechaType type = mecha.getMechaType();
+		//Render rotating mecha model
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef(90, 100, 100);
+		GL11.glScalef(-50F / type.cameraDistance, 50F / type.cameraDistance, 50F / type.cameraDistance);
+		GL11.glRotatef(180F, 0F, 0F, 1F);
+		GL11.glRotatef(30F, 1F, 0F, 0F);
+		GL11.glRotatef(FlansMod.ticker, 0F, 1F, 0F);
+		mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+		type.model.render(type);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glPopMatrix();
     }
 	
 	@Override

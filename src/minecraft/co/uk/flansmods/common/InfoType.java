@@ -27,6 +27,7 @@ public class InfoType
 	public String texture;
 	public String modelString;
 	public String description;
+	public float modelScale = 1F;
 	
 	public InfoType(TypeFile file)
 	{
@@ -52,51 +53,53 @@ public class InfoType
 	}
 
 	/** Pack reader */
-	protected void read(String[] arg0, TypeFile file)
+	protected void read(String[] split, TypeFile file)
 	{
 		try
 		{
-			if(arg0[0].toLowerCase().equals("model"))
-				modelString = arg0[1];
-			if (arg0[0].equals("Name"))
+			if(split[0].toLowerCase().equals("model"))
+				modelString = split[1];
+			if(split[0].toLowerCase().equals("modelscale"))
+				modelScale = Float.parseFloat(split[1]);
+			if (split[0].equals("Name"))
 			{
-				name = arg0[1];
-				for (int i = 0; i < arg0.length - 2; i++)
+				name = split[1];
+				for (int i = 0; i < split.length - 2; i++)
 				{
-					name = name + " " + arg0[i + 2];
+					name = name + " " + split[i + 2];
 				}
 			}
-			if (arg0[0].equals("Description"))
+			if (split[0].equals("Description"))
 			{
-				description = arg0[1];
-				for (int i = 0; i < arg0.length - 2; i++)
+				description = split[1];
+				for (int i = 0; i < split.length - 2; i++)
 				{
-					description = description + " " + arg0[i + 2];
+					description = description + " " + split[i + 2];
 				}
 			}
-			if (arg0[0].equals("ShortName"))
+			if (split[0].equals("ShortName"))
 			{
-				shortName = arg0[1];
+				shortName = split[1];
 			}
-			if (arg0[0].equals("Colour") || arg0[0].equals("Color"))
+			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
-				colour = (Integer.parseInt(arg0[1]) << 16) + ((Integer.parseInt(arg0[2])) << 8) + ((Integer.parseInt(arg0[3])));
+				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
 			}
-			if (arg0[0].equals("ItemID"))
+			if (split[0].equals("ItemID"))
 			{
-				itemID = Integer.parseInt(arg0[1]);
+				itemID = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("Icon"))
+			if (split[0].equals("Icon"))
 			{
-				iconPath = arg0[1];
+				iconPath = split[1];
 			}
-			if (arg0[0].equals("RecipeOutput"))
+			if (split[0].equals("RecipeOutput"))
 			{
-				recipeOutput = Integer.parseInt(arg0[1]);
+				recipeOutput = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("Recipe"))
+			if (split[0].equals("Recipe"))
 			{
-				recipe = new Object[arg0.length + 2];
+				recipe = new Object[split.length + 2];
 				for (int i = 0; i < 3; i++)
 				{
 					String line = null;
@@ -112,17 +115,17 @@ public class InfoType
 					}
 					recipe[i] = line;
 				}
-				recipeLine = arg0;
+				recipeLine = split;
 				shapeless = false;
 			}
-			if (arg0[0].equals("ShapelessRecipe"))
+			if (split[0].equals("ShapelessRecipe"))
 			{
-				recipeLine = arg0;
+				recipeLine = split;
 				shapeless = true;
 			}
-			if (arg0[0].equals("SmeltableFrom"))
+			if (split[0].equals("SmeltableFrom"))
 			{
-				smeltableFrom = arg0[1];
+				smeltableFrom = split[1];
 			}
 		} catch (Exception e)
 		{
