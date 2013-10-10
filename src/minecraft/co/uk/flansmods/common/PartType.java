@@ -19,6 +19,8 @@ public class PartType extends InfoType {
 	public float fuelConsumption = 1.0F;
 	/** (Fuel) The amount of fuel this fuel tank gives */
 	public int fuel = 0;
+	/** The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot */
+	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
 	
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 
@@ -70,7 +72,14 @@ public class PartType extends InfoType {
 				}
 				partBoxRecipe.addAll(Arrays.asList(stacks));
 			}
-			
+			if(split[0].equals("WorksWith"))
+			{
+				worksWith = new ArrayList<EnumType>();
+				for(int i = 0; i < split.length - 1; i++)
+				{
+					worksWith.add(EnumType.get(split[i + 1]));
+				}
+			}
 		} 
 		catch (Exception e) 
 		{

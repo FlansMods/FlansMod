@@ -211,7 +211,7 @@ public class CommonProxy
 			{
 				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 				//Check its an engine
-				if(partType.category == 2)
+				if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(type)))
 				{
 					//If we already have engines of this type, add these ones to the stack
 					if(engines.containsKey(partType))
