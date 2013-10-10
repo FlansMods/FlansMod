@@ -5,64 +5,64 @@ ItemID 23422
 //Visuals
 Icon AlphaTitan
 Model titan.ProtoTitan
-Texture ProtoTitan
+Texture AlphaTitan
 //Third Person Camera Distance
-CameraDistance 5.0
+CameraDistance 15.0
 //Driver and passenger positions
-Driver 0 24 0
+Driver 0 72 0
 Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
-//Steering Modifiers
-TurnLeftSpeed 1
-TurnRightSpeed 1
-MoveSpeed 1.7
+//Speed Modifier, 1 is player speed
+MoveSpeed 4
 //YOffset
 YOffset 0
 //Fuel Tank Size
-FuelTankSize 10000
+FuelTankSize 30000
 //Inventory Slots
-CargoSlots 36
+CargoSlots 72
 //How quickly the legs react to a change in direction
-RotateSpeed 14
+RotateSpeed 20
 //Will it squash puny mobs?
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
-StepHeight 1
-JumpHeight 2
+StepHeight 3
+JumpHeight 6
 //Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
-LeftArmOrigin 0 40 -16
-RightArmOrigin 0 40 16
+LeftArmOrigin 0 120 -48
+RightArmOrigin 0 120 48
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
-ArmLength 22
-LegLength 16
+ArmLength 66
+LegLength 48
 //The scale multiplier for rendering the items and tools being held
-HeldItemScale 1
+HeldItemScale 3
 //Recipe
 //Each section of the mecha may have many parts
 //The sections are core, leftArm, rightArm, hips, head
-AddRecipeParts core 1 smallIronBody 1 vehicleSeat
-AddRecipeParts leftArm 1 smallIronArm
-AddRecipeParts rightArm 1 smallIronArm
-AddRecipeParts hips 2 smallIronLeg
-AddRecipeParts head 1 basicCPU
+AddRecipeParts core 1 meduimDiamondBody 1 vehicleSeat
+AddRecipeParts leftArm 1 mediumDiamondArm
+AddRecipeParts rightArm 1 mediumDiamondArm
+AddRecipeParts hips 2 mediumDiamondLeg
+AddRecipeParts head 1 advCPU
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 5 black
-AddDye 1 orange
-Add Dye 1 yellow
+AddDye 1 purple
+Add Dye 1 blue
 //Health and collision
-SetupPart core 200 -12 24 -12 24 24 24
-SetupPart leftArm 30 -4 36 -18 16 8 6
-SetupPart rightArm 30 -4 36 18 16 8 -6
-SetupPart hips 100 -8 0 -8 16 24 16
+SetupPart core 600 -36 72 -36 72 72 72
+SetupPart leftArm 90 -12 108 -54 48 24 18
+SetupPart rightArm 90 -12 108 54 48 24 -18
+SetupPart hips 100 -24 0 -24 48 72 48
 //SetupPart head 100 -7 -5 10 32 2 78
-BulletDetection 4
+BulletDetection 12
 //Height and Width for world collision
-Height 48
-Width 28
+Height 144
+Width 84
 //Height of chassis above the ground
-ChassisHeight 21
+ChassisHeight 63
 //The amount of damage the mecha should take from falling
-FallDamageMultiplier 1.0
+FallDamageMultiplier 3.0
 //The size of explosion to create per distance fallen upon hitting the ground
-BlockDamageFromFalling 0.0
+BlockDamageFromFalling 2.0
+//Size Multiplier; scales up the model
+ModelScale 3

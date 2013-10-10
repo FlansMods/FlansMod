@@ -13,9 +13,7 @@ Driver 0 24 0
 Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
-//Steering Modifiers
-TurnLeftSpeed 1
-TurnRightSpeed 1
+//Speed Modifier, 1 is player speed
 MoveSpeed 1.7
 //YOffset
 YOffset 0
@@ -41,7 +39,7 @@ HeldItemScale 1
 //Recipe
 //Each section of the mecha may have many parts
 //The sections are core, leftArm, rightArm, hips, head
-AddRecipeParts core 1 smallIronBody 1 vehicleSeat
+AddRecipeParts core 1 smallIronBody
 AddRecipeParts leftArm 1 smallIronArm
 AddRecipeParts rightArm 1 smallIronArm
 AddRecipeParts hips 2 smallIronLeg
