@@ -62,3 +62,7 @@ Height 48
 Width 28
 //Height of chassis above the ground
 ChassisHeight 21
+//The amount of damage the mecha should take from falling
+FallDamageMultiplier 1.0
+//The size of explosion to create per distance fallen upon hitting the ground
+BlockDamageFromFalling 0.0

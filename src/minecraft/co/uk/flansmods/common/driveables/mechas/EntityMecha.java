@@ -355,9 +355,11 @@ public class EntityMecha extends EntityDriveable
 			
 			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
 			
-			Vector3f lookTarget = Vector3f.add(lookVector, new Vector3f(posX, posY, posZ), null);
+			Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
 			
 			MovingObjectPosition hit = worldObj.clip(lookOrigin.toVec3(), lookTarget.toVec3());
+			
+			//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
 			if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
 			{
 				if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
@@ -469,6 +471,12 @@ public class EntityMecha extends EntityDriveable
         {
         	float damageToInflict = i * type.fallDamageMultiplier;
         	float blockDamageFromFalling = i * type.blockDamageFromFalling / 10F;
+        	
+        	if(stopFallDamage())
+        		damageToInflict = 0;
+        	if(type.blockDamageFromFalling == 0F && breakBlocksUponFalling())
+        		blockDamageFromFalling = i / 10F;
+        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
         	checkParts();
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
@@ -844,6 +852,19 @@ public class EntityMecha extends EntityDriveable
 		}
 		return false;
 	}
+	
+	/** Check all upgrades to see if any stop fall damage */
+	public boolean breakBlocksUponFalling()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.forceBlockFallDamage)
+				return true;
+		}
+		return false;
+	}
+	
+	
 	
 	public ArrayList<MechaItemType> getUpgradeTypes()
 	{

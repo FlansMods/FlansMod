@@ -26,6 +26,7 @@ public class InfoType
 	public String shortName;
 	public String texture;
 	public String modelString;
+	public String description;
 	
 	public InfoType(TypeFile file)
 	{
@@ -63,6 +64,14 @@ public class InfoType
 				for (int i = 0; i < arg0.length - 2; i++)
 				{
 					name = name + " " + arg0[i + 2];
+				}
+			}
+			if (arg0[0].equals("Description"))
+			{
+				description = arg0[1];
+				for (int i = 0; i < arg0.length - 2; i++)
+				{
+					description = description + " " + arg0[i + 2];
 				}
 			}
 			if (arg0[0].equals("ShortName"))

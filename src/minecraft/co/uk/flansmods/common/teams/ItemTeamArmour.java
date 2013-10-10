@@ -1,5 +1,7 @@
 package co.uk.flansmods.common.teams;
 
+import java.util.List;
+
 import co.uk.flansmods.common.FlansMod;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -51,6 +53,16 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor {
 	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, int layer) 
 	{
 		return "flansmod:armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
+	{
+		if(type.description != null)
+		{
+			for(String s : type.description.split("_"))
+				lines.add(s);
+		}
 	}
 	
     @Override
