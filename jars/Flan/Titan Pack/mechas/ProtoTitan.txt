@@ -22,7 +22,7 @@ YOffset 0
 //Fuel Tank Size
 FuelTankSize 10000
 //Inventory Slots
-CargoSlots 36
+CargoSlots 16
 //How quickly the legs react to a change in direction
 RotateSpeed 14
 //Will it squash puny mobs?

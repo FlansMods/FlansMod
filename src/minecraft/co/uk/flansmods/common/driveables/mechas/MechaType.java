@@ -31,12 +31,23 @@ public class MechaType extends DriveableType
 	public float height = 3F, width = 2F;
 	/** The height of chassis above the ground; for use when legs are gone */
 	public float chassisHeight = 1F;
-	/** How much fall damage the mecha takes by default. Overidden by some upgrades */
-	public float fallDamageMultiplier = 1F;
-	/** The size of explosion to cause, per fall damage */
-	public float blockDamageFromFalling = 0F;
+	
 	/** The default reach of tools. Tools can multiply this base reach as they wish */
 	public float reach = 10F;
+	
+	//Falling
+	/** Whether the mecha damages blocks when falling. Can be overriden by upgrades */
+	public boolean damageBlocksFromFalling = true;
+	/** The size of explosion to cause, per fall damage */
+	public float blockDamageFromFalling = 1F;
+	
+	/** Whether the mecha takes fall damage. Can be overriden by upgrades */
+	public boolean takeFallDamage = true;
+	/** How much fall damage the mecha takes by default */
+	public float fallDamageMultiplier = 1F;
+	
+	
+
 	
 	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();

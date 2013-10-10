@@ -90,7 +90,7 @@ public class ItemMecha extends Item {
             int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 1.5F + type.yOffset, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
+				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 1.5F + type.yOffset, (double)k + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
@@ -100,11 +100,11 @@ public class ItemMecha extends Item {
         return itemstack;
     }
 	
-	public DriveableData getData(ItemStack itemstack, World world)
+    public DriveableData getData(ItemStack itemstack, World world)
     {
 		return new DriveableData(getTagCompound(itemstack, world));
     }
-    
+   
     @Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)

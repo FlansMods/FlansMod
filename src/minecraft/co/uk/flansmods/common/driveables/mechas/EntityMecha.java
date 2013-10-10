@@ -95,7 +95,7 @@ public class EntityMecha extends EntityDriveable
 		inventory = new MechaInventory(this);
 	}
 	
-	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data) 
+	public EntityMecha(World world, double x, double y, double z, MechaType type, DriveableData data, NBTTagCompound tags) 
 	{
 		super(world, type, data);
 		legAxes = new RotatedAxes();
@@ -103,12 +103,12 @@ public class EntityMecha extends EntityDriveable
 		stepHeight = 3;
 		setPosition(x, y, z);
 		initType(type, false);
-		inventory = new MechaInventory(this);
+		inventory = new MechaInventory(this, tags);
 	}
 	
-	public EntityMecha(World world, double x, double y, double z, EntityPlayer placer, MechaType type, DriveableData data) 
+	public EntityMecha(World world, double x, double y, double z, EntityPlayer placer, MechaType type, DriveableData data, NBTTagCompound tags) 
 	{
-		this(world, x, y, z, type, data);
+		this(world, x, y, z, type, data, tags);
 		rotateYaw(placer.rotationYaw + 90F);
 		legAxes.rotateGlobalYaw(placer.rotationYaw + 90F);
 		prevLegsYaw = legAxes.getYaw();
@@ -469,14 +469,12 @@ public class EntityMecha extends EntityDriveable
         
         if(damagesource.getDamageType().equals("fall"))
         {
-        	float damageToInflict = i * type.fallDamageMultiplier;
-        	float blockDamageFromFalling = i * type.blockDamageFromFalling / 10F;
+        	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
+        	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	if(stopFallDamage())
-        		damageToInflict = 0;
-        	if(type.blockDamageFromFalling == 0F && breakBlocksUponFalling())
-        		blockDamageFromFalling = i / 10F;
-        	
+        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier : 0;
+        	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
+        	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
         	checkParts();
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
@@ -491,6 +489,7 @@ public class EntityMecha extends EntityDriveable
 			ItemStack mechaStack = new ItemStack(type.itemID, 1, 0);
 			mechaStack.stackTagCompound = new NBTTagCompound();
 			driveableData.writeToNBT(mechaStack.stackTagCompound);
+			inventory.writeToNBT(mechaStack.stackTagCompound);
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}

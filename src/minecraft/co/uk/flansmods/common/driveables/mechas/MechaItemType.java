@@ -84,7 +84,8 @@ public class MechaItemType extends InfoType
 	
 	public void reloadModel()
 	{
-		model = FlansMod.proxy.loadModel(modelString, shortName, ModelMechaTool.class);
+		if(modelString != null)
+			model = FlansMod.proxy.loadModel(modelString, shortName, ModelMechaTool.class);
 	}
 
 }

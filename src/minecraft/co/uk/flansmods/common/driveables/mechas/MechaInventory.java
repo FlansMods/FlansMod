@@ -26,6 +26,12 @@ public class MechaInventory implements IInventory
 		}
 	}
 	
+	public MechaInventory(EntityMecha m, NBTTagCompound tags) 
+	{
+		this(m);
+		readFromNBT(tags);
+	}
+
 	public void readFromNBT(NBTTagCompound tags)
 	{
 		if(tags == null)
@@ -119,13 +125,14 @@ public class MechaInventory implements IInventory
 	@Override
 	public void onInventoryChanged() 
 	{
-		mecha.couldNotFindFuel = false;
+		if(mecha != null)
+			mecha.couldNotFindFuel = false;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) 
 	{
-		return entityplayer.getDistanceToEntity(mecha) <= 10D;
+		return mecha != null && entityplayer.getDistanceToEntity(mecha) <= 10D;
 	}
 
 	@Override

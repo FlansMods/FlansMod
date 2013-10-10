@@ -13,7 +13,7 @@ public class ModelProtoTitan extends ModelMecha
 		int textureY = 256;
 		
 		//Body
-		bodyModel = new ModelRendererTurbo[6];
+		bodyModel = new ModelRendererTurbo[8];
 		
 		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		bodyModel[0].addBox(-12, 29, -12, 16, 19, 24);
@@ -35,22 +35,12 @@ public class ModelProtoTitan extends ModelMecha
 		bodyModel[5] = new ModelRendererTurbo(this, 0, 52, textureX, textureY);
 		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(-12, 2, 0, 0),  new Coord2D(-12, 8, 0, 6), new Coord2D(12, 8, 24, 6), new Coord2D(9, 2, 21, 0) }), 23, 24, 6, 61, 24, ModelRendererTurbo.MR_BACK, new float[] { 20, 9, 24, 8 });
 
-		/*
-		bodyModel[0].setPosition(70F, 0F, 0F);
-		bodyModel[1].setPosition(100F, 0F, 0F);
-		bodyModel[2].setPosition(90F, 0F, 0F);
-		bodyModel[3].setPosition(30F, 0F, 0F);
-		bodyModel[4].setPosition(40F, 0F, 0F);
-		*/
-
-		//bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		//bodyModel[1].flip = true;
-		//bodyModel[1].addBox(-12, 24, -12, 16, 24, 24);
+		bodyModel[6] = new ModelRendererTurbo(this, 85, 82, textureX, textureY);
+		bodyModel[6].addBox(6, 21, -5, 2, 8, 2);
 		
-		///bodyModel[3] = new ModelRendererTurbo(this, 0, 48, textureX, textureY);
-		//bodyModel[3].flip = true;
-		//bodyModel[3].addShape3D(0, 24, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 0), new Coord2D(12, 0), new Coord2D(12, 12), new Coord2D(4, 24) }), 24, 24, 12, 66, 24, ModelRendererTurbo.MR_BACK, new float[] { 8, 12, 14, 24 });
-
+		bodyModel[7] = new ModelRendererTurbo(this, 85, 82, textureX, textureY);
+		bodyModel[7].addBox(6, 21, 3, 2, 8, 2);
+		
 		//Left Arm
 		leftArmModel = new ModelRendererTurbo[6];
 		
