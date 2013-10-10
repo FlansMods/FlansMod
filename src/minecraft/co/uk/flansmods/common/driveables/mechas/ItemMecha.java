@@ -34,6 +34,21 @@ public class ItemMecha extends Item {
 	}
 	
 	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
+	{
+		if(type.description != null)
+		{
+			for(String s : type.description.split("_"))
+				lines.add(s);
+		}
+		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
+		String engineName = tags.getString("Engine");
+		PartType part = PartType.getPart(engineName);
+		if(part != null)
+			lines.add(part.name);
+	}
+	
+	@Override
 	/** Make sure client and server side NBTtags update */
 	public boolean getShareTag()
 	{

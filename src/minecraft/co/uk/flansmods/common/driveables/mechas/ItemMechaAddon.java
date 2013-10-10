@@ -24,6 +24,11 @@ public class ItemMechaAddon extends Item
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
 	{
+		if(type.description != null)
+		{
+			for(String s : type.description.split("_"))
+				list.add(s);
+		}
 	}
 
     @Override
