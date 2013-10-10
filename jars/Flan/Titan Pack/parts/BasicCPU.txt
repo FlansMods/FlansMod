@@ -5,7 +5,10 @@ Icon BasicCPU
 Colour 255 255 255
 ItemID 23415
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
-Category Misc
+Category Engine
+EngineSpeed 1
+FuelConsumption 1
+WorksWith mechas
 StackSize 8
 RecipeOutput 2
 Recipe R redstone D diode C comparator B blockRedstone

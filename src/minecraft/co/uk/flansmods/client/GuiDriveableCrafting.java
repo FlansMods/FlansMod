@@ -3,6 +3,8 @@ package co.uk.flansmods.client;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
+
+import co.uk.flansmods.common.EnumType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
@@ -221,8 +223,8 @@ public class GuiDriveableCrafting extends GuiScreen
 				if(stackInSlot != null && stackInSlot.getItem() instanceof ItemPart)
 				{
 					PartType partType = ((ItemPart)stackInSlot.getItem()).type;
-					//Check its an engine
-					if(partType.category == 2)
+					//Check its an engine that we can use
+					if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
 					{
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))
