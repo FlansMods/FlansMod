@@ -1,9 +1,9 @@
 //Naming
 Name AlphaTitan
-ShortName ProtoTitan
+ShortName AlphaTitan
 ItemID 23422
 //Visuals
-Icon ProtoTitan
+Icon AlphaTitan
 Model titan.ProtoTitan
 Texture ProtoTitan
 //Third Person Camera Distance
@@ -62,3 +62,7 @@ Height 48
 Width 28
 //Height of chassis above the ground
 ChassisHeight 21
+//The amount of damage the mecha should take from falling
+FallDamageMultiplier 1.0
+//The size of explosion to create per distance fallen upon hitting the ground
+BlockDamageFromFalling 0.0
