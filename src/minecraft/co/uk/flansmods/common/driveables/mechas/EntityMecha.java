@@ -648,7 +648,7 @@ public class EntityMecha extends EntityDriveable
 				
 				Vector3f motion = legAxes.getXAxis();
 				
-				motion.scale((type.moveSpeed)*(4.3F/20F)*(intent.lengthSquared()));
+				motion.scale((type.moveSpeed * data.engine.engineSpeed)*(4.3F/20F)*(intent.lengthSquared()));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	

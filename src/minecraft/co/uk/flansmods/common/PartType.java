@@ -1,6 +1,7 @@
 package co.uk.flansmods.common;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class PartType extends InfoType {
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 
 	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
-	public static PartType defaultEngine;
+	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
 	/** The list of all PartTypes */
 	public static List<PartType> parts = new ArrayList<PartType>();
 
@@ -38,8 +39,20 @@ public class PartType extends InfoType {
 	protected void read(TypeFile file) 
 	{
 		super.read(file);
-		if (category == 2 && defaultEngine == null)
-			defaultEngine = this;
+		if (category == 2)
+		{
+			for(EnumType type : worksWith)
+			{
+				//If there is already a default engine for this type, compare and see if this one is better
+				if(defaultEngines.containsKey(type))
+				{
+					PartType possiblyInferiorEngine = defaultEngines.get(type);
+					if(isInferiorEngine(possiblyInferiorEngine))
+						defaultEngines.put(type, this);
+				}
+				else defaultEngines.put(type, this);
+			}
+		}
 	}
 
 	@Override
@@ -86,6 +99,11 @@ public class PartType extends InfoType {
 			System.out.println("Reading part file failed.");
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isInferiorEngine(PartType quitePossiblyAnInferiorEngine)
+	{
+		return engineSpeed > quitePossiblyAnInferiorEngine.engineSpeed;
 	}
 
 	public static PartType getPart(String s) {

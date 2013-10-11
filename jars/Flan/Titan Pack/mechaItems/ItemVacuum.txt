@@ -7,10 +7,10 @@ Icon ItemVacuum
 Colour 255 255 255
 ItemID 23426
 RecipeOutput 1
-Recipe O obsidian
-   
-O O
-OOO
+Recipe H hopper I blockIron R redstone
+RHR
+HIH
+RHR
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type upgrade
 //The modifiers this item enacts on the mecha

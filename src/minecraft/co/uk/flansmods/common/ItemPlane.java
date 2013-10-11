@@ -53,7 +53,7 @@ public class ItemPlane extends Item
 			{
 				stack.stackTagCompound = new NBTTagCompound();
 				stack.stackTagCompound.setString("Type", type.shortName);
-				stack.stackTagCompound.setString("Engine", PartType.defaultEngine.shortName);
+				stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
 			}
 		}
 		return stack.stackTagCompound;
@@ -174,8 +174,8 @@ public class ItemPlane extends Item
     	ItemStack planeStack = new ItemStack(i, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
-    	if(PartType.defaultEngine != null)
-    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	if(PartType.defaultEngines.containsKey(EnumType.plane))
+    		tags.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
     	for(EnumDriveablePart part : EnumDriveablePart.values())
     	{
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);

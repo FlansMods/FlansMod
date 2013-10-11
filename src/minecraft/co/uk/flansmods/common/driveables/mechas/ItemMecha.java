@@ -2,6 +2,7 @@ package co.uk.flansmods.common.driveables.mechas;
 
 import java.util.List;
 
+import co.uk.flansmods.common.EnumType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableData;
@@ -118,8 +119,8 @@ public class ItemMecha extends Item {
     	ItemStack mechaStack = new ItemStack(i, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
-    	if(PartType.defaultEngine != null)
-    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	if(PartType.defaultEngines.containsKey(EnumType.mecha))
+    		tags.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
     	for(EnumDriveablePart part : EnumDriveablePart.values())
     	{
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
