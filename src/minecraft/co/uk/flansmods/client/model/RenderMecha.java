@@ -267,6 +267,7 @@ public class RenderMecha extends Render
 				}
 				toolType.model.renderDrill(mecha, dT);
 				GL11.glPopMatrix();
+				toolType.model.renderSaw(mecha, dT, (leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld));
 			}
 		}
 		else

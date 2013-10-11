@@ -1,5 +1,7 @@
 package co.uk.flansmods.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
 import net.minecraft.client.model.ModelBase;
@@ -29,11 +31,22 @@ public class ModelMechaTool extends ModelBase
 			model.render(f5);
 	}
 	
-	public void renderSaw(EntityMecha mecha, float f1)
+	public void renderSaw(EntityMecha mecha, float f1, boolean spin)
 	{
 		float f5 = 1F / 16F;
 				
 		for(ModelRendererTurbo model : sawModel)
-			model.render(f5);
+		{
+	        GL11.glPushMatrix();
+	        if(spin)
+	        {
+		        GL11.glTranslatef(model.rotationPointX / 16F, model.rotationPointY / 16F, model.rotationPointZ / 16F);
+				GL11.glRotatef(25F * (float)mecha.ticksExisted, 0F, 1F, 0F);
+		        GL11.glTranslatef(-model.rotationPointX / 16F, -model.rotationPointY / 16F, -model.rotationPointZ / 16F);
+	        }
+	        model.render(f5);
+	        GL11.glPopMatrix();
+		}
+			
 	}
 }
