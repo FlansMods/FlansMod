@@ -40,13 +40,13 @@ public class ContainerMechaInventory extends Container
 		}
 		
 		//Equipment Slots
-		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.feet, 84, 128));
-		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftLeg, 60, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.legs, 84, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.hips, 60, 128));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftArm, 36, 80));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftTool, 36, 56));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.leftShoulder, 60, 32));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.head, 84, 32));
-		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightLeg, 108, 128));
+		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.feet, 108, 128));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightArm, 132, 80));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightTool, 132, 56));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.rightShoulder, 108, 32));

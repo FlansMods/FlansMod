@@ -49,8 +49,8 @@ AddDye 1 purple
 Add Dye 1 blue
 //Health and collision
 SetupPart core 400 -24 48 -24 48 48 48
-SetupPart leftArm 60 -8 72 -36 32 16 12
-SetupPart rightArm 60 -8 72 36 32 16 -12
+SetupPart leftArm 60 -8 72 -48 32 16 16
+SetupPart rightArm 60 -8 72 48 32 16 -16
 SetupPart hips 200 -16 0 -16 32 48 32
 //SetupPart head 100 -7 -5 10 32 2 78
 BulletDetection 8

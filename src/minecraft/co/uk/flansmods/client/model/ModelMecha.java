@@ -64,72 +64,58 @@ public class ModelMecha extends ModelDriveable
         if(mecha.isPartIntact(EnumDriveablePart.head))
         	for(ModelRendererTurbo model : headModel)
         		model.render(f5);
-        
-        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
-        	for(ModelRendererTurbo model : rightArmModel)
-        		//model.render(f5);
-        		;
 	}
 		
 	public void renderLeftArm(float f5, EntityMecha mecha, float f)
 	{
-        if(mecha.isPartIntact(EnumDriveablePart.leftArm))
         	for(ModelRendererTurbo model : leftArmModel)
         		model.render(f5);
 	}
 	
 	public void renderLeftHand(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.leftArm))
         	for(ModelRendererTurbo model : leftHandModel)
         		model.render(f5);
 	}
 	
 	public void renderRightArm(float f5, EntityMecha mecha, float f)
 	{
-        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
         	for(ModelRendererTurbo model : rightArmModel)
         		model.render(f5);
 	}
 	
 	public void renderRightHand(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.rightArm))
         	for(ModelRendererTurbo model : rightHandModel)
         		model.render(f5);
 	}
 	
 	public void renderRightFoot(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.hips))
         	for(ModelRendererTurbo model : rightFootModel)
         		model.render(f5);
 	}
 	
 	public void renderLeftFoot(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.hips))
         	for(ModelRendererTurbo model : leftFootModel)
         		model.render(f5);
 	}
 	
 	public void renderRightLeg(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.hips))
         	for(ModelRendererTurbo model : rightLegModel)
         		model.render(f5);
 	}
 	
 	public void renderLeftLeg(float f5, EntityMecha mecha, float f)
 	{
-		if(mecha.isPartIntact(EnumDriveablePart.hips))
         	for(ModelRendererTurbo model : leftLegModel)
         		model.render(f5);
 	}
 	
 	public void renderHips(float f5, EntityMecha mecha, float f)
 	{        
-        if(mecha.isPartIntact(EnumDriveablePart.hips))
         	for(ModelRendererTurbo model : hipsModel)
         		model.render(f5);
 	}
