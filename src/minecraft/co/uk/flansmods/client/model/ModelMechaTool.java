@@ -10,15 +10,15 @@ public class ModelMechaTool extends ModelBase
 	public ModelRendererTurbo[] baseModel = new ModelRendererTurbo[0];
 	/** This bit spins */
 	public ModelRendererTurbo[] drillModel = new ModelRendererTurbo[0];
+	/** This bit spins on a different axis */
+	public ModelRendererTurbo[] sawModel = new ModelRendererTurbo[0];
 	
 	public void render(EntityMecha mecha, float f1)
 	{
 		float f5 = 1F / 16F;
 		
 		for(ModelRendererTurbo model : baseModel)
-		{
 			model.render(f5);
-		}
 	}
 	
 	public void renderDrill(EntityMecha mecha, float f1)
@@ -26,9 +26,14 @@ public class ModelMechaTool extends ModelBase
 		float f5 = 1F / 16F;
 				
 		for(ModelRendererTurbo model : drillModel)
-		{
-			//Rotate
 			model.render(f5);
-		}
+	}
+	
+	public void renderSaw(EntityMecha mecha, float f1)
+	{
+		float f5 = 1F / 16F;
+				
+		for(ModelRendererTurbo model : sawModel)
+			model.render(f5);
 	}
 }

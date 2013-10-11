@@ -140,7 +140,7 @@ public class GuiDriveableInventory extends GuiContainer
 				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < (m > 3 ? 3 : m); row++)
 				{
-					drawTexturedModalRect(j + 9, k + 24 + 19 * row, 7, 97, 18 * ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8), 18);
+					drawTexturedModalRect(j + 9, k + 24 + 19 * row, 7, 97, 18 * ((row + scroll + 1) * 8 <= numItems ? 8 : numItems % 8), 18);
 				}
 				break;
 			}

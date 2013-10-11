@@ -43,12 +43,12 @@ public class ModelMecha extends ModelDriveable
 		renderPart(rightFootModel);
 		renderPart(headModel);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(mechaType.leftArmOrigin.x, mechaType.leftArmOrigin.y, mechaType.leftArmOrigin.z);
+		GL11.glTranslatef(mechaType.leftArmOrigin.x / mechaType.modelScale, mechaType.leftArmOrigin.y / mechaType.modelScale, mechaType.leftArmOrigin.z / mechaType.modelScale);
 		renderPart(leftArmModel);
 		renderPart(leftHandModel);
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-		GL11.glTranslatef(mechaType.rightArmOrigin.x, mechaType.rightArmOrigin.y, mechaType.rightArmOrigin.z);
+		GL11.glTranslatef(mechaType.rightArmOrigin.x / mechaType.modelScale, mechaType.rightArmOrigin.y / mechaType.modelScale, mechaType.rightArmOrigin.z / mechaType.modelScale);
 		renderPart(rightArmModel);
 		renderPart(rightHandModel);
 		GL11.glPopMatrix();

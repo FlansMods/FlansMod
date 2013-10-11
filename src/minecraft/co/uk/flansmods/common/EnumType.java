@@ -2,7 +2,10 @@ package co.uk.flansmods.common;
 
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntityVehicle;
+import co.uk.flansmods.common.driveables.PlaneType;
+import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 
 public enum EnumType 
 {
@@ -27,9 +30,9 @@ public enum EnumType
 	
 	public static EnumType getFromObject(Object o)
 	{
-		if(o instanceof EntityMecha) return mecha;
-		if(o instanceof EntityPlane) return plane;
-		if(o instanceof EntityVehicle) return vehicle;
+		if(o instanceof EntityMecha || o instanceof MechaType) return mecha;
+		if(o instanceof EntityPlane || o instanceof PlaneType) return plane;
+		if(o instanceof EntityVehicle || o instanceof VehicleType) return vehicle;
 		return null;
 	}
 }

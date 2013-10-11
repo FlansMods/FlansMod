@@ -1,5 +1,5 @@
 //Naming
-Name AlphaTitan
+Name Alpha Titan
 ShortName AlphaTitan
 ItemID 23422
 //Visuals
@@ -20,7 +20,7 @@ YOffset 0
 //Fuel Tank Size
 FuelTankSize 20000
 //Inventory Slots
-CargoSlots 32
+CargoSlots 48
 //How quickly the legs react to a change in direction
 RotateSpeed 20
 //Will it squash puny mobs?
@@ -39,11 +39,10 @@ HeldItemScale 1
 //Recipe
 //Each section of the mecha may have many parts
 //The sections are core, leftArm, rightArm, hips, head
-AddRecipeParts core 1 meduimDiamondBody 1 vehicleSeat
+AddRecipeParts core 1 mediumDiamondBody 1 vehicleSeat
 AddRecipeParts leftArm 1 mediumDiamondArm
 AddRecipeParts rightArm 1 mediumDiamondArm
 AddRecipeParts hips 2 mediumDiamondLeg
-AddRecipeParts head 1 advCPU
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 5 black
 AddDye 1 purple
@@ -65,4 +64,4 @@ FallDamageMultiplier 2.0
 //The size of explosion to create per distance fallen upon hitting the ground
 BlockDamageFromFalling 2.0
 //Size Multiplier; scales up the model
-ModelScale 3
+ModelScale 2

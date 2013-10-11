@@ -9,6 +9,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableType;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -138,7 +139,9 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
-			GL11.glScalef(-50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance);
+			if(selectedType instanceof MechaType)
+				GL11.glTranslatef(0, 15, 0);
+			GL11.glScalef(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);
 			GL11.glRotatef(180F, 0F, 0F, 1F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
 			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);

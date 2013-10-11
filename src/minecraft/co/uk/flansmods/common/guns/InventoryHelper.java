@@ -69,7 +69,7 @@ public class InventoryHelper
         }
 	}
 	
-    private static int storeItemStack(IInventory inventory, ItemStack stack)
+	public static int storeItemStack(IInventory inventory, ItemStack stack)
     {
         for (int i = 0; i < inventory.getSizeInventory(); ++i)
         {
@@ -83,7 +83,7 @@ public class InventoryHelper
         return -1;
     }
 	
-    private static int storePartialItemStack(IInventory inventory, ItemStack stack)
+    public static int storePartialItemStack(IInventory inventory, ItemStack stack)
     {
         int i = stack.itemID;
         int j = stack.stackSize;
@@ -125,10 +125,10 @@ public class InventoryHelper
             	
                 if(oldStack == null)
                 {
-                	ItemStack newStack = new ItemStack(i, 0, stack.getItemDamage());
+                	oldStack = new ItemStack(i, 0, stack.getItemDamage());
                 	if(stack.hasTagCompound())
-                		newStack.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
-                	inventory.setInventorySlotContents(k, newStack);
+                		oldStack.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+                	inventory.setInventorySlotContents(k, oldStack);
                 }
 
                 int l = j;
@@ -159,7 +159,7 @@ public class InventoryHelper
     }
 	
 	/** Method from InventoryPlayer */
-    private static int getFirstEmptyStack(IInventory inventory)
+    public static int getFirstEmptyStack(IInventory inventory)
     {
         for(int i = 0; i < inventory.getSizeInventory(); ++i)
             if (inventory.getStackInSlot(i) == null)

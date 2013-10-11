@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,6 +49,7 @@ import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.InventoryHelper;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.network.PacketPlaySound;
@@ -484,7 +486,7 @@ public class EntityMecha extends EntityDriveable
         	}
         }
         
-		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+        else if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.itemID, 1, 0);
 			mechaStack.stackTagCompound = new NBTTagCompound();
@@ -493,6 +495,10 @@ public class EntityMecha extends EntityDriveable
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}
+        else
+        {
+        	driveableData.parts.get(EnumDriveablePart.core).attack(i, damagesource.isFireDamage());
+        }
         return true;
     }
 	
@@ -593,6 +599,7 @@ public class EntityMecha extends EntityDriveable
 		if(driverIsLiving)
 		{
 			EntityLivingBase entity = (EntityLivingBase)seats[0].riddenByEntity;
+			boolean driverIsCreative = entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode;
 			if(thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController)
 			{
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
@@ -670,6 +677,7 @@ public class EntityMecha extends EntityDriveable
 				{
 					//Get block and material
 					Block blockHit = Block.blocksList[worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z)];
+					int metadata = worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 					Material material = worldObj.getBlockMaterial(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 					
 					//Get the itemstacks in each hand
@@ -694,17 +702,24 @@ public class EntityMecha extends EntityDriveable
 						
 						//Calculate the mine speed
 						float mineSpeed = 1F;
+						boolean atLeastOneEffectiveTool = false;
 						if(leftStackIsTool)
 						{
 							MechaItemType leftType = ((ItemMechaAddon)leftStack.getItem()).type;
 							if(leftType.function.effectiveAgainst(material) && leftType.toolHardness > blockHardness)
+							{
 								mineSpeed *= leftType.speed;
+								atLeastOneEffectiveTool = true;
+							}
 						}
 						if(rightStackIsTool)
 						{
 							MechaItemType rightType = ((ItemMechaAddon)rightStack.getItem()).type;
 							if(rightType.function.effectiveAgainst(material) && rightType.toolHardness > blockHardness)
+							{
 								mineSpeed *= rightType.speed;
+								atLeastOneEffectiveTool = true;
+							}
 						}
 						
 						//If this block is immortal, do not break it
@@ -726,7 +741,19 @@ public class EntityMecha extends EntityDriveable
 			        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
 							//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 							//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-							worldObj.destroyBlock(breakingBlock.x, breakingBlock.y, breakingBlock.z, true);
+							boolean vacuumItems = vacuumItems();
+							if(vacuumItems)
+							{
+								for(ItemStack stack : blockHit.getBlockDropped(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
+								{
+									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+									{
+										worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
+									}
+								}
+							}
+
+							worldObj.destroyBlock(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
 						}
 					}
 				}
@@ -863,7 +890,15 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	
+	public boolean vacuumItems()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.vacuumItems)
+				return true;
+		}
+		return false;
+	}
 	
 	public ArrayList<MechaItemType> getUpgradeTypes()
 	{

@@ -30,7 +30,7 @@ public class MechaItemType extends InfoType
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false;
 	
 	/** The model */
 	@SideOnly(Side.CLIENT)
@@ -66,6 +66,8 @@ public class MechaItemType extends InfoType
 				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ItemVacuum"))
+				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception e)
 		{
