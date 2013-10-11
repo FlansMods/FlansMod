@@ -27,13 +27,13 @@ RotateSpeed 20
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
 StepHeight 2
-JumpHeight 4
+JumpHeight 1
 //Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
 LeftArmOrigin 0 80 -32
 RightArmOrigin 0 80 32
 //Arm lengths used to determine where the held items appear (Again in model co-ords)
 ArmLength 44
-LegLength 32
+LegLength 16
 //The scale multiplier for rendering the items and tools being held (1 will automatically scale with model)
 HeldItemScale 1
 //Recipe
