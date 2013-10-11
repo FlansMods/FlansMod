@@ -334,85 +334,88 @@ public class EntityMecha extends EntityDriveable
 	
 	private boolean useItem(boolean left)
 	{
-		boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
-		ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
-		if(heldStack == null)
-			return false;
-		
-		Item heldItem = heldStack.getItem();
-		
-		MechaType mechaType = getMechaType();
-		
-		if(heldItem instanceof ItemMechaAddon)
-		{
-			MechaItemType toolType = ((ItemMechaAddon)heldItem).type;
+        if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
+	        {
+			boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
+			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+			if(heldStack == null)
+				return false;
 			
-			float reach = toolType.reach * mechaType.reach;
+			Item heldItem = heldStack.getItem();
 			
-			Vector3f lookOrigin = new Vector3f((float)mechaType.seats[0].x / 16F, (float)mechaType.seats[0].y / 16F + seats[0].riddenByEntity.getMountedYOffset(), (float)mechaType.seats[0].z / 16F);
-			lookOrigin = axes.findLocalVectorGlobally(lookOrigin);
-			Vector3f.add(lookOrigin, new Vector3f(posX, posY, posZ), lookOrigin);
-	
-			Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
+			MechaType mechaType = getMechaType();
 			
-			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
-			
-			Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
-			
-			MovingObjectPosition hit = worldObj.clip(lookOrigin.toVec3(), lookTarget.toVec3());
-			
-			//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
-			if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
+			if(heldItem instanceof ItemMechaAddon)
 			{
-				if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
-					breakingProgress = 0F;
-				breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
-			}
-		}
+				MechaItemType toolType = ((ItemMechaAddon)heldItem).type;
+				
+				float reach = toolType.reach * mechaType.reach;
+				
+				Vector3f lookOrigin = new Vector3f((float)mechaType.seats[0].x / 16F, (float)mechaType.seats[0].y / 16F + seats[0].riddenByEntity.getMountedYOffset(), (float)mechaType.seats[0].z / 16F);
+				lookOrigin = axes.findLocalVectorGlobally(lookOrigin);
+				Vector3f.add(lookOrigin, new Vector3f(posX, posY, posZ), lookOrigin);
 		
-		else if(heldItem instanceof ItemGun)
-		{
-			ItemGun gunItem = (ItemGun)heldItem;
-			GunType gunType = gunItem.type;
-			
-			//Get the correct shoot delay
-			int delay = left ? shootDelayLeft : shootDelayRight;
-			
-			//If we can shoot
-			if(delay <= 0)
-			{
-				//Go through the bullet stacks in the gun and see if any of them are not null
-				int bulletID = 0;
-				ItemStack bulletStack = null;
-				for(; bulletID < gunType.numAmmoItemsInGun; bulletID++)
+				Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
+				
+				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
+				
+				Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
+				
+				MovingObjectPosition hit = worldObj.clip(lookOrigin.toVec3(), lookTarget.toVec3());
+				
+				//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
+				if(hit != null && hit.typeOfHit == EnumMovingObjectType.TILE)
 				{
-					ItemStack checkingStack = gunItem.getBulletItemStack(heldStack, bulletID);
-					if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+					if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
+						breakingProgress = 0F;
+					breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
+				}
+			}
+			
+			else if(heldItem instanceof ItemGun)
+			{
+				ItemGun gunItem = (ItemGun)heldItem;
+				GunType gunType = gunItem.type;
+				
+				//Get the correct shoot delay
+				int delay = left ? shootDelayLeft : shootDelayRight;
+				
+				//If we can shoot
+				if(delay <= 0)
+				{
+					//Go through the bullet stacks in the gun and see if any of them are not null
+					int bulletID = 0;
+					ItemStack bulletStack = null;
+					for(; bulletID < gunType.numAmmoItemsInGun; bulletID++)
 					{
-						bulletStack = checkingStack;
-						break;
+						ItemStack checkingStack = gunItem.getBulletItemStack(heldStack, bulletID);
+						if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+						{
+							bulletStack = checkingStack;
+							break;
+						}
+					}
+					
+					//If no bullet stack was found, reload
+					if(bulletStack == null)
+					{
+						gunItem.reload(heldStack, worldObj, this, driveableData, creative, false);				
+					}
+					//A bullet stack was found, so try shooting with it
+					else if(bulletStack.getItem() instanceof ItemBullet)
+					{
+						//Shoot
+						BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
+						shoot(gunType, bulletType, creative, left);
+						//Damage the bullet item
+						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+						
+						//Update the stack in the gun
+						gunItem.setBulletItemStack(heldStack, bulletStack, bulletID);
 					}
 				}
-				
-				//If no bullet stack was found, reload
-				if(bulletStack == null)
-				{
-					gunItem.reload(heldStack, worldObj, this, driveableData, creative, false);				
-				}
-				//A bullet stack was found, so try shooting with it
-				else if(bulletStack.getItem() instanceof ItemBullet)
-				{
-					//Shoot
-					BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
-					shoot(gunType, bulletType, creative, left);
-					//Damage the bullet item
-					bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-					
-					//Update the stack in the gun
-					gunItem.setBulletItemStack(heldStack, bulletStack, bulletID);
-				}
 			}
-		}
+        }
 		
 		return true;
 	}

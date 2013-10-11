@@ -72,6 +72,7 @@ public class RenderMecha extends Render
 		GL11.glPopMatrix();
 		
 		//Left arm render
+        if(mecha.isPartIntact(EnumDriveablePart.leftArm))
 		{
 			bindEntityTexture(mecha);
 			GL11.glPushMatrix();
@@ -106,6 +107,7 @@ public class RenderMecha extends Render
 		}
 		
 		//Right arm render
+        if(mecha.isPartIntact(EnumDriveablePart.rightArm))
 		{
 			bindEntityTexture(mecha);
 			GL11.glPushMatrix();
@@ -167,24 +169,26 @@ public class RenderMecha extends Render
         GL11.glPopMatrix();
         
         //Leg render
-        bindEntityTexture(mecha);
+		if(mecha.isPartIntact(EnumDriveablePart.hips))
+	    {
+	    bindEntityTexture(mecha);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
-        dYaw = mecha.legAxes.getYaw() - mecha.prevLegsYaw;
-        for(; dYaw > 180F; dYaw -= 360F) {}
-        for(; dYaw <= -180F; dYaw += 360F) {}
+	    dYaw = mecha.legAxes.getYaw() - mecha.prevLegsYaw;
+	    for(; dYaw > 180F; dYaw -= 360F) {}
+	    for(; dYaw <= -180F; dYaw += 360F) {}
 		GL11.glRotatef(- dYaw * f1 - mecha.prevLegsYaw, 0F, 1F, 0F);
-        GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+	    GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GL11.glScalef(modelScale, modelScale, modelScale);
 		if(model != null)
 		{
 			float legLength = type.legLength;
-        	int legSwingTime = 5;
-        	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / legSwingTime) * mecha.legSwing;
-        	float footH = (float)Math.sin(legsYaw) * legLength;
-        	float footV = (float)Math.cos(legsYaw) * legLength;
-        	
+	    	int legSwingTime = 5;
+	    	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / legSwingTime) * mecha.legSwing;
+	    	float footH = (float)Math.sin(legsYaw) * legLength;
+	    	float footV = (float)Math.cos(legsYaw) * legLength;
+	    	
 			//Hips
 			model.renderHips(scale, mecha, f1);
 			
@@ -222,6 +226,7 @@ public class RenderMecha extends Render
 			
 		}
 		GL11.glPopMatrix();
+	    }
     }
 	
 	@Override
