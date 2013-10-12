@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 
 public class ItemOpStick extends Item
 {
-	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction", "opStick_redCorner", "opStick_blueCorner"};
+	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
     
@@ -200,58 +200,6 @@ public class ItemOpStick extends Item
 	    	}
     	}
 	}
-	
-	/** Super secret WorldEdit functionality */
-	@Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
-		int n = itemstack.getItemDamage();
-		if(n != 4 && n != 5)
-			return itemstack;
-				
-    	//Raytracing
-        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-        double length = 100D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.clip(posVec, lookVec, true);
-        
-        //Result check
-        if(movingobjectposition == null)
-        {
-            return itemstack;
-        }
-        if(movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
-        {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
-            if(world.isRemote)
-            {
-            	world.spawnEntityInWorld(new EntityDebugAABB(world, new Vector3f(i - 0.1F, j - 0.1F, k - 0.1F), new Vector3f(1.2F, 1.2F, 1.2F), 20, n == 4 ? 1 : 0, 0, n == 5 ? 1 : 0));
-            }
-            else
-            {
-        		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer, Side.SERVER);
-        		if(n == 4)
-        		{
-	        		data.x1 = i;
-	        		data.y1 = j;
-	        		data.z1 = k;
-        		}
-        		else
-        		{
-	        		data.x2 = i;
-	        		data.y2 = j;
-	        		data.z2 = k;
-        		}
-            }
-        }
-        return itemstack;
-    }
 	
 	@Override
     @SideOnly(Side.CLIENT)
