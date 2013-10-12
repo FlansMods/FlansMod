@@ -61,5 +61,9 @@ Width 28
 ChassisHeight 21
 //The amount of damage the mecha should take from falling
 FallDamageMultiplier 1.0
+//Whether to actually take fall damage. Can be overriden by upgrades
+TakeFallDamage true
 //The size of explosion to create per distance fallen upon hitting the ground
 BlockDamageFromFalling 1.0
+//Whether to actually damage the ground. Can be overridden by upgrades
+DamageBlocksFromFalling false
