@@ -25,6 +25,8 @@ public class MechaItemType extends InfoType
 	public float toolHardness = 1F;
 	/** This is multiplied by the mecha reach to calculate the total reach */
 	public float reach = 1F;
+	/** This makes the mecha float towards the surface if it jumps underwater */
+	public boolean floater = false;
 	
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
@@ -61,13 +63,14 @@ public class MechaItemType extends InfoType
 				toolHardness = Float.parseFloat(split[1]);
 			if(split[0].equals("Reach"))
 				reach = Float.parseFloat(split[1]);
-			
 			if(split[0].equals("StopMechaFallDamage"))
 				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ItemVacuum"))
 				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Floatation"))
+				floater = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception e)
 		{
