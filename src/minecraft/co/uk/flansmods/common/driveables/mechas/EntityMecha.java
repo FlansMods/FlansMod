@@ -146,6 +146,44 @@ public class EntityMecha extends EntityDriveable
 		try
 		{
 			out.writeFloat(legAxes.getYaw());
+			out.writeFloat(legSwing);
+			
+			//Only send this bit from server to client
+			if(!worldObj.isRemote)
+			{
+				NBTTagCompound leftTags = new NBTTagCompound();
+				NBTTagCompound rightTags = new NBTTagCompound();
+				ItemStack leftStack = inventory.getStackInSlot(EnumMechaSlotType.leftTool);
+				ItemStack rightStack = inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+				if(leftStack != null)
+					inventory.getStackInSlot(EnumMechaSlotType.leftTool).writeToNBT(leftTags);
+				if(rightStack != null)
+					inventory.getStackInSlot(EnumMechaSlotType.rightTool).writeToNBT(rightTags);
+				NBTBase.writeNamedTag(leftTags, out);
+				NBTBase.writeNamedTag(rightTags, out);
+			}
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void readUpdateData(DataInputStream in)
+	{
+		try
+		{
+			legAxes.setAngles(in.readFloat(), 0, 0);
+			legSwing = in.readFloat() / 2F;
+			//Only receive this on the client
+			if(worldObj.isRemote)
+			{
+				NBTTagCompound leftTags = (NBTTagCompound)NBTBase.readNamedTag(in);
+				NBTTagCompound rightTags = (NBTTagCompound)NBTBase.readNamedTag(in);
+				inventory.setInventorySlotContents(EnumMechaSlotType.leftTool, ItemStack.loadItemStackFromNBT(leftTags));
+				inventory.setInventorySlotContents(EnumMechaSlotType.rightTool, ItemStack.loadItemStackFromNBT(rightTags));
+			}
 		}
 		catch(IOException e)
 		{
@@ -178,19 +216,6 @@ public class EntityMecha extends EntityDriveable
 		try
 		{
 			inventory.readFromNBT((NBTTagCompound)NBTBase.readNamedTag(inputData));
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void readUpdateData(DataInputStream in)
-	{
-		try
-		{
-			legAxes.setAngles(in.readFloat(), 0, 0);
 		}
 		catch(IOException e)
 		{
@@ -868,7 +893,8 @@ public class EntityMecha extends EntityDriveable
 				seat.updatePosition();
 		}
 		
-		legSwing = legSwing / 2F;
+		if(!driverIsLiving || thePlayerIsDrivingThis)
+			legSwing = legSwing / 2F;
 	}
 	
 	/** Check all upgrades to see if any stop fall damage */

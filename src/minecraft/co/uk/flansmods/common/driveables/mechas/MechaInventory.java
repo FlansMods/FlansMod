@@ -100,8 +100,13 @@ public class MechaInventory implements IInventory
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) 
 	{
+		setInventorySlotContents(EnumMechaSlotType.values()[i], itemstack);
+	}
+	
+	public void setInventorySlotContents(EnumMechaSlotType e, ItemStack itemstack) 
+	{
 		onInventoryChanged();
-		stacks.put(EnumMechaSlotType.values()[i], itemstack);
+		stacks.put(e, itemstack);
 	}
 
 	@Override
