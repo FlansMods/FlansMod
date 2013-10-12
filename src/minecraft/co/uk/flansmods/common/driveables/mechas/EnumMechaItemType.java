@@ -13,7 +13,7 @@ public enum EnumMechaItemType
 		}
 		return nothing;
 	}
-	
+
 	public EnumMechaSlotType[] getValidSlots()
 	{
 		switch(this)

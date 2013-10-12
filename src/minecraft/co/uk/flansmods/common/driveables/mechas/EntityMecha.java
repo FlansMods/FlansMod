@@ -287,6 +287,12 @@ public class EntityMecha extends EntityDriveable
     		}
 			case 4 : //Jump
 			{
+				if(isInWater() && shouldFloat() && (jumpDelay == 0))
+				{
+					jumpDelay = 10;
+					motionY += 0.3F;
+					return true;
+				}
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
@@ -924,6 +930,16 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.vacuumItems)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean shouldFloat()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.floater)
 				return true;
 		}
 		return false;
