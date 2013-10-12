@@ -726,7 +726,8 @@ public class EntityMecha extends EntityDriveable
 					//If we are not breaking blocks, reset everything
 					if(blockHit == null || !breakingBlocks)
 					{
-						Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
+						if(worldObj.isRemote)
+							Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
 						breakingBlock = null;
 					}
 					else
@@ -768,7 +769,8 @@ public class EntityMecha extends EntityDriveable
 						}
 						
 						//Add block digging overlay
-						Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
+						if(worldObj.isRemote)
+							Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(entityId, breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
 						breakingProgress += 0.1F * mineSpeed;
 						if(breakingProgress >= 1F)
 						{
