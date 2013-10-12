@@ -115,6 +115,11 @@ public class ContainerMechaInventory extends Container
         {
             ItemStack slotStack = currentSlot.getStack();
             stack = slotStack.copy();
+         
+            ///if(stack.getItem() instanceof ItemMechaAddon)
+           // {
+            	//((ItemMechaAddon)stack.getItem()).type;
+            //}
             
             if(slotID >= numItems)
             {
