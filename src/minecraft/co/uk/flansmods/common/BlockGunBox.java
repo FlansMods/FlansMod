@@ -26,6 +26,8 @@ public class BlockGunBox extends BlockContainer
 		//super(i, boxType.material);
 		// set specific material.
 		super(i, Material.wood);
+		setHardness(2F);
+	    setResistance(4F);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 	

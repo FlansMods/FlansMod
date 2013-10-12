@@ -19,6 +19,8 @@ public class BlockPlaneWorkbench extends Block
     public BlockPlaneWorkbench(int i, int j, int k)
     {
         super(i, Material.iron);
+        setHardness(3F);
+        setResistance(6F);
         setCreativeTab(FlansMod.tabFlanDriveables);
     }
     
