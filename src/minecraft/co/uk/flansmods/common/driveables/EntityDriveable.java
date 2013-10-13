@@ -646,6 +646,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     
     public boolean hasFuel()
     {
+    	if(seats == null)
+    		return false;
     	if(seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
     		return true;
     	return driveableData.fuelInTank > 0;
