@@ -345,6 +345,11 @@ public class CommonProxy
 		}
 	}
 	
+	public boolean isScreenOpen()
+	{
+		return false;
+	}
+	
 	public boolean isKeyDown(int key)
 	{
 		return false;

@@ -193,7 +193,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	@SideOnly(Side.CLIENT)
 	private void checkForShooting()
 	{
-		if(Mouse.isButtonDown(0) && !wasShooting)
+		if(Mouse.isButtonDown(0) && !wasShooting && !FlansMod.proxy.isScreenOpen())
 		{
 			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
 			wasShooting = true;
