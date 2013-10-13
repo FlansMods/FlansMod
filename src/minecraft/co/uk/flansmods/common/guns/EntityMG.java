@@ -394,6 +394,16 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		data.writeInt(blockX);
 		data.writeInt(blockY);
 		data.writeInt(blockZ);
+		
+		if(ammo != null)
+		{
+			data.writeBoolean(true);
+			data.writeInt(ammo.itemID);
+			data.writeInt(ammo.getItemDamage());
+		}
+		else {
+			data.writeBoolean(false);
+		}
 	}
 
 	@Override
@@ -406,6 +416,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			blockX = data.readInt();
 			blockY = data.readInt();
 			blockZ = data.readInt();
+			
+			if(data.readBoolean())
+			{
+				ammo = new ItemStack(data.readInt(), 1, data.readInt());
+			}
 		}
 		catch(Exception e)
 		{
