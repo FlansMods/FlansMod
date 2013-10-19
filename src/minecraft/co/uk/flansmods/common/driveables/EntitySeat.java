@@ -353,7 +353,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
 	{
-		if(driver)
+		if((!worldObj.isRemote || foundDriveable) && driver)
 		{
 			driveable.updateKeyHeldState(key, held);
 		}

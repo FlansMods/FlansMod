@@ -434,6 +434,7 @@ public class TeamsManager implements IPlayerTracker
 			FlansMod.explosions = tags.getBoolean("Explosions");
 			FlansMod.forceAdventureMode = tags.getBoolean("ForceAdventure");
 			FlansMod.canBreakGuns = tags.getBoolean("CanBreakGuns");
+			FlansMod.canBreakGlass = tags.getBoolean("CanBreakGlass");
 			FlansMod.armourDrops = tags.getBoolean("ArmourDrops");
 			FlansMod.weaponDrops = tags.getInteger("WeaponDrops");
 			FlansMod.vehiclesNeedFuel = tags.getBoolean("NeedFuel");
@@ -512,6 +513,7 @@ public class TeamsManager implements IPlayerTracker
 			tags.setBoolean("Explosions", FlansMod.explosions);
 			tags.setBoolean("ForceAdventure", FlansMod.forceAdventureMode);
 			tags.setBoolean("CanBreakGuns", FlansMod.canBreakGuns);
+			tags.setBoolean("CanBreakGlass", FlansMod.canBreakGlass);
 			tags.setBoolean("ArmourDrops", FlansMod.armourDrops);
 			tags.setInteger("WeaponDrops", FlansMod.weaponDrops);
 			tags.setBoolean("NeedFuel", FlansMod.vehiclesNeedFuel);
