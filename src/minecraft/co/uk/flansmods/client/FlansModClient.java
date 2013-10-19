@@ -265,11 +265,6 @@ public class FlansModClient extends FlansMod
 			type.reloadModel();
 		}
 	}
-
-	public static void shoot()
-	{
-		// TODO : SMP guns
-	}
 	
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
 }

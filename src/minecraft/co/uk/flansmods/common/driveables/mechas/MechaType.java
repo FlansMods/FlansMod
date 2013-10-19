@@ -46,7 +46,8 @@ public class MechaType extends DriveableType
 	/** How much fall damage the mecha takes by default */
 	public float fallDamageMultiplier = 1F;
 	
-	
+	/** Leg Swing Limit */
+	public float legSwingLimit = 2F;	
 
 	
 	
@@ -109,6 +110,8 @@ public class MechaType extends DriveableType
 				takeFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("DamageBlocksFromFalling"))
 				damageBlocksFromFalling = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("LegSwingLimit"))
+				legSwingLimit = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

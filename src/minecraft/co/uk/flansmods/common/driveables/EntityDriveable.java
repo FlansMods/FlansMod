@@ -62,7 +62,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
 	public float throttle;
-
+	
 	public boolean fuelling;
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
 	public float prevRotationRoll;
@@ -646,9 +646,21 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     
     public boolean hasFuel()
     {
+    	if(seats == null || seats[0] == null || seats[0].riddenByEntity == null)
+    		return false;
     	if(seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
     		return true;
     	return driveableData.fuelInTank > 0;
+    }
+    
+    public boolean hasEnoughFuel()
+    {
+    	if(seats == null || seats[0] == null || seats[0].riddenByEntity == null)
+    		return false;
+    	if(seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+    		return true;
+    	
+		return driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
     }
 	
 	//Physics time! Oooh yeah

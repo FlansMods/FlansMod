@@ -308,7 +308,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	private void checkForShooting()
 	{
 		//Send a packet!
-		if(Mouse.isButtonDown(0) && !wasShooting)
+		if(Mouse.isButtonDown(0) && !wasShooting && !FlansMod.proxy.isScreenOpen())
 		{
 			PacketDispatcher.sendPacketToServer(PacketMGFire.buildMGFirePacket(true));
 			wasShooting = true;

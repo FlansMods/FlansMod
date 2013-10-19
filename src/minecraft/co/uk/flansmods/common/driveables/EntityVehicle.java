@@ -375,7 +375,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		//Aesthetics
 		//Rotate the wheels
-		wheelsAngle += throttle / 7F;	
+		if(hasEnoughFuel())
+		{
+			wheelsAngle += throttle / 7F;	
+		}
 		
 		//Return the wheels to their resting position
 		wheelsYaw *= 0.9F;
@@ -524,13 +527,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		//Sounds
 		//Starting sound
-		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0)
+		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
 		//Flying sound
-		if (throttle > 0.2F && soundPosition == 0)
+		if (throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;

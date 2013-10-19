@@ -551,7 +551,7 @@ public class CommandTeams extends CommandBase {
 				return;
 			}
 			FlansMod.driveablesBreakBlocks = Boolean.parseBoolean(split[1]);
-			sender.sendChatToPlayer(ChatMessageComponent.createFromText("Vehicles will " + (FlansMod.vehiclesNeedFuel ? "now" : "no longer") + " break blocks"));
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("Vehicles will " + (FlansMod.driveablesBreakBlocks ? "now" : "no longer") + " break blocks"));
 			return;
 		}
 		if(split[0].equals("setVariable"))

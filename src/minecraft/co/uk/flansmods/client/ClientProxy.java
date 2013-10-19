@@ -5,8 +5,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.client.debug.EntityDebugAABB;
@@ -288,6 +291,12 @@ public class ClientProxy extends CommonProxy
 		super.repairDriveable(driver, driving, part);
 		if(driver.worldObj.isRemote)
 			PacketDispatcher.sendPacketToServer(PacketRepairDriveable.buildRepairPacket(part.type));
+	}
+	
+	@Override
+	public boolean isScreenOpen()
+	{
+		return Minecraft.getMinecraft().currentScreen != null;
 	}
 	
 	@Override

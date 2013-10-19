@@ -406,7 +406,10 @@ public class EntityPlane extends EntityDriveable
 		
 		//Aesthetics
 		//Rotate the propellers
-		propAngle += throttle / 7F;	
+		if(hasEnoughFuel())
+		{
+			propAngle += throttle / 7F;	
+		}
 		
 		//Return the flaps to their resting position
 		flapsYaw *= 0.9F;
@@ -588,13 +591,13 @@ public class EntityPlane extends EntityDriveable
 
 		//Sounds
 		//Starting sound
-		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0)
+		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
 		//Flying sound
-		if (throttle > 0.2F && soundPosition == 0)
+		if (throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;
@@ -620,13 +623,13 @@ public class EntityPlane extends EntityDriveable
 			serverYaw = axes.getYaw();
 		}
 		
-		//If this is the server, send position updates to everyone, having recieved them from the driver
+		//If this is the server, send position updates to everyone, having received them from the driver
 		if(!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
 			PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 200, dimension, PacketVehicleControl.buildUpdatePacket(this));
 		}
     }
-	
+    
 	@Override
 	public boolean gearDown()
 	{

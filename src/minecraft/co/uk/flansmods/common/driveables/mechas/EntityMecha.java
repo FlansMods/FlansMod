@@ -902,7 +902,7 @@ public class EntityMecha extends EntityDriveable
 		}
 		
 		if(!driverIsLiving || thePlayerIsDrivingThis)
-			legSwing = legSwing / 2F;
+			legSwing = legSwing / type.legSwingLimit;
 	}
 	
 	/** Check all upgrades to see if any stop fall damage */

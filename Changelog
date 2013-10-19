@@ -3,6 +3,21 @@
 ####           Changelog           ####
 ####                               ####
 #######################################
+=== v4.0.1 ===
+Fixes:
+- Fixed gunbox and vehicle crafting table hardness
+- Fixed MGs and AA guns firing when clicking in inventory
+- Fixed sounds and movement with no fuel
+- Fixed vehiclesBreakBlocks command message
+Additions:
+- Ability to limit mecha leg swing
+
+=== v4.0 ===
+I refuse to read through flan's commits so we'll just assume only this happened.
+Additions:
+- Mechas
+- New official Titan Pack
+
 === v3.1.2 ===
 Fixes:
 - Settings for protections are saved/loaded now
