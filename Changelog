@@ -9,13 +9,16 @@ Fixes:
 - Fixed MGs and AA guns firing when clicking in inventory
 - Fixed sounds and movement with no fuel
 - Fixed vehiclesBreakBlocks command message
+- Added canBreakGlass to the TeamsManager save/load methods
 Additions:
 - Ability to limit mecha leg swing
 
 === v4.0 ===
-I refuse to read through flan's commits so we'll just assume only this happened.
+I refuse to read through Flan's commits so we'll just assume only this happened.
 Additions:
 - Mechas
+- Mecha tools and upgrades
+- Some generalisations applied to driveables in order to allow mechas to extend them more easily
 - New official Titan Pack
 
 === v3.1.2 ===
