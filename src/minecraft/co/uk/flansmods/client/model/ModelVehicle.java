@@ -264,6 +264,8 @@ public class ModelVehicle extends ModelDriveable
 	public void flipAll()
 	{
 		super.flipAll();
+		flip(bodyDoorOpenModel);
+		flip(bodyDoorCloseModel);
 		flip(turretModel);
 		flip(barrelModel);
 		flip(leftFrontWheelModel);
@@ -284,6 +286,8 @@ public class ModelVehicle extends ModelDriveable
 	public void translateAll(int x, int y, int z)
 	{
 		super.translateAll(x, y, z);
+		translate(bodyDoorOpenModel, x, y, z);
+		translate(bodyDoorCloseModel, x, y, z);		
 		translate(turretModel, x, y, z);
 		translate(barrelModel, x, y, z);
 		translate(leftFrontWheelModel, x, y, z);
