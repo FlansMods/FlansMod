@@ -85,9 +85,9 @@ public class MechaType extends DriveableType
 				rotateSpeed = Float.parseFloat(split[1]);
 			
 			if(split[0].equals("LeftArmOrigin"))
-				leftArmOrigin = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+				leftArmOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			if(split[0].equals("RightArmOrigin"))
-				rightArmOrigin = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+				rightArmOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			if(split[0].equals("ArmLength"))
 				armLength = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("LegLength"))
