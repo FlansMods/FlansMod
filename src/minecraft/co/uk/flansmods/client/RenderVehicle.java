@@ -41,11 +41,14 @@ public class RenderVehicle extends Render
         GL11.glRotatef(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(vehicle.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
-        ModelVehicle modVehicle = (ModelVehicle)type.model;
+
+		float modelScale = type.modelScale;
+		GL11.glPushMatrix();
+		GL11.glScalef(modelScale, modelScale, modelScale);
+		ModelVehicle modVehicle = (ModelVehicle)type.model;
 		if(modVehicle != null)
 			modVehicle.render(vehicle, f1);
-		
-		GL11.glPushMatrix();
+
 		if(type.barrelPosition != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 		{
     		float yaw = vehicle.seats[0].prevLooking.getYaw() + (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw()) * f1;
