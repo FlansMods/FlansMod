@@ -40,11 +40,13 @@ public class RenderPlane extends Render
         GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-        ModelDriveable modPlane = type.model;
+
+		float modelScale = type.modelScale;
+		GL11.glScalef(modelScale, modelScale, modelScale);
+		 ModelDriveable modPlane = type.model;
 		if(modPlane != null)
-		{
 			modPlane.render(entityPlane, f1);
-		}
+
 		if(FlansMod.DEBUG)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
