@@ -143,6 +143,8 @@
 				<exclude name="**/nerf/**"/>
 				<exclude name="**/ww2/**"/>
 				<exclude name="**/yeolde/**"/>
+				<exclude name="**/mw/**"/>
+				<exclude name="**/titan/**"/>
 			</fileset>
 		</copy>
         
