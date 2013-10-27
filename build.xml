@@ -158,6 +158,11 @@
 		<copy todir="${classes.dir}/assets">
 			<fileset dir="${resources.dir}"/>
 		</copy>
+		
+		<!-- Copy license file -->
+        <copy todir="${classes.dir}">
+            <fileset file="LICENSE.txt"/>
+        </copy>
 
 		<!-- Reset src dir to post-forge-install state -->
 		<delete dir="${mcpsrc.dir}/minecraft/co"/>
