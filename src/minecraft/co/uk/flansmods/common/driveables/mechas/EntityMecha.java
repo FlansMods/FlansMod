@@ -619,6 +619,25 @@ public class EntityMecha extends EntityDriveable
 				axes.setAngles(((EntityLivingBase)seats[0].riddenByEntity).renderYawOffset + 90F, 0F, 0F);
 			else
 			{
+				//Function to limit Head Movement Left/Right
+				if(type.limitHeadTurn == true)
+				{
+					float axesLegs = legAxes.getYaw();
+					float axesBody = axes.getYaw();
+					
+					double dYaw = axesBody - axesLegs;
+					if(dYaw > 180)
+						axesBody -= 360F;
+					if(dYaw < -180)
+						axesBody += 360F;
+					
+					if(axesLegs + type.limitHeadTurnValue < axesBody)
+						axes.setAngles(axesLegs + type.limitHeadTurnValue, 0F, 0F);
+					
+					if(axesLegs - type.limitHeadTurnValue > axesBody)
+						axes.setAngles(axesLegs - type.limitHeadTurnValue, 0F, 0F);
+				}
+
 				float yaw = seats[0].looking.getYaw() - seats[0].prevLooking.getYaw();
 				axes.rotateGlobalYaw(yaw);
 				seats[0].looking.rotateGlobalYaw(-yaw);
