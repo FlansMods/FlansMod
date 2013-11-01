@@ -49,8 +49,13 @@ public class MechaType extends DriveableType
 	/** Leg Swing Limit */
 	public float legSwingLimit = 2F;	
 
-	
-	
+	// Limiting head turning
+	public boolean limitHeadTurn = false;
+	public float limitHeadTurnValue = 90F;
+
+	// Speed of Leg movement
+	public float legSwingTime = 5;
+
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
 	public MechaType(TypeFile file)
@@ -112,6 +117,13 @@ public class MechaType extends DriveableType
 				damageBlocksFromFalling = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("LegSwingLimit"))
 				legSwingLimit = Float.parseFloat(split[1]);
+			if(split[0].equals("LimitHeadTurn"))
+			{
+				limitHeadTurn = Boolean.parseBoolean(split[1].toLowerCase());
+				limitHeadTurnValue = Float.parseFloat(split[2]);
+			}
+			if(split[0].equals("LegSwingTime"))
+				legSwingTime = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

@@ -184,8 +184,8 @@ public class RenderMecha extends Render
 		if(model != null)
 		{
 			float legLength = type.legLength;
-	    	int legSwingTime = 5;
-	    	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / legSwingTime) * mecha.legSwing;
+	    	
+	    	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / type.legSwingTime) * mecha.legSwing;
 	    	float footH = (float)Math.sin(legsYaw) * legLength;
 	    	float footV = (float)Math.cos(legsYaw) * legLength;
 	    	
