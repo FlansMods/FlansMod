@@ -82,6 +82,13 @@ public class RenderMecha extends Render
 	        if(mecha.seats[0] != null)
 	        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
 			
+			//Lower Limit
+			if(smoothedPitch > type.lowerArmLimit)
+				smoothedPitch = type.lowerArmLimit;
+			//Upper Limit
+			if(smoothedPitch < -type.upperArmLimit)
+				smoothedPitch = -type.upperArmLimit;
+				
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.leftArmOrigin.x, mecha.getMechaType().leftArmOrigin.y, mecha.getMechaType().leftArmOrigin.z);
 			GL11.glRotatef(90F - smoothedPitch, 0F, 0F, 1F);
@@ -116,6 +123,13 @@ public class RenderMecha extends Render
 			float smoothedPitch = 0F;
 	        if(mecha.seats[0] != null)
 	        	smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
+			
+			//Lower Limit
+			if(smoothedPitch > type.lowerArmLimit)
+				smoothedPitch = type.lowerArmLimit;
+			//Upper Limit
+			if(smoothedPitch < -type.upperArmLimit)
+				smoothedPitch = -type.upperArmLimit;
 			
 	        //Translate to the arm origin, rotate and render
 			GL11.glTranslatef(type.rightArmOrigin.x, mecha.getMechaType().rightArmOrigin.y, mecha.getMechaType().rightArmOrigin.z);
