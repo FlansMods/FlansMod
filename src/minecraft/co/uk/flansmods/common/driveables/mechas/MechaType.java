@@ -56,6 +56,10 @@ public class MechaType extends DriveableType
 	// Speed of Leg movement
 	public float legSwingTime = 5;
 
+	// Upper/Lower Arm Limit
+	public float upperArmLimit = 90;
+	public float lowerArmLimit = 90;
+	
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
 	public MechaType(TypeFile file)
@@ -124,6 +128,10 @@ public class MechaType extends DriveableType
 			}
 			if(split[0].equals("LegSwingTime"))
 				legSwingTime = Float.parseFloat(split[1]);
+			if(split[0].equals("UpperArmLimit"))
+				upperArmLimit = Float.parseFloat(split[1]);
+			if(split[0].equals("LowerArmLimit"))
+				lowerArmLimit = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{
