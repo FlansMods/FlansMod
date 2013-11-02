@@ -53,6 +53,8 @@ public class MechaType extends DriveableType
 	public boolean limitHeadTurn = false;
 	public float limitHeadTurnValue = 90F;
 
+	// Speed of Leg movement
+	public float legSwingTime = 5;
 
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
@@ -120,6 +122,8 @@ public class MechaType extends DriveableType
 				limitHeadTurn = Boolean.parseBoolean(split[1].toLowerCase());
 				limitHeadTurnValue = Float.parseFloat(split[2]);
 			}
+			if(split[0].equals("LegSwingTime"))
+				legSwingTime = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{
