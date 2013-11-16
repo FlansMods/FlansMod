@@ -43,7 +43,6 @@ public class RenderVehicle extends Render
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
 
 		float modelScale = type.modelScale;
-		GL11.glPushMatrix();
 		GL11.glScalef(modelScale, modelScale, modelScale);
         ModelVehicle modVehicle = (ModelVehicle)type.model;
 		if(modVehicle != null)
