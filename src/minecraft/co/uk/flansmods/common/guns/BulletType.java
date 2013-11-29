@@ -36,6 +36,7 @@ public class BulletType extends InfoType
 	public int roundsPerItem = 1;
 	public int maxStackSize = 1;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
+	public boolean hasLight = false;
 
 	public BulletType(TypeFile file)
 	{
@@ -96,6 +97,8 @@ public class BulletType extends InfoType
 				dropItemOnReload = arg0[1];
 			if (arg0[0].equals("DropItemOnHit"))
 				dropItemOnHit = arg0[1];
+			if (arg0[0].equals("HasLight"))
+				hasLight = arg0[1].equals("True");
 		} catch (Exception e)
 		{
 			System.out.println("Reading bullet file failed.");

@@ -488,4 +488,28 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			e.printStackTrace();
 		}
 	}
+	
+	public int getBrightnessForRender(float par1)
+	{
+		if(type.hasLight == true)
+		{
+			return 15728880;
+		}
+		else
+		{
+			int i = MathHelper.floor_double(this.posX);
+			int j = MathHelper.floor_double(this.posZ);
+			
+			if (this.worldObj.blockExists(i, 0, j))
+			{
+				double d0 = (this.boundingBox.maxY - this.boundingBox.minY) * 0.66D;
+				int k = MathHelper.floor_double(this.posY - (double)this.yOffset + d0);
+				return this.worldObj.getLightBrightnessForSkyBlocks(i, k, j, 0);
+			}
+			else
+			{
+				return 0;
+			}
+		}
+	}
 }
