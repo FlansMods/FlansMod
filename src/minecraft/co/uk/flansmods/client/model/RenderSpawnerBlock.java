@@ -1,4 +1,4 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;

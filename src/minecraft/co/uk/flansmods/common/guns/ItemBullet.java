@@ -1,8 +1,8 @@
-package co.uk.flansmods.common;
+package co.uk.flansmods.common.guns;
 
 import java.util.List;
 
-import co.uk.flansmods.common.guns.BulletType;
+import co.uk.flansmods.common.FlansMod;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

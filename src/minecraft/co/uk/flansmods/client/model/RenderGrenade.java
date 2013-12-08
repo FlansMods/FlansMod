@@ -1,7 +1,8 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.common.guns.EntityGrenade;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;

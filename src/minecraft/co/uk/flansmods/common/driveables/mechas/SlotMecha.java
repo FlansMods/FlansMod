@@ -1,8 +1,5 @@
-package co.uk.flansmods.common.teams;
+package co.uk.flansmods.common.driveables.mechas;
 
-import co.uk.flansmods.common.driveables.mechas.EnumMechaItemType;
-import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
-import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
 import co.uk.flansmods.common.guns.ItemGun;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

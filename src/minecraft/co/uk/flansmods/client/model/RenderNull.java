@@ -1,4 +1,4 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import org.lwjgl.opengl.GL11;
 

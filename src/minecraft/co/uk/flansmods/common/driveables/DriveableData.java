@@ -2,9 +2,9 @@ package co.uk.flansmods.common.driveables;
 
 import java.util.HashMap;
 
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
+import co.uk.flansmods.common.guns.ItemBullet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

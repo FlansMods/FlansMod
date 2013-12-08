@@ -2,7 +2,7 @@ package co.uk.flansmods.common.driveables.mechas;
 
 import java.util.HashMap;
 
-import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
 
 import net.minecraft.entity.player.EntityPlayer;

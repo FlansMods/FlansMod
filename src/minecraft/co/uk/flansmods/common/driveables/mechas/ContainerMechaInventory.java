@@ -1,6 +1,5 @@
 package co.uk.flansmods.common.driveables.mechas;
 
-import co.uk.flansmods.common.teams.SlotMecha;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

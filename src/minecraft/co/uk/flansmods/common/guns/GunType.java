@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.TypeFile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

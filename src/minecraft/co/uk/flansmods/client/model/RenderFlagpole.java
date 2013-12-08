@@ -1,4 +1,4 @@
-package co.uk.flansmods.client;
+package co.uk.flansmods.client.model;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import co.uk.flansmods.client.model.ModelFlagpole;
 import co.uk.flansmods.common.teams.EntityFlagpole;
 
 public class RenderFlagpole extends Render

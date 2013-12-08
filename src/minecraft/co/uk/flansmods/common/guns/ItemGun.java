@@ -33,7 +33,6 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansModPlayerHandler;
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
