@@ -491,7 +491,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	
 	public int getBrightnessForRender(float par1)
 	{
-		if(type.hasLight == true)
+		if(type.hasLight)
 		{
 			return 15728880;
 		}
