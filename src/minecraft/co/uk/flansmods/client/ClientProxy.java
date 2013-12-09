@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.input.Keyboard;
 
@@ -21,6 +22,7 @@ import co.uk.flansmods.client.model.RenderBullet;
 import co.uk.flansmods.client.model.RenderFlag;
 import co.uk.flansmods.client.model.RenderFlagpole;
 import co.uk.flansmods.client.model.RenderGrenade;
+import co.uk.flansmods.client.model.RenderGun;
 import co.uk.flansmods.client.model.RenderMG;
 import co.uk.flansmods.client.model.RenderMecha;
 import co.uk.flansmods.client.model.RenderNull;
@@ -44,6 +46,7 @@ import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.EntityGrenade;
 import co.uk.flansmods.common.guns.EntityMG;
+import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.network.PacketDriveableCrafting;
 import co.uk.flansmods.common.network.PacketRepairDriveable;
@@ -66,12 +69,19 @@ public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "co.uk.flansmods.client.model.";
 	
+	public static RenderGun gunRenderer;
 	public List<File> contentPacks;
 
 	@Override
 	public void load()
 	{
 		new FlansModClient().load();
+		gunRenderer = new RenderGun();
+		for(GunType gunType : GunType.guns)
+		{
+			if(gunType.model != null)
+				MinecraftForgeClient.registerItemRenderer(gunType.item.itemID, gunRenderer);
+		}
 	}
 
 	@Override
@@ -246,6 +256,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
+		if(s == null || shortName == null)
+			return null;
 		try 
 		{	
 			return typeClass.cast(Class.forName(modelDir + getModelName(s)).getConstructor().newInstance());

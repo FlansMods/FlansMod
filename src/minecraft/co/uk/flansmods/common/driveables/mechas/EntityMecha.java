@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.GuiDriveableController;
 import co.uk.flansmods.client.debug.EntityDebugVector;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
@@ -82,6 +83,9 @@ public class EntityMecha extends EntityDriveable
     public Vector3i breakingBlock = null;
     /** Progress made towards breaking each block */
     public float breakingProgress = 0F;
+    
+    /** Gun animations */
+    public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
     
     /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
     private int foundFuel = -1;
@@ -438,6 +442,17 @@ public class EntityMecha extends EntityDriveable
 						//Shoot
 						BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
 						shoot(gunType, bulletType, creative, left);
+						
+						//Apply animations to 3D modelled guns
+						//TODO : Move to client side and sync
+						if(left)
+						{
+							leftAnimations.lastGunSlide = leftAnimations.gunSlide = 1F;
+						}
+						else
+						{
+							rightAnimations.lastGunSlide = rightAnimations.gunSlide = 1F;
+						}
 						//Damage the bullet item
 						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 						
@@ -547,6 +562,10 @@ public class EntityMecha extends EntityDriveable
 		if(shootDelayRight > 0) shootDelayRight--;
 		if(soundDelayLeft > 0)  soundDelayLeft--;
 		if(soundDelayRight > 0) soundDelayRight--;
+		
+		//Update gun animations
+		leftAnimations.update();
+		rightAnimations.update();
 		
 		//Get Mecha Type
 		MechaType type = this.getMechaType();

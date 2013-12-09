@@ -23,7 +23,9 @@ public class RenderMG extends Render
         GL11.glPushMatrix();
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glRotatef(180F - mg.direction * 90F, 0.0F, 1.0F, 0.0F);
-		ModelMG model = mg.type.model;
+		ModelMG model = mg.type.deployableModel;
+		if(model == null)
+			return;
 		//GL11.glScalef(-1F, -1F, 1.0F);
 		model.renderBipod(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, mg);
         GL11.glRotatef(-(mg.prevRotationYaw + (mg.rotationYaw - mg.prevRotationYaw) * f1), 0.0F, 1.0F, 0.0F);
@@ -40,6 +42,6 @@ public class RenderMG extends Render
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
-		return FlansModResourceHandler.getTexture(((EntityMG)entity).type);
+		return FlansModResourceHandler.getDeployableTexture(((EntityMG)entity).type);
 	}
 }

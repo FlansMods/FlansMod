@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import co.uk.flansmods.client.model.RenderFlag;
+import co.uk.flansmods.client.model.RenderGun;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
@@ -185,6 +186,7 @@ public class TickHandlerClient implements ITickHandler
 		if (type.equals(EnumSet.of(TickType.RENDER)))
 		{
 			rTickStart(FMLClientHandler.instance().getClient());
+			RenderGun.smoothing = (Float)tickData[0];
 		}
 		if (type.equals(EnumSet.of(TickType.CLIENT)))
 		{

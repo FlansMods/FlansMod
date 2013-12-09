@@ -55,7 +55,13 @@ public class ModelPlane extends ModelDriveable
 		renderPart(bayModel);
 		renderPart(tailModel);
 		for(ModelRendererTurbo[] prop : propellerModels)
-			renderPart(prop);
+		{
+			for(int j = 0; j < prop.length; j++)
+			{
+				prop[j].rotateAngleX = (j * 2F * 3.1415926535F) / (prop.length);
+				prop[j].render(0.0625F);
+			}
+		}
 		renderPart(yawFlapModel);
 		renderPart(pitchFlapLeftModel);
 		renderPart(pitchFlapRightModel);

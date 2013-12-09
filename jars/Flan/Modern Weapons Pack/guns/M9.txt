@@ -24,3 +24,5 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+Model mw.M9
+Texture M9

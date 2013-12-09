@@ -36,6 +36,17 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 	
+	public static ResourceLocation getDeployableTexture(GunType gunType)
+	{
+		if(textureMap.containsKey(gunType))
+		{
+			return textureMap.get(gunType);
+		}
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + gunType.deployableTexture + ".png");
+		textureMap.put(gunType, resLoc);
+		return resLoc;
+	}
+	
 	public static ResourceLocation getScope(GunType gunType)
 	{
 		if(scopeMap.containsKey(gunType))

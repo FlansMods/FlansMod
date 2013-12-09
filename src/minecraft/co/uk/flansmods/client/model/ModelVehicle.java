@@ -43,6 +43,10 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(rightBackWheelModel);
 		renderPart(leftFrontWheelModel);
 		renderPart(rightFrontWheelModel);
+		renderPart(rightTrackModel);
+		renderPart(leftTrackModel);
+		renderPart(rightTrackWheelModels);
+		renderPart(leftTrackWheelModels);
 		renderPart(bodyDoorCloseModel);
 		renderPart(trailerModel);
 		renderPart(turretModel);

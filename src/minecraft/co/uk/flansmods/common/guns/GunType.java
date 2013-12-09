@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import co.uk.flansmods.client.model.ModelGun;
 import co.uk.flansmods.client.model.ModelMG;
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
@@ -38,7 +40,10 @@ public class GunType extends InfoType
 	public float zoomLevel = 8.0F;
 	
 	@SideOnly(Side.CLIENT)
-	public ModelMG model;
+	public ModelGun model;
+	@SideOnly(Side.CLIENT)
+	public ModelMG deployableModel;
+	public String deployableTexture;
 	
 	public float standBackDist = 1.5F;
 	public float topViewLimit = -60F;
@@ -103,12 +108,18 @@ public class GunType extends InfoType
 				zoomLevel = Float.parseFloat(arg0[1]);
 			if (arg0[0].equals("Deployable"))
 				deployable = arg0[1].equals("True");
-			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("DeployedModel") && deployable)
+			if (FMLCommonHandler.instance().getSide().isClient() && deployable && arg0[0].equals("DeployedModel"))
 			{
-				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelMG.class);
+				deployableModel = FlansMod.proxy.loadModel(arg0[1], shortName, ModelMG.class);
 			}
-			if (arg0[0].equals("DeployedTexture"))
+			if (FMLCommonHandler.instance().getSide().isClient() && (arg0[0].equals("Model")))
+			{
+				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelGun.class);
+			}
+			if (arg0[0].equals("Texture"))
 				texture = arg0[1];
+			if (arg0[0].equals("DeployedTexture"))
+				deployableTexture = arg0[1];
 			if (arg0[0].equals("StandBackDistance"))
 				standBackDist = Float.parseFloat(arg0[1]);
 			if (arg0[0].equals("TopViewLimit"))
@@ -137,7 +148,7 @@ public class GunType extends InfoType
 			e.printStackTrace();
 		}
 	}
-
+	
 	public boolean isAmmo(BulletType type)
 	{
 		return ammo.contains(type);
@@ -162,5 +173,11 @@ public class GunType extends InfoType
 				return gun;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelGun.class);
 	}
 }

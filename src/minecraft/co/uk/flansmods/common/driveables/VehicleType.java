@@ -1,6 +1,9 @@
 package co.uk.flansmods.common.driveables;
 
 import java.util.ArrayList;
+
+import co.uk.flansmods.client.model.ModelGun;
+import co.uk.flansmods.client.model.ModelVehicle;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.TypeFile;
 import co.uk.flansmods.common.vector.Vector3f;
@@ -96,5 +99,11 @@ public class VehicleType extends DriveableType
 				return type;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelVehicle.class);
 	}
 }

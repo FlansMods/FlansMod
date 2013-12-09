@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.flansmods.client.model.ModelAAGun;
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
@@ -157,5 +158,11 @@ public class AAGunType extends InfoType
 				return gun;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
 	}
 }

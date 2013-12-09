@@ -209,4 +209,10 @@ public class GrenadeType extends InfoType
 		}
 		return null;
 	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);
+	}
 }

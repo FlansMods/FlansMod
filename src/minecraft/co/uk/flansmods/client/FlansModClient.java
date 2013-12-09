@@ -1,9 +1,13 @@
 package co.uk.flansmods.client;
 
 import java.io.File;
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntitySeat;
@@ -26,28 +31,45 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod
 {
+	/** Whether the player has received the vehicle tutorial text */
 	public static boolean doneTutorial = false;
-	
-	public static boolean controlModeMouse = false; // 0 = Standard controls, 1 = Mouse
+	/** Whether the player is in mouse control mode */
+	public static boolean controlModeMouse = false;
+	/** A delayer on the mouse control switch */
 	public static int controlModeSwitchTimer = 20;
 	
+	/** The delay between shots / reloading */
 	public static int shootTime;
+	/** A delayer on the scope button to avoid repeat presses */
 	public static int scopeTime;
-	public static GunType zoomOverlay;
+	
+	/** The recoil applied to the player view by shooting */
 	public static float playerRecoil;
+	/** The amount of compensation to apply to the recoil in order to bring it back to normal */
 	public static float antiRecoil;
+	
+	/** Gun animation variables for each entity holding a gun. Currently only applicable to the player */
+	public static HashMap<EntityLivingBase, GunAnimations> gunAnimations = new HashMap<EntityLivingBase, GunAnimations>();
+	
+	/** The gun zoom overlay in place */
+	public static GunType zoomOverlay;
+	/** The current zoom of the player view */
 	public static float playerZoom = 1.0F;
+	/** The zoom the player is aiming for. For smooth transitions */
 	public static float newZoom = 1.0F;
+	/** The player zoom last tick. To avoid excessive use of reflection */
 	public static float lastPlayerZoom;
     
+	/** The player's mouse sensitivity setting, as it was before being hacked by my mod */
 	public static float originalMouseSensitivity = 0.5F;
+	/** Whether the player had hideGUI enabled before it was hacked on */
 	public static boolean originalHideGUI = false;
+	/** The original third person mode, before being hacked */
 	public static int originalThirdPerson = 0;
 	
+	/** Whether the player is in a plane or not */
 	public static boolean inPlane = false;
-	
-	public static ResourceLocation resources;
-	
+		
 	public void load()
 	{
 		if (ABORT)
@@ -109,6 +131,7 @@ public class FlansModClient extends FlansMod
 		
 		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
 			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
+		
 		// Guns
 		if (shootTime > 0)
 			shootTime--;
@@ -121,6 +144,11 @@ public class FlansModClient extends FlansMod
 
 		minecraft.thePlayer.rotationPitch += antiRecoil * 0.2F;
 		antiRecoil *= 0.8F;
+		
+		for(GunAnimations g : gunAnimations.values())
+		{
+			g.update();
+		}		
 
 		Item itemInHand = null;
 		ItemStack itemstackInHand = minecraft.thePlayer.inventory.getCurrentItem();

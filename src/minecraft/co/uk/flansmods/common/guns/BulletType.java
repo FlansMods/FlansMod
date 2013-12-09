@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
@@ -124,5 +125,11 @@ public class BulletType extends InfoType
 				return bullet;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);
 	}
 }

@@ -3,6 +3,7 @@ package co.uk.flansmods.client.model;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import co.uk.flansmods.client.ClientProxy;
 import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.client.model.titan.ModelProtoTitan;
 import co.uk.flansmods.common.FlansMod;
@@ -14,6 +15,8 @@ import co.uk.flansmods.common.driveables.mechas.EnumMechaSlotType;
 import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
 import co.uk.flansmods.common.driveables.mechas.MechaItemType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -283,6 +286,15 @@ public class RenderMecha extends Render
 				GL11.glPopMatrix();
 				toolType.model.renderSaw(mecha, dT, (leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld));
 			}
+		}
+		else if(item instanceof ItemGun && ((ItemGun)item).type.model != null)
+		{
+			GunType gunType = ((ItemGun)item).type;
+			ModelGun model = gunType.model;
+			
+			GL11.glRotatef(-90F, 0F, 0F, 1F);
+			texturemanager.bindTexture(FlansModResourceHandler.getTexture(gunType));
+			ClientProxy.gunRenderer.renderGun(stack, gunType, 1F / 16F, model, leftHand ? mecha.leftAnimations : mecha.rightAnimations);
 		}
 		else
 		{

@@ -22,3 +22,5 @@ Mode SemiAuto
 Scope mwbarrett
 Deployable False
 DeployedModel None
+Model mw.Barrett
+Texture Barrett

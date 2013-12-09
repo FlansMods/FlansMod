@@ -6,7 +6,6 @@ import co.uk.flansmods.client.tmt.ModelRendererTurbo;
 
 public class ModelC4 extends ModelBase 
 {
-
 	public ModelRendererTurbo[] c4Model;
 
 	public ModelC4()

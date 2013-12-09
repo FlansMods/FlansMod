@@ -4,16 +4,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -63,7 +67,15 @@ public class PacketReload extends FlanPacketCommon
     	if(stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
-    		((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
+    		if(((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true))
+    		{
+				//Send reload packet to induce reload effects client side
+				PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
+				//Play reload sound
+				if(type.reloadSound != null)
+					PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, true));
+
+    		}
     	}
 	}
 	
@@ -79,6 +91,17 @@ public class PacketReload extends FlanPacketCommon
         	{
         		GunType type = ((ItemGun)stack.getItem()).type;
         		FlansModClient.shootTime = type.reloadTime;
+        		
+        		//Apply animations
+        		GunAnimations animations = null;
+				if(FlansModClient.gunAnimations.containsKey(player))
+					animations = FlansModClient.gunAnimations.get(player);
+				else 
+				{
+					animations = new GunAnimations();
+					FlansModClient.gunAnimations.put((EntityLivingBase)player, animations);
+				}
+				animations.doReload(type.reloadTime);
         		
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;

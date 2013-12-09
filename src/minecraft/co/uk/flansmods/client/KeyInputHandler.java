@@ -5,13 +5,18 @@ import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketReload;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
