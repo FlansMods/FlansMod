@@ -23,3 +23,5 @@ Scope None
 ZoomLevel 1.5
 Deployable False
 DeployedModel None
+Model mw.AK47
+Texture AK47
