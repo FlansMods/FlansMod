@@ -24,6 +24,7 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.IScope;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.teams.Team;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -31,6 +32,7 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper;
 
 public class FlansModClient extends FlansMod
 {
+	//Plane / Vehicle control handling
 	/** Whether the player has received the vehicle tutorial text */
 	public static boolean doneTutorial = false;
 	/** Whether the player is in mouse control mode */
@@ -40,30 +42,30 @@ public class FlansModClient extends FlansMod
 	
 	/** The delay between shots / reloading */
 	public static int shootTime;
-	/** A delayer on the scope button to avoid repeat presses */
-	public static int scopeTime;
 	
+	//Recoil variables
 	/** The recoil applied to the player view by shooting */
 	public static float playerRecoil;
 	/** The amount of compensation to apply to the recoil in order to bring it back to normal */
 	public static float antiRecoil;
 	
+	//Gun animations
 	/** Gun animation variables for each entity holding a gun. Currently only applicable to the player */
 	public static HashMap<EntityLivingBase, GunAnimations> gunAnimations = new HashMap<EntityLivingBase, GunAnimations>();
 	
-	/** The gun zoom overlay in place */
-	public static GunType zoomOverlay;
-	/** The current zoom of the player view */
-	public static float playerZoom = 1.0F;
-	/** The zoom the player is aiming for. For smooth transitions */
-	public static float newZoom = 1.0F;
-	/** The player zoom last tick. To avoid excessive use of reflection */
-	public static float lastPlayerZoom;
+	//Scope variables
+	/** A delayer on the scope button to avoid repeat presses */
+	public static int scopeTime;
+	/** The scope that is currently being looked down */
+	public static IScope currentScope = null;
+	/** The transition variable for zooming in / out with a smoother. 0 = unscoped, 1 = scoped */
+	public static float zoomProgress = 0F, lastZoomProgress = 0F;
+	/** The zoom level of the last scope used, for transitioning out of being scoped, even after the scope is forgotten */
+	public static float lastZoomLevel = 1F;
     
+	//Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
 	/** The player's mouse sensitivity setting, as it was before being hacked by my mod */
 	public static float originalMouseSensitivity = 0.5F;
-	/** Whether the player had hideGUI enabled before it was hacked on */
-	public static boolean originalHideGUI = false;
 	/** The original third person mode, before being hacked */
 	public static int originalThirdPerson = 0;
 	
@@ -145,23 +147,56 @@ public class FlansModClient extends FlansMod
 		minecraft.thePlayer.rotationPitch += antiRecoil * 0.2F;
 		antiRecoil *= 0.8F;
 		
+		//Update gun animations for the gun in hand
 		for(GunAnimations g : gunAnimations.values())
 		{
 			g.update();
 		}		
 
+		//If the currently held item is not a gun or is the wrong gun, unscope
 		Item itemInHand = null;
 		ItemStack itemstackInHand = minecraft.thePlayer.inventory.getCurrentItem();
 		if (itemstackInHand != null)
 			itemInHand = itemstackInHand.getItem();
 		if (itemInHand != null)
 		{
-			if (!(itemInHand instanceof ItemGun && ((ItemGun) itemInHand).type.hasScopeOverlay))
+			if(currentScope != null && !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).getCurrentScope(itemstackInHand) == currentScope))
 			{
-				newZoom = 1.0F;
+				currentScope = null;
+				minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
+				minecraft.gameSettings.thirdPersonView = originalThirdPerson;
+			}
+		}
+		
+		//Calculate new zoom variables
+		lastZoomProgress = zoomProgress;
+		if(currentScope == null)
+		{
+			zoomProgress *= 0.66F;
+		}
+		else
+		{
+			zoomProgress = 1F - (1F - zoomProgress) * 0.66F; 
+		}
+				
+		//If the zoom has changed sufficiently, update it via reflection
+		if(Math.abs(zoomProgress - lastZoomProgress) > 0.0001F)
+		{
+			double zoomLevel = zoomProgress * lastZoomLevel + (1 - zoomProgress);
+			if(Math.abs(zoomLevel - 1F) < 0.01F)
+				zoomLevel = 1.0D;
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, zoomLevel, "cameraZoom", "Y", "field_78503_V");
+			} 
+			catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
 			}
 		}
 
+		/*
 		float dZoom = newZoom - playerZoom;
 		playerZoom += dZoom / 3F;
 		if (playerZoom < 1.1F && zoomOverlay != null)
@@ -185,6 +220,8 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		lastPlayerZoom = playerZoom;
+		*/
+		
 		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
 			inPlane = true;

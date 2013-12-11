@@ -20,6 +20,7 @@ ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
 Scope mwbarrett
+ZoomLevel 8.0
 Deployable False
 DeployedModel None
 Model mw.Barrett

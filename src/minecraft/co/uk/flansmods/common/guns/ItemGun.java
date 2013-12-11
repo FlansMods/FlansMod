@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -69,6 +70,12 @@ public class ItemGun extends Item
 	public boolean getShareTag()
 	{
 		return true;
+	}
+	
+	/** Return the currently active scope on this gun. Search attachments, and by default, simply give the gun */
+	public IScope getCurrentScope(ItemStack gunStack)
+	{
+		return type;
 	}
 	
 	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
@@ -177,34 +184,33 @@ public class ItemGun extends Item
 			{
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
-			if (type.hasScopeOverlay && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
+			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
+			IScope currentScope = getCurrentScope(itemstack);
+			if(Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
-				if (FlansModClient.zoomOverlay == null)
+				if(FlansModClient.currentScope == null)
 				{
-					FlansModClient.zoomOverlay = type;
-					FlansModClient.newZoom = type.zoomLevel;
-					float f = FlansModClient.originalMouseSensitivity = FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity;
-					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = f / (float) Math.sqrt(type.zoomLevel);
-					FlansModClient.originalHideGUI = FMLClientHandler.instance().getClient().gameSettings.hideGUI;
-					FlansModClient.originalThirdPerson = FMLClientHandler.instance().getClient().gameSettings.thirdPersonView;
-					FMLClientHandler.instance().getClient().gameSettings.hideGUI = true;
-					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = 0;
-				} else
+					FlansModClient.currentScope = currentScope;
+					FlansModClient.lastZoomLevel = currentScope.getZoomFactor();
+					float f = FlansModClient.originalMouseSensitivity = gameSettings.mouseSensitivity;
+					gameSettings.mouseSensitivity = f / (float) Math.sqrt(currentScope.getZoomFactor());
+					FlansModClient.originalThirdPerson = gameSettings.thirdPersonView;
+					gameSettings.thirdPersonView = 0;
+				}
+				else
 				{
-					FlansModClient.newZoom = 1.0F;
-					FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
-					FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansModClient.originalHideGUI;
-					FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+					FlansModClient.currentScope = null;
+					gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+					gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 				}
 				FlansModClient.scopeTime = 10;
 			}
 			
-			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.zoomOverlay != null && type.hasScopeOverlay)
+			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.currentScope != null)
 			{
-				FlansModClient.newZoom = 1.0F;
-				FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
-				FMLClientHandler.instance().getClient().gameSettings.hideGUI = FlansModClient.originalHideGUI;
-				FMLClientHandler.instance().getClient().gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+				FlansModClient.currentScope = null;
+				gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+				gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 			}
 		}
 		if (soundDelay > 0)
@@ -544,7 +550,7 @@ public class ItemGun extends Item
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
-		return type.meleeDamage == 0 || type.hasScopeOverlay;
+		return true;//type.meleeDamage == 0 || type.hasScopeOverlay;
 	}
 	
 	@Override

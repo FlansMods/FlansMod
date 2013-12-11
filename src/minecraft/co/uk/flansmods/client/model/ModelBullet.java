@@ -11,7 +11,7 @@ public class ModelBullet extends ModelBase
 	public ModelBullet()
 	{
 		bulletModel = new ModelRenderer(this, 0, 0);
-		bulletModel.addBox(-0.5F, -1F, -0.5F, 1, 2, 1);
+		bulletModel.addBox(0F, -1F, 0F, 1, 2, 1);
 	}
 
 	@Override

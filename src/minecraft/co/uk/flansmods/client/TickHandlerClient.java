@@ -39,7 +39,7 @@ public class TickHandlerClient implements ITickHandler
 {
 	public static final ResourceLocation gui = new ResourceLocation("FlansMod","textures/gui/gui.png");
 	public static final ResourceLocation teamScores = new ResourceLocation("FlansMod","textures/gui/teamScores.png");
-	public static final ResourceLocation zoomOverlay = new ResourceLocation("FlansMod","textures/gui/" + FlansModClient.zoomOverlay + ".png");
+	//public static final ResourceLocation zoomOverlay = new ResourceLocation("FlansMod","textures/gui/" + FlansModClient.zoomOverlay + ".png");
 	
 	public TickHandlerClient()
 	{
@@ -50,6 +50,13 @@ public class TickHandlerClient implements ITickHandler
 	public void eventHandler(RenderGameOverlayEvent event)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
+		
+		//Remove crosshairs if looking down the sights of a gun
+		if(event.type == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
+		{
+			event.setCanceled(true);
+			return;
+		}
 
 	    if(event.isCancelable() || event.type != ElementType.HOTBAR)
 	    {      
@@ -249,7 +256,7 @@ public class TickHandlerClient implements ITickHandler
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
-		if (FlansModClient.zoomOverlay != null && FMLClientHandler.instance().getClient().currentScreen == null)
+		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null)
 		{
 			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 			GL11.glEnable(3042 /* GL_BLEND */);
@@ -259,7 +266,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
-			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.zoomOverlay));
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.currentScope.getZoomOverlay()));
 
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();

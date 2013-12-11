@@ -14,7 +14,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GunType extends InfoType
+public class GunType extends InfoType implements IScope
 {
 	//Gun Behaviour Variables
 	/** The list of bullet types that can be used in this gun */
@@ -73,7 +73,7 @@ public class GunType extends InfoType
 	/** Whether the default scope has an overlay */
 	public boolean hasScopeOverlay;
 	/** The zoom level of the default scope */
-	public float zoomLevel = 8.0F;
+	public float zoomLevel = 1.0F;
 	
 	/** For guns with 3D models */
 	@SideOnly(Side.CLIENT)
@@ -208,5 +208,23 @@ public class GunType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelGun.class);
+	}
+
+	@Override
+	public float getZoomFactor() 
+	{
+		return zoomLevel;
+	}
+
+	@Override
+	public boolean hasZoomOverlay() 
+	{
+		return hasScopeOverlay;
+	}
+
+	@Override
+	public String getZoomOverlay() 
+	{
+		return defaultScopeTexture;
 	}
 }
