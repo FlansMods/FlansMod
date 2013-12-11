@@ -1,0 +1,4 @@
+Name Silencer
+ShortName flanSilencer
+Icon Silencer
+ItemID 23859

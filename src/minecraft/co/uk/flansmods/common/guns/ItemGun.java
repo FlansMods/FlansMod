@@ -14,7 +14,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -150,7 +152,7 @@ public class ItemGun extends Item
 			}
 		}
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public void onUpdateClient(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
@@ -167,15 +169,15 @@ public class ItemGun extends Item
 				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(true));
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
-			if(type.mode == 1 && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
+			if(type.mode == EnumFireMode.FULLAUTO && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
 			{
 				PacketDispatcher.sendPacketToServer(PacketGunFire.buildGunFirePacket(false));
 			}
-			if(type.mode == 1 && mouseHeld)
+			if(type.mode == EnumFireMode.FULLAUTO && mouseHeld)
 			{
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
-			if (type.hasScope && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
+			if (type.hasScopeOverlay && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
 				if (FlansModClient.zoomOverlay == null)
 				{
@@ -197,7 +199,7 @@ public class ItemGun extends Item
 				FlansModClient.scopeTime = 10;
 			}
 			
-			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.zoomOverlay != null && type.hasScope)
+			if(FMLClientHandler.instance().getClient().currentScreen != null && FlansModClient.zoomOverlay != null && type.hasScopeOverlay)
 			{
 				FlansModClient.newZoom = 1.0F;
 				FMLClientHandler.instance().getClient().gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
@@ -257,7 +259,7 @@ public class ItemGun extends Item
 				}
 				return;
 			}
-			if(type.mode == 1 && data.isShooting)
+			if(type.mode == EnumFireMode.FULLAUTO && data.isShooting)
 			{
 				tryToShoot(itemstack, world, player);
 			}
@@ -282,7 +284,7 @@ public class ItemGun extends Item
 			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
 				return stack;
 			data.isShooting = isShooting;
-			if(type.mode == 0 && isShooting)
+			if(type.mode == EnumFireMode.SEMIAUTO && isShooting)
 			{
 				data.isShooting = false;
 				return tryToShoot(stack, world, player);
@@ -331,7 +333,7 @@ public class ItemGun extends Item
 			{
 				//Shoot
 				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
-				shoot(world, bulletType, entityplayer);
+				shoot(gunStack, world, bulletType, entityplayer);
 				//Damage the bullet item
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 				
@@ -346,84 +348,6 @@ public class ItemGun extends Item
 	public boolean reload(ItemStack gunStack, World world, EntityPlayer player, boolean forceReload)
 	{
 		return reload(gunStack, world, player, player.inventory, player.capabilities.isCreativeMode, forceReload);
-		/*
-		//Deployable guns cannot be reloaded in the inventory
-		if(type.deployable)
-			return;
-		//If you cannot reload half way through a clip, reject the player for trying to do so
-		if(forceReload && !type.canForceReload)
-			return;
-		//Keep the Flan's Mod player data handy
-		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
-		//For playing sounds afterwards
-		boolean reloadedSomething = false;
-		//Check each ammo slot, one at a time
-		for(int i = 0; i < type.numAmmoItemsInGun; i++)
-		{
-			//Get the stack in the slot
-			ItemStack bulletStack = getBulletItemStack(gunStack, i);
-			
-			//If there is no magazine, if the magazine is empty or if this is a forced reload
-			if(bulletStack == null || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
-			{		
-				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
-				int bestSlot = -1;
-				int bulletsInBestSlot = 0;
-				for (int j = 0; j < player.inventory.getSizeInventory(); j++)
-				{
-					ItemStack item = player.inventory.getStackInSlot(j);
-					if (item != null && item.getItem() instanceof ItemBullet && type.isAmmo(((ItemBullet)(item.getItem())).type))
-					{
-						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
-						if(bulletsInThisSlot > bulletsInBestSlot)
-						{
-							bestSlot = j;
-							bulletsInBestSlot = bulletsInThisSlot;
-						}
-					}
-				}
-				//If there was a valid non-empty magazine / bullet item somewhere in the inventory, load it
-				if(bestSlot != -1)
-				{
-					ItemStack newBulletStack = player.inventory.getStackInSlot(bestSlot);
-					BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
-					//Unload the old magazine (Drop an item if it is required and the player is not in creative mode)
-					if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet && ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload != null && !player.capabilities.isCreativeMode)
-						dropItem(world, player, ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload);
-					//The magazine was not finished, pull it out and give it back to the player or, failing that, drop it
-					if(bulletStack != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
-						if(!player.inventory.addItemStackToInventory(bulletStack))
-							player.entityDropItem(bulletStack, 0.5F);
-					
-					//Load the new magazine
-					ItemStack stackToLoad = newBulletStack.copy();
-					stackToLoad.stackSize = 1;
-					setBulletItemStack(gunStack, stackToLoad, i);					
-					
-					//Remove the magazine from the inventory
-					if(!player.capabilities.isCreativeMode)
-						newBulletStack.stackSize--;
-					if(newBulletStack.stackSize <= 0)
-						newBulletStack = null;
-					player.inventory.setInventorySlotContents(bestSlot, newBulletStack);
-										
-					//With intant reloads, we don't want to impose a delay or play reload sounds
-					if(!instant)
-					{
-						//Tell the sound player that we reloaded something
-						reloadedSomething = true;
-						//Set player shoot delay to be the reload delay
-						data.shootTime = type.reloadTime;
-						//Send reload packet to induce reload effects client side
-						PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
-					}
-				}
-			}
-		}
-		//Play reload sound
-		if (reloadedSomething && type.reloadSound != null)
-			PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, true));
-		 */
 	}
 	
 	/** Reload method. Called automatically when firing with an empty clip */
@@ -513,7 +437,7 @@ public class ItemGun extends Item
 	}
 	
 	/** Method for shooting to avoid repeated code */
-	private void shoot(World world, BulletType bullet, EntityPlayer entityplayer)
+	private void shoot(ItemStack stack, World world, BulletType bullet, EntityPlayer entityplayer)
 	{
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && type.shootSound != null)
@@ -527,7 +451,7 @@ public class ItemGun extends Item
 			// Spawn the bullet entities
 			for (int k = 0; k < type.numBullets; k++)
 			{
-				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.accuracy, type.damage, bullet, type.speed, type.numBullets > 1, type));
+				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.bulletSpread, type.damage, bullet, type.bulletSpeed, type.numBullets > 1, type));
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
@@ -620,7 +544,7 @@ public class ItemGun extends Item
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
-		return type.meleeDamage == 0 || type.hasScope;
+		return type.meleeDamage == 0 || type.hasScopeOverlay;
 	}
 	
 	@Override

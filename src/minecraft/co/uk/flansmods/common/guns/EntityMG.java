@@ -161,7 +161,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.reloadSound));
 			}
 		}
-		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == 1)
+		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == EnumFireMode.FULLAUTO)
 		{
 			//Send a packet!
 			checkForShooting();
@@ -180,7 +180,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.accuracy, type.damage, bullet, type));
+			worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, bullet, type));
 			if (soundDelay <= 0)
 			{
 				soundDelay = type.shootSoundLength;
@@ -221,7 +221,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (player == gunner)
 			{
 				// Player left clicked on the gun
-				if (type.mode == 1)
+				if (type.mode == EnumFireMode.FULLAUTO)
 					return true;
 				// Check for ammo / reloading
 				if (ammo == null || reloadTimer > 0 || shootDelay > 0)
@@ -235,7 +235,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)
 				{
-					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, (EntityLivingBase) player, type.accuracy, type.damage, bullet, type.speed, false, type));
+					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, (EntityLivingBase) player, type.bulletSpread, type.damage, bullet, type.bulletSpeed, false, type));
 				}
 				if (soundDelay <= 0)
 				{

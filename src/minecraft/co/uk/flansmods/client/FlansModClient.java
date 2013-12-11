@@ -156,7 +156,7 @@ public class FlansModClient extends FlansMod
 			itemInHand = itemstackInHand.getItem();
 		if (itemInHand != null)
 		{
-			if (!(itemInHand instanceof ItemGun && ((ItemGun) itemInHand).type.hasScope))
+			if (!(itemInHand instanceof ItemGun && ((ItemGun) itemInHand).type.hasScopeOverlay))
 			{
 				newZoom = 1.0F;
 			}

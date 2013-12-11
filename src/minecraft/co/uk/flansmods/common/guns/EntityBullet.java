@@ -42,7 +42,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	private int ticksInAir;
 	public BulletType type;
 	public InfoType firedFrom;
-	public int damage;
+	public float damage;
 	public boolean shotgun = false;
 
 	public EntityBullet(World world)
@@ -53,7 +53,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	/** Private partial constructor to avoid repeated code */
-	private EntityBullet(World world, EntityLivingBase shooter, int gunDamage, BulletType bulletType, InfoType shotFrom)
+	private EntityBullet(World world, EntityLivingBase shooter, float gunDamage, BulletType bulletType, InfoType shotFrom)
 	{
 		this(world);
 		owner = shooter;
@@ -63,20 +63,20 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	/** Method called by ItemGun for creating bullets from a hand held weapon */
-	public EntityBullet(World world, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
+	public EntityBullet(World world, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
 	{
 		this(world, Vec3.createVectorHelper(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw, shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
 		shotgun = shot;
 	}
 
 	/** Machinegun / AAGun bullet constructor */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F, shotFrom);
 	}
 
 	/** More generalised bullet constructor */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		this(world, shooter, gunDamage, type1, shotFrom);
 		damage = gunDamage;
@@ -93,7 +93,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	/**  */
-	public EntityBullet(World world, Vector3f origin, Vector3f direction, EntityLivingBase shooter, float spread, int gunDamage, BulletType type1, float speed, InfoType shotFrom)
+	public EntityBullet(World world, Vector3f origin, Vector3f direction, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		this(world, shooter, gunDamage, type1, shotFrom);
 		damage = gunDamage;
@@ -105,7 +105,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	/** Bomb constructor. Inherits the motion and rotation of the plane */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLivingBase shooter, int gunDamage, BulletType type1, InfoType shotFrom)
+	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLivingBase shooter, float gunDamage, BulletType type1, InfoType shotFrom)
 	{
 		super(world);
 		type = type1;
@@ -273,7 +273,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				}
 				//Calculate the hit damage
-				int hitDamage = damage * type.damageVsLiving;
+				float hitDamage = damage * type.damageVsLiving;
 				//Create a damage source object
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	

@@ -53,7 +53,7 @@ public class FlansModResourceHandler
 		{
 			return scopeMap.get(gunType);
 		}
-		ResourceLocation resLoc = new ResourceLocation("flansmod", "gui/" + gunType.scope + ".png");
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "gui/" + gunType.defaultScopeTexture + ".png");
 		scopeMap.put(gunType, resLoc);
 		return resLoc;
 	}

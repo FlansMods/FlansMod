@@ -48,6 +48,7 @@ import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.VehicleType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityBullet;
+import co.uk.flansmods.common.guns.EnumFireMode;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.InventoryHelper;
 import co.uk.flansmods.common.guns.ItemBullet;
@@ -489,11 +490,11 @@ public class EntityMecha extends EntityDriveable
 				
 		if(!worldObj.isRemote)
 			for (int k = 0; k < gunType.numBullets; k++)
-				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.accuracy / 2, gunType.damage, bulletType, gunType.speed, mechaType));
+				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), (float)gunType.bulletSpread / 2, gunType.damage, bulletType, gunType.bulletSpeed, mechaType));
 		
 		if(left)
-			shootDelayLeft = gunType.mode == 0 ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
-		else shootDelayRight = gunType.mode == 0 ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
+			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
+		else shootDelayRight = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
 		
 		if(bulletType.dropItemOnShoot != null && !creative)
 			ItemGun.dropItem(worldObj, this, bulletType.dropItemOnShoot);
