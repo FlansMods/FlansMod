@@ -82,6 +82,8 @@ public class GunType extends InfoType implements IScope
 	/** For guns with 3D models */
 	@SideOnly(Side.CLIENT)
 	public ModelGun model;
+	/** For making detailed models and scaling down */
+	public float modelScale = 1F;
 	
 	//Attachment settings
 	/** If this is true, then all attachments are allowed. Otherwise the list is checked */
@@ -162,6 +164,8 @@ public class GunType extends InfoType implements IScope
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelGun.class);
 			}
+			if(split[0].equals("ModelScale"))
+				modelScale = Float.parseFloat(split[1]);
 			if (split[0].equals("Texture"))
 				texture = split[1];
 			if (split[0].equals("DeployedTexture"))

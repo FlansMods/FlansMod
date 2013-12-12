@@ -122,6 +122,8 @@ public class RenderGun implements IItemRenderer
 		if(animations == null)
 			animations = GunAnimations.defaults;
 		
+		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
+		
 		//Render the gun
 		model.renderGun(f);
 		
