@@ -12,6 +12,8 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemBullet;
@@ -63,12 +65,15 @@ public class PacketReload extends FlanPacketCommon
 	private void interpretServer(DataInputStream stream, Object[] extradata)
 	{
     	EntityPlayer player = (EntityPlayer)extradata[0];
+    	FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
     	ItemStack stack = player.getCurrentEquippedItem();
-    	if(stack != null && stack.getItem() instanceof ItemGun)
+    	if(data != null && stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
     		if(((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true))
     		{
+    			//Set the reload delay
+    			data.shootTime = type.reloadTime;
 				//Send reload packet to induce reload effects client side
 				PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
 				//Play reload sound
