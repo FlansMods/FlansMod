@@ -74,6 +74,8 @@ public class GunType extends InfoType implements IScope
 	public boolean hasScopeOverlay;
 	/** The zoom level of the default scope */
 	public float zoomLevel = 1.0F;
+	/** The FOV zoom level of the default scope */
+	public float FOVFactor = 1.5F;
 	
 	/** For guns with 3D models */
 	@SideOnly(Side.CLIENT)
@@ -135,6 +137,8 @@ public class GunType extends InfoType implements IScope
 			}
 			if (split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);
+			if (split[0].equals("FOVZoomLevel"))
+				FOVFactor = Float.parseFloat(split[1]);
 			if (split[0].equals("Deployable"))
 				deployable = split[1].equals("True");
 			if (FMLCommonHandler.instance().getSide().isClient() && deployable && split[0].equals("DeployedModel"))
@@ -226,5 +230,11 @@ public class GunType extends InfoType implements IScope
 	public String getZoomOverlay() 
 	{
 		return defaultScopeTexture;
+	}
+
+	@Override
+	public float getFOVFactor()
+	{
+		return FOVFactor;
 	}
 }

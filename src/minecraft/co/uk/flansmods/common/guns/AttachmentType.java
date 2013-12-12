@@ -5,14 +5,20 @@ import java.util.ArrayList;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
 
-public class AttachmentType extends InfoType 
+public class AttachmentType extends InfoType implements IScope
 {
 	public static ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
 	
-	/** If a gun has a silencer attachment, then all shoot sounds will be muffled */
+	/** The type of attachment. Each gun can have one barrel, one scope, one grip, one stock and some number of generics up to a limit set by the gun */
+	public EnumAttachmentType type = EnumAttachmentType.generic;
+	
+	/** This variable controls whether or not bullet sounds should be muffled */
 	public boolean silencer = false;
 	/** These stack between attachments and apply themselves to the gun's default spread */
 	public float spreadMultiplier = 1F;
+	
+	//Scope variables
+	/** The zoomLevel of this scope */
 	
 	public AttachmentType(TypeFile file) 
 	{
@@ -43,5 +49,29 @@ public class AttachmentType extends InfoType
 				return attachment;
 		}
 		return null;
+	}
+
+	@Override
+	public float getZoomFactor() 
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean hasZoomOverlay() 
+	{
+		return false;
+	}
+
+	@Override
+	public String getZoomOverlay() 
+	{
+		return null;
+	}
+
+	@Override
+	public float getFOVFactor() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

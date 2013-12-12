@@ -192,16 +192,19 @@ public class ItemGun extends Item
 				{
 					FlansModClient.currentScope = currentScope;
 					FlansModClient.lastZoomLevel = currentScope.getZoomFactor();
+					FlansModClient.lastFOVZoomLevel = currentScope.getFOVFactor();
 					float f = FlansModClient.originalMouseSensitivity = gameSettings.mouseSensitivity;
 					gameSettings.mouseSensitivity = f / (float) Math.sqrt(currentScope.getZoomFactor());
 					FlansModClient.originalThirdPerson = gameSettings.thirdPersonView;
 					gameSettings.thirdPersonView = 0;
+					FlansModClient.originalFOV = gameSettings.fovSetting;
 				}
 				else
 				{
 					FlansModClient.currentScope = null;
 					gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
 					gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+					gameSettings.fovSetting = FlansModClient.originalFOV;
 				}
 				FlansModClient.scopeTime = 10;
 			}
@@ -211,6 +214,7 @@ public class ItemGun extends Item
 				FlansModClient.currentScope = null;
 				gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
 				gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+				gameSettings.fovSetting = FlansModClient.originalFOV;
 			}
 		}
 		if (soundDelay > 0)

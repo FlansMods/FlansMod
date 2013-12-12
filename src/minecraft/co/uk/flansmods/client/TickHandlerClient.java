@@ -192,7 +192,7 @@ public class TickHandlerClient implements ITickHandler
 	{
 		if (type.equals(EnumSet.of(TickType.RENDER)))
 		{
-			rTickStart(FMLClientHandler.instance().getClient());
+			rTickStart(FMLClientHandler.instance().getClient(), (Float)tickData[0]);
 			RenderGun.smoothing = (Float)tickData[0];
 		}
 		if (type.equals(EnumSet.of(TickType.CLIENT)))
@@ -234,7 +234,7 @@ public class TickHandlerClient implements ITickHandler
 	}
 	
 	
-	public void rTickStart(Minecraft mc)
+	public void rTickStart(Minecraft mc, float smoothing)
 	{
 		// CAPTURE MOUSE INPUT!
 		if (mc.currentScreen == null && FlansModClient.controlModeMouse)
@@ -248,6 +248,8 @@ public class TickHandlerClient implements ITickHandler
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
 			}
 		}
+		
+		FlansModClient.renderTick(smoothing);
 	}
 
 	public void rTickEnd(Minecraft mc)

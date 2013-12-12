@@ -61,11 +61,13 @@ public class FlansModClient extends FlansMod
 	/** The transition variable for zooming in / out with a smoother. 0 = unscoped, 1 = scoped */
 	public static float zoomProgress = 0F, lastZoomProgress = 0F;
 	/** The zoom level of the last scope used, for transitioning out of being scoped, even after the scope is forgotten */
-	public static float lastZoomLevel = 1F;
+	public static float lastZoomLevel = 1F, lastFOVZoomLevel = 1F;
     
 	//Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
 	/** The player's mouse sensitivity setting, as it was before being hacked by my mod */
 	public static float originalMouseSensitivity = 0.5F;
+	/** The player's original FOV */
+	public static float originalFOV = 90F;
 	/** The original third person mode, before being hacked */
 	public static int originalThirdPerson = 0;
 	
@@ -163,6 +165,7 @@ public class FlansModClient extends FlansMod
 			if(currentScope != null && !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).getCurrentScope(itemstackInHand) == currentScope))
 			{
 				currentScope = null;
+				minecraft.gameSettings.fovSetting = originalFOV;
 				minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
 				minecraft.gameSettings.thirdPersonView = originalThirdPerson;
 			}
@@ -178,49 +181,6 @@ public class FlansModClient extends FlansMod
 		{
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F; 
 		}
-				
-		//If the zoom has changed sufficiently, update it via reflection
-		if(Math.abs(zoomProgress - lastZoomProgress) > 0.0001F)
-		{
-			double zoomLevel = zoomProgress * lastZoomLevel + (1 - zoomProgress);
-			if(Math.abs(zoomLevel - 1F) < 0.01F)
-				zoomLevel = 1.0D;
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, zoomLevel, "cameraZoom", "Y", "field_78503_V");
-			} 
-			catch (Exception e)
-			{
-				log("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-		}
-
-		/*
-		float dZoom = newZoom - playerZoom;
-		playerZoom += dZoom / 3F;
-		if (playerZoom < 1.1F && zoomOverlay != null)
-		{
-			minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
-			playerZoom = 1.0F;
-			zoomOverlay = null;
-			minecraft.gameSettings.hideGUI = originalHideGUI;
-			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
-		}
-
-		if (Math.abs(playerZoom - lastPlayerZoom) > 1F / 64F)
-		{
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, playerZoom, "cameraZoom", "Y", "field_78503_V");
-			} catch (Exception e)
-			{
-				log("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
-		}
-		lastPlayerZoom = playerZoom;
-		*/
 		
 		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
@@ -269,6 +229,29 @@ public class FlansModClient extends FlansMod
 			controlModeSwitchTimer--;
 		if (errorStringTimer > 0)
 			errorStringTimer--;
+	}
+	
+	public static void renderTick(float smoothing)
+	{
+		//If the zoom has changed sufficiently, update it via reflection
+		if(Math.abs(zoomProgress - lastZoomProgress) > 0.0001F)
+		{
+			float actualZoomProgress = lastZoomProgress + (zoomProgress - lastZoomProgress) * smoothing;
+			double zoomLevel = actualZoomProgress * lastZoomLevel + (1 - actualZoomProgress);
+			float FOVZoomLevel = actualZoomProgress * lastFOVZoomLevel + (1 - actualZoomProgress);
+			if(Math.abs(zoomLevel - 1F) < 0.01F)
+				zoomLevel = 1.0D;
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, zoomLevel, "cameraZoom", "Y", "field_78503_V");
+				minecraft.gameSettings.fovSetting = (((originalFOV * 40 + 70) / FOVZoomLevel) - 70) / 40;
+			} 
+			catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}
+		}
 	}
 	
 	@ForgeSubscribe
