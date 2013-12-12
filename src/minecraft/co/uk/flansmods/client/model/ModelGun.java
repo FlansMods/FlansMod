@@ -66,4 +66,45 @@ public class ModelGun extends ModelBase
 			if(model != null)
 				model.render(f);
 	}
+	
+	/** Flips the model. Generally only for backwards compatibility */
+	public void flipAll()
+	{
+		flip(gunModel);
+		flip(defaultBarrelModel);
+		flip(defaultScopeModel);
+		flip(defaultStockModel);
+		flip(ammoModel);
+		flip(slideModel);
+	}	
+	
+	protected void flip(ModelRendererTurbo[] model)
+	{
+		for(ModelRendererTurbo part : model)
+		{
+			part.doMirror(false, true, true);
+			part.setRotationPoint(part.rotationPointX, - part.rotationPointY, - part.rotationPointZ);
+		}
+	}
+	
+	/** Translates the model */
+	public void translateAll(int x, int y, int z)
+	{
+		translate(gunModel, x, y, z);
+		translate(defaultBarrelModel, x, y, z);
+		translate(defaultScopeModel, x, y, z);
+		translate(defaultStockModel, x, y, z);
+		translate(ammoModel, x, y, z);
+		translate(slideModel, x, y, z);
+	}
+	
+	protected void translate(ModelRendererTurbo[] model, int x, int y, int z)
+	{
+		for(ModelRendererTurbo mod : model)
+		{
+			mod.rotationPointX += x;
+			mod.rotationPointY += y;
+			mod.rotationPointZ += z;
+		}
+	}
 }
