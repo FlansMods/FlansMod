@@ -3,6 +3,7 @@ package co.uk.flansmods.client.model.mw;
 import co.uk.flansmods.client.model.EnumAnimationType;
 import co.uk.flansmods.client.model.ModelGun;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.vector.Vector3f;
 
 public class ModelM9 extends ModelGun 
 {
@@ -37,6 +38,8 @@ public class ModelM9 extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 14, 0, textureX, textureY);
 		ammoModel[0].addBox(-0.5F, -1.8F, -0.5F, 2, 4, 1);
+		
+		barrelAttachPoint = new Vector3f(7.5F / 16F, 4F / 16F, 0F);
 		
 		gunSlideDistance = 0.25F;
 		animationType = EnumAnimationType.PISTOL_CLIP;

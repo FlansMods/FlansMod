@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import co.uk.flansmods.client.model.ModelGun;
 import co.uk.flansmods.client.model.ModelMG;
 import co.uk.flansmods.client.model.ModelMecha;
@@ -212,6 +214,75 @@ public class GunType extends InfoType implements IScope
 		{
 			System.out.println("Reading gun file failed.");
 			e.printStackTrace();
+		}
+	}
+	
+	/** Return the currently active scope on this gun. Search attachments, and by default, simply give the gun */
+	public IScope getCurrentScope(ItemStack gunStack)
+	{
+		IScope attachedScope = getScope(gunStack);
+		return attachedScope == null ? this : attachedScope;
+	}
+	
+	/** Returns all attachments currently attached to the specified gun */
+	public ArrayList<AttachmentType> getCurrentAttachments(ItemStack gun)
+	{
+		checkForTags(gun);
+		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
+		NBTTagCompound attachmentTags = gun.stackTagCompound.getCompoundTag("attachments");
+		NBTTagList genericsList = attachmentTags.getTagList("generics");
+		for(int i = 0; i < numGenericAttachmentSlots; i++)
+		{
+			appendToList(gun, "generic_" + i, attachments);
+		}
+		appendToList(gun, "barrel", attachments);
+		appendToList(gun, "scope", attachments);
+		appendToList(gun, "stock", attachments);
+		appendToList(gun, "grip", attachments);
+		return attachments;
+	}
+	
+	/** Private method for attaching attachments to a list of attachments with a nullcheck */
+	private void appendToList(ItemStack gun, String name, ArrayList<AttachmentType> attachments)
+	{
+		AttachmentType type = getAttachment(gun, name);
+		if(type != null) attachments.add(type);
+	}
+	
+	//Attachment getter methods
+	public AttachmentType getBarrel(ItemStack gun) { return getAttachment(gun, "barrel"); }
+	public AttachmentType getScope(ItemStack gun) { return getAttachment(gun, "scope"); }
+	public AttachmentType getStock(ItemStack gun) { return getAttachment(gun, "stock"); }
+	public AttachmentType getGrip(ItemStack gun) { return getAttachment(gun, "grip"); }
+	public AttachmentType getGeneric(ItemStack gun, int i) { return getAttachment(gun, "generic_" + i); }
+	
+	/** Generalised attachment getter method */
+	public AttachmentType getAttachment(ItemStack gun, String name)
+	{
+		checkForTags(gun);
+		return AttachmentType.getFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
+	}
+	
+	/** Method to check for null tags and assign default empty tags in that case */
+	private void checkForTags(ItemStack gun)
+	{
+		//If the gun has no tags, give it some
+		if(!gun.hasTagCompound())
+		{
+			gun.stackTagCompound = new NBTTagCompound("tag");
+		}
+		//If the gun has no attachment tags, give it some
+		if(!gun.stackTagCompound.hasKey("attachments"))
+		{
+			NBTTagCompound attachmentTags = new NBTTagCompound("attachments");
+			for(int i = 0; i < numGenericAttachmentSlots; i++)
+				attachmentTags.setCompoundTag("generic_" + i, new NBTTagCompound());
+			attachmentTags.setCompoundTag("barrel", new NBTTagCompound());
+			attachmentTags.setCompoundTag("scope", new NBTTagCompound());
+			attachmentTags.setCompoundTag("stock", new NBTTagCompound());
+			attachmentTags.setCompoundTag("grip", new NBTTagCompound());
+			
+			gun.stackTagCompound.setCompoundTag("attachments", attachmentTags);
 		}
 	}
 	

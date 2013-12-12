@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.common.FlansMod;
+import co.uk.flansmods.common.guns.AttachmentType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import net.minecraft.client.Minecraft;
@@ -125,12 +126,78 @@ public class RenderGun implements IItemRenderer
 		model.renderGun(f);
 		
 		//Render static attachments
-		//TODO : Check for attachments. Otherwise use defaults
-		model.renderDefaultScope(f);
-		model.renderDefaultBarrel(f);
-		model.renderDefaultStock(f);
+		//Scope
+		GL11.glPushMatrix();
+		{
+			AttachmentType scopeAttachment = type.getScope(item);
+			if(scopeAttachment == null)
+				model.renderDefaultScope(f);
+			else
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(scopeAttachment));
+				GL11.glTranslatef(model.scopeAttachPoint.x, model.scopeAttachPoint.y, model.scopeAttachPoint.z);
+				ModelAttachment scopeModel = scopeAttachment.model;
+				if(scopeModel != null)
+					scopeModel.renderAttachment(f);
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+		}
+		GL11.glPopMatrix();
+		
+		//Barrel
+		GL11.glPushMatrix();
+		{
+			AttachmentType barrelAttachment = type.getBarrel(item);
+			if(barrelAttachment == null)
+				model.renderDefaultBarrel(f);
+			else
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(barrelAttachment));
+				GL11.glTranslatef(model.barrelAttachPoint.x, model.barrelAttachPoint.y, model.barrelAttachPoint.z);
+				ModelAttachment barrelModel = barrelAttachment.model;
+				if(barrelModel != null)
+					barrelModel.renderAttachment(f);
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+		}
+		GL11.glPopMatrix();
+		
+		//Scope
+		GL11.glPushMatrix();
+		{
+			AttachmentType stockAttachment = type.getStock(item);
+			if(stockAttachment == null)
+				model.renderDefaultStock(f);
+			else
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(stockAttachment));
+				GL11.glTranslatef(model.stockAttachPoint.x, model.stockAttachPoint.y, model.stockAttachPoint.z);
+				ModelAttachment stockModel = stockAttachment.model;
+				if(stockModel != null)
+					stockModel.renderAttachment(f);
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+		}
+		GL11.glPopMatrix();
+		
+		//Grip
+		GL11.glPushMatrix();
+		{
+			AttachmentType gripAttachment = type.getGrip(item);
+			if(gripAttachment == null)
+				model.renderDefaultGrip(f);
+			else
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(gripAttachment));
+				GL11.glTranslatef(model.gripAttachPoint.x, model.gripAttachPoint.y, model.gripAttachPoint.z);
+				ModelAttachment gripModel = gripAttachment.model;
+				if(gripModel != null)
+					gripModel.renderAttachment(f);
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+		}
+		GL11.glPopMatrix();
 					
-		//TODO : Animations
 		//Render various shoot / reload animated parts
 		//Render the slide
 		GL11.glPushMatrix();

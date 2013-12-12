@@ -162,7 +162,7 @@ public class FlansModClient extends FlansMod
 			itemInHand = itemstackInHand.getItem();
 		if (itemInHand != null)
 		{
-			if(currentScope != null && !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).getCurrentScope(itemstackInHand) == currentScope))
+			if(currentScope != null && !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).type.getCurrentScope(itemstackInHand) == currentScope))
 			{
 				currentScope = null;
 				minecraft.gameSettings.fovSetting = originalFOV;

@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,11 +36,14 @@ import com.google.common.collect.Multimap;
 
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.model.GunAnimations;
+import co.uk.flansmods.common.EnumType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
+import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketReload;
@@ -72,48 +76,7 @@ public class ItemGun extends Item
 	{
 		return true;
 	}
-	
-	/** Return the currently active scope on this gun. Search attachments, and by default, simply give the gun */
-	public IScope getCurrentScope(ItemStack gunStack)
-	{
-		return type;
-	}
-	
-	public ArrayList<AttachmentType> getCurrentAttachments(ItemStack gun)
-	{
-		checkForTags(gun);
-		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
-		NBTTagCompound attachmentTags = gun.stackTagCompound.getCompoundTag("attachments");
 		
-		return attachments;
-	}
-	
-	private void checkForTags(ItemStack gun)
-	{
-		//If the gun has no tags, give it some
-		if(!gun.hasTagCompound())
-		{
-			gun.stackTagCompound = new NBTTagCompound("tag");
-		}
-		//If the gun has no attachment tags, give it some
-		if(!gun.stackTagCompound.hasKey("attachments"))
-		{
-			NBTTagCompound attachmentTags = new NBTTagCompound("attachments");
-			NBTTagList genericAttachments = new NBTTagList();
-			for(int i = 0; i < type.numGenericAttachmentSlots; i++)
-			{
-				genericAttachments.appendTag(new NBTTagCompound());
-			}
-			attachmentTags.setTag("generics", genericAttachments);
-			attachmentTags.setTag("barrel", new NBTTagCompound());
-			attachmentTags.setTag("scope", new NBTTagCompound());
-			attachmentTags.setTag("stock", new NBTTagCompound());
-			attachmentTags.setTag("grip", new NBTTagCompound());
-			
-			gun.stackTagCompound.setCompoundTag("attachments", attachmentTags);
-		}
-	}
-	
 	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
 	public ItemStack getBulletItemStack(ItemStack gun, int id)
 	{
@@ -183,6 +146,11 @@ public class ItemGun extends Item
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
+		for(AttachmentType attachment : type.getCurrentAttachments(stack))
+		{
+			String line = attachment.name;
+			lines.add(line);
+		}
 		for(int i = 0; i < type.numAmmoItemsInGun; i++)
 		{
 			ItemStack bulletStack = getBulletItemStack(stack, i);
@@ -221,7 +189,7 @@ public class ItemGun extends Item
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
 			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
-			IScope currentScope = getCurrentScope(itemstack);
+			IScope currentScope = type.getCurrentScope(itemstack);
 			if(Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
 				if(FlansModClient.currentScope == null)
@@ -488,8 +456,10 @@ public class ItemGun extends Item
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && type.shootSound != null)
 		{
+			AttachmentType barrel = type.getBarrel(stack);
+			boolean silenced = barrel != null && barrel.silencer;
 			//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
-			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound));
+			PacketDispatcher.sendPacketToAllAround(entityplayer.posX, entityplayer.posY, entityplayer.posZ, 50, entityplayer.dimension, PacketPlaySound.buildSoundPacket(entityplayer.posX, entityplayer.posY, entityplayer.posZ, type.shootSound, type.distortSound, silenced));
 			soundDelay = type.shootSoundLength;
 		}
 		if (!world.isRemote)
@@ -610,6 +580,20 @@ public class ItemGun extends Item
 	{
 		return true;
 	}
+	
+    @Override
+    public void getSubItems(int i, CreativeTabs tabs, List list)
+    {
+    	ItemStack gunStack = new ItemStack(i, 1, 0);
+    	NBTTagCompound tags = new NBTTagCompound();
+    	NBTTagCompound attachmentTags = new NBTTagCompound();
+    	NBTTagCompound silencerTags = new NBTTagCompound();
+    	(new ItemStack(AttachmentType.attachments.get(0).item, 1, 0)).writeToNBT(silencerTags);
+    	attachmentTags.setCompoundTag("barrel", silencerTags);
+    	tags.setCompoundTag("attachments", attachmentTags);
+    	gunStack.stackTagCompound = tags;
+        list.add(gunStack);
+    }
 	
     @Override
     @SideOnly(Side.CLIENT)

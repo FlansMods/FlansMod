@@ -19,3 +19,6 @@ ReloadTimeMultiplier 1.0
 ZoomLevel 1.0
 FOVZoomLevel 1.0
 ZoomOverlay None
+//Model
+Model mw.Silencer
+Texture Silencer

@@ -19,8 +19,13 @@ public static Random rand = new Random();
 public static final byte packetID = 8;
 	
 	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean distort)
+	{	
+		sendSoundPacket(x, y, z, range, dimension, s, distort, false);
+	}
+	
+	public static void sendSoundPacket(double x, double y, double z, double range, int dimension, String s, boolean distort, boolean silenced)
 	{
-		PacketDispatcher.sendPacketToAllAround(x, y, z, range, dimension, buildSoundPacket(x, y, z, s, distort));
+		PacketDispatcher.sendPacketToAllAround(x, y, z, range, dimension, buildSoundPacket(x, y, z, s, distort, silenced));
 	}
 
 	public static Packet buildSoundPacket(double x, double y, double z, String s)
@@ -29,6 +34,11 @@ public static final byte packetID = 8;
 	}
 
 	public static Packet buildSoundPacket(double x, double y, double z, String s, boolean distort)
+	{	
+		return buildSoundPacket(x, y, z, s, distort, false);
+	}
+	
+	public static Packet buildSoundPacket(double x, double y, double z, String s, boolean distort, boolean silenced)
 	{
 		Packet250CustomPayload packet = new Packet250CustomPayload();
 		packet.channel = channelFlan;
@@ -43,6 +53,7 @@ public static final byte packetID = 8;
         	data.writeFloat((float)z);
         	data.writeUTF(s);
         	data.writeBoolean(distort);
+        	data.writeBoolean(silenced);
         	
         	packet.data = bytes.toByteArray();
         	packet.length = packet.data.length;
@@ -52,7 +63,7 @@ public static final byte packetID = 8;
         }
         catch(Exception e)
         {
-                e.printStackTrace();
+            e.printStackTrace();
         }
         
         return packet;
@@ -76,8 +87,9 @@ public static final byte packetID = 8;
         	float z = stream.readFloat();
         	String sound = stream.readUTF();      
         	boolean distort = stream.readBoolean();
+        	boolean silenced = stream.readBoolean();
                	
-        	FMLClientHandler.instance().getClient().sndManager.playSound("flansmod:" + sound, x, y, z, 10F, distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+        	FMLClientHandler.instance().getClient().sndManager.playSound("flansmod:" + sound, x, y, z, silenced ? 0.5F : 4F, (distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F));
         }
         catch(Exception e)
         {

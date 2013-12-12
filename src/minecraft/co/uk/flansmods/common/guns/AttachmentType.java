@@ -2,8 +2,17 @@ package co.uk.flansmods.common.guns;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import co.uk.flansmods.client.model.ModelAttachment;
+import co.uk.flansmods.client.model.ModelGun;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class AttachmentType extends InfoType implements IScope
 {
@@ -39,6 +48,10 @@ public class AttachmentType extends InfoType implements IScope
 	/** Whether to overlay a texture or not */
 	public boolean hasScopeOverlay = false;
 	
+	@SideOnly(Side.CLIENT)
+	/**Model. Only applicable when the attachment is added to 3D guns */
+	public ModelAttachment model;
+	
 	//Some more mundane variables
 	/** The max stack size in the inventory */
 	public int maxStackSize = 1;
@@ -57,6 +70,11 @@ public class AttachmentType extends InfoType implements IScope
 		{
 			if(split[0].equals("AttachmentType"))
 				type = EnumAttachmentType.get(split[1]);
+			if (FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAttachment.class);
+			if (split[0].equals("Texture"))
+				texture = split[1];
+			
 			if(split[0].equals("Silencer"))
 				silencer = Boolean.parseBoolean(split[1].toLowerCase());
 			//Multipliers
@@ -90,6 +108,20 @@ public class AttachmentType extends InfoType implements IScope
 			System.out.println("Reading attachment file failed.");
 			e.printStackTrace();
 		}
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAttachment.class);
+	}
+	
+	public static AttachmentType getFromNBT(NBTTagCompound tags)
+	{
+		ItemStack stack = ItemStack.loadItemStackFromNBT(tags);
+		if(stack != null && stack.getItem() instanceof ItemAttachment)
+			return ((ItemAttachment)stack.getItem()).type;
+		return null;
 	}
 
 	@Override

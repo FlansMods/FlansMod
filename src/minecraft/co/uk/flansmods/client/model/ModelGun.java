@@ -13,6 +13,7 @@ public class ModelGun extends ModelBase
 	public ModelRendererTurbo[] defaultBarrelModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] defaultScopeModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] defaultStockModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] defaultGripModel = new ModelRendererTurbo[0];
 	
 	//Animated models follow. 
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
@@ -23,6 +24,7 @@ public class ModelGun extends ModelBase
 	public Vector3f barrelAttachPoint = new Vector3f();
 	public Vector3f scopeAttachPoint = new Vector3f();
 	public Vector3f stockAttachPoint = new Vector3f();
+	public Vector3f gripAttachPoint = new Vector3f();
 	
 	//Various animation parameters
 	public float gunSlideDistance = 1F / 4F;
@@ -52,6 +54,11 @@ public class ModelGun extends ModelBase
 	public void renderDefaultStock(float f)
 	{
 		render(defaultStockModel, f);
+	}
+	
+	public void renderDefaultGrip(float f)
+	{
+		render(defaultGripModel, f);
 	}
 	
 	public void renderAmmo(float f)
