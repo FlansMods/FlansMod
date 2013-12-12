@@ -3,27 +3,26 @@ package co.uk.flansmods.common.guns;
 import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-/** Implemented from old source. */
-public class ItemBullet extends Item
+public class ItemAttachment extends Item 
 {
-	public ItemBullet(int i, BulletType type1)
+	public AttachmentType type;
+	
+	public ItemAttachment(int id, AttachmentType t) 
 	{
-		super(i);
-		type = type1;
-		setMaxDamage(type.roundsPerItem);
-		setMaxStackSize(type.maxStackSize);
-		setHasSubtypes(true);
+		super(id);
+		type = t;
 		type.item = this;
+		maxStackSize = t.maxStackSize;
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
-
+	
     @SideOnly(Side.CLIENT)
     @Override
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
@@ -47,6 +46,4 @@ public class ItemBullet extends Item
 				lines.add(s);
 		}
 	}
-    
-	public BulletType type;
 }

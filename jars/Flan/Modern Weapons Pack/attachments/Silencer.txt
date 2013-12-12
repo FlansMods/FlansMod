@@ -1,5 +1,5 @@
 Name Silencer
-ShortName flanSilencer
+ShortName flanMWSilencer
 Icon Silencer
 ItemID 23859
 //The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"

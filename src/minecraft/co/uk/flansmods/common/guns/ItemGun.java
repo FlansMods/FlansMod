@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.guns;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -76,6 +77,41 @@ public class ItemGun extends Item
 	public IScope getCurrentScope(ItemStack gunStack)
 	{
 		return type;
+	}
+	
+	public ArrayList<AttachmentType> getCurrentAttachments(ItemStack gun)
+	{
+		checkForTags(gun);
+		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
+		NBTTagCompound attachmentTags = gun.stackTagCompound.getCompoundTag("attachments");
+		
+		return attachments;
+	}
+	
+	private void checkForTags(ItemStack gun)
+	{
+		//If the gun has no tags, give it some
+		if(!gun.hasTagCompound())
+		{
+			gun.stackTagCompound = new NBTTagCompound("tag");
+		}
+		//If the gun has no attachment tags, give it some
+		if(!gun.stackTagCompound.hasKey("attachments"))
+		{
+			NBTTagCompound attachmentTags = new NBTTagCompound("attachments");
+			NBTTagList genericAttachments = new NBTTagList();
+			for(int i = 0; i < type.numGenericAttachmentSlots; i++)
+			{
+				genericAttachments.appendTag(new NBTTagCompound());
+			}
+			attachmentTags.setTag("generics", genericAttachments);
+			attachmentTags.setTag("barrel", new NBTTagCompound());
+			attachmentTags.setTag("scope", new NBTTagCompound());
+			attachmentTags.setTag("stock", new NBTTagCompound());
+			attachmentTags.setTag("grip", new NBTTagCompound());
+			
+			gun.stackTagCompound.setCompoundTag("attachments", attachmentTags);
+		}
 	}
 	
 	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */

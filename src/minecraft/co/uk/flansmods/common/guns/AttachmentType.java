@@ -39,7 +39,9 @@ public class AttachmentType extends InfoType implements IScope
 	/** Whether to overlay a texture or not */
 	public boolean hasScopeOverlay = false;
 	
-	
+	//Some more mundane variables
+	/** The max stack size in the inventory */
+	public int maxStackSize = 1;
 	
 	public AttachmentType(TypeFile file) 
 	{
@@ -90,16 +92,6 @@ public class AttachmentType extends InfoType implements IScope
 		}
 	}
 
-	public static AttachmentType getAttachment(String s)
-	{
-		for(AttachmentType attachment : attachments)
-		{
-			if(attachment.shortName.equals(s))
-				return attachment;
-		}
-		return null;
-	}
-
 	@Override
 	public float getZoomFactor() 
 	{
@@ -122,5 +114,15 @@ public class AttachmentType extends InfoType implements IScope
 	public float getFOVFactor() 
 	{ 
 		return FOVZoomLevel;
+	}
+
+	public static AttachmentType getAttachment(String s)
+	{
+		for(AttachmentType attachment : attachments)
+		{
+			if(attachment.shortName.equals(s))
+				return attachment;
+		}
+		return null;
 	}
 }

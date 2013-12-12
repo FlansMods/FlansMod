@@ -22,7 +22,18 @@ ShootSound M9Shoot
 ReloadSound coltReload
 Mode SemiAuto
 Scope None
+//Deployable Settings
 Deployable False
 DeployedModel None
+//3D Model Settings
 Model mw.M9
 Texture M9
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1

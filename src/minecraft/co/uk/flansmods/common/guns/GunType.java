@@ -80,7 +80,18 @@ public class GunType extends InfoType implements IScope
 	/** For guns with 3D models */
 	@SideOnly(Side.CLIENT)
 	public ModelGun model;
-
+	
+	//Attachment settings
+	/** If this is true, then all attachments are allowed. Otherwise the list is checked */
+	public boolean allowAllAttachments = false;
+	/** The list of allowed attachments for this gun */
+	public ArrayList<AttachmentType> allowedAttachments = new ArrayList<AttachmentType>();
+	/** Whether each attachment slot is available */
+	public boolean allowBarrelAttachments = false, allowScopeAttachments = false, 
+			allowStockAttachments = false, allowGripAttachments = false;
+	/** The number of generic attachment slots there are on this gun */
+	public int numGenericAttachmentSlots = 0;
+	
 	/** The static list of all guns */
 	public static List<GunType> guns = new ArrayList<GunType>();
 
@@ -174,8 +185,30 @@ public class GunType extends InfoType implements IScope
 			if (split[0].equals("BulletSpeed"))
 				bulletSpeed = Float.parseFloat(split[1]);
 			if (split[0].equals("CanShootUnderwater"))
-				canShootUnderwater = Boolean.parseBoolean(split[1]);
-		} catch (Exception e)
+				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());
+			
+			//Attachment settings
+			if(split[0].equals("AllowAllAttachments"))
+				allowAllAttachments = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AllowAttachments"))
+			{
+				for(int i = 1; i < split.length; i++)
+				{
+					allowedAttachments.add(AttachmentType.getAttachment(split[i]));
+				}
+			}
+			if(split[0].equals("AllowBarrelAttachments"))
+				allowBarrelAttachments = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AllowScopeAttachments"))
+				allowScopeAttachments = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AllowStockAttachments"))
+				allowStockAttachments = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AllowGripAttachments"))
+				allowGripAttachments = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("NumGenericAttachmentSlots"))
+				numGenericAttachmentSlots = Integer.parseInt(split[1]);
+		} 
+		catch (Exception e)
 		{
 			System.out.println("Reading gun file failed.");
 			e.printStackTrace();

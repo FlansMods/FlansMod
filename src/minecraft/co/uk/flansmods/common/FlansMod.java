@@ -32,6 +32,7 @@ import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
 import co.uk.flansmods.common.driveables.mechas.MechaItemType;
 import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.AttachmentType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -40,6 +41,7 @@ import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemAttachment;
 import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGrenade;
 import co.uk.flansmods.common.guns.ItemGun;
@@ -108,7 +110,8 @@ public class FlansMod
 	public static boolean DEBUG = false;
 	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), 
 			partItems = new ArrayList<Item>(),
-			toolItems = new ArrayList<Item>(), 
+			toolItems = new ArrayList<Item>(),
+			attachmentItems = new ArrayList<Item>(),
 			gunItems = new ArrayList<Item>(), 
 			aaGunItems = new ArrayList<Item>(), 
 			mechaToolItems = new ArrayList<Item>(),
@@ -450,7 +453,7 @@ public class FlansMod
 			{
 				BulletType type = new BulletType(bulletFile);
 				type.read(bulletFile);
-				Item bulletItem = new ItemBullet(type.itemID - 256, type.colour, type).setUnlocalizedName(type.shortName);
+				Item bulletItem = new ItemBullet(type.itemID - 256, type).setUnlocalizedName(type.shortName);
 				bulletItems.add(bulletItem);
 				LanguageRegistry.addName(bulletItem, type.name);
 			} 
@@ -461,6 +464,25 @@ public class FlansMod
 			}
 		}
 		log("Loaded bullets.");
+		
+		//Attachments
+		for(TypeFile attachmentFile : TypeFile.files.get(EnumType.attachment))
+		{
+			try
+			{
+				AttachmentType type = new AttachmentType(attachmentFile);
+				type.read(attachmentFile);
+				Item attachmentItem = new ItemAttachment(type.itemID - 256, type).setUnlocalizedName(type.shortName);
+				attachmentItems.add(attachmentItem);
+				LanguageRegistry.addName(attachmentItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add attachment : " + attachmentFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded attachments.");
 
 		// Guns
 		for(TypeFile gunFile : TypeFile.files.get(EnumType.gun))
