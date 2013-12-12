@@ -43,7 +43,7 @@ public class GunType extends InfoType implements IScope
 	/** The firing mode of the gun. Currently semi auto or full auto. Burst coming soon maybe */
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** Whether this gun can be used underwater */
-	public boolean canShootUnderwater;
+	public boolean canShootUnderwater = true;
 	
 	//Sounds
 	/** The sound played upon shooting */
@@ -71,7 +71,7 @@ public class GunType extends InfoType implements IScope
 	/** Default scope overlay texture */
 	public String defaultScopeTexture;
 	/** Whether the default scope has an overlay */
-	public boolean hasScopeOverlay;
+	public boolean hasScopeOverlay = false;
 	/** The zoom level of the default scope */
 	public float zoomLevel = 1.0F;
 	/** The FOV zoom level of the default scope */
@@ -133,7 +133,7 @@ public class GunType extends InfoType implements IScope
 				hasScopeOverlay = true;
 				if (split[1].equals("None"))
 					hasScopeOverlay = false;
-				defaultScopeTexture = split[1];
+				else defaultScopeTexture = split[1];
 			}
 			if (split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);

@@ -14,11 +14,32 @@ public class AttachmentType extends InfoType implements IScope
 	
 	/** This variable controls whether or not bullet sounds should be muffled */
 	public boolean silencer = false;
+	
+	//Gun behaviour modifiers
 	/** These stack between attachments and apply themselves to the gun's default spread */
 	public float spreadMultiplier = 1F;
+	/** Likewise these stack and affect recoil */
+	public float recoilMultiplier = 1F;
+	/** Another stacking variable for damage */
+	public float damageMultiplier = 1F;
+	/** Melee damage modifier */
+	public float meleeDamageMultiplier = 1F;
+	/** Bullet speed modifier */
+	public float bulletSpeedMultiplier = 1F;
+	/** This modifies the reload time, which is then rounded down to the nearest tick */
+	public float reloadTimeModifier = 1F;
 	
-	//Scope variables
+	//Scope variables (These variables only come into play for scope attachments)
 	/** The zoomLevel of this scope */
+	public float zoomLevel = 1F;
+	/** The FOV zoom level of this scope */
+	public float FOVZoomLevel = 1F;
+	/** The overlay to render when using this scope */
+	public String zoomOverlay;
+	/** Whether to overlay a texture or not */
+	public boolean hasScopeOverlay = false;
+	
+	
 	
 	public AttachmentType(TypeFile file) 
 	{
@@ -32,7 +53,35 @@ public class AttachmentType extends InfoType implements IScope
 		super.read(split, file);
 		try
 		{
-			
+			if(split[0].equals("AttachmentType"))
+				type = EnumAttachmentType.get(split[1]);
+			if(split[0].equals("Silencer"))
+				silencer = Boolean.parseBoolean(split[1].toLowerCase());
+			//Multipliers
+			if(split[0].equals("MeleeDamageMultiplier"))
+				meleeDamageMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("DamageMultiplier"))
+				damageMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("SpreadMultiplier"))
+				spreadMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("RecoilMultiplier"))
+				recoilMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("BulletSpeedMultiplier"))
+				bulletSpeedMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("ReloadTimeMultiplier"))
+				reloadTimeModifier = Float.parseFloat(split[1]);
+			//Scope Variables
+			if(split[0].equals("ZoomLevel"))
+				zoomLevel = Float.parseFloat(split[1]);
+			if(split[0].equals("FOVZoomLevel"))
+				FOVZoomLevel = Float.parseFloat(split[1]);
+			if (split[0].equals("ZoomOverlay"))
+			{
+				hasScopeOverlay = true;
+				if (split[1].equals("None"))
+					hasScopeOverlay = false;
+				else zoomOverlay = split[1];
+			}
 		}
 		catch (Exception e)
 		{
@@ -54,24 +103,24 @@ public class AttachmentType extends InfoType implements IScope
 	@Override
 	public float getZoomFactor() 
 	{
-		return 0;
+		return zoomLevel;
 	}
 
 	@Override
 	public boolean hasZoomOverlay() 
 	{
-		return false;
+		return hasScopeOverlay;
 	}
 
 	@Override
 	public String getZoomOverlay() 
 	{
-		return null;
+		return zoomOverlay;
 	}
 
 	@Override
-	public float getFOVFactor() {
-		// TODO Auto-generated method stub
-		return 0;
+	public float getFOVFactor() 
+	{ 
+		return FOVZoomLevel;
 	}
 }
