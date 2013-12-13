@@ -252,7 +252,7 @@ public class ItemGun extends Item
 					FlansModClient.gunAnimations.put((EntityLivingBase)player, animations);
 				}
 				animations.lastGunSlide = animations.gunSlide = 1F;
-				FlansModClient.playerRecoil += type.recoil;
+				FlansModClient.playerRecoil += type.getRecoil(stack);
 				FlansModClient.shootTime = type.shootDelay;
 			}
 		}
@@ -334,7 +334,7 @@ public class ItemGun extends Item
 				if(reload(gunStack, world, entityplayer, false))
 				{
 					//Set player shoot delay to be the reload delay
-					data.shootTime = type.reloadTime;
+					data.shootTime = (int)type.getReloadTime(gunStack);
 					//Send reload packet to induce reload effects client side
 					PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)entityplayer);
 					//Play reload sound
@@ -467,7 +467,7 @@ public class ItemGun extends Item
 			// Spawn the bullet entities
 			for (int k = 0; k < type.numBullets; k++)
 			{
-				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.bulletSpread, type.damage, bullet, type.bulletSpeed, type.numBullets > 1, type));
+				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.getSpread(stack), type.getDamage(stack), bullet, type.getBulletSpeed(stack), type.numBullets > 1, type));
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
@@ -540,16 +540,16 @@ public class ItemGun extends Item
 	@Override
 	public float getDamageVsEntity(Entity par1Entity, ItemStack itemStack)
 	{
-		return type.meleeDamage;
+		return type.getMeleeDamage(itemStack);
 	}
 	
-	@Override
+	/*@Override
     public Multimap getItemAttributeModifiers()
     {
         Multimap multimap = super.getItemAttributeModifiers();
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.getMeleeDamage(stack), 0));
         return multimap;
-    }
+    }*/
 
 	@Override
 	public boolean isFull3D()
@@ -588,7 +588,7 @@ public class ItemGun extends Item
     	NBTTagCompound tags = new NBTTagCompound();
     	NBTTagCompound attachmentTags = new NBTTagCompound();
     	NBTTagCompound silencerTags = new NBTTagCompound();
-    	(new ItemStack(AttachmentType.attachments.get(0).item, 1, 0)).writeToNBT(silencerTags);
+    	(new ItemStack(AttachmentType.attachments.get(1).item, 1, 0)).writeToNBT(silencerTags);
     	attachmentTags.setCompoundTag("barrel", silencerTags);
     	tags.setCompoundTag("attachments", attachmentTags);
     	gunStack.stackTagCompound = tags;

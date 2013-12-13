@@ -221,6 +221,54 @@ public class GunType extends InfoType implements IScope
 		}
 	}
 	
+	public boolean isAmmo(BulletType type)
+	{
+		return ammo.contains(type);
+	}
+
+	public boolean isAmmo(ItemStack stack)
+	{
+		if (stack == null)
+			return false;
+		if (stack.getItem() instanceof ItemBullet)
+		{
+			return isAmmo(((ItemBullet) stack.getItem()).type);
+		}
+		return false;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelGun.class);
+	}
+
+	@Override
+	public float getZoomFactor() 
+	{
+		return zoomLevel;
+	}
+
+	@Override
+	public boolean hasZoomOverlay() 
+	{
+		return hasScopeOverlay;
+	}
+
+	@Override
+	public String getZoomOverlay() 
+	{
+		return defaultScopeTexture;
+	}
+
+	@Override
+	public float getFOVFactor()
+	{
+		return FOVFactor;
+	}
+	
+	//ItemStack specific methods
+	
 	/** Return the currently active scope on this gun. Search attachments, and by default, simply give the gun */
 	public IScope getCurrentScope(ItemStack gunStack)
 	{
@@ -290,22 +338,73 @@ public class GunType extends InfoType implements IScope
 		}
 	}
 	
-	public boolean isAmmo(BulletType type)
+	/** Get the melee damage of a specific gun, taking into account attachments */
+	public float getMeleeDamage(ItemStack stack)
 	{
-		return ammo.contains(type);
-	}
-
-	public boolean isAmmo(ItemStack stack)
-	{
-		if (stack == null)
-			return false;
-		if (stack.getItem() instanceof ItemBullet)
+		float stackMeleeDamage = meleeDamage;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
 		{
-			return isAmmo(((ItemBullet) stack.getItem()).type);
+			stackMeleeDamage *= attachment.meleeDamageMultiplier;
 		}
-		return false;
+		return stackMeleeDamage;
+	}
+	
+	/** Get the damage of a specific gun, taking into account attachments */
+	public float getDamage(ItemStack stack)
+	{
+		float stackDamage = damage;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			stackDamage *= attachment.damageMultiplier;
+		}
+		return stackDamage;
 	}
 
+	/** Get the bullet spread of a specific gun, taking into account attachments */
+	public float getSpread(ItemStack stack)
+	{
+		float stackSpread = bulletSpread;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			stackSpread *= attachment.spreadMultiplier;
+		}
+		return stackSpread;
+	}
+	
+	/** Get the recoil of a specific gun, taking into account attachments */
+	public float getRecoil(ItemStack stack)
+	{
+		float stackRecoil = recoil;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			stackRecoil *= attachment.recoilMultiplier;
+		}
+		return stackRecoil;
+	}
+	
+	/** Get the bullet speed of a specific gun, taking into account attachments */
+	public float getBulletSpeed(ItemStack stack)
+	{
+		float stackBulletSpeed = bulletSpeed;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			stackBulletSpeed *= attachment.bulletSpeedMultiplier;
+		}
+		return stackBulletSpeed;
+	}
+	
+	/** Get the reload time of a specific gun, taking into account attachments */
+	public float getReloadTime(ItemStack stack)
+	{
+		float stackReloadTime = reloadTime;
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			stackReloadTime *= attachment.reloadTimeMultiplier;
+		}
+		return stackReloadTime;
+	}
+
+	/** Static String to GunType method */
 	public static GunType getGun(String s)
 	{
 		for (GunType gun : guns)
@@ -314,35 +413,5 @@ public class GunType extends InfoType implements IScope
 				return gun;
 		}
 		return null;
-	}
-	
-	/** To be overriden by subtypes for model reloading */
-	public void reloadModel()
-	{
-		model = FlansMod.proxy.loadModel(modelString, shortName, ModelGun.class);
-	}
-
-	@Override
-	public float getZoomFactor() 
-	{
-		return zoomLevel;
-	}
-
-	@Override
-	public boolean hasZoomOverlay() 
-	{
-		return hasScopeOverlay;
-	}
-
-	@Override
-	public String getZoomOverlay() 
-	{
-		return defaultScopeTexture;
-	}
-
-	@Override
-	public float getFOVFactor()
-	{
-		return FOVFactor;
 	}
 }

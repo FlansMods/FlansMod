@@ -46,7 +46,7 @@ public class ModelBarrett extends ModelGun
 		defaultScopeModel[2] = new ModelRendererTurbo(this, 10, 7, textureX, textureY);
 		defaultScopeModel[2].addBox(1.5F, 3.5F, -0.5F, 3, 2, 1);
 		
-		scopeAttachPoint = new Vector3f(3F / 16F, 4F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
 		
 		//Barrel
 		defaultBarrelModel = new ModelRendererTurbo[1];
@@ -61,6 +61,8 @@ public class ModelBarrett extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 24, 8, textureX, textureY);
 		ammoModel[0].addBox(2.5F, -3F, -1F, 4, 5, 2);
+		
+		translateAll(0, 1, 0);
 		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;

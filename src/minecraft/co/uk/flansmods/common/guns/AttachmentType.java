@@ -36,7 +36,7 @@ public class AttachmentType extends InfoType implements IScope
 	/** Bullet speed modifier */
 	public float bulletSpeedMultiplier = 1F;
 	/** This modifies the reload time, which is then rounded down to the nearest tick */
-	public float reloadTimeModifier = 1F;
+	public float reloadTimeMultiplier = 1F;
 	
 	//Scope variables (These variables only come into play for scope attachments)
 	/** The zoomLevel of this scope */
@@ -49,8 +49,10 @@ public class AttachmentType extends InfoType implements IScope
 	public boolean hasScopeOverlay = false;
 	
 	@SideOnly(Side.CLIENT)
-	/**Model. Only applicable when the attachment is added to 3D guns */
+	/** Model. Only applicable when the attachment is added to 3D guns */
 	public ModelAttachment model;
+	/** For making detailed models and scaling down mainly */
+	public float modelScale = 1F;
 	
 	//Some more mundane variables
 	/** The max stack size in the inventory */
@@ -70,9 +72,11 @@ public class AttachmentType extends InfoType implements IScope
 		{
 			if(split[0].equals("AttachmentType"))
 				type = EnumAttachmentType.get(split[1]);
-			if (FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
+			if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAttachment.class);
-			if (split[0].equals("Texture"))
+			if(split[0].equals("ModelScale"))
+				modelScale = Float.parseFloat(split[1]);
+			if(split[0].equals("Texture"))
 				texture = split[1];
 			
 			if(split[0].equals("Silencer"))
@@ -89,7 +93,7 @@ public class AttachmentType extends InfoType implements IScope
 			if(split[0].equals("BulletSpeedMultiplier"))
 				bulletSpeedMultiplier = Float.parseFloat(split[1]);
 			if(split[0].equals("ReloadTimeMultiplier"))
-				reloadTimeModifier = Float.parseFloat(split[1]);
+				reloadTimeMultiplier = Float.parseFloat(split[1]);
 			//Scope Variables
 			if(split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);
