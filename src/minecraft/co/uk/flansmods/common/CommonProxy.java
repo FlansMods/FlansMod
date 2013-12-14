@@ -20,6 +20,7 @@ import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
 import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.guns.ContainerGunModTable;
 import co.uk.flansmods.common.network.PacketBreakSound;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -118,7 +119,8 @@ public class CommonProxy
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		switch(ID) 
-		{
+		{	
+			case 2: return new ContainerGunModTable(player.inventory, world);
 			case 3: return new ContainerPlaneMenu(player.inventory, world);
 			case 4: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
 			

@@ -52,9 +52,6 @@ public class RenderGun implements IItemRenderer
 		if(model == null)
 			return;
 		
-		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getTexture(gunType));
-		
 		//The model scale
 		float f = 1F / 16F;
 		
@@ -127,6 +124,9 @@ public class RenderGun implements IItemRenderer
 		AttachmentType barrelAttachment = type.getBarrel(item);
 		AttachmentType stockAttachment = type.getStock(item);
 		AttachmentType gripAttachment = type.getGrip(item);
+		
+		//Load texture
+		renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 		
 		//Render the gun and default attachment models
 		GL11.glPushMatrix();

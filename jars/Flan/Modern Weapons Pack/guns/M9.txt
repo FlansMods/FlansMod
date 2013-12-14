@@ -31,7 +31,7 @@ Texture M9
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer
+AllowAttachments flanMWSilencer flanMWRedDot
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

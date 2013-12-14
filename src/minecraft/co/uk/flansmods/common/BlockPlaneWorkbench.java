@@ -47,8 +47,11 @@ public class BlockPlaneWorkbench extends Block
     @Override
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
     {
-    	if(world.isRemote)
-    		entityplayer.openGui(FlansMod.instance, 0, world, i, j, k);
+    	switch(world.getBlockMetadata(i, j, k))
+    	{
+    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.instance, 0, world, i, j, k); break;
+    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.instance, 2, world, i, j, k); break; 
+    	}    	
 		return true;
     }
     

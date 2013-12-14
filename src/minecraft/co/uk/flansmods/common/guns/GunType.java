@@ -308,11 +308,25 @@ public class GunType extends InfoType implements IScope
 	public AttachmentType getGrip(ItemStack gun) { return getAttachment(gun, "grip"); }
 	public AttachmentType getGeneric(ItemStack gun, int i) { return getAttachment(gun, "generic_" + i); }
 	
+	//Attachment ItemStack getter methods
+	public ItemStack getBarrelItemStack(ItemStack gun) { return getAttachmentItemStack(gun, "barrel"); }
+	public ItemStack getScopeItemStack(ItemStack gun) { return getAttachmentItemStack(gun, "scope"); }
+	public ItemStack getStockItemStack(ItemStack gun) { return getAttachmentItemStack(gun, "stock"); }
+	public ItemStack getGripItemStack(ItemStack gun) { return getAttachmentItemStack(gun, "grip"); }
+	public ItemStack getGenericItemStack(ItemStack gun, int i) { return getAttachmentItemStack(gun, "generic_" + i); }
+	
 	/** Generalised attachment getter method */
 	public AttachmentType getAttachment(ItemStack gun, String name)
 	{
 		checkForTags(gun);
 		return AttachmentType.getFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
+	}
+	
+	/** Generalised attachment ItemStack getter method */
+	public ItemStack getAttachmentItemStack(ItemStack gun, String name)
+	{
+		checkForTags(gun);
+		return ItemStack.loadItemStackFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Method to check for null tags and assign default empty tags in that case */

@@ -44,7 +44,7 @@ public class FlanPacketCommon implements IPacketHandler
     		switch(ID)
     		{
 	    		case 1: (new PacketBreakSound()).interpret(stream, null, side); break;
-	    		case 2: break; //Free packet ID
+	    		case 2: (new PacketGunModButton()).interpret(stream, new Object[] {player}, side); break;
 	    		case 3: (new PacketVehicleControl()).interpret(stream, new Object[] {player}, side); break;
 	    		case 4: (new PacketVehicleKey()).interpret(stream, new Object[] {player}, side); break;
 	    		case 5: (new PacketBuyWeapon()).interpret(stream, new Object[] {world, player}, side); break;

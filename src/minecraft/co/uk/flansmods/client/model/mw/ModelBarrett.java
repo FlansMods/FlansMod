@@ -56,6 +56,11 @@ public class ModelBarrett extends ModelGun
 		
 		barrelAttachPoint = new Vector3f(20F / 16F, 4F / 16F, 0F);
 		
+		//Stock
+		defaultStockModel = new ModelRendererTurbo[1];
+		defaultStockModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		defaultStockModel[0].addBox(-12F, 0F, -1F, 4, 3, 2);
+		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];
 		
