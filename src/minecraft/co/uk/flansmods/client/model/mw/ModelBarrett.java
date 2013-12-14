@@ -16,7 +16,7 @@ public class ModelBarrett extends ModelGun
 		
 		//Main Barrel
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[0].addBox(-8F, 2F, -1F, 20, 2, 2);
+		gunModel[0].addBox(-4F, 2F, -1F, 16, 2, 2);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 26, 4, textureX, textureY);
 		gunModel[1].addBox(12F, 2.5F, -0.5F, 8, 1, 1);
@@ -59,7 +59,9 @@ public class ModelBarrett extends ModelGun
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[1];
 		defaultStockModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		defaultStockModel[0].addBox(-12F, 0F, -1F, 4, 3, 2);
+		defaultStockModel[0].addBox(-8F, 0F, -1F, 4, 3, 2);
+		
+		stockAttachPoint = new Vector3f(-4F / 16F, 1F / 16F, 0F);
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];

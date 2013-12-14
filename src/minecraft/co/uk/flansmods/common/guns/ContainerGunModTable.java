@@ -51,6 +51,13 @@ public class ContainerGunModTable extends Container
         	addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 234));
         }
 	}
+	
+	@Override
+    public void onContainerClosed(EntityPlayer player)
+    {
+		if(inventory.getStackInSlot(0) != null)
+			player.dropPlayerItem(inventory.getStackInSlot(0));
+    }
 		
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) 

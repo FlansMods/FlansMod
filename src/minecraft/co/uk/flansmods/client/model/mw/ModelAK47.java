@@ -3,6 +3,7 @@ package co.uk.flansmods.client.model.mw;
 import co.uk.flansmods.client.model.EnumAnimationType;
 import co.uk.flansmods.client.model.ModelGun;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.vector.Vector3f;
 
 public class ModelAK47 extends ModelGun 
 {
@@ -11,7 +12,7 @@ public class ModelAK47 extends ModelGun
 		int textureX = 64;
 		int textureY = 16;
 		
-		gunModel = new ModelRendererTurbo[3];
+		gunModel = new ModelRendererTurbo[4];
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		gunModel[0].addBox(-4F, 2F, -1F, 12, 3, 2);
@@ -21,6 +22,12 @@ public class ModelAK47 extends ModelGun
 		
 		gunModel[2] = new ModelRendererTurbo(this, 8, 5, textureX, textureY);
 		gunModel[2].addBox(6.9F, 4.2F, -0.5F, 1, 1, 1);
+		
+		gunModel[3] = new ModelRendererTurbo(this, 0, 12, textureX, textureY);
+		gunModel[3].addBox(8F, 2.25F, -1F, 6, 2, 2);
+		
+		//Scope
+		scopeAttachPoint = new Vector3f(4F / 16F, 5F / 16F, 0F);
 
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
@@ -31,17 +38,18 @@ public class ModelAK47 extends ModelGun
 		defaultStockModel[1] = new ModelRendererTurbo(this, 18, 7, textureX, textureY);
 		defaultStockModel[1].addBox(-10F, 0F, -1F, 3, 3, 2);
 		
+		stockAttachPoint = new Vector3f(-4F / 16F, 3.5F / 16F, 0F);
+		
 		//Barrel
-		defaultBarrelModel = new ModelRendererTurbo[3];
+		defaultBarrelModel = new ModelRendererTurbo[2];
+				
+		defaultBarrelModel[0] = new ModelRendererTurbo(this, 30, 14, textureX, textureY);
+		defaultBarrelModel[0].addBox(14F, 2.5F, -0.5F, 3, 1, 1);
 		
-		defaultBarrelModel[0] = new ModelRendererTurbo(this, 0, 12, textureX, textureY);
-		defaultBarrelModel[0].addBox(8F, 2.25F, -1F, 3, 2, 2);
+		defaultBarrelModel[1] = new ModelRendererTurbo(this, 16, 12, textureX, textureY);
+		defaultBarrelModel[1].addBox(17F, 2.5F, -0.5F, 1, 2, 1);
 		
-		defaultBarrelModel[1] = new ModelRendererTurbo(this, 10, 12, textureX, textureY);
-		defaultBarrelModel[1].addBox(11F, 2.5F, -0.5F, 2, 1, 1);
-		
-		defaultBarrelModel[2] = new ModelRendererTurbo(this, 16, 12, textureX, textureY);
-		defaultBarrelModel[2].addBox(13F, 2.5F, -0.5F, 1, 2, 1);
+		barrelAttachPoint = new Vector3f(14F / 16F, 3.25F / 16F, 0F);
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[3];

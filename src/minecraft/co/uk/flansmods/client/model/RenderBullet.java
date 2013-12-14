@@ -1,5 +1,6 @@
 package co.uk.flansmods.client.model;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,8 @@ public class RenderBullet extends Render
 
 	public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)
 	{
+		if(bullet.owner == Minecraft.getMinecraft().thePlayer && bullet.ticksExisted < 1)
+			return;
 		bindEntityTexture(bullet);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
