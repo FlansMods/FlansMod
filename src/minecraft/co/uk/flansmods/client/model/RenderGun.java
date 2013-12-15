@@ -78,8 +78,10 @@ public class RenderGun implements IItemRenderer
 				{
 					float adsSwitch = FlansModClient.lastZoomProgress + (FlansModClient.zoomProgress - FlansModClient.lastZoomProgress) * smoothing;//0F;//((float)Math.sin((FlansMod.ticker) / 10F) + 1F) / 2F;
 					GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
-					GL11.glRotatef(-5F + 0F * adsSwitch, 0F, 1F, 0F);
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
 					GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
+					GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
+					GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
 					
 					if(animations.reloading)
 					{
@@ -128,10 +130,14 @@ public class RenderGun implements IItemRenderer
 		//Load texture
 		renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
 		
+		if(scopeAttachment != null)
+			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);
+		
 		//Render the gun and default attachment models
 		GL11.glPushMatrix();
 		{
 			GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
+
 			model.renderGun(f);
 			if(scopeAttachment == null && !model.scopeIsOnSlide)
 				model.renderDefaultScope(f);

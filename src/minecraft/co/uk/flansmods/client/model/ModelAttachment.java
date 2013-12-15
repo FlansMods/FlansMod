@@ -7,6 +7,9 @@ public class ModelAttachment extends ModelBase
 {
 	public ModelRendererTurbo[] attachmentModel = new ModelRendererTurbo[0];
 	
+	/** For big scopes, so that the player actually looks through them properly */
+	public float renderOffset = 0F;
+	
 	public void renderAttachment(float f)
 	{
 		for(ModelRendererTurbo model : attachmentModel)

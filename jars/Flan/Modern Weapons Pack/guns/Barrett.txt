@@ -28,7 +28,7 @@ Texture Barrett
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments true
