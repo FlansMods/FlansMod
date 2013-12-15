@@ -31,6 +31,6 @@ AllowAllAttachments false
 AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
 AllowBarrelAttachments true
 AllowScopeAttachments true
-AllowStockAttachments true
+AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 2

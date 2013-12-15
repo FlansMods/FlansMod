@@ -64,6 +64,9 @@ public class RenderGun implements IItemRenderer
 		
 		GL11.glPushMatrix();
 		{
+			//Get the reload animation rotation
+			float reloadRotate = 0F;
+			
 			//Setup transforms based on gun position
 			switch(type)
 			{
@@ -87,7 +90,7 @@ public class RenderGun implements IItemRenderer
 					{
 						//Calculate the amount of tilt required for the reloading animation
 						float effectiveReloadAnimationProgress = animations.lastReloadAnimationProgress + (animations.reloadAnimationProgress - animations.lastReloadAnimationProgress) * smoothing;
-						float reloadRotate = 1F;
+						reloadRotate = 1F;
 						if(effectiveReloadAnimationProgress < model.tiltGunTime)
 							reloadRotate = effectiveReloadAnimationProgress / model.tiltGunTime;
 						if(effectiveReloadAnimationProgress > model.tiltGunTime + model.unloadClipTime + model.loadClipTime)
@@ -109,13 +112,13 @@ public class RenderGun implements IItemRenderer
 				}
 			}
 			
-			renderGun(item, gunType, f, model, animations);
+			renderGun(item, gunType, f, model, animations, reloadRotate);
 		}
 		GL11.glPopMatrix();
 	}
 	
 	/** Gun render method, seperated from transforms so that mecha renderer may also call this */
-	public void renderGun(ItemStack item, GunType type, float f, ModelGun model, GunAnimations animations)
+	public void renderGun(ItemStack item, GunType type, float f, ModelGun model, GunAnimations animations, float reloadRotate)
 	{
 		//If we have no animation variables, use defaults
 		if(animations == null)
@@ -190,6 +193,17 @@ public class RenderGun implements IItemRenderer
 						{
 							GL11.glRotatef(-90F * clipPosition * clipPosition, 0F, 0F, 1F);
 							GL11.glTranslatef(0F, -1F * clipPosition, 0F);
+							break;
+						}
+						case P90 :
+						{
+							float clipRemoval = clipPosition;///*effectiveReloadAnimationProgress > 0.5F ? clipPosition : */Math.max(0F, clipPosition * 2F - 1F);
+							float clipRotation = reloadRotate;//Math.min(clipPosition * 2F, 1F);
+							//GL11.glRotatef(45F * clipPosition * clipPosition, 1F, 0F, 0F);
+							GL11.glRotatef(-15F * clipRotation * clipRotation, 0F, 0F, 1F);
+							GL11.glTranslatef(0F, 0.075F * clipRotation, 0F);
+							
+							GL11.glTranslatef(-2F * clipRemoval, -0.3F * clipRemoval, 0.5F * clipRemoval);
 							break;
 						}
 					}

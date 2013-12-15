@@ -17,7 +17,7 @@ ReloadTimeMultiplier 1.0
 //The ZoomLevel affects how much the view zooms in (note that this removes the model from the zooming animation and so is useless for iron sights)
 //The FOVZoomLevel affects how much the view narrows when zooming. Very useful for iron sights as it gives the illusion of zooming without killing off the model
 ZoomLevel 1.0
-FOVZoomLevel 1.5
+FOVZoomLevel 2.0
 ZoomOverlay None
 //Model
 Model mw.ACOG

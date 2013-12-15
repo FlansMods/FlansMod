@@ -53,7 +53,7 @@ public class GuiGunModTable extends GuiContainer
         		GL11.glRotatef(160, 1F, 0F, 0F);
         		GL11.glRotatef(20, 0F, 1F, 0F);
         		GL11.glScalef(-50F, 50F, 50F);
-        		ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults);
+        		ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
         		GL11.glPopMatrix();
         	}
         }
