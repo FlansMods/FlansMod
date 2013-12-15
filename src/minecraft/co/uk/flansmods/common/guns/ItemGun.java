@@ -586,14 +586,6 @@ public class ItemGun extends Item
     {
     	ItemStack gunStack = new ItemStack(i, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
-    	NBTTagCompound attachmentTags = new NBTTagCompound();
-    	NBTTagCompound silencerTags = new NBTTagCompound();
-    	NBTTagCompound scopeTags = new NBTTagCompound();
-    	(new ItemStack(AttachmentType.attachments.get(0).item, 1, 0)).writeToNBT(scopeTags);
-    	attachmentTags.setCompoundTag("scope", scopeTags);
-    	(new ItemStack(AttachmentType.attachments.get(1).item, 1, 0)).writeToNBT(silencerTags);
-    	attachmentTags.setCompoundTag("barrel", silencerTags);
-    	tags.setCompoundTag("attachments", attachmentTags);
     	gunStack.stackTagCompound = tags;
         list.add(gunStack);
     }
