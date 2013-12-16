@@ -32,6 +32,8 @@ public class ModelGun extends ModelBase
 	public float tiltGunTime = 0.25F, unloadClipTime = 0.25F, loadClipTime = 0.25F, untiltGunTime = 0.25F;
 	/** If true, then the scope attachment will move with the top slide */
 	public boolean scopeIsOnSlide = false;
+	/** For rifles and shotguns. Currently a generic reload animation regardless of how full the internal magazine already is */
+	public float numBulletsInReloadAnimation = 1;
 	
 	public void renderGun(float f)
 	{
@@ -97,7 +99,7 @@ public class ModelGun extends ModelBase
 	}
 	
 	/** Translates the model */
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		translate(gunModel, x, y, z);
 		translate(defaultBarrelModel, x, y, z);
@@ -107,7 +109,7 @@ public class ModelGun extends ModelBase
 		translate(slideModel, x, y, z);
 	}
 	
-	protected void translate(ModelRendererTurbo[] model, int x, int y, int z)
+	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
 	{
 		for(ModelRendererTurbo mod : model)
 		{

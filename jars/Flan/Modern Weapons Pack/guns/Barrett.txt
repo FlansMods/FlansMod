@@ -19,10 +19,14 @@ ShootDelay 12
 ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
+//Default Scope Settings
 Scope mwbarrett
 ZoomLevel 8.0
+FOVZoomLevel 1.0
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model Settings
 Model mw.Barrett
 Texture Barrett
 //Attachment Settings

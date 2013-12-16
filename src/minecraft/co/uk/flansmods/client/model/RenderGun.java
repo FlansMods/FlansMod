@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
 
 public class RenderGun implements IItemRenderer
@@ -106,6 +107,13 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
 								break;
 							}
+							case RIFLE :
+							{
+								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(-30F * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
+								break;
+							}
 						}
 					}
 					break;
@@ -197,13 +205,21 @@ public class RenderGun implements IItemRenderer
 						}
 						case P90 :
 						{
-							float clipRemoval = clipPosition;///*effectiveReloadAnimationProgress > 0.5F ? clipPosition : */Math.max(0F, clipPosition * 2F - 1F);
-							float clipRotation = reloadRotate;//Math.min(clipPosition * 2F, 1F);
-							//GL11.glRotatef(45F * clipPosition * clipPosition, 1F, 0F, 0F);
-							GL11.glRotatef(-15F * clipRotation * clipRotation, 0F, 0F, 1F);
-							GL11.glTranslatef(0F, 0.075F * clipRotation, 0F);
+							GL11.glRotatef(-15F * reloadRotate * reloadRotate, 0F, 0F, 1F);
+							GL11.glTranslatef(0F, 0.075F * reloadRotate, 0F);
+							GL11.glTranslatef(-2F * clipPosition, -0.3F * clipPosition, 0.5F * clipPosition);
+							break;
+						}
+						case RIFLE :
+						{
+							float thing = clipPosition * model.numBulletsInReloadAnimation;
+							int bulletNum = MathHelper.floor_float(thing);
+							float bulletProgress = thing - bulletNum;
 							
-							GL11.glTranslatef(-2F * clipRemoval, -0.3F * clipRemoval, 0.5F * clipRemoval);
+							GL11.glRotatef(bulletProgress * 15F, 0F, 1F, 0F);
+							GL11.glRotatef(bulletProgress * 15F, 0F, 0F, 1F);
+							GL11.glTranslatef(bulletProgress * -1F, 0F, bulletProgress * 0.5F);
+							
 							break;
 						}
 					}

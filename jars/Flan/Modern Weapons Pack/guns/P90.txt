@@ -28,7 +28,7 @@ Deployable False
 DeployedModel None
 //Model settings
 Model mw.P90
-Texture P90_Obsidian
+Texture P90
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
