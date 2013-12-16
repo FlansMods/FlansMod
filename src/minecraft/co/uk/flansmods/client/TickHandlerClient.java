@@ -258,7 +258,7 @@ public class TickHandlerClient implements ITickHandler
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
-		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null)
+		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
 			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 			GL11.glEnable(3042 /* GL_BLEND */);
