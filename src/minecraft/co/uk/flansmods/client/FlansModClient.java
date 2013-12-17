@@ -154,6 +154,21 @@ public class FlansModClient extends FlansMod
 		{
 			g.update();
 		}		
+		
+		for(Object obj : minecraft.theWorld.playerEntities)
+		{
+			EntityPlayer player = (EntityPlayer)obj;
+			ItemStack currentItem = player.getCurrentEquippedItem();
+			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
+			{
+				if(player == minecraft.thePlayer && minecraft.gameSettings.thirdPersonView == 0)
+					player.clearItemInUse();
+				else
+				{
+					player.setItemInUse(currentItem, 100);
+				}
+			}
+		}
 
 		//If the currently held item is not a gun or is the wrong gun, unscope
 		Item itemInHand = null;

@@ -603,8 +603,15 @@ public class ItemGun extends Item
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
+    @Override
     public int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
-        return 10;
+        return 100;
+    }
+    
+    @Override
+    public EnumAction getItemUseAction(ItemStack par1ItemStack)
+    {
+        return EnumAction.bow;
     }
 }
