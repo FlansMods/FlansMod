@@ -130,7 +130,7 @@ public class ItemTool extends Item
 				{
 					EntityDriveable driveable = (EntityDriveable)obj;
 					//Raytrace
-					DriveablePart part = driveable.raytraceParts(new Vector3f(posVec), Vector3f.sub(new Vector3f(posVec), new Vector3f(lookVec), null));
+					DriveablePart part = driveable.raytraceParts(new Vector3f(posVec), Vector3f.sub(new Vector3f(lookVec), new Vector3f(posVec), null));
 					//If we hit something that is healable
 					if(part != null && part.maxHealth > 0)
 					{
