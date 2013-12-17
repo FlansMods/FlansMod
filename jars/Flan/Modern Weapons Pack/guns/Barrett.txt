@@ -2,6 +2,7 @@ Name Barrett .50cal
 ShortName barrett
 //The ammo this gun uses (shortName)
 Ammo barrettAmmo
+Ammo barrettExplosiveAmmo
 Icon Barrett
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

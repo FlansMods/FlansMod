@@ -406,7 +406,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					{
 						if (worldObj.getBlockMaterial(i, j, k) == Material.air)
 						{
-							worldObj.setBlock(i, j, k, Block.fire.blockID, 0, 5);
+							worldObj.setBlock(i, j, k, Block.fire.blockID, 0, 3);
 						}
 					}
 				}

@@ -34,7 +34,7 @@ public class GunType extends InfoType implements IScope
 	/** The damage inflicted upon punching someone with this gun */
 	public float meleeDamage = 1;
 	/** The speed of bullets upon leaving this gun */
-	public float bulletSpeed = 3.0F;
+	public float bulletSpeed = 5.0F;
 	/** The number of bullet entities created by each shot */
 	public int numBullets = 1;
 	/** The delay between shots in ticks (1/20ths of seconds) */

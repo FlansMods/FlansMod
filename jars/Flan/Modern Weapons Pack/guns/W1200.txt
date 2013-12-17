@@ -2,6 +2,7 @@ Name W1200
 ShortName w1200
 //The ammo this gun uses (shortName)
 Ammo w1200Ammo
+Ammo w1200IncendiaryAmmo
 Icon W1200
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
