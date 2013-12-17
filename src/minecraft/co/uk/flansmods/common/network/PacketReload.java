@@ -78,7 +78,7 @@ public class PacketReload extends FlanPacketCommon
 				PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
 				//Play reload sound
 				if(type.reloadSound != null)
-					PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, true));
+					PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, false));
 
     		}
     	}
@@ -106,7 +106,9 @@ public class PacketReload extends FlanPacketCommon
 					animations = new GunAnimations();
 					FlansModClient.gunAnimations.put((EntityLivingBase)player, animations);
 				}
-				animations.doReload(type.reloadTime);
+				int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
+				int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+				animations.doReload(type.reloadTime, pumpDelay, pumpTime);
         		
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;

@@ -446,13 +446,18 @@ public class EntityMecha extends EntityDriveable
 						
 						//Apply animations to 3D modelled guns
 						//TODO : Move to client side and sync
-						if(left)
+						if(worldObj.isRemote)
 						{
-							leftAnimations.lastGunSlide = leftAnimations.gunSlide = 1F;
-						}
-						else
-						{
-							rightAnimations.lastGunSlide = rightAnimations.gunSlide = 1F;
+							int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
+							int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
+							if(left)
+							{
+								leftAnimations.doShoot(pumpDelay, pumpTime);
+							}
+							else
+							{
+								rightAnimations.doShoot(pumpDelay, pumpTime);
+							}
 						}
 						//Damage the bullet item
 						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);

@@ -46,7 +46,7 @@ public class GunType extends InfoType implements IScope
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
-	
+		
 	//Sounds
 	/** The sound played upon shooting */
 	public String shootSound;

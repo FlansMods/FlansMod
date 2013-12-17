@@ -252,7 +252,9 @@ public class ItemGun extends Item
 					animations = new GunAnimations();
 					FlansModClient.gunAnimations.put((EntityLivingBase)player, animations);
 				}
-				animations.lastGunSlide = animations.gunSlide = 1F;
+				int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
+				int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+				animations.doShoot(pumpDelay, pumpTime);
 				FlansModClient.playerRecoil += type.getRecoil(stack);
 				FlansModClient.shootTime = type.shootDelay;
 			}

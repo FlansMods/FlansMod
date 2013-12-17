@@ -18,6 +18,7 @@ public class ModelGun extends ModelBase
 	//Animated models follow. 
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
 
 	
 	//These designate the locations of 3D attachment models on the gun
@@ -34,6 +35,10 @@ public class ModelGun extends ModelBase
 	public boolean scopeIsOnSlide = false;
 	/** For rifles and shotguns. Currently a generic reload animation regardless of how full the internal magazine already is */
 	public float numBulletsInReloadAnimation = 1;
+	/** For shotgun pump handles and rifle bolts */
+	public int pumpDelay = 0, pumpDelayAfterReload = 0, pumpTime = 1;
+	/** For shotgun pump handle */
+	public float pumpHandleDistance = 4F / 16F;
 	
 	public void renderGun(float f)
 	{
@@ -43,6 +48,11 @@ public class ModelGun extends ModelBase
 	public void renderSlide(float f)
 	{
 		render(slideModel, f);
+	}
+	
+	public void renderPump(float f)
+	{
+		render(pumpModel, f);
 	}
 	
 	public void renderDefaultScope(float f)

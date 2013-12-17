@@ -109,7 +109,7 @@ public class RenderGun implements IItemRenderer
 						//Rotate the gun dependent on the animation type
 						switch(model.animationType)
 						{
-							case BOTTOM_CLIP : case PISTOL_CLIP :
+							case BOTTOM_CLIP : case PISTOL_CLIP : case SHOTGUN :
 							{
 								GL11.glRotatef(60F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(30F * reloadRotate, 1F, 0F, 0F);
@@ -123,6 +123,7 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
 								break;
 							}
+							
 						}
 					}
 					break;
@@ -180,6 +181,12 @@ public class RenderGun implements IItemRenderer
 			GL11.glPopMatrix();
 			
 			//Render the pump-action handle
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
+				model.renderPump(f);
+			}
+			GL11.glPopMatrix();
 			
 			//Render the cocking handle
 			
@@ -219,7 +226,7 @@ public class RenderGun implements IItemRenderer
 							GL11.glTranslatef(-2F * clipPosition, -0.3F * clipPosition, 0.5F * clipPosition);
 							break;
 						}
-						case RIFLE :
+						case RIFLE : 
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
 							int bulletNum = MathHelper.floor_float(thing);
@@ -228,6 +235,17 @@ public class RenderGun implements IItemRenderer
 							GL11.glRotatef(bulletProgress * 15F, 0F, 1F, 0F);
 							GL11.glRotatef(bulletProgress * 15F, 0F, 0F, 1F);
 							GL11.glTranslatef(bulletProgress * -1F, 0F, bulletProgress * 0.5F);
+							
+							break;
+						}
+						case SHOTGUN : 
+						{
+							float thing = clipPosition * model.numBulletsInReloadAnimation;
+							int bulletNum = MathHelper.floor_float(thing);
+							float bulletProgress = thing - bulletNum;
+							
+							GL11.glRotatef(bulletProgress * -30F, 0F, 0F, 1F);
+							GL11.glTranslatef(bulletProgress * -0.5F, bulletProgress * -1F, 0F);
 							
 							break;
 						}
