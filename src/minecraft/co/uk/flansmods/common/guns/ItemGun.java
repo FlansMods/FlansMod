@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.crash.CrashReport;
@@ -524,7 +525,12 @@ public class ItemGun extends Item
 					}
 				}
 			}
-
+		}
+		//Stop the gun bobbing up and down when holding shoot and looking at a block
+		if(world.isRemote)
+		{
+			for(int i = 0; i < 3; i++)
+				Minecraft.getMinecraft().entityRenderer.itemRenderer.updateEquippedItem();
 		}
 		return itemstack;
 	}
@@ -597,5 +603,8 @@ public class ItemGun extends Item
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
-    
+    public int getMaxItemUseDuration(ItemStack par1ItemStack)
+    {
+        return 10;
+    }
 }

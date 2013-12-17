@@ -19,6 +19,22 @@ ShootDelay 2
 ShootSound M14Shoot
 ReloadSound mp44Reload
 Mode FullAuto
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model settings
+Model mw.M16A4
+Texture M16A4
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMWForegrip
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1

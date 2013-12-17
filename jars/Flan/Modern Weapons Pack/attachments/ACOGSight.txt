@@ -9,8 +9,8 @@ Silencer false
 //These multipliers stack between attachments and do what they say
 MeleeDamageMultiplier 1.0
 DamageMultiplier 1.0
-SpreadMultiplier 0.5
-RecoilMultiplier 1.25
+SpreadMultiplier 0.4
+RecoilMultiplier 0.8
 BulletSpeedMultiplier 1.0
 ReloadTimeMultiplier 1.0
 //These variables only come into effect if this is a scope
