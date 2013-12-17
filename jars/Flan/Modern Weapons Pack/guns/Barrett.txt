@@ -21,7 +21,7 @@ ReloadSound BARReload
 Mode SemiAuto
 //Default Scope Settings
 Scope mwbarrett
-ZoomLevel 8.0
+ZoomLevel 6.0
 FOVZoomLevel 1.0
 //Deployable Settings
 Deployable False

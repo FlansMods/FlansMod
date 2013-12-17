@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
@@ -27,7 +28,8 @@ public class RenderGun implements IItemRenderer
 	{
 		switch(type)
 		{
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : case ENTITY :*/ return item != null && item.getItem() instanceof ItemGun && ((ItemGun)item.getItem()).type.model != null;
+		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null && item.getItem() instanceof ItemGun && ((ItemGun)item.getItem()).type.model != null;
 		}
 		return false;
 	}
@@ -60,7 +62,8 @@ public class RenderGun implements IItemRenderer
 		if(animations == null)
 		{
 			animations = new GunAnimations();
-			FlansModClient.gunAnimations.put((EntityLivingBase)data[1], animations);
+			if(type != ItemRenderType.ENTITY)
+				FlansModClient.gunAnimations.put((EntityLivingBase)data[1], animations);
 		}
 		
 		GL11.glPushMatrix();
@@ -71,6 +74,12 @@ public class RenderGun implements IItemRenderer
 			//Setup transforms based on gun position
 			switch(type)
 			{
+				case ENTITY :
+				{
+					EntityItem entity = (EntityItem)data[1];
+					GL11.glRotatef(entity.rotationYaw + entity.ticksExisted + smoothing, 0F, 1F, 0F);
+					break;
+				}
 				case EQUIPPED:
 				{
 					GL11.glRotatef(35F, 0F, 0F, 1F);

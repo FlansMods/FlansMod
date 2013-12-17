@@ -21,7 +21,7 @@ ReloadSound springfieldReload
 Mode SemiAuto
 //Default Scope Settings
 Scope mwm40a3
-ZoomLevel 8.0
+ZoomLevel 6.0
 FOVZoomLevel 1.0
 //Deployable Settings
 Deployable False
