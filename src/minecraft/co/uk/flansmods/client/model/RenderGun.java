@@ -7,6 +7,7 @@ import co.uk.flansmods.client.FlansModResourceHandler;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.guns.AttachmentType;
 import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -110,7 +111,7 @@ public class RenderGun implements IItemRenderer
 						//Rotate the gun dependent on the animation type
 						switch(model.animationType)
 						{
-							case BOTTOM_CLIP : case PISTOL_CLIP : case SHOTGUN :
+							case BOTTOM_CLIP : case PISTOL_CLIP : case SHOTGUN : case END_LOADED : 
 							{
 								GL11.glRotatef(60F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(30F * reloadRotate, 1F, 0F, 0F);
@@ -148,6 +149,16 @@ public class RenderGun implements IItemRenderer
 		AttachmentType barrelAttachment = type.getBarrel(item);
 		AttachmentType stockAttachment = type.getStock(item);
 		AttachmentType gripAttachment = type.getGrip(item);
+		
+		ItemStack[] bulletStacks = new ItemStack[type.numAmmoItemsInGun];
+		boolean empty = true;
+		for(int i = 0; i < type.numAmmoItemsInGun; i++)
+		{
+			bulletStacks[i] = ((ItemGun)item.getItem()).getBulletItemStack(item, i);
+			if(bulletStacks[i] != null && bulletStacks[i].getItem() instanceof ItemBullet && bulletStacks[i].getItemDamage() < bulletStacks[i].getMaxDamage())
+				empty = false;
+		}
+		
 		
 		//Load texture
 		renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
@@ -194,7 +205,19 @@ public class RenderGun implements IItemRenderer
 			//Render the clip
 			GL11.glPushMatrix();
 			{
-				if(animations.reloading && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
+				boolean shouldRender = true;
+				//Check to see if the ammo should be rendered first
+				switch(model.animationType)
+				{
+					case END_LOADED :
+					{
+						if(empty)
+							shouldRender = false;
+						break;
+					}
+				}
+				//If it should be rendered, do the transformations required
+				if(shouldRender && animations.reloading && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
 				{
 					//Calculate the amount of tilt required for the reloading animation
 					float effectiveReloadAnimationProgress = animations.lastReloadAnimationProgress + (animations.reloadAnimationProgress - animations.lastReloadAnimationProgress) * smoothing;
@@ -250,9 +273,26 @@ public class RenderGun implements IItemRenderer
 							
 							break;
 						}
+						case END_LOADED :
+						{
+							float bulletProgress = 1F;
+							if(effectiveReloadAnimationProgress > model.tiltGunTime)
+								bulletProgress = 1F - Math.min((effectiveReloadAnimationProgress - model.tiltGunTime) / (model.unloadClipTime + model.loadClipTime), 1);
+							
+							GL11.glTranslatef(bulletProgress, 0F, 0F);
+			
+							if(bulletProgress > 0.5F)
+							{
+								GL11.glTranslatef(-3F * (bulletProgress - 0.5F), 0F, 0F);
+								GL11.glRotatef(-180F * (bulletProgress - 0.5F), 0F, 0F, 1F);	
+							}
+							break;
+						}
 					}
 				}
-				model.renderAmmo(f);
+
+				if(shouldRender)
+					model.renderAmmo(f);
 			}
 			GL11.glPopMatrix();
 		}
