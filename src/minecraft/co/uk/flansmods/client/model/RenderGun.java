@@ -85,6 +85,7 @@ public class RenderGun implements IItemRenderer
 					GL11.glRotatef(35F, 0F, 0F, 1F);
 					GL11.glRotatef(-5F, 0F, 1F, 0F);
 					GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+					GL11.glScalef(1F, 1F, -1F);
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
