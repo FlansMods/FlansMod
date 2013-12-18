@@ -1,6 +1,6 @@
 Name Infiltrator
 ShortName spetsnazMulti2
-AddItem m14
+AddItem m14+flanMWSilencer+flanMWACOG
 AddItem ak74
 AddItem m67 3
 AddItem mwKnife
