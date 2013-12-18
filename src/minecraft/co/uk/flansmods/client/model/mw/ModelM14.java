@@ -12,7 +12,7 @@ public class ModelM14 extends ModelGun
 		int textureX = 64;
 		int textureY = 32;
 		
-		gunModel = new ModelRendererTurbo[11];
+		gunModel = new ModelRendererTurbo[10];
 		gunModel[0] = new ModelRendererTurbo(this,  12,  0, textureX, textureY); // gun1
 		gunModel[1] = new ModelRendererTurbo(this,  0,  6, textureX, textureY); // gun2
 		gunModel[2] = new ModelRendererTurbo(this,  0,  9, textureX, textureY); // gun3
@@ -20,10 +20,10 @@ public class ModelM14 extends ModelGun
 		gunModel[4] = new ModelRendererTurbo(this,  0,  16, textureX, textureY); // gun5
 		gunModel[5] = new ModelRendererTurbo(this,  0,  18, textureX, textureY); // gun6
 		gunModel[6] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // gun7
-		gunModel[7] = new ModelRendererTurbo(this,  0,  30, textureX, textureY); // gun8
+		
 		gunModel[8] = new ModelRendererTurbo(this,  6,  16, textureX, textureY); // gun9
 		gunModel[9] = new ModelRendererTurbo(this,  20,  24, textureX, textureY); // gun10
-		gunModel[10] = new ModelRendererTurbo(this,  22,  21, textureX, textureY); // gun10
+		gunModel[7] = new ModelRendererTurbo(this,  22,  21, textureX, textureY); // gun10
 
 		gunModel[0].addBox(0F, 0F, 0F, 1, 3, 2, 0F); // gun1
 		gunModel[0].setRotationPoint(0F, -7F, -1F);
@@ -46,8 +46,7 @@ public class ModelM14 extends ModelGun
 		gunModel[6].addBox(0F, 0F, 0F, 4, 1, 2, 0F); // gun7
 		gunModel[6].setRotationPoint(-2F, -1F, -1F);
 
-		gunModel[7].addBox(0F, 0F, 0F, 3, 1, 1, 0F); // gun8
-		gunModel[7].setRotationPoint(-1.5F, 0F, -0.5F);
+
 
 		gunModel[8].addBox(0F, 0F, 0F, 1, 1, 1, 0F); // gun9
 		gunModel[8].setRotationPoint(18.5F, 0F, -0.5F);
@@ -55,11 +54,17 @@ public class ModelM14 extends ModelGun
 		gunModel[9].addBox(0F, 0F, 0F, 6, 2, 1, 0F); // gun10
 		gunModel[9].setRotationPoint(9F, -3.2F, 0.2F);
 
-		gunModel[10].addBox(0F, 0F, 0F, 6, 2, 1, 0F); // gun10
-		gunModel[10].setRotationPoint(9F, -3.2F, -1.2F);		
+		gunModel[7].addBox(0F, 0F, 0F, 6, 2, 1, 0F); // gun10
+		gunModel[7].setRotationPoint(9F, -3.2F, -1.2F);		
 		
 		//Scope
-		scopeAttachPoint = new Vector3f(3.5F / 16F, 5F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(0F / 16F, 6.25F / 16F, 0F);
+		
+		defaultScopeModel = new ModelRendererTurbo[1];
+		
+		defaultScopeModel[0] = new ModelRendererTurbo(this,  0,  30, textureX, textureY); // gun8
+		defaultScopeModel[0].addBox(0F, 0F, 0F, 3, 1, 1, 0F); // gun8
+		defaultScopeModel[0].setRotationPoint(-1.5F, 0F, -0.5F);
 
 		//defaultStock
 		defaultStockModel = new ModelRendererTurbo[2];
@@ -75,7 +80,7 @@ public class ModelM14 extends ModelGun
 		stockAttachPoint = new Vector3f(1F / 16F, 4F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(18F / 16F, 4F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(25F / 16F, 5.25F / 16F, 0F);
 		
 		//Grip
 		gripAttachPoint = new Vector3f(10F / 16F, 3F / 16F, 0F);
@@ -85,7 +90,7 @@ public class ModelM14 extends ModelGun
 		slideModel[0] = new ModelRendererTurbo(this,  0,  22, textureX, textureY); // bolt
 
 		slideModel[0].addBox(0F, 0F, 0F, 5, 1, 1, 0F); // bolt
-		slideModel[0].setRotationPoint(2F, -1F, -0.5F);	
+		slideModel[0].setRotationPoint(2F, -1.1F, -0.5F);	
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];
@@ -99,7 +104,7 @@ public class ModelM14 extends ModelGun
 		gunSlideDistance = 0.2F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;
 		
-		translateAll(0, 6, 0);
+		translateAll(0, 6.25F, 0);
 	}
 }
 

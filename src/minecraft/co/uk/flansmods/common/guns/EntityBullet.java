@@ -265,8 +265,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				if(checkEntity instanceof EntityPlayer)
 				{
 					FlansModPlayerData data = FlansModPlayerHandler.getPlayerData((EntityPlayer)checkEntity, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
-					if(data != null && data.team == Team.spectators)
-						return;
+					if(checkEntity != owner && data != null && data.team == Team.spectators)
+						continue;
 				}
 				
 				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
@@ -387,9 +387,11 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void setDead()
 	{
-		if (isDead || worldObj.isRemote)
+		if (isDead)
 			return;
 		super.setDead();
+		if(worldObj.isRemote)
+			return;
 		if (type.explosion > 0)
 		{
 	        if(owner instanceof EntityPlayer)
