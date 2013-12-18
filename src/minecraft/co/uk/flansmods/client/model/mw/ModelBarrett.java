@@ -58,7 +58,7 @@ public class ModelBarrett extends ModelGun
 		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[1];
-		defaultStockModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+		defaultStockModel[0] = new ModelRendererTurbo(this, 36, 9, textureX, textureY);
 		defaultStockModel[0].addBox(-8F, 0F, -1F, 4, 3, 2);
 		
 		stockAttachPoint = new Vector3f(-4F / 16F, 1F / 16F, 0F);

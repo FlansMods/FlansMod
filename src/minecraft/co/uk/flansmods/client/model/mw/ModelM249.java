@@ -12,15 +12,12 @@ public class ModelM249 extends ModelGun
 		int textureX = 64;
 		int textureY = 32;
 		
-		gunModel = new ModelRendererTurbo[19];
+		gunModel = new ModelRendererTurbo[15];
 		gunModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // barrel1
 		gunModel[1] = new ModelRendererTurbo(this,  0,  9, textureX, textureY); // slidemain2
 		gunModel[2] = new ModelRendererTurbo(this,  0,  14, textureX, textureY); // slidemain3
 		gunModel[3] = new ModelRendererTurbo(this,  0,  17, textureX, textureY); // slidemain4
-		gunModel[4] = new ModelRendererTurbo(this,  0,  20, textureX, textureY); // Foregrip1
-		gunModel[5] = new ModelRendererTurbo(this,  0,  24, textureX, textureY); // Foregrip2
-		gunModel[6] = new ModelRendererTurbo(this,  0,  29, textureX, textureY); // Foregrip3
-		gunModel[7] = new ModelRendererTurbo(this,  4,  29, textureX, textureY); // Foregrip4
+
 		gunModel[8] = new ModelRendererTurbo(this,  4,  27, textureX, textureY); // slidemain5
 		gunModel[9] = new ModelRendererTurbo(this,  4,  25, textureX, textureY); // slidemain6
 		gunModel[10] = new ModelRendererTurbo(this,  4,  23, textureX, textureY); // slidemain5
@@ -28,10 +25,10 @@ public class ModelM249 extends ModelGun
 		gunModel[12] = new ModelRendererTurbo(this,  0,  7, textureX, textureY); // trigger1
 		gunModel[13] = new ModelRendererTurbo(this,  6,  6, textureX, textureY); // trigger2
 		gunModel[14] = new ModelRendererTurbo(this,  12,  22, textureX, textureY); // Chamber1
-		gunModel[15] = new ModelRendererTurbo(this,  22,  18, textureX, textureY); // slidewhatever
-		gunModel[16] = new ModelRendererTurbo(this,  10,  7, textureX, textureY); // slideblock2
-		gunModel[17] = new ModelRendererTurbo(this,  20,  14, textureX, textureY); // slideblock3
-		gunModel[18] = new ModelRendererTurbo(this,  20,  16, textureX, textureY); // slideblock4
+		gunModel[4] = new ModelRendererTurbo(this,  22,  18, textureX, textureY); // slidewhatever
+		gunModel[5] = new ModelRendererTurbo(this,  10,  7, textureX, textureY); // slideblock2
+		gunModel[6] = new ModelRendererTurbo(this,  20,  14, textureX, textureY); // slideblock3
+		gunModel[7] = new ModelRendererTurbo(this,  20,  16, textureX, textureY); // slideblock4
 
 		gunModel[0].addBox(0F, 0F, 0F, 12, 1, 1, 0F); // barrel1
 		gunModel[0].setRotationPoint(6F, 3.8F, -0.5F);
@@ -44,19 +41,6 @@ public class ModelM249 extends ModelGun
 
 		gunModel[3].addBox(0F, 0F, 0F, 9, 1, 1, 0F); // slidemain4
 		gunModel[3].setRotationPoint(4.9F, 4.2F, -0.5F);
-
-		gunModel[4].addBox(0F, -1F, 0F, 4, 1, 2, 0F); // Foregrip1
-		gunModel[4].setRotationPoint(8.5F, 3F, -1F);
-
-		gunModel[5].addBox(0F, -3F, 0F, 1, 3, 1, 0F); // Foregrip2
-		gunModel[5].setRotationPoint(10.5F, 2.5F, -0.5F);
-		gunModel[5].rotateAngleZ = -0.3141593F;
-
-		gunModel[6].addBox(0F, -1F, 0F, 1, 1, 1, 0F); // Foregrip3
-		gunModel[6].setRotationPoint(10.4F, 3.4F, 0.1F);
-
-		gunModel[7].addBox(0F, -1F, 0F, 1, 1, 1, 0F); // Foregrip4
-		gunModel[7].setRotationPoint(10.4F, 3.4F, -1.1F);
 
 		gunModel[8].addBox(0F, 0F, 0F, 3, 1, 1, 0F); // slidemain5
 		gunModel[8].setRotationPoint(9.2F, 4.3F, -0.2F);
@@ -79,20 +63,20 @@ public class ModelM249 extends ModelGun
 		gunModel[14].addBox(0F, 0F, 0F, 3, 1, 1, 0F); // Chamber1
 		gunModel[14].setRotationPoint(5.8F, 3.5F, -1.1F);
 
-		gunModel[15].addBox(0F, 0F, -1F, 2, 2, 1, 0F); // slidewhatever
-		gunModel[15].setRotationPoint(6.8F, 2.9F, 1.2F);
+		gunModel[4].addBox(0F, 0F, -1F, 2, 2, 1, 0F); // slidewhatever
+		gunModel[4].setRotationPoint(6.8F, 2.9F, 1.2F);
 
-		gunModel[16].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock2
-		gunModel[16].setRotationPoint(5F, 5F, -0.9F);
+		gunModel[5].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock2
+		gunModel[5].setRotationPoint(5F, 5F, -0.9F);
 
-		gunModel[17].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock3
-		gunModel[17].setRotationPoint(5F, 5F, -0.1F);
+		gunModel[6].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock3
+		gunModel[6].setRotationPoint(5F, 5F, -0.1F);
 
-		gunModel[18].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock4
-		gunModel[18].setRotationPoint(5.1F, 5.1F, -0.5F);	
+		gunModel[7].addBox(0F, -0.6666667F, 0F, 3, 1, 1, 0F); // slideblock4
+		gunModel[7].setRotationPoint(5.1F, 5.1F, -0.5F);	
 		
 		//Scope
-		scopeAttachPoint = new Vector3f(3.5F / 16F, 5F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(2F / 16F, 3.333F / 16F, 0F);
 
 		//defaultStock
 		defaultStockModel = new ModelRendererTurbo[4];
@@ -119,8 +103,28 @@ public class ModelM249 extends ModelGun
 		barrelAttachPoint = new Vector3f(18F / 16F, 4F / 16F, 0F);
 		
 		//Grip
-		gripAttachPoint = new Vector3f(10F / 16F, 3F / 16F, 0F);
+		gripAttachPoint = new Vector3f(8F / 16F, 0.5F / 16F, 0F);
+		
+		defaultGripModel = new ModelRendererTurbo[4];
+		
+		defaultGripModel[0] = new ModelRendererTurbo(this,  0,  20, textureX, textureY); // Foregrip1
+		defaultGripModel[1] = new ModelRendererTurbo(this,  0,  24, textureX, textureY); // Foregrip2
+		defaultGripModel[2] = new ModelRendererTurbo(this,  0,  29, textureX, textureY); // Foregrip3
+		defaultGripModel[3] = new ModelRendererTurbo(this,  4,  29, textureX, textureY); // Foregrip4
+		
+		defaultGripModel[0].addBox(0F, -1F, 0F, 4, 1, 2, 0F); // Foregrip1
+		defaultGripModel[0].setRotationPoint(8.5F, 3F, -1F);
 
+		defaultGripModel[1].addBox(0F, -3F, 0F, 1, 3, 1, 0F); // Foregrip2
+		defaultGripModel[1].setRotationPoint(10.5F, 2.5F, -0.5F);
+		defaultGripModel[1].rotateAngleZ = -0.3141593F;
+
+		defaultGripModel[2].addBox(0F, -1F, 0F, 1, 1, 1, 0F); // Foregrip3
+		defaultGripModel[2].setRotationPoint(10.4F, 3.4F, 0.1F);
+
+		defaultGripModel[3].addBox(0F, -1F, 0F, 1, 1, 1, 0F); // Foregrip4
+		defaultGripModel[3].setRotationPoint(10.4F, 3.4F, -1.1F);
+		
 		//Bolt
 		slideModel = new ModelRendererTurbo[2];
 		slideModel[0] = new ModelRendererTurbo(this,  18,  20, textureX, textureY); // bolt2
@@ -145,10 +149,16 @@ public class ModelM249 extends ModelGun
 		ammoModel[1].rotateAngleX = 0.6806784F;
 		ammoModel[1].rotateAngleY = 0.01745329F;	
 
-		translateAll(-3, 0, 0);
+		translateAll(-3, -2.2F, 0);
 		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;
+		
+		tiltGunTime = 0.1F;
+		unloadClipTime = 0.2F;
+		loadClipTime = 0.2F;
+		untiltGunTime = 0.5F;
+
 	}
 }
 

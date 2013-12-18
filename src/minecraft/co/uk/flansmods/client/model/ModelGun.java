@@ -95,8 +95,10 @@ public class ModelGun extends ModelBase
 		flip(defaultBarrelModel);
 		flip(defaultScopeModel);
 		flip(defaultStockModel);
+		flip(defaultGripModel);
 		flip(ammoModel);
 		flip(slideModel);
+		flip(pumpModel);
 	}	
 	
 	protected void flip(ModelRendererTurbo[] model)
@@ -115,8 +117,10 @@ public class ModelGun extends ModelBase
 		translate(defaultBarrelModel, x, y, z);
 		translate(defaultScopeModel, x, y, z);
 		translate(defaultStockModel, x, y, z);
+		translate(defaultGripModel, x, y, z);
 		translate(ammoModel, x, y, z);
 		translate(slideModel, x, y, z);
+		translate(pumpModel, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
