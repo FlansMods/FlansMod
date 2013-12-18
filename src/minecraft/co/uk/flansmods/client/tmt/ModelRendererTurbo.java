@@ -826,6 +826,34 @@ public class ModelRendererTurbo extends ModelRenderer
 		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
 	}
 
+	/** 
+	 * Adds a box with float width, height and depth. Who knows what it will do to the texture.
+	* @param x the starting x-positions
+	* @param y the starting y-position
+	* @param z the starting z-position
+	* @param w the width (over the x-direction)
+	* @param h the height (over the y-direction)
+	* @param d the depth (over the z-direction)
+	 */
+	public void addBox(float x, float y, float z, float w, float h, float d)
+	{
+		int rw = MathHelper.ceiling_float_int(w);
+		int rh = MathHelper.ceiling_float_int(h);
+		int rd = MathHelper.ceiling_float_int(d);
+		w -= rw;
+		h -= rh;
+		d -= rd;
+		addShapeBox(x, y, z, rw, rh, rd, 0F, 
+				0F, 0F, 0F, 
+				w, 0F, 0F,
+				w, 0F, d,
+				0F, 0F, d,
+				0F, h, 0F,
+				w, h, 0F,
+				w, h, d,
+				0F, h, d);
+	}
+	
 	/**
 	* Adds a trapezoid-like shape. It's achieved by expanding the shape on one side.
 	* You can use the static variables <code>MR_RIGHT</code>, <code>MR_LEFT</code>,
