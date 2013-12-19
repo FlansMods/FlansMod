@@ -78,7 +78,7 @@ public class RenderGun implements IItemRenderer
 				case ENTITY :
 				{
 					EntityItem entity = (EntityItem)data[1];
-					GL11.glRotatef(entity.rotationYaw + entity.ticksExisted + smoothing, 0F, 1F, 0F);
+					GL11.glRotatef(entity.age + (entity.age == 0 ? 0 : smoothing), 0F, 1F, 0F);
 					break;
 				}
 				case EQUIPPED:

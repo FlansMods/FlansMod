@@ -28,7 +28,7 @@ Deployable False
 DeployedModel None
 //Model settings
 Model mw.AK47
-Texture AK47_JungleCamo
+Texture AK47
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
