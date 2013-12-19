@@ -175,15 +175,12 @@ public class FlansModClient extends FlansMod
 		ItemStack itemstackInHand = minecraft.thePlayer.inventory.getCurrentItem();
 		if (itemstackInHand != null)
 			itemInHand = itemstackInHand.getItem();
-		if (itemInHand != null)
+		if (currentScope != null && (itemInHand == null || !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).type.getCurrentScope(itemstackInHand) == currentScope)))
 		{
-			if(currentScope != null && !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).type.getCurrentScope(itemstackInHand) == currentScope))
-			{
-				currentScope = null;
-				minecraft.gameSettings.fovSetting = originalFOV;
-				minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
-				minecraft.gameSettings.thirdPersonView = originalThirdPerson;
-			}
+			currentScope = null;
+			minecraft.gameSettings.fovSetting = originalFOV;
+			minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
+			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
 		}
 		
 		//Calculate new zoom variables
