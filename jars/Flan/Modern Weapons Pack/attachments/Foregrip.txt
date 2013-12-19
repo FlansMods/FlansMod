@@ -22,3 +22,9 @@ ZoomOverlay None
 //Model
 Model mw.Foregrip
 Texture Foregrip
+//Recipe
+RecipeOutput 1
+Recipe F fiberglass
+FFF
+ F 
+ F 

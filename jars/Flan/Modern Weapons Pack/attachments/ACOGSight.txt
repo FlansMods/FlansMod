@@ -23,3 +23,9 @@ ZoomOverlay None
 Model mw.ACOG
 Texture ACOGSight
 ModelScale 0.125
+//Recipe
+RecipeOutput 1
+Recipe R yellowDust F fiberglass G thinGlass
+FFF
+GRG
+FFF

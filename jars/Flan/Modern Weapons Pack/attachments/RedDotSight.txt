@@ -23,3 +23,9 @@ ZoomOverlay None
 Model mw.RedDot
 Texture RedDotSight
 ModelScale 0.125
+//Recipe
+RecipeOutput 1
+Recipe R redstone F fiberglass G thinGlass
+   
+ RG
+FFF

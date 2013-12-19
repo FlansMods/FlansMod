@@ -138,7 +138,10 @@ public class FlansMod
 	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not disappear at all.
 	public static int planeLife = 0; //Ditto for Planes
 	public static int vehicleLife = 0; //Ditto for Vehicles
-	public static int mechaLove = 0;  //Ditto for Mechas. Also a reference to a great song.
+	
+	public static int mechaLove = 0;  //Ditto for Mechas. Also a reference to a great song. -JJBrazman
+	//I did say that next time I saw this, I'd refactor it, but I'm going to leave it for now. -Flan
+	
 	public static int aaLife = 0; //Ditto for AA Guns
 
 	public static Block craftingTable;
@@ -217,12 +220,12 @@ public class FlansMod
 		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setUnlocalizedName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Vehicle Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Part Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Gun Modification Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Part Crafting Table : Coming Soon");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
-		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
-		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
+		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 1), new Object[] {"ICI", "III", Character.valueOf('C'), Block.cauldron, Character.valueOf('I'), Item.ingotIron });
+		//GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
 		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
