@@ -21,6 +21,23 @@ ShootDelay 2
 ShootSound RPDShoot
 ReloadSound BrowningReload
 Mode FullAuto
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model settings
+Model mw.M60E4
+Texture M60E4
+ModelScale 1.0
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWRedDot flanMWACOG flanMWForegrip
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1
