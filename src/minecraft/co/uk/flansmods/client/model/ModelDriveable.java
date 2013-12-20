@@ -69,7 +69,7 @@ public class ModelDriveable extends ModelBase
 		}
 	}
 	
-	protected void translate(ModelRendererTurbo[] model, int x, int y, int z)
+	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
 	{
 		for(ModelRendererTurbo mod : model)
 		{
@@ -79,7 +79,7 @@ public class ModelDriveable extends ModelBase
 		}
 	}
 	
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		translate(bodyModel, x, y, z);
 		translate(bodyDoorOpenModel, x, y, z);
