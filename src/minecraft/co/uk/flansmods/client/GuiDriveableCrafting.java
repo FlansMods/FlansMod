@@ -78,6 +78,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
+		String recipeName;
 		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
@@ -150,8 +151,12 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 			
+			recipeName = selectedType.name;
+			if (recipeName.length() > 16)
+				recipeName = recipeName.substring(0, 15) + "...";
+			
 			//Render the info text alongside the driveable
-			drawString(fontRenderer, selectedType.name, guiOriginX + 82, guiOriginY + 64, 0xffffff);
+			drawString(fontRenderer, recipeName , guiOriginX + 82, guiOriginY + 64, 0xffffff);
 			drawString(fontRenderer, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
 			drawString(fontRenderer, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
 			drawString(fontRenderer, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
