@@ -287,7 +287,7 @@ public class ModelVehicle extends ModelDriveable
 	}	
 	
 	@Override
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		super.translateAll(x, y, z);
 		translate(bodyDoorOpenModel, x, y, z);

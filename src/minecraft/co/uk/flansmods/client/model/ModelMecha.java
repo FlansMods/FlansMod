@@ -137,7 +137,7 @@ public class ModelMecha extends ModelDriveable
 	}	
 	
 	@Override
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		super.translateAll(x, y, z);
 		translate(leftArmModel, x, y, z);
