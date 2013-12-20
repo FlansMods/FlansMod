@@ -1,7 +1,7 @@
 Name Light Assault
 ShortName marineAssault1
-AddItem g36
-AddItem usp
+AddItem g36+flanMWACOG
+AddItem usp+flanMWSilencer
 AddItem m67 2
 AddItem mwKnife
 AddItem g36Ammo 3

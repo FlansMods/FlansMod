@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ContainerGunModTable extends Container 
@@ -64,6 +65,49 @@ public class ContainerGunModTable extends Container
 	{
 		return true;
 	}
+	
+	@Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+    {
+		ItemStack stack = null;
+        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+
+        if(currentSlot != null && currentSlot.getHasStack())
+        {
+            ItemStack slotStack = currentSlot.getStack();
+            stack = slotStack.copy();
+            
+            if(slotID >= 13)
+            {
+            	return null;
+            }
+            else 
+            {
+            	if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
+            	{
+            		return null;
+            	}
+            }
+            
+            if (slotStack.stackSize == 0)
+            {
+                currentSlot.putStack((ItemStack)null);
+            }
+            else
+            {
+                currentSlot.onSlotChanged();
+            }
+
+            if (slotStack.stackSize == stack.stackSize)
+            {
+                return null;
+            }
+
+            currentSlot.onPickupFromSlot(player, slotStack);
+        }
+
+        return stack;
+    }
 
 	public void pressButton(boolean paint, boolean left)
 	{

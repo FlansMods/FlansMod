@@ -79,12 +79,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "4.0.1")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "4.1")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[4.0,4.1)",
+	    versionBounds = "[4.1,4.2)",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -224,7 +224,7 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Part Crafting Table : Coming Soon");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
-		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 1), new Object[] {"ICI", "III", Character.valueOf('C'), Block.cauldron, Character.valueOf('I'), Item.ingotIron });
+		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 1), new Object[] {"ICI", "III", Character.valueOf('C'), Item.cauldron, Character.valueOf('I'), Item.ingotIron });
 		//GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
 		//Register driveables

@@ -82,9 +82,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		this(world, shooter, gunDamage, type1, shotFrom);
 		damage = gunDamage;
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
-		float offset = (1F - FlansModClient.zoomProgress) * 0.16F;
+		float offset = 0F;//(1F - FlansModClient.zoomProgress) * 0.16F;
 		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * offset;
-		posY -= 0.10000000149011612D * (1F - FlansModClient.zoomProgress);
+		posY -= 0F;//0.10000000149011612D * (1F - FlansModClient.zoomProgress);
 		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * offset;
 		setPosition(posX, posY, posZ);
 		yOffset = 0.0F;

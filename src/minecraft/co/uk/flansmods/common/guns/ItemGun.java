@@ -568,7 +568,7 @@ public class ItemGun extends Item
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
-		return true;//type.meleeDamage == 0 || type.hasScopeOverlay;
+		return type.meleeDamage == 0 || type.FOVFactor != 1.0F;
 	}
 	
 	@Override
