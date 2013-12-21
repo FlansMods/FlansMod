@@ -19,6 +19,22 @@ ShootDelay 10
 ShootSound M21Shoot
 ReloadSound BARReload
 Mode SemiAuto
+//Default Scope Settings
 Scope mwm21
+ZoomLevel 6.0
+FOVZoomLevel 1.0
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model Settings
+Model mw.M21
+Texture M21
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 2

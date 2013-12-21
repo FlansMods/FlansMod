@@ -5,13 +5,18 @@ import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Keyboard;
 
 import co.uk.flansmods.api.IControllable;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.PacketReload;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -43,6 +48,7 @@ public class KeyInputHandler extends KeyHandler
     protected static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J);
     protected static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O);
     protected static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10);
+    protected static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9);
 
 	Minecraft mc;
 	
@@ -70,7 +76,8 @@ public class KeyInputHandler extends KeyHandler
 				teamsMenuKey,
 				teamsScoresKey,
 				reloadKey,
-				debugKey
+				debugKey,
+				reloadModelsKey
 				},
 				new boolean[]
 						{
@@ -94,7 +101,8 @@ public class KeyInputHandler extends KeyHandler
 				false, // teams menu
 				false, // teams scores menu
 				false, //reload
-				false //debug
+				false, //debug
+				false //reloadModels
 						});
 		
 		mc = Minecraft.getMinecraft();
@@ -170,6 +178,10 @@ public class KeyInputHandler extends KeyHandler
 		else if(kb == debugKey)
 		{
 			FlansMod.DEBUG = !FlansMod.DEBUG;
+		}
+		else if(kb == reloadModelsKey)
+		{
+			FlansModClient.reloadModels();
 		}
 		else
 			handled = false;

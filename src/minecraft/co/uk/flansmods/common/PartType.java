@@ -1,8 +1,13 @@
 package co.uk.flansmods.common;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.BufferedReader;
+
+import co.uk.flansmods.common.driveables.EnumDriveablePart;
+
+import net.minecraft.item.ItemStack;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */
@@ -15,9 +20,13 @@ public class PartType extends InfoType {
 	public float fuelConsumption = 1.0F;
 	/** (Fuel) The amount of fuel this fuel tank gives */
 	public int fuel = 0;
+	/** The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot */
+	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
+	
+	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 
 	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
-	public static PartType defaultEngine;
+	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
 	/** The list of all PartTypes */
 	public static List<PartType> parts = new ArrayList<PartType>();
 
@@ -30,14 +39,28 @@ public class PartType extends InfoType {
 	protected void read(TypeFile file) 
 	{
 		super.read(file);
-		if (category == 2 && defaultEngine == null)
-			defaultEngine = this;
+		if (category == 2)
+		{
+			for(EnumType type : worksWith)
+			{
+				//If there is already a default engine for this type, compare and see if this one is better
+				if(defaultEngines.containsKey(type))
+				{
+					PartType possiblyInferiorEngine = defaultEngines.get(type);
+					if(isInferiorEngine(possiblyInferiorEngine))
+						defaultEngines.put(type, this);
+				}
+				else defaultEngines.put(type, this);
+			}
+		}
 	}
 
 	@Override
-	protected void read(String[] split, TypeFile file) {
+	protected void read(String[] split, TypeFile file) 
+	{
 		super.read(split, file);
-		try {
+		try 
+		{
 			if (split[0].equals("Category"))
 				category = getCategory(split[1]);
 			if (split[0].equals("StackSize"))
@@ -48,10 +71,39 @@ public class PartType extends InfoType {
 				fuelConsumption = Float.parseFloat(split[1]);
 			if (split[0].equals("Fuel"))
 				fuel = Integer.parseInt(split[1]);
-		} catch (Exception e) {
+			//Recipe
+			if(split[0].equals("PartBoxRecipe"))
+			{
+				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
+				for(int i = 0; i < (split.length - 2) / 2; i++)
+				{
+					int amount = Integer.parseInt(split[2 * i + 2]);
+					boolean damaged = split[2 * i + 3].contains(".");
+					String itemName = damaged ? split[2 * i + 3].split("\\.")[0] : split[2 * i + 3];
+					int damage = damaged ? Integer.parseInt(split[2 * i + 3].split("\\.")[1]) : 0;
+					stacks[i] = getRecipeElement(itemName, amount, damage);
+				}
+				partBoxRecipe.addAll(Arrays.asList(stacks));
+			}
+			if(split[0].equals("WorksWith"))
+			{
+				worksWith = new ArrayList<EnumType>();
+				for(int i = 0; i < split.length - 1; i++)
+				{
+					worksWith.add(EnumType.get(split[i + 1]));
+				}
+			}
+		} 
+		catch (Exception e) 
+		{
 			System.out.println("Reading part file failed.");
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isInferiorEngine(PartType quitePossiblyAnInferiorEngine)
+	{
+		return engineSpeed > quitePossiblyAnInferiorEngine.engineSpeed;
 	}
 
 	public static PartType getPart(String s) {

@@ -14,6 +14,7 @@ public class ModelDisc extends ModelBase
 		bulletModel.addBox(-1F, -1F, -0.5F, 2, 2, 1);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		bulletModel.render(f5);

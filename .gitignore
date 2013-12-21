@@ -1,4 +1,5 @@
 .DS_Store
+.metadata
 CHANGELOG
 LICENSE.txt
 Thumbs.db
@@ -29,6 +30,7 @@ Thumbs.db
 !/src/minecraft/flansmod.png
 !/src/minecraft/pack.mcmeta
 !/jars/Flan/
+!/LICENSE.txt
 
 *.bat
 *.sh

@@ -3,6 +3,7 @@ package co.uk.flansmods.common.teams;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -65,7 +66,8 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
      	return false;
     }
     
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
+    @Override
+	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
     {
         if (!worldObj.isRemote)
         {
@@ -116,7 +118,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			NBTTagCompound tags = new NBTTagCompound();
 			//Getter of EntityItem
 			getEntityItem().writeToNBT(tags);
-			NBTTagCompound.writeNamedTag(tags, data);
+			NBTBase.writeNamedTag(tags, data);
 		}
 		catch(Exception e)
 		{
@@ -137,7 +139,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 			//Flan, as EntityItem's itemstack (previously the field was called 'item') field is now only managed
 			//by datawatchers, there are now getters and setters, both currently still unmapped by Forge. This
 			//method sets the itemstack.
-			setEntityItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTTagCompound.readNamedTag(data)));
+			setEntityItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound)NBTBase.readNamedTag(data)));
 		}
 		catch(Exception e)
 		{

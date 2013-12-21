@@ -1,22 +1,17 @@
 package co.uk.flansmods.client;
 
-import java.io.File;
 import java.util.HashMap;
 
-import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.guns.GunType;
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.sound.SoundLoadEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 
 public class FlansModResourceHandler 
 {
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
-	private static HashMap<GunType, ResourceLocation> scopeMap = new HashMap<GunType, ResourceLocation>();
+	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();
 	
 	public static ResourceLocation getIcon(InfoType infoType)
@@ -41,14 +36,25 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 	
-	public static ResourceLocation getScope(GunType gunType)
+	public static ResourceLocation getDeployableTexture(GunType gunType)
 	{
-		if(scopeMap.containsKey(gunType))
+		if(textureMap.containsKey(gunType))
 		{
-			return scopeMap.get(gunType);
+			return textureMap.get(gunType);
 		}
-		ResourceLocation resLoc = new ResourceLocation("flansmod", "gui/" + gunType.scope + ".png");
-		scopeMap.put(gunType, resLoc);
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + gunType.deployableTexture + ".png");
+		textureMap.put(gunType, resLoc);
+		return resLoc;
+	}
+	
+	public static ResourceLocation getScope(String scopeTexture)
+	{
+		if(scopeMap.containsKey(scopeTexture))
+		{
+			return scopeMap.get(scopeTexture);
+		}
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "gui/" + scopeTexture + ".png");
+		scopeMap.put(scopeTexture, resLoc);
 		return resLoc;
 	}
 	

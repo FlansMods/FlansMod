@@ -6,14 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,6 +26,8 @@ public class BlockGunBox extends BlockContainer
 		//super(i, boxType.material);
 		// set specific material.
 		super(i, Material.wood);
+		setHardness(2F);
+	    setResistance(4F);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 	
@@ -276,7 +275,8 @@ public class BlockGunBox extends BlockContainer
         return ret;
     }
 	
-    public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+    @Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
     {
 		TileEntityGunBox te = (TileEntityGunBox)world.getBlockTileEntity(x, y, z);
     	if(te != null && te.getType() != null)    		world.spawnEntityInWorld(new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, new ItemStack(blockID, 1, te.getType().gunBoxID)));

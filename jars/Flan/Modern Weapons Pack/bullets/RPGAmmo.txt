@@ -1,7 +1,7 @@
 Name RPG Ammo
 ShortName rpgAmmo
-//TODO : Change model
-Model Bullet
+Model mw.RPGRocket
+Texture RPG
 //Colour of icon and model
 Colour 255 255 255
 ItemID 23849

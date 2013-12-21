@@ -15,6 +15,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 		fileExtensions = new String[] {"obj"};
 	}
 	
+	@Override
 	public void getModel(File file)
 	{
 		try
@@ -170,7 +171,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 							v.add(verts.get(vInt).setTexturePosition(curUV[0], curUV[1]));
 							if(verts.get(vInt) instanceof PositionTransformVertex)
 							{
-								((PositionTransformVertex)verts.get(vInt)).addGroup(group);
+								verts.get(vInt).addGroup(group);
 							}
 						}
 						if(ind > -1)

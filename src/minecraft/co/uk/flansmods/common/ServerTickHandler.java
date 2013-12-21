@@ -13,7 +13,7 @@ public class ServerTickHandler implements ITickHandler {
 	public void tickStart(EnumSet<TickType> type, Object... tickData)
 	{
 		EntityPlayer player = (EntityPlayer) tickData[0];
-		World world = (World) player.worldObj;
+		World world = player.worldObj;
 		
 		// do whatever here
 	}
@@ -22,11 +22,12 @@ public class ServerTickHandler implements ITickHandler {
 	public void tickEnd(EnumSet<TickType> type, Object... tickData)
 	{
 		EntityPlayer player = (EntityPlayer) tickData[0];
-		World world = (World) player.worldObj;
+		World world = player.worldObj;
 		
 		// do whatever here
 	}
 	
+	@Override
 	public EnumSet<TickType> ticks()
 	{
 		return EnumSet.of(TickType.PLAYER);

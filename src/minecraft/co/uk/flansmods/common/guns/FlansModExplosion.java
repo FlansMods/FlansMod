@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 
 import net.minecraft.block.Block;
@@ -79,9 +78,9 @@ public class FlansModExplosion extends Explosion
                 {
                     if(i == 0 || i == boomRadius - 1 || j == 0 || j == boomRadius - 1 || k == 0 || k == boomRadius - 1)
                     {
-                        double d3 = (double)((float)i / ((float)boomRadius - 1.0F) * 2.0F - 1.0F);
-                        double d4 = (double)((float)j / ((float)boomRadius - 1.0F) * 2.0F - 1.0F);
-                        double d5 = (double)((float)k / ((float)boomRadius - 1.0F) * 2.0F - 1.0F);
+                        double d3 = (i / (boomRadius - 1.0F) * 2.0F - 1.0F);
+                        double d4 = (j / (boomRadius - 1.0F) * 2.0F - 1.0F);
+                        double d5 = (k / (boomRadius - 1.0F) * 2.0F - 1.0F);
                         double d6 = Math.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
                         d3 /= d6;
                         d4 /= d6;
@@ -110,9 +109,9 @@ public class FlansModExplosion extends Explosion
                                 hashset.add(new ChunkPosition(l, i1, j1));
                             }
 
-                            d0 += d3 * (double)f2;
-                            d1 += d4 * (double)f2;
-                            d2 += d5 * (double)f2;
+                            d0 += d3 * f2;
+                            d1 += d4 * f2;
+                            d2 += d5 * f2;
                         }
                     }
                 }
@@ -121,35 +120,35 @@ public class FlansModExplosion extends Explosion
 
         affectedBlockPositions.addAll(hashset);
         explosionSize *= 2.0F;
-        int i = MathHelper.floor_double(explosionX - (double)explosionSize - 1.0D);
-        int j = MathHelper.floor_double(explosionX + (double)explosionSize + 1.0D);
-        int k = MathHelper.floor_double(explosionY - (double)explosionSize - 1.0D);
-        int l1 = MathHelper.floor_double(explosionY + (double)explosionSize + 1.0D);
-        int i2 = MathHelper.floor_double(explosionZ - (double)explosionSize - 1.0D);
-        int j2 = MathHelper.floor_double(explosionZ + (double)explosionSize + 1.0D);
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getAABBPool().getAABB((double)i, (double)k, (double)i2, (double)j, (double)l1, (double)j2));
+        int i = MathHelper.floor_double(explosionX - explosionSize - 1.0D);
+        int j = MathHelper.floor_double(explosionX + explosionSize + 1.0D);
+        int k = MathHelper.floor_double(explosionY - explosionSize - 1.0D);
+        int l1 = MathHelper.floor_double(explosionY + explosionSize + 1.0D);
+        int i2 = MathHelper.floor_double(explosionZ - explosionSize - 1.0D);
+        int j2 = MathHelper.floor_double(explosionZ + explosionSize + 1.0D);
+        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getAABBPool().getAABB(i, k, i2, j, l1, j2));
         Vec3 vec3 = worldObj.getWorldVec3Pool().getVecFromPool(explosionX, explosionY, explosionZ);
 
         for (int k2 = 0; k2 < list.size(); ++k2)
         {
             Entity entity = (Entity)list.get(k2);
-            double d7 = entity.getDistance(explosionX, explosionY, explosionZ) / (double)explosionSize;
+            double d7 = entity.getDistance(explosionX, explosionY, explosionZ) / explosionSize;
 
             if (d7 <= 1.0D)
             {
                 d0 = entity.posX - explosionX;
-                d1 = entity.posY + (double)entity.getEyeHeight() - explosionY;
+                d1 = entity.posY + entity.getEyeHeight() - explosionY;
                 d2 = entity.posZ - explosionZ;
-                double d8 = (double)MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
+                double d8 = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
 
                 if (d8 != 0.0D)
                 {
                     d0 /= d8;
                     d1 /= d8;
                     d2 /= d8;
-                    double d9 = (double)worldObj.getBlockDensity(vec3, entity.boundingBox);
+                    double d9 = worldObj.getBlockDensity(vec3, entity.boundingBox);
                     double d10 = (1.0D - d7) * d9;
-                    entity.attackEntityFrom(player == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)explosionSize + 1.0D)));
+                    entity.attackEntityFrom(player == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type), ((int)((d10 * d10 + d10) / 2.0D * 8.0D * explosionSize + 1.0D)));
                     double d11 = EnchantmentProtection.func_92092_a(entity, d10);
                     entity.motionX += d0 * d11;
                     entity.motionY += d1 * d11;
@@ -169,7 +168,8 @@ public class FlansModExplosion extends Explosion
     /**
      * Does the second part of the explosion (sound, particles, drop spawn)
      */
-    public void doExplosionB(boolean par1)
+    @Override
+	public void doExplosionB(boolean par1)
     {
         worldObj.playSoundEffect(explosionX, explosionY, explosionZ, "random.explode", 4.0F, (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
@@ -203,18 +203,18 @@ public class FlansModExplosion extends Explosion
 
                 if (par1)
                 {
-                    double d0 = (double)((float)i + worldObj.rand.nextFloat());
-                    double d1 = (double)((float)j + worldObj.rand.nextFloat());
-                    double d2 = (double)((float)k + worldObj.rand.nextFloat());
+                    double d0 = (i + worldObj.rand.nextFloat());
+                    double d1 = (j + worldObj.rand.nextFloat());
+                    double d2 = (k + worldObj.rand.nextFloat());
                     double d3 = d0 - explosionX;
                     double d4 = d1 - explosionY;
                     double d5 = d2 - explosionZ;
-                    double d6 = (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+                    double d6 = MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
                     d3 /= d6;
                     d4 /= d6;
                     d5 /= d6;
-                    double d7 = 0.5D / (d6 / (double)explosionSize + 0.1D);
-                    d7 *= (double)(worldObj.rand.nextFloat() * worldObj.rand.nextFloat() + 0.3F);
+                    double d7 = 0.5D / (d6 / explosionSize + 0.1D);
+                    d7 *= (worldObj.rand.nextFloat() * worldObj.rand.nextFloat() + 0.3F);
                     d3 *= d7;
                     d4 *= d7;
                     d5 *= d7;
@@ -257,7 +257,8 @@ public class FlansModExplosion extends Explosion
         }
     }
 
-    public Map func_77277_b()
+    @Override
+	public Map func_77277_b()
     {
         return playerLocations;
     }

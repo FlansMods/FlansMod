@@ -27,10 +27,15 @@ public enum EnumDriveablePart
 	leftTrack(new EnumDriveablePart[] { }, "leftTrack", "Left Track"),
 	rightTrack(new EnumDriveablePart[] { }, "rightTrack", "Right Track"),
 	trailer(new EnumDriveablePart[] { }, "trailer", "Trailer"),	
+	
+	//Mecha parts
+	leftArm(new EnumDriveablePart[] { }, "leftArm", "Left Arm"),
+	rightArm(new EnumDriveablePart[] { }, "rightArm", "Right Arm"),
+	head(new EnumDriveablePart[] { }, "head", "Head"),
+	hips(new EnumDriveablePart[] { }, "hips", "Hips"),
 
 	//Shared part
-	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
-		
+	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, leftArm, rightArm, head, hips, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
 	
 	private String shortName;
 	private String name;

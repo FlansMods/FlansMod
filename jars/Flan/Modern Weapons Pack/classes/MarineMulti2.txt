@@ -1,6 +1,6 @@
 Name Infiltrator
 ShortName marineMulti2
-AddItem g3
+AddItem g3+flanMWACOG
 AddItem uzi
 AddItem m67 2
 AddItem mwKnife

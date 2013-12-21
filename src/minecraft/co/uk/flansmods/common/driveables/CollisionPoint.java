@@ -21,6 +21,6 @@ public class CollisionPoint
 	
 	public Vector3f getLocalVector()
 	{
-		return new Vector3f((float)posX / 16F, (float)posY / 16F, (float)posZ / 16F);
+		return new Vector3f(posX / 16F, posY / 16F, posZ / 16F);
 	}
 }

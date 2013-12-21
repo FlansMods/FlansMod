@@ -19,6 +19,23 @@ ShootDelay 2
 ShootSound G36Shoot
 ReloadSound mp40Reload
 Mode FullAuto
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model settings
+Model mw.G36
+Texture G36
+ModelScale 1.0
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMWForegrip
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments true
+NumGenericAttachmentSlots 1

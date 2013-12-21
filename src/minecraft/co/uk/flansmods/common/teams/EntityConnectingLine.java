@@ -46,7 +46,8 @@ public class EntityConnectingLine extends EntityFishHook {
         connectedTo = object;
     }
 	    
-    public void onUpdate()
+    @Override
+	public void onUpdate()
     {          
     	ItemStack currentItemstack = angler.inventory.getCurrentItem();
     	if(currentItemstack == null || !(currentItemstack.getItem() instanceof ItemOpStick) || currentItemstack.getItemDamage() != 1)

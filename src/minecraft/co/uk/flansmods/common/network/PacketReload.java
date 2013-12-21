@@ -4,18 +4,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.client.FlansModClient;
+import co.uk.flansmods.client.model.GunAnimations;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.ItemBullet;
+import co.uk.flansmods.common.FlansModPlayerData;
+import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
-import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -61,11 +65,22 @@ public class PacketReload extends FlanPacketCommon
 	private void interpretServer(DataInputStream stream, Object[] extradata)
 	{
     	EntityPlayer player = (EntityPlayer)extradata[0];
+    	FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(player);
     	ItemStack stack = player.getCurrentEquippedItem();
-    	if(stack != null && stack.getItem() instanceof ItemGun)
+    	if(data != null && stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
-    		((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true, false);
+    		if(((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true))
+    		{
+    			//Set the reload delay
+    			data.shootTime = type.reloadTime;
+				//Send reload packet to induce reload effects client side
+				PacketDispatcher.sendPacketToPlayer(PacketReload.buildReloadPacket(), (Player)player);
+				//Play reload sound
+				if(type.reloadSound != null)
+					PacketDispatcher.sendPacketToAllAround(player.posX, player.posY, player.posZ, 50, player.dimension, PacketPlaySound.buildSoundPacket(player.posX, player.posY, player.posZ, type.reloadSound, false));
+
+    		}
     	}
 	}
 	
@@ -81,6 +96,19 @@ public class PacketReload extends FlanPacketCommon
         	{
         		GunType type = ((ItemGun)stack.getItem()).type;
         		FlansModClient.shootTime = type.reloadTime;
+        		
+        		//Apply animations
+        		GunAnimations animations = null;
+				if(FlansModClient.gunAnimations.containsKey(player))
+					animations = FlansModClient.gunAnimations.get(player);
+				else 
+				{
+					animations = new GunAnimations();
+					FlansModClient.gunAnimations.put((EntityLivingBase)player, animations);
+				}
+				int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
+				int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+				animations.doReload(type.reloadTime, pumpDelay, pumpTime);
         		
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;

@@ -1,0 +1,14 @@
+Name Canister
+ShortName canister
+Icon Canister
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23428
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Misc
+StackSize 16
+RecipeOutput 3
+Recipe B bucket I iron
+ I 
+ B 
+ B 

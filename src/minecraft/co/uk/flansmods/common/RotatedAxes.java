@@ -22,6 +22,7 @@ public class RotatedAxes
 		setAngles(yaw, pitch, roll);
 	}
 	
+	@Override
 	public RotatedAxes clone()
 	{
 		RotatedAxes newAxes = new RotatedAxes();

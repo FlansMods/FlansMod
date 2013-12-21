@@ -1,6 +1,6 @@
 Name Medic
 ShortName spetsnazMedic1
-AddItem ak47
+AddItem ak47+flanMWACOG
 AddItem m1911
 AddItem m67 2
 AddItem mwMedKit

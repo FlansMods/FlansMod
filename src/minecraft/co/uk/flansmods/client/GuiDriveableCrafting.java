@@ -3,19 +3,15 @@ package co.uk.flansmods.client;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
+import co.uk.flansmods.common.EnumType;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.GunBoxType;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.DriveableType;
-import co.uk.flansmods.common.driveables.EntityPlane;
-import co.uk.flansmods.common.network.PacketVehicleGUI;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -82,6 +78,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
+		String recipeName;
 		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
@@ -143,17 +140,23 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
-			GL11.glScalef(-50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance, 50F / selectedType.cameraDistance);
+			if(selectedType instanceof MechaType)
+				GL11.glTranslatef(0, 15, 0);
+			GL11.glScalef(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);
 			GL11.glRotatef(180F, 0F, 0F, 1F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
 			GL11.glRotatef(spinner / 5F, 0F, 1F, 0F);
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
-			selectedType.model.render();
+			selectedType.model.render(selectedType);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 			
+			recipeName = selectedType.name;
+			if (recipeName.length() > 16)
+				recipeName = recipeName.substring(0, 15) + "...";
+			
 			//Render the info text alongside the driveable
-			drawString(fontRenderer, selectedType.name, guiOriginX + 82, guiOriginY + 64, 0xffffff);
+			drawString(fontRenderer, recipeName , guiOriginX + 82, guiOriginY + 64, 0xffffff);
 			drawString(fontRenderer, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
 			drawString(fontRenderer, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
 			drawString(fontRenderer, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
@@ -228,8 +231,8 @@ public class GuiDriveableCrafting extends GuiScreen
 				if(stackInSlot != null && stackInSlot.getItem() instanceof ItemPart)
 				{
 					PartType partType = ((ItemPart)stackInSlot.getItem()).type;
-					//Check its an engine
-					if(partType.category == 2)
+					//Check its an engine that we can use
+					if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
 					{
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))

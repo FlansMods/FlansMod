@@ -3,7 +3,6 @@ package co.uk.flansmods.client.tmt;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.src.ModLoader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.nio.ByteBuffer;
@@ -12,8 +11,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
-import java.util.logging.Level;
-
+import org.lwjgl.opengl.ARBBufferObject;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
@@ -159,14 +157,15 @@ public class TmtTessellator extends Tessellator
         if (useVBO)
         {
             vertexBuffers = GLAllocation.createDirectIntBuffer(vboCount);
-            ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
+            ARBBufferObject.glGenBuffersARB(vertexBuffers);
         }
     }
 
     /**
      * Draws the data set up in this tessellator and resets the state to prepare for new drawing.
      */
-    public int draw()
+    @Override
+	public int draw()
     {
         if (!this.isDrawing)
         {
@@ -188,29 +187,29 @@ public class TmtTessellator extends Tessellator
                 {
                     vtc = Math.min(vertexCount - offs, nativeBufferSize >> 5);
                 }
-                this.intBuffer.clear();
-                this.intBuffer.put(this.rawBuffer, offs * 10, vtc * 10);
-                this.byteBuffer.position(0);
-                this.byteBuffer.limit(vtc * 40);
+                TmtTessellator.intBuffer.clear();
+                TmtTessellator.intBuffer.put(this.rawBuffer, offs * 10, vtc * 10);
+                TmtTessellator.byteBuffer.position(0);
+                TmtTessellator.byteBuffer.limit(vtc * 40);
                 offs += vtc;
 
-                if (this.useVBO)
+                if (TmtTessellator.useVBO)
                 {
-                    this.vboIndex = (this.vboIndex + 1) % this.vboCount;
-                    ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.vertexBuffers.get(this.vboIndex));
-                    ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.byteBuffer, ARBVertexBufferObject.GL_STREAM_DRAW_ARB);
+                    this.vboIndex = (this.vboIndex + 1) % TmtTessellator.vboCount;
+                    ARBBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, TmtTessellator.vertexBuffers.get(this.vboIndex));
+                    ARBBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, TmtTessellator.byteBuffer, ARBBufferObject.GL_STREAM_DRAW_ARB);
                 }
 
                 if (this.hasTexture)
                 {
-                    if (this.useVBO)
+                    if (TmtTessellator.useVBO)
                     {
                         GL11.glTexCoordPointer(4, GL11.GL_FLOAT, 40, 12L);
                     }
                     else
                     {
-                        this.floatBuffer.position(3);
-                        GL11.glTexCoordPointer(4, 40, this.floatBuffer);
+                        TmtTessellator.floatBuffer.position(3);
+                        GL11.glTexCoordPointer(4, 40, TmtTessellator.floatBuffer);
                     }
 
                     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -220,14 +219,14 @@ public class TmtTessellator extends Tessellator
                 {
                     OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
 
-                    if (this.useVBO)
+                    if (TmtTessellator.useVBO)
                     {
                         GL11.glTexCoordPointer(2, GL11.GL_SHORT, 40, 36L);
                     }
                     else
                     {
-                        this.shortBuffer.position(18);
-                        GL11.glTexCoordPointer(2, 40, this.shortBuffer);
+                        TmtTessellator.shortBuffer.position(18);
+                        GL11.glTexCoordPointer(2, 40, TmtTessellator.shortBuffer);
                     }
 
                     GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -236,14 +235,14 @@ public class TmtTessellator extends Tessellator
 
                 if (this.hasColor)
                 {
-                    if (this.useVBO)
+                    if (TmtTessellator.useVBO)
                     {
                         GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 40, 28L);
                     }
                     else
                     {
-                        this.byteBuffer.position(28);
-                        GL11.glColorPointer(4, true, 40, this.byteBuffer);
+                        TmtTessellator.byteBuffer.position(28);
+                        GL11.glColorPointer(4, true, 40, TmtTessellator.byteBuffer);
                     }
 
                     GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
@@ -251,27 +250,27 @@ public class TmtTessellator extends Tessellator
 
                 if (this.hasNormals)
                 {
-                    if (this.useVBO)
+                    if (TmtTessellator.useVBO)
                     {
                         GL11.glNormalPointer(GL11.GL_UNSIGNED_BYTE, 40, 32L);
                     }
                     else
                     {
-                        this.byteBuffer.position(32);
-                        GL11.glNormalPointer(40, this.byteBuffer);
+                        TmtTessellator.byteBuffer.position(32);
+                        GL11.glNormalPointer(40, TmtTessellator.byteBuffer);
                     }
 
                     GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
                 }
 
-                if (this.useVBO)
+                if (TmtTessellator.useVBO)
                 {
                     GL11.glVertexPointer(3, GL11.GL_FLOAT, 40, 0L);
                 }
                 else
                 {
-                    this.floatBuffer.position(0);
-                    GL11.glVertexPointer(3, 40, this.floatBuffer);
+                    TmtTessellator.floatBuffer.position(0);
+                    GL11.glVertexPointer(3, 40, TmtTessellator.floatBuffer);
                 }
 
                 GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
@@ -328,7 +327,7 @@ public class TmtTessellator extends Tessellator
     private void reset()
     {
         this.vertexCount = 0;
-        this.byteBuffer.clear();
+        TmtTessellator.byteBuffer.clear();
         this.rawBufferIndex = 0;
         this.addedVertices = 0;
     }
@@ -336,7 +335,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets draw mode in the tessellator to draw quads.
      */
-    public void startDrawingQuads()
+    @Override
+	public void startDrawingQuads()
     {
         this.startDrawing(7);
     }
@@ -344,7 +344,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Resets tessellator state and prepares for drawing (with the specified draw mode).
      */
-    public void startDrawing(int par1)
+    @Override
+	public void startDrawing(int par1)
     {
         if (this.isDrawing)
         {
@@ -366,7 +367,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the texture coordinates.
      */
-    public void setTextureUV(double par1, double par3)
+    @Override
+	public void setTextureUV(double par1, double par3)
     {
         this.hasTexture = true;
         this.textureU = par1;
@@ -385,7 +387,8 @@ public class TmtTessellator extends Tessellator
         this.textureW = par4;
     }
     
-    public void setBrightness(int par1)
+    @Override
+	public void setBrightness(int par1)
     {
         this.hasBrightness = true;
         this.brightness = par1;
@@ -394,7 +397,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the RGB values as specified, converting from floats between 0 and 1 to integers from 0-255.
      */
-    public void setColorOpaque_F(float par1, float par2, float par3)
+    @Override
+	public void setColorOpaque_F(float par1, float par2, float par3)
     {
         this.setColorOpaque((int)(par1 * 255.0F), (int)(par2 * 255.0F), (int)(par3 * 255.0F));
     }
@@ -402,7 +406,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the RGBA values for the color, converting from floats between 0 and 1 to integers from 0-255.
      */
-    public void setColorRGBA_F(float par1, float par2, float par3, float par4)
+    @Override
+	public void setColorRGBA_F(float par1, float par2, float par3, float par4)
     {
         this.setColorRGBA((int)(par1 * 255.0F), (int)(par2 * 255.0F), (int)(par3 * 255.0F), (int)(par4 * 255.0F));
     }
@@ -410,7 +415,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the RGB values as specified, and sets alpha to opaque.
      */
-    public void setColorOpaque(int par1, int par2, int par3)
+    @Override
+	public void setColorOpaque(int par1, int par2, int par3)
     {
         this.setColorRGBA(par1, par2, par3, 255);
     }
@@ -418,7 +424,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the RGBA values for the color. Also clamps them to 0-255.
      */
-    public void setColorRGBA(int par1, int par2, int par3, int par4)
+    @Override
+	public void setColorRGBA(int par1, int par2, int par3, int par4)
     {
         if (!this.isColorDisabled)
         {
@@ -478,7 +485,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Adds a vertex specifying both x,y,z and the texture u,v for it.
      */
-    public void addVertexWithUV(double par1, double par3, double par5, double par7, double par9)
+    @Override
+	public void addVertexWithUV(double par1, double par3, double par5, double par7, double par9)
     {
         this.setTextureUV(par7, par9);
         this.addVertex(par1, par3, par5);
@@ -494,7 +502,8 @@ public class TmtTessellator extends Tessellator
      * Adds a vertex with the specified x,y,z to the current draw call. It will trigger a draw() if the buffer gets
      * full.
      */
-    public void addVertex(double par1, double par3, double par5)
+    @Override
+	public void addVertex(double par1, double par3, double par5)
     {
         if (rawBufferIndex >= rawBufferSize - 40) 
         {
@@ -547,7 +556,7 @@ public class TmtTessellator extends Tessellator
         {
             this.rawBuffer[this.rawBufferIndex + 3] = Float.floatToRawIntBits((float)this.textureU);
             this.rawBuffer[this.rawBufferIndex + 4] = Float.floatToRawIntBits((float)this.textureV);
-            this.rawBuffer[this.rawBufferIndex + 5] = Float.floatToRawIntBits((float)0.0F);
+            this.rawBuffer[this.rawBufferIndex + 5] = Float.floatToRawIntBits(0.0F);
             this.rawBuffer[this.rawBufferIndex + 6] = Float.floatToRawIntBits((float)this.textureW);
         }
 
@@ -576,7 +585,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the color to the given opaque value (stored as byte values packed in an integer).
      */
-    public void setColorOpaque_I(int par1)
+    @Override
+	public void setColorOpaque_I(int par1)
     {
         int j = par1 >> 16 & 255;
         int k = par1 >> 8 & 255;
@@ -587,7 +597,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the color to the given color (packed as bytes in integer) and alpha values.
      */
-    public void setColorRGBA_I(int par1, int par2)
+    @Override
+	public void setColorRGBA_I(int par1, int par2)
     {
         int k = par1 >> 16 & 255;
         int l = par1 >> 8 & 255;
@@ -598,7 +609,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Disables colors for the current draw call.
      */
-    public void disableColor()
+    @Override
+	public void disableColor()
     {
         this.isColorDisabled = true;
     }
@@ -606,7 +618,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the normal for the current draw call.
      */
-    public void setNormal(float par1, float par2, float par3)
+    @Override
+	public void setNormal(float par1, float par2, float par3)
     {
         this.hasNormals = true;
         byte b0 = (byte)((int)(par1 * 127.0F));
@@ -618,7 +631,8 @@ public class TmtTessellator extends Tessellator
     /**
      * Sets the translation for all vertices in the current draw call.
      */
-    public void setTranslation(double par1, double par3, double par5)
+    @Override
+	public void setTranslation(double par1, double par3, double par5)
     {
         this.xOffset = par1;
         this.yOffset = par3;
@@ -628,10 +642,11 @@ public class TmtTessellator extends Tessellator
     /**
      * Offsets the translation for all vertices in the current draw call.
      */
-    public void addTranslation(float par1, float par2, float par3)
+    @Override
+	public void addTranslation(float par1, float par2, float par3)
     {
-        this.xOffset += (double)par1;
-        this.yOffset += (double)par2;
-        this.zOffset += (double)par3;
+        this.xOffset += par1;
+        this.yOffset += par2;
+        this.zOffset += par3;
     }
 }

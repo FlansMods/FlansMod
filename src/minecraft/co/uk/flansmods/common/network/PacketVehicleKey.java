@@ -9,7 +9,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.common.FlansMod;
-import co.uk.flansmods.common.driveables.EntityDriveable;
 import cpw.mods.fml.relauncher.Side;
 
 public class PacketVehicleKey extends FlanPacketCommon {

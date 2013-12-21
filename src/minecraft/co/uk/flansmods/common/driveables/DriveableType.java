@@ -1,18 +1,12 @@
 package co.uk.flansmods.common.driveables;
 
-import java.io.BufferedReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ArrayList;
-import java.io.File;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 
 import co.uk.flansmods.client.model.ModelDriveable;
-import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.PartType;
@@ -122,7 +116,7 @@ public class DriveableType extends InfoType
 		try
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				model = FlansMod.proxy.loadModel(split, shortName, ModelDriveable.class);
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelDriveable.class);
 			
 			if(split[0].equals("Texture"))
 			{
@@ -212,7 +206,7 @@ public class DriveableType extends InfoType
 			
 			if(split[0].equals("RotatedDriverOffset"))
 			{
-				rotatedDriverOffset = new Vector3f((float)Integer.parseInt(split[1]) / 16F, (float)Integer.parseInt(split[2]) / 16F, (float)Integer.parseInt(split[3]) / 16F);
+				rotatedDriverOffset = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
 			}
 			
 			//Passengers / Gunner Seats

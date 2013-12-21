@@ -9,33 +9,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import com.google.common.collect.Sets;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
-import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.driveables.mechas.ItemMecha;
+import co.uk.flansmods.common.driveables.mechas.ItemMechaAddon;
+import co.uk.flansmods.common.driveables.mechas.MechaItemType;
+import co.uk.flansmods.common.driveables.mechas.MechaType;
 import co.uk.flansmods.common.guns.AAGunType;
+import co.uk.flansmods.common.guns.AttachmentType;
 import co.uk.flansmods.common.guns.BulletType;
 import co.uk.flansmods.common.guns.EntityAAGun;
 import co.uk.flansmods.common.guns.EntityBullet;
@@ -44,10 +41,11 @@ import co.uk.flansmods.common.guns.EntityMG;
 import co.uk.flansmods.common.guns.GrenadeType;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemAttachment;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGrenade;
 import co.uk.flansmods.common.guns.ItemGun;
 import co.uk.flansmods.common.network.FlansModContentPackVerifier;
-import co.uk.flansmods.common.network.PacketBuyWeapon;
 import co.uk.flansmods.common.teams.ArmourType;
 import co.uk.flansmods.common.teams.BlockSpawner;
 import co.uk.flansmods.common.teams.ChunkLoadingHandler;
@@ -66,12 +64,7 @@ import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -84,15 +77,14 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = "FlansMod", name = "Flan's Mod", version = "3.1.2")
+@Mod(modid = "FlansMod", name = "Flan's Mod", version = "4.1")
 @NetworkMod(
 		clientSideRequired = true,
 		serverSideRequired = false,
 		channels = {"flansmods"},
-	    versionBounds = "[3.1,3.2)",
+	    versionBounds = "[4.1,4.2)",
 	    clientPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.client.network.FlanPacketClient.class ),
 	    serverPacketHandlerSpec = @SidedPacketHandler(channels = {"flansmods"}, packetHandler = co.uk.flansmods.common.network.FlanPacketCommon.class )
 		)
@@ -112,17 +104,18 @@ public class FlansMod
 	
 	public static int craftingTableID = 255, spawnerID = 254, gunBoxID = 200;
 	
-	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0);
-	public static CreativeTabFlan tabFlanDriveables = new CreativeTabFlan(1);
-	public static CreativeTabFlan tabFlanParts = new CreativeTabFlan(2);
-	public static CreativeTabFlan tabFlanTeams = new CreativeTabFlan(3);
+	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
+			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
 
 	public static boolean DEBUG = false;
 	public static ArrayList<Item> bulletItems = new ArrayList<Item>(), 
 			partItems = new ArrayList<Item>(),
-			toolItems = new ArrayList<Item>(), 
+			toolItems = new ArrayList<Item>(),
+			attachmentItems = new ArrayList<Item>(),
 			gunItems = new ArrayList<Item>(), 
 			aaGunItems = new ArrayList<Item>(), 
+			mechaToolItems = new ArrayList<Item>(),
+			mechaItems = new ArrayList<Item>(),
 			grenadeItems = new ArrayList<Item>(), 
 			armourItems = new ArrayList<Item>();
 	public static boolean inMCP = false;
@@ -142,10 +135,14 @@ public class FlansMod
 	public static boolean armourDrops = true;
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	public static boolean vehiclesNeedFuel = true;
-	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int planeLife = 0; //How long planes stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int vehicleLife = 0; //How long vehicles stay around for. Anything 0 or less means they do not dissapear at all.
-	public static int aaLife = 0; //How long AA Guns stay around for. Anything 0 or less means they do not dissapear at all.
+	public static int mgLife = 0; //How long MGs stay around for. Anything 0 or less means they do not disappear at all.
+	public static int planeLife = 0; //Ditto for Planes
+	public static int vehicleLife = 0; //Ditto for Vehicles
+	
+	public static int mechaLove = 0;  //Ditto for Mechas. Also a reference to a great song. -JJBrazman
+	//I did say that next time I saw this, I'd refactor it, but I'm going to leave it for now. -Flan
+	
+	public static int aaLife = 0; //Ditto for AA Guns
 
 	public static Block craftingTable;
 	public static Block spawner;
@@ -214,6 +211,7 @@ public class FlansMod
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan1", "Flan's Mod Vehicles");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan2", "Flan's Mod Parts");
 		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan3", "Flan's Mod Team Stuff");
+		LanguageRegistry.instance().addStringLocalization("itemGroup.tabFlan4", "Flan's Mod Mechas");
 		
 		//TODO : Content pack handler
 		NetworkRegistry.instance().registerConnectionHandler(new FlansModContentPackVerifier());
@@ -222,22 +220,24 @@ public class FlansMod
 		craftingTable = new BlockPlaneWorkbench(craftingTableID, 1, 0).setUnlocalizedName("flansCraftingBench");
 		GameRegistry.registerBlock(craftingTable, ItemBlockManyNames.class, "planeCraftingTable");
 		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 0), "Vehicle Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Vehicle Crafting Table");
-		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Vehicle Crafting Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 1), "Gun Modification Table");
+		LanguageRegistry.addName(new ItemStack(craftingTable, 1, 2), "Part Crafting Table : Coming Soon");
 		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 0), new Object[]
 		{ "BBB", "III", "III", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
-		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 2), new Object[] {"BB", "II", "II", Character.valueOf('B'), Item.bowlEmpty, Character.valueOf('I'), Item.ingotIron });
-		GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
+		GameRegistry.addRecipe(new ItemStack(craftingTable, 1, 1), new Object[] {"ICI", "III", Character.valueOf('C'), Item.cauldron, Character.valueOf('I'), Item.ingotIron });
+		//GameRegistry.addShapelessRecipe(new ItemStack(craftingTable, 1, 1), craftingTable, craftingTable);
 		
 		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 20, false);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 15, false);
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntitySeat.class, "Seat", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntityParachute.class, "Parachute", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityParachute.class, "Parachute", 101, this, 40, 20, false);
+		EntityRegistry.registerGlobalEntityID(EntityMecha.class, "Mecha", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityMecha.class, "Mecha", 102, this, 250, 20, false);
 		
 		//Register bullets and grenades
 		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
@@ -253,7 +253,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		
 		// GunBox block 
-		gunBoxBlock = (BlockGunBox) new BlockGunBox(gunBoxID);
+		gunBoxBlock = new BlockGunBox(gunBoxID);
 		GameRegistry.registerBlock(gunBoxBlock, ItemGunBox.class, "gunBox");
 		GameRegistry.registerTileEntity(TileEntityGunBox.class, "GunBoxTE");
 
@@ -266,8 +266,6 @@ public class FlansMod
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 1), "Stick of Connecting");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 2), "Stick of Mapping");
 		LanguageRegistry.addName(new ItemStack(opStick, 1, 3), "Stick of Destruction");
-		LanguageRegistry.addName(new ItemStack(opStick, 1, 4), "Stick of Redness");
-		LanguageRegistry.addName(new ItemStack(opStick, 1, 5), "Stick of Blueness");
 		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
@@ -318,7 +316,6 @@ public class FlansMod
 	{
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
-		handler.registerCommand(new CommandBuild());
 	}
 	
 	private void getTypeFiles(List<File> contentPacks)
@@ -459,7 +456,7 @@ public class FlansMod
 			{
 				BulletType type = new BulletType(bulletFile);
 				type.read(bulletFile);
-				Item bulletItem = new ItemBullet(type.itemID - 256, type.colour, type).setUnlocalizedName(type.shortName);
+				Item bulletItem = new ItemBullet(type.itemID - 256, type).setUnlocalizedName(type.shortName);
 				bulletItems.add(bulletItem);
 				LanguageRegistry.addName(bulletItem, type.name);
 			} 
@@ -470,6 +467,25 @@ public class FlansMod
 			}
 		}
 		log("Loaded bullets.");
+		
+		//Attachments
+		for(TypeFile attachmentFile : TypeFile.files.get(EnumType.attachment))
+		{
+			try
+			{
+				AttachmentType type = new AttachmentType(attachmentFile);
+				type.read(attachmentFile);
+				Item attachmentItem = new ItemAttachment(type.itemID - 256, type).setUnlocalizedName(type.shortName);
+				attachmentItems.add(attachmentItem);
+				LanguageRegistry.addName(attachmentItem, type.name);
+			} 
+			catch (Exception e)
+			{
+				log("Failed to add attachment : " + attachmentFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded attachments.");
 
 		// Guns
 		for(TypeFile gunFile : TypeFile.files.get(EnumType.gun))
@@ -584,6 +600,44 @@ public class FlansMod
 			}
 		}
 		log("Loaded AA guns.");
+		
+		//Mecha Tools
+		for(TypeFile mechaToolFile : TypeFile.files.get(EnumType.mechaItem))
+		{
+			try
+			{
+				MechaItemType type = new MechaItemType(mechaToolFile);
+				type.read(mechaToolFile);
+				Item mechaToolItem = new ItemMechaAddon(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				mechaToolItems.add(mechaToolItem);
+				LanguageRegistry.addName(mechaToolItem, type.name);
+			}
+			catch(Exception e)
+			{
+				log("Failed to add mecha tool : " + mechaToolFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded mecha tools.");
+		
+		// Mechas
+		for(TypeFile mechaFile : TypeFile.files.get(EnumType.mecha))
+		{
+			try
+			{
+				MechaType type = new MechaType(mechaFile);
+				type.read(mechaFile);
+				Item mechaItem = new ItemMecha(type.itemID - 256, type).setUnlocalizedName(type.iconPath);
+				mechaItems.add(mechaItem);
+				LanguageRegistry.addName(mechaItem, type.name);
+			}
+			catch (Exception e)
+			{
+				log("Failed to add mecha : " + mechaFile.name);
+				e.printStackTrace();
+			}
+		}
+		log("Loaded mechas.");
 		
 		//Tools
 		for(TypeFile toolFile : TypeFile.files.get(EnumType.tool))

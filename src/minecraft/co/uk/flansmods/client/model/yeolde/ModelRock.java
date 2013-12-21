@@ -14,6 +14,7 @@ public class ModelRock extends ModelBase
 		rockModel.addBox(-1F, -1F, -1F, 2, 2, 2);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		rockModel.render(f5);

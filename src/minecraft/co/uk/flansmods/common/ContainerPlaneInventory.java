@@ -29,13 +29,13 @@ public class ContainerPlaneInventory extends Container
 			case 1 : 
 			{
 				numItems = plane.getDriveableType().numBombSlots;
-				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
+				maxScroll = (((numItems + 7) / 8) > 3 ? ((numItems + 7) / 8) - 3 : 0);
 				break;
 			}
 			case 2 : 
 			{
 				numItems = plane.getDriveableType().numCargoSlots;
-				maxScroll = ((int)((numItems + 7) / 8) > 3 ? (int)((numItems + 7) / 8) - 3 : 0);
+				maxScroll = (((numItems + 7) / 8) > 3 ? ((numItems + 7) / 8) - 3 : 0);
 				break;
 			}	
 		}
@@ -62,13 +62,13 @@ public class ContainerPlaneInventory extends Container
 				int startSlot = plane.driveableData.getBombInventoryStart();
 				if(screen == 2)
 					startSlot = plane.driveableData.getCargoInventoryStart();
-				int m = (int)((numItems + 7) / 8);
+				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
 				{
 					int yPos = -1000;
 					if(row < 3 + scroll && row >= scroll)
 						yPos = 25 + 19 * (row - scroll);
-					for(int col = 0; col < ((row + scroll + 1) * 8 < numItems ? 8 : numItems % 8); col++)
+					for(int col = 0; col < ((row + scroll + 1) * 8 <= numItems ? 8 : numItems % 8); col++)
 					{
 						addSlotToContainer(new Slot(plane.driveableData, startSlot + row * 8 + col, 10 + 18 * col, yPos));
 					}
@@ -114,13 +114,13 @@ public class ContainerPlaneInventory extends Container
 			case 1 :
 			case 2 :
 			{
-				int m = (int)((numItems + 7) / 8);
+				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
 				{
 					int yPos = -1000;
 					if(row < 3 + scroll && row >= scroll)
 						yPos = 25 + 19 * (row - scroll);
-					for(int col = 0; col < ((row + 1) * 8 < numItems ? 8 : numItems % 8); col++)
+					for(int col = 0; col < ((row + 1) * 8 <= numItems ? 8 : numItems % 8); col++)
 					{
 						((Slot)inventorySlots.get(row * 8 + col)).yDisplayPosition = yPos;
 					}

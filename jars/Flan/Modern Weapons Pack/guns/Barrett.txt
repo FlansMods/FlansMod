@@ -2,6 +2,7 @@ Name Barrett .50cal
 ShortName barrett
 //The ammo this gun uses (shortName)
 Ammo barrettAmmo
+Ammo barrettExplosiveAmmo
 Icon Barrett
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -19,6 +20,22 @@ ShootDelay 12
 ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
+//Default Scope Settings
 Scope mwbarrett
+ZoomLevel 6.0
+FOVZoomLevel 1.0
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model Settings
+Model mw.Barrett
+Texture Barrett
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 2

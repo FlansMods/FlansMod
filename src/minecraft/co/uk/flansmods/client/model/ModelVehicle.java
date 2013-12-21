@@ -1,9 +1,8 @@
 package co.uk.flansmods.client.model;
 
-import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
-import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
@@ -11,6 +10,24 @@ import co.uk.flansmods.common.driveables.EnumDriveablePart;
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelDriveable
 {
+    public ModelRendererTurbo turretModel[] = new ModelRendererTurbo[0];			//The turret (for tanks)
+	public ModelRendererTurbo barrelModel[] = new ModelRendererTurbo[0];			//The barrel of the main turret
+    public ModelRendererTurbo frontWheelModel[] = new ModelRendererTurbo[0];		//Front and back wheels are for bicycles and motorbikes and whatnot
+    public ModelRendererTurbo backWheelModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo leftFrontWheelModel[] = new ModelRendererTurbo[0];	//This set of 4 wheels are for 4 or more wheeled things
+    public ModelRendererTurbo rightFrontWheelModel[] = new ModelRendererTurbo[0];	//The front wheels will turn as the player steers, and the back ones will not
+    public ModelRendererTurbo leftBackWheelModel[] = new ModelRendererTurbo[0];		//They will all turn as the car drives if the option to do so is set on
+    public ModelRendererTurbo rightBackWheelModel[] = new ModelRendererTurbo[0];	//In the vehicle type file
+    public ModelRendererTurbo rightTrackModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo leftTrackModel[] = new ModelRendererTurbo[0];
+    public ModelRendererTurbo rightTrackWheelModels[] = new ModelRendererTurbo[0];	//These go with the tracks but rotate
+    public ModelRendererTurbo leftTrackWheelModels[] = new ModelRendererTurbo[0];
+	
+	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];	
+	public ModelRendererTurbo trailerModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo steeringWheelModel[] = new ModelRendererTurbo[0];
+	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
 	{
@@ -19,13 +36,17 @@ public class ModelVehicle extends ModelDriveable
 	
 	@Override
 	/** GUI render method */
-	public void render()
+	public void render(DriveableType type)
 	{
-		super.render();
+		super.render(type);
 		renderPart(leftBackWheelModel);
 		renderPart(rightBackWheelModel);
 		renderPart(leftFrontWheelModel);
 		renderPart(rightFrontWheelModel);
+		renderPart(rightTrackModel);
+		renderPart(leftTrackModel);
+		renderPart(rightTrackWheelModels);
+		renderPart(leftTrackWheelModels);
 		renderPart(bodyDoorCloseModel);
 		renderPart(trailerModel);
 		renderPart(turretModel);
@@ -247,14 +268,14 @@ public class ModelVehicle extends ModelDriveable
 	public void flipAll()
 	{
 		super.flipAll();
+		flip(bodyDoorOpenModel);
+		flip(bodyDoorCloseModel);
 		flip(turretModel);
 		flip(barrelModel);
 		flip(leftFrontWheelModel);
 		flip(rightFrontWheelModel);
 		flip(leftBackWheelModel);
 		flip(rightBackWheelModel);
-		flip(bodyDoorOpenModel);
-		flip(bodyDoorCloseModel);
 		flip(rightTrackModel);
 		flip(leftTrackModel);
 		flip(rightTrackWheelModels);
@@ -266,17 +287,17 @@ public class ModelVehicle extends ModelDriveable
 	}	
 	
 	@Override
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		super.translateAll(x, y, z);
+		translate(bodyDoorOpenModel, x, y, z);
+		translate(bodyDoorCloseModel, x, y, z);		
 		translate(turretModel, x, y, z);
 		translate(barrelModel, x, y, z);
 		translate(leftFrontWheelModel, x, y, z);
 		translate(rightFrontWheelModel, x, y, z);
 		translate(leftBackWheelModel, x, y, z);
 		translate(rightBackWheelModel, x, y, z);
-		translate(bodyDoorOpenModel, x, y, z);
-		translate(bodyDoorCloseModel, x, y, z);
 		translate(rightTrackModel, x, y, z);
 		translate(leftTrackModel, x, y, z);
 		translate(rightTrackWheelModels, x, y, z);
@@ -286,24 +307,4 @@ public class ModelVehicle extends ModelDriveable
 		translate(frontWheelModel, x, y, z);
 		translate(backWheelModel, x, y, z);
 	}
-
-
-
-    public ModelRendererTurbo turretModel[] = new ModelRendererTurbo[0];			//The turret (for tanks)
-	public ModelRendererTurbo barrelModel[] = new ModelRendererTurbo[0];			//The barrel of the main turret
-    public ModelRendererTurbo frontWheelModel[] = new ModelRendererTurbo[0];		//Front and back wheels are for bicycles and motorbikes and whatnot
-    public ModelRendererTurbo backWheelModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo leftFrontWheelModel[] = new ModelRendererTurbo[0];	//This set of 4 wheels are for 4 or more wheeled things
-    public ModelRendererTurbo rightFrontWheelModel[] = new ModelRendererTurbo[0];	//The front wheels will turn as the player steers, and the back ones will not
-    public ModelRendererTurbo leftBackWheelModel[] = new ModelRendererTurbo[0];		//They will all turn as the car drives if the option to do so is set on
-    public ModelRendererTurbo rightBackWheelModel[] = new ModelRendererTurbo[0];	//In the vehicle type file
-    public ModelRendererTurbo rightTrackModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo leftTrackModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo rightTrackWheelModels[] = new ModelRendererTurbo[0];	//These go with the tracks but rotate
-    public ModelRendererTurbo leftTrackWheelModels[] = new ModelRendererTurbo[0];
-	
-	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];	
-	public ModelRendererTurbo trailerModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo steeringWheelModel[] = new ModelRendererTurbo[0];
 }

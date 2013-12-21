@@ -8,7 +8,6 @@ import java.util.List;
 import co.uk.flansmods.common.driveables.DriveableData;
 import co.uk.flansmods.common.driveables.EntityVehicle;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
-import co.uk.flansmods.common.driveables.PlaneType;
 import co.uk.flansmods.common.driveables.VehicleType;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -54,7 +53,7 @@ public class ItemVehicle extends ItemMapBase
 			{
 				stack.stackTagCompound = new NBTTagCompound();
 				stack.stackTagCompound.setString("Type", type.shortName);
-				stack.stackTagCompound.setString("Engine", PartType.defaultEngine.shortName);
+				stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.vehicle).shortName);
 			}
 		}
 		return stack.stackTagCompound;
@@ -86,6 +85,11 @@ public class ItemVehicle extends ItemMapBase
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
+		if(type.description != null)
+		{
+			for(String s : type.description.split("_"))
+				lines.add(s);
+		}
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
@@ -93,7 +97,8 @@ public class ItemVehicle extends ItemMapBase
 			lines.add(part.name);
 	}
 	
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+    @Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
         float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
@@ -101,7 +106,7 @@ public class ItemVehicle extends ItemMapBase
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.clip(posVec, lookVec, true);
         
@@ -142,7 +147,8 @@ public class ItemVehicle extends ItemMapBase
 		return new DriveableData(getTagCompound(itemstack, world));
     }
 	
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
@@ -162,8 +168,8 @@ public class ItemVehicle extends ItemMapBase
     	ItemStack planeStack = new ItemStack(i, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
-    	if(PartType.defaultEngine != null)
-    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	if(PartType.defaultEngines.containsKey(EnumType.vehicle))
+    		tags.setString("Engine", PartType.defaultEngines.get(EnumType.vehicle).shortName);
     	for(EnumDriveablePart part : EnumDriveablePart.values())
     	{
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);

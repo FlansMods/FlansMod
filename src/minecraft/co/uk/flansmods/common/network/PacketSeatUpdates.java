@@ -71,7 +71,7 @@ public class PacketSeatUpdates extends FlanPacketCommon
         		float yaw = stream.readFloat();	        		
         		float pitch = stream.readFloat();
         		//If this is the player who sent the packet in the first place, don't read it
-        		if(side == Side.CLIENT && driveable.seats[seatID].riddenByEntity == player)
+        		if(side == Side.CLIENT && driveable.seats[seatID] != null && driveable.seats[seatID].riddenByEntity == player)
         			return;
         		driveable.seats[seatID].prevLooking = driveable.seats[seatID].looking.clone();
         		driveable.seats[seatID].looking.setAngles(yaw, pitch, 0F);

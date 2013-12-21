@@ -60,6 +60,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	/**
 	 * Returns a string representation of this matrix
 	 */
+	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
 		buf.append(m00).append(' ').append(m10).append(' ').append(m20).append(' ').append(m30).append('\n');
@@ -73,6 +74,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * Set this matrix to be the identity matrix.
 	 * @return this
 	 */
+	@Override
 	public Matrix setIdentity() {
 		return setIdentity(this);
 	}
@@ -107,6 +109,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * Set this matrix to 0.
 	 * @return this
 	 */
+	@Override
 	public Matrix setZero() {
 		return setZero(this);
 	}
@@ -182,6 +185,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * @param buf A float buffer to read from
 	 * @return this
 	 */
+	@Override
 	public Matrix load(FloatBuffer buf) {
 
 		m00 = buf.get();
@@ -211,6 +215,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * @param buf A float buffer to read from
 	 * @return this
 	 */
+	@Override
 	public Matrix loadTranspose(FloatBuffer buf) {
 
 		m00 = buf.get();
@@ -238,6 +243,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * major (openGL) order.
 	 * @param buf The buffer to store this matrix in
 	 */
+	@Override
 	public Matrix store(FloatBuffer buf) {
 		buf.put(m00);
 		buf.put(m01);
@@ -263,6 +269,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * major (maths) order.
 	 * @param buf The buffer to store this matrix in
 	 */
+	@Override
 	public Matrix storeTranspose(FloatBuffer buf) {
 		buf.put(m00);
 		buf.put(m10);
@@ -440,6 +447,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * Transpose this matrix
 	 * @return this
 	 */
+	@Override
 	public Matrix transpose() {
 		return transpose(this);
 	}
@@ -690,6 +698,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	/**
 	 * @return the determinant of the matrix
 	 */
+	@Override
 	public float determinant() {
 		float f =
 			m00
@@ -733,6 +742,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * Invert this matrix
 	 * @return this if successful, null otherwise
 	 */
+	@Override
 	public Matrix invert() {
 		return invert(this, this);
 	}
@@ -804,6 +814,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 * Negate this matrix
 	 * @return this
 	 */
+	@Override
 	public Matrix negate() {
 		return negate(this);
 	}

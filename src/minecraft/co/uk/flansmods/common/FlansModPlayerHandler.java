@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,6 +13,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
+import co.uk.flansmods.common.teams.Gametype;
 import co.uk.flansmods.common.teams.TeamsManager;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -94,7 +94,7 @@ public class FlansModPlayerHandler implements IPlayerTracker
 		if(!serverSideData.containsKey(player.username))
 			serverSideData.put(player.username, new FlansModPlayerData(player.username));
 		if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
-			TeamsManager.getInstance().currentGametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
+			Gametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 		if(clientsToRemoveAfterThisRound.contains(player.username))
 			clientsToRemoveAfterThisRound.remove(player.username);
 	}

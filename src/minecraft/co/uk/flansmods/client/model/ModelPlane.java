@@ -1,15 +1,12 @@
 package co.uk.flansmods.client.model;
 
-import java.util.HashMap;
-
-import net.minecraft.client.model.ModelBase;
 import co.uk.flansmods.client.tmt.ModelRendererTurbo;
+import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntityPlane;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.driveables.Propeller;
-import co.uk.flansmods.common.vector.Vector3f;
 
 /** Extensible ModelPlane class for rendering plane models */
 public class ModelPlane extends ModelDriveable
@@ -48,9 +45,9 @@ public class ModelPlane extends ModelDriveable
 	
 	@Override
 	/** GUI render method */
-	public void render()
+	public void render(DriveableType type)
 	{
-		super.render();
+		super.render(type);
 		renderPart(noseModel);
 		renderPart(leftWingModel);
 		renderPart(rightWingModel);
@@ -58,7 +55,13 @@ public class ModelPlane extends ModelDriveable
 		renderPart(bayModel);
 		renderPart(tailModel);
 		for(ModelRendererTurbo[] prop : propellerModels)
-			renderPart(prop);
+		{
+			for(int j = 0; j < prop.length; j++)
+			{
+				prop[j].rotateAngleX = (j * 2F * 3.1415926535F) / (prop.length);
+				prop[j].render(0.0625F);
+			}
+		}
 		renderPart(yawFlapModel);
 		renderPart(pitchFlapLeftModel);
 		renderPart(pitchFlapRightModel);
@@ -327,7 +330,7 @@ public class ModelPlane extends ModelDriveable
 	}
 
 	@Override
-	public void translateAll(int x, int y, int z)
+	public void translateAll(float x, float y, float z)
 	{
 		super.translateAll(x, y, z);
 		translate(noseModel, x, y, z);

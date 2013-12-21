@@ -14,7 +14,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +22,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -55,7 +53,7 @@ public class ItemPlane extends Item
 			{
 				stack.stackTagCompound = new NBTTagCompound();
 				stack.stackTagCompound.setString("Type", type.shortName);
-				stack.stackTagCompound.setString("Engine", PartType.defaultEngine.shortName);
+				stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
 			}
 		}
 		return stack.stackTagCompound;
@@ -107,7 +105,7 @@ public class ItemPlane extends Item
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.clip(posVec, lookVec, true);
         
@@ -155,7 +153,8 @@ public class ItemPlane extends Item
 		return new DriveableData(getTagCompound(itemstack, world));
     }
 		
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
@@ -175,8 +174,8 @@ public class ItemPlane extends Item
     	ItemStack planeStack = new ItemStack(i, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
-    	if(PartType.defaultEngine != null)
-    		tags.setString("Engine", PartType.defaultEngine.shortName);
+    	if(PartType.defaultEngines.containsKey(EnumType.plane))
+    		tags.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
     	for(EnumDriveablePart part : EnumDriveablePart.values())
     	{
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);

@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -18,17 +17,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet10Flying;
-import net.minecraft.network.packet.Packet11PlayerPosition;
 import net.minecraft.network.packet.Packet34EntityTeleport;
-import net.minecraft.network.packet.Packet39AttachEntity;
-import net.minecraft.network.packet.Packet6SpawnPosition;
-import net.minecraft.network.packet.Packet9Respawn;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -40,10 +32,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.Event;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -54,20 +44,17 @@ import net.minecraftforge.event.world.WorldEvent;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.ItemPlane;
 import co.uk.flansmods.common.ItemVehicle;
 import co.uk.flansmods.common.guns.BulletType;
-import co.uk.flansmods.common.guns.EntityDamageSourceGun;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemAAGun;
+import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.guns.ItemGun;
-import co.uk.flansmods.common.network.PacketPlayerSpawn;
 import co.uk.flansmods.common.network.PacketTeamInfo;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TeamsManager implements IPlayerTracker
@@ -447,12 +434,14 @@ public class TeamsManager implements IPlayerTracker
 			FlansMod.explosions = tags.getBoolean("Explosions");
 			FlansMod.forceAdventureMode = tags.getBoolean("ForceAdventure");
 			FlansMod.canBreakGuns = tags.getBoolean("CanBreakGuns");
+			FlansMod.canBreakGlass = tags.getBoolean("CanBreakGlass");
 			FlansMod.armourDrops = tags.getBoolean("ArmourDrops");
 			FlansMod.weaponDrops = tags.getInteger("WeaponDrops");
 			FlansMod.vehiclesNeedFuel = tags.getBoolean("NeedFuel");
 			FlansMod.mgLife = tags.getInteger("MGLife");
 			FlansMod.aaLife = tags.getInteger("AALife");
 			FlansMod.vehicleLife = tags.getInteger("VehicleLife");
+			FlansMod.mechaLove = tags.getInteger("MechaLove");
 			FlansMod.planeLife = tags.getInteger("PlaneLife");
 			FlansMod.driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
 		}
@@ -524,12 +513,14 @@ public class TeamsManager implements IPlayerTracker
 			tags.setBoolean("Explosions", FlansMod.explosions);
 			tags.setBoolean("ForceAdventure", FlansMod.forceAdventureMode);
 			tags.setBoolean("CanBreakGuns", FlansMod.canBreakGuns);
+			tags.setBoolean("CanBreakGlass", FlansMod.canBreakGlass);
 			tags.setBoolean("ArmourDrops", FlansMod.armourDrops);
 			tags.setInteger("WeaponDrops", FlansMod.weaponDrops);
 			tags.setBoolean("NeedFuel", FlansMod.vehiclesNeedFuel);
 			tags.setInteger("MGLife", FlansMod.mgLife);
 			tags.setInteger("AALife", FlansMod.aaLife);
 			tags.setInteger("VehicleLife", FlansMod.vehicleLife);
+			tags.setInteger("MechaLove", FlansMod.mechaLove);
 			tags.setInteger("PlaneLife", FlansMod.planeLife);
 			tags.setBoolean("BreakBlocks", FlansMod.driveablesBreakBlocks);
 			
@@ -761,7 +752,7 @@ public class TeamsManager implements IPlayerTracker
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true, true);
+				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
 			}
 		}
 	}

@@ -5,10 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -20,14 +18,10 @@ import co.uk.flansmods.common.driveables.DriveableType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
 import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.driveables.EnumDriveablePart;
-import co.uk.flansmods.common.driveables.PlaneType;
-import co.uk.flansmods.common.driveables.VehicleType;
-import co.uk.flansmods.common.guns.AAGunType;
-import co.uk.flansmods.common.guns.BulletType;
-import co.uk.flansmods.common.guns.GrenadeType;
-import co.uk.flansmods.common.guns.GunType;
+import co.uk.flansmods.common.driveables.mechas.ContainerMechaInventory;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.guns.ContainerGunModTable;
 import co.uk.flansmods.common.network.PacketBreakSound;
-import co.uk.flansmods.common.network.PacketBuyWeapon;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -93,7 +87,7 @@ public class CommonProxy
 	{
 	}
 	
-	public <T> T loadModel(String[] split, String shortName, Class<T> typeClass)
+	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
 		return null;
 	}
@@ -125,7 +119,8 @@ public class CommonProxy
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		switch(ID) 
-		{
+		{	
+			case 2: return new ContainerGunModTable(player.inventory, world);
 			case 3: return new ContainerPlaneMenu(player.inventory, world);
 			case 4: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
 			
@@ -134,6 +129,7 @@ public class CommonProxy
 			case 7: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
 			case 8: return new ContainerPlaneMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
 			case 9: return new ContainerPlaneInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
+			case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		}
 		return null;
 	}
@@ -217,7 +213,7 @@ public class CommonProxy
 			{
 				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 				//Check its an engine
-				if(partType.category == 2)
+				if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(type)))
 				{
 					//If we already have engines of this type, add these ones to the stack
 					if(engines.containsKey(partType))
@@ -349,5 +345,15 @@ public class CommonProxy
 			part.dead = false;
 			driving.checkParts();
 		}
+	}
+	
+	public boolean isScreenOpen()
+	{
+		return false;
+	}
+	
+	public boolean isKeyDown(int key)
+	{
+		return false;
 	}
 }

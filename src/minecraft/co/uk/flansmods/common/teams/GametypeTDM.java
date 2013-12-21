@@ -5,14 +5,9 @@ import java.util.List;
 
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
-import co.uk.flansmods.common.network.PacketTeamSelect;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.Vec3;
 
 public class GametypeTDM extends Gametype 
@@ -67,9 +62,9 @@ public class GametypeTDM extends Gametype
 			{
 				if(team != null && team.score >= scoreLimit && newRoundTimer < 0)
 				{
-					teamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
+					TeamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
 					newRoundTimer = 200;
-					teamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
+					TeamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
 					time = -300;
 				}
 			}
@@ -77,7 +72,7 @@ public class GametypeTDM extends Gametype
 		time++;
 		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
 		{
-			teamsManager.messageAll("\u00a7fAutobalancing teams...");
+			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
 		}
 		if(autoBalance && time % autoBalanceInterval == 0 && needAutobalance())
 		{
@@ -149,7 +144,7 @@ public class GametypeTDM extends Gametype
 			getPlayerData(player).playerClass = null;
 			getPlayerData(player).newPlayerClass = null;
 		}
-		sendClassMenuToPlayer((EntityPlayerMP)player);
+		sendClassMenuToPlayer(player);
 		if(team != previousTeam)
 			teamsManager.forceRespawn(player);
 		return true;

@@ -64,8 +64,8 @@ public class PacketBreakSound extends FlanPacketCommon
         	int blockID = stream.readInt();
         	
     		Block block = Block.blocksList[blockID];
-        	FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int)x, (int)y, (int)z, 1);
-        	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+        	FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects(x, y, z, 1);
+        	FMLClientHandler.instance().getClient().sndManager.playSound(block.stepSound.getBreakSound(), x + 0.5F, y + 0.5F, z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
         }
         catch(Exception e)
         {

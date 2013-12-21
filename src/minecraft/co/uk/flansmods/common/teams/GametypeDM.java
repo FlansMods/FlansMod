@@ -46,7 +46,7 @@ public class GametypeDM extends Gametype
 				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
 		}
 		resetScores();
-		teamsManager.messageAll("\u00a7fA new round has started!");
+		TeamsManager.messageAll("\u00a7fA new round has started!");
 		if(teamsManager.teams != null)
 		{
 			for(Team team : teamsManager.teams)
@@ -86,9 +86,9 @@ public class GametypeDM extends Gametype
 					FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(name);
 					if(data.score >= scoreLimit && newRoundTimer < 0)
 					{
-						teamsManager.messageAll(name + "\u00a7f won!");
+						TeamsManager.messageAll(name + "\u00a7f won!");
 						newRoundTimer = 200;
-						teamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
+						TeamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
 						time = -300;
 					}
 				}
@@ -116,7 +116,7 @@ public class GametypeDM extends Gametype
 			getPlayerData(player).newPlayerClass = null;
 		}
 		
-		sendClassMenuToPlayer((EntityPlayerMP)player);
+		sendClassMenuToPlayer(player);
 		if(team != previousTeam)
 			teamsManager.forceRespawn(player);
 		return true;

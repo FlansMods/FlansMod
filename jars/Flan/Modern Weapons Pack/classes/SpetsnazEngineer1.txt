@@ -1,6 +1,6 @@
 Name Engineer
 ShortName spetsnazEngineer1
-AddItem m1014
+AddItem m1014+flanMWRedDot
 AddItem usp
 AddItem c4 3
 AddItem c4Remote

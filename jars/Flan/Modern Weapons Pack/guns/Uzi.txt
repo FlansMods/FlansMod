@@ -19,6 +19,23 @@ ShootDelay 1
 ShootSound MiniUziShoot
 ReloadSound coltReload
 Mode FullAuto
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.25
+//Deployable Settings
 Deployable False
 DeployedModel None
+//Model settings
+Model mw.MiniUzi
+Texture MiniUzi
+ModelScale 1.0
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowBarrelAttachments true
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1

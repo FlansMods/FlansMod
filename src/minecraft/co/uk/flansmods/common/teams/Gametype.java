@@ -195,7 +195,7 @@ public abstract class Gametype {
 				getPlayerData((EntityPlayerMP)player).team.removePlayer(player);
 		}
 		resetScores();
-		teamsManager.messageAll("\u00a7fA new round has started!");
+		TeamsManager.messageAll("\u00a7fA new round has started!");
 		if(teamsManager.teams != null)
 		{
 			for(Team team : teamsManager.teams)

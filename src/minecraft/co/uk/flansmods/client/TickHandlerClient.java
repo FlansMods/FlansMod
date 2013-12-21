@@ -24,8 +24,11 @@ import net.minecraftforge.event.ForgeSubscribe;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import co.uk.flansmods.client.model.RenderFlag;
+import co.uk.flansmods.client.model.RenderGun;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.EntitySeat;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemGun;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -36,7 +39,7 @@ public class TickHandlerClient implements ITickHandler
 {
 	public static final ResourceLocation gui = new ResourceLocation("FlansMod","textures/gui/gui.png");
 	public static final ResourceLocation teamScores = new ResourceLocation("FlansMod","textures/gui/teamScores.png");
-	public static final ResourceLocation zoomOverlay = new ResourceLocation("FlansMod","textures/gui/" + FlansModClient.zoomOverlay + ".png");
+	//public static final ResourceLocation zoomOverlay = new ResourceLocation("FlansMod","textures/gui/" + FlansModClient.zoomOverlay + ".png");
 	
 	public TickHandlerClient()
 	{
@@ -46,11 +49,20 @@ public class TickHandlerClient implements ITickHandler
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void eventHandler(RenderGameOverlayEvent event)
 	{
+		Minecraft mc = Minecraft.getMinecraft();
+		
+		//Remove crosshairs if looking down the sights of a gun
+		if(event.type == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
+		{
+			event.setCanceled(true);
+			return;
+		}
+
 	    if(event.isCancelable() || event.type != ElementType.HOTBAR)
 	    {      
 	    	return;
 	    }
-		Minecraft mc = Minecraft.getMinecraft();
+
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
@@ -111,7 +123,7 @@ public class TickHandlerClient implements ITickHandler
 			{
 				//Draw team 1 colour bit
 				int colour = GuiTeamScores.teamData[0].team.teamColour;	
-				GL11.glColor4f((float)((colour >> 16) & 0xff) / 256F, (float)((colour >> 8) & 0xff) / 256F, (float)(colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
 				tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
@@ -120,7 +132,7 @@ public class TickHandlerClient implements ITickHandler
 				tessellator.draw();
 				//Draw team 2 colour bit
 				colour = GuiTeamScores.teamData[1].team.teamColour;	
-				GL11.glColor4f((float)((colour >> 16) & 0xff) / 256F, (float)((colour >> 8) & 0xff) / 256F, (float)(colour & 0xff) / 256F, 1.0F);
+				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
@@ -180,7 +192,8 @@ public class TickHandlerClient implements ITickHandler
 	{
 		if (type.equals(EnumSet.of(TickType.RENDER)))
 		{
-			rTickStart(FMLClientHandler.instance().getClient());
+			rTickStart(FMLClientHandler.instance().getClient(), (Float)tickData[0]);
+			RenderGun.smoothing = (Float)tickData[0];
 		}
 		if (type.equals(EnumSet.of(TickType.CLIENT)))
 		{
@@ -221,7 +234,7 @@ public class TickHandlerClient implements ITickHandler
 	}
 	
 	
-	public void rTickStart(Minecraft mc)
+	public void rTickStart(Minecraft mc, float smoothing)
 	{
 		// CAPTURE MOUSE INPUT!
 		if (mc.currentScreen == null && FlansModClient.controlModeMouse)
@@ -235,6 +248,8 @@ public class TickHandlerClient implements ITickHandler
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
 			}
 		}
+		
+		FlansModClient.renderTick(smoothing);
 	}
 
 	public void rTickEnd(Minecraft mc)
@@ -243,7 +258,7 @@ public class TickHandlerClient implements ITickHandler
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
-		if (FlansModClient.zoomOverlay != null && FMLClientHandler.instance().getClient().currentScreen == null)
+		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
 			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 			GL11.glEnable(3042 /* GL_BLEND */);
@@ -253,7 +268,7 @@ public class TickHandlerClient implements ITickHandler
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
-			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.zoomOverlay));
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.currentScope.getZoomOverlay()));
 
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
@@ -277,11 +292,13 @@ public class TickHandlerClient implements ITickHandler
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
 
+	@Override
 	public EnumSet<TickType> ticks()
 	{
 		return EnumSet.of(TickType.RENDER, TickType.CLIENT);
 	}
 
+	@Override
 	public String getLabel()
 	{
 		return "FlansModClient";

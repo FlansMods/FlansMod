@@ -5,8 +5,6 @@ import java.util.*;
 
 import cpw.mods.fml.common.Loader;
 
-import net.minecraft.client.Minecraft;
-
 public class ModelPool
 {
 	public static ModelPoolEntry addFile(String file, Class modelClass, Map<String, TransformGroup> group, Map<String, TextureGroup> textureGroup)

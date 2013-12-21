@@ -8,7 +8,7 @@ public class PositionTransformVertex extends PositionTextureVertex
 {
 	public PositionTransformVertex(float x, float y, float z, float u, float v)
 	{
-		this(Vec3.createVectorHelper((double)x, (double)y, (double)z), u, v);
+		this(Vec3.createVectorHelper(x, y, z), u, v);
 	}
 	
 	public PositionTransformVertex(PositionTextureVertex vertex, float u, float v)

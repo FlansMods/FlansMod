@@ -1,15 +1,18 @@
 package co.uk.flansmods.client;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import co.uk.flansmods.common.ContainerPlaneMenu;
+import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.driveables.EntityDriveable;
+import co.uk.flansmods.common.driveables.mechas.EntityMecha;
+import co.uk.flansmods.common.network.PacketVehicleGUI;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 
 public class GuiDriveableFuel extends GuiContainer
@@ -25,13 +28,15 @@ public class GuiDriveableFuel extends GuiContainer
 		inventory = inventoryplayer;
     }
 
-    protected void drawGuiContainerForegroundLayer(int i, int j)
+    @Override
+	protected void drawGuiContainerForegroundLayer(int i, int j)
     {
         fontRenderer.drawString(plane.getDriveableType().name + " - Fuel", 6, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
     }
 
-    protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
+    @Override
+	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
     {
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
 		if(newTime > lastTime)
@@ -57,13 +62,16 @@ public class GuiDriveableFuel extends GuiContainer
 			drawTexturedModalRect(j + 26, k + 21, 0, 161, (int)((129 * fuelInTank) / fuelTankSize), 15);
     }
 	
+	@Override
 	protected void mouseClicked(int i, int j, int k)
     {
         super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;
 		int n = j - (height - ySize) / 2;
 		if(m > 161 && m < 171 && n > 5 && n < 15)
+		{
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, plane));
+		}
 	}
 
 	public World world;

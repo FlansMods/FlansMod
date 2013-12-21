@@ -1,18 +1,13 @@
 package co.uk.flansmods.common.guns;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.flansmods.client.model.ModelAAGun;
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.ItemBullet;
 import co.uk.flansmods.common.TypeFile;
-import co.uk.flansmods.common.driveables.PlaneType;
-
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -52,7 +47,7 @@ public class AAGunType extends InfoType
 		{
 			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadModel(arg0, shortName, ModelAAGun.class);
+				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelAAGun.class);
 			}
 			if (arg0[0].equals("Texture"))
 			{
@@ -163,5 +158,11 @@ public class AAGunType extends InfoType
 				return gun;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
 	}
 }

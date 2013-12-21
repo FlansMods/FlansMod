@@ -1,20 +1,14 @@
 package co.uk.flansmods.common.driveables;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import net.minecraft.item.ItemStack;
 
+import co.uk.flansmods.client.model.ModelGun;
 import co.uk.flansmods.client.model.ModelPlane;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.TypeFile;
-import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.vector.Vector3f;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class PlaneType extends DriveableType
 {
@@ -167,5 +161,11 @@ public class PlaneType extends DriveableType
 				return type;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelPlane.class);
 	}
 }

@@ -1,7 +1,6 @@
 package co.uk.flansmods.common.teams;
 
 import co.uk.flansmods.client.debug.EntityDebugAABB;
-import co.uk.flansmods.common.CommandBuild;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
@@ -23,7 +22,7 @@ import net.minecraft.world.World;
 
 public class ItemOpStick extends Item
 {
-	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction", "opStick_redCorner", "opStick_blueCorner"};
+	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
     @SideOnly(Side.CLIENT)
     private Icon[] icons;
     
@@ -34,11 +33,13 @@ public class ItemOpStick extends Item
 		setHasSubtypes(true);
 	}
 		
-    public boolean shouldRotateAroundWhenRendering()
+    @Override
+	public boolean shouldRotateAroundWhenRendering()
     {
         return true;
     }
 	
+	@Override
 	public boolean isFull3D()
 	{
 		return true;
@@ -64,7 +65,7 @@ public class ItemOpStick extends Item
 	    	{
 	    		if(teamsManager.teams == null)
 	    		{
-	    			teamsManager.messagePlayer(player, "Please set up teams before editing this base");
+	    			TeamsManager.messagePlayer(player, "Please set up teams before editing this base");
 	    			return;
 	    		}
 	    		Team currentOwner = base.getOwner();
@@ -89,7 +90,7 @@ public class ItemOpStick extends Item
 	    				}
 	    			}
 	    		}
-	    		teamsManager.messagePlayer(player, "Base owner changed to " + (newOwner == null ? "none" : newOwner.shortName));
+	    		TeamsManager.messagePlayer(player, "Base owner changed to " + (newOwner == null ? "none" : newOwner.shortName));
 	    		if(currentOwner != null)
 	    			currentOwner.bases.remove(base);
 	    		base.setBase(newOwner);
@@ -120,11 +121,11 @@ public class ItemOpStick extends Item
 	    					base.addObject(object);
 	    					line.setDead();
 	    					player.fishEntity = null;
-	    					teamsManager.messagePlayer(player, "Successfully connected.");
+	    					TeamsManager.messagePlayer(player, "Successfully connected.");
 	    				}
 	    				else
 	    				{
-	    					teamsManager.messagePlayer(player, "Cannot connect bases to bases.");
+	    					TeamsManager.messagePlayer(player, "Cannot connect bases to bases.");
 	    				}
 	    			}
 	    		}
@@ -136,7 +137,7 @@ public class ItemOpStick extends Item
 	    		int mapID = teamsManager.maps.indexOf(currentMap);
 	    		TeamsMap newMap = teamsManager.maps.get((mapID + 1) % teamsManager.maps.size());
 	    		base.setMap(newMap);
-	    		teamsManager.messagePlayer(player, "Set map for this base to " + newMap.name + ".");
+	    		TeamsManager.messagePlayer(player, "Set map for this base to " + newMap.name + ".");
 	    		break;
 	    	}
 	    	case 3 : //Stick of Destruction
@@ -177,11 +178,11 @@ public class ItemOpStick extends Item
 	    					base.addObject(object);
 	    					//line.setDead();
 	    					//player.fishEntity = null;
-	    					teamsManager.messagePlayer(player, "Successfully connected.");
+	    					TeamsManager.messagePlayer(player, "Successfully connected.");
 	    				}
 	    				else
 	    				{
-	    					teamsManager.messagePlayer(player, "Cannot connect objects to objects.");
+	    					TeamsManager.messagePlayer(player, "Cannot connect objects to objects.");
 	    				}
 	    			}
 	    		}
@@ -199,58 +200,6 @@ public class ItemOpStick extends Item
 	    	}
     	}
 	}
-	
-	/** Super secret WorldEdit functionality */
-	@Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
-		int n = itemstack.getItemDamage();
-		if(n != 4 && n != 5)
-			return itemstack;
-				
-    	//Raytracing
-        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-        double length = 100D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - (double)entityplayer.yOffset, entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.clip(posVec, lookVec, true);
-        
-        //Result check
-        if(movingobjectposition == null)
-        {
-            return itemstack;
-        }
-        if(movingobjectposition.typeOfHit == EnumMovingObjectType.TILE)
-        {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
-            if(world.isRemote)
-            {
-            	world.spawnEntityInWorld(new EntityDebugAABB(world, new Vector3f(i - 0.1F, j - 0.1F, k - 0.1F), new Vector3f(1.2F, 1.2F, 1.2F), 20, n == 4 ? 1 : 0, 0, n == 5 ? 1 : 0));
-            }
-            else
-            {
-        		FlansModPlayerData data = FlansModPlayerHandler.getPlayerData(entityplayer, Side.SERVER);
-        		if(n == 4)
-        		{
-	        		data.x1 = i;
-	        		data.y1 = j;
-	        		data.z1 = k;
-        		}
-        		else
-        		{
-	        		data.x2 = i;
-	        		data.y2 = j;
-	        		data.z2 = k;
-        		}
-            }
-        }
-        return itemstack;
-    }
 	
 	@Override
     @SideOnly(Side.CLIENT)

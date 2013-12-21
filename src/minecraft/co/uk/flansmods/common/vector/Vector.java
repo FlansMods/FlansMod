@@ -54,6 +54,7 @@ public abstract class Vector implements Serializable, ReadableVector {
 	/**
 	 * @return the length of the vector
 	 */
+	@Override
 	public final float length() {
 		return (float) Math.sqrt(lengthSquared());
 	}
@@ -62,6 +63,7 @@ public abstract class Vector implements Serializable, ReadableVector {
 	/**
 	 * @return the length squared of the vector
 	 */
+	@Override
 	public abstract float lengthSquared();
 
 	/**
@@ -97,6 +99,7 @@ public abstract class Vector implements Serializable, ReadableVector {
 	 * @param buf The buffer to store it in, at the current position
 	 * @return this
 	 */
+	@Override
 	public abstract Vector store(FloatBuffer buf);
 
 

@@ -22,10 +22,10 @@ public class TexturedPolygon
 		this(apositionTexturevertex);
 		float var8 = 0.0F / par6;
 		float var9 = 0.0F / par7;
-		apositionTexturevertex[0] = apositionTexturevertex[0].setTexturePosition((float)par4 / par6 - var8, (float)par3 / par7 + var9);
-		apositionTexturevertex[1] = apositionTexturevertex[1].setTexturePosition((float)par2 / par6 + var8, (float)par3 / par7 + var9);
-		apositionTexturevertex[2] = apositionTexturevertex[2].setTexturePosition((float)par2 / par6 + var8, (float)par5 / par7 - var9);
-		apositionTexturevertex[3] = apositionTexturevertex[3].setTexturePosition((float)par4 / par6 - var8, (float)par5 / par7 - var9);
+		apositionTexturevertex[0] = apositionTexturevertex[0].setTexturePosition(par4 / par6 - var8, par3 / par7 + var9);
+		apositionTexturevertex[1] = apositionTexturevertex[1].setTexturePosition(par2 / par6 + var8, par3 / par7 + var9);
+		apositionTexturevertex[2] = apositionTexturevertex[2].setTexturePosition(par2 / par6 + var8, par5 / par7 - var9);
+		apositionTexturevertex[3] = apositionTexturevertex[3].setTexturePosition(par4 / par6 - var8, par5 / par7 - var9);
 	}
 	
 	public void setInvertNormal(boolean isSet)

@@ -1,14 +1,16 @@
 package co.uk.flansmods.common.teams;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
+import co.uk.flansmods.common.guns.AttachmentType;
+import co.uk.flansmods.common.guns.ItemGun;
 
 public class PlayerClass 
 {
@@ -66,14 +68,15 @@ public class PlayerClass
 				Item matchingItem = null;
 				int amount = 1;
 				int damage = 0;
+				String[] itemNames = split[1].split("\\+");
 				for(Item item : Item.itemsList)
 				{
-					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(split[1]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(split[1]))))
+					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(itemNames[0]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(itemNames[0]))))
 						matchingItem = item;
 				}
 				for(InfoType type : InfoType.infoTypes)
 				{
-					if(type.shortName.equals(split[1]))
+					if(type.shortName.equals(itemNames[0]))
 						matchingItem = type.item;
 				}
 				if(matchingItem == null)
@@ -89,7 +92,32 @@ public class PlayerClass
 				{
 					damage = Integer.parseInt(split[3]);
 				}
-				startingItems.add(new ItemStack(matchingItem, amount, damage));
+				ItemStack stack = new ItemStack(matchingItem, amount, damage);
+				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
+				{
+			    	NBTTagCompound tags = new NBTTagCompound();
+			    	NBTTagCompound attachmentTags = new NBTTagCompound();
+			    	int genericID = 0;
+			    	for(int i = 0; i < itemNames.length - 1; i++)
+			    	{
+			    		AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
+			    		String tagName = null;
+			    		switch(attachment.type)
+			    		{
+			    			case sights : tagName = "scope"; break;
+			    			case barrel : tagName = "barrel"; break;
+			    			case stock : tagName = "stock"; break;
+			    			case grip : tagName = "grip"; break;
+			    			case generic : tagName = "generic_" + genericID++; break;
+			    		}
+			    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
+			    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
+			    		attachmentTags.setCompoundTag(tagName, specificAttachmentTags);
+			    	}
+			    	tags.setCompoundTag("attachments", attachmentTags);
+			    	stack.stackTagCompound = tags;
+				}
+				startingItems.add(stack);
 			}
 		} catch (Exception e)
 		{

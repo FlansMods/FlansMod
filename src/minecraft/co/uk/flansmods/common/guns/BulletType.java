@@ -1,11 +1,11 @@
 package co.uk.flansmods.common.guns;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 
+import co.uk.flansmods.client.model.ModelMecha;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.InfoType;
 import co.uk.flansmods.common.TypeFile;
@@ -37,6 +37,7 @@ public class BulletType extends InfoType
 	public int roundsPerItem = 1;
 	public int maxStackSize = 1;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
+	public boolean hasLight = false;
 
 	public BulletType(TypeFile file)
 	{
@@ -46,57 +47,59 @@ public class BulletType extends InfoType
 	}
 
 	@Override
-	protected void read(String[] arg0, TypeFile file)
+	protected void read(String[] split, TypeFile file)
 	{
-		super.read(arg0, file);
+		super.read(split, file);
 		try
 		{
-			if (arg0[0].equals("Model"))
+			if (split[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadModel(arg0, shortName, ModelBase.class);
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
 			}
-			if (arg0[0].equals("Texture"))
-				texture = arg0[1];
-			if (arg0[0].equals("FallSpeed"))
-				fallSpeed = Float.parseFloat(arg0[1]);
-			if (arg0[0].equals("Damage") || arg0[0].equals("DamageVsLiving") || arg0[0].equals("DamageVsPlayer"))
-				damageVsLiving = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("DamageVsVehicles"))
-				damageVsDriveable = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("Explosion"))
-				explosion = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("FlakParticles"))
-				flak = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("Fire"))
-				fire = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("ExpodeOnImpact"))
-				explodeOnImpact = arg0[1].equals("True");
-			if (arg0[0].equals("Fuse"))
-				fuse = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("BreaksGlass"))
-				breaksGlass = arg0[1].equals("True");
-			if (arg0[0].equals("HitBoxSize"))
-				hitBoxSize = Float.parseFloat(arg0[1]);
-			if (arg0[0].equals("HitSound"))
-				hitSound = arg0[1];
-			if (arg0[0].equals("Penetrates"))
-				penetratesEntities = arg0[1].equals("True");
-			if (arg0[0].equals("SmokeTrail"))
-				smokeTrail = arg0[1].equals("True");
-			if (arg0[0].equals("RoundsPerItem"))
-				roundsPerItem = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("MaxStackSize"))
-				maxStackSize = Integer.parseInt(arg0[1]);
-			if (arg0[0].equals("Bomb"))
-				isBomb = arg0[1].equals("True");
-			if (arg0[0].equals("Shell"))
-				isShell = arg0[1].equals("True");
-			if (arg0[0].equals("DropItemOnShoot"))
-				dropItemOnShoot = arg0[1];
-			if (arg0[0].equals("DropItemOnReload"))
-				dropItemOnReload = arg0[1];
-			if (arg0[0].equals("DropItemOnHit"))
-				dropItemOnHit = arg0[1];
+			if (split[0].equals("Texture"))
+				texture = split[1];
+			if (split[0].equals("FallSpeed"))
+				fallSpeed = Float.parseFloat(split[1]);
+			if (split[0].equals("Damage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
+				damageVsLiving = Integer.parseInt(split[1]);
+			if (split[0].equals("DamageVsVehicles"))
+				damageVsDriveable = Integer.parseInt(split[1]);
+			if (split[0].equals("Explosion"))
+				explosion = Integer.parseInt(split[1]);
+			if (split[0].equals("FlakParticles"))
+				flak = Integer.parseInt(split[1]);
+			if (split[0].equals("Fire"))
+				fire = Integer.parseInt(split[1]);
+			if (split[0].equals("ExpodeOnImpact"))
+				explodeOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("Fuse"))
+				fuse = Integer.parseInt(split[1]);
+			if (split[0].equals("BreaksGlass"))
+				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("HitBoxSize"))
+				hitBoxSize = Float.parseFloat(split[1]);
+			if (split[0].equals("HitSound"))
+				hitSound = split[1];
+			if (split[0].equals("Penetrates"))
+				penetratesEntities = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("SmokeTrail"))
+				smokeTrail = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("RoundsPerItem"))
+				roundsPerItem = Integer.parseInt(split[1]);
+			if (split[0].equals("MaxStackSize"))
+				maxStackSize = Integer.parseInt(split[1]);
+			if (split[0].equals("Bomb"))
+				isBomb = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("Shell"))
+				isShell = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("DropItemOnShoot"))
+				dropItemOnShoot = split[1];
+			if (split[0].equals("DropItemOnReload"))
+				dropItemOnReload = split[1];
+			if (split[0].equals("DropItemOnHit"))
+				dropItemOnHit = split[1];
+			if (split[0].equals("HasLight"))
+				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
 		} catch (Exception e)
 		{
 			System.out.println("Reading bullet file failed.");
@@ -122,5 +125,11 @@ public class BulletType extends InfoType
 				return bullet;
 		}
 		return null;
+	}
+	
+	/** To be overriden by subtypes for model reloading */
+	public void reloadModel()
+	{
+		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);
 	}
 }

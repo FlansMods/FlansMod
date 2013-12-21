@@ -40,6 +40,7 @@ public class PacketVehicleControl extends FlanPacketCommon
         	data.writeFloat(driveable.angularVelocity.y);
         	data.writeFloat(driveable.angularVelocity.z);
         	data.writeFloat(driveable.throttle);
+        	data.writeFloat(driveable.driveableData.fuelInTank);
         	driveable.writeUpdateData(data);
         	        	
         	packet.data = bytes.toByteArray();
@@ -71,12 +72,15 @@ public class PacketVehicleControl extends FlanPacketCommon
 				if(obj instanceof EntityDriveable && ((Entity)obj).entityId == entityId)
 				{
 					driveable = (EntityDriveable)obj;
+					if(side.isClient() && driveable.seats[0] != null && driveable.seats[0].riddenByEntity == player)
+						return;
 					break;
 				}
 			}
 			if(driveable != null)
 			{
 				driveable.setPositionRotationAndMotion(stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readDouble(), stream.readDouble(), stream.readDouble(), stream.readFloat(), stream.readFloat(), stream.readFloat(), stream.readFloat());
+				driveable.driveableData.fuelInTank = stream.readFloat();
 				driveable.readUpdateData(stream);
 			}
 		}

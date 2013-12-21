@@ -1,6 +1,5 @@
 package co.uk.flansmods.common.driveables;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.EntityDamageSource;
 
 public class EntityDamageSourceCollision extends EntityDamageSource 
