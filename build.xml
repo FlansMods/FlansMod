@@ -32,7 +32,7 @@
 	<property name="forge.version" value="${forge.version}"/>
 
 
-	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
+	<property name="forge.name" value="forge-${mc.version}-${forge.version}-src.zip"/>
 
 	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
 
@@ -59,7 +59,7 @@
 
 	<!-- Download forge (if it doesn't exist) -->
 	<target name="download-forge" unless="forge-exists">
-		<get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+		<get src="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${mc.version}-${forge.version}/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
 	</target>
 
 	<!-- Setup mcp and forge -->
