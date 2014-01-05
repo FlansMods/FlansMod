@@ -1,11 +1,14 @@
 package co.uk.flansmods.common.driveables;
 
+import icbm.api.RadarRegistry;
+import icbm.api.sentry.IAATarget;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
@@ -13,11 +16,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumMovingObjectType;
@@ -26,7 +28,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ForgeHooks;
 import co.uk.flansmods.api.IControllable;
 import co.uk.flansmods.api.IExplodeable;
 import co.uk.flansmods.client.FlansModClient;
@@ -37,13 +38,14 @@ import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.network.PacketDriveableDamage;
 import co.uk.flansmods.common.network.PacketDriveableKeyHeld;
 import co.uk.flansmods.common.vector.Vector3f;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import icbm.api.RadarRegistry;
-import icbm.api.sentry.IAATarget;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData, IAATarget
 {
@@ -1181,9 +1183,35 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public int doDamage(int damage)
 	{
+		//Increase damage, base damage very low
+		DriveableType type = getDriveableType();
+		damage *= 5;
+		damage /= type.mass;
+		
 		DriveablePart core = getDriveableData().parts.get(EnumDriveablePart.core);
-		core.health -= damage;
+		
+		if(worldObj.isRemote)
+			return core.health;
+		
+		//Server side
+		//Do damage to a random part
+		DriveablePart randomPart = null;
+		DriveablePart[] parts = getDriveableData().parts.values().toArray(new DriveablePart[0]);
+		while(randomPart == null)
+		{
+			int random = worldObj.rand.nextInt(getDriveableData().parts.size());
+			randomPart = parts[random];
+			if(randomPart.dead) randomPart = null;
+		}
+		
+		//Do less damage to core, remaining to random part
+		int coreDamage = damage/8;
+		core.health -= coreDamage;
+		randomPart.health -= damage-coreDamage;
+		
 		checkParts();
+		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
+		
 		return core.health;
 	}
 	
@@ -1197,8 +1225,51 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		//Check config for option to show plane on radar
 		DriveableType type = getDriveableType();
-		if(type.onRadar == true)
+		if(type.onRadar == true && FlansMod.isICBMLoaded)
 		{
+			//Don't shoot at someone on the turrets access list
+			try 
+			{
+				Class auto = Class.forName( "icbm.sentry.turret.TileEntityTurret");
+				Class terminal = Class.forName("icbm.sentry.terminal.TileEntityTerminal");
+				if(auto.isInstance(entity))
+				{
+					Method m = auto.getMethod("getPlatform");
+					Method ac = terminal.getMethod("canUserAccess", String.class);
+					Object plat = m.invoke(entity);
+					boolean allNull = true;
+
+					for(int i =0; i < this.seats.length; i++)
+					{
+						if(seats[i].riddenByEntity != null && seats[i].riddenByEntity instanceof EntityPlayerMP)
+						{
+							allNull = false;
+							Boolean access = (Boolean) ac.invoke(plat, ((EntityPlayerMP)seats[i].riddenByEntity).username);
+							if(access.booleanValue()) return false;
+						} 
+					}
+					if(allNull) return false;
+				}
+			} 
+			catch( ClassNotFoundException e ) 
+			{
+				//my class isn't there!
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return true;
 		}
 		else
