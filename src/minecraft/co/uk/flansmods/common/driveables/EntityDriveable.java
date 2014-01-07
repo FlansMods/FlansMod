@@ -1225,7 +1225,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		//Check config for option to show plane on radar
 		DriveableType type = getDriveableType();
-		if(type.onRadar == true && FlansMod.isICBMLoaded)
+		if(type.onRadar == true && FlansMod.isICBMSentryLoaded)
 		{
 			//Don't shoot at someone on the turrets access list
 			try 

@@ -158,7 +158,7 @@ public class FlansMod
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<Item> vehicleItems = new ArrayList<Item>();
 	
-	public static boolean isICBMLoaded;
+	public static boolean isICBMSentryLoaded;
 	
 	//GunBoxBlock
 	public static BlockGunBox gunBoxBlock;
@@ -310,7 +310,7 @@ public class FlansMod
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		this.isICBMLoaded = Loader.instance().isModLoaded("ICBM|Sentry");
+		this.isICBMSentryLoaded = Loader.instance().isModLoaded("ICBM|Sentry");
 		hooks.hook();
 		System.out.println("[Flan] Hooking complete.");
 	}
