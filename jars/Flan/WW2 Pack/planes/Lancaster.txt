@@ -86,3 +86,5 @@ SetupPart rightWingWheel 100 68 -32 46 24 36 12
 SetupPart tail 200 -144 12 -16 80 32 32
 SetupPart tailWheel 100 -106 -11 -3 12 24 6
 BulletDetection 25
+//Should it be shown on ICBM radar and shot at by ICBM AA turrets
+OnRadar True

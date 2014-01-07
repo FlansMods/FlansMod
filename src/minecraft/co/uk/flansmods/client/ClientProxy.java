@@ -215,6 +215,9 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
+		//Null riding entity, don't open GUI in this case
+		if(ID >= 6 && ID <= 10 && ((EntitySeat)player.ridingEntity) == null) return null;
+		
 		switch(ID) 
 		{
 			case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);

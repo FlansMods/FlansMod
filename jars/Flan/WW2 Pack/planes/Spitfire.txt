@@ -81,3 +81,5 @@ SetupPart bay 200 -70 -7 -10 53 18 20
 SetupPart tail 100 -93 -5 -8 23 14 16
 SetupPart tailWheel 50 -85 -12 -2 6 7 4
 BulletDetection 10
+//Should it be shown on ICBM radar and shot at by ICBM AA turrets
+OnRadar True

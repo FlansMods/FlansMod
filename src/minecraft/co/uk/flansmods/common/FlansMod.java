@@ -62,6 +62,7 @@ import co.uk.flansmods.common.teams.Team;
 import co.uk.flansmods.common.teams.TeamsManager;
 import co.uk.flansmods.common.teams.TileEntitySpawner;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -156,7 +157,9 @@ public class FlansMod
 	public static FlansModPlayerHandler playerHandler;
 	public static List<Item> planeItems = new ArrayList<Item>();
 	public static List<Item> vehicleItems = new ArrayList<Item>();
-		
+	
+	public static boolean isICBMSentryLoaded;
+	
 	//GunBoxBlock
 	public static BlockGunBox gunBoxBlock;
 	
@@ -307,6 +310,7 @@ public class FlansMod
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
+		this.isICBMSentryLoaded = Loader.instance().isModLoaded("ICBM|Sentry");
 		hooks.hook();
 		System.out.println("[Flan] Hooking complete.");
 	}
