@@ -38,3 +38,6 @@ CHANGELOG
 LICENSE.txt
 *.bat
 *.sh
+
+# Gradle
+.gradle/
