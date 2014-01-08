@@ -224,7 +224,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 						int damageMultiplier = 1;
 						float shellSpeed = 3F;
 
-						worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, ((ItemBullet)driveableData.getStackInSlot(slot).getItem()).type, shellSpeed, type));
+						worldObj.spawnEntityInWorld(((ItemBullet)driveableData.getStackInSlot(slot).getItem()).getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed,driveableData.getStackInSlot(slot).getItemDamage(), type));
 						
 						if(type.shootSecondarySound != null)
 							PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootSecondarySound, false));					
@@ -264,7 +264,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 								
 								Vector3f gunVec = rotate(localGunVec);
 								//Spawn a new bullet item
-								worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVec, (EntityLiving)riddenByEntity, gunType.bulletSpread / 2, gunType.damage, bullet, 2.0F, type));
+								worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVec, (EntityLiving)riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
 								//Play the shoot sound
 								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));
 								//Get the bullet item damage and increment it
