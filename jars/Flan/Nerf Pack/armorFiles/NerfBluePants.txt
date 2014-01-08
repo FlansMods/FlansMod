@@ -1,8 +1,0 @@
-Name Blue Nerf Kneepads
-ShortName nerfBlueKnees
-ItemID 23993
-Icon NerfBlueKnees
-Colour 255 255 255
-Type Pants
-Defence 0.1
-ArmourTexture NerfBlue

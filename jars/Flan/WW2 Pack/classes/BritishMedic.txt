@@ -1,9 +1,0 @@
-Name Medic
-ShortName britishMedic
-AddItem leeEnfield
-AddItem webley
-AddItem millsBomb 2
-AddItem ww2MedKit
-AddItem ww2Knife
-AddItem leeEnfieldAmmo 2
-AddItem webleyAmmo 2

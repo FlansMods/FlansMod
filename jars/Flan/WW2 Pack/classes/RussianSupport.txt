@@ -1,9 +1,0 @@
-Name Support
-ShortName russianSupport
-AddItem dp28
-AddItem bazooka
-AddItem tt33
-AddItem ww2Knife
-AddItem dp28Ammo 3
-AddItem bazookaAmmo 2
-AddItem tt33Ammo

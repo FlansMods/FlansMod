@@ -1,9 +1,0 @@
-Name Scout
-ShortName germanScout
-AddItem kar98kSniper
-AddItem luger
-AddItem stielhandgranate 2
-AddItem ww2Knife
-AddItem ww2Binoculars
-AddItem kar98kAmmo 3
-AddItem lugerAmmo 2

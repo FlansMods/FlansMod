@@ -1,9 +1,0 @@
-Name Medic
-ShortName russianMedic
-AddItem nagant
-AddItem tt33
-AddItem rgd33 2
-AddItem ww2MedKit
-AddItem ww2Knife
-AddItem nagantAmmo 2
-AddItem tt33Ammo 2

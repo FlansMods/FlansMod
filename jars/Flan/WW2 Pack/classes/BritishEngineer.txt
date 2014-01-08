@@ -1,9 +1,0 @@
-Name Engineer
-ShortName britishEngineer
-AddItem sten
-AddItem webley
-AddItem millsBomb 2
-AddItem ww2Mine 2
-AddItem ww2Knife
-AddItem stenAmmo 3
-AddItem webleyAmmo 2

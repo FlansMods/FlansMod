@@ -1,9 +1,0 @@
-Name Support
-ShortName americanSupport
-AddItem browning
-AddItem bazooka
-AddItem colt
-AddItem ww2Knife
-AddItem browningAmmo
-AddItem bazookaAmmo 2
-AddItem coltAmmo 3

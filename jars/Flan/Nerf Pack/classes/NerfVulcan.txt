@@ -1,6 +1,0 @@
-Name Support
-ShortName nerfVulcan
-AddItem vulcan
-AddItem maverick
-AddItem 25DartBelt 2
-AddItem whistlerDart 12

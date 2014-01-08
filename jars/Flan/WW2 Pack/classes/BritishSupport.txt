@@ -1,9 +1,0 @@
-Name Support
-ShortName britishSupport
-AddItem bren
-AddItem PIAT
-AddItem webley
-AddItem ww2Knife
-AddItem brenAmmo100 2
-AddItem PIATAmmo 2
-AddItem webleyAmmo 2

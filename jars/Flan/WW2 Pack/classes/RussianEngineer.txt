@@ -1,9 +1,0 @@
-Name Engineer
-ShortName russianEngineer
-AddItem nagant
-AddItem tt33
-AddItem rgd33 1
-AddItem ww2Mine 2
-AddItem ww2Knife
-AddItem nagantAmmo 3
-AddItem tt33Ammo 2

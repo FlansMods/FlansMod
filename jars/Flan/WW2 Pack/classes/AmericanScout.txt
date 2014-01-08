@@ -1,9 +1,0 @@
-Name Scout
-ShortName americanScout
-AddItem springfield
-AddItem colt
-AddItem mk2Frag 2
-AddItem ww2Knife
-AddItem ww2Binoculars
-AddItem springfieldAmmo 3
-AddItem coltAmmo 2

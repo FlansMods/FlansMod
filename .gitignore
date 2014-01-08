@@ -1,37 +1,40 @@
+############
+## Ignore ##
+############
+
+# Builds & Binaries
+build/
+bin/
+target/
+lib/
+launcher/
+*.zip
+*.jar
+
+# Tmp Files
+*~
+*#
+
+# System Files
+Thumbs.db
+Desktop.ini
 .DS_Store
-.metadata
+
+# IDEs
+.classpath
+.project
+.settings
+
+# MCP Files
+conf/
+docs/
+eclipse/
+jars/
+logs/
+reobf/
+runtime/
+temp/
 CHANGELOG
 LICENSE.txt
-Thumbs.db
-
-/build/*
-
-/bin/*
-/conf/*
-/docs/*
-/eclipse/*
-/forge/*
-/jars/*
-/lib/*
-/logs/*
-/modsrc/*
-/reobf/*
-/runtime/*
-/temp/*
-
-/src/common/*
-/src/minecraft/*
-/src/minecraft_server/*
-
-!/src/minecraft/assets/flansmod/
-!/src/minecraft/co/
-!/src/minecraft/icbm/
-!/src/minecraft/universalelectricity/
-!/src/minecraft/mcmod.info
-!/src/minecraft/flansmod.png
-!/src/minecraft/pack.mcmeta
-!/jars/Flan/
-!/LICENSE.txt
-
 *.bat
 *.sh

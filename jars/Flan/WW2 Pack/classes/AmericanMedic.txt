@@ -1,9 +1,0 @@
-Name Medic
-ShortName americanMedic
-AddItem m1Garand
-AddItem colt
-AddItem mk2Frag 2
-AddItem ww2MedKit
-AddItem ww2Knife
-AddItem m1GarandAmmo 2
-AddItem coltAmmo 2

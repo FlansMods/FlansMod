@@ -1,9 +1,0 @@
-Name Medic
-ShortName germanMedic
-AddItem kar98k
-AddItem luger
-AddItem stielhandgranate 2
-AddItem ww2MedKit
-AddItem ww2Knife
-AddItem kar98kAmmo 2
-AddItem lugerAmmo 2

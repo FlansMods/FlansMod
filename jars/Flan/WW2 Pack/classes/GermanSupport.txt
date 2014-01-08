@@ -1,9 +1,0 @@
-Name Support
-ShortName germanSupport
-AddItem mg42
-AddItem panzerschreck
-AddItem luger
-AddItem ww2Knife
-AddItem mg42Ammo250
-AddItem panzerschreckAmmo 2
-AddItem lugerAmmo 3
