@@ -36,7 +36,6 @@ runtime/
 temp/
 CHANGELOG
 LICENSE.txt
-*.bat
 *.sh
 
 # Gradle
