@@ -180,7 +180,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntityInWorld(new EntityBullet(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, bullet, type));
+			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, ammo.getItemDamage(), type));
 			if (soundDelay <= 0)
 			{
 				soundDelay = type.shootSoundLength;
@@ -235,7 +235,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)
 				{
-					worldObj.spawnEntityInWorld(new EntityBullet(worldObj, (EntityLivingBase) player, type.bulletSpread, type.damage, bullet, type.bulletSpeed, false, type));
+					worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, (EntityLivingBase) player, type.bulletSpread, type.damage, type.bulletSpeed, false, ammo.getItemDamage(), type));
 				}
 				if (soundDelay <= 0)
 				{
