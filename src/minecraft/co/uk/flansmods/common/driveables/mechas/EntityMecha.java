@@ -495,7 +495,7 @@ public class EntityMecha extends EntityDriveable
 				
 		if(!worldObj.isRemote)
 			for (int k = 0; k < gunType.numBullets; k++)
-				worldObj.spawnEntityInWorld(new EntityBullet(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), bulletType, gunType.getBulletSpeed(stack), mechaType));
+				worldObj.spawnEntityInWorld(((ItemBullet)stack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLiving)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),stack.getItemDamage(), mechaType));
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;

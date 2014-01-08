@@ -470,7 +470,7 @@ public class ItemGun extends Item
 			// Spawn the bullet entities
 			for (int k = 0; k < type.numBullets; k++)
 			{
-				world.spawnEntityInWorld(new EntityBullet(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.getSpread(stack), type.getDamage(stack), bullet, type.getBulletSpeed(stack), type.numBullets > 1, type));
+				world.spawnEntityInWorld(((ItemBullet)stack.getItem()).getEntity(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.getSpread(stack), type.getDamage(stack), type.getBulletSpeed(stack), type.numBullets > 1,stack.getItemDamage(), type));
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
