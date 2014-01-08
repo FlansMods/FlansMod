@@ -18,7 +18,7 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.2-4.2"
-group= "co.uk.flansmod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "co.uk.flansmods"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
