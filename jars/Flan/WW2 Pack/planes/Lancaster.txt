@@ -35,7 +35,7 @@ RestingPitch 5.0
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 32000
 //Bombs (Bomb delay is in 1/20ths of seconds)
-BombDelay 1
+BombDelay 40
 BombPosition 0 -32 0
 //Inventory Slots
 CargoSlots 0
