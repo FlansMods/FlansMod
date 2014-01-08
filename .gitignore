@@ -9,7 +9,6 @@ target/
 lib/
 launcher/
 *.zip
-*.jar
 
 # Tmp Files
 *~
