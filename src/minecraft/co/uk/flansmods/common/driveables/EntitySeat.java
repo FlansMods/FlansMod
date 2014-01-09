@@ -152,6 +152,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				//worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D + yOffset.x, posY + zAxis.y * i * 0.3D + yOffset.y, posZ + zAxis.z * i * 0.3D + yOffset.z, 0, 0, 0);
 			}
 		}
+		prevLooking = looking.clone();
 	}
 	
 	/** Set the position to be that of the driveable plus the local position, rotated */
