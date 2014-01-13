@@ -34,7 +34,7 @@ reobf/
 runtime/
 temp/
 CHANGELOG
-LICENSE.txt
+/LICENSE.txt
 *.sh
 
 # Gradle
