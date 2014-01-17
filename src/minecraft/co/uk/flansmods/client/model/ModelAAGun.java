@@ -29,7 +29,13 @@ public class ModelAAGun extends ModelBase
 			gunModel[i].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
             gunModel[i].render(f5);
         }
-		
+
+		for(int i = 0; i <gunsightModel.length; i++)
+		{
+			gunsightModel[i].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
+			gunsightModel[i].render(f5);
+		}
+
         for(int i = 0; i < barrelModel.length; i++)
         {
 		    for(int j = 0; j < barrelModel[i].length; j++)
@@ -75,6 +81,11 @@ public class ModelAAGun extends ModelBase
 			gunModel[i].doMirror(false, true, true);
 			gunModel[i].setRotationPoint(gunModel[i].rotationPointX, - gunModel[i].rotationPointY, - gunModel[i].rotationPointZ);
 		}
+		for(int i = 0; i < gunsightModel.length; i++)
+		{
+			gunsightModel[i].doMirror(false, true, true);
+			gunsightModel[i].setRotationPoint(gunsightModel[i].rotationPointX, - gunsightModel[i].rotationPointY, - gunsightModel[i].rotationPointZ);
+		}
 		for(int i = 0; i < barrelModel.length; i++)
 		{
 			for(int j = 0; j < barrelModel[i].length; j++)
@@ -98,5 +109,7 @@ public class ModelAAGun extends ModelBase
 	public ModelRendererTurbo gunModel[];		//The bit of the gun that points where you look, but doesn't move
 	public ModelRendererTurbo barrelModel[][];	//The end of the barrel that recoils
 	public ModelRendererTurbo ammoModel[][];	//The magazines for each barrel.
+	public ModelRendererTurbo gunsightModel[] = new ModelRendererTurbo[0];	//The gunsight for the Gun.
+
 	public int barrelX, barrelY, barrelZ;
 }
