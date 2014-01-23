@@ -102,6 +102,10 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.displayGuiScreen(new GuiChat());
 		}
+		if(i == mc.gameSettings.keyBindCommand.keyCode)
+		{
+			mc.displayGuiScreen(new GuiChat("/"));
+		}
 		if(i == KeyInputHandler.debugKey.keyCode)
 		{
 			FlansMod.DEBUG = !FlansMod.DEBUG;
