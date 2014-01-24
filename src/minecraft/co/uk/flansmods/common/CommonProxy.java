@@ -356,4 +356,9 @@ public class CommonProxy
 	{
 		return false;
 	}
+	
+	public boolean keyDown(int keycode)
+	{
+		return false;
+	}
 }
