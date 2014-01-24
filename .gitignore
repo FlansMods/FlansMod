@@ -23,6 +23,7 @@ Thumbs.db
 /src/minecraft/*
 /src/minecraft_server/*
 
+!/src/minecraft/assets/flansmod/
 !/src/minecraft/co/
 !/src/minecraft/icbm/
 !/src/minecraft/universalelectricity/
