@@ -66,6 +66,12 @@ public class BlockPlaneWorkbench extends Block
     	side = register.registerIcon("FlansMod:" + "planeCraftingTableSide");
     }
     
+    @Override
+    public int damageDropped(int par1)
+    {
+        return par1;
+    }
+    
 	private Icon side;
 	private Icon[] top;
 }
