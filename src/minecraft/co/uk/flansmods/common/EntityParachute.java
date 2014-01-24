@@ -43,6 +43,8 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
+		this.fallDistance = 0;
+		
 		motionY = -0.1D;
 		
 		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
