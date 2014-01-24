@@ -139,71 +139,71 @@ public class GuiDriveableController extends GuiScreen
         
 		if(plane != null && !plane.isDead() && plane.getControllingEntity() != null && plane.getControllingEntity() instanceof EntityPlayer)
 		{
-			if(Keyboard.isKeyDown(KeyInputHandler.accelerateKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.accelerateKey.keyCode))
 			{
 				plane.pressKey(0, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.decelerateKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.decelerateKey.keyCode))
 			{
 				plane.pressKey(1, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.leftKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.leftKey.keyCode))
 			{
 				plane.pressKey(2, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.rightKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.rightKey.keyCode))
 			{
 				plane.pressKey(3, player);
 			}	
-			if(Keyboard.isKeyDown(KeyInputHandler.upKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.upKey.keyCode))
 			{
 				plane.pressKey(4, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.downKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.downKey.keyCode))
 			{
 				plane.pressKey(5, player);
 			}	
-			if(Keyboard.isKeyDown(KeyInputHandler.exitKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.exitKey.keyCode))
 			{
 				plane.pressKey(6, player);
 			}	
-			if(Keyboard.isKeyDown(KeyInputHandler.inventoryKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.inventoryKey.keyCode))
 			{
 				plane.pressKey(7, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.bombKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.bombKey.keyCode))
 			{
 				plane.pressKey(8, player);
 			}
-			if(Keyboard.isKeyDown(KeyInputHandler.gunKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.gunKey.keyCode))
 			{
 				plane.pressKey(9, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.controlSwitchKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.controlSwitchKey.keyCode))
 			{
 				plane.pressKey(10, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.leftRollKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.leftRollKey.keyCode))
 			{
 				plane.pressKey(11, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.rightRollKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.rightRollKey.keyCode))
 			{
 				plane.pressKey(12, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.gearKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.gearKey.keyCode))
 			{
 				plane.pressKey(13, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.doorKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.doorKey.keyCode))
 			{
 				plane.pressKey(14, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.wingKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.wingKey.keyCode))
 			{
 				plane.pressKey(15, player);
 			}				
-			if(Keyboard.isKeyDown(KeyInputHandler.trimKey.keyCode))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.keyCode))
 			{
 				plane.pressKey(16, player);
 			}				
@@ -215,7 +215,7 @@ public class GuiDriveableController extends GuiScreen
 			return;
 		}
     }
-	
+	   
 	@Override
 	public void drawBackground(int i)
     {
