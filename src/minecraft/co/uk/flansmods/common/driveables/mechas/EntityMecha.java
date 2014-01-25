@@ -441,8 +441,7 @@ public class EntityMecha extends EntityDriveable
 					else if(bulletStack.getItem() instanceof ItemBullet)
 					{
 						//Shoot
-						BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
-						shoot(heldStack, gunType, bulletType, creative, left);
+						shoot(heldStack, gunType, bulletStack, creative, left);
 						
 						//Apply animations to 3D modelled guns
 						//TODO : Move to client side and sync
@@ -472,10 +471,10 @@ public class EntityMecha extends EntityDriveable
 		return true;
 	}
 	
-	private void shoot(ItemStack stack, GunType gunType, BulletType bulletType, boolean creative, boolean left)
+	private void shoot(ItemStack stack, GunType gunType, ItemStack bulletStack, boolean creative, boolean left)
 	{
 		MechaType mechaType = getMechaType();
-		
+		BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
 		RotatedAxes a = new RotatedAxes();
 		
 		Vector3f armVector = new Vector3f(mechaType.armLength, 0F, 0F);
@@ -495,7 +494,7 @@ public class EntityMecha extends EntityDriveable
 				
 		if(!worldObj.isRemote)
 			for (int k = 0; k < gunType.numBullets; k++)
-				worldObj.spawnEntityInWorld(((ItemBullet)stack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLiving)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),stack.getItemDamage(), mechaType));
+				worldObj.spawnEntityInWorld(((ItemBullet)bulletStack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLiving)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),bulletStack.getItemDamage(), mechaType));
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
