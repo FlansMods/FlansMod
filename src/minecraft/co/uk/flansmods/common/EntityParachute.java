@@ -43,8 +43,6 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
-		this.fallDistance = 0;
-		
 		motionY = -0.1D;
 		
 		if(riddenByEntity != null && riddenByEntity instanceof EntityLivingBase)
@@ -69,6 +67,12 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		if(onGround || worldObj.getBlockMaterial(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) == Material.water)
 			setDead();
 	}
+	
+	@Override
+	protected void fall(float par1)
+    {
+		//Ignore fall damage
+    }
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float f)
