@@ -23,6 +23,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		super(w);
 		ignoreFrustumCheck = true;
+		System.out.println(w.isRemote ? "Client paraspawn" : "Server paraspawn");
 	}
 	
 	public EntityParachute(World w, ToolType t, EntityPlayer player)
@@ -37,8 +38,10 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		super.onUpdate();
 		
-		if(riddenByEntity == null || riddenByEntity.ridingEntity != this)
+		if(!worldObj.isRemote && (riddenByEntity == null || riddenByEntity.ridingEntity != this))
+		{
 			setDead();
+		}
 		
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
@@ -65,7 +68,9 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		moveEntity(motionX, motionY, motionZ);
 		
 		if(onGround || worldObj.getBlockMaterial(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) == Material.water)
+		{
 			setDead();
+		}
 	}
 	
 	@Override
@@ -85,7 +90,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	protected void entityInit() 
 	{
 	}
-
+	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
