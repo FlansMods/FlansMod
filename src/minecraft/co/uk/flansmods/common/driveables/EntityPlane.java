@@ -3,7 +3,9 @@ package co.uk.flansmods.common.driveables;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,14 +19,12 @@ import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.ItemPart;
 import co.uk.flansmods.common.ItemTool;
 import co.uk.flansmods.common.guns.BulletType;
-import co.uk.flansmods.common.guns.EntityBullet;
 import co.uk.flansmods.common.guns.GunType;
 import co.uk.flansmods.common.guns.ItemBullet;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketVehicleControl;
 import co.uk.flansmods.common.network.PacketVehicleKey;
 import co.uk.flansmods.common.vector.Vector3f;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -276,7 +276,7 @@ public class EntityPlane extends EntityDriveable
 								//Rotate the gun vector to global axes
 								Vector3f gunVec = rotate(gun.position);
 								//Spawn a new bullet item
-								worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLiving)riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
+								worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
 								//Play the shoot sound
 								PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.shootMainSound, false));
 								//Get the bullet item damage and increment it
