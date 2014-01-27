@@ -166,13 +166,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 					detonate();
 				
 				//If we hit glass and can break it, do so
-				else if(type.breaksGlass && mat == Material.glass)
+				else if(type.breaksGlass && mat == Material.glass && FlansMod.canBreakGlass)
 				{
-					if(FlansMod.canBreakGlass)
-					{
-						worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
-						FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
-					}
+					worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
+					FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockID);
 				}
 				
 				//If this grenade does not penetrate blocks, hit the block instead
@@ -277,6 +274,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				if(obj instanceof EntityLivingBase)
 				{
+					System.out.println("Damage: " + (type.hitEntityDamage * motVec.lengthSquared() * 3));
 					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
 				}
 			}
