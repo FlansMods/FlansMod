@@ -10,6 +10,7 @@ import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.teams.TeamsManager.TeamsMap;
 import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.EnumChatFormatting;
 
 public class CommandTeams extends CommandBase {
 	
@@ -576,6 +577,11 @@ public class CommandTeams extends CommandBase {
 	
 	public void sendHelpInformation(ICommandSender sender, int page)
 	{
+		if(page > 3 || page < 1)
+		{
+			sender.sendChatToPlayer(ChatMessageComponent.createFromText("Invalid help page, should be in the range (1-3)").setColor(EnumChatFormatting.RED));
+			return;
+		}
 		
 		sender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00a72Listing teams commands \u00a7f[Page " + page + " of 3]"));
 		switch(page)
