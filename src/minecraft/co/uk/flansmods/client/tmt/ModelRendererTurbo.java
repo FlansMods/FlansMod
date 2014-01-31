@@ -528,7 +528,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
 		};
 		
-		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
 	}
 
 	/**
@@ -659,7 +659,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
 		};
 		
-		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
 	}
 
 	/**
@@ -823,7 +823,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
 		};
 		
-		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
 	}
 
 	/** 
@@ -914,7 +914,7 @@ public class ModelRendererTurbo extends ModelRenderer
 				Math.abs((v3[2] - v7[2])/(v2[2]-v6[2]))	
 		};
 		
-		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d, qValues);
+		addRectShape(v, v1, v2, v3, v4, v5, v6, v7, w, h, d);
 	}
 
 
