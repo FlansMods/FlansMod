@@ -59,7 +59,15 @@ public class MechaType extends DriveableType
 	// Upper/Lower Arm Limit
 	public float upperArmLimit = 90;
 	public float lowerArmLimit = 90;
-	
+
+	// Modifier for Weapons in Hand
+	public float leftHandModifierX = 0;
+	public float leftHandModifierY = 0;
+	public float leftHandModifierZ = 0;
+	public float rightHandModifierX = 0;
+	public float rightHandModifierY = 0;
+	public float rightHandModifierZ = 0;
+
 	public static ArrayList<MechaType> types = new ArrayList<MechaType>();
 
 	public MechaType(TypeFile file)
@@ -132,6 +140,18 @@ public class MechaType extends DriveableType
 				upperArmLimit = Float.parseFloat(split[1]);
 			if(split[0].equals("LowerArmLimit"))
 				lowerArmLimit = Float.parseFloat(split[1]);
+			if(split[0].equals("LeftHandModifier"))
+			{
+				leftHandModifierX = Float.parseFloat(split[1])/16F;
+				leftHandModifierY = Float.parseFloat(split[2])/16F;
+				leftHandModifierZ = Float.parseFloat(split[3])/16F;
+			}
+			if(split[0].equals("RightHandModifier"))
+			{
+				rightHandModifierX = Float.parseFloat(split[1])/16F;
+				rightHandModifierY = Float.parseFloat(split[2])/16F;
+				rightHandModifierZ = Float.parseFloat(split[3])/16F;
+			}
 		}
 		catch (Exception e)
 		{
