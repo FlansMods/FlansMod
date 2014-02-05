@@ -101,7 +101,7 @@ public class RenderMecha extends Render
 			GL11.glPopMatrix();
 			
 			//Move to the end of the arm and render the held item
-			GL11.glTranslatef(0F, -type.armLength, 0F);
+			GL11.glTranslatef(0F + type.leftHandModifierY, -type.armLength - type.leftHandModifierX, 0F + type.leftHandModifierZ);
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
 			GL11.glScalef(modelScale, modelScale, modelScale);			
 			if(holdingStack == null)
@@ -143,7 +143,7 @@ public class RenderMecha extends Render
 			GL11.glPopMatrix();
 			
 			//Move to the end of the arm and render the held item
-			GL11.glTranslatef(0F, -type.armLength, 0F);
+			GL11.glTranslatef(0F + type.rightHandModifierY, -type.armLength - type.rightHandModifierX, 0F + type.rightHandModifierZ);
 			GL11.glScalef(modelScale, modelScale, modelScale);	
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(holdingStack == null)
