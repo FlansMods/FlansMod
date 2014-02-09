@@ -225,10 +225,10 @@ public class FlansModExplosion extends Explosion
                 if (l > 0)
                 {
                     Block block = Block.blocksList[l];
-					BreakEvent breakEvent = new BreakEvent(i, j, k, worldObj, block, worldObj.getBlockMetadata(i, j, k), player);
-					
-			        if(breakEvent.getResult().equals(Result.ALLOW))
-					{
+                    BreakEvent breakEvent = new BreakEvent(i, j, k, worldObj, block, worldObj.getBlockMetadata(i, j, k), player);
+
+                    if(breakEvent.getResult().equals(Result.ALLOW))
+                    {
                         if (block.canDropFromExplosion(this))
                         {
                             block.dropBlockAsItemWithChance(worldObj, i, j, k, worldObj.getBlockMetadata(i, j, k), 1.0F / explosionSize, 0);
@@ -236,7 +236,7 @@ public class FlansModExplosion extends Explosion
 
                         block.onBlockExploded(worldObj, i, j, k, this);
                     }
-				}
+                }
             }
         }
 
