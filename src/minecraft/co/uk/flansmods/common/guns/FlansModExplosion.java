@@ -24,6 +24,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class FlansModExplosion extends Explosion 
 {
