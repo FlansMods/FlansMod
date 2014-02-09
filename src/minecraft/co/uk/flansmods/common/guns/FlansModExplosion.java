@@ -24,7 +24,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.event.Event.Result;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class FlansModExplosion extends Explosion 
@@ -229,7 +228,7 @@ public class FlansModExplosion extends Explosion
                     Block block = Block.blocksList[l];
                     BreakEvent breakEvent = new BreakEvent(i, j, k, worldObj, block, worldObj.getBlockMetadata(i, j, k), player);
 
-                    if(breakEvent.getResult().equals(Result.ALLOW))
+                    if(!breakEvent.isCanceled())
                     {
                         if (block.canDropFromExplosion(this))
                         {
