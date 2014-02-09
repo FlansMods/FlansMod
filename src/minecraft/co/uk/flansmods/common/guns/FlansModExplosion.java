@@ -34,6 +34,7 @@ public class FlansModExplosion extends Explosion
     private World worldObj;
     public InfoType type;
     public EntityPlayer player;
+    public List nonProcessedBlockPositions = new ArrayList();
     
 	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r, boolean breakBlocks) 
 	{
@@ -119,7 +120,7 @@ public class FlansModExplosion extends Explosion
             }
         }
 
-        affectedBlockPositions.addAll(hashset);
+        nonProcessedBlockPositions.addAll(hashset);
         explosionSize *= 2.0F;
         int i = MathHelper.floor_double(explosionX - explosionSize - 1.0D);
         int j = MathHelper.floor_double(explosionX + explosionSize + 1.0D);
@@ -192,7 +193,7 @@ public class FlansModExplosion extends Explosion
 
         if (isSmoking)
         {
-            iterator = affectedBlockPositions.iterator();
+            iterator = nonProcessedBlockPositions.iterator();
 
             while (iterator.hasNext())
             {
@@ -236,6 +237,7 @@ public class FlansModExplosion extends Explosion
                         }
 
                         block.onBlockExploded(worldObj, i, j, k, this);
+                        affectedBlockPositions.add(chunkposition);
                     }
                 }
             }
@@ -243,7 +245,7 @@ public class FlansModExplosion extends Explosion
 
         if (isFlaming)
         {
-            iterator = affectedBlockPositions.iterator();
+            iterator = nonProcessedBlockPositions.iterator();
 
             while (iterator.hasNext())
             {
