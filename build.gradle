@@ -22,7 +22,8 @@ group= "co.uk.flansmods"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.2-10.12.0.996"
+    version = "1.7.2-10.12.0.1029"
+    assetDir = "eclipse/assets"
 }
 processResources
 {
