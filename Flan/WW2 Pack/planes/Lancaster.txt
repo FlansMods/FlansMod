@@ -1,0 +1,90 @@
+//Naming
+Name Lancaster Bomber
+ShortName Lancaster
+ItemID 23325
+//Visuals
+Icon Lancaster
+Model ww2.Lancaster
+Texture Lancaster
+//Third Person Camera Distance
+CameraDistance 20.0
+//Throttle
+MaxThrottle 8.0
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 1
+TurnRightSpeed 1
+//Pitch modifiers
+LookUpSpeed 1
+LookDownSpeed 1
+//Roll modifiers
+RollLeftSpeed 1
+RollRightSpeed 1
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 9.0
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 16.7
+//Mass (In tons)
+Mass 16.7
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 80.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 1.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 32000
+//Bombs (Bomb delay is in 1/20ths of seconds)
+BombDelay 40
+BombPosition 0 -32 0
+//Inventory Slots
+CargoSlots 0
+BombSlots 16
+//Propeller Positions
+Propeller 0 114 16 -52 leftWing metalPropeller
+Propeller 1 114 16 52 rightWing metalPropeller
+Propeller 2 98 16 -116 leftWing metalPropeller
+Propeller 3 98 16 116 rightWing metalPropeller
+//Passengers
+Pilot 115 20 0
+Passengers 5
+//Passenger <ID> <x> <y> <z> <part> [minYaw] [maxYaw] [minPitch] [maxPitch] [gunType] [gunModelName]
+Passenger 1 148 2 0 nose -30 30 -25 25 browning Nose
+Passenger 2 90 10 0 core
+Passenger 3 70 10 0 core
+Passenger 4 -48 36 0 tail -360 360 0 45 browning Dorsal
+Passenger 5 -128 20 0 tail 135 225 -30 30 browning Tail
+//Sounds
+StartSound propStart
+StartSoundLength 20
+PropSound LancasterProp
+PropSoundLength 49
+ShootSound PlaneShoot
+BombSound bomb
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts nose 1 vehicleSeat
+AddRecipeParts core 1 metalCockpit 1 bombBay 3 vehicleSeat
+AddRecipeParts rightWing 2 metalWingSection
+AddRecipeParts rightWingWheel 1 largeWheel
+AddRecipeParts leftWing 2 metalWingSection
+AddRecipeParts leftWingWheel 1 largeWheel
+AddRecipeParts tail 1 metalTail 2 vehicleSeat
+AddRecipeParts tailWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 green
+AddDye 5 yellow
+//Health and collision
+SetupPart core 500 -64 -4 -16 208 48 32
+SetupPart nose 200 144 -4 -16 16 32 32
+SetupPart leftWing 300 -16 26 -240 80 4 224
+SetupPart leftWingWheel 100 68 -32 -58 24 36 12
+SetupPart rightWing 300 -16 26 16 80 4 224
+SetupPart rightWingWheel 100 68 -32 46 24 36 12
+SetupPart tail 200 -144 12 -16 80 32 32
+SetupPart tailWheel 100 -106 -11 -3 12 24 6
+BulletDetection 25
+//Should it be shown on ICBM radar and shot at by ICBM AA turrets
+OnRadar True

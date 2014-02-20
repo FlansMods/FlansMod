@@ -1,0 +1,36 @@
+Name American Weapon Box
+ShortName american
+TopTexture boxTop
+SideTexture AmericanBox
+BottomTexture boxBottom
+GunBoxID 152
+Recipe I iron B dyePowder.4 R dyePowder.1
+III
+BRR
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as iron (ingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//NumGuns must come before all the addGun lines and must be correct.
+NumGuns 10
+AddGun m1Carbine 8 iron 12 log
+AddAmmo m1CarbineAmmo 3 iron 1 gunpowder
+AddGun m1Garand 10 iron 15 log
+AddAmmo m1GarandAmmo 2 iron 1 gunpowder
+AddGun springfield 12 iron 20 log 4 glass
+AddAmmo springfieldAmmo 3 iron 1 gunpowder
+AddGun thompson 6 iron 8 log
+AddAmmo thompsonAmmo 4 iron 1 gunpowder
+AddGun BAR 15 iron 10 log
+AddAmmo BARAmmo 4 iron 1 gunpowder
+AddGun colt 5 iron 6 log
+AddAmmo coltAmmo 2 iron 1 gunpowder
+AddGun bazooka 24 iron 8 log
+AddAmmo bazookaAmmo 6 iron 3 gunpowder
+AddGun browning 30 iron 5 log
+AddAmmo browningAmmo 25 iron 15 gunpowder
+AddGun bofors 1 aaBarrel 1 leather 1 blockIron 2 wheel
+AddAmmo boforsAmmo 1 iron 2 gunpowder
+AddGun mk2Frag 4 iron 2 gunpowder

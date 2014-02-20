@@ -1,0 +1,8 @@
+Name German WW2 Boots
+ShortName germanBoots
+ItemID 23584
+Icon GermanBoots
+Colour 255 255 255
+Type Boots
+Defence 0.1
+ArmourTexture German

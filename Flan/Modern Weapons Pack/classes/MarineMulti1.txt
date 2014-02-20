@@ -1,0 +1,8 @@
+Name Assassin
+ShortName marineMulti1
+AddItem m21
+AddItem mp5+flanMWRedDot+flanMWSilencer
+AddItem m67 2
+AddItem mwKnife
+AddItem m21Ammo 3
+AddItem mp5Ammo 3

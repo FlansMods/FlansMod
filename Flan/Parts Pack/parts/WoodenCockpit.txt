@@ -1,0 +1,11 @@
+Name Wooden Cockpit
+ShortName woodenCockpit
+Icon WoodenCockpit
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23269
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Cockpit
+StackSize 4
+RecipeOutput 1
+ShapelessRecipe boat

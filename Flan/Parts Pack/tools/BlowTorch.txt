@@ -1,0 +1,17 @@
+Name Blow Torch
+ShortName blowTorch
+Icon Blowtorch
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23463
+Heal false
+Repair true
+HealAmount 10
+ToolLife 100
+DestroyOnEmpty false
+StackSize 1
+RecipeOutput 1
+Recipe I iron C coal
+II 
+ I 
+ICI

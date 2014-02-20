@@ -1,0 +1,32 @@
+Name Japanese Weapon Box
+ShortName japanese
+TopTexture boxTop
+SideTexture JapaneseBox
+BottomTexture boxBottom
+GunBoxID 153
+Recipe I iron W dyePowder.15 R dyePowder.1
+III
+WRW
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as iron (ingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//NumGuns must come before all the addGun lines and must be correct.
+NumGuns 8
+AddGun type38 10 iron 10 log
+AddAmmo type38Ammo 2 iron 1 gunpowder
+AddGun kar98kSniper 12 iron 15 log 4 glass
+AddAmmo kar98kAmmo 3 iron 1 gunpowder
+AddGun type100 15 iron 5 log
+AddAmmo type100Ammo 3 iron 2 gunpowder
+AddGun luger 5 iron 5 log
+AddAmmo lugerAmmo 2 iron 1 gunpowder
+AddGun panzerschreck 25 iron 6 log
+AddAmmo panzerschreckAmmo 5 iron 3 gunpowder
+AddGun type99 20 iron 5 log
+AddAmmo type99Ammo 4 iron 3 gunpowder
+AddGun flakvierling 4 aaBarrel 1 leather 1 blockIron 2 iron
+AddAmmo flakvierlingAmmo 5 iron 8 gunpowder
+AddGun type97 4 iron 2 gunpowder

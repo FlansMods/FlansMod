@@ -1,0 +1,9 @@
+Name Engineer
+ShortName spetsnazEngineer1
+AddItem m1014+flanMWRedDot
+AddItem usp
+AddItem c4 3
+AddItem c4Remote
+AddItem mwKnife
+AddItem m1014Ammo 2
+AddItem uspAmmo 2

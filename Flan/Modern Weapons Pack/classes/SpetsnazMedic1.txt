@@ -1,0 +1,9 @@
+Name Medic
+ShortName spetsnazMedic1
+AddItem ak47+flanMWACOG
+AddItem m1911
+AddItem m67 2
+AddItem mwMedKit
+AddItem mwKnife
+AddItem ak47Ammo 3
+AddItem m1911Ammo 2

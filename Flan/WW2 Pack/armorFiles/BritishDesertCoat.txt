@@ -1,0 +1,8 @@
+Name British WW2 Desert Coat
+ShortName britishDesertCoat
+ItemID 23608
+Icon BritishDesertCoat
+Colour 255 255 255
+Type Body
+Defence 0.1
+ArmourTexture BritishDesert

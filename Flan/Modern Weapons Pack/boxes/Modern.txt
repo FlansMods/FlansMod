@@ -1,0 +1,73 @@
+Name Modern Weapons Box
+ShortName modern
+TopTexture ModernBoxTop
+SideTexture ModernBoxSide
+BottomTexture boxBottom
+GunBoxID 155
+Recipe I iron G dyePowder.2
+III
+GGG
+III
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as iron (ingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//NumGuns must come before all the addGun lines and must be correct.
+NumGuns 30
+AddGun m40a3 12 iron 8 fiberglass 4 glass 2 dyePowder.2
+AddAmmo m40a3Ammo 3 iron 2 gunpowder
+AddGun m21 10 iron 10 fiberglass 5 glass
+AddAmmo m21Ammo 2 iron 3 fiberglass 3 gunpowder
+AddGun dragunov 12 iron 10 log 4 glass
+AddAmmo dragunovAmmo 4 iron 3 gunpowder
+AddGun r700 10 iron 8 log 4 glass
+AddAmmo r700Ammo 2 iron 1 gunpowder
+AddGun barrett 20 iron 5 glass
+AddAmmo barrettAmmo 4 iron 3 gunpowder
+AddGun m16a4 15 iron 5 fiberglass
+AddAmmo m16a4Ammo 6 iron 5 gunpowder
+AddGun ak47 10 iron 10 log
+AddAmmo ak47Ammo 5 iron 4 gunpowder
+AddGun g3 22 iron
+AddAmmo g3Ammo 4 iron 4 gunpowder
+AddGun g36 5 iron 15 fiberglass
+AddAmmo g36Ammo 2 iron 4 fiberglass 4 gunpowder
+AddGun m14 10 iron 10 fiberglass
+AddAmmo m14Ammo 2 iron 3 gunpowder
+AddGun mp5 15 iron
+AddAmmo mp5Ammo 3 iron 4 gunpowder
+AddGun skorpion 12 iron 3 log
+AddAmmo skorpionAmmo 3 iron 4 gunpowder
+AddGun uzi 14 iron
+AddAmmo uziAmmo 4 iron 4 gunpowder
+AddGun ak74 15 iron 10 fiberglass
+AddAmmo ak74Ammo 3 iron 4 fiberglass 3 gunpowder
+AddGun p90 5 iron 20 fiberglass
+AddAmmo p90Ammo 8 fiberglass 6 gunpowder
+AddGun w1200 16 iron 6 fiberglass
+AddAmmo w1200Ammo 8 iron 2 fiberglass 5 gunpowder
+AddGun m1014 12 iron 10 fiberglass
+AddAmmo m1014Ammo 6 iron 1 fiberglass 3 gunpowder
+AddGun m249 24 iron 5 fiberglass
+AddAmmo m249Ammo 10 iron 10 fiberglass 10 gunpowder 1 dyePowder.6
+AddGun rpd 20 iron 5 log
+AddAmmo rpdAmmo 12 iron 11 gunpowder
+AddGun m60 24 iron
+AddAmmo m60Ammo 9 iron 3 fiberglass 10 gunpowder
+AddGun m9 8 iron
+AddAmmo m9Ammo 2 iron 2 gunpowder
+AddGun usp 10 iron
+AddAmmo uspAmmo 2 iron 2 gunpowder
+AddGun m1911 8 iron 1 leather
+AddAmmo m1911Ammo 2 iron 1 gunpowder
+AddGun desertEagle 12 iron
+AddAmmo desertEagleAmmo 3 iron 2 gunpowder
+AddGun goldDesertEagle 12 ingotGold
+AddAmmo desertEagleAmmo 3 iron 2 gunpowder
+AddGun rpg 25 iron 10 log
+AddAmmo rpgAmmo 5 iron 6 gunpowder
+AddGun m67 4 fiberglass 2 gunpowder
+AddGun claymore 4 fiberglass 2 gunpowder 1 redstone
+AddGun c4 3 gunpowder 2 slimeball 1 redstone
+AddGun c4Remote 1 fiberglass 1 redstone

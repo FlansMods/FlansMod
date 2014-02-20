@@ -1,0 +1,20 @@
+Name Russian Spetsnaz
+ShortName spetsnaz
+//TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
+//This is used for player names and such
+TextColour Red
+//TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
+TeamColour 128 0 0
+//Specify the armour this team should spawn with
+Hat spetsnazHelmet
+Chest spetsnazBody
+Legs spetsnazPants
+Shoes spetsnazBoots
+AddClass spetsnazSniper1
+AddClass spetsnazSniper2
+AddClass spetsnazMulti1
+AddClass spetsnazMulti2
+AddClass spetsnazAssault1
+AddClass spetsnazAssault2
+AddClass spetsnazMedic1
+AddClass spetsnazEngineer1

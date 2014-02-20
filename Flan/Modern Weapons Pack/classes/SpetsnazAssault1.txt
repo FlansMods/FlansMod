@@ -1,0 +1,8 @@
+Name Light Assault
+ShortName spetsnazAssault1
+AddItem p90+flanMWACOG
+AddItem usp+flanMWSilencer
+AddItem m67 2
+AddItem mwKnife
+AddItem p90Ammo 3
+AddItem uspAmmo 2

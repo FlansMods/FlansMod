@@ -1,0 +1,9 @@
+Name Scout
+ShortName japaneseScout
+AddItem type38Sniper
+AddItem luger
+AddItem type97 2
+AddItem ww2Knife
+AddItem ww2Binoculars
+AddItem type38Ammo 3
+AddItem lugerAmmo 2

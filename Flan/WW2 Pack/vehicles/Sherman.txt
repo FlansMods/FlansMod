@@ -1,0 +1,69 @@
+//Naming
+Name M4 Sherman
+ShortName Sherman
+ItemID 23489
+//Visuals
+Icon Sherman
+Model ww2.Sherman
+Texture Sherman
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 5.0
+MaxNegativeThrottle 0.0
+//Steering modifiers
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
+//Drag
+Drag 90.0
+//Mass (In tons)
+Mass 30.0
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 30.0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 0
+ShellSlots 5
+//Driver and passenger positions
+Driver 0 16 0 -360 360 0 45
+RotatedDriverOffset 10 0 -8
+//Secondary gun
+AddGun 8 34 8 turret browning
+Passengers 1
+Passenger 1 0 34 0 turret -360 360 -15 60 browning Browning
+BarrelPosition 0 34 0
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 2
+ShellDelay 100
+//Sounds
+StartSound Engine
+StartSoundLength 20
+EngineSound Engine
+EngineSoundLength 20
+ShootSound BrowningShoot
+ShellSound TankShell
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 tankTurret 1 vehicleSeat
+AddRecipeParts core 1 tankBody 1 vehicleSeat
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 green
+//Health and collision
+SetupPart core 500 -40 -8 -20 80 36 40
+SetupPart turret 400 -16 28 -16 32 12 32
+SetupPart leftTrack 200 -40 -8 -24 80 20 4
+SetupPart rightTrack 200 -40 -8 20 80 20 4
+BulletDetection 7

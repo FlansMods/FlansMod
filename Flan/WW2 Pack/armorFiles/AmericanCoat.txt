@@ -1,0 +1,8 @@
+Name American WW2 Coat
+ShortName americanCoat
+ItemID 23642
+Icon AmericanCoat
+Colour 255 255 255
+Type Body
+Defence 0.1
+ArmourTexture American

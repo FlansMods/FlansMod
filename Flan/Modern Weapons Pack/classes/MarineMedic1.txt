@@ -1,0 +1,9 @@
+Name Medic
+ShortName marineMedic1
+AddItem m16a4+flanMWACOG
+AddItem m1911
+AddItem m67 2
+AddItem mwMedKit
+AddItem mwKnife
+AddItem m16a4Ammo 3
+AddItem m1911Ammo 2

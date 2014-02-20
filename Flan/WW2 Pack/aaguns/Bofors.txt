@@ -1,0 +1,35 @@
+Name Bofors 40mm AA Gun
+ShortName bofors
+//The ammo this gun uses (shortName)
+Ammo boforsAmmo
+Icon Bofors
+ItemID 23287
+Model ww2.Bofors
+//Place the texture .png in the skins folder
+Texture Bofors
+NumBarrels 1
+Barrel 0 -6 12 6
+FireAlternately True
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 20
+Health 100
+//The amount of gun recoil
+Recoil 5
+//Damage in half hearts
+Damage 10
+//The higher this value, the more the bullets spread
+Accuracy 6
+//Time in ticks between rounds
+ShootDelay 20
+ShootSound AAfire
+ReloadSound BARReload
+//The position of the player relative to the pivot
+GunnerPos 8 28 8
+//Degrees above and below level that the gun can work within. 90 degrees is vertical
+TopViewLimit 75
+BottomViewLimit 0
+RecipeOutput 1
+Recipe A aaBarrel B blockIron L leather W wheel
+  A
+LB 
+W W

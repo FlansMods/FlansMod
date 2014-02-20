@@ -1,0 +1,86 @@
+//Naming
+Name P-51 Mustang
+ShortName Mustang
+ItemID 23324
+//Visuals
+Icon Mustang
+Model ww2.BF109
+Texture Mustang
+//Third Person Camera Distance
+CameraDistance 10.0
+//Throttle
+MaxThrottle 3.5
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 2
+TurnRightSpeed 2
+//Pitch modifiers
+LookUpSpeed 2
+LookDownSpeed 2
+//Roll modifiers
+RollLeftSpeed 2
+RollRightSpeed 2
+//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+Drag 1.2
+//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
+Lift 3.5
+//Mass (In tons)
+Mass 3.5
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 10.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 1.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 5.0
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 4000
+//Nose and Wing Guns
+AddGun 60 3 -5 nose browning
+AddGun 60 3 5 nose browning
+ShootDelay 6
+//ShootAlternately False
+//Bombs (Bomb delay is in 1/20ths of seconds)
+BombDelay 80
+BombPosition -30 -12 0
+//Inventory Slots
+CargoSlots 0
+BombSlots 4
+//Propeller Positions
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 54 2 0 nose metalPropeller
+//Passengers
+Pilot -4 -4 0
+Passengers 0
+//Sounds
+StartSound propStart
+StartSoundLength 20
+PropSound propSound
+PropSoundLength 30
+ShootSound PlaneShoot
+BombSound bomb
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts nose 1 metalNose
+AddRecipeParts rightWing 1 metalWingSmall
+AddRecipeParts leftWing 1 metalWingSmall
+AddRecipeParts bay 1 bombBay
+AddRecipeParts tail 1 metalTail
+AddRecipeParts tailWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 6 lightBlue
+//Health and collision
+SetupPart core 200 -17 -7 -10 20 24 20
+SetupPart coreWheel 50 0 -20 -8 6 13 16
+SetupPart nose 100 3 -7 -10 48 18 20
+SetupPart rightWing 100 -7 -5 10 32 2 78
+SetupPart leftWing 100 -7 -5 -88 32 2 78
+SetupPart bay 200 -70 -7 -10 53 18 20
+SetupPart tail 100 -93 -5 -8 23 14 16
+SetupPart tailWheel 50 -85 -12 -2 6 7 4
+BulletDetection 10
+//Should it be shown on ICBM radar and shot at by ICBM AA turrets
+OnRadar True

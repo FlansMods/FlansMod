@@ -1,0 +1,17 @@
+Name V6 Engine
+ShortName v6Engine
+Icon V6Engine
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23275
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Engine
+EngineSpeed 1.2
+FuelConsumption 1.3
+WorksWith vehicles planes
+StackSize 4
+RecipeOutput 1
+Recipe I iron P enginePiston
+PIP
+PIP
+PIP

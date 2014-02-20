@@ -1,0 +1,14 @@
+Name Passenger Bay
+ShortName passengerBay
+Icon PassengerBay
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23280
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Bay
+StackSize 4
+RecipeOutput 1
+Recipe I iron D doorIron
+III
+I D
+III

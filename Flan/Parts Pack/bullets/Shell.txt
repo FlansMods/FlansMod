@@ -1,0 +1,40 @@
+Name Tank Shell
+ShortName shell
+Model Bullet
+//Colour of icon and model
+Colour 255 255 255
+ItemID 23462
+Icon TankShell
+//How affected by gravity the bullet is
+FallSpeed 1
+//The number of rounds each item has. Limited to 32000.
+RoundsPerItem 1
+//The maximum stack size of a stack of these
+MaxStackSize 16
+//The damage multiplier caused by the bullet on hitting an entity
+Damage 50
+DamageVsLiving 1
+DamageVsVehicles 250
+//Size of explosion caused
+Explosion 3
+//True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
+ExplodeOnImpact True
+Fuse 200
+FlakParticles 0
+//Amount of fire to spread on exploding; for each increment, it will increase the dimensions of the burning area by 2. i.e. 1 will burn a 3x3 square, 2 will burn a 5x5 square
+Fire 0
+BreaksGlass True
+//Size of box to check for entities to hit / detonate
+HitBoxSize 1.0
+HitSound bomb
+//Whether or not the bullet can travel through an entity having hit it
+Penetrates False
+SmokeTrail True
+//True if this is a bomb
+Bomb False
+Shell True
+RecipeOutput 3
+Recipe I iron G gunpowder
+   
+GGG
+III

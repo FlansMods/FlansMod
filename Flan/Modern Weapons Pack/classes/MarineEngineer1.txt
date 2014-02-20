@@ -1,0 +1,9 @@
+Name Engineer
+ShortName marineEngineer1
+AddItem w1200
+AddItem usp
+AddItem c4 2
+AddItem c4Remote
+AddItem mwKnife
+AddItem w1200Ammo 3
+AddItem uspAmmo 2

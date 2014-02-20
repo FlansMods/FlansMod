@@ -1,0 +1,15 @@
+Name Fuel Can
+ShortName fuelCan
+Icon FuelCan
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23290
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Fuel, Misc
+Category Fuel
+Fuel 1000
+StackSize 8
+RecipeOutput 1
+Recipe I iron C coal
+  I
+ CC
+ CC
