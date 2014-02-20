@@ -242,6 +242,7 @@ public class CommonProxy
 		//If the player doesn't have any suitable engines, return
 		if(bestEngineStack == null)
 		{
+			player.inventory.copyInventory(temporaryInventory);
 			return;
 		}
 		
@@ -353,6 +354,11 @@ public class CommonProxy
 	}
 	
 	public boolean isKeyDown(int key)
+	{
+		return false;
+	}
+	
+	public boolean keyDown(int keycode)
 	{
 		return false;
 	}

@@ -92,4 +92,9 @@ public class ModelDriveable extends ModelBase
 			}
 		}
 	}
+	
+	public void translateAll(int x, int y, int z)
+	{
+		translateAll((float)x, (float)y, (float)z);
+	}
 }

@@ -1,5 +1,6 @@
 package co.uk.flansmods.common.guns;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class FlansModExplosion extends Explosion 
 {
@@ -33,6 +35,7 @@ public class FlansModExplosion extends Explosion
     private World worldObj;
     public InfoType type;
     public EntityPlayer player;
+    public List nonProcessedBlockPositions = new ArrayList();
     
 	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r, boolean breakBlocks) 
 	{
@@ -118,7 +121,7 @@ public class FlansModExplosion extends Explosion
             }
         }
 
-        affectedBlockPositions.addAll(hashset);
+        nonProcessedBlockPositions.addAll(hashset);
         explosionSize *= 2.0F;
         int i = MathHelper.floor_double(explosionX - explosionSize - 1.0D);
         int j = MathHelper.floor_double(explosionX + explosionSize + 1.0D);
@@ -191,7 +194,7 @@ public class FlansModExplosion extends Explosion
 
         if (isSmoking)
         {
-            iterator = affectedBlockPositions.iterator();
+            iterator = nonProcessedBlockPositions.iterator();
 
             while (iterator.hasNext())
             {
@@ -225,20 +228,25 @@ public class FlansModExplosion extends Explosion
                 if (l > 0)
                 {
                     Block block = Block.blocksList[l];
+                    BreakEvent breakEvent = new BreakEvent(i, j, k, worldObj, block, worldObj.getBlockMetadata(i, j, k), player);
 
-                    if (block.canDropFromExplosion(this))
+                    if(!breakEvent.isCanceled())
                     {
-                        block.dropBlockAsItemWithChance(worldObj, i, j, k, worldObj.getBlockMetadata(i, j, k), 1.0F / explosionSize, 0);
-                    }
+                        if (block.canDropFromExplosion(this))
+                        {
+                            block.dropBlockAsItemWithChance(worldObj, i, j, k, worldObj.getBlockMetadata(i, j, k), 1.0F / explosionSize, 0);
+                        }
 
-                    block.onBlockExploded(worldObj, i, j, k, this);
+                        block.onBlockExploded(worldObj, i, j, k, this);
+                        affectedBlockPositions.add(chunkposition);
+                    }
                 }
             }
         }
 
         if (isFlaming)
         {
-            iterator = affectedBlockPositions.iterator();
+            iterator = nonProcessedBlockPositions.iterator();
 
             while (iterator.hasNext())
             {

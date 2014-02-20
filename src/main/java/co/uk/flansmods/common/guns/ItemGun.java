@@ -1,50 +1,37 @@
 package co.uk.flansmods.common.guns;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ReportedException;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Mouse;
 
-import com.google.common.collect.Multimap;
-
 import co.uk.flansmods.client.FlansModClient;
 import co.uk.flansmods.client.model.GunAnimations;
-import co.uk.flansmods.common.EnumType;
 import co.uk.flansmods.common.FlansMod;
 import co.uk.flansmods.common.FlansModPlayerData;
 import co.uk.flansmods.common.FlansModPlayerHandler;
 import co.uk.flansmods.common.InfoType;
-import co.uk.flansmods.common.PartType;
 import co.uk.flansmods.common.driveables.EntitySeat;
-import co.uk.flansmods.common.driveables.EnumDriveablePart;
 import co.uk.flansmods.common.network.PacketGunFire;
 import co.uk.flansmods.common.network.PacketPlaySound;
 import co.uk.flansmods.common.network.PacketReload;
@@ -349,8 +336,8 @@ public class ItemGun extends Item
 			else if(bulletStack.getItem() instanceof ItemBullet)
 			{
 				//Shoot
-				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
-				shoot(gunStack, world, bulletType, entityplayer);
+				
+				shoot(gunStack, world, bulletStack, entityplayer);
 				//Damage the bullet item
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 				
@@ -454,8 +441,9 @@ public class ItemGun extends Item
 	}
 	
 	/** Method for shooting to avoid repeated code */
-	private void shoot(ItemStack stack, World world, BulletType bullet, EntityPlayer entityplayer)
+	private void shoot(ItemStack stack, World world, ItemStack bulletStack, EntityPlayer entityplayer)
 	{
+		BulletType bullet = ((ItemBullet)bulletStack.getItem()).type;
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && type.shootSound != null)
 		{
@@ -468,9 +456,10 @@ public class ItemGun extends Item
 		if (!world.isRemote)
 		{
 			// Spawn the bullet entities
+			
 			for (int k = 0; k < type.numBullets; k++)
 			{
-				world.spawnEntityInWorld(((ItemBullet)stack.getItem()).getEntity(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.getSpread(stack), type.getDamage(stack), type.getBulletSpeed(stack), type.numBullets > 1,stack.getItemDamage(), type));
+				world.spawnEntityInWorld(((ItemBullet)bulletStack.getItem()).getEntity(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * type.getSpread(stack), type.getDamage(stack), type.getBulletSpeed(stack), type.numBullets > 1,bulletStack.getItemDamage(), type));
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)

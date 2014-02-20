@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import co.uk.flansmods.client.debug.EntityDebugAABB;
 import co.uk.flansmods.client.debug.EntityDebugVector;
@@ -330,17 +331,24 @@ public class ClientProxy extends CommonProxy
 		switch(key)
 		{
 		case 0 : //Press Forwards
-			return Keyboard.isKeyDown(KeyInputHandler.accelerateKey.keyCode);
+			return keyDown(KeyInputHandler.accelerateKey.keyCode);
 			
 		case 1 : //Press Backwards
-			return Keyboard.isKeyDown(KeyInputHandler.decelerateKey.keyCode);
+			return keyDown(KeyInputHandler.decelerateKey.keyCode);
 			
 		case 2 : //Press Left
-			return Keyboard.isKeyDown(KeyInputHandler.leftKey.keyCode);
+			return keyDown(KeyInputHandler.leftKey.keyCode);
 			
 		case 3 : //Press Right
-			return Keyboard.isKeyDown(KeyInputHandler.rightKey.keyCode);
+			return keyDown(KeyInputHandler.rightKey.keyCode);
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean keyDown(int keycode)
+	{
+	   	boolean state = (keycode < 0 ? Mouse.isButtonDown(keycode + 100) : Keyboard.isKeyDown(keycode));
+    	return state;
 	}
 }
