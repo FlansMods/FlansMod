@@ -1,41 +1,6 @@
-############
-## Ignore ##
-############
-
-# Builds & Binaries
 build/
-bin/
-target/
-lib/
-launcher/
-*.zip
-
-# Tmp Files
-*~
-*#
-
-# System Files
-Thumbs.db
-Desktop.ini
-.DS_Store
-
-# IDEs
 .classpath
 .project
-.settings
-
-# MCP Files
-conf/
-docs/
-eclipse/
-jars/
-logs/
-reobf/
-runtime/
-temp/
-CHANGELOG
-/LICENSE.txt
-*.sh
-
-# Gradle
 .gradle/
+eclipse/
+bin/
