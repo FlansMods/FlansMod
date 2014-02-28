@@ -16,4 +16,13 @@ public class ModelAttachment extends ModelBase
 			if(model != null)
 				model.render(f);
 	}
+
+	public void flipAll()
+	{
+		for(int i = 0; i < attachmentModel.length; i++)
+		{
+			attachmentModel[i].doMirror(false, true, true);
+			attachmentModel[i].setRotationPoint(attachmentModel[i].rotationPointX, - attachmentModel[i].rotationPointY, - attachmentModel[i].rotationPointZ);
+		}
+	}
 }
