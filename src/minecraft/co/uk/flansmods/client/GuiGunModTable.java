@@ -44,6 +44,7 @@ public class GuiGunModTable extends GuiContainer
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
         {
         	GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			float modelScale = ((ItemGun)gunStack.getItem()).type.modelScale;
         	if(gunType.model != null)
         	{
         		GL11.glPushMatrix();
@@ -52,7 +53,7 @@ public class GuiGunModTable extends GuiContainer
         		
         		GL11.glRotatef(160, 1F, 0F, 0F);
         		GL11.glRotatef(20, 0F, 1F, 0F);
-        		GL11.glScalef(-50F, 50F, 50F);
+        		GL11.glScalef(-50F * modelScale, 50F * modelScale, 50F * modelScale);
         		ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
         		GL11.glPopMatrix();
         	}
