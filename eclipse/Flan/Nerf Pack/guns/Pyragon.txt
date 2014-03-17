@@ -1,5 +1,5 @@
 Name Nerf Vortex Pyragon
-ShortName pyragon
+ShortName nerfPyragon
 //The ammo this gun uses (shortName)
 Ammo 10DiscClip
 Ammo 20DiscClip

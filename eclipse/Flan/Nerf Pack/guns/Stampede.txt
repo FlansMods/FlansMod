@@ -1,5 +1,5 @@
 Name Nerf Stampede
-ShortName stampede
+ShortName nerfStampede
 //The ammo this gun uses (shortName)
 Ammo 6DartClip
 Ammo 18DartClip

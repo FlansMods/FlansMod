@@ -1,5 +1,5 @@
 Name Nerf Elite Stryfe
-ShortName stryfe
+ShortName nerfStryfe
 //The ammo this gun uses (shortName)
 Ammo 6DartEliteClip
 Ammo 12DartEliteClip

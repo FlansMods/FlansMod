@@ -1,7 +1,9 @@
 Name Nerf Maverick
-ShortName maverick
+ShortName nerfMaverick
 //The ammo this gun uses (shortName)
 Ammo whistlerDart
+Ammo eliteDart
+Ammo clipDart
 Icon Maverick
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

@@ -1,5 +1,5 @@
 Name Nerf Longshot
-ShortName longshot
+ShortName nerfLongshot
 //The ammo this gun uses (shortName)
 Ammo 6DartClip
 Ammo 18DartClip

@@ -1,5 +1,5 @@
 Name Nerf Vortex Nitron
-ShortName nitron
+ShortName nerfNitron
 //The ammo this gun uses (shortName)
 Ammo 10DiscClip
 Ammo 20DiscClip

@@ -1,7 +1,8 @@
 Name Nerf Strongarm
-ShortName strongarm
+ShortName nerfStrongarm
 //The ammo this gun uses (shortName)
 Ammo eliteDart
+Ammo clipDart
 Icon Strongarm
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

@@ -1,5 +1,5 @@
 Name Nerf Vortex Praxis
-ShortName praxis
+ShortName nerfPraxis
 //The ammo this gun uses (shortName)
 Ammo 10DiscClip
 Ammo 20DiscClip

@@ -1,5 +1,5 @@
 Name Foam
-ShortName foam
+ShortName nerfFoam
 Icon Foam
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

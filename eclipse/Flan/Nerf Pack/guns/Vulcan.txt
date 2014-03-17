@@ -1,5 +1,5 @@
 Name Nerf Vulcan
-ShortName vulcan
+ShortName nerfVulcan
 //The ammo this gun uses (shortName)
 Ammo 25DartBelt
 Icon Vulcan
