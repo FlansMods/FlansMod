@@ -46,7 +46,7 @@ public class PlayerClass extends InfoType
 				}
 				for(InfoType type : InfoType.infoTypes)
 				{
-					if(type.shortName.equals(itemNames[0]))
+					if(type.shortName.equals(itemNames[0]) && type.item != null)
 						matchingItem = type.item;
 				}
 				if(matchingItem == null)
