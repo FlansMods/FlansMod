@@ -17,7 +17,7 @@ Accuracy 2
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound M14Shoot
-ReloadSound mp44Reload
+ReloadSound MP44Reload
 Mode FullAuto
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None

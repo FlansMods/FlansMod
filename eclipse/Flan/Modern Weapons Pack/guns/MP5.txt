@@ -17,7 +17,7 @@ Accuracy 1
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound MP5Shoot
-ReloadSound stenReload
+ReloadSound StenReload
 Mode FullAuto
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None

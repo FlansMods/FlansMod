@@ -17,7 +17,7 @@ Accuracy 1
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound P90Shoot
-ReloadSound thompsonReload
+ReloadSound ThompsonReload
 Mode SemiAuto
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None

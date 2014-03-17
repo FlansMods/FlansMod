@@ -17,7 +17,7 @@ Accuracy 20
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound RPGShoot
-ReloadSound bazookaReload
+ReloadSound BazookaReload
 Mode SemiAuto
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None

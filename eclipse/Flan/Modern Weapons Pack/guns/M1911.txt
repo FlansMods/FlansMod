@@ -19,7 +19,7 @@ Accuracy 8
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound M9Shoot
-ReloadSound coltReload
+ReloadSound ColtReload
 Mode SemiAuto
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
