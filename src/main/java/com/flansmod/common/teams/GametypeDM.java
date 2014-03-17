@@ -223,23 +223,13 @@ public class GametypeDM extends Gametype
 	{
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
 		PlayerData data = getPlayerData(player);
-		if(data != null && data.team == Team.spectators)
+		if(data != null)
 		{
-			for(int j = 0; j < data.team.bases.size(); j++)
+			if(data.team == null)
 			{
-				ITeamBase base = data.team.bases.get(j);
-				if(base.getMap() != teamsManager.currentMap)
-					continue;
-				for(int i = 0; i < base.getObjects().size(); i++)
-				{
-					if(base.getObjects().get(i).isSpawnPoint())
-						validSpawnPoints.add(base.getObjects().get(i));
-				}
+				
 			}
-		}
-		else
-		{
-			for(Team team : teamsManager.teams)
+			else if(data.team == Team.spectators)
 			{
 				for(int j = 0; j < data.team.bases.size(); j++)
 				{
@@ -252,7 +242,24 @@ public class GametypeDM extends Gametype
 							validSpawnPoints.add(base.getObjects().get(i));
 					}
 				}
-			}	
+			}
+			else
+			{
+				for(Team team : teamsManager.teams)
+				{
+					for(int j = 0; j < data.team.bases.size(); j++)
+					{
+						ITeamBase base = data.team.bases.get(j);
+						if(base.getMap() != teamsManager.currentMap)
+							continue;
+						for(int i = 0; i < base.getObjects().size(); i++)
+						{
+							if(base.getObjects().get(i).isSpawnPoint())
+								validSpawnPoints.add(base.getObjects().get(i));
+						}
+					}
+				}	
+			}
 		}
 		if(validSpawnPoints.size() > 0)
 		{

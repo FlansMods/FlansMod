@@ -41,7 +41,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(16, new String("none"));
+		dataWatcher.addObject(2, new String("none"));
 	}
 	
 	@Override
@@ -98,8 +98,8 @@ public class EntityFlag extends Entity implements ITeamObject {
 	public void onBaseSet(Team newOwners) 
 	{
 		if(newOwners != null)
-			dataWatcher.updateObject(16, newOwners.shortName);
-		else dataWatcher.updateObject(16, "none");
+			dataWatcher.updateObject(2, newOwners.shortName);
+		else dataWatcher.updateObject(2, "none");
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
@@ -152,7 +152,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 
 	public String getTeamName()
 	{
-		return dataWatcher.getWatchableObjectString(16);
+		return dataWatcher.getWatchableObjectString(2);
 	}
 	
 	public Team getTeam()
