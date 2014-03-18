@@ -10,7 +10,7 @@ item.passengerBay.name=Passenger Bay
 item.enginePiston.name=Engine Piston
 item.rotaryEngine.name=Rotary Engine
 item.vehicleSeat.name=Seat
-item.smallChassis.Small Car Chassis
+item.smallChassis.name=Small Car Chassis
 item.wheel.name=Small Wheel
 item.tankBarrel.name=Tank Barrel
 item.tankBody.name=Tank Body
