@@ -18,11 +18,11 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.7.2-4.2"
-group= "co.uk.flansmods"
+group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.2-10.12.0.1029"
+    version = "1.7.2-10.12.0.1024"
     assetDir = "eclipse/assets"
 }
 processResources
