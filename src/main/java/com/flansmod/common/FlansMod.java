@@ -94,7 +94,7 @@ public class FlansMod
 	//Core mod stuff
 	public static boolean DEBUG = false;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "5.0";
+	public static final String VERSION = "4.2";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
