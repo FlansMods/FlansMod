@@ -1,6 +1,8 @@
 package com.flansmod.common.guns;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.network.PacketKillMessage;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
 
@@ -34,6 +36,8 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
     	Team killedTeam = PlayerHandler.getPlayerData(player).team;
     	Team killerTeam = PlayerHandler.getPlayerData(shooter).team;
     	
-        return new ChatComponentText("flanDeath." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName() + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName());
+    	FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(weapon, (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName(),  (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName()), living.dimension);
+    	
+        return new ChatComponentText("#flansmod");//flanDeath." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName() + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName());
     }
 }

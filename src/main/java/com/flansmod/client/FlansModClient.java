@@ -86,6 +86,7 @@ public class FlansModClient extends FlansMod
 	public void load()
 	{		
 		log("Loading Flan's mod client side.");
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 		
 	@SubscribeEvent
@@ -267,12 +268,12 @@ public class FlansModClient extends FlansMod
 	@SubscribeEvent
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.getUnformattedText().startsWith("{\"translate\":\"flanDeath."))
+		if(event.message.getUnformattedText().equals("#flansmod"))
 		{
-			String[] split = event.message.getUnformattedText().split("\\.");
-			split[split.length - 1] = split[split.length - 1].split("\"}")[0];
+			//String[] split = event.message.getUnformattedText().split("\\.");
+			//split[split.length - 1] = split[split.length - 1].split("\"}")[0];
 			event.setCanceled(true);
-			TickHandlerClient.addKillMessage(split);
+			//TickHandlerClient.addKillMessage(split);
 			//FMLClientHandler.instance().getClient().thePlayer.sendChatToPlayer(split[3] + " killed " + split[2] + " with a " + InfoType.getType(split[1]).name);
 		}
 	}

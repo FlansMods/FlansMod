@@ -298,19 +298,16 @@ public class TickHandlerClient
 		itemRenderer.renderItemIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
-	
-	public static void addKillMessage(String[] split)
+		
+	public static void addKillMessage(InfoType infoType, String killer, String killed)
 	{
-		if(split.length == 4)
+		for(KillMessage killMessage : killMessages)
 		{
-			for(KillMessage killMessage : killMessages)
-			{
-				killMessage.line++;
-				if(killMessage.line > 10)
-					killMessage.timer = 0;
-			}
-			killMessages.add(new KillMessage(split));
+			killMessage.line++;
+			if(killMessage.line > 10)
+				killMessage.timer = 0;
 		}
+		killMessages.add(new KillMessage(infoType, killer, killed));
 	}
 	
 	private static RenderItem itemRenderer = new RenderItem();
@@ -318,11 +315,11 @@ public class TickHandlerClient
 	
 	private static class KillMessage
 	{
-		public KillMessage(String[] split)
+		public KillMessage(InfoType infoType, String killer, String killed)
 		{
-			killerName = split[3];
-			killedName = split[2];
-			weapon = InfoType.getType(split[1]);
+			killerName = killer;
+			killedName = killed;
+			weapon = infoType;
 			line = 0;
 			timer = 200;
 		}

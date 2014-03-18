@@ -151,6 +151,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
 		registerPacket(PacketVehicleControl.class);
+		registerPacket(PacketKillMessage.class);
 	}
 
 	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 
