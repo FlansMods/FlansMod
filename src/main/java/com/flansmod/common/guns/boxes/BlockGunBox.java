@@ -236,7 +236,6 @@ public class BlockGunBox extends Block
     @Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
     {
-    	world.spawnEntityInWorld(new EntityItem(world, x + 0.5F, y + 0.5F, z + 0.5F, new ItemStack(block, 1, 0)));
         super.breakBlock(world, x, y, z, block, metadata);
     }
     
