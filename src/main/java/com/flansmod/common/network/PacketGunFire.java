@@ -17,6 +17,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketGunFire extends PacketBase 
 {
@@ -52,6 +53,7 @@ public class PacketGunFire extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansMod.log("Received gun button packet on client. Skipping.");

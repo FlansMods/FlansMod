@@ -12,6 +12,7 @@ import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -47,6 +48,7 @@ public class PacketRepairDriveable extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansMod.log("Received driveable repair packet on client side. Skipping.");

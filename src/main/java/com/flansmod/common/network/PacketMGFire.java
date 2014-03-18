@@ -17,6 +17,7 @@ import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityMG;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketMGFire extends PacketBase
 {
@@ -56,6 +57,7 @@ public class PacketMGFire extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansMod.log("MG firing packet received on client. Skipping.");

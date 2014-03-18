@@ -14,6 +14,7 @@ import com.flansmod.api.IControllable;
 import com.flansmod.common.FlansMod;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketDriveableKey extends PacketBase 
 {
@@ -48,6 +49,7 @@ public class PacketDriveableKey extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansMod.log("Driveable keypress packet received on client. Skipping.");

@@ -59,6 +59,7 @@ public class PacketBreakSound extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		Block block = Block.getBlockById(blockID);

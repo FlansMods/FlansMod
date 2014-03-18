@@ -14,6 +14,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.GunBoxType;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketBuyWeapon extends PacketBase
 {
@@ -54,6 +55,7 @@ public class PacketBuyWeapon extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		FlansMod.log("Received gun box purchase packet on client. Skipping.");

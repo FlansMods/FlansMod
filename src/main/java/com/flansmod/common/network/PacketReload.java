@@ -59,6 +59,7 @@ public class PacketReload extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
     	ItemStack stack = clientPlayer.getCurrentEquippedItem();

@@ -17,6 +17,8 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketPlaySound extends PacketBase 
 {
@@ -84,6 +86,7 @@ public class PacketPlaySound extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{           	
     	FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound(sound), silenced ? 0.5F : 1F, (distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), posX, posY, posZ));

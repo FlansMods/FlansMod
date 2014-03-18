@@ -16,6 +16,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.EntityMG;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketMGMount extends PacketBase 
 {
@@ -55,6 +56,7 @@ public class PacketMGMount extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityPlayer player = (EntityPlayer)clientPlayer.worldObj.getEntityByID(playerEntityId);

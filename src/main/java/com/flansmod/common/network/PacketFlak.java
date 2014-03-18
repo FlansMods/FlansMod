@@ -158,6 +158,7 @@ public class PacketFlak extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		World world = clientPlayer.worldObj;

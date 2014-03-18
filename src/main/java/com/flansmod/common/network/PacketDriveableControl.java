@@ -15,6 +15,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketDriveableControl extends PacketBase
 {
@@ -110,6 +111,7 @@ public class PacketDriveableControl extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityDriveable driveable = null;
