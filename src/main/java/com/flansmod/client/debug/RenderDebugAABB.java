@@ -18,7 +18,7 @@ public class RenderDebugAABB extends Render
 		EntityDebugAABB ent = (EntityDebugAABB)entity;
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		//GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(ent.red, ent.green, ent.blue, 0.9F);
 		GL11.glPushMatrix();

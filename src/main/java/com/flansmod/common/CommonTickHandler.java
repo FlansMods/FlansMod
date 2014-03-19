@@ -18,6 +18,23 @@ public class CommonTickHandler
 	}
 	
 	@SubscribeEvent
+	public void tick(TickEvent.ClientTickEvent event)
+	{
+		switch(event.phase)
+		{
+		case START :
+		{
+			break;
+		}
+		case END :
+		{
+			FlansMod.proxy.getPhysicsHandler().tick();
+			break;
+		}		
+		}
+	}
+	
+	@SubscribeEvent
 	public void tick(TickEvent.ServerTickEvent event)
 	{
 		switch(event.phase)
@@ -29,6 +46,7 @@ public class CommonTickHandler
 		case END :
 		{
 			TeamsManager.getInstance().tick();
+			FlansMod.proxy.getPhysicsHandler().tick();
 			FlansMod.playerHandler.tick();
 			FlansMod.ticker++;
 			break;
