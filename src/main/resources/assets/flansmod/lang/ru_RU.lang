@@ -1,0 +1,16 @@
+itemGroup.tabFlan0=Оружие Flan's Mod
+itemGroup.tabFlan1=Техника Flan's Mod
+itemGroup.tabFlan2=Запчасти Flan's Mod
+itemGroup.tabFlan3=Командные вещи Flan's Mod
+itemGroup.tabFlan4=Меха Flan's Mod
+tile.flansWorkbench.0.name=Верстак для техники
+tile.flansWorkbench.1.name=Стол модифицирования оружия
+tile.flansWorkbench.2.name=Верстак для запчастей
+item.opStick.0.name=Посох приспособления
+item.opStick.1.name=Посох соединения
+item.opStick.2.name=Посох картографа
+item.opStick.3.name=Посох разрушения
+item.flagpole.name=Флагшток
+tile.teamsSpawner.0.name=Спаунер предметов
+tile.teamsSpawner.1.name=Спаунер игрока
+tile.teamsSpawner.2.name=Спаунер техники

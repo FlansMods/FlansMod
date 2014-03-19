@@ -3,7 +3,16 @@ build/
 .project
 .gradle/
 .settings/org.eclipse.jdt.core.prefs
-eclipse/
+eclipse/.metadata
+eclipse/assets
+eclipse/config
+eclipse/crash-reports
+eclipse/logs
+eclipse/mods
+eclipse/resourcepacks
+eclipse/saves
+eclipse/screenshots
+eclipse/options.txt
 bin/
 CREDITS-fml.txt
 forge-1.7.2-10.12.0.1024-changelog.txt
