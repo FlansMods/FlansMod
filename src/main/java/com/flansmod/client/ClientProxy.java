@@ -61,7 +61,6 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
 import com.flansmod.common.network.PacketRepairDriveable;
-import com.flansmod.common.physics.PhysicsHandler;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.TileEntitySpawner;
@@ -97,7 +96,6 @@ public class ClientProxy extends CommonProxy
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();
-		physicsHandler = new PhysicsHandlerClient();
 	}
 	
 	@Override

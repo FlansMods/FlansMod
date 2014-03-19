@@ -29,7 +29,6 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
-import com.flansmod.common.physics.PhysicsHandler;
 import com.flansmod.common.types.EnumType;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +36,6 @@ import cpw.mods.fml.relauncher.Side;
 public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
-	protected static PhysicsHandler physicsHandler;
 
 	/** Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath */
 	public List<File> getContentList(Method method, ClassLoader classloader)
@@ -57,11 +55,6 @@ public class CommonProxy
 		return contentPacks;
 	}
 	
-	public PhysicsHandler getPhysicsHandler()
-	{
-		return physicsHandler;
-	}
-	
 	public void tick()
 	{
 		
@@ -70,7 +63,6 @@ public class CommonProxy
 	/** A ton of client only methods follow */
 	public void load()
 	{
-		physicsHandler = new PhysicsHandler();
 	}
 	
 	public void forceReload()

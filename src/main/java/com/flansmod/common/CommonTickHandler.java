@@ -28,7 +28,6 @@ public class CommonTickHandler
 		}
 		case END :
 		{
-			FlansMod.proxy.getPhysicsHandler().tick();
 			break;
 		}		
 		}
@@ -46,7 +45,6 @@ public class CommonTickHandler
 		case END :
 		{
 			TeamsManager.getInstance().tick();
-			FlansMod.proxy.getPhysicsHandler().tick();
 			FlansMod.playerHandler.tick();
 			FlansMod.ticker++;
 			break;
