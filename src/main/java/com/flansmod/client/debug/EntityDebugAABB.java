@@ -1,6 +1,9 @@
 package com.flansmod.client.debug;
 
+import jinngine.math.Vector3;
+
 import com.flansmod.common.vector.Vector3f;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -28,6 +31,11 @@ public class EntityDebugAABB extends Entity
 		setPosition(u.x, u.y, u.z);
 		vector = v;
 		life = i;
+	}
+
+	public EntityDebugAABB(World world, Vector3 origin, Vector3 lengths, int i) 
+	{
+		this(world, new Vector3f(origin.x, origin.y, origin.z), new Vector3f(lengths.x, lengths.y, lengths.z), i);
 	}
 
 	@Override
