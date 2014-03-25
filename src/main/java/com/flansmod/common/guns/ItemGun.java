@@ -153,7 +153,13 @@ public class ItemGun extends Item
 	public void onUpdateClient(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == itemstack)
-		{
+		{			
+			if (soundDelay <= 0 && type.idleSound != null)
+			{
+				PacketPlaySound.sendSoundPacket(entity.posX, entity.posY, entity.posZ, FlansMod.soundRange, entity.dimension, type.idleSound, false);
+				soundDelay = type.idleSoundLength;
+			}
+			
 			lastMouseHeld = mouseHeld;
 			mouseHeld = Mouse.isButtonDown(1);
 			if (type.deployable)
@@ -548,6 +554,8 @@ public class ItemGun extends Item
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
+		if (type.meleeSound != null)
+			PacketPlaySound.sendSoundPacket(entityLiving.posX, entityLiving.posY, entityLiving.posZ, FlansMod.soundRange, entityLiving.dimension, type.meleeSound, true);
 		return type.meleeDamage == 0 || type.FOVFactor != 1.0F;
 	}
 	
