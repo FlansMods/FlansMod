@@ -1,0 +1,16 @@
+itemGroup.tabFlan0=Flan's Mod Waffen
+itemGroup.tabFlan1=Flan's Mod Fahrzeuge
+itemGroup.tabFlan2=Flan's Mod Teile
+itemGroup.tabFlan3=Flan's Mod Teamteile
+itemGroup.tabFlan4=Flan's Mod Mechas
+tile.flansWorkbench.0.name=Fahrzeugerstellungsblock
+tile.flansWorkbench.1.name=Waffenmodifikationsblock
+tile.flansWorkbench.2.name=Teilerstellungsblock
+item.opStick.0.name=Stab des Eigentums
+item.opStick.1.name=Stab der Verbindung
+item.opStick.2.name=Stab der Abbildung
+item.opStick.3.name=Stab der Zerstörung
+item.flagpole.name=Flaggenmast
+tile.teamsSpawner.0.name=Material Spawner
+tile.teamsSpawner.1.name=Spieler Spawner
+tile.teamsSpawner.2.name=Fahrzeug Spawner
