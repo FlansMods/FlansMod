@@ -58,7 +58,14 @@ public class GunType extends InfoType implements IScope
 	public boolean distortSound = true;
 	/** The sound to play upon reloading */
 	public String reloadSound;
-	
+
+	/** The sound to play upon weapon swing */
+	public String meleeSound;
+	/** The sound to play while holding the weapon in the hand*/
+	public String idleSound;
+	public int idleSoundLength;
+
+
 	//Deployable Settings
 	/** If true, then the bullet does not shoot when right clicked, but must instead be placed on the ground */
 	public boolean deployable = false;
@@ -143,6 +150,18 @@ public class GunType extends InfoType implements IScope
 				reloadSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
+			if (split[0].equals("IdleSound"))
+			{
+				idleSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			if (split[0].equals("IdleSoundLength"))
+				idleSoundLength = Integer.parseInt(split[1]);
+			if (split[0].equals("MeleeSound"))
+			{
+				meleeSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}	
 			if (split[0].equals("Mode"))
 				mode = split[1].equals("FullAuto") ? EnumFireMode.FULLAUTO : EnumFireMode.SEMIAUTO;
 			if (split[0].equals("Scope"))
