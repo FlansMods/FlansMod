@@ -88,13 +88,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = FlansMod.MODID, version = FlansMod.VERSION, acceptableRemoteVersions = "[4.2,4.3)")
+@Mod(modid = FlansMod.MODID, version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "4.2.3";
+	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
