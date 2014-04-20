@@ -1,6 +1,6 @@
 [
 {
-  "modid": "FlansMod",
+  "modid": "flansmod",
   "name": "Flan's Mod",
   "description": "Guns, planes and other vehicles in Minecraft.",
   "version": "${version}",
