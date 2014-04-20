@@ -88,7 +88,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = FlansMod.MODID, version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@")
 public class FlansMod
 {
 	//Core mod stuff
