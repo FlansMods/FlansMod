@@ -1,0 +1,7 @@
+Name Scout
+ShortName nerfRetaliator
+AddItem nerfRetaliator
+AddItem nerfStrongarm
+AddItem 18DartEliteClip
+AddItem 12DartEliteClip
+AddItem eliteDart 12

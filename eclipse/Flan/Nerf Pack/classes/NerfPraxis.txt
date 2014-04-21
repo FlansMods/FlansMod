@@ -1,0 +1,6 @@
+Name Scout
+ShortName nerfPraxis
+AddItem nerfPraxis
+AddItem nerfMaverick
+AddItem 10DiscClip 3
+AddItem whistlerDart 12

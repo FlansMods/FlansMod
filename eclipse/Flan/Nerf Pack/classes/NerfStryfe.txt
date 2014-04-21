@@ -1,0 +1,6 @@
+Name Support
+ShortName nerfStryfe
+AddItem nerfStryfe
+AddItem nerfStrongarm
+AddItem 18DartEliteClip 2
+AddItem eliteDart 12

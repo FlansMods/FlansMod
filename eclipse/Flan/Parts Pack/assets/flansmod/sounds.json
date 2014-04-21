@@ -1,0 +1,46 @@
+{
+	"AAfire": {
+		"category" : "player",
+		"sounds" : [ "flansmod:AAfire" ]
+	},
+	
+	"bomb": {
+		"category" : "player",
+		"sounds" : [ "flansmod:bomb" ]
+	},
+	
+	"bullet": {
+		"category" : "player",
+		"sounds" : [ "flansmod:bullet" ]
+	},
+	
+	"bulletHit": {
+		"category" : "player",
+		"sounds" : [ "flansmod:bulletHit" ]
+	},
+	
+	"Engine": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Engine" ]
+	},
+	
+	"Flak": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Flak" ]
+	},
+	
+	"propSound": {
+		"category" : "player",
+		"sounds" : [ "flansmod:propSound" ]
+	},
+	
+	"propStart": {
+		"category" : "player",
+		"sounds" : [ "flansmod:propStart" ]
+	},
+	
+	"TankShell": {
+		"category" : "player",
+		"sounds" : [ "flansmod:TankShell" ]
+	}
+}

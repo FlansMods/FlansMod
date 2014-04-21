@@ -1,0 +1,10 @@
+Name Plastic
+ShortName nerfPlastic
+Icon Plastic
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 23999
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Fuel, Misc
+Category Misc
+StackSize 64
+SmeltableFrom slimeball

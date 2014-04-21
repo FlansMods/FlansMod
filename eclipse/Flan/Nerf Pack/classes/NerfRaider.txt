@@ -1,0 +1,6 @@
+Name Light Assault
+ShortName nerfRaider
+AddItem nerfRaider
+AddItem nerfMaverick
+AddItem 35DartDrum
+AddItem whistlerDart 12

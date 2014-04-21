@@ -1,0 +1,6 @@
+Name Sniper
+ShortName nerfLongshot
+AddItem nerfLongshot
+AddItem nerfMaverick
+AddItem 6DartClip 2
+AddItem whistlerDart 12
