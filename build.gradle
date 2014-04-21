@@ -53,50 +53,42 @@ processResources
 
 version = "${project.minecraft.version}-${project.version}"
 
-jar {
-    exclude '**/mw/'
-    exclude '**/nerf/'
-    exclude '**/titan/'
-    exclude '**/ww2/'
-    exclude '**/yeolde/'
-}
-
-task modernWeapons(type: Zip) {
-    from ('build/classes/main/') { include 'com/flansmod/client/model/mw/'}
+task modernWeapons(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
     from 'eclipse/Flan/Modern Weapons Pack'
     baseName = 'Modern Warfare'
     appendix = 'Content Pack'
 }
 
-task nerf(type: Zip) {
-    from ('build/classes/main/') { include 'com/flansmod/client/model/nerf/'}
+task nerf(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/'}
     from 'eclipse/Flan/Nerf Pack'
     baseName = 'Nerf'
     appendix = 'Content Pack'
 }
 
-task simpleParts(type: Zip) {
+task simpleParts(type: Jar) {
     from 'eclipse/Flan/Parts Pack'
     baseName = 'Simple Parts'
     appendix = 'Content Pack'
 }
 
-task titan(type: Zip) {
-    from ('build/classes/main/') { include 'com/flansmod/client/model/titan/'}
+task titan(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/'}
     from 'eclipse/Flan/Titan Pack'
     baseName = 'Titan'
     appendix = 'Content Pack'
 }
 
-task ww2(type: Zip) {
-    from ('build/classes/main/') { include 'com/flansmod/client/model/ww2/'}
+task ww2(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
     baseName = 'WW2'
     appendix = 'Content Pack'
 }
 
-task yeOlde(type: Zip) {
-    from ('build/classes/main/') { include 'com/flansmod/client/model/yeolde/'}
+task yeOlde(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/'}
     from 'eclipse/Flan/Ye Olde Pack'
     baseName = 'Ye Olde'
     appendix = 'Content Pack'
@@ -111,6 +103,26 @@ task contentPacks() {
     dependsOn yeOlde
 }
 
+task outputJar(type: Jar) {
+    destinationDir = new File("build/output/mods/")
+    from (zipTree("build/libs/${archiveName}")) {
+        exclude '**/mw/'
+        exclude '**/nerf/'
+        exclude '**/titan/'
+        exclude '**/ww2/'
+        exclude '**/yeolde/'
+    }
+}
+
+task outputPacks(type: Copy) {
+    from ('build/libs/') {
+        exclude "**/Flan's Mod*.jar"
+    }
+    into 'build/output/Flan/'
+}
+
 build {
     dependsOn contentPacks
+    dependsOn outputJar
+    dependsOn outputPacks
 }
