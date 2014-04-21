@@ -119,8 +119,8 @@
 		"sounds" : [ "flansmod:VulcanReload" ]
 	},
 	
-	"VuclanShoot": {
+	"VulcanShoot": {
 		"category" : "player",
-		"sounds" : [ "flansmod:VuclanShoot" ]
+		"sounds" : [ "flansmod:VulcanShoot" ]
 	}
 }
