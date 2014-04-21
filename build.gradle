@@ -54,44 +54,44 @@ processResources
 version = "${project.minecraft.version}-${project.version}"
 
 task modernWeapons(type: Jar) {
-    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
-    from 'eclipse/Flan/Modern Weapons Pack'
     baseName = 'Modern Warfare'
     appendix = 'Content Pack'
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
+    from 'eclipse/Flan/Modern Weapons Pack'
 }
 
 task nerf(type: Jar) {
-    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/'}
-    from 'eclipse/Flan/Nerf Pack'
     baseName = 'Nerf'
     appendix = 'Content Pack'
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/'}
+    from 'eclipse/Flan/Nerf Pack'
 }
 
 task simpleParts(type: Jar) {
-    from 'eclipse/Flan/Parts Pack'
     baseName = 'Simple Parts'
     appendix = 'Content Pack'
+    from 'eclipse/Flan/Parts Pack'
 }
 
 task titan(type: Jar) {
-    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/'}
-    from 'eclipse/Flan/Titan Pack'
     baseName = 'Titan'
     appendix = 'Content Pack'
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/'}
+    from 'eclipse/Flan/Titan Pack'
 }
 
 task ww2(type: Jar) {
-    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
-    from 'eclipse/Flan/WW2 Pack'
     baseName = 'WW2'
     appendix = 'Content Pack'
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
+    from 'eclipse/Flan/WW2 Pack'
 }
 
 task yeOlde(type: Jar) {
-    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/'}
-    from 'eclipse/Flan/Ye Olde Pack'
     baseName = 'Ye Olde'
     appendix = 'Content Pack'
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/'}
+    from 'eclipse/Flan/Ye Olde Pack'
 }
 
 task contentPacks() {
