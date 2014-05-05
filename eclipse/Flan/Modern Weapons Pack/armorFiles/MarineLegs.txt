@@ -4,5 +4,5 @@ ItemID 23887
 Icon MarinePants
 Colour 255 255 255
 Type Legs
-Defence 0.17
+Defence 0.1
 ArmourTexture Marine

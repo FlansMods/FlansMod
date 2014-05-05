@@ -41,7 +41,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 {
-	private static int bulletLife = 100; //Kill bullets after 30 seconds
+	private static int bulletLife = 600; //Kill bullets after 30 seconds
 	public Entity owner;
 	private int ticksInAir;
 	public BulletType type;

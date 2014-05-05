@@ -4,5 +4,5 @@ ItemID 23886
 Icon MarineBody
 Colour 255 255 255
 Type Chest
-Defence 0.2
+Defence 0.1
 ArmourTexture Marine
