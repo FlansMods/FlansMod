@@ -32,26 +32,26 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
 {  
-	//public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "key.categories.movement");
-	//public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "key.categories.movement");
-	//public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "key.categories.movement");
-	//public static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D, "key.categories.movement");
-	//public static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE, "key.categories.movement");
-	public static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL, "key.categories.movement");
-	//public static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_LSHIFT, "key.categories.gameplay");
-	public static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R, "key.categories.inventory");
-	public static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V, "key.categories.gameplay");
-	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "key.categories.gameplay");
-	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "key.categories.gameplay");
-	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "key.categories.gameplay");
-	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "key.categories.multiplayer");
-	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "key.categories.multiplayer");
-	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "key.categories.movement");
-	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "key.categories.movement");
-    public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "key.categories.movement");
-    public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "key.categories.movement");
-    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "key.categories.movement");
-    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "key.categories.movement");
+	public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "Flan's Mod");
+	public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "Flan's Mod");
+	public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "Flan's Mod");
+	public static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D, "Flan's Mod");
+	public static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE, "Flan's Mod");
+	public static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL, "Flan's Mod");
+	public static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_LSHIFT, "Flan's Mod");
+	public static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R, "Flan's Mod");
+	public static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V, "Flan's Mod");
+	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "Flan's Mod");
+	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "Flan's Mod");
+	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "Flan's Mod");
+	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "Flan's Mod");
+	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "Flan's Mod");
+	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "Flan's Mod");
+	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "Flan's Mod");
+    public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
+    public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
+    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "Flan's Mod");
+    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "key.categories.misc");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "key.categories.misc");
 
@@ -59,13 +59,13 @@ public class KeyInputHandler
 	
 	public KeyInputHandler()
 	{
-		//ClientRegistry.registerKeyBinding(accelerateKey);
-		//ClientRegistry.registerKeyBinding(decelerateKey);
-		//ClientRegistry.registerKeyBinding(leftKey);
-		//ClientRegistry.registerKeyBinding(rightKey);
-		//ClientRegistry.registerKeyBinding(upKey);
+		ClientRegistry.registerKeyBinding(accelerateKey);
+		ClientRegistry.registerKeyBinding(decelerateKey);
+		ClientRegistry.registerKeyBinding(leftKey);
+		ClientRegistry.registerKeyBinding(rightKey);
+		ClientRegistry.registerKeyBinding(upKey);
 		ClientRegistry.registerKeyBinding(downKey);
-		//ClientRegistry.registerKeyBinding(exitKey);
+		ClientRegistry.registerKeyBinding(exitKey);
 		ClientRegistry.registerKeyBinding(inventoryKey);
 		ClientRegistry.registerKeyBinding(bombKey);
 		ClientRegistry.registerKeyBinding(gunKey);
@@ -148,19 +148,19 @@ public class KeyInputHandler
 		if(ridingEntity instanceof IControllable)
 		{
 			IControllable riding = (IControllable)ridingEntity;
-			if(mc.gameSettings.keyBindForward.isPressed())//if(accelerateKey.isPressed())
+			if(accelerateKey.isPressed())
 				riding.pressKey(0, player);
-			if(mc.gameSettings.keyBindBack.isPressed())//if(decelerateKey.isPressed())
+			if(decelerateKey.isPressed())
 				riding.pressKey(1, player);
-			if(mc.gameSettings.keyBindLeft.isPressed())//if(leftKey.isPressed())
+			if(leftKey.isPressed())
 				riding.pressKey(2, player);
-			if(mc.gameSettings.keyBindRight.isPressed())//if(rightKey.isPressed())
+			if(rightKey.isPressed())
 				riding.pressKey(3, player);
-			if(mc.gameSettings.keyBindJump.isPressed())//if(upKey.isPressed())
+			if(upKey.isPressed())
 				riding.pressKey(4, player);
 			if(downKey.isPressed())
 				riding.pressKey(5, player);
-			if(mc.gameSettings.keyBindSneak.isPressed())//if(exitKey.isPressed())
+			if(exitKey.isPressed())
 				riding.pressKey(6, player);
 			if(mc.gameSettings.keyBindInventory.isPressed() || inventoryKey.isPressed())
 				riding.pressKey(7, player);
