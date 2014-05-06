@@ -105,6 +105,12 @@ public class GunType extends InfoType implements IScope
 	/** The number of generic attachment slots there are on this gun */
 	public int numGenericAttachmentSlots = 0;
 	
+	//Paintjobs
+	/** The list of all available paintjobs for this gun */
+	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
+	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
+	public Paintjob defaultPaintjob;
+	
 	/** The static list of all guns */
 	public static List<GunType> guns = new ArrayList<GunType>();
 
@@ -112,6 +118,15 @@ public class GunType extends InfoType implements IScope
 	{
 		super(file);
 		guns.add(this);
+	}
+	
+	@Override
+	public void read(TypeFile file)
+	{
+		super.read(file);
+		//After all lines have been read, set up the default paintjob
+		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
+		paintjobs.add(defaultPaintjob);
 	}
 	
 	@Override
@@ -240,6 +255,8 @@ public class GunType extends InfoType implements IScope
 			System.out.println("Reading gun file failed.");
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	public boolean isAmmo(BulletType type)
@@ -448,5 +465,15 @@ public class GunType extends InfoType implements IScope
 				return gun;
 		}
 		return null;
+	}
+	
+	public Paintjob getPaintjob(String s)
+	{
+		for(Paintjob paintjob : paintjobs)
+		{
+			if(paintjob.iconName.equals(s))
+				return paintjob;
+		}
+		return defaultPaintjob;
 	}
 }

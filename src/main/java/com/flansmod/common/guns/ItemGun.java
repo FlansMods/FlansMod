@@ -1,5 +1,6 @@
 package com.flansmod.common.guns;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -20,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -52,6 +54,8 @@ public class ItemGun extends Item
 	private static boolean mouseHeld;
 	private static boolean lastMouseHeld;
 	public int soundDelay;
+	
+	public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
 
 	public ItemGun(GunType gun)
 	{
@@ -581,7 +585,9 @@ public class ItemGun extends Item
     public void getSubItems(Item item, CreativeTabs tabs, List list)
     {
     	ItemStack gunStack = new ItemStack(item, 1, 0);
+    	GunType type = ((ItemGun)item).type;
     	NBTTagCompound tags = new NBTTagCompound();
+    	tags.setString("Paint", type.defaultPaintjob.iconName);
     	gunStack.stackTagCompound = tags;
         list.add(gunStack);
     }
@@ -590,7 +596,22 @@ public class ItemGun extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister icon) 
     {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	for(Paintjob paintjob : type.paintjobs)
+    	{
+    		icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
+    		//itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	}
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack)
+    {
+    	//For backwards compatibility, give old guns the default paint job
+    	if(!stack.stackTagCompound.hasKey("Paint"))
+    		stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
+
+        return icons.get(stack.stackTagCompound.getString("Paint"));
     }
     
     @Override

@@ -167,7 +167,7 @@ public class RenderGun implements IItemRenderer
 		
 		
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.stackTagCompound.getString("Paint"))));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);

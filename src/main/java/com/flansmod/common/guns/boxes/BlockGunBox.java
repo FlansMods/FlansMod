@@ -3,6 +3,7 @@ package com.flansmod.common.guns.boxes;
 import java.util.ArrayList;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.GunType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -12,6 +13,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -75,9 +77,18 @@ public class BlockGunBox extends Block
 						}
 					}
 				}
-				if (!inventory.addItemStackToInventory(new ItemStack(type.guns[i].getItem())))
+				ItemStack gunStack = new ItemStack(type.guns[i].getItem());
+				if(type.guns[i] instanceof GunType)
+				{
+					GunType gunType = (GunType)type.guns[i];
+					NBTTagCompound tags = new NBTTagCompound();
+					tags.setString("Paint", gunType.defaultPaintjob.iconName);
+					gunStack.stackTagCompound = tags;
+				}
+				if (!inventory.addItemStackToInventory(gunStack))
 				{
 					// Drop gun on floor
+					inventory.player.dropPlayerItemWithRandomChoice(gunStack, false);
 				}
 			} else
 			{
