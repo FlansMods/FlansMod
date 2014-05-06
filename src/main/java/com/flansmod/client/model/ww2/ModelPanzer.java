@@ -10,6 +10,7 @@ public class ModelPanzer extends ModelVehicle
 {
     public ModelPanzer()
     {
+    	/*
 		int textureX = 512;
 		int textureY = 256;
 		
@@ -376,9 +377,13 @@ public class ModelPanzer extends ModelVehicle
 				mg42Model[2] = new ModelRendererTurbo[0];
 				
 		registerGunModel("MG42", mg42Model);
+		*/
 		
-		/*
-		Old model follows
+    	
+		//Old model follows
+    	
+    	int textureX = 256;
+    	int textureY = 256;
 	
         bodyModel = new ModelRendererTurbo[4];	
 	    bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
@@ -436,18 +441,5 @@ public class ModelPanzer extends ModelVehicle
 		
 		flipAll(); //For old models
 		translateAll(0, -8, 0);
-		
-		*/
-		
-		flipAll();
-		translateAll(3, 16, 12);
-		oldRotateOrder = true;
-    }
-    
-    @Override
-    public void render(float f5, EntityVehicle vehicle, float f)
-    {
-    	GL11.glRotatef(90F, 0F, 1F, 0F);
-    	super.render(f5, vehicle, f);
     }
 }
