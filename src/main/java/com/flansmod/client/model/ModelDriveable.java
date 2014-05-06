@@ -17,6 +17,9 @@ public class ModelDriveable extends ModelBase
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
 	
+	/** Set to true to use the old rotation order (ZYX) rather than (YZX) */
+	public boolean oldRotateOrder = false;
+	
 	/** For rendering a specific entity */
 	public void render(EntityDriveable driveable, float f1)
 	{
@@ -37,7 +40,7 @@ public class ModelDriveable extends ModelBase
 	{
 		for(ModelRendererTurbo bit : part)
 		{
-			bit.render(0.0625F);
+			bit.render(0.0625F, oldRotateOrder);
 		}
 	}
 	

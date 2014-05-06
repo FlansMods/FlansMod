@@ -538,9 +538,9 @@ public class ItemGun extends Item
 	}
 
 	@Override
-    public Multimap getAttributeModifiers(ItemStack stack)
+    public Multimap getItemAttributeModifiers()
     {
-        Multimap multimap = super.getAttributeModifiers(stack);
+        Multimap multimap = super.getItemAttributeModifiers();
         multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
