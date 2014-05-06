@@ -5,5 +5,9 @@ build/
 .settings/
 eclipse/
 bin/
+out/
+*.iml
+*.ipr
+*.iws
 
 !eclipse/Flan/
