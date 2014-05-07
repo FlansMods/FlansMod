@@ -3,6 +3,8 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -126,7 +128,11 @@ public class GunType extends InfoType implements IScope
 		super.read(file);
 		//After all lines have been read, set up the default paintjob
 		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
-		paintjobs.add(defaultPaintjob);
+		//Move to a new list to ensure that the default paintjob is always first
+		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
+		newPaintjobList.add(defaultPaintjob);
+		newPaintjobList.addAll(paintjobs);
+		paintjobs = newPaintjobList;
 	}
 	
 	@Override
@@ -249,6 +255,15 @@ public class GunType extends InfoType implements IScope
 				allowGripAttachments = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("NumGenericAttachmentSlots"))
 				numGenericAttachmentSlots = Integer.parseInt(split[1]);
+			
+			//Paintjobs
+			if(split[0].toLowerCase().equals("paintjob"))
+			{
+				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
+				for(int i = 0; i < (split.length - 3) / 2; i++)
+					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
+				paintjobs.add(new Paintjob(split[1], split[2], dyeStacks));
+			}
 		} 
 		catch (Exception e)
 		{
@@ -257,6 +272,21 @@ public class GunType extends InfoType implements IScope
 		}
 		
 		
+	}
+	
+	/** Return a dye damage value from a string name */
+	private int getDyeDamageValue(String dyeName)
+	{
+		int damage = -1;
+		for(int i = 0; i < ItemDye.field_150923_a.length; i++)
+		{
+			if(ItemDye.field_150923_a[i].equals(dyeName))
+				damage = i;
+		}
+		if(damage == -1)
+			FlansMod.log("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
+		
+		return damage;
 	}
 	
 	public boolean isAmmo(BulletType type)

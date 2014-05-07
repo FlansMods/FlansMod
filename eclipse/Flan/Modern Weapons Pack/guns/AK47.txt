@@ -42,3 +42,6 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob AK47_JungleCamo AK47_JungleCamo green 1
+Paintjob AK47_Red AK47_JungleCamo red 1 orange 1
+Paintjob AK47_SnowCamo AK47_JungleCamo white 1 gray 1 silver 1
+Paintjob AK47_DesertCamo AK47_JungleCamo yellow 5 purple 11 cyan 10 pink 50

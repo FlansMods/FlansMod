@@ -608,6 +608,8 @@ public class ItemGun extends Item
     public IIcon getIconIndex(ItemStack stack)
     {
     	//For backwards compatibility, give old guns the default paint job
+    	if(stack.stackTagCompound == null)
+    		stack.stackTagCompound = new NBTTagCompound();
     	if(!stack.stackTagCompound.hasKey("Paint"))
     		stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
 
