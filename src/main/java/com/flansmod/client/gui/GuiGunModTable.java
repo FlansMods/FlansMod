@@ -15,6 +15,7 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.network.PacketDriveableGUI;
+import com.flansmod.common.network.PacketGunPaint;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -137,7 +138,7 @@ public class GuiGunModTable extends GuiContainer
         {
         	int numDyes = hoveringOver.dyesNeeded.length;
         	//Only draw box if there are dyes needed
-        	if(numDyes != 0)
+        	if(numDyes != 0 && !inventory.player.capabilities.isCreativeMode)
         	{
         		//Calculate which dyes we have in our inventory
 	        	boolean[] haveDyes = new boolean[numDyes];
@@ -232,6 +233,13 @@ public class GuiGunModTable extends GuiContainer
 	@Override
     protected void mouseClicked(int x, int y, int button)
     {
+		super.mouseClicked(x, y, button);
+		if(button != 0)
+			return;
+		if(hoveringOver == null)
+			return;
 		
+		FlansMod.getPacketHandler().sendToServer(new PacketGunPaint(hoveringOver.iconName));
+		((ContainerGunModTable)inventorySlots).clickPaintjob(hoveringOver);
     }
 }

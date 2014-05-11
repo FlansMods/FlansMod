@@ -2,6 +2,7 @@ package com.flansmod.common.guns;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -112,5 +113,65 @@ public class ContainerGunModTable extends Container
 	public void pressButton(boolean paint, boolean left)
 	{
 		//Nope.
+	}
+	
+	public void clickPaintjob(String name)
+	{
+		ItemStack gunStack = inventory.getStackInSlot(0);
+        if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+        {
+        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
+        	clickPaintjob(gunType.getPaintjob(name));
+        }
+	}
+	
+	public void clickPaintjob(Paintjob paintjob)
+	{
+		ItemStack gunStack = inventory.getStackInSlot(0);
+        if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+        {
+        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
+	        	
+			int numDyes = paintjob.dyesNeeded.length;
+	    	
+	    	if(!playerInv.player.capabilities.isCreativeMode)
+	    	{
+	    		//Calculate which dyes we have in our inventory
+	        	for(int n = 0; n < numDyes; n++)
+	        	{
+	        		int amountNeeded = paintjob.dyesNeeded[n].stackSize;
+	        		for(int s = 0; s < playerInv.getSizeInventory(); s++)
+	        		{
+	        			ItemStack stack = playerInv.getStackInSlot(s);
+	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+	        			{
+	        				amountNeeded -= stack.stackSize;
+	        			}
+	        		}
+	        		//We don't have enough of this dye
+					if(amountNeeded > 0)
+						return;
+	        	}
+	    	
+	        	for(int n = 0; n < numDyes; n++)
+	        	{
+	        		int amountNeeded = paintjob.dyesNeeded[n].stackSize;
+	        		for(int s = 0; s < playerInv.getSizeInventory(); s++)
+	        		{
+	        			if(amountNeeded <= 0)
+	        				continue;
+	        			ItemStack stack = playerInv.getStackInSlot(s);
+	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+	        			{
+	        				ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
+	        				amountNeeded -= consumed.stackSize;
+	        			}
+	        		}
+	        	}
+	    	}
+	    	
+	    	//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
+			gunStack.stackTagCompound.setString("Paint", paintjob.iconName);
+		}
 	}
 }
