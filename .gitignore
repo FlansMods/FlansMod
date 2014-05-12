@@ -3,6 +3,7 @@ build/
 .project
 .gradle/
 .settings/
+.idea/
 eclipse/
 bin/
 out/
