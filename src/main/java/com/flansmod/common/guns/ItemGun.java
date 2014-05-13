@@ -596,6 +596,7 @@ public class ItemGun extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister icon) 
     {
+        itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     	for(Paintjob paintjob : type.paintjobs)
     	{
     		icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
