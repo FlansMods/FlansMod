@@ -103,6 +103,10 @@ task contentPacks() {
     dependsOn yeOlde
 }
 
+task clearOutput(type: Delete) {
+    delete 'build/output/'
+}
+
 task outputJar(type: Jar) {
     destinationDir = new File("build/output/mods/")
     from (zipTree("build/libs/${archiveName}")) {
@@ -116,6 +120,7 @@ task outputJar(type: Jar) {
 
 task outputPacks(type: Copy) {
     from ('build/libs/') {
+        include "**/*${version}.jar"
         exclude "**/Flan's Mod*.jar"
     }
     into 'build/output/Flan/'
@@ -123,6 +128,7 @@ task outputPacks(type: Copy) {
 
 build {
     dependsOn contentPacks
+    dependsOn clearOutput
     dependsOn outputJar
     dependsOn outputPacks
 }
