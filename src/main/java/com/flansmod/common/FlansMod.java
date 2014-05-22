@@ -358,6 +358,7 @@ public class FlansMod
 					}
 					while(zipEntry != null);
 					reader.close();
+                    zip.close();
 					zipStream.close();
 				}
 				catch(IOException e)
