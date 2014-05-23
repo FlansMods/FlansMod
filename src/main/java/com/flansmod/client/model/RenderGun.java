@@ -249,6 +249,13 @@ public class RenderGun implements IItemRenderer
 							GL11.glTranslatef(0F, -1F * clipPosition, 0F);
 							break;
 						}
+						case SIDE_CLIP : 
+						{
+							GL11.glRotatef(180F * clipPosition, 0F, 1F, 0F);
+							GL11.glRotatef(60F * clipPosition, 0F, 1F, 0F);
+							GL11.glTranslatef(0.5F * clipPosition, 0F, 0F);
+							break;
+						}
 						case P90 :
 						{
 							GL11.glRotatef(-15F * reloadRotate * reloadRotate, 0F, 0F, 1F);
