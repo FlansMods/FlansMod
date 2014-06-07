@@ -143,13 +143,18 @@ public class TeamsManager
 		}
 		for(Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
 		{
-			EntityPlayerMP player = (EntityPlayerMP)obj;
-			PlayerData data = PlayerHandler.getPlayerData(player);
-			if(data.spawnDelay == 0)
-			{
-		        WorldServer world = (WorldServer)player.worldObj;
-		        world.getEntityTracker().func_151247_a(player, new S18PacketEntityTeleport(player));	
-			}
+            try {
+                if(obj instanceof EntityPlayerMP){
+                    EntityPlayerMP player = (EntityPlayerMP) obj;
+                    PlayerData data = PlayerHandler.getPlayerData(player);
+                    if (data.spawnDelay == 0) {
+                        WorldServer world = (WorldServer) player.worldObj;
+                        world.getEntityTracker().func_151247_a(player, new S18PacketEntityTeleport(player));
+                    }
+                }
+			} catch(Exception e) {
+                e.printStackTrace();
+            }
 		}
 	}
 	
