@@ -36,7 +36,7 @@ public class ModelPlane extends ModelDriveable
 	public ModelRendererTurbo rightWingPos2Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingPos1Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingPos2Model[] = new ModelRendererTurbo[0];
-	
+	public ModelRendererTurbo hudModel[] = new ModelRendererTurbo[0];
 	@Override
 	public void render(EntityDriveable driveable, float f1)
 	{
@@ -74,6 +74,7 @@ public class ModelPlane extends ModelDriveable
 		renderPart(tailDoorCloseModel);
 		renderPart(rightWingPos1Model);
 		renderPart(leftWingPos1Model);
+		renderPart(hudModel);
 	}
 	
     public void render(float f5, EntityPlane plane, float f)
@@ -240,6 +241,11 @@ public class ModelPlane extends ModelDriveable
 				if(!plane.varDoor)
 					bodyDoorCloseModel[i].render(f5);
 			}
+			for(int i = 0; i < hudModel.length; i++)
+			{
+				hudModel[i].rotateAngleX = -(plane.axes.getRoll() * 3.14159265F / 180F);
+				hudModel[i].render(f5);
+			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.coreWheel))
 		{
@@ -322,6 +328,7 @@ public class ModelPlane extends ModelDriveable
 		flip(rightWingPos2Model);
 		flip(leftWingPos1Model);
 		flip(leftWingPos2Model);
+		flip(hudModel);
 		
 		for(ModelRendererTurbo[] propellerModel : propellerModels)
 		{
@@ -354,6 +361,7 @@ public class ModelPlane extends ModelDriveable
 		translate(rightWingPos2Model, x, y, z);
 		translate(leftWingPos1Model, x, y, z);
 		translate(leftWingPos2Model, x, y, z);
+		translate(hudModel, x, y, z);
 
 		for(ModelRendererTurbo[] mods : propellerModels)
 		{
