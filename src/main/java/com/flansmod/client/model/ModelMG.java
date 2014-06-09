@@ -9,12 +9,20 @@ public class ModelMG extends ModelBase
 	public ModelRendererTurbo bipodModel[];
 	public ModelRendererTurbo gunModel[];
 	public ModelRendererTurbo ammoModel[];
+	public ModelRendererTurbo ammoBoxModel[] = new ModelRendererTurbo[0];
 
 	public void renderBipod(float f, float f1, float f2, float f3, float f4, float f5, EntityMG mg)
 	{
 		for (ModelRendererTurbo bipodPart : bipodModel)
 		{
 			bipodPart.render(f5);
+		}
+		if (mg.reloadTimer > 0 || mg.ammo == null)
+			return;
+
+		for (ModelRendererTurbo ammoBoxPart : ammoBoxModel)
+		{
+			ammoBoxPart.render(f5);
 		}
 	}
 
@@ -52,6 +60,11 @@ public class ModelMG extends ModelBase
 		{
 			ammoModel[i].doMirror(false, true, true);
 			ammoModel[i].setRotationPoint(ammoModel[i].rotationPointX, - ammoModel[i].rotationPointY, - ammoModel[i].rotationPointZ);
+		}
+		for(int i = 0; i < ammoBoxModel.length; i++)
+		{
+			ammoBoxModel[i].doMirror(false, true, true);
+			ammoBoxModel[i].setRotationPoint(ammoBoxModel[i].rotationPointX, - ammoBoxModel[i].rotationPointY, - ammoBoxModel[i].rotationPointZ);
 		}
 	}	
 }
