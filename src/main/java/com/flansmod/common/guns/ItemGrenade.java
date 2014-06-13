@@ -34,9 +34,9 @@ public class ItemGrenade extends Item {
 	}
 	
 	@Override
-    public Multimap getItemAttributeModifiers()
+    public Multimap getAttributeModifiers(ItemStack stack)
     {
-        Multimap multimap = super.getItemAttributeModifiers();
+        Multimap multimap = super.getAttributeModifiers(stack);
         multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }

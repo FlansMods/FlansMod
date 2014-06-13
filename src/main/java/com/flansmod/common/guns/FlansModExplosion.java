@@ -126,7 +126,7 @@ public class FlansModExplosion extends Explosion
         int l1 = MathHelper.floor_double(explosionY + explosionSize + 1.0D);
         int i2 = MathHelper.floor_double(explosionZ - explosionSize - 1.0D);
         int j2 = MathHelper.floor_double(explosionZ + explosionSize + 1.0D);
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getAABBPool().getAABB(i, k, i2, j, l1, j2));
+        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(i, k, i2, j, l1, j2));
         Vec3 vec3 = worldObj.getWorldVec3Pool().getVecFromPool(explosionX, explosionY, explosionZ);
 
         for (int k2 = 0; k2 < list.size(); ++k2)
