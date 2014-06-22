@@ -122,7 +122,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			break;
 		}
 		}
-		out.add(packet);
 	}
 	
 	/** Initialisation method called from FMLInitializationEvent in FlansMod */
