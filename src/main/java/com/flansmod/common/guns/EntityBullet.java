@@ -242,8 +242,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					if(type.breaksGlass && mat == Material.glass)
 					{
 						if(TeamsManager.canBreakGlass)
-							worldObj.setBlockToAir(xTile, yTile, zTile);
-						FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
+                        {
+                            worldObj.setBlockToAir(xTile, yTile, zTile);
+                            FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
+                        }
 					}
 					if(!type.penetratesBlocks)
 					{
