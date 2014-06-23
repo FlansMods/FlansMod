@@ -1,0 +1,15 @@
+//Description for hover text. Underscores represent new lines.
+Description Helps cut diamonds_out of the rock_to increase yield
+ShortName mechaDiamondCutter
+Icon DiamondCutter
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe I blockIron D diamond R redstone
+ DI
+DRD
+ D 
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type upgrade
+//The modifiers this item enacts on the mecha
+DiamondMultiplier 1.2
