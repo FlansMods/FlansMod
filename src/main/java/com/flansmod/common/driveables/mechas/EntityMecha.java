@@ -1017,7 +1017,6 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			multiplier *= type.fortuneEmerald;
->>>>>>> 1707c1728fc6abe44f84821d372eb0b8d6647fdb
 		}
 		return multiplier;
 	}
