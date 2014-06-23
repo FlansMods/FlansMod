@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description Helps cut diamonds_out of the rock_to increase yield_(1.2x diamond drop rate)
+Description Helps cut diamonds_out of the rock_to increase yield_(1.2x Diamond Drop Rate)
 ShortName mechaDiamondCutter
 Icon DiamondCutter
 //Colour in Red, Green, Blue, each going up to 255.

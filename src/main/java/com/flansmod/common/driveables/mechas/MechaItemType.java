@@ -85,6 +85,12 @@ public class MechaItemType extends InfoType
 			
 			if(split[0].equals("DiamondMultiplier"))
 				fortuneDiamond = Float.parseFloat(split[1]);
+			if(split[0].equals("RedstoneMultiplier"))
+				fortuneRedstone = Float.parseFloat(split[1]);
+			if(split[0].equals("EmeraldMultiplier"))
+				fortuneEmerald = Float.parseFloat(split[1]);
+			if(split[0].equals("CoalMultiplier"))
+				fortuneCoal = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{
