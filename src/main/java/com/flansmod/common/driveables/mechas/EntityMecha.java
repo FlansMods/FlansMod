@@ -862,6 +862,7 @@ public class EntityMecha extends EntityDriveable
 			        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
 							//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 							//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+							
 							boolean vacuumItems = vacuumItems();
 							if(vacuumItems)
 							{
@@ -897,6 +898,9 @@ public class EntityMecha extends EntityDriveable
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
     	setPosition(posX, posY, posZ);
+    	
+    	if(data.fuelInTank != 0)
+    		FlansMod.log((worldObj.isRemote ? "Client" : "Server") + data.fuelInTank);
 		
 		//Fuel Handling
 		if(!couldNotFindFuel)
@@ -974,8 +978,6 @@ public class EntityMecha extends EntityDriveable
 			}
 		}
 		
-
-		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)
 		{
@@ -1043,6 +1045,17 @@ public class EntityMecha extends EntityDriveable
 		}
 		return false;
 	}
+	
+	public float diamondMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneDiamond;
+		}
+		return multiplier;
+	}
+
 	
 	public boolean autoCoal()
 	{
