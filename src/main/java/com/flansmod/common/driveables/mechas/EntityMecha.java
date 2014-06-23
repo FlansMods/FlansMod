@@ -935,10 +935,10 @@ public class EntityMecha extends EntityDriveable
 			if(fuelling)
 			{
 				int damage = fuelStack.getItemDamage();
-				//Consume 100 points of fuel (1 damage)
+				//Consume 10 points of fuel (1 damage)
 				fuelStack.setItemDamage(damage + 1);
-				//Put 100 points of fuel 
-				data.fuelInTank += 100;
+				//Put 10 points of fuel 
+				data.fuelInTank += 10;
 				//If we have finished this fuel item
 				if(damage >= fuelStack.getMaxDamage())
 				{
