@@ -25,6 +25,7 @@ AddGun r700 10 iron 8 log 4 glass
 AddAmmo r700Ammo 2 iron 1 gunpowder
 AddGun barrett 20 iron 5 glass
 AddAmmo barrettAmmo 4 iron 3 gunpowder
+AddAltAmmo barrettExplosiveAmmo 4 iron 20 gunpowder
 AddGun m16a4 15 iron 5 fiberglass
 AddAmmo m16a4Ammo 6 iron 5 gunpowder
 AddGun ak47 10 iron 10 log
@@ -47,6 +48,7 @@ AddGun p90 5 iron 20 fiberglass
 AddAmmo p90Ammo 8 fiberglass 6 gunpowder
 AddGun w1200 16 iron 6 fiberglass
 AddAmmo w1200Ammo 8 iron 2 fiberglass 5 gunpowder
+AddAltAmmo w1200IncendiaryAmmo 8 iron 2 fiberglass 8 gunpowder 2 blazePowder
 AddGun m1014 12 iron 10 fiberglass
 AddAmmo m1014Ammo 6 iron 1 fiberglass 3 gunpowder
 AddGun m249 24 iron 5 fiberglass

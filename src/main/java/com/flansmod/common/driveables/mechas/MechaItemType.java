@@ -35,6 +35,12 @@ public class MechaItemType extends InfoType
 	*/
 	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false;
 	
+	/** The drop rate of these items are multiplied by this float. They stack between items too. 
+	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
+	 * dropRate - floor(dropRate) chance of getting one more */
+	public float fortuneDiamond = 1F, fortuneRedstone = 1F, fortuneCoal = 1F, fortuneEmerald = 1F;
+	
+	
 	/** The model */
 	@SideOnly(Side.CLIENT)
 	public ModelMechaTool model;
@@ -76,6 +82,9 @@ public class MechaItemType extends InfoType
 				autoCoal = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
+			
+			if(split[0].equals("DiamondMultiplier"))
+				fortuneDiamond = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

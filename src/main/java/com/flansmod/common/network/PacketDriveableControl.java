@@ -120,6 +120,7 @@ public class PacketDriveableControl extends PacketBase
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;
+				driveable.driveableData.fuelInTank = fuelInTank;
 				if(driveable.seats[0] != null && driveable.seats[0].riddenByEntity == clientPlayer)
 					return;
 				break;
