@@ -28,6 +28,8 @@ public class MechaItemType extends InfoType
 	public float reach = 1F;
 	/** This makes the mecha float towards the surface when underwater, because apparently people prefer limited functionality */
 	public boolean floater = false;
+	/** This allows an upgrade to affect the mecha's move speed */
+	public float speedMultiplier = 1F;
 	
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
@@ -82,7 +84,8 @@ public class MechaItemType extends InfoType
 				autoCoal = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
-			
+			if(split[0].equals("SpeedMultiplier"))
+				speedMultiplier = Float.parseFloat(split[1]);
 			if(split[0].equals("DiamondMultiplier"))
 				fortuneDiamond = Float.parseFloat(split[1]);
 		}

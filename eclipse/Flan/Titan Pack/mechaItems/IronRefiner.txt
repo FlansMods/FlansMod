@@ -4,7 +4,6 @@ ShortName mechaIronRefiner
 Icon IronRefiner
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23427
 RecipeOutput 1
 Recipe H hopper I ingotIron B blockIron F furnace
 IBI

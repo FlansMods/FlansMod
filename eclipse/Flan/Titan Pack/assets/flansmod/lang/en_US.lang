@@ -1,7 +1,9 @@
-item.mechaFloat.name=Floatation Device
-item.mechaItemVacuum.name=Item Vacuum
-item.mechaIronRefiner.name=Iron Refiner
 item.mechaAutoFueler.name=Auto Fueler
+item.mechaFloat.name=Floatation Device
+item.mechaIronRefiner.name=Iron Refiner
+item.mechaItemVacuum.name=Item Vacuum
+item.mechaNanobots.name=Nanobots
 item.obsidianMechaBoots.name=Obsidian Mecha Boots
+item.mechaSpeedUpgrade.name=Speed Upgrade
 item.AlphaTitan.name=Alpha Titan
 item.ProtoTitan.name=Proto Titan

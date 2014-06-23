@@ -663,7 +663,7 @@ public class EntityMecha extends EntityDriveable
 				
 				Vector3f motion = legAxes.getXAxis();
 				
-				motion.scale((type.moveSpeed * data.engine.engineSpeed)*(4.3F/20F)*(intent.lengthSquared()));
+				motion.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F)*(intent.lengthSquared()));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
@@ -758,7 +758,7 @@ public class EntityMecha extends EntityDriveable
 			        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
 							//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 							//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-							
+
 							boolean vacuumItems = vacuumItems();
 							if(vacuumItems)
 							{
@@ -948,6 +948,16 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			multiplier *= type.fortuneDiamond;
+		}
+		return multiplier;
+	}
+	
+	public float speedMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.speedMultiplier;
 		}
 		return multiplier;
 	}
