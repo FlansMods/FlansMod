@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description Uses mined coal to_refuel the mecha
+Description Uses vacuumed coal to_refuel the mecha
 ShortName mechaAutoFueler
 Icon AutoFueler
 //Colour in Red, Green, Blue, each going up to 255.
