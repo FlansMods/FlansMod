@@ -764,18 +764,45 @@ public class EntityMecha extends EntityDriveable
 							{
 								for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 								{
+									//Check for iron regarding refining
 									if(refineIron() && (stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
 									{
 										stack = (new ItemStack(Items.iron_ingot, 1, 0));
 										if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 											data.fuelInTank -= 5F;
 									}
+									
+									//Check for item multipliers
+									if(stack.getItem() == Items.diamond)
+									{
+										float multiplier = diamondMultiplier();
+										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+									}
+									if(stack.getItem() == Items.redstone)
+									{
+										float multiplier = redstoneMultiplier();
+										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+									}
+									if(stack.getItem() == Items.coal)
+									{
+										float multiplier = coalMultiplier();
+										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+									}
+									if(stack.getItem() == Items.emerald)
+									{
+										float multiplier = emeraldMultiplier();
+										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+									}
+									
+									//Check for auto coal consumption
 									if(autoCoal() && (stack.getItem() == Items.coal) && (data.fuelInTank + 250F < type.fuelTankSize))
 									{
 										data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
 										couldNotFindFuel = false;
 										stack.stackSize = 0;
 									}
+									
+									//Add the itemstack to mecha inventory
 									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 									{
 										worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
@@ -794,9 +821,6 @@ public class EntityMecha extends EntityDriveable
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
     	setPosition(posX, posY, posZ);
-    	
-    	if(data.fuelInTank != 0)
-    		FlansMod.log((worldObj.isRemote ? "Client" : "Server") + data.fuelInTank);
 		
 		//Fuel Handling
 		if(!couldNotFindFuel)
@@ -900,6 +924,11 @@ public class EntityMecha extends EntityDriveable
 			legSwing = legSwing / type.legSwingLimit;
 	}
 	
+	private float tailFloat(float f)
+	{
+		return f - MathHelper.floor_float(f);
+	}
+	
 	/** Check all upgrades to see if any stop fall damage */
 	public boolean stopFallDamage()
 	{
@@ -958,6 +987,37 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			multiplier *= type.speedMultiplier;
+		}
+		return multiplier;
+	}
+	
+	public float coalMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneCoal;
+		}
+		return multiplier;
+	}
+	
+	public float redstoneMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneRedstone;
+		}
+		return multiplier;
+	}
+	
+	public float emeraldMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneEmerald;
+>>>>>>> 1707c1728fc6abe44f84821d372eb0b8d6647fdb
 		}
 		return multiplier;
 	}
