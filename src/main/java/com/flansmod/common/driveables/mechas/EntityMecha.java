@@ -880,6 +880,11 @@ public class EntityMecha extends EntityDriveable
 										couldNotFindFuel = false;
 										stack.stackSize = 0;
 									}
+									if(stack.getItem() == Items.diamond)
+									{
+										float multiplier = diamondMultiplier();
+										stack.stackSize = MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+									}
 									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 									{
 										worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
@@ -898,9 +903,6 @@ public class EntityMecha extends EntityDriveable
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		
     	setPosition(posX, posY, posZ);
-    	
-    	if(data.fuelInTank != 0)
-    		FlansMod.log((worldObj.isRemote ? "Client" : "Server") + data.fuelInTank);
 		
 		//Fuel Handling
 		if(!couldNotFindFuel)
@@ -1002,6 +1004,11 @@ public class EntityMecha extends EntityDriveable
 		
 		if(!driverIsLiving || thePlayerIsDrivingThis)
 			legSwing = legSwing / type.legSwingLimit;
+	}
+	
+	private float tailFloat(float f)
+	{
+		return f - MathHelper.floor_float(f);
 	}
 	
 	/** Check all upgrades to see if any stop fall damage */
