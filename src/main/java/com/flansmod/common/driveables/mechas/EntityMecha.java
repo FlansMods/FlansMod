@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,8 +72,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityMecha extends EntityDriveable
 {
-	public int fMotion = 0;
-	public int sMotion = 0;
 	private int ticksSinceUsed;
     public int toggleTimer = 0;
     private float moveX = 0, moveZ = 0;
@@ -231,12 +230,6 @@ public class EntityMecha extends EntityDriveable
     		}
 			case 4 : //Jump
 			{
-				if(isInWater() && shouldFloat() && (jumpDelay == 0))
-				{
-					jumpDelay = 10;
-					motionY += 0.3F;
-					return true;
-				}
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
@@ -409,7 +402,111 @@ public class EntityMecha extends EntityDriveable
 		
 		return true;
 	}
-	
+	/*
+	private boolean useItem(boolean left)
+	{
+	    if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
+	        {
+			boolean creative = seats[0].riddenByEntity instanceof EntityPlayer ? ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode : true;
+			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
+			if(heldStack == null)
+				return false;
+			
+			Item heldItem = heldStack.getItem();
+			
+			MechaType mechaType = getMechaType();
+			
+			if(heldItem instanceof ItemMechaAddon)
+			{
+				MechaItemType toolType = ((ItemMechaAddon)heldItem).type;
+				
+				float reach = toolType.reach * mechaType.reach;
+				
+				Vector3f lookOrigin = new Vector3f((float)mechaType.seats[0].x / 16F, (float)mechaType.seats[0].y / 16F + seats[0].riddenByEntity.getMountedYOffset(), (float)mechaType.seats[0].z / 16F);
+				lookOrigin = axes.findLocalVectorGlobally(lookOrigin);
+				Vector3f.add(lookOrigin, new Vector3f(posX, posY, posZ), lookOrigin);
+		
+				Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
+				
+				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
+				
+				Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
+				
+				MovingObjectPosition hit = worldObj.rayTraceBlocks(lookOrigin.toVec3(), lookTarget.toVec3());
+				
+				//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
+				if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
+				{
+					if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
+						breakingProgress = 0F;
+					breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
+				}
+			}
+			
+			else if(heldItem instanceof ItemGun)
+			{
+				ItemGun gunItem = (ItemGun)heldItem;
+				GunType gunType = gunItem.type;
+				
+				//Get the correct shoot delay
+				int delay = left ? shootDelayLeft : shootDelayRight;
+				
+				//If we can shoot
+				if(delay <= 0)
+				{
+					//Go through the bullet stacks in the gun and see if any of them are not null
+					int bulletID = 0;
+					ItemStack bulletStack = null;
+					for(; bulletID < gunType.numAmmoItemsInGun; bulletID++)
+					{
+						ItemStack checkingStack = gunItem.getBulletItemStack(heldStack, bulletID);
+						if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+						{
+							bulletStack = checkingStack;
+							break;
+						}
+					}
+					
+					//If no bullet stack was found, reload
+					if(bulletStack == null)
+					{
+						gunItem.reload(heldStack, worldObj, this, driveableData, creative, false);				
+					}
+					//A bullet stack was found, so try shooting with it
+					else if(bulletStack.getItem() instanceof ItemBullet)
+					{
+						//Shoot
+						shoot(heldStack, gunType, bulletStack, creative, left);
+						
+						//Apply animations to 3D modelled guns
+						//TODO : Move to client side and sync
+						if(worldObj.isRemote)
+						{
+							int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
+							int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
+							if(left)
+							{
+								leftAnimations.doShoot(pumpDelay, pumpTime);
+							}
+							else
+							{
+								rightAnimations.doShoot(pumpDelay, pumpTime);
+							}
+						}
+						//Damage the bullet item
+						bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+						
+						//Update the stack in the gun
+						gunItem.setBulletItemStack(heldStack, bulletStack, bulletID);
+					}
+				}
+			}
+	    }
+		
+		return true;
+	}
+	*/
+
 	private void shoot(ItemStack stack, GunType gunType, ItemStack bulletStack, boolean creative, boolean left)
 	{
 		MechaType mechaType = getMechaType();
@@ -610,6 +707,12 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
+		if(isInWater() && shouldFloat())
+		{
+			motionY *= 0.89;
+			motionY += 0.1;
+		}
+		
 		Vector3f actualMotion = new Vector3f(0F, motionY - 9.81F / 400F, 0F);
 		
 		if(driverIsLiving)
@@ -764,6 +867,18 @@ public class EntityMecha extends EntityDriveable
 							{
 								for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 								{
+									if(refineIron() && (stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+									{
+										stack = (new ItemStack(Items.iron_ingot, 1, 0));
+										if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+											data.fuelInTank -= 5F;
+									}
+									if(autoCoal() && (stack.getItem() == Items.coal) && (data.fuelInTank + 250F < type.fuelTankSize))
+									{
+										data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
+										couldNotFindFuel = false;
+										stack.stackSize = 0;
+									}
 									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 									{
 										worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
@@ -914,6 +1029,26 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.vacuumItems)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean refineIron()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.refineIron)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean autoCoal()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.autoCoal)
 				return true;
 		}
 		return false;

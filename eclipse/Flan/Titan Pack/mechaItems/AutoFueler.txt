@@ -1,17 +1,16 @@
-Name Item Vacuum
 //Description for hover text. Underscores represent new lines.
-Description Adds all items mined by the_mecha to its inventory
-ShortName mechaItemVacuum
-Icon ItemVacuum
+Description Uses mined coal to_refuel the mecha
+ShortName mechaAutoFueler
+Icon AutoFueler
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23426
+ItemID 23428
 RecipeOutput 1
-Recipe H hopper I blockIron R redstone
-RHR
-HIH
-RHR
+Recipe C coal D dispenser
+ C 
+CDC
+ C 
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type upgrade
 //The modifiers this item enacts on the mecha
-ItemVacuum true
+AutoFuel true

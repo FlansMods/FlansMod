@@ -26,14 +26,14 @@ public class MechaItemType extends InfoType
 	public float toolHardness = 1F;
 	/** This is multiplied by the mecha reach to calculate the total reach */
 	public float reach = 1F;
-	/** This makes the mecha float towards the surface if it jumps underwater */
+	/** This makes the mecha float towards the surface when underwater, because apparently people prefer limited functionality */
 	public boolean floater = false;
 	
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false;
 	
 	/** The model */
 	@SideOnly(Side.CLIENT)
@@ -70,6 +70,10 @@ public class MechaItemType extends InfoType
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ItemVacuum"))
 				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("IronRefine"))
+				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AutoFuel"))
+				autoCoal = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
 		}
