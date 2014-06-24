@@ -1124,7 +1124,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public boolean isPartIntact(EnumDriveablePart part)
 	{
-		return getDriveableData().parts.get(part).maxHealth == 0 || getDriveableData().parts.get(part).health > 0; 
+		DriveablePart thisPart = getDriveableData().parts.get(part);
+		return thisPart.maxHealth == 0 || thisPart.health > 0;
 	}
 	
 	public abstract boolean hasMouseControlMode();

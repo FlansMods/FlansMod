@@ -35,7 +35,7 @@ public class MechaItemType extends InfoType
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
@@ -94,6 +94,8 @@ public class MechaItemType extends InfoType
 				fortuneEmerald = Float.parseFloat(split[1]);
 			if(split[0].equals("CoalMultiplier"))
 				fortuneCoal = Float.parseFloat(split[1]);
+			if(split[0].equals("Nanorepair"))
+				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception e)
 		{

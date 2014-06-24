@@ -515,6 +515,17 @@ public class EntityMecha extends EntityDriveable
 		
 		prevLegsYaw = legAxes.getYaw();
 		
+		if(toggleTimer == 0 && autoRepair())
+		{
+			for(EnumDriveablePart part: EnumDriveablePart.values())
+			{
+				DriveablePart thisPart = data.parts.get(part);
+				if(thisPart != null && thisPart.health < thisPart.maxHealth)
+					thisPart.health += 1;
+			}
+			toggleTimer = 10;
+		}
+			
 		//TODO better implement this
 		if(isPartIntact(EnumDriveablePart.hips))
 		{
@@ -540,7 +551,7 @@ public class EntityMecha extends EntityDriveable
 			setDead();
 		}
 		
-		//Timer, for general use
+		//Timer, for general use (only current use is for Auto Repair)
 		if(toggleTimer > 0)
 			toggleTimer--;
 		
@@ -1027,6 +1038,16 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.autoCoal)
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean autoRepair()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.autoRepair)
 				return true;
 		}
 		return false;
