@@ -30,6 +30,8 @@ public class MechaItemType extends InfoType
 	public boolean floater = false;
 	/** This allows an upgrade to affect the mecha's move speed */
 	public float speedMultiplier = 1F;
+	/** This allows upgrades to reduce incoming damage */
+	public float damageResistance = 1F;
 	
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
@@ -96,6 +98,8 @@ public class MechaItemType extends InfoType
 				fortuneCoal = Float.parseFloat(split[1]);
 			if(split[0].equals("Nanorepair"))
 				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Armour"))
+				damageResistance = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

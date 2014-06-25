@@ -460,7 +460,7 @@ public class EntityMecha extends EntityDriveable
         	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
         	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier : 0;
+        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * armourPierce() : 0;
         	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
         	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
@@ -483,7 +483,7 @@ public class EntityMecha extends EntityDriveable
 		}
         else
         {
-        	driveableData.parts.get(EnumDriveablePart.core).attack(i, damagesource.isFireDamage());
+        	driveableData.parts.get(EnumDriveablePart.core).attack(i * armourPierce(), damagesource.isFireDamage());
         }
         return true;
     }
@@ -515,15 +515,18 @@ public class EntityMecha extends EntityDriveable
 		
 		prevLegsYaw = legAxes.getYaw();
 		
+		//Autorepair. Like a Boss.
+		
 		if(toggleTimer == 0 && autoRepair())
 		{
 			for(EnumDriveablePart part: EnumDriveablePart.values())
 			{
 				DriveablePart thisPart = data.parts.get(part);
-				if(thisPart != null && thisPart.health < thisPart.maxHealth)
+				if(thisPart != null && thisPart.health < thisPart.maxHealth && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 10F))
 					thisPart.health += 1;
-			}
-			toggleTimer = 10;
+				if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+					data.fuelInTank -= 10F;			}
+			toggleTimer = 20;
 		}
 			
 		//TODO better implement this
@@ -951,7 +954,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	/** Check all upgrades to see if any stop fall damage */
+	/** Check all upgrades to see if any force fall damage */
 	public boolean breakBlocksUponFalling()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -1020,6 +1023,16 @@ public class EntityMecha extends EntityDriveable
 			multiplier *= type.fortuneRedstone;
 		}
 		return multiplier;
+	}
+	
+	public float armourPierce()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.damageResistance;
+		}
+		return 1 - multiplier;
 	}
 	
 	public float emeraldMultiplier()

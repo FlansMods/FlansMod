@@ -1,12 +1,14 @@
 item.mechaAutoFueler.name=Auto Fueler
+item.mechaDiamondArmour.name=Diamond Armor
+item.mechaDiamondCutter.name=Diamond Cutter
 item.mechaFloat.name=Floatation Device
+item.mechaIronArmour.name=Iron Armor
 item.mechaIronRefiner.name=Iron Refiner
 item.mechaItemVacuum.name=Item Vacuum
+item.mechaLaserDiamondCutter.name=Laser Diamond Cutter
 item.mechaNanobots.name=Nanobots
 item.obsidianMechaBoots.name=Obsidian Mecha Boots
-item.mechaSpeedUpgrade.name=Speed Upgrade
-item.mechaDiamondCutter.name=Diamond Cutter
-item.mechaLaserDiamondCutter.name=Laser Diamond Cutter
 item.mechaRedstoneMagnet.name=Redstone Magnet
+item.mechaSpeedUpgrade.name=Speed Upgrade
 item.AlphaTitan.name=Alpha Titan
 item.ProtoTitan.name=Proto Titan
