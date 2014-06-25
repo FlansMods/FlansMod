@@ -1,5 +1,12 @@
-﻿item.mechaFloat.name=Плавательное приспособление
+item.mechaAutoFueler.name=Авто-заправщик
+item.mechaFloat.name=Плавательное приспособление
+item.mechaIronRefiner.name=Переплавщик железа
 item.mechaItemVacuum.name=Вакуумный поглотитель предметов
+item.mechaNanobots.name=Нанороботы
 item.obsidianMechaBoots.name=Обсидиановые ботинки меха
+item.mechaSpeedUpgrade.name=Улучшение скорости
+item.mechaDiamondCutter.name=Алмазные кусачки
+item.mechaLaserDiamondCutter.name=Лазерный алмазный резчик
+item.mechaRedstoneMagnet.name=Магнит из красного камня
 item.AlphaTitan.name=Альфа-титан
 item.ProtoTitan.name=Прото-титан
