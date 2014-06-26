@@ -81,7 +81,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	public void drawScreen(int i, int j, float f)
 	{
 		String recipeName;
-		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
