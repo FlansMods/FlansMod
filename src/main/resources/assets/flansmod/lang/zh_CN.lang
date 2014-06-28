@@ -1,0 +1,18 @@
+#By Darkyoooooo
+
+itemGroup.tabFlan0=Flan's Mod 枪械
+itemGroup.tabFlan1=Flan's Mod 载具
+itemGroup.tabFlan2=Flan's Mod 零件
+itemGroup.tabFlan3=Flan's Mod 团队工具
+itemGroup.tabFlan4=Flan's Mod 
+tile.flansWorkbench.0.name=载具制造台
+tile.flansWorkbench.1.name=枪械制造台
+tile.flansWorkbench.2.name=零件合成台
+item.opStick.0.name=Stick of Ownership
+item.opStick.1.name=Stick of Connecting
+item.opStick.2.name=Stick of Mapping
+item.opStick.3.name=Stick of Destruction
+item.flagpole.name=Flagpole
+tile.teamsSpawner.0.name=物品生成器
+tile.teamsSpawner.1.name=士兵生成器
+tile.teamsSpawner.2.name=载具生成器
