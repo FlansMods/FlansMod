@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -83,6 +84,14 @@ public class BlockGunBox extends Block
 					GunType gunType = (GunType)type.guns[i];
 					NBTTagCompound tags = new NBTTagCompound();
 					tags.setString("Paint", gunType.defaultPaintjob.iconName);
+					//Add ammo tags
+					NBTTagList ammoTagsList = new NBTTagList();
+					for(int j = 0; j < gunType.numAmmoItemsInGun; j++)
+					{
+						ammoTagsList.appendTag(new NBTTagCompound());
+					}
+					tags.setTag("ammo", ammoTagsList);
+					
 					gunStack.stackTagCompound = tags;
 				}
 				if (!inventory.addItemStackToInventory(gunStack))
