@@ -66,7 +66,7 @@ public class TickHandlerClient
 	    	return;
 	    }
 
-		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
@@ -261,7 +261,7 @@ public class TickHandlerClient
 
 	public void renderTickEnd(Minecraft mc)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft.gameSettings, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		

@@ -457,7 +457,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			type = BulletType.getBullet(typeString);
 		
 		if (ownerName != null && !ownerName.equals("null"))
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(ownerName);
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(ownerName);
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class CommonGuiHandler implements IGuiHandler
  	@SideOnly(Side.CLIENT)
  	public static void openGunBoxGui(EntityPlayer player, GunBoxType type) 
  	{
- 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(player.getCommandSenderName());
+ 		EntityPlayerMP playerMP = FMLClientHandler.instance().getServer().getConfigurationManager().func_152612_a(player.getCommandSenderName());
  		FMLClientHandler.instance().displayGuiScreen(player, new GuiGunBox(playerMP.inventory, type));
  	}
 }

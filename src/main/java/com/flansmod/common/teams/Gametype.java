@@ -52,7 +52,7 @@ public abstract class Gametype {
 	
 	public EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(username);
+		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
 	}
 	
 	public static PlayerData getPlayerData(EntityPlayerMP player)

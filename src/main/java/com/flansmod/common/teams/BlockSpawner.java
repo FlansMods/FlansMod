@@ -142,7 +142,7 @@ public class BlockSpawner extends BlockContainer
     		return true;
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
-    	if(MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getCommandSenderName()))
+    	if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
     	{
     		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(x, y, z);
     		ItemStack item = player.getCurrentEquippedItem();

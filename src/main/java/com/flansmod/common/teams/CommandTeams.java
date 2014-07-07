@@ -642,7 +642,7 @@ public class CommandTeams extends CommandBase
 
 	public EntityPlayerMP getPlayer(String name)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(name);
 	}
 
 	@Override

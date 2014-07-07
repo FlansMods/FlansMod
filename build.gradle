@@ -22,7 +22,7 @@ group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.2-10.12.2.1121"
+    version = "1.7.10-10.13.0.1170"
     assetDir = "eclipse/assets"
 
     replace "@ALLOWED_VERSION@", "[4.3,4.4)"
@@ -104,7 +104,7 @@ task contentPacks() {
     dependsOn modernWeapons
     dependsOn nerf
     dependsOn simpleParts
-	dependsOn mechaParts
+    dependsOn mechaParts
     dependsOn titan
     dependsOn ww2
     dependsOn yeOlde
