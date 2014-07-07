@@ -22,7 +22,7 @@ group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.10-10.13.0.1152"
+    version = "1.7.10-10.13.0.1170"
     assetDir = "eclipse/assets"
 
     replace "@ALLOWED_VERSION@", "[4.3,4.4)"
