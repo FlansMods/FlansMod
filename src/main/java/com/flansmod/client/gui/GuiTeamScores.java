@@ -31,7 +31,7 @@ public class GuiTeamScores extends GuiScreen
 		}
 		
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;

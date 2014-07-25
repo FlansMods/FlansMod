@@ -175,7 +175,7 @@ public class TeamsManager
 	
 	public EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(username);
+		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
 	}
 	
 	public static void log(String s)
@@ -622,7 +622,7 @@ public class TeamsManager
 		{		
 			EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 			PlayerData data = PlayerHandler.getPlayerData(playerMP);
-			if(playerMP != null && data != null && data.team == Team.spectators && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(playerMP.getCommandSenderName()))
+			if(playerMP != null && data != null && data.team == Team.spectators && MinecraftServer.getServer().getConfigurationManager().func_152596_g(playerMP.getGameProfile()))
 			{
 				return;
 			}
