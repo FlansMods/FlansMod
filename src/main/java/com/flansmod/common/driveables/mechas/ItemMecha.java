@@ -64,6 +64,7 @@ public class ItemMecha extends Item {
 		{
 			stack.stackTagCompound = new NBTTagCompound();
 			stack.stackTagCompound.setString("Type", type.shortName);
+			stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
 		}
 		return stack.stackTagCompound;
 	}
