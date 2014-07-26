@@ -48,6 +48,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     public float wheelsAngle;
     /** Delayer for door button */
     public int toggleTimer = 0;
+    /** Wheel entities for collision and motion calculation */
+    public EntityWheel[] wheels;
     
     public EntityVehicle(World world)
     {
@@ -67,6 +69,20 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
+	}
+	
+	@Override
+	protected void initType(DriveableType type, boolean clientSide)
+	{
+		wheels = new EntityWheel[4];
+		for(int i = 0; i < 4; i++)
+		{
+			if(!clientSide)
+			{
+				wheels[i] = new EntityWheel(worldObj, this, i);
+				worldObj.spawnEntityInWorld(wheels[i]);
+			}
+		}
 	}
 
 	@Override
@@ -304,7 +320,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
             case 16 : // Trim Button
             {
-				applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
+				//applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
 				return true;
             }
             case 17 : //Park
@@ -559,7 +575,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
 	    	
 	    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
-	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelRadius);
+	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelStepHeight);
 	    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
 	    	
 	    	//If its solid on top

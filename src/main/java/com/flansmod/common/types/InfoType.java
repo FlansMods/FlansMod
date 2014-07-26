@@ -41,6 +41,7 @@ public class InfoType
 	
 	public void read(TypeFile file)
 	{
+		preRead();
 		for(;;)
 		{
 			String line = null;
@@ -54,7 +55,14 @@ public class InfoType
 				continue;
 			read(split, file);
 		}
+		postRead();
 	}
+	
+	/** Method for performing actions prior to reading the type file */
+	protected void preRead() {}
+	
+	/** Method for performing actions after reading the type file */
+	protected void postRead() {}
 
 	/** Pack reader */
 	protected void read(String[] split, TypeFile file)
