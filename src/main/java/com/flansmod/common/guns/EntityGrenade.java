@@ -277,10 +277,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
 					continue;
 				if(obj instanceof EntityLivingBase)
-				{
-					System.out.println("Damage: " + (type.hitEntityDamage * motVec.lengthSquared() * 3));
 					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
-				}
 			}
 		}
 	
