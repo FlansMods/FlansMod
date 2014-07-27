@@ -333,7 +333,7 @@ public class EntityPlane extends EntityDriveable
 			}
             case 16 : // Trim Button
             {
-				applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
+                axes.setAngles(axes.getYaw(), 0, 0);
 				return true;
             }
             case 17 : //Park
