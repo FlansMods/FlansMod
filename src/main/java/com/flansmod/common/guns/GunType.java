@@ -50,7 +50,9 @@ public class GunType extends InfoType implements IScope
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
-		
+	/** The amount of knockback to impact upon the player per shot */
+	public float knockback = 0F;	
+	
 	//Sounds
 	/** The sound played upon shooting */
 	public String shootSound;
@@ -60,7 +62,20 @@ public class GunType extends InfoType implements IScope
 	public boolean distortSound = true;
 	/** The sound to play upon reloading */
 	public String reloadSound;
+	
+	//Looping sounds
+	/** Whether the looping sounds should be used. Automatically set if the player sets any one of the following sounds */
+	public boolean useLoopingSounds = false;
+	/** Played when the player starts to hold shoot */
+	public String warmupSound;
+	public int warmupSoundLength = 20;
+	/** Played in a loop until player stops holding shoot */
+	public String loopedSound;
+	public int loopedSoundLength = 20;
+	/** Played when the player stops holding shoot */
+	public String cooldownSound;
 
+	
 	/** The sound to play upon weapon swing */
 	public String meleeSound;
 	/** The sound to play while holding the weapon in the hand*/
@@ -151,10 +166,13 @@ public class GunType extends InfoType implements IScope
 				reloadTime = Integer.parseInt(split[1]);
 			if (split[0].equals("Recoil"))
 				recoil = Integer.parseInt(split[1]);
+			if (split[0].equals("Knockback"))
+				knockback = Float.parseFloat(split[1]);
 			if (split[0].equals("Accuracy") || split[0].equals("Spread"))
 				bulletSpread = Float.parseFloat(split[1]);
 			if (split[0].equals("NumBullets"))
 				numBullets = Integer.parseInt(split[1]);
+			//Sounds
 			if (split[0].equals("ShootDelay"))
 				shootDelay = Integer.parseInt(split[1]);
 			if (split[0].equals("SoundLength"))
@@ -182,9 +200,31 @@ public class GunType extends InfoType implements IScope
 			{
 				meleeSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
-			}	
+			}
+			//Looping sounds
+			if (split[0].equals("WarmupSound"))
+			{
+				warmupSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			if (split[0].equals("WarmupSoundLength"))
+				warmupSoundLength = Integer.parseInt(split[1]);
+			if (split[0].equals("LoopedSound") || split[0].equals("SpinSound"))
+			{
+				loopedSound = split[1];
+				useLoopingSounds = true;
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			if (split[0].equals("LoopedSoundLength") || split[0].equals("SpinSoundLength"))
+				loopedSoundLength = Integer.parseInt(split[1]);
+			if (split[0].equals("CooldownSound"))
+			{
+				cooldownSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			//Modes and zoom settings
 			if (split[0].equals("Mode"))
-				mode = split[1].equals("FullAuto") ? EnumFireMode.FULLAUTO : EnumFireMode.SEMIAUTO;
+				mode = EnumFireMode.getFireMode(split[1]);
 			if (split[0].equals("Scope"))
 			{
 				hasScopeOverlay = true;

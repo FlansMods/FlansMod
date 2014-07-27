@@ -19,6 +19,9 @@ public class GunAnimations
 	public float reloadAnimationTime = 0;
 	
 	public float reloadAnimationProgress = 0F, lastReloadAnimationProgress = 0F;
+
+	public float minigunBarrelRotation = 0F;
+	public float minigunBarrelRotationSpeed = 0F;
 	
 	public GunAnimations()
 	{
@@ -56,10 +59,14 @@ public class GunAnimations
 			reloadAnimationProgress += 1F / reloadAnimationTime;
 		if(reloading && reloadAnimationProgress >= 1F)
 			reloading = false;
+		
+		minigunBarrelRotation += minigunBarrelRotationSpeed;
+		minigunBarrelRotationSpeed *= 0.9F;
 	}
 	
 	public void doShoot(int pumpDelay, int pumpTime)
 	{
+		minigunBarrelRotationSpeed += 2F;
 		lastGunSlide = gunSlide = 1F;
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;

@@ -44,6 +44,7 @@ public class VehicleType extends DriveableType
 	protected void postRead()
     {
     	//Backwards compatibility bit. Take wheel positions from wheel collision boxes
+    	/*
     	CollisionBox box = health.get(EnumDriveablePart.backLeftWheel);
     	if(wheelPositions[0] == null)
     		wheelPositions[0] = new Vector3f(((float)box.x + (float)box.w / 2F) / 16F, ((float)box.y + 8F) / 16F, ((float)box.z + (float)box.d / 2F) / 16F);
@@ -59,6 +60,7 @@ public class VehicleType extends DriveableType
     	box = health.get(EnumDriveablePart.frontRightWheel);
     	if(wheelPositions[3] == null)
     		wheelPositions[3] = new Vector3f(((float)box.x + (float)box.w / 2F) / 16F, ((float)box.y + 8F) / 16F, ((float)box.z + (float)box.d / 2F) / 16F);
+    	*/
     }
 	
     @Override

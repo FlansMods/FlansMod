@@ -49,6 +49,7 @@ public class PacketReload extends PacketBase
     		{
     			//Set the reload delay
     			data.shootTime = type.reloadTime;
+    			data.reloading = true;
 				//Send reload packet to induce reload effects client side
 				FlansMod.getPacketHandler().sendTo(new PacketReload(), playerEntity);
 				//Play reload sound

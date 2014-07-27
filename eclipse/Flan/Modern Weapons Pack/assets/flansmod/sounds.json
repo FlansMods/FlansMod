@@ -202,5 +202,20 @@
 	"W1200Shoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:W1200Shoot" ]
+	},
+	
+	"MinigunWarmup": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MinigunWarmup" ]
+	},
+	
+	"MinigunSpin": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MinigunSpin" ]
+	},
+	
+	"MinigunCooldown": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MinigunCooldown" ]
 	}
 }

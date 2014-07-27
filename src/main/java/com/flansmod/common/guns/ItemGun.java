@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
@@ -175,11 +176,11 @@ public class ItemGun extends Item
 				FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true));
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
-			if(type.mode == EnumFireMode.FULLAUTO && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
+			if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false));
 			}
-			if(type.mode == EnumFireMode.FULLAUTO && mouseHeld)
+			if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && mouseHeld)
 			{
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
@@ -274,6 +275,21 @@ public class ItemGun extends Item
 			{
 				tryToShoot(itemstack, world, player);
 			}
+			if(type.useLoopingSounds && data.isShooting && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloading)
+			{
+				data.loopedSoundDelay = type.loopedSoundLength;
+				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? type.warmupSound : type.loopedSound, false);
+				data.shouldPlayWarmupSound = false;
+			}
+			if(type.useLoopingSounds && !data.isShooting && data.shouldPlayCooldownSound)
+			{
+				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.cooldownSound, false);
+				data.shouldPlayCooldownSound = false;
+			}
+			if(type.mode == EnumFireMode.MINIGUN && data.isShooting && data.minigunSpeed > 15F)
+			{
+				tryToShoot(itemstack, world, player);
+			}
 		}
 	}
 	
@@ -289,7 +305,7 @@ public class ItemGun extends Item
 	public ItemStack onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean isShooting)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(data.shootClickDelay == 0)
+		if(data != null && data.shootClickDelay == 0)
 		{
 			//Drivers can't shoot
 			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
@@ -300,6 +316,11 @@ public class ItemGun extends Item
 				data.isShooting = false;
 				return tryToShoot(stack, world, player);
 			}
+			//Play the warmup sound for miniguns immediately
+			if(type.useLoopingSounds && isShooting)
+			{
+				data.shouldPlayWarmupSound = true;
+			}
 		}
 		return stack;
 	}
@@ -309,6 +330,7 @@ public class ItemGun extends Item
 		if(type.deployable)
 			return gunStack;
 		PlayerData data = PlayerHandler.getPlayerData(entityplayer);
+		boolean reloading = true;
 		//Shoot delay ticker is at (or below) 0. Try and shoot the next bullet
 		if(data.shootTime <= 0)
 		{
@@ -332,6 +354,7 @@ public class ItemGun extends Item
 				{
 					//Set player shoot delay to be the reload delay
 					data.shootTime = (int)type.getReloadTime(gunStack);
+					data.reloading = true;
 					//Send reload packet to induce reload effects client side
 					FlansMod.getPacketHandler().sendTo(new PacketReload(), entityplayer);
 					//Play reload sound
@@ -343,7 +366,7 @@ public class ItemGun extends Item
 			else if(bulletStack.getItem() instanceof ItemBullet)
 			{
 				//Shoot
-				
+				reloading = false;
 				shoot(gunStack, world, bulletStack, entityplayer);
 				//Damage the bullet item
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
@@ -473,6 +496,10 @@ public class ItemGun extends Item
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
 		PlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
+		if(type.knockback > 0)
+		{
+			//TODO : Apply knockback		
+		}	
 	}
 
 	/** Deployable guns only */

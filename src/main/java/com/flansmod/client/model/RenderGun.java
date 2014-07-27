@@ -6,9 +6,11 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -31,6 +33,7 @@ public class RenderGun implements IItemRenderer
 		{
 		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
 		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null && item.getItem() instanceof ItemGun && ((ItemGun)item.getItem()).type.model != null;
+		default : break;
 		}
 		return false;
 	}
@@ -127,11 +130,12 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
 								break;
 							}
-							
+							default : break;
 						}
 					}
 					break;
 				}
+				default : break;
 			}
 			
 			renderGun(item, gunType, f, model, animations, reloadRotate);
@@ -206,6 +210,17 @@ public class RenderGun implements IItemRenderer
 			}
 			GL11.glPopMatrix();
 			
+			//Render the minigun barrels
+			if(type.mode == EnumFireMode.MINIGUN)
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(model.minigunBarrelOrigin.x, model.minigunBarrelOrigin.y, model.minigunBarrelOrigin.z);
+				GL11.glRotatef(animations.minigunBarrelRotation, 1F, 0F, 0F);
+				GL11.glTranslatef(-model.minigunBarrelOrigin.x, -model.minigunBarrelOrigin.y, -model.minigunBarrelOrigin.z);
+				model.renderMinigunBarrel(f);
+				GL11.glPopMatrix();
+			}
+			
 			//Render the cocking handle
 			
 			//Render the clip
@@ -221,6 +236,7 @@ public class RenderGun implements IItemRenderer
 							shouldRender = false;
 						break;
 					}
+					default: break;
 				}
 				//If it should be rendered, do the transformations required
 				if(shouldRender && animations.reloading && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
@@ -301,6 +317,8 @@ public class RenderGun implements IItemRenderer
 							}
 							break;
 						}
+						
+						default : break;
 					}
 				}
 

@@ -14,13 +14,18 @@ public class PlayerData
 	public Team team;
 	public PlayerClass playerClass;
 	public PlayerClass newPlayerClass;
+	/** True if this player is shooting */
 	public boolean isShooting;
+	/** The speed of the minigun the player is using */
+	public float minigunSpeed = 0F;
 	public int shootTime;
 	public int shootClickDelay;
 	public int spawnDelay;
 	public double spawnX;
 	public double spawnY;
 	public double spawnZ;
+	
+	public boolean reloading;
 
 	public float prevRotationRoll;
 	public float rotationRoll;
@@ -36,6 +41,9 @@ public class PlayerData
 
 	//For my quick world edit hack thingy
 	public int x1, y1, z1, x2, y2, z2;
+	public int loopedSoundDelay;
+	public boolean shouldPlayCooldownSound;
+	public boolean shouldPlayWarmupSound;
 	
 	public PlayerData(String name) 
 	{
@@ -46,9 +54,22 @@ public class PlayerData
 	{
 		if(shootTime > 0)
 			shootTime--;
+		if(shootTime == 0)
+			reloading = false;
 		if(shootClickDelay > 0)
 			shootClickDelay--;
 		spawnDelay--;
+		
+		//Handle minigun speed
+		if(isShooting && !reloading)
+			minigunSpeed += 2F; 
+		minigunSpeed *= 0.9F;
+		if(loopedSoundDelay > 0)
+		{
+			loopedSoundDelay--;
+			if(loopedSoundDelay == 0 && !isShooting)
+				shouldPlayCooldownSound = true;
+		}
 	}
 	
 	public void setSpawn(double x, double y, double z, int t)
