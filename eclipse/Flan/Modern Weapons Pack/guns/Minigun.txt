@@ -2,6 +2,7 @@ Name Minigun
 ShortName minigun
 //The ammo this gun uses (shortName)
 Ammo minigunAmmo
+Ammo minigunExplosiveAmmo
 Icon Minigun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

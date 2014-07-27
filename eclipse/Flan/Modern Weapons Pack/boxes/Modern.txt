@@ -59,6 +59,7 @@ AddGun m60 24 iron
 AddAmmo m60Ammo 9 iron 3 fiberglass 10 gunpowder
 AddGun minigun 32 iron 16 fiberglass 16 redstone
 AddAmmo minigunAmmo 8 iron 32 gunpowder
+AddAltAmmo minigunExplosiveAmmo 8 iron 64 gunpowder 64 gunpowder 64 gunpowder
 AddGun m9 8 iron
 AddAmmo m9Ammo 2 iron 2 gunpowder
 AddGun usp 10 iron
