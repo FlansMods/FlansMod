@@ -1,29 +1,9 @@
 package com.flansmod.common.driveables;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.List;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.flansmod.api.IControllable;
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityBullet;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.network.PacketSeatUpdates;
-import com.flansmod.common.network.PacketDriveableKey;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.tools.ItemTool;
-import com.flansmod.common.vector.Vector3f;
+import io.netty.buffer.ByteBuf;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -37,6 +17,24 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.api.IControllable;
+import com.flansmod.client.FlansModClient;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.network.PacketSeatUpdates;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntitySeat extends Entity implements IControllable, IEntityAdditionalSpawnData
 {

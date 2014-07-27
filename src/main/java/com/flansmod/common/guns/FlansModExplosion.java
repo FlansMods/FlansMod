@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
@@ -26,7 +24,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+
+import com.flansmod.common.types.InfoType;
 
 public class FlansModExplosion extends Explosion 
 {

@@ -31,8 +31,6 @@ import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 
-import cpw.mods.fml.relauncher.Side;
-
 public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");

@@ -1,20 +1,9 @@
 package com.flansmod.common.guns;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.List;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
+import io.netty.buffer.ByteBuf;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -26,10 +15,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 {

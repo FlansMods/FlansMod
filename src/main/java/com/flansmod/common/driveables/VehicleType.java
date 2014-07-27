@@ -2,7 +2,6 @@ package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
 
-import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.TypeFile;

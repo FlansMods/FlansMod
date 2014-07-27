@@ -2,15 +2,14 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import com.flansmod.client.model.ModelMecha;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class MechaItemType extends InfoType 
 {

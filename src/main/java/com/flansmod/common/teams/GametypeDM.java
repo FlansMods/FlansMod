@@ -3,16 +3,15 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
+
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
 
 public class GametypeDM extends Gametype 
 {

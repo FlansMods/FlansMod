@@ -1,8 +1,9 @@
 package com.flansmod.client.model;
 
+import net.minecraft.client.model.ModelBase;
+
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
-import net.minecraft.client.model.ModelBase;
 
 public class ModelGun extends ModelBase 
 {

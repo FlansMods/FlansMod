@@ -1,13 +1,12 @@
 package com.flansmod.common;
 
-import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.guns.GunType;
-
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.guns.GunType;
 
 public class CreativeTabFlan extends CreativeTabs
 {

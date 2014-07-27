@@ -2,13 +2,11 @@ package com.flansmod.client;
 
 import java.util.HashMap;
 
+import net.minecraft.util.ResourceLocation;
+
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraft.client.audio.SoundRegistry;
-import net.minecraft.util.ResourceLocation;
 
 public class FlansModResourceHandler 
 {

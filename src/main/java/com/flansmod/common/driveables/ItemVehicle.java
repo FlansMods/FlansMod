@@ -5,14 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableData;
-import com.flansmod.common.driveables.EntityVehicle;
-import com.flansmod.common.driveables.EnumDriveablePart;
-import com.flansmod.common.driveables.VehicleType;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.EnumType;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -22,14 +14,19 @@ import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.parts.PartType;
+import com.flansmod.common.types.EnumType;
 
 public class ItemVehicle extends ItemMapBase
 {

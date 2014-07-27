@@ -2,10 +2,10 @@ package com.flansmod.common.teams;
 
 import java.util.List;
 
-import com.flansmod.common.teams.TeamsManager.TeamsMap;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+
+import com.flansmod.common.teams.TeamsManager.TeamsMap;
 
 /**
  * Interface for objects that act as team bases, places that teams are given or can capture, dependent on game mode.

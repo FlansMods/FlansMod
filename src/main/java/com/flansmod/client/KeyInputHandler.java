@@ -1,26 +1,12 @@
 package com.flansmod.client;
 
-import java.util.EnumSet;
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.input.Keyboard;
-
-import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.gui.GuiTeamSelect;
-import com.flansmod.client.model.GunAnimations;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketReload;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -28,6 +14,12 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.api.IControllable;
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketReload;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler

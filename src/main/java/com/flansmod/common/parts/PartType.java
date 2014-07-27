@@ -1,16 +1,15 @@
 package com.flansmod.common.parts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
-import com.flansmod.common.driveables.EnumDriveablePart;
+import net.minecraft.item.ItemStack;
+
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
-
-import net.minecraft.item.ItemStack;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */

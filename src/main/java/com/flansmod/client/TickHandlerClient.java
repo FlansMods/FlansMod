@@ -1,8 +1,10 @@
 package com.flansmod.client;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,27 +17,24 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.model.RenderFlag;
-import com.flansmod.client.model.RenderGun;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.types.InfoType;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.model.RenderFlag;
+import com.flansmod.client.model.RenderGun;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.types.InfoType;
 
 public class TickHandlerClient
 {

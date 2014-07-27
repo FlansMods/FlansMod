@@ -2,23 +2,22 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.EnumFireMode;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+
 import net.minecraftforge.client.IItemRenderer;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGun;
 
 public class RenderGun implements IItemRenderer
 {

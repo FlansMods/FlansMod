@@ -2,8 +2,8 @@ package com.flansmod.client.tmt;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
 public class TextureGroup

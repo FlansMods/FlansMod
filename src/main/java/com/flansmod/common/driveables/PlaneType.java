@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 
-import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;

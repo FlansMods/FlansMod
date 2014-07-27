@@ -1,14 +1,9 @@
 package com.flansmod.common.driveables;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -18,20 +13,20 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.network.PacketPlaneControl;
-import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketDriveableControl;
 import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketPlaneControl;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityPlane extends EntityDriveable
 {

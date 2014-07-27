@@ -11,13 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 
 /** Implemented from old source. */
 public class ItemBullet extends Item

@@ -15,18 +15,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketMGFire;
-import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.teams.TeamsManager;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketMGFire;
+import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.TeamsManager;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {

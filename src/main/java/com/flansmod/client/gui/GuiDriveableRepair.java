@@ -1,14 +1,9 @@
 package com.flansmod.client.gui;
 
 import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveablePart;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.driveables.mechas.EntityMecha;
-import com.flansmod.common.network.PacketDriveableGUI;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,6 +12,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveablePart;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.network.PacketDriveableGUI;
 
 public class GuiDriveableRepair extends GuiScreen 
 {
