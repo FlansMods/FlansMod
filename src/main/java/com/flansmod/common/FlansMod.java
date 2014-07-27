@@ -20,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.config.Configuration;
 
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
@@ -82,21 +83,30 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
+    public static Configuration configFile;
 	public static final String MODID = "flansmod";
 	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
+    public static int generalConfigInteger = 32;
+    public static String generalConfigString = "Hello!";
+    public static boolean generalConfigBoolean = false;
+    public static int teamsConfigInteger = 32;
+    public static String teamsConfigString = "Hello!";
+    public static boolean teamsConfigBoolean = false;
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
 	public static CommonProxy proxy;
 	//A standardised ticker for all bits of the mod to call upon if they need one
@@ -142,7 +152,9 @@ public class FlansMod
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		log("Preinitialising Flan's mod.");
-		
+        configFile = new Configuration(event.getSuggestedConfigurationFile());
+        syncConfig();
+
 		//TODO : Load properties
 		//configuration = new Configuration(event.getSuggestedConfigurationFile());
 		//loadProperties();
@@ -228,18 +240,18 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityGrenade.class, "Grenade", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
 
-		
 		//Register MGs and AA guns
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
-		
-		
+
 		//Register the chunk loader 
 		//TODO : Re-do chunk loading
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
-		
+
+		//Config
+        FMLCommonHandler.instance().bus().register(INSTANCE);
 		log("Loading complete.");
 	}
 	
@@ -266,6 +278,12 @@ public class FlansMod
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
 	}
+
+    @SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+        if(eventArgs.modID.equals(MODID))
+            syncConfig();
+    }
 	
 	/** Reads type files from all content packs */
 	private void getTypeFiles(List<File> contentPacks)
@@ -441,7 +459,20 @@ public class FlansMod
 	{
 		return INSTANCE.packetHandler;
 	}
-	
+
+    public static void syncConfig() {
+        generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+        generalConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, generalConfigBoolean, "A Boolean!");
+
+        teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
+        teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+
+        if(configFile.hasChanged())
+            configFile.save();
+    }
+
 	//TODO : Proper logger
 	public static void log(String string) 
 	{
