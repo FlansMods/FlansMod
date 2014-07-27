@@ -38,3 +38,7 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 2
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob M40A3_Ice M40A3_Ice lightBlue 1
