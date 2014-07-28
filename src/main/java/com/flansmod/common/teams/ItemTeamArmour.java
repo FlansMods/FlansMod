@@ -24,6 +24,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
 	{
 		super(ItemArmor.ArmorMaterial.CLOTH, 0, t.type);
 		type = t;
+		type.item = this;
 		setCreativeTab(FlansMod.tabFlanTeams);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}

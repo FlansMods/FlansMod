@@ -35,7 +35,8 @@ public class BlockGunBox extends Block
 	    setResistance(4F);
 	    type = t;
 	    type.block = this;
-	    GameRegistry.registerBlock(this, ItemGunBox.class, "gunBox." + type.shortName);
+	    setBlockName(type.shortName);
+	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 		

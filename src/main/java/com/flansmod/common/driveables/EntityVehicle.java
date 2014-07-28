@@ -74,6 +74,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	@Override
 	protected void initType(DriveableType type, boolean clientSide)
 	{
+		super.initType(type, clientSide);
 		wheels = new EntityWheel[4];
 		for(int i = 0; i < 4; i++)
 		{

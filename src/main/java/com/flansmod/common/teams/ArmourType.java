@@ -1,14 +1,13 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
 public class ArmourType extends InfoType
 {
-	public static List<ArmourType> armours = new ArrayList<ArmourType>();
+	public static ArrayList<ArmourType> armours = new ArrayList<ArmourType>();
 	
 	public int type;
 	public double defence;
@@ -50,5 +49,15 @@ public class ArmourType extends InfoType
 			System.out.println("Reading armour file failed.");
 			e.printStackTrace();
 		}
+	}
+
+	public static ArmourType getArmourType(String string) 
+	{
+		for(ArmourType armour : armours)
+		{
+			if(armour.shortName.equals(string))
+				return armour;
+		}
+		return null;
 	}
 }

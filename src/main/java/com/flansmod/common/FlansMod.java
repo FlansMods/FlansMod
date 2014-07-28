@@ -48,11 +48,12 @@ import com.flansmod.common.guns.ItemGrenade;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
-import com.flansmod.common.guns.boxes.ItemGunBox;
 import com.flansmod.common.network.PacketHandler;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
+import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
+import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.BlockSpawner;
 import com.flansmod.common.teams.ChunkLoadingHandler;
 import com.flansmod.common.teams.CommandTeams;
@@ -134,8 +135,10 @@ public class FlansMod
 	public static ArrayList<ItemGrenade> grenadeItems = new ArrayList<ItemGrenade>();
 	public static ArrayList<ItemTool> toolItems = new ArrayList<ItemTool>();
 	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
+	public static ArrayList<BlockArmourBox> armourBoxBlocks = new ArrayList<BlockArmourBox>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
+
 	
 	/** The mod pre-initialiser method */
 	@EventHandler
@@ -421,6 +424,7 @@ public class FlansMod
 					case tool : toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setUnlocalizedName(infoType.shortName)); break;
 					case box : gunBoxBlocks.add((BlockGunBox)new BlockGunBox((GunBoxType)infoType).setBlockName(infoType.shortName)); break;
 					case armour : armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case armourBox : armourBoxBlocks.add((BlockArmourBox)new BlockArmourBox((ArmourBoxType)infoType).setBlockName(infoType.shortName)); break; 
 					case playerClass : break;
 					case team : break;
 					default : log("Unrecognised type."); break;

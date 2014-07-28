@@ -42,7 +42,6 @@ public class GunBoxType extends InfoType
 	
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
-	public static ArrayList<String> shortNameList = new ArrayList<String>();
 	
 	public GunBoxType(TypeFile file)
 	{
@@ -78,11 +77,9 @@ public class GunBoxType extends InfoType
 	}
 	
 	@Override
-	public void read(TypeFile file)
+	public void postRead()
 	{
-		super.read(file);
 		gunBoxMap.put(this.shortName, this);
-		shortNameList.add(this.shortName);
 	}
 
 	@Override
@@ -141,7 +138,7 @@ public class GunBoxType extends InfoType
 			}
 		} catch (Exception e)
 		{
-			System.out.println("Reading gun box file failed : " + shortName);
+			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
 	}

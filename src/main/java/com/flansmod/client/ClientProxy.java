@@ -21,6 +21,7 @@ import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.debug.RenderDebugAABB;
 import com.flansmod.client.debug.RenderDebugVector;
+import com.flansmod.client.gui.GuiArmourBox;
 import com.flansmod.client.gui.GuiDriveableCrafting;
 import com.flansmod.client.gui.GuiDriveableFuel;
 import com.flansmod.client.gui.GuiDriveableInventory;
@@ -61,6 +62,7 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
 import com.flansmod.common.network.PacketRepairDriveable;
+import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.TileEntitySpawner;
@@ -231,6 +233,7 @@ public class ClientProxy extends CommonProxy
 			case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
 			case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
 			case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
+			case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlock(x, y, z)).type);
 		}
 		return null;
 	}
