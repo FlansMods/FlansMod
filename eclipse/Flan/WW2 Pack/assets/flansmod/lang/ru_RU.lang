@@ -1,8 +1,8 @@
-american.name=Ящик с американским оружием
-british.name=Ящик с британским оружием 
-german.name=Ящик с немецким оружием
-japanese.name=Ящик с японским оружием
-russian.name=Ящик с советским оружием
+tile.american.name=Ящик с американским оружием
+tile.british.name=Ящик с британским оружием
+tile.german.name=Ящик с немецким оружием
+tile.japanese.name=Ящик с японским оружием
+tile.russian.name=Ящик с советским оружием
 item.britishHelmet.name=Британский шлем ВМВ
 item.britishCoat.name=Британский мундир ВМВ
 item.britishPants.name=Британские штаны ВМВ
