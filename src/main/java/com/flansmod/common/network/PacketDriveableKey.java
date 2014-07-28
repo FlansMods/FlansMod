@@ -3,18 +3,14 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.flansmod.api.IControllable;
-import com.flansmod.common.FlansMod;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.api.IControllable;
+import com.flansmod.common.FlansMod;
 
 public class PacketDriveableKey extends PacketBase 
 {

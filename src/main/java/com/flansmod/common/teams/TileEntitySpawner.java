@@ -1,13 +1,7 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.ItemPlane;
-import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.guns.ItemAAGun;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -16,11 +10,13 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.ForgeChunkManager;
+
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.ItemPlane;
+import com.flansmod.common.driveables.ItemVehicle;
+import com.flansmod.common.guns.ItemAAGun;
 
 public class TileEntitySpawner extends TileEntity implements ITeamObject
 {

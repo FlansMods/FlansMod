@@ -17,10 +17,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
-import com.flansmod.common.network.PacketHandler;
 import com.flansmod.common.network.PacketTeamSelect;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public abstract class Gametype {
 	

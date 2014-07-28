@@ -1,7 +1,8 @@
 package com.flansmod.client.tmt;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import cpw.mods.fml.common.Loader;
 

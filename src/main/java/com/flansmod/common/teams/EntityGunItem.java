@@ -3,14 +3,6 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,8 +11,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGun;
 
 public class EntityGunItem extends EntityItem {
 	

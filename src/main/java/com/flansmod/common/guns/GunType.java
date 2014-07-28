@@ -9,16 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.flansmod.client.model.ModelGun;
-import com.flansmod.client.model.ModelMG;
-import com.flansmod.client.model.ModelMecha;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.client.model.ModelGun;
+import com.flansmod.client.model.ModelMG;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public class GunType extends InfoType implements IScope
 {

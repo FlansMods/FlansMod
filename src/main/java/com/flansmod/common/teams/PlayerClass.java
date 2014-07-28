@@ -3,15 +3,15 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public class PlayerClass extends InfoType
 {

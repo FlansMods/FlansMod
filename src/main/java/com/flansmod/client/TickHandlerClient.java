@@ -1,8 +1,10 @@
 package com.flansmod.client;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,27 +17,24 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.model.RenderFlag;
-import com.flansmod.client.model.RenderGun;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketTeamInfo;
-import com.flansmod.common.types.InfoType;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.model.RenderFlag;
+import com.flansmod.client.model.RenderGun;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.types.InfoType;
 
 public class TickHandlerClient
 {
@@ -176,7 +175,7 @@ public class TickHandlerClient
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
-			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "    " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "    " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
+			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 		}
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -186,7 +185,7 @@ public class TickHandlerClient
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
-			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("    " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
 		RenderHelper.disableStandardItemLighting();

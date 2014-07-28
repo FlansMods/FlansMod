@@ -2,8 +2,6 @@ package com.flansmod.common.teams;
 
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,10 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+
 import net.minecraftforge.common.ISpecialArmor;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
 
 public class ItemTeamArmour extends ItemArmor implements ISpecialArmor 
 {

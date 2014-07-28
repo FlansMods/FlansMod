@@ -4,15 +4,6 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.parts.ItemPart;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.EnumType;
-
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,6 +13,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.client.FMLClientHandler;
+
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.parts.ItemPart;
+import com.flansmod.common.parts.PartType;
+import com.flansmod.common.types.EnumType;
 
 public class GuiDriveableCrafting extends GuiScreen 
 {

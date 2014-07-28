@@ -2,14 +2,14 @@ package com.flansmod.common.driveables;
 
 import java.util.HashMap;
 
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.parts.ItemPart;
-import com.flansmod.common.parts.PartType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.parts.ItemPart;
+import com.flansmod.common.parts.PartType;
 
 public class DriveableData implements IInventory
 {

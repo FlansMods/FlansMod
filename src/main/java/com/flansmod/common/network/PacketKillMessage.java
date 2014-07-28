@@ -1,13 +1,14 @@
 package com.flansmod.common.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import com.flansmod.client.TickHandlerClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketKillMessage extends PacketBase 
 {

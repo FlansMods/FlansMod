@@ -1,8 +1,8 @@
 package com.flansmod.client.model;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
+
+import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelAttachment extends ModelBase 
 {

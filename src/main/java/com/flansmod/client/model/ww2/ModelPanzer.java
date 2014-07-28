@@ -1,10 +1,7 @@
 package com.flansmod.client.model.ww2;
 
-import org.lwjgl.opengl.GL11;
-
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.driveables.EntityVehicle;
 
 public class ModelPanzer extends ModelVehicle
 {

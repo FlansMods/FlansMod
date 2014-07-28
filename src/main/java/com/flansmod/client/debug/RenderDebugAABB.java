@@ -2,11 +2,12 @@ package com.flansmod.client.debug;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.common.FlansMod;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.common.FlansMod;
 
 public class RenderDebugAABB extends Render 
 {
