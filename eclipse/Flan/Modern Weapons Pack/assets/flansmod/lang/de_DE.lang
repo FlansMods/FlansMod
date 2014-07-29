@@ -74,3 +74,6 @@ item.m67.name=M67 Granate
 item.c4Remote.name=C4 Fernzünder
 item.mwMedKit.name=Verbandsmaterial
 item.mwParachute.name=Fallschirm
+item.minigun.name=Minigun
+item.minigunAmmo.name=Minigun Munition
+item.minigunExplosiveAmmo.name=Minigun Explosiv Munition
