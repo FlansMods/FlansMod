@@ -1,8 +1,9 @@
-american.name=Amerikanische Waffen Box
-british.name=Englische Waffen Box
-german.name=Deutsche Waffen Box
-japanese.name=Japanische Waffen Box
-russian.name=Russische Waffen Box
+tile.ww2Armour.name=WW2 Rüstung Box
+tile.american.name=Amerikanische Waffen Box
+tile.british.name=Englische Waffen Box
+tile.german.name=Deutsche Waffen Box
+tile.japanese.name=Japanische Waffen Box
+tile.russian.name=Russische Waffen Box
 item.britishHelmet.name=Englischer WW2 Helm
 item.britishCoat.name=Englische WW2 Jacke
 item.britishPants.name=Englische WW2 Hose

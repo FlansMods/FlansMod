@@ -1,4 +1,4 @@
-modern.name=Modern Weapons Box
+tile.modern.name=Modern Weapons Box
 item.clayAndSand.name=Clay and Sand Mixture
 item.fiberglass.name=Fibreglass
 item.marineHelmet.name=Marine Helmet
@@ -76,4 +76,4 @@ item.mwMedKit.name=Medkit
 item.mwParachute.name=Parachute
 item.minigun.name=Minigun
 item.minigunAmmo.name=Minigun Ammo
-item.minigunExplosiveAmmo.name=Explosive Minigun Ammo
+item.minigunExplosiveAmmo.name=Minigun Explosive Ammo
