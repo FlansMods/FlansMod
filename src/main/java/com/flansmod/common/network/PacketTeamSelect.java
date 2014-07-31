@@ -74,7 +74,7 @@ public class PacketTeamSelect extends PacketBase
 		    	data.writeByte(teams.length);
 		    	for(int i = 0; i < teams.length; i++)
 		    	{
-		    		writeUTF(data, teams[i] == null ? Team.spectators.shortName : teams[i].shortName);
+		    		writeUTF(data, teams[i] == null ? "null" : teams[i].shortName);
 		    	}
 			}
 		}

@@ -79,7 +79,8 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
                 return;
             }
             
-            Team spawnerTeam = spawner.getTeam();
+            int spawnerTeamID = spawner.getTeamID();
+            Team spawnerTeam = TeamsManager.getInstance().getTeam(spawnerTeamID);
             Team playerTeam = PlayerHandler.getPlayerData(player).team;
             if(spawnerTeam != null)
             {

@@ -79,6 +79,7 @@ public class GuiTeamSelect extends GuiScreen
 			{
 				if(teamChoices[i] != null)
 					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
+				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7No Team / Builder"));
 			}
 		}
 	}
@@ -126,7 +127,7 @@ public class GuiTeamSelect extends GuiScreen
 		if(classMenu)
 			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[button.id].shortName, true));
 		else
-			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id].shortName, false));
+			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id] == null ? "null" : teamChoices[button.id].shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);
     }
 	

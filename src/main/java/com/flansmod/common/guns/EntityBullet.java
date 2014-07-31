@@ -282,8 +282,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	
 				//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
-				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-					TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
+				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentRound != null)
+					TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
 				
 				//Attack the entity!
 				if(checkEntity.attackEntityFrom(damagesource, hitDamage))

@@ -121,9 +121,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 					if(obj instanceof EntityLivingBase && getDistanceToEntity((Entity)obj) < type.livingProximityTrigger)
 					{
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
-						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentGametype != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
+						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
 						{
-							if(!TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
 								continue;
 						}
 						detonate();

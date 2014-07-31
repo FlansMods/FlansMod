@@ -19,10 +19,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 
 public class BlockSpawner extends BlockContainer 
@@ -127,8 +127,24 @@ public class BlockSpawner extends BlockContainer
 		try
 		{
 			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(x, y, z);
-			Team team = spawner.getTeam();
-			return team.teamColour;
+            int spawnerTeamID = spawner.getTeamID();
+            Team spawnerTeam = FlansModClient.getTeam(spawnerTeamID);
+            
+            boolean currentMap = FlansModClient.isCurrentMap(spawner.map);
+            
+            //Use default colours
+            if(spawnerTeam == null || !currentMap)
+            {
+            	switch(spawnerTeamID)
+            	{
+            	case 0 : return 0x808080;	//No team : light grey
+            	case 1 : return 0x404040;	//Spectators : dark grey
+            	case 2 : return 0xa17fff;	//Team 1 : purple
+            	case 3 : return 0xff7fb6;	//Team 2 : pink
+            	}
+            }
+            
+			return spawnerTeam.teamColour;
 		}
 		catch(Exception e)
 		{
@@ -141,8 +157,10 @@ public class BlockSpawner extends BlockContainer
     {
     	if(world.isRemote)
     		return true;
+    	/* TODO : Check the generalised code in TeamsManager works
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
+    	*/
     	if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
     	{
     		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(x, y, z);

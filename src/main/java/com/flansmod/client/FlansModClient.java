@@ -10,11 +10,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -309,4 +307,19 @@ public class FlansModClient extends FlansMod
 	}
 	
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
+
+	/** Gets the team class from an ID */
+	public static Team getTeam(int spawnerTeamID) 
+	{
+		if(teamInfo == null)
+			return null;
+		else return teamInfo.getTeam(spawnerTeamID);
+	}
+
+	public static boolean isCurrentMap(String map) 
+	{
+		if(teamInfo == null || teamInfo.map == null)
+			return false;
+		else return teamInfo.map.equals(map);
+	}
 }

@@ -69,28 +69,28 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		if(TeamsManager.getInstance().currentGametype == null)
+		if(TeamsManager.getInstance().currentRound == null)
     	{
 			writeUTF(data, "No Gametype");
     		data.writeInt(0);
     	}
     	else
     	{
-    		writeUTF(data, TeamsManager.getInstance().currentGametype.name);
-    		writeUTF(data, TeamsManager.getInstance().currentMap.name);
-    		if(TeamsManager.getInstance().currentGametype.sortScoreboardByTeam())
+    		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
+    		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
+    		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{
     			data.writeBoolean(true);
-	        	if(TeamsManager.getInstance().teams == null)
+	        	if(TeamsManager.getInstance().currentRound.teams == null)
 	        	{
 	        		data.writeInt(0);
 	        	}
 	        	else
 	        	{
-		        	data.writeInt(TeamsManager.getInstance().teams.length);
-		        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+		        	data.writeInt(TeamsManager.getInstance().currentRound.teams.length);
+		        	for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 		        	{
-		        		Team team = TeamsManager.getInstance().teams[i];
+		        		Team team = TeamsManager.getInstance().currentRound.teams[i];
 		        		if(team == null)
 		        		{
 		        			writeUTF(data, "none");
@@ -125,9 +125,9 @@ public class PacketTeamInfo extends PacketBase
     		{
     			data.writeBoolean(false);
     			ArrayList<String> playerNames = new ArrayList<String>();
-    			for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+    			for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 	        	{
-	        		Team team = TeamsManager.getInstance().teams[i];
+	        		Team team = TeamsManager.getInstance().currentRound.teams[i];
 	        		if(team == null || team.members == null)
 	        		{
 	        			continue;
@@ -241,5 +241,15 @@ public class PacketTeamInfo extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansModClient.teamInfo = this;
+	}
+
+	public Team getTeam(int spawnerTeamID) 
+	{
+		switch(spawnerTeamID)
+		{
+		case 0 : return null;
+		case 1 : return Team.spectators;
+		default : return teamData.length > 0 ? teamData[spawnerTeamID - 2].team : null;
+		}
 	}
 }

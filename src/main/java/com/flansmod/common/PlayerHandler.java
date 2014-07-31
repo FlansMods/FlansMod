@@ -103,8 +103,6 @@ public class PlayerHandler
 			String username = player.getCommandSenderName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
-			if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
-				Gametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 			if(clientsToRemoveAfterThisRound.contains(username))
 				clientsToRemoveAfterThisRound.remove(username);
 		}
@@ -112,7 +110,7 @@ public class PlayerHandler
 		{
 			EntityPlayer player = event.player;
 			String username = player.getCommandSenderName();
-			if(TeamsManager.getInstance().currentGametype == null)
+			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
 		}

@@ -117,7 +117,7 @@ public class FlansMod
 	public static final float driveableUpdateRange = 200F;
 	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
-	public static Team spectators = new Team("spectators", "Spectators", 0xffffff, '7');
+	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
 
 	//Handlers
 	public static final PacketHandler packetHandler = new PacketHandler();

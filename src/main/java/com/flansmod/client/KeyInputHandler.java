@@ -46,6 +46,7 @@ public class KeyInputHandler
     public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
+    public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
 
 	Minecraft mc;
 	
@@ -73,6 +74,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
+		ClientRegistry.registerKeyBinding(zoomKey);
 		/*
 		 *  TODO : Note. This information (hold key or single shot key) has been lost.
 				true, // accelerate key

@@ -9,11 +9,19 @@ import com.flansmod.common.teams.Team;
 
 public class PlayerData 
 {
+	/** Their username */
 	public String username;
-	public EntityMG mountingGun;
+	
+	/** The team this player is currently on */
 	public Team team;
+	/** The team this player will switch to upon respawning */
+	public Team newTeam;
+	/** The class the player is currently using */
 	public PlayerClass playerClass;
+	/** The class the player will switch to upon respawning */
 	public PlayerClass newPlayerClass;
+	
+	public EntityMG mountingGun;
 	/** True if this player is shooting */
 	public boolean isShooting;
 	/** The speed of the minigun the player is using */
@@ -90,5 +98,7 @@ public class PlayerData
 	public void resetScore() 
 	{
 		score = kills = deaths = 0;
+		team = newTeam = null;
+		playerClass = newPlayerClass = null;
 	}
 }
