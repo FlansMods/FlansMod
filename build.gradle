@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "4.3.1"
+version = "4.4.0"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -25,7 +25,7 @@ minecraft {
     version = "1.7.10-10.13.0.1180"
     assetDir = "eclipse/assets"
 
-    replace "@ALLOWED_VERSION@", "[4.3,4.4)"
+    replace "@ALLOWED_VERSION@", "[4.4,4.5)"
     replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"

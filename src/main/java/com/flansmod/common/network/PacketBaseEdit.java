@@ -8,6 +8,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ITeamBase;
 import com.flansmod.common.teams.TeamsManager;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.Minecraft;
@@ -103,6 +105,7 @@ public class PacketBaseEdit extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		Minecraft.getMinecraft().displayGuiScreen(new GuiBaseEditor(this));
