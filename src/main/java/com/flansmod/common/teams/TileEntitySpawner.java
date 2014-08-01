@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 import com.flansmod.common.FlansMod;
@@ -202,7 +202,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public void destroy() 
 	{
-		worldObj.setBlock(xCoord, yCoord, zCoord, null);
+		worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air);
 	}
 
 	@Override

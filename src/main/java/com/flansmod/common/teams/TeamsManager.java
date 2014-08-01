@@ -115,6 +115,7 @@ public class TeamsManager
 	{
 		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
+		FMLCommonHandler.instance().bus().register(this);
 
 		//Init arrays
 		bases = new ArrayList<ITeamBase>();
@@ -127,7 +128,7 @@ public class TeamsManager
 		
 		
 		//Testing stuff. TODO : Replace with automatic Gametype loader
-		//new GametypeTDM();
+		new GametypeTDM();
 		//new GametypeConquest();
 		//new GametypeDM();
 		//new GametypeCTF();
@@ -141,9 +142,12 @@ public class TeamsManager
 		//currentMap = TeamsMap.def;
 		//teams = null;
 		
+		currentRound = null;
+		
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
 		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
 		
 		//rotation = new ArrayList<RotationEntry>();
 	}
@@ -217,6 +221,19 @@ public class TeamsManager
 		//TODO
 	}
 	
+	public void start() 
+	{
+		if(!enabled || rounds.size() == 0)
+			return;
+		
+		//Can only start once
+		//if(currentRound != null)
+		//	return;
+			
+		currentRound = rounds.get(0);
+		startRound();
+	}
+	
 	public void startNextRound()
 	{
 		if(!enabled || rounds.size() == 0)
@@ -247,10 +264,17 @@ public class TeamsManager
 		//Note that if nextRound is null, we stay on the round we just played
 		
 		//Begin the next round
+		startRound();
+	}
+	
+	private void startRound()
+	{
 		currentRound.gametype.roundStart();
-		roundTimeLeft = currentRound.timeLimit;
+		roundTimeLeft = currentRound.timeLimit * 60 * 20;
 		for(ITeamBase base : bases)
+		{
 			base.startRound();
+		}
 		
 		for(EntityPlayer player : getPlayers())
 			forceRespawn((EntityPlayerMP)player);
@@ -270,8 +294,8 @@ public class TeamsManager
 			if(data == null)
 				continue;
 			//Catch for people not on a team, such as builders
-			if(data.team == null && data.newTeam == null)
-				continue;
+			//if(data.team == null && data.newTeam == null && playerIsOp(player))
+			//	continue;
 
 			sendTeamsMenuToPlayer((EntityPlayerMP)player);
 		}
@@ -493,14 +517,23 @@ public class TeamsManager
 		if(data != null && data.team == Team.spectators)
 			event.setCanceled(true);
 	}
-	
+		
 	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
+	public void onPlayerRespawn(PlayerEvent event) 
+	{
+		if(event instanceof PlayerEvent.PlayerRespawnEvent)
+			respawnPlayer(event.player);
+		if(event instanceof PlayerEvent.PlayerLoggedOutEvent)
+			onPlayerLogout(event.player);
+		if(event instanceof PlayerEvent.PlayerLoggedInEvent)
+			onPlayerLogin(event.player);
+	}
+	
+	public void onPlayerLogin(EntityPlayer player) 
 	{
 		if(!enabled || currentRound == null)
 			return;
 		
-		EntityPlayer player = event.player;
 		if(player instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
@@ -509,19 +542,10 @@ public class TeamsManager
 		}
 	}
 	
-	@SubscribeEvent
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) 
+	public void onPlayerLogout(EntityPlayer player) 
 	{
 		for(Team team : Team.teams)
-		{
-			team.removePlayer(event.player);
-		}
-	}
-
-	@SubscribeEvent
-	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
-	{
-		respawnPlayer(event.player);
+			team.removePlayer(player);
 	}
 	
 	public void respawnPlayer(EntityPlayer player)
@@ -559,11 +583,10 @@ public class TeamsManager
 				playerMP.mountEntity(horse);
 			}
 			*/
-			
-			if(forceAdventureMode)
-				player.setGameType(GameType.ADVENTURE);
-			resetInventory(player);	
 		}
+		if(forceAdventureMode)
+			player.setGameType(GameType.ADVENTURE);
+		resetInventory(player);	
 		currentRound.gametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
@@ -593,12 +616,12 @@ public class TeamsManager
 		}
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
-		sendPacketToPlayer(new PacketTeamSelect(availableTeams), player);
+		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams), player);
 	}
 	
 	public void sendClassMenuToPlayer(EntityPlayerMP player)
 	{
-		Team team = PlayerHandler.getPlayerData(player).team;
+		Team team = PlayerHandler.getPlayerData(player).newTeam;
 		if(team == null)
 		{
 			sendTeamsMenuToPlayer(player);
@@ -627,7 +650,10 @@ public class TeamsManager
 		if(teamName.equals("null"))
 		{
 			if(playerIsOp(player))
+			{
+				data.team = null;
 				return;
+			}
 			else teamName = "spectators"; 
 		}
 		
@@ -638,7 +664,7 @@ public class TeamsManager
 			selectedTeam = Team.spectators;
 
 		//Validate the selected team
-		boolean isValid = false;
+		boolean isValid = selectedTeam == Team.spectators;
 		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		for(int i = 0; i < validTeams.length; i++)
 		{
@@ -665,6 +691,8 @@ public class TeamsManager
 			sendClassMenuToPlayer(player);
 		}
 		
+		if(selectedTeam == Team.spectators)
+			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
 		currentRound.gametype.playerChoseTeam(player, data.team, selectedTeam);
 	}
 	
@@ -803,7 +831,7 @@ public class TeamsManager
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
+		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
 		if(!checkFileExists(file))
 			return;
 		try
@@ -829,8 +857,8 @@ public class TeamsManager
 				rounds.add(round);
 			}
 
-			if(rounds.size() > 0)
-				currentRound = rounds.get(tags.getInteger("CurrentRound"));
+			//if(rounds.size() > 0)
+			//	currentRound = rounds.get(tags.getInteger("CurrentRound"));
 			
 			//Read variables
 			voting = tags.getBoolean("Voting");
@@ -860,7 +888,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
+		File file = new File("saves/" + MinecraftServer.getServer().getWorldName(), "teams.dat");
 		checkFileExists(file);
 		try
 		{
@@ -928,6 +956,7 @@ public class TeamsManager
 		catch(Exception e)
 		{
 			FlansMod.log("Failed to save to teams.dat");
+			e.printStackTrace();
 		}
 	}
 	

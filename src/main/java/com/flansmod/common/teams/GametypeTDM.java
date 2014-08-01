@@ -26,6 +26,25 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
+	public void roundStart() 
+	{
+		
+	}
+
+	@Override
+	public void roundEnd()
+	{
+		
+	}
+
+	@Override
+	public void roundCleanup() 
+	{
+		
+	}
+	
+	/*
+	@Override
 	public void initGametype() 
 	{
 		startNewRound();
@@ -43,34 +62,11 @@ public class GametypeTDM extends Gametype
 		super.stopGametype();
 		resetScores();
 	}
-
+	 */
+	
 	@Override
 	public void tick() 
 	{
-		newRoundTimer--;
-		if(newRoundTimer == 0)
-		{
-			if(TeamsManager.useRotation)
-			{
-				TeamsManager.getInstance().switchToNextGametype();
-				return;
-			}
-			startNewRound();
-		}
-		if(teamsManager.teams != null)
-		{
-			for(Team team : teamsManager.teams)
-			{
-				if(team != null && team.score >= scoreLimit && newRoundTimer < 0)
-				{
-					TeamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
-					newRoundTimer = 200;
-					TeamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
-					time = -300;
-				}
-			}
-		}
-		time++;
 		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
 		{
 			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
@@ -83,10 +79,10 @@ public class GametypeTDM extends Gametype
 	
 	public boolean needAutobalance()
 	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+		if(teamsManager.currentRound == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
 			return false;
-		int membersTeamA = teamsManager.teams[0].members.size();
-		int membersTeamB = teamsManager.teams[1].members.size();
+		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
+		int membersTeamB = teamsManager.currentRound.teams[1].members.size();
 		if(Math.abs(membersTeamA - membersTeamB) > 1)
 			return true;
 		return false;
@@ -94,23 +90,27 @@ public class GametypeTDM extends Gametype
 	
 	public void autobalance()
 	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
+		if(teamsManager.currentRound.teams == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
 			return;
-		int membersTeamA = teamsManager.teams[0].members.size();
-		int membersTeamB = teamsManager.teams[1].members.size();
+		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
+		int membersTeamB = teamsManager.currentRound.teams[1].members.size();
 		if(membersTeamA - membersTeamB > 1)
 		{
 			for(int i = 0; i < (membersTeamA - membersTeamB) / 2; i++)
 			{
 				//My goodness this is convoluted...
-				sendClassMenuToPlayer(getPlayer(teamsManager.teams[1].addPlayer(teamsManager.teams[0].removeWorstPlayer())));
+				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[1].addPlayer(teamsManager.currentRound.teams[0].removeWorstPlayer()));
+				teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[1].name);
+				teamsManager.sendClassMenuToPlayer(player);
 			}
 		}
 		if(membersTeamB - membersTeamA > 1)
 		{
 			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
 			{
-				sendClassMenuToPlayer(getPlayer(teamsManager.teams[0].addPlayer(teamsManager.teams[1].removeWorstPlayer())));
+				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[0].addPlayer(teamsManager.currentRound.teams[1].removeWorstPlayer()));
+				teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[0].name);
+				teamsManager.sendClassMenuToPlayer(player);
 			}
 		}
 	}
@@ -118,17 +118,17 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void playerJoined(EntityPlayerMP player) 
 	{
-		sendTeamsMenuToPlayer(player);
 	}
 	
+	/*
 	@Override
-	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
+	public void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
 	{
 		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return false;
+			return;
 		if(team == Team.spectators)
 		{
-			return true;
+			return;
 		}
 		if(autoBalance)
 		{
@@ -150,7 +150,9 @@ public class GametypeTDM extends Gametype
 			teamsManager.forceRespawn(player);
 		return true;
 	}
+	*/
 
+	/*
 	@Override
 	public boolean playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
 	{
@@ -168,11 +170,11 @@ public class GametypeTDM extends Gametype
 		}
 		return true;
 	}
+	*/
 
 	@Override
-	public void playerQuit(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
+	public void playerQuit(EntityPlayerMP player) 
+	{
 	}
 
 	@Override
@@ -225,40 +227,44 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
-	public void baseAttacked(ITeamBase base, DamageSource source) {
-		// TODO Auto-generated method stub
-		
+	public void baseAttacked(ITeamBase base, DamageSource source) 
+	{
+
 	}
 
 	@Override
-	public void objectAttacked(ITeamObject object, DamageSource source) {
-		// TODO Auto-generated method stub
-		
+	public void objectAttacked(ITeamObject object, DamageSource source)
+	{
+
 	}
 
 	@Override
-	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
+	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) 
+	{
+
 	}
 
 	@Override
-	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
+	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) 
+	{
+
 	}
 
 	@Override
 	public Vec3 getSpawnPoint(EntityPlayerMP player) 
 	{
+		if(teamsManager.currentRound == null)
+			return null;
 		PlayerData data = getPlayerData(player);
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
 		if(data.team == null)
 			return null;
-		for(int j = 0; j < data.team.bases.size(); j++)
+		
+		ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.team));
+		for(int j = 0; j < bases.size(); j++)
 		{
-			ITeamBase base = data.team.bases.get(j);
-			if(base.getMap() != teamsManager.currentMap)
+			ITeamBase base = bases.get(j);
+			if(base.getMap() != teamsManager.currentRound.map)
 				continue;
 			for(int i = 0; i < base.getObjects().size(); i++)
 			{
@@ -324,4 +330,6 @@ public class GametypeTDM extends Gametype
 	{
 		return true;
 	}
+
+
 }

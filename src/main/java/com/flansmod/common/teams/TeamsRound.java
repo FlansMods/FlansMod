@@ -20,7 +20,11 @@ public class TeamsRound
 	
 	public TeamsRound(TeamsMap map2, Gametype gametype2, Team[] teams2, int timeLimit, int scoreLimit) 
 	{
-		// TODO Auto-generated constructor stub
+		map = map2;
+		gametype = gametype2;
+		teams = teams2;
+		this.timeLimit = timeLimit;
+		this.scoreLimit = scoreLimit;
 	}
 	
 	public TeamsRound(NBTTagCompound tags)
@@ -49,6 +53,17 @@ public class TeamsRound
 		{
 			tags.setString("Team_" + i, teams[i].shortName);
 		}
+	}
+	
+	public int getTeamID(Team team)
+	{
+		if(team == Team.spectators)
+			return 1;
+		if(team == teams[0])
+			return 2;
+		if(team == teams[1])
+			return 3;
+		return 0;
 	}
 	
 	public Team getTeam(int id)

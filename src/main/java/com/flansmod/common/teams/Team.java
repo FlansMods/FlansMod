@@ -20,7 +20,7 @@ public class Team extends InfoType
 {
 	public static List<Team> teams = new ArrayList<Team>();
 	public List<String> members = new ArrayList<String>();
-	public List<ITeamBase> bases = new ArrayList<ITeamBase>();
+	//public List<ITeamBase> bases = new ArrayList<ITeamBase>();
 	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
 	public static Team spectators;
@@ -161,6 +161,7 @@ public class Team extends InfoType
 		return null;
 	}
 	
+	/*
 	//Called both by ops and the gametype
 	public void addBase(ITeamBase base)
 	{
@@ -172,6 +173,7 @@ public class Team extends InfoType
 	{
 		bases.remove(base);
 	}
+	*/
 	
 	public void removePlayer(EntityPlayer player)
 	{

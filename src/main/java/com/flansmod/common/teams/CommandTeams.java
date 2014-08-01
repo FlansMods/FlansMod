@@ -31,18 +31,7 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
 			return;
 		}
-		if(!teamsManager.enabled)
-		{
-			sender.addChatMessage(new ChatComponentText("Teams mod is disabled. Try /teams on"));
-			return;
-		}
-		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
-		{
-			if(split.length == 2)
-				sendHelpInformation(sender, Integer.parseInt(split[1]));
-			else sendHelpInformation(sender, 1);
-			return;
-		}
+		//On / off
 		if(split[0].equals("off"))
 		{
 			teamsManager.currentRound = null;
@@ -54,6 +43,18 @@ public class CommandTeams extends CommandBase
 		{
 			teamsManager.enabled = true;
 			TeamsManager.messageAll("Flan's Teams Mod enabled");
+			return;
+		}
+		if(!teamsManager.enabled)
+		{
+			sender.addChatMessage(new ChatComponentText("Teams mod is disabled. Try /teams on"));
+			return;
+		}
+		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
+		{
+			if(split.length == 2)
+				sendHelpInformation(sender, Integer.parseInt(split[1]));
+			else sendHelpInformation(sender, 1);
 			return;
 		}
 		if(split[0].equals("survival"))
@@ -335,6 +336,16 @@ public class CommandTeams extends CommandBase
 			for(int i = 0; i < TeamsManager.getInstance().rounds.size(); i++)
 			{
 				TeamsRound entry = TeamsManager.getInstance().rounds.get(i);
+				if(entry.map == null)
+				{
+					sender.addChatMessage(new ChatComponentText("Round had null map"));
+					return;
+				}
+				if(entry.gametype == null)
+				{
+					sender.addChatMessage(new ChatComponentText("Round had null gametype"));
+					return;
+				}
 				String s = i + ". " + entry.map.shortName + ", " + entry.gametype.shortName;
 				if(entry == TeamsManager.getInstance().currentRound)
 				{
@@ -360,7 +371,7 @@ public class CommandTeams extends CommandBase
 			TeamsManager.getInstance().rounds.remove(map);
 			return;
 		}
-		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation"))
+		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation") || split[0].equals("addRound"))
 		{
 			if(split.length < 7)
 			{
@@ -368,7 +379,17 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			TeamsMap map = TeamsManager.getInstance().maps.get(split[1]);
+			if(map == null)
+			{
+				sender.addChatMessage(new ChatComponentText("Could not find map : " + split[1]));	
+				return;
+			}
 			Gametype gametype = Gametype.getGametype(split[2]);
+			if(gametype == null)
+			{
+				sender.addChatMessage(new ChatComponentText("Could not find gametype : " + split[2]));	
+				return;
+			}
 			if(split.length != 5 + gametype.numTeamsRequired)
 			{
 				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <ScoreLimit> <TimeLimit>"));	
@@ -380,7 +401,13 @@ public class CommandTeams extends CommandBase
 				teams[i] = Team.getTeam(split[3 + i]);
 			}
 			sender.addChatMessage(new ChatComponentText("Added map (" + map.shortName + ") to rotation"));
-			TeamsManager.getInstance().rounds.add(new TeamsRound(map, gametype, teams, Integer.parseInt(split[5 + gametype.numTeamsRequired]), Integer.parseInt(split[6 + gametype.numTeamsRequired])));
+			TeamsManager.getInstance().rounds.add(new TeamsRound(map, gametype, teams, Integer.parseInt(split[3 + gametype.numTeamsRequired]), Integer.parseInt(split[4 + gametype.numTeamsRequired])));
+			return;
+		}
+		if(split[0].equals("start") || split[0].equals("begin"))
+		{
+			teamsManager.start();
+			sender.addChatMessage(new ChatComponentText("Started teams map rotation"));
 			return;
 		}
 		if(split[0].equals("nextMap"))

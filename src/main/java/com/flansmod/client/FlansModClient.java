@@ -318,8 +318,8 @@ public class FlansModClient extends FlansMod
 
 	public static boolean isCurrentMap(String map) 
 	{
-		if(teamInfo == null || teamInfo.map == null)
+		if(teamInfo == null || teamInfo.mapShortName == null)
 			return false;
-		else return teamInfo.map.equals(map);
+		else return teamInfo.mapShortName.equals(map);
 	}
 }

@@ -20,6 +20,7 @@ import com.flansmod.common.teams.TeamsManager;
 
 public class PacketTeamInfo extends PacketBase 
 {			
+	public static String mapShortName;
 	public static String map;
 	public static String gametype;
 	public static int numTeams;
@@ -78,6 +79,7 @@ public class PacketTeamInfo extends PacketBase
     	{
     		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
+    		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
     		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{
     			data.writeBoolean(true);
@@ -176,6 +178,7 @@ public class PacketTeamInfo extends PacketBase
 		else
 		{
 			map = readUTF(data);
+			mapShortName = readUTF(data);
 			sortedByTeam = data.readBoolean();
 			if(sortedByTeam)
 			{

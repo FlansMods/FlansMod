@@ -18,7 +18,7 @@ public class TeamsMap
 	public String shortName;
 	public String name;
 	public Ticket chunkLoadingTicket;
-	public ArrayList<ITeamBase> bases;
+	public ArrayList<ITeamBase> bases = new ArrayList<ITeamBase>();
 	public int minPlayers = 0, maxPlayers = 1000000;
 		
 	public TeamsMap(World world, String sn, String n)
@@ -37,11 +37,36 @@ public class TeamsMap
 		chunkLoadingTicket.getModData().setString("ShortName", shortName);
 	}
 	
+	public ArrayList<ITeamBase> getBasesPerTeam(int teamID)
+	{
+		ArrayList<ITeamBase> basesForThisTeam = new ArrayList<ITeamBase>();
+		for(ITeamBase base : bases)
+		{
+			if(base.getOwnerID() == teamID)
+				basesForThisTeam.add(base);
+		}
+		return basesForThisTeam;
+	}
+	
 	public void addBase(ITeamBase base)
 	{
 		bases.add(base);
 		//Add the chunk this base is in to our chunk loading ticket
 		ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
+		FlansMod.log("Added chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " to chunk loading ticket for base " + name );
+	}
+	
+	public void removeBase(ITeamBase base)
+	{
+		if(bases == null)
+		{
+			FlansMod.log("Base array for map " + name + " null");
+			return;
+		}
+		bases.remove(base);
+		//Remove the chunk from the chunk loading ticket
+		ForgeChunkManager.unforceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
+		FlansMod.log("Removed chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " from chunk loading ticket for base " + name );
 	}
 	
 	public void addObject(ITeamObject object)

@@ -51,6 +51,28 @@ public class ItemOpStick extends Item
 			clickedObject(world, (EntityPlayerMP)player, (ITeamObject)clicked);
 	}
 	
+	public static void openBaseEditGUI(ITeamBase base, EntityPlayerMP player)
+	{
+		String[] maps = new String[TeamsManager.getInstance().maps.values().size()];
+		if(maps.length == 0)
+		{
+			//There are no maps setup. Disaster! Abort.
+			TeamsManager.messagePlayer(player, "Maps are not yet set up. Use /teams help");
+			return;
+		}
+		int currentMapID = 0;
+		int i = 0;
+		for(TeamsMap map : TeamsManager.getInstance().maps.values())
+		{
+			maps[i] = map.name;
+			if(map == base.getMap())
+				currentMapID = i;
+			i++;
+		}	    		
+		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getName(), maps, currentMapID, base.getDefaultOwnerID()), player);
+
+	}
+	
 	public void clickedBase(World world, EntityPlayerMP player, ITeamBase base)
 	{
 		int damage = player.inventory.getCurrentItem().getItemDamage(); 
@@ -104,30 +126,7 @@ public class ItemOpStick extends Item
 	    	}
 	    	case 2 : //Stick of Mapping
 	    	{
-	    		//TODO : Fix mapping stick
-	    		//TeamsMap currentMap = base.getMap();
-	    		//int mapID = teamsManager.maps.values().indexOf(currentMap);
-	    		//TeamsMap newMap = teamsManager.maps.get((mapID + 1) % teamsManager.maps.size());
-	    		//base.setMap(newMap);
-	    		//TeamsManager.messagePlayer(player, "Set map for this base to " + newMap.name + ".");
-	    		
-	    		String[] maps = new String[TeamsManager.getInstance().maps.values().size()];
-	    		if(maps.length == 0)
-	    		{
-	    			//There are no maps setup. Disaster! Abort.
-	    			TeamsManager.messagePlayer(player, "Maps are not yet set up. Use /teams help");
-	    			return;
-	    		}
-	    		int currentMapID = 0;
-	    		int i = 0;
-	    		for(TeamsMap map : TeamsManager.getInstance().maps.values())
-	    		{
-	    			maps[i] = map.name;
-	    			if(map == base.getMap())
-	    				currentMapID = i;
-	    			i++;
-	    		}	    		
-	    		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getName(), maps, currentMapID, base.getDefaultOwnerID()), player);
+	    		openBaseEditGUI(base, player);
 	    		break;
 	    	}
 	    	case 3 : //Stick of Destruction
