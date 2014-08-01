@@ -830,7 +830,7 @@ public class TeamsManager
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File((world.isRemote ? "saves/" : "") + world.getSaveHandler().getWorldDirectoryName(), "teams_" + world.provider.getDimensionName() + ".dat");
+        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
 		if(!checkFileExists(file))
 			return;
 		try
@@ -887,7 +887,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File((world.isRemote ? "saves/" : "") + world.getSaveHandler().getWorldDirectoryName(), "teams_" + world.provider.getDimensionName() + ".dat");
+        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
 		checkFileExists(file);
 		try
 		{
