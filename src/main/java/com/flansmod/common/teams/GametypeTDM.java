@@ -100,8 +100,11 @@ public class GametypeTDM extends Gametype
 			{
 				//My goodness this is convoluted...
 				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[1].addPlayer(teamsManager.currentRound.teams[0].removeWorstPlayer()));
-				teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[1].name);
-				teamsManager.sendClassMenuToPlayer(player);
+				if(!player.isDead)
+				{
+					teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[1].name);
+					teamsManager.sendClassMenuToPlayer(player);
+				}
 			}
 		}
 		if(membersTeamB - membersTeamA > 1)
@@ -109,8 +112,11 @@ public class GametypeTDM extends Gametype
 			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
 			{
 				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[0].addPlayer(teamsManager.currentRound.teams[1].removeWorstPlayer()));
-				teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[0].name);
-				teamsManager.sendClassMenuToPlayer(player);
+				if(!player.isDead)
+				{
+					teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[0].name);
+					teamsManager.sendClassMenuToPlayer(player);
+				}
 			}
 		}
 	}

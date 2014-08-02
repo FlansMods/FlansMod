@@ -203,7 +203,7 @@ public class Team extends InfoType
 			team.members.removeAll(list);
 		}
 		members.add(username);
-		PlayerHandler.getPlayerData(username).team = this;
+		PlayerHandler.getPlayerData(username).newTeam = PlayerHandler.getPlayerData(username).team = this;
 		return username;
 	}
 	

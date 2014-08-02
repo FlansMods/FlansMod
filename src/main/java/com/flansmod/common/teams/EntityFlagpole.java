@@ -118,6 +118,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public void setMap(TeamsMap newMap) 
 	{
+		if(newMap == null)
+		{
+			FlansMod.log("Flagpole given invalid map");
+		}
 		if(map != null && map != newMap)
 			map.removeBase(this);
 		map = newMap;

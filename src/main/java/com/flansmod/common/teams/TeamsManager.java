@@ -160,6 +160,12 @@ public class TeamsManager
 	
 	public void tick()
 	{
+		//Send a full team info update to players every 2 seconds.
+		if(time % 40 == 0)
+		{
+			FlansMod.INSTANCE.getPacketHandler().sendToAll(new PacketTeamInfo());
+		}
+		
 		if(!enabled)
 			return;
 		
@@ -167,11 +173,7 @@ public class TeamsManager
 			currentRound.gametype.tick();
 		time++;
 		
-		//Send a full team info update to players every 2 seconds.
-		if(time % 40 == 0)
-		{
-			FlansMod.INSTANCE.getPacketHandler().sendToAll(new PacketTeamInfo());
-		}
+
 		//Tick bases and objects
 		for(ITeamBase base : bases)
 			base.tick();
@@ -258,6 +260,12 @@ public class TeamsManager
 		//if(currentRound != null)
 		//	return;
 			
+		if(currentRound != null)
+		{
+			currentRound.gametype.roundCleanup();
+			resetScores();
+		}
+		
 		currentRound = rounds.get(0);
 		startRound();
 	}
@@ -304,8 +312,8 @@ public class TeamsManager
 			base.startRound();
 		}
 		
-		//for(EntityPlayer player : getPlayers())
-		//	forceRespawn((EntityPlayerMP)player);
+		for(EntityPlayer player : getPlayers())
+			forceRespawn((EntityPlayerMP)player);
 		
 		showTeamsMenuToAll();
 		
@@ -721,7 +729,11 @@ public class TeamsManager
 		//Spawn spectators immediately
 		if(selectedTeam == Team.spectators)
 		{
+			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
 			data.newTeam = data.team = Team.spectators;
+			player.inventory.armorInventory = new ItemStack[4];
+			player.inventory.mainInventory = new ItemStack[36];
+			player.heal(9001);
 			respawnPlayer(player, true);
 		}
 		//Give other players the chance to select a class
@@ -729,9 +741,7 @@ public class TeamsManager
 			data.newTeam = selectedTeam;
 			sendClassMenuToPlayer(player);
 		}
-		
-		if(selectedTeam == Team.spectators)
-			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
+					
 		currentRound.gametype.playerChoseTeam(player, data.team, selectedTeam);
 	}
 	
