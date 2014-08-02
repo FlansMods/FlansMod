@@ -59,6 +59,7 @@ import com.flansmod.common.guns.ItemAAGun;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketBase;
+import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamSelect;
 
@@ -195,25 +196,52 @@ public class TeamsManager
 		}
 		
 		//If in a round
-		if(roundTimeLeft > 0)
+		if(currentRound != null && roundTimeLeft > 0)
 		{
 			roundTimeLeft--;
-			if(roundTimeLeft == 0)
+			boolean roundEnded = roundTimeLeft == 0;
+			if(roundEnded)
+				messageAll(randomTimeOutString());
+			for(Team team : currentRound.teams)
+			{
+				if(team.score >= currentRound.scoreLimit)
+				{
+					roundEnded = true;
+					messageAll(team.name + " won the round!");
+				}
+			}
+			
+			if(roundEnded)
 			{
 				//The round has ended on a timer, so display the scoreboard summary
+				roundTimeLeft = 0;
 				interRoundTimeLeft = voting ? (votingTime + scoreDisplayTime) : scoreDisplayTime;
 				displayScoreboardGUI();
 				currentRound.gametype.roundEnd();
 				PlayerHandler.roundEnded();
 			}
+		}	
+	}
+	
+	public String randomTimeOutString()
+	{
+		switch(Gametype.rand.nextInt(4))
+		{
+		case 0 : return "That's time!";
+		case 1 : return "How dull; a tie...";
+		case 2 : return "Everybody's a loser but the clock.";
+		default : return "Time up.";
 		}
-		
-		//TODO Check score limit
 	}
 	
 	public void displayScoreboardGUI()
 	{
-		//TODO
+		for(EntityPlayer player : getPlayers())
+		{
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(!data.builder)
+				sendPacketToPlayer(new PacketRoundFinished(scoreDisplayTime), (EntityPlayerMP)player);
+		}
 	}
 	
 	public void displayVotingGUI()
@@ -872,10 +900,8 @@ public class TeamsManager
 				rounds.add(round);
 			}
 
-			//if(rounds.size() > 0)
-			//	currentRound = rounds.get(tags.getInteger("CurrentRound"));
-			
 			//Read variables
+			enabled = tags.getBoolean("Enabled");
 			voting = tags.getBoolean("Voting");
 			bombsEnabled = tags.getBoolean("Bombs");
 			bulletsEnabled = tags.getBoolean("Bullets");
@@ -892,6 +918,10 @@ public class TeamsManager
 			mechaLove = tags.getInteger("MechaLove");
 			planeLife = tags.getInteger("PlaneLife");
 			driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
+			
+			//Start the rotation
+			if(enabled && rounds.size() > 0)
+				start();
 		}
 		catch(Exception e)
 		{
@@ -949,6 +979,7 @@ public class TeamsManager
 			}
 
 			//Save variables
+			tags.setBoolean("Enabled", enabled);
 			tags.setBoolean("Voting", voting);
 			tags.setBoolean("Bombs", bombsEnabled);
 			tags.setBoolean("Bullets", bulletsEnabled);

@@ -5,10 +5,9 @@ import java.util.Collections;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,9 +25,11 @@ public class PacketTeamInfo extends PacketBase
 	public static int numTeams;
 	public static TeamData[] teamData;
 	public static boolean sortedByTeam;
+	public static int timeLeft;
+	public static int scoreLimit;
 	
 	public static int numLines;
-
+	
 	public static class TeamData
 	{
 		public Team team;
@@ -80,6 +81,9 @@ public class PacketTeamInfo extends PacketBase
     		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
+    		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
+    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);
+    		
     		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{
     			data.writeBoolean(true);
@@ -179,6 +183,8 @@ public class PacketTeamInfo extends PacketBase
 		{
 			map = readUTF(data);
 			mapShortName = readUTF(data);
+			timeLeft = data.readInt();
+			scoreLimit = data.readInt();
 			sortedByTeam = data.readBoolean();
 			if(sortedByTeam)
 			{
@@ -254,5 +260,27 @@ public class PacketTeamInfo extends PacketBase
 		case 1 : return Team.spectators;
 		default : return teamData.length > 0 ? teamData[spawnerTeamID - 2].team : null;
 		}
+	}
+	
+	public boolean roundOver()
+	{
+		if(timeLeft == 0)
+			return true;
+		for(int i = 0; i < teamData.length; i++)
+		{
+			if(teamData[i].score == scoreLimit)
+				return true;
+		}
+		return false;
+	}
+	
+	public Team getWinner()
+	{
+		for(int i = 0; i < teamData.length; i++)
+		{
+			if(teamData[i].score == scoreLimit)
+				return teamData[i].team;
+		}
+		return null;
 	}
 }

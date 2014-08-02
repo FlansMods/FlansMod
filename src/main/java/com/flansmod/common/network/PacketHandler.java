@@ -147,7 +147,8 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketPlaneControl.class);	
 		registerPacket(PacketPlaySound.class);	
 		registerPacket(PacketReload.class);	
-		registerPacket(PacketRepairDriveable.class);	
+		registerPacket(PacketRepairDriveable.class);
+		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);	
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
