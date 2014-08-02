@@ -79,7 +79,7 @@ public class GuiTeamSelect extends GuiScreen
 			{
 				if(teamChoices[i] != null)
 					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
-				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7No Team / Builder"));
+				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
 			}
 		}
 	}

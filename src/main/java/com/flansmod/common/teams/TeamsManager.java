@@ -276,8 +276,8 @@ public class TeamsManager
 			base.startRound();
 		}
 		
-		for(EntityPlayer player : getPlayers())
-			forceRespawn((EntityPlayerMP)player);
+		//for(EntityPlayer player : getPlayers())
+		//	forceRespawn((EntityPlayerMP)player);
 		
 		showTeamsMenuToAll();
 		
@@ -294,8 +294,8 @@ public class TeamsManager
 			if(data == null)
 				continue;
 			//Catch for people not on a team, such as builders
-			//if(data.team == null && data.newTeam == null && playerIsOp(player))
-			//	continue;
+			if(data.builder && playerIsOp(player))
+				continue;
 
 			sendTeamsMenuToPlayer((EntityPlayerMP)player);
 		}
@@ -334,7 +334,7 @@ public class TeamsManager
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			DamageSource source = event.source;
 			
-			if(data.team == Team.spectators)
+			if(data.team == Team.spectators && source != DamageSource.generic)
 			{
 				event.setCanceled(true);
 				return;
@@ -386,7 +386,11 @@ public class TeamsManager
 		if(!enabled)
 			return;
 		if(currentRound != null)
+		{
 			currentRound.gametype.entityKilled(event.entity, event.source);
+			if(event.entity instanceof EntityPlayerMP)
+				currentRound.gametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+		}
 	}
 	
 	/** Base and object gathering hooks for entities, not tile entities */
@@ -522,7 +526,7 @@ public class TeamsManager
 	public void onPlayerRespawn(PlayerEvent event) 
 	{
 		if(event instanceof PlayerEvent.PlayerRespawnEvent)
-			respawnPlayer(event.player);
+			respawnPlayer(event.player, false);
 		if(event instanceof PlayerEvent.PlayerLoggedOutEvent)
 			onPlayerLogout(event.player);
 		if(event instanceof PlayerEvent.PlayerLoggedInEvent)
@@ -548,46 +552,50 @@ public class TeamsManager
 			team.removePlayer(player);
 	}
 	
-	public void respawnPlayer(EntityPlayer player)
+	public void respawnPlayer(EntityPlayer player, boolean firstSpawn)
 	{
 		if(!enabled || currentRound == null)
 			return;
 		
 		EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 		PlayerData data = PlayerHandler.getPlayerData(playerMP);
-
-		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(playerMP);
-		if(spawnPoint != null)
+		
+		//On the first spawn, we don't kill the player, we simply move them over, so do a /tp like command
+		if(firstSpawn)
 		{
-			//player.setSpawnChunk(new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), true);
-			//data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-			//playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-			player.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
-
-			/*
-			if(data.playerClass != null && data.playerClass.horse)
+			Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(playerMP);
+			if(spawnPoint != null)
 			{
-				EntityHorse horse = new EntityHorse(playerMP.worldObj);
-				
-				NBTTagCompound tags = new NBTTagCompound();
-				horse.writeToNBT(tags);
-				tags.setBoolean("Tame", true);
-				tags.setInteger("Temper", 0);
-				tags.setString("OwnerName", playerMP.getCommandSenderName());
-				tags.setTag("SaddleItem", new ItemStack(Items.saddle).writeToNBT(new NBTTagCompound()));
-				tags.setInteger("Type", 0);
-				tags.setInteger("Variant", 0);
-				horse.readFromNBT(tags);
-				horse.setPosition(playerMP.posX, playerMP.posY, playerMP.posZ);
-				playerMP.worldObj.spawnEntityInWorld(horse);
-				playerMP.mountEntity(horse);
+				player.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
 			}
-			*/
 		}
+
+		//To set their next spawn position, override their bed position
+		setPlayersNextSpawnpoint(playerMP);
+
 		if(forceAdventureMode)
 			player.setGameType(GameType.ADVENTURE);
 		resetInventory(player);	
 		currentRound.gametype.playerRespawned((EntityPlayerMP)player);
+	}
+	
+	private void setPlayersNextSpawnpoint(EntityPlayerMP player, ChunkCoordinates coords)
+	{
+		player.setSpawnChunk(coords, true);
+	}	
+	
+	private void setPlayersNextSpawnpoint(EntityPlayerMP player)
+	{
+		if(!enabled || currentRound == null)
+			return;
+		
+		PlayerData data = PlayerHandler.getPlayerData(player);
+
+		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(player);
+		if(spawnPoint != null)
+			setPlayersNextSpawnpoint(player, new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)));
+		else
+			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.team == null ? "null" : data.team.name));
 	}
 	
 	/** Force a respawn */
@@ -598,7 +606,7 @@ public class TeamsManager
 		player.heal(9001);
 		if(forceAdventureMode)
 			player.setGameType(GameType.ADVENTURE);
-		respawnPlayer(player);
+		respawnPlayer(player, true);
 	}
 	
 	public void sendTeamsMenuToPlayer(EntityPlayerMP player)
@@ -646,12 +654,15 @@ public class TeamsManager
 		
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		
+		data.builder = false;
+		
 		//The player picked the op / builder team
 		if(teamName.equals("null"))
 		{
 			if(playerIsOp(player))
 			{
 				data.team = null;
+				data.builder = true;
 				return;
 			}
 			else teamName = "spectators"; 
@@ -683,7 +694,7 @@ public class TeamsManager
 		if(selectedTeam == Team.spectators)
 		{
 			data.newTeam = data.team = Team.spectators;
-			respawnPlayer(player);
+			respawnPlayer(player, true);
 		}
 		//Give other players the chance to select a class
 		else {
@@ -727,19 +738,24 @@ public class TeamsManager
 		{
 			messageAll(player.getCommandSenderName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerDefected(player, data.team, data.newTeam);
+			setPlayersNextSpawnpoint(player);
 			player.attackEntityFrom(DamageSource.generic, 10000F);
+			if(data.team != null)
+				data.team.removePlayer(player);
+			data.newTeam.addPlayer(player);
 			data.team = data.newTeam;
-			data.playerClass = playerClass;
+			data.newPlayerClass = playerClass;
 		}
 		//3 : Player has only just joined
 		else if(data.team == null)
 		{
 			messageAll(player.getCommandSenderName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerEnteredTheGame(player, data.newTeam, playerClass);
+			data.newTeam.addPlayer(player);
 			data.team = data.newTeam;
-			data.playerClass = playerClass;
+			data.newPlayerClass = playerClass;
 			currentRound.gametype.playerChoseNewClass(player, playerClass);
-			respawnPlayer(player);
+			respawnPlayer(player, true);
 		}
 	}
 		

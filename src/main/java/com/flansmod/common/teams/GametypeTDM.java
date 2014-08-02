@@ -257,10 +257,10 @@ public class GametypeTDM extends Gametype
 			return null;
 		PlayerData data = getPlayerData(player);
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
-		if(data.team == null)
+		if(data.newTeam == null)
 			return null;
 		
-		ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.team));
+		ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
 		for(int j = 0; j < bases.size(); j++)
 		{
 			ITeamBase base = bases.get(j);

@@ -31,6 +31,13 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
 			return;
 		}
+		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
+		{
+			if(split.length == 2)
+				sendHelpInformation(sender, Integer.parseInt(split[1]));
+			else sendHelpInformation(sender, 1);
+			return;
+		}
 		//On / off
 		if(split[0].equals("off"))
 		{
@@ -48,13 +55,6 @@ public class CommandTeams extends CommandBase
 		if(!teamsManager.enabled)
 		{
 			sender.addChatMessage(new ChatComponentText("Teams mod is disabled. Try /teams on"));
-			return;
-		}
-		if(split == null || split.length == 0 || split[0].equals("help") || split[0].equals("?"))
-		{
-			if(split.length == 2)
-				sendHelpInformation(sender, Integer.parseInt(split[1]));
-			else sendHelpInformation(sender, 1);
 			return;
 		}
 		if(split[0].equals("survival"))

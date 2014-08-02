@@ -21,6 +21,9 @@ public class PlayerData
 	/** The class the player will switch to upon respawning */
 	public PlayerClass newPlayerClass;
 	
+	/** Keeps the player out of having to rechose their team each round */
+	public boolean builder;
+	
 	public EntityMG mountingGun;
 	/** True if this player is shooting */
 	public boolean isShooting;
