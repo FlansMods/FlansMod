@@ -79,17 +79,20 @@ public class GametypeTDM extends Gametype
 	
 	public boolean needAutobalance()
 	{
+		/*
 		if(teamsManager.currentRound == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
 			return false;
 		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
 		int membersTeamB = teamsManager.currentRound.teams[1].members.size();
 		if(Math.abs(membersTeamA - membersTeamB) > 1)
 			return true;
+			*/
 		return false;
 	}
 	
 	public void autobalance()
 	{
+		/*
 		if(teamsManager.currentRound.teams == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
 			return;
 		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
@@ -119,6 +122,7 @@ public class GametypeTDM extends Gametype
 				}
 			}
 		}
+		*/
 	}
 
 	@Override

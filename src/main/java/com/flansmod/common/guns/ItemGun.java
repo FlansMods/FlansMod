@@ -262,6 +262,8 @@ public class ItemGun extends Item
 		{
 			EntityPlayerMP player = (EntityPlayerMP)entity;
 			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(data == null)
+				return;
 			if(player.inventory.getCurrentItem() != itemstack)
 			{
 				//If the player is no longer holding a gun, emulate a release of the shoot button
