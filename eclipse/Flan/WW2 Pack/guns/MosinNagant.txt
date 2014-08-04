@@ -22,3 +22,16 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+//Model settings
+Model ww2.Mosin
+Texture MosinNagant
+ModelScale 1.0
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+//AllowAttachments 
+AllowBarrelAttachments false
+AllowScopeAttachments false
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1

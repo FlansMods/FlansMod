@@ -95,10 +95,17 @@ public class RenderGun implements IItemRenderer
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
+					if(FlansModClient.zoomProgress > 0.9F && gunType.hasScopeOverlay)
+					{
+						GL11.glPopMatrix();
+						return;
+					}
 					float adsSwitch = FlansModClient.lastZoomProgress + (FlansModClient.zoomProgress - FlansModClient.lastZoomProgress) * smoothing;//0F;//((float)Math.sin((FlansMod.ticker) / 10F) + 1F) / 2F;
 					GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
 					GL11.glRotatef(-5F, 0F, 1F, 0F);
 					GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
+					if(gunType.hasScopeOverlay)
+						GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
 					GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
 					GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
 					
@@ -127,6 +134,14 @@ public class RenderGun implements IItemRenderer
 								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(-30F * reloadRotate, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
+								break;
+							}
+							case RIFLE_TOP :
+							{
+								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(10F * reloadRotate, 0F, 1F, 0F);
+								GL11.glRotatef(-10F * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(0.1F * reloadRotate, -0.2F * reloadRotate, -0.1F * reloadRotate);
 								break;
 							}
 							default : break;
@@ -287,6 +302,18 @@ public class RenderGun implements IItemRenderer
 							GL11.glRotatef(bulletProgress * 15F, 0F, 1F, 0F);
 							GL11.glRotatef(bulletProgress * 15F, 0F, 0F, 1F);
 							GL11.glTranslatef(bulletProgress * -1F, 0F, bulletProgress * 0.5F);
+							
+							break;
+						}
+						case RIFLE_TOP : 
+						{
+							float thing = clipPosition * model.numBulletsInReloadAnimation;
+							int bulletNum = MathHelper.floor_float(thing);
+							float bulletProgress = thing - bulletNum;
+							
+							GL11.glRotatef(bulletProgress * 55F, 0F, 1F, 0F);
+							GL11.glRotatef(bulletProgress * 95F, 0F, 0F, 1F);
+							GL11.glTranslatef(bulletProgress * -0.1F, bulletProgress * 1F, bulletProgress * 0.5F);
 							
 							break;
 						}
