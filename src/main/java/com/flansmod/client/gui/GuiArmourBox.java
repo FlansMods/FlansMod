@@ -30,7 +30,6 @@ public class GuiArmourBox extends GuiScreen
 	private int guiOriginX;
 	private int guiOriginY;
 	private int scroll;
-	private long lastTime;
 	
 	public GuiArmourBox(InventoryPlayer playerinventory, ArmourBoxType type)
 	{
@@ -39,17 +38,17 @@ public class GuiArmourBox extends GuiScreen
 		this.type = type;
 		page = 0;
 	}
+
+	@Override
+	public void updateScreen()
+	{
+		super.updateScreen();
+		scroll++;
+	}
 	
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		if (newTime > lastTime)
-		{
-			lastTime = newTime;
-			if (newTime % 40 == 0)
-				scroll++;
-		}
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
@@ -124,7 +123,7 @@ public class GuiArmourBox extends GuiScreen
 					int startPart = 0;
 					if (numParts >= 4)
 					{
-						startPart = scroll % (numParts - 2);
+						startPart = (scroll / 40) % (numParts - 2);
 					}
 					
 					for(int p = 0; p < (numParts < 3 ? numParts : 3); p++)
