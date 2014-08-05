@@ -1,0 +1,7 @@
+Name Juggernaut Heavy Bodyarmour
+ShortName juggernautBody
+Icon JuggernautBody
+Colour 255 255 255
+Type Chest
+Defence 0.4
+ArmourTexture Juggernaut

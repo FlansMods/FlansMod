@@ -141,6 +141,8 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketDriveableKeyHeld.class);	
 		registerPacket(PacketFlak.class);	
 		registerPacket(PacketGunFire.class);	
+		registerPacket(PacketGunPaint.class);
+		registerPacket(PacketKillMessage.class);
 		registerPacket(PacketMechaControl.class);	
 		registerPacket(PacketMGFire.class);	
 		registerPacket(PacketMGMount.class);	
@@ -153,8 +155,8 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
 		registerPacket(PacketVehicleControl.class);
-		registerPacket(PacketKillMessage.class);
-		registerPacket(PacketGunPaint.class);
+		
+		
 	}
 
 	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 
