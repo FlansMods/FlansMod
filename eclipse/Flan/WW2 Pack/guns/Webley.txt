@@ -28,7 +28,7 @@ Deployable False
 DeployedModel None
 //Model settings
 Model ww2.Webley
-Texture webley
+Texture Webley
 ModelScale 0.3
 //Attachment Settings
 AllowAllAttachments false

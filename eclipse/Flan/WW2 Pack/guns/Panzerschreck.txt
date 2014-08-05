@@ -23,4 +23,4 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Panzerschreck
-Texture Panzerschreck
+Texture panzerschreck
