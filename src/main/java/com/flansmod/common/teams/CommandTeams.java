@@ -620,6 +620,28 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Vehicles will " + (TeamsManager.driveablesBreakBlocks ? "now" : "no longer") + " break blocks"));
 			return;
 		}
+		if(split[0].equals("scoreDisplayTime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.scoreDisplayTime = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
+			return;
+		}
+		if(split[0].equals("votingTime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.votingTime = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.votingTime / 20 + " seconds"));
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
 			if(TeamsManager.getInstance().currentRound == null)
@@ -661,24 +683,28 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("/teams survival"));
 			sender.addChatMessage(new ChatComponentText("/teams getSticks"));
 			sender.addChatMessage(new ChatComponentText("/teams listGametypes"));
-			sender.addChatMessage(new ChatComponentText("/teams setGametype <name>"));
-			sender.addChatMessage(new ChatComponentText("/teams listAllTeams"));
+			//sender.addChatMessage(new ChatComponentText("/teams setGametype <name>"));
+			//sender.addChatMessage(new ChatComponentText("/teams listAllTeams"));
 			sender.addChatMessage(new ChatComponentText("/teams listTeams"));
-			sender.addChatMessage(new ChatComponentText("/teams setTeams <teamName1> <teamName2>"));
+			//sender.addChatMessage(new ChatComponentText("/teams setTeams <teamName1> <teamName2>"));
+			sender.addChatMessage(new ChatComponentText("/teams addMap <shortName> <longName>"));
+			sender.addChatMessage(new ChatComponentText("/teams listMaps"));
+			sender.addChatMessage(new ChatComponentText("/teams removeMap <shortName>"));
 			break;
 		}
 		case 2 :
 		{
-			sender.addChatMessage(new ChatComponentText("/teams addMap <shortName> <longName>"));
-			sender.addChatMessage(new ChatComponentText("/teams listMaps"));
-			sender.addChatMessage(new ChatComponentText("/teams removeMap <shortName>"));
-			sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
+
+			//sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
 			sender.addChatMessage(new ChatComponentText("/teams useRotation <true / false>"));
-			sender.addChatMessage(new ChatComponentText("/teams addRotation <map> <gametype> <team1> <team2> ..."));
-			sender.addChatMessage(new ChatComponentText("/teams listRotation"));
-			sender.addChatMessage(new ChatComponentText("/teams removeRotation <ID>"));
+			sender.addChatMessage(new ChatComponentText("/teams voting <true / false>"));
+			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <scoreLimit> <timeLimit>"));
+			sender.addChatMessage(new ChatComponentText("/teams listRounds"));
+			sender.addChatMessage(new ChatComponentText("/teams removeRound <ID>"));
 			sender.addChatMessage(new ChatComponentText("/teams nextMap"));			
-			sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));			
+			//sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));		
+			sender.addChatMessage(new ChatComponentText("/teams votingTime <time>"));
+			sender.addChatMessage(new ChatComponentText("/teams scoreDisplayTime <time>"));
 			break;
 		}
 		case 3 :
@@ -695,6 +721,7 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("/teams planeLife <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams vehicleLife <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams aaLife <time>"));
+
 			sender.addChatMessage(new ChatComponentText("/teams vehiclesBreakBlocks <true / false>"));		
 			break;
 		}
