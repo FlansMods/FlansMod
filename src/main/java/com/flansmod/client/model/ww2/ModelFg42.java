@@ -93,7 +93,7 @@ public class ModelFg42 extends ModelGun
 
 
 		gunSlideDistance = 0F;
-		animationType = EnumAnimationType.P90;
+		animationType = EnumAnimationType.SIDE_CLIP;
 
 		flipAll();
 		translateAll(0F, 1F, 0F);
