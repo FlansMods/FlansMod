@@ -98,7 +98,8 @@ public class PacketBaseEdit extends PacketBase
 		}
 		base.setDefaultOwnerID(teamID);
 		base.setOwnerID(teamID);
-		base.setMap(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
+		if(mapID != -1)
+			base.setMap(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
 		base.setName(baseName);
 		
 		FlansMod.log(playerEntity.getCommandSenderName() + " modified attributes of base " + baseID);

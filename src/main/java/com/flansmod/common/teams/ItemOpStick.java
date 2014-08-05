@@ -60,7 +60,7 @@ public class ItemOpStick extends Item
 			TeamsManager.messagePlayer(player, "Maps are not yet set up. Use /teams help");
 			return;
 		}
-		int currentMapID = 0;
+		int currentMapID = -1;
 		int i = 0;
 		for(TeamsMap map : TeamsManager.getInstance().maps.values())
 		{
