@@ -19,6 +19,11 @@ ShootDelay 16
 ShootSound leeEnfieldShoot
 ReloadSound leeEnfieldReload
 Mode SemiAuto
-Scope wwiileeenfieldsniper
+Scope wwiileeEnfieldsniper
 Deployable False
 DeployedModel None
+Model ww2.LeeenfieldS
+Texture LeeEnfield
+ModelScale 0.7
+ZoomLevel 6.0
+FOVZoomLevel 1.0

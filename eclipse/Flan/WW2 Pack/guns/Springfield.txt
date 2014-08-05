@@ -22,3 +22,8 @@ Mode SemiAuto
 Scope wwiispringfieldsniper
 Deployable False
 DeployedModel None
+Model ww2.Springfield
+Texture Springfield
+ModelScale 0.7
+ZoomLevel 6.0
+FOVZoomLevel 1.0

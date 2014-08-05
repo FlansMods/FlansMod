@@ -22,3 +22,5 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Bazooka
+Texture Bazooka
