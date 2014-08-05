@@ -17,6 +17,7 @@ public class PlayerClass extends InfoType
 {
 	public static List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
+	public List<String[]> startingItemStrings = new ArrayList<String[]>();
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public boolean horse = false;
 	
@@ -30,9 +31,22 @@ public class PlayerClass extends InfoType
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
+		if (split[0].equals("AddItem"))
+		{
+			startingItemStrings.add(split);
+		}
+	}
+	
+	/** In the loading phase item IDs are all up in the air and so too are NBT tags regarding ItemStacks 
+	 * So to avoid guns with attachments having their attachments replaced with incorrect ones, 
+	 * random guns and other silly things, we read the relevant lines here, as the world loads */
+	@Override
+	public void onWorldLoad()
+	{
 		try
-		{	
-			if (split[0].equals("AddItem"))
+		{
+			startingItems.clear();
+			for(String[] split : startingItemStrings)
 			{
 				Item matchingItem = null;
 				int amount = 1;
@@ -91,7 +105,7 @@ public class PlayerClass extends InfoType
 			}
 		} catch (Exception e)
 		{
-			System.out.println("Reading class file failed.");
+			System.out.println("Interpreting player class file failed.");
 			e.printStackTrace();
 		}
 	}

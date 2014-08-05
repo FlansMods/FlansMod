@@ -62,6 +62,7 @@ import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.types.InfoType;
 
 public class TeamsManager
 {
@@ -759,7 +760,7 @@ public class TeamsManager
 		{
 			player.addChatMessage(new ChatComponentText("You may not select " + playerClass.name + ". Please try again"));
 			FlansMod.log(player.getCommandSenderName() + " tried to pick an invalid class : " + playerClass.name);
-			sendClassMenuToPlayer(player);
+			//sendClassMenuToPlayer(player);
 			return;
 		}
 		
@@ -939,6 +940,10 @@ public class TeamsManager
 			e.printStackTrace();
 			
 		}
+		
+		//Reset all infotypes. Specifically, send this to player classes so that they may create itemstacks from strings regarding attachments for guns
+		for(InfoType type : InfoType.infoTypes)
+			type.onWorldLoad();
 	}
 	
 	private void savePerWorldData(Event event, World world)

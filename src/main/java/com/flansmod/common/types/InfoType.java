@@ -320,4 +320,9 @@ public class InfoType
 		}
 		return null;
 	}
+
+	public void onWorldLoad() 
+	{
+		
+	}
 }

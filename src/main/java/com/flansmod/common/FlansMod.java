@@ -264,8 +264,7 @@ public class FlansMod
 		packetHandler.postInitialise();
 		
 		hooks.hook();
-		
-		
+				
 		/* TODO : ICBM
 		isICBMSentryLoaded = Loader.instance().isModLoaded("ICBM|Sentry");
 		
