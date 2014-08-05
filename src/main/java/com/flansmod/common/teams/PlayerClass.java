@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
@@ -37,14 +38,24 @@ public class PlayerClass extends InfoType
 		}
 	}
 	
+	/** This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once */
+	@Override
+	protected void postRead() 
+	{
+		onWorldLoad(null);
+	}
+	
 	/** In the loading phase item IDs are all up in the air and so too are NBT tags regarding ItemStacks 
 	 * So to avoid guns with attachments having their attachments replaced with incorrect ones, 
 	 * random guns and other silly things, we read the relevant lines here, as the world loads */
 	@Override
-	public void onWorldLoad()
+	public void onWorldLoad(World world)
 	{
+		if(world != null && world.isRemote)
+			return;
 		try
 		{
+			
 			startingItems.clear();
 			for(String[] split : startingItemStrings)
 			{

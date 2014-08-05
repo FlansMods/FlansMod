@@ -943,7 +943,7 @@ public class TeamsManager
 		
 		//Reset all infotypes. Specifically, send this to player classes so that they may create itemstacks from strings regarding attachments for guns
 		for(InfoType type : InfoType.infoTypes)
-			type.onWorldLoad();
+			type.onWorldLoad(world);
 	}
 	
 	private void savePerWorldData(Event event, World world)

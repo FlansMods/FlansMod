@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import com.flansmod.common.FlansMod;
@@ -321,7 +321,7 @@ public class InfoType
 		return null;
 	}
 
-	public void onWorldLoad() 
+	public void onWorldLoad(World world) 
 	{
 		
 	}
