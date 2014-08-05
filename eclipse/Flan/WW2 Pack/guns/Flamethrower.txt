@@ -1,7 +1,7 @@
 Name Flame Thrower
-ShortName Flame Thrower
+ShortName flamethrower
 //The ammo this gun uses (shortName)
-Ammo Flamethrowerammo
+Ammo flamethrowerAmmo
 Icon GreenGasGun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

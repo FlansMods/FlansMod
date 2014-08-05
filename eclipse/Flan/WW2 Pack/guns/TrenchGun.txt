@@ -1,7 +1,7 @@
-Name Trenchgun
-ShortName Trench Gun
+Name Trench Gun
+ShortName trenchgun
 //The ammo this gun uses (shortName)
-Ammo TrenchgunAmmo
+Ammo trenchgunAmmo
 Icon Trenchgun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
