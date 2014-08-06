@@ -132,7 +132,7 @@ public class TeamsManager
 		//Testing stuff. TODO : Replace with automatic Gametype loader
 		new GametypeTDM();
 		//new GametypeConquest();
-		//new GametypeDM();
+		new GametypeDM();
 		//new GametypeCTF();
 		//new GametypeNerf();
 		//-----
@@ -286,7 +286,7 @@ public class TeamsManager
 		else //Use standard rotation. Go to next map
 		{
 			int lastRoundID = rounds.indexOf(currentRound);
-			int nextRoundID = lastRoundID++ % rounds.size();
+			int nextRoundID = ++lastRoundID % rounds.size();
 			nextRound = rounds.get(nextRoundID);
 		}
 		

@@ -258,7 +258,7 @@ public class PacketTeamInfo extends PacketBase
 		{
 		case 0 : return null;
 		case 1 : return Team.spectators;
-		default : return teamData.length > 0 ? teamData[spawnerTeamID - 2].team : null;
+		default : return teamData.length > spawnerTeamID - 2 ? teamData[spawnerTeamID - 2].team : null;
 		}
 	}
 	

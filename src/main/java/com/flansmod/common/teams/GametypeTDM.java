@@ -42,28 +42,7 @@ public class GametypeTDM extends Gametype
 	{
 		
 	}
-	
-	/*
-	@Override
-	public void initGametype() 
-	{
-		startNewRound();
-	}
-
-	@Override
-	public void teamsSet()
-	{	
-		startNewRound();
-	}
-	
-	@Override
-	public void stopGametype() 
-	{
-		super.stopGametype();
-		resetScores();
-	}
-	 */
-	
+		
 	@Override
 	public void tick() 
 	{
@@ -192,11 +171,6 @@ public class GametypeTDM extends Gametype
 	{
 		if(getPlayerData(player) == null || getPlayerData(player).team == null)
 			return false;
-		//Players may not fight between rounds
-		if(newRoundTimer > 0)
-		{
-			return false;
-		}
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
