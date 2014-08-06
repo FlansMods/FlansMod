@@ -355,6 +355,8 @@ public class CommandTeams extends CommandBase
 				{
 					s += ", " + entry.teams[j].shortName;
 				}
+				s += ", " + entry.timeLimit;
+				s += ", " + entry.scoreLimit;
 				sender.addChatMessage(new ChatComponentText(s));
 			}
 			return;

@@ -169,7 +169,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	{
 		if(worldObj.isRemote)
 			return teamID;
-		else return base == null ? null : base.getOwnerID();
+		else return base == null ? 0 : base.getOwnerID();
 	}
 
 	@Override
