@@ -26,6 +26,8 @@ DeployedModel None
 Model ww2.MosinSniper
 Texture MosinNagant
 ModelScale 1.0
+ZoomLevel 6.0
+FOVZoomLevel 1.0
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
