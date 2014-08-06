@@ -591,11 +591,17 @@ public class TeamsManager
 	
 	public void respawnPlayer(EntityPlayer player, boolean firstSpawn)
 	{
+		if(player.worldObj.isRemote)
+			return;
+		
 		if(!enabled || currentRound == null)
 			return;
 		
 		EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 		PlayerData data = PlayerHandler.getPlayerData(playerMP);
+		
+		if(data.builder && playerIsOp(playerMP))
+			return;
 		
 		//On the first spawn, we don't kill the player, we simply move them over, so do a /tp like command
 		if(firstSpawn)
@@ -638,6 +644,8 @@ public class TeamsManager
 	/** Force a respawn */
 	public void forceRespawn(EntityPlayerMP player)
 	{
+		if(playerIsOp(player) && PlayerHandler.getPlayerData(player).builder)
+			return;
 		player.inventory.armorInventory = new ItemStack[4];
 		player.inventory.mainInventory = new ItemStack[36];
 		player.heal(9001);
