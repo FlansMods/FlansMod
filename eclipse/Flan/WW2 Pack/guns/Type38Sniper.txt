@@ -22,3 +22,5 @@ Mode SemiAuto
 Scope wwiitype38sniper
 Deployable False
 DeployedModel None
+ZoomLevel 6.0
+FOVZoomLevel 1.0
