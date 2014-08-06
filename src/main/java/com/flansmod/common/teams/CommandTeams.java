@@ -375,7 +375,7 @@ public class CommandTeams extends CommandBase
 		{
 			if(split.length < 7)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <ScoreLimit> <TimeLimit>"));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <TimeLimit> <ScoreLimit>"));	
 				return;
 			}
 			TeamsMap map = TeamsManager.getInstance().maps.get(split[1]);
@@ -698,7 +698,7 @@ public class CommandTeams extends CommandBase
 			//sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
 			sender.addChatMessage(new ChatComponentText("/teams useRotation <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams voting <true / false>"));
-			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <scoreLimit> <timeLimit>"));
+			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <TimeLimit> <ScoreLimit>"));
 			sender.addChatMessage(new ChatComponentText("/teams listRounds"));
 			sender.addChatMessage(new ChatComponentText("/teams removeRound <ID>"));
 			sender.addChatMessage(new ChatComponentText("/teams nextMap"));			

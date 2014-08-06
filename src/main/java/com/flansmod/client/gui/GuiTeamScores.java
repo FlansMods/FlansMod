@@ -46,16 +46,17 @@ public class GuiTeamScores extends GuiScreen
 		mc.renderEngine.bindTexture(texture2);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		int m = k / 2 - 128;
+		int m = k / 2 - 156;
 		int n = l / 2 - 180 / 2;
-		drawTexturedModalRect(m, n, 0, 0, 256, 180);
+		//Like draw texturedModalRect, but with custom image size
+		func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
 		
 		//No idea why this works, but it makes the text bind its texture correctly
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investiagate this
 
 		drawString(fontRendererObj, teamInfo.map, m + 6, n + 6, 0xffffff);
-		drawString(fontRendererObj, teamInfo.gametype, m + 256 - 6 - fontRendererObj.getStringWidth(teamInfo.gametype), n + 6, 0xffffff);
+		drawString(fontRendererObj, teamInfo.gametype, m + 312 - 6 - fontRendererObj.getStringWidth(teamInfo.gametype), n + 6, 0xffffff);
 		
 		if(teamInfo.roundOver())
 		{
@@ -76,19 +77,19 @@ public class GuiTeamScores extends GuiScreen
 			int minutesLeft = secondsLeft / 60;
 			secondsLeft = secondsLeft % 60;
 			drawString(fontRendererObj, "Time Left : " + minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft), m + 10, n + 20, 0xffffff);
-			drawString(fontRendererObj, "Score Limit : " + teamInfo.scoreLimit, m + 246 - fontRendererObj.getStringWidth("Score Limit : " + teamInfo.scoreLimit), n + 20, 0xffffff);
+			drawString(fontRendererObj, "Score Limit : " + teamInfo.scoreLimit, m + 302 - fontRendererObj.getStringWidth("Score Limit : " + teamInfo.scoreLimit), n + 20, 0xffffff);
 		}
 		
 		for(int i = 0; i < 2; i++)
 		{
-			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.name, m + 10 + 123 * i, n + 39, 0xffffff);
-			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.score, m + 115 + 123 * i, n + 39, 0xffffff);
+			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.name, m + 10 + 151 * i, n + 39, 0xffffff);
+			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.score, m + 143 + 151 * i, n + 39, 0xffffff);
 			for(int j = 0; j < teamInfo.teamData[i].numPlayers; j++)
 			{
-				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 123 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 83 + 123 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].kills, m + 99 + 123 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].deaths, m + 115 + 123 * i, n + 67 + 9 * j, 0xffffff);
+				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 151 * i, n + 67 + 9 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 67 + 9 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].kills, m + 127 + 151 * i, n + 67 + 9 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 67 + 9 * j, 0xffffff);
 			}
 		}
 		
