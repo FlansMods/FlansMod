@@ -301,16 +301,16 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if(player == null)
 			return;
 		Side side = worldObj.isRemote ? Side.CLIENT : Side.SERVER;
-		if(PlayerHandler.getPlayerData(gunner, side) == null)
+		if(PlayerHandler.getPlayerData(player, side) == null)
 			return;
 		if(mounting)
 		{
 			gunner = player;
-			PlayerHandler.getPlayerData(gunner, side).mountingGun = this;
+			PlayerHandler.getPlayerData(player, side).mountingGun = this;
 		}
 		else
 		{
-			PlayerHandler.getPlayerData(gunner, side).mountingGun = null;
+			PlayerHandler.getPlayerData(player, side).mountingGun = null;
 			gunner = null;
 		}
 	}
