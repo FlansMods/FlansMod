@@ -15,10 +15,10 @@ Damage 4
 //The higher this value, the more the bullets spread
 Accuracy 8
 //Time in ticks between rounds
-ShootDelay 1
+ShootDelay 2
 ShootSound DP28Shoot
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
-SoundLength 11
+//SoundLength 11
 DistortSound False
 ReloadSound DP28Reload
 Mode FullAuto
