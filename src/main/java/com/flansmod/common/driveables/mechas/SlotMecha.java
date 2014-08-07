@@ -1,10 +1,11 @@
 package com.flansmod.common.driveables.mechas;
 
-import com.flansmod.common.guns.ItemGun;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import com.flansmod.common.guns.ItemGun;
 
 public class SlotMecha extends Slot 
 {

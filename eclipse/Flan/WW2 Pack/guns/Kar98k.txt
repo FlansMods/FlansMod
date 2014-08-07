@@ -22,3 +22,6 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Kar98k
+Texture Kar98k
+ModelScale 0.7

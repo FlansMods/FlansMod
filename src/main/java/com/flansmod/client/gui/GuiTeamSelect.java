@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -7,14 +9,12 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
+import cpw.mods.fml.client.FMLClientHandler;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
-
-import cpw.mods.fml.client.FMLClientHandler;
 
 public class GuiTeamSelect extends GuiScreen 
 {
@@ -79,6 +79,7 @@ public class GuiTeamSelect extends GuiScreen
 			{
 				if(teamChoices[i] != null)
 					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
+				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
 			}
 		}
 	}
@@ -126,7 +127,7 @@ public class GuiTeamSelect extends GuiScreen
 		if(classMenu)
 			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[button.id].shortName, true));
 		else
-			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id].shortName, false));
+			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id] == null ? "null" : teamChoices[button.id].shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);
     }
 	

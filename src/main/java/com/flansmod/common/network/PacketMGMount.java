@@ -3,20 +3,14 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.EntityMG;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.EntityMG;
 
 public class PacketMGMount extends PacketBase 
 {

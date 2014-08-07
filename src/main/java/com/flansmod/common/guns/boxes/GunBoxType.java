@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public class GunBoxType extends InfoType
 {
@@ -42,7 +42,6 @@ public class GunBoxType extends InfoType
 	
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
-	public static ArrayList<String> shortNameList = new ArrayList<String>();
 	
 	public GunBoxType(TypeFile file)
 	{
@@ -78,11 +77,9 @@ public class GunBoxType extends InfoType
 	}
 	
 	@Override
-	public void read(TypeFile file)
+	public void postRead()
 	{
-		super.read(file);
 		gunBoxMap.put(this.shortName, this);
-		shortNameList.add(this.shortName);
 	}
 
 	@Override
@@ -141,7 +138,7 @@ public class GunBoxType extends InfoType
 			}
 		} catch (Exception e)
 		{
-			System.out.println("Reading gun box file failed : " + shortName);
+			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
 	}

@@ -12,11 +12,11 @@ public interface ITeamObject {
 	
 	//Called when the owner of a base is set by an op
 	//The object should remember the base ID for saving / loading
-	public void onBaseSet(Team newOwners);
+	public void onBaseSet(int newTeamID);
 	
 	//Called when a base is captured, but not when set by an op
 	//The object should remember the base ID for saving / loading
-	public void onBaseCapture(Team newOwners);
+	public void onBaseCapture(int newTeamID);
 	
 	//Called when an op connects this object to a new base
 	public void setBase(ITeamBase base);
@@ -34,4 +34,7 @@ public interface ITeamObject {
 	
 	//Return true if players can spawn here
 	public boolean isSpawnPoint();
+
+	//Return true if this object should force the chunk it is in to remain loaded
+	public boolean forceChunkLoading();
 }

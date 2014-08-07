@@ -7,22 +7,22 @@ import java.util.Map;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.teams.Gametype;
-import com.flansmod.common.teams.TeamsManager;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.teams.Gametype;
+import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
 {
@@ -103,8 +103,6 @@ public class PlayerHandler
 			String username = player.getCommandSenderName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
-			if(TeamsManager.getInstance().currentGametype != null && TeamsManager.getInstance().areTeamsValid())
-				Gametype.sendTeamsMenuToPlayer((EntityPlayerMP)player);
 			if(clientsToRemoveAfterThisRound.contains(username))
 				clientsToRemoveAfterThisRound.remove(username);
 		}
@@ -112,7 +110,7 @@ public class PlayerHandler
 		{
 			EntityPlayer player = event.player;
 			String username = player.getCommandSenderName();
-			if(TeamsManager.getInstance().currentGametype == null)
+			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
 		}

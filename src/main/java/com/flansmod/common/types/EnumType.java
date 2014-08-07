@@ -1,5 +1,7 @@
 package com.flansmod.common.types;
 
+import net.minecraft.item.Item;
+
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.PlaneType;
@@ -14,6 +16,7 @@ import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.parts.PartType;
+import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
@@ -21,7 +24,7 @@ import com.flansmod.common.tools.ToolType;
 
 public enum EnumType 
 {
-	part("parts"), bullet("bullets"), attachment("attachments"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), grenade("grenades"), tool("tools"), armour("armorFiles"), playerClass("classes"), team("teams"), box("boxes");
+	part("parts"), bullet("bullets"), attachment("attachments"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), grenade("grenades"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams");
 	
 	public String folderName;
 	
@@ -55,6 +58,7 @@ public enum EnumType
 		case grenade : 		return GrenadeType.class;
 		case tool :			return ToolType.class;
 		case armour : 		return ArmourType.class;
+		case armourBox : 	return ArmourBoxType.class;
 		case playerClass :	return PlayerClass.class;
 		case team :			return Team.class;
 		case box :			return GunBoxType.class;

@@ -1,14 +1,9 @@
 package com.flansmod.common.driveables;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -20,12 +15,11 @@ import net.minecraft.world.World;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketVehicleControl;
-import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
@@ -48,6 +42,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     public float wheelsAngle;
     /** Delayer for door button */
     public int toggleTimer = 0;
+    /** Wheel entities for collision and motion calculation */
+    public EntityWheel[] wheels;
     
     public EntityVehicle(World world)
     {
@@ -67,6 +63,21 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
+	}
+	
+	@Override
+	protected void initType(DriveableType type, boolean clientSide)
+	{
+		super.initType(type, clientSide);
+		wheels = new EntityWheel[4];
+		for(int i = 0; i < 4; i++)
+		{
+			if(!clientSide)
+			{
+				wheels[i] = new EntityWheel(worldObj, this, i);
+				worldObj.spawnEntityInWorld(wheels[i]);
+			}
+		}
 	}
 
 	@Override
@@ -304,7 +315,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
             case 16 : // Trim Button
             {
-				applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
+				//applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
 				return true;
             }
             case 17 : //Park
@@ -559,7 +570,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
 	    	
 	    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
-	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelRadius);
+	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelStepHeight);
 	    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
 	    	
 	    	//If its solid on top

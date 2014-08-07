@@ -1,4 +1,4 @@
-Name Lee Enfield
+Name Lee enfield
 ShortName leeEnfield
 //The ammo this gun uses (shortName)
 Ammo leeEnfieldAmmo
@@ -22,3 +22,6 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Leeenfield
+Texture LeeEnfield
+ModelScale 0.7

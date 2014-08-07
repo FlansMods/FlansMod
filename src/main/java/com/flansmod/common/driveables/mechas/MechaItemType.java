@@ -2,15 +2,14 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import com.flansmod.client.model.ModelMecha;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class MechaItemType extends InfoType 
 {
@@ -26,14 +25,24 @@ public class MechaItemType extends InfoType
 	public float toolHardness = 1F;
 	/** This is multiplied by the mecha reach to calculate the total reach */
 	public float reach = 1F;
-	/** This makes the mecha float towards the surface if it jumps underwater */
+	/** This makes the mecha float towards the surface when underwater, because apparently people prefer limited functionality */
 	public boolean floater = false;
+	/** This allows an upgrade to affect the mecha's move speed */
+	public float speedMultiplier = 1F;
+	/** This allows upgrades to reduce incoming damage */
+	public float damageResistance = 1F;
 	
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false;
+	
+	/** The drop rate of these items are multiplied by this float. They stack between items too. 
+	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
+	 * dropRate - floor(dropRate) chance of getting one more */
+	public float fortuneDiamond = 1F, fortuneRedstone = 1F, fortuneCoal = 1F, fortuneEmerald = 1F;
+	
 	
 	/** The model */
 	@SideOnly(Side.CLIENT)
@@ -70,8 +79,26 @@ public class MechaItemType extends InfoType
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ItemVacuum"))
 				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("IronRefine"))
+				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("AutoFuel"))
+				autoCoal = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("SpeedMultiplier"))
+				speedMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("DiamondMultiplier"))
+				fortuneDiamond = Float.parseFloat(split[1]);
+			if(split[0].equals("RedstoneMultiplier"))
+				fortuneRedstone = Float.parseFloat(split[1]);
+			if(split[0].equals("EmeraldMultiplier"))
+				fortuneEmerald = Float.parseFloat(split[1]);
+			if(split[0].equals("CoalMultiplier"))
+				fortuneCoal = Float.parseFloat(split[1]);
+			if(split[0].equals("Nanorepair"))
+				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Armour"))
+				damageResistance = Float.parseFloat(split[1]);
 		}
 		catch (Exception e)
 		{

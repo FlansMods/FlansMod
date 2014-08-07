@@ -1,12 +1,12 @@
 package com.flansmod.common.types;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import com.flansmod.common.FlansMod;
@@ -41,6 +41,7 @@ public class InfoType
 	
 	public void read(TypeFile file)
 	{
+		preRead();
 		for(;;)
 		{
 			String line = null;
@@ -54,7 +55,14 @@ public class InfoType
 				continue;
 			read(split, file);
 		}
+		postRead();
 	}
+	
+	/** Method for performing actions prior to reading the type file */
+	protected void preRead() {}
+	
+	/** Method for performing actions after reading the type file */
+	protected void postRead() {}
 
 	/** Pack reader */
 	protected void read(String[] split, TypeFile file)
@@ -311,5 +319,10 @@ public class InfoType
 				return type;
 		}
 		return null;
+	}
+
+	public void onWorldLoad(World world) 
+	{
+		
 	}
 }

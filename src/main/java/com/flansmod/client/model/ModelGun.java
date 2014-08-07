@@ -1,8 +1,9 @@
 package com.flansmod.client.model;
 
+import net.minecraft.client.model.ModelBase;
+
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
-import net.minecraft.client.model.ModelBase;
 
 public class ModelGun extends ModelBase 
 {
@@ -18,7 +19,9 @@ public class ModelGun extends ModelBase
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
-
+	public ModelRendererTurbo[] minigunBarrelModel = new ModelRendererTurbo[0];
+	/** The point about which the minigun barrel rotates. Rotation is along the line of the gun through this point */
+	public Vector3f minigunBarrelOrigin = new Vector3f();
 	
 	//These designate the locations of 3D attachment models on the gun
 	public Vector3f barrelAttachPoint = new Vector3f();
@@ -79,6 +82,11 @@ public class ModelGun extends ModelBase
 		render(ammoModel, f);
 	}
 
+	public void renderMinigunBarrel(float f) 
+	{
+		render(minigunBarrelModel, f);
+	}
+
 	/** For renderering models simply */
 	private void render(ModelRendererTurbo[] models, float f)
 	{
@@ -98,6 +106,7 @@ public class ModelGun extends ModelBase
 		flip(ammoModel);
 		flip(slideModel);
 		flip(pumpModel);
+		flip(minigunBarrelModel);
 	}	
 	
 	protected void flip(ModelRendererTurbo[] model)
@@ -120,6 +129,7 @@ public class ModelGun extends ModelBase
 		translate(ammoModel, x, y, z);
 		translate(slideModel, x, y, z);
 		translate(pumpModel, x, y, z);
+		translate(minigunBarrelModel, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)

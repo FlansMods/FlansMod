@@ -22,3 +22,6 @@ Mode FullAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Mp40
+Texture Mp40
+ModelScale 0.8

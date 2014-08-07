@@ -2,12 +2,13 @@ package com.flansmod.client.model;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
-
+import com.flansmod.client.FlansModClient;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.Team;
@@ -29,9 +30,19 @@ public class RenderFlag extends Render
 	{
 		bindEntityTexture(entity);
 		EntityFlag flag = (EntityFlag)entity;
-		Team team = flag.getTeam();
+		int teamID = flag.getTeamID();
+		Team team = FlansModClient.getTeam(teamID);
 		if(team == null)
-			GL11.glColor3f(1F, 1F, 1F);
+		{
+			//Give each team a default colour
+			switch(teamID)
+			{
+			case 0 : GL11.glColor3f(0x80 / 255F, 0x80 / 255F, 0x80 / 255F); break; //No team
+			case 1 : GL11.glColor3f(0x40 / 255F, 0x40 / 255F, 0x40 / 255F); break; //Spectators 
+			case 2 : GL11.glColor3f(0xa1 / 255F, 0x7f / 255F, 0xff / 255F); break; //Team 1
+			case 3 : GL11.glColor3f(0xff / 255F, 0x7f / 255F, 0xb6 / 255F); break; //Team 2
+			}
+		}
 		else 
 		{
 			int colour = team.teamColour;

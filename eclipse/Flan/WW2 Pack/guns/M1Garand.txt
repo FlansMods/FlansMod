@@ -23,3 +23,6 @@ Mode SemiAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.M1Garand
+Texture M1Garand
+ModelScale 0.7

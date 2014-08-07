@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -12,15 +16,11 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 public class Team extends InfoType
 {
 	public static List<Team> teams = new ArrayList<Team>();
 	public List<String> members = new ArrayList<String>();
-	public List<ITeamBase> bases = new ArrayList<ITeamBase>();
+	//public List<ITeamBase> bases = new ArrayList<ITeamBase>();
 	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
 	public static Team spectators;
@@ -161,6 +161,7 @@ public class Team extends InfoType
 		return null;
 	}
 	
+	/*
 	//Called both by ops and the gametype
 	public void addBase(ITeamBase base)
 	{
@@ -172,6 +173,7 @@ public class Team extends InfoType
 	{
 		bases.remove(base);
 	}
+	*/
 	
 	public void removePlayer(EntityPlayer player)
 	{
@@ -201,7 +203,7 @@ public class Team extends InfoType
 			team.members.removeAll(list);
 		}
 		members.add(username);
-		PlayerHandler.getPlayerData(username).team = this;
+		PlayerHandler.getPlayerData(username).newTeam = PlayerHandler.getPlayerData(username).team = this;
 		return username;
 	}
 	

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelBase;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public class GrenadeType extends InfoType 
 {

@@ -1,8 +1,5 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerHandler;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerHandler;
 
 public class EntityFlag extends Entity implements ITeamObject {
 	
@@ -41,7 +41,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(2, new String("none"));
+		dataWatcher.addObject(2, new Byte((byte)0));
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("Base", base.getID());
+		tags.setInteger("Base", base == null ? -1 : base.getBaseID());
 	}
 
 	@Override
@@ -95,18 +95,16 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 
 	@Override
-	public void onBaseSet(Team newOwners) 
+	public void onBaseSet(int newTeamID) 
 	{
-		if(newOwners != null)
-			dataWatcher.updateObject(2, newOwners.shortName);
-		else dataWatcher.updateObject(2, "none");
+		dataWatcher.updateObject(2, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
 	@Override
-	public void onBaseCapture(Team newOwners) 
+	public void onBaseCapture(int newTeamID) 
 	{
-		onBaseSet(newOwners);
+		onBaseSet(newTeamID);
 	}
 
 	@Override
@@ -121,8 +119,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		if(base != null)
 		{
 			base.addObject(this);
-			Team owner = base.getOwner();
-			onBaseSet(owner);
+			onBaseSet(base.getOwnerID());
 		}
 	}
 
@@ -150,16 +147,11 @@ public class EntityFlag extends Entity implements ITeamObject {
 		return posZ;
 	}
 
-	public String getTeamName()
+	public int getTeamID()
 	{
-		return dataWatcher.getWatchableObjectString(2);
+		return dataWatcher.getWatchableObjectByte(2);
 	}
-	
-	public Team getTeam()
-	{
-		return Team.getTeam(getTeamName());
-	}
-	
+		
 	@Override
 	public boolean isSpawnPoint()
 	{
@@ -169,8 +161,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
     public boolean interactFirst(EntityPlayer player) //interact
     {
+    	/* TODO : Check the generalised code in TeamsManager works
     	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
+    		*/
         return false;
     }
 	
@@ -180,4 +174,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;
     }
+
+	@Override
+	public boolean forceChunkLoading() 
+	{
+		return false;
+	}
 }

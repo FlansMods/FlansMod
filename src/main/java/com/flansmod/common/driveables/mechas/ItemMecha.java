@@ -2,26 +2,27 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableData;
-import com.flansmod.common.driveables.EnumDriveablePart;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.EnumType;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveableData;
+import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.parts.PartType;
+import com.flansmod.common.types.EnumType;
 
 public class ItemMecha extends Item {
 	
@@ -64,6 +65,7 @@ public class ItemMecha extends Item {
 		{
 			stack.stackTagCompound = new NBTTagCompound();
 			stack.stackTagCompound.setString("Type", type.shortName);
+			stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
 		}
 		return stack.stackTagCompound;
 	}

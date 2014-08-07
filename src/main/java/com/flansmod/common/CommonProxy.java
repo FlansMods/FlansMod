@@ -29,9 +29,8 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
+import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.types.EnumType;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy
 {
@@ -363,5 +362,10 @@ public class CommonProxy
 	public boolean keyDown(int keycode)
 	{
 		return false;
+	}
+
+	public void buyArmour(String shortName, int piece, ArmourBoxType type) 
+	{
+
 	}
 }

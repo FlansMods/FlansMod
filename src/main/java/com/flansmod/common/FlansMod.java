@@ -17,9 +17,26 @@ import java.util.zip.ZipInputStream;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.config.Configuration;
+
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
@@ -48,11 +65,12 @@ import com.flansmod.common.guns.ItemGrenade;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
-import com.flansmod.common.guns.boxes.ItemGunBox;
 import com.flansmod.common.network.PacketHandler;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
+import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
+import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.BlockSpawner;
 import com.flansmod.common.teams.ChunkLoadingHandler;
 import com.flansmod.common.teams.CommandTeams;
@@ -73,30 +91,22 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
+    public static Configuration configFile;
 	public static final String MODID = "flansmod";
 	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
+    public static int generalConfigInteger = 32;
+    public static String generalConfigString = "Hello!";
+    public static boolean generalConfigBoolean = false;
+    public static int teamsConfigInteger = 32;
+    public static String teamsConfigString = "Hello!";
+    public static boolean teamsConfigBoolean = false;
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
 	public static CommonProxy proxy;
 	//A standardised ticker for all bits of the mod to call upon if they need one
@@ -107,7 +117,7 @@ public class FlansMod
 	public static final float driveableUpdateRange = 200F;
 	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
-	public static Team spectators = new Team("spectators", "Spectators", 0xffffff, '7');
+	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
 
 	//Handlers
 	public static final PacketHandler packetHandler = new PacketHandler();
@@ -134,15 +144,19 @@ public class FlansMod
 	public static ArrayList<ItemGrenade> grenadeItems = new ArrayList<ItemGrenade>();
 	public static ArrayList<ItemTool> toolItems = new ArrayList<ItemTool>();
 	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
+	public static ArrayList<BlockArmourBox> armourBoxBlocks = new ArrayList<BlockArmourBox>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
+
 	
 	/** The mod pre-initialiser method */
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		log("Preinitialising Flan's mod.");
-		
+        configFile = new Configuration(event.getSuggestedConfigurationFile());
+        syncConfig();
+
 		//TODO : Load properties
 		//configuration = new Configuration(event.getSuggestedConfigurationFile());
 		//loadProperties();
@@ -228,18 +242,18 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityGrenade.class, "Grenade", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
 
-		
 		//Register MGs and AA guns
 		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
-		
-		
+
 		//Register the chunk loader 
 		//TODO : Re-do chunk loading
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
-		
+
+		//Config
+        FMLCommonHandler.instance().bus().register(INSTANCE);
 		log("Loading complete.");
 	}
 	
@@ -250,8 +264,7 @@ public class FlansMod
 		packetHandler.postInitialise();
 		
 		hooks.hook();
-		
-		
+				
 		/* TODO : ICBM
 		isICBMSentryLoaded = Loader.instance().isModLoaded("ICBM|Sentry");
 		
@@ -266,6 +279,12 @@ public class FlansMod
 		CommandHandler handler = ((CommandHandler)FMLCommonHandler.instance().getSidedDelegate().getServer().getCommandManager());
 		handler.registerCommand(new CommandTeams());
 	}
+
+    @SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+        if(eventArgs.modID.equals(MODID))
+            syncConfig();
+    }
 	
 	/** Reads type files from all content packs */
 	private void getTypeFiles(List<File> contentPacks)
@@ -358,6 +377,7 @@ public class FlansMod
 					}
 					while(zipEntry != null);
 					reader.close();
+                    zip.close();
 					zipStream.close();
 				}
 				catch(IOException e)
@@ -420,6 +440,7 @@ public class FlansMod
 					case tool : toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setUnlocalizedName(infoType.shortName)); break;
 					case box : gunBoxBlocks.add((BlockGunBox)new BlockGunBox((GunBoxType)infoType).setBlockName(infoType.shortName)); break;
 					case armour : armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case armourBox : armourBoxBlocks.add((BlockArmourBox)new BlockArmourBox((ArmourBoxType)infoType).setBlockName(infoType.shortName)); break; 
 					case playerClass : break;
 					case team : break;
 					default : log("Unrecognised type."); break;
@@ -440,7 +461,20 @@ public class FlansMod
 	{
 		return INSTANCE.packetHandler;
 	}
-	
+
+    public static void syncConfig() {
+        generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+        generalConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, generalConfigBoolean, "A Boolean!");
+
+        teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
+        teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+
+        if(configFile.hasChanged())
+            configFile.save();
+    }
+
 	//TODO : Proper logger
 	public static void log(String string) 
 	{

@@ -22,3 +22,5 @@ Mode FullAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Mp44
+Texture Mp44

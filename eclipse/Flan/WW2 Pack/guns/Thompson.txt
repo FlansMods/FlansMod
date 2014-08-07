@@ -22,3 +22,6 @@ Mode FullAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Thompson
+Texture Thompson
+ModelScale

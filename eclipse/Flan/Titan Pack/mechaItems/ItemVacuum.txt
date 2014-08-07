@@ -1,6 +1,6 @@
 Name Item Vacuum
 //Description for hover text. Underscores represent new lines.
-Description Adds all items mined by_the mecha to its inventory
+Description Adds all items mined by the_mecha to its inventory
 ShortName mechaItemVacuum
 Icon ItemVacuum
 //Colour in Red, Green, Blue, each going up to 255.

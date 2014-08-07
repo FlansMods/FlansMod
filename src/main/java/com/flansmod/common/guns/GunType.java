@@ -3,20 +3,21 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.flansmod.client.model.ModelGun;
-import com.flansmod.client.model.ModelMG;
-import com.flansmod.client.model.ModelMecha;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.types.TypeFile;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.client.model.ModelGun;
+import com.flansmod.client.model.ModelMG;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 
 public class GunType extends InfoType implements IScope
 {
@@ -48,7 +49,9 @@ public class GunType extends InfoType implements IScope
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
-		
+	/** The amount of knockback to impact upon the player per shot */
+	public float knockback = 0F;	
+	
 	//Sounds
 	/** The sound played upon shooting */
 	public String shootSound;
@@ -58,7 +61,20 @@ public class GunType extends InfoType implements IScope
 	public boolean distortSound = true;
 	/** The sound to play upon reloading */
 	public String reloadSound;
+	
+	//Looping sounds
+	/** Whether the looping sounds should be used. Automatically set if the player sets any one of the following sounds */
+	public boolean useLoopingSounds = false;
+	/** Played when the player starts to hold shoot */
+	public String warmupSound;
+	public int warmupSoundLength = 20;
+	/** Played in a loop until player stops holding shoot */
+	public String loopedSound;
+	public int loopedSoundLength = 20;
+	/** Played when the player stops holding shoot */
+	public String cooldownSound;
 
+	
 	/** The sound to play upon weapon swing */
 	public String meleeSound;
 	/** The sound to play while holding the weapon in the hand*/
@@ -105,6 +121,12 @@ public class GunType extends InfoType implements IScope
 	/** The number of generic attachment slots there are on this gun */
 	public int numGenericAttachmentSlots = 0;
 	
+	//Paintjobs
+	/** The list of all available paintjobs for this gun */
+	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
+	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
+	public Paintjob defaultPaintjob;
+	
 	/** The static list of all guns */
 	public static List<GunType> guns = new ArrayList<GunType>();
 
@@ -112,6 +134,19 @@ public class GunType extends InfoType implements IScope
 	{
 		super(file);
 		guns.add(this);
+	}
+	
+	@Override
+	public void read(TypeFile file)
+	{
+		super.read(file);
+		//After all lines have been read, set up the default paintjob
+		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
+		//Move to a new list to ensure that the default paintjob is always first
+		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
+		newPaintjobList.add(defaultPaintjob);
+		newPaintjobList.addAll(paintjobs);
+		paintjobs = newPaintjobList;
 	}
 	
 	@Override
@@ -130,10 +165,13 @@ public class GunType extends InfoType implements IScope
 				reloadTime = Integer.parseInt(split[1]);
 			if (split[0].equals("Recoil"))
 				recoil = Integer.parseInt(split[1]);
+			if (split[0].equals("Knockback"))
+				knockback = Float.parseFloat(split[1]);
 			if (split[0].equals("Accuracy") || split[0].equals("Spread"))
 				bulletSpread = Float.parseFloat(split[1]);
 			if (split[0].equals("NumBullets"))
 				numBullets = Integer.parseInt(split[1]);
+			//Sounds
 			if (split[0].equals("ShootDelay"))
 				shootDelay = Integer.parseInt(split[1]);
 			if (split[0].equals("SoundLength"))
@@ -161,9 +199,31 @@ public class GunType extends InfoType implements IScope
 			{
 				meleeSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
-			}	
+			}
+			//Looping sounds
+			if (split[0].equals("WarmupSound"))
+			{
+				warmupSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			if (split[0].equals("WarmupSoundLength"))
+				warmupSoundLength = Integer.parseInt(split[1]);
+			if (split[0].equals("LoopedSound") || split[0].equals("SpinSound"))
+			{
+				loopedSound = split[1];
+				useLoopingSounds = true;
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			if (split[0].equals("LoopedSoundLength") || split[0].equals("SpinSoundLength"))
+				loopedSoundLength = Integer.parseInt(split[1]);
+			if (split[0].equals("CooldownSound"))
+			{
+				cooldownSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
+			}
+			//Modes and zoom settings
 			if (split[0].equals("Mode"))
-				mode = split[1].equals("FullAuto") ? EnumFireMode.FULLAUTO : EnumFireMode.SEMIAUTO;
+				mode = EnumFireMode.getFireMode(split[1]);
 			if (split[0].equals("Scope"))
 			{
 				hasScopeOverlay = true;
@@ -234,12 +294,38 @@ public class GunType extends InfoType implements IScope
 				allowGripAttachments = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("NumGenericAttachmentSlots"))
 				numGenericAttachmentSlots = Integer.parseInt(split[1]);
+			
+			//Paintjobs
+			if(split[0].toLowerCase().equals("paintjob"))
+			{
+				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
+				for(int i = 0; i < (split.length - 3) / 2; i++)
+					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
+				paintjobs.add(new Paintjob(split[1], split[2], dyeStacks));
+			}
 		} 
 		catch (Exception e)
 		{
 			System.out.println("Reading gun file failed.");
 			e.printStackTrace();
 		}
+		
+		
+	}
+	
+	/** Return a dye damage value from a string name */
+	private int getDyeDamageValue(String dyeName)
+	{
+		int damage = -1;
+		for(int i = 0; i < ItemDye.field_150923_a.length; i++)
+		{
+			if(ItemDye.field_150923_a[i].equals(dyeName))
+				damage = i;
+		}
+		if(damage == -1)
+			FlansMod.log("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
+		
+		return damage;
 	}
 	
 	public boolean isAmmo(BulletType type)
@@ -448,5 +534,15 @@ public class GunType extends InfoType implements IScope
 				return gun;
 		}
 		return null;
+	}
+	
+	public Paintjob getPaintjob(String s)
+	{
+		for(Paintjob paintjob : paintjobs)
+		{
+			if(paintjob.iconName.equals(s))
+				return paintjob;
+		}
+		return defaultPaintjob;
 	}
 }

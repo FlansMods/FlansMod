@@ -289,6 +289,26 @@
 		"sounds" : [ "flansmod:Type100Shoot" ]
 	},
 	
+	"Fg42Reload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Fg42Reload" ]
+	},
+	
+	"Fg42Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Fg42Shoot" ]
+	},
+	
+	"M3A1Reload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M3A1Reload" ]
+	},
+	
+	"M3A1Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M3A1Shoot" ]
+	},
+	
 	"webleyReload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:webleyReload" ]

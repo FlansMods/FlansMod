@@ -1,0 +1,7 @@
+Name Juggernaut Heavy Boots
+ShortName juggernautBoots
+Icon JuggernautBoots
+Colour 255 255 255
+Type Boots
+Defence 0.1
+ArmourTexture Juggernaut

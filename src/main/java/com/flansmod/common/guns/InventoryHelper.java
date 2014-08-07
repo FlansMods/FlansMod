@@ -1,12 +1,9 @@
 package com.flansmod.common.guns;
 
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ReportedException;
 
 /** Adds access to the InventoryPlayer stack combination methods for arbitrary inventories */
 public class InventoryHelper 

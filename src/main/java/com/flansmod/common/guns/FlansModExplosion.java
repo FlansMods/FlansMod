@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
@@ -26,7 +24,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+
+import com.flansmod.common.types.InfoType;
 
 public class FlansModExplosion extends Explosion 
 {
@@ -126,8 +127,8 @@ public class FlansModExplosion extends Explosion
         int l1 = MathHelper.floor_double(explosionY + explosionSize + 1.0D);
         int i2 = MathHelper.floor_double(explosionZ - explosionSize - 1.0D);
         int j2 = MathHelper.floor_double(explosionZ + explosionSize + 1.0D);
-        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getAABBPool().getAABB(i, k, i2, j, l1, j2));
-        Vec3 vec3 = worldObj.getWorldVec3Pool().getVecFromPool(explosionX, explosionY, explosionZ);
+        List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(i, k, i2, j, l1, j2));
+        Vec3 vec3 = Vec3.createVectorHelper(explosionX, explosionY, explosionZ);
 
         for (int k2 = 0; k2 < list.size(); ++k2)
         {
@@ -156,7 +157,7 @@ public class FlansModExplosion extends Explosion
 
                     if (entity instanceof EntityPlayer)
                     {
-                    	playerLocations.put((EntityPlayer)entity, worldObj.getWorldVec3Pool().getVecFromPool(d0 * d10, d1 * d10, d2 * d10));
+                    	playerLocations.put((EntityPlayer)entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10));
                     }
                 }
             }

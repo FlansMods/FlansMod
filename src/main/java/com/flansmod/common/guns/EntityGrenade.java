@@ -1,20 +1,9 @@
 package com.flansmod.common.guns;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.List;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
+import io.netty.buffer.ByteBuf;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -26,10 +15,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 {
@@ -122,9 +121,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 					if(obj instanceof EntityLivingBase && getDistanceToEntity((Entity)obj) < type.livingProximityTrigger)
 					{
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
-						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentGametype != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
+						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
 						{
-							if(!TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
 								continue;
 						}
 						detonate();
@@ -277,10 +276,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
 					continue;
 				if(obj instanceof EntityLivingBase)
-				{
-					System.out.println("Damage: " + (type.hitEntityDamage * motVec.lengthSquared() * 3));
 					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
-				}
 			}
 		}
 	

@@ -1,5 +1,8 @@
 package com.flansmod.client.gui;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,14 +13,9 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.boxes.GunBoxType;
-
 import cpw.mods.fml.client.FMLClientHandler;
+
+import com.flansmod.common.guns.boxes.GunBoxType;
 
 public class GuiGunBox extends GuiScreen
 {
@@ -30,7 +28,6 @@ public class GuiGunBox extends GuiScreen
 	private int guiOriginX;
 	private int guiOriginY;
 	private int scroll;
-	private long lastTime;
 	
 	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{
@@ -39,18 +36,18 @@ public class GuiGunBox extends GuiScreen
 		this.type = type;
 		page = 0;
 	}
+	
+	@Override
+	public void updateScreen()
+	{
+		super.updateScreen();
+		scroll++;
+	}
 
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		if (newTime > lastTime)
-		{
-			lastTime = newTime;
-			if (newTime % 40 == 0)
-				scroll++;
-		}
-		ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRenderer;
@@ -120,7 +117,7 @@ public class GuiGunBox extends GuiScreen
 			int startPart = 0;
 			if (numParts >= 4)
 			{
-				startPart = scroll % (numParts - 2);
+				startPart = (scroll / 40) % (numParts - 2);
 			}
 			for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 			{
@@ -132,7 +129,7 @@ public class GuiGunBox extends GuiScreen
 				startPart = 0;
 				if (numParts >= 4)
 				{
-					startPart = scroll % (numParts - 2);
+					startPart = (scroll / 40) % (numParts - 2);
 				}
 				for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 				{
@@ -145,7 +142,7 @@ public class GuiGunBox extends GuiScreen
 				startPart = 0;
 				if (numParts >= 4)
 				{
-					startPart = scroll % (numParts - 2);
+					startPart = (scroll / 40) % (numParts - 2);
 				}
 				for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 				{
@@ -174,6 +171,7 @@ public class GuiGunBox extends GuiScreen
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
+		RenderHelper.enableGUIStandardItemLighting();
 		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 		GL11.glDisable(GL11.GL_LIGHTING);

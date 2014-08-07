@@ -5,15 +5,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.teams.TeamsManager.TeamsMap;
-
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 
 public class CommandTeams extends CommandBase 
 {
@@ -41,10 +38,23 @@ public class CommandTeams extends CommandBase
 			else sendHelpInformation(sender, 1);
 			return;
 		}
+		//On / off
 		if(split[0].equals("off"))
 		{
-			teamsManager.currentGametype = null;
+			teamsManager.currentRound = null;
+			teamsManager.enabled = false;
 			TeamsManager.messageAll("Flan's Teams Mod disabled");
+			return;
+		}
+		if(split[0].equals("on"))
+		{
+			teamsManager.enabled = true;
+			TeamsManager.messageAll("Flan's Teams Mod enabled");
+			return;
+		}
+		if(!teamsManager.enabled)
+		{
+			sender.addChatMessage(new ChatComponentText("Teams mod is disabled. Try /teams on"));
 			return;
 		}
 		if(split[0].equals("survival"))
@@ -83,12 +93,14 @@ public class CommandTeams extends CommandBase
 		{
 			sender.addChatMessage(new ChatComponentText("\u00a72Showing all avaliable gametypes"));
 			sender.addChatMessage(new ChatComponentText("\u00a72To pick a gametype, use \"/teams setGametype <gametype>\" with the name in brackets"));
-			for(Gametype gametype : Gametype.gametypes)
+			for(Gametype gametype : Gametype.gametypes.values())
 			{
 				sender.addChatMessage(new ChatComponentText("\u00a7f" + gametype.name + " (" + gametype.shortName + ")"));
 			}
 			return;
 		}
+		/*
+		No longer used
 		if(split[0].equals("setGametype"))
 		{
 			if(split.length != 2)
@@ -132,7 +144,7 @@ public class CommandTeams extends CommandBase
 			}
 			gametype.initGametype();
 			return;
-		}
+		}*/
 		if(split[0].equals("listMaps"))
 		{
 			if(teamsManager.maps == null)
@@ -140,11 +152,10 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("The map list is null"));
 				return;
 			}
-			sender.addChatMessage(new ChatComponentText("\u00a72Listing maps and corresponding IDs"));
-			for(int i = 0; i < teamsManager.maps.size(); i++)
+			sender.addChatMessage(new ChatComponentText("\u00a72Listing maps"));
+			for(TeamsMap map : teamsManager.maps.values())
 			{
-				TeamsMap map = teamsManager.maps.get(i);
-				sender.addChatMessage(new ChatComponentText((map == teamsManager.currentMap ? "\u00a74" : "") + i + ". " + map.name + " (" + map.shortName + ")"));
+				sender.addChatMessage(new ChatComponentText((teamsManager.currentRound != null && map == teamsManager.currentRound.map ? "\u00a74" : "") + map.name + " (" + map.shortName + ")"));
 			}
 			return;
 		}
@@ -161,7 +172,7 @@ public class CommandTeams extends CommandBase
 			{
 				name += " " + split[i];
 			}
-			teamsManager.maps.add(new TeamsMap(shortName, name));
+			teamsManager.maps.put(shortName, new TeamsMap(sender.getEntityWorld(), shortName, name));
 			sender.addChatMessage(new ChatComponentText("Added new map : " + name + " (" + shortName + ")"));
 			return;
 		}
@@ -172,14 +183,20 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("You need to specify a map's short name"));
 				return;
 			}
-			TeamsMap map = teamsManager.getTeamsMap(split[1]);
-			if(map != null)
+			if(teamsManager.maps.containsKey(split[1]))
 			{
-				teamsManager.maps.remove(map);
+				teamsManager.maps.remove(split[1]);
+				sender.addChatMessage(new ChatComponentText("Removed map " + split[1]));
 			}
-			sender.addChatMessage(new ChatComponentText("Removed map " + split[1]));
+			else
+			{
+				sender.addChatMessage(new ChatComponentText("Map (" + split[1] + ") not found"));
+			}
+			
 			return;
 		}
+		/*
+		 * No longer used
 		if(split[0].equals("setMap"))
 		{
 			if(split.length != 2)
@@ -187,7 +204,7 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("You need to specify a map's short name"));
 				return;
 			}
-			TeamsMap map = teamsManager.getTeamsMap(split[1]);
+			TeamsMap map = teamsManager.maps.get(split[1]);
 			if(map != null)
 			{
 				TeamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
@@ -217,7 +234,8 @@ public class CommandTeams extends CommandBase
 			}
 			return;
 		}
-		if(split[0].equals("listAllTeams"))
+		*/
+		if(split[0].equals("listTeams") || split[0].equals("listAllTeams"))
 		{
 			if(Team.teams.size() == 0)
 			{
@@ -232,6 +250,8 @@ public class CommandTeams extends CommandBase
 			}
 			return;
 		}
+		/*
+		 * No longer used
 		if(split[0].equals("setTeams"))
 		{
 			if(teamsManager.currentGametype == null || teamsManager.teams == null)
@@ -270,6 +290,7 @@ public class CommandTeams extends CommandBase
 			TeamsManager.messageAll("\u00a72" + sender.getCommandSenderName() + "\u00a7f changed the teams to be " + teamList);
 			return;
 		}
+		*/
 		if(split[0].equals("getSticks") || split[0].equals("getOpSticks") || split[0].equals("getOpKit"))
 		{
 			EntityPlayerMP player = getPlayer(sender.getCommandSenderName());
@@ -294,18 +315,39 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
 				return;
 			}
-			TeamsManager.useRotation = Boolean.parseBoolean(split[1]);
-			sender.addChatMessage(new ChatComponentText("Map rotation is now " + (TeamsManager.useRotation ? "enabled" : "disabled")));
+			TeamsManager.voting = !Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Voting is now " + (TeamsManager.voting ? "enabled" : "disabled")));
 			return;
 		}
-		if(split[0].equals("listRotation"))
+		if(split[0].equals("voting"))
 		{
-			sender.addChatMessage(new ChatComponentText("\u00a72Current Map Rotation"));
-			for(int i = 0; i < TeamsManager.getInstance().rotation.size(); i++)
+			if(split.length != 2)
 			{
-				TeamsManager.RotationEntry entry = TeamsManager.getInstance().rotation.get(i);
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			TeamsManager.voting = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Voting is now " + (TeamsManager.voting ? "enabled" : "disabled")));
+			return;
+		}
+		if(split[0].equals("listRounds") || split[0].equals("listRotation"))
+		{
+			sender.addChatMessage(new ChatComponentText("\u00a72Current Round List"));
+			for(int i = 0; i < TeamsManager.getInstance().rounds.size(); i++)
+			{
+				TeamsRound entry = TeamsManager.getInstance().rounds.get(i);
+				if(entry.map == null)
+				{
+					sender.addChatMessage(new ChatComponentText("Round had null map"));
+					return;
+				}
+				if(entry.gametype == null)
+				{
+					sender.addChatMessage(new ChatComponentText("Round had null gametype"));
+					return;
+				}
 				String s = i + ". " + entry.map.shortName + ", " + entry.gametype.shortName;
-				if(i == TeamsManager.getInstance().currentRotationEntry)
+				if(entry == TeamsManager.getInstance().currentRound)
 				{
 					s = "\u00a74" + s;
 				}
@@ -313,11 +355,13 @@ public class CommandTeams extends CommandBase
 				{
 					s += ", " + entry.teams[j].shortName;
 				}
+				s += ", " + entry.timeLimit;
+				s += ", " + entry.scoreLimit;
 				sender.addChatMessage(new ChatComponentText(s));
 			}
 			return;
 		}
-		if(split[0].equals("removeMapFromRotation") || split[0].equals("removeFromRotation") || split[0].equals("removeRotation"))
+		if(split[0].equals("removeRound") || split[0].equals("removeMapFromRotation") || split[0].equals("removeFromRotation") || split[0].equals("removeRotation"))
 		{
 			if(split.length != 2)
 			{
@@ -325,22 +369,32 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			int map = Integer.parseInt(split[1]);
-			sender.addChatMessage(new ChatComponentText("Removed map " + map + " (" + TeamsManager.getInstance().rotation.get(map).map.shortName + ") from rotation"));
-			TeamsManager.getInstance().rotation.remove(map);
+			sender.addChatMessage(new ChatComponentText("Removed map " + map + " (" + TeamsManager.getInstance().rounds.get(map).map.shortName + ") from rotation"));
+			TeamsManager.getInstance().rounds.remove(map);
 			return;
 		}
-		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation"))
+		if(split[0].equals("addMapToRotation") || split[0].equals("addToRotation") || split[0].equals("addRotation") || split[0].equals("addRound"))
 		{
-			if(split.length < 5)
+			if(split.length < 7)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ..."));	
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <TimeLimit> <ScoreLimit>"));	
 				return;
 			}
-			TeamsMap map = TeamsManager.getInstance().getTeamsMap(split[1]);
-			Gametype gametype = Gametype.getGametype(split[2]);
-			if(split.length != 3 + gametype.numTeamsRequired)
+			TeamsMap map = TeamsManager.getInstance().maps.get(split[1]);
+			if(map == null)
 			{
-				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ..."));	
+				sender.addChatMessage(new ChatComponentText("Could not find map : " + split[1]));	
+				return;
+			}
+			Gametype gametype = Gametype.getGametype(split[2]);
+			if(gametype == null)
+			{
+				sender.addChatMessage(new ChatComponentText("Could not find gametype : " + split[2]));	
+				return;
+			}
+			if(split.length != 5 + gametype.numTeamsRequired)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <Map> <Gametype> <Team1> <Team2> ... <ScoreLimit> <TimeLimit>"));	
 				return;
 			}
 			Team[] teams = new Team[gametype.numTeamsRequired];
@@ -349,14 +403,22 @@ public class CommandTeams extends CommandBase
 				teams[i] = Team.getTeam(split[3 + i]);
 			}
 			sender.addChatMessage(new ChatComponentText("Added map (" + map.shortName + ") to rotation"));
-			TeamsManager.getInstance().rotation.add(new TeamsManager.RotationEntry(map, gametype, teams));
+			TeamsManager.getInstance().rounds.add(new TeamsRound(map, gametype, teams, Integer.parseInt(split[3 + gametype.numTeamsRequired]), Integer.parseInt(split[4 + gametype.numTeamsRequired])));
+			return;
+		}
+		if(split[0].equals("start") || split[0].equals("begin"))
+		{
+			teamsManager.start();
+			sender.addChatMessage(new ChatComponentText("Started teams map rotation"));
 			return;
 		}
 		if(split[0].equals("nextMap"))
 		{
-			teamsManager.switchToNextGametype();
+			teamsManager.roundTimeLeft = 1;
 			return;
 		}
+		/*
+		 * Ignore
 		if(split[0].equals("goToMap"))
 		{
 			if(split.length != 2)
@@ -371,6 +433,7 @@ public class CommandTeams extends CommandBase
 			teamsManager.switchToNextGametype();
 			return;
 		}
+		*/
 		if(split[0].equals("forceAdventure") || split[0].equals("forceAdventureMode"))
 		{
 			if(split.length != 2)
@@ -559,9 +622,31 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Vehicles will " + (TeamsManager.driveablesBreakBlocks ? "now" : "no longer") + " break blocks"));
 			return;
 		}
+		if(split[0].equals("scoreDisplayTime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.scoreDisplayTime = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
+			return;
+		}
+		if(split[0].equals("votingTime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.votingTime = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.votingTime / 20 + " seconds"));
+			return;
+		}
 		if(split[0].equals("setVariable"))
 		{
-			if(TeamsManager.getInstance().currentGametype == null)
+			if(TeamsManager.getInstance().currentRound == null)
 			{
 				sender.addChatMessage(new ChatComponentText("There is no gametype to set variables for"));		
 				return;
@@ -571,9 +656,9 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams setVariable <variable> <value>"));	
 				return;
 			}
-			if(TeamsManager.getInstance().currentGametype.setVariable(split[1], split[2]))
-				sender.addChatMessage(new ChatComponentText("Set variable " + split[1] + " in gametype " + TeamsManager.getInstance().currentGametype.shortName + " to " + split[2]));
-			else sender.addChatMessage(new ChatComponentText("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentGametype.shortName));
+			if(TeamsManager.getInstance().currentRound.gametype.setVariable(split[1], split[2]))
+				sender.addChatMessage(new ChatComponentText("Set variable " + split[1] + " in gametype " + TeamsManager.getInstance().currentRound.gametype.shortName + " to " + split[2]));
+			else sender.addChatMessage(new ChatComponentText("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentRound.gametype.shortName));
 			return;
 		}
 		sender.addChatMessage(new ChatComponentText(split[0] + " is not a valid teams command. Try /teams help"));
@@ -600,24 +685,28 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("/teams survival"));
 			sender.addChatMessage(new ChatComponentText("/teams getSticks"));
 			sender.addChatMessage(new ChatComponentText("/teams listGametypes"));
-			sender.addChatMessage(new ChatComponentText("/teams setGametype <name>"));
-			sender.addChatMessage(new ChatComponentText("/teams listAllTeams"));
+			//sender.addChatMessage(new ChatComponentText("/teams setGametype <name>"));
+			//sender.addChatMessage(new ChatComponentText("/teams listAllTeams"));
 			sender.addChatMessage(new ChatComponentText("/teams listTeams"));
-			sender.addChatMessage(new ChatComponentText("/teams setTeams <teamName1> <teamName2>"));
+			//sender.addChatMessage(new ChatComponentText("/teams setTeams <teamName1> <teamName2>"));
+			sender.addChatMessage(new ChatComponentText("/teams addMap <shortName> <longName>"));
+			sender.addChatMessage(new ChatComponentText("/teams listMaps"));
+			sender.addChatMessage(new ChatComponentText("/teams removeMap <shortName>"));
 			break;
 		}
 		case 2 :
 		{
-			sender.addChatMessage(new ChatComponentText("/teams addMap <shortName> <longName>"));
-			sender.addChatMessage(new ChatComponentText("/teams listMaps"));
-			sender.addChatMessage(new ChatComponentText("/teams removeMap <shortName>"));
-			sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
+
+			//sender.addChatMessage(new ChatComponentText("/teams setMap <shortName>"));
 			sender.addChatMessage(new ChatComponentText("/teams useRotation <true / false>"));
-			sender.addChatMessage(new ChatComponentText("/teams addRotation <map> <gametype> <team1> <team2> ..."));
-			sender.addChatMessage(new ChatComponentText("/teams listRotation"));
-			sender.addChatMessage(new ChatComponentText("/teams removeRotation <ID>"));
+			sender.addChatMessage(new ChatComponentText("/teams voting <true / false>"));
+			sender.addChatMessage(new ChatComponentText("/teams addRound <map> <gametype> <team1> <team2> <TimeLimit> <ScoreLimit>"));
+			sender.addChatMessage(new ChatComponentText("/teams listRounds"));
+			sender.addChatMessage(new ChatComponentText("/teams removeRound <ID>"));
 			sender.addChatMessage(new ChatComponentText("/teams nextMap"));			
-			sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));			
+			//sender.addChatMessage(new ChatComponentText("/teams goToMap <ID>"));		
+			sender.addChatMessage(new ChatComponentText("/teams votingTime <time>"));
+			sender.addChatMessage(new ChatComponentText("/teams scoreDisplayTime <time>"));
 			break;
 		}
 		case 3 :
@@ -634,6 +723,7 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("/teams planeLife <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams vehicleLife <time>"));
 			sender.addChatMessage(new ChatComponentText("/teams aaLife <time>"));
+
 			sender.addChatMessage(new ChatComponentText("/teams vehiclesBreakBlocks <true / false>"));		
 			break;
 		}
@@ -642,7 +732,7 @@ public class CommandTeams extends CommandBase
 
 	public EntityPlayerMP getPlayer(String name)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
+		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(name);
 	}
 
 	@Override

@@ -1,0 +1,25 @@
+Name Modern Warfare Armour Box
+ShortName mwArmour
+TopTexture ModernArmourBoxTop
+SideTexture ModernArmourBoxSide
+BottomTexture ModernArmourBoxTop
+Recipe W wood F fiberglass
+WWW
+FFF
+WWW
+//AddArmour
+AddArmour marines Marines
+marineHelmet cloth.8 5
+marineBody cloth.8 8
+marinePants cloth.8 7
+marineBoots cloth.4 4
+AddArmour spetsnaz Spetsnaz
+spetsnazHelmet cloth.13 5
+spetsnazBody cloth.7 8
+spetsnazPants cloth.13 7
+spetsnazBoots cloth.15 4
+AddArmour juggernaut Juggernaut
+juggernautHelmet cloth.13 5 iron 12 fiberglass 12 diamond 2
+juggernautBody cloth.13 8 iron 32 fiberglass 32 leather 16
+juggernautPants cloth.13 7 iron 18 fiberglass 18 leather 8
+juggernautBoots cloth.13 4 iron 8 fiberglass 8 string 8

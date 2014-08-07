@@ -7,9 +7,9 @@
   "mcversion": "${mcversion}",
   "url": "http://www.flansmod.com",
   "updateUrl": "",
-  "authors": ["jamioflan"],
+  "authorList": ["jamioflan"],
   "credits": "All code contributors.",
-  "logoFile": "/flansmod.png",
+  "logoFile": "flansmod.png",
   "screenshots": [],
   "dependencies": []
 }

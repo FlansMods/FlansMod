@@ -17,15 +17,15 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "4.2.3"
+version = "4.4.0"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.2-10.12.1.1060"
+    version = "1.7.10-10.13.0.1180"
     assetDir = "eclipse/assets"
 
-    replace "@ALLOWED_VERSION@", "[4.2,)"
+    replace "@ALLOWED_VERSION@", "[4.4,4.5)"
     replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
@@ -54,53 +54,64 @@ processResources
 version = "${project.minecraft.version}-${project.version}"
 
 task modernWeapons(type: Jar) {
-    baseName = 'Modern Warfare'
-    appendix = 'Content Pack'
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
     from 'eclipse/Flan/Modern Weapons Pack'
+    baseName = 'Modern Warfare'
+    appendix = 'Content Pack'
 }
 
 task nerf(type: Jar) {
-    baseName = 'Nerf'
-    appendix = 'Content Pack'
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/'}
     from 'eclipse/Flan/Nerf Pack'
+    baseName = 'Nerf'
+    appendix = 'Content Pack'
 }
 
 task simpleParts(type: Jar) {
+    from 'eclipse/Flan/Parts Pack'
     baseName = 'Simple Parts'
     appendix = 'Content Pack'
-    from 'eclipse/Flan/Parts Pack'
 }
 
 task titan(type: Jar) {
-    baseName = 'Titan'
-    appendix = 'Content Pack'
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/'}
     from 'eclipse/Flan/Titan Pack'
+    baseName = 'Titan'
+    appendix = 'Content Pack'
+}
+
+task mechaParts(type: Jar) {
+    from 'eclipse/Flan/Mecha Parts Pack'
+    baseName = 'Mecha Parts'
+    appendix = 'Content Pack'
 }
 
 task ww2(type: Jar) {
-    baseName = 'WW2'
-    appendix = 'Content Pack'
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
+    baseName = 'WW2'
+    appendix = 'Content Pack'
 }
 
 task yeOlde(type: Jar) {
-    baseName = 'Ye Olde'
-    appendix = 'Content Pack'
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/'}
     from 'eclipse/Flan/Ye Olde Pack'
+    baseName = 'Ye Olde'
+    appendix = 'Content Pack'
 }
 
 task contentPacks() {
     dependsOn modernWeapons
     dependsOn nerf
     dependsOn simpleParts
+    dependsOn mechaParts
     dependsOn titan
     dependsOn ww2
     dependsOn yeOlde
+}
+
+task clearOutput(type: Delete) {
+    delete 'build/output/'
 }
 
 task outputJar(type: Jar) {
@@ -116,6 +127,7 @@ task outputJar(type: Jar) {
 
 task outputPacks(type: Copy) {
     from ('build/libs/') {
+        include "**/*${version}.jar"
         exclude "**/Flan's Mod*.jar"
     }
     into 'build/output/Flan/'
@@ -123,6 +135,7 @@ task outputPacks(type: Copy) {
 
 build {
     dependsOn contentPacks
+    dependsOn clearOutput
     dependsOn outputJar
     dependsOn outputPacks
 }

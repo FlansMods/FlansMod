@@ -3,6 +3,7 @@ package com.flansmod.client.model;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
+
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class RenderSpawnerBlock implements ISimpleBlockRenderingHandler

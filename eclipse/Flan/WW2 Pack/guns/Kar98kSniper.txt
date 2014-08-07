@@ -22,3 +22,8 @@ Mode SemiAuto
 Scope wwiikar98ksniper
 Deployable False
 DeployedModel None
+Model ww2.Kar98kSniper
+Texture Kar98kSniper
+ModelScale 0.7
+ZoomLevel 6.0
+FOVZoomLevel 1.0

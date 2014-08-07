@@ -3,7 +3,12 @@ build/
 .project
 .gradle/
 .settings/
-eclipse/
+.idea/
+eclipse/*
 bin/
+out/
+*.iml
+*.ipr
+*.iws
 
 !eclipse/Flan/

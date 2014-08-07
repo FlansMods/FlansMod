@@ -8,16 +8,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -2055,6 +2055,17 @@ public class ModelRendererTurbo extends ModelRenderer
 	@Override
 	public void render(float worldScale)
 	{
+		render(worldScale, false);
+	}
+		
+
+	/** 
+	 * Renders the shape
+	 * @param worldScale	The scale of the shape
+	 * @param oldRotateOrder	Whether to use the old rotate order (ZYX) instead of the new one (YZX)
+	 */
+	public void render(float worldScale, boolean oldRotateOrder)
+	{
 		if(field_1402_i)
 		{
 			return;
@@ -2071,19 +2082,23 @@ public class ModelRendererTurbo extends ModelRenderer
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef(rotationPointX * worldScale, rotationPointY * worldScale, rotationPointZ * worldScale);
-			if(rotateAngleY != 0.0F)
+			if(!oldRotateOrder && rotateAngleY != 0.0F)
 			{
 				GL11.glRotatef(rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
 			}
 			if(rotateAngleZ != 0.0F)
 			{
-				GL11.glRotatef(rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
+				GL11.glRotatef((oldRotateOrder ? -1 : 1) * rotateAngleZ * 57.29578F, 0.0F, 0.0F, 1.0F);
 			}
-
+			if(oldRotateOrder && rotateAngleY != 0.0F)
+			{
+				GL11.glRotatef(-rotateAngleY * 57.29578F, 0.0F, 1.0F, 0.0F);
+			}
 			if(rotateAngleX != 0.0F)
 			{
 				GL11.glRotatef(rotateAngleX * 57.29578F, 1.0F, 0.0F, 0.0F);
 			}
+			
 			callDisplayList();
 			if(childModels != null)
 			{

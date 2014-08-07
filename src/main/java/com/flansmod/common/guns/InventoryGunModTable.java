@@ -1,7 +1,5 @@
 package com.flansmod.common.guns;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,8 +47,10 @@ public class InventoryGunModTable extends InventoryBasic
 		{
 			//Create a new NBT tag compound for our gun item
 			NBTTagCompound gunTags = new NBTTagCompound();
-			//Copy the ammo from the old stack
+			//Copy the ammo and paintjob from the old stack
 			gunTags.setTag("ammo", getStackInSlot(0).stackTagCompound.getTag("ammo"));
+			if(getStackInSlot(0).stackTagCompound.getTag("Paint") != null)
+				gunTags.setTag("Paint", getStackInSlot(0).stackTagCompound.getTag("Paint"));
 			
 			//Add each attachment from the inventory to our gun stack
 	    	NBTTagCompound attachmentTags = new NBTTagCompound();

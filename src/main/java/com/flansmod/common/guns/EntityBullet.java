@@ -1,8 +1,8 @@
 package com.flansmod.common.guns;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.List;
+
+import io.netty.buffer.ByteBuf;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,7 +20,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import com.flansmod.client.FlansModClient;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -31,13 +35,6 @@ import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
 
 public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 {
@@ -242,8 +239,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					if(type.breaksGlass && mat == Material.glass)
 					{
 						if(TeamsManager.canBreakGlass)
-							worldObj.setBlockToAir(xTile, yTile, zTile);
-						FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
+                        {
+                            worldObj.setBlockToAir(xTile, yTile, zTile);
+                            FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
+                        }
 					}
 					if(!type.penetratesBlocks)
 					{
@@ -283,8 +282,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
 	
 				//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
-				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-					TeamsManager.getInstance().currentGametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
+				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentRound != null)
+					TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)checkEntity, damagesource);
 				
 				//Attack the entity!
 				if(checkEntity.attackEntityFrom(damagesource, hitDamage))
@@ -455,7 +454,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			type = BulletType.getBullet(typeString);
 		
 		if (ownerName != null && !ownerName.equals("null"))
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(ownerName);
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(ownerName);
 	}
 
 	@Override

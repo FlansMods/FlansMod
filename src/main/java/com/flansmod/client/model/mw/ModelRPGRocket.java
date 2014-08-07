@@ -2,11 +2,10 @@ package com.flansmod.client.model.mw;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+
+import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelRPGRocket extends ModelBase 
 {

@@ -14,7 +14,7 @@ Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
 //Speed Modifier, 1 is player speed
-MoveSpeed 1.7
+MoveSpeed 1.6
 //YOffset
 YOffset 0
 //Fuel Tank Size

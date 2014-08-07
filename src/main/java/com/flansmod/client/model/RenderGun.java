@@ -2,21 +2,22 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.AttachmentType;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
-import com.flansmod.common.guns.ItemGun;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+
 import net.minecraftforge.client.IItemRenderer;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGun;
 
 public class RenderGun implements IItemRenderer
 {
@@ -31,6 +32,7 @@ public class RenderGun implements IItemRenderer
 		{
 		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
 		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null && item.getItem() instanceof ItemGun && ((ItemGun)item.getItem()).type.model != null;
+		default : break;
 		}
 		return false;
 	}
@@ -93,10 +95,17 @@ public class RenderGun implements IItemRenderer
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
+					if(FlansModClient.zoomProgress > 0.9F && gunType.hasScopeOverlay)
+					{
+						GL11.glPopMatrix();
+						return;
+					}
 					float adsSwitch = FlansModClient.lastZoomProgress + (FlansModClient.zoomProgress - FlansModClient.lastZoomProgress) * smoothing;//0F;//((float)Math.sin((FlansMod.ticker) / 10F) + 1F) / 2F;
 					GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
 					GL11.glRotatef(-5F, 0F, 1F, 0F);
 					GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
+					if(gunType.hasScopeOverlay)
+						GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
 					GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
 					GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
 					
@@ -127,11 +136,20 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
 								break;
 							}
-							
+							case RIFLE_TOP :
+							{
+								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(10F * reloadRotate, 0F, 1F, 0F);
+								GL11.glRotatef(-10F * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(0.1F * reloadRotate, -0.2F * reloadRotate, -0.1F * reloadRotate);
+								break;
+							}
+							default : break;
 						}
 					}
 					break;
 				}
+				default : break;
 			}
 			
 			renderGun(item, gunType, f, model, animations, reloadRotate);
@@ -167,7 +185,7 @@ public class RenderGun implements IItemRenderer
 		
 		
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.stackTagCompound.getString("Paint"))));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);
@@ -206,6 +224,17 @@ public class RenderGun implements IItemRenderer
 			}
 			GL11.glPopMatrix();
 			
+			//Render the minigun barrels
+			if(type.mode == EnumFireMode.MINIGUN)
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(model.minigunBarrelOrigin.x, model.minigunBarrelOrigin.y, model.minigunBarrelOrigin.z);
+				GL11.glRotatef(animations.minigunBarrelRotation, 1F, 0F, 0F);
+				GL11.glTranslatef(-model.minigunBarrelOrigin.x, -model.minigunBarrelOrigin.y, -model.minigunBarrelOrigin.z);
+				model.renderMinigunBarrel(f);
+				GL11.glPopMatrix();
+			}
+			
 			//Render the cocking handle
 			
 			//Render the clip
@@ -221,6 +250,7 @@ public class RenderGun implements IItemRenderer
 							shouldRender = false;
 						break;
 					}
+					default: break;
 				}
 				//If it should be rendered, do the transformations required
 				if(shouldRender && animations.reloading && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
@@ -249,6 +279,13 @@ public class RenderGun implements IItemRenderer
 							GL11.glTranslatef(0F, -1F * clipPosition, 0F);
 							break;
 						}
+						case SIDE_CLIP : 
+						{
+							GL11.glRotatef(180F * clipPosition, 0F, 1F, 0F);
+							GL11.glRotatef(60F * clipPosition, 0F, 1F, 0F);
+							GL11.glTranslatef(0.5F * clipPosition, 0F, 0F);
+							break;
+						}
 						case P90 :
 						{
 							GL11.glRotatef(-15F * reloadRotate * reloadRotate, 0F, 0F, 1F);
@@ -265,6 +302,18 @@ public class RenderGun implements IItemRenderer
 							GL11.glRotatef(bulletProgress * 15F, 0F, 1F, 0F);
 							GL11.glRotatef(bulletProgress * 15F, 0F, 0F, 1F);
 							GL11.glTranslatef(bulletProgress * -1F, 0F, bulletProgress * 0.5F);
+							
+							break;
+						}
+						case RIFLE_TOP : 
+						{
+							float thing = clipPosition * model.numBulletsInReloadAnimation;
+							int bulletNum = MathHelper.floor_float(thing);
+							float bulletProgress = thing - bulletNum;
+							
+							GL11.glRotatef(bulletProgress * 55F, 0F, 1F, 0F);
+							GL11.glRotatef(bulletProgress * 95F, 0F, 0F, 1F);
+							GL11.glTranslatef(bulletProgress * -0.1F, bulletProgress * 1F, bulletProgress * 0.5F);
 							
 							break;
 						}
@@ -294,6 +343,8 @@ public class RenderGun implements IItemRenderer
 							}
 							break;
 						}
+						
+						default : break;
 					}
 				}
 

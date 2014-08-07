@@ -3,14 +3,13 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.GunAnimations;
@@ -21,9 +20,6 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 //When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
 //When the server receives one, it is interpreted as a forced reload
@@ -49,6 +45,7 @@ public class PacketReload extends PacketBase
     		{
     			//Set the reload delay
     			data.shootTime = type.reloadTime;
+    			data.reloading = true;
 				//Send reload packet to induce reload effects client side
 				FlansMod.getPacketHandler().sendTo(new PacketReload(), playerEntity);
 				//Play reload sound

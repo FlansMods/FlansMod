@@ -6,35 +6,31 @@ import java.util.HashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class FlansModClient extends FlansMod
 {
@@ -82,7 +78,9 @@ public class FlansModClient extends FlansMod
 	
 	/** Packet containing teams mod information from the server */
 	public static PacketTeamInfo teamInfo;
-		
+	/** When a round ends, the teams score GUI is locked for this length of time */
+	public static int teamsScoreGUILock = 0;	
+	
 	public void load()
 	{		
 		log("Loading Flan's mod client side.");
@@ -135,6 +133,18 @@ public class FlansModClient extends FlansMod
 		
 		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
 			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
+		
+		if(teamInfo != null && teamInfo.timeLeft > 0)
+			teamInfo.timeLeft--;
+		
+		//Teams GUI lock at end of rounds
+		if(teamsScoreGUILock > 0)
+		{
+			teamsScoreGUILock--;
+			if(minecraft.currentScreen == null)
+				minecraft.displayGuiScreen(new GuiTeamScores());
+		}
+		
 		
 		// Guns
 		if (shootTime > 0)
@@ -315,4 +325,19 @@ public class FlansModClient extends FlansMod
 	}
 	
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
+
+	/** Gets the team class from an ID */
+	public static Team getTeam(int spawnerTeamID) 
+	{
+		if(teamInfo == null)
+			return null;
+		else return teamInfo.getTeam(spawnerTeamID);
+	}
+
+	public static boolean isCurrentMap(String map) 
+	{
+		if(teamInfo == null || teamInfo.mapShortName == null)
+			return false;
+		else return teamInfo.mapShortName.equals(map);
+	}
 }

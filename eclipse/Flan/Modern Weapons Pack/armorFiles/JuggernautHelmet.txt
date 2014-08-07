@@ -1,0 +1,7 @@
+Name Juggernaut Heavy Helmet
+ShortName juggernautHelmet
+Icon JuggernautHelmet
+Colour 255 255 255
+Type Hat
+Defence 0.15
+ArmourTexture Juggernaut

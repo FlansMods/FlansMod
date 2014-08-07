@@ -1,6 +1,9 @@
 package com.flansmod.common.guns;
 
+import java.util.HashMap;
 import java.util.List;
+
+import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -20,31 +23,31 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
 import net.minecraftforge.common.util.Constants;
 
-import org.lwjgl.input.Mouse;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
+import com.flansmod.common.types.InfoType;
 import com.google.common.collect.Multimap;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGun extends Item
 {
@@ -52,6 +55,8 @@ public class ItemGun extends Item
 	private static boolean mouseHeld;
 	private static boolean lastMouseHeld;
 	public int soundDelay;
+	
+	public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
 
 	public ItemGun(GunType gun)
 	{
@@ -171,11 +176,11 @@ public class ItemGun extends Item
 				FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true));
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
-			if(type.mode == EnumFireMode.FULLAUTO && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
+			if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !mouseHeld && lastMouseHeld) //Full auto. Send released mouse packet
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false));
 			}
-			if(type.mode == EnumFireMode.FULLAUTO && mouseHeld)
+			if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && mouseHeld)
 			{
 				clientSideShoot((EntityPlayer)entity, itemstack);
 			}
@@ -257,6 +262,8 @@ public class ItemGun extends Item
 		{
 			EntityPlayerMP player = (EntityPlayerMP)entity;
 			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(data == null)
+				return;
 			if(player.inventory.getCurrentItem() != itemstack)
 			{
 				//If the player is no longer holding a gun, emulate a release of the shoot button
@@ -267,6 +274,21 @@ public class ItemGun extends Item
 				return;
 			}
 			if(type.mode == EnumFireMode.FULLAUTO && data.isShooting)
+			{
+				tryToShoot(itemstack, world, player);
+			}
+			if(type.useLoopingSounds && data.isShooting && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloading)
+			{
+				data.loopedSoundDelay = type.loopedSoundLength;
+				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? type.warmupSound : type.loopedSound, false);
+				data.shouldPlayWarmupSound = false;
+			}
+			if(type.useLoopingSounds && !data.isShooting && data.shouldPlayCooldownSound)
+			{
+				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.cooldownSound, false);
+				data.shouldPlayCooldownSound = false;
+			}
+			if(type.mode == EnumFireMode.MINIGUN && data.isShooting && data.minigunSpeed > 15F)
 			{
 				tryToShoot(itemstack, world, player);
 			}
@@ -285,7 +307,7 @@ public class ItemGun extends Item
 	public ItemStack onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean isShooting)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(data.shootClickDelay == 0)
+		if(data != null && data.shootClickDelay == 0)
 		{
 			//Drivers can't shoot
 			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
@@ -296,6 +318,11 @@ public class ItemGun extends Item
 				data.isShooting = false;
 				return tryToShoot(stack, world, player);
 			}
+			//Play the warmup sound for miniguns immediately
+			if(type.useLoopingSounds && isShooting)
+			{
+				data.shouldPlayWarmupSound = true;
+			}
 		}
 		return stack;
 	}
@@ -305,6 +332,7 @@ public class ItemGun extends Item
 		if(type.deployable)
 			return gunStack;
 		PlayerData data = PlayerHandler.getPlayerData(entityplayer);
+		boolean reloading = true;
 		//Shoot delay ticker is at (or below) 0. Try and shoot the next bullet
 		if(data.shootTime <= 0)
 		{
@@ -328,6 +356,7 @@ public class ItemGun extends Item
 				{
 					//Set player shoot delay to be the reload delay
 					data.shootTime = (int)type.getReloadTime(gunStack);
+					data.reloading = true;
 					//Send reload packet to induce reload effects client side
 					FlansMod.getPacketHandler().sendTo(new PacketReload(), entityplayer);
 					//Play reload sound
@@ -339,7 +368,7 @@ public class ItemGun extends Item
 			else if(bulletStack.getItem() instanceof ItemBullet)
 			{
 				//Shoot
-				
+				reloading = false;
 				shoot(gunStack, world, bulletStack, entityplayer);
 				//Damage the bullet item
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
@@ -469,6 +498,10 @@ public class ItemGun extends Item
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 		}
 		PlayerHandler.getPlayerData(entityplayer).shootTime = type.shootDelay;
+		if(type.knockback > 0)
+		{
+			//TODO : Apply knockback		
+		}	
 	}
 
 	/** Deployable guns only */
@@ -538,9 +571,9 @@ public class ItemGun extends Item
 	}
 
 	@Override
-    public Multimap getItemAttributeModifiers()
+    public Multimap getAttributeModifiers(ItemStack stack)
     {
-        Multimap multimap = super.getItemAttributeModifiers();
+        Multimap multimap = super.getAttributeModifiers(stack);
         multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
@@ -581,7 +614,9 @@ public class ItemGun extends Item
     public void getSubItems(Item item, CreativeTabs tabs, List list)
     {
     	ItemStack gunStack = new ItemStack(item, 1, 0);
+    	GunType type = ((ItemGun)item).type;
     	NBTTagCompound tags = new NBTTagCompound();
+    	tags.setString("Paint", type.defaultPaintjob.iconName);
     	gunStack.stackTagCompound = tags;
         list.add(gunStack);
     }
@@ -590,7 +625,25 @@ public class ItemGun extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister icon) 
     {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+        itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	for(Paintjob paintjob : type.paintjobs)
+    	{
+    		icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
+    		//itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	}
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack)
+    {
+    	//For backwards compatibility, give old guns the default paint job
+    	if(stack.stackTagCompound == null)
+    		stack.stackTagCompound = new NBTTagCompound();
+    	if(!stack.stackTagCompound.hasKey("Paint"))
+    		stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
+
+        return icons.get(stack.stackTagCompound.getString("Paint"));
     }
     
     @Override

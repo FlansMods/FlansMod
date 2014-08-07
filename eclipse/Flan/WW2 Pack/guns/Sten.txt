@@ -22,3 +22,6 @@ Mode FullAuto
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Sten
+Texture Sten
+ModelScale 0.7

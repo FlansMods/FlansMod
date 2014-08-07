@@ -2,13 +2,13 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.tools.EntityParachute;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.tools.EntityParachute;
 
 public class RenderParachute extends Render 
 {

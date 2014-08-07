@@ -2,17 +2,17 @@ package com.flansmod.client;
 
 import java.util.HashMap;
 
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.types.InfoType;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.types.InfoType;
 
 public class FlansModResourceHandler 
 {
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
+	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();
 	
@@ -70,5 +70,16 @@ public class FlansModResourceHandler
 		soundMap.put(sound, resLoc);
 		return resLoc;
 		//FMLClientHandler.instance().getClient().getSoundHandler().playSound("flansmod:" + sound + ".ogg");   
+	}
+
+	public static ResourceLocation getPaintjobTexture(Paintjob paintjob) 
+	{
+		if(paintjobMap.containsKey(paintjob))
+		{
+			return paintjobMap.get(paintjob);
+		}
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + paintjob.textureName + ".png");
+		paintjobMap.put(paintjob, resLoc);
+		return resLoc;
 	}
 }

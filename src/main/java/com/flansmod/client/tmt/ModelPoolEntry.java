@@ -1,7 +1,10 @@
 package com.flansmod.client.tmt;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class ModelPoolEntry
 {

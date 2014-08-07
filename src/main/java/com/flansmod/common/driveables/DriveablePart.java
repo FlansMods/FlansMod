@@ -1,10 +1,9 @@
 package com.flansmod.common.driveables;
 
-import com.flansmod.client.debug.EntityDebugAABB;
-import com.flansmod.client.debug.EntityDebugVector;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.vector.Vector3f;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class DriveablePart 
 {

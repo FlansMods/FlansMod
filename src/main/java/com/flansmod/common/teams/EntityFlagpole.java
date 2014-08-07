@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.teams.TeamsManager.TeamsMap;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,12 +19,16 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
-public class EntityFlagpole extends Entity implements ITeamBase {
-	
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+
+public class EntityFlagpole extends Entity implements ITeamBase
+{
 	//Set this when an op sets the base and return to it when the gametype restarts
-	public Team defaultTeam;
+	public int defaultTeamID;
 	//This is the team that currently holds this base, reset it to default team at the end of each round
-	public Team currentTeam;
+	public int currentTeamID;
 	//The map this base is a part of
 	public TeamsMap map;
 	//List of all TeamObjects associated with this base
@@ -43,7 +44,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 	
 	//Chunk loading
-	private Ticket chunkTicket;
+	private Ticket chunkTicket; //TODO REMOVE
 	private boolean uninitialized = true;
 	private int loadDistance = 1;
 
@@ -61,7 +62,8 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 		flag = new EntityFlag(worldObj, this);
 		objects.add(flag);
 		worldObj.spawnEntityInWorld(flag);
-		map = teamsManager.currentMap;
+		if(teamsManager.maps.size() > 0)
+			map = teamsManager.maps.values().iterator().next();
 	}	
 	
 	public EntityFlagpole(World world, int x, int y, int z) 
@@ -91,27 +93,21 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
-		setID(tags.getInteger("ID"));
-		currentTeam = defaultTeam = Team.getTeam(tags.getString("Team"));
-		if(currentTeam != null)
-			currentTeam.bases.add(this);
-		map = teamsManager.getTeamsMap(tags.getString("Map"));
+		setBaseID(tags.getInteger("ID"));
+		currentTeamID = defaultTeamID = tags.getInteger("TeamID");
+		map = teamsManager.maps.get(tags.getString("Map"));
+		name = tags.getString("Name");
+		setMap(map);
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
-		if(defaultTeam != null)
-			tags.setString("Team", defaultTeam.shortName);
-		tags.setString("Map", map.shortName);
-		tags.setInteger("ID", getID());
-	}
-
-	@Override
-	public Team getOwner() 
-	{
-		return currentTeam;
+		tags.setInteger("TeamID", defaultTeamID);
+		tags.setString("Map", map == null ? "" : map.shortName);
+		tags.setInteger("ID", getBaseID());
+		tags.setString("Name", name);
 	}
 
 	@Override
@@ -123,7 +119,15 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	public void setMap(TeamsMap newMap) 
 	{
+		if(newMap == null)
+		{
+			FlansMod.log("Flagpole given invalid map");
+			return;
+		}
+		if(map != null && map != newMap)
+			map.removeBase(this);
 		map = newMap;
+		newMap.addBase(this);
 	}
 
 	@Override
@@ -131,34 +135,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	{
 		return objects;
 	}
-
-	@Override
-	public void setBase(Team newOwners) 
-	{
-		updateOwners(newOwners);
-		currentTeam = defaultTeam = newOwners;
-	}
-
-	@Override
-	public void captureBase(Team newOwners) 
-	{
-		updateOwners(newOwners);
-		currentTeam = newOwners;
-		TeamsManager.messageAll("\u00a7" + newOwners.textColour + newOwners.name + "\u00a7f captured " + name + "!");
-	}
-	
-	public void updateOwners(Team newOwners)
-	{
-		ArrayList<ITeamBase> thisBase = new ArrayList<ITeamBase>();
-		thisBase.add(this);
-		for(Team team : Team.teams)
-		{
-			team.bases.removeAll(thisBase);
-		}
-		if(newOwners != null)
-			newOwners.bases.add(this);
-	}
-
+		
 	@Override
 	public void tick() 
 	{
@@ -168,12 +145,7 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	@Override
 	public void startRound() 
 	{
-		updateOwners(defaultTeam);
-		currentTeam = defaultTeam;
-		for(ITeamObject object : getObjects())
-		{
-			object.onBaseSet(defaultTeam);
-		}
+		currentTeamID = defaultTeamID;
 	}
 
 	@Override
@@ -231,20 +203,6 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	}
 	
 	@Override
-	public void setID(int i)
-	{
-		//dataWatcher.updateObject(16, new Integer(i));
-		ID = i;
-	}
-	
-	@Override
-	public int getID()
-	{
-		//return dataWatcher.getWatchableObjectInt(16);
-		return ID;
-	}
-
-	@Override
 	public ITeamObject getFlag() 
 	{
 		return flag;
@@ -254,10 +212,77 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 	public void onUpdate()
 	{
 		super.onUpdate();
-    	updateChunkLoading();
+    	//updateChunkLoading();
+	}
+		
+	@Override
+	public void setDead() 
+	{
+		super.setDead();
+		ForgeChunkManager.releaseTicket(chunkTicket);
+	}
+	
+	@Override
+    public boolean interactFirst(EntityPlayer player) //interact
+    {
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		if(!worldObj.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemOpStick)))
+			ItemOpStick.openBaseEditGUI(this, (EntityPlayerMP)player);
+		
+    	/* TODO : Check the generalised code in TeamsManager works
+    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+    		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
+    		*/
+        return false;
+    }
+	
+	@Override
+    public ItemStack getPickedResult(MovingObjectPosition target)
+    {
+		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
+		return stack;
+    }
+
+	@Override
+	public void setBaseID(int i) 
+	{
+		ID = i;
+	}
+
+	@Override
+	public int getBaseID() 
+	{
+		return ID;
+	}
+
+	@Override
+	public int getDefaultOwnerID() 
+	{
+		return defaultTeamID;
+	}
+
+	@Override
+	public void setDefaultOwnerID(int id) 
+	{
+		currentTeamID = defaultTeamID = id;
+		for(ITeamObject object : objects)
+			object.onBaseSet(id);
+	}
+
+	@Override
+	public int getOwnerID() 
+	{
+		return currentTeamID;
+	}
+
+	@Override
+	public void setOwnerID(int id) 
+	{
+		currentTeamID = id;
 	}
 	
 	//Chunk loading
+	/*
 	public void forceChunkLoading(Ticket ticket) 
 	{
 		chunkTicket = ticket;
@@ -288,27 +313,5 @@ public class EntityFlagpole extends Entity implements ITeamBase {
 			}
 			uninitialized = false;
 		}
-	}
-	
-	@Override
-	public void setDead() 
-	{
-		super.setDead();
-		ForgeChunkManager.releaseTicket(chunkTicket);
-	}
-	
-	@Override
-    public boolean interactFirst(EntityPlayer player) //interact
-    {
-    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-    		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
-        return false;
-    }
-	
-	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
-		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
-		return stack;
-    }
+	}*/
 }

@@ -1,26 +1,12 @@
 package com.flansmod.client;
 
-import java.util.EnumSet;
+import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
-import org.lwjgl.input.Keyboard;
-
-import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.gui.GuiTeamSelect;
-import com.flansmod.client.model.GunAnimations;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.network.PacketReload;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -29,31 +15,38 @@ import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import com.flansmod.api.IControllable;
+import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketReload;
+
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
 {  
-	//public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "key.categories.movement");
-	//public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "key.categories.movement");
-	//public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "key.categories.movement");
-	//public static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D, "key.categories.movement");
-	//public static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE, "key.categories.movement");
-	public static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL, "key.categories.movement");
-	//public static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_LSHIFT, "key.categories.gameplay");
-	public static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R, "key.categories.inventory");
-	public static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V, "key.categories.gameplay");
-	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "key.categories.gameplay");
-	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "key.categories.gameplay");
-	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "key.categories.gameplay");
-	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "key.categories.multiplayer");
-	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "key.categories.multiplayer");
-	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "key.categories.movement");
-	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "key.categories.movement");
-    public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "key.categories.movement");
-    public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "key.categories.movement");
-    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "key.categories.movement");
-    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "key.categories.movement");
-    public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "key.categories.misc");
-    public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "key.categories.misc");
+	//public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "Flan's Mod");
+	//public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "Flan's Mod");
+	//public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "Flan's Mod");
+	//public static KeyBinding rightKey = new KeyBinding("Right Key", Keyboard.KEY_D, "Flan's Mod");
+	//public static KeyBinding upKey = new KeyBinding("Up Key", Keyboard.KEY_SPACE, "Flan's Mod");
+	public static KeyBinding downKey = new KeyBinding("Down key", Keyboard.KEY_LCONTROL, "Flan's Mod");
+	//public static KeyBinding exitKey = new KeyBinding("Exit Key", Keyboard.KEY_LSHIFT, "Flan's Mod");
+	public static KeyBinding inventoryKey = new KeyBinding("Inventory key", Keyboard.KEY_R, "Flan's Mod");
+	public static KeyBinding bombKey = new KeyBinding("Bomb Key", Keyboard.KEY_V, "Flan's Mod");
+	public static KeyBinding gunKey = new KeyBinding("Gun Key", Keyboard.KEY_B, "Flan's Mod");
+	public static KeyBinding controlSwitchKey = new KeyBinding("Control Switch key", Keyboard.KEY_C, "Flan's Mod");
+	public static KeyBinding reloadKey = new KeyBinding("Reload key", Keyboard.KEY_R, "Flan's Mod");
+	public static KeyBinding teamsMenuKey = new KeyBinding("Teams Menu Key", Keyboard.KEY_G, "Flan's Mod");
+	public static KeyBinding teamsScoresKey = new KeyBinding("Teams Scores Key", Keyboard.KEY_H, "Flan's Mod");
+	public static KeyBinding leftRollKey = new KeyBinding("Roll Left Key", Keyboard.KEY_Z, "Flan's Mod");
+	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "Flan's Mod");
+    public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
+    public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
+    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "Flan's Mod");
+    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
+    public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
+    public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
+    public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
 
 	Minecraft mc;
 	
@@ -81,6 +74,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
+		ClientRegistry.registerKeyBinding(zoomKey);
 		/*
 		 *  TODO : Note. This information (hold key or single shot key) has been lost.
 				true, // accelerate key

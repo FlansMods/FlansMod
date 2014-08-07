@@ -1,26 +1,23 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.teams.TeamsManager.TeamsMap;
-import com.flansmod.common.vector.Vector3f;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketBaseEdit;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemOpStick extends Item
 {
+	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
 	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
@@ -54,6 +51,28 @@ public class ItemOpStick extends Item
 			clickedObject(world, (EntityPlayerMP)player, (ITeamObject)clicked);
 	}
 	
+	public static void openBaseEditGUI(ITeamBase base, EntityPlayerMP player)
+	{
+		String[] maps = new String[TeamsManager.getInstance().maps.values().size()];
+		if(maps.length == 0)
+		{
+			//There are no maps setup. Disaster! Abort.
+			TeamsManager.messagePlayer(player, "Maps are not yet set up. Use /teams help");
+			return;
+		}
+		int currentMapID = -1;
+		int i = 0;
+		for(TeamsMap map : TeamsManager.getInstance().maps.values())
+		{
+			maps[i] = map.name;
+			if(map == base.getMap())
+				currentMapID = i;
+			i++;
+		}	    		
+		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getName(), maps, currentMapID, base.getDefaultOwnerID()), player);
+
+	}
+	
 	public void clickedBase(World world, EntityPlayerMP player, ITeamBase base)
 	{
 		int damage = player.inventory.getCurrentItem().getItemDamage(); 
@@ -62,43 +81,18 @@ public class ItemOpStick extends Item
     	{
 	    	case 0 : //Stick of Ownership
 	    	{
-	    		if(teamsManager.teams == null)
-	    		{
-	    			TeamsManager.messagePlayer(player, "Please set up teams before editing this base");
-	    			return;
-	    		}
-	    		Team currentOwner = base.getOwner();
-	    		Team newOwner = null;
-	    		if(currentOwner == null)
-	    		{
-	    			if(teamsManager.teams != null)
-	    				newOwner = teamsManager.teams[0];
-	    			else newOwner = Team.spectators;
-	    		}
-	    		else if(currentOwner == Team.spectators)
-	    			newOwner = null;
-	    		else
-	    		{
-	    			for(int i = 0; i < teamsManager.teams.length; i++)
-	    			{
-	    				if(currentOwner == teamsManager.teams[i])
-	    				{
-	    					if(i == teamsManager.teams.length - 1)
-	    						newOwner = Team.spectators;
-	    					else newOwner = teamsManager.teams[i + 1];
-	    				}
-	    			}
-	    		}
-	    		TeamsManager.messagePlayer(player, "Base owner changed to " + (newOwner == null ? "none" : newOwner.shortName));
-	    		if(currentOwner != null)
-	    			currentOwner.bases.remove(base);
-	    		base.setBase(newOwner);
-	    		if(newOwner != null)
-	    			newOwner.bases.add(base);
+	    		//Take the existing ownerID, increment it (mod 4 for now - assume all gametypes involve 2 teams)
+	    		int currentOwnerID = base.getDefaultOwnerID();
+	    		currentOwnerID++;
+	    		currentOwnerID = currentOwnerID % 4;
+	    		base.setDefaultOwnerID(currentOwnerID);
+	    		base.setOwnerID(currentOwnerID);
+	    		
 	    		for(ITeamObject object : base.getObjects())
-	    		{
-	    			object.onBaseSet(newOwner);
-	    		}
+	    			object.onBaseSet(currentOwnerID);
+	    		
+	    		TeamsManager.messagePlayer(player, "Base owner changed to " + teamNames[currentOwnerID]);
+
 	    		break;
 	    	}
 	    	case 1 : //Stick of Connecting
@@ -132,11 +126,7 @@ public class ItemOpStick extends Item
 	    	}
 	    	case 2 : //Stick of Mapping
 	    	{
-	    		TeamsMap currentMap = base.getMap();
-	    		int mapID = teamsManager.maps.indexOf(currentMap);
-	    		TeamsMap newMap = teamsManager.maps.get((mapID + 1) % teamsManager.maps.size());
-	    		base.setMap(newMap);
-	    		TeamsManager.messagePlayer(player, "Set map for this base to " + newMap.name + ".");
+	    		openBaseEditGUI(base, player);
 	    		break;
 	    	}
 	    	case 3 : //Stick of Destruction

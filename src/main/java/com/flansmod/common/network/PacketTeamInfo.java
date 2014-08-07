@@ -1,35 +1,35 @@
 package com.flansmod.common.network;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class PacketTeamInfo extends PacketBase 
 {			
+	public static String mapShortName;
 	public static String map;
 	public static String gametype;
 	public static int numTeams;
 	public static TeamData[] teamData;
 	public static boolean sortedByTeam;
+	public static int timeLeft;
+	public static int scoreLimit;
 	
 	public static int numLines;
-
+	
 	public static class TeamData
 	{
 		public Team team;
@@ -71,28 +71,32 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		if(TeamsManager.getInstance().currentGametype == null)
+		if(TeamsManager.getInstance().currentRound == null)
     	{
 			writeUTF(data, "No Gametype");
     		data.writeInt(0);
     	}
     	else
     	{
-    		writeUTF(data, TeamsManager.getInstance().currentGametype.name);
-    		writeUTF(data, TeamsManager.getInstance().currentMap.name);
-    		if(TeamsManager.getInstance().currentGametype.sortScoreboardByTeam())
+    		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
+    		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
+    		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
+    		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
+    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);
+    		
+    		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{
     			data.writeBoolean(true);
-	        	if(TeamsManager.getInstance().teams == null)
+	        	if(TeamsManager.getInstance().currentRound.teams == null)
 	        	{
 	        		data.writeInt(0);
 	        	}
 	        	else
 	        	{
-		        	data.writeInt(TeamsManager.getInstance().teams.length);
-		        	for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+		        	data.writeInt(TeamsManager.getInstance().currentRound.teams.length);
+		        	for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 		        	{
-		        		Team team = TeamsManager.getInstance().teams[i];
+		        		Team team = TeamsManager.getInstance().currentRound.teams[i];
 		        		if(team == null)
 		        		{
 		        			writeUTF(data, "none");
@@ -127,9 +131,9 @@ public class PacketTeamInfo extends PacketBase
     		{
     			data.writeBoolean(false);
     			ArrayList<String> playerNames = new ArrayList<String>();
-    			for(int i = 0; i < TeamsManager.getInstance().teams.length; i++)
+    			for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
 	        	{
-	        		Team team = TeamsManager.getInstance().teams[i];
+	        		Team team = TeamsManager.getInstance().currentRound.teams[i];
 	        		if(team == null || team.members == null)
 	        		{
 	        			continue;
@@ -178,6 +182,9 @@ public class PacketTeamInfo extends PacketBase
 		else
 		{
 			map = readUTF(data);
+			mapShortName = readUTF(data);
+			timeLeft = data.readInt();
+			scoreLimit = data.readInt();
 			sortedByTeam = data.readBoolean();
 			if(sortedByTeam)
 			{
@@ -243,5 +250,37 @@ public class PacketTeamInfo extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		FlansModClient.teamInfo = this;
+	}
+
+	public Team getTeam(int spawnerTeamID) 
+	{
+		switch(spawnerTeamID)
+		{
+		case 0 : return null;
+		case 1 : return Team.spectators;
+		default : return teamData.length > spawnerTeamID - 2 ? teamData[spawnerTeamID - 2].team : null;
+		}
+	}
+	
+	public boolean roundOver()
+	{
+		if(timeLeft == 0)
+			return true;
+		for(int i = 0; i < teamData.length; i++)
+		{
+			if(teamData[i].score == scoreLimit)
+				return true;
+		}
+		return false;
+	}
+	
+	public Team getWinner()
+	{
+		for(int i = 0; i < teamData.length; i++)
+		{
+			if(teamData[i].score == scoreLimit)
+				return teamData[i].team;
+		}
+		return null;
 	}
 }

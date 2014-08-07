@@ -2,9 +2,10 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.model.ModelBase;
+
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.driveables.mechas.EntityMecha;
-import net.minecraft.client.model.ModelBase;
 
 public class ModelMechaTool extends ModelBase
 {

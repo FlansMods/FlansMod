@@ -2,19 +2,24 @@ package com.flansmod.common.teams;
 
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.google.common.collect.Multimap;
 
 public class ItemTeamArmour extends ItemArmor implements ISpecialArmor 
 {
@@ -24,10 +29,11 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
 	{
 		super(ItemArmor.ArmorMaterial.CLOTH, 0, t.type);
 		type = t;
+		type.item = this;
 		setCreativeTab(FlansMod.tabFlanTeams);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
-
+	
 	public ItemTeamArmour(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, int armourType) 
 	{
 		super(armorMaterial, renderIndex, armourType);

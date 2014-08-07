@@ -1,0 +1,17 @@
+﻿item.diamondCircularSaw.name=Алмазная циркулярная пила
+item.diamondExcavator.name=Алмазная лопата
+item.diamondDrill.name=Алмазная дрель
+item.ironCircularSaw.name=Железная циркулярная пила
+item.ironExcavator.name=Железная лопата
+item.ironDrill.name=Железная дрель
+item.advCPU.name=Продвинутый процессор
+item.advHydraulics.name=Улучшенная гидравлика
+item.basicCPU.name=Обычный процессор
+item.canister.name=Бензобак
+item.hydraulics.name=Гидравлика
+item.mediumDiamondArm.name=Средняя алмазная рука
+item.mediumDiamondBody.name=Средний алмазный корпус
+item.mediumDiamondLeg.name=Средняя алмазная нога
+item.smallIronLeg.name=Маленькая железная нога
+item.smallIronArm.name=Маленькая железная рука
+item.smallIronBody.name=Маленький железный корпус

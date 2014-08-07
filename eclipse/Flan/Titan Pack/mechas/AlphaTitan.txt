@@ -14,7 +14,7 @@ Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
 //Speed Modifier, 1 is player speed
-MoveSpeed 3.2
+MoveSpeed 2.4
 //YOffset
 YOffset 0
 //Fuel Tank Size
@@ -27,7 +27,7 @@ RotateSpeed 20
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)
 StepHeight 2
-JumpHeight 1
+JumpHeight 2.5
 //Arm origins used to rotate arm models and calculate position of held item / tool (positions in model co-ordinates)
 LeftArmOrigin 0 80 -32
 RightArmOrigin 0 80 32

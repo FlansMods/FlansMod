@@ -2,9 +2,9 @@ package com.flansmod.client.tmt;
 
 import java.util.ArrayList;
 
-import net.minecraft.util.Vec3;
-
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.util.Vec3;
 
 public class TexturedPolygon
 {

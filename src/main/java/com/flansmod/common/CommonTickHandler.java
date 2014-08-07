@@ -1,14 +1,10 @@
 package com.flansmod.common;
 
-import java.util.EnumSet;
-
-import com.flansmod.common.teams.TeamsManager;
-
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+
+import com.flansmod.common.teams.TeamsManager;
 
 public class CommonTickHandler 
 {

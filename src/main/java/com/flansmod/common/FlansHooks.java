@@ -1,8 +1,9 @@
 package com.flansmod.common;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.Loader;
 
 public class FlansHooks
 {

@@ -1,26 +1,22 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.ItemPlane;
-import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.guns.ItemAAGun;
-
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.ItemPlane;
+import com.flansmod.common.driveables.ItemVehicle;
+import com.flansmod.common.guns.ItemAAGun;
 
 public class TileEntitySpawner extends TileEntity implements ITeamObject
 {
@@ -33,14 +29,15 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	private int baseID = -1;
 	private int dimension;
 	public int currentDelay;
-	
+
 	//Chunk loading
 	private Ticket chunkTicket;
 	private boolean uninitialized = true;
 	private int loadDistance = 1;
 	
 	//Client side
-	private String team;
+	private int teamID;
+	public String map;
 	
 	public TileEntitySpawner()
 	{
@@ -51,14 +48,16 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
     public Packet getDescriptionPacket()
     {
         NBTTagCompound tags = new NBTTagCompound();
-        tags.setString("Team", base == null || base.getOwner() == null ? "none" : base.getOwner().shortName);
+        tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
+        tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tags);
     }
     
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-    	team = packet.func_148857_g().getString("Team");
+    	teamID = packet.func_148857_g().getByte("TeamID");
+    	map = packet.func_148857_g().getString("Map");
     }
     
     @Override
@@ -166,23 +165,23 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		return base;
 	}
 	
-	public Team getTeam()
+	public int getTeamID()
 	{
 		if(worldObj.isRemote)
-			return Team.getTeam(team);
-		else return base == null ? null : base.getOwner();
+			return teamID;
+		else return base == null ? 0 : base.getOwnerID();
 	}
 
 	@Override
-	public void onBaseSet(Team newOwners) 
+	public void onBaseSet(int newTeamID) 
 	{
 		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 
 	@Override
-	public void onBaseCapture(Team newOwners) 
+	public void onBaseCapture(int newTeamID) 
 	{
-		onBaseSet(newOwners);
+		onBaseSet(newTeamID);
 	}
 
 	@Override
@@ -190,7 +189,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	{
 		base = b;
 		if(b != null)
-			baseID = b.getID();
+			baseID = b.getBaseID();
 		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 
@@ -203,7 +202,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	@Override
 	public void destroy() 
 	{
-		worldObj.setBlock(xCoord, yCoord, zCoord, null);
+		worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air);
 	}
 
 	@Override
@@ -272,4 +271,10 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
 */
+
+	@Override
+	public boolean forceChunkLoading() 
+	{
+		return false;
+	}
 }

@@ -6,6 +6,12 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageCodec;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,8 +20,6 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
 import net.minecraft.server.MinecraftServer;
 
-import com.flansmod.common.FlansMod;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -23,12 +27,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ibxm.Player;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageCodec;
+
+import com.flansmod.common.FlansMod;
 
 /** 
  * Flan's Mod packet handler class. Directs packet data to packet classes.
@@ -122,7 +122,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			break;
 		}
 		}
-		out.add(packet);
 	}
 	
 	/** Initialisation method called from FMLInitializationEvent in FlansMod */
@@ -130,7 +129,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	{
 		channels = NetworkRegistry.INSTANCE.newChannel("FlansMod", this);
 		
+		registerPacket(PacketBaseEdit.class);
 		registerPacket(PacketBreakSound.class);
+		registerPacket(PacketBuyArmour.class);
 		registerPacket(PacketBuyWeapon.class);
 		registerPacket(PacketCraftDriveable.class);	
 		registerPacket(PacketDriveableControl.class);	
@@ -140,18 +141,22 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketDriveableKeyHeld.class);	
 		registerPacket(PacketFlak.class);	
 		registerPacket(PacketGunFire.class);	
+		registerPacket(PacketGunPaint.class);
+		registerPacket(PacketKillMessage.class);
 		registerPacket(PacketMechaControl.class);	
 		registerPacket(PacketMGFire.class);	
 		registerPacket(PacketMGMount.class);	
 		registerPacket(PacketPlaneControl.class);	
 		registerPacket(PacketPlaySound.class);	
 		registerPacket(PacketReload.class);	
-		registerPacket(PacketRepairDriveable.class);	
+		registerPacket(PacketRepairDriveable.class);
+		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);	
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
 		registerPacket(PacketVehicleControl.class);
-		registerPacket(PacketKillMessage.class);
+		
+		
 	}
 
 	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 

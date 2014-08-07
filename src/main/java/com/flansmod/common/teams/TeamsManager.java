@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -14,15 +15,16 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -41,6 +43,10 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -52,70 +58,100 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemAAGun;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketBase;
+import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamInfo;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.types.InfoType;
 
 public class TeamsManager
 {
+	/** Overall switch for teams mod */
+	public static boolean enabled = true;
+	/** The instance */
+	public static TeamsManager instance;
+	
 	//Configuration variables
 	// Player changeable stuff
-	public static boolean useRotation = false, explosions = true, driveablesBreakBlocks = true,
+	public static boolean voting = false, explosions = true, driveablesBreakBlocks = true,
 			bombsEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
 			armourDrops = true, vehiclesNeedFuel = true;
 	
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	//Life of certain entity types. 0 is eternal.
-	public static int mgLife = 0, planeLife = 0, vehicleLife = 0, mechaLove = 0, aaLife = 0; 
+	public static int mgLife = 0, planeLife = 0, vehicleLife = 0, mechaLove = 0, aaLife = 0;
 	
-	public Gametype currentGametype;
-	public TeamsMap currentMap;
-	public Team[] teams;
-	public static TeamsManager instance;
-	public List<ITeamBase> bases;
-	public List<ITeamObject> objects;
-	public List<TeamsMap> maps;
+	/** The number of ticks for which to display the round summary page */
+	public static int scoreDisplayTime = 200;
+	/** The number of ticks for which to display the voting box, if enabled */
+	public static int votingTime = 200;
+	
+	/** The current round in play. This class replaces the old set of 3 fields "currentGametype", "currentMap" and "teams" */
+	public TeamsRound currentRound;
+	/** This contains a list of all the valid rounds, similar to the old RotationEntry and map rotation */
+	public ArrayList<TeamsRound> rounds;
+	/** The list of all available maps */
+	public HashMap<String, TeamsMap> maps;
+	
+	/** For assigning base IDs to bases. Used primarily in client-server syncing and saving */
 	private int nextBaseID = 1;
+	public ArrayList<ITeamBase> bases;
+	public ArrayList<ITeamObject> objects;
+	
 	private long time;
-	public List<RotationEntry> rotation;
-	public int currentRotationEntry;
+	
+	/** A downwards counter that times the round (in ticks) */
+	public int roundTimeLeft;
+	/** A downwards counter that times inter-round phases (in ticks) */
+	private int interRoundTimeLeft;
+
+	
+	//Disused. Delete when done
+	//public Gametype currentGametype;
+	//public TeamsMap currentMap;
+	//public Team[] teams;
+	//public List<RotationEntry> rotation;
+	//public int currentRotationEntry;
 	
 	public TeamsManager()
 	{
 		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
+		FMLCommonHandler.instance().bus().register(this);
 
+		//Init arrays
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
-		maps = new ArrayList<TeamsMap>();
-		maps.add(TeamsMap.def);
-		rotation = new ArrayList<RotationEntry>();
-		currentMap = TeamsMap.def;
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
+		
+		//rotation = new ArrayList<RotationEntry>();
+		//currentMap = TeamsMap.def;
 		
 		
 		//Testing stuff. TODO : Replace with automatic Gametype loader
 		new GametypeTDM();
-		new GametypeConquest();
+		//new GametypeConquest();
 		new GametypeDM();
-		new GametypeCTF();
-		new GametypeNerf();
+		//new GametypeCTF();
+		//new GametypeNerf();
 		//-----
 	}
 	
 	public void reset()
 	{
-		currentGametype = null;
-		currentMap = TeamsMap.def;
-		teams = null;
+		//currentGametype = null;
+		//currentMap = TeamsMap.def;
+		//teams = null;
+		
+		currentRound = null;
+		
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
-		maps = new ArrayList<TeamsMap>();
-		maps.add(TeamsMap.def);
-		rotation = new ArrayList<RotationEntry>();
+		maps = new HashMap<String, TeamsMap>();
+		rounds = new ArrayList<TeamsRound>();
+		
+		//rotation = new ArrayList<RotationEntry>();
 	}
 	
 	public static TeamsManager getInstance()
@@ -125,108 +161,276 @@ public class TeamsManager
 	
 	public void tick()
 	{
-		if(currentGametype != null)
-			currentGametype.tick();
-		time++;
-		//Send a full team info update every 2 seconds.
+		//Send a full team info update to players every 2 seconds.
 		if(time % 40 == 0)
 		{
 			FlansMod.INSTANCE.getPacketHandler().sendToAll(new PacketTeamInfo());
 		}
+		
+		if(!enabled)
+			return;
+		
+		if(currentRound != null)
+			currentRound.gametype.tick();
+		time++;
+		
+
+		//Tick bases and objects
 		for(ITeamBase base : bases)
-		{
 			base.tick();
-		}
 		for(ITeamObject object : objects)
-		{
 			object.tick();
-		}
-		for(Object obj : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+		
+		//Check round timer
+		//If inbetween rounds
+		if(interRoundTimeLeft > 0)
 		{
-			EntityPlayerMP player = (EntityPlayerMP)obj;
-			PlayerData data = PlayerHandler.getPlayerData(player);
-			if(data.spawnDelay == 0)
+			interRoundTimeLeft--;
+			//If we're done showing scores, show the voting box
+			if(voting && interRoundTimeLeft == votingTime)
 			{
-		        WorldServer world = (WorldServer)player.worldObj;
-		        world.getEntityTracker().func_151247_a(player, new S18PacketEntityTeleport(player));	
+				displayVotingGUI();
+			}
+			//If the timer is finished, start the next round
+			if(interRoundTimeLeft == 0)
+			{
+				startNextRound();
 			}
 		}
-	}
-	
-	public void switchToNextGametype()
-	{
-		PlayerHandler.roundEnded();
-		currentRotationEntry = (currentRotationEntry + 1) % rotation.size();
-		RotationEntry entry = rotation.get(currentRotationEntry);
-		if(currentGametype != null && currentGametype != entry.gametype)
+		
+		//If in a round
+		if(currentRound != null && roundTimeLeft > 0)
 		{
-			currentGametype.stopGametype();
-		}
-		currentGametype = entry.gametype;
-		currentMap = entry.map;
-		teams = entry.teams;
-		currentGametype.initGametype();
+			roundTimeLeft--;
+			boolean roundEnded = roundTimeLeft == 0;
+			if(roundEnded)
+				messageAll(randomTimeOutString());
+			for(Team team : currentRound.teams)
+			{
+				if(team.score >= currentRound.scoreLimit)
+				{
+					roundEnded = true;
+					messageAll(team.name + " won the round!");
+				}
+			}
+			
+			if(roundEnded)
+			{
+				//The round has ended on a timer, so display the scoreboard summary
+				roundTimeLeft = 0;
+				interRoundTimeLeft = voting ? (votingTime + scoreDisplayTime) : scoreDisplayTime;
+				displayScoreboardGUI();
+				currentRound.gametype.roundEnd();
+				PlayerHandler.roundEnded();
+			}
+		}	
 	}
 	
-	public EntityPlayerMP getPlayer(String username)
+	public String randomTimeOutString()
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(username);
-	}
-	
-	public static void log(String s)
-	{
-		FlansMod.log("Teams Info : " + s);
-	}	
-	
-	public static void messagePlayer(EntityPlayerMP player, String s)
-	{
-		player.addChatComponentMessage(new ChatComponentText(s));
-	}
-	
-	public static void messageAll(String s)
-	{
-		FlansMod.log("Teams Announcement : " + s);
-		for(EntityPlayerMP player : (List<EntityPlayerMP>)MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+		switch(Gametype.rand.nextInt(4))
 		{
-			player.addChatComponentMessage(new ChatComponentText(s));
+		case 0 : return "That's time!";
+		case 1 : return "How dull; a tie...";
+		case 2 : return "Everybody's a loser but the clock.";
+		default : return "Time up.";
 		}
 	}
 	
+	public void displayScoreboardGUI()
+	{
+		for(EntityPlayer player : getPlayers())
+		{
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(!data.builder)
+				sendPacketToPlayer(new PacketRoundFinished(scoreDisplayTime), (EntityPlayerMP)player);
+		}
+	}
+	
+	public void displayVotingGUI()
+	{
+		//TODO
+	}
+	
+	public void start() 
+	{
+		if(!enabled || rounds.size() == 0)
+			return;
+		
+		//Can only start once
+		//if(currentRound != null)
+		//	return;
+			
+		if(currentRound != null)
+		{
+			currentRound.gametype.roundCleanup();
+			resetScores();
+		}
+		
+		currentRound = rounds.get(0);
+		startRound();
+	}
+	
+	public void startNextRound()
+	{
+		if(!enabled || rounds.size() == 0)
+			return;
+		
+ 		TeamsRound nextRound = null;
+		
+		if(voting)
+		{
+			//TODO
+			//Gather votes and decide which map to play
+		}
+		else //Use standard rotation. Go to next map
+		{
+			int lastRoundID = rounds.indexOf(currentRound);
+			int nextRoundID = ++lastRoundID % rounds.size();
+			nextRound = rounds.get(nextRoundID);
+		}
+		
+		//End the last round
+		if(currentRound != null)
+			currentRound.gametype.roundCleanup();
+		resetScores();
+		
+		//Advance to next round
+		if(nextRound != null)
+			currentRound = nextRound;
+		//Note that if nextRound is null, we stay on the round we just played
+		
+		//Begin the next round
+		startRound();
+	}
+	
+	private void startRound()
+	{
+		currentRound.gametype.roundStart();
+		roundTimeLeft = currentRound.timeLimit * 60 * 20;
+		for(ITeamBase base : bases)
+		{
+			base.startRound();
+		}
+		
+		for(EntityPlayer player : getPlayers())
+			forceRespawn((EntityPlayerMP)player);
+		
+		showTeamsMenuToAll();
+		
+		messageAll("\u00a7fA new round has started!");
+	}
+	
+	/** Called at the start of a round. Shows all players the team selection menu. Exludes people on the building / op team */
+	public void showTeamsMenuToAll()
+	{
+		for(EntityPlayer player : getPlayers())
+		{
+			PlayerData data = PlayerHandler.getPlayerData((EntityPlayerMP)player);
+			//Catch for broken player data
+			if(data == null)
+				continue;
+			//Catch for people not on a team, such as builders
+			if(data.builder && playerIsOp(player))
+				continue;
+
+			sendTeamsMenuToPlayer((EntityPlayerMP)player);
+		}
+	}
+			
 	@SubscribeEvent
-	public void onPlayerUpdate(EntityInteractEvent event)
+	public void onPlayerInteract(EntityInteractEvent event)
 	{
 		if(event.entityPlayer.inventory.getCurrentItem() != null && event.entityPlayer.inventory.getCurrentItem().getItem() instanceof ItemOpStick)
 			((ItemOpStick)event.entityPlayer.inventory.getCurrentItem().getItem()).clickedEntity(event.entityPlayer.worldObj, event.entityPlayer, event.target);
 	}	
 	
+	/** Stop damage being taken when it shouldn't 
+	 * N - NoTeam, S - Spectator, 1 - Team 1, 2 - Team 2, O - Other (mobs and world inflicted damage etc)
+	 * 
+	 *   | N S O 1 2 
+	 *  ------------
+	 *  N| y n y n n
+	 *  S| n n n n n
+	 *  O| y n y y y
+	 *  1| n n y G G
+	 *  2| n n y G G
+	 * 
+	 * y - yes, can hurt
+	 * n - no, can't hurt
+	 * G - decided by gametype
+	 * */
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event) 
 	{
-		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
-			if(!currentGametype.playerAttacked((EntityPlayerMP)event.entity, event.source))
-				event.setCanceled(true);
-	}
-	
-	@SubscribeEvent
-	public void onEntityKilled(LivingDeathEvent event) 
-	{
-		if(event.entity instanceof EntityPlayerMP && currentGametype != null)
+		if(!enabled)
+			return;
+		if(event.entity instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP killed = (EntityPlayerMP)event.entity;
-			currentGametype.playerKilled(killed, event.source);
-			if(event.source instanceof EntityDamageSource)
+			EntityPlayerMP player = (EntityPlayerMP)event.entity;
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			DamageSource source = event.source;
+			
+			if(data.team == Team.spectators && source != DamageSource.generic)
 			{
-				Entity entity = event.source.getSourceOfDamage();
-				if(entity instanceof EntityPlayer)
+				event.setCanceled(true);
+				return;
+			}
+			
+			if(source instanceof EntityDamageSource && ((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
+			{
+				EntityPlayerMP attacker = ((EntityPlayerMP)((EntityDamageSource)source).getEntity());
+				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
+				
+				//Cannot be attacked by a spectator
+				if(attackerData.team == Team.spectators)
 				{
-					ItemStack stack = ((EntityPlayer)entity).getCurrentEquippedItem();
-					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
-						messageAll("flanDeath." + ((ItemGun)stack.getItem()).type.shortName + "." + PlayerHandler.getPlayerData(killed).team.textColour + event.entity.getCommandSenderName() + "." + PlayerHandler.getPlayerData((EntityPlayer)entity).team.textColour + entity.getEntityId());
+					event.setCanceled(true);
+					return;
+				}
+				
+				//Cannot be fights between people in the game and outside the game
+				if((attackerData.team == null && data.team != null) || (attackerData.team != null && data.team == null)) 
+				{
+					event.setCanceled(true);
+					return;
+				}
+
+				//Final case. Either the two players are not in the game (in which case, ignore) or they are both in the game.
+				//At this point, we pass over to the gametype
+				if(attackerData.team != null && data.team != null)
+				{
+					//The roundTimeLeft check ensures that players do not fight during the cooldown period
+					if(roundTimeLeft > 0 && !currentRound.gametype.playerCanAttack(attacker, attackerData.team, player, data.team))
+					{
+						event.setCanceled(true);
+					}
 				}
 			}
+			else
+			{
+				//Not being attacked by a player, so this is fine
+				return;
+			}
+			
 		}
 	}
 	
+	/** Handles entity deaths. Passes information to gametype for scoring */
+	@SubscribeEvent
+	public void onEntityKilled(LivingDeathEvent event) 
+	{
+		if(!enabled)
+			return;
+		if(currentRound != null)
+		{
+			currentRound.gametype.entityKilled(event.entity, event.source);
+			if(event.entity instanceof EntityPlayerMP)
+				currentRound.gametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+		}
+	}
+	
+	/** Base and object gathering hooks for entities, not tile entities */
 	@SubscribeEvent
 	public void entityJoinedWorld(EntityJoinWorldEvent event)
 	{
@@ -243,7 +447,9 @@ public class TeamsManager
 	@SubscribeEvent
 	public void playerInteracted(PlayerInteractEvent event)
 	{
-		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit)
+		if(!enabled)
+			return;
+		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit && !event.entityPlayer.capabilities.isCreativeMode)
 		{
 			event.setCanceled(true);
 			return;	
@@ -262,12 +468,12 @@ public class TeamsManager
 				if(te instanceof ITeamBase)
 					((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)te);
 			}
-			else if(currentGametype != null)
+			else if(currentRound != null)
 			{
 				if(te instanceof ITeamObject)
-					currentGametype.objectClickedByPlayer((ITeamObject)te, (EntityPlayerMP)event.entityPlayer);
+					currentRound.gametype.objectClickedByPlayer((ITeamObject)te, (EntityPlayerMP)event.entityPlayer);
 				if(te instanceof ITeamBase)
-					currentGametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.entityPlayer);
+					currentRound.gametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.entityPlayer);
 			}
 		}
 	}
@@ -344,392 +550,262 @@ public class TeamsManager
 
 	}
 	
+	/** Stop spectators looting items */
 	@SubscribeEvent
 	public void playerLoot(EntityItemPickupEvent event)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer);
 		if(data != null && data.team == Team.spectators)
 			event.setCanceled(true);
+	}
 		
+	@SubscribeEvent
+	public void onPlayerRespawn(PlayerEvent event) 
+	{
+		if(event instanceof PlayerEvent.PlayerRespawnEvent)
+			respawnPlayer(event.player, false);
+		if(event instanceof PlayerEvent.PlayerLoggedOutEvent)
+			onPlayerLogout(event.player);
+		if(event instanceof PlayerEvent.PlayerLoggedInEvent)
+			onPlayerLogin(event.player);
 	}
 	
-	@SubscribeEvent
-	public void chunkLoaded(ChunkDataEvent event)
+	public void onPlayerLogin(EntityPlayer player) 
 	{
-		Chunk chunk = event.getChunk();
-		for(List<Entity> list : chunk.entityLists)
-		{
-			for(Entity entity : list)
-			{
-				if(entity instanceof ITeamBase)
-				{
-					bases.add((ITeamBase)entity);
-					if(((ITeamBase)entity).getID() > nextBaseID)
-					{
-						FlansMod.log("Loaded base with ID higher than the supposed highest ID. Adjusted highest ID");
-						nextBaseID = ((ITeamBase)entity).getID();
-					}
-				}
-				if(entity instanceof ITeamObject)
-					objects.add((ITeamObject)entity);
-			}
-		}
-	}
-	
-	@SubscribeEvent
-	public void worldData(WorldEvent event)
-	{
-		if(event.world.isRemote)
+		if(!enabled || currentRound == null)
 			return;
-		if(event instanceof WorldEvent.Load)
-		{
-			loadPerWorldData(event, event.world);
-			savePerWorldData(event, event.world);
-		}
-		if(event instanceof WorldEvent.Save)
-		{
-			savePerWorldData(event, event.world);
-		}
-	}
-	
-	private void loadPerWorldData(Event event, World world)
-	{
-
-		//Reset the teams manager before loading a new world
-		reset();
-		//Read the teams dat file
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
-		if(!checkFileExists(file))
-			return;
-		try
-		{
-			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-			nextBaseID = tags.getInteger("NextBaseID");
-			for(int i = 0; i < tags.getInteger("NumMaps"); i++)
-			{
-				String shortName = tags.getString("MapShortName " + i);
-				if(shortName.equals("default"))
-					continue;
-				maps.add(new TeamsMap(shortName, tags.getString("MapName " + i)));
-			}
-			currentMap = getTeamsMap(tags.getString("Map"));
-			currentGametype = Gametype.getGametype(tags.getString("Gametype"));
-			if(currentGametype != null)
-			{
-				currentGametype.initGametype();
-				currentGametype.readFromNBT(tags);
-				teams = new Team[currentGametype.numTeamsRequired];
-				for(int i = 0; i < teams.length; i++)
-				{
-					teams[i] = Team.getTeam(tags.getString("Team " + i));
-				}
-			}
-			int rotationSize = tags.getInteger("RotationSize");
-			for(int i = 0; i < rotationSize; i++)
-			{
-				TeamsMap map = getTeamsMap(tags.getString("RotationMap " + i));
-				Gametype gametype = Gametype.getGametype(tags.getString("RotationGametype " + i));
-				int nTeams = tags.getInteger("RotationTeams " + i);
-				Team[] demTeams = new Team[nTeams];
-				for(int j = 0; j < nTeams; j++)
-				{
-					demTeams[j] = Team.getTeam(tags.getString("RotationTeam " + i + " " + j));
-				}
-				if(map != null && gametype != null)
-				{
-					rotation.add(new RotationEntry(map, gametype, demTeams));
-				}
-			}
-			useRotation = tags.getBoolean("UseRotation");
-			bombsEnabled = tags.getBoolean("Bombs");
-			bulletsEnabled = tags.getBoolean("Bullets");
-			explosions = tags.getBoolean("Explosions");
-			forceAdventureMode = tags.getBoolean("ForceAdventure");
-			canBreakGuns = tags.getBoolean("CanBreakGuns");
-			canBreakGlass = tags.getBoolean("CanBreakGlass");
-			armourDrops = tags.getBoolean("ArmourDrops");
-			weaponDrops = tags.getInteger("WeaponDrops");
-			vehiclesNeedFuel = tags.getBoolean("NeedFuel");
-			mgLife = tags.getInteger("MGLife");
-			aaLife = tags.getInteger("AALife");
-			vehicleLife = tags.getInteger("VehicleLife");
-			mechaLove = tags.getInteger("MechaLove");
-			planeLife = tags.getInteger("PlaneLife");
-			driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to load from teams.dat");
-			e.printStackTrace();
-			
-		}
-	}
-	
-	private void savePerWorldData(Event event, World world)
-	{
-		File file = new File((FMLCommonHandler.instance().getSide().isClient() ? "saves/" + MinecraftServer.getServer().getWorldName() : MinecraftServer.getServer().getFolderName()), "teams.dat");
-		checkFileExists(file);
-		try
-		{
-			NBTTagCompound tags = new NBTTagCompound();
-			tags.setInteger("NextBaseID", nextBaseID);
-			tags.setInteger("NumMaps", maps.size());
-			if(maps != null)
-			{
-				for(int i = 0; i < maps.size(); i++)
-				{
-					if(maps.get(i) != null)
-					{
-						tags.setString("MapShortName " + i, maps.get(i).shortName);
-						tags.setString("MapName " + i, maps.get(i).name);
-					}
-				}
-			}
-			if(currentMap != null)
-				tags.setString("Map", currentMap.shortName);
-			tags.setString("Gametype", currentGametype == null ? "None" : currentGametype.shortName);
-			for(Gametype gametype : Gametype.gametypes)
-			{
-				gametype.saveToNBT(tags);
-			}
-			if(teams != null)
-			{
-				for(int i = 0; i < teams.length; i++)
-				{
-					if(teams[i] != null)
-						tags.setString("Team " + i, teams[i].shortName);
-				}
-			}
-			if(rotation != null)
-			{
-				tags.setInteger("RotationSize", rotation.size());
-				for(int i = 0; i < rotation.size(); i++)
-				{
-					RotationEntry entry = rotation.get(i);
-					if(entry != null)
-					{
-						tags.setString("RotationMap " + i, entry.map.shortName);
-						tags.setString("RotationGametype " + i, entry.gametype.shortName);
-						tags.setInteger("RotationTeams " + i, entry.teams.length);
-						for(int j = 0; j < entry.teams.length; j++)
-						{
-							tags.setString("RotationTeam " + i + " " + j, entry.teams[j].shortName);
-						}
-					}
-				}
-			}
-			else tags.setInteger("RotationSize", 0);
-			tags.setBoolean("UseRotation", useRotation);
-			tags.setBoolean("Bombs", bombsEnabled);
-			tags.setBoolean("Bullets", bulletsEnabled);
-			tags.setBoolean("Explosions", explosions);
-			tags.setBoolean("ForceAdventure", forceAdventureMode);
-			tags.setBoolean("CanBreakGuns", canBreakGuns);
-			tags.setBoolean("CanBreakGlass", canBreakGlass);
-			tags.setBoolean("ArmourDrops", armourDrops);
-			tags.setInteger("WeaponDrops", weaponDrops);
-			tags.setBoolean("NeedFuel", vehiclesNeedFuel);
-			tags.setInteger("MGLife", mgLife);
-			tags.setInteger("AALife", aaLife);
-			tags.setInteger("VehicleLife", vehicleLife);
-			tags.setInteger("MechaLove", mechaLove);
-			tags.setInteger("PlaneLife", planeLife);
-			tags.setBoolean("BreakBlocks", driveablesBreakBlocks);
-			
-			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
-		}
-		catch(Exception e)
-		{
-			FlansMod.log("Failed to save to teams.dat");
-		}
-	}
-	
-	private boolean checkFileExists(File file)
-	{
-		if(!file.exists())
-		{
-			try
-			{ 
-				file.createNewFile();
-			}
-			catch(Exception e)
-			{
-				FlansMod.log("Failed to create file");
-				FlansMod.log(file.getAbsolutePath());
-			}
-			return false;
-		}	
-		return true;
-	}
-	
-	public ITeamBase getBase(int ID)
-	{
-		for(ITeamBase base : bases)
-		{
-			if(base.getID() == ID)
-				return base;
-		}
-		return null;
-	}
-	
-	public void registerBase(ITeamBase base)
-	{
-		if(base.getID() == 0)
-			base.setID(nextBaseID++);
-		bases.add(base);
-	}	
-	
-	public void registerObject(ITeamObject obj)
-	{
-		objects.add(obj);
-	}
-
-	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) 
-	{
-		EntityPlayer player = event.player;
+		
 		if(player instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP playerMP = (EntityPlayerMP)player;
-			if(currentGametype != null)
-				currentGametype.playerJoined(playerMP);
+			sendTeamsMenuToPlayer(playerMP);
+			currentRound.gametype.playerJoined(playerMP);
 		}
 	}
-
-	@SubscribeEvent
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) 
+	
+	public void onPlayerLogout(EntityPlayer player) 
 	{
 		for(Team team : Team.teams)
-		{
-			team.removePlayer(event.player);
-		}
-	}
-
-	@SubscribeEvent
-	public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) 
-	{
-		onPlayerRespawn(event.player);
+			team.removePlayer(player);
 	}
 	
-	public void onPlayerRespawn(EntityPlayer player)
+	public void respawnPlayer(EntityPlayer player, boolean firstSpawn)
 	{
-		if(currentGametype != null)
-		{		
-			EntityPlayerMP playerMP = ((EntityPlayerMP)player);
-			PlayerData data = PlayerHandler.getPlayerData(playerMP);
-			if(playerMP != null && data != null && data.team == Team.spectators && MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(playerMP.getCommandSenderName()))
-			{
-				return;
-			}
-			Vec3 spawnPoint = currentGametype.getSpawnPoint(playerMP);
+		if(player.worldObj.isRemote)
+			return;
+		
+		if(!enabled || currentRound == null)
+			return;
+		
+		EntityPlayerMP playerMP = ((EntityPlayerMP)player);
+		PlayerData data = PlayerHandler.getPlayerData(playerMP);
+		
+		if(data.builder && playerIsOp(playerMP))
+			return;
+		
+		//On the first spawn, we don't kill the player, we simply move them over, so do a /tp like command
+		if(firstSpawn)
+		{
+			Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(playerMP);
 			if(spawnPoint != null)
 			{
-				player.setSpawnChunk(new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), true);
-				data.setSpawn(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 5);
-				playerMP.setLocationAndAngles(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0, 0);
-
-				if(data.playerClass != null && data.playerClass.horse)
-				{
-					EntityHorse horse = new EntityHorse(playerMP.worldObj);
-					
-					NBTTagCompound tags = new NBTTagCompound();
-					horse.writeToNBT(tags);
-					tags.setBoolean("Tame", true);
-					tags.setInteger("Temper", 0);
-					tags.setString("OwnerName", playerMP.getCommandSenderName());
-					tags.setTag("SaddleItem", new ItemStack(Items.saddle).writeToNBT(new NBTTagCompound()));
-					tags.setInteger("Type", 0);
-					tags.setInteger("Variant", 0);
-					horse.readFromNBT(tags);
-					horse.setPosition(playerMP.posX, playerMP.posY, playerMP.posZ);
-					playerMP.worldObj.spawnEntityInWorld(horse);
-					playerMP.mountEntity(horse);
-				}
-				
-				if(forceAdventureMode && player.capabilities.allowEdit)
-					player.setGameType(GameType.ADVENTURE);
-				resetInventory(player);	
+				player.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
 			}
-			currentGametype.playerRespawned((EntityPlayerMP)player);
 		}
+
+		//To set their next spawn position, override their bed position
+		setPlayersNextSpawnpoint(playerMP);
+
+		if(forceAdventureMode)
+			player.setGameType(GameType.ADVENTURE);
+		resetInventory(player);	
+		currentRound.gametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
+	private void setPlayersNextSpawnpoint(EntityPlayerMP player, ChunkCoordinates coords)
+	{
+		player.setSpawnChunk(coords, true);
+	}	
+	
+	private void setPlayersNextSpawnpoint(EntityPlayerMP player)
+	{
+		if(!enabled || currentRound == null)
+			return;
+		
+		PlayerData data = PlayerHandler.getPlayerData(player);
+
+		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(player);
+		if(spawnPoint != null)
+			setPlayersNextSpawnpoint(player, new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)));
+		else
+			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.team == null ? "null" : data.team.name));
+	}
+	
+	/** Force a respawn */
 	public void forceRespawn(EntityPlayerMP player)
 	{
+		if(playerIsOp(player) && PlayerHandler.getPlayerData(player).builder)
+			return;
 		player.inventory.armorInventory = new ItemStack[4];
 		player.inventory.mainInventory = new ItemStack[36];
 		player.heal(9001);
-		if(forceAdventureMode && player.capabilities.allowEdit)
+		if(forceAdventureMode)
 			player.setGameType(GameType.ADVENTURE);
-		onPlayerRespawn(player);
+		respawnPlayer(player, true);
 	}
 	
-	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
+	public void sendTeamsMenuToPlayer(EntityPlayerMP player)
 	{
-		Team previousTeam = Gametype.getPlayerData(player).team;
-		if(previousTeam != null && previousTeam.shortName.equals(teamName))
+		if(!enabled || currentRound == null || currentRound.teams == null)
+			return;
+		//Get the available teams from the gametype
+		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
+		//Add in the spectators as an option and "none" if the player is an op
+		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
+		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
+		for(int i = 0; i < availableTeams.length; i++)
 		{
-			Gametype.sendClassMenuToPlayer(player);
+			allAvailableTeams[i] = currentRound.teams[i];
+		}
+		allAvailableTeams[availableTeams.length] = Team.spectators;
+		
+		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams), player);
+	}
+	
+	public void sendClassMenuToPlayer(EntityPlayerMP player)
+	{
+		Team team = PlayerHandler.getPlayerData(player).newTeam;
+		if(team == null)
+		{
+			sendTeamsMenuToPlayer(player);
 			return;
 		}
-		Team team = null;
-		for(Team t : teams)
+		else if(team != Team.spectators && team.classes.size() > 0)
 		{
-			if(t != null && t.shortName.equals(teamName))
-				team = t;
+			sendPacketToPlayer(new PacketTeamSelect(team.classes.toArray(new PlayerClass[team.classes.size()])), player);
 		}
-		if(teamName.equals(Team.spectators.shortName))
+	}
+	
+	public boolean playerIsOp(EntityPlayer player)
+	{ 
+		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
+	}
+	
+	//
+	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
+	{
+		if(!enabled || currentRound == null)
+			return;
+		
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		
+		data.builder = false;
+		
+		//The player picked the op / builder team
+		if(teamName.equals("null"))
 		{
-			team = Team.spectators;
-		}
-		if(team == null)
-			team = Team.spectators;
-		if(team != null)
-		{
-			if(currentGametype != null)
+			if(playerIsOp(player))
 			{
-				PlayerHandler.getPlayerData(player).team = team;
-				boolean canJoinTeam = currentGametype.playerChoseTeam(player, team, previousTeam);
-				if(canJoinTeam)
-				{
-					team.addPlayer(player);
-					messageAll(player.getCommandSenderName() + " joined \u00a7" + team.textColour + team.name);
-				}
-				else 
-				{
-					player.addChatMessage(new ChatComponentText("You may not pick that team"));
-					Gametype.sendTeamsMenuToPlayer(player);
-				}
+				data.team = null;
+				data.builder = true;
+				return;
 			}
+			else teamName = "spectators"; 
 		}
-		if(team == Team.spectators)
+		
+		//The team the player selected
+		Team selectedTeam = Team.getTeam(teamName);
+		//They cannot pick no team
+		if(selectedTeam == null)
+			selectedTeam = Team.spectators;
+
+		//Validate the selected team
+		boolean isValid = selectedTeam == Team.spectators;
+		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
+		for(int i = 0; i < validTeams.length; i++)
 		{
-			PlayerHandler.getPlayerData(player).playerClass = PlayerHandler.getPlayerData(player).newPlayerClass = null;
-			resetInventory(player);
-			player.capabilities.allowFlying = true;
+			if(selectedTeam == validTeams[i])
+				isValid = true;
 		}
-		else player.capabilities.allowFlying = false;
-	}	
+		//Default to spectator
+		if(!isValid)
+		{
+			player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + ". Please try again"));
+			FlansMod.log(player.getCommandSenderName() + " tried to spawn on an invalid team : " + selectedTeam.name);
+			selectedTeam = Team.spectators;
+		}
+		
+		//Spawn spectators immediately
+		if(selectedTeam == Team.spectators)
+		{
+			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
+			data.newTeam = data.team = Team.spectators;
+			player.inventory.armorInventory = new ItemStack[4];
+			player.inventory.mainInventory = new ItemStack[36];
+			player.heal(9001);
+			respawnPlayer(player, true);
+		}
+		//Give other players the chance to select a class
+		else {
+			data.newTeam = selectedTeam;
+			sendClassMenuToPlayer(player);
+		}
+					
+		currentRound.gametype.playerChoseTeam(player, data.team, selectedTeam);
+	}
 	
 	public void playerSelectedClass(EntityPlayerMP player, String className)
 	{
-		Team team = PlayerHandler.getPlayerData(player).team;
-		if(team == null)
+		if(!enabled || currentRound == null)
 			return;
-		PlayerClass playerClass = null;
-		for(PlayerClass pc : team.classes)
+		
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		
+		//Get player class requested
+		PlayerClass playerClass = PlayerClass.getClass(className);
+		//Validate class
+		if(!data.newTeam.classes.contains(playerClass))
 		{
-			if(pc.shortName.equals(className))
-				playerClass = pc;
+			player.addChatMessage(new ChatComponentText("You may not select " + playerClass.name + ". Please try again"));
+			FlansMod.log(player.getCommandSenderName() + " tried to pick an invalid class : " + playerClass.name);
+			//sendClassMenuToPlayer(player);
+			return;
 		}
-		if(playerClass != null)
+		
+		//Check cases
+		//1 : Player switched class only
+		if(data.team == data.newTeam && data.playerClass != playerClass)
 		{
-			if(currentGametype != null)
-				currentGametype.playerChoseClass(player, playerClass);
-			PlayerHandler.getPlayerData(player).playerClass = playerClass;
+			currentRound.gametype.playerChoseNewClass(player, playerClass);
+			data.newPlayerClass = playerClass;
+			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.name + " class"));
+		}
+		//2 : Player switched team
+		else if(data.team != null && data.team != data.newTeam)
+		{
+			messageAll(player.getCommandSenderName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
+			currentRound.gametype.playerDefected(player, data.team, data.newTeam);
+			setPlayersNextSpawnpoint(player);
+			player.attackEntityFrom(DamageSource.generic, 10000F);
+			if(data.team != null)
+				data.team.removePlayer(player);
+			data.newTeam.addPlayer(player);
+			data.team = data.newTeam;
+			data.newPlayerClass = playerClass;
+		}
+		//3 : Player has only just joined
+		else if(data.team == null)
+		{
+			messageAll(player.getCommandSenderName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
+			currentRound.gametype.playerEnteredTheGame(player, data.newTeam, playerClass);
+			data.newTeam.addPlayer(player);
+			data.team = data.newTeam;
+			data.newPlayerClass = playerClass;
+			currentRound.gametype.playerChoseNewClass(player, playerClass);
+			respawnPlayer(player, true);
 		}
 	}
-	
+		
 	public void resetInventory(EntityPlayer player)
 	{
 		Team team = PlayerHandler.getPlayerData(player).team;
@@ -768,53 +844,300 @@ public class TeamsManager
 			}
 		}
 	}
+			
+	//---------------------------------------------------------
+	// Saving and Loading
+	//---------------------------------------------------------
 	
-	public boolean areTeamsValid()
+	@SubscribeEvent
+	public void chunkLoaded(ChunkDataEvent event)
 	{
-		if(teams == null)
-			return false;
-		for(Team t : teams)
+		Chunk chunk = event.getChunk();
+		for(List<Entity> list : chunk.entityLists)
 		{
-			if(t == null)
-				return false;
+			for(Entity entity : list)
+			{
+				if(entity instanceof ITeamBase)
+				{
+					bases.add((ITeamBase)entity);
+					if(((ITeamBase)entity).getBaseID() > nextBaseID)
+					{
+						FlansMod.log("Loaded base with ID higher than the supposed highest ID. Adjusted highest ID");
+						nextBaseID = ((ITeamBase)entity).getBaseID();
+					}
+				}
+				if(entity instanceof ITeamObject)
+					objects.add((ITeamObject)entity);
+			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void worldData(WorldEvent event)
+	{
+		if(event.world.isRemote)
+			return;
+		if(event instanceof WorldEvent.Load)
+		{
+			loadPerWorldData(event, event.world);
+			savePerWorldData(event, event.world);
+		}
+		if(event instanceof WorldEvent.Save)
+		{
+			savePerWorldData(event, event.world);
+		}
+	}
+	
+	private void loadPerWorldData(Event event, World world)
+	{
+		//Reset the teams manager before loading a new world
+		reset();
+		//Read the teams dat file
+        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		if(!checkFileExists(file))
+			return;
+		try
+		{
+			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
+			nextBaseID = tags.getInteger("NextBaseID");
+			//Read maps
+			for(int i = 0; i < tags.getInteger("NumberOfMaps"); i++)
+			{
+				TeamsMap map = new TeamsMap(world, tags.getCompoundTag("Map_" + i));
+				maps.put(map.shortName, map);
+			}
+			
+			if(maps.size() == 0)
+			{
+				maps.put("default" + world.getWorldInfo().getVanillaDimension(), new TeamsMap(world, "default" + world.getWorldInfo().getVanillaDimension(), "Default " + world.getWorldInfo().getWorldName()));
+			}
+
+			//Read the rounds list		
+			for(int i = 0; i < tags.getInteger("RoundsSize"); i++)
+			{
+				TeamsRound round = new TeamsRound(tags.getCompoundTag("Round_" + i));
+				rounds.add(round);
+			}
+
+			//Read variables
+			enabled = tags.getBoolean("Enabled");
+			voting = tags.getBoolean("Voting");
+			bombsEnabled = tags.getBoolean("Bombs");
+			bulletsEnabled = tags.getBoolean("Bullets");
+			explosions = tags.getBoolean("Explosions");
+			forceAdventureMode = tags.getBoolean("ForceAdventure");
+			canBreakGuns = tags.getBoolean("CanBreakGuns");
+			canBreakGlass = tags.getBoolean("CanBreakGlass");
+			armourDrops = tags.getBoolean("ArmourDrops");
+			weaponDrops = tags.getInteger("WeaponDrops");
+			vehiclesNeedFuel = tags.getBoolean("NeedFuel");
+			mgLife = tags.getInteger("MGLife");
+			aaLife = tags.getInteger("AALife");
+			vehicleLife = tags.getInteger("VehicleLife");
+			mechaLove = tags.getInteger("MechaLove");
+			planeLife = tags.getInteger("PlaneLife");
+			driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
+			
+			//Start the rotation
+			if(enabled && rounds.size() > 0)
+				start();
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to load from teams.dat");
+			e.printStackTrace();
+			
+		}
+		
+		//Reset all infotypes. Specifically, send this to player classes so that they may create itemstacks from strings regarding attachments for guns
+		for(InfoType type : InfoType.infoTypes)
+			type.onWorldLoad(world);
+	}
+	
+	private void savePerWorldData(Event event, World world)
+	{
+        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		checkFileExists(file);
+		try
+		{
+			NBTTagCompound tags = new NBTTagCompound();
+			tags.setInteger("NextBaseID", nextBaseID);
+			//Changed name so that it does not try to read old maps
+			tags.setInteger("NumberOfMaps", maps.size());
+			//Write the maps to memory
+			if(maps != null)
+			{
+				int i = 0;
+				for(TeamsMap map : maps.values())
+				{
+					NBTTagCompound mapTags = new NBTTagCompound();
+					map.writeToNBT(mapTags);
+					tags.setTag("Map_" + i, mapTags);
+					i++;
+				}
+			}
+			//Write the rounds list to memory
+			if(rounds != null)
+			{
+				tags.setInteger("RoundsSize", rounds.size());
+				for(int i = 0; i < rounds.size(); i++)
+				{
+					TeamsRound entry = rounds.get(i);
+					if(entry != null)
+					{
+						NBTTagCompound roundTags = new NBTTagCompound();
+						entry.writeToNBT(roundTags);
+						tags.setTag("Round_" + i, roundTags);
+					}
+				}
+			}
+			else tags.setInteger("RoundsSize", 0);
+			//Write the current round to memory
+			if(currentRound != null)
+				tags.setInteger("CurrentRound", rounds.indexOf(currentRound));
+			//Save gametype settings to memory
+			for(Gametype gametype : Gametype.gametypes.values())
+			{
+				gametype.saveToNBT(tags);
+			}
+
+			//Save variables
+			tags.setBoolean("Enabled", enabled);
+			tags.setBoolean("Voting", voting);
+			tags.setBoolean("Bombs", bombsEnabled);
+			tags.setBoolean("Bullets", bulletsEnabled);
+			tags.setBoolean("Explosions", explosions);
+			tags.setBoolean("ForceAdventure", forceAdventureMode);
+			tags.setBoolean("CanBreakGuns", canBreakGuns);
+			tags.setBoolean("CanBreakGlass", canBreakGlass);
+			tags.setBoolean("ArmourDrops", armourDrops);
+			tags.setInteger("WeaponDrops", weaponDrops);
+			tags.setBoolean("NeedFuel", vehiclesNeedFuel);
+			tags.setInteger("MGLife", mgLife);
+			tags.setInteger("AALife", aaLife);
+			tags.setInteger("VehicleLife", vehicleLife);
+			tags.setInteger("MechaLove", mechaLove);
+			tags.setInteger("PlaneLife", planeLife);
+			tags.setBoolean("BreakBlocks", driveablesBreakBlocks);
+			
+			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
+		}
+		catch(Exception e)
+		{
+			FlansMod.log("Failed to save to teams.dat");
+			e.printStackTrace();
+		}
+	}
+	
+	private boolean checkFileExists(File file)
+	{
+		if(!file.exists())
+		{
+			try
+			{ 
+				file.createNewFile();
+				FlansMod.log("Created new file");
+			}
+			catch(Exception e)
+			{
+				FlansMod.log("Failed to create file");
+				FlansMod.log(file.getAbsolutePath());
+				e.printStackTrace();
+			}
+			return false;
+		}	
 		return true;
 	}
 	
-	public static class TeamsMap
+	//------------------------------------------------------------------------------
+	// Getters, setters, registers, loggers and the likes 
+	//------------------------------------------------------------------------------
+	
+	public void resetScores()
 	{
-		public static TeamsMap def = new TeamsMap("default", "Default");
-		public String name;
-		public String shortName;
-		
-		public TeamsMap(String s1, String s2)
+		for(Team team : Team.teams)
 		{
-			shortName = s1;
-			name = s2;
+			team.score = 0;
+			team.members.clear();
 		}
+		for(EntityPlayer player : getPlayers())
+			PlayerHandler.getPlayerData((EntityPlayerMP)player).resetScore();
 	}
 	
-	public TeamsMap getTeamsMap(String s)
+	public ITeamBase getBase(int ID)
 	{
-		for(TeamsMap map : maps)
+		for(ITeamBase base : bases)
 		{
-			if(map.shortName.equals(s))
-				return map;
+			if(base.getBaseID() == ID)
+				return base;
 		}
 		return null;
 	}
 	
-	public static class RotationEntry
+	public void registerBase(ITeamBase base)
 	{
-		public TeamsMap map;
-		public Gametype gametype;
-		public Team[] teams;
-		
-		public RotationEntry(TeamsMap m, Gametype g, Team[] t)
+		if(base.getBaseID() == 0)
+			base.setBaseID(nextBaseID++);
+		bases.add(base);
+	}	
+	
+	public void registerObject(ITeamObject obj)
+	{
+		objects.add(obj);
+	}
+	
+	public EntityPlayerMP getPlayer(String username)
+	{
+		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
+	}
+	
+	public static void log(String s)
+	{
+		FlansMod.log("Teams Info : " + s);
+	}	
+	
+	public static void messagePlayer(EntityPlayerMP player, String s)
+	{
+		player.addChatComponentMessage(new ChatComponentText(s));
+	}
+	
+	public static void messageAll(String s)
+	{
+		FlansMod.log("Teams Announcement : " + s);
+		for(EntityPlayerMP player : (List<EntityPlayerMP>)MinecraftServer.getServer().getConfigurationManager().playerEntityList)
 		{
-			map = m;
-			gametype = g;
-			teams = t;
+			player.addChatComponentMessage(new ChatComponentText(s));
 		}
+	}
+	
+	public static void sendPacketToPlayer(PacketBase packet, EntityPlayerMP player)
+	{
+		FlansMod.getPacketHandler().sendTo(packet, player);
+	}
+	
+	public static List<EntityPlayer> getPlayers()
+	{
+		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+	}
+
+	/** Returns the team associated with the given ID */
+	public Team getTeam(int spawnerTeamID) 
+	{
+		if(!enabled || currentRound == null || spawnerTeamID == 0)
+			return null;
+		if(spawnerTeamID == 1)
+			return Team.spectators;
+		return currentRound.teams[spawnerTeamID - 2];
+	}
+
+	/** The maps HashMap is indexed by shortName, not full name, so this method helps there */
+	public TeamsMap getMapFromFullName(String string) 
+	{
+		for(TeamsMap map : maps.values())
+		{
+			if(map.name.equals(string))
+				return map;
+		}
+		return null;
 	}
 }
