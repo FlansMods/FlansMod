@@ -301,6 +301,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		if(player == null)
 			return;
 		Side side = worldObj.isRemote ? Side.CLIENT : Side.SERVER;
+		if(PlayerHandler.getPlayerData(gunner, side) == null)
+			return;
 		if(mounting)
 		{
 			gunner = player;
