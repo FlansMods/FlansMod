@@ -176,9 +176,6 @@ public class GametypeTDM extends Gametype
 		{
 			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
 				return false;
-			//Spectators may not attack players
-			if(getPlayerData(attacker).team == Team.spectators)
-				return false;
 			//Check for friendly fire
 			if(getPlayerData(player).team == getPlayerData(attacker).team)
 				return friendlyFire;
@@ -190,13 +187,28 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) 
+	{ 
+		if(attackerTeam == victimTeam)
+			return friendlyFire;
+		return true;
+	}
+	
+	@Override
 	public void playerKilled(EntityPlayerMP player, DamageSource source) 
 	{
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
+			//They killed themself. -1 point.
 			if(attacker == player)
 				getPlayerData(player).score--;
+			//They teamkilled. -1 point.
+			else if(getPlayerData(attacker).team == getPlayerData(player).team)
+			{
+				getPlayerData(attacker).score--;
+			}
+			//They killed an enemy. +1 point to them and their team
 			else 
 			{	
 				givePoints(attacker, 1);
