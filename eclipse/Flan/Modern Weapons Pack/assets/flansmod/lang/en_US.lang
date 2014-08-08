@@ -1,5 +1,5 @@
 tile.modern.name=Modern Weapons Box
-tile.mwArmour.name=Modern Warfare Armour Box
+tile.mwArmour.name=Modern Warfare Armor Box
 item.clayAndSand.name=Clay and Sand Mixture
 item.fiberglass.name=Fibreglass
 item.marineHelmet.name=Marine Helmet
@@ -7,8 +7,8 @@ item.marineBody.name=Marine Jacket
 item.marinePants.name=Marine Trousers
 item.marineBoots.name=Marine Boots
 item.juggernautHelmet.name=Juggernaut Helmet
-item.juggernautBody.name=Juggernaut Body Armour
-item.juggernautPants.name=Juggernaut Leg Armour
+item.juggernautBody.name=Juggernaut Body Armor
+item.juggernautPants.name=Juggernaut Leg Armor
 item.juggernautBoots.name=Juggernaut Boots
 item.spetsnazHelmet.name=Spetsnaz Helmet
 item.spetsnazBody.name=Spetsnaz Jacket
