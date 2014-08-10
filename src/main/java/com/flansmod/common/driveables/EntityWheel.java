@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import com.flansmod.api.IControllable;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.vector.Vector3f;
 
 import io.netty.buffer.ByteBuf;
@@ -38,7 +39,13 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		vehicleID = veh.getEntityId();
 		ID = i;
 		
-		setPosition(veh.posX, veh.posY, veh.posZ);
+		initPosition();
+	}
+	
+	public void initPosition()
+	{
+		Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(vehicle.getVehicleType().wheelPositions[ID]);
+		setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
 	}
 
 	@Override
@@ -61,6 +68,10 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
 		
 		//If on the client and the vehicle parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundVehicle)
@@ -97,10 +108,14 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//Apply steering
 		if(ID == 2 || ID == 3)
 		{
-			float velocityScale = 100F;
-			motionX -= vehicle.getSpeedXZ() * Math.sin(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
-			motionZ += vehicle.getSpeedXZ() * Math.cos(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
+			float velocityScale = 0.01F;
+			motionX -= getSpeedXZ() * Math.sin(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
+			motionZ += getSpeedXZ() * Math.cos(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
 		}
+		
+		motionX *= 0.99F;
+		motionY *= 0.99F;
+		motionZ *= 0.99F;
 		
 		moveEntity(motionX, motionY, motionZ);
 		
@@ -109,13 +124,20 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		Vector3f currentWheelPos = new Vector3f(posX - vehicle.posX, posY - vehicle.posY, posZ - vehicle.posZ);
 		
 		Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(vehicle.getVehicleType().wheelSpringStrength));
-				
+			
 		if(dPos.length() > 0.001F)
 		{
 			moveEntity(dPos.x, dPos.y, dPos.z);
 			dPos.scale(0.2F);
 			vehicle.moveEntity(-dPos.x, -dPos.y, -dPos.z);
 		}
+		
+
+	}
+	
+	public double getSpeedXZ()
+	{
+		return Math.sqrt(motionX * motionX + motionZ * motionZ);
 	}
 	
 	@Override

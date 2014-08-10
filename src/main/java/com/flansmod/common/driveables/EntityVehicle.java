@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,6 +82,15 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				worldObj.spawnEntityInWorld(wheels[i]);
 			}
 		}
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf data)
+	{
+		super.readSpawnData(data);
+		for(EntityWheel wheel : wheels)
+			if(wheel != null)
+				wheel.initPosition();
 	}
 
 	@Override
@@ -405,7 +415,26 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Movement
-		
+		if(wheels[0] != null)
+		{
+			Vector3f frontAxleCentre = new Vector3f(wheels[2].posX + wheels[3].posX / 2F, wheels[2].posY + wheels[3].posY / 2F, wheels[2].posZ + wheels[3].posZ / 2F); 
+			Vector3f backAxleCentre = new Vector3f(wheels[0].posX + wheels[1].posX / 2F, wheels[0].posY + wheels[1].posY / 2F, wheels[0].posZ + wheels[1].posZ / 2F); 
+			
+			Vector3f carCentre = new Vector3f((frontAxleCentre.x + backAxleCentre.x) / 2F, (frontAxleCentre.y + backAxleCentre.y) / 2F, (frontAxleCentre.z + backAxleCentre.z) / 2F);
+			
+			
+			float dx = frontAxleCentre.x - backAxleCentre.x;
+			float dy = frontAxleCentre.y - backAxleCentre.y;
+			float dz = frontAxleCentre.z - backAxleCentre.z;
+			
+			float dxz = (float)Math.sqrt(dx * dx + dz * dz);
+			
+			float yaw = (float)Math.atan2(dz, dx);
+			float pitch = (float)Math.atan2(dy, dxz);
+			float roll = 0;
+			
+			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
+		}
 		
 		/*
 		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
