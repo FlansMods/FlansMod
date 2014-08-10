@@ -91,6 +91,11 @@ public class PlayerHandler
 			if(!clientSideData.containsKey(username))
 				clientSideData.put(username, new PlayerData(username));
 		}
+		else
+		{
+			if(!serverSideData.containsKey(username))
+				serverSideData.put(username, new PlayerData(username));
+		}
 		return side.isClient() ? clientSideData.get(username) : serverSideData.get(username);
 	}
 

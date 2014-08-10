@@ -25,6 +25,7 @@ public class VehicleType extends DriveableType
 	public boolean tank = false;
 	/** Wheel positions */
 	public Vector3f[] wheelPositions = new Vector3f[4];
+	public float wheelSpringStrength = 0.1F;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -83,8 +84,8 @@ public class VehicleType extends DriveableType
             	tank = Boolean.parseBoolean(split[1].toLowerCase());
             
             //Wheels
-            if(split[0].equals("Wheel"))
-            	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]), Float.parseFloat(split[3]), Float.parseFloat(split[4]));
+            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
+            	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
             
             //Visuals
             if(split[0].equals("HasDoor"))

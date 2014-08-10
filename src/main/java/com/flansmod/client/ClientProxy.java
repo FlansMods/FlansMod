@@ -14,9 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-
 import net.minecraftforge.client.MinecraftForgeClient;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -59,6 +57,7 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EntityWheel;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.EntityAAGun;
@@ -157,7 +156,8 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());		
+		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());

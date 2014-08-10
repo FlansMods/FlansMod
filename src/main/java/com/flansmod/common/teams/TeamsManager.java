@@ -382,6 +382,9 @@ public class TeamsManager
 				EntityPlayerMP attacker = ((EntityPlayerMP)((EntityDamageSource)source).getEntity());
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
+				if(attackerData == null)
+					return;
+				
 				//Cannot be attacked by a spectator
 				if(attackerData.team == Team.spectators)
 				{
@@ -600,7 +603,7 @@ public class TeamsManager
 		EntityPlayerMP playerMP = ((EntityPlayerMP)player);
 		PlayerData data = PlayerHandler.getPlayerData(playerMP);
 		
-		if(data.builder && playerIsOp(playerMP))
+		if(data == null || (data.builder && playerIsOp(playerMP)))
 			return;
 		
 		//On the first spawn, we don't kill the player, we simply move them over, so do a /tp like command
@@ -1061,7 +1064,8 @@ public class TeamsManager
 			team.members.clear();
 		}
 		for(EntityPlayer player : getPlayers())
-			PlayerHandler.getPlayerData((EntityPlayerMP)player).resetScore();
+			if(PlayerHandler.getPlayerData((EntityPlayerMP)player) != null)
+				PlayerHandler.getPlayerData((EntityPlayerMP)player).resetScore();
 	}
 	
 	public ITeamBase getBase(int ID)

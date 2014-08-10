@@ -25,6 +25,11 @@ MomentOfInertia 10.0
 Bounciness 0.3
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 0.5
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -22 -8 -14
+WheelPosition 1 -22 -8 14
+WheelPosition 2 22 -8 14
+WheelPosition 3 22 -8 -14
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)

@@ -10,10 +10,12 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.flansmod.api.IExplodeable;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
@@ -23,6 +25,7 @@ import com.flansmod.common.network.PacketVehicleControl;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.vector.Matrix4f;
 import com.flansmod.common.vector.Vector3f;
 
 
@@ -402,7 +405,25 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Movement
-
+		
+		
+		/*
+		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
+		Vec3 xAxis = subtract(wheelVectors[3], wheelVectors[0]).normalize();
+		Vec3 yAxis = crossProduct(zAxis2, xAxis);
+		Matrix4f rotationMatrix = new Matrix4f();
+		rotationMatrix.m00 = (float)xAxis.xCoord;
+		rotationMatrix.m10 = (float)xAxis.yCoord;
+		rotationMatrix.m20 = (float)xAxis.zCoord;
+		rotationMatrix.m01 = (float)yAxis.xCoord;
+		rotationMatrix.m11 = (float)yAxis.yCoord;
+		rotationMatrix.m21 = (float)yAxis.zCoord;
+		rotationMatrix.m02 = (float)zAxis2.xCoord;
+		rotationMatrix.m12 = (float)zAxis2.yCoord;
+		rotationMatrix.m22 = (float)zAxis2.zCoord;
+		axes = new RotatedAxes(rotationMatrix);
+*/
+		/*
 		//Apply turning forces
 		{
 			float sensitivityAdjust = 1F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
@@ -467,6 +488,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		//Call the movement method in EntityDriveable to move the driveable according to the forces we just applied
 		moveDriveable();
+		*/
 		
 		
 		//Fuel Handling
@@ -550,6 +572,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
     }
+    
+	private Vec3 subtract(Vec3 a, Vec3 b)
+	{
+		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
+	}
+	
+	private Vec3 crossProduct(Vec3 a, Vec3 b)
+	{
+        return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
+	}
     
     private void applyThrust(DriveablePart part, float thrust)
     {
@@ -638,5 +670,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public boolean hasMouseControlMode()
 	{
 		return false;
+	}
+	
+	@Override
+	public void setDead()
+	{
+		super.setDead();
+		for(EntityWheel wheel : wheels)
+			if(wheel != null)
+				wheel.setDead();
 	}
 }
