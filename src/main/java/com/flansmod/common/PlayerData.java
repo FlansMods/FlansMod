@@ -2,6 +2,8 @@ package com.flansmod.common;
 
 import java.util.ArrayList;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.teams.PlayerClass;
@@ -103,5 +105,11 @@ public class PlayerData
 		score = kills = deaths = 0;
 		team = newTeam = null;
 		playerClass = newPlayerClass = null;
+	}
+	
+	public void playerKilled()
+	{
+		mountingGun = null;
+		isShooting = false;
 	}
 }

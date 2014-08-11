@@ -52,7 +52,7 @@ public class PlayerHandler
 		EntityLivingBase entity = event.entityLiving;
 		if(entity instanceof EntityPlayer)
 		{
-			getPlayerData((EntityPlayer)entity).isShooting = false;
+			getPlayerData((EntityPlayer)entity).playerKilled();
 		}
 	}
 	
