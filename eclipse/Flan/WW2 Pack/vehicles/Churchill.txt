@@ -1,25 +1,25 @@
 //Naming
-Name Panzer IV
-ShortName Panzer
-ItemID 23490
+Name Churchill mk VII
+ShortName Churchill
+ItemID 23493
 //Visuals
-Icon Panzer
-Model ww2.Panzer
-Texture Panzer
+Icon Churchill
+Model ww2.Churchill
+Texture Churchill
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 5.0
+MaxThrottle 2.5
 MaxNegativeThrottle 0.0
 //Steering modifiers
-TurnLeftSpeed 0.3
-TurnRightSpeed 0.3
+TurnLeftSpeed 1
+TurnRightSpeed 1
 //Drag
-Drag 90.0
+Drag 10.0
 //Mass (In tons)
-Mass 30.0
+Mass 10.0
 //Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
-MomentOfInertia 30.0
+MomentOfInertia 100.0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.5
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -40,8 +40,8 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 14 0 -360 360 0 45
-RotatedDriverOffset 12 0 -8
+Driver 0 43 0 -360 360 0 45
+RotatedDriverOffset -12 0 0
 Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 mg42 MG42
 BarrelPosition 0 34 0
@@ -68,8 +68,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 500 -40 -8 -20 80 36 40
-SetupPart turret 400 -16 28 -16 32 12 32
-SetupPart leftTrack 200 -40 -8 -24 80 20 4
-SetupPart rightTrack 200 -40 -8 20 80 20 4
+SetupPart leftTrack 200 -66 6 16 142 17 14
+SetupPart rightTrack 200 -66 6 -30 142 17 14
+SetupPart core 500 -70 -13 -33 149 24 64
+SetupPart turret 200 -23 33 -16 43 22 32
 BulletDetection 7
