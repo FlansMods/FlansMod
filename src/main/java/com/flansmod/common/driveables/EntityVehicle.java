@@ -52,12 +52,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     public EntityVehicle(World world)
     {
         super(world);
+        stepHeight = 1.0F;
     }
     
     //This one deals with spawning from a vehicle spawner
 	public EntityVehicle(World world, double x, double y, double z, VehicleType type, DriveableData data)
 	{
 		super(world, type, data);
+		stepHeight = 1.0F;
 		setPosition(x, y, z);
 		initType(type, false);
 	}
@@ -82,6 +84,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				worldObj.spawnEntityInWorld(wheels[i]);
 			}
 		}
+		stepHeight = ((VehicleType)type).wheelStepHeight;
 	}
 	
 	@Override
@@ -415,6 +418,70 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Movement
+		//Hacky way of forcing the car to step up blocks
+		onGround = true;
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel == null)
+				continue;
+			
+			wheel.onGround = true;
+			
+			//Update angles
+			wheel.rotationYaw = axes.getYaw();
+			//Front wheels
+			if(wheel.ID == 2 || wheel.ID == 3)
+			{
+				wheel.rotationYaw += wheelsYaw;
+			}
+			
+			wheel.motionX *= 0.9F;
+			wheel.motionY *= 0.9F;
+			wheel.motionZ *= 0.9F;
+			
+			//Apply gravity
+			wheel.motionY -= 0.98F / 20F;
+			
+			//Apply velocity
+			if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+			{
+				float velocityScale = 0.06F;
+				wheel.motionX += throttle * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+				wheel.motionZ += throttle * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+			}
+			
+			//Apply steering
+			if(wheel.ID == 2 || wheel.ID == 3)
+			{
+				float velocityScale = 0.01F;
+
+				wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+				wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+			}
+			else
+			{
+				wheel.motionX *= 0.9F;
+				wheel.motionZ *= 0.9F;
+			}
+			
+
+			
+			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
+			
+			//Pull wheels towards car
+			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.ID]);
+			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
+			
+			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
+				
+			if(dPos.length() > 0.001F)
+			{
+				wheel.moveEntity(dPos.x, dPos.y, dPos.z);
+				dPos.scale(0.5F);
+				moveEntity(-dPos.x, -dPos.y, -dPos.z);
+			}
+		}
+		
 		if(wheels[0] != null)
 		{
 			Vector3f frontAxleCentre = new Vector3f(wheels[2].posX + wheels[3].posX / 2F, wheels[2].posY + wheels[3].posY / 2F, wheels[2].posZ + wheels[3].posZ / 2F); 
@@ -430,10 +497,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			float dxz = (float)Math.sqrt(dx * dx + dz * dz);
 			
 			float yaw = (float)Math.atan2(dz, dx);
-			float pitch = (float)Math.atan2(dy, dxz);
+			float pitch = -(float)Math.atan2(dy, dxz);
 			float roll = 0;
 			
-			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
+			//The 11.93 is due to this calculation causing the car to spin at equilibrium. I may try and find the cause later, but this fix works for now
+			axes.setAngles(yaw * 180F / 3.14159F - 11.93F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
 		/*

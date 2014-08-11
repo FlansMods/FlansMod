@@ -25,7 +25,8 @@ public class VehicleType extends DriveableType
 	public boolean tank = false;
 	/** Wheel positions */
 	public Vector3f[] wheelPositions = new Vector3f[4];
-	public float wheelSpringStrength = 0.1F;
+	/** Strength of springs connecting car to wheels */
+	public float wheelSpringStrength = 0.5F;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -86,6 +87,10 @@ public class VehicleType extends DriveableType
             //Wheels
             if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
             	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
+            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
+            	wheelStepHeight = Float.parseFloat(split[1]);            
+            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
+                wheelSpringStrength = Float.parseFloat(split[1]);
             
             //Visuals
             if(split[0].equals("HasDoor"))

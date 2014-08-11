@@ -30,6 +30,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(world);
 		setSize(1F, 1F);
+		stepHeight = 1.0F;
 	}
 
 	public EntityWheel(World world, EntityVehicle veh, int i) 
@@ -46,6 +47,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	{
 		Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(vehicle.getVehicleType().wheelPositions[ID]);
 		setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
+		stepHeight = vehicle.getVehicleType().wheelStepHeight;
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		
 		if(vehicle == null)
 			return;
-		
+		/*
 		//Update angles
 		rotationYaw = vehicle.rotationYaw;
 		//Front wheels
@@ -108,14 +110,14 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//Apply steering
 		if(ID == 2 || ID == 3)
 		{
-			float velocityScale = 0.01F;
+			float velocityScale = 0.02F;
 			motionX -= getSpeedXZ() * Math.sin(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
 			motionZ += getSpeedXZ() * Math.cos(rotationYaw * 3.14159265F / 180F) * velocityScale * vehicle.wheelsYaw;
 		}
 		
-		motionX *= 0.99F;
-		motionY *= 0.99F;
-		motionZ *= 0.99F;
+		motionX *= 0.95F;
+		motionY *= 0.95F;
+		motionZ *= 0.95F;
 		
 		moveEntity(motionX, motionY, motionZ);
 		
@@ -123,7 +125,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		Vector3f targetWheelPos = vehicle.axes.findLocalVectorGlobally(vehicle.getVehicleType().wheelPositions[ID]);
 		Vector3f currentWheelPos = new Vector3f(posX - vehicle.posX, posY - vehicle.posY, posZ - vehicle.posZ);
 		
-		Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(vehicle.getVehicleType().wheelSpringStrength));
+		Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(vehicle.getVehicleType().wheelSpringStrength * 5F));
 			
 		if(dPos.length() > 0.001F)
 		{
@@ -131,7 +133,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			dPos.scale(0.2F);
 			vehicle.moveEntity(-dPos.x, -dPos.y, -dPos.z);
 		}
-		
+		*/
 
 	}
 	
