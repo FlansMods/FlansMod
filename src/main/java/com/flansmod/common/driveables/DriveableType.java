@@ -48,10 +48,7 @@ public class DriveableType extends InfoType
 	public int fuelTankSize = 100;
 	/** The guns controlled by the driver */
 	public ArrayList<PilotGun> guns = new ArrayList<PilotGun>();
-	
-	/** The offset of the driver from their point of rotation. Used in tank turrets where the player is in a rotating turret, but on one side of the gun */
-	public Vector3f rotatedDriverOffset = new Vector3f();
-	
+		
 	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
 	public float yOffset = 10F / 16F;
 	/** Third person render distance */
@@ -208,7 +205,11 @@ public class DriveableType extends InfoType
 			
 			if(split[0].equals("RotatedDriverOffset"))
 			{
-				rotatedDriverOffset = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+				seats[0].rotatedOffset = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
+			}
+			if(split[0].equals("RotatedPassengerOffset"))
+			{
+				seats[Integer.parseInt(split[1])].rotatedOffset = new Vector3f(Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F, Integer.parseInt(split[4]) / 16F);
 			}
 			
 			//Passengers / Gunner Seats

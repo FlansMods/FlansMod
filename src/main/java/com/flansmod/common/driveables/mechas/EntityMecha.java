@@ -809,6 +809,7 @@ public class EntityMecha extends EntityDriveable
 								}
 							}
 							//Destroy block
+							
 							worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
 						}
 					}

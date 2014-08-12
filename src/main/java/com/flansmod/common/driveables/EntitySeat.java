@@ -171,13 +171,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 
 		//Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
-		//If this is the drivers seat, add the offset vector
-		if(driver)
-		{
-			RotatedAxes yawOnlyLooking = new RotatedAxes(looking.getYaw(), 0F, 0F);
-			Vector3f rotatedOffset = yawOnlyLooking.findLocalVectorGlobally(driveable.getDriveableType().rotatedDriverOffset);
-			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
-		}
+		
+		//Rotate the offset vector by the turret yaw
+		RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.seats[0].looking.getYaw(), 0F, 0F);
+		Vector3f rotatedOffset = yawOnlyLooking.findLocalVectorGlobally(seatInfo.rotatedOffset);
+		Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
+		
 		//If this seat is connected to the turret, then its position vector on the driveable axes needs an extra rotation in it
 		//if(driveable.rotateWithTurret(seatInfo) && driveable.seats[0] != null)
 			//localPosition = driveable.seats[0].looking.findLocalVectorGlobally(localPosition);
@@ -245,7 +244,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
     public boolean canBeCollidedWith()
     {
-        return false;
+        return !isDead;
     }
 	
 	@Override
