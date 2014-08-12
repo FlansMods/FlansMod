@@ -245,7 +245,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
     public boolean canBeCollidedWith()
     {
-        return !isDead;
+        return false;
     }
 	
 	@Override

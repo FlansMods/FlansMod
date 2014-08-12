@@ -15,6 +15,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.flansmod.api.IExplodeable;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
@@ -91,9 +92,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public void readSpawnData(ByteBuf data)
 	{
 		super.readSpawnData(data);
-		for(EntityWheel wheel : wheels)
-			if(wheel != null)
-				wheel.initPosition();
 	}
 
 	@Override
@@ -355,6 +353,18 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         	return;
         }
         
+        if(!worldObj.isRemote)
+        {
+        	for(int i = 0; i < 4; i++)
+        	{
+        		if(wheels[i] == null || !wheels[i].addedToChunk)
+        		{
+        			wheels[i] = new EntityWheel(worldObj, this, i);
+    				worldObj.spawnEntityInWorld(wheels[i]);
+        		}
+        	}
+        }
+        
         //Work out if this is the client side and the player is driving
         boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
                 
@@ -418,19 +428,22 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Movement
-		//Hacky way of forcing the car to step up blocks
-		onGround = true;
+
+		Vector3f amountToMoveCar = new Vector3f();
+		
 		for(EntityWheel wheel : wheels)
 		{
 			if(wheel == null)
 				continue;
 			
+			//Hacky way of forcing the car to step up blocks
+			onGround = true;
 			wheel.onGround = true;
 			
 			//Update angles
 			wheel.rotationYaw = axes.getYaw();
 			//Front wheels
-			if(wheel.ID == 2 || wheel.ID == 3)
+			if(!type.tank && (wheel.ID == 2 || wheel.ID == 3))
 			{
 				wheel.rotationYaw += wheelsYaw;
 			}
@@ -440,32 +453,50 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.motionZ *= 0.9F;
 			
 			//Apply gravity
-			wheel.motionY -= 0.98F / 20F;
+			wheel.motionY -= 0.98F / 1F;
 			
 			//Apply velocity
-			if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+			if(getVehicleType().tank)
 			{
-				float velocityScale = 0.06F;
-				wheel.motionX += throttle * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
-				wheel.motionZ += throttle * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
-			}
-			
-			//Apply steering
-			if(wheel.ID == 2 || wheel.ID == 3)
-			{
-				float velocityScale = 0.01F;
+				boolean left = wheel.ID == 0 || wheel.ID == 3;
+				
+				float turningDrag = 0.02F;
+				wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
+				wheel.motionZ *= 1F - (Math.abs(wheelsYaw) * turningDrag);
+				
+				float velocityScale = 0.04F;
+				float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+				float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
+				wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
+				wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
+				
 
-				wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
-				wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
 			}
 			else
 			{
-				wheel.motionX *= 0.9F;
-				wheel.motionZ *= 0.9F;
+				//if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+				{
+					float velocityScale = 0.1F;
+					wheel.motionX += throttle * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+					wheel.motionZ += throttle * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+				}
+				
+				//Apply steering
+				if(wheel.ID == 2 || wheel.ID == 3)
+				{
+					float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+	
+					wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+					wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+				}
+				else
+				{
+					wheel.motionX *= 0.9F;
+					wheel.motionZ *= 0.9F;
+				}
 			}
 			
 
-			
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
 			
 			//Pull wheels towards car
@@ -478,17 +509,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				wheel.moveEntity(dPos.x, dPos.y, dPos.z);
 				dPos.scale(0.5F);
-				moveEntity(-dPos.x, -dPos.y, -dPos.z);
+				Vector3f.sub(amountToMoveCar, dPos, amountToMoveCar);
 			}
 		}
 		
-		if(wheels[0] != null)
+		moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+		
+		if(wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
 		{
-			Vector3f frontAxleCentre = new Vector3f(wheels[2].posX + wheels[3].posX / 2F, wheels[2].posY + wheels[3].posY / 2F, wheels[2].posZ + wheels[3].posZ / 2F); 
-			Vector3f backAxleCentre = new Vector3f(wheels[0].posX + wheels[1].posX / 2F, wheels[0].posY + wheels[1].posY / 2F, wheels[0].posZ + wheels[1].posZ / 2F); 
-			
-			Vector3f carCentre = new Vector3f((frontAxleCentre.x + backAxleCentre.x) / 2F, (frontAxleCentre.y + backAxleCentre.y) / 2F, (frontAxleCentre.z + backAxleCentre.z) / 2F);
-			
+			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F); 
+			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F); 
 			
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
@@ -500,8 +530,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			float pitch = -(float)Math.atan2(dy, dxz);
 			float roll = 0;
 			
+			if(type.tank)
+			{
+				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) + (float)Math.PI / 2F;
+				//yaw = averageAngles((float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX),(float)Math.atan2(wheels[1].posZ - wheels[0].posZ, wheels[1].posX - wheels[0].posX));
+			}
+			
 			//The 11.93 is due to this calculation causing the car to spin at equilibrium. I may try and find the cause later, but this fix works for now
-			axes.setAngles(yaw * 180F / 3.14159F - 11.93F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
+			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
 		/*
@@ -668,6 +704,24 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
+    }
+    
+    private float averageAngles(float a, float b)
+    {
+    	FlansMod.log("Pre  " + a + " " + b);
+    	
+    	float pi = (float)Math.PI;
+    	for(; a > b + pi; a -= 2 * pi) ;
+    	for(; a < b - pi; a += 2 * pi) ;
+    	
+    	float avg = (a + b) / 2F;
+    		
+    	for(; avg > pi; avg -= 2 * pi) ;
+    	for(; avg < -pi; avg += 2 * pi) ;
+    	
+    	FlansMod.log("Post " + a + " " + b + " " + avg);
+    	
+    	return avg;
     }
     
 	private Vec3 subtract(Vec3 a, Vec3 b)

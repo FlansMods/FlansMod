@@ -77,8 +77,6 @@ public class VehicleType extends DriveableType
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
-            	wheelStepHeight = Float.parseFloat(split[1]);
             if(split[0].equals("FourWheelDrive"))
             	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
             if(split[0].equals("Tank") || split[0].equals("TankMode"))

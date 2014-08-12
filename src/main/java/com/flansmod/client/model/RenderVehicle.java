@@ -54,7 +54,10 @@ public class RenderVehicle extends Render
 				GL11.glPushMatrix();
 				if(type.barrelPosition != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 				{
-		    		float yaw = vehicle.seats[0].prevLooking.getYaw() + (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw()) * f1;
+					dYaw = (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw());
+			        for(; dYaw > 180F; dYaw -= 360F) {}
+			        for(; dYaw <= -180F; dYaw += 360F) {}
+		    		float yaw = vehicle.seats[0].prevLooking.getYaw() + dYaw * f1;
 		    		
 		    		GL11.glTranslatef(type.barrelPosition.x, type.barrelPosition.y, type.barrelPosition.z);
 					GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);

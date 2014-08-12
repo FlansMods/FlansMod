@@ -7,21 +7,15 @@ Icon Churchill
 Model ww2.Churchill
 Texture Churchill
 //Third Person Camera Distance
-CameraDistance 7.5
+CameraDistance 12.5
 //Throttle
 MaxThrottle 2.5
 MaxNegativeThrottle 0.0
 //Steering modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
-//Drag
-Drag 10.0
-//Mass (In tons)
-Mass 10.0
-//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
-MomentOfInertia 100.0
 //For calculating whether wheels are on the ground or not for driving
-WheelRadius 1.5
+WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
 WheelPosition 0 -22 -8 -14
 WheelPosition 1 -22 -8 14
