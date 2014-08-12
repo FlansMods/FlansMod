@@ -453,7 +453,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.motionZ *= 0.9F;
 			
 			//Apply gravity
-			wheel.motionY -= 0.98F / 1F;
+			wheel.motionY -= 0.98F / 20F;
 			
 			//Apply velocity
 			if(getVehicleType().tank)
@@ -484,7 +484,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				//Apply steering
 				if(wheel.ID == 2 || wheel.ID == 3)
 				{
-					float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+					float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
 	
 					wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
 					wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
