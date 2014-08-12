@@ -11,6 +11,7 @@ public class DriveablePart
 	public CollisionBox box;
 	public int maxHealth;
 	public int health;
+	public int fireTime;
 	public boolean onFire;
 	/** Keeps track of whether death code has been called or not */
 	public boolean dead;
@@ -24,6 +25,10 @@ public class DriveablePart
 	
 	public void update(EntityDriveable driveable)
 	{
+		if(fireTime > 0)
+			fireTime--;
+		if(fireTime == 0)
+			onFire = false;
 		if(onFire)
 			health--;
 		if(health <= 0 && maxHealth > 0)
@@ -91,7 +96,10 @@ public class DriveablePart
 		{
 			health -= bullet.damage * bullet.type.damageVsDriveable;
 			if(bullet.type.fire > 0)
+			{
+				fireTime = 20;
 				onFire = true;
+			}
 		}
 		return hit;
 	}
@@ -141,6 +149,9 @@ public class DriveablePart
 	{
 		health -= damage;
 		if(fireDamage)
+		{				
+			fireTime = 20;
 			onFire = true;
+		}
 	}
 }

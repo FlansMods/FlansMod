@@ -137,6 +137,8 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 
 	}
 	
+	
+	
 	public double getSpeedXZ()
 	{
 		return Math.sqrt(motionX * motionX + motionZ * motionZ);
