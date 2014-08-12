@@ -48,6 +48,8 @@ public class BlockSpawner extends BlockContainer
     @Override
     public IIcon getIcon(int i, int j)
     {
+    	if(j > 2)
+    		j = 2;
     	return icons[colouredPass ? 1 : 0][j];
     }
     
