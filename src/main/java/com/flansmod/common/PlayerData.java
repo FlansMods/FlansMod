@@ -8,6 +8,7 @@ import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.teams.TeamsRound;
 
 public class PlayerData 
 {
@@ -57,6 +58,9 @@ public class PlayerData
 	public int loopedSoundDelay;
 	public boolean shouldPlayCooldownSound;
 	public boolean shouldPlayWarmupSound;
+	
+	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */
+	public int vote;
 	
 	public PlayerData(String name) 
 	{

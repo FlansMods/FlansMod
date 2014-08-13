@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,6 +63,7 @@ import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.network.PacketVoting;
 import com.flansmod.common.types.InfoType;
 
 public class TeamsManager
@@ -103,8 +105,9 @@ public class TeamsManager
 	/** A downwards counter that times the round (in ticks) */
 	public int roundTimeLeft;
 	/** A downwards counter that times inter-round phases (in ticks) */
-	private int interRoundTimeLeft;
-
+	public int interRoundTimeLeft;
+	/** The list of rounds currently being voted upon */
+	public TeamsRound[] voteOptions;
 	
 	//Disused. Delete when done
 	//public Gametype currentGametype;
@@ -187,9 +190,14 @@ public class TeamsManager
 		{
 			interRoundTimeLeft--;
 			//If we're done showing scores, show the voting box
-			if(voting && interRoundTimeLeft == votingTime)
+			if(voting)
 			{
-				displayVotingGUI();
+				if(interRoundTimeLeft == votingTime)
+					pickVoteOptions();
+				if(interRoundTimeLeft <= votingTime)
+				{
+					displayVotingGUI();
+				}
 			}
 			//If the timer is finished, start the next round
 			if(interRoundTimeLeft == 0)
@@ -249,7 +257,26 @@ public class TeamsManager
 	
 	public void displayVotingGUI()
 	{
-		//TODO
+		
+		for(EntityPlayer player : getPlayers())
+		{
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(!data.builder)
+				sendPacketToPlayer(new PacketVoting(this), (EntityPlayerMP)player);
+		}
+	}
+	
+	public void pickVoteOptions()
+	{
+		Collections.sort(rounds);
+		voteOptions = new TeamsRound[Math.min(5, rounds.size())];
+		for(int i = 0; i < voteOptions.length; i++)
+		{
+			voteOptions[i] = rounds.get(i);
+		}
+		
+		//Wildcard option!
+		voteOptions[Gametype.rand.nextInt(voteOptions.length)] = rounds.get(Gametype.rand.nextInt(rounds.size()));
 	}
 	
 	public void start() 
@@ -280,8 +307,51 @@ public class TeamsManager
 		
 		if(voting)
 		{
-			//TODO
 			//Gather votes and decide which map to play
+			int winner = 0;
+			int mostVotes = 0;
+			
+			//Collect the votes from player data
+			int[] numVotes = new int[voteOptions.length];
+			for(PlayerData data : PlayerHandler.serverSideData.values())
+			{
+				if(data.vote > 0)
+					numVotes[data.vote - 1]++;
+			}
+			
+			//Find the highest one
+			for(int i = 0; i < voteOptions.length; i++)
+			{
+				if(numVotes[i] > mostVotes)
+				{
+					mostVotes = numVotes[i];
+					winner = i;
+				}
+			}
+			nextRound = voteOptions[winner];
+			
+			
+			//Update ratings
+			for(TeamsRound round : rounds)
+				round.roundsSincePlayed++;
+			
+			for(int i = 0; i < voteOptions.length; i++)
+			{
+				if(i == winner)
+				{
+					voteOptions[i].popularity = 1F - (1F - voteOptions[i].popularity) * 0.8F;
+					voteOptions[i].roundsSincePlayed = 0;
+				}
+				else 
+				{
+					voteOptions[i].popularity *= 0.9F;
+					voteOptions[i].popularity += 0.01F;
+				}
+			}
+			
+			//Clear votes
+			for(PlayerData data : PlayerHandler.serverSideData.values())
+				data.vote = 0;
 		}
 		else //Use standard rotation. Go to next map
 		{
@@ -925,6 +995,8 @@ public class TeamsManager
 			//Read variables
 			enabled = tags.getBoolean("Enabled");
 			voting = tags.getBoolean("Voting");
+			votingTime = tags.getInteger("VotingTime");
+			scoreDisplayTime = tags.getInteger("ScoreTime");
 			bombsEnabled = tags.getBoolean("Bombs");
 			bulletsEnabled = tags.getBoolean("Bullets");
 			explosions = tags.getBoolean("Explosions");
@@ -1007,6 +1079,8 @@ public class TeamsManager
 			//Save variables
 			tags.setBoolean("Enabled", enabled);
 			tags.setBoolean("Voting", voting);
+			tags.setInteger("VotingTime", votingTime);
+			tags.setInteger("ScoreTime", scoreDisplayTime);
 			tags.setBoolean("Bombs", bombsEnabled);
 			tags.setBoolean("Bullets", bulletsEnabled);
 			tags.setBoolean("Explosions", explosions);

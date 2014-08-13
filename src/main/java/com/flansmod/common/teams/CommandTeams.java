@@ -357,6 +357,7 @@ public class CommandTeams extends CommandBase
 				}
 				s += ", " + entry.timeLimit;
 				s += ", " + entry.scoreLimit;
+				s += ", Pop : " + (int)(entry.popularity * 100F) + "%";
 				sender.addChatMessage(new ChatComponentText(s));
 			}
 			return;
@@ -630,7 +631,7 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			TeamsManager.scoreDisplayTime = Integer.parseInt(split[1]) * 20;
-			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
+			sender.addChatMessage(new ChatComponentText("Score summary menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
 			return;
 		}
 		if(split[0].equals("votingTime"))
