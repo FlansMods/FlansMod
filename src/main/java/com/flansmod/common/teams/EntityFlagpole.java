@@ -98,6 +98,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		map = teamsManager.maps.get(tags.getString("Map"));
 		name = tags.getString("Name");
 		setMap(map);
+	
+		flag = new EntityFlag(worldObj, this);
+		objects.add(flag);
+		worldObj.spawnEntityInWorld(flag);
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
@@ -212,6 +216,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		if(!worldObj.isRemote && !flag.addedToChunk)
+			worldObj.spawnEntityInWorld(flag);
     	//updateChunkLoading();
 	}
 		

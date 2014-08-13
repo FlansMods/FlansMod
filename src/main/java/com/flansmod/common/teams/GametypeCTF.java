@@ -15,8 +15,6 @@ public class GametypeCTF extends Gametype
 {
 	public boolean friendlyFire = false;
 	public boolean autoBalance = true;
-	public int scoreLimit = 5;
-	public int newRoundTimer = 0;
 	public int time;
 	public int autoBalanceInterval = 1200;
 
@@ -24,63 +22,29 @@ public class GametypeCTF extends Gametype
 	{
 		super("Capture the Flag", "CTF", 2);
 	}
-
-	@Override
-	public void initGametype() 
-	{
-		startNewRound();
-	}
-
-	@Override
-	public void teamsSet()
-	{	
-		startNewRound();
-	}
 	
 	@Override
-	public void stopGametype() 
+	public void roundStart() 
 	{
-		super.stopGametype();
-		resetScores();
+	}
+
+	@Override
+	public void roundEnd() 
+	{
+	}
+
+	@Override
+	public void roundCleanup() 
+	{
 	}
 
 	@Override
 	public void tick() 
 	{
-		newRoundTimer--;
-		if(newRoundTimer == 0)
-		{
-			if(TeamsManager.useRotation)
-			{
-				TeamsManager.getInstance().switchToNextGametype();
-				return;
-			}
-			startNewRound();
-		}
-		if(teamsManager.teams != null)
-		{
-			for(Team team : teamsManager.teams)
-			{
-				if(team != null && team.score >= scoreLimit && newRoundTimer < 0)
-				{
-					TeamsManager.messageAll("\u00a7" + team.textColour + team.name + "\u00a7f won!");
-					newRoundTimer = 200;
-					TeamsManager.messageAll("\u00a7fThe next round will start in 10 seconds");
-					time = -300;
-				}
-			}
-		}
-		time++;
-		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
-		{
-			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
-		}
-		if(autoBalance && time % autoBalanceInterval == 0 && needAutobalance())
-		{
-			autobalance();
-		}
+		
 	}
 	
+	/*
 	public boolean needAutobalance()
 	{
 		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
@@ -114,62 +78,23 @@ public class GametypeCTF extends Gametype
 			}
 		}
 	}
+	 */
+	
+
+
 
 	@Override
-	public void playerJoined(EntityPlayerMP player) 
+	public void playerQuit(EntityPlayerMP player) 
 	{
-		sendTeamsMenuToPlayer(player);
+
 	}
 	
 	@Override
-	public boolean playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
-	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return false;
-		if(autoBalance)
-		{
-			int membersOnTeamTheyWantToJoin = team.members.size();
-			int membersOnBothTeams = teamsManager.teams[0].members.size() + teamsManager.teams[1].members.size();
-			int membersOnTeamTheyDontWantToJoin = membersOnBothTeams - membersOnTeamTheyWantToJoin;
-			if(membersOnTeamTheyWantToJoin > membersOnTeamTheyDontWantToJoin)
-				return false;
-		}
-		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam, true))
-		{
-			getPlayerData(player).deaths++;
-			getPlayerData(player).score--;
-			getPlayerData(player).playerClass = null;
-			getPlayerData(player).newPlayerClass = null;
-		}
-		
-		sendClassMenuToPlayer(player);
-		if(team != previousTeam)
-			teamsManager.forceRespawn(player);
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) 
+	{ 
+		if(attackerTeam == victimTeam)
+			return friendlyFire;
 		return true;
-	}
-
-	@Override
-	public boolean playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
-	{
-		Team team = getPlayerData(player).team;
-		if(!team.classes.contains(playerClass))
-			return false;
-		getPlayerData(player).newPlayerClass = playerClass;
-		if(getPlayerData(player).playerClass == null)
-		{
-			teamsManager.resetInventory(player);
-		}
-		else
-		{
-			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.name.toLowerCase() + " class")); 
-		}
-		return true;
-	}
-
-	@Override
-	public void playerQuit(EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -177,18 +102,10 @@ public class GametypeCTF extends Gametype
 	{
 		if(getPlayerData(player) == null || getPlayerData(player).team == null)
 			return false;
-		//Players may not fight between rounds
-		if(newRoundTimer > 0)
-		{
-			return false;
-		}
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
 			if(getPlayerData(attacker) == null || getPlayerData(attacker).team == null)
-				return false;
-			//Spectators may not attack players
-			if(getPlayerData(attacker).team == Team.spectators)
 				return false;
 			//Check for friendly fire
 			if(getPlayerData(player).team == getPlayerData(attacker).team)
@@ -206,8 +123,10 @@ public class GametypeCTF extends Gametype
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
 		{
+			//Killed self. Lose a point
 			if(attacker == player)
 				getPlayerData(player).score--;
+			//Killed someone else. Get points
 			else 
 			{	
 				getPlayerData(attacker).score++;
@@ -220,62 +139,76 @@ public class GametypeCTF extends Gametype
 		}
 		getPlayerData(player).deaths++;
 		
-		for(Team team : teamsManager.teams)
+		if(player.riddenByEntity instanceof EntityFlag)
 		{
-			for(ITeamBase base : team.bases)
-			{
-				ITeamObject obj = base.getFlag();
-			}
+			Team flagTeam = teamsManager.getTeam(((EntityFlag)player.riddenByEntity).getBase().getOwnerID());
+			player.riddenByEntity.mountEntity(null);
+			TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 		}
 	}
 
 	@Override
-	public void baseAttacked(ITeamBase base, DamageSource source) {
-		// TODO Auto-generated method stub
-		
+	public void baseAttacked(ITeamBase base, DamageSource source) 
+	{
+
 	}
 
 	@Override
-	public void objectAttacked(ITeamObject object, DamageSource source) {
-		// TODO Auto-generated method stub
-		
+	public void objectAttacked(ITeamObject object, DamageSource source) 
+	{
+
 	}
 
 	@Override
-	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) {
-		// TODO Auto-generated method stub
-		
+	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) 
+	{
+		if(base instanceof EntityFlagpole && ((EntityFlag)base.getFlag()).isHome)
+			objectClickedByPlayer(base.getFlag(), player);
 	}
 
 	@Override
-	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) {
-		// TODO Auto-generated method stub
+	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player)
+	{
+		if(teamsManager.currentRound == null)
+			return;
 		if(object instanceof EntityFlag)
 		{
 			EntityFlag flag = (EntityFlag)object;
-			if(flag.getBase().getOwner() != null && flag.getBase().getOwner() != Team.spectators)
+			//Flag belongs to some team other than spectators
+			if(flag.getBase().getOwnerID() > 1)
 			{
-				Team team = getPlayerData(player).team;
-				if(team != null && team != Team.spectators)
+				//Get the player's team and teamID
+				Team playerTeam = getPlayerData(player).team;
+				int playerTeamID = teamsManager.currentRound.getTeamID(playerTeam);
+				Team flagTeam = teamsManager.getTeam(flag.getBase().getOwnerID());
+				
+				//Make sure they are in the game and on the right map
+				if(playerTeam != null && playerTeam != Team.spectators && flag.getBase().getMap() == teamsManager.currentRound.map)
 				{
 					//If the player is clicking their own flag
-					if(team == flag.getBase().getOwner())
+					if(playerTeam == flagTeam)
 					{
+						//They found it on the floor and are returning it
 						if(flag.ridingEntity == null && !flag.isHome)
 						{
 							flag.reset();
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " returned the \u00a7" + flag.getBase().getOwner().textColour + flag.getBase().getOwner().name + "\u00a7f flag");		
+							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");		
 						}
-						//If player has the other flag
+						
+						//TODO : Move to be a proximity thing?
+						//They have another flag in hand
 						else if(player.riddenByEntity instanceof EntityFlag)
 						{
+							//Get the other flag and its team
 							EntityFlag otherFlag = (EntityFlag)player.riddenByEntity;
-							if(otherFlag.getBase().getOwner() != null && otherFlag.getBase().getOwner() != team && otherFlag.getBase().getOwner() != Team.spectators && flag.isHome && newRoundTimer <= 0)
+							Team otherFlagTeam = teamsManager.getTeam(otherFlag.getBase().getOwnerID());
+							
+							if(otherFlagTeam != null && otherFlagTeam != Team.spectators && otherFlagTeam != flagTeam && flag.isHome)
 							{
-								team.score++;
+								playerTeam.score++;
 								
 								otherFlag.reset();
-								TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " captured the \u00a7" + otherFlag.getBase().getOwner().textColour + otherFlag.getBase().getOwner().name + "\u00a7f flag");
+								TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " captured the \u00a7" + otherFlagTeam.textColour + otherFlagTeam.name + "\u00a7f flag");
 							}
 						}
 					}
@@ -285,12 +218,12 @@ public class GametypeCTF extends Gametype
 						if(flag.ridingEntity == player)
 						{
 							flag.mountEntity(null);
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + flag.getBase().getOwner().textColour + flag.getBase().getOwner().name + "\u00a7f flag");
+							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 						}
 						else if(flag.ridingEntity == null)
 						{
 							flag.mountEntity(player);
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " picked up the \u00a7" + flag.getBase().getOwner().textColour + flag.getBase().getOwner().name + "\u00a7f flag");
+							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " picked up the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 							flag.isHome = false;
 						}
 						
@@ -303,14 +236,18 @@ public class GametypeCTF extends Gametype
 	@Override
 	public Vec3 getSpawnPoint(EntityPlayerMP player) 
 	{
+		if(teamsManager.currentRound == null)
+			return null;
 		PlayerData data = getPlayerData(player);
 		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
-		if(data.team == null)
+		if(data.newTeam == null)
 			return null;
-		for(int j = 0; j < data.team.bases.size(); j++)
+		
+		ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
+		for(int j = 0; j < bases.size(); j++)
 		{
-			ITeamBase base = data.team.bases.get(j);
-			if(base.getMap() != teamsManager.currentMap)
+			ITeamBase base = bases.get(j);
+			if(base.getMap() != teamsManager.currentRound.map)
 				continue;
 			for(int i = 0; i < base.getObjects().size(); i++)
 			{
@@ -337,11 +274,6 @@ public class GametypeCTF extends Gametype
 	@Override
 	public boolean setVariable(String variable, String value) 
 	{
-		if(variable.toLowerCase().equals("scorelimit"))
-		{
-			scoreLimit = Integer.parseInt(value);
-			return true;
-		}
 		if(variable.toLowerCase().equals("friendlyfire"))
 		{
 			friendlyFire = Boolean.parseBoolean(value);
@@ -358,7 +290,6 @@ public class GametypeCTF extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-		scoreLimit = tags.getInteger("CTFScoreLimit");
 		friendlyFire = tags.getBoolean("CTFFriendlyFire");
 		autoBalance = tags.getBoolean("CTFAutoBalance");
 	}
@@ -366,7 +297,6 @@ public class GametypeCTF extends Gametype
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("CTFScoreLimit", scoreLimit);
 		tags.setBoolean("CTFFriendlyFire", friendlyFire);
 		tags.setBoolean("CTFAutoBalance", autoBalance);
 	}

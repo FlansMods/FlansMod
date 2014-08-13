@@ -78,14 +78,15 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
-		baseID = tags.getInteger("Base");
-		setBase(TeamsManager.getInstance().getBase(baseID));
+		setDead();
+		//baseID = tags.getInteger("Base");
+		//setBase(TeamsManager.getInstance().getBase(baseID));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("Base", base == null ? -1 : base.getBaseID());
+		//tags.setInteger("Base", base == null ? -1 : base.getBaseID());
 	}
 
 	@Override

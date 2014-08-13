@@ -9,8 +9,8 @@ Texture Panzer
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 4.0
-MaxNegativeThrottle 2.0
+MaxThrottle 0.6
+MaxNegativeThrottle 0.3
 //Steering modifiers
 TurnLeftSpeed 1.0
 TurnRightSpeed 1.0

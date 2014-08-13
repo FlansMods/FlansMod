@@ -136,7 +136,7 @@ public class TeamsManager
 		new GametypeTDM();
 		//new GametypeConquest();
 		new GametypeDM();
-		//new GametypeCTF();
+		new GametypeCTF();
 		//new GametypeNerf();
 		//-----
 	}
@@ -517,6 +517,31 @@ public class TeamsManager
 		{
 			objects.add((ITeamObject)event.entity);
 		}	
+	}
+	
+	@SubscribeEvent
+	public void playerUseEntity(EntityInteractEvent event)
+	{
+		if(!enabled)
+			return;
+		if(event.entityPlayer.worldObj.isRemote)
+			return;
+
+		ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
+		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
+		{
+			if(event.target instanceof ITeamObject)
+				((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
+			if(event.target instanceof ITeamBase)
+				((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
+		}
+		else if(currentRound != null)
+		{
+			if(event.target instanceof ITeamObject)
+				currentRound.gametype.objectClickedByPlayer((ITeamObject)event.target, (EntityPlayerMP)event.entityPlayer);
+			if(event.target instanceof ITeamBase)
+				currentRound.gametype.baseClickedByPlayer((ITeamBase)event.target, (EntityPlayerMP)event.entityPlayer);
+		}
 	}
 	
 	@SubscribeEvent

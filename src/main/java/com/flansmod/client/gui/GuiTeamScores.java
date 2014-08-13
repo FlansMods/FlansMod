@@ -83,7 +83,7 @@ public class GuiTeamScores extends GuiScreen
 		for(int i = 0; i < 2; i++)
 		{
 			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].team.name, m + 10 + 151 * i, n + 39, 0xffffff);
-			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].score, m + 143 + 151 * i, n + 39, 0xffffff);
+			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].score, m + 133 + 151 * i, n + 39, 0xffffff);
 			for(int j = 0; j < teamInfo.teamData[i].numPlayers; j++)
 			{
 				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 151 * i, n + 67 + 9 * j, 0xffffff);

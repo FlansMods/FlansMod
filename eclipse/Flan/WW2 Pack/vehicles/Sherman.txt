@@ -9,8 +9,8 @@ Texture Sherman
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 6.0
-MaxNegativeThrottle 3.0
+MaxThrottle 0.8
+MaxNegativeThrottle 0.4
 //Steering modifiers
 TurnLeftSpeed 1.4
 TurnRightSpeed 1.4

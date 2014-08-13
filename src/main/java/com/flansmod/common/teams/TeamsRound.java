@@ -94,9 +94,9 @@ public class TeamsRound implements Comparable<TeamsRound>
 	public int compareTo(TeamsRound o) 
 	{
 		if(getWeight() < o.getWeight())
-			return -1;
-		else if(getWeight() > o.getWeight())
 			return 1;
+		else if(getWeight() > o.getWeight())
+			return -1;
 		else return 0;
 	}
 }
