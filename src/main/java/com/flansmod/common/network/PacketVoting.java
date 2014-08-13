@@ -80,6 +80,7 @@ public class PacketVoting extends PacketBase
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		if(!(Minecraft.getMinecraft().currentScreen instanceof GuiVoting))
