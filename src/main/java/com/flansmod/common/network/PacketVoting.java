@@ -52,8 +52,8 @@ public class PacketVoting extends PacketBase
 		{
 			writeUTF(data, options[i].gametype.shortName);
 			writeUTF(data, options[i].map.name);
-			writeUTF(data, options[i].teams[0].name);
-			writeUTF(data, options[i].teams[1].name);
+			writeUTF(data, options[i].teams[0].textColour + options[i].teams[0].name);
+			writeUTF(data, options[i].teams[1].textColour + options[i].teams[1].name);
 			data.writeByte(numVotes[i]);
 		}
 		data.writeInt(timeLeft);

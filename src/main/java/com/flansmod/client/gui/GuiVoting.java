@@ -79,7 +79,7 @@ public class GuiVoting extends GuiScreen
 		for(int p = 0; p < packet.clientOptions.length; p++)
 		{
 			drawString(fontRendererObj, packet.clientOptions[p].mapName, m + 10, n + 25 + 24 * p, 0xffffff);
-			drawString(fontRendererObj, packet.clientOptions[p].gametype + " : " + packet.clientOptions[p].teamNames[0] + ", " + packet.clientOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
+			drawString(fontRendererObj, packet.clientOptions[p].gametype + " : \u00a7" + packet.clientOptions[p].teamNames[0] + ", \u00a7" + packet.clientOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
 			
 			drawCenteredString(fontRendererObj, (myVote == p + 1 ? "\u00a72" : "") + packet.numVotes[p], m + 196, n + 31 + 24 * p, 0xffffff);
 		}

@@ -87,7 +87,7 @@ public class TeamsRound implements Comparable<TeamsRound>
 	
 	public float getWeight()
 	{
-		return popularity * Math.max(1, roundsSincePlayed - 3);
+		return popularity * 4F + roundsSincePlayed;
 	}
 
 	@Override
