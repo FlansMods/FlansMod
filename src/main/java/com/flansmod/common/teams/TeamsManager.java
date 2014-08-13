@@ -292,6 +292,7 @@ public class TeamsManager
 			
 		if(currentRound != null)
 		{
+			
 			currentRound.gametype.roundCleanup();
 			resetScores();
 		}
@@ -364,7 +365,11 @@ public class TeamsManager
 		
 		//End the last round
 		if(currentRound != null)
+		{
+			for(ITeamBase base : currentRound.map.bases)
+				base.roundCleanup();
 			currentRound.gametype.roundCleanup();
+		}
 		resetScores();
 		
 		//Advance to next round

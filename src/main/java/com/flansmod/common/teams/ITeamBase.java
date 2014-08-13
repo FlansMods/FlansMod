@@ -35,6 +35,8 @@ public interface ITeamBase
 	//Called when a new round is started
 	public void startRound();	
 	
+	public void roundCleanup(); 
+	
 	//Return the map that this base is a part of
 	public TeamsMap getMap();
 	//Set the map that this base is a part of

@@ -207,6 +207,12 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
+	public void roundCleanup()
+	{
+		flag.reset();
+	}
+	
+	@Override
 	public ITeamObject getFlag() 
 	{
 		return flag;
@@ -217,8 +223,14 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		super.onUpdate();
 		
+		if(!worldObj.isRemote && flag == null)
+		{
+			flag = new EntityFlag(worldObj, this);
+			objects.add(flag);
+		}
 		if(!worldObj.isRemote && !flag.addedToChunk)
 			worldObj.spawnEntityInWorld(flag);
+			
     	//updateChunkLoading();
 	}
 		

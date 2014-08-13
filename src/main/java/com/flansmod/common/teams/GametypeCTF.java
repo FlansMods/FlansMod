@@ -9,6 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 
 public class GametypeCTF extends Gametype 
@@ -36,6 +37,7 @@ public class GametypeCTF extends Gametype
 	@Override
 	public void roundCleanup() 
 	{
+		
 	}
 
 	@Override
