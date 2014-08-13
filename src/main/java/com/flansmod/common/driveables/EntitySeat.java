@@ -66,6 +66,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	/** For smoothness */
 	private double prevPlayerPosX, prevPlayerPosY, prevPlayerPosZ;
 	private float prevPlayerYaw, prevPlayerPitch;
+	private boolean shooting;
 	
 	
 	/** Default constructor for spawning client side 
@@ -107,6 +108,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//prevPosX = posX;
 		//prevPosY = posY;
 		//prevPosZ = posZ;
+		
 		
 		//If on the client and the driveable parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundDriveable)
@@ -152,6 +154,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				//worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D + yOffset.x, posY + zAxis.y * i * 0.3D + yOffset.y, posZ + zAxis.z * i * 0.3D + yOffset.z, 0, 0, 0);
 			}
 		}
+		
+		
+		if(riddenByEntity instanceof EntityPlayer && shooting)
+			pressKey(9, (EntityPlayer)riddenByEntity);
 		//prevLooking = looking.clone();
 	}
 	
@@ -359,6 +365,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if((!worldObj.isRemote || foundDriveable) && driver)
 		{
 			driveable.updateKeyHeldState(key, held);
+			if(key == 9)
+				shooting = held;
 		}
 	}
 

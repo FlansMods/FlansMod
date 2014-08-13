@@ -196,6 +196,8 @@ public class TeamsManager
 					pickVoteOptions();
 				if(interRoundTimeLeft <= votingTime)
 				{
+					if(voteOptions == null)
+						pickVoteOptions();
 					displayVotingGUI();
 				}
 			}

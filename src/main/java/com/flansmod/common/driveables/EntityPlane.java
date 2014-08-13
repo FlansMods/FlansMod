@@ -230,48 +230,7 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 9 : //Shoot bullet
 			{
-				if(!worldObj.isRemote && gunDelay <= 0 && TeamsManager.bulletsEnabled)
-				{
-					for(PilotGun gun : getDriveableType().guns)
-					{
-						//Get the gun from the plane type and the ammo from the data
-						GunType gunType = gun.type;
-						ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + gun.gunID];
-						//Check that neither is null and that the bullet item is actually a bullet
-						if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
-						{
-							BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
-							if(gunType.isAmmo(bullet))
-							{
-								//Rotate the gun vector to global axes
-								Vector3f gunVec = rotate(gun.position);
-								//Spawn a new bullet item
-								worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
-								//Play the shoot sound
-								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootMainSound, false);
-								//Get the bullet item damage and increment it
-								int damage = bulletItemStack.getItemDamage();
-								bulletItemStack.setItemDamage(damage + 1);	
-								//If the bullet item is completely damaged (empty)
-								if(damage + 1 == bulletItemStack.getMaxDamage())
-								{
-									//Set the damage to 0 and consume one ammo item (unless in creative)
-									bulletItemStack.setItemDamage(0);
-									if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-									{
-										bulletItemStack.stackSize--;
-										if(bulletItemStack.stackSize <= 0)
-											bulletItemStack = null;
-										driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
-									}
-								}
-								//Reset the shoot delay
-								gunDelay = type.planeShootDelay;
-							}
-						}
-					}
-					return true;
-				}
+				
 				return false;
 			}
 			case 10 : //Change control mode
@@ -514,6 +473,50 @@ public class EntityPlane extends EntityDriveable
 		
 		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
 		moveDriveable();
+		
+		
+		//Shooting
+		if(!worldObj.isRemote && leftMouseHeld && gunDelay <= 0 && TeamsManager.bulletsEnabled)
+		{
+			for(PilotGun gun : getDriveableType().guns)
+			{
+				//Get the gun from the plane type and the ammo from the data
+				GunType gunType = gun.type;
+				ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + gun.gunID];
+				//Check that neither is null and that the bullet item is actually a bullet
+				if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
+				{
+					BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+					if(gunType.isAmmo(bullet))
+					{
+						//Rotate the gun vector to global axes
+						Vector3f gunVec = rotate(gun.position);
+						//Spawn a new bullet item
+						worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
+						//Play the shoot sound
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootMainSound, false);
+						//Get the bullet item damage and increment it
+						int damage = bulletItemStack.getItemDamage();
+						bulletItemStack.setItemDamage(damage + 1);	
+						//If the bullet item is completely damaged (empty)
+						if(damage + 1 == bulletItemStack.getMaxDamage())
+						{
+							//Set the damage to 0 and consume one ammo item (unless in creative)
+							bulletItemStack.setItemDamage(0);
+							if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+							{
+								bulletItemStack.stackSize--;
+								if(bulletItemStack.stackSize <= 0)
+									bulletItemStack = null;
+								driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
+							}
+						}
+						//Reset the shoot delay
+						gunDelay = type.planeShootDelay;
+					}
+				}
+			}
+		}
 		
 		//Fuel Handling
 		
