@@ -296,6 +296,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         
 		//Get vehicle type
         VehicleType type = this.getVehicleType();
+        DriveableData data = getDriveableData();
         if(type == null)
         {
         	FlansMod.log("Vehicle type null. Not ticking vehicle");
@@ -405,46 +406,51 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.motionY -= 0.98F / 20F;
 			
 			//Apply velocity
-			if(getVehicleType().tank)
+			//If the player driving this is in creative, then we can thrust, no matter what
+			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+			//Otherwise, check the fuel tanks!
+			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
 			{
-				boolean left = wheel.ID == 0 || wheel.ID == 3;
-				
-				float turningDrag = 0.02F;
-				wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
-				wheel.motionZ *= 1F - (Math.abs(wheelsYaw) * turningDrag);
-				
-				float velocityScale = 0.04F;
-				float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
-				float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
-				wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
-				wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
-				
-
-			}
-			else
-			{
-				//if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+				if(getVehicleType().tank)
 				{
-					float velocityScale = 0.1F;
-					wheel.motionX += throttle * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
-					wheel.motionZ += throttle * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
-				}
-				
-				//Apply steering
-				if(wheel.ID == 2 || wheel.ID == 3)
-				{
-					float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
+					boolean left = wheel.ID == 0 || wheel.ID == 3;
+					
+					float turningDrag = 0.02F;
+					wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
+					wheel.motionZ *= 1F - (Math.abs(wheelsYaw) * turningDrag);
+					
+					float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+					float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+					float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
+					wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
+					wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
+					
 	
-					wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
-					wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
 				}
 				else
 				{
-					wheel.motionX *= 0.9F;
-					wheel.motionZ *= 0.9F;
+					//if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+					{
+						float velocityScale = 0.1F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+						wheel.motionX += Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+						wheel.motionZ += Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
+					}
+					
+					//Apply steering
+					if(wheel.ID == 2 || wheel.ID == 3)
+					{
+						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
+		
+						wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+						wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+					}
+					else
+					{
+						wheel.motionX *= 0.9F;
+						wheel.motionZ *= 0.9F;
+					}
 				}
 			}
-			
 
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
 			
@@ -626,7 +632,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Fuel Handling
-		DriveableData data = getDriveableData();
 		
 		//If the fuel item has stack size <= 0, delete it
 		if(data.fuel != null && data.fuel.stackSize <= 0)

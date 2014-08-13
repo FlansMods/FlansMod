@@ -413,7 +413,7 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Started teams map rotation"));
 			return;
 		}
-		if(split[0].equals("nextMap"))
+		if(split[0].equals("nextMap") || split[0].equals("next") || split[0].equals("nextRound"))
 		{
 			teamsManager.roundTimeLeft = 1;
 			return;

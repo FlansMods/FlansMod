@@ -75,6 +75,7 @@ public class GuiVoting extends GuiScreen
 		drawTexturedModalRect(m, l / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		
 		drawString(fontRendererObj, "Vote for the Next Round", m + 8, n + 8, 0xffffff);
+		drawString(fontRendererObj, (packet.timeLeft / 20) + "", m + 256 - 20, n + 8, 0xffffff);
 		
 		for(int p = 0; p < packet.clientOptions.length; p++)
 		{
