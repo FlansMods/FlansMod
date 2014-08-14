@@ -186,7 +186,7 @@ public class ItemGun extends Item
 			}
 			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
 			IScope currentScope = type.getCurrentScope(itemstack);
-			if(Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
+			if((type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM) && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
 			{
 				if(FlansModClient.currentScope == null)
 				{
@@ -574,7 +574,8 @@ public class ItemGun extends Item
     public Multimap getAttributeModifiers(ItemStack stack)
     {
         Multimap multimap = super.getAttributeModifiers(stack);
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
+        	multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
 
@@ -589,7 +590,7 @@ public class ItemGun extends Item
 	{
 		if (type.meleeSound != null)
 			PacketPlaySound.sendSoundPacket(entityLiving.posX, entityLiving.posY, entityLiving.posZ, FlansMod.soundRange, entityLiving.dimension, type.meleeSound, true);
-		return type.meleeDamage == 0 || type.FOVFactor != 1.0F;
+		return type.secondaryFunction != EnumSecondaryFunction.MELEE;
 	}
 	
 	@Override

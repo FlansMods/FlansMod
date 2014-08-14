@@ -51,6 +51,8 @@ public class GunType extends InfoType implements IScope
 	public boolean canShootUnderwater = true;
 	/** The amount of knockback to impact upon the player per shot */
 	public float knockback = 0F;	
+	/** The secondary function of this gun. By default, the left mouse button triggers this */
+	public EnumSecondaryFunction secondaryFunction = EnumSecondaryFunction.ADS_ZOOM;
 	
 	//Sounds
 	/** The sound played upon shooting */
@@ -158,7 +160,11 @@ public class GunType extends InfoType implements IScope
 			if (split[0].equals("Damage"))
 				damage = Float.parseFloat(split[1]);
 			if (split[0].equals("MeleeDamage"))
+			{
 				meleeDamage = Float.parseFloat(split[1]);
+				if(meleeDamage > 0F)
+					secondaryFunction = EnumSecondaryFunction.MELEE;
+			}
 			if (split[0].equals("CanForceReload"))
 				canForceReload = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("ReloadTime"))
@@ -232,9 +238,17 @@ public class GunType extends InfoType implements IScope
 				else defaultScopeTexture = split[1];
 			}
 			if (split[0].equals("ZoomLevel"))
+			{
 				zoomLevel = Float.parseFloat(split[1]);
+				if(zoomLevel > 1F)
+					secondaryFunction = EnumSecondaryFunction.ZOOM;
+			}
 			if (split[0].equals("FOVZoomLevel"))
+			{
 				FOVFactor = Float.parseFloat(split[1]);
+				if(FOVFactor > 1F)
+					secondaryFunction = EnumSecondaryFunction.ADS_ZOOM;
+			}
 			if (split[0].equals("Deployable"))
 				deployable = split[1].equals("True");
 			if (FMLCommonHandler.instance().getSide().isClient() && deployable && split[0].equals("DeployedModel"))
@@ -273,6 +287,8 @@ public class GunType extends InfoType implements IScope
 				bulletSpeed = Float.parseFloat(split[1]);
 			if (split[0].equals("CanShootUnderwater"))
 				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("SecondaryFunction"))
+				secondaryFunction = EnumSecondaryFunction.get(split[1]);
 			
 			//Attachment settings
 			if(split[0].equals("AllowAllAttachments"))
