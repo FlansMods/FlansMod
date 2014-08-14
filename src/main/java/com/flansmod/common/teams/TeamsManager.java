@@ -108,6 +108,8 @@ public class TeamsManager
 	public int interRoundTimeLeft;
 	/** The list of rounds currently being voted upon */
 	public TeamsRound[] voteOptions;
+	/** For forcing the next round. Not normally used */
+	public TeamsRound nextRound;
 	
 	//Disused. Delete when done
 	//public Gametype currentGametype;
@@ -192,14 +194,24 @@ public class TeamsManager
 			//If we're done showing scores, show the voting box
 			if(voting)
 			{
-				if(interRoundTimeLeft == votingTime)
-					pickVoteOptions();
-				if(interRoundTimeLeft <= votingTime)
+				//If the next round is forced, go to it
+				if(nextRound != null)
 				{
-					if(voteOptions == null)
-						pickVoteOptions();
-					displayVotingGUI();
+					startNextRound();
+					interRoundTimeLeft = 0;
+					return;
 				}
+				else
+				{
+					if(interRoundTimeLeft == votingTime)
+						pickVoteOptions();
+					if(interRoundTimeLeft <= votingTime)
+					{
+						if(voteOptions == null)
+							pickVoteOptions();
+						displayVotingGUI();
+					}
+				}	
 			}
 			//If the timer is finished, start the next round
 			if(interRoundTimeLeft == 0)
@@ -305,62 +317,64 @@ public class TeamsManager
 	{
 		if(!enabled || rounds.size() == 0)
 			return;
-		
- 		TeamsRound nextRound = null;
-		
-		if(voting)
+				
+		//If the next round has not been forced
+		if(nextRound == null)
 		{
-			//Gather votes and decide which map to play
-			int winner = 0;
-			int mostVotes = 0;
-			
-			//Collect the votes from player data
-			int[] numVotes = new int[voteOptions.length];
-			for(PlayerData data : PlayerHandler.serverSideData.values())
+			if(voting)
 			{
-				if(data.vote > 0)
-					numVotes[data.vote - 1]++;
+				//Gather votes and decide which map to play
+				int winner = 0;
+				int mostVotes = 0;
+				
+				//Collect the votes from player data
+				int[] numVotes = new int[voteOptions.length];
+				for(PlayerData data : PlayerHandler.serverSideData.values())
+				{
+					if(data.vote > 0)
+						numVotes[data.vote - 1]++;
+				}
+				
+				//Find the highest one
+				for(int i = 0; i < voteOptions.length; i++)
+				{
+					if(numVotes[i] > mostVotes)
+					{
+						mostVotes = numVotes[i];
+						winner = i;
+					}
+				}
+				nextRound = voteOptions[winner];
+				
+				
+				//Update ratings
+				for(TeamsRound round : rounds)
+					round.roundsSincePlayed++;
+				
+				for(int i = 0; i < voteOptions.length; i++)
+				{
+					if(i == winner)
+					{
+						voteOptions[i].popularity = 1F - (1F - voteOptions[i].popularity) * 0.8F;
+						voteOptions[i].roundsSincePlayed = 0;
+					}
+					else 
+					{
+						voteOptions[i].popularity *= 0.9F;
+						voteOptions[i].popularity += 0.01F;
+					}
+				}
+				
+				//Clear votes
+				for(PlayerData data : PlayerHandler.serverSideData.values())
+					data.vote = 0;
 			}
-			
-			//Find the highest one
-			for(int i = 0; i < voteOptions.length; i++)
+			else //Use standard rotation. Go to next map
 			{
-				if(numVotes[i] > mostVotes)
-				{
-					mostVotes = numVotes[i];
-					winner = i;
-				}
+				int lastRoundID = rounds.indexOf(currentRound);
+				int nextRoundID = ++lastRoundID % rounds.size();
+				nextRound = rounds.get(nextRoundID);
 			}
-			nextRound = voteOptions[winner];
-			
-			
-			//Update ratings
-			for(TeamsRound round : rounds)
-				round.roundsSincePlayed++;
-			
-			for(int i = 0; i < voteOptions.length; i++)
-			{
-				if(i == winner)
-				{
-					voteOptions[i].popularity = 1F - (1F - voteOptions[i].popularity) * 0.8F;
-					voteOptions[i].roundsSincePlayed = 0;
-				}
-				else 
-				{
-					voteOptions[i].popularity *= 0.9F;
-					voteOptions[i].popularity += 0.01F;
-				}
-			}
-			
-			//Clear votes
-			for(PlayerData data : PlayerHandler.serverSideData.values())
-				data.vote = 0;
-		}
-		else //Use standard rotation. Go to next map
-		{
-			int lastRoundID = rounds.indexOf(currentRound);
-			int nextRoundID = ++lastRoundID % rounds.size();
-			nextRound = rounds.get(nextRoundID);
 		}
 		
 		//End the last round
@@ -379,6 +393,9 @@ public class TeamsManager
 		
 		//Begin the next round
 		startRound();
+		
+		//Reset this. Used for round forcing only.
+		nextRound = null;
 	}
 	
 	private void startRound()

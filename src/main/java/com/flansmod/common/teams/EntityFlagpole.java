@@ -44,7 +44,6 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 	
 	//Chunk loading
-	private Ticket chunkTicket; //TODO REMOVE
 	private boolean uninitialized = true;
 	private int loadDistance = 1;
 
@@ -99,9 +98,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		name = tags.getString("Name");
 		setMap(map);
 	
-		flag = new EntityFlag(worldObj, this);
-		objects.add(flag);
-		worldObj.spawnEntityInWorld(flag);
+		//flag = new EntityFlag(worldObj, this);
+		//objects.add(flag);
+		//worldObj.spawnEntityInWorld(flag);
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
@@ -209,7 +208,8 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public void roundCleanup()
 	{
-		flag.reset();
+		if(flag != null)
+			flag.reset();
 	}
 	
 	@Override
@@ -223,22 +223,25 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		super.onUpdate();
 		
-		if(!worldObj.isRemote && flag == null)
+		if(!worldObj.isRemote)
 		{
-			flag = new EntityFlag(worldObj, this);
-			objects.add(flag);
+			if(flag == null)
+			{
+				flag = new EntityFlag(worldObj, this);
+				objects.add(flag);
+			}
+			if(!flag.addedToChunk)
+				worldObj.spawnEntityInWorld(flag);
+			if(flag.isHome)
+				flag.setPosition(posX, posY + 2F, posZ);
 		}
-		if(!worldObj.isRemote && !flag.addedToChunk)
-			worldObj.spawnEntityInWorld(flag);
-			
-    	//updateChunkLoading();
+		
 	}
 		
 	@Override
 	public void setDead() 
 	{
 		super.setDead();
-		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
 	
 	@Override

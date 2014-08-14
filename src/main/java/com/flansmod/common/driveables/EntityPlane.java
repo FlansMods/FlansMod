@@ -476,7 +476,7 @@ public class EntityPlane extends EntityDriveable
 		
 		
 		//Shooting
-		if(!worldObj.isRemote && leftMouseHeld && gunDelay <= 0 && TeamsManager.bulletsEnabled)
+		if(!worldObj.isRemote && leftMouseHeld && gunDelay <= 0 && TeamsManager.bulletsEnabled && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer)
 		{
 			for(PilotGun gun : getDriveableType().guns)
 			{

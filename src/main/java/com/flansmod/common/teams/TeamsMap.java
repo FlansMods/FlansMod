@@ -78,7 +78,8 @@ public class TeamsMap
 	
 	public TeamsMap(World world, NBTTagCompound tags)
 	{
-		this(world, tags.getString("ShortName"), tags.getString("Name"));
+		shortName = tags.getString("ShortName");
+		name = tags.getString("Name");
 		minPlayers = tags.getInteger("MinPlayers");
 		maxPlayers = tags.getInteger("MaxPlayers");
 	}

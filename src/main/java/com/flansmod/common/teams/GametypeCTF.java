@@ -18,6 +18,7 @@ public class GametypeCTF extends Gametype
 	public boolean autoBalance = true;
 	public int time;
 	public int autoBalanceInterval = 1200;
+	public int flagReturnTime = 60;
 
 	public GametypeCTF() 
 	{
@@ -181,7 +182,7 @@ public class GametypeCTF extends Gametype
 			{
 				//Get the player's team and teamID
 				Team playerTeam = getPlayerData(player).team;
-				int playerTeamID = teamsManager.currentRound.getTeamID(playerTeam);
+				PlayerData playerData = getPlayerData(player);
 				Team flagTeam = teamsManager.getTeam(flag.getBase().getOwnerID());
 				
 				//Make sure they are in the game and on the right map
@@ -194,6 +195,7 @@ public class GametypeCTF extends Gametype
 						if(flag.ridingEntity == null && !flag.isHome)
 						{
 							flag.reset();
+							playerData.score += 2;
 							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");		
 						}
 						
@@ -208,7 +210,7 @@ public class GametypeCTF extends Gametype
 							if(otherFlagTeam != null && otherFlagTeam != Team.spectators && otherFlagTeam != flagTeam && flag.isHome)
 							{
 								playerTeam.score++;
-								
+								playerData.score += 10;
 								otherFlag.reset();
 								TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " captured the \u00a7" + otherFlagTeam.textColour + otherFlagTeam.name + "\u00a7f flag");
 							}
@@ -224,6 +226,8 @@ public class GametypeCTF extends Gametype
 						}
 						else if(flag.ridingEntity == null)
 						{
+							if(flag.isHome)
+								playerData.score += 3;
 							flag.mountEntity(player);
 							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " picked up the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 							flag.isHome = false;
@@ -286,6 +290,11 @@ public class GametypeCTF extends Gametype
 			autoBalance = Boolean.parseBoolean(value);
 			return true;
 		}
+		if(variable.toLowerCase().equals("flagtime"))
+		{
+			flagReturnTime = Integer.parseInt(value);
+			return true;
+		}
 		return false;
 	}
 
@@ -294,6 +303,7 @@ public class GametypeCTF extends Gametype
 	{
 		friendlyFire = tags.getBoolean("CTFFriendlyFire");
 		autoBalance = tags.getBoolean("CTFAutoBalance");
+		flagReturnTime = tags.getInteger("CTFFlagTime");
 	}
 
 	@Override
@@ -301,6 +311,7 @@ public class GametypeCTF extends Gametype
 	{
 		tags.setBoolean("CTFFriendlyFire", friendlyFire);
 		tags.setBoolean("CTFAutoBalance", autoBalance);
+		tags.setInteger("CTFFlagTime", flagReturnTime);
 	}
 	
 	@Override

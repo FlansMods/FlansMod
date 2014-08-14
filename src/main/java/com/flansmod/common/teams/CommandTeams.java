@@ -195,27 +195,22 @@ public class CommandTeams extends CommandBase
 			
 			return;
 		}
-		/*
-		 * No longer used
-		if(split[0].equals("setMap"))
+		if(split[0].equals("setRound"))
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("You need to specify a map's short name"));
+				sender.addChatMessage(new ChatComponentText("You need to specify the round index (see /teams listRounds)"));
 				return;
 			}
-			TeamsMap map = teamsManager.maps.get(split[1]);
-			if(map != null)
+			TeamsRound round = teamsManager.rounds.get(Integer.parseInt(split[1]));
+			if(round != null)
 			{
-				TeamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
-				teamsManager.currentMap = map;
-				if(teamsManager.currentGametype != null)
-				{
-					teamsManager.currentGametype.startNewRound();
-				}
+				teamsManager.nextRound = round;
+				TeamsManager.messageAll("\u00a72Next round will be " + round.gametype.shortName + " in " + round.map.name);
 			}
 			return;
 		}
+		/*
 		if(split[0].equals("listTeams"))
 		{
 			if(teamsManager.currentGametype == null || teamsManager.teams == null)
