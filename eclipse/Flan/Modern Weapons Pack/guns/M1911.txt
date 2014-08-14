@@ -21,6 +21,7 @@ ShootDelay 1
 ShootSound M9Shoot
 ReloadSound ColtReload
 Mode SemiAuto
+OneHanded true
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0

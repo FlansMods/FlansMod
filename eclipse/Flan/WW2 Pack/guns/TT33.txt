@@ -19,6 +19,7 @@ ShootDelay 6
 ShootSound TT33Shoot
 ReloadSound TT33Reload
 Mode SemiAuto
+OneHanded true
 Scope None
 Deployable False
 DeployedModel None

@@ -19,6 +19,7 @@ ShootDelay 10
 ShootSound lugerShoot
 ReloadSound lugerReload
 Mode SemiAuto
+OneHanded true
 Scope None
 Deployable False
 DeployedModel None

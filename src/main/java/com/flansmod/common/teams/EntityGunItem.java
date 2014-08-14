@@ -221,7 +221,7 @@ public class EntityGunItem extends EntityItem {
     		}
     		setDead();
     		PlayerHandler.getPlayerData(player).shootClickDelay = 10;
-    		PlayerHandler.getPlayerData(player).isShooting = false;
+    		PlayerHandler.getPlayerData(player).isShootingRight = false;
     		return true;
     	}
     	return false;

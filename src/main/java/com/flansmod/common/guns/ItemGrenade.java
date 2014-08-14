@@ -58,10 +58,10 @@ public class ItemGrenade extends Item {
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player, world.isRemote ? Side.CLIENT : Side.SERVER);
 		//If can throw grenade
-		if(data != null && data.shootTime <= 0)
+		if(data != null && data.shootTimeRight <= 0 && data.shootTimeLeft <= 0)
 		{
 			//Delay the next throw / weapon fire / whatnot
-			data.shootTime = type.throwDelay;
+			data.shootTimeRight = type.throwDelay;
 			//Create a new grenade entity
 			EntityGrenade grenade = new EntityGrenade(world, type, player);
 			//Spawn the entity server side

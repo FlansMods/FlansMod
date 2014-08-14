@@ -3,9 +3,14 @@ package com.flansmod.common;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsRound;
@@ -29,17 +34,21 @@ public class PlayerData
 	
 	public EntityMG mountingGun;
 	/** True if this player is shooting */
-	public boolean isShooting;
+	public boolean isShootingRight, isShootingLeft;
 	/** The speed of the minigun the player is using */
 	public float minigunSpeed = 0F;
-	public int shootTime;
+	
+	/** The slotID of the gun being used by the off-hand. 0 = no slot. 1 ~ 9 = hotbar slots */
+	public int offHandGunSlot = 0;
+	
+	public int shootTimeRight, shootTimeLeft;
 	public int shootClickDelay;
 	public int spawnDelay;
 	public double spawnX;
 	public double spawnY;
 	public double spawnZ;
 	
-	public boolean reloading;
+	public boolean reloadingRight, reloadingLeft;
 
 	public float prevRotationRoll;
 	public float rotationRoll;
@@ -53,8 +62,6 @@ public class PlayerData
 	public int deaths;
 	public boolean out; //For Nerf gametypes
 
-	//For my quick world edit hack thingy
-	public int x1, y1, z1, x2, y2, z2;
 	public int loopedSoundDelay;
 	public boolean shouldPlayCooldownSound;
 	public boolean shouldPlayWarmupSound;
@@ -69,24 +76,32 @@ public class PlayerData
 	
 	public void tick()
 	{
-		if(shootTime > 0)
-			shootTime--;
-		if(shootTime == 0)
-			reloading = false;
+		if(shootTimeRight > 0)
+			shootTimeRight--;
+		if(shootTimeRight == 0)
+			reloadingRight = false;
+		
+		if(shootTimeLeft > 0)
+			shootTimeLeft--;
+		if(shootTimeLeft == 0)
+			reloadingLeft = false;
+		
 		if(shootClickDelay > 0)
 			shootClickDelay--;
 		spawnDelay--;
 		
 		//Handle minigun speed
-		if(isShooting && !reloading)
+		if(isShootingRight && !reloadingRight)
 			minigunSpeed += 2F; 
 		minigunSpeed *= 0.9F;
 		if(loopedSoundDelay > 0)
 		{
 			loopedSoundDelay--;
-			if(loopedSoundDelay == 0 && !isShooting)
+			if(loopedSoundDelay == 0 && !isShootingRight)
 				shouldPlayCooldownSound = true;
 		}
+		
+		
 	}
 	
 	public void setSpawn(double x, double y, double z, int t)
@@ -114,6 +129,42 @@ public class PlayerData
 	public void playerKilled()
 	{
 		mountingGun = null;
-		isShooting = false;
+		isShootingRight = isShootingLeft = false;
+	}
+	
+	public void selectOffHandWeapon(EntityPlayer player, int slot)
+	{
+		if(isValidOffHandWeapon(player, slot))
+			offHandGunSlot = slot;
+	}
+	
+	public boolean isValidOffHandWeapon(EntityPlayer player, int slot)
+	{
+		if(slot == 0)
+			return true;
+		if(slot - 1 == player.inventory.currentItem)
+			return false;
+		ItemStack stackInSlot = player.inventory.getStackInSlot(slot - 1);
+		if(stackInSlot == null)
+			return false;
+		if(stackInSlot.getItem() instanceof ItemGun)
+		{
+			ItemGun item = ((ItemGun)stackInSlot.getItem());
+			if(item.type.oneHanded)
+				return true;
+		}
+		return false;
+	}
+
+	public void cycleOffHandItem(EntityPlayer player, int dWheel) 
+	{
+		if(dWheel < 0)
+			for(offHandGunSlot = ((offHandGunSlot + 1) % 10); !isValidOffHandWeapon(player, offHandGunSlot); offHandGunSlot = ((offHandGunSlot + 1) % 10)) ;
+		else if(dWheel > 0)
+			for(offHandGunSlot = ((offHandGunSlot + 9) % 10); !isValidOffHandWeapon(player, offHandGunSlot); offHandGunSlot = ((offHandGunSlot + 9) % 10)) ;
+		
+		FlansModClient.currentScope = null;
+		
+		FlansMod.getPacketHandler().sendToServer(new PacketSelectOffHandGun(offHandGunSlot));
 	}
 }

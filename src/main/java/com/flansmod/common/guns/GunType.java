@@ -53,6 +53,8 @@ public class GunType extends InfoType implements IScope
 	public float knockback = 0F;	
 	/** The secondary function of this gun. By default, the left mouse button triggers this */
 	public EnumSecondaryFunction secondaryFunction = EnumSecondaryFunction.ADS_ZOOM;
+	/** If true, then this gun can be dual wielded */
+	public boolean oneHanded = false;
 	
 	//Sounds
 	/** The sound played upon shooting */
@@ -287,6 +289,8 @@ public class GunType extends InfoType implements IScope
 				bulletSpeed = Float.parseFloat(split[1]);
 			if (split[0].equals("CanShootUnderwater"))
 				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("OneHanded"))
+				oneHanded = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);
 			

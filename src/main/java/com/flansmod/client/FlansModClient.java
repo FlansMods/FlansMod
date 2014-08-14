@@ -56,7 +56,7 @@ public class FlansModClient extends FlansMod
 	
 	//Gun animations
 	/** Gun animation variables for each entity holding a gun. Currently only applicable to the player */
-	public static HashMap<EntityLivingBase, GunAnimations> gunAnimations = new HashMap<EntityLivingBase, GunAnimations>();
+	public static HashMap<EntityLivingBase, GunAnimations> gunAnimationsRight = new HashMap<EntityLivingBase, GunAnimations>(), gunAnimationsLeft = new HashMap<EntityLivingBase, GunAnimations>();
 	
 	//Scope variables
 	/** A delayer on the scope button to avoid repeat presses */
@@ -166,7 +166,11 @@ public class FlansModClient extends FlansMod
 		antiRecoil *= 0.8F;
 		
 		//Update gun animations for the gun in hand
-		for(GunAnimations g : gunAnimations.values())
+		for(GunAnimations g : gunAnimationsRight.values())
+		{
+			g.update();
+		}		
+		for(GunAnimations g : gunAnimationsLeft.values())
 		{
 			g.update();
 		}		

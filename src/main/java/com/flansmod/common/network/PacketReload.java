@@ -25,29 +25,48 @@ import com.flansmod.common.guns.ItemGun;
 //When the server receives one, it is interpreted as a forced reload
 public class PacketReload extends PacketBase 
 {
+	public boolean left;
+	
 	public PacketReload() {}
+	
+	public PacketReload(boolean l) 
+	{
+		left = l;
+	}
 		
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) {}
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	{
+		data.writeBoolean(left);
+	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) {}
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	{
+		left = data.readBoolean();
+	}
 
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
     	PlayerData data = PlayerHandler.getPlayerData(playerEntity);
     	ItemStack stack = playerEntity.getCurrentEquippedItem();
+    	if(left)
+    	{
+    		stack = playerEntity.inventory.getStackInSlot(data.offHandGunSlot - 1);
+    	}
     	if(data != null && stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
-    		if(((ItemGun)stack.getItem()).reload(stack, playerEntity.worldObj, playerEntity, true))
+    		if(((ItemGun)stack.getItem()).reload(stack, type, playerEntity.worldObj, playerEntity, true, left))
     		{
     			//Set the reload delay
-    			data.shootTime = type.reloadTime;
-    			data.reloading = true;
+    			data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
+    			if(left)
+    				data.reloadingLeft = true;
+    			else data.reloadingRight = true;
 				//Send reload packet to induce reload effects client side
-				FlansMod.getPacketHandler().sendTo(new PacketReload(), playerEntity);
+				FlansMod.getPacketHandler().sendTo(new PacketReload(left), playerEntity);
 				//Play reload sound
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
@@ -60,6 +79,9 @@ public class PacketReload extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
     	ItemStack stack = clientPlayer.getCurrentEquippedItem();
+    	PlayerData data = PlayerHandler.getPlayerData(clientPlayer, Side.CLIENT);
+    	if(left)
+    		stack = clientPlayer.inventory.getStackInSlot(data.offHandGunSlot - 1);
     	if(stack != null && stack.getItem() instanceof ItemGun)
     	{
     		GunType type = ((ItemGun)stack.getItem()).type;
@@ -67,13 +89,26 @@ public class PacketReload extends PacketBase
     		
     		//Apply animations
     		GunAnimations animations = null;
-			if(FlansModClient.gunAnimations.containsKey(clientPlayer))
-				animations = FlansModClient.gunAnimations.get(clientPlayer);
-			else 
-			{
-				animations = new GunAnimations();
-				FlansModClient.gunAnimations.put((EntityLivingBase)clientPlayer, animations);
-			}
+    		if(left)
+    		{
+    			if(FlansModClient.gunAnimationsLeft.containsKey(clientPlayer))
+					animations = FlansModClient.gunAnimationsLeft.get(clientPlayer);
+				else 
+				{
+					animations = new GunAnimations();
+					FlansModClient.gunAnimationsLeft.put((EntityLivingBase)clientPlayer, animations);
+				}
+    		}
+    		else
+    		{
+				if(FlansModClient.gunAnimationsRight.containsKey(clientPlayer))
+					animations = FlansModClient.gunAnimationsRight.get(clientPlayer);
+				else 
+				{
+					animations = new GunAnimations();
+					FlansModClient.gunAnimationsRight.put((EntityLivingBase)clientPlayer, animations);
+				}
+    		}
 			int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 			int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 			animations.doReload(type.reloadTime, pumpDelay, pumpTime);

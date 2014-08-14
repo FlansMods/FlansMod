@@ -1030,7 +1030,7 @@ public class TeamsManager
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).reload(stack, player.worldObj, player, true);
+				((ItemGun)stack.getItem()).reload(stack, ((ItemGun)stack.getItem()).type, player.worldObj, player, true, false);
 			}
 		}
 	}

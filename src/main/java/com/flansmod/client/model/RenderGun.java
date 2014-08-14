@@ -6,18 +6,22 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
-
 import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+
+import cpw.mods.fml.relauncher.Side;
 
 public class RenderGun implements IItemRenderer
 {
@@ -57,19 +61,56 @@ public class RenderGun implements IItemRenderer
 		ModelGun model = gunType.model;
 		if(model == null)
 			return;
+
+		//Render main hand gun
+		{
+			GunAnimations animations = FlansModClient.gunAnimationsRight.get(data[1]);
+			if(animations == null)
+			{
+				animations = new GunAnimations();
+				if(type != ItemRenderType.ENTITY)
+					FlansModClient.gunAnimationsRight.put((EntityLivingBase)data[1], animations);
+			}
+			renderGun(type, item, gunType, animations, false, data);
+		}
 		
+		//Render off-hand gun
+		if(gunType.oneHanded && type != ItemRenderType.ENTITY)
+		{
+			EntityLivingBase entity = (EntityLivingBase)data[1];
+			if(entity instanceof EntityPlayer)
+			{
+				EntityPlayer player = (EntityPlayer)entity;
+				PlayerData playerData = PlayerHandler.getPlayerData(player, Side.CLIENT);
+				if(playerData.offHandGunSlot != 0)
+				{
+					GunAnimations animations = FlansModClient.gunAnimationsLeft.get(data[1]);
+					if(animations == null)
+					{
+						animations = new GunAnimations();
+						FlansModClient.gunAnimationsLeft.put((EntityLivingBase)data[1], animations);
+					}
+					ItemStack offHandItem = player.inventory.getStackInSlot(playerData.offHandGunSlot - 1);
+					if(offHandItem == null || !(offHandItem.getItem() instanceof ItemGun))
+						return;
+					GunType offHandGunType = ((ItemGun)offHandItem.getItem()).type;
+					if(!offHandGunType.oneHanded)
+						return;
+					
+					renderGun(type, offHandItem, offHandGunType, animations, true, data);
+				}
+			
+			}
+		}
+	}
 		
-		
+	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
+	{
 		//The model scale
 		float f = 1F / 16F;
+		ModelGun model = gunType.model;
 		
-		GunAnimations animations = FlansModClient.gunAnimations.get(data[1]);
-		if(animations == null)
-		{
-			animations = new GunAnimations();
-			if(type != ItemRenderType.ENTITY)
-				FlansModClient.gunAnimations.put((EntityLivingBase)data[1], animations);
-		}
+		int flip = offHand ? -1 : 1;
 		
 		GL11.glPushMatrix();
 		{
@@ -101,13 +142,24 @@ public class RenderGun implements IItemRenderer
 						return;
 					}
 					float adsSwitch = FlansModClient.lastZoomProgress + (FlansModClient.zoomProgress - FlansModClient.lastZoomProgress) * smoothing;//0F;//((float)Math.sin((FlansMod.ticker) / 10F) + 1F) / 2F;
-					GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
-					GL11.glRotatef(-5F, 0F, 1F, 0F);
-					GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
-					if(gunType.hasScopeOverlay)
-						GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
-					GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
-					GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
+					
+					if(offHand)
+					{
+						GL11.glTranslatef(0F, 0.03F, -0.76F);
+						GL11.glRotatef(23F, 0F, 0F, 1F); 
+						GL11.glRotatef(-4F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.15F, 0.2F, -0.6F);
+					}
+					else
+					{
+						GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
+						GL11.glRotatef(-5F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
+						if(gunType.hasScopeOverlay)
+							GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
+						GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
+						GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
+					}
 					
 					if(animations.reloading)
 					{
@@ -125,7 +177,7 @@ public class RenderGun implements IItemRenderer
 							case BOTTOM_CLIP : case PISTOL_CLIP : case SHOTGUN : case END_LOADED : 
 							{
 								GL11.glRotatef(60F * reloadRotate, 0F, 0F, 1F);
-								GL11.glRotatef(30F * reloadRotate, 1F, 0F, 0F);
+								GL11.glRotatef(30F * reloadRotate * flip, 1F, 0F, 0F);
 								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
 								break;
 							}

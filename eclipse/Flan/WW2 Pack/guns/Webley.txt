@@ -19,6 +19,7 @@ ShootDelay 9
 ShootSound webleyShoot
 ReloadSound webleyReload
 Mode SemiAuto
+OneHanded true
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0

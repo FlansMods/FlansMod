@@ -49,6 +49,7 @@ public class KeyInputHandler
     //public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
 
 	Minecraft mc;
+	private boolean reloadLeft = false;
 	
 	public KeyInputHandler()
 	{
@@ -126,7 +127,8 @@ public class KeyInputHandler
 		}
 		if(reloadKey.isPressed() && FlansModClient.shootTime <= 0)
 		{
-			FlansMod.getPacketHandler().sendToServer(new PacketReload());
+			FlansMod.getPacketHandler().sendToServer(new PacketReload(reloadLeft ));
+			reloadLeft = !reloadLeft;
 			return;
 		}
 		if(debugKey.isPressed())
