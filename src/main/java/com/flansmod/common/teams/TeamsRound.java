@@ -85,6 +85,16 @@ public class TeamsRound implements Comparable<TeamsRound>
 		}
 	}
 	
+	/** In two team gametypes, returns the opposite team */
+	public Team getOtherTeam(Team team)
+	{
+		if(team == Team.spectators || team == null || teams.length != 2)
+			return team;
+		if(team == teams[0])
+			return teams[1];
+		return teams[0];
+	}
+	
 	public float getWeight()
 	{
 		return popularity * 4F + roundsSincePlayed;

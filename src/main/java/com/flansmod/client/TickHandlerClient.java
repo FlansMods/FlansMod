@@ -7,21 +7,22 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -34,7 +35,9 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 public class TickHandlerClient
 {
@@ -226,10 +229,10 @@ public class TickHandlerClient
 			break;
 		}	
 	}
-		
+			
 	public void clientTickStart(Minecraft minecraft)
 	{ /* Client side only */
-		
+			
 	}
 
 	public void clientTickEnd(Minecraft minecraft)

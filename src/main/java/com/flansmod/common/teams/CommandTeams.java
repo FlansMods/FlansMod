@@ -303,6 +303,17 @@ public class CommandTeams extends CommandBase
 			}
 			return;
 		}
+		if(split[0].toLowerCase().equals("autobalance"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			TeamsManager.autoBalance = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Autobalance is now " + (TeamsManager.autoBalance ? "enabled" : "disabled")));
+			return;
+		}
 		if(split[0].equals("useRotation"))
 		{
 			if(split.length != 2)
@@ -638,6 +649,17 @@ public class CommandTeams extends CommandBase
 			}
 			TeamsManager.votingTime = Integer.parseInt(split[1]) * 20;
 			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.votingTime / 20 + " seconds"));
+			return;
+		}
+		if(split[0].toLowerCase().equals("autobalancetime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.autoBalanceInterval = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Autobalance will now occur every " + TeamsManager.autoBalanceInterval / 20 + " seconds"));
 			return;
 		}
 		if(split[0].equals("setVariable"))

@@ -111,6 +111,11 @@ public class TeamsManager
 	/** For forcing the next round. Not normally used */
 	public TeamsRound nextRound;
 	
+	/** Whether to use autobalance */
+	public static boolean autoBalance;
+	/** Time between autobalance attempts */
+	public static int autoBalanceInterval;
+	
 	//Disused. Delete when done
 	//public Gametype currentGametype;
 	//public TeamsMap currentMap;
@@ -223,6 +228,16 @@ public class TeamsManager
 		//If in a round
 		if(currentRound != null && roundTimeLeft > 0)
 		{
+			//10 seconds before autobalance, display a message
+			if(autoBalance() && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
+			{
+				TeamsManager.messageAll("\u00a7fAutobalancing teams...");
+			}
+			if(autoBalance() && time % autoBalanceInterval == 0 && needAutobalance())
+			{
+				autobalance();
+			}
+			
 			roundTimeLeft--;
 			boolean roundEnded = roundTimeLeft == 0;
 			if(roundEnded)
@@ -246,6 +261,44 @@ public class TeamsManager
 				PlayerHandler.roundEnded();
 			}
 		}	
+	}
+	
+	public boolean needAutobalance()
+	{
+		if(!autoBalance() || currentRound == null || currentRound.teams.length != 2)
+			return false;
+		int membersTeamA = currentRound.teams[0].members.size();
+		int membersTeamB = currentRound.teams[1].members.size();
+		if(Math.abs(membersTeamA - membersTeamB) > 1)
+			return true;
+		return false;
+	}
+	
+	public void autobalance()
+	{
+		if(!autoBalance() || currentRound == null || currentRound.teams.length != 2)
+			return;
+		int membersTeamA = currentRound.teams[0].members.size();
+		int membersTeamB = currentRound.teams[1].members.size();
+		if(membersTeamA - membersTeamB > 1)
+		{
+			for(int i = 0; i < (membersTeamA - membersTeamB) / 2; i++)
+			{
+				//My goodness this is convoluted...
+				EntityPlayerMP playerToKick = getPlayer(currentRound.teams[1].addPlayer(currentRound.teams[0].removeWorstPlayer()));
+				this.messagePlayer(playerToKick, "You were moved to the other team by the autobalancer.");
+				sendClassMenuToPlayer(playerToKick);
+			}
+		}
+		if(membersTeamB - membersTeamA > 1)
+		{
+			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
+			{
+				EntityPlayerMP playerToKick = getPlayer(currentRound.teams[0].addPlayer(currentRound.teams[1].removeWorstPlayer()));
+				this.messagePlayer(playerToKick, "You were moved to the other team by the autobalancer.");
+				sendClassMenuToPlayer(playerToKick);
+			}
+		}
 	}
 	
 	public String randomTimeOutString()
@@ -813,6 +866,13 @@ public class TeamsManager
 		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 	
+	public boolean autoBalance()
+	{
+		if(currentRound != null && !currentRound.gametype.shouldAutobalance())
+			return false;
+		return autoBalance;
+	}
+	
 	//
 	public void playerSelectedTeam(EntityPlayerMP player, String teamName)
 	{
@@ -852,7 +912,7 @@ public class TeamsManager
 		//Default to spectator
 		if(!isValid)
 		{
-			player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + ". Please try again"));
+			player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + " for it is invalid. Please try again"));
 			FlansMod.log(player.getCommandSenderName() + " tried to spawn on an invalid team : " + selectedTeam.name);
 			selectedTeam = Team.spectators;
 		}
@@ -868,7 +928,15 @@ public class TeamsManager
 			respawnPlayer(player, true);
 		}
 		//Give other players the chance to select a class
-		else {
+		else 
+		{
+			Team otherTeam = currentRound.getOtherTeam(selectedTeam);
+			if(autoBalance() && selectedTeam.members.size() > otherTeam.members.size() + 1)
+			{
+				player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + " due to imbalance. Please try again"));
+				sendTeamsMenuToPlayer(player);
+				return;
+			}
 			data.newTeam = selectedTeam;
 			sendClassMenuToPlayer(player);
 		}

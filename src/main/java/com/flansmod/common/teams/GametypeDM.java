@@ -128,11 +128,9 @@ public class GametypeDM extends Gametype
 			return null;
 		
 		//Check each team's spawnpoints
-		for(int k = 2; k < 4; k++)
+		if(data.newTeam == Team.spectators)
 		{
-			if(data.newTeam == Team.spectators)
-				k = 1;
-			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
+			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
 			for(int j = 0; j < bases.size(); j++)
 			{
 				ITeamBase base = bases.get(j);
@@ -145,7 +143,24 @@ public class GametypeDM extends Gametype
 				}
 			}
 		}
-		
+		else
+		{
+			for(int k = 2; k < 4; k++)
+			{
+				ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
+				for(int j = 0; j < bases.size(); j++)
+				{
+					ITeamBase base = bases.get(j);
+					if(base.getMap() != teamsManager.currentRound.map)
+						continue;
+					for(int i = 0; i < base.getObjects().size(); i++)
+					{
+						if(base.getObjects().get(i).isSpawnPoint())
+							validSpawnPoints.add(base.getObjects().get(i));
+					}
+				}
+			}
+		}
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
@@ -189,5 +204,10 @@ public class GametypeDM extends Gametype
 	public boolean sortScoreboardByTeam()
 	{
 		return false;
+	}
+	
+	public boolean shouldAutobalance() 
+	{ 
+		return false; 
 	}
 }

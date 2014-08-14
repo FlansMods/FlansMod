@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -31,6 +33,7 @@ import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 public class FlansModClient extends FlansMod
 {
@@ -86,10 +89,13 @@ public class FlansModClient extends FlansMod
 		log("Loading Flan's mod client side.");
 		MinecraftForge.EVENT_BUS.register(this);
 	}
+	
+	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
 		
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
 	{
+		//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, zombieSkin);
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
 		if(event.entity instanceof EntityPlayer && teamInfo != null && teamInfo.gametype != null && !"No Gametype".equals(teamInfo.gametype))

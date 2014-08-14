@@ -156,4 +156,6 @@ public abstract class Gametype
 		}
 		return attacker;
 	}
+	
+	public boolean shouldAutobalance() { return true; }
 }
