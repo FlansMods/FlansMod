@@ -181,14 +181,14 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
 								break;
 							}
-							case RIFLE :
+							case RIFLE : 
 							{
 								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(-30F * reloadRotate, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
 								break;
 							}
-							case RIFLE_TOP :
+							case RIFLE_TOP : case REVOLVER :
 							{
 								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(10F * reloadRotate, 0F, 1F, 0F);
@@ -234,8 +234,7 @@ public class RenderGun implements IItemRenderer
 			if(bulletStacks[i] != null && bulletStacks[i].getItem() instanceof ItemBullet && bulletStacks[i].getItemDamage() < bulletStacks[i].getMaxDamage())
 				empty = false;
 		}
-		
-		
+				
 		//Load texture
 		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.stackTagCompound.getString("Paint"))));
 		
@@ -289,6 +288,14 @@ public class RenderGun implements IItemRenderer
 			
 			//Render the cocking handle
 			
+			//Render the revolver barrel
+			GL11.glPushMatrix();
+			{
+				GL11.glRotatef(15F * reloadRotate, 1F, 0F, 0F);
+				model.renderRevolverBarrel(f);
+			}
+			GL11.glPopMatrix();
+			
 			//Render the clip
 			GL11.glPushMatrix();
 			{
@@ -318,6 +325,12 @@ public class RenderGun implements IItemRenderer
 					//Rotate the gun dependent on the animation type
 					switch(model.animationType)
 					{
+						case REVOLVER :
+						{
+							GL11.glRotatef(15F * reloadRotate, 1F, 0F, 0F);
+							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
+							break;
+						}
 						case BOTTOM_CLIP : 
 						{
 							GL11.glRotatef(-180F * clipPosition, 0F, 0F, 1F);

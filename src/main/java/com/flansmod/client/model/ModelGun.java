@@ -17,6 +17,7 @@ public class ModelGun extends ModelBase
 	
 	//Animated models follow. 
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] revolverBarrelModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] minigunBarrelModel = new ModelRendererTurbo[0];
@@ -86,6 +87,11 @@ public class ModelGun extends ModelBase
 	{
 		render(minigunBarrelModel, f);
 	}
+	
+	public void renderRevolverBarrel(float f) 
+	{
+		render(revolverBarrelModel, f);
+	}
 
 	/** For renderering models simply */
 	private void render(ModelRendererTurbo[] models, float f)
@@ -107,6 +113,7 @@ public class ModelGun extends ModelBase
 		flip(slideModel);
 		flip(pumpModel);
 		flip(minigunBarrelModel);
+		flip(revolverBarrelModel);
 	}	
 	
 	protected void flip(ModelRendererTurbo[] model)
@@ -130,6 +137,7 @@ public class ModelGun extends ModelBase
 		translate(slideModel, x, y, z);
 		translate(pumpModel, x, y, z);
 		translate(minigunBarrelModel, x, y, z);
+		translate(revolverBarrelModel, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
@@ -141,4 +149,6 @@ public class ModelGun extends ModelBase
 			mod.rotationPointZ += z;
 		}
 	}
+
+
 }
