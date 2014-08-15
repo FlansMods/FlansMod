@@ -3,16 +3,33 @@ package com.flansmod.client;
 import java.io.File;
 import java.util.HashMap;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -27,6 +44,7 @@ import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
@@ -92,6 +110,135 @@ public class FlansModClient extends FlansMod
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
 		
+	//Render off hand item
+	/*@SubscribeEvent
+	public void renderLiving(RenderLivingEvent.Post event)
+	{
+		EntityLivingBase entity = event.entity;
+		RendererLivingEntity renderer = event.renderer;
+		float dT = 0F;
+		
+        if(entity.deathTime > 0)
+        	return;
+		
+		GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        
+        float f2 = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, dT);
+        float f3 = interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, dT);
+        float f4;
+        if (entity.isRiding() && entity.ridingEntity instanceof EntityLivingBase)
+        {
+            f2 = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, dT);
+            f4 = MathHelper.wrapAngleTo180_float(f3 - f2);
+
+            if (f4 < -85.0F)
+                f4 = -85.0F;
+
+            if (f4 >= 85.0F)
+                f4 = 85.0F;
+
+            f2 = f3 - f4;
+
+            if (f4 * f4 > 2500.0F)
+                f2 += f4 * 0.2F;
+        }
+        
+        float f13 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * dT;
+        
+        //this.renderLivingAt(entity, event.x, event.y, event.z);
+        GL11.glTranslatef((float)event.x, (float)event.y, (float)event.z);
+        
+        //f4 = this.handleRotationFloat(p_76986_1_, p_76986_9_);
+        f4 = (float)entity.ticksExisted + dT;        
+      
+        //this.rotateCorpse(entity, f4, f2, dT);
+        GL11.glRotatef(180.0F - f2, 0.0F, 1.0F, 0.0F);
+        
+        float f5 = 0.0625F;
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glScalef(-1.0F, -1.0F, 1.0F);
+        
+        //this.preRenderCallback(entity, dT);
+        
+        GL11.glTranslatef(0.0F, -24.0F * f5 - 0.0078125F, 0.0F);
+        float f6 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * dT;
+        float f7 = entity.limbSwing - entity.limbSwingAmount * (1.0F - dT);
+        
+        if (entity.isChild())
+            f7 *= 3.0F;
+
+        if (f6 > 1.0F)
+            f6 = 1.0F;
+        
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //renderer.mainModel.setLivingAnimations(entity, f7, f6, p_76986_9_);
+        //this.renderModel(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
+        
+        GL11.glDepthMask(true);
+        //this.renderEquippedItems(entity, dT);
+	}*/
+	
+	@SubscribeEvent
+	public void renderOffHandGun(RenderPlayerEvent.Specials.Post event)
+	{
+		RenderPlayer renderer = event.renderer;
+		EntityPlayer player = event.entityPlayer;
+		float dt = event.partialRenderTick;
+		PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+		
+		ItemStack gunStack = null;
+		
+		//Check current stack is a one handed gun
+		if(player instanceof EntityOtherPlayerMP)
+		{
+			gunStack = data.offHandGunStack;
+		}
+		else
+		{
+			ItemStack currentStack = player.getCurrentEquippedItem();
+			if(currentStack == null || !(currentStack.getItem() instanceof ItemGun) || !((ItemGun)currentStack.getItem()).type.oneHanded || data.offHandGunSlot == 0)
+				return;
+			gunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
+		}
+				
+		if(gunStack == null || !(gunStack.getItem() instanceof ItemGun))
+			return;
+		GunType gunType = ((ItemGun)gunStack.getItem()).type;
+				
+		//Render!
+		GL11.glPushMatrix();
+		renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);
+        GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
+
+        float f2 = 1F;
+        
+        GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
+        GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
+        GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glScalef(-f2, -f2, f2);
+               
+        int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
+        float f11 = (float)(k >> 16 & 255) / 255.0F;
+        float f12 = (float)(k >> 8 & 255) / 255.0F;
+        float f3 = (float)(k & 255) / 255.0F;
+        GL11.glColor4f(f11, f12, f3, 1.0F);
+        ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);  
+        
+        GL11.glPopMatrix();
+	}
+	
+    private float interpolateRotation(float x, float y, float dT)
+    {
+        float f3;
+
+        for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
+        for( ; f3 >= 180.0F; f3 -= 360.0F) { }
+
+        return x + dT * f3;
+    }
+	
+	//Handle player hiding / name tag removal for teams
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
 	{

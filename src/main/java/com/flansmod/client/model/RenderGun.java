@@ -75,7 +75,7 @@ public class RenderGun implements IItemRenderer
 		}
 		
 		//Render off-hand gun
-		if(gunType.oneHanded && type != ItemRenderType.ENTITY)
+		if(gunType.oneHanded && type == ItemRenderType.EQUIPPED_FIRST_PERSON)
 		{
 			EntityLivingBase entity = (EntityLivingBase)data[1];
 			if(entity instanceof EntityPlayer)
@@ -103,6 +103,22 @@ public class RenderGun implements IItemRenderer
 			}
 		}
 	}
+	
+	//Render off-hand gun in 3rd person
+	public void renderOffHandGun(EntityPlayer player, ItemStack offHandItemStack)
+	{
+		GunAnimations animations = FlansModClient.gunAnimationsLeft.get(player);
+		if(animations == null)
+		{
+			animations = new GunAnimations();
+			FlansModClient.gunAnimationsLeft.put(player, animations);
+		}
+		GunType offHandGunType = ((ItemGun)offHandItemStack.getItem()).type;
+		if(!offHandGunType.oneHanded)
+			return;
+		
+		renderGun(ItemRenderType.EQUIPPED, offHandItemStack, offHandGunType, animations, true, player);
+	}
 		
 	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
 	{
@@ -128,10 +144,20 @@ public class RenderGun implements IItemRenderer
 				}
 				case EQUIPPED:
 				{
-					GL11.glRotatef(35F, 0F, 0F, 1F);
-					GL11.glRotatef(-5F, 0F, 1F, 0F);
-					GL11.glTranslatef(0.75F, -0.22F, -0.08F);
-					GL11.glScalef(1F, 1F, -1F);
+					if(offHand)
+					{
+						GL11.glRotatef(-70F, 1F, 0F, 0F);
+						GL11.glRotatef(48F, 0F, 0F, 1F);
+						GL11.glRotatef(105F, 0F, 1F, 0F);
+						GL11.glTranslatef(-0.1F, -0.22F, -0.15F);
+					}
+					else
+					{
+						GL11.glRotatef(35F, 0F, 0F, 1F);
+						GL11.glRotatef(-5F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+						GL11.glScalef(1F, 1F, -1F);
+					}
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:

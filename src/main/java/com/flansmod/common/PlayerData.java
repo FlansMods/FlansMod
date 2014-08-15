@@ -15,6 +15,9 @@ import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsRound;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class PlayerData 
 {
 	/** Their username */
@@ -40,6 +43,9 @@ public class PlayerData
 	
 	/** The slotID of the gun being used by the off-hand. 0 = no slot. 1 ~ 9 = hotbar slots */
 	public int offHandGunSlot = 0;
+	/** The off hand gun stack. For viewing other player's off hand weapons only (since you don't know what is in their inventory and hence just the ID is insufficient) */
+	@SideOnly(Side.CLIENT)
+	public ItemStack offHandGunStack;
 	
 	public int shootTimeRight, shootTimeLeft;
 	public int shootClickDelay;
