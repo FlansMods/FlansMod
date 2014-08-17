@@ -65,5 +65,6 @@ AddDye 10 gray
 SetupPart leftTrack 200 -66 6 16 142 17 14
 SetupPart rightTrack 200 -66 6 -30 142 17 14
 SetupPart core 500 -70 -13 -33 149 24 64
-SetupPart turret 200 -23 33 -16 43 22 32BulletDetection 7
+SetupPart turret 200 -23 33 -16 43 22 32
+BulletDetection 7
 ModelScale 1.5

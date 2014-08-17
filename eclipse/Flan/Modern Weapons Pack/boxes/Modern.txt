@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 31
+NumGuns 32
 AddGun m40a3 12 iron 8 fiberglass 4 glass 2 dyePowder.2
 AddAmmo m40a3Ammo 3 iron 2 gunpowder
 AddGun m21 10 iron 10 fiberglass 5 glass
@@ -76,3 +76,4 @@ AddGun m67 4 fiberglass 2 gunpowder
 AddGun claymore 4 fiberglass 2 gunpowder 1 redstone
 AddGun c4 3 gunpowder 2 slimeball 1 redstone
 AddGun c4Remote 1 fiberglass 1 redstone
+AddGun mwRiotShield 12 fiberglass 12 thinGlass 16 iron

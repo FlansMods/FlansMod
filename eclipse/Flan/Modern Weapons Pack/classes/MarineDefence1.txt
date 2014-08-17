@@ -1,6 +1,6 @@
 Name Defender
 ShortName marineDefence1
-AddItem miniUzi+MiniUzi_Red
+AddItem uzi+MiniUzi_Red
 AddItem mwRiotShield
 AddItem m67 2
 AddItem mwKnife
