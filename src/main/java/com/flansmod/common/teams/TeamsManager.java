@@ -1006,6 +1006,8 @@ public class TeamsManager
 		
 		player.inventory.armorInventory = new ItemStack[4];
 		player.inventory.mainInventory = new ItemStack[36];
+		
+		//Set team armour
 		if(team.hat != null)
 			player.inventory.armorInventory[3] = team.hat.copy();
 		if(team.chest != null)
@@ -1017,6 +1019,16 @@ public class TeamsManager
 		
 		if(playerClass == null)
 			return;
+		
+		//Override with class armour
+		if(playerClass.hat != null)
+			player.inventory.armorInventory[3] = playerClass.hat.copy();
+		if(playerClass.chest != null)
+			player.inventory.armorInventory[2] = playerClass.chest.copy();
+		if(playerClass.legs != null)
+			player.inventory.armorInventory[1] = playerClass.legs.copy();
+		if(playerClass.shoes != null)
+			player.inventory.armorInventory[0] = playerClass.shoes.copy();	
 		
 		for(ItemStack stack : playerClass.startingItems)
 		{

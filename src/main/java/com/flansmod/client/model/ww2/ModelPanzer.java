@@ -137,7 +137,7 @@ public class ModelPanzer extends ModelVehicle
 
 
 // Turret
-		turretModel = new ModelRendererTurbo[34];
+		turretModel = new ModelRendererTurbo[33];
 		turretModel[0] = new ModelRendererTurbo(this,  465,  17, textureX, textureY); // TurretCheek
 		turretModel[1] = new ModelRendererTurbo(this,  17,  25, textureX, textureY); // turretCheek
 		turretModel[2] = new ModelRendererTurbo(this,  81,  1, textureX, textureY); // TurretFront
@@ -160,18 +160,17 @@ public class ModelPanzer extends ModelVehicle
 		turretModel[19] = new ModelRendererTurbo(this,  833,  49, textureX, textureY); // Turrettop
 		turretModel[20] = new ModelRendererTurbo(this,  673,  73, textureX, textureY); // AmmoRacket
 		turretModel[21] = new ModelRendererTurbo(this,  417,  9, textureX, textureY); // Gunnersight
-		turretModel[22] = new ModelRendererTurbo(this,  145,  9, textureX, textureY); // Gunmantle
-		turretModel[23] = new ModelRendererTurbo(this,  41,  9, textureX, textureY); // 
-		turretModel[24] = new ModelRendererTurbo(this,  417,  1, textureX, textureY); // CH
-		turretModel[25] = new ModelRendererTurbo(this,  73,  9, textureX, textureY); // CH
-		turretModel[26] = new ModelRendererTurbo(this,  561,  17, textureX, textureY); // CH
-		turretModel[27] = new ModelRendererTurbo(this,  65,  129, textureX, textureY); // 
-		turretModel[28] = new ModelRendererTurbo(this,  129,  129, textureX, textureY); // TurretSkirt
-		turretModel[29] = new ModelRendererTurbo(this,  193,  129, textureX, textureY); // TurretSkirt
-		turretModel[30] = new ModelRendererTurbo(this,  241,  129, textureX, textureY); // TurretSkirt
-		turretModel[31] = new ModelRendererTurbo(this,  265,  129, textureX, textureY); // TurretSkirt
-		turretModel[32] = new ModelRendererTurbo(this,  297,  129, textureX, textureY); // TurretSkirt
-		turretModel[33] = new ModelRendererTurbo(this,  329,  129, textureX, textureY); // TurretSkirt
+		turretModel[22] = new ModelRendererTurbo(this,  41,  9, textureX, textureY); // 
+		turretModel[23] = new ModelRendererTurbo(this,  417,  1, textureX, textureY); // CH
+		turretModel[24] = new ModelRendererTurbo(this,  73,  9, textureX, textureY); // CH
+		turretModel[25] = new ModelRendererTurbo(this,  561,  17, textureX, textureY); // CH
+		turretModel[26] = new ModelRendererTurbo(this,  65,  129, textureX, textureY); // 
+		turretModel[27] = new ModelRendererTurbo(this,  129,  129, textureX, textureY); // TurretSkirt
+		turretModel[28] = new ModelRendererTurbo(this,  193,  129, textureX, textureY); // TurretSkirt
+		turretModel[29] = new ModelRendererTurbo(this,  241,  129, textureX, textureY); // TurretSkirt
+		turretModel[30] = new ModelRendererTurbo(this,  265,  129, textureX, textureY); // TurretSkirt
+		turretModel[31] = new ModelRendererTurbo(this,  297,  129, textureX, textureY); // TurretSkirt
+		turretModel[32] = new ModelRendererTurbo(this,  329,  129, textureX, textureY); // TurretSkirt
 
 		turretModel[0].addBox(0F, -30F, -12.4F, 23, 6, 2, 0F); // TurretCheek
 		turretModel[0].setRotationPoint(-1F, 0F, 0F);
@@ -258,62 +257,60 @@ public class ModelPanzer extends ModelVehicle
 		turretModel[21].addBox(18F, -29F, 5F, 8, 3, 6, 0F); // Gunnersight
 		turretModel[21].setRotationPoint(0F, 0F, 0F);
 
-		turretModel[22].addBox(26.5F, -31F, -3F, 1, 9, 11, 0F); // Gunmantle
-		turretModel[22].setRotationPoint(0F, 0F, -4F);
+		turretModel[22].addBox(-16F, -37F, -5F, 1, 3, 10, 0F); // CH
+		turretModel[22].setRotationPoint(0F, 0F, 0F);
 
-		turretModel[23].addBox(-16F, -37F, -5F, 1, 3, 10, 0F); // CH
-		turretModel[23].setRotationPoint(0F, 0F, 0F);
+		turretModel[23].addBox(-15F, -36F, 5F, 10, 3, 1, 0F); // CH
+		turretModel[23].setRotationPoint(0F, -1F, 0F);
 
-		turretModel[24].addBox(-15F, -36F, 5F, 10, 3, 1, 0F); // CH
-		turretModel[24].setRotationPoint(0F, -1F, 0F);
+		turretModel[24].addBox(-5F, -37F, -5F, 1, 3, 10, 0F); // CH
+		turretModel[24].setRotationPoint(0F, 0F, 0F);
 
-		turretModel[25].addBox(-5F, -37F, -5F, 1, 3, 10, 0F); // CH
+		turretModel[25].addBox(-15F, -37F, -6F, 10, 3, 1, 0F); // CH
 		turretModel[25].setRotationPoint(0F, 0F, 0F);
 
-		turretModel[26].addBox(-15F, -37F, -6F, 10, 3, 1, 0F); // CH
+		turretModel[26].addBox(-5F, -34F, 20F, 28, 12, 1, 0F); // TurretSkirt
 		turretModel[26].setRotationPoint(0F, 0F, 0F);
+		turretModel[26].rotateAngleX = 0.03490658F;
+		turretModel[26].rotateAngleY = -0.1745329F;
 
-		turretModel[27].addBox(-5F, -34F, 20F, 28, 12, 1, 0F); // TurretSkirt
+		turretModel[27].addBox(-5F, -34F, -21F, 28, 12, 1, 0F); // TurretSkirt
 		turretModel[27].setRotationPoint(0F, 0F, 0F);
-		turretModel[27].rotateAngleX = 0.03490658F;
-		turretModel[27].rotateAngleY = -0.1745329F;
+		turretModel[27].rotateAngleX = -0.03490658F;
+		turretModel[27].rotateAngleY = 0.1745329F;
 
-		turretModel[28].addBox(-5F, -34F, -21F, 28, 12, 1, 0F); // TurretSkirt
+		turretModel[28].addBox(-21F, -34F, 20.5F, 22, 12, 1, 0F); // TurretSkirt
 		turretModel[28].setRotationPoint(0F, 0F, 0F);
-		turretModel[28].rotateAngleX = -0.03490658F;
-		turretModel[28].rotateAngleY = 0.1745329F;
+		turretModel[28].rotateAngleX = 0.03490658F;
+		turretModel[28].rotateAngleY = 0.1047198F;
 
-		turretModel[29].addBox(-21F, -34F, 20.5F, 22, 12, 1, 0F); // TurretSkirt
+		turretModel[29].addBox(-21F, -34F, -21.5F, 22, 12, 1, 0F); // TurretSkirt
 		turretModel[29].setRotationPoint(0F, 0F, 0F);
-		turretModel[29].rotateAngleX = 0.03490658F;
-		turretModel[29].rotateAngleY = 0.1047198F;
+		turretModel[29].rotateAngleX = -0.03490658F;
+		turretModel[29].rotateAngleY = -0.1047198F;
 
-		turretModel[30].addBox(-21F, -34F, -21.5F, 22, 12, 1, 0F); // TurretSkirt
+		turretModel[30].addBox(-34.5F, -34F, -12F, 1, 12, 24, 0F); // TurretSkirt
 		turretModel[30].setRotationPoint(0F, 0F, 0F);
-		turretModel[30].rotateAngleX = -0.03490658F;
-		turretModel[30].rotateAngleY = -0.1047198F;
+		turretModel[30].rotateAngleZ = -0.03490658F;
 
-		turretModel[31].addBox(-34.5F, -34F, -12F, 1, 12, 24, 0F); // TurretSkirt
+		turretModel[31].addBox(-20F, -34F, 28.5F, 12, 12, 1, 0F); // TurretSkirt
 		turretModel[31].setRotationPoint(0F, 0F, 0F);
-		turretModel[31].rotateAngleZ = -0.03490658F;
+		turretModel[31].rotateAngleX = 0.03490658F;
+		turretModel[31].rotateAngleY = 0.6283185F;
 
-		turretModel[32].addBox(-20F, -34F, 28.5F, 12, 12, 1, 0F); // TurretSkirt
+		turretModel[32].addBox(-20F, -34F, -29.5F, 12, 12, 1, 0F); // TurretSkirt
 		turretModel[32].setRotationPoint(0F, 0F, 0F);
-		turretModel[32].rotateAngleX = 0.03490658F;
-		turretModel[32].rotateAngleY = 0.6283185F;
-
-		turretModel[33].addBox(-20F, -34F, -29.5F, 12, 12, 1, 0F); // TurretSkirt
-		turretModel[33].setRotationPoint(0F, 0F, 0F);
-		turretModel[33].rotateAngleX = -0.03490658F;
-		turretModel[33].rotateAngleY = -0.6283185F;
+		turretModel[32].rotateAngleX = -0.03490658F;
+		turretModel[32].rotateAngleY = -0.6283185F;
 
 
 
 // Barrel
-		barrelModel = new ModelRendererTurbo[3];
+		barrelModel = new ModelRendererTurbo[4];
 		barrelModel[0] = new ModelRendererTurbo(this,  17,  57, textureX, textureY); // GunRammer
 		barrelModel[1] = new ModelRendererTurbo(this,  881,  81, textureX, textureY); // Barrel
 		barrelModel[2] = new ModelRendererTurbo(this,  505,  1, textureX, textureY); // MuzzleBreak
+		barrelModel[3] = new ModelRendererTurbo(this,  145,  9, textureX, textureY); // Gunmantle
 
 		barrelModel[0].addBox(36F, -29F, -6F, 13, 5, 9, 0F); // GunRammer
 		barrelModel[0].setRotationPoint(-15F, 0F, 0F);
@@ -323,6 +320,9 @@ public class ModelPanzer extends ModelVehicle
 
 		barrelModel[2].addBox(74F, -28.5F, -3.5F, 7, 4, 4, 0F); // MuzzleBreak
 		barrelModel[2].setRotationPoint(0F, 0F, 0F);
+		
+		barrelModel[3].addBox(26.5F, -31F, -7F, 1, 9, 11, 0F); // Gunmantle
+		barrelModel[3].setRotationPoint(0F, 0F, 0F);
 
 
 
@@ -476,19 +476,19 @@ public class ModelPanzer extends ModelVehicle
        
         //The main gun part
         mg42Model[1] = new ModelRendererTurbo[4];
-        mg42Model[1][0] = new ModelRendererTurbo(this, 0, 28, textureX, textureY);
-        mg42Model[1][1] = new ModelRendererTurbo(this, 0, 23, textureX, textureY);
-        mg42Model[1][2] = new ModelRendererTurbo(this, 8, 26, textureX, textureY);
-        mg42Model[1][3] = new ModelRendererTurbo(this, 18, 19, textureX, textureY);
+        mg42Model[1][0] = new ModelRendererTurbo(this, 0, 196, textureX, textureY);
+        mg42Model[1][1] = new ModelRendererTurbo(this, 0, 196, textureX, textureY);
+        mg42Model[1][2] = new ModelRendererTurbo(this, 8, 196, textureX, textureY);
+        mg42Model[1][3] = new ModelRendererTurbo(this, 18, 196, textureX, textureY);
        
-        mg42Model[1][0].addBox(-6F, 10F, -1F, 16, 2, 2);
-        mg42Model[1][1].addBox(-2F, 12F, -1F, 2, 3, 2);  
-        mg42Model[1][2].addBox(10F, 10.5F, -0.5F, 4, 1, 1);             
-        mg42Model[1][3].addBox(2F, 10F, -6F, 2, 4, 5);
+        mg42Model[1][0].addBox(6F, 10F, -1F, 16, 2, 2);
+        mg42Model[1][1].addBox(10F, 12F, -1F, 2, 3, 2);  
+        mg42Model[1][2].addBox(22F, 10.5F, -0.5F, 4, 1, 1);             
+        mg42Model[1][3].addBox(14F, 10F, -6F, 2, 4, 5);
        
         //Set the origin
         for(ModelRendererTurbo gunPart : mg42Model[1])
-                gunPart.setRotationPoint(0F, -52F, 0F);
+                gunPart.setRotationPoint(-10F, -55F, 0F);
        
         //No recoil part
                         mg42Model[2] = new ModelRendererTurbo[0];

@@ -7,3 +7,7 @@ AddItem mwKnife
 AddItem m249Ammo 2
 AddItem uspAmmo 2
 AddItem rpgAmmo 2
+Hat juggernautHelmetBrown
+Chest juggernautBodyBrown
+Legs juggernautPantsBrown
+Shoes juggernautBootsBrown

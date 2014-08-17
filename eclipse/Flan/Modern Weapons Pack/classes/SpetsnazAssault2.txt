@@ -7,3 +7,7 @@ AddItem mwKnife
 AddItem rpdAmmo 2
 AddItem m9Ammo 2
 AddItem rpgAmmo 2
+Hat juggernautHelmet
+Chest juggernautBody
+Legs juggernautPants
+Shoes juggernautBoots
