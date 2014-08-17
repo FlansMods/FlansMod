@@ -68,8 +68,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	//This one allows you to deal with spawning from items
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type, DriveableData data)
 	{
-		this(world, x, y, z, type, data);
+		super(world, type, data);
+		stepHeight = 1.0F;
+		setPosition(x, y, z);
 		rotateYaw(placer.rotationYaw + 90F);
+		initType(type, false);
 	}
 	
 	@Override
