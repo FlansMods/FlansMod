@@ -102,7 +102,7 @@ public class FlansMod
 	public static FlansMod INSTANCE;
     public static int generalConfigInteger = 32;
     public static String generalConfigString = "Hello!";
-    public static boolean generalConfigBoolean = false;
+    public static boolean addGunpowderRecipe = true;
     public static int teamsConfigInteger = 32;
     public static String teamsConfigString = "Hello!";
     public static boolean teamsConfigBoolean = false;
@@ -211,6 +211,11 @@ public class FlansMod
 		for (InfoType type : InfoType.infoTypes)
 		{
 			type.addRecipe();
+		}
+		if(addGunpowderRecipe)
+		{
+			ItemStack charcoal = new ItemStack(Items.coal, 1, 1);
+			GameRegistry.addShapelessRecipe(new ItemStack(Items.gunpowder), charcoal, charcoal, charcoal, new ItemStack(Items.glowstone_dust));
 		}
 		log("Loaded recipes.");
 		
@@ -465,13 +470,13 @@ public class FlansMod
 	}
 
     public static void syncConfig() {
-        generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
-        generalConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, generalConfigBoolean, "A Boolean!");
+        //generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        //generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+        addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
 
-        teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
-        teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+        //teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        //teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
+        //teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
 
         if(configFile.hasChanged())
             configFile.save();
