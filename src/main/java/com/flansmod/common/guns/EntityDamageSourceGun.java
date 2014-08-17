@@ -17,12 +17,14 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 
 	public InfoType weapon;
 	public EntityPlayer shooter;
+	public boolean headshot;
 	
-	public EntityDamageSourceGun(String s, Entity entity, EntityPlayer player, InfoType wep) 
+	public EntityDamageSourceGun(String s, Entity entity, EntityPlayer player, InfoType wep, boolean head) 
 	{
 		super(s, entity, player);
 		weapon = wep;
 		shooter = player;
+		headshot = head;
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
     	Team killedTeam = PlayerHandler.getPlayerData(player).team;
     	Team killerTeam = PlayerHandler.getPlayerData(shooter).team;
     	
-    	FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(weapon, (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName(),  (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName()), living.dimension);
+    	FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(headshot, weapon, (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName(),  (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName()), living.dimension);
     	
         return new ChatComponentText("#flansmod");//flanDeath." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName() + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName());
     }

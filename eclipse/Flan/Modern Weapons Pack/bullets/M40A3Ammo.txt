@@ -25,6 +25,7 @@ BreaksGlass True
 //Size of box to check for entities to hit / detonate
 HitBoxSize 0.1
 HitSound bullet
-//Whether or not the bullet can travel through an entity having hit it
-Penetrates True
+//The penetration power of this bullet. Anything > 1 will penetrate a player. Anything > 4 will penetrate a riot shield. 5 ~ Jeep, 10 ~ Light Tank, 20 ~ Medium Tank, 50 = Obsidian
+//Each object penetrated detracts from the bullet's power and so the total damage it does should be constant
+Penetration 4.5
 SmokeTrail False

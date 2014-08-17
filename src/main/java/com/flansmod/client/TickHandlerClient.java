@@ -160,7 +160,7 @@ public class TickHandlerClient
 				GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 	
 				mc.renderEngine.bindTexture(GuiTeamScores.texture);
-	
+								
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
@@ -230,11 +230,12 @@ public class TickHandlerClient
 				KillMessage killMessage = killMessages.get(n);
 				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 			}
+						
+			//Draw icons indicated weapons used
 			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-			
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);	
 			for(int n = 0; n < killMessages.size(); n++)
 			{
 				KillMessage killMessage = killMessages.get(n);
@@ -383,7 +384,7 @@ public class TickHandlerClient
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
 	}
 		
-	public static void addKillMessage(InfoType infoType, String killer, String killed)
+	public static void addKillMessage(boolean headshot, InfoType infoType, String killer, String killed)
 	{
 		for(KillMessage killMessage : killMessages)
 		{
@@ -391,7 +392,7 @@ public class TickHandlerClient
 			if(killMessage.line > 10)
 				killMessage.timer = 0;
 		}
-		killMessages.add(new KillMessage(infoType, killer, killed));
+		killMessages.add(new KillMessage(headshot, infoType, killer, killed));
 	}
 	
 	private static RenderItem itemRenderer = new RenderItem();
@@ -399,8 +400,9 @@ public class TickHandlerClient
 	
 	private static class KillMessage
 	{
-		public KillMessage(InfoType infoType, String killer, String killed)
+		public KillMessage(boolean head, InfoType infoType, String killer, String killed)
 		{
+			headshot = head;
 			killerName = killer;
 			killedName = killed;
 			weapon = infoType;
@@ -413,5 +415,6 @@ public class TickHandlerClient
 		public InfoType weapon;
 		public int timer;
 		public int line;
+		public boolean headshot;
 	}
 }

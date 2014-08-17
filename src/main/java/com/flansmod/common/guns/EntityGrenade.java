@@ -123,7 +123,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
 						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
 						{
-							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)))
 								continue;
 						}
 						detonate();
@@ -376,7 +376,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	private DamageSource getGrenadeDamage()
 	{
 		if(thrower instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)).setProjectile();
+			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)).setProjectile();
 		else return (new EntityDamageSourceIndirect(type.shortName, this, thrower)).setProjectile();
 	}
 

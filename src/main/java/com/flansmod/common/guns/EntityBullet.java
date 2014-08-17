@@ -348,7 +348,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				//Calculate the hit damage
 				float hitDamage = damage * type.damageVsLiving;
 				//Create a damage source object
-				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage();
+				DamageSource damagesource = owner == null ? DamageSource.generic : getBulletDamage(false);
 	
 				//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 				if(hitDamage == 0 && checkEntity instanceof EntityPlayerMP && TeamsManager.getInstance().currentRound != null)
@@ -425,10 +425,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
-	public DamageSource getBulletDamage()
+	public DamageSource getBulletDamage(boolean headshot)
 	{
 		if(owner instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)owner, firedFrom)).setProjectile();
+			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)owner, firedFrom, headshot)).setProjectile();
 		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 

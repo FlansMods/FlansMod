@@ -159,7 +159,7 @@ public class PlayerHitbox
 			//Calculate the hit damage
 			float hitDamage = bullet.damage * bullet.type.damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = bullet.owner == null ? DamageSource.generic : bullet.getBulletDamage();
+			DamageSource damagesource = bullet.owner == null ? DamageSource.generic : bullet.getBulletDamage(type == EnumHitboxType.HEAD);
 
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 			if(hitDamage == 0 && TeamsManager.getInstance().currentRound != null)

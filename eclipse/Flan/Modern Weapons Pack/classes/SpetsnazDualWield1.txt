@@ -1,0 +1,9 @@
+Name Gunslinger
+ShortName spetsnazDualWield1
+AddItem skorpion
+AddItem m1911
+AddItem m1911
+AddItem mwKnife
+AddItem skorpionAmmo 2
+AddItem m1911Ammo 3
+AddItem m1911Ammo 3
