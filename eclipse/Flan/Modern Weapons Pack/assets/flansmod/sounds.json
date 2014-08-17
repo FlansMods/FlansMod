@@ -109,6 +109,11 @@
 		"sounds" : [ "flansmod:M1014Reload" ]
 	},
 	
+	"M1014Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M1014Shoot" ]
+	},
+	
 	"MG42Reload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:MG42Reload" ]

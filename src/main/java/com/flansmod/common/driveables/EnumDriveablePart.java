@@ -33,6 +33,7 @@ public enum EnumDriveablePart
 	rightArm(new EnumDriveablePart[] { }, "rightArm", "Right Arm"),
 	head(new EnumDriveablePart[] { }, "head", "Head"),
 	hips(new EnumDriveablePart[] { }, "hips", "Hips"),
+	barrel(new EnumDriveablePart[] { }, "barrel", "Barrel"),
 
 	//Shared part
 	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, leftArm, rightArm, head, hips, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
