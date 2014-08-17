@@ -476,9 +476,9 @@ public class ModelPanzer extends ModelVehicle
        
         //The main gun part
         mg42Model[1] = new ModelRendererTurbo[4];
-        mg42Model[1][0] = new ModelRendererTurbo(this, 0, 196, textureX, textureY);
-        mg42Model[1][1] = new ModelRendererTurbo(this, 0, 196, textureX, textureY);
-        mg42Model[1][2] = new ModelRendererTurbo(this, 8, 196, textureX, textureY);
+        mg42Model[1][0] = new ModelRendererTurbo(this, 0, 205, textureX, textureY);
+        mg42Model[1][1] = new ModelRendererTurbo(this, 0, 200, textureX, textureY);
+        mg42Model[1][2] = new ModelRendererTurbo(this, 8, 203, textureX, textureY);
         mg42Model[1][3] = new ModelRendererTurbo(this, 18, 196, textureX, textureY);
        
         mg42Model[1][0].addBox(6F, 10F, -1F, 16, 2, 2);
