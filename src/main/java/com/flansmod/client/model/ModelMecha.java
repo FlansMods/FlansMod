@@ -21,6 +21,7 @@ public class ModelMecha extends ModelDriveable
 	public ModelRendererTurbo[] leftFootModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightFootModel = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo[] headModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] barrelModel = new ModelRendererTurbo[0];
 	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
@@ -63,16 +64,18 @@ public class ModelMecha extends ModelDriveable
         if(mecha.isPartIntact(EnumDriveablePart.head))
         	for(ModelRendererTurbo model : headModel)
         		model.render(f5);
-	}
-	
-			float pitch = mecha.seats[0].looking.getPitch();
+
+		float pitch = mecha.seats[0].looking.getPitch();
         
         if(mecha.isPartIntact(EnumDriveablePart.barrel))
-		for(int i = 0; i < barrelModel.length; i++)
-		{
-			barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
-			barrelModel[i].render(f5, oldRotateOrder);
-		}
+        {
+			for(int i = 0; i < barrelModel.length; i++)
+			{
+				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
+				barrelModel[i].render(f5, oldRotateOrder);
+			}
+        }
+	}
 		
 	public void renderLeftArm(float f5, EntityMecha mecha, float f)
 	{
