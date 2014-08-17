@@ -312,17 +312,17 @@ public class ModelPanzer extends ModelVehicle
 		barrelModel[2] = new ModelRendererTurbo(this,  505,  1, textureX, textureY); // MuzzleBreak
 		barrelModel[3] = new ModelRendererTurbo(this,  145,  9, textureX, textureY); // Gunmantle
 
-		barrelModel[0].addBox(36F, -29F, -6F, 13, 5, 9, 0F); // GunRammer
-		barrelModel[0].setRotationPoint(-15F, 0F, 0F);
+		barrelModel[0].addBox(11F, -2.5F, -6F, 13, 5, 9, 0F); // GunRammer
+		barrelModel[0].setRotationPoint(24F, -26F, 0F);
 
-		barrelModel[1].addBox(15F, -28F, -3F, 59, 3, 3, 0F); // Barrel
-		barrelModel[1].setRotationPoint(0F, 0F, 0F);
+		barrelModel[1].addBox(-10F, -1.5F, -3F, 59, 3, 3, 0F); // Barrel
+		barrelModel[1].setRotationPoint(24F, -26F, 0F);
 
-		barrelModel[2].addBox(74F, -28.5F, -3.5F, 7, 4, 4, 0F); // MuzzleBreak
-		barrelModel[2].setRotationPoint(0F, 0F, 0F);
+		barrelModel[2].addBox(49F, -2F, -3.5F, 7, 4, 4, 0F); // MuzzleBreak
+		barrelModel[2].setRotationPoint(24F, -26F, 0F);
 		
-		barrelModel[3].addBox(26.5F, -31F, -7F, 1, 9, 11, 0F); // Gunmantle
-		barrelModel[3].setRotationPoint(0F, 0F, 0F);
+		barrelModel[3].addBox(1.5F, -4.5F, -7F, 1, 9, 11, 0F); // Gunmantle
+		barrelModel[3].setRotationPoint(24F, -26F, 0F);
 
 
 
