@@ -14,7 +14,9 @@ AddClass spetsnazSniper1
 AddClass spetsnazSniper2
 AddClass spetsnazMulti1
 AddClass spetsnazMulti2
+AddClass spetsnazDualWield1
 AddClass spetsnazAssault1
 AddClass spetsnazAssault2
+AddClass spetsnazDefence1
 AddClass spetsnazMedic1
 AddClass spetsnazEngineer1

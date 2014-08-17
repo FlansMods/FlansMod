@@ -12,6 +12,8 @@ public class ArmourType extends InfoType
 	public int type;
 	public double defence;
 	public String armourTextureName;
+	public float moveSpeedModifier = 1F;
+	public float knockbackModifier = 0.8F;
 	
 	public ArmourType(TypeFile file)
 	{
@@ -36,10 +38,14 @@ public class ArmourType extends InfoType
 				if(split[1].equals("Shoes") || split[1].equals("Boots"))
 					type = 3;
 			}			
+			
 			if(split[0].equals("DamageReduction") || split[0].equals("Defence"))
-			{
-				defence = Double.parseDouble(split[1]);
-			}
+				defence = Double.parseDouble(split[1]);		
+			if(split[0].equals("MoveSpeedModifier") || split[0].equals("Slowness"))
+				moveSpeedModifier = Float.parseFloat(split[1]);
+			if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
+				knockbackModifier = Float.parseFloat(split[1]);
+			
 			if(split[0].equals("ArmourTexture") || split[0].equals("ArmorTexture"))
 			{
 				armourTextureName = split[1];

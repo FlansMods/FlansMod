@@ -1,6 +1,7 @@
 package com.flansmod.common.teams;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -24,6 +25,7 @@ import com.google.common.collect.Multimap;
 public class ItemTeamArmour extends ItemArmor implements ISpecialArmor 
 {
 	public ArmourType type;
+	protected static final UUID[] uuid = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() };
 	
 	public ItemTeamArmour(ArmourType t)
 	{
@@ -98,7 +100,8 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
     public Multimap getAttributeModifiers(ItemStack stack)
     {
        	Multimap map = super.getAttributeModifiers(stack);
-       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", 0.5F, 0));
+       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier - 1F, 2));
+       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
        	return map;
     }
 }
