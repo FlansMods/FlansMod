@@ -93,5 +93,12 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
-
+    
+    @Override
+    public Multimap getAttributeModifiers(ItemStack stack)
+    {
+       	Multimap map = super.getAttributeModifiers(stack);
+       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", 0.5F, 0));
+       	return map;
+    }
 }

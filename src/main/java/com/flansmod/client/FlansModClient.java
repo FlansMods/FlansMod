@@ -109,76 +109,7 @@ public class FlansModClient extends FlansMod
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
-		
-	//Render off hand item
-	/*@SubscribeEvent
-	public void renderLiving(RenderLivingEvent.Post event)
-	{
-		EntityLivingBase entity = event.entity;
-		RendererLivingEntity renderer = event.renderer;
-		float dT = 0F;
-		
-        if(entity.deathTime > 0)
-        	return;
-		
-		GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        
-        float f2 = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, dT);
-        float f3 = interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, dT);
-        float f4;
-        if (entity.isRiding() && entity.ridingEntity instanceof EntityLivingBase)
-        {
-            f2 = interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, dT);
-            f4 = MathHelper.wrapAngleTo180_float(f3 - f2);
-
-            if (f4 < -85.0F)
-                f4 = -85.0F;
-
-            if (f4 >= 85.0F)
-                f4 = 85.0F;
-
-            f2 = f3 - f4;
-
-            if (f4 * f4 > 2500.0F)
-                f2 += f4 * 0.2F;
-        }
-        
-        float f13 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * dT;
-        
-        //this.renderLivingAt(entity, event.x, event.y, event.z);
-        GL11.glTranslatef((float)event.x, (float)event.y, (float)event.z);
-        
-        //f4 = this.handleRotationFloat(p_76986_1_, p_76986_9_);
-        f4 = (float)entity.ticksExisted + dT;        
-      
-        //this.rotateCorpse(entity, f4, f2, dT);
-        GL11.glRotatef(180.0F - f2, 0.0F, 1.0F, 0.0F);
-        
-        float f5 = 0.0625F;
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glScalef(-1.0F, -1.0F, 1.0F);
-        
-        //this.preRenderCallback(entity, dT);
-        
-        GL11.glTranslatef(0.0F, -24.0F * f5 - 0.0078125F, 0.0F);
-        float f6 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * dT;
-        float f7 = entity.limbSwing - entity.limbSwingAmount * (1.0F - dT);
-        
-        if (entity.isChild())
-            f7 *= 3.0F;
-
-        if (f6 > 1.0F)
-            f6 = 1.0F;
-        
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
-        //renderer.mainModel.setLivingAnimations(entity, f7, f6, p_76986_9_);
-        //this.renderModel(p_76986_1_, f7, f6, f4, f3 - f2, f13, f5);
-        
-        GL11.glDepthMask(true);
-        //this.renderEquippedItems(entity, dT);
-	}*/
-	
+			
 	@SubscribeEvent
 	public void renderOffHandGun(RenderPlayerEvent.Specials.Post event)
 	{
@@ -242,6 +173,14 @@ public class FlansModClient extends FlansMod
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
 	{
+		//Render debug boxes for player snapshots
+		if(FlansMod.DEBUG)
+		{
+			PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
+			if(data.snapshots[0] != null)
+				data.snapshots[0].renderSnapshot();
+		}
+		
 		//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, zombieSkin);
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
@@ -277,6 +216,8 @@ public class FlansModClient extends FlansMod
 				return;
 			}
 		}
+		
+
 	}
 
 	public static void tick()

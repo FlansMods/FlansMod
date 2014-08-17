@@ -12,7 +12,7 @@ ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 22
 //Damage in half hearts
-Damage 18
+Damage 25
 //The higher this value, the more the bullets spread
 Accuracy 3
 //Time in ticks between rounds

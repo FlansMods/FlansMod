@@ -25,8 +25,6 @@ public class BulletType extends InfoType
 	public String dropItemOnShoot = null;
 	public String dropItemOnHit = null;
 	public boolean breaksGlass = false;
-	public boolean penetratesEntities = false;
-	public boolean penetratesBlocks = false;
 	public String trailParticles = "smoke";
 	public String flakParticles = "largesmoke";
 	public boolean smokeTrail = false;
@@ -38,6 +36,7 @@ public class BulletType extends InfoType
 	public int maxStackSize = 1;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 	public boolean hasLight = false;
+	public float penetratingPower = 0F;
 
 	public BulletType(TypeFile file)
 	{
@@ -81,7 +80,9 @@ public class BulletType extends InfoType
 			if (split[0].equals("HitSound"))
 				hitSound = split[1];
 			if (split[0].equals("Penetrates"))
-				penetratesEntities = Boolean.parseBoolean(split[1].toLowerCase());
+				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 1F : 0F);
+			if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))
+				penetratingPower = Float.parseFloat(split[1]);
 			if (split[0].equals("SmokeTrail"))
 				smokeTrail = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("RoundsPerItem"))

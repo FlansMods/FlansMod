@@ -3,7 +3,6 @@ package com.flansmod.common.driveables;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -18,9 +17,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
@@ -33,6 +30,8 @@ import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.raytracing.BulletHit;
+import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.teams.TeamsManager;
@@ -971,8 +970,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	/** Attack method called by bullets hitting the plane. Does advanced raytracing to detect which part of the plane is hit */
-	public boolean attackFromBullet(EntityBullet bullet, Vector3f origin, Vector3f motion)
+	public ArrayList<BulletHit> attackFromBullet(EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
+		//Make an array to contain the hits
+		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
 		//Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
 		Vector3f relativePosVector = Vector3f.sub(origin, new Vector3f((float)posX, (float)posY, (float)posZ), null);
 		Vector3f rotatedPosVector = axes.findGlobalVectorLocally(relativePosVector);
@@ -981,22 +982,32 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(this, bullet, rotatedPosVector, rotatedMotVector))
-			{
-				//This is server side bsns
-				if(worldObj.isRemote)
-					return true;
-				checkParts();
-
-				//If it hit, send a damage update packet
-				FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, 100, dimension);
-				return true;
-			}
+			DriveableHit hit = part.rayTrace(this, bullet, rotatedPosVector, rotatedMotVector);
+			if(hit != null)
+				hits.add(hit);
 		}
-		return false;
+		return hits;
 	}
 	
-	/** A simple raytracer for the driveable */
+	/** Called if the bullet actually hit the part returned by the raytrace 
+	 * @param penetratingPower */
+	public float bulletHit(EntityBullet bullet, DriveableHit hit, float penetratingPower)
+	{
+		DriveablePart part = getDriveableData().parts.get(hit.part);
+		part.hitByBullet(bullet);
+		
+		//This is server side bsns
+		if(!worldObj.isRemote)
+		{
+			checkParts();
+			//If it hit, send a damage update packet
+			FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, 100, dimension);
+		}
+		
+		return penetratingPower - 5F;
+	}
+	
+	/** A simple raytracer for the driveable. Called by tools */
 	public DriveablePart raytraceParts(Vector3f origin, Vector3f motion)
 	{
 		//Get the position of the bullet origin, relative to the centre of the plane, and then rotate the vectors onto local co-ordinates
@@ -1007,7 +1018,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(this, null, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, rotatedPosVector, rotatedMotVector))
 			{
 				return part;
 			}

@@ -8,7 +8,6 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,6 +17,7 @@ import com.flansmod.client.model.ModelMG;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.common.vector.Vector3f;
 
 public class GunType extends InfoType implements IScope
 {
@@ -55,6 +55,16 @@ public class GunType extends InfoType implements IScope
 	public EnumSecondaryFunction secondaryFunction = EnumSecondaryFunction.ADS_ZOOM;
 	/** If true, then this gun can be dual wielded */
 	public boolean oneHanded = false;
+	
+	//Shields
+	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
+	//and a load of shield code on top. This means that guns can have in built shields (think Nerf Stampede)
+	/** Whether or not this gun has a shield piece */
+	public boolean shield = false;
+	/** Shield collision box definition. In model co-ordinates */
+	public Vector3f shieldOrigin, shieldDimensions;
+	/** Float between 0 and 1 denoting the proportion of damage blocked by the shield */
+	public float shieldDamageAbsorption = 0F;
 	
 	//Sounds
 	/** The sound played upon shooting */
@@ -322,6 +332,15 @@ public class GunType extends InfoType implements IScope
 				for(int i = 0; i < (split.length - 3) / 2; i++)
 					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
 				paintjobs.add(new Paintjob(split[1], split[2], dyeStacks));
+			}
+			
+			//Shield settings
+			if(split[0].toLowerCase().equals("shield"))
+			{
+				shield = true;
+				shieldDamageAbsorption = Float.parseFloat(split[1]);
+				shieldOrigin = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
+				shieldDimensions = new Vector3f(Float.parseFloat(split[5]) / 16F, Float.parseFloat(split[6]) / 16F, Float.parseFloat(split[7]) / 16F);
 			}
 		} 
 		catch (Exception e)

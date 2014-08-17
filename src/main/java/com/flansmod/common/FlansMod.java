@@ -114,6 +114,7 @@ public class FlansMod
 	public static File flanDir;
 	public static final float soundRange = 50F;
 	public static final float driveableUpdateRange = 200F;
+	public static final int numPlayerSnapshots = 20;
 	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
 	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');

@@ -96,24 +96,51 @@ public class RotatedAxes
 	}
 	
 	//Rotate globally by some angle about the yaw axis
-	public void rotateGlobalYaw(float rotateBy)
+	public RotatedAxes rotateGlobalYaw(float rotateBy)
 	{
 		rotationMatrix.rotate(rotateBy * 3.14159265F / 180F, new Vector3f(0F, 1F, 0F));
 		convertMatrixToAngles();
+		return this;
 	}
 	
 	//Rotate globally by some angle about the pitch axis
-	public void rotateGlobalPitch(float rotateBy)
+	public RotatedAxes rotateGlobalPitch(float rotateBy)
 	{
 		rotationMatrix.rotate(rotateBy * 3.14159265F / 180F, new Vector3f(0F, 0F, 1F));
 		convertMatrixToAngles();
+		return this;
 	}
 	
 	//Rotate globally by some angle about the roll axis
-	public void rotateGlobalRoll(float rotateBy)
+	public RotatedAxes rotateGlobalRoll(float rotateBy)
 	{
 		rotationMatrix.rotate(rotateBy * 3.14159265F / 180F, new Vector3f(1F, 0F, 0F));
 		convertMatrixToAngles();
+		return this;
+	}
+	
+	//Rotate globally by some angle about the yaw axis
+	public RotatedAxes rotateGlobalYawInRads(float rotateBy)
+	{
+		rotationMatrix.rotate(rotateBy, new Vector3f(0F, 1F, 0F));
+		convertMatrixToAngles();
+		return this;
+	}
+	
+	//Rotate globally by some angle about the pitch axis
+	public RotatedAxes rotateGlobalPitchInRads(float rotateBy)
+	{
+		rotationMatrix.rotate(rotateBy, new Vector3f(0F, 0F, 1F));
+		convertMatrixToAngles();
+		return this;
+	}
+	
+	//Rotate globally by some angle about the roll axis
+	public RotatedAxes rotateGlobalRollInRads(float rotateBy)
+	{
+		rotationMatrix.rotate(rotateBy, new Vector3f(1F, 0F, 0F));
+		convertMatrixToAngles();
+		return this;
 	}
 	
 	//Rotate by some angle around some axis

@@ -25,8 +25,10 @@ import cpw.mods.fml.common.discovery.ContainerType;
 import cpw.mods.fml.common.discovery.ModCandidate;
 
 import com.flansmod.client.debug.EntityDebugAABB;
+import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.debug.RenderDebugAABB;
+import com.flansmod.client.debug.RenderDebugDot;
 import com.flansmod.client.debug.RenderDebugVector;
 import com.flansmod.client.gui.GuiArmourBox;
 import com.flansmod.client.gui.GuiDriveableCrafting;
@@ -160,6 +162,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha());

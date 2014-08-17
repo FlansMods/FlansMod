@@ -10,6 +10,7 @@ import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
@@ -22,7 +23,46 @@ public class PlayerData
 {
 	/** Their username */
 	public String username;
+
+	//Movement related fields
+	/** Roll variables */
+	public float prevRotationRoll, rotationRoll;
+	/** Snapshots for bullet hit detection. Array size is set to number of snapshots required. When a new one is taken, 
+	 * each snapshot is moved along one place and new one is added at the start, so that when the array fills up, the oldest one is lost */
+	public PlayerSnapshot[] snapshots;
 	
+	//Gun related fields
+	/** The slotID of the gun being used by the off-hand. 0 = no slot. 1 ~ 9 = hotbar slots */
+	public int offHandGunSlot = 0;
+	/** The off hand gun stack. For viewing other player's off hand weapons only (since you don't know what is in their inventory and hence just the ID is insufficient) */
+	@SideOnly(Side.CLIENT)
+	public ItemStack offHandGunStack;
+	/** The MG this player is using */
+	public EntityMG mountingGun;
+	/** Tickers to stop shooting too fast */
+	public int shootTimeRight, shootTimeLeft;
+	/** Stops player shooting immediately after swapping weapons */
+	public int shootClickDelay;
+	/** True if this player is shooting */
+	public boolean isShootingRight, isShootingLeft;
+	/** The speed of the minigun the player is using */
+	public float minigunSpeed = 0F;
+	/** Reloading booleans */
+	public boolean reloadingRight, reloadingLeft;
+	/** When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates */
+	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
+	/** Sound delay parameters */
+	public int loopedSoundDelay;
+	/** Sound delay parameters */
+	public boolean shouldPlayCooldownSound, shouldPlayWarmupSound;
+	
+	//Teams related fields
+	/** Gametype variables */
+	public int score, kills, deaths;
+	/** Gametype variable for Nerf */
+	public boolean out;
+	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */
+	public int vote;
 	/** The team this player is currently on */
 	public Team team;
 	/** The team this player will switch to upon respawning */
@@ -31,56 +71,16 @@ public class PlayerData
 	public PlayerClass playerClass;
 	/** The class the player will switch to upon respawning */
 	public PlayerClass newPlayerClass;
-	
 	/** Keeps the player out of having to rechose their team each round */
 	public boolean builder;
-	
-	public EntityMG mountingGun;
-	/** True if this player is shooting */
-	public boolean isShootingRight, isShootingLeft;
-	/** The speed of the minigun the player is using */
-	public float minigunSpeed = 0F;
-	
-	/** The slotID of the gun being used by the off-hand. 0 = no slot. 1 ~ 9 = hotbar slots */
-	public int offHandGunSlot = 0;
-	/** The off hand gun stack. For viewing other player's off hand weapons only (since you don't know what is in their inventory and hence just the ID is insufficient) */
-	@SideOnly(Side.CLIENT)
-	public ItemStack offHandGunStack;
-	
-	public int shootTimeRight, shootTimeLeft;
-	public int shootClickDelay;
-	public int spawnDelay;
-	public double spawnX;
-	public double spawnY;
-	public double spawnZ;
-	
-	public boolean reloadingRight, reloadingLeft;
-
-	public float prevRotationRoll;
-	public float rotationRoll;
-	
-	/** When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates */
-	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
-	
-	//For use by the currentGametype
-	public int score;
-	public int kills;
-	public int deaths;
-	public boolean out; //For Nerf gametypes
-
-	public int loopedSoundDelay;
-	public boolean shouldPlayCooldownSound;
-	public boolean shouldPlayWarmupSound;
-	
-	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */
-	public int vote;
 	
 	public PlayerData(String name) 
 	{
 		username = name;	
+		snapshots = new PlayerSnapshot[FlansMod.numPlayerSnapshots];
 	}
 	
-	public void tick()
+	public void tick(EntityPlayer player)
 	{
 		if(shootTimeRight > 0)
 			shootTimeRight--;
@@ -94,7 +94,6 @@ public class PlayerData
 		
 		if(shootClickDelay > 0)
 			shootClickDelay--;
-		spawnDelay--;
 		
 		//Handle minigun speed
 		if(isShootingRight && !reloadingRight)
@@ -107,17 +106,16 @@ public class PlayerData
 				shouldPlayCooldownSound = true;
 		}
 		
-		
+		//Move all snapshots along one place
+		for(int i = snapshots.length - 2; i >= 0; i--)
+		{
+			snapshots[i + 1] = snapshots[i];
+		}
+		//Take new snapshot
+		snapshots[0] = new PlayerSnapshot(player);
+
 	}
-	
-	public void setSpawn(double x, double y, double z, int t)
-	{
-		spawnX = x;
-		spawnY = y;
-		spawnZ = z;
-		spawnDelay = t;
-	}
-	
+
 	public PlayerClass getPlayerClass()
 	{
 		if(playerClass != newPlayerClass)

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -54,21 +56,33 @@ public class PlayerHandler
 			getPlayerData((EntityPlayer)entity).playerKilled();
 		}
 	}
-	
-	/** Ticker for player data. Called from Flan's Mod ticker */
-	public void tick()
+		
+	public void serverTick()
 	{
 		for(PlayerData d : serverSideData.values())
-			d.tick();
+		{
+			EntityPlayer player = null;
+			for(WorldServer world : MinecraftServer.getServer().worldServers)
+				if(world.getPlayerEntityByName(d.username) != null)
+					d.tick(world.getPlayerEntityByName(d.username));
+		}
+	}
+	
+	public void clientTick()
+	{
 		for(PlayerData d : clientSideData.values())
-			d.tick();
+		{
+			EntityPlayer player = null;
+			if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.getPlayerEntityByName(d.username) != null)
+				d.tick(Minecraft.getMinecraft().theWorld.getPlayerEntityByName(d.username));
+		}
 	}
 	
 	public static PlayerData getPlayerData(EntityPlayer player)
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getCommandSenderName(), Side.SERVER);
+		return getPlayerData(player.getCommandSenderName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
 	}
 	
 	public static PlayerData getPlayerData(String username)

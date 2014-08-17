@@ -24,6 +24,7 @@ public class CommonTickHandler
 		}
 		case END :
 		{
+			FlansMod.playerHandler.clientTick();
 			break;
 		}		
 		}
@@ -41,7 +42,7 @@ public class CommonTickHandler
 		case END :
 		{
 			TeamsManager.getInstance().tick();
-			FlansMod.playerHandler.tick();
+			FlansMod.playerHandler.serverTick();
 			FlansMod.ticker++;
 			break;
 		}		

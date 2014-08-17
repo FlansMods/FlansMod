@@ -215,22 +215,26 @@ public class ItemGun extends Item
 					{
 						offHandFull = true;
 						ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-						GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
-						
-						//Send packet when firing a semi or starting to fire a full
-						if(leftMouseHeld && !lastLeftMouseHeld) 
+						if(offHandGunStack != null && offHandGunStack.getItem() instanceof ItemGun)
 						{
-							FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
-							clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
+							GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
+							
+							//Send packet when firing a semi or starting to fire a full
+							if(leftMouseHeld && !lastLeftMouseHeld) 
+							{
+								FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
+								clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
+							}
+							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
+							{
+								FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
+							}
+							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
+							{
+								clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
+							}
 						}
-						if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
-						{
-							FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
-						}
-						if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
-						{
-							clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
-						}
+						else data.offHandGunSlot = 0;
 					}
 				}
 				
@@ -428,7 +432,7 @@ public class ItemGun extends Item
 			//Drivers can't shoot
 			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
 				return stack;
-			if(left)
+			if(left && data.offHandGunSlot != 0)
 			{
 				ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
 				GunType gunType = ((ItemGun)offHandGunStack.getItem()).type;

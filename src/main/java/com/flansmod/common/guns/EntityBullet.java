@@ -1,9 +1,11 @@
 package com.flansmod.common.guns;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import scala.actors.threadpool.Arrays;
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -19,17 +21,22 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 
+import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.raytracing.BlockHit;
+import com.flansmod.common.guns.raytracing.BulletHit;
+import com.flansmod.common.guns.raytracing.DriveableHit;
+import com.flansmod.common.guns.raytracing.PlayerBulletHit;
+import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
@@ -45,6 +52,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public InfoType firedFrom;
 	public float damage;
 	public boolean shotgun = false;
+	/** If this is non-zero, then the player raytrace code will look back in time to when the player thinks their bullet should have hit */
+	public int pingOfShooter = 0;
 
 	public EntityBullet(World world)
 	{
@@ -58,6 +67,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	{
 		this(world);
 		owner = shooter;
+		if(shooter instanceof EntityPlayerMP)
+			pingOfShooter = ((EntityPlayerMP)shooter).ping;
 		type = bulletType;
 		firedFrom = shotFrom;
 		damage = gunDamage;
@@ -181,10 +192,17 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			setDead();
 		}
 		
-		//Iterate over all EntityDriveables
+		//Create a list for all bullet hits
+		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
+		
+		Vector3f origin = new Vector3f(posX, posY, posZ);
+		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
+		
+		//Iterate over all entities
 		for(int i = 0; i < worldObj.loadedEntityList.size(); i++)
 		{
 			Object obj = worldObj.loadedEntityList.get(i);
+			//Get driveables
 			if(obj instanceof EntityDriveable)
 			{
 				EntityDriveable driveable = (EntityDriveable)obj;
@@ -195,13 +213,34 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				//If this bullet is within the driveable's detection range
 				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
 				{
-					//Raytrace the bullet and if it hits, kill the bullet
-					if(driveable.attackFromBullet(this, new Vector3f((float)posX, (float)posY, (float)posZ), new Vector3f((float)motionX, (float)motionY, (float)motionZ)))
-					{
-						if(!type.penetratesEntities)
-							setDead();
-					}
+					//Raytrace the bullet
+					ArrayList<BulletHit> driveableHits = driveable.attackFromBullet(this, origin, motion);
+					hits.addAll(driveableHits);
 				}
+			}
+			//Get players
+			if(obj instanceof EntityPlayer)
+			{
+				EntityPlayer player = (EntityPlayer)obj;
+				PlayerData data = PlayerHandler.getPlayerData(player, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+				if(data == null || data.team == Team.spectators)
+					continue;
+				if(player == owner && ticksInAir < 20)
+					continue;
+				int snapshotToTry = pingOfShooter / 50;
+				if(snapshotToTry >= data.snapshots.length)
+					snapshotToTry = data.snapshots.length - 1;
+				PlayerSnapshot snapshot = data.snapshots[snapshotToTry];
+				if(snapshot == null)
+				{
+					snapshot = data.snapshots[0];
+					if(snapshot == null)
+						continue;
+				}
+				
+				//Raytrace
+				ArrayList<BulletHit> playerHits = snapshot.raytrace(origin, motion);
+				hits.addAll(playerHits);
 			}
 		}
 		
@@ -210,29 +249,52 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		Vec3 nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
 		MovingObjectPosition hit = worldObj.func_147447_a(posVec, nextPosVec, false, true, true);
 		
-		//Reset the position vectors since the ray tracer messes them up
-		posVec = Vec3.createVectorHelper(posX, posY, posZ);
-		nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-		
-		//If there is something in the way of the bullet's motion, put the bullet at that position next tick
-		if(hit != null && !(hit.entityHit == null ? type.penetratesBlocks : type.penetratesEntities))
+		if(hit != null)
 		{
-			nextPosVec = Vec3.createVectorHelper(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+			//Calculate the lambda value of the intercept
+			Vec3 hitVec = hit.hitVec.subtract(posVec);
+			float lambda = 0;
+			//Try each co-ordinate one at a time.
+			if(motionX != 0)
+				lambda = (float)(hitVec.xCoord / motionX);
+			else if(motionY != 0)
+				lambda = (float)(hitVec.yCoord / motionY);
+			else if(motionZ != 0)
+				lambda = (float)(hitVec.zCoord / motionZ);
+			
+			hits.add(new BlockHit(hit, lambda));
 		}
-		//If we hit something
-		if (!isDead && hit != null)
+		
+		float penetratingPower = type.penetratingPower;
+		
+		//We hit something
+		if(!hits.isEmpty())
 		{
-			//If the bullet should explode on impact and the hit is not the shooter, explode!
-			if (type.explodeOnImpact && ticksInAir > 5 && (hit.entityHit == null || !isPartOfOwner(hit.entityHit)))
-				setDead();
-			else
+			//Sort the hits according to the intercept position
+			Collections.sort(hits);
+			
+			for(BulletHit bulletHit : hits)
 			{
-				//If the hit wasn't an entity hit, then it must've been a block hit
-				if(hit.entityHit == null)
+				if(bulletHit instanceof DriveableHit)
 				{
-					int xTile = hit.blockX;
-					int yTile = hit.blockY;
-					int zTile = hit.blockZ;
+					DriveableHit driveableHit = (DriveableHit)bulletHit;
+					penetratingPower = driveableHit.driveable.bulletHit(this, driveableHit, penetratingPower);
+				}
+				else if(bulletHit instanceof PlayerBulletHit)
+				{
+					PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
+					penetratingPower = playerHit.hitbox.hitByBullet(this, penetratingPower);
+					if(FlansMod.DEBUG)
+						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(posX + motionX * playerHit.intersectTime, posY + motionY * playerHit.intersectTime, posZ + motionZ * playerHit.intersectTime), 2000, 1F, 0F, 0F));
+				}
+				else if(bulletHit instanceof BlockHit)
+				{
+					BlockHit blockHit = (BlockHit)bulletHit;
+					MovingObjectPosition raytraceResult = blockHit.raytraceResult;
+					//If the hit wasn't an entity hit, then it must've been a block hit
+					int xTile = raytraceResult.blockX;
+					int yTile = raytraceResult.blockY;
+					int zTile = raytraceResult.blockZ;
 					Block block = worldObj.getBlock(xTile, yTile, zTile);
 					Material mat = block.getMaterial();
 					//If the bullet breaks glass, and can do so according to FlansMod, do so.
@@ -244,16 +306,25 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
                             FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
                         }
 					}
-					if(!type.penetratesBlocks)
+					
+					if(penetratingPower > block.getBlockHardness(worldObj, zTile, zTile, zTile))
 					{
-						setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
-						setDead();
+						penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
+						//setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 					}
 				}
+				
+				if(penetratingPower <= 0F || type.explodeOnImpact && ticksInAir > 5)
+				{
+					setDead();
+					break;
+				}
 			}
+			
+			
 		}
-		//If the bullet was not stopped by a block
-		if(!isDead)
+		//Otherwise, do a standard check for uninteresting entities
+		else
 		{
 			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
 			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.addCoord(motionX, motionY, motionZ).expand(type.hitBoxSize, type.hitBoxSize, type.hitBoxSize));
@@ -265,17 +336,15 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				
 				if(checkEntity instanceof EntityPlayer)
-				{
-					PlayerData data = PlayerHandler.getPlayerData((EntityPlayer)checkEntity, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
-					if(checkEntity != owner && data != null && data.team == Team.spectators)
-						continue;
-				}
+					continue;
 				
 				//Stop the bullet hitting stuff that can't be collided with or the person shooting immediately after firing it
-				if ((!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity)) && ticksInAir < 20)
+				if((!checkEntity.canBeCollidedWith() || isPartOfOwner(checkEntity)) && ticksInAir < 20)
 				{
 					continue;
 				}
+				
+				
 				//Calculate the hit damage
 				float hitDamage = damage * type.damageVsLiving;
 				//Create a damage source object
@@ -298,7 +367,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					//PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 50, dimension, PacketPlaySound.buildSoundPacket(posX, posY, posZ, type.hitSound, true));
 				}
 				//Unless the bullet penetrates, kill it
-				if(!type.penetratesEntities)
+				if(type.penetratingPower > 0)
 				{
 					setPosition(checkEntity.posX, checkEntity.posY, checkEntity.posZ);
 					setDead();
@@ -356,7 +425,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 
-	private DamageSource getBulletDamage()
+	public DamageSource getBulletDamage()
 	{
 		if(owner instanceof EntityPlayer)
 			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)owner, firedFrom)).setProjectile();
