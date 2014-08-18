@@ -42,6 +42,8 @@ public class ModelGun extends ModelBase
 	public int pumpDelay = 0, pumpDelayAfterReload = 0, pumpTime = 1;
 	/** For shotgun pump handle */
 	public float pumpHandleDistance = 4F / 16F;
+	/** If true, then the grip attachment will move with the shotgun pump */
+	public boolean gripIsOnPump = false;
 	
 	public void renderGun(float f)
 	{
