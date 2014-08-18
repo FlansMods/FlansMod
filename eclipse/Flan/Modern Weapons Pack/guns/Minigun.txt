@@ -29,6 +29,8 @@ SpinSoundLength 9
 ShootSound RPDShoot
 ReloadSound BrowningReload
 Mode Minigun
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0

@@ -22,6 +22,8 @@ ShootSound DP28Shoot
 DistortSound False
 ReloadSound DP28Reload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable True
 //-----------------------------------------------------------------------------

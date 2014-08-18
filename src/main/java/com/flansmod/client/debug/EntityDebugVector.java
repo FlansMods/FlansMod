@@ -12,6 +12,11 @@ public class EntityDebugVector extends Entity
 	public int life;
 	public float red = 1F, green = 1F, blue = 1F;
 	
+	public EntityDebugVector(World w) 
+	{
+		super(w);
+	}
+	
 	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i, float r, float g, float b) 
 	{
 		super(w);

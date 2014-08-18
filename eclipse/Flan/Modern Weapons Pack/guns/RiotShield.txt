@@ -20,6 +20,8 @@ ShootDelay 0
 //ReloadSound lugerReload
 Mode SemiAuto
 OneHanded True
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 FOVZoomLevel 1.0
 Deployable False

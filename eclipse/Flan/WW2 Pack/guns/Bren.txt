@@ -24,6 +24,8 @@ DistortSound False
 ShootSound BrenShoot
 ReloadSound BrenReload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable True
 //-----------------------------------------------------------------------------

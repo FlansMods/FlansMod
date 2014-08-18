@@ -19,6 +19,8 @@ ShootDelay 20
 ShootSound R700Shoot
 ReloadSound SpringfieldReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default Scope Settings
 Scope mwr700
 ZoomLevel 6.0

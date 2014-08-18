@@ -19,6 +19,8 @@ ShootDelay 30
 ShootSound kar98kSniperShoot
 ReloadSound kar98kSniperReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope wwiikar98ksniper
 Deployable False
 DeployedModel None

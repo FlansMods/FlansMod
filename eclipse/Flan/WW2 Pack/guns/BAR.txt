@@ -19,6 +19,8 @@ ShootDelay 2
 ShootSound BARShoot
 ReloadSound BARReload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None

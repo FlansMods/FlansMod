@@ -3,6 +3,7 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import scala.actors.threadpool.Arrays;
 import io.netty.buffer.ByteBuf;
@@ -27,6 +28,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -54,6 +56,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public boolean shotgun = false;
 	/** If this is non-zero, then the player raytrace code will look back in time to when the player thinks their bullet should have hit */
 	public int pingOfShooter = 0;
+	/** Avoids the fact that using the entity random to calculate spread direction always results in the same direction */
+	public static Random bulletRandom = new Random();
 
 	public EntityBullet(World world)
 	{
@@ -93,14 +97,14 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		this(world, shooter, gunDamage, type1, shotFrom);
 		damage = gunDamage;
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
-		float offset = 0F;//(1F - FlansModClient.zoomProgress) * 0.16F;
-		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * offset;
-		posY -= 0F;//0.10000000149011612D * (1F - FlansModClient.zoomProgress);
-		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * offset;
+		//float offset = 0F;//(1F - FlansModClient.zoomProgress) * 0.16F;
+		//posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * offset;
+		//posY -= 0F;//0.10000000149011612D * (1F - FlansModClient.zoomProgress);
+		//posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * offset;
 		setPosition(posX, posY, posZ);
 		yOffset = 0.0F;
-		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
-		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
+		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.14159265F) * MathHelper.cos((rotationPitch / 180F) * 3.14159265F);
+		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.14159265F) * MathHelper.cos((rotationPitch / 180F) * 3.14159265F);
 		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);
 		setArrowHeading(motionX, motionY, motionZ, spread / 2F, speed);
 	}
@@ -146,12 +150,15 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		d /= f2;
 		d1 /= f2;
 		d2 /= f2;
-		d += rand.nextGaussian() * 0.005D * spread;
-		d1 += rand.nextGaussian() * 0.005D * spread;
-		d2 += rand.nextGaussian() * 0.005D * spread;
 		d *= speed;
 		d1 *= speed;
 		d2 *= speed;
+		d += rand.nextGaussian() * 0.005D * spread;
+		d1 += rand.nextGaussian() * 0.005D * spread;
+		d2 += rand.nextGaussian() * 0.005D * spread;
+		
+		//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ), new Vector3f(d, d1, d2), 80));
+
 		motionX = d;
 		motionY = d1;
 		motionZ = d2;
@@ -559,6 +566,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{
+		data.writeDouble(motionX);
+		data.writeDouble(motionY);
+		data.writeDouble(motionZ);
 		ByteBufUtils.writeUTF8String(data, type.shortName);
 		if (owner == null)
 			ByteBufUtils.writeUTF8String(data, "null");
@@ -571,6 +581,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	{
 		try
 		{
+			motionX = data.readDouble();
+			motionY = data.readDouble();
+			motionZ = data.readDouble();
 			type = BulletType.getBullet(ByteBufUtils.readUTF8String(data));
 			String name = ByteBufUtils.readUTF8String(data);
 			for(Object obj : worldObj.loadedEntityList)

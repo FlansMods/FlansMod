@@ -19,6 +19,8 @@ ShootDelay 16
 ShootSound leeEnfieldShoot
 ReloadSound leeEnfieldReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope wwiileeenfieldsniper
 Deployable False
 DeployedModel None

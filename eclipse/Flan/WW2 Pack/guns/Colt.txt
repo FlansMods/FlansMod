@@ -20,6 +20,8 @@ ShootSound coltShoot
 ReloadSound coltReload
 Mode SemiAuto
 OneHanded true
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None

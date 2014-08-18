@@ -21,6 +21,8 @@ ShootDelay 18
 ShootSound M1014Shoot
 ReloadSound M1014Reload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 6.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0

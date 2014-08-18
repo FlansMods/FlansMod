@@ -20,6 +20,8 @@ ShootDelay 5
 ShootSound m1garandShoot
 ReloadSound m1garandReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None

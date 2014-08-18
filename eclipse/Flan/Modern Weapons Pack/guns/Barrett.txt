@@ -20,6 +20,8 @@ ShootDelay 12
 ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 20.0
 //Default Scope Settings
 Scope mwbarrett
 ZoomLevel 6.0

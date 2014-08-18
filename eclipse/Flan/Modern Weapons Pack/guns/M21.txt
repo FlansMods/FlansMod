@@ -19,6 +19,8 @@ ShootDelay 10
 ShootSound M21Shoot
 ReloadSound BARReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default Scope Settings
 Scope mwm21
 ZoomLevel 6.0

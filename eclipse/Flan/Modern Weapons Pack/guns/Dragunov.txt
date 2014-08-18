@@ -19,6 +19,8 @@ ShootDelay 8
 ShootSound DragunovShoot
 ReloadSound BARReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default Scope Settings
 Scope mwdragunov
 ZoomLevel 6.0

@@ -19,6 +19,8 @@ ShootDelay 10
 ShootSound lugerShoot
 ReloadSound lugerReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 OneHanded true
 Scope None
 Deployable False

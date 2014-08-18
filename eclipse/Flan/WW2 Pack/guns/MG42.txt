@@ -23,6 +23,8 @@ ShootSound MG42Shoot
 DistortSound False
 ReloadSound MG42Reload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable True
 //-----------------------------------------------------------------------------

@@ -19,6 +19,8 @@ ShootDelay 5
 ShootSound m1carbineShoot
 ReloadSound m1carbineReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None
