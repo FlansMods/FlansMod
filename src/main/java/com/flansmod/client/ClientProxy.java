@@ -90,7 +90,7 @@ public class ClientProxy extends CommonProxy
 	{
 		new FlansModClient().load();
 		gunRenderer = new RenderGun();
-		for(GunType gunType : GunType.guns)
+		for(GunType gunType : GunType.guns.values())
 		{
 			if(gunType.model != null)
 				MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);

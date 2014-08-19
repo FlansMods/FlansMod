@@ -91,6 +91,7 @@ public class PlayerClass extends InfoType
 	@Override
 	protected void postRead() 
 	{
+    	super.postRead();
 		onWorldLoad(null);
 	}
 	

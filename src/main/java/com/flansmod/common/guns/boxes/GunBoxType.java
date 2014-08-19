@@ -79,6 +79,7 @@ public class GunBoxType extends InfoType
 	@Override
 	public void postRead()
 	{
+    	super.postRead();
 		gunBoxMap.put(this.shortName, this);
 	}
 

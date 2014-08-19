@@ -1,6 +1,7 @@
 package com.flansmod.common.guns;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.init.Items;
@@ -143,19 +144,21 @@ public class GunType extends InfoType implements IScope
 	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
 	public Paintjob defaultPaintjob;
 	
+	/** The static hashmap of all guns by shortName */
+	public static HashMap<String, GunType> guns = new HashMap<String, GunType>();
 	/** The static list of all guns */
-	public static List<GunType> guns = new ArrayList<GunType>();
+	public static ArrayList<GunType> gunList = new ArrayList<GunType>();
 
 	public GunType(TypeFile file)
 	{
 		super(file);
-		guns.add(this);
 	}
 	
 	@Override
-	public void read(TypeFile file)
+	public void postRead()
 	{
-		super.read(file);
+		guns.put(shortName, this);
+		
 		//After all lines have been read, set up the default paintjob
 		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first
@@ -571,12 +574,7 @@ public class GunType extends InfoType implements IScope
 	/** Static String to GunType method */
 	public static GunType getGun(String s)
 	{
-		for (GunType gun : guns)
-		{
-			if (gun.shortName.equals(s))
-				return gun;
-		}
-		return null;
+		return guns.get(s);
 	}
 	
 	public Paintjob getPaintjob(String s)

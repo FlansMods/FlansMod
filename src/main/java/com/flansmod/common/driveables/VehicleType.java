@@ -45,6 +45,7 @@ public class VehicleType extends DriveableType
     @Override
 	protected void postRead()
     {
+    	super.postRead();
     	//Backwards compatibility bit. Take wheel positions from wheel collision boxes
     	/*
     	CollisionBox box = health.get(EnumDriveablePart.backLeftWheel);

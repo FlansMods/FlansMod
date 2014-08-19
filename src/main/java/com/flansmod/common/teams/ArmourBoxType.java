@@ -43,6 +43,7 @@ public class ArmourBoxType extends InfoType
 	@Override
 	public void postRead()
 	{
+    	super.postRead();
 		boxes.put(shortName, this);
 	}
 	
