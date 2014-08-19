@@ -298,6 +298,8 @@ public class RenderGun implements IItemRenderer
 			{
 				GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
 				model.renderPump(f);
+				if(gripAttachment == null && model.gripIsOnPump)
+				       model.renderDefaultGrip(f);
 			}
 			GL11.glPopMatrix();
 			
@@ -519,7 +521,7 @@ public class RenderGun implements IItemRenderer
 			GL11.glPopMatrix();
 		}
 		
-		//Scope
+		//Stock
 		if(stockAttachment != null)
 		{
 			GL11.glPushMatrix();
@@ -534,21 +536,5 @@ public class RenderGun implements IItemRenderer
 			}
 			GL11.glPopMatrix();
 		}
-		
-		//Grip
-				if(stockAttachment != null)
-				{
-					GL11.glPushMatrix();
-					{
-						renderEngine.bindTexture(FlansModResourceHandler.getTexture(stockAttachment));
-						GL11.glTranslatef(model.stockAttachPoint.x * type.modelScale, model.stockAttachPoint.y * type.modelScale, model.stockAttachPoint.z * type.modelScale);
-						GL11.glScalef(stockAttachment.modelScale, stockAttachment.modelScale, stockAttachment.modelScale);
-						ModelAttachment stockModel = stockAttachment.model;
-						if(stockModel != null)
-							stockModel.renderAttachment(f);
-						renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
-					}
-					GL11.glPopMatrix();
-				}
 	}
 }
