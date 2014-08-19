@@ -218,7 +218,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
 					{
 						ItemStack shell = driveableData.getStackInSlot(i);
-						if(shell != null && shell.getItem() instanceof ItemBullet && ((ItemBullet)shell.getItem()).type.isShell)
+						if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)shell.getItem()).type))
 						{
 							slot = i;
 						}

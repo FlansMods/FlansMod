@@ -2,17 +2,18 @@ package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
@@ -33,6 +34,11 @@ public class DriveableType extends InfoType
 	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<EnumDriveablePart, ItemStack[]>();
 	/** Recipe parts as one complete list */
 	public ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
+	
+	/** If true, then all ammo is accepted */
+	public boolean acceptAllAmmo = false;
+	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
+	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
 	/** The number of passengers, not including the pilot */
 	public int numPassengers = 0;	
@@ -146,6 +152,11 @@ public class DriveableType extends InfoType
 			
 			if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
+			//Ammo limiters
+			if(split[0].equals("AddAmmo"))
+				ammo.add(BulletType.getBullet(split[1]));
+			if(split[0].equals("AllowAllAmmo") || split[0].equals("AcceptAllAmmo"))
+				acceptAllAmmo = Boolean.parseBoolean(split[1]);
 
 			//Recipe
 			if(split[0].equals("AddRecipeParts"))
@@ -283,6 +294,11 @@ public class DriveableType extends InfoType
     public int ammoSlots()
     {
     	return numPassengerGunners + guns.size();
+    }
+    
+    public boolean isValidAmmo(BulletType bulletType)
+    {
+    	return acceptAllAmmo || ammo.contains(bulletType);
     }
     
     /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */

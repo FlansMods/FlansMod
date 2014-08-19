@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
@@ -152,7 +153,13 @@ public class PlaneType extends DriveableType
     	}
     	return stacks;
     }
-	
+    
+    @Override
+    public boolean isValidAmmo(BulletType bulletType)
+    {
+    	return super.isValidAmmo(bulletType) && bulletType.isBomb;
+    }
+    
 	public static PlaneType getPlane(String find)
 	{
 		for(PlaneType type : types)
