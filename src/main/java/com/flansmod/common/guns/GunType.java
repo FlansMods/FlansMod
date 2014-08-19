@@ -157,6 +157,7 @@ public class GunType extends InfoType implements IScope
 	@Override
 	public void postRead()
 	{
+		gunList.add(this);
 		guns.put(shortName, this);
 		
 		//After all lines have been read, set up the default paintjob

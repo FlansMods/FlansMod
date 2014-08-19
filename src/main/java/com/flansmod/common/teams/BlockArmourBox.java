@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -28,12 +29,14 @@ public class BlockArmourBox extends Block
 	{
 		super(Material.wood);
 		type = t;
-		type.block = this;
+
 		setBlockName(type.shortName);
 		setHardness(2F);
 	    setResistance(4F);
 	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
+		type.block = this;
+		type.item = Item.getItemFromBlock(this);
 	}
 	
 	public void buyArmour(String shortName, int piece, InventoryPlayer inventory)
