@@ -64,6 +64,7 @@ public class CommandTeams extends CommandBase
 			teamsManager.bombsEnabled = true;
 			teamsManager.bulletsEnabled = true;
 			teamsManager.forceAdventureMode = false;
+			teamsManager.overrideHunger = false;
 			teamsManager.canBreakGuns = true;
 			teamsManager.canBreakGlass = true;
 			teamsManager.armourDrops = true;
@@ -80,6 +81,7 @@ public class CommandTeams extends CommandBase
 			teamsManager.bombsEnabled = true;
 			teamsManager.bulletsEnabled = true;
 			teamsManager.forceAdventureMode = true;
+			teamsManager.overrideHunger = true;
 			teamsManager.canBreakGuns = true;
 			teamsManager.canBreakGlass = false;
 			teamsManager.armourDrops = false;
@@ -452,6 +454,17 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Adventure mode will " + (TeamsManager.forceAdventureMode ? "now" : "no longer") + " be forced"));
 			return;
 		}
+		if(split[0].equals("overrideHunger") || split[0].equals("noHunger"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			TeamsManager.overrideHunger = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Players will " + (TeamsManager.overrideHunger ? "no longer" : "now") + " get hungry during rounds"));
+			return;
+		}
 		if(split[0].equals("explosions"))
 		{
 			if(split.length != 2)
@@ -731,6 +744,7 @@ public class CommandTeams extends CommandBase
 		{
 			sender.addChatMessage(new ChatComponentText("/teams setVariable <variable> <value>"));
 			sender.addChatMessage(new ChatComponentText("/teams forceAdventure <true / false>"));
+			sender.addChatMessage(new ChatComponentText("/teams overrideHunger <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams explosions <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams canBreakGuns <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams canBreakGlass <true / false>"));

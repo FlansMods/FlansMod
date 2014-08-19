@@ -77,7 +77,7 @@ public class TeamsManager
 	// Player changeable stuff
 	public static boolean voting = false, explosions = true, driveablesBreakBlocks = true,
 			bombsEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
-			armourDrops = true, vehiclesNeedFuel = true;
+			armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true;
 	
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops
 	//Life of certain entity types. 0 is eternal.
@@ -190,6 +190,10 @@ public class TeamsManager
 			base.tick();
 		for(ITeamObject object : objects)
 			object.tick();
+		if(overrideHunger && currentRound != null)
+			for(World world : MinecraftServer.getServer().worldServers)
+				for(Object player : world.playerEntities)
+					((EntityPlayer)player).getFoodStats().addStats(20, 10F);
 		
 		//Check round timer
 		//If inbetween rounds
