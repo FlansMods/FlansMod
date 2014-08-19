@@ -223,7 +223,8 @@ public class ItemGun extends Item
 							if(leftMouseHeld && !lastLeftMouseHeld) 
 							{
 								FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
-								clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
+								if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
+									player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
 							}
 							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
 							{
@@ -231,7 +232,8 @@ public class ItemGun extends Item
 							}
 							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
 							{
-								clientSideShoot((EntityPlayer)entity, offHandGunStack, offHandGunType, true);
+								if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
+									player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
 							}
 						}
 						else data.offHandGunSlot = 0;
@@ -242,7 +244,8 @@ public class ItemGun extends Item
 				if(rightMouseHeld && !lastRightMouseHeld) 
 				{
 					FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, true));
-					clientSideShoot((EntityPlayer)entity, itemstack, type, false);
+					if(clientSideShoot(player, itemstack, type, false))
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 				}
 				if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
 				{
@@ -250,7 +253,8 @@ public class ItemGun extends Item
 				}
 				if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && rightMouseHeld)
 				{
-					clientSideShoot((EntityPlayer)entity, itemstack, type, false);
+					if(clientSideShoot(player, itemstack, type, false))
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 				}
 				
 				IScope currentScope = type.getCurrentScope(itemstack);
@@ -284,7 +288,9 @@ public class ItemGun extends Item
 		}
 	}
 	
-	public void clientSideShoot(EntityPlayer player, ItemStack stack, GunType gunType, boolean left)
+	/** Client side shoot method for animations and delayers
+	 * @return whether to consume the gun item  */
+	public boolean clientSideShoot(EntityPlayer player, ItemStack stack, GunType gunType, boolean left)
 	{
 		if(FlansModClient.shootTime <= 0)
 		{
@@ -326,8 +332,11 @@ public class ItemGun extends Item
 				animations.doShoot(pumpDelay, pumpTime);
 				FlansModClient.playerRecoil += gunType.getRecoil(stack);
 				FlansModClient.shootTime = gunType.shootDelay;
+				if(type.consumeGunUponUse)
+					return true;
 			}
 		}
+		return false;
 	}
 	
 	public void onUpdateServer(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
@@ -354,7 +363,7 @@ public class ItemGun extends Item
 				//Shoot full auto weapons
 				if(type.mode == EnumFireMode.FULLAUTO)
 				{
-					tryToShoot(itemstack, type, world, player, false);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 				}
 				//Play looping sounds for minigun
 				if(type.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingRight)
@@ -365,7 +374,7 @@ public class ItemGun extends Item
 				}
 				//Minigun is sufficiently fast to shoot
 				if(type.mode == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
-					tryToShoot(itemstack, type, world, player, false);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 			}
 			else
 			{
@@ -389,7 +398,7 @@ public class ItemGun extends Item
 						//Shoot full auto weapons
 						if(offHandGunType.mode == EnumFireMode.FULLAUTO)
 						{
-							tryToShoot(offHandGunStack, offHandGunType, world, player, true);
+							player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 						}
 						//Play looping sounds for minigun
 						if(offHandGunType.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingLeft)
@@ -400,7 +409,7 @@ public class ItemGun extends Item
 						}
 						//Minigun is sufficiently fast to shoot
 						if(offHandGunType.mode == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
-							tryToShoot(offHandGunStack, offHandGunType, world, player, true);
+							player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 					}
 					else
 					{
@@ -424,14 +433,14 @@ public class ItemGun extends Item
 	}
 	 
 	
-	public ItemStack onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean left, boolean isShooting)
+	public void onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean left, boolean isShooting)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		if(data != null && data.shootClickDelay == 0)
 		{
 			//Drivers can't shoot
 			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
-				return stack;
+				return;
 			if(left && data.offHandGunSlot != 0)
 			{
 				ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
@@ -440,7 +449,7 @@ public class ItemGun extends Item
 				if(gunType.mode == EnumFireMode.SEMIAUTO && isShooting)
 				{
 					data.isShootingLeft = false;
-					return tryToShoot(offHandGunStack, gunType, world, player, true);
+					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
 				}
 			}
 			else
@@ -449,7 +458,7 @@ public class ItemGun extends Item
 				if(type.mode == EnumFireMode.SEMIAUTO && isShooting)
 				{
 					data.isShootingRight = false;
-					return tryToShoot(stack, type, world, player, false);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
 				}
 			}
 			//Play the warmup sound for miniguns immediately
@@ -458,7 +467,7 @@ public class ItemGun extends Item
 				data.shouldPlayWarmupSound = true;
 			}
 		}
-		return stack;
+		return;
 	}
 		
 	public ItemStack tryToShoot(ItemStack gunStack, GunType gunType, World world, EntityPlayerMP entityplayer, boolean left)
@@ -510,6 +519,9 @@ public class ItemGun extends Item
 				
 				//Update the stack in the gun
 				setBulletItemStack(gunStack, bulletStack, bulletID);
+				
+				if(gunType.consumeGunUponUse)
+					return null;
 			}
 		}
 		return gunStack;

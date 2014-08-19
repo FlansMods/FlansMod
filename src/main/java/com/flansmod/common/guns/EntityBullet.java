@@ -9,6 +9,8 @@ import scala.actors.threadpool.Arrays;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +28,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -51,13 +55,17 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public Entity owner;
 	private int ticksInAir;
 	public BulletType type;
+	/** What type of weapon did this come from? For death messages */
 	public InfoType firedFrom;
+	/** The amount of damage the gun imparted upon the bullet. Multiplied by the bullet damage to get total damage */
 	public float damage;
 	public boolean shotgun = false;
 	/** If this is non-zero, then the player raytrace code will look back in time to when the player thinks their bullet should have hit */
 	public int pingOfShooter = 0;
 	/** Avoids the fact that using the entity random to calculate spread direction always results in the same direction */
 	public static Random bulletRandom = new Random();
+	/** For homing missiles */
+	public Entity lockedOnTo;
 
 	public EntityBullet(World world)
 	{
@@ -66,7 +74,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		setSize(0.5F, 0.5F);
 	}
 	
-	/** Private partial constructor to avoid repeated code */
+	/** Private partial constructor to avoid repeated code. All constructors go through this one */
 	private EntityBullet(World world, EntityLivingBase shooter, float gunDamage, BulletType bulletType, InfoType shotFrom)
 	{
 		this(world);
@@ -95,12 +103,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
 		this(world, shooter, gunDamage, type1, shotFrom);
-		damage = gunDamage;
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
-		//float offset = 0F;//(1F - FlansModClient.zoomProgress) * 0.16F;
-		//posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * offset;
-		//posY -= 0F;//0.10000000149011612D * (1F - FlansModClient.zoomProgress);
-		//posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * offset;
 		setPosition(posX, posY, posZ);
 		yOffset = 0.0F;
 		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.14159265F) * MathHelper.cos((rotationPitch / 180F) * 3.14159265F);
@@ -124,13 +127,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	/** Bomb constructor. Inherits the motion and rotation of the plane */
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, double motX, double motY, double motZ, EntityLivingBase shooter, float gunDamage, BulletType type1, InfoType shotFrom)
 	{
-		super(world);
-		type = type1;
-		firedFrom = shotFrom;
-		ticksInAir = 0;
-		owner = shooter;
-		damage = gunDamage;
-		setSize(0.5F, 0.5F);
+		this(world, shooter, gunDamage, type1, shotFrom);
 		setLocationAndAngles(origin.xCoord, origin.yCoord, origin.zCoord, yaw, pitch);
 		setPosition(posX, posY, posZ);
 		yOffset = 0.0F;
@@ -156,15 +153,43 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		d += rand.nextGaussian() * 0.005D * spread;
 		d1 += rand.nextGaussian() * 0.005D * spread;
 		d2 += rand.nextGaussian() * 0.005D * spread;
-		
-		//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ), new Vector3f(d, d1, d2), 80));
-
 		motionX = d;
 		motionY = d1;
 		motionZ = d2;
 		float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
 		prevRotationYaw = rotationYaw = (float) ((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
 		prevRotationPitch = rotationPitch = (float) ((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
+		
+		getLockOnTarget();
+	}
+	
+	/** Find the entity nearest to the missile's trajectory, anglewise */
+	private void getLockOnTarget() 
+	{
+		if(type.lockOnToDriveables || type.lockOnToLivings || type.lockOnToPlayers)
+		{
+			Vector3f motionVec = new Vector3f(motionX, motionY, motionZ);
+			Entity closestEntity = null;
+			float closestAngle = type.maxLockOnAngle;
+			
+			for(Object obj : worldObj.loadedEntityList)
+			{
+				Entity entity = (Entity)obj;
+				if((type.lockOnToDriveables && entity instanceof EntityDriveable) || (type.lockOnToPlayers && entity instanceof EntityPlayer) || (type.lockOnToLivings && entity instanceof EntityLivingBase))
+				{
+					Vector3f relPosVec = new Vector3f(entity.posX - posX, entity.posY - posY, entity.posZ - posZ);
+					float angle = Math.abs(Vector3f.angle(motionVec, relPosVec));
+					if(angle < closestAngle)
+					{
+						closestEntity = entity;
+						closestAngle = angle;
+					}
+				}
+			}
+			
+			if(closestEntity != null)
+				lockedOnTo = closestEntity;
+		}
 	}
 
 	@Override
@@ -383,23 +408,6 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 	
-		//Apply motion
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		
-		//Recalculate the angles from the new motion
-		float motionXZ = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-		rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
-		rotationPitch = (float) ((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
-		//Reset the range of the angles
-		for (; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F){}
-		for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F){}
-		for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F){}
-		for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F){}
-		rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
-		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
-		
 		//Movement dampening variables
 		float drag = 0.99F;
 		float gravity = 0.02F;
@@ -417,18 +425,63 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		motionY *= drag;
 		motionZ *= drag;
 		motionY -= gravity * type.fallSpeed;
+		
+		//Apply homing action
+		if(lockedOnTo != null)
+		{
+			double dX = lockedOnTo.posX - posX;
+			double dY = lockedOnTo.posY - posY;
+			double dZ = lockedOnTo.posZ - posZ;
+			double dXYZ = Math.sqrt(dX * dX + dY * dY + dZ * dZ);	
+			
+			Vector3f relPosVec = new Vector3f(lockedOnTo.posX - posX, lockedOnTo.posY - posY, lockedOnTo.posZ - posZ);
+			float angle = Math.abs(Vector3f.angle(motion, relPosVec));
+			
+			double lockOnPull = angle / 2F * type.lockOnForce;
+			
+			motionX += lockOnPull * dX / dXYZ;
+			motionY += lockOnPull * dY / dXYZ;
+			motionZ += lockOnPull * dZ / dXYZ;
+		}
+		
+		
+		//Apply motion
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
 		setPosition(posX, posY, posZ);
 		
+		//Recalculate the angles from the new motion
+		float motionXZ = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+		rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
+		rotationPitch = (float) ((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
+		//Reset the range of the angles
+		for (; rotationPitch - prevRotationPitch < -180F; prevRotationPitch -= 360F){}
+		for (; rotationPitch - prevRotationPitch >= 180F; prevRotationPitch += 360F){}
+		for (; rotationYaw - prevRotationYaw < -180F; prevRotationYaw -= 360F){}
+		for (; rotationYaw - prevRotationYaw >= 180F; prevRotationYaw += 360F){}
+		rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
+		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
+		
 		//Particles 
-		if (type.smokeTrail)
+		if (type.smokeTrail && worldObj.isRemote)
 		{
-			double dX = (posX - prevPosX) / 10;
-			double dY = (posY - prevPosY) / 10;
-			double dZ = (posZ - prevPosZ) / 10;
-			for (int i = 0; i < 10; i++)
-			{
-				worldObj.spawnParticle(type.trailParticles, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i, 0, 0, 0);
-			}
+			spawnParticles();
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void spawnParticles()
+	{
+		double dX = (posX - prevPosX) / 10;
+		double dY = (posY - prevPosY) / 10;
+		double dZ = (posZ - prevPosZ) / 10;
+		for (int i = 0; i < 10; i++)
+		{
+			EntityFX particle = FlansModClient.getParticle(type.trailParticles, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
+				particle.renderDistanceWeight = 100D;
+			worldObj.spawnEntityInWorld(particle);
 		}
 	}
 
@@ -569,6 +622,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		data.writeDouble(motionX);
 		data.writeDouble(motionY);
 		data.writeDouble(motionZ);
+		data.writeInt(lockedOnTo == null ? -1 : lockedOnTo.getEntityId());
 		ByteBufUtils.writeUTF8String(data, type.shortName);
 		if (owner == null)
 			ByteBufUtils.writeUTF8String(data, "null");
@@ -584,6 +638,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			motionX = data.readDouble();
 			motionY = data.readDouble();
 			motionZ = data.readDouble();
+			int lockedOnToID = data.readInt();
+			if(lockedOnToID != -1)
+				lockedOnTo = worldObj.getEntityByID(lockedOnToID);
 			type = BulletType.getBullet(ByteBufUtils.readUTF8String(data));
 			String name = ByteBufUtils.readUTF8String(data);
 			for(Object obj : worldObj.loadedEntityList)

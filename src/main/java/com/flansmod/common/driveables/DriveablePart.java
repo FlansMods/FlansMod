@@ -83,12 +83,12 @@ public class DriveablePart
 			return false;
 
 		//Complicated. Will explain later. Someone remind me.
-		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
-		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
-		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
-		boolean inX = coordIsIn(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
-		boolean inY = coordIsIn(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
-		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
+		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x, (box.x + box.w));
+		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, box.y, (box.y + box.h));
+		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, box.z, (box.z + box.d));
+		boolean inX = coordIsIn(origin.x, origin.x + motion.x, box.x, (box.x + box.w));
+		boolean inY = coordIsIn(origin.y, origin.y + motion.y, box.y, (box.y + box.h));
+		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z, (box.z + box.d));
 		return (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
 	}
 	

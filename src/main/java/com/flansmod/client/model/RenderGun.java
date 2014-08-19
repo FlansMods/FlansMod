@@ -348,6 +348,8 @@ public class RenderGun implements IItemRenderer
 					if(effectiveReloadAnimationProgress >= model.tiltGunTime + model.unloadClipTime && effectiveReloadAnimationProgress < model.tiltGunTime + model.unloadClipTime + model.loadClipTime)
 						clipPosition = 1F - (effectiveReloadAnimationProgress - (model.tiltGunTime + model.unloadClipTime)) / model.loadClipTime;
 					
+					float loadOnlyClipPosition = Math.max(0F, Math.min(1F, 1F - ((effectiveReloadAnimationProgress - model.tiltGunTime) / (model.unloadClipTime + model.loadClipTime))));
+					
 					//Rotate the gun dependent on the animation type
 					switch(model.animationType)
 					{
@@ -421,17 +423,35 @@ public class RenderGun implements IItemRenderer
 						}
 						case END_LOADED :
 						{
-							float bulletProgress = 1F;
-							if(effectiveReloadAnimationProgress > model.tiltGunTime)
-								bulletProgress = 1F - Math.min((effectiveReloadAnimationProgress - model.tiltGunTime) / (model.unloadClipTime + model.loadClipTime), 1);
+							//float bulletProgress = 1F;
+							//if(effectiveReloadAnimationProgress > model.tiltGunTime)
+							//	bulletProgress = 1F - Math.min((effectiveReloadAnimationProgress - model.tiltGunTime) / (model.unloadClipTime + model.loadClipTime), 1);
 							
-							GL11.glTranslatef(bulletProgress, 0F, 0F);
-			
+
+							
+							float dYaw = (loadOnlyClipPosition > 0.5F ? loadOnlyClipPosition * 2F - 1F : 0F);
+							
+							
+							GL11.glRotatef(-45F * dYaw, 0F, 0F, 1F);
+							GL11.glTranslatef(-model.endLoadedAmmoDistance * dYaw, -0.5F * dYaw, 0F);
+							
+							float xDisplacement = (loadOnlyClipPosition < 0.5F ? loadOnlyClipPosition * 2F : 1F);
+							
+							GL11.glTranslatef(model.endLoadedAmmoDistance * xDisplacement, 0F, 0F);
+							
+							/*
+							GL11.glTranslatef(1F * bulletProgress, -3F * bulletProgress, 0F);
 							if(bulletProgress > 0.5F)
+								GL11.glRotatef(-90F * (bulletProgress * 2F), 0F, 0F, 1F);	
+							
+							if(bulletProgress < 0.5F)
 							{
 								GL11.glTranslatef(-3F * (bulletProgress - 0.5F), 0F, 0F);
-								GL11.glRotatef(-180F * (bulletProgress - 0.5F), 0F, 0F, 1F);	
+								
 							}
+							*/
+							
+							
 							break;
 						}
 						

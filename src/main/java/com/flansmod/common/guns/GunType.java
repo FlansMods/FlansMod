@@ -55,6 +55,8 @@ public class GunType extends InfoType implements IScope
 	public EnumSecondaryFunction secondaryFunction = EnumSecondaryFunction.ADS_ZOOM;
 	/** If true, then this gun can be dual wielded */
 	public boolean oneHanded = false;
+	/** For one shot items like a panzerfaust */
+	public boolean consumeGunUponUse = false;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -189,6 +191,8 @@ public class GunType extends InfoType implements IScope
 				bulletSpread = Float.parseFloat(split[1]);
 			if (split[0].equals("NumBullets"))
 				numBullets = Integer.parseInt(split[1]);
+			if(split[0].equals("ConsumeGunOnUse"))
+				consumeGunUponUse = Boolean.parseBoolean(split[1]);
 			//Sounds
 			if (split[0].equals("ShootDelay"))
 				shootDelay = Integer.parseInt(split[1]);

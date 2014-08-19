@@ -37,7 +37,13 @@ public class BulletType extends InfoType
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 	public boolean hasLight = false;
 	public float penetratingPower = 0F;
-
+	/** Lock on variables. If true, then the bullet will search for a target at the moment it is fired */
+	public boolean lockOnToDriveables = false, lockOnToPlayers = false, lockOnToLivings = false;
+	/** Lock on maximum angle for finding a target */
+	public float maxLockOnAngle = 45F;
+	/** Lock on force that pulls the bullet towards its prey */
+	public float lockOnForce = 1F;
+	
 	public BulletType(TypeFile file)
 	{
 		super(file);
@@ -67,6 +73,8 @@ public class BulletType extends InfoType
 				explosion = Integer.parseInt(split[1]);
 			if (split[0].equals("FlakParticles"))
 				flak = Integer.parseInt(split[1]);
+			if (split[0].equals("FlakParticleType"))
+				flakParticles = split[1];
 			if (split[0].equals("Fire"))
 				fire = Integer.parseInt(split[1]);
 			if (split[0].equals("ExpodeOnImpact"))
@@ -85,6 +93,11 @@ public class BulletType extends InfoType
 				penetratingPower = Float.parseFloat(split[1]);
 			if (split[0].equals("SmokeTrail"))
 				smokeTrail = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("TrailParticleType"))
+			{
+				smokeTrail = true;
+				trailParticles = split[1];
+			}
 			if (split[0].equals("RoundsPerItem"))
 				roundsPerItem = Integer.parseInt(split[1]);
 			if (split[0].equals("MaxStackSize"))
@@ -101,6 +114,16 @@ public class BulletType extends InfoType
 				dropItemOnHit = split[1];
 			if (split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("LockOnToDriveables") || split[0].equals("LockOnToVehicles") || split[0].equals("LockOnToPlanes"))
+				lockOnToDriveables = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("LockOnToPlayers"))
+				lockOnToPlayers = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("LockOnToLivings"))
+				lockOnToLivings = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("MaxLockOnAngle"))
+				maxLockOnAngle = Float.parseFloat(split[1]);			
+			if (split[0].equals("LockOnForce") || split[0].equals("TurningForce"))
+				lockOnForce = Float.parseFloat(split[1]);
 		} catch (Exception e)
 		{
 			System.out.println("Reading bullet file failed.");

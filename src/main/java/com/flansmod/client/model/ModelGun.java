@@ -42,6 +42,8 @@ public class ModelGun extends ModelBase
 	public int pumpDelay = 0, pumpDelayAfterReload = 0, pumpTime = 1;
 	/** For shotgun pump handle */
 	public float pumpHandleDistance = 4F / 16F;
+	/** For end loaded projectiles */
+	public float endLoadedAmmoDistance = 1F;
 	
 	public void renderGun(float f)
 	{
