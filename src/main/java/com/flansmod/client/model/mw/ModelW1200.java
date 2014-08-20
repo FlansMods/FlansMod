@@ -56,7 +56,7 @@ public class ModelW1200 extends ModelGun
 		barrelAttachPoint = new Vector3f(18F / 16F, 4F / 16F, 0F);
 		
 		//Grip
-		gripAttachPoint = new Vector3f(10F / 16F, 3F / 16F, 0F);
+		gripAttachPoint = new Vector3f(12F / 16F, 3F / 16F, 0F);
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];
@@ -69,6 +69,7 @@ public class ModelW1200 extends ModelGun
 		pumpDelayAfterReload = 115;
 		pumpDelay = 6;
 		pumpTime = 9;
+		gripIsOnPump = true;
 		
 		numBulletsInReloadAnimation = 7;
 		tiltGunTime = 0.159F;
