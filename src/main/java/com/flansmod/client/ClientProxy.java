@@ -69,9 +69,11 @@ import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
+import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
 import com.flansmod.common.network.PacketRepairDriveable;
+import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
@@ -304,6 +306,13 @@ public class ClientProxy extends CommonProxy
 	public void buyAmmo(GunBoxType box, int ammo, int type)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(box, type, ammo));
+		FlansModClient.shootTime = 10;
+	}
+	
+	@Override
+	public void buyArmour(String shortName, int piece, ArmourBoxType box)
+	{
+		FlansMod.getPacketHandler().sendToServer(new PacketBuyArmour(box.shortName, shortName, piece));
 		FlansModClient.shootTime = 10;
 	}
 	
