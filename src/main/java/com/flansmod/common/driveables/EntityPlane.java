@@ -12,10 +12,10 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
@@ -26,6 +26,7 @@ import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
+import com.flansmod.common.vector.Matrix4f;
 import com.flansmod.common.vector.Vector3f;
 
 public class EntityPlane extends EntityDriveable
@@ -44,6 +45,10 @@ public class EntityPlane extends EntityDriveable
     public boolean varGear = true, varDoor = false, varWing = false;
     /** Delayer for gear, door and wing buttons */
     public int toggleTimer = 0;
+    /** Current plane mode */
+    public EnumPlaneMode mode;
+    /** The wheels on this plane */
+	public EntityWheel[] wheels;
 	
     public EntityPlane(World world)
     {
@@ -62,8 +67,23 @@ public class EntityPlane extends EntityDriveable
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
         rotatePitch(type.restingPitch);
-		
-
+	}
+	
+	@Override
+	public void initType(DriveableType type, boolean clientSide)
+	{
+		super.initType(type, clientSide);
+		mode = (((PlaneType)type).mode == EnumPlaneMode.HELI ? EnumPlaneMode.HELI : EnumPlaneMode.PLANE);
+		wheels = new EntityWheel[4];
+		for(int i = 0; i < 4; i++)
+		{
+			if(!clientSide)
+			{
+				wheels[i] = new EntityWheel(worldObj, this, i);
+				worldObj.spawnEntityInWorld(wheels[i]);
+			}
+		}
+		stepHeight = ((PlaneType)type).wheelStepHeight;
 	}
 	
 	@Override
@@ -383,7 +403,166 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Movement
+		
+		//Throttle handling
+		//Without a player, default to 0
+		//With a player default to 0.5 for helicopters (hover speed)
+		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
+		float throttlePull = 0.99F;
+		throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
+		//Get the speed of the plane
+		float lastTickSpeed = (float)getSpeedXYZ();
+		
+		//Alter angles
+		float sensitivityAdjust = 0.5F / (float)Math.max(1D, 5D * throttle);
+		float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
+		
+		if(throttle < 0.2F)
+			sensitivityAdjust = throttle * 2.5F;
+		//Pitch according to the sum of flapsPitchLeft and flapsPitchRight / 2
+		float flapsPitch = (flapsPitchLeft + flapsPitchRight) / 2F;
+		float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * sensitivityAdjust;
+		
+		//Roll according to the difference between flapsPitchLeft and flapsPitchRight / 2
+		float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
+		float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
+		
+		axes.rotateLocalYaw(yaw);
+		axes.rotateLocalPitch(pitch);
+		axes.rotateLocalRoll(-roll);
+		
+		if(worldObj.isRemote && !FlansMod.proxy.mouseControlEnabled())
+		{
+			//axes.rotateGlobalRoll(-axes.getRoll() * 0.1F);
+		}
+		
+		//Some constants
+		float g = 0.98F / 10F;
+		float drag = 1F - (0.05F * type.drag);
+		float wobbleFactor = 0F;//.005F;
+		
+		switch(mode)
+		{
+		case HELI :
+			
+			Vector3f up = axes.getYAxis();
+			
+			float throttleScale = 0.02F * type.maxThrottle;
+						
+			float upwardsForce = throttle * throttleScale + (g - throttleScale / 2F);
+			if(throttle < 0.5F)
+				upwardsForce = g * throttle * 2F;
+			
+			//Move up
+			//Throttle - 0.5 means that the positive throttle scales from -0.5 to +0.5. Thus it accounts for gravity-ish
+			motionX += upwardsForce * up.x;
+			motionY += upwardsForce * up.y;
+			motionZ += upwardsForce * up.z;
+			//Apply gravity
+			motionY -= g;
+			
+			//Apply wobble
+			motionX += rand.nextGaussian() * wobbleFactor;
+			motionY += rand.nextGaussian() * wobbleFactor;
+			motionZ += rand.nextGaussian() * wobbleFactor;
+			
+			//Apply drag
+			motionX *= drag;
+			motionY *= drag;
+			motionZ *= drag;
+			
+			moveEntity(motionX, motionY, motionZ);
+			for(EntityWheel wheel : wheels)
+				if(wheel != null)
+					wheel.moveEntity(motionX, motionY, motionZ);
+			break;
+			
+		case PLANE :
+
+			
+			//Apply forces
+			Vector3f forwards = axes.getXAxis();
+			
+			
+			
+			break;
+		default:
+			break;
+		}
+		
+		//Update wheels
+		Vector3f amountToMoveCar = new Vector3f();
+			
+		type.wheelSpringStrength = 0.2F;
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel == null)
+				continue;
+			
+			//Hacky way of forcing the car to step up blocks
+			onGround = true;
+			wheel.onGround = true;
+			
+			//Update angles
+			wheel.rotationYaw = axes.getYaw();
+			
+			//wheel.motionX *= 0.95F;
+			//wheel.motionY *= 0.95F;
+			//wheel.motionZ *= 0.95F;
+
+			//Pull wheels towards car
+			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.ID]);
+			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
+			
+			float targetWheelLength = targetWheelPos.length();
+			float currentWheelLength = currentWheelPos.length();
+			
+			float dLength = targetWheelLength - currentWheelLength;
+			float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
+			
+			if(dLength > 0.001F || dAngle > 0.1F)
+			{
+				//Now Lerp by wheelSpringStrength and work out the new positions		
+				float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
+				Vector3f rotateAround = Vector3f.cross(targetWheelPos, currentWheelPos, null);
+				
+				Matrix4f mat = new Matrix4f();
+				mat.m00 = currentWheelPos.x;
+				mat.m10 = currentWheelPos.y;
+				mat.m20 = currentWheelPos.z;
+				mat.rotate(dAngle * type.wheelSpringStrength, rotateAround);
+				
+				Vector3f newWheelPos = new Vector3f(mat.m00, mat.m10, mat.m20);
+				newWheelPos.normalise().scale(newLength);
+				
+				//The proportion of the spring adjustment that is applied to the wheel. 1 - this is applied to the plane
+				float wheelProportion = 0.75F;
+				
+				wheel.motionX = (newWheelPos.x - currentWheelPos.x) * wheelProportion;
+				wheel.motionY = (newWheelPos.y - currentWheelPos.y) * wheelProportion;
+				wheel.motionZ = (newWheelPos.z - currentWheelPos.z) * wheelProportion;
+				
+				amountToMoveCar.x -= (newWheelPos.x - currentWheelPos.x) * (1F - wheelProportion);
+				amountToMoveCar.y -= (newWheelPos.y - currentWheelPos.y) * (1F - wheelProportion);
+				amountToMoveCar.z -= (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);
+				
+				//Apply gravity
+				//wheel.motionY -= 0.98F / 20F;
+				
+				wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
+			}
+		}
+		
+		
+		//motionX += amountToMoveCar.x;
+		//motionY += amountToMoveCar.y;
+		//motionZ += amountToMoveCar.z;
+		
+		
+		moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+		
+		/*
 		//Apply turning forces
 		{
 			float sensitivityAdjust = 0.5F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
@@ -470,9 +649,10 @@ public class EntityPlane extends EntityDriveable
 		
 		//Smooth off rotational motion
 		angularVelocity.scale(0.95F);
+		*/
 		
 		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
-		moveDriveable();
+		//moveDriveable();
 		
 		
 		//Shooting

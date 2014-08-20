@@ -34,9 +34,11 @@ import cpw.mods.fml.relauncher.Side;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.RenderFlag;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
@@ -273,6 +275,17 @@ public class TickHandlerClient
 						tessellator.draw();
 					}
 				}
+			}
+			
+			//DEBUG vehicles
+			if(FlansMod.DEBUG && mc.thePlayer.ridingEntity instanceof EntitySeat)
+			{
+				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+				mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
+				mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
+				mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
+				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
+
 			}
 	    }
 	}

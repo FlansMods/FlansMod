@@ -41,9 +41,9 @@ public class ArmourBoxType extends InfoType
 	}
 	
 	@Override
-	public void postRead()
+	public void postRead(TypeFile file)
 	{
-    	super.postRead();
+    	super.postRead(file);
 		boxes.put(shortName, this);
 	}
 	

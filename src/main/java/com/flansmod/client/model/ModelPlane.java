@@ -6,7 +6,10 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.EnumPlaneMode;
+import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
+import com.flansmod.common.vector.Vector3f;
 
 /** Extensible ModelPlane class for rendering plane models */
 public class ModelPlane extends ModelDriveable
@@ -23,7 +26,18 @@ public class ModelPlane extends ModelDriveable
 	public ModelRendererTurbo pitchFlapRightModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo pitchFlapLeftWingModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo pitchFlapRightWingModel[] = new ModelRendererTurbo[0];
-		
+	
+	//Helicopter bits
+	public ModelRendererTurbo heliMainRotorModels[][] = new ModelRendererTurbo[0][0]; //Helicopter main rotors model array [numProps][prop blades]
+	public Vector3f[] heliMainRotorOrigins = new Vector3f[0]; //Rotation origin of the rotors [numProps]
+	public ModelRendererTurbo heliTailRotorModels[][] = new ModelRendererTurbo[0][0]; //Helicopter tail rotors model array [numProps][prop blades]
+	public Vector3f[] heliTailRotorOrigins = new Vector3f[0]; //Rotation origin of the tail rotors [numProps]
+	public ModelRendererTurbo skidsModel[] = new ModelRendererTurbo[0]; //Same as landing gear, but for helicopters
+	
+	//VTOL bits. They are swapped between when you swap modes
+	public ModelRendererTurbo helicopterModeParts[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo planeModeParts[] = new ModelRendererTurbo[0];		
+	
 	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingWheelModel[] = new ModelRendererTurbo[0];
@@ -62,6 +76,12 @@ public class ModelPlane extends ModelDriveable
 				prop[j].render(0.0625F);
 			}
 		}
+		for(int i = 0; i < heliMainRotorModels.length; i++)
+			renderPart(heliMainRotorModels[i]);
+		for(int i = 0; i < heliTailRotorModels.length; i++)
+			renderPart(heliTailRotorModels[i]);
+		renderPart(helicopterModeParts);
+		renderPart(skidsModel);
 		renderPart(yawFlapModel);
 		renderPart(pitchFlapLeftModel);
 		renderPart(pitchFlapRightModel);
@@ -79,11 +99,12 @@ public class ModelPlane extends ModelDriveable
 	
     public void render(float f5, EntityPlane plane, float f)
     {
+    	PlaneType type = plane.getPlaneType();
 		//Rotating the propeller
 		float angle = plane.propAngle;
 		for(Propeller propeller : plane.getPlaneType().propellers)
 		{
-			if(plane.isPartIntact(propeller.planePart))
+			if(plane.isPartIntact(propeller.planePart) && propellerModels.length > propeller.ID)
 			{
 				int numParts = propellerModels[propeller.ID].length;
 				for(int j = 0; j < numParts; j++)
@@ -93,6 +114,7 @@ public class ModelPlane extends ModelDriveable
 				}
 			}
 		}
+				
 		if(plane.isPartIntact(EnumDriveablePart.nose))
 		{
 			//Nose
@@ -144,6 +166,15 @@ public class ModelPlane extends ModelDriveable
 			{
 				pitchFlapRightModel[i].rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
 				pitchFlapRightModel[i].render(f5);
+			}
+		}
+		if(plane.isPartIntact(EnumDriveablePart.skids))
+		{
+			//Skids
+			for(int i = 0; i < skidsModel.length; i++)
+			{
+				if(plane.varGear)
+					skidsModel[i].render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.tailWheel))
@@ -246,6 +277,12 @@ public class ModelPlane extends ModelDriveable
 				hudModel[i].rotateAngleX = -(plane.axes.getRoll() * 3.14159265F / 180F);
 				hudModel[i].render(f5);
 			}
+			//VTOL bits
+			if(plane.mode == EnumPlaneMode.HELI)
+			{
+				renderPart(helicopterModeParts);
+			}
+			else renderPart(planeModeParts);
 		}
 		if(plane.isPartIntact(EnumDriveablePart.coreWheel))
 		{
@@ -303,6 +340,34 @@ public class ModelPlane extends ModelDriveable
     }
     
 
+    /** Renders helicopter rotor number i. */
+	public void renderRotor(EntityPlane plane, float f5, int i) 
+	{
+		PlaneType type = plane.getPlaneType();
+		//If its not covered by the plane type heli propellers, render it. Otherwise, see if the part is intact
+		if(i >= type.heliPropellers.size() || plane.isPartIntact(type.heliPropellers.get(i).planePart))
+		{
+			for(int j = 0; j < heliMainRotorModels[i].length; j++)
+			{
+				heliMainRotorModels[i][j].render(f5);
+			}
+		}
+	}
+    
+	/** Renders helicopter tail rotor number i. */
+	public void renderTailRotor(EntityPlane plane, float f5, int i) 
+	{
+		PlaneType type = plane.getPlaneType();
+		//If its not covered by the plane type heli propellers, render it. Otherwise, see if the part is intact
+		if(i >= type.heliTailPropellers.size() || plane.isPartIntact(type.heliTailPropellers.get(i).planePart))
+		{
+			for(int j = 0; j < heliTailRotorModels[i].length; j++)
+			{
+				heliTailRotorModels[i][j].render(f5);
+			}
+		}
+	}
+	
 	@Override
 	public void flipAll()
 	{
@@ -314,6 +379,9 @@ public class ModelPlane extends ModelDriveable
 		flip(bayModel);
 		flip(tailModel);
 		flip(yawFlapModel);
+		flip(skidsModel);
+		flip(helicopterModeParts);
+		flip(planeModeParts);
 		flip(pitchFlapLeftModel);
 		flip(pitchFlapRightModel);
 		flip(pitchFlapLeftWingModel);
@@ -334,6 +402,14 @@ public class ModelPlane extends ModelDriveable
 		{
 			flip(propellerModel);
 		}
+		for(ModelRendererTurbo[] propellerModel : heliMainRotorModels)
+		{
+			flip(propellerModel);
+		}
+		for(ModelRendererTurbo[] propellerModel : heliTailRotorModels)
+		{
+			flip(propellerModel);
+		}
 	}
 
 	@Override
@@ -347,6 +423,9 @@ public class ModelPlane extends ModelDriveable
 		translate(bayModel, x, y, z);
 		translate(tailModel, x, y, z);
 		translate(yawFlapModel, x, y, z);
+		translate(skidsModel, x, y, z);
+		translate(helicopterModeParts, x, y, z);
+		translate(planeModeParts, x, y, z);
 		translate(pitchFlapLeftModel, x, y, z);
 		translate(pitchFlapRightModel, x, y, z);
 		translate(pitchFlapLeftWingModel, x, y, z);
@@ -367,5 +446,17 @@ public class ModelPlane extends ModelDriveable
 		{
 			translate(mods, x, y, z);
 		}
+		for(ModelRendererTurbo[] mods : heliMainRotorModels)
+		{
+			translate(mods, x, y, z);
+		}
+		for(ModelRendererTurbo[] mods : heliTailRotorModels)
+		{
+			translate(mods, x, y, z);
+		}
+		for(Vector3f o : heliMainRotorOrigins)
+			Vector3f.add(o, new Vector3f(x / 16F, y / 16F, z / 16F), o);
+		for(Vector3f o : heliTailRotorOrigins)
+			Vector3f.add(o, new Vector3f(x / 16F, y / 16F, z / 16F), o);
 	}
 }

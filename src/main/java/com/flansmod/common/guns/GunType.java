@@ -155,7 +155,7 @@ public class GunType extends InfoType implements IScope
 	}
 	
 	@Override
-	public void postRead()
+	public void postRead(TypeFile file)
 	{
 		gunList.add(this);
 		guns.put(shortName, this);

@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
@@ -8,11 +9,14 @@ import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.parts.PartType;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
 public class PlaneType extends DriveableType
 {
+	/** What type of flying vehicle is this? */
+	public EnumPlaneMode mode = EnumPlaneMode.PLANE;	
 	/** Pitch modifiers */
 	public float lookDownModifier = 1F, lookUpModifier = 1F;
 	/** Roll modifiers */
@@ -31,6 +35,14 @@ public class PlaneType extends DriveableType
 	
 	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
+	/** The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly */
+	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
+	/** Wheel positions */
+	public Vector3f[] wheelPositions;
+	/** Strength of springs connecting car to wheels */
+	public float wheelSpringStrength = 0.5F;
+	/** The wheel radius for onGround checks */
+	public float wheelStepHeight = 1.0F;
 				
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
@@ -49,11 +61,37 @@ public class PlaneType extends DriveableType
     }
     
     @Override
+    public void preRead(TypeFile file)
+    {
+    	super.preRead(file);
+		//Make sure NumWheels is read before anything else
+		for(String line : file.lines)
+		{
+			if(line == null)
+				break;
+			if(line.startsWith("//"))
+				continue;
+			String[] split = line.split(" ");
+			if(split.length < 2)
+				continue;
+			
+			if (split[0].equals("NumWheels"))
+			{
+				wheelPositions = new Vector3f[Integer.parseInt(split[1])];
+				return;
+			}
+		}
+    }
+    
+    @Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
 		{		
+			//Plane Mode
+			if(split[0].equals("Mode"))
+				mode = EnumPlaneMode.getMode(split[1]);
 			//Yaw modifiers
 			if(split[0].equals("TurnLeftSpeed"))
 				turnLeftModifier = Float.parseFloat(split[1]);
@@ -69,6 +107,15 @@ public class PlaneType extends DriveableType
 				rollLeftModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("RollRightSpeed"))
 				rollRightModifier = Float.parseFloat(split[1]);
+			
+	        //Wheels
+            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
+            	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
+            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
+            	wheelStepHeight = Float.parseFloat(split[1]);            
+            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
+                wheelSpringStrength = Float.parseFloat(split[1]);
+ 
 			
 			//Lift
 			if(split[0].equals("Lift"))
@@ -89,6 +136,18 @@ public class PlaneType extends DriveableType
 			{
 				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
 				propellers.add(propeller);
+				recipe.add(new ItemStack(propeller.itemType.item));
+			}
+			if(split[0].equals("HeliPropeller"))
+			{
+				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+				heliPropellers.add(propeller);
+				recipe.add(new ItemStack(propeller.itemType.item));
+			}
+			if(split[0].equals("HeliTailPropeller"))
+			{
+				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+				heliTailPropellers.add(propeller);
 				recipe.add(new ItemStack(propeller.itemType.item));
 			}
 

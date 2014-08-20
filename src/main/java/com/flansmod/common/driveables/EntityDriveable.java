@@ -209,7 +209,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     public AxisAlignedBB getCollisionBox(Entity entity)
     {
-        return entity.boundingBox;
+        return null;//entity.boundingBox;
     }
 
 	@Override
@@ -696,6 +696,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		motionZ += accelerationVector.z * deltaTime;
 	}
 	
+	/*
 	public void moveDriveable()
 	{		
         float deltaTime = 1F / 20F;
@@ -933,7 +934,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
 		      				else if(Math.abs(dmaxZ - min) < 0.00001F)
 		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
-		      					*/
+		      					/
 	      				}
 	      			}
 	      		}
@@ -943,6 +944,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		setPosition(posX, posY, posZ);
 	}
+	*/
 	
 	/** To be overriden by vehicles to get alternate collision system */
 	public boolean landVehicle()

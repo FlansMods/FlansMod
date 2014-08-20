@@ -46,6 +46,12 @@ public class GunBoxType extends InfoType
 	public GunBoxType(TypeFile file)
 	{
 		super(file);
+	}
+	
+	@Override
+	public void preRead(TypeFile file)
+	{
+		super.preRead(file);
 		//Make sure NumGuns is read before anything else
 		for(String line : file.lines)
 		{
@@ -77,9 +83,9 @@ public class GunBoxType extends InfoType
 	}
 	
 	@Override
-	public void postRead()
+	public void postRead(TypeFile file)
 	{
-    	super.postRead();
+    	super.postRead(file);
 		gunBoxMap.put(this.shortName, this);
 	}
 

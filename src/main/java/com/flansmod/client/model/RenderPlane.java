@@ -43,10 +43,32 @@ public class RenderPlane extends Render
 
 		float modelScale = type.modelScale;
 		GL11.glScalef(modelScale, modelScale, modelScale);
-		 ModelDriveable modPlane = type.model;
-		if(modPlane != null)
-			modPlane.render(entityPlane, f1);
-
+		ModelPlane model = (ModelPlane)type.model;
+		if(model != null)
+		{
+			model.render(entityPlane, f1);
+			//Render heli main rotors
+			for(int i = 0; i < model.heliMainRotorModels.length; i++)
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y, model.heliMainRotorOrigins[i].z);
+			    GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 1.0F, 0.0F);
+			    GL11.glTranslatef(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y, -model.heliMainRotorOrigins[i].z);
+				model.renderRotor(entityPlane, 0.0625F, i);
+				GL11.glPopMatrix();
+			}
+			//Render heli tail rotors
+			for(int i = 0; i < model.heliTailRotorModels.length; i++)
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y, model.heliTailRotorOrigins[i].z);
+			    GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
+				GL11.glTranslatef(-model.heliTailRotorOrigins[i].x, -model.heliTailRotorOrigins[i].y, -model.heliTailRotorOrigins[i].z);
+				model.renderTailRotor(entityPlane, 0.0625F, i);
+				GL11.glPopMatrix();
+			}
+		}
+		
 		if(FlansMod.DEBUG)
 		{
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -59,7 +81,7 @@ public class RenderPlane extends Render
 				if(part.box == null)
 					continue;
 				
-				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
+				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
 			}
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)

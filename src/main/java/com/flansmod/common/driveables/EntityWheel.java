@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 {
 	/** The vehicle this wheel is part of */
-	public EntityVehicle vehicle;
+	public EntityDriveable vehicle;
 	/** The ID of this wheel within the vehicle */
 	public int ID;
 	
@@ -33,21 +33,31 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		stepHeight = 1.0F;
 	}
 
-	public EntityWheel(World world, EntityVehicle veh, int i) 
+	public EntityWheel(World world, EntityDriveable entity,  int i) 
 	{
 		this(world);
-		vehicle = veh;
-		vehicleID = veh.getEntityId();
+		vehicle = entity;
+		vehicleID = entity.getEntityId();
 		ID = i;
 		
 		initPosition();
 	}
 	
+	//TODO : Make wheels more generic
 	public void initPosition()
 	{
-		Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(vehicle.getVehicleType().wheelPositions[ID]);
-		setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
-		stepHeight = vehicle.getVehicleType().wheelStepHeight;
+		if(vehicle instanceof EntityVehicle)
+		{
+			Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(((EntityVehicle)vehicle).getVehicleType().wheelPositions[ID]);
+			setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
+			stepHeight = ((EntityVehicle)vehicle).getVehicleType().wheelStepHeight;
+		}
+		else if(vehicle instanceof EntityPlane)
+		{
+			Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(((EntityPlane)vehicle).getPlaneType().wheelPositions[ID]);
+			setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
+			stepHeight = ((EntityPlane)vehicle).getPlaneType().wheelStepHeight;
+		}
 	}
 
 	@Override
@@ -78,11 +88,14 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//If on the client and the vehicle parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundVehicle)
 		{
-			vehicle = (EntityVehicle)worldObj.getEntityByID(vehicleID);
+			vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
 			if(vehicle == null)
 				return;
 			foundVehicle = true;
-			vehicle.wheels[ID] = this;
+			if(vehicle instanceof EntityVehicle)
+				((EntityVehicle)vehicle).wheels[ID] = this;
+			else if(vehicle instanceof EntityPlane)
+				((EntityPlane)vehicle).wheels[ID] = this;
 		}	
 		
 		if(vehicle == null)
@@ -161,7 +174,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	{
 		vehicleID = data.readInt();
 		ID = data.readInt();
-		vehicle = (EntityVehicle)worldObj.getEntityByID(vehicleID);
+		vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
 		
 		if(vehicle != null)
 			setPosition(posX, posY, posZ);

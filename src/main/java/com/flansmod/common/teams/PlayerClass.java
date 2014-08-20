@@ -89,9 +89,9 @@ public class PlayerClass extends InfoType
 	
 	/** This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once */
 	@Override
-	protected void postRead() 
+	protected void postRead(TypeFile file) 
 	{
-    	super.postRead();
+    	super.postRead(file);
 		onWorldLoad(null);
 	}
 	

@@ -94,6 +94,12 @@ public class DriveableType extends InfoType
     public DriveableType(TypeFile file)
     {
 		super(file);
+    }
+    
+    @Override
+    public void preRead(TypeFile file)
+    {
+    	super.preRead(file);
 		//Make sure the passenger arrays are set up first
 		for(String line : file.lines)
 		{

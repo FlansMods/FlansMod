@@ -92,7 +92,7 @@ public class RenderVehicle extends Render
 					if(part.box == null)
 						continue;
 					
-					renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
+					renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
 				}
 				GL11.glColor4f(0F, 1F, 0F, 0.3F);
 				if(type.barrelPosition != null)
