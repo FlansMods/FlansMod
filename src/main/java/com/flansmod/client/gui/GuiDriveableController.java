@@ -29,7 +29,7 @@ public class GuiDriveableController extends GuiScreen
 	public void initGui()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = plane.getCamera();
+			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
 	}
 	
 	@Override
@@ -101,7 +101,7 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
 			if(mc.gameSettings.thirdPersonView == 1)
-				mc.renderViewEntity = plane.getCamera();
+				mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
 			else mc.renderViewEntity = mc.thePlayer;
 		}
 		if(i == 66)
@@ -138,7 +138,7 @@ public class GuiDriveableController extends GuiScreen
 	public void updateScreen()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = plane.getCamera();
+			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
 		else mc.renderViewEntity = mc.thePlayer;
 	}
 	

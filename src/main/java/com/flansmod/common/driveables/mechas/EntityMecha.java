@@ -1103,4 +1103,11 @@ public class EntityMecha extends EntityDriveable
 	{
 		return "";
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase getCamera()
+	{
+		return null;
+	}
 }

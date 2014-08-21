@@ -30,6 +30,9 @@ import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Matrix4f;
 import com.flansmod.common.vector.Vector3f;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 
 public class EntityVehicle extends EntityDriveable implements IExplodeable
 {
@@ -596,6 +599,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
         return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
 	}
+	
+	
     
     private void applyThrust(DriveablePart part, float thrust)
     {
@@ -690,6 +695,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public boolean hasMouseControlMode()
 	{
 		return false;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase getCamera()
+	{
+		return null;
 	}
 	
 	@Override
