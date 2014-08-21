@@ -27,6 +27,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
+import com.flansmod.client.EntityCamera;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -82,6 +83,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public RotatedAxes axes;
 	
 	public EntitySeat[] seats;
+	
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase camera;
 	
     public EntityDriveable(World world)
     {
@@ -194,6 +198,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			super.setDead();
 			e.printStackTrace();
 		}
+		
+		camera = new EntityCamera(worldObj, this);
+		worldObj.spawnEntityInWorld(camera);
 	}
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
@@ -203,6 +210,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	 */
 	@Override
 	public abstract void onMouseMoved(int deltaX, int deltaY);
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase getCamera()
+	{
+		return camera;
+	}
 
 	protected boolean canSit(int seat)
 	{
@@ -262,6 +276,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		//Unregister to Radar
 		//RadarRegistry.unregister(this);
+		if(worldObj.isRemote)
+			camera.setDead();
 		
 		for(EntitySeat seat : seats)
 			if(seat != null)

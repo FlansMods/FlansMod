@@ -3,7 +3,6 @@ package com.flansmod.common.driveables;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -17,7 +16,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -249,6 +247,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
 		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
     }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase getCamera()
+	{
+		return driveable.getCamera();
+	}
 
 	@Override
     public boolean canBeCollidedWith()

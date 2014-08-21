@@ -26,9 +26,17 @@ public class GuiDriveableController extends GuiScreen
 	}
 	
 	@Override
+	public void initGui()
+	{
+		if(mc.gameSettings.thirdPersonView == 1)
+			mc.renderViewEntity = plane.getCamera();
+	}
+	
+	@Override
 	public void onGuiClosed()
     {
 		mc.mouseHelper.ungrabMouseCursor();
+		mc.renderViewEntity = mc.thePlayer;
     }
 	
 	@Override
@@ -92,6 +100,9 @@ public class GuiDriveableController extends GuiScreen
 		if(i == 63)
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
+			if(mc.gameSettings.thirdPersonView == 1)
+				mc.renderViewEntity = plane.getCamera();
+			else mc.renderViewEntity = mc.thePlayer;
 		}
 		if(i == 66)
 		{
@@ -122,6 +133,14 @@ public class GuiDriveableController extends GuiScreen
 			FlansModClient.reloadModels();
 		}
     }
+	
+	@Override
+	public void updateScreen()
+	{
+		if(mc.gameSettings.thirdPersonView == 1)
+			mc.renderViewEntity = plane.getCamera();
+		else mc.renderViewEntity = mc.thePlayer;
+	}
 	
     @Override
 	public void handleInput()
