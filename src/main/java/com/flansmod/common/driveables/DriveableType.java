@@ -360,6 +360,7 @@ public class DriveableType extends InfoType
 		}
 		catch (Exception e)
 		{
+			FlansMod.log("Errored reading " + file.name);
 			e.printStackTrace();
 		}
 	}
