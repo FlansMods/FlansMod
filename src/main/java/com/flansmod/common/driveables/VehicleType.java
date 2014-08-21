@@ -14,8 +14,6 @@ public class VehicleType extends DriveableType
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
 	/** If true, this will crush any living entity under the wheels */
 	public boolean squashMobs = false;
-	/** The origin of the tank turret */
-	public Vector3f barrelPosition;
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
 	/** If this is true, the vehicle will drive from all wheels */
@@ -65,7 +63,7 @@ public class VehicleType extends DriveableType
             	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
             if(split[0].equals("Tank") || split[0].equals("TankMode"))
             	tank = Boolean.parseBoolean(split[1].toLowerCase());
-            
+           
             //Wheels
             if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
             	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
@@ -81,10 +79,6 @@ public class VehicleType extends DriveableType
             	rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
 
 			//Armaments
-			if(split[0].equals("BarrelPosition"))
-			{
-				barrelPosition = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
-			}
 			if(split[0].equals("ShootDelay"))
 				vehicleShootDelay = Integer.parseInt(split[1]);
 			if(split[0].equals("ShellDelay"))
@@ -93,12 +87,12 @@ public class VehicleType extends DriveableType
 			//Sound
 			if(split[0].equals("ShootSound"))
 			{
-				shootMainSound = split[1];
+				shootSoundPrimary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("ShellSound"))
 			{
-				shootSecondarySound = split[1];
+				shootSoundSecondary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 		}
@@ -106,13 +100,7 @@ public class VehicleType extends DriveableType
 		{
 		}
 	}
-    
-    @Override
-    public boolean isValidAmmo(BulletType bulletType)
-    {
-    	return super.isValidAmmo(bulletType) && bulletType.isShell;
-    }
-	
+    	
 	public static VehicleType getVehicle(String find)
 	{
 		for(VehicleType type : types)

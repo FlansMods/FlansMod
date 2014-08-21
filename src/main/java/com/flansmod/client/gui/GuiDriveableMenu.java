@@ -34,42 +34,49 @@ public class GuiDriveableMenu extends GuiContainer
 	public void initGui()
 	{
 		super.initGui();
-		buttonList.add(new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Guns"));
-		buttonList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, entity.getBombInventoryName()));
+		buttonList.add(new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Cargo"));
+		buttonList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, "Guns"));
 		buttonList.add(new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel"));
-		buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, "Cargo"));
+		buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, entity.getMissileInventoryName()));
 		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
+		buttonList.add(new GuiButton(5, width / 2 + 2, height / 2 - 27, 58, 20, entity.getBombInventoryName()));
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button)
     {
 		//Replace with a packet requesting the GUI from the server
-        if(button.id == 0) //Guns
+		if(button.id == 0) //Cargo
+        {
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(3));
+			//inventory.player.openGui(FlansMod.INSTANCE, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        }
+        if(button.id == 1) //Guns
         {
         	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(0));
-        	inventory.player.openGui(FlansMod.INSTANCE, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
-        }
-        if(button.id == 1) //Bombs
-        {
-        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
-        	inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	//inventory.player.openGui(FlansMod.INSTANCE, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
         if(button.id == 2) //Fuel
         {
         	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(2));
-        	inventory.player.openGui(FlansMod.INSTANCE, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	//inventory.player.openGui(FlansMod.INSTANCE, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         } 
-		if(button.id == 3) //Cargo
+        if(button.id == 3) //Missiles
         {
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(3));
-			inventory.player.openGui(FlansMod.INSTANCE, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(5));
+        	//inventory.player.openGui(FlansMod.INSTANCE, 12, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
 		if(button.id == 4) //Repair
 		{
 			//No server side required. No interactive slots in this one
 			inventory.player.openGui(FlansMod.INSTANCE, 1, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
 		}
+        if(button.id == 5) //Bombs
+        {
+        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
+        	//inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        }
+
     }
 
     @Override

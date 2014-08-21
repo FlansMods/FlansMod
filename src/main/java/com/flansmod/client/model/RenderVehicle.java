@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
+import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.PilotGun;
@@ -52,28 +53,32 @@ public class RenderVehicle extends Render
 					modVehicle.render(vehicle, f1);
 				
 				GL11.glPushMatrix();
-				if(type.barrelPosition != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
+				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 				{
 					dYaw = (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw());
 			        for(; dYaw > 180F; dYaw -= 360F) {}
 			        for(; dYaw <= -180F; dYaw += 360F) {}
 		    		float yaw = vehicle.seats[0].prevLooking.getYaw() + dYaw * f1;
 		    		
-		    		GL11.glTranslatef(type.barrelPosition.x, type.barrelPosition.y, type.barrelPosition.z);
+		    		GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
 					GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
-					GL11.glTranslatef(-type.barrelPosition.x, -type.barrelPosition.y, -type.barrelPosition.z);
+					GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 					
 					if(modVehicle != null)
 						modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					
 					if(FlansMod.DEBUG)
-					{
+					{						
+						//Render shoot points
 						GL11.glColor4f(0F, 0F, 1F, 0.3F);
-						for(PilotGun gun : type.guns)
-						{		
-							if(gun.driveablePart == EnumDriveablePart.turret)
-								renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
-						}
+						for(DriveablePosition point : type.shootPointsPrimary)			
+							if(point.part == EnumDriveablePart.turret)
+								renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+						
+						GL11.glColor4f(0F, 1F, 0F, 0.3F);
+						for(DriveablePosition point : type.shootPointsSecondary)	
+							if(point.part == EnumDriveablePart.turret)
+								renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
 					}
 				}
 				GL11.glPopMatrix();
@@ -94,16 +99,22 @@ public class RenderVehicle extends Render
 					
 					renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
 				}
-				GL11.glColor4f(0F, 1F, 0F, 0.3F);
-				if(type.barrelPosition != null)
-					renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
+				//GL11.glColor4f(0F, 1F, 0F, 0.3F);
+				//if(type.barrelPosition != null)
+				//	renderAABB(AxisAlignedBB.getBoundingBox(type.barrelPosition.x - 0.25F, type.barrelPosition.y - 0.25F, type.barrelPosition.z - 0.25F, type.barrelPosition.x + 0.25F, type.barrelPosition.y + 0.25F, type.barrelPosition.z + 0.25F));
+				
+				//Render shoot points
 				GL11.glColor4f(0F, 0F, 1F, 0.3F);
-				for(PilotGun gun : type.guns)
-				{				
-					if(gun.driveablePart != EnumDriveablePart.turret)
-						renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
-				}
-				GL11.glColor4f(0F, 0F, 0F, 0.3F);	
+				for(DriveablePosition point : type.shootPointsPrimary)			
+					if(point.part != EnumDriveablePart.turret)
+						renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+				
+				GL11.glColor4f(0F, 1F, 0F, 0.3F);
+				for(DriveablePosition point : type.shootPointsSecondary)	
+					if(point.part != EnumDriveablePart.turret)
+						renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+
+				
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				GL11.glEnable(GL11.GL_DEPTH_TEST);
 				GL11.glDisable(GL11.GL_BLEND);

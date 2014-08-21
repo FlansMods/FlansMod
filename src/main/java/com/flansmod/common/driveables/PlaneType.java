@@ -122,10 +122,7 @@ public class PlaneType extends DriveableType
 				lift = Float.parseFloat(split[1]);
 				
 			//Propellers and Armaments
-			if(split[0].equals("BombPosition"))
-			{
-				bombPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);	
-			}
+
 			if(split[0].equals("ShootDelay"))
 				planeShootDelay = Integer.parseInt(split[1]);
 			if(split[0].equals("BombDelay"))
@@ -161,12 +158,12 @@ public class PlaneType extends DriveableType
 			}
 			if(split[0].equals("ShootSound"))
 			{
-				shootMainSound = split[1];
+				shootSoundPrimary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
-				shootSecondarySound = split[1];
+				shootSoundSecondary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			
@@ -211,12 +208,6 @@ public class PlaneType extends DriveableType
     		}
     	}
     	return stacks;
-    }
-    
-    @Override
-    public boolean isValidAmmo(BulletType bulletType)
-    {
-    	return super.isValidAmmo(bulletType) && bulletType.isBomb;
     }
     
 	public static PlaneType getPlane(String find)

@@ -163,7 +163,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			drawString(fontRendererObj, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
 			drawString(fontRendererObj, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
 			drawString(fontRendererObj, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
-			drawString(fontRendererObj, "Guns : " + (selectedType.numPassengerGunners + selectedType.guns.size()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
+			drawString(fontRendererObj, "Guns : " + (selectedType.ammoSlots()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
 			drawString(fontRendererObj, selectedType.numEngines() + "x", guiOriginX + 100, guiOriginY + 141, 0xffffff);
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required

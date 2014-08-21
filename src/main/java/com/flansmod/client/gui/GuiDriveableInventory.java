@@ -45,10 +45,11 @@ public class GuiDriveableInventory extends GuiContainer
     @Override
 	protected void drawGuiContainerForegroundLayer(int x, int y)
     {
-		String wololo = " - Guns";
-		if(screen == 1) wololo = " - " + driveable.getBombInventoryName();
-		if(screen == 2) wololo = " - Cargo";
-        fontRendererObj.drawString(driveable.getDriveableType().name + wololo, 6, 6, 0x404040);
+		String title = " - Guns";
+		if(screen == 1) title = " - " + driveable.getBombInventoryName();
+		if(screen == 2) title = " - Cargo";
+		if(screen == 3) title = " - " + driveable.getMissileInventoryName();
+        fontRendererObj.drawString(driveable.getDriveableType().name + title, 6, 6, 0x404040);
         fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -70,16 +71,16 @@ public class GuiDriveableInventory extends GuiContainer
 					slotsDone++;
 				}
 			}
-			for(int i = 0; i < driveable.getDriveableType().guns.size(); i++)
+			for(int i = 0; i < driveable.getDriveableType().pilotGuns.size(); i++)
 			{
 				if(slotsDone >= 3 + scroll)
 					continue;
-				if(driveable.getDriveableType().guns.get(i).type != null)
+				if(driveable.getDriveableType().pilotGuns.get(i).type != null)
 				{
 					if(slotsDone >= scroll)
 					{
 						fontRendererObj.drawString("Driver's gun " + (i + 1), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
-						drawStack(new ItemStack(driveable.getDriveableType().guns.get(i).type.getItem()), 10, 25 + 19 * (slotsDone - scroll));
+						drawStack(new ItemStack(driveable.getDriveableType().pilotGuns.get(i).type.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
 				}
@@ -136,6 +137,7 @@ public class GuiDriveableInventory extends GuiContainer
 			}
 			case 1 :
 			case 2 :
+			case 3 : 
 			{
 				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < (m > 3 ? 3 : m); row++)

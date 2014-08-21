@@ -42,6 +42,8 @@ RotatedPassengerOffset 1 -12 0 0
 BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret mg42
+AllowAllAmmo False
+AddAmmo shell
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 110

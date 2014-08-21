@@ -211,41 +211,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				return true;
 			}
 			case 8 : //Shoot shell
-			{
-				if(!worldObj.isRemote && shellDelay <= 0 && TeamsManager.bombsEnabled)
-				{
-					int slot = -1;
-					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
-					{
-						ItemStack shell = driveableData.getStackInSlot(i);
-						if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)shell.getItem()).type))
-						{
-							slot = i;
-						}
-					}
-					
-					if(slot != -1)
-					{
-						int spread = 0;
-						int damageMultiplier = 1;
-						float shellSpeed = 3F;
-
-						worldObj.spawnEntityInWorld(((ItemBullet)driveableData.getStackInSlot(slot).getItem()).getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), rotate(type.barrelPosition), null), rotate(seats[0].looking.getXAxis()), (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed,driveableData.getStackInSlot(slot).getItemDamage(), type));
-						
-						if(type.shootSecondarySound != null)
-							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSecondarySound, false);					
-						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							driveableData.decrStackSize(slot, 1);
-						shellDelay = type.vehicleShellDelay;
-					}
-					return true;
-				}
-				return false;
-			}
 			case 9 : //Shoot bullet
 			{
-				
-				return false;
+				return super.pressKey(key, player);
 			}
 			case 10 : //Change control mode : Do nothing
 			{
@@ -291,6 +259,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		return false;
 	}
+    
+    @Override
+	public Vector3f getLookVector(DriveablePosition dp)
+    {
+		return rotate(seats[0].looking.getXAxis());
+    }
 	
     @Override
 	public void onUpdate()
@@ -494,7 +468,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				//yaw = averageAngles((float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX),(float)Math.atan2(wheels[1].posZ - wheels[0].posZ, wheels[1].posX - wheels[0].posX));
 			}
 			
-			//The 11.93 is due to this calculation causing the car to spin at equilibrium. I may try and find the cause later, but this fix works for now
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
@@ -514,125 +487,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		rotationMatrix.m22 = (float)zAxis2.zCoord;
 		axes = new RotatedAxes(rotationMatrix);
 */
-		/*
-		//Apply turning forces
-		{
-			float sensitivityAdjust = 1F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
-			
-			//Yaw according to the wheelsYaw
-			float yaw = wheelsYaw * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;	
-			
-			applyTorque(axes.findLocalVectorGlobally(new Vector3f(0F, yaw, 0F)));
-		}
-		
-		//Co-efficients of formulae
-		float thrustFormulaCoefficient = 0.1F;
-		float dragFormulaCoefficient = 1F;
-		float gravity = 9.81F / 20F;
-				
-		//Apply thrust
-		{
-			float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * getDriveableData().engine.engineSpeed;
-			
-			if(type.tank)
-			{
-				applyThrust(getDriveableData().parts.get(EnumDriveablePart.leftTrack), thrust);
-				applyThrust(getDriveableData().parts.get(EnumDriveablePart.rightTrack), thrust);
-			}
-			else
-			{
-				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backLeftWheel), thrust);
-				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backRightWheel), thrust);
-				applyThrust(getDriveableData().parts.get(EnumDriveablePart.backWheel), thrust);
-				if(type.fourWheelDrive)
-				{
-					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontLeftWheel), thrust);
-					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontRightWheel), thrust);
-					applyThrust(getDriveableData().parts.get(EnumDriveablePart.frontWheel), thrust);
-				}
-			}
-		}
-		
-		//Apply drag
-		{
-			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
-			//Avoid zero errors by not applying drag when going too slow
-			if(velocityVector.lengthSquared() > 0.0000001F)
-			{
-				//Drag formula is 1/2 * v^2 * dragCoefficient
-				float drag = dragFormulaCoefficient * type.drag * velocityVector.lengthSquared();
-				//Apply in the direction opposite to the motion of the plane
-				applyForce(new Vector3f(), (Vector3f)velocityVector.normalise().negate().scale(drag));
-			}
-		}
-		
-		//Apply gravity
-		{
-			//Work out mg
-			float gravitationalForce = type.mass * gravity;
-			//Apply it downwards
-			applyForce(new Vector3f(), new Vector3f(0F, -gravitationalForce, 0F));
-		}
-		
-		//Smooth off rotational motion
-		angularVelocity.scale(0.95F);
-		
-		//Call the movement method in EntityDriveable to move the driveable according to the forces we just applied
-		moveDriveable();
-		*/
-		
-		//Shooting
-		if(!worldObj.isRemote && leftMouseHeld && gunDelay <= 0 && TeamsManager.bulletsEnabled && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer)
-		{
-			for(PilotGun gun : getDriveableType().guns)
-			{
-				//Get the gun from the plane type and the ammo from the data
-				GunType gunType = gun.type;
-				ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + gun.gunID];
-				//Check that neither is null and that the bullet item is actually a bullet
-				if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
-				{
-					BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
-					if(gunType.isAmmo(bullet))
-					{
-						//Rotate the gun vector to global axes
-						Vector3f localGunVec = gun.position;
-						
-						Vector3f lookVec = axes.getXAxis();
-						
-						if(gun.driveablePart == EnumDriveablePart.turret)
-						{
-							localGunVec = seats[0].looking.findLocalVectorGlobally(localGunVec);
-							lookVec = axes.findLocalVectorGlobally(seats[0].looking.getXAxis());
-						}
-						
-						Vector3f gunVec = rotate(localGunVec);
-						//Spawn a new bullet item
-						worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVec, (EntityLiving)riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
-						//Play the shoot sound
-						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootMainSound, false);
-						//Get the bullet item damage and increment it
-						int damage = bulletItemStack.getItemDamage();
-						bulletItemStack.setItemDamage(damage + 1);	
-						//If the bullet item is completely damaged (empty)
-						if(damage + 1 == bulletItemStack.getMaxDamage())
-						{
-							//Set the damage to 0 and consume one ammo item (unless in creative)
-							bulletItemStack.setItemDamage(0);
-							if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							{
-								bulletItemStack.stackSize--;
-								if(bulletItemStack.stackSize <= 0)
-									bulletItemStack = null;
-								driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
-							}
-						}
-						//Reset the shoot delay
-						gunDelay = type.vehicleShootDelay;
-					}
-				}
-			}
-		}
 		
 		//Fuel Handling
 		
@@ -822,6 +676,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 	@Override
 	public String getBombInventoryName() 
+	{
+		return "Mines";
+	}
+	
+	@Override
+	public String getMissileInventoryName() 
 	{
 		return "Shells";
 	}

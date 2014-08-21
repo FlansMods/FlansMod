@@ -6,6 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,11 +31,16 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.raytracing.BulletHit;
 import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
 
@@ -63,6 +70,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** Whether each mouse button is held */
 	public boolean leftMouseHeld = false, rightMouseHeld = false;
+	
+	/** Shoot delay variables */
+	public int shootDelayPrimary, shootDelaySecondary;
+	/** Minigun speed variables */
+	public float minigunSpeedPrimary, minigunSpeedSecondary;
+	/** Current gun variables for alternating weapons. */
+	public int currentGunPrimary, currentGunSecondary;
 	
 	public RotatedAxes prevAxes;
 	public RotatedAxes axes;
@@ -349,7 +363,46 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 	
 	@Override
-	public abstract boolean pressKey(int key, EntityPlayer player);
+	public boolean pressKey(int key, EntityPlayer player)
+	{
+		if(!worldObj.isRemote && key == 9 && getDriveableType().modePrimary == EnumFireMode.SEMIAUTO) //Primary
+		{
+			shoot(false);
+			return true;
+		}
+		else if(!worldObj.isRemote && key == 8 && getDriveableType().modeSecondary == EnumFireMode.SEMIAUTO) //Secondary
+		{
+			shoot(true);
+			return true;
+		}
+		/*
+		if(!worldObj.isRemote && bombDelay <= 0 && TeamsManager.bombsEnabled)
+		{
+			int slot = -1;
+			int bombType = 0;
+			for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
+			{
+				ItemStack bomb = driveableData.getStackInSlot(i);
+				if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)bomb.getItem()).type))
+				{
+					slot = i;
+				}
+			}
+			
+			if(slot != -1)
+			{
+				Vec3 bombVec = rotate(type.bombPosition).toVec3();
+				worldObj.spawnEntityInWorld(((ItemBullet)driveableData.getStackInSlot(slot).getItem()).getEntity(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, driveableData.getStackInSlot(slot).getItemDamage(), type));
+				if(type.shootSoundSecondary != null)
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSoundSecondary, false);					
+				if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+					driveableData.decrStackSize(slot, 1);
+				bombDelay = type.planeBombDelay;
+			}
+			return true;
+		}*/
+		return false;
+	}
 	
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
@@ -364,7 +417,157 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		case 8 : rightMouseHeld = held; break;
 		}
 	}
+	
+	/** Shoot method called by pressing / holding shoot buttons */
+	public void shoot(boolean secondary)
+	{
+		DriveableType type = getDriveableType();
+		if(seats[0] == null && !(seats[0].riddenByEntity instanceof EntityLivingBase))
+			return;
+		//Check shoot delay
+		if(getShootDelay(secondary) <= 0)
+		{
+			//We can shoot, so grab the available shoot points and the weaponType
+			ArrayList<DriveablePosition> shootPoints = type.shootPoints(secondary);
+			EnumWeaponType weaponType = type.weaponType(secondary);
+			//If there are no shoot points, return
+			if(shootPoints.size() == 0)
+				return;
+			//For alternating guns, move on to the next one
+			int currentGun = getCurrentGun(secondary);
+			if(type.alternate(secondary))
+			{
+				currentGun = (currentGun + 1) % shootPoints.size();
+				setCurrentGun(currentGun, secondary);
+				shootEach(type, shootPoints.get(currentGun), currentGun, secondary, weaponType);
+			}
+			else for(int i = 0; i < shootPoints.size(); i++)
+				shootEach(type, shootPoints.get(i), i, secondary, weaponType);
+		}
+	}
+	
+	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
+	{
+		//Rotate the gun vector to global axes
+		Vector3f gunVec = getOrigin(shootPoint);
+		Vector3f lookVector = getLookVector(shootPoint);
+		
+		//If its a pilot gun, then it is using a gun type, so do the following
+		if(shootPoint instanceof PilotGun)
+		{
+			PilotGun pilotGun = (PilotGun)shootPoint;
+			//Get the gun from the plane type and the ammo from the data
+			GunType gunType = pilotGun.type;
+			ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
+			//Check that neither is null and that the bullet item is actually a bullet
+			if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet && TeamsManager.bulletsEnabled)
+			{
+				BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+				if(gunType.isAmmo(bullet))
+				{
+					//Spawn a new bullet item
+					worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
+					//Play the shoot sound
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
+					//Get the bullet item damage and increment it
+					int damage = bulletItemStack.getItemDamage();
+					bulletItemStack.setItemDamage(damage + 1);	
+					//If the bullet item is completely damaged (empty)
+					if(damage + 1 == bulletItemStack.getMaxDamage())
+					{
+						//Set the damage to 0 and consume one ammo item (unless in creative)
+						bulletItemStack.setItemDamage(0);
+						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						{
+							bulletItemStack.stackSize--;
+							if(bulletItemStack.stackSize <= 0)
+								bulletItemStack = null;
+							driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + currentGun, bulletItemStack);
+						}
+					}
+					//Reset the shoot delay
+					setShootDelay(type.shootDelay(secondary), secondary);
+				}
+			}
+		}
+		else //One of the other modes
+		{
+			
+			
+			switch(weaponType)
+			{		
+			case BOMB :
+			{
+				
+				break;
+			}		
+			case MISSILE : //These two are actually almost identical
+			case SHELL :
+			{
+				if(TeamsManager.shellsEnabled)
+				{
+					int slot = -1;
+					for(int i = driveableData.getMissileInventoryStart(); i < driveableData.getMissileInventoryStart() + type.numMissileSlots; i++)
+					{
+						ItemStack shell = driveableData.getStackInSlot(i);
+						if(shell != null && shell.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)shell.getItem()).type, weaponType))
+						{
+							slot = i;
+						}
+					}
+					
+					if(slot != -1)
+					{
+						int spread = 0;
+						int damageMultiplier = 1;
+						float shellSpeed = 3F;
 
+						ItemBullet bulletItem = (ItemBullet)driveableData.getStackInSlot(slot).getItem();
+						EntityBullet bulletEntity = bulletItem.getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						worldObj.spawnEntityInWorld(bulletEntity);
+						
+						if(type.shootSound(secondary) != null)
+							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
+						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+							driveableData.decrStackSize(slot, 1);
+						setShootDelay(type.shootDelay(secondary), secondary);
+					}
+				}
+				break;
+			}				
+			case GUN: //Handled above
+				break;
+			case MINE:
+				break;
+			case NONE:
+				break;
+			}
+		}
+	}
+	
+	public Vector3f getOrigin(DriveablePosition dp)
+	{
+		//Rotate the gun vector to global axes
+		Vector3f localGunVec = new Vector3f(dp.position);
+				
+		if(dp.part == EnumDriveablePart.turret)
+		{
+			//Untranslate by the turret origin, to get the rotation about the right point
+			Vector3f.sub(localGunVec, getDriveableType().turretOrigin, localGunVec);
+			//Rotate by the turret angles
+			localGunVec = seats[0].looking.findLocalVectorGlobally(localGunVec);
+			//Translate by the turret origin
+			Vector3f.add(localGunVec, getDriveableType().turretOrigin, localGunVec);
+		}
+		
+		return rotate(localGunVec);
+	}
+	
+	public Vector3f getLookVector(DriveablePosition dp)
+	{
+		return axes.getXAxis();
+	}
+		
 	@Override
     public void onUpdate()
     {
@@ -450,23 +653,23 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			riddenByEntity.fallDistance = 0F;
 		
 		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
-		if(!worldObj.isRemote && seats[0].riddenByEntity == null)
+		if(seats[0] != null && seats[0].riddenByEntity == null)
 		{
 			throttle *= 0.9F;
 		}
 		
-		/*if(worldObj.isRemote && FlansMod.DEBUG)
+		//Check if shooting
+		if(shootDelayPrimary > 0)
+			shootDelayPrimary--;
+		if(shootDelaySecondary > 0)
+			shootDelaySecondary--;
+		if(!worldObj.isRemote)
 		{
-			Vector3f xAxis = axes.getXAxis();
-			Vector3f yAxis = axes.getYAxis();
-			Vector3f zAxis = axes.getZAxis();
-			for(int i = 0; i < 10; i++)
-			{
-				worldObj.spawnParticle("enchantmenttable", 	posX + xAxis.x * i * 0.3D, posY + xAxis.y * i * 0.3D, posZ + xAxis.z * i * 0.3D, 0, 0, 0);
-				worldObj.spawnParticle("smoke", 			posX + yAxis.x * i * 0.3D, posY + yAxis.y * i * 0.3D, posZ + yAxis.z * i * 0.3D, 0, 0, 0);
-				worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D, posY + zAxis.y * i * 0.3D, posZ + zAxis.z * i * 0.3D , 0, 0, 0);
-			}
-		}*/
+			if(leftMouseHeld && getDriveableType().modePrimary == EnumFireMode.FULLAUTO)
+				shoot(false);
+			if(rightMouseHeld && getDriveableType().modeSecondary == EnumFireMode.FULLAUTO)
+				shoot(true);
+		}
     }
 	
 	@Override
@@ -696,256 +899,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		motionZ += accelerationVector.z * deltaTime;
 	}
 	
-	/*
-	public void moveDriveable()
-	{		
-        float deltaTime = 1F / 20F;
-
-		DriveableType type = getDriveableType();
-        
-		Vector3f position = new Vector3f((float)posX, (float)posY, (float)posZ);
-        Vector3f motion = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
-        
-        if(worldObj.isRemote && FlansMod.DEBUG)
-        {
-	        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, motion, 2, 0F, 0F, 1F));
-	        worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, position, (Vector3f)new Vector3f(angularVelocity).scale(1F / 10F), 2, 1F, 0F, 1F));
-        }
-        
-      	RotatedAxes newAxes = axes.clone();
-      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
-      		newAxes.rotateLocal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
-
-      	int numHits = 0;
-        
-		for(CollisionPoint point : type.points)
-		{
-      		if(!isPartIntact(point.part))
-      			continue;
-			if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-				continue;
-			Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-			Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
-			Vector3f origin = Vector3f.add(position, pointVec, null);
-			Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
-			Vector3f rayOrigin = Vector3f.sub(newOrigin, motion, null);
-			Vector3f ray = Vector3f.add(newOrigin, motion, null);
-
-	        if(worldObj.isRemote && FlansMod.DEBUG)
-	        {
-	        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, origin, (Vector3f)Vector3f.sub(ray, origin, null).scale(1F), 2, 1F, 0F, 0F));
-	        }
-
-			MovingObjectPosition hit = worldObj.rayTraceBlocks(rayOrigin.toVec3(), ray.toVec3());
-
-			if(hit != null)
-			{
-				numHits++;
-			}
-		}
-        
-		if(numHits > 0)
-		{
-			for(CollisionPoint point : type.points)
-			{
-	      		if(!isPartIntact(point.part))
-	      			continue;
-				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-					continue;
-				Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-				Vector3f newPointVec = newAxes.findLocalVectorGlobally(point.getLocalVector());
-				Vector3f origin = Vector3f.add(position, pointVec, null);
-				Vector3f newOrigin = Vector3f.add(position, newPointVec, null);
-				Vector3f ray = Vector3f.add(newOrigin, motion, null);
-
-				MovingObjectPosition hit = worldObj.rayTraceBlocks(newOrigin.toVec3(), ray.toVec3());
-
-				if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
-				{
-					Vector3f hitVec = new Vector3f(hit.hitVec);
-
-					Vector3f normal = null;
-					int x = 0, y = 0, z = 0;
-					switch(hit.sideHit)
-					{
-					case 0 : normal = new Vector3f(0F, -1F, 0F); y = -1; break;
-					case 1 : normal = new Vector3f(0F, 1F, 0F); y = 1; break;
-					case 2 : normal = new Vector3f(0F, 0F, -1F); z = 1; break;
-					case 3 : normal = new Vector3f(0F, 0F, 1F); z = -1; break;
-					case 4 : normal = new Vector3f(-1F, 0F, 0F); x = 1; break;
-					case 5 : normal = new Vector3f(1F, 0F, 0F); x = -1; break;
-					}
-
-					if(worldObj.isSideSolid(hit.blockX + x, hit.blockY + y, hit.blockZ + z, ForgeDirection.getOrientation(hit.sideHit).getOpposite()))
-					{
-						continue;
-					}
-
-			        if(worldObj.isRemote && FlansMod.DEBUG)
-			        {
-			        	worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, hitVec, normal, 2, 0F, 1F, 0F));
-			        }
-
-			        float normalReactionMagnitude = Vector3f.dot(normal.negate(null), Vector3f.sub(ray, hitVec, null));
-			        float forceMagnitude = type.mass * normalReactionMagnitude / (numHits * deltaTime);
-
-			       	boolean shouldApplyForce = true; 
-
-			        //After taking this much force, the plane will take damage (scales with mass)
-			        float damagePoint = 1F;
-			        float damageModifier = 5F;
-			        float blockDamageModifier = 50F;
-
-			        if(forceMagnitude > damagePoint * type.mass)
-			        {
-			        	float smashyForce = forceMagnitude - damagePoint * type.mass;
-			        	DriveablePart part = getDriveableData().parts.get(point.part);
-			        	float smashyForceVsBlock = blockDamageModifier * part.smashIntoGround(this, damageModifier * smashyForce);
-			        	Block blockHit = worldObj.getBlock(hit.blockX, hit.blockY, hit.blockZ);
-			        	float blockHardness = blockHit.getBlockHardness(worldObj, hit.blockX, hit.blockY, hit.blockZ);
-			        	if(TeamsManager.driveablesBreakBlocks && smashyForceVsBlock > blockHardness && blockHardness >= 0)
-			        	{
-			        		blockHit.dropBlockAsItem(worldObj, hit.blockX, hit.blockY, hit.blockZ, worldObj.getBlockMetadata(hit.blockX, hit.blockY, hit.blockZ), 1);
-							FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, blockHit);
-							worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
-							shouldApplyForce = false;
-			        	}
-			        }
-			        
-			        if(shouldApplyForce)
-			        	applyForce(pointVec, (Vector3f)normal.scale(forceMagnitude));	 
-				}
-			}
-		}
-		
-		//Apply motion to position
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		
-		//Apply motion to rotation
-      	if(Math.abs(angularVelocity.lengthSquared()) > 0.00000001D)
-			axes.rotateGlobal(angularVelocity.length() * deltaTime, (Vector3f)new Vector3f(angularVelocity).normalise());
-
-      	if(true)
-      	{
-	      	numHits = 0;
-	      	
-	      	for(CollisionPoint point : type.points)
-	      	{
-	      		if(!isPartIntact(point.part))
-	      			continue;
-				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-					continue;
-	
-	      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-	      		int blockX = MathHelper.floor_double(posX + pointVec.x);
-	      		int blockY = MathHelper.floor_double(posY + pointVec.y);
-	      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
-	      		Block block = worldObj.getBlock(blockX, blockY, blockZ);
-	      		if(block != null)
-	      		{
-	      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-	      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
-	      			if(aabbs.size() > 0)
-	      			{
-	      				numHits++;  
-	      			}
-	      		}
-	      	}
-	      	
-	      	for(CollisionPoint point : type.points)
-	      	{
-	      		if(!isPartIntact(point.part))
-	      			continue;
-				if(EnumDriveablePart.isWheel(point.part) && !gearDown())
-					continue;
-	
-	      		Vector3f pointVec = axes.findLocalVectorGlobally(point.getLocalVector());
-	      		int blockX = MathHelper.floor_double(posX + pointVec.x);
-	      		int blockY = MathHelper.floor_double(posY + pointVec.y);
-	      		int blockZ = MathHelper.floor_double(posZ + pointVec.z);
-	      		Block block = worldObj.getBlock(blockX, blockY, blockZ);
-	      		if(block != null)
-	      		{
-	      			ArrayList<AxisAlignedBB> aabbs = new ArrayList<AxisAlignedBB>();
-	      			block.addCollisionBoxesToList(worldObj, blockX, blockY, blockZ, AxisAlignedBB.getBoundingBox(posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z, posX + pointVec.x, posY + pointVec.y, posZ + pointVec.z), aabbs, this);
-	      			if(aabbs.size() > 0)
-	      			{
-	      				AxisAlignedBB aabb = aabbs.get(0);
-	      				double dminX = Math.abs(posX + pointVec.x - aabb.minX);
-	      				double dmaxX = Math.abs(posX + pointVec.x - aabb.maxX);
-	      				double dminY = Math.abs(posY + pointVec.y - aabb.minY);
-	      				double dmaxY = Math.abs(posY + pointVec.y - aabb.maxY);
-	      				double dminZ = Math.abs(posZ + pointVec.z - aabb.minZ);
-	      				double dmaxZ = Math.abs(posZ + pointVec.z - aabb.maxZ);
-	      				
-	      				double min = Math.min(Math.min(Math.min(dminX, dmaxX), Math.min(dminY, dmaxY)), Math.min(dminZ, dmaxZ));
-	      				      		
-	      				float pushiness = 1F;
-	      				float bounciness = type.bounciness;
-	      				
-	      				
-	      				if(false) //Keeping this. May come in handy later
-	      				{
-	      					if(!worldObj.getBlock(blockX, blockY + 1, blockZ).isOpaqueCube())
-	      						posY += (float)dmaxY * type.mass / (deltaTime * numHits) * bounciness;
-	      					else
-	      					{
-	      						min = Math.min(Math.min(dminX, dmaxX), Math.min(dminZ, dmaxZ));
-	      						if(Math.abs(dminX - min) < 0.00001F && !worldObj.getBlock(blockX - 1, blockY, blockZ).isOpaqueCube())
-	      						{
-	      							if(motionX > 0)
-	      								motionX = 0;
-	      							posX -= (float)dminX * type.mass / (deltaTime * numHits) * pushiness;
-	      						}
-			      				else if(Math.abs(dmaxX - min) < 0.00001F && !worldObj.getBlock(blockX + 1, blockY, blockZ).isOpaqueCube())
-	      						{
-	      							if(motionX < 0)
-	      								motionX = 0;
-			      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * pushiness;
-	      						}
-			      				else if(Math.abs(dminZ - min) < 0.00001F && !worldObj.getBlock(blockX, blockY, blockZ - 1).isOpaqueCube())
-	      						{
-	      							if(motionZ > 0)
-	      								motionZ = 0;
-			      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * pushiness;
-	      						}
-			      				else if(Math.abs(dmaxZ - min) < 0.00001F && !worldObj.getBlock(blockX, blockY, blockZ + 1).isOpaqueCube())
-	      						{
-	      							if(motionZ < 0)
-	      								motionZ = 0;
-			      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * pushiness;
-	      						}
-	      					}
-	      				}
-	      				else
-	      				{
-	          				applyForce(pointVec, new Vector3f(0F, (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness, 0F));	  
-	
-	      					/*
-		      				if(Math.abs(dminX - min) < 0.00001F)
-		      					posX -= (float)dminX * type.mass / (deltaTime * numHits) * type.bounciness;
-		      				else if(Math.abs(dmaxX - min) < 0.00001F)
-		      					posX += (float)dmaxX * type.mass / (deltaTime * numHits) * type.bounciness;
-		      				else if(Math.abs(dmaxY - min) < 0.00001F)
-		      					posY += (float)dmaxY * type.mass / (deltaTime * numHits) * type.bounciness;
-		      				else if(Math.abs(dminZ - min) < 0.00001F)
-		      					posZ -= (float)dminZ * type.mass / (deltaTime * numHits) * type.bounciness;
-		      				else if(Math.abs(dmaxZ - min) < 0.00001F)
-		      					posZ += (float)dmaxZ * type.mass / (deltaTime * numHits) * type.bounciness;
-		      					/
-	      				}
-	      			}
-	      		}
-	      	}
-      	}
-		checkParts();
-		
-		setPosition(posX, posY, posZ);
-	}
-	*/
-	
 	/** To be overriden by vehicles to get alternate collision system */
 	public boolean landVehicle()
 	{
@@ -965,12 +918,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return onGround;
 	}
-	
-	public boolean attackPoint(CollisionPoint point, DamageSource damagesource, float i)
-	{
-		return false;
-	}
-	
+		
 	/** Attack method called by bullets hitting the plane. Does advanced raytracing to detect which part of the plane is hit */
 	public ArrayList<BulletHit> attackFromBullet(EntityBullet bullet, Vector3f origin, Vector3f motion)
 	{
@@ -1137,6 +1085,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public abstract String getBombInventoryName();
 	
+	public abstract String getMissileInventoryName();
+	
 	public boolean rotateWithTurret(Seat seat)
 	{
 		return seat.part == EnumDriveablePart.turret;
@@ -1153,120 +1103,47 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return seat == 0 ? !FlansModClient.controlModeMouse : true;
 	}
-	
-	/*
-	 * ICBM Hooks. Temporarily removed since ICBM is not up to date.
-	// Destroys the target with a boom. This is a forced way for the sentry to kill the target if
-	// it doesn't take damage
-	// Not needed in Flan due to plane is detroyed when HP = 0
-	@Override
-	public void destroyCraft()
-	{
-	
-	}
-	
-	// Applies damage to the the target
-	// 
-	// @param damage - damage in half HP
-	// @return the amount of HP left. Return -1 if this target can't take damage, and will be chance
-	// killed. Return 0 if this target is dead and destroyCraft() will be called.
-	
-	@Override
-	public int doDamage(int damage)
-	{
-		//Increase damage, base damage very low
-		DriveableType type = getDriveableType();
-		damage *= 5;
-		damage /= type.mass;
-		
-		DriveablePart core = getDriveableData().parts.get(EnumDriveablePart.core);
-		
-		if(worldObj.isRemote)
-			return core.health;
-		
-		//Server side
-		//Do damage to a random part
-		DriveablePart randomPart = null;
-		DriveablePart[] parts = getDriveableData().parts.values().toArray(new DriveablePart[0]);
-		while(randomPart == null)
-		{
-			int random = worldObj.rand.nextInt(getDriveableData().parts.size());
-			randomPart = parts[random];
-			if(randomPart.dead) randomPart = null;
-		}
-		
-		//Do less damage to core, remaining to random part
-		int coreDamage = damage/8;
-		core.health -= coreDamage;
-		randomPart.health -= damage-coreDamage;
-		
-		checkParts();
-		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 100, dimension, PacketDriveableDamage.buildUpdatePacket(this));
-		
-		return core.health;
-	}
-	
-	// Can this be targeted by automated targeting systems or AIs. Used to implement radar jammers,
-	// cloaking devices, and other addons for the Entity being targeted
-	//
-	// @param entity - entity that is targeting this, can be an Entity, EntityLiving, or TileEntity
-	// @return true if it can
-	@Override
-	public boolean canBeTargeted(Object entity)
-	{
-		//Check config for option to show plane on radar
-		DriveableType type = getDriveableType();
-		if(type.onRadar == true && FlansMod.isICBMSentryLoaded)
-		{
-			//Don't shoot at someone on the turrets access list
-			try 
-			{
-				Class auto = Class.forName( "icbm.sentry.turret.TileEntityTurret");
-				Class terminal = Class.forName("icbm.sentry.terminal.TileEntityTerminal");
-				if(auto.isInstance(entity))
-				{
-					Method m = auto.getMethod("getPlatform");
-					Method ac = terminal.getMethod("canUserAccess", String.class);
-					Object plat = m.invoke(entity);
-					boolean allNull = true;
 
-					for(int i =0; i < this.seats.length; i++)
-					{
-						if(seats[i].riddenByEntity != null && seats[i].riddenByEntity instanceof EntityPlayerMP)
-						{
-							allNull = false;
-							Boolean access = (Boolean) ac.invoke(plat, ((EntityPlayerMP)seats[i].riddenByEntity).username);
-							if(access.booleanValue()) return false;
-						} 
-					}
-					if(allNull) return false;
-				}
-			} 
-			catch( ClassNotFoundException e ) 
-			{
-				//my class isn't there!
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+	//-------------------------------------
+	// Getters and setters for dual fields
+	//-------------------------------------
+	
+	public int getShootDelay(boolean secondary)
+	{
+		return secondary ? shootDelaySecondary : shootDelayPrimary;
 	}
-	*/
+	
+	public float getMinigunSpeed(boolean secondary)
+	{
+		return secondary ? minigunSpeedSecondary : minigunSpeedPrimary;
+	}
+	
+	public int getCurrentGun(boolean secondary)
+	{
+		return secondary ? currentGunSecondary : currentGunPrimary;
+	}
+	
+	public void setShootDelay(int i, boolean secondary)
+	{
+		if(secondary)
+			shootDelaySecondary = i;
+		else shootDelayPrimary = i;
+	}
+	
+	public void setMinigunSpeed(float f, boolean secondary)
+	{
+		if(secondary)
+			minigunSpeedSecondary = f;
+		else minigunSpeedPrimary = f;
+	}
+	
+	public void setCurrentGun(int i, boolean secondary)
+	{
+		if(secondary)
+			currentGunSecondary = i;
+		else currentGunPrimary = i;
+	}
+	
+	
+	
 }

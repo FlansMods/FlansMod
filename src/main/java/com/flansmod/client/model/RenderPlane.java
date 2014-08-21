@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
+import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.PilotGun;
 import com.flansmod.common.driveables.PlaneType;
@@ -83,19 +84,25 @@ public class RenderPlane extends Render
 				
 				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
 			}
-			GL11.glColor4f(0F, 1F, 0F, 0.3F);
+			GL11.glColor4f(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{				
 				renderAABB(AxisAlignedBB.getBoundingBox(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F));
 			}
-			GL11.glColor4f(0F, 0F, 1F, 0.3F);
-			for(PilotGun gun : type.guns)
-			{				
-				renderAABB(AxisAlignedBB.getBoundingBox(gun.position.x - 0.25F, gun.position.y - 0.25F, gun.position.z - 0.25F, gun.position.x + 0.25F, gun.position.y + 0.25F, gun.position.z + 0.25F));
-			}
-			GL11.glColor4f(0F, 0F, 0F, 0.3F);	
-			if(type.bombPosition != null)
-				renderAABB(AxisAlignedBB.getBoundingBox(type.bombPosition.x - 0.25F, type.bombPosition.y - 0.25F, type.bombPosition.z - 0.25F, type.bombPosition.x + 0.25F, type.bombPosition.y + 0.25F, type.bombPosition.z + 0.25F));
+			
+			//Render shoot points
+			GL11.glColor4f(1F, 0F, 1F, 0.3F);
+			for(DriveablePosition point : type.shootPointsPrimary)			
+				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+			
+			GL11.glColor4f(0F, 1F, 0F, 0.3F);
+			for(DriveablePosition point : type.shootPointsSecondary)			
+				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+			
+			//GL11.glColor4f(0F, 0F, 0F, 0.3F);	
+			//if(type.bombPosition != null)
+			//	renderAABB(AxisAlignedBB.getBoundingBox(type.bombPosition.x - 0.25F, type.bombPosition.y - 0.25F, type.bombPosition.z - 0.25F, type.bombPosition.x + 0.25F, type.bombPosition.y + 0.25F, type.bombPosition.z + 0.25F));
+			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_BLEND);

@@ -14,6 +14,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
@@ -25,9 +27,7 @@ public class DriveableType extends InfoType
 	/** The plane model */
 	public ModelDriveable model;
 		
-	/** Points for calculating collision. Each one is tied to a part of the driveable */
-	public ArrayList<CollisionPoint> points = new ArrayList<CollisionPoint>();
-
+	//Health and recipe
 	/** Health of each driveable part */
 	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
 	/** Recipe parts associated to each driveable part */
@@ -35,33 +35,53 @@ public class DriveableType extends InfoType
 	/** Recipe parts as one complete list */
 	public ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
 	
+	//Ammo
 	/** If true, then all ammo is accepted */
 	public boolean acceptAllAmmo = false;
 	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
+	//Weapon variables
+	/** The weapon type assigned to left mouse */
+	public EnumWeaponType primary = EnumWeaponType.NONE, secondary = EnumWeaponType.NONE;
+	/** Whether to alternate weapons or fire all at once */
+	public boolean alternatePrimary = false, alternateSecondary = false;
+	/** Delays. Can override gun delays */
+	public int shootDelayPrimary = 1, shootDelaySecondary = 1;
+	/** Firing modes for primary and secondary guns. Minigun also an option */
+	public EnumFireMode modePrimary = EnumFireMode.FULLAUTO, modeSecondary = EnumFireMode.FULLAUTO;
+	/** Sounds */
+	public String shootSoundPrimary, shootSoundSecondary;
+	/** Positions of primary and secondary weapons */
+	public ArrayList<DriveablePosition> shootPointsPrimary = new ArrayList<DriveablePosition>(), shootPointsSecondary = new ArrayList<DriveablePosition>();
+	/** Pilot guns also have their own seperate array so ammo handling can be done */
+	public ArrayList<PilotGun> pilotGuns = new ArrayList<PilotGun>();
+	
+	//Passengers
 	/** The number of passengers, not including the pilot */
 	public int numPassengers = 0;	
 	/** Seat objects for holding information about the position and gun setup of each seat */
 	public Seat[] seats;
 	/** Automatic counter used to setup ammo inventory for gunners */
 	public int numPassengerGunners = 0;
-	/** Automatic counter used to setup ammo inventory for pilot guns */
-	public int nextGunID = 0;
+	
+	//Inventory + Pilot guns
 	/** Inventory sizes */
-	public int numCargoSlots, numBombSlots;
+	public int numCargoSlots, numBombSlots, numMissileSlots;
 	/** The fuel tank size */
 	public int fuelTankSize = 100;
-	/** The guns controlled by the driver */
-	public ArrayList<PilotGun> guns = new ArrayList<PilotGun>();
 		
+	//Rendering variables
 	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
 	public float yOffset = 10F / 16F;
 	/** Third person render distance */
 	public float cameraDistance = 5F;
 	
+	//Movement variables
 	/** Generic movement modifiers, no longer repeated for plane and vehicle */
 	public float maxThrottle = 1F, maxNegativeThrottle = 0F;
+	/** The origin of the tank turret */
+	public Vector3f turretOrigin = new Vector3f();
 	
 	/** Mass in tons */
 	public float mass = 1F;
@@ -86,8 +106,7 @@ public class DriveableType extends InfoType
 	public int startSoundLength;
 	public String engineSound;
 	public int engineSoundLength;
-	public String shootMainSound;
-	public String shootSecondarySound;
+
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
 	
@@ -147,23 +166,85 @@ public class DriveableType extends InfoType
 				drag = Float.parseFloat(split[1]);
 			if(split[0].equals("Bounciness"))
 				bounciness = Float.parseFloat(split[1]);
+            if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
+            	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);
-			if(split[0].equals("BombSlots") || split[0].equals("ShellSlots"))
+			if(split[0].equals("BombSlots") || split[0].equals("MineSlots"))
 				numBombSlots = Integer.parseInt(split[1]);
+			if(split[0].equals("MissileSlots") || split[0].equals("ShellSlots"))
+				numMissileSlots = Integer.parseInt(split[1]);
 			if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);
 			
 			if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
+			
 			//Ammo limiters
 			if(split[0].equals("AddAmmo"))
 				ammo.add(BulletType.getBullet(split[1]));
 			if(split[0].equals("AllowAllAmmo") || split[0].equals("AcceptAllAmmo"))
 				acceptAllAmmo = Boolean.parseBoolean(split[1]);
-
+			
+			//Weaponry
+			if(split[0].equals("Primary"))
+				primary = EnumWeaponType.valueOf(split[1].toUpperCase());
+			if(split[0].equals("Secondary"))
+				secondary = EnumWeaponType.valueOf(split[1].toUpperCase());
+			if(split[0].equals("ShootDelayPrimary"))
+				shootDelayPrimary = Integer.parseInt(split[1]);
+			if(split[0].equals("ShootDelaySecondary"))
+				shootDelaySecondary = Integer.parseInt(split[1]);
+			if(split[0].equals("AlternatePrimary"))
+				alternatePrimary = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("AlternateSecondary"))
+				alternateSecondary = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("ModePrimary"))
+				modePrimary = EnumFireMode.valueOf(split[1].toUpperCase());
+			if(split[0].equals("ModeSecondary"))
+				modeSecondary = EnumFireMode.valueOf(split[1].toUpperCase());
+			if(split[0].equals("ShootPointPrimary"))
+			{
+				DriveablePosition shootPoint = getShootPoint(split);
+				shootPointsPrimary.add(shootPoint);
+				if(shootPoint instanceof PilotGun)
+					pilotGuns.add((PilotGun)shootPoint);
+			}
+			if(split[0].equals("ShootPointSecondary"))
+			{
+				DriveablePosition shootPoint = getShootPoint(split);
+				shootPointsSecondary.add(shootPoint);
+				if(shootPoint instanceof PilotGun)
+					pilotGuns.add((PilotGun)shootPoint);
+			}
+			
+			
+			//Backwards compatibility stuff
+			if(split[0].equals("AddGun"))
+			{
+				secondary = EnumWeaponType.GUN;
+				PilotGun pilotGun = (PilotGun)getShootPoint(split);
+				shootPointsSecondary.add(pilotGun);
+				pilotGuns.add(pilotGun);
+				recipe.add(new ItemStack(pilotGun.type.item));
+			}
+			if(split[0].equals("BombPosition"))
+			{
+				primary = EnumWeaponType.BOMB;
+				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.core));	
+			}
+			if(split[0].equals("BarrelPosition"))
+			{
+				primary = EnumWeaponType.SHELL;
+				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.turret));	
+			}
+			if(split[0].equals("ShootDelay"))
+				shootDelaySecondary = Integer.parseInt(split[1]);
+			if(split[0].equals("ShellDelay") || split[0].equals("BombDelay"))
+				shootDelayPrimary = Integer.parseInt(split[1]);
+			
 			//Recipe
 			if(split[0].equals("AddRecipeParts"))
 			{
@@ -240,16 +321,7 @@ public class DriveableType extends InfoType
 					recipe.add(new ItemStack(seat.gunType.item));
 				}
 			}
-			
-			//Driver guns
-			if(split[0].equals("AddGun"))
-			{
-				PilotGun gun = new PilotGun(split);
-				guns.add(gun);
-				gun.gunID = nextGunID++;
-				recipe.add(new ItemStack(gun.type.item));
-			}
-			
+						
 			//Y offset for badly built models :P
 			if(split[0].equals("YOffset"))
 				yOffset = Float.parseFloat(split[1]);
@@ -272,14 +344,14 @@ public class DriveableType extends InfoType
 				engineSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
-			if(split[0].equals("ShootMainSound"))
+			if(split[0].equals("ShootMainSound") || split[0].equals("ShootSoundPrimary") || split[0].equals("ShellSound") || split[0].equals("BombSound"))
 			{
-				shootMainSound = split[1];
+				shootSoundPrimary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
-			if(split[0].equals("ShootSecondarySound"))
+			if(split[0].equals("ShootSecondarySound") || split[0].equals("ShootSoundSecondary"))
 			{
-				shootSecondarySound = split[1];
+				shootSoundSecondary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			// ICBM Mod Radar
@@ -292,19 +364,58 @@ public class DriveableType extends InfoType
 		}
 	}
     
-    public int numEngines()
+    private DriveablePosition getShootPoint(String[] split) 
+    {
+    	//Its a gun with a type
+    	if(split.length == 6)
+    	{
+    		return new PilotGun(split);
+    	}
+    	else if(split.length == 5)
+    	{
+    		return new DriveablePosition(split);
+    	}
+		return new DriveablePosition(new Vector3f(), EnumDriveablePart.core);
+	}
+    
+    public ArrayList<DriveablePosition> shootPoints(boolean s)
+    {
+    	return s ? shootPointsSecondary : shootPointsPrimary;
+    }
+
+    public boolean alternate(boolean s)
+    {
+    	return s ? alternateSecondary : alternatePrimary;
+    }
+    
+    public EnumWeaponType weaponType(boolean s)
+    {
+    	return s ? secondary : primary;
+    }
+    
+    public int shootDelay(boolean s)
+    {
+    	return s ? shootDelaySecondary : shootDelayPrimary;
+    }
+    
+    public String shootSound(boolean s)
+    {
+    	return s ? shootSoundSecondary : shootSoundPrimary;
+    }
+    
+	public int numEngines()
     {
     	return 1;
     }
     
     public int ammoSlots()
     {
-    	return numPassengerGunners + guns.size();
+    	return numPassengerGunners + pilotGuns.size();
     }
-    
-    public boolean isValidAmmo(BulletType bulletType)
+        
+    public boolean isValidAmmo(BulletType bulletType, EnumWeaponType weaponType)
     {
-    	return acceptAllAmmo || ammo.contains(bulletType);
+    	return (acceptAllAmmo || ammo.contains(bulletType)) && bulletType.weaponType == weaponType;
     }
     
     /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
@@ -320,9 +431,9 @@ public class DriveableType extends InfoType
 	    	}
     	}
     	//Add the items required for the guns connected to this part
-    	for(PilotGun gun : guns)
+    	for(PilotGun gun : pilotGuns)
     	{
-    		if(gun.driveablePart == part.type)
+    		if(gun.part == part.type)
     			stacks.add(new ItemStack(gun.type.item));
     	}
     	for(Seat seat : seats)

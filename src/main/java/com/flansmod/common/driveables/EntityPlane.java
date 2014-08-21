@@ -220,38 +220,9 @@ public class EntityPlane extends EntityDriveable
 				return true;
 			}
 			case 8 : //Drop bomb
-			{
-				if(!worldObj.isRemote && bombDelay <= 0 && TeamsManager.bombsEnabled)
-				{
-					int slot = -1;
-					int bombType = 0;
-					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
-					{
-						ItemStack bomb = driveableData.getStackInSlot(i);
-						if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)bomb.getItem()).type))
-						{
-							slot = i;
-						}
-					}
-					
-					if(slot != -1)
-					{
-						Vec3 bombVec = rotate(type.bombPosition).toVec3();
-						worldObj.spawnEntityInWorld(((ItemBullet)driveableData.getStackInSlot(slot).getItem()).getEntity(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, driveableData.getStackInSlot(slot).getItemDamage(), type));
-						if(type.shootSecondarySound != null)
-							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSecondarySound, false);					
-						if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							driveableData.decrStackSize(slot, 1);
-						bombDelay = type.planeBombDelay;
-					}
-					return true;
-				}
-				return false;
-			}
 			case 9 : //Shoot bullet
 			{
-				
-				return false;
+				return super.pressKey(key, player);
 			}
 			case 10 : //Change control mode
 			{
@@ -318,6 +289,21 @@ public class EntityPlane extends EntityDriveable
 		return false;
 	}
     
+	@Override
+	public void updateKeyHeldState(int key, boolean held)
+	{
+		super.updateKeyHeldState(key, held);
+		//On the server. For semi-auto weapons, shoot!
+		if(!worldObj.isRemote)
+		{
+			switch(key)
+			{
+			case 9 : //Left Mouse
+			case 8 : //Right Mouse
+			}
+		}
+	}
+	
     @Override
 	public void onUpdate()
     {
@@ -409,7 +395,8 @@ public class EntityPlane extends EntityDriveable
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		throttle = (throttle - 0.5F) * throttlePull + 0.5F;
+		if(seats[0] != null && seats[0].riddenByEntity != null)
+			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
 		//Get the speed of the plane
 		float lastTickSpeed = (float)getSpeedXYZ();
@@ -448,17 +435,22 @@ public class EntityPlane extends EntityDriveable
 			
 			Vector3f up = axes.getYAxis();
 			
-			float throttleScale = 0.02F * type.maxThrottle;
+			float throttleScale = 0.01F * type.maxThrottle;
 						
 			float upwardsForce = throttle * throttleScale + (g - throttleScale / 2F);
 			if(throttle < 0.5F)
 				upwardsForce = g * throttle * 2F;
 			
+			if(!isPartIntact(EnumDriveablePart.blades))
+			{
+				upwardsForce = 0F;
+			}
+			
 			//Move up
 			//Throttle - 0.5 means that the positive throttle scales from -0.5 to +0.5. Thus it accounts for gravity-ish
-			motionX += upwardsForce * up.x;
+			motionX += upwardsForce * up.x * 0.5F;
 			motionY += upwardsForce * up.y;
-			motionZ += upwardsForce * up.z;
+			motionZ += upwardsForce * up.z * 0.5F;
 			//Apply gravity
 			motionY -= g;
 			
@@ -492,212 +484,73 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Update wheels
-		Vector3f amountToMoveCar = new Vector3f();
-			
-		type.wheelSpringStrength = 0.2F;
-		for(EntityWheel wheel : wheels)
+		Vector3f amountToMoveCar = new Vector3f();//motionX, motionY, motionZ);
+					
+		type.wheelSpringStrength = 0.125F;
+		for(int i = 0; i < 2; i++)
 		{
-			if(wheel == null)
-				continue;
-			
-			//Hacky way of forcing the car to step up blocks
-			onGround = true;
-			wheel.onGround = true;
-			
-			//Update angles
-			wheel.rotationYaw = axes.getYaw();
-			
-			//wheel.motionX *= 0.95F;
-			//wheel.motionY *= 0.95F;
-			//wheel.motionZ *= 0.95F;
-
-			//Pull wheels towards car
-			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.ID]);
-			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
-			
-			float targetWheelLength = targetWheelPos.length();
-			float currentWheelLength = currentWheelPos.length();
-			
-			float dLength = targetWheelLength - currentWheelLength;
-			float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
-			
-			if(dLength > 0.001F || dAngle > 0.1F)
+			for(EntityWheel wheel : wheels)
 			{
-				//Now Lerp by wheelSpringStrength and work out the new positions		
-				float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
-				Vector3f rotateAround = Vector3f.cross(targetWheelPos, currentWheelPos, null);
+				if(wheel == null)
+					continue;
 				
-				Matrix4f mat = new Matrix4f();
-				mat.m00 = currentWheelPos.x;
-				mat.m10 = currentWheelPos.y;
-				mat.m20 = currentWheelPos.z;
-				mat.rotate(dAngle * type.wheelSpringStrength, rotateAround);
+				//Hacky way of forcing the car to step up blocks
+				onGround = true;
+				wheel.onGround = true;
 				
-				Vector3f newWheelPos = new Vector3f(mat.m00, mat.m10, mat.m20);
-				newWheelPos.normalise().scale(newLength);
+				//Update angles
+				wheel.rotationYaw = axes.getYaw();
 				
-				//The proportion of the spring adjustment that is applied to the wheel. 1 - this is applied to the plane
-				float wheelProportion = 0.75F;
+				//Pull wheels towards car
+				Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.ID]);
+				Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 				
-				wheel.motionX = (newWheelPos.x - currentWheelPos.x) * wheelProportion;
-				wheel.motionY = (newWheelPos.y - currentWheelPos.y) * wheelProportion;
-				wheel.motionZ = (newWheelPos.z - currentWheelPos.z) * wheelProportion;
+				float targetWheelLength = targetWheelPos.length();
+				float currentWheelLength = currentWheelPos.length();
 				
-				amountToMoveCar.x -= (newWheelPos.x - currentWheelPos.x) * (1F - wheelProportion);
-				amountToMoveCar.y -= (newWheelPos.y - currentWheelPos.y) * (1F - wheelProportion);
-				amountToMoveCar.z -= (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);
+				float dLength = targetWheelLength - currentWheelLength;
+				float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
 				
-				//Apply gravity
-				//wheel.motionY -= 0.98F / 20F;
-				
-				wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
+				//if(dLength > 0.01F || dAngle > 1F)
+				{
+					//Now Lerp by wheelSpringStrength and work out the new positions		
+					float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
+					Vector3f rotateAround = Vector3f.cross(targetWheelPos, currentWheelPos, null);
+					
+					Matrix4f mat = new Matrix4f();
+					mat.m00 = currentWheelPos.x;
+					mat.m10 = currentWheelPos.y;
+					mat.m20 = currentWheelPos.z;
+					mat.rotate(dAngle * type.wheelSpringStrength, rotateAround);
+										
+					Vector3f newWheelPos = new Vector3f(mat.m00, mat.m10, mat.m20);
+					newWheelPos.normalise().scale(newLength);
+					
+					//The proportion of the spring adjustment that is applied to the wheel. 1 - this is applied to the plane
+					float wheelProportion = 0.75F;
+					
+					//wheel.motionX = (newWheelPos.x - currentWheelPos.x) * wheelProportion;
+					//wheel.motionY = (newWheelPos.y - currentWheelPos.y) * wheelProportion;
+					//wheel.motionZ = (newWheelPos.z - currentWheelPos.z) * wheelProportion;
+					
+					Vector3f amountToMoveWheel = new Vector3f();
+					
+					amountToMoveWheel.x = (newWheelPos.x - currentWheelPos.x) * (1F - wheelProportion);
+					amountToMoveWheel.y = (newWheelPos.y - currentWheelPos.y) * (1F - wheelProportion);
+					amountToMoveWheel.z = (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);		
+					
+					amountToMoveCar.x -= (newWheelPos.x - currentWheelPos.x) * (1F - wheelProportion);
+					amountToMoveCar.y -= (newWheelPos.y - currentWheelPos.y) * (1F - wheelProportion);
+					amountToMoveCar.z -= (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);
+													
+					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
+				}
 			}
-		}
-		
-		
-		//motionX += amountToMoveCar.x;
-		//motionY += amountToMoveCar.y;
-		//motionZ += amountToMoveCar.z;
 		
 		
 		moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
-		
-		/*
-		//Apply turning forces
-		{
-			float sensitivityAdjust = 0.5F * type.mass / (float)Math.max(1D, 5D * Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ));
-			
-			//Yaw according to the flapsYaw
-			float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
-			
-			//Pitch according to the sum of flapsPitchLeft and flapsPitchRight / 2
-			float flapsPitch = (flapsPitchLeft + flapsPitchRight) / 2F;
-			float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * sensitivityAdjust;
-			
-			//Roll according to the difference between flapsPitchLeft and flapsPitchRight / 2
-			float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
-			float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
-			
-			applyTorque(axes.findLocalVectorGlobally(new Vector3f(-roll, yaw, -pitch)));
-		}
-		
-		//Co-efficients of formulae
-		float thrustFormulaCoefficient = 2F;
-		float dragFormulaCoefficient = 10F;
-		float gravity = 9.81F / 20F;
-		float liftFormulaCoefficient = 1.2F * (dragFormulaCoefficient * type.drag * type.mass * gravity) / (type.lift * thrustFormulaCoefficient * type.maxThrottle * type.propellers.size());
-				
-		//Apply thrust
-		for(Propeller propeller : type.propellers)
-		{
-			//Check the propeller is still around
-			if(!getDriveableData().parts.get(propeller.planePart).dead)
-			{
-				//If the player driving this is in creative, then we can thrust, no matter what
-				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-				//Otherwise, check the fuel tanks!
-				if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
-				{
-					//Calculate the thrust
-					float thrust = thrustFormulaCoefficient * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
-					//Apply the thrust
-					applyForce(axes.findLocalVectorGlobally(propeller.getPosition()), (Vector3f)axes.getXAxis().scale(thrust));
-					//If we can't thrust creatively, we must thrust using fuel. Nom.
-					if(!canThrustCreatively)
-						data.fuelInTank -= data.engine.fuelConsumption * throttle;
-				}
-			}
 		}
 				
-		//Apply drag
-		{
-			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
-			//Avoid zero errors by not applying drag when going too slow
-			if(velocityVector.lengthSquared() > 0.0000001F)
-			{
-				//Drag formula is 1/2 * v^2 * dragCoefficient
-				float drag = dragFormulaCoefficient * type.drag * velocityVector.lengthSquared();
-				//Apply in the direction opposite to the motion of the plane
-				applyForce(new Vector3f(), (Vector3f)velocityVector.normalise().negate().scale(drag));
-			}
-		}
-		
-		//Apply lift
-		{
-			Vector3f velocityVector = new Vector3f((float)motionX, (float)motionY, (float)motionZ);
-			//Get the velocity in the local XZ plane (the plane the wings lie on)
-			float xVelocity = Vector3f.dot(velocityVector, axes.getXAxis());
-			float zVelocity = Vector3f.dot(velocityVector, axes.getZAxis());
-			float perpendicularVelocity = xVelocity * xVelocity + zVelocity * zVelocity;
-			//Avoid zero errors by not applying lift when going too slow
-			if(velocityVector.lengthSquared() > 0.0000001F)
-			{
-				//Lift formula is 1/2 * v^2 * liftCoefficient
-				float lift = liftFormulaCoefficient * type.lift * perpendicularVelocity;
-				//Apply to the yAxis of the plane
-				applyForce(new Vector3f(), (Vector3f)axes.getYAxis().scale(lift));
-			}
-		}
-		
-		//Apply gravity
-		{
-			//Work out mg
-			float gravitationalForce = type.mass * gravity;
-			//Apply it downwards
-			applyForce(new Vector3f(), new Vector3f(0F, -gravitationalForce, 0F));
-		}
-		
-		//Smooth off rotational motion
-		angularVelocity.scale(0.95F);
-		*/
-		
-		//Call the movement method in EntityDriveable to move the plane according to the forces we just applied
-		//moveDriveable();
-		
-		
-		//Shooting
-		if(!worldObj.isRemote && leftMouseHeld && gunDelay <= 0 && TeamsManager.bulletsEnabled && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer)
-		{
-			for(PilotGun gun : getDriveableType().guns)
-			{
-				//Get the gun from the plane type and the ammo from the data
-				GunType gunType = gun.type;
-				ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + gun.gunID];
-				//Check that neither is null and that the bullet item is actually a bullet
-				if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
-				{
-					BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
-					if(gunType.isAmmo(bullet))
-					{
-						//Rotate the gun vector to global axes
-						Vector3f gunVec = rotate(gun.position);
-						//Spawn a new bullet item
-						worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), axes.getXAxis(), (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
-						//Play the shoot sound
-						PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootMainSound, false);
-						//Get the bullet item damage and increment it
-						int damage = bulletItemStack.getItemDamage();
-						bulletItemStack.setItemDamage(damage + 1);	
-						//If the bullet item is completely damaged (empty)
-						if(damage + 1 == bulletItemStack.getMaxDamage())
-						{
-							//Set the damage to 0 and consume one ammo item (unless in creative)
-							bulletItemStack.setItemDamage(0);
-							if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							{
-								bulletItemStack.stackSize--;
-								if(bulletItemStack.stackSize <= 0)
-									bulletItemStack = null;
-								driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + gun.gunID, bulletItemStack);
-							}
-						}
-						//Reset the shoot delay
-						gunDelay = type.planeShootDelay;
-					}
-				}
-			}
-		}
-		
 		//Fuel Handling
 		
 		//If the fuel item has stack size <= 0, delete it
@@ -777,10 +630,20 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//If this is the server, send position updates to everyone, having received them from the driver
-		if(!worldObj.isRemote && ticksExisted % 5 == 0)
+		float updateSpeed = 0.01F;
+		if(!worldObj.isRemote && ticksExisted % 1 == 0)// && (Math.abs(posX - prevPosX) > updateSpeed || Math.abs(posY - prevPosY) > updateSpeed || Math.abs(posZ - prevPosZ) > updateSpeed))
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
+    }
+    
+    @Override
+    public void setDead()
+    {
+    	super.setDead();
+    	for(EntityWheel wheel : wheels)
+    		if(wheel != null)
+    			wheel.setDead();	
     }
     
 	@Override
@@ -833,6 +696,12 @@ public class EntityPlane extends EntityDriveable
 	public String getBombInventoryName() 
 	{
 		return "Bombs";
+	}
+	
+	@Override
+	public String getMissileInventoryName() 
+	{
+		return "Missiles";
 	}
 	
 	@Override

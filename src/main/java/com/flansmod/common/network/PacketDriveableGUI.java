@@ -46,7 +46,7 @@ public class PacketDriveableGUI extends PacketBase
 			{
 			case 0 : //Guns
 				playerEntity.openGui(FlansMod.INSTANCE, 6, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
-			case 1 : //Bombs / Shells
+			case 1 : //Bombs / Mines
 				playerEntity.openGui(FlansMod.INSTANCE, 7, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 			case 2 : //Fuel
 				playerEntity.openGui(FlansMod.INSTANCE, 8, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
@@ -54,6 +54,8 @@ public class PacketDriveableGUI extends PacketBase
 				playerEntity.openGui(FlansMod.INSTANCE, 9, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 			case 4 : //Mecha
 				playerEntity.openGui(FlansMod.INSTANCE, 10, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
+			case 5 : //Missiles / Shells
+				playerEntity.openGui(FlansMod.INSTANCE, 12, playerEntity.worldObj, d.chunkCoordX, d.chunkCoordY, d.chunkCoordZ); break;
 			}
 		}
 	}

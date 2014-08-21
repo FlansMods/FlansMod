@@ -76,7 +76,7 @@ public class TeamsManager
 	//Configuration variables
 	// Player changeable stuff
 	public static boolean voting = false, explosions = true, driveablesBreakBlocks = true,
-			bombsEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
+			bombsEnabled = true, shellsEnabled = true, missilesEnabled = true, bulletsEnabled = true, forceAdventureMode = true, canBreakGuns = true, canBreakGlass = true,
 			armourDrops = true, vehiclesNeedFuel = true, overrideHunger = true;
 	
 	public static int weaponDrops = 1; //0 = no drops, 1 = drops, 2 = smart drops

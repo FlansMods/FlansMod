@@ -1,13 +1,16 @@
-//Naming
+// ------------------------------------------------------ Naming ------------------------------------------------------
 Name Huey Cobra
 ShortName cobra
-//Visuals
+// ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Cobra
 Model mw.Cobra
 Texture Cobra
 //Third Person Camera Distance
 CameraDistance 15.0
-//Mode : One of Plane, Heli or VTOL
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 0.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode Heli
 //Throttle
 MaxThrottle 2.5
@@ -21,51 +24,54 @@ LookDownSpeed 2
 //Roll modifiers
 RollLeftSpeed 2
 RollRightSpeed 2
-//Drag (A (maxThrottle * numPropellers) : drag ratio of 1 : 1 with mass should keep the plane going at some reasonable speed at full throttle
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
 Drag 1.0
-//Lift (A lift : mass ratio of 1 : 1 should keep the plane perfectly level at full throttle
-Lift 2.5
-//Mass (In tons)
-Mass 2.5
-//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
-MomentOfInertia 10.0
-//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
-Bounciness 1.0
+//Lift
+//Lift 2.5
 //Wheels (Fake wheels imitating skids)
 NumWheels 4
-WheelPosition 0 -22 -40 -14
-WheelPosition 1 -22 -40 14
-WheelPosition 2 32 -40 14
-WheelPosition 3 32 -40 -14
-//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
-RestingPitch 0.0
+WheelPosition 0 -32 -28 -24
+WheelPosition 1 -32 -28 24
+WheelPosition 2 48 -28 24
+WheelPosition 3 48 -28 -24
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+HeliPropeller 0 0 48 0 blades metalPropeller
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Missile
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 20
+ShootDelaySecondary 0
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary 8 0 -32 leftWing
+ShootPointPrimary 8 0 32 rightWing
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 8
+AllowAllAmmo False
+AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 5000
-//Nose and Wing Guns
-//AddGun 60 3 -5 nose minigun
-//AddGun 60 3 5 nose minigun
-ShootDelay 5
-//Bombs (Bomb delay is in 1/20ths of seconds)
-BombDelay 100
-BombPosition -30 -12 0
-//Inventory Slots
-CargoSlots 0
-BombSlots 4
-//Propeller Positions
-//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
-Propeller 0 0 56 0 core metalPropeller
-//Passengers
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 32 -4 0
 Passengers 1
 Passenger 1 48 -8 0 nose -30 30 -25 25 minigun Nose
-Pilot 32 -4 0
-//Sounds
+// ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound propStart
 StartSoundLength 20
 PropSound propSound
 PropSoundLength 30
 ShootSound PlaneShoot
 BombSound bomb
-//Recipe
+// ------------------------------------------------------ Recipe ------------------------------------------------------
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
@@ -79,15 +85,11 @@ AddRecipeParts tail 1 metalTail
 AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 green
-//Health and collision
-SetupPart core 200 -17 -7 -10 20 24 20
-SetupPart coreWheel 50 0 -20 -8 6 13 16
-SetupPart nose 100 3 -7 -10 48 18 20
-SetupPart rightWing 100 -7 -5 10 32 2 78
-SetupPart leftWing 100 -7 -5 -88 32 2 78
-SetupPart bay 200 -70 -7 -10 53 18 20
-SetupPart tail 100 -93 -5 -8 23 14 16
-SetupPart tailWheel 50 -85 -12 -2 6 7 4
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+SetupPart core 200 -24 -12 -10 96 32 20
+SetupPart skids 50 -24 -24 -20 72 2 40
+SetupPart blades 50 -24 20 -20 48 16 40
+//SetupPart rightWing 100 -7 -5 10 32 2 78
+//SetupPart leftWing 100 -7 -5 -88 32 2 78
+SetupPart tail 100 -100 -12 -9 76 24 18
 BulletDetection 10
-//Should it be shown on ICBM radar and shot at by ICBM AA turrets
-OnRadar True

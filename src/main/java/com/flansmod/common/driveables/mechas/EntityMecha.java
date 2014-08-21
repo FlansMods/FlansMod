@@ -3,7 +3,6 @@ package com.flansmod.common.driveables.mechas;
 import java.util.ArrayList;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -22,7 +21,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -1083,20 +1081,26 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
-	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) {
-		// TODO Auto-generated method stub
+	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) 
+	{
 
 	}
 
 	@Override
-	public boolean hasMouseControlMode() {
-		// TODO Auto-generated method stub
+	public boolean hasMouseControlMode() 
+	{
 		return false;
 	}
 
 	@Override
-	public String getBombInventoryName() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getBombInventoryName() 
+	{
+		return "";
+	}
+	
+	@Override
+	public String getMissileInventoryName() 
+	{
+		return "";
 	}
 }

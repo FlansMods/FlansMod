@@ -50,6 +50,7 @@ public class PlayerHitbox
 	@SideOnly(Side.CLIENT)
 	public void renderHitbox(World world, Vector3f pos)
 	{
+		/*
 		Vector3f boxOrigin = new Vector3f(pos.x + rP.x, pos.y + rP.y, pos.z + rP.z);
 		//world.spawnEntityInWorld(new EntityDebugAABB(world, boxOrigin, d, 2, 1F, 1F, 0F, axes.getYaw(), axes.getPitch(), axes.getRoll(), o));
 		
@@ -61,6 +62,7 @@ public class PlayerHitbox
 					point = axes.findLocalVectorGlobally(point);
 					world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(pos.x + rP.x + point.x, pos.y + rP.y + point.y, pos.z + rP.z + point.z), 1, 0F, 1F, 0F));
 				}
+		*/
 	}
 
 	public PlayerBulletHit raytrace(Vector3f origin, Vector3f motion) 

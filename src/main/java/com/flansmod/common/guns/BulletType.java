@@ -7,6 +7,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EnumWeaponType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
@@ -28,8 +29,8 @@ public class BulletType extends InfoType
 	public String trailParticles = "smoke";
 	public String flakParticles = "largesmoke";
 	public boolean smokeTrail = false;
-	public boolean isBomb = false;
-	public boolean isShell = false;
+	/** Exclusively for driveable usage. Replaces old isBomb and isShell booleans with something more flexible */
+	public EnumWeaponType weaponType = EnumWeaponType.NONE;
 	public float hitBoxSize = 0.5F;
 	public String hitSound;
 	public int roundsPerItem = 1;
@@ -103,9 +104,13 @@ public class BulletType extends InfoType
 			if (split[0].equals("MaxStackSize"))
 				maxStackSize = Integer.parseInt(split[1]);
 			if (split[0].equals("Bomb"))
-				isBomb = Boolean.parseBoolean(split[1].toLowerCase());
+				weaponType = EnumWeaponType.BOMB;
 			if (split[0].equals("Shell"))
-				isShell = Boolean.parseBoolean(split[1].toLowerCase());
+				weaponType = EnumWeaponType.SHELL;
+			if(split[0].equals("Missile"))
+				weaponType = EnumWeaponType.MISSILE;
+			if(split[0].equals("WeaponType"))
+				weaponType = EnumWeaponType.valueOf(split[1].toUpperCase());
 			if (split[0].equals("DropItemOnShoot"))
 				dropItemOnShoot = split[1];
 			if (split[0].equals("DropItemOnReload"))
