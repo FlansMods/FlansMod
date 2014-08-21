@@ -39,7 +39,7 @@ public class BulletType extends InfoType
 	public boolean hasLight = false;
 	public float penetratingPower = 0F;
 	/** Lock on variables. If true, then the bullet will search for a target at the moment it is fired */
-	public boolean lockOnToDriveables = false, lockOnToPlayers = false, lockOnToLivings = false;
+	public boolean lockOnToPlanes = false, lockOnToVehicles = false, lockOnToMechas = false, lockOnToPlayers = false, lockOnToLivings = false;
 	/** Lock on maximum angle for finding a target */
 	public float maxLockOnAngle = 45F;
 	/** Lock on force that pulls the bullet towards its prey */
@@ -119,8 +119,14 @@ public class BulletType extends InfoType
 				dropItemOnHit = split[1];
 			if (split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("LockOnToDriveables") || split[0].equals("LockOnToVehicles") || split[0].equals("LockOnToPlanes"))
-				lockOnToDriveables = Boolean.parseBoolean(split[1].toLowerCase());
+			if (split[0].equals("LockOnToDriveables"))
+				lockOnToPlanes = lockOnToVehicles = lockOnToMechas = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("LockOnToVehicles"))
+				lockOnToVehicles = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("LockOnToPlanes"))
+				lockOnToPlanes = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("LockOnToMechas"))
+				lockOnToMechas = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("LockOnToPlayers"))
 				lockOnToPlayers = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("LockOnToLivings"))

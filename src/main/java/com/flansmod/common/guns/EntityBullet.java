@@ -37,7 +37,10 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.BlockHit;
 import com.flansmod.common.guns.raytracing.BulletHit;
 import com.flansmod.common.guns.raytracing.DriveableHit;
@@ -166,7 +169,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 	/** Find the entity nearest to the missile's trajectory, anglewise */
 	private void getLockOnTarget() 
 	{
-		if(type.lockOnToDriveables || type.lockOnToLivings || type.lockOnToPlayers)
+		if(type.lockOnToPlanes || type.lockOnToVehicles || type.lockOnToMechas || type.lockOnToLivings || type.lockOnToPlayers)
 		{
 			Vector3f motionVec = new Vector3f(motionX, motionY, motionZ);
 			Entity closestEntity = null;
@@ -175,7 +178,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			for(Object obj : worldObj.loadedEntityList)
 			{
 				Entity entity = (Entity)obj;
-				if((type.lockOnToDriveables && entity instanceof EntityDriveable) || (type.lockOnToPlayers && entity instanceof EntityPlayer) || (type.lockOnToLivings && entity instanceof EntityLivingBase))
+				if((type.lockOnToMechas && entity instanceof EntityMecha) || (type.lockOnToVehicles && entity instanceof EntityVehicle) || (type.lockOnToPlanes && entity instanceof EntityPlane) || (type.lockOnToPlayers && entity instanceof EntityPlayer) || (type.lockOnToLivings && entity instanceof EntityLivingBase))
 				{
 					Vector3f relPosVec = new Vector3f(entity.posX - posX, entity.posY - posY, entity.posZ - posZ);
 					float angle = Math.abs(Vector3f.angle(motionVec, relPosVec));
