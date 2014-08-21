@@ -55,6 +55,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public RotatedAxes prevLooking;
 	/** Delay ticker for shooting guns */
 	public int gunDelay;
+	/** Minigun speed */
+	public float minigunSpeed;
+	
 	/** Sound delay ticker for looping sounds */
 	public int soundDelay;
 	
@@ -590,5 +593,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			setPosition(posX, posY, posZ);
 		}
 		
+	}
+
+	public float getMinigunSpeed() 
+	{
+		return minigunSpeed;
 	}
 }

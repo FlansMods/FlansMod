@@ -11,7 +11,7 @@ public class ModelCobra extends ModelPlane
 		int textureX = 512; //The x-size of the texture
 		int textureY = 256;	//The y-size of the texture
 	
-        bodyModel = new ModelRendererTurbo[8];
+        bodyModel = new ModelRendererTurbo[11];
         
         bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body section
 		bodyModel[0].addBox(-24F, 8F, -10F, 48, 32, 20);		
@@ -24,20 +24,61 @@ public class ModelCobra extends ModelPlane
 		
 		bodyModel[3] = new ModelRendererTurbo(this, 74, 92, textureX, textureY); //Cockpit front
 		bodyModel[3].addShapeBox(-64F, 24F, -10F, 24, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -6F, -6F, -2F, /* 5 */ 0F, 0F, -2F, /* 6 */ 0F, 0F, -2F, /* 7 */ -6F, -6F, -2F);
+		
+		bodyModel[4] = new ModelRendererTurbo(this, 0, 92, textureX, textureY); //Cockpit back inside
+		bodyModel[4].flip = true;
+		bodyModel[4].addShapeBox(-40F, 24F, -10F, 16, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, -2F, /* 5 */ 0F, 0F, -2F, /* 6 */ 0F, 0F, -2F, /* 7 */ 0F, 0F, -2F);
+		
+		bodyModel[5] = new ModelRendererTurbo(this, 74, 92, textureX, textureY); //Cockpit front inside
+		bodyModel[5].flip = true;
+		bodyModel[5].addShapeBox(-64F, 24F, -10F, 24, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -6F, -6F, -2F, /* 5 */ 0F, 0F, -2F, /* 6 */ 0F, 0F, -2F, /* 7 */ -6F, -6F, -2F);
 				
-		bodyModel[4] = new ModelRendererTurbo(this, 0, 130, textureX, textureY); //Top blade base
-		bodyModel[4].addTrapezoid(-24F, 40F, -10F, 48, 8, 20, 0F, -4F, ModelRendererTurbo.MR_BOTTOM);	
+		bodyModel[6] = new ModelRendererTurbo(this, 0, 130, textureX, textureY); //Top blade base
+		bodyModel[6].addTrapezoid(-24F, 40F, -10F, 48, 8, 20, 0F, -4F, ModelRendererTurbo.MR_BOTTOM);	
 		
-        bodyModel[5] = new ModelRendererTurbo(this, 0, 160, textureX, textureY); //Rear jet
-		bodyModel[5].addBox(24F, 26F, -6F, 8, 12, 12);		
+        bodyModel[7] = new ModelRendererTurbo(this, 0, 160, textureX, textureY); //Rear jet
+		bodyModel[7].addBox(24F, 26F, -6F, 8, 12, 12);		
 		
-		bodyModel[6] = new ModelRendererTurbo(this, 42, 160, textureX, textureY); //Side jet
-		bodyModel[6].addBox(0F, 26F, 10F, 24, 12, 4);		
+		bodyModel[8] = new ModelRendererTurbo(this, 42, 160, textureX, textureY); //Side jet
+		bodyModel[8].addBox(0F, 26F, 10F, 24, 12, 4);		
 
-		bodyModel[7] = new ModelRendererTurbo(this, 42, 178, textureX, textureY); //Side jet
-		bodyModel[7].addBox(0F, 26F, -14F, 24, 12, 4);		
-
+		bodyModel[9] = new ModelRendererTurbo(this, 42, 178, textureX, textureY); //Side jet
+		bodyModel[9].addBox(0F, 26F, -14F, 24, 12, 4);		
 		
+		bodyModel[10] = new ModelRendererTurbo(this, 162, 114, textureX, textureY); //Front body section insides
+		bodyModel[10].flip = true;
+		bodyModel[10].addBox(-64F, 8F, -10F, 40, 16, 20);	
+
+
+		//Right wing
+		rightWingModel = new ModelRendererTurbo[4];
+		    
+		rightWingModel[0] = new ModelRendererTurbo(this, 162, 52, textureX, textureY); //Main piece
+		rightWingModel[0].addShapeBox(-12F, 21F, -38F, 24, 2, 28, 0F, /* 0 */ -8F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -8F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);			
+        
+		rightWingModel[1] = new ModelRendererTurbo(this, 162, 84, textureX, textureY); //Tip
+		rightWingModel[1].addBox(-8F, 20F, -42F, 24, 4, 4);	
+		
+		rightWingModel[2] = new ModelRendererTurbo(this, 162, 94, textureX, textureY); //Missile launcher connecting piece
+		rightWingModel[2].addBox(-4F, 19F, -30F, 16, 2, 2);	
+		
+		rightWingModel[3] = new ModelRendererTurbo(this, 162, 100, textureX, textureY); //Missile launcher box
+		rightWingModel[3].addBox(-8F, 13F, -32F, 24, 6, 6);	
+		
+		//Left wing
+		leftWingModel = new ModelRendererTurbo[4];
+		    
+		leftWingModel[0] = new ModelRendererTurbo(this, 268, 52, textureX, textureY); //Main piece
+		leftWingModel[0].addShapeBox(-12F, 21F, 10F, 24, 2, 28, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -8F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -8F, 0F, 0F);			
+        
+		leftWingModel[1] = new ModelRendererTurbo(this, 268, 84, textureX, textureY); //Tip
+		leftWingModel[1].addBox(-8F, 20F, 38F, 24, 4, 4);	
+		
+		leftWingModel[2] = new ModelRendererTurbo(this, 268, 94, textureX, textureY); //Missile launcher connecting piece
+		leftWingModel[2].addBox(-4F, 19F, 28F, 16, 2, 2);	
+		
+		leftWingModel[3] = new ModelRendererTurbo(this, 268, 100, textureX, textureY); //Missile launcher box
+		leftWingModel[3].addBox(-8F, 13F, 26F, 24, 6, 6);	
 		
 		//Skids
 		skidsModel = new ModelRendererTurbo[6];

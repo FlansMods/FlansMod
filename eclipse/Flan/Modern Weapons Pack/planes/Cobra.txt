@@ -50,8 +50,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 8 0 -32 leftWing
-ShootPointPrimary 8 0 32 rightWing
+ShootPointPrimary 12 -4 -29 rightWing
+ShootPointPrimary 12 -4 29 leftWing
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 0
@@ -63,7 +63,7 @@ FuelTankSize 5000
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 32 -4 0
 Passengers 1
-Passenger 1 48 -8 0 nose -30 30 -25 25 minigun Nose
+Passenger 1 56 -8 0 nose -30 30 -30 0 minigun Nose
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound propStart
 StartSoundLength 20
