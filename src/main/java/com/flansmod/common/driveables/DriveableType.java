@@ -86,7 +86,7 @@ public class DriveableType extends InfoType
 	public Vector3f turretOrigin = new Vector3f();
 	
 	/** Wheel positions */
-	public DriveablePosition[] wheelPositions;
+	public DriveablePosition[] wheelPositions = new DriveablePosition[4];
 	/** Strength of springs connecting car to wheels */
 	public float wheelSpringStrength = 0.5F;
 	/** The wheel radius for onGround checks */
@@ -185,8 +185,6 @@ public class DriveableType extends InfoType
             //Wheels
             if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
             {
-            	if(wheelPositions == null)
-            		wheelPositions = new DriveablePosition[4];
             	wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
             }
             if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))

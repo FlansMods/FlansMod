@@ -50,8 +50,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     public float wheelsAngle;
     /** Delayer for door button */
     public int toggleTimer = 0;
-    /** Wheel entities for collision and motion calculation */
-    public EntityWheel[] wheels;
     
     public EntityVehicle(World world)
     {
