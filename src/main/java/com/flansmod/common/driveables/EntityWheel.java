@@ -79,11 +79,11 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void onUpdate()
 	{
-		super.onUpdate();
+		//super.onUpdate();
 		
-		prevPosX = posX;
-		prevPosY = posY;
-		prevPosZ = posZ;
+		//prevPosX = posX;
+		//prevPosY = posY;
+		//prevPosZ = posZ;
 		
 		//If on the client and the vehicle parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundVehicle)
@@ -100,6 +100,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		
 		if(vehicle == null)
 			return;
+		
+		if(!addedToChunk)
+			worldObj.spawnEntityInWorld(this);
 		/*
 		//Update angles
 		rotationYaw = vehicle.rotationYaw;

@@ -90,6 +90,7 @@ public class EntityPlane extends EntityDriveable
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
 		super.writeEntityToNBT(tag);
+		tag.setTag("Pos", this.newDoubleNBTList(new double[] {this.posX, this.posY + (double)1D, this.posZ}));
         tag.setBoolean("VarGear", varGear);
         tag.setBoolean("VarDoor", varDoor);
         tag.setBoolean("VarWing", varWing);
@@ -318,6 +319,18 @@ public class EntityPlane extends EntityDriveable
         	return;
         }
         
+        if(!worldObj.isRemote)
+        {
+        	for(int i = 0; i < type.wheelPositions.length; i++)
+        	{
+        		if(wheels[i] == null || !wheels[i].addedToChunk)
+        		{
+        			wheels[i] = new EntityWheel(worldObj, this, i);
+    				worldObj.spawnEntityInWorld(wheels[i]);
+        		}
+        	}
+        }
+        
         //Work out if this is the client side and the player is driving
         boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
                 
@@ -464,10 +477,13 @@ public class EntityPlane extends EntityDriveable
 			motionY *= drag;
 			motionZ *= drag;
 			
-			moveEntity(motionX, motionY, motionZ);
+			//moveEntity(motionX, motionY, motionZ);
 			for(EntityWheel wheel : wheels)
 				if(wheel != null)
+				{
+					wheel.prevPosY = wheel.posY;
 					wheel.moveEntity(motionX, motionY, motionZ);
+				}
 			break;
 			
 		case PLANE :
@@ -484,7 +500,7 @@ public class EntityPlane extends EntityDriveable
 		}
 		
 		//Update wheels
-		Vector3f amountToMoveCar = new Vector3f();//motionX, motionY, motionZ);
+		Vector3f amountToMoveCar = new Vector3f(motionX, motionY, motionZ);
 					
 		type.wheelSpringStrength = 0.125F;
 		for(int i = 0; i < 2; i++)
@@ -542,8 +558,13 @@ public class EntityPlane extends EntityDriveable
 					amountToMoveCar.x -= (newWheelPos.x - currentWheelPos.x) * (1F - wheelProportion);
 					amountToMoveCar.y -= (newWheelPos.y - currentWheelPos.y) * (1F - wheelProportion);
 					amountToMoveCar.z -= (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);
+					
+					//The difference between how much the wheel moved and how much it was meant to move. i.e. the reaction force from the block
+					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.154F;
 													
 					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
+					
+
 				}
 			}
 		

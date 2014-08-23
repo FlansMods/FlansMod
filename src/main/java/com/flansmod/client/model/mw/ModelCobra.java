@@ -125,8 +125,9 @@ public class ModelCobra extends ModelPlane
 		heliMainRotorModels[0][2].addBox(4F, 56F, -2F, 72, 1, 8);	
 		
 		heliMainRotorModels[0][3] = new ModelRendererTurbo(this, 0, 223, textureX, textureY); //Blade
-		heliMainRotorModels[0][3].addBox(-76F, 56F, -6F, 72, 1, 8);	
-		
+		heliMainRotorModels[0][3].addBox(4F, 56F, -2F, 72, 1, 8);	
+		heliMainRotorModels[0][3].rotateAngleY = (float)Math.PI;
+				
 		//The helicopter rotor origins for rendering. Better than the old propeller rotation point code
 		heliMainRotorOrigins = new Vector3f[] { new Vector3f(0F, 48F / 16F, 0F) }; 
 		
