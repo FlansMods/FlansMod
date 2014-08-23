@@ -195,19 +195,20 @@ public class FlansModClient extends FlansMod
 
         return x + dT * f3;
     }
-	
+    	
 	//Handle player hiding / name tag removal for teams
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
 	{
+		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
+		
 		//Render debug boxes for player snapshots
 		if(FlansMod.DEBUG)
 		{
-			PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
 			if(data.snapshots[0] != null)
 				data.snapshots[0].renderSnapshot();
 		}
-		
+				
 		//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, zombieSkin);
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
