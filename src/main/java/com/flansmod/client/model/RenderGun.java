@@ -209,7 +209,7 @@ public class RenderGun implements IItemRenderer
 							}
 							case BULLPUP :
 							{
-								GL11.glRotatef(90F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(70F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(10F * reloadRotate, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, -0.2F * reloadRotate, 0F);
 								break;
