@@ -225,7 +225,7 @@ public class GuiDriveableController extends GuiScreen
 			{
 				plane.pressKey(14, player);
 			}				
-			if(FlansMod.proxy.keyDown(KeyInputHandler.wingKey.getKeyCode()))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.modeKey.getKeyCode()))
 			{
 				plane.pressKey(15, player);
 			}				

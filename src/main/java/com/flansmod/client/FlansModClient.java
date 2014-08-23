@@ -86,7 +86,7 @@ public class FlansModClient extends FlansMod
 	/** Whether the player has received the vehicle tutorial text */
 	public static boolean doneTutorial = false;
 	/** Whether the player is in mouse control mode */
-	public static boolean controlModeMouse = false;
+	public static boolean controlModeMouse = true;
 	/** A delayer on the mouse control switch */
 	public static int controlModeSwitchTimer = 20;
 	

@@ -47,8 +47,6 @@ public class EntityPlane extends EntityDriveable
     public int toggleTimer = 0;
     /** Current plane mode */
     public EnumPlaneMode mode;
-    /** The wheels on this plane */
-	public EntityWheel[] wheels;
 	
     public EntityPlane(World world)
     {
@@ -59,6 +57,9 @@ public class EntityPlane extends EntityDriveable
 	{
 		super(world, type, data);
 		setPosition(x, y, z);
+		prevPosX = x;
+		prevPosY = y;
+		prevPosZ = z;
 		initType(type, false);
 	}
     
@@ -74,16 +75,6 @@ public class EntityPlane extends EntityDriveable
 	{
 		super.initType(type, clientSide);
 		mode = (((PlaneType)type).mode == EnumPlaneMode.HELI ? EnumPlaneMode.HELI : EnumPlaneMode.PLANE);
-		wheels = new EntityWheel[4];
-		for(int i = 0; i < 4; i++)
-		{
-			if(!clientSide)
-			{
-				wheels[i] = new EntityWheel(worldObj, this, i);
-				worldObj.spawnEntityInWorld(wheels[i]);
-			}
-		}
-		stepHeight = ((PlaneType)type).wheelStepHeight;
 	}
 	
 	@Override
@@ -171,14 +162,14 @@ public class EntityPlane extends EntityDriveable
 		{
 			case 0 : //Accelerate : Increase the throttle, up to 1.
 			{
-				throttle += 0.01F;
+				throttle += 0.002F;
 				if(throttle > 1F)
 					throttle = 1F;
 				return true;
 			}
 			case 1 : //Decelerate : Decrease the throttle, down to -1, or 0 if the plane cannot reverse
 			{
-				throttle -= 0.01F;
+				throttle -= 0.005F;
 				if(throttle < -1F)
 					throttle = -1F;
 				if(throttle < 0F && type.maxNegativeThrottle == 0F)
@@ -267,11 +258,13 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 15 : // Wing
 			{
-				if(toggleTimer <= 0)
+				if(toggleTimer <= 0 && (type.hasWing || type.mode == EnumPlaneMode.VTOL))
 				{
+					if(mode == EnumPlaneMode.HELI)
+						mode = EnumPlaneMode.PLANE;
+					else mode = EnumPlaneMode.HELI;
 					varWing = !varWing;
-					if(type.hasWing)
-						player.addChatMessage(new ChatComponentText("Toggling wings"));
+					player.addChatMessage(new ChatComponentText(mode == EnumPlaneMode.HELI ? "Entering hover mode" : "Entering plane mode"));
 					toggleTimer = 10;
 					FlansMod.getPacketHandler().sendToServer(new PacketDriveableControl(this));
 				}
@@ -317,18 +310,6 @@ public class EntityPlane extends EntityDriveable
         {
         	FlansMod.log("Plane type null. Not ticking plane");
         	return;
-        }
-        
-        if(!worldObj.isRemote)
-        {
-        	for(int i = 0; i < type.wheelPositions.length; i++)
-        	{
-        		if(wheels[i] == null || !wheels[i].addedToChunk)
-        		{
-        			wheels[i] = new EntityWheel(worldObj, this, i);
-    				worldObj.spawnEntityInWorld(wheels[i]);
-        		}
-        	}
         }
         
         //Work out if this is the client side and the player is driving
@@ -415,11 +396,17 @@ public class EntityPlane extends EntityDriveable
 		float lastTickSpeed = (float)getSpeedXYZ();
 		
 		//Alter angles
-		float sensitivityAdjust = 0.5F / (float)Math.max(1D, 5D * throttle);
+		//Sensitivity function
+		float sensitivityAdjust = (throttle > 0.5F ? 1.5F - throttle : 4F * throttle - 1F); 
+		if(sensitivityAdjust < 0F)
+			sensitivityAdjust = 0F;
+		//Scalar
+		sensitivityAdjust *= 0.125F;
+		
 		float yaw = flapsYaw * (flapsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * sensitivityAdjust;
 		
-		if(throttle < 0.2F)
-			sensitivityAdjust = throttle * 2.5F;
+		//if(throttle < 0.2F)
+		//	sensitivityAdjust = throttle * 2.5F;
 		//Pitch according to the sum of flapsPitchLeft and flapsPitchRight / 2
 		float flapsPitch = (flapsPitchLeft + flapsPitchRight) / 2F;
 		float pitch = flapsPitch * (flapsPitch > 0 ? type.lookUpModifier : type.lookDownModifier) * sensitivityAdjust;
@@ -442,15 +429,29 @@ public class EntityPlane extends EntityDriveable
 		float drag = 1F - (0.05F * type.drag);
 		float wobbleFactor = 0F;//.005F;
 		
+		float throttleScaled = 0.01F * (type.maxThrottle + (data.engine == null ? 0 : data.engine.engineSpeed));
+		int numPropsWorking = 0;
+		int numProps = 0;
+		
 		switch(mode)
 		{
 		case HELI :
 			
+			//Count the number of working propellers
+			for(Propeller prop : type.heliPropellers)
+				if(isPartIntact(prop.planePart))
+					numPropsWorking++;
+			numProps = type.heliPropellers.size();
+			
+			//Got no propellers. Derp.
+			if(numProps == 0)
+				break;
+			
 			Vector3f up = axes.getYAxis();
 			
-			float throttleScale = 0.01F * type.maxThrottle;
+			throttleScaled *= numPropsWorking / numProps;
 						
-			float upwardsForce = throttle * throttleScale + (g - throttleScale / 2F);
+			float upwardsForce = throttle * throttleScaled + (g - throttleScaled / 2F);
 			if(throttle < 0.5F)
 				upwardsForce = g * throttle * 2F;
 			
@@ -468,43 +469,88 @@ public class EntityPlane extends EntityDriveable
 			motionY -= g;
 			
 			//Apply wobble
-			motionX += rand.nextGaussian() * wobbleFactor;
-			motionY += rand.nextGaussian() * wobbleFactor;
-			motionZ += rand.nextGaussian() * wobbleFactor;
+			//motionX += rand.nextGaussian() * wobbleFactor;
+			//motionY += rand.nextGaussian() * wobbleFactor;
+			//motionZ += rand.nextGaussian() * wobbleFactor;
 			
 			//Apply drag
 			motionX *= drag;
 			motionY *= drag;
 			motionZ *= drag;
-			
-			//moveEntity(motionX, motionY, motionZ);
-			for(EntityWheel wheel : wheels)
-				if(wheel != null)
-				{
-					wheel.prevPosY = wheel.posY;
-					wheel.moveEntity(motionX, motionY, motionZ);
-				}
+
 			break;
 			
 		case PLANE :
-
+			//Count the number of working propellers
+			for(Propeller prop : type.propellers)
+				if(isPartIntact(prop.planePart))
+					numPropsWorking++;
+			numProps = type.propellers.size();
+			
+			//Got no propellers. Derp.
+			if(numProps == 0)
+				break;
 			
 			//Apply forces
-			Vector3f forwards = axes.getXAxis();
+			Vector3f forwards = (Vector3f)axes.getXAxis().normalise();
 			
+			//Sanity limiter
+			if(lastTickSpeed > 2F)
+				lastTickSpeed = 2F;
 			
+			float newSpeed = lastTickSpeed + throttleScaled * 2F;
 			
+			//Calculate the amount to alter motion by
+			float proportionOfMotionToCorrect = 2F * throttle - 0.5F;
+			if(proportionOfMotionToCorrect < 0F)
+				proportionOfMotionToCorrect = 0F;
+			if(proportionOfMotionToCorrect > 0.5F)
+				proportionOfMotionToCorrect = 0.5F;
+			
+			//Apply gravity
+			motionY -= g;
+			
+			//Apply lift
+			float amountOfLift = 2F * g * throttle;
+			if(amountOfLift > g)
+				amountOfLift = g;
+			
+			motionY += amountOfLift;
+			
+			//Cut out some motion for correction
+			motionX *= 1F - proportionOfMotionToCorrect;
+			motionY *= 1F - proportionOfMotionToCorrect;
+			motionZ *= 1F - proportionOfMotionToCorrect;
+			
+			//Add the corrected motion
+			motionX += proportionOfMotionToCorrect * newSpeed * forwards.x;
+			motionY += proportionOfMotionToCorrect * newSpeed * forwards.y;
+			motionZ += proportionOfMotionToCorrect * newSpeed * forwards.z;
+			
+			//Apply drag
+			motionX *= drag;
+			motionY *= drag;
+			motionZ *= drag;
 			break;
 		default:
 			break;
 		}
 		
+		//Move the wheels first
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel != null)
+			{
+				wheel.prevPosY = wheel.posY;
+				wheel.moveEntity(motionX, motionY, motionZ);
+			}
+		}
+		
 		//Update wheels
-		Vector3f amountToMoveCar = new Vector3f(motionX, motionY, motionZ);
-					
-		type.wheelSpringStrength = 0.125F;
 		for(int i = 0; i < 2; i++)
 		{
+			Vector3f amountToMoveCar = new Vector3f(motionX / 2F, motionY / 2F, motionZ / 2F);
+			
 			for(EntityWheel wheel : wheels)
 			{
 				if(wheel == null)
@@ -518,7 +564,7 @@ public class EntityPlane extends EntityDriveable
 				wheel.rotationYaw = axes.getYaw();
 				
 				//Pull wheels towards car
-				Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.ID]);
+				Vector3f targetWheelPos = axes.findLocalVectorGlobally(getPlaneType().wheelPositions[wheel.ID].position);
 				Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 				
 				float targetWheelLength = targetWheelPos.length();
@@ -538,6 +584,8 @@ public class EntityPlane extends EntityDriveable
 					mat.m10 = currentWheelPos.y;
 					mat.m20 = currentWheelPos.z;
 					mat.rotate(dAngle * type.wheelSpringStrength, rotateAround);
+					
+					axes.rotateGlobal(-dAngle * type.wheelSpringStrength, rotateAround);
 										
 					Vector3f newWheelPos = new Vector3f(mat.m00, mat.m10, mat.m20);
 					newWheelPos.normalise().scale(newLength);
@@ -560,16 +608,17 @@ public class EntityPlane extends EntityDriveable
 					amountToMoveCar.z -= (newWheelPos.z - currentWheelPos.z) * (1F - wheelProportion);
 					
 					//The difference between how much the wheel moved and how much it was meant to move. i.e. the reaction force from the block
-					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.154F;
+					//amountToMoveCar.x += ((wheel.posX - wheel.prevPosX) - (motionX)) * 0.616F / wheels.length;
+					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.49F / wheels.length;
+					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 													
 					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
-					
 
 				}
 			}
 		
-		
-		moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+			moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+			
 		}
 				
 		//Fuel Handling

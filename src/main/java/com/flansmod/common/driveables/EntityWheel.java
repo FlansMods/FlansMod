@@ -8,6 +8,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
@@ -43,22 +45,28 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		initPosition();
 	}
 	
-	//TODO : Make wheels more generic
 	public void initPosition()
 	{
-		if(vehicle instanceof EntityVehicle)
-		{
-			Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(((EntityVehicle)vehicle).getVehicleType().wheelPositions[ID]);
-			setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
-			stepHeight = ((EntityVehicle)vehicle).getVehicleType().wheelStepHeight;
-		}
-		else if(vehicle instanceof EntityPlane)
-		{
-			Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(((EntityPlane)vehicle).getPlaneType().wheelPositions[ID]);
-			setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
-			stepHeight = ((EntityPlane)vehicle).getPlaneType().wheelStepHeight;
-		}
+		Vector3f wheelVector = vehicle.axes.findLocalVectorGlobally(vehicle.getDriveableType().wheelPositions[ID].position);
+		setPosition(vehicle.posX + wheelVector.x, vehicle.posY + wheelVector.y, vehicle.posZ + wheelVector.z);
+		stepHeight = vehicle.getDriveableType().wheelStepHeight;
+		
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
 	}
+	
+	@Override
+    protected void fall(float k)
+    {
+		if(!foundVehicle)
+			return;
+        if (k <= 0) 
+        	return;
+        int i = MathHelper.ceiling_float_int(k - 3F);
+        if(i > 0)
+        	vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.fall, i);
+    }
 
 	@Override
 	protected void entityInit() 
@@ -92,10 +100,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			if(vehicle == null)
 				return;
 			foundVehicle = true;
-			if(vehicle instanceof EntityVehicle)
-				((EntityVehicle)vehicle).wheels[ID] = this;
-			else if(vehicle instanceof EntityPlane)
-				((EntityPlane)vehicle).wheels[ID] = this;
+			vehicle.wheels[ID] = this;
 		}	
 		
 		if(vehicle == null)

@@ -82,16 +82,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	protected void initType(DriveableType type, boolean clientSide)
 	{
 		super.initType(type, clientSide);
-		wheels = new EntityWheel[4];
-		for(int i = 0; i < 4; i++)
-		{
-			if(!clientSide)
-			{
-				wheels[i] = new EntityWheel(worldObj, this, i);
-				worldObj.spawnEntityInWorld(wheels[i]);
-			}
-		}
-		stepHeight = ((VehicleType)type).wheelStepHeight;
 	}
 	
 	@Override
@@ -282,19 +272,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
         	FlansMod.log("Vehicle type null. Not ticking vehicle");
         	return;
         }
-        
-        if(!worldObj.isRemote)
-        {
-        	for(int i = 0; i < 4; i++)
-        	{
-        		if(wheels[i] == null || !wheels[i].addedToChunk)
-        		{
-        			wheels[i] = new EntityWheel(worldObj, this, i);
-    				worldObj.spawnEntityInWorld(wheels[i]);
-        		}
-        	}
-        }
-        
+          
         //Work out if this is the client side and the player is driving
         boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
                 
@@ -435,7 +413,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
 			
 			//Pull wheels towards car
-			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.ID]);
+			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.ID].position);
 			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 			
 			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
@@ -599,45 +577,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
         return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
 	}
-	
-	
-    
-    private void applyThrust(DriveablePart part, float thrust)
-    {
-    	if(part.maxHealth > 0 && part.health <= 0)
-    		return;
-    	if(part.box == null)
-    		return;
-    	
-    	DriveableData data = getDriveableData();
-    	
-		//If the player driving this is in creative, then we can thrust, no matter what
-		boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-		//Otherwise, check the fuel tanks!
-		if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
-		{
-			//Find the block we are resting on
-			Vector3f midPoint = part.box.getCentre();
-	    	Vector3f globalMidPoint = axes.findLocalVectorGlobally(midPoint);
-	    	
-	    	int x = MathHelper.floor_double(posX + globalMidPoint.x);
-	    	int y = MathHelper.floor_double(posY + globalMidPoint.y - getVehicleType().wheelStepHeight);
-	    	int z = MathHelper.floor_double(posZ + globalMidPoint.z);
-	    	
-	    	//If its solid on top
-	    	if(!worldObj.isAirBlock(x, y, z))
-	    	{
-	    		//Apply the thrust
-	    		Vector3f xAxis = axes.getXAxis();
-	    		applyForce(globalMidPoint, (Vector3f)new Vector3f(xAxis.x, 0F, xAxis.z).scale(thrust));				
-	    	}
-	    	
-			//If we can't thrust creatively, we must thrust using fuel. Nom.
-			if(!canThrustCreatively)
-				data.fuelInTank -= data.engine.fuelConsumption * throttle;
-		}
-    }
-    
+	    
     @Override
     public boolean landVehicle()
     {

@@ -190,7 +190,7 @@ public class ClientProxy extends CommonProxy
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasDoor)
 					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.doorKey.getKeyCode()) + " to switch the doors"));
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasWing)
-					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.wingKey.getKeyCode()) + " to switch the wings"));
+					player.addChatComponentMessage(new ChatComponentText("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch the wings"));
 			}
 		}
 	}

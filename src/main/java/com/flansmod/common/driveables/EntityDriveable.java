@@ -62,6 +62,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** The throttle, in the range -1, 1 is multiplied by the maxThrottle (or maxNegativeThrottle) from the plane type to obtain the thrust */
 	public float throttle;
+    /** The wheels on this plane */
+	public EntityWheel[] wheels;
 	
 	public boolean fuelling;
 	/** Extra prevRoation field for smoothness in all 3 rotational axes */
@@ -117,6 +119,16 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnEntityInWorld(seats[i]);
 			}
 		}
+		wheels = new EntityWheel[4];
+		for(int i = 0; i < 4; i++)
+		{
+			if(!clientSide)
+			{
+				wheels[i] = new EntityWheel(worldObj, this, i);
+				worldObj.spawnEntityInWorld(wheels[i]);
+			}
+		}
+		stepHeight = type.wheelStepHeight;
 		yOffset = type.yOffset;
 		
 		//Register Plane to Radar on Spawning
@@ -391,32 +403,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			shoot(true);
 			return true;
 		}
-		/*
-		if(!worldObj.isRemote && bombDelay <= 0 && TeamsManager.bombsEnabled)
-		{
-			int slot = -1;
-			int bombType = 0;
-			for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
-			{
-				ItemStack bomb = driveableData.getStackInSlot(i);
-				if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)bomb.getItem()).type))
-				{
-					slot = i;
-				}
-			}
-			
-			if(slot != -1)
-			{
-				Vec3 bombVec = rotate(type.bombPosition).toVec3();
-				worldObj.spawnEntityInWorld(((ItemBullet)driveableData.getStackInSlot(slot).getItem()).getEntity(worldObj, bombVec.addVector(posX, posY, posZ), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLiving)riddenByEntity, 1, driveableData.getStackInSlot(slot).getItemDamage(), type));
-				if(type.shootSoundSecondary != null)
-					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSoundSecondary, false);					
-				if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-					driveableData.decrStackSize(slot, 1);
-				bombDelay = type.planeBombDelay;
-			}
-			return true;
-		}*/
 		return false;
 	}
 	
@@ -601,6 +587,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     				worldObj.spawnEntityInWorld(seats[i]);
         		}
         	}
+        	for(int i = 0; i < type.wheelPositions.length; i++)
+        	{
+        		if(wheels[i] == null || !wheels[i].addedToChunk)
+        		{
+        			wheels[i] = new EntityWheel(worldObj, this, i);
+    				worldObj.spawnEntityInWorld(wheels[i]);
+        		}
+        	}
         }
         
         for(DriveablePart part : getDriveableData().parts.values())
@@ -671,7 +665,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
 		if(seats[0] != null && seats[0].riddenByEntity == null)
 		{
-			throttle *= 0.9F;
+			throttle *= 0.96F;
 		}
 		
 		//Check if shooting
@@ -693,9 +687,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     {
         if (k <= 0) 
         	return;
-        super.fall(k);
+        //super.fall(k);
         int i = MathHelper.ceiling_float_int(k - 3F);
 
+        if(i > 0)
+        	attackPart(EnumDriveablePart.core, DamageSource.fall, i);
+        
+        /*
         if (i > 0)
         {
             if (i > 4)
@@ -716,7 +714,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
                 this.playSound(stepSound.getStepResourcePath(), stepSound.getVolume() * 0.5F, stepSound.getPitch() * 0.75F);
             }
         }
+        */
     }
+	
+	public void attackPart(EnumDriveablePart part, DamageSource source, float damage)
+	{
+		
+	}
 		
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */
 	public Vector3f rotate(Vector3f inVec)
@@ -872,47 +876,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public double getSpeedXZ()
 	{
 		return Math.sqrt(motionX * motionX + motionZ * motionZ);
-	}
-	
-	/** Returns the kinetic energy of the driveable */
-	public double getKineticEnergy()
-	{
-		return 0.5D * getDriveableType().mass * getSpeedXYZ();
-	}
-		
-	/** Applies both a translational and rotational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
-	public void applyForce(Vector3f forceOrigin, Vector3f forceVector)
-	{
-		//Apply the translational force
-		applyTranslationalForce(forceOrigin, forceVector);
-		//And then the rotational force
-		applyRotationalForce(forceOrigin, forceVector);
-	}
-	
-	/** Applies a rotational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
-	public void applyRotationalForce(Vector3f forceOrigin, Vector3f forceVector)
-	{
-		Vector3f torqueVector = Vector3f.cross((Vector3f)forceVector.scale(1), forceOrigin, null);
-		applyTorque(torqueVector);
-	}
-	
-	/** Applies a rotational torque */
-	public void applyTorque(Vector3f torqueVector)
-	{
-		float deltaTime = 1F / 20F;
-		float momentOfInertia = getDriveableType().momentOfInertia / (landVehicle() ? 250 : 100);
-		Vector3f.add(angularVelocity, (Vector3f)torqueVector.scale(deltaTime * 1F / momentOfInertia), angularVelocity);
-	}
-	
-	/** Applies a translational force at forceOrigin along forceVector with magnitude that of forceVector for the duration of the tick in which it is called */
-	public void applyTranslationalForce(Vector3f forceOrigin, Vector3f forceVector)
-	{
-		float deltaTime = 1F / 20F;
-		Vector3f accelerationVector = (Vector3f)forceVector.scale(1F / getDriveableType().mass);
-		//Apply v=u+at
-		motionX += accelerationVector.x * deltaTime;
-		motionY += accelerationVector.y * deltaTime;
-		motionZ += accelerationVector.z * deltaTime;
 	}
 	
 	/** To be overriden by vehicles to get alternate collision system */

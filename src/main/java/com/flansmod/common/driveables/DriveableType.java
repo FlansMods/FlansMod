@@ -41,6 +41,8 @@ public class DriveableType extends InfoType
 	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
+	
+	
 	//Weapon variables
 	/** The weapon type assigned to left mouse */
 	public EnumWeaponType primary = EnumWeaponType.NONE, secondary = EnumWeaponType.NONE;
@@ -83,22 +85,21 @@ public class DriveableType extends InfoType
 	/** The origin of the tank turret */
 	public Vector3f turretOrigin = new Vector3f();
 	
-	/** Mass in tons */
-	public float mass = 1F;
+	/** Wheel positions */
+	public DriveablePosition[] wheelPositions;
+	/** Strength of springs connecting car to wheels */
+	public float wheelSpringStrength = 0.5F;
+	/** The wheel radius for onGround checks */
+	public float wheelStepHeight = 1.0F;
+	
 	/** Coefficient of drag */
 	public float drag = 1F;
-	/** Moment of inertia in metre tons or whatnot */
-	public float momentOfInertia = 1F;
-	/** Couldn't decide on the best value for this constant, so now it is variable. 
-	 * This scales the push-out-of-blocks force exerted on driveables */
-	public float bounciness = 0.4F;
 	
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
 
 	/** Plane is shown on ICBM Radar and engaged by AA Guns */
     public boolean onRadar = false;
-
 	
 	/** Sounds */
 	//TODO : Overhaul sounds
@@ -134,6 +135,24 @@ public class DriveableType extends InfoType
 			{
 				numPassengers = Integer.parseInt(split[1]);
 				seats = new Seat[numPassengers + 1];
+				break;
+			}
+		}
+		//Make sure NumWheels is read before anything else
+		for(String line : file.lines)
+		{
+			if(line == null)
+				break;
+			if(line.startsWith("//"))
+				continue;
+			String[] split = line.split(" ");
+			if(split.length < 2)
+				continue;
+			
+			if (split[0].equals("NumWheels"))
+			{
+				wheelPositions = new DriveablePosition[Integer.parseInt(split[1])];
+				break;
 			}
 		}
 		types.add(this);
@@ -158,17 +177,23 @@ public class DriveableType extends InfoType
 				maxThrottle = Float.parseFloat(split[1]);
 			if(split[0].equals("MaxNegativeThrottle"))
 				maxNegativeThrottle = Float.parseFloat(split[1]);
-			if(split[0].equals("Mass"))
-				mass = Float.parseFloat(split[1]);
-			if(split[0].equals("MomentOfInertia"))
-				momentOfInertia = Float.parseFloat(split[1]);
 			if(split[0].equals("Drag"))
 				drag = Float.parseFloat(split[1]);
-			if(split[0].equals("Bounciness"))
-				bounciness = Float.parseFloat(split[1]);
             if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
             	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
-			
+            
+            //Wheels
+            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
+            {
+            	if(wheelPositions == null)
+            		wheelPositions = new DriveablePosition[4];
+            	wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
+            }
+            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
+            	wheelStepHeight = Float.parseFloat(split[1]);            
+            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
+                wheelSpringStrength = Float.parseFloat(split[1]);
+            
 			//Cargo / Payload
 			if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);

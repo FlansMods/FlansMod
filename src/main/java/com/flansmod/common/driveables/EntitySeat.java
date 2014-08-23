@@ -44,7 +44,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public EntityDriveable driveable;
 	
 	@SideOnly(Side.CLIENT)
-	public float playerRoll;
+	public float playerRoll, prevPlayerRoll;
 	
 	public Seat seatInfo;
 	public boolean driver;
@@ -232,7 +232,10 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			//If the entity is a player, roll its view accordingly
 			if(worldObj.isRemote)
+			{
+				prevPlayerRoll = playerRoll;
 				playerRoll = -globalLookAxes.getRoll();
+			}		
 		}
 	}
 	
@@ -552,6 +555,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getPlayerRoll() 
 	{
+		for(; playerRoll - prevPlayerRoll > 180F; playerRoll -= 360F) ;
+		for(; playerRoll - prevPlayerRoll < -180F; playerRoll += 360F) ;
 		return playerRoll;
 	}
 	

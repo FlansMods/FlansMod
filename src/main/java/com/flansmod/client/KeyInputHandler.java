@@ -42,7 +42,7 @@ public class KeyInputHandler
 	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "Flan's Mod");
     public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
     public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
-    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "Flan's Mod");
+    public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
     public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
@@ -70,7 +70,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(rightRollKey);
 		ClientRegistry.registerKeyBinding(gearKey);
 		ClientRegistry.registerKeyBinding(doorKey);
-		ClientRegistry.registerKeyBinding(wingKey);
+		ClientRegistry.registerKeyBinding(modeKey);
 		ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
@@ -172,7 +172,7 @@ public class KeyInputHandler
 				riding.pressKey(13, player);
 			if(doorKey.isPressed())
 				riding.pressKey(14, player);
-			if(wingKey.isPressed())
+			if(modeKey.isPressed())
 				riding.pressKey(15, player);
 			if(trimKey.isPressed())
 				riding.pressKey(16, player);

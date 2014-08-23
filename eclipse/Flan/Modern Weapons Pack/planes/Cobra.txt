@@ -34,6 +34,7 @@ WheelPosition 0 -32 -28 -24
 WheelPosition 1 -32 -28 24
 WheelPosition 2 48 -28 24
 WheelPosition 3 48 -28 -24
+WheelSpringStrength 0.125
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
 HeliPropeller 0 0 48 0 blades metalPropeller
 // ------------------------------------------------------ Weaponry ------------------------------------------------------

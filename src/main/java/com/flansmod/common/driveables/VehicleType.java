@@ -14,18 +14,12 @@ public class VehicleType extends DriveableType
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
 	/** If true, this will crush any living entity under the wheels */
 	public boolean squashMobs = false;
-	/** The wheel radius for onGround checks */
-	public float wheelStepHeight = 1.0F;
 	/** If this is true, the vehicle will drive from all wheels */
 	public boolean fourWheelDrive = false;
 	/** If true, then wheels will rotate as the vehicle drives */
 	public boolean rotateWheels = false;
 	/** Tank movement system. Uses track collision box for thrust, rather than the wheels */
 	public boolean tank = false;
-	/** Wheel positions */
-	public Vector3f[] wheelPositions = new Vector3f[4];
-	/** Strength of springs connecting car to wheels */
-	public float wheelSpringStrength = 0.5F;
 	
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
@@ -63,14 +57,6 @@ public class VehicleType extends DriveableType
             	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
             if(split[0].equals("Tank") || split[0].equals("TankMode"))
             	tank = Boolean.parseBoolean(split[1].toLowerCase());
-           
-            //Wheels
-            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
-            	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
-            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
-            	wheelStepHeight = Float.parseFloat(split[1]);            
-            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
-                wheelSpringStrength = Float.parseFloat(split[1]);
             
             //Visuals
             if(split[0].equals("HasDoor"))

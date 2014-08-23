@@ -37,12 +37,6 @@ public class PlaneType extends DriveableType
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
 	/** The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly */
 	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
-	/** Wheel positions */
-	public Vector3f[] wheelPositions;
-	/** Strength of springs connecting car to wheels */
-	public float wheelSpringStrength = 0.5F;
-	/** The wheel radius for onGround checks */
-	public float wheelStepHeight = 1.0F;
 				
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
@@ -64,23 +58,6 @@ public class PlaneType extends DriveableType
     public void preRead(TypeFile file)
     {
     	super.preRead(file);
-		//Make sure NumWheels is read before anything else
-		for(String line : file.lines)
-		{
-			if(line == null)
-				break;
-			if(line.startsWith("//"))
-				continue;
-			String[] split = line.split(" ");
-			if(split.length < 2)
-				continue;
-			
-			if (split[0].equals("NumWheels"))
-			{
-				wheelPositions = new Vector3f[Integer.parseInt(split[1])];
-				return;
-			}
-		}
     }
     
     @Override
@@ -107,15 +84,6 @@ public class PlaneType extends DriveableType
 				rollLeftModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("RollRightSpeed"))
 				rollRightModifier = Float.parseFloat(split[1]);
-			
-	        //Wheels
-            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
-            	wheelPositions[Integer.parseInt(split[1])] = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
-            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
-            	wheelStepHeight = Float.parseFloat(split[1]);            
-            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
-                wheelSpringStrength = Float.parseFloat(split[1]);
- 
 			
 			//Lift
 			if(split[0].equals("Lift"))
