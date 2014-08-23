@@ -36,8 +36,8 @@ public class DriveableType extends InfoType
 	public ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
 	
 	//Ammo
-	/** If true, then all ammo is accepted */
-	public boolean acceptAllAmmo = false;
+	/** If true, then all ammo is accepted. Default is true to minimise backwards compatibility issues */
+	public boolean acceptAllAmmo = true;
 	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
