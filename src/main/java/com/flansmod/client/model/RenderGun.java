@@ -207,6 +207,13 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
 								break;
 							}
+							case BULLPUP :
+							{
+								GL11.glRotatef(90F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(10F * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(0.5F * reloadRotate, -0.2F * reloadRotate, 0F);
+								break;
+							}
 							case RIFLE : 
 							{
 								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
@@ -379,6 +386,13 @@ public class RenderGun implements IItemRenderer
 							GL11.glRotatef(180F * clipPosition, 0F, 1F, 0F);
 							GL11.glRotatef(60F * clipPosition, 0F, 1F, 0F);
 							GL11.glTranslatef(0.5F * clipPosition, 0F, 0F);
+							break;
+						}
+						case BULLPUP :
+						{
+							GL11.glRotatef(-150F * clipPosition, 0F, 0F, 1F);
+							GL11.glRotatef(60F * clipPosition, 1F, 0F, 0F);
+							GL11.glTranslatef(1F * clipPosition, -0.5F * clipPosition, 0F);
 							break;
 						}
 						case P90 :
