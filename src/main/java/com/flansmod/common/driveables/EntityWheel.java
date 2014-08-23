@@ -59,9 +59,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
     protected void fall(float k)
     {
-		if(!foundVehicle)
-			return;
-        if (k <= 0) 
+		if(vehicle == null || k <= 0) 
         	return;
         int i = MathHelper.ceiling_float_int(k - 3F);
         if(i > 0)
