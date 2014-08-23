@@ -609,7 +609,7 @@ public class EntityPlane extends EntityDriveable
 					
 					//The difference between how much the wheel moved and how much it was meant to move. i.e. the reaction force from the block
 					//amountToMoveCar.x += ((wheel.posX - wheel.prevPosX) - (motionX)) * 0.616F / wheels.length;
-					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.49F / wheels.length;
+					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.5F / wheels.length;
 					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 													
 					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);

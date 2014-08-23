@@ -119,8 +119,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				worldObj.spawnEntityInWorld(seats[i]);
 			}
 		}
-		wheels = new EntityWheel[4];
-		for(int i = 0; i < 4; i++)
+		wheels = new EntityWheel[type.wheelPositions.length];
+		for(int i = 0; i < wheels.length; i++)
 		{
 			if(!clientSide)
 			{
