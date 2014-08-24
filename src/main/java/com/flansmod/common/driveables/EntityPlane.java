@@ -258,13 +258,20 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 15 : // Wing
 			{
-				if(toggleTimer <= 0 && (type.hasWing || type.mode == EnumPlaneMode.VTOL))
+				if(toggleTimer <= 0)
 				{
-					if(mode == EnumPlaneMode.HELI)
-						mode = EnumPlaneMode.PLANE;
-					else mode = EnumPlaneMode.HELI;
-					varWing = !varWing;
-					player.addChatMessage(new ChatComponentText(mode == EnumPlaneMode.HELI ? "Entering hover mode" : "Entering plane mode"));
+					if(type.hasWing)
+					{
+						varWing = !varWing;
+						player.addChatMessage(new ChatComponentText("Switching mode"));
+					}
+					if(type.mode == EnumPlaneMode.VTOL)
+					{
+						if(mode == EnumPlaneMode.HELI)
+							mode = EnumPlaneMode.PLANE;
+						else mode = EnumPlaneMode.HELI;
+						player.addChatMessage(new ChatComponentText(mode == EnumPlaneMode.HELI ? "Entering hover mode" : "Entering plane mode"));
+					}
 					toggleTimer = 10;
 					FlansMod.getPacketHandler().sendToServer(new PacketDriveableControl(this));
 				}

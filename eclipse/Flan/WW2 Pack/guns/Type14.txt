@@ -24,4 +24,4 @@ Deployable False
 DeployedModel None
 Model ww2.Type14
 Texture Type14
-ModelScale 2
+ModelScale 1.5

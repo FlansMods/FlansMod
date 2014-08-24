@@ -224,6 +224,17 @@
 		"sounds" : [ "flansmod:HelicopterStart" ]
 	},	
 	
+	"JetEngine1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JetEngine1" ]
+	},	
+
+	"JetEngine2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JetEngine2" ]
+	},	
+
+	
 	"RocketFire1": {
 		"category" : "player",
 		"sounds" : [ "flansmod:RocketFire1" ]
