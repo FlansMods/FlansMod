@@ -19,8 +19,8 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class ModelType14 extends ModelGun
 {
-	int textureX = 1024;
-	int textureY = 1024;
+	int textureX = 512;
+	int textureY = 512;
 
 	public ModelType14()	
 	{
@@ -28,18 +28,18 @@ public class ModelType14 extends ModelGun
 
 // Gun
 		gunModel = new ModelRendererTurbo[12];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // GN.HandleRight
-		gunModel[1] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // GN.HandleLeft
-		gunModel[2] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // GN.HandleRightForwards
-		gunModel[3] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // GN.HandleLeftForwards
-		gunModel[4] = new ModelRendererTurbo(this,  0,  265, textureX, textureY); // 
-		gunModel[5] = new ModelRendererTurbo(this,  0,  275, textureX, textureY); // GN.Trigger
+		gunModel[0] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleRight
+		gunModel[1] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleLeft
+		gunModel[2] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleRightForwards
+		gunModel[3] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleLeftForwards
+		gunModel[4] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // 
+		gunModel[5] = new ModelRendererTurbo(this,  0,  83, textureX, textureY); // GN.Trigger
 		gunModel[6] = new ModelRendererTurbo(this,  0,  285, textureX, textureY); // GN.Barrel
-		gunModel[7] = new ModelRendererTurbo(this,  0,  265, textureX, textureY); // 
+		gunModel[7] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // 
 		gunModel[8] = new ModelRendererTurbo(this,  0,  285, textureX, textureY); // GN.Backdetail
 		gunModel[9] = new ModelRendererTurbo(this,  0,  305, textureX, textureY); // GN.Ironsight
-		gunModel[10] = new ModelRendererTurbo(this,  0,  265, textureX, textureY); // GN.MainbodyTopRight
-		gunModel[11] = new ModelRendererTurbo(this,  0,  265, textureX, textureY); // GN.Mainbodybottomright
+		gunModel[10] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // GN.MainbodyTopRight
+		gunModel[11] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // GN.Mainbodybottomright
 
 		gunModel[0].addBox(0F, 0F, -0.3F, 1, 5, 1, 0F); // GN.HandleRight
 		gunModel[0].setRotationPoint(0F, -3F, 0F);

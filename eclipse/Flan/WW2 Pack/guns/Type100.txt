@@ -24,3 +24,5 @@ BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None
+Model ww2.Type100
+Texture Type100
