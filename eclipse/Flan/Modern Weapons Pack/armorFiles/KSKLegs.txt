@@ -1,0 +1,7 @@
+Name German KSK Trousers
+ShortName kskPants
+Icon KSKPants
+Colour 255 255 255
+Type Legs
+Defence 0.1
+ArmourTexture KSK
