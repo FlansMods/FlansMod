@@ -224,14 +224,14 @@
 		"sounds" : [ "flansmod:HelicopterStart" ]
 	},	
 	
-	"Rocket1": {
+	"RocketFire1": {
 		"category" : "player",
-		"sounds" : [ "flansmod:Rocket1" ]
+		"sounds" : [ "flansmod:RocketFire1" ]
 	},	
 	
-	"Rocket2": {
+	"RocketFire2": {
 		"category" : "player",
-		"sounds" : [ "flansmod:Rocket2" ]
+		"sounds" : [ "flansmod:RocketFire2" ]
 	},	
 	
 	"BulletHit": {

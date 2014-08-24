@@ -29,9 +29,9 @@ RollRightSpeed 3
 Drag 1.0
 //Wheels
 NumWheels 3
-WheelPosition 0 3 -17 -7
-WheelPosition 1 3 -17 7
-WheelPosition 2 -82 -9 0
+WheelPosition 0 2 -13 -6
+WheelPosition 1 2 -13 6
+WheelPosition 2 -46 -8 0
 WheelSpringStrength 0.125
 //Propeller Positions
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>

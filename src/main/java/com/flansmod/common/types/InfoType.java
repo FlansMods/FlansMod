@@ -261,12 +261,18 @@ public class InfoType
 		return item;
 	}
 	
+	
 	public static ItemStack getRecipeElement(String s, int damage)
 	{
 		return getRecipeElement(s, 1, damage);
 	}
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage)
+	{
+		return getRecipeElement(s, amount, damage, "nothing");
+	}
+	
+	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
 	{
 		if (s.equals("doorIron"))
 		{
@@ -301,7 +307,7 @@ public class InfoType
 		{
 			return new ItemStack(Items.iron_ingot, amount);
 		}
-		FlansMod.log("Could not find " + s + " when adding recipe");
+		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
 		return null;
 	}
 	
