@@ -74,6 +74,11 @@
 		"sounds" : [ "flansmod:LugerReload" ]
 	},
 	
+	"L96Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:L96Shoot" ]
+	},
+	
 	"M1CarbineReload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:M1CarbineReload" ]
