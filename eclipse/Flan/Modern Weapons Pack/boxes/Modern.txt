@@ -73,7 +73,7 @@ AddAmmo desertEagleAmmo 3 iron 2 gunpowder
 AddGun rpg 25 iron 10 log
 AddAmmo rpgAmmo 5 iron 6 gunpowder
 AddGun stinger 20 iron 10 fiberglass 20 redstone
-AddAmmo stingerAmmo 12 iron 4 gold 12 gunpowder 6 redstone
+AddAmmo stingerAmmo 12 iron 4 ingotGold 12 gunpowder 6 redstone
 AddGun m67 4 fiberglass 2 gunpowder
 AddGun claymore 4 fiberglass 2 gunpowder 1 redstone
 AddGun c4 3 gunpowder 2 slimeball 1 redstone

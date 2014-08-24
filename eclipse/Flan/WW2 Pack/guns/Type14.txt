@@ -1,7 +1,7 @@
 Name Type14
-ShortName Type14
+ShortName type14
 //The ammo this gun uses (shortName)
-Ammo Type14Ammo
+Ammo type14Ammo
 Icon luger
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
