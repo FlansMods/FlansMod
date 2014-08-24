@@ -66,31 +66,29 @@ Pilot 32 -4 0
 Passengers 1
 Passenger 1 56 -8 0 nose -30 30 -30 0 minigun Nose
 // ------------------------------------------------------ Sounds ------------------------------------------------------
-StartSound propStart
-StartSoundLength 20
-PropSound propSound
-PropSoundLength 30
-ShootSound PlaneShoot
-BombSound bomb
+StartSound HelicopterStart
+StartSoundLength 100
+PropSound Helicopter1
+PropSoundLength 93
+ShootSoundPrimary RocketFire1
+//ShootSoundSecondary None
 // ------------------------------------------------------ Recipe ------------------------------------------------------
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 1 metalCockpit
-AddRecipeParts coreWheel 2 wheel
-AddRecipeParts nose 1 metalNose
-AddRecipeParts rightWing 1 metalWingSmall
-AddRecipeParts leftWing 1 metalWingSmall
-AddRecipeParts bay 1 bombBay
-AddRecipeParts tail 1 metalTail
-AddRecipeParts tailWheel 1 wheel
+AddRecipeParts core 1 advancedMetalCockpit
+AddRecipeParts skids 2 helicopterSkid
+AddRecipeParts blades 2 helicopterBlade
+AddRecipeParts rightWing 1 blockRedstone 1 blockIron
+AddRecipeParts leftWing 1 blockRedstone 1 blockIron
+AddRecipeParts tail 1 metalTail 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 green
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 200 -24 -12 -10 96 32 20
+SetupPart core 300 -24 -12 -10 96 32 20
 SetupPart skids 50 -24 -24 -20 72 2 40
-SetupPart blades 50 -24 20 -20 48 16 40
-//SetupPart rightWing 100 -7 -5 10 32 2 78
-//SetupPart leftWing 100 -7 -5 -88 32 2 78
+SetupPart blades 100 -24 20 -20 48 16 40
+//SetupPart rightWing 50 -7 -5 10 32 2 78
+//SetupPart leftWing 50 -7 -5 -88 32 2 78
 SetupPart tail 100 -100 -12 -9 76 24 18
 BulletDetection 10

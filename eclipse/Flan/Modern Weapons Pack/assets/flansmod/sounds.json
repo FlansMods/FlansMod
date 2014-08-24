@@ -209,6 +209,36 @@
 		"sounds" : [ "flansmod:W1200Shoot" ]
 	},
 	
+	"Helicopter1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Helicopter1" ]
+	},	
+	
+	"Helicopter2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Helicopter2" ]
+	},	
+	
+	"HelicopterStart": {
+		"category" : "player",
+		"sounds" : [ "flansmod:HelicopterStart" ]
+	},	
+	
+	"Rocket1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Rocket1" ]
+	},	
+	
+	"Rocket2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Rocket2" ]
+	},	
+	
+	"BulletHit": {
+		"category" : "player",
+		"sounds" : [ "flansmod:BulletHit" ]
+	},	
+	
 	"MinigunWarmup": {
 		"category" : "player",
 		"sounds" : [ "flansmod:MinigunWarmup" ]

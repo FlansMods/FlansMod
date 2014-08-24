@@ -33,3 +33,6 @@ item.largeWheel.name=Large Wheel
 item.metalCockpit.name=Metal Cockpit
 item.metalNose.name=Metal Nose
 item.blowTorch.name=Blow Torch
+item.helicopterBlade.name=Helicopter Blade
+item.helicopterSkid.name=Helicopter Skid
+item.advancedMetalCockpit.name=Advanced Metal Cockpit
