@@ -203,7 +203,7 @@ public class FlansModClient extends FlansMod
 		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
 		
 		//Render debug boxes for player snapshots
-		if(FlansMod.DEBUG)
+		if(FlansMod.DEBUG && data != null)
 		{
 			if(data.snapshots[0] != null)
 				data.snapshots[0].renderSnapshot();

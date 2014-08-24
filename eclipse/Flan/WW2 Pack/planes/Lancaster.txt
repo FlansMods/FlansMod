@@ -14,7 +14,7 @@ CameraDistance 20.0
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode Plane
 //Throttle
-MaxThrottle 8.0
+MaxThrottle 2.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 1
@@ -29,9 +29,9 @@ RollRightSpeed 1
 Drag 1.0
 //Wheels
 NumWheels 3
-WheelPosition 0 3 -17 -7
-WheelPosition 1 3 -17 7
-WheelPosition 2 -82 -9 0
+WheelPosition 0 80 -16 -52
+WheelPosition 1 80 -16 52
+WheelPosition 2 -92 0 0
 WheelSpringStrength 0.125
 //Propeller Positions
 Propeller 0 114 16 -52 leftWing metalPropeller
