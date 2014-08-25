@@ -6,12 +6,14 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.VehicleType;
 
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelDriveable
 {
     public ModelRendererTurbo turretModel[] = new ModelRendererTurbo[0];			//The turret (for tanks)
 	public ModelRendererTurbo barrelModel[] = new ModelRendererTurbo[0];			//The barrel of the main turret
+	public ModelRendererTurbo ammoModel[][] = new ModelRendererTurbo[0][0];			//Ammo models for the main turret. ammoModel[i] will render if the vehicle has less than 3 ammo slots or if slot i is full. Checks shell / missile inventory
     public ModelRendererTurbo frontWheelModel[] = new ModelRendererTurbo[0];		//Front and back wheels are for bicycles and motorbikes and whatnot
     public ModelRendererTurbo backWheelModel[] = new ModelRendererTurbo[0];
     public ModelRendererTurbo leftFrontWheelModel[] = new ModelRendererTurbo[0];	//This set of 4 wheels are for 4 or more wheeled things
@@ -51,6 +53,8 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(trailerModel);
 		renderPart(turretModel);
 		renderPart(barrelModel);
+		for(ModelRendererTurbo[] mods : ammoModel)
+			renderPart(mods);
 		renderPart(steeringWheelModel);
 	}
 	
@@ -211,6 +215,8 @@ public class ModelVehicle extends ModelDriveable
      * @param dt */
 	public void renderTurret(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float dt)
     {		
+		VehicleType type = vehicle.getVehicleType();
+		
 		//Render main turret barrel
 		{
 			float yaw = vehicle.seats[0].looking.getYaw();
@@ -224,6 +230,17 @@ public class ModelVehicle extends ModelDriveable
 			{
 				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
 				barrelModel[i].render(f5, oldRotateOrder);
+			}
+			for(int i = 0; i < ammoModel.length; i++)
+			{
+				if(i >= type.numMissileSlots || vehicle.getDriveableData().missiles[i] != null)
+				{
+					for(int j = 0; j < ammoModel[i].length; j++)
+					{
+						ammoModel[i][j].rotateAngleZ = -pitch * 3.14159265F / 180F;
+						ammoModel[i][j].render(f5, oldRotateOrder);
+					}
+				}
 			}
 		}
 		

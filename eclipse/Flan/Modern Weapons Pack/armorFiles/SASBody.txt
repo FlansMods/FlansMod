@@ -1,0 +1,7 @@
+Name British SAS Bodyarmour
+ShortName sasBody
+Icon SASCoat
+Colour 255 255 255
+Type Chest
+Defence 0.1
+ArmourTexture SAS

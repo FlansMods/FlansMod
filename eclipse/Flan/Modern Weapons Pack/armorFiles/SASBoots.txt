@@ -1,0 +1,7 @@
+Name British SAS Boots
+ShortName sasBoots
+Icon SASBoots
+Colour 255 255 255
+Type Boots
+Defence 0.1
+ArmourTexture SAS

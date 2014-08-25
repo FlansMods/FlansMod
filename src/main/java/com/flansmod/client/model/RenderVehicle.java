@@ -68,7 +68,11 @@ public class RenderVehicle extends Render
 						modVehicle.renderTurret(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, vehicle, f1);
 					
 					if(FlansMod.DEBUG)
-					{						
+					{					
+			    		GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
+						GL11.glRotatef(-vehicle.seats[0].looking.getPitch(), 0.0F, 0.0F, 1.0F);
+						GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
+						
 						//Render shoot points
 						GL11.glColor4f(0F, 0F, 1F, 0.3F);
 						for(DriveablePosition point : type.shootPointsPrimary)			
