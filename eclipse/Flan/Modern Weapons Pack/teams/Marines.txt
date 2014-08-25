@@ -12,11 +12,8 @@ Legs marinePants
 Shoes marineBoots
 AddClass marineSniper1
 AddClass marineSniper2
-AddClass marineMulti1
-AddClass marineMulti2
 AddClass marineDualWield1
 AddClass marineAssault1
 AddClass marineAssault2
-AddClass marineDefence1
 AddClass marineMedic1
 AddClass marineEngineer1

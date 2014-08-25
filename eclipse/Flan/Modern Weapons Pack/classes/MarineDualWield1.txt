@@ -1,8 +1,8 @@
 Name Gunslinger
 ShortName marineDualWield1
-AddItem desertEagle
-AddItem desertEagle
-AddItem m67 1
+AddItem m9
+AddItem m9
+AddItem m67 2
 AddItem mwKnife
-AddItem desertEagleAmmo 3
-AddItem desertEagleAmmo 3
+AddItem m9Ammo 4
+AddItem m9Ammo 4

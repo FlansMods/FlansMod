@@ -173,7 +173,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		{
 			Vector3f motionVec = new Vector3f(motionX, motionY, motionZ);
 			Entity closestEntity = null;
-			float closestAngle = type.maxLockOnAngle;
+			float closestAngle = type.maxLockOnAngle * 3.14159265F / 180F;
 			
 			for(Object obj : worldObj.loadedEntityList)
 			{
@@ -482,9 +482,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		for (int i = 0; i < 10; i++)
 		{
 			EntityFX particle = FlansModClient.getParticle(type.trailParticles, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
-			if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
+			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
-			worldObj.spawnEntityInWorld(particle);
+			//worldObj.spawnEntityInWorld(particle);
 		}
 	}
 

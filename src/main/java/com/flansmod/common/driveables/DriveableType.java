@@ -86,11 +86,14 @@ public class DriveableType extends InfoType
 	public Vector3f turretOrigin = new Vector3f();
 	
 	/** Wheel positions */
-	public DriveablePosition[] wheelPositions = new DriveablePosition[4];
+	public DriveablePosition[] wheelPositions = new DriveablePosition[0];
 	/** Strength of springs connecting car to wheels */
 	public float wheelSpringStrength = 0.5F;
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
+	
+	/** Collision points for block based collisions */
+	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<DriveablePosition>();
 	
 	/** Coefficient of drag */
 	public float drag = 1F;
@@ -181,6 +184,8 @@ public class DriveableType extends InfoType
 				drag = Float.parseFloat(split[1]);
             if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
             	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
+            if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
+            	collisionPoints.add(new DriveablePosition(split));
             
             //Wheels
             if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
@@ -310,10 +315,6 @@ public class DriveableType extends InfoType
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
 				CollisionBox box = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8]));
 				health.put(part, box);
-				//for(int i = 0; i < 2; i++)
-				//	for(int j = 0; j < 2; j++)
-				//		for(int k = 0; k < 2; k++)
-				//			points.add(new CollisionPoint(box.x + i * box.w, box.y + j * box.h, box.z + k * box.d, part.getShortName(), 1.0F));
 			}
 			
 			//Driver Position
