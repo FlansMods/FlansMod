@@ -1,6 +1,6 @@
 Name German KSK Bodyarmour
 ShortName kskBody
-Icon KSKBody
+Icon KSKCoat
 Colour 255 255 255
 Type Chest
 Defence 0.1
