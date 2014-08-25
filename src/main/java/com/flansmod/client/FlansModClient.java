@@ -251,7 +251,7 @@ public class FlansModClient extends FlansMod
 
 	public static void tick()
 	{
-		if (minecraft.thePlayer == null)
+		if (minecraft.thePlayer == null or minecraft.theWorld == null)
 			return;
 		
 		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
