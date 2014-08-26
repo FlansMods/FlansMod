@@ -1,8 +1,8 @@
 Name SG550
-ShortName SG550
+ShortName sg550
 //The ammo this gun uses (shortName)
-Ammo m16a4Ammo
-Icon M16A4
+Ammo sg550Ammo
+Icon SG550
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 ItemID 77777
@@ -33,9 +33,9 @@ Model mw.SG550
 Texture SG550
 ModelScale 0.9
 //Attachment Settings
-AllowAllAttachments True
+AllowAllAttachments False
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMWForegrip flanMWFlashlight
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

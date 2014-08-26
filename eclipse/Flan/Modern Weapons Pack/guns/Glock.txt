@@ -1,40 +1,38 @@
-Name Gold Desert Eagle
-ShortName goldDesertEagle
+Name Glock
+ShortName glock
 //The ammo this gun uses (shortName)
-Ammo desertEagleAmmo
-Icon GoldDesertEagle
+Ammo glockAmmo
+Icon Glock
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23848
+ItemID 99999
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 40
+ReloadTime 32
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
-Recoil 5
-//Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 1
+Recoil 2
 //Damage in half hearts
-Damage 10
+Damage 5
 //The higher this value, the more the bullets spread
-Accuracy 5
+Accuracy 1.5
 //Time in ticks between rounds
-ShootDelay 1
-ShootSound DesertEagleShoot
-ReloadSound LugerReload
-Mode SemiAuto
+ShootDelay 2
+ShootSound M9Shoot
+ReloadSound ColtReload
+Mode FullAuto
+OneHanded true
 //Bullet speed, default 3.0
 BulletSpeed 10.0
-OneHanded true
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
-FOVZoomLevel 1.2
+FOVZoomLevel 1.25
 //Deployable Settings
 Deployable False
 DeployedModel None
-//3D Model Settings
-Model mw.DesertEagle
-ModelScale 0.8
-Texture DesertEagle_Gold
+//Model settings
+Model mw.Glock
+Texture Glock
+ModelScale
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces

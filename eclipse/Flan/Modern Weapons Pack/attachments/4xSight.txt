@@ -1,0 +1,30 @@
+Name 4x Scope
+ShortName flanMW4xScope
+Icon 4xScope
+//The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
+AttachmentType sights
+//If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
+Silencer false
+//These multipliers stack between attachments and do what they say
+MeleeDamageMultiplier 1.0
+DamageMultiplier 1.0
+SpreadMultiplier 0.4
+RecoilMultiplier 0.8
+BulletSpeedMultiplier 1.0
+ReloadTimeMultiplier 1.0
+//These variables only come into effect if this is a scope
+//The ZoomLevel affects how much the view zooms in (note that this removes the model from the zooming animation and so is useless for iron sights)
+//The FOVZoomLevel affects how much the view narrows when zooming. Very useful for iron sights as it gives the illusion of zooming without killing off the model
+ZoomLevel 4.0
+FOVZoomLevel 2.0
+ZoomOverlay mwbarrett
+//Model
+Model mw.4xScope
+Texture 4xScope
+ModelScale
+//Recipe
+RecipeOutput 1
+Recipe R yellowDust F fiberglass G thinGlass
+FFF
+G G
+FFF
