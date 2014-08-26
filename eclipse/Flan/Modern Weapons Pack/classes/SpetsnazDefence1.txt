@@ -1,7 +1,0 @@
-Name Defender
-ShortName spetsnazDefence1
-AddItem skorpion
-AddItem mwRiotShield
-AddItem m67 3
-AddItem mwKnife
-AddItem skorpionAmmo 5
