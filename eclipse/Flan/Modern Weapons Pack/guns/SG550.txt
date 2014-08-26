@@ -15,10 +15,10 @@ Damage 7.5
 //The higher this value, the more the bullets spread
 Accuracy 2.5
 //Time in ticks between rounds
-ShootDelay 2
+ShootDelay 5
 ShootSound M14Shoot
 ReloadSound MP44Reload
-Mode FullAuto
+Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
@@ -44,4 +44,4 @@ NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-Paintjob M16A4_Orange M16A4_Orange orange 1 white 1
+//Paintjob M16A4_Orange M16A4_Orange orange 1 white 1

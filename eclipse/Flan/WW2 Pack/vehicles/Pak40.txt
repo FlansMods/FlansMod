@@ -3,7 +3,7 @@ Name Pak-40
 ShortName Pak40
 ItemID 23490
 //Visuals
-Icon Panzer
+Icon Pak40
 Model ww2.Pak40
 Texture Pak40
 //Third Person Camera Distance

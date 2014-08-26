@@ -88,11 +88,15 @@ public class ModelGlock extends ModelGun
 		slideModel[1].setRotationPoint(7F, -4.5F, -0.5F);
 
 		
-
+		barrelAttachPoint = new Vector3f(8.5F / 16F, 4F / 16F, 0F);
+		
+		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
 
 		gunSlideDistance = 0.2F;
 		animationType = EnumAnimationType.PISTOL_CLIP;
 
 		flipAll();
+		
+		translateAll(0F, 1F, 0F);
 	}
 }

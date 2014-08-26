@@ -1,5 +1,5 @@
 Name SG550 Ammo
-ShortName SG550Ammo
+ShortName sg550Ammo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
@@ -10,7 +10,7 @@ FallSpeed 0.25
 //The maximum stack size
 MaxStackSize 4
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 30
+RoundsPerItem 20
 //The damage multiplier caused by the bullet on hitting an entity
 Damage 1
 //Size of explosion caused

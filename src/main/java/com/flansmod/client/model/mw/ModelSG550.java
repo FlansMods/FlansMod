@@ -89,10 +89,10 @@ public class ModelSG550 extends ModelGun
 		scopeAttachPoint = new Vector3f(4F / 16F, 6F / 16F, 0F);
 		
 		//Grip
-		gripAttachPoint = new Vector3f(15F / 16F, 4.5F / 16F, 0F);
+		gripAttachPoint = new Vector3f(15F / 16F, 3.5F / 16F, 0F);
 				
 		//Barrel		
-		barrelAttachPoint = new Vector3f(36.5F / 24F, 5F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(36.5F / 24F, 4.5F / 16F, 0F);
 
 // Ammo
 		ammoModel = new ModelRendererTurbo[2];
@@ -113,6 +113,6 @@ public class ModelSG550 extends ModelGun
 
 
 		flipAll();
-		translateAll(0F, 2F, 0F);
+		translateAll(0F, 1F, 0F);
 	}
 }

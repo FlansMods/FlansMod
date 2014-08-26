@@ -1,5 +1,5 @@
 Name AT4 Rocket
-ShortName AT4Ammo
+ShortName at4Ammo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
