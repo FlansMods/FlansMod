@@ -19,8 +19,8 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class ModelAT4 extends ModelGun
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 256;
+	int textureY = 32;
 
 	public ModelAT4()	
 	{

@@ -18,8 +18,8 @@ import com.flansmod.client.tmt.Shape2D;
 
 public class Model4xScope extends ModelAttachment 
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 32;
+	int textureY = 32;
 
 	public Model4xScope()	
 	{
