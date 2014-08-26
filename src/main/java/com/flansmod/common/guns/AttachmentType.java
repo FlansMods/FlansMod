@@ -23,6 +23,12 @@ public class AttachmentType extends InfoType implements IScope
 	
 	/** This variable controls whether or not bullet sounds should be muffled */
 	public boolean silencer = false;
+	/** If true, then this attachment will act like a flashlight */
+	public boolean flashlight = false;
+	/** Flashlight range. How far away it lights things up */
+	public float flashlightRange = 10F;
+	/** Flashlight strength between 0 and 15 */
+	public int flashlightStrength = 12;
 	
 	//Gun behaviour modifiers
 	/** These stack between attachments and apply themselves to the gun's default spread */
@@ -81,6 +87,16 @@ public class AttachmentType extends InfoType implements IScope
 			
 			if(split[0].equals("Silencer"))
 				silencer = Boolean.parseBoolean(split[1].toLowerCase());
+			
+			//Flashlight settings
+			if(split[0].equals("Flashlight"))
+				flashlight = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("FlashlightRange"))
+				flashlightRange = Float.parseFloat(split[1]);
+			if(split[0].equals("FlashlightStrength"))
+				flashlightStrength = Integer.parseInt(split[1]);
+			
+			
 			//Multipliers
 			if(split[0].equals("MeleeDamageMultiplier"))
 				meleeDamageMultiplier = Float.parseFloat(split[1]);

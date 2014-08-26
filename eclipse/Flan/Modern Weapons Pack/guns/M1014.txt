@@ -36,7 +36,7 @@ Texture M1014
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMWForegrip
+AllowAttachments flanMWRedDot flanMWACOG flanMWForegrip flanMWFlashlight
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

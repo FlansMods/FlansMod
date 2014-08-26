@@ -34,7 +34,7 @@ Texture M16A4
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMWForegrip
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMWForegrip flanMWFlashlight
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

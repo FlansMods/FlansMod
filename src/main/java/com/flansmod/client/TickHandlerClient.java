@@ -20,7 +20,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -39,16 +42,20 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3i;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 public class TickHandlerClient
 {
 	public static final ResourceLocation offHand = new ResourceLocation("flansmod","gui/offHand.png");
+	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<Vector3i>();
+	public static int lightOverrideRefreshRate = 5;
 	
 	public TickHandlerClient()
 	{
@@ -318,10 +325,66 @@ public class TickHandlerClient
 			break;
 		}	
 	}
+	
+	/** Handle flashlight block light override */	
+	public void clientTickStart(Minecraft mc)
+	{
+		if(FlansMod.ticker % lightOverrideRefreshRate == 0 && mc.theWorld != null)
+		{
+			//Check graphics setting and adjust refresh rate
+			lightOverrideRefreshRate = mc.gameSettings.fancyGraphics ? 10 : 20;
 			
-	public void clientTickStart(Minecraft minecraft)
-	{ /* Client side only */
+			//Reset old light values
+			for(Vector3i v : blockLightOverrides)
+			{
+				mc.theWorld.updateLightByType(EnumSkyBlock.Block, v.x, v.y, v.z);
+			}
+			//Clear the list
+			blockLightOverrides.clear();
 			
+			//Find all flashlights
+			for(Object obj : mc.theWorld.playerEntities)
+			{
+				EntityPlayer player = (EntityPlayer)obj;
+				ItemStack currentHeldItem = player.getCurrentEquippedItem();
+				if(currentHeldItem != null && currentHeldItem.getItem() instanceof ItemGun)
+				{
+					GunType type = ((ItemGun)currentHeldItem.getItem()).type;
+					AttachmentType grip = type.getGrip(currentHeldItem);
+					if(grip != null && grip.flashlight)
+					{
+						for(int i = 0; i < 2; i++)
+						{
+							MovingObjectPosition ray = player.rayTrace(grip.flashlightRange / 2F * (i + 1), 1F);
+							if(ray != null)
+							{
+								int x = ray.blockX;
+								int y = ray.blockY;
+								int z = ray.blockZ;
+								int side = ray.sideHit;
+								switch(side)
+								{
+								case 0 : y--; break;
+								case 1 : y++; break;
+								case 2 : z--; break;
+								case 3 : z++; break;
+								case 4 : x--; break;
+								case 5 : x++; break;
+								}
+								blockLightOverrides.add(new Vector3i(x, y, z));
+								mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, 12);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
+								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void clientTickEnd(Minecraft minecraft)
