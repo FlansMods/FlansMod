@@ -1,0 +1,8 @@
+Name Light Assault
+ShortName kskAssault1
+AddItem g36
+AddItem glock
+AddItem m67 2
+AddItem mwKnife
+AddItem g36Ammo 3
+AddItem glockAmmo 2
