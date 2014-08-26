@@ -16,7 +16,7 @@ Damage 7.5
 Accuracy 2.5
 //Time in ticks between rounds
 ShootDelay 5
-ShootSound M14Shoot
+ShootSound SG550Shoot
 ReloadSound MP44Reload
 Mode SemiAuto
 //Bullet speed, default 3.0

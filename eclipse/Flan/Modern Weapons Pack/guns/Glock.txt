@@ -16,7 +16,7 @@ Damage 5
 Accuracy 1.5
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound M9Shoot
+ShootSound GlockShoot
 ReloadSound ColtReload
 Mode FullAuto
 OneHanded true

@@ -208,10 +208,25 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:W1200Reload" ]
 	},
-	
+		
 	"W1200Shoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:W1200Shoot" ]
+	},
+	
+	"GlockShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:GlockShoot" ]
+	},
+	
+	"SG550Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:SG550Shoot" ]
+	},
+	
+	"AT4Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:AT4Shoot" ]
 	},
 	
 	"Helicopter1": {
@@ -239,7 +254,6 @@
 		"sounds" : [ "flansmod:JetEngine2" ]
 	},	
 
-	
 	"RocketFire1": {
 		"category" : "player",
 		"sounds" : [ "flansmod:RocketFire1" ]

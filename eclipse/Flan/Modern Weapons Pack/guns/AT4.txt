@@ -16,7 +16,7 @@ Accuracy 3.5
 //Time in ticks between rounds
 ShootDelay 1
 ConsumeGunOnUse True
-ShootSound bazookaShoot
+ShootSound AT4Shoot
 //ReloadSound bazookaReload
 Mode SemiAuto
 Scope None
