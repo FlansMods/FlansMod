@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -21,6 +22,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldSettings.GameType;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.world.BlockEvent;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -704,8 +708,8 @@ public class EntityMecha extends EntityDriveable
 					//If we are not breaking blocks, reset everything
 					if(blockHit == null || !breakingBlocks)
 					{
-						if(worldObj.isRemote)
-							Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
+						//if(worldObj.isRemote)
+						//	Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, -1);
 						breakingBlock = null;
 					}
 					else
@@ -747,68 +751,77 @@ public class EntityMecha extends EntityDriveable
 						}
 						
 						//Add block digging overlay
-						if(worldObj.isRemote)
-							Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
+						//if(worldObj.isRemote)
+						//	Minecraft.getMinecraft().renderGlobal.destroyBlockPartially(getEntityId(), breakingBlock.x, breakingBlock.y, breakingBlock.z, (int)(breakingProgress * 10));
 						breakingProgress += 0.1F * mineSpeed;
 						if(breakingProgress >= 1F)
 						{
-			        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
-							//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-							//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-
-							boolean vacuumItems = vacuumItems();
-							if(vacuumItems)
+							boolean cancelled = false;
+							if(entity instanceof EntityPlayerMP)
 							{
-								for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
+								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+								cancelled = event.isCanceled();
+							}
+					        if(!cancelled)
+					        {
+				        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
+								//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+								//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+	
+								boolean vacuumItems = vacuumItems();
+								if(vacuumItems)
 								{
-									//Check for iron regarding refining
-									if(refineIron() && (stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+									for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 									{
-										stack = (new ItemStack(Items.iron_ingot, 1, 0));
-										if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-											data.fuelInTank -= 5F;
-									}
-									
-									//Check for item multipliers
-									if(stack.getItem() == Items.diamond)
-									{
-										float multiplier = diamondMultiplier();
-										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
-									}
-									if(stack.getItem() == Items.redstone)
-									{
-										float multiplier = redstoneMultiplier();
-										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
-									}
-									if(stack.getItem() == Items.coal)
-									{
-										float multiplier = coalMultiplier();
-										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
-									}
-									if(stack.getItem() == Items.emerald)
-									{
-										float multiplier = emeraldMultiplier();
-										stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
-									}
-									
-									//Check for auto coal consumption
-									if(autoCoal() && (stack.getItem() == Items.coal) && (data.fuelInTank + 250F < type.fuelTankSize))
-									{
-										data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
-										couldNotFindFuel = false;
-										stack.stackSize = 0;
-									}
-									
-									//Add the itemstack to mecha inventory
-									if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
-									{
-										worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
+										//Check for iron regarding refining
+										if(refineIron() && (stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										{
+											stack = (new ItemStack(Items.iron_ingot, 1, 0));
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 5F;
+										}
+										
+										//Check for item multipliers
+										if(stack.getItem() == Items.diamond)
+										{
+											float multiplier = diamondMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
+										if(stack.getItem() == Items.redstone)
+										{
+											float multiplier = redstoneMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
+										if(stack.getItem() == Items.coal)
+										{
+											float multiplier = coalMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
+										if(stack.getItem() == Items.emerald)
+										{
+											float multiplier = emeraldMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
+										
+										//Check for auto coal consumption
+										if(autoCoal() && (stack.getItem() == Items.coal) && (data.fuelInTank + 250F < type.fuelTankSize))
+										{
+											data.fuelInTank = Math.min(data.fuelInTank + 1000F, type.fuelTankSize);
+											couldNotFindFuel = false;
+											stack.stackSize = 0;
+										}
+										
+										//Add the itemstack to mecha inventory
+										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+										{
+											worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
+										}
 									}
 								}
-							}
-							//Destroy block
-							
-							worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
+								//Destroy block
+								
+								worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
+					        }
 						}
 					}
 				}

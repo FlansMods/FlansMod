@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,6 +20,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -35,6 +38,7 @@ import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.FlansModExplosion;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.raytracing.BulletHit;
@@ -609,13 +613,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	           		if(part.onFire)
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
-		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + rand.nextFloat() * part.box.w / 16F, part.box.y / 16F + rand.nextFloat() * part.box.h / 16F, part.box.z / 16F + rand.nextFloat() * part.box.d / 16F));
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + rand.nextFloat() * part.box.w, part.box.y + rand.nextFloat() * part.box.h, part.box.z + rand.nextFloat() * part.box.d));
 		        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	           		if(part.health > 0 && part.health < part.maxHealth / 2)
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
-		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + rand.nextFloat() * part.box.w / 16F, part.box.y / 16F + rand.nextFloat() * part.box.h / 16F, part.box.z / 16F + rand.nextFloat() * part.box.d / 16F));
+		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + rand.nextFloat() * part.box.w, part.box.y + rand.nextFloat() * part.box.h, part.box.z + rand.nextFloat() * part.box.d));
 		        		worldObj.spawnParticle(part.health < part.maxHealth / 4 ? "largesmoke" : "smoke", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	        	}
@@ -627,7 +631,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        			part.onFire = false;
 	        		//Also water blocks
 	        		//Get the centre point of the part
-	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
+	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + part.box.w / 2F, part.box.y + part.box.h / 2F, part.box.z + part.box.d / 2F));
 	        		if(worldObj.getBlock(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)).getMaterial() == Material.water)
 	        		{
 	        			part.onFire = false;
@@ -682,44 +686,75 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
     }
 	
+	public void checkForCollisions()
+	{
+		boolean crashInWater = false;
+		double speed = getSpeedXYZ();
+		for(DriveablePosition p : getDriveableType().collisionPoints)
+		{
+			if(driveableData.parts.get(p.part).dead)
+				continue;
+			Vector3f lastRelPos = prevAxes.findLocalVectorGlobally(p.position);
+			Vec3 lastPos = Vec3.createVectorHelper(prevPosX + lastRelPos.x, prevPosY + lastRelPos.y, prevPosZ + lastRelPos.z);
+			
+			Vector3f currentRelPos = axes.findLocalVectorGlobally(p.position);
+			Vec3 currentPos = Vec3.createVectorHelper(posX + currentRelPos.x, posY + currentRelPos.y, posZ + currentRelPos.z);
+			
+			if(FlansMod.DEBUG && worldObj.isRemote)
+			{
+				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(lastPos), Vector3f.sub(currentRelPos, lastRelPos, null), 10, 1F, 0F, 0F));
+			}
+			
+			MovingObjectPosition hit = worldObj.rayTraceBlocks(lastPos, currentPos, crashInWater);
+			if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
+			{
+				int x = hit.blockX;
+				int y = hit.blockY;
+				int z = hit.blockZ;
+				Block blockHit = worldObj.getBlock(x, y, z);
+				int meta = worldObj.getBlockMetadata(x, y, z);
+				
+				float blockHardness = blockHit.getBlockHardness(worldObj, x, y, z);
+				
+				//Attack the part
+				if(!attackPart(p.part, DamageSource.inWall, blockHardness * blockHardness * (float)speed) && TeamsManager.driveablesBreakBlocks)
+				{
+					//And if it didn't die from the attack, break the block
+					worldObj.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(blockHit) + (meta << 12));					
+					
+					if(!worldObj.isRemote)
+					{	
+						blockHit.dropBlockAsItem(worldObj, x, y, z, meta, 1);		
+						worldObj.setBlockToAir(x, y, z);
+					}
+				}
+				else
+				{
+					//The part died!
+					worldObj.createExplosion(this, currentPos.xCoord, currentPos.yCoord, currentPos.zCoord, 1F, false);
+				}
+			}
+			
+		}
+	}
+	
 	@Override
     protected void fall(float k)
     {
         if (k <= 0) 
         	return;
         //super.fall(k);
-        int i = MathHelper.ceiling_float_int(k - 3F);
+        int i = MathHelper.ceiling_float_int(k - 10F);
 
         if(i > 0)
-        	attackPart(EnumDriveablePart.core, DamageSource.fall, i);
-        
-        /*
-        if (i > 0)
-        {
-            if (i > 4)
-            {
-                playSound("damage.fallbig", 1.0F, 1.0F);
-            }
-            else
-            {
-                playSound("damage.fallsmall", 1.0F, 1.0F);
-            }
-
-            attackEntityFrom(DamageSource.fall, (float)i);
-            Block block = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY - 0.20000000298023224D - (double)this.yOffset), MathHelper.floor_double(this.posZ));
-
-            if (block != null)
-            {
-            	Block.SoundType stepSound = block.stepSound;
-                this.playSound(stepSound.getStepResourcePath(), stepSound.getVolume() * 0.5F, stepSound.getPitch() * 0.75F);
-            }
-        }
-        */
+        	attackPart(EnumDriveablePart.core, DamageSource.fall, i / 5);
     }
 	
-	public void attackPart(EnumDriveablePart part, DamageSource source, float damage)
+	/** Attack a certain part of a driveable and return whether it broke or not */
+	public boolean attackPart(EnumDriveablePart ep, DamageSource source, float damage)
 	{
-		
+		DriveablePart part = driveableData.parts.get(ep);
+		return part.attack(damage, source.isFireDamage());
 	}
 		
 	/** Takes a vector (such as the origin of a seat / gun) and translates it from local coordinates to global coordinates */

@@ -71,6 +71,10 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+    	data.writeBoolean(TeamsManager.canBreakGlass);
+    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
+    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+    	
 		if(TeamsManager.getInstance().currentRound == null)
     	{
 			writeUTF(data, "No Gametype");
@@ -165,14 +169,15 @@ public class PacketTeamInfo extends PacketBase
     		}
     	}
     	
-    	data.writeBoolean(TeamsManager.canBreakGlass);
-    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
-    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+		TeamsManager.canBreakGlass = data.readBoolean();
+		TeamsManager.vehiclesNeedFuel = data.readBoolean();
+		TeamsManager.driveablesBreakBlocks = data.readBoolean();
 		gametype = readUTF(data);
 		if(gametype.equals("No Gametype"))
 		{
@@ -234,9 +239,7 @@ public class PacketTeamInfo extends PacketBase
 				}
 			}
 		}
-		TeamsManager.canBreakGlass = data.readBoolean();
-		TeamsManager.vehiclesNeedFuel = data.readBoolean();
-		TeamsManager.driveablesBreakBlocks = data.readBoolean();
+
 	}
 
 	@Override

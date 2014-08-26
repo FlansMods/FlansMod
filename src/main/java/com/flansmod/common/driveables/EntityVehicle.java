@@ -450,6 +450,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
+		checkForCollisions();
+		
 		/*
 		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
 		Vec3 xAxis = subtract(wheelVectors[3], wheelVectors[0]).normalize();

@@ -292,6 +292,7 @@ public class TickHandlerClient
 				mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
 				mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
 				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
+				mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
 
 			}
 	    }

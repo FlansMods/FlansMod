@@ -237,7 +237,7 @@ public class DriveablePart
 		return false;	
 	}
 
-	public void attack(float damage, boolean fireDamage) 
+	public boolean attack(float damage, boolean fireDamage) 
 	{
 		health -= damage;
 		if(fireDamage)
@@ -245,5 +245,6 @@ public class DriveablePart
 			fireTime = 20;
 			onFire = true;
 		}
+		return health <= 0;
 	}
 }

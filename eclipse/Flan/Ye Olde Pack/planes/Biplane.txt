@@ -87,3 +87,19 @@ SetupPart topWing 50 -9 18 -50 18 2 100
 SetupPart tail 50 -51 -6 -5 40 8 10
 SetupPart tailWheel 10 -48 -10 -1 4 4 2
 BulletDetection 5
+//Collision points for breaking wings etc. upon crashing
+//RightWing
+CollisionPoint 0 -2 20 rightWing
+CollisionPoint 0 -2 40 rightWing
+//LeftWing
+CollisionPoint 0 -2 -20 leftWing
+CollisionPoint 0 -2 -40 leftWing
+//TopWing
+CollisionPoint 0 18 -40 topWing
+CollisionPoint 0 18 -20 topWing
+CollisionPoint 0 18 0 topWing
+CollisionPoint 0 18 20 topWing
+CollisionPoint 0 18 40 topWing
+//Tail
+CollisionPoint -40 -2 0 tail
+CollisionPoint -20 -2 0 tail

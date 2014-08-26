@@ -422,6 +422,20 @@ public class EntityPlane extends EntityDriveable
 		float flapsRoll = (flapsPitchRight - flapsPitchLeft) / 2F;
 		float roll = flapsRoll * (flapsRoll > 0 ? type.rollLeftModifier : type.rollRightModifier) * sensitivityAdjust;
 		
+		//Damage modifiers
+		if(mode == EnumPlaneMode.PLANE)
+		{
+			if(!isPartIntact(EnumDriveablePart.tail))
+			{
+				yaw = 0;
+				pitch = 0;
+			}
+			if(!isPartIntact(EnumDriveablePart.leftWing))
+				roll -= 2F * getSpeedXZ();		
+			if(!isPartIntact(EnumDriveablePart.rightWing))
+				roll += 2F * getSpeedXZ();		
+		}
+		
 		axes.rotateLocalYaw(yaw);
 		axes.rotateLocalPitch(pitch);
 		axes.rotateLocalRoll(-roll);
@@ -515,10 +529,15 @@ public class EntityPlane extends EntityDriveable
 				proportionOfMotionToCorrect = 0.5F;
 			
 			//Apply gravity
+			g = 0.98F;
 			motionY -= g;
 			
 			//Apply lift
-			float amountOfLift = 2F * g * throttle;
+			int numWingsIntact = 0;
+			if(isPartIntact(EnumDriveablePart.rightWing)) numWingsIntact++;
+			if(isPartIntact(EnumDriveablePart.leftWing)) numWingsIntact++; 
+			
+			float amountOfLift = 2F * g * throttle * numWingsIntact / 2F;
 			if(amountOfLift > g)
 				amountOfLift = g;
 			
@@ -628,6 +647,8 @@ public class EntityPlane extends EntityDriveable
 			
 		}
 				
+		checkForCollisions();
+		
 		//Fuel Handling
 		
 		//If the fuel item has stack size <= 0, delete it
