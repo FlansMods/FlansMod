@@ -27,7 +27,7 @@ Model mw.Flashlight
 Texture Flashlight
 //Recipe
 RecipeOutput 1
-Recipe F fiberglass
+Recipe F fiberglass G yellowDust R redstone
 FFF
- F 
- F 
+GRR
+FFF
