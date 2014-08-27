@@ -64,7 +64,8 @@ FuelTankSize 5000
 // ------------------------------------------------------ Passengers ------------------------------------------------------
 Pilot 32 -4 0
 Passengers 1
-Passenger 1 56 -8 0 nose -30 30 -30 0 minigun Nose
+Passenger 1 52 -8 0 nose -30 30 -30 0 minigun Nose
+GunOrigin 1 64 -28 0
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound HelicopterStart
 StartSoundLength 100

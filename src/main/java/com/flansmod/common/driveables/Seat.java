@@ -24,6 +24,8 @@ public class Seat
 	public int gunnerID;
 	/** For turret mounted seats on tanks, the seat will be positioned differently according to this offset and the yaw of the turret */
 	public Vector3f rotatedOffset = new Vector3f();
+	/** Where the bullets come from */
+	public Vector3f gunOrigin = new Vector3f();
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z

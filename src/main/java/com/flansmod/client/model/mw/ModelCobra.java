@@ -11,7 +11,7 @@ public class ModelCobra extends ModelPlane
 		int textureX = 512; //The x-size of the texture
 		int textureY = 256;	//The y-size of the texture
 	
-        bodyModel = new ModelRendererTurbo[11];
+        bodyModel = new ModelRendererTurbo[12];
         
         bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body section
 		bodyModel[0].addBox(-24F, 8F, -10F, 48, 32, 20);		
@@ -49,6 +49,8 @@ public class ModelCobra extends ModelPlane
 		bodyModel[10].flip = true;
 		bodyModel[10].addBox(-64F, 8F, -10F, 40, 16, 20);	
 
+		bodyModel[11] = new ModelRendererTurbo(this, 162, 176, textureX, textureY); //Nose piece
+		bodyModel[11].addTrapezoid(-72F, 16F, -10F, 8, 8, 20, 0F, -3F, ModelRendererTurbo.MR_RIGHT);	
 
 		//Right wing
 		rightWingModel = new ModelRendererTurbo[4];
@@ -150,7 +152,43 @@ public class ModelCobra extends ModelPlane
 		//The helicopter rotor origins for rendering. Better than the old propeller rotation point code
 		heliTailRotorOrigins = new Vector3f[] { new Vector3f(112F / 16F, 44F / 16F, 1F / 16F) }; 
 
+		ModelRendererTurbo[][] noseGun = new ModelRendererTurbo[4][];
+		//A swivel chair for the dorsal gunner with some gun supports
+		noseGun[0] = new ModelRendererTurbo[0];
+
+		//A single barrel with no recoil effects
+		noseGun[1] = new ModelRendererTurbo[1];
+		noseGun[1][0] = new ModelRendererTurbo(this, 198, 206, textureX, textureY);
+		noseGun[1][0].addBox(-4, -3, -3, 8, 6, 6); 	
 		
+		//No recoil part just yet
+		noseGun[2] = new ModelRendererTurbo[0];
+		
+		//A single barrel with no recoil effects
+		noseGun[3] = new ModelRendererTurbo[6];
+		noseGun[3][0] = new ModelRendererTurbo(this, 162, 206, textureX, textureY);
+		noseGun[3][0].addBox(4, -3, -3, 2, 6, 6); 
+		
+		noseGun[3][1] = new ModelRendererTurbo(this, 162, 220, textureX, textureY);
+		noseGun[3][1].addBox(6, -2, -2, 16, 1, 1); 
+		
+		noseGun[3][2] = new ModelRendererTurbo(this, 162, 224, textureX, textureY);
+		noseGun[3][2].addBox(6, -2, 1, 16, 1, 1); 
+		
+		noseGun[3][3] = new ModelRendererTurbo(this, 162, 228, textureX, textureY);
+		noseGun[3][3].addBox(6, 1, -2, 16, 1, 1); 
+		
+		noseGun[3][4] = new ModelRendererTurbo(this, 162, 232, textureX, textureY);
+		noseGun[3][4].addBox(6, 1, 1, 16, 1, 1); 
+	
+		noseGun[3][5] = new ModelRendererTurbo(this, 180, 206, textureX, textureY);
+		noseGun[3][5].addBox(18, -3, -3, 2, 6, 6); 
+		
+		for(ModelRendererTurbo[] dorsalGunParts : noseGun)
+			for(ModelRendererTurbo dorsalGunPart : dorsalGunParts)
+				dorsalGunPart.setRotationPoint(-64, 12, 0);
+		
+		registerGunModel("Nose", noseGun);
 		
 		translateAll(0F, -20F, 0F);
 		

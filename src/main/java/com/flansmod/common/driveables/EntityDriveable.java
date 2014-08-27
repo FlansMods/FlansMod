@@ -684,6 +684,20 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				shoot(false);
 			if(rightMouseHeld && getDriveableType().modeSecondary == EnumFireMode.FULLAUTO)
 				shoot(true);
+			minigunSpeedPrimary *= 0.9F;
+			minigunSpeedSecondary *= 0.9F;
+			if(leftMouseHeld && getDriveableType().modePrimary == EnumFireMode.MINIGUN)
+			{
+				minigunSpeedPrimary += 0.1F;
+				if(minigunSpeedPrimary > 1F)
+					shoot(false);
+			}
+			if(rightMouseHeld && getDriveableType().modeSecondary == EnumFireMode.MINIGUN)
+			{
+				minigunSpeedSecondary += 0.1F;
+				if(minigunSpeedSecondary > 1F)
+					shoot(true);
+			}
 		}
     }
 	

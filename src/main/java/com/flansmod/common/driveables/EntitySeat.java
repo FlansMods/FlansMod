@@ -25,9 +25,11 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.network.PacketDriveableKey;
+import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketSeatUpdates;
 import com.flansmod.common.teams.TeamsManager;
@@ -57,6 +59,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public int gunDelay;
 	/** Minigun speed */
 	public float minigunSpeed;
+	/** Minigun angle for render */
+	public float minigunAngle;
 	
 	/** Sound delay ticker for looping sounds */
 	public int soundDelay;
@@ -159,6 +163,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(riddenByEntity instanceof EntityPlayer && shooting)
 			pressKey(9, (EntityPlayer)riddenByEntity);
+		
+		minigunSpeed *= 0.95F;
+		minigunAngle += minigunSpeed;
 		//prevLooking = looking.clone();
 	}
 	
@@ -373,89 +380,92 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
 	{
-		if((!worldObj.isRemote || foundDriveable) && driver)
+		if(worldObj.isRemote && foundDriveable)
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKeyHeld(key, held));
+		}
+		if(driver)
 		{
 			driveable.updateKeyHeldState(key, held);
-			if(key == 9)
-				shooting = held;
+		}
+		else if(key == 9)
+		{ 
+			shooting = held;
 		}
 	}
 
 	@Override
 	public boolean pressKey(int key, EntityPlayer player) 
 	{
-		if(worldObj.isRemote && !foundDriveable)
-			return false;
-		
 		//Driver seat should pass input to driveable
 		if(driver)
 		{
 			return driveable.pressKey(key, player);
 		}
 		
-		if(key == 6)
-		{		
-			if(worldObj.isRemote)
+		if(worldObj.isRemote)
+		{
+			if(foundDriveable)
+			{
 				FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-			else
-			{	
-				riddenByEntity.mountEntity(null);
+				if(key == 9)
+					minigunSpeed += 0.1F;
 			}
-			return true;
+			return false;
 		}
 		
+		//Exit key pressed
+		if(key == 6 && riddenByEntity != null)
+			riddenByEntity.mountEntity(null);
+				
 		if(key == 9) //Shoot
 		{
+			//Get the gun from the plane type and the ammo from the data
+			GunType gun = seatInfo.gunType;
 			
-			if(worldObj.isRemote)
+			minigunSpeed += 0.1F;
+			
+			if(gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
 			{
-				FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-				//DEBUG
-				Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
-				Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getYOffset(), 0F));
-				for(int i = 0; i < 10; i++)
+				if(gunDelay <= 0 && TeamsManager.bulletsEnabled)
 				{
-					//worldObj.spawnParticle("reddust", 	posX + shootVec.x * i * 0.3D + yOffset.x, posY + shootVec.y * i * 0.3D + yOffset.y, posZ + shootVec.z * i * 0.3D + yOffset.z, 0, 0, 0);
-				}
-				//
-			}
-			else if(gunDelay <= 0 && TeamsManager.bulletsEnabled)
-			{
-				//Get the gun from the plane type and the ammo from the data
-				GunType gun = seatInfo.gunType;
-				ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
-				//Check that neither is null and that the bullet item is actually a bullet
-				if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
-				{
-					BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
-					if(gun.isAmmo(bullet))
+	
+					ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];
+					//Check that neither is null and that the bullet item is actually a bullet
+					if(gun != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet)
 					{
-						//Calculate the look axes globally
-						RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
-						Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
-						//Calculate the origin of the bullets
-						Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));						
-						//Spawn a new bullet item
-						worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(yOffset, new Vector3f((float)posX, (float)posY, (float)posZ), null), shootVec, (EntityLivingBase)riddenByEntity, gun.bulletSpread, gun.damage, 1.0F,bulletItemStack.getItemDamage(), driveable.getDriveableType()));
-						//Play the shoot sound
-						if(soundDelay <= 0)
+						BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+						if(gun.isAmmo(bullet))
 						{
-							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, gun.shootSound, false);
-							soundDelay = gun.shootSoundLength;
+							//Gun origin
+							Vector3f gunOrigin = Vector3f.add(driveable.axes.findLocalVectorGlobally(seatInfo.gunOrigin), new Vector3f(driveable.posX, driveable.posY, driveable.posZ), null);
+							//Calculate the look axes globally
+							RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+							Vector3f shootVec = driveable.axes.findLocalVectorGlobally(looking.getXAxis());
+							//Calculate the origin of the bullets
+							Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));						
+							//Spawn a new bullet item
+							worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec, (EntityLivingBase)riddenByEntity, gun.bulletSpread, gun.damage, 1.0F,bulletItemStack.getItemDamage(), driveable.getDriveableType()));
+							//Play the shoot sound
+							if(soundDelay <= 0)
+							{
+								PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, gun.shootSound, false);
+								soundDelay = gun.shootSoundLength;
+							}
+							//Get the bullet item damage and increment it
+							int damage = bulletItemStack.getItemDamage();
+							bulletItemStack.setItemDamage(damage + 1);	
+							//If the bullet item is completely damaged (empty)
+							if(damage + 1 == bulletItemStack.getMaxDamage())
+							{
+								//Set the damage to 0 and consume one ammo item (unless in creative)
+								bulletItemStack.setItemDamage(0);
+								if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+									driveable.getDriveableData().decrStackSize(3 + seatID, 1);
+							}
+							//Reset the shoot delay
+							gunDelay = gun.shootDelay;
 						}
-						//Get the bullet item damage and increment it
-						int damage = bulletItemStack.getItemDamage();
-						bulletItemStack.setItemDamage(damage + 1);	
-						//If the bullet item is completely damaged (empty)
-						if(damage + 1 == bulletItemStack.getMaxDamage())
-						{
-							//Set the damage to 0 and consume one ammo item (unless in creative)
-							bulletItemStack.setItemDamage(0);
-							if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-								driveable.getDriveableData().decrStackSize(3 + seatID, 1);
-						}
-						//Reset the shoot delay
-						gunDelay = gun.shootDelay;
 					}
 				}
 			}

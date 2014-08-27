@@ -339,10 +339,12 @@ public class ModelPlane extends ModelDriveable
     			{
     				//Minigun barrel part
     				float minigunSpeed = seat.getMinigunSpeed();
-        			for(ModelRendererTurbo gunModelPart : gunModel[2])
+        			for(ModelRendererTurbo gunModelPart : gunModel[3])
         			{
         				//Yaw, pitch, recoil and render
-            			gunModelPart.rotateAngleX = (180F - yaw) * 3.14159265F / 180F;
+            			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+            			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+            			gunModelPart.rotateAngleX = seat.minigunAngle * 0.5F;
             			gunModelPart.render(f5);
         			}
     			}

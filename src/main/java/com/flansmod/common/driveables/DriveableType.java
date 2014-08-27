@@ -345,6 +345,8 @@ public class DriveableType extends InfoType
 					recipe.add(new ItemStack(seat.gunType.item));
 				}
 			}
+			if(split[0].equals("GunOrigin"))
+				seats[Integer.parseInt(split[1])].gunOrigin = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
 						
 			//Y offset for badly built models :P
 			if(split[0].equals("YOffset"))
