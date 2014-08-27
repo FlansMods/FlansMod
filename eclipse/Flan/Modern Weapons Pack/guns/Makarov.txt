@@ -17,7 +17,7 @@ Damage 7
 Accuracy 8
 //Time in ticks between rounds
 ShootDelay 1
-ShootSound M9Shoot
+ShootSound MakarovShoot
 ReloadSound ColtReload
 Mode SemiAuto
 OneHanded true

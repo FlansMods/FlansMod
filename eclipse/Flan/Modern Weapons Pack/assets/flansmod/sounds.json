@@ -229,6 +229,21 @@
 		"sounds" : [ "flansmod:AT4Shoot" ]
 	},
 	
+	"MakarovShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MakarovShoot" ]
+	},
+	
+	"R870Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:R870Shoot" ]
+	},
+	
+	"FNSCARShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FNSCARShoot" ]
+	},
+	
 	"Helicopter1": {
 		"category" : "player",
 		"sounds" : [ "flansmod:Helicopter1" ]

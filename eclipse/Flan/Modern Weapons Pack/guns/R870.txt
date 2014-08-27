@@ -17,7 +17,7 @@ Damage 3
 Accuracy 11
 //Time in ticks between rounds
 ShootDelay 15
-ShootSound W1200Shoot
+ShootSound R870Shoot
 ReloadSound W1200Reload
 Mode SemiAuto
 //Bullet speed, default 3.0

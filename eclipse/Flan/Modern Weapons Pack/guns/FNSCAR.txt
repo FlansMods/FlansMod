@@ -15,7 +15,7 @@ Damage 8
 Accuracy 3
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound M14Shoot
+ShootSound FNSCARShoot
 ReloadSound MP44Reload
 Mode FullAuto
 //Bullet speed, default 3.0
