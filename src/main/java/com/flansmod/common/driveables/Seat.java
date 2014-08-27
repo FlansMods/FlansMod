@@ -38,6 +38,7 @@ public class Seat
 		x = Integer.parseInt(split[2]);
 		y = Integer.parseInt(split[3]);
 		z = Integer.parseInt(split[4]);
+		gunOrigin = new Vector3f(x, y, z);
 		part = EnumDriveablePart.getPart(split[5]);
 		if(split.length > 6)
 		{
