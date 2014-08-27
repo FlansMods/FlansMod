@@ -314,6 +314,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				{
 					DriveableHit driveableHit = (DriveableHit)bulletHit;
 					penetratingPower = driveableHit.driveable.bulletHit(this, driveableHit, penetratingPower);
+					if(FlansMod.DEBUG)
+						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(posX + motionX * driveableHit.intersectTime, posY + motionY * driveableHit.intersectTime, posZ + motionZ * driveableHit.intersectTime), 2000, 1F, 0F, 0F));
+
 				}
 				else if(bulletHit instanceof PlayerBulletHit)
 				{
