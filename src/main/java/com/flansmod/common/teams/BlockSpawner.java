@@ -38,11 +38,14 @@ public class BlockSpawner extends BlockContainer
 	}
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tabs, List list)
+    public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        list.add(new ItemStack(item, 1, 0));
-        list.add(new ItemStack(item, 1, 1));
-        list.add(new ItemStack(item, 1, 2));
+    	if(tab == FlansMod.tabFlanTeams)
+    	{
+	        list.add(new ItemStack(item, 1, 0));
+	        list.add(new ItemStack(item, 1, 1));
+	        list.add(new ItemStack(item, 1, 2));
+    	}
     }
     
     @Override

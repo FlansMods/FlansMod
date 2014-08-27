@@ -37,7 +37,11 @@ public class ItemTool extends Item
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
-		setCreativeTab(type.remote ? FlansMod.tabFlanGuns : FlansMod.tabFlanParts);
+		setCreativeTab(FlansMod.tabFlanParts);
+		if(type.remote)
+			setCreativeTab(FlansMod.tabFlanGuns);
+		if(type.healDriveables)
+			setCreativeTab(FlansMod.tabFlanDriveables);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
     }
     

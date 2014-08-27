@@ -6,4 +6,4 @@ Type Legs
 Defence 0.2
 ArmourTexture Juggernaut
 MoveSpeedModifier 0.75
-KnockbackModifier 2
+KnockbackModifier 0.25

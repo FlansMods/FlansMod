@@ -6,4 +6,4 @@ Type Boots
 Defence 0.1
 ArmourTexture Juggernaut
 MoveSpeedModifier 0.9
-KnockbackModifier 2
+KnockbackModifier 0.25

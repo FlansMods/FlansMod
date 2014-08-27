@@ -13,7 +13,7 @@ public class ArmourType extends InfoType
 	public double defence;
 	public String armourTextureName;
 	public float moveSpeedModifier = 1F;
-	public float knockbackModifier = 0.8F;
+	public float knockbackModifier = 0.2F;
 	
 	public ArmourType(TypeFile file)
 	{

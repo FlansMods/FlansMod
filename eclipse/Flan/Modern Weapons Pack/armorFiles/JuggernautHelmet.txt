@@ -6,4 +6,4 @@ Type Hat
 Defence 0.15
 ArmourTexture Juggernaut
 MoveSpeedModifier 0.85
-KnockbackModifier 2
+KnockbackModifier 0.25

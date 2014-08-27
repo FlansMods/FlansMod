@@ -29,7 +29,11 @@ public class ItemBullet extends Item
 		setMaxStackSize(type.maxStackSize);
 		setHasSubtypes(true);
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanGuns);
+		switch(type.weaponType)
+		{
+		case SHELL : case BOMB : case MINE : case MISSILE : setCreativeTab(FlansMod.tabFlanDriveables); break;
+		default : setCreativeTab(FlansMod.tabFlanGuns);
+		}
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
