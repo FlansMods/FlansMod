@@ -669,7 +669,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
 		if(seats[0] != null && seats[0].riddenByEntity == null)
 		{
-			throttle *= 0.96F;
+			throttle *= 0.98F;
+			rightMouseHeld = leftMouseHeld = false;
 		}
 		
 		//Check if shooting
