@@ -151,6 +151,8 @@ public class ModelCobra extends ModelPlane
 
 		//The helicopter rotor origins for rendering. Better than the old propeller rotation point code
 		heliTailRotorOrigins = new Vector3f[] { new Vector3f(112F / 16F, 44F / 16F, 1F / 16F) }; 
+		
+		heliRotorSpeeds = new float[] { 1F };
 
 		ModelRendererTurbo[][] noseGun = new ModelRendererTurbo[4][];
 		//A swivel chair for the dorsal gunner with some gun supports

@@ -30,6 +30,7 @@ public class ModelPlane extends ModelDriveable
 	//Helicopter bits
 	public ModelRendererTurbo heliMainRotorModels[][] = new ModelRendererTurbo[0][0]; //Helicopter main rotors model array [numProps][prop blades]
 	public Vector3f[] heliMainRotorOrigins = new Vector3f[0]; //Rotation origin of the rotors [numProps]
+	public float[] heliRotorSpeeds = new float[0]; //Speed for rotor rotation. Make this negative for reverse blades
 	public ModelRendererTurbo heliTailRotorModels[][] = new ModelRendererTurbo[0][0]; //Helicopter tail rotors model array [numProps][prop blades]
 	public Vector3f[] heliTailRotorOrigins = new Vector3f[0]; //Rotation origin of the tail rotors [numProps]
 	public ModelRendererTurbo skidsModel[] = new ModelRendererTurbo[0]; //Same as landing gear, but for helicopters
