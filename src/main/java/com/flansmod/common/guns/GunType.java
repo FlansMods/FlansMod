@@ -58,6 +58,8 @@ public class GunType extends InfoType implements IScope
 	public boolean oneHanded = false;
 	/** For one shot items like a panzerfaust */
 	public boolean consumeGunUponUse = false;
+	/** Item to drop on shooting */
+	public String dropItemOnShoot = null;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -197,6 +199,8 @@ public class GunType extends InfoType implements IScope
 				numBullets = Integer.parseInt(split[1]);
 			if(split[0].equals("ConsumeGunOnUse"))
 				consumeGunUponUse = Boolean.parseBoolean(split[1]);
+			if (split[0].equals("DropItemOnShoot"))
+				dropItemOnShoot = split[1];
 			//Sounds
 			if (split[0].equals("ShootDelay"))
 				shootDelay = Integer.parseInt(split[1]);

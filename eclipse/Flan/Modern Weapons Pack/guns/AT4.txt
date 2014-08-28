@@ -24,3 +24,4 @@ Deployable False
 DeployedModel None
 Model mw.AT4
 Texture AT4
+DropItemOnShoot at4

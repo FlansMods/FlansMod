@@ -643,6 +643,9 @@ public class ItemGun extends Item
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
+			// Drop item on shooting if gun requires it
+			if(gunType.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
+				dropItem(world, entityplayer, gunType.dropItemOnShoot);
 		}
 		if(left)
 			PlayerHandler.getPlayerData(entityplayer).shootTimeLeft = gunType.shootDelay;
