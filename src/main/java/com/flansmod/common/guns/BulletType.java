@@ -37,7 +37,7 @@ public class BulletType extends InfoType
 	public int maxStackSize = 1;
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 	public boolean hasLight = false;
-	public float penetratingPower = 0F;
+	public float penetratingPower = 1F;
 	/** Lock on variables. If true, then the bullet will search for a target at the moment it is fired */
 	public boolean lockOnToPlanes = false, lockOnToVehicles = false, lockOnToMechas = false, lockOnToPlayers = false, lockOnToLivings = false;
 	/** Lock on maximum angle for finding a target */

@@ -528,14 +528,25 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						int damageMultiplier = 1;
 						float shellSpeed = 3F;
 
-						ItemBullet bulletItem = (ItemBullet)driveableData.getStackInSlot(slot).getItem();
+						ItemStack bulletStack = driveableData.getStackInSlot(slot);
+						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
 						EntityBullet bulletEntity = bulletItem.getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed, driveableData.getStackInSlot(slot).getItemDamage(), type);
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
 						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-							driveableData.decrStackSize(slot, 1);
+						{
+							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
+							{
+								bulletStack.setItemDamage(0);
+								bulletStack.stackSize--;
+								if(bulletStack.stackSize == 0)
+									bulletStack = null;
+							}
+							driveableData.setInventorySlotContents(slot, bulletStack);
+						}
 						setShootDelay(type.shootDelay(secondary), secondary);
 					}
 				}

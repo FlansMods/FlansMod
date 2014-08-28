@@ -9,11 +9,11 @@ Texture Pak40
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.1
-MaxNegativeThrottle 0.1
+MaxThrottle 0
+MaxNegativeThrottle 0
 //Steering modifiers
-TurnLeftSpeed 0.1
-TurnRightSpeed 0.1
+TurnLeftSpeed 0
+TurnRightSpeed 0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -22,8 +22,6 @@ WheelPosition 1 -32 -8 18
 WheelPosition 2 20 -8 18
 WheelPosition 3 20 -8 -18
 WheelSpringStrength 0.5
-//Bouncy bouncy
-Bounciness 0.3
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
 //Tank mode activate

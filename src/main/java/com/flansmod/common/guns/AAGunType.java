@@ -14,6 +14,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class AAGunType extends InfoType
 {
+	/** The ammo types used by this gun */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	public int reloadTime;
 	public int recoil = 5;
@@ -32,6 +33,9 @@ public class AAGunType extends InfoType
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
 	public int[] barrelX, barrelY, barrelZ;
+	
+	
+	
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 
 	public AAGunType(TypeFile file)

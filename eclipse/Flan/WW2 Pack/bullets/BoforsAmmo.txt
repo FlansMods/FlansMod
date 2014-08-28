@@ -11,6 +11,8 @@ FallSpeed 0.25
 MaxStackSize 16
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 4
+//WeaponType : One of Missile, Shell, Bomb, Gun, None. Only affects driveable entities
+WeaponType Shell
 //The damage multiplier caused by the bullet on hitting an entity
 DamageVsLiving 3
 DamageVsVehicles 250

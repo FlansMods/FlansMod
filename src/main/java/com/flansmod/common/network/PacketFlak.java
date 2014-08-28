@@ -95,11 +95,14 @@ public class PacketFlak extends PacketBase
 		for (int i = 0; i < numParticles; i++)
 		{
 			EntityFX obj = FlansModClient.getParticle(particleType, world, x + rand.nextGaussian(), y + rand.nextGaussian(), z + rand.nextGaussian());
-			obj.motionX = rand.nextGaussian() / 20;
-			obj.motionY = rand.nextGaussian() / 20;
-			obj.motionZ = rand.nextGaussian() / 20;
-			obj.renderDistanceWeight = 250D;
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
+			if(obj != null)
+			{
+				obj.motionX = rand.nextGaussian() / 20;
+				obj.motionY = rand.nextGaussian() / 20;
+				obj.motionZ = rand.nextGaussian() / 20;
+				obj.renderDistanceWeight = 250D;
+				FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
+			}
 		}		
 	}
 }
