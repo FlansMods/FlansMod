@@ -6,6 +6,6 @@ AddItem usp
 AddItem c4 2
 AddItem c4Remote
 AddItem mwKnife
-AddItem w1200Ammo 2
+AddItem w1200Ammo 3
 AddItem panzerfaust3Ammo 1
 AddItem uspAmmo 2

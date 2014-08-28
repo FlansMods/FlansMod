@@ -234,6 +234,11 @@
 		"sounds" : [ "flansmod:MakarovShoot" ]
 	},
 	
+	"SIGP229Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MakarovShoot" ]
+	},
+	
 	"R870Shoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:R870Shoot" ]

@@ -1,0 +1,8 @@
+Name Stealth Sniper
+ShortName sasSniper2
+AddItem m21+flanMWSilencer
+AddItem m9+flanMWSilencer
+AddItem mwKnife
+AddItem claymore 2
+AddItem m21Ammo 3
+AddItem m9Ammo 2

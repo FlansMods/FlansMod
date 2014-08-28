@@ -6,6 +6,6 @@ AddItem m9
 AddItem c4 2
 AddItem c4Remote
 AddItem mwKnife
-AddItem m1014Ammo 2
-AddItem at4Ammo 2
+AddItem m1014Ammo 4
+AddItem at4Ammo 1
 AddItem m9Ammo 2
