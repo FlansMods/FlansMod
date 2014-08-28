@@ -1,5 +1,7 @@
 package com.flansmod.common.guns;
 
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
 
 import org.lwjgl.input.Mouse;
@@ -14,7 +16,6 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -22,6 +23,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
@@ -210,7 +212,22 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 		if (shootDelay > 0)
 			shootDelay--;
-
+		/*
+		List list = worldObj.getEntitiesWithinAABB(EntityDriveable.class, boundingBox.expand(50D, 50D, 50D));
+		if(list.size() > 0)
+		{
+			EntityDriveable ent = ((EntityDriveable)list.get(0));
+			double dX = ent.posX - posX;
+			double dY = ent.posY - posY;
+			double dZ = ent.posZ - posZ;
+			float newYaw = (float)Math.atan2(dZ, dX);
+			float newPitch = (float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ));
+			
+			
+			gunYaw = 180F + newYaw * 180F / 3.14159F;
+			gunPitch = -newPitch * 180F / 3.14159F;
+		}
+		*/
 		// apply gravity
 
 		//if (!onGround && !worldObj.isRemote)
