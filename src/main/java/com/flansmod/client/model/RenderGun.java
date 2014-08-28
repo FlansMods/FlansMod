@@ -229,6 +229,21 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.1F * reloadRotate, -0.2F * reloadRotate, -0.1F * reloadRotate);
 								break;
 							}
+							case ALT_PISTOL_CLIP :
+							{
+								if(offHand)
+								{
+									GL11.glRotatef(-60F * reloadRotate, 0F, 1F, 0F);
+									GL11.glTranslatef(0.15F * reloadRotate, 0.25F * reloadRotate, 0F);
+									break;
+								}
+								else
+								{
+									GL11.glRotatef(60F * reloadRotate, 0F, 1F, 0F);
+									GL11.glTranslatef(0.15F * reloadRotate, 0.25F * reloadRotate, 0F);
+									break;
+								}
+							}
 							default : break;
 						}
 					}
@@ -379,6 +394,12 @@ public class RenderGun implements IItemRenderer
 						{
 							GL11.glRotatef(-90F * clipPosition * clipPosition, 0F, 0F, 1F);
 							GL11.glTranslatef(0F, -1F * clipPosition, 0F);
+							break;
+						}
+						case ALT_PISTOL_CLIP :
+						{
+							GL11.glRotatef(5F * clipPosition, 0F, 0F, 1F);
+							GL11.glTranslatef(0F, -3F * clipPosition, 0F);
 							break;
 						}
 						case SIDE_CLIP : 
