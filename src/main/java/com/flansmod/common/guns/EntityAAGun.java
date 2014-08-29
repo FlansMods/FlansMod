@@ -7,7 +7,9 @@ import io.netty.buffer.ByteBuf;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -23,27 +25,33 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.network.PacketAAGunAngles;
 import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
-	private int field_9394_d;
-	private double field_9393_e;
-	private double field_9392_f;
-	private double field_9391_g;
-	private double field_9390_h;
-	private double field_9389_i;
+	private int sUpdateTime;
+	private double sPosX;
+	private double sPosY;
+	private double sPosZ;
+	private double sYaw;
+	private double sPitch;
 	private double field_9388_j;
 	private double field_9387_k;
 	private double field_9386_l;
 
 	private int health;
 	private int shootDelay;
-	public float gunYaw;
-	public float gunPitch;
+	/** Gun angles */
+	public float gunYaw, gunPitch;
+	/** Prev gun angles */
+	public float prevGunYaw, prevGunPitch;
 	public float barrelRecoil[];
 	public AAGunType type;
 	public Entity towedByEntity;
@@ -52,6 +60,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public int currentBarrel; // For cycling through firing each barrel
 	public boolean mouseHeld;
 	public boolean wasShooting;
+	
+	//Sentry stuff
+	/** Stops the sentry shooting whoever placed it or their teammates */
+	public EntityPlayer placer = null;
+	/** The sentry's current target */
+	public Entity target = null;
+	/** How often to check for new targets */
+	public static final float targetAcquireInterval = 10;
 	
 	public int ticksSinceUsed = 0;
 
@@ -66,9 +82,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		shootDelay = 0;
 	}
 
-	public EntityAAGun(World world, AAGunType type1, double d, double d1, double d2)
+	public EntityAAGun(World world, AAGunType type1, double d, double d1, double d2, EntityPlayer p)
 	{
 		this(world);
+		placer = p;
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -84,6 +101,17 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		float f1 = height;
 		boundingBox.setBounds(d - f, (d1 - yOffset) + ySize, d2 - f, d + f, (d1 - yOffset) + ySize + f1, d2 + f);
 	}
+	
+	@Override
+    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
+    {
+		sPosX = d;
+		sPosY = d1;
+		sPosZ = d2;
+		sYaw = f;
+		sPitch = f1;
+		sUpdateTime = i;
+    }
 
 	public void initType()
 	{
@@ -189,6 +217,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		prevGunYaw = gunYaw;
+		prevGunPitch = gunPitch;
+		
 		ticksSinceUsed++;
 		if(TeamsManager.aaLife > 0 && ticksSinceUsed > TeamsManager.aaLife * 20)
 		{
@@ -212,26 +244,44 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 		if (shootDelay > 0)
 			shootDelay--;
-		/*
-		List list = worldObj.getEntitiesWithinAABB(EntityDriveable.class, boundingBox.expand(50D, 50D, 50D));
-		if(list.size() > 0)
+		
+		// Sentry stuff
+		if(isSentry())
 		{
-			EntityDriveable ent = ((EntityDriveable)list.get(0));
-			double dX = ent.posX - posX;
-			double dY = ent.posY - posY;
-			double dZ = ent.posZ - posZ;
-			float newYaw = (float)Math.atan2(dZ, dX);
-			float newPitch = (float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ));
-			
-			
-			gunYaw = 180F + newYaw * 180F / 3.14159F;
-			gunPitch = -newPitch * 180F / 3.14159F;
+			if(target != null && target.isDead)
+				target = null;
+			//Find a new target if we don't currently have one
+			if(target == null && ticksExisted % targetAcquireInterval == 0)
+			{
+				target = getValidTarget();
+			}
+			if(target != null)
+			{
+				double dX = target.posX - posX;
+				double dY = target.posY - (posY + 1.5F);
+				double dZ = target.posZ - posZ;
+				
+				double distanceToTarget = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+
+				if(distanceToTarget > type.targetRange)
+					target = null;
+				else
+				{
+					float newYaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
+					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F;
+					
+					float turnSpeed = 0.25F;
+					
+					gunYaw += (newYaw - gunYaw) * turnSpeed;
+					gunPitch += (newPitch - gunPitch) * turnSpeed;
+				}
+			}
 		}
-		*/
+			
 		// apply gravity
 
-		//if (!onGround && !worldObj.isRemote)
-		//	motionY -= 9.8D / 400D;
+		if (!onGround && !worldObj.isRemote)
+			motionY -= 9.8D / 400D;
 
 		// update motion
 		motionX *= 0.5;
@@ -245,21 +295,21 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 		if (worldObj.isRemote)
 		{
-			if (field_9394_d > 0)
+			if (sUpdateTime > 0)
 			{
-				double d1 = posX + (field_9393_e - posX) / field_9394_d;
-				double d5 = posY + (field_9392_f - posY) / field_9394_d;
-				double d9 = posZ + (field_9391_g - posZ) / field_9394_d;
+				double d1 = posX + (sPosX - posX) / sUpdateTime;
+				double d5 = posY + (sPosY - posY) / sUpdateTime;
+				double d9 = posZ + (sPosZ - posZ) / sUpdateTime;
 				double d12;
-				for (d12 = field_9390_h - rotationYaw; d12 < -180D; d12 += 360D)
+				for (d12 = sYaw - rotationYaw; d12 < -180D; d12 += 360D)
 				{
 				}
 				for (; d12 >= 180D; d12 -= 360D)
 				{
 				}
-				rotationYaw += d12 / field_9394_d;
-				rotationPitch += (field_9389_i - rotationPitch) / field_9394_d;
-				field_9394_d--;
+				rotationYaw += d12 / sUpdateTime;
+				rotationPitch += (sPitch - rotationPitch) / sUpdateTime;
+				sUpdateTime--;
 				setPosition(d1, d5, d9);
 				setRotation(rotationYaw, rotationPitch);
 			}
@@ -300,25 +350,91 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 
 		
-		if (!worldObj.isRemote && mouseHeld && riddenByEntity != null && riddenByEntity instanceof EntityPlayer && reloadTimer <= 0 && shootDelay <= 0)
+		if(!worldObj.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
-			EntityPlayer player = (EntityPlayer)riddenByEntity;
-			for (int j = 0; j < type.numBarrels; j++)
+			if(mouseHeld && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
 			{
-				if (shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+				EntityPlayer player = (EntityPlayer)riddenByEntity;
+				for(int j = 0; j < type.numBarrels; j++)
 				{
-					// Fire
-					BulletType bullet = BulletType.getBullet(ammo[j].getItem());
-					if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-						ammo[j].damageItem(1, player);
-					shootDelay = type.shootDelay;
-					barrelRecoil[j] = type.recoil;
-					worldObj.spawnEntityInWorld(((ItemBullet)ammo[j].getItem()).getEntity(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, ammo[j].getItemDamage(), type));
-					PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+					if(shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+					{
+						// Fire
+						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
+						if (!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+							ammo[j].damageItem(1, player);
+						shootDelay = type.shootDelay;
+						barrelRecoil[j] = type.recoil;
+						worldObj.spawnEntityInWorld(((ItemBullet)ammo[j].getItem()).getEntity(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, ammo[j].getItemDamage(), type));
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+					}
+				}
+				currentBarrel = (currentBarrel + 1) % type.numBarrels;
+			}
+			else if(target != null)
+			{
+				for(int j = 0; j < type.numBarrels; j++)
+				{
+					int ammoSlot = j;
+					if(type.shareAmmo)
+						ammoSlot = 0;
+					if(shootDelay <= 0 && ammo[ammoSlot] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == ammoSlot))
+					{
+						// Fire
+						BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
+						ammo[ammoSlot].setItemDamage(ammo[ammoSlot].getItemDamage() + 1);
+						shootDelay = type.shootDelay;
+						barrelRecoil[ammoSlot] = type.recoil;
+						worldObj.spawnEntityInWorld(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, ammo[ammoSlot].getItemDamage(), type));
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+					}
+				}
+				currentBarrel = (currentBarrel + 1) % type.numBarrels;
+			}
+		}
+		if(!worldObj.isRemote)
+		{
+			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 50F, dimension);
+		}
+	}
+	
+	public boolean isSentry()
+	{
+		return type.targetMobs || type.targetPlayers;
+	}
+	
+	public Entity getValidTarget()
+	{
+		if(worldObj.isRemote)
+			return null;
+		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(type.targetRange, type.targetRange, type.targetRange)))
+		{
+			Entity candidateEntity = (Entity)obj;
+			
+			if((type.targetMobs && candidateEntity instanceof EntityMob) || (type.targetPlayers && candidateEntity instanceof EntityPlayer))
+			{
+				//Check that this entity is actually in range and visible
+				if(candidateEntity.getDistanceToEntity(this) < type.targetRange)
+				{
+					if(candidateEntity instanceof EntityPlayer)
+					{
+						if(candidateEntity == placer)
+							continue;
+						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
+						{
+							PlayerData placerData = PlayerHandler.getPlayerData(placer, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+							PlayerData candidateData = PlayerHandler.getPlayerData((EntityPlayer)candidateEntity, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+							if(candidateData.team == Team.spectators || candidateData.team == null)
+								continue;
+							if(!TeamsManager.getInstance().currentRound.gametype.playerCanAttack((EntityPlayerMP)placer, placerData.team, (EntityPlayerMP)candidateEntity, candidateData.team))
+								continue;
+						}
+					}
+					return candidateEntity;
 				}
 			}
-			currentBarrel = (currentBarrel + 1) % type.numBarrels;
 		}
+		return null;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -426,8 +542,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				entityplayer.mountEntity(null);
 				return true;
 			}
-			entityplayer.mountEntity(this);
-			for (int i = 0; i < type.numBarrels; i++)
+			if(!isSentry())
+				entityplayer.mountEntity(this);
+			for (int i = 0; i < (type.shareAmmo ? 1 : type.numBarrels); i++)
 			{
 				if (ammo[i] == null)
 				{

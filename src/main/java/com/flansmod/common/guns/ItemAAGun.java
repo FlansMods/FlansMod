@@ -62,7 +62,7 @@ public class ItemAAGun extends Item
 			int k = movingobjectposition.blockZ;
 			if (!world.isRemote && world.isSideSolid(i, j, k, ForgeDirection.UP))
 			{
-				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F));
+				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F, entityplayer));
 			}
 			if (!entityplayer.capabilities.isCreativeMode)
 			{
@@ -74,7 +74,7 @@ public class ItemAAGun extends Item
 	
     public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
     {
-    	Entity entity = new EntityAAGun(world, type, x, y, z);
+    	Entity entity = new EntityAAGun(world, type, x, y, z, null);
     	if(!world.isRemote)
         {
 			world.spawnEntityInWorld(entity);

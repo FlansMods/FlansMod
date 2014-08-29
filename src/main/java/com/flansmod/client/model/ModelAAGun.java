@@ -105,11 +105,11 @@ public class ModelAAGun extends ModelBase
 		}
 	}	
 
-    public ModelRendererTurbo baseModel[];		//The base which stays put
-	public ModelRendererTurbo seatModel[];		//The bit which swivels around the yaw axis, but which does not pitch
-	public ModelRendererTurbo gunModel[];		//The bit of the gun that points where you look, but doesn't move
-	public ModelRendererTurbo barrelModel[][];	//The end of the barrel that recoils
-	public ModelRendererTurbo ammoModel[][];	//The magazines for each barrel.
+    public ModelRendererTurbo baseModel[] = new ModelRendererTurbo[0];		//The base which stays put
+	public ModelRendererTurbo seatModel[] = new ModelRendererTurbo[0];			//The bit which swivels around the yaw axis, but which does not pitch
+	public ModelRendererTurbo gunModel[] = new ModelRendererTurbo[0];			//The bit of the gun that points where you look, but doesn't move
+	public ModelRendererTurbo barrelModel[][] = new ModelRendererTurbo[0][0];		//The end of the barrel that recoils
+	public ModelRendererTurbo ammoModel[][] = new ModelRendererTurbo[0][0];		//The magazines for each barrel.
 	public ModelRendererTurbo gunsightModel[] = new ModelRendererTurbo[0];	//The gunsight for the Gun.
 
 	public int barrelX, barrelY, barrelZ;

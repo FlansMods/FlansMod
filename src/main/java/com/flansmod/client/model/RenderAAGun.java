@@ -23,10 +23,18 @@ public class RenderAAGun extends Render
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) d, (float) d1, (float) d2);
 		GL11.glScalef(1F, 1F, 1.0F);
+		
+		float dYaw = aa.gunYaw - aa.prevGunYaw;
+		for(; dYaw > 180F; dYaw -= 360F) {}
+		for(; dYaw <= -180F; dYaw += 360F) {}
+		
 		ModelAAGun modelAAGun = aa.type.model;
-		modelAAGun.renderBase(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, aa);
-		GL11.glRotatef(180F - aa.gunYaw, 0.0F, 1.0F, 0.0F);
-		modelAAGun.renderGun(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, aa);
+		if(modelAAGun != null)
+		{
+			modelAAGun.renderBase(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, aa);
+			GL11.glRotatef(180F - (aa.prevGunYaw + dYaw * f1), 0.0F, 1.0F, 0.0F);
+			modelAAGun.renderGun(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, aa);
+		}
 		GL11.glPopMatrix();
 	}
 

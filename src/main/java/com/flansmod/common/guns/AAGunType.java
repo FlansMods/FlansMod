@@ -3,8 +3,8 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.client.model.ModelAAGun;
@@ -24,17 +24,19 @@ public class AAGunType extends InfoType
 	public int numBarrels;
 	public boolean fireAlternately;
 	public int health;
-	public int gunnerX;
-	public int gunnerY;
-	public int gunnerZ;
+	public int gunnerX, gunnerY, gunnerZ;
 	public String shootSound;
 	public String reloadSound;
 	public ModelAAGun model;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
 	public int[] barrelX, barrelY, barrelZ;
-	
-	
+	/** Sentry mode. If target players is true then it either targets everyone on the other team, or everyone other than the owner when not playing with teams */
+	public boolean targetMobs = false, targetPlayers = false, targetVehicles = false, targetPlanes = false, targetMechas = false;
+	/** Targeting radius */
+	public float targetRange = 10F;
+	/** If true, then all barrels share the same ammo slot */
+	public boolean shareAmmo = false;
 	
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
 
@@ -45,93 +47,107 @@ public class AAGunType extends InfoType
 	}
 
 	@Override
-	protected void read(String[] arg0, TypeFile file)
+	protected void read(String[] split, TypeFile file)
 	{
-		super.read(arg0, file);
+		super.read(split, file);
 		try
 		{
-			if (FMLCommonHandler.instance().getSide().isClient() && arg0[0].equals("Model"))
+			if (FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
-				model = FlansMod.proxy.loadModel(arg0[1], shortName, ModelAAGun.class);
+				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAAGun.class);
 			}
-			if (arg0[0].equals("Texture"))
+			if (split[0].equals("Texture"))
 			{
-				texture = arg0[1];
+				texture = split[1];
 			}
-			if (arg0[0].equals("Damage"))
+			if (split[0].equals("Damage"))
 			{
-				damage = Integer.parseInt(arg0[1]);
+				damage = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("ReloadTime"))
+			if (split[0].equals("ReloadTime"))
 			{
-				reloadTime = Integer.parseInt(arg0[1]);
+				reloadTime = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("Recoil"))
+			if (split[0].equals("Recoil"))
 			{
-				recoil = Integer.parseInt(arg0[1]);
+				recoil = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("Accuracy"))
+			if (split[0].equals("Accuracy"))
 			{
-				accuracy = Integer.parseInt(arg0[1]);
+				accuracy = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("ShootDelay"))
+			if (split[0].equals("ShootDelay"))
 			{
-				shootDelay = Integer.parseInt(arg0[1]);
+				shootDelay = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("ShootSound"))
+			if (split[0].equals("ShootSound"))
 			{
-				shootSound = arg0[1];
-				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
+				shootSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "aaguns", split[1]);
 			}
-			if (arg0[0].equals("ReloadSound"))
+			if (split[0].equals("ReloadSound"))
 			{
-				reloadSound = arg0[1];
-				FlansMod.proxy.loadSound(contentPack, "aaguns", arg0[1]);
+				reloadSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "aaguns", split[1]);
 			}
-			if (arg0[0].equals("FireAlternately"))
+			if (split[0].equals("FireAlternately"))
 			{
-				fireAlternately = arg0[1].equals("True");
+				fireAlternately = split[1].equals("True");
 			}
-			if (arg0[0].equals("NumBarrels"))
+			if (split[0].equals("NumBarrels"))
 			{
-				numBarrels = Integer.parseInt(arg0[1]);
+				numBarrels = Integer.parseInt(split[1]);
 				barrelX = new int[numBarrels];
 				barrelY = new int[numBarrels];
 				barrelZ = new int[numBarrels];
 			}
-			if(arg0[0].equals("Barrel"))
+			if(split[0].equals("Barrel"))
 			{
-				int id = Integer.parseInt(arg0[1]);
-				barrelX[id] = Integer.parseInt(arg0[2]);
-				barrelY[id] = Integer.parseInt(arg0[3]);
-				barrelZ[id] = Integer.parseInt(arg0[4]);
+				int id = Integer.parseInt(split[1]);
+				barrelX[id] = Integer.parseInt(split[2]);
+				barrelY[id] = Integer.parseInt(split[3]);
+				barrelZ[id] = Integer.parseInt(split[4]);
 			}
-			if (arg0[0].equals("Health"))
+			if (split[0].equals("Health"))
 			{
-				health = Integer.parseInt(arg0[1]);
+				health = Integer.parseInt(split[1]);
 			}
-			if (arg0[0].equals("TopViewLimit"))
+			if (split[0].equals("TopViewLimit"))
 			{
-				topViewLimit = Float.parseFloat(arg0[1]);
+				topViewLimit = Float.parseFloat(split[1]);
 			}
-			if (arg0[0].equals("BottomViewLimit"))
+			if (split[0].equals("BottomViewLimit"))
 			{
-				bottomViewLimit = Float.parseFloat(arg0[1]);
+				bottomViewLimit = Float.parseFloat(split[1]);
 			}
-			if (arg0[0].equals("Ammo"))
+			if (split[0].equals("Ammo"))
 			{
-				BulletType type = BulletType.getBullet(arg0[1]);
+				BulletType type = BulletType.getBullet(split[1]);
 				if (type != null)
 				{
 					ammo.add(type);
 				}
 			}
-			if (arg0[0].equals("GunnerPos"))
+			if (split[0].equals("GunnerPos"))
 			{
-				gunnerX = Integer.parseInt(arg0[1]);
-				gunnerY = Integer.parseInt(arg0[2]);
-				gunnerZ = Integer.parseInt(arg0[3]);
+				gunnerX = Integer.parseInt(split[1]);
+				gunnerY = Integer.parseInt(split[2]);
+				gunnerZ = Integer.parseInt(split[3]);
 			}
+			if(split[0].equals("TargetMobs"))
+				targetMobs = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("TargetPlayers"))
+				targetPlayers = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("TargetVehicles"))
+				targetVehicles = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("TargetPlanes"))
+				targetPlanes = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("TargetMechas"))
+				targetMechas = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("TargetDriveables"))
+				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("ShareAmmo"))
+				shareAmmo = Boolean.parseBoolean(split[1]);
 
 		} catch (Exception e)
 		{
