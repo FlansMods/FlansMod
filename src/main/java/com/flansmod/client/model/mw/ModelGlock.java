@@ -91,6 +91,7 @@ public class ModelGlock extends ModelGun
 		barrelAttachPoint = new Vector3f(8.5F / 16F, 4F / 16F, 0F);
 		
 		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
+		scopeIsOnSlide = true;
 
 		gunSlideDistance = 0.2F;
 		animationType = EnumAnimationType.PISTOL_CLIP;
