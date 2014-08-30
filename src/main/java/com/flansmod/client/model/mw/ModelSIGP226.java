@@ -41,7 +41,7 @@ public class ModelSIGP226 extends ModelGun
 		barrelAttachPoint = new Vector3f(6.5F / 16F, 4F / 16F, 0F);
 		
 		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
-		scopeIsOnSlide = false;
+		scopeIsOnSlide = true;
 		
 		gunSlideDistance = 0.25F;
 		animationType = EnumAnimationType.PISTOL_CLIP;
