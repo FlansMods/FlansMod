@@ -1,8 +1,8 @@
 Name Light Assault
 ShortName sasAssault1
 AddItem m16a4
-AddItem sigP229
+AddItem sigP226
 AddItem m67 2
 AddItem mwKnife
 AddItem m16a4Ammo 3
-AddItem sigP229Ammo 2
+AddItem sigP226Ammo 2
