@@ -4,6 +4,7 @@ import com.flansmod.common.vector.Vector3f;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class EntityDebugDot extends Entity 
@@ -40,7 +41,13 @@ public class EntityDebugDot extends Entity
 		if(life <= 0)
 			setDead();
 	}
-
+	
+	@Override
+	public AxisAlignedBB getBoundingBox()
+	{
+		return null;
+	}
+	
 	@Override
 	protected void entityInit() 
 	{

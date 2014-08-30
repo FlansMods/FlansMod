@@ -1,10 +1,15 @@
 package com.flansmod.common.guns.raytracing;
 
-public class EntityHit extends BulletHit {
+import net.minecraft.entity.Entity;
 
-	public EntityHit(float f) {
+public class EntityHit extends BulletHit 
+{
+	public Entity entity;
+	
+	public EntityHit(Entity e, float f) 
+	{
 		super(f);
-		// TODO Auto-generated constructor stub
+		entity = e;
 	}
 
 }

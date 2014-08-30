@@ -385,7 +385,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						ammo[ammoSlot].setItemDamage(ammo[ammoSlot].getItemDamage() + 1);
 						shootDelay = type.shootDelay;
 						barrelRecoil[ammoSlot] = type.recoil;
-						worldObj.spawnEntityInWorld(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ), gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, ammo[ammoSlot].getItemDamage(), type));
+						worldObj.spawnEntityInWorld(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(worldObj, rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D, type.barrelY[currentBarrel] / 16D, type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY + 1.5F, posZ), gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, ammo[ammoSlot].getItemDamage(), type));
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}
 				}
@@ -551,8 +551,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					int slot = findAmmo(entityplayer);
 					if (slot >= 0)
 					{
-						ammo[i] = entityplayer.inventory.getStackInSlot(slot);
-						entityplayer.inventory.decrStackSize(slot, 1);
+						ammo[i] = entityplayer.inventory.getStackInSlot(slot).copy();
+						ammo[i].stackSize = 1;
+						if(!entityplayer.capabilities.isCreativeMode)
+							entityplayer.inventory.decrStackSize(slot, 1);
 						reloadTimer = type.reloadTime;
 						worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 					}

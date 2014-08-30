@@ -31,6 +31,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -44,6 +45,7 @@ import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.BlockHit;
 import com.flansmod.common.guns.raytracing.BulletHit;
 import com.flansmod.common.guns.raytracing.DriveableHit;
+import com.flansmod.common.guns.raytracing.EntityHit;
 import com.flansmod.common.guns.raytracing.PlayerBulletHit;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketFlak;
@@ -254,7 +256,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 			//Get players
-			if(obj instanceof EntityPlayer)
+			else if(obj instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer)obj;
 				PlayerData data = PlayerHandler.getPlayerData(player, worldObj.isRemote ? Side.CLIENT : Side.SERVER);
@@ -277,6 +279,25 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				ArrayList<BulletHit> playerHits = snapshot.raytrace(origin, motion);
 				hits.addAll(playerHits);
 			}
+			else
+			{
+				Entity entity = (Entity)obj;
+				if(entity == this || entity.isDead || entity instanceof EntityBullet || entity.boundingBox == null || entity instanceof EntityDebugDot || entity instanceof EntityDebugVector || entity instanceof EntityDebugAABB)
+					continue;
+				MovingObjectPosition mop = entity.boundingBox.calculateIntercept(origin.toVec3(), Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ));
+				if(mop != null)
+				{
+					Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - posX, mop.hitVec.yCoord - posY, mop.hitVec.zCoord - posZ);
+					float hitLambda = 1F;
+					if(motion.x != 0F)
+						hitLambda = hitPoint.x / motion.x;
+					else if(motion.y != 0F)
+						hitLambda = hitPoint.y / motion.y;
+					else if(motion.z != 0F)
+						hitLambda = hitPoint.z / motion.z;
+					hits.add(new EntityHit(entity, hitLambda));
+				}
+			}
 		}
 		
 		//Ray trace the bullet by comparing its next position to its current position
@@ -288,7 +309,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		{
 			//Calculate the lambda value of the intercept
 			Vec3 hitVec = hit.hitVec.subtract(posVec);
-			float lambda = 0;
+			float lambda = 1;
 			//Try each co-ordinate one at a time.
 			if(motionX != 0)
 				lambda = (float)(hitVec.xCoord / motionX);
@@ -324,6 +345,20 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					penetratingPower = playerHit.hitbox.hitByBullet(this, penetratingPower);
 					if(FlansMod.DEBUG)
 						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(posX + motionX * playerHit.intersectTime, posY + motionY * playerHit.intersectTime, posZ + motionZ * playerHit.intersectTime), 2000, 1F, 0F, 0F));
+				}
+				else if(bulletHit instanceof EntityHit)
+				{
+					EntityHit entityHit = (EntityHit)bulletHit;
+					if(entityHit.entity.attackEntityFrom(getBulletDamage(false), damage * type.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
+					{
+						EntityLivingBase living = (EntityLivingBase)entityHit.entity;
+						//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+						living.arrowHitTimer++;
+						living.hurtResistantTime = living.maxHurtResistantTime / 2;
+					}
+					penetratingPower -= 1F;
+					if(FlansMod.DEBUG)
+						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(posX + motionX * entityHit.intersectTime, posY + motionY * entityHit.intersectTime, posZ + motionZ * entityHit.intersectTime), 2000, 1F, 0F, 0F));
 				}
 				else if(bulletHit instanceof BlockHit)
 				{
@@ -362,6 +397,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			
 		}
 		//Otherwise, do a standard check for uninteresting entities
+		/*
 		else
 		{
 			//Iterate over entities close to the bullet to see if any of them have been hit and hit them
@@ -413,6 +449,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				}
 			}
 		}
+		*/
 	
 		//Movement dampening variables
 		float drag = 0.99F;
