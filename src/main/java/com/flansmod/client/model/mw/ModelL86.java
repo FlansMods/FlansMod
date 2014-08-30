@@ -75,7 +75,7 @@ public class ModelL86 extends ModelGun
 		defaultGripModel[2].addShapeBox(15F, -3F, 0F, 1, 5, 1, 0F, /* 0 */ 0F, 0F, -3F, /* 1 */ 0F, 0F, -3F, /* 2 */ 0F, 0F, 3F, /* 3 */ 0F, 0F, 3F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 
 		gunSlideDistance = 0.25F;
-		animationType = EnumAnimationType.PISTOL_CLIP;
+		animationType = EnumAnimationType.BULLPUP;
 		
 		tiltGunTime = 0.1F;
 		unloadClipTime = 0.2F;
