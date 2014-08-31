@@ -1,4 +1,4 @@
-Name Type14
+Name Type 14
 ShortName type14
 //The ammo this gun uses (shortName)
 Ammo type14Ammo

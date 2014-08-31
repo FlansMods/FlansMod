@@ -72,8 +72,8 @@ AddGun usp 10 ingotIron
 AddAmmo uspAmmo 2 ingotIron 2 gunpowder
 AddGun m1911 8 ingotIron 1 leather
 AddAmmo m1911Ammo 2 ingotIron 1 gunpowder
-AddGun sigP229 8 ingotIron
-AddAmmo sigP229Ammo 2 ingotIron 2 gunpowder
+AddGun sigP226 8 ingotIron
+AddAmmo sigP226Ammo 2 ingotIron 2 gunpowder
 AddGun glock 9 ingotIron
 AddAmmo glockAmmo 4 ingotIron 3 gunpowder
 AddGun desertEagle 12 ingotIron

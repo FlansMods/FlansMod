@@ -37,3 +37,9 @@ LockOnToMechas False
 LockOnToPlayers False
 LockOnToLivings False
 MaxLockOnAngle 20.0
+//Recipe
+RecipeOutput 1
+Recipe B smallBomb F fiberglass I ingotIron R blockRedstone
+BF 
+FRF
+ FI

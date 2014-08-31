@@ -23,5 +23,5 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Panzerfaust
-Texture panzerfaust
+Texture Panzerfaust
 DropItemOnShoot panzerfaust

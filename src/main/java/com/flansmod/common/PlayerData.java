@@ -114,6 +114,7 @@ public class PlayerData
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 
+		
 	}
 
 	public PlayerClass getPlayerClass()
@@ -134,6 +135,7 @@ public class PlayerData
 	{
 		mountingGun = null;
 		isShootingRight = isShootingLeft = false;
+		snapshots = new PlayerSnapshot[FlansMod.numPlayerSnapshots];
 	}
 	
 	public void selectOffHandWeapon(EntityPlayer player, int slot)

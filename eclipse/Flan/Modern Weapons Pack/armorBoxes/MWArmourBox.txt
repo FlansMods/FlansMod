@@ -18,6 +18,16 @@ spetsnazHelmet cloth.13 5
 spetsnazBody cloth.7 8
 spetsnazPants cloth.13 7
 spetsnazBoots cloth.15 4
+AddArmour ksk German KSK
+kskHelmet cloth.13 5
+kskBody cloth.13 8
+kskPants cloth.13 7
+kskBoots cloth.13 4
+AddArmour sas British SAS
+sasHelmet cloth.7 5
+sasBody cloth.7 8
+sasPants cloth.7 7
+sasBoots cloth.7 4
 AddArmour juggernaut Juggernaut (Green)
 juggernautHelmet cloth.13 5 iron 12 fiberglass 12 diamond 2
 juggernautBody cloth.13 8 iron 32 fiberglass 32 leather 16

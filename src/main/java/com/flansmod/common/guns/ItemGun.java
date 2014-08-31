@@ -644,7 +644,7 @@ public class ItemGun extends Item
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
 				dropItem(world, entityplayer, bullet.dropItemOnShoot);
 			// Drop item on shooting if gun requires it
-			if(gunType.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)
+			if(gunType.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
 				dropItem(world, entityplayer, gunType.dropItemOnShoot);
 		}
 		if(left)

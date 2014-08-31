@@ -17,8 +17,8 @@ III
 NumGuns 8
 AddGun type38 10 ingotIron 10 log
 AddAmmo type38Ammo 2 ingotIron 1 gunpowder
-AddGun kar98kSniper 12 ingotIron 15 log 4 glass
-AddAmmo kar98kAmmo 3 ingotIron 1 gunpowder
+AddGun type38Sniper 12 ingotIron 10 log 4 glass
+AddAmmo type38Ammo 2 ingotIron 1 gunpowder
 AddGun type100 15 ingotIron 5 log
 AddAmmo type100Ammo 3 ingotIron 2 gunpowder
 AddGun type14 5 ingotIron 5 log
