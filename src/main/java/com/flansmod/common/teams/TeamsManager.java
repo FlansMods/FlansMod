@@ -817,7 +817,7 @@ public class TeamsManager
 		if(spawnPoint != null)
 			setPlayersNextSpawnpoint(player, new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)));
 		else
-			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.team == null ? "null" : data.team.name));
+			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.newTeam == null ? "null" : data.newTeam.name));
 	}
 	
 	/** Force a respawn */

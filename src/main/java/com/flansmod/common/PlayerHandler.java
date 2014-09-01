@@ -18,6 +18,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
@@ -59,22 +60,20 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
-		for(PlayerData d : serverSideData.values())
+		for(WorldServer world : MinecraftServer.getServer().worldServers)
 		{
-			EntityPlayer player = null;
-			for(WorldServer world : MinecraftServer.getServer().worldServers)
-				if(world.getPlayerEntityByName(d.username) != null)
-					d.tick(world.getPlayerEntityByName(d.username));
+			for(Object player : world.playerEntities)
+			{
+				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
+			}
 		}
 	}
 	
 	public void clientTick()
 	{
-		for(PlayerData d : clientSideData.values())
+		for(Object player : Minecraft.getMinecraft().theWorld.playerEntities)
 		{
-			EntityPlayer player = null;
-			if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().theWorld.getPlayerEntityByName(d.username) != null)
-				d.tick(Minecraft.getMinecraft().theWorld.getPlayerEntityByName(d.username));
+			getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
 		}
 	}
 	
@@ -131,6 +130,13 @@ public class PlayerHandler
 			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
+		}
+		else if(event instanceof PlayerRespawnEvent)
+		{
+			EntityPlayer player = event.player;
+			String username = player.getCommandSenderName();
+			if(!serverSideData.containsKey(username))
+				serverSideData.put(username, new PlayerData(username));
 		}
 	}
 	
