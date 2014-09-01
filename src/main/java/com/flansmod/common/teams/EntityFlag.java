@@ -92,7 +92,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		if(entity == null)
 		{
-			if(TeamsManager.getInstance().currentRound.gametype instanceof GametypeCTF)
+			if(TeamsManager.getInstance().currentRound != null && TeamsManager.getInstance().currentRound.gametype instanceof GametypeCTF)
 			{
 				timeUntilReturn = ((GametypeCTF)TeamsManager.getInstance().currentRound.gametype).flagReturnTime * 20;
 			}

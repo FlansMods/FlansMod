@@ -89,7 +89,7 @@ public class BulletType extends InfoType
 			if (split[0].equals("HitSound"))
 				hitSound = split[1];
 			if (split[0].equals("Penetrates"))
-				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 1F : 0F);
+				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 5F : 0.25F);
 			if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))
 				penetratingPower = Float.parseFloat(split[1]);
 			if (split[0].equals("SmokeTrail"))

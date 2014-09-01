@@ -425,7 +425,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			minigunSpeed += 0.1F;
 			
-			if(gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
+			if(gun != null && gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
 			{
 				if(gunDelay <= 0 && TeamsManager.bulletsEnabled)
 				{
