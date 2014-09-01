@@ -36,9 +36,9 @@ ModelScale 0.3
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
-AllowBarrelAttachments true
-AllowScopeAttachments true
+//AllowAttachments
+AllowBarrelAttachments false
+AllowScopeAttachments false
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 1
