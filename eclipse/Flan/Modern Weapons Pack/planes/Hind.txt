@@ -1,50 +1,48 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
-Name Tornado F3
-ShortName tornado
+Name Mi-24 Hind
+ShortName hind
 // ------------------------------------------------------ Visuals ------------------------------------------------------
-Icon Tornado
-Model mw.Tornado
-Texture Tornado
+Icon Hind
+Model mw.Hind
+Texture Hind
 //Third Person Camera Distance
-CameraDistance 15.0
+CameraDistance 20.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
-RestingPitch 5.0
-HasGear True
-ModelScale 1.2
+RestingPitch 0.0
 // ------------------------------------------------------ Movement ------------------------------------------------------
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
-Mode Plane
+Mode Heli
 //Throttle
-MaxThrottle 8.0
+MaxThrottle 3.5
 MaxNegativeThrottle 0.0
 //Yaw modifiers
-TurnLeftSpeed 4
-TurnRightSpeed 4
+TurnLeftSpeed 2
+TurnRightSpeed 2
 //Pitch modifiers
-LookUpSpeed 4
-LookDownSpeed 4
+LookUpSpeed 2
+LookDownSpeed 2
 //Roll modifiers
-RollLeftSpeed 4
-RollRightSpeed 4
+RollLeftSpeed 2
+RollRightSpeed 2
 //Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
 Drag 1.0
 //Lift
 //Lift 2.5
-//Wheels
+//Wheels (Fake wheels imitating skids)
 NumWheels 3
-WheelPosition 0 -92 -12 -15
-WheelPosition 1 -92 -12 15
-WheelPosition 2 12 -9 0
+WheelPosition 0 81 -27 0
+WheelPosition 1 -19 -27 34
+WheelPosition 2 -19 -27 -34
 WheelSpringStrength 0.125
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
-Propeller 0 54 0 0 core metalPropeller
+HeliPropeller 0 0 48 0 blades metalPropeller
 // ------------------------------------------------------ Weaponry ------------------------------------------------------
 //Weapon types. Options are Missile, Bomb, Gun, Shell, None
-Primary Gun
-Secondary Missile
+Primary Missile
+Secondary None
 //Time between shots in 1/20ths of seconds
-ShootDelayPrimary 2
-ShootDelaySecondary 20
+ShootDelayPrimary 20
+ShootDelaySecondary 0
 //Whether to alternate or fire all together
 AlternatePrimary False
 AlternateSecondary False
@@ -52,10 +50,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 60 3 -5 nose m60
-ShootPointPrimary 60 3 5 nose m60
-ShootPointSecondary -60 16 -58 leftWing
-ShootPointSecondary -60 16 58 rightWing
+ShootPointPrimary -13 7 -53 rightWing
+ShootPointPrimary -13 7 53 leftWing
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 0
@@ -63,57 +59,42 @@ MissileSlots 8
 AllowAllAmmo False
 AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 6000
+FuelTankSize 5000
 // ------------------------------------------------------ Passengers ------------------------------------------------------
-Pilot -4 20 0
-Passengers 0
+Pilot 64 18 0
+Passengers 5
+Passenger 1 88 4 0 nose -90 90 -90 5 rpd Nose
+GunOrigin 1 64 -28 0
+Passenger 2 -50 6 12 nose -360 30 -360 1
+Passenger 3 -50 6 -12 nose -360 30 -360 2
+Passenger 4 -40 6 12 nose -360 30 -360 3
+Passenger 5 -40 6 -12 nose -360 30 -360 4
 // ------------------------------------------------------ Sounds ------------------------------------------------------
-StartSound propStart
-StartSoundLength 60
-PropSound JetEngine2
-PropSoundLength 47
-ShootSoundPrimary M60Shoot
-ShootSoundSecondary RocketFire2
+StartSound HelicopterStart
+StartSoundLength 100
+PropSound Helicopter1
+PropSoundLength 93
+ShootSoundPrimary RocketFire1
+//ShootSoundSecondary None
 // ------------------------------------------------------ Recipe ------------------------------------------------------
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 advancedMetalCockpit
-AddRecipeParts coreWheel 2 wheel
-AddRecipeParts nose 1 metalNose
-AddRecipeParts rightWing 1 metalWingSmall
-AddRecipeParts leftWing 1 metalWingSmall
-AddRecipeParts tail 1 metalTail
-AddRecipeParts rightWingWheel 1 wheel
-AddRecipeParts leftWingWheel 1 wheel
+AddRecipeParts skids 2 helicopterSkid
+AddRecipeParts blades 2 helicopterBlade
+AddRecipeParts rightWing 1 blockRedstone 1 blockIron
+AddRecipeParts leftWing 1 blockRedstone 1 blockIron
+AddRecipeParts tail 1 metalTail 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 5 white
-AddDye 1 gray
+AddDye 6 green
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart nose 100 46 10 -9 35 18 18
-SetupPart core 300 -93 9 -23 139 31 46
-SetupPart tail 100 -149 16 -16 56 14 32
-SetupPart leftWing 100 -78 25 -101 40 3 83
-SetupPart rightWing 100 -78 25 18 40 3 83
-SetupPart coreWheel 100 7 -10 -3 10 20 6
-SetupPart leftWingWheel 100 -83 -10 -18 10 26 6
-SetupPart rightWingWheel 100 -83 -10 12 10 26 6
+SetupPart core 400 -94 -9 -18 215 67 36
+SetupPart tail 100 -242 32 -10 148 26 20
+SetupPart leftWing 50 -39 2 -83 25 33 65
+SetupPart rightWing 50 -39 2 18 25 33 65
+SetupPart coreWheel 100 69 -27 -5 12 18 11
+SetupPart leftWingWheel 100 -33 -30 -34 14 26 17
+SetupPart rightWingWheel 100 -33 -30 19 14 26 17
+SetupPart blades 100 -30 68 -30 60 2 60
 BulletDetection 10
-
-
-//RightWing
-CollisionPoint -43 28 -18 rightWing
-CollisionPoint -43 28 -101 rightWing
-CollisionPoint -3 28 -18 rightWing
-CollisionPoint -3 28 -101 rightWing
-//LeftWing
-CollisionPoint -43 28 18 leftWing
-CollisionPoint -43 28 101 leftWing
-CollisionPoint -3 28 18 leftWing
-CollisionPoint -3 28 101 leftWing
-//Nose
-CollisionPoint 81 28 0 nose
-CollisionPoint 46 28 0 nose
-
-//Tail
-CollisionPoint -134 29 0 tail

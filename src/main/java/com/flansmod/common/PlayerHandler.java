@@ -71,9 +71,12 @@ public class PlayerHandler
 	
 	public void clientTick()
 	{
-		for(Object player : Minecraft.getMinecraft().theWorld.playerEntities)
+		if(Minecraft.getMinecraft().theWorld != null)
 		{
-			getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
+			for(Object player : Minecraft.getMinecraft().theWorld.playerEntities)
+			{
+				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
+			}	
 		}
 	}
 	

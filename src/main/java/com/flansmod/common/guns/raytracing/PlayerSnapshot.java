@@ -109,19 +109,16 @@ public class PlayerSnapshot
 	}
 	
 	public ArrayList<BulletHit> raytrace(Vector3f origin, Vector3f motion)
-	{
-		if(FlansMod.DEBUG)
-			player.worldObj.spawnEntityInWorld(new EntityDebugVector(player.worldObj, origin, motion, 100));
-		
+	{	
 		//Get the bullet raytrace vector into local coordinates
-		Vector3f.sub(origin, pos, origin);
+		Vector3f localOrigin = Vector3f.sub(origin, pos, null);
 		//Prepare a list for the hits
 		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();		
 		
 		//Check each hitbox for a hit
 		for(PlayerHitbox hitbox : hitboxes)
 		{
-			PlayerBulletHit hit = hitbox.raytrace(origin, motion);
+			PlayerBulletHit hit = hitbox.raytrace(localOrigin, motion);
 			if(hit != null)
 			{
 				hits.add(hit);

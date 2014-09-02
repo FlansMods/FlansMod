@@ -514,7 +514,7 @@ public class TeamsManager
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event) 
 	{
-		if(!enabled)
+		if(!enabled || currentRound == null)
 			return;
 		if(event.entity instanceof EntityPlayerMP)
 		{
