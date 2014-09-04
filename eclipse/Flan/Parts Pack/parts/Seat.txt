@@ -8,7 +8,7 @@ ItemID 23464
 Category Misc
 StackSize 8
 RecipeOutput 2
-Recipe I iron L leather
+Recipe I ingotIron L leather
  LI
 LLI
 III

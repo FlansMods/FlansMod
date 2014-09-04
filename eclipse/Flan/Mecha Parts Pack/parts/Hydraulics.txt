@@ -8,7 +8,7 @@ ItemID 23417
 Category Misc
 StackSize 16
 RecipeOutput 1
-Recipe I iron W bucketWater P pistonBase
+Recipe I ingotIron W bucketWater P pistonBase
 IPI
 IWI
 IPI

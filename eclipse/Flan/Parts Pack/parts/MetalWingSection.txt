@@ -8,7 +8,7 @@ ItemID 23289
 Category Wing
 StackSize 8
 RecipeOutput 1
-Recipe I iron B fenceIron
+Recipe I ingotIron B fenceIron
 III
 BBB
 III
