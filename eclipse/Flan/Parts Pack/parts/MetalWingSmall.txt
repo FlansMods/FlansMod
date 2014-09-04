@@ -8,7 +8,7 @@ ItemID 23299
 Category Wing
 StackSize 8
 RecipeOutput 1
-Recipe I iron W metalWingSection
+Recipe I ingotIron W metalWingSection
    
 IWI
    

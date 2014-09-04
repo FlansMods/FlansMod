@@ -8,7 +8,7 @@ ItemID 23279
 Category Misc
 StackSize 64
 RecipeOutput 1
-Recipe I iron F flintAndSteel
+Recipe I ingotIron F flintAndSteel
    
 IFI
 I I

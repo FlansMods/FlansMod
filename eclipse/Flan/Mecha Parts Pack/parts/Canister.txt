@@ -8,7 +8,7 @@ ItemID 23428
 Category Misc
 StackSize 16
 RecipeOutput 3
-Recipe B bucket I iron
+Recipe B bucket I ingotIron
  I 
  B 
  B 

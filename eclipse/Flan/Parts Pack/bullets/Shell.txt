@@ -34,7 +34,7 @@ SmokeTrail True
 Bomb False
 Shell True
 RecipeOutput 3
-Recipe I iron G gunpowder
+Recipe I ingotIron G gunpowder
    
 GGG
 III

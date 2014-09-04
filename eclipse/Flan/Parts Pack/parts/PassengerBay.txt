@@ -8,7 +8,7 @@ ItemID 23280
 Category Bay
 StackSize 4
 RecipeOutput 1
-Recipe I iron D doorIron
+Recipe I ingotIron D doorIron
 III
 I D
 III
