@@ -158,22 +158,29 @@ public class EntityPlane extends EntityDriveable
     		FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
     		return true;
     	}
+    	boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0;
 		switch(key)
 		{
 			case 0 : //Accelerate : Increase the throttle, up to 1.
 			{
-				throttle += 0.002F;
-				if(throttle > 1F)
-					throttle = 1F;
+				if(canThrust || throttle < 0F)
+				{
+					throttle += 0.002F;
+					if(throttle > 1F)
+						throttle = 1F;
+				}
 				return true;
 			}
 			case 1 : //Decelerate : Decrease the throttle, down to -1, or 0 if the plane cannot reverse
 			{
-				throttle -= 0.005F;
-				if(throttle < -1F)
-					throttle = -1F;
-				if(throttle < 0F && type.maxNegativeThrottle == 0F)
-					throttle = 0F;
+				if(canThrust || throttle > 0F)
+				{
+					throttle -= 0.005F;
+					if(throttle < -1F)
+						throttle = -1F;
+					if(throttle < 0F && type.maxNegativeThrottle == 0F)
+						throttle = 0F;
+				}
 				return true;
 			}
 			case 2 : //Left : Yaw the flaps left
@@ -392,12 +399,14 @@ public class EntityPlane extends EntityDriveable
 		
 		//Movement
 		
+		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || data.fuelInTank > 0;
+		
 		//Throttle handling
 		//Without a player, default to 0
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI)
+		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI && canThrust)
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
 		//Get the speed of the plane
@@ -452,6 +461,10 @@ public class EntityPlane extends EntityDriveable
 		float wobbleFactor = 0F;//.005F;
 		
 		float throttleScaled = 0.01F * (type.maxThrottle + (data.engine == null ? 0 : data.engine.engineSpeed));
+		
+		if(!canThrust)
+			throttleScaled = 0;
+		
 		int numPropsWorking = 0;
 		int numProps = 0;
 		
