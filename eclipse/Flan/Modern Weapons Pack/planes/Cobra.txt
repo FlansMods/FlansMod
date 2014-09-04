@@ -80,8 +80,8 @@ ShootSoundPrimary RocketFire1
 AddRecipeParts core 1 advancedMetalCockpit
 AddRecipeParts skids 2 helicopterSkid
 AddRecipeParts blades 2 helicopterBlade
-AddRecipeParts rightWing 1 blockRedstone 1 blockIron
-AddRecipeParts leftWing 1 blockRedstone 1 blockIron
+AddRecipeParts rightWing 1 metalWingSmall
+AddRecipeParts leftWing 1 metalWingSmall
 AddRecipeParts tail 1 metalTail 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 green

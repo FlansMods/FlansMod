@@ -82,12 +82,12 @@ ShootSoundPrimary RocketFire1
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts core 1 advancedMetalCockpit
 AddRecipeParts skids 2 helicopterSkid
-AddRecipeParts blades 2 helicopterBlade
-AddRecipeParts rightWing 1 blockRedstone 1 blockIron
-AddRecipeParts leftWing 1 blockRedstone 1 blockIron
-AddRecipeParts tail 1 metalTail 1 metalPropeller
+AddRecipeParts blades 5 helicopterBlade
+AddRecipeParts rightWing 1 metalWingSmall
+AddRecipeParts leftWing 1 metalWingSmall
+AddRecipeParts tail 1 metalTail 1 passengerBay 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 6 green
+AddDye 10 yellow
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
 SetupPart core 400 -94 -9 -18 215 67 36
 SetupPart tail 100 -242 32 -10 148 26 20
