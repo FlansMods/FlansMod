@@ -677,8 +677,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
+		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
+
 		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
-		if(seats[0] != null && seats[0].riddenByEntity == null)
+		if((seats[0] != null && seats[0].riddenByEntity == null) || !canThrust)
 		{
 			throttle *= 0.98F;
 			rightMouseHeld = leftMouseHeld = false;
