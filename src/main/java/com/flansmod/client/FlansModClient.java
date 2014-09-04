@@ -12,10 +12,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityBlockDustFX;
 import net.minecraft.client.particle.EntityBreakingFX;
 import net.minecraft.client.particle.EntityBubbleFX;
 import net.minecraft.client.particle.EntityCloudFX;
 import net.minecraft.client.particle.EntityCritFX;
+import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.client.particle.EntityDropParticleFX;
 import net.minecraft.client.particle.EntityEnchantmentTableParticleFX;
 import net.minecraft.client.particle.EntityExplodeFX;
@@ -472,6 +474,155 @@ public class FlansModClient extends FlansMod
 	public static EntityFX getParticle(String s, World w, double x, double y, double z)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		return mc.renderGlobal.doSpawnParticle(s, x, y, z, 0.01D, 0.01D, 0.01D);
+		//return mc.renderGlobal.doSpawnParticle(s, x, y, z, 0.01D, 0.01D, 0.01D);
+		EntityFX fx = null;
+		if(s.equals("hugeexplosion"))
+			fx = new EntityHugeExplodeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("largeexplode"))
+			fx = new EntityLargeExplodeFX(mc.renderEngine, w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("fireworksSpark"))
+			fx = new EntityFireworkSparkFX(w, x, y, z, 0D, 0D, 0D, mc.effectRenderer);
+		else if(s.equals("bubble"))
+			fx = new EntityBubbleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("suspended"))
+			fx = new EntitySuspendFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("depthsuspend"))
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("townaura"))
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("crit"))
+			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("magicCrit"))
+		{
+			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setRBGColorF(fx.getRedColorF() * 0.3F, fx.getGreenColorF() * 0.8F, fx.getBlueColorF());
+            fx.nextTextureIndexX();
+		}
+		else if(s.equals("smoke"))
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("mobSpell"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setRBGColorF(0F, 0F, 0F);
+		}
+		else if(s.equals("mobSpellAmbient"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+            fx.setAlphaF(0.15F);
+            fx.setRBGColorF(0F, 0F, 0F);
+		}
+		else if(s.equals("spell"))
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("instantSpell"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
+		}
+		else if(s.equals("witchMagic"))
+		{
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
+			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
+            float f = w.rand.nextFloat() * 0.5F + 0.35F;
+            fx.setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
+		}
+		else if(s.equals("note"))
+			fx = new EntityNoteFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("portal"))
+			fx = new EntityPortalFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("enchantmenttable"))
+			fx = new EntityEnchantmentTableParticleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("explode"))
+			fx = new EntityExplodeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("flame"))
+			fx = new EntityFlameFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("lava"))
+			fx = new EntityLavaFX(w, x, y, z);
+		else if(s.equals("footstep"))
+			fx = new EntityFootStepFX(mc.renderEngine, w, x, y, z);
+		else if(s.equals("splash"))
+			fx = new EntitySplashFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("wake"))
+			fx = new EntityFishWakeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("largesmoke"))
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D, 2.5F);
+		else if(s.equals("cloud"))
+			fx = new EntityCloudFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("reddust"))
+			fx = new EntityReddustFX(w, x, y, z, 0F, 0F, 0F);
+		else if(s.equals("snowballpoof"))
+			fx = new EntityBreakingFX(w, x, y, z, Items.snowball);
+		else if(s.equals("dripWater"))
+			fx = new EntityDropParticleFX(w, x, y, z, Material.water);
+		else if(s.equals("dripLava"))
+			fx = new EntityDropParticleFX(w, x, y, z, Material.lava);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("slime"))
+			fx = new EntityBreakingFX(w, x, y, z, Items.slime_ball);
+		else if(s.equals("heart"))
+			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("angryVillager"))
+		{
+			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setParticleTextureIndex(81);
+			fx.setRBGColorF(1.0F, 1.0F, 1.0F);
+		}
+		else if(s.equals("happyVillager"))
+		{
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setParticleTextureIndex(82);
+            fx.setRBGColorF(1.0F, 1.0F, 1.0F);
+		}
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+
+        else
+        {
+            int k;
+            String[] astring;
+
+            if (s.startsWith("iconcrack_"))
+            {
+                astring = s.split("_", 3);
+                int j = Integer.parseInt(astring[1]);
+
+                if (astring.length > 2)
+                {
+                    k = Integer.parseInt(astring[2]);
+                    fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), k);
+                }
+                else fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), 0);
+            }
+            else
+            {
+                Block block;
+
+                if (s.startsWith("blockcrack_"))
+                {
+                    astring = s.split("_", 3);
+                    block = Block.getBlockById(Integer.parseInt(astring[1]));
+                    k = Integer.parseInt(astring[2]);
+                    fx = (new EntityDiggingFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+                }
+                else if (s.startsWith("blockdust_"))
+                {
+                    astring = s.split("_", 3);
+                    block = Block.getBlockById(Integer.parseInt(astring[1]));
+                    k = Integer.parseInt(astring[2]);
+                    fx = (new EntityBlockDustFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+                }
+            }
+        }
+		
+		if(mc.gameSettings.fancyGraphics)
+			fx.renderDistanceWeight = 200D;
+		
+        if(fx != null)
+            mc.effectRenderer.addEffect(fx);
+		return fx;
 	}
 }
