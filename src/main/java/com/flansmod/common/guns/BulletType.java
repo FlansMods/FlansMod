@@ -78,7 +78,7 @@ public class BulletType extends InfoType
 				flakParticles = split[1];
 			if (split[0].equals("Fire"))
 				fire = Integer.parseInt(split[1]);
-			if (split[0].equals("ExpodeOnImpact"))
+			if (split[0].equals("ExplodeOnImpact"))
 				explodeOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);

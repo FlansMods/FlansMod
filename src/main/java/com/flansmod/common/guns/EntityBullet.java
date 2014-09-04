@@ -435,14 +435,13 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 						//setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 					}
 				}
-				
-				if(penetratingPower <= 0F || type.explodeOnImpact && ticksInAir > 5)
+				if(penetratingPower <= 0F || (type.explodeOnImpact && ticksInAir > 1))
 				{
 					setDead();
 					break;
 				}
+
 			}
-			
 			
 		}
 		//Otherwise, do a standard check for uninteresting entities
