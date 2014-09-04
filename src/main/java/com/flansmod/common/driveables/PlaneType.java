@@ -157,7 +157,13 @@ public class PlaneType extends DriveableType
     @Override
     public int numEngines()
     {
-    	return propellers.size();
+    	switch(mode)
+    	{
+    	case VTOL : return Math.max(propellers.size(), heliPropellers.size());
+    	case PLANE : return propellers.size();
+    	case HELI : return heliPropellers.size();
+    	default : return 1;
+    	}
     }
     
     /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */

@@ -324,7 +324,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			else
 			{
 				Entity entity = (Entity)obj;
-				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityMG))
+				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun))
 				{
 					MovingObjectPosition mop = entity.boundingBox.calculateIntercept(origin.toVec3(), Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)

@@ -397,7 +397,7 @@ public class EntityPlane extends EntityDriveable
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		if(seats[0] != null && seats[0].riddenByEntity != null)
+		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI)
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
 		//Get the speed of the plane
@@ -471,7 +471,7 @@ public class EntityPlane extends EntityDriveable
 			
 			Vector3f up = axes.getYAxis();
 			
-			throttleScaled *= numPropsWorking / numProps;
+			throttleScaled *= numPropsWorking / numProps * 2F;
 						
 			float upwardsForce = throttle * throttleScaled + (g - throttleScaled / 2F);
 			if(throttle < 0.5F)

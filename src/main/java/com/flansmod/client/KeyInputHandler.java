@@ -43,7 +43,7 @@ public class KeyInputHandler
     public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
     public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
     public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
-    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
+    //public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
     //public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
@@ -71,7 +71,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(gearKey);
 		ClientRegistry.registerKeyBinding(doorKey);
 		ClientRegistry.registerKeyBinding(modeKey);
-		ClientRegistry.registerKeyBinding(trimKey);
+		//ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
 		//ClientRegistry.registerKeyBinding(zoomKey);
@@ -174,8 +174,8 @@ public class KeyInputHandler
 				riding.pressKey(14, player);
 			if(modeKey.isPressed())
 				riding.pressKey(15, player);
-			if(trimKey.isPressed())
-				riding.pressKey(16, player);
+			//if(trimKey.isPressed())
+			//	riding.pressKey(16, player);
 			
 			/*
 			for(KeyBinding key : mc.gameSettings.keyBindings )
