@@ -8,7 +8,7 @@ ItemID 23262
 Category Bay
 StackSize 4
 RecipeOutput 1
-Recipe I iron D trapdoor
+Recipe I ingotIron D trapdoor
 III
 I I
 IDI

@@ -8,7 +8,7 @@ ItemID 23459
 Category Chassis
 StackSize 4
 RecipeOutput 1
-Recipe I iron D trapdoor R redstone
+Recipe I ingotIron D trapdoor R redstone
 IDI
 IRI
 III

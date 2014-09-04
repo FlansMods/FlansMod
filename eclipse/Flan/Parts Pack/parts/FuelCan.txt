@@ -9,7 +9,7 @@ Category Fuel
 Fuel 1000
 StackSize 8
 RecipeOutput 1
-Recipe I iron C coal
+Recipe I ingotIron C coal
   I
  CC
  CC

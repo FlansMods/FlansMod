@@ -207,6 +207,13 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
 								break;
 							}
+							case BACK_LOADED :
+							{
+								GL11.glRotatef(-75F * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(-30F * reloadRotate * flip, 1F, 0F, 0F);
+								GL11.glTranslatef(0.5F * reloadRotate, 0F, 0F);
+								break;
+							}
 							case BULLPUP :
 							{
 								GL11.glRotatef(70F * reloadRotate, 0F, 0F, 1F);
@@ -243,6 +250,19 @@ public class RenderGun implements IItemRenderer
 									GL11.glTranslatef(0.15F * reloadRotate, 0.25F * reloadRotate, 0F);
 									break;
 								}
+							}
+							case STRIKER : 
+							{
+								GL11.glRotatef(-35F * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(0.2F * reloadRotate, 0F, -0.1F * reloadRotate);
+								break;
+							}
+							case GENERIC :
+							{
+								//Gun reloads partly or completely off-screen.
+								GL11.glRotatef(45F * reloadRotate, 0F, 0F, 1F);
+								GL11.glTranslatef(-0.2F * reloadRotate, -0.5F * reloadRotate, 0F);
+								break;
 							}
 							default : break;
 						}
@@ -353,7 +373,7 @@ public class RenderGun implements IItemRenderer
 				//Check to see if the ammo should be rendered first
 				switch(model.animationType)
 				{
-					case END_LOADED :
+					case END_LOADED : case BACK_LOADED :
 					{
 						if(empty)
 							shouldRender = false;
@@ -447,7 +467,7 @@ public class RenderGun implements IItemRenderer
 							
 							break;
 						}
-						case SHOTGUN : 
+						case SHOTGUN : case STRIKER :
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
 							int bulletNum = MathHelper.floor_float(thing);
@@ -490,6 +510,18 @@ public class RenderGun implements IItemRenderer
 							
 							
 							break;
+						}
+						case BACK_LOADED :
+						{
+							float dYaw = (loadOnlyClipPosition > 0.5F ? loadOnlyClipPosition * 2F - 1F : 0F);
+							
+							
+							//GL11.glRotatef(-45F * dYaw, 0F, 0F, 1F);
+							GL11.glTranslatef(model.endLoadedAmmoDistance * dYaw, -0.5F * dYaw, 0F);
+							
+							float xDisplacement = (loadOnlyClipPosition < 0.5F ? loadOnlyClipPosition * 2F : 1F);
+							
+							GL11.glTranslatef(-model.endLoadedAmmoDistance * xDisplacement, 0F, 0F);
 						}
 						
 						default : break;

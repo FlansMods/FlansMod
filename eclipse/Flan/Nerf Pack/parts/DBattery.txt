@@ -8,7 +8,7 @@ ItemID 23997
 Category Misc
 StackSize 64
 RecipeOutput 1
-Recipe I iron R redstone
+Recipe I ingotIron R redstone
  I 
  R 
    

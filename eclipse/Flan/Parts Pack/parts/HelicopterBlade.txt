@@ -7,7 +7,7 @@ Colour 255 255 255
 Category Propeller
 StackSize 8
 RecipeOutput 1
-Recipe I iron G ingotGold
+Recipe I ingotIron G ingotGold
 GII
 GII
    
