@@ -217,7 +217,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		if (damagesource.damageType.equals("player"))
 		{
-			Entity player = ((EntityDamageSource) damagesource).getEntity();
+			Entity player = damagesource.getEntity();
 			if (player == gunner)
 			{
 				// Player left clicked on the gun
@@ -336,7 +336,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			if(TeamsManager.weaponDrops == 2)
 			{
-				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(new ItemStack[] {ammo}));
+				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
 				worldObj.spawnEntityInWorld(gunEntity);
 			}
 			else if(TeamsManager.weaponDrops == 1)

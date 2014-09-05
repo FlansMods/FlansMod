@@ -81,7 +81,7 @@ public class EntityPlane extends EntityDriveable
     protected void writeEntityToNBT(NBTTagCompound tag)
     {
 		super.writeEntityToNBT(tag);
-		tag.setTag("Pos", this.newDoubleNBTList(new double[] {this.posX, this.posY + (double)1D, this.posZ}));
+		tag.setTag("Pos", this.newDoubleNBTList(this.posX, this.posY + 1D, this.posZ));
         tag.setBoolean("VarGear", varGear);
         tag.setBoolean("VarDoor", varDoor);
         tag.setBoolean("VarWing", varWing);
@@ -771,7 +771,7 @@ public class EntityPlane extends EntityDriveable
         
         PlaneType type = PlaneType.getPlane(driveableType);
         
-		if(damagesource.damageType.equals("player") && ((EntityDamageSource)damagesource).getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack planeStack = new ItemStack(type.item, 1, 0);
 			planeStack.stackTagCompound = new NBTTagCompound();

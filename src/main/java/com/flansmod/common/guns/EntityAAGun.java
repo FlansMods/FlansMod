@@ -172,7 +172,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		if (damagesource.damageType.equals("player"))
 		{
-			Entity player = ((EntityDamageSource) damagesource).getEntity();
+			Entity player = damagesource.getEntity();
 			if (player == riddenByEntity)
 			{
 				

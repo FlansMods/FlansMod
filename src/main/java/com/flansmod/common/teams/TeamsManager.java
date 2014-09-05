@@ -477,7 +477,7 @@ public class TeamsManager
 	{
 		for(EntityPlayer player : getPlayers())
 		{
-			PlayerData data = PlayerHandler.getPlayerData((EntityPlayerMP)player);
+			PlayerData data = PlayerHandler.getPlayerData(player);
 			//Catch for broken player data
 			if(data == null)
 				continue;
@@ -528,9 +528,9 @@ public class TeamsManager
 				return;
 			}
 			
-			if(source instanceof EntityDamageSource && ((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
+			if(source instanceof EntityDamageSource && source.getEntity() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP attacker = ((EntityPlayerMP)((EntityDamageSource)source).getEntity());
+				EntityPlayerMP attacker = ((EntityPlayerMP) source.getEntity());
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
 				if(attackerData == null)
@@ -1268,8 +1268,8 @@ public class TeamsManager
 			team.members.clear();
 		}
 		for(EntityPlayer player : getPlayers())
-			if(PlayerHandler.getPlayerData((EntityPlayerMP)player) != null)
-				PlayerHandler.getPlayerData((EntityPlayerMP)player).resetScore();
+			if(PlayerHandler.getPlayerData(player) != null)
+				PlayerHandler.getPlayerData(player).resetScore();
 	}
 	
 	public ITeamBase getBase(int ID)

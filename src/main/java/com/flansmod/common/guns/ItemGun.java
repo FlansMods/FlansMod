@@ -99,7 +99,7 @@ public class ItemGun extends Item
 		//Take the list of ammo tags
 		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo", Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
-		NBTTagCompound ammoTags = (NBTTagCompound)ammoTagsList.getCompoundTagAt(id);
+		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		return ItemStack.loadItemStackFromNBT(ammoTags);
 	}
 	
@@ -124,7 +124,7 @@ public class ItemGun extends Item
 		//Take the list of ammo tags
 		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo", Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
-		NBTTagCompound ammoTags = (NBTTagCompound)ammoTagsList.getCompoundTagAt(id);
+		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		//Represent empty slots by nulltypes
 		if(bullet == null)
 		{
@@ -314,7 +314,7 @@ public class ItemGun extends Item
 					else 
 					{
 						animations = new GunAnimations();
-						FlansModClient.gunAnimationsLeft.put((EntityLivingBase)player, animations);
+						FlansModClient.gunAnimationsLeft.put(player, animations);
 					}
 				}
 				else
@@ -324,7 +324,7 @@ public class ItemGun extends Item
 					else 
 					{
 						animations = new GunAnimations();
-						FlansModClient.gunAnimationsRight.put((EntityLivingBase)player, animations);
+						FlansModClient.gunAnimationsRight.put(player, animations);
 					}
 				}
 				int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
