@@ -743,7 +743,7 @@ public class EntityPlane extends EntityDriveable
 		
 		//If this is the server, send position updates to everyone, having received them from the driver
 		float updateSpeed = 0.01F;
-		if(!worldObj.isRemote && ticksExisted % 1 == 0)// && (Math.abs(posX - prevPosX) > updateSpeed || Math.abs(posY - prevPosY) > updateSpeed || Math.abs(posZ - prevPosZ) > updateSpeed))
+		if(!worldObj.isRemote && 0 == 0)// && (Math.abs(posX - prevPosX) > updateSpeed || Math.abs(posY - prevPosY) > updateSpeed || Math.abs(posZ - prevPosZ) > updateSpeed))
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
