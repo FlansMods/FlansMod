@@ -1,6 +1,7 @@
 package com.flansmod.client.tmt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -15,11 +16,8 @@ public class Shape2D
 	public Shape2D(Coord2D[] coordArray)
 	{
 		coords = new ArrayList<Coord2D>();
-		
-		for(int idx = 0; idx < coordArray.length; idx++)
-		{
-			coords.add(coordArray[idx]);
-		}
+
+        Collections.addAll(coords, coordArray);
 	}
 	
 	public Shape2D(ArrayList<Coord2D> coordList)

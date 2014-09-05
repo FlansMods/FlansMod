@@ -1,5 +1,6 @@
 package com.flansmod.common.teams;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,8 +71,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				lines.add(s);
+            Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

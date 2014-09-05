@@ -3,6 +3,7 @@ package com.flansmod.common.driveables;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -90,8 +91,7 @@ public class ItemVehicle extends ItemMapBase
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				lines.add(s);
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");

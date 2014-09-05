@@ -71,7 +71,7 @@ public enum EnumDriveablePart
 					parents.add(part);
 			}
 		}
-		return parents.toArray(new EnumDriveablePart[0]);
+		return parents.toArray(new EnumDriveablePart[parents.size()]);
 	}
 	
 	public String getShortName()

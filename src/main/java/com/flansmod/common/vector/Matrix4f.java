@@ -62,12 +62,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder buf = new StringBuilder();
-		buf.append(m00).append(' ').append(m10).append(' ').append(m20).append(' ').append(m30).append('\n');
-		buf.append(m01).append(' ').append(m11).append(' ').append(m21).append(' ').append(m31).append('\n');
-		buf.append(m02).append(' ').append(m12).append(' ').append(m22).append(' ').append(m32).append('\n');
-		buf.append(m03).append(' ').append(m13).append(' ').append(m23).append(' ').append(m33).append('\n');
-		return buf.toString();
+        return String.valueOf(m00) + ' ' + m10 + ' ' + m20 + ' ' + m30 + '\n' + m01 + ' ' + m11 + ' ' + m21 + ' ' + m31 + '\n' + m02 + ' ' + m12 + ' ' + m22 + ' ' + m32 + '\n' + m03 + ' ' + m13 + ' ' + m23 + ' ' + m33 + '\n';
 	}
 
 	/**

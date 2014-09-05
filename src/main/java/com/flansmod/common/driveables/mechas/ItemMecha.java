@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables.mechas;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -42,8 +43,7 @@ public class ItemMecha extends Item {
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				lines.add(s);
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");

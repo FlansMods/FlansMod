@@ -20,6 +20,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Arrays;
+
 public class GuiBaseEditor extends GuiScreen 
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/baseEdit.png");
@@ -60,11 +62,8 @@ public class GuiBaseEditor extends GuiScreen
 		teamButtons[1] = new GuiButton(1, width / 2 - 128 + 68, height / 2 - 94 + 38, 58, 20, "Spectator");
 		teamButtons[2] = new GuiButton(2, width / 2 - 128 + 130, height / 2 - 94 + 38, 58, 20, "Team 1");
 		teamButtons[3] = new GuiButton(3, width / 2 - 128 + 192, height / 2 - 94 + 38, 58, 20, "Team 2");
-		
-		for(int i = 0; i < 4; i++)
-		{
-			buttonList.add(teamButtons[i]);
-		}
+
+        buttonList.addAll(Arrays.asList(teamButtons).subList(0, 4));
 		
 		mapButtons = new GuiButton[5];
 		for(int i = 0; i < 5; i++)

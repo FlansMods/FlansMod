@@ -167,16 +167,8 @@ public class Vector3i extends Vector
 
 	public String toString() 
 	{
-		StringBuilder sb = new StringBuilder(64);
 
-		sb.append("Vector3i[");
-		sb.append(x);
-		sb.append(", ");
-		sb.append(y);
-		sb.append(", ");
-		sb.append(z);
-		sb.append(']');
-		return sb.toString();
+        return "Vector3i[" + x + ", " + y + ", " + z + ']';
 	}
 
 	public final int getX() 
