@@ -199,8 +199,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 					
 					face.add(poly);
 					texture.addPoly(poly);
-					continue;					
-				}
+                }
 			}
 			
 			vertices = new PositionTransformVertex[verts.size()];

@@ -238,8 +238,7 @@ public class GuiDriveableController extends GuiScreen
 		else
 		{
             mc.displayGuiScreen(null);
-			return;
-		}
+        }
     }
 	   
 	@Override

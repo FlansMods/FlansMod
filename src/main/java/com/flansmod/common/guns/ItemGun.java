@@ -467,8 +467,7 @@ public class ItemGun extends Item
 				data.shouldPlayWarmupSound = true;
 			}
 		}
-		return;
-	}
+    }
 		
 	public ItemStack tryToShoot(ItemStack gunStack, GunType gunType, World world, EntityPlayerMP entityplayer, boolean left)
 	{

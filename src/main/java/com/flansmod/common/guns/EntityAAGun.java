@@ -489,8 +489,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double z2 = -x * sinYaw + z * cosYaw;
 
 		riddenByEntity.setPosition(posX + x2, posY + y, posZ + z2);
-		return;
-	}
+    }
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)

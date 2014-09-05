@@ -244,8 +244,7 @@ public class FlansModClient extends FlansMod
 			{
 				RendererLivingEntity.NAME_TAG_RANGE = 0F;
 				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
-				return;
-			}
+            }
 		}
 		
 

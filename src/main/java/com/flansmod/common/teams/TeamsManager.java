@@ -564,8 +564,7 @@ public class TeamsManager
 			else
 			{
 				//Not being attacked by a player, so this is fine
-				return;
-			}
+            }
 			
 		}
 	}
@@ -854,8 +853,7 @@ public class TeamsManager
 		if(team == null)
 		{
 			sendTeamsMenuToPlayer(player);
-			return;
-		}
+        }
 		else if(team != Team.spectators && team.classes.size() > 0)
 		{
 			sendPacketToPlayer(new PacketTeamSelect(team.classes.toArray(new PlayerClass[team.classes.size()])), player);
