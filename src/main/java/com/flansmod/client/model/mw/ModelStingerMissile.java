@@ -2,8 +2,6 @@ package com.flansmod.client.model.mw;
 
 import net.minecraft.entity.Entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.flansmod.client.model.ModelBullet;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 

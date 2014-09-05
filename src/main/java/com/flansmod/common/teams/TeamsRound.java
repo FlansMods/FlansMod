@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 /** This represents a round in the teams mod 
  * It designates the map, gametype and teams to be played that round 

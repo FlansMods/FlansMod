@@ -12,8 +12,6 @@ package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelTornado extends ModelPlane
 {

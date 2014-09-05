@@ -3,7 +3,6 @@ package com.flansmod.client.gui;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 

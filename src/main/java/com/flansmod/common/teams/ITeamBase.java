@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.List;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;

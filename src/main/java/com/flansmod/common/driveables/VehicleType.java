@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.types.TypeFile;
-import com.flansmod.common.vector.Vector3f;
 
 public class VehicleType extends DriveableType
 {

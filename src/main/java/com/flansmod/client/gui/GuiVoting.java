@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.common.FlansMod;
@@ -10,7 +9,6 @@ import com.flansmod.common.network.PacketVoting;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 

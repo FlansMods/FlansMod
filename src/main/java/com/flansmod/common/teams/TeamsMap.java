@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import com.flansmod.common.FlansMod;
 
@@ -9,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 

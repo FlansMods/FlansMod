@@ -1,15 +1,12 @@
 package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 

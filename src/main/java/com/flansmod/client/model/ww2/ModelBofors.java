@@ -1,6 +1,5 @@
 package com.flansmod.client.model.ww2;
 
-import com.flansmod.client.model.ModelAAGun;
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 

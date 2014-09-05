@@ -12,8 +12,6 @@ package com.flansmod.client.model.ww2;
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelType4HoRo extends ModelVehicle
 {

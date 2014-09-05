@@ -1,6 +1,5 @@
 package com.flansmod.common.teams;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +18,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
-import com.flansmod.common.network.PacketTeamSelect;
 
 public abstract class Gametype 
 {
