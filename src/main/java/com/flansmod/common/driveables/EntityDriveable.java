@@ -1143,7 +1143,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@SideOnly(Side.CLIENT)
 	public boolean showInventory(int seat)
 	{
-		return seat == 0 ? !FlansModClient.controlModeMouse : true;
+		return seat != 0 || !FlansModClient.controlModeMouse;
 	}
 
 	//-------------------------------------
