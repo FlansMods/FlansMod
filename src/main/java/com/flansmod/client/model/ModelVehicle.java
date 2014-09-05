@@ -71,12 +71,12 @@ public class ModelVehicle extends ModelDriveable
 	        }	
 			for(int i = 0; i < bodyDoorOpenModel.length; i++)
 			{
-				if(vehicle.varDoor == true)
+				if(vehicle.varDoor)
 					bodyDoorOpenModel[i].render(f5, oldRotateOrder);
 			}
 			for(int i = 0; i < bodyDoorCloseModel.length; i++)
 			{
-				if(vehicle.varDoor == false)
+				if(!vehicle.varDoor)
 					bodyDoorCloseModel[i].render(f5, oldRotateOrder);
 			}
 			for(int i = 0; i < steeringWheelModel.length; i++)
