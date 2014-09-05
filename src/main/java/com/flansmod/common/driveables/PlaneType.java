@@ -149,7 +149,7 @@ public class PlaneType extends DriveableType
             if(split[0].equals("InflightInventory"))
                 invInflight = split[1].equals("False");
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
 	}

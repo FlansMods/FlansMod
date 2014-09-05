@@ -214,7 +214,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 			}
 			in.close();
 		}
-		catch(Throwable e)
+		catch(Throwable ignored)
 		{
 			
 		}

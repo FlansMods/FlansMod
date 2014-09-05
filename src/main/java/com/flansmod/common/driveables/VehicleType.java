@@ -89,7 +89,7 @@ public class VehicleType extends DriveableType
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
 	}
