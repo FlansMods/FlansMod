@@ -425,11 +425,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
                         }
 					}
 					
-					if(penetratingPower > block.getBlockHardness(worldObj, zTile, zTile, zTile))
-					{
-						penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
-						//setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
-					}
+					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
+					//setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+					setDead();
+					break;
 				}
 				if(penetratingPower <= 0F || (type.explodeOnImpact && ticksInAir > 1))
 				{

@@ -31,7 +31,7 @@ ModelScale 1.0
 //Custom melee animation and hits
 UseCustomMelee True
 //The time it takes to perform a melee attack in ticks
-MeleeTime 40
+MeleeTime 30
 //The point on the gun that does the damage
 MeleeDamagePoint 4 0 16
 MeleeDamagePoint 4 0 32
