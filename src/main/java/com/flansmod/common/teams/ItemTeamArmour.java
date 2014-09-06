@@ -1,5 +1,6 @@
 package com.flansmod.common.teams;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,11 +10,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -70,8 +69,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				lines.add(s);
+            Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

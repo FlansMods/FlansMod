@@ -100,7 +100,7 @@ public class MechaItemType extends InfoType
 			if(split[0].equals("Armour"))
 				damageResistance = Float.parseFloat(split[1]);
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
     }

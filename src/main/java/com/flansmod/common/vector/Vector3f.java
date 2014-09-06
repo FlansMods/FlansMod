@@ -313,16 +313,8 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(64);
 
-		sb.append("Vector3f[");
-		sb.append(x);
-		sb.append(", ");
-		sb.append(y);
-		sb.append(", ");
-		sb.append(z);
-		sb.append(']');
-		return sb.toString();
+        return "Vector3f[" + x + ", " + y + ", " + z + ']';
 	}
 
 	/**

@@ -7,7 +7,6 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,7 +22,6 @@ import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.teams.Gametype;
 import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler

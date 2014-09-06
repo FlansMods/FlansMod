@@ -56,9 +56,9 @@ public class PacketPlaySound extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		data.writeFloat((float)posX);
-    	data.writeFloat((float)posY);
-    	data.writeFloat((float)posZ);
+		data.writeFloat(posX);
+    	data.writeFloat(posY);
+    	data.writeFloat(posZ);
     	writeUTF(data, sound);
     	data.writeBoolean(distort);
     	data.writeBoolean(silenced);

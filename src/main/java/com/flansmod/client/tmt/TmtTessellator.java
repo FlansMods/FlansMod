@@ -547,7 +547,7 @@ public class TmtTessellator extends Tessellator
                     this.rawBuffer[this.rawBufferIndex + 7] = this.rawBuffer[this.rawBufferIndex - var8 + 7];
                 }
 
-                this.rawBuffer[this.rawBufferIndex + 0] = this.rawBuffer[this.rawBufferIndex - var8 + 0];
+                this.rawBuffer[this.rawBufferIndex] = this.rawBuffer[(this.rawBufferIndex - var8)];
                 this.rawBuffer[this.rawBufferIndex + 1] = this.rawBuffer[this.rawBufferIndex - var8 + 1];
                 this.rawBuffer[this.rawBufferIndex + 2] = this.rawBuffer[this.rawBufferIndex - var8 + 2];
                 ++this.vertexCount;
@@ -578,7 +578,7 @@ public class TmtTessellator extends Tessellator
             this.rawBuffer[this.rawBufferIndex + 8] = this.normal;
         }
 
-        this.rawBuffer[this.rawBufferIndex + 0] = Float.floatToRawIntBits((float)(par1 + this.xOffset));
+        this.rawBuffer[this.rawBufferIndex] = Float.floatToRawIntBits((float)(par1 + this.xOffset));
         this.rawBuffer[this.rawBufferIndex + 1] = Float.floatToRawIntBits((float)(par3 + this.yOffset));
         this.rawBuffer[this.rawBufferIndex + 2] = Float.floatToRawIntBits((float)(par5 + this.zOffset));
         this.rawBufferIndex += 10;

@@ -12,15 +12,11 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
@@ -30,7 +26,6 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
@@ -477,7 +472,7 @@ public class TeamsManager
 	{
 		for(EntityPlayer player : getPlayers())
 		{
-			PlayerData data = PlayerHandler.getPlayerData((EntityPlayerMP)player);
+			PlayerData data = PlayerHandler.getPlayerData(player);
 			//Catch for broken player data
 			if(data == null)
 				continue;
@@ -528,9 +523,9 @@ public class TeamsManager
 				return;
 			}
 			
-			if(source instanceof EntityDamageSource && ((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
+			if(source instanceof EntityDamageSource && source.getEntity() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP attacker = ((EntityPlayerMP)((EntityDamageSource)source).getEntity());
+				EntityPlayerMP attacker = ((EntityPlayerMP) source.getEntity());
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
 				if(attackerData == null)
@@ -564,8 +559,7 @@ public class TeamsManager
 			else
 			{
 				//Not being attacked by a player, so this is fine
-				return;
-			}
+            }
 			
 		}
 	}
@@ -842,10 +836,7 @@ public class TeamsManager
 		//Add in the spectators as an option and "none" if the player is an op
 		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
-		for(int i = 0; i < availableTeams.length; i++)
-		{
-			allAvailableTeams[i] = currentRound.teams[i];
-		}
+        System.arraycopy(currentRound.teams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
 		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams), player);
@@ -857,8 +848,7 @@ public class TeamsManager
 		if(team == null)
 		{
 			sendTeamsMenuToPlayer(player);
-			return;
-		}
+        }
 		else if(team != Team.spectators && team.classes.size() > 0)
 		{
 			sendPacketToPlayer(new PacketTeamSelect(team.classes.toArray(new PlayerClass[team.classes.size()])), player);
@@ -1271,8 +1261,8 @@ public class TeamsManager
 			team.members.clear();
 		}
 		for(EntityPlayer player : getPlayers())
-			if(PlayerHandler.getPlayerData((EntityPlayerMP)player) != null)
-				PlayerHandler.getPlayerData((EntityPlayerMP)player).resetScore();
+			if(PlayerHandler.getPlayerData(player) != null)
+				PlayerHandler.getPlayerData(player).resetScore();
 	}
 	
 	public ITeamBase getBase(int ID)

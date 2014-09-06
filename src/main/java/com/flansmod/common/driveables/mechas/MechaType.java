@@ -153,7 +153,7 @@ public class MechaType extends DriveableType
 				rightHandModifierZ = Float.parseFloat(split[3])/16F;
 			}
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
     }

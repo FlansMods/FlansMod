@@ -1,7 +1,6 @@
 package com.flansmod.common.network;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.teams.ArmourBoxType;
 
 import cpw.mods.fml.relauncher.Side;

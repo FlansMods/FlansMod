@@ -3,7 +3,6 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -96,7 +95,7 @@ public class PacketReload extends PacketBase
 				else 
 				{
 					animations = new GunAnimations();
-					FlansModClient.gunAnimationsLeft.put((EntityLivingBase)clientPlayer, animations);
+					FlansModClient.gunAnimationsLeft.put(clientPlayer, animations);
 				}
     		}
     		else
@@ -106,7 +105,7 @@ public class PacketReload extends PacketBase
 				else 
 				{
 					animations = new GunAnimations();
-					FlansModClient.gunAnimationsRight.put((EntityLivingBase)clientPlayer, animations);
+					FlansModClient.gunAnimationsRight.put(clientPlayer, animations);
 				}
     		}
 			int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;

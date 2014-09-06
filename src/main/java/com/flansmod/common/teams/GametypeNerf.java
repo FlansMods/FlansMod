@@ -184,7 +184,7 @@ public class GametypeNerf extends Gametype {
 			return false;
 		}
 		//If the player is out, they cannot take damage
-		if(getPlayerData(player).out == true)
+		if(getPlayerData(player).out)
 			return false;
 		//Players may not attack spectators
 		if(getPlayerData(player).team == Team.spectators)
@@ -201,7 +201,7 @@ public class GametypeNerf extends Gametype {
 			if(getPlayerData(player).team == getPlayerData(attacker).team && !friendlyFire)
 				return false;
 			//If the attacker is out, they cannot kill people
-			if(getPlayerData(attacker).out == true)
+			if(getPlayerData(attacker).out)
 				return false;
 			//If they are using weapons and get a hit, then they get a point and that person is dead
 			if(source instanceof EntityDamageSourceGun)

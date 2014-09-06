@@ -4,7 +4,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.raytracing.DriveableHit;
-import com.flansmod.common.guns.raytracing.PlayerBulletHit;
 import com.flansmod.common.vector.Vector3f;
 
 public class DriveablePart 

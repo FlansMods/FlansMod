@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.types.TypeFile;
-import com.flansmod.common.vector.Vector3f;
 
 public class VehicleType extends DriveableType
 {
@@ -89,7 +87,7 @@ public class VehicleType extends DriveableType
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
 	}

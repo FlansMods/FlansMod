@@ -5,7 +5,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.teams.TeamsMap;
 import com.flansmod.common.teams.TeamsRound;
 
 import cpw.mods.fml.relauncher.Side;

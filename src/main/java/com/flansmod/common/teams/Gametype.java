@@ -1,6 +1,5 @@
 package com.flansmod.common.teams;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +18,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
-import com.flansmod.common.network.PacketTeamSelect;
 
 public abstract class Gametype 
 {
@@ -146,13 +144,13 @@ public abstract class Gametype
 		EntityPlayerMP attacker = null;
 		if(source instanceof EntityDamageSource)
 		{
-			if(((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)((EntityDamageSource)source).getEntity();
+			if(source.getEntity() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP) source.getEntity();
 		}
 		if(source instanceof EntityDamageSourceIndirect)
 		{
-			if(((EntityDamageSourceIndirect)source).getSourceOfDamage() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)((EntityDamageSourceIndirect)source).getSourceOfDamage(); 
+			if(source.getSourceOfDamage() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP) source.getSourceOfDamage();
 		}
 		return attacker;
 	}

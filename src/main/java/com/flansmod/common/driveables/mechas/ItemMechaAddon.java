@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables.mechas;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -29,8 +30,7 @@ public class ItemMechaAddon extends Item
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				list.add(s);
+            Collections.addAll(list, type.description.split("_"));
 		}
 	}
 

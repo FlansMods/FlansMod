@@ -292,15 +292,15 @@ public class ModelRendererTurbo extends ModelRenderer
 		1F, qParam[7], qParam[10]*qParam[7], qParam[10]);
 		poly[1] = addPolygonReturn(new PositionTextureVertex[] {
 			positionTexturevertex, positionTexturevertex4, positionTexturevertex7, positionTexturevertex3
-		}, textureOffsetX + 0, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h,
+		}, textureOffsetX, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h,
 		qParam[9]*qParam[6], qParam[9], 1F, qParam[6]);
 		poly[2] = addPolygonReturn(new PositionTextureVertex[] {
 			positionTexturevertex5, positionTexturevertex4, positionTexturevertex, positionTexturevertex1
-		}, textureOffsetX + d, textureOffsetY + 0, textureOffsetX + d + w, textureOffsetY + d,
+		}, textureOffsetX + d, textureOffsetY, textureOffsetX + d + w, textureOffsetY + d,
 		1F, qParam[8], qParam[1]*qParam[8], qParam[1]);
 		poly[3] = addPolygonReturn(new PositionTextureVertex[] {
 			positionTexturevertex2, positionTexturevertex3, positionTexturevertex7, positionTexturevertex6
-		}, textureOffsetX + d + w, textureOffsetY + 0, textureOffsetX + d + w + w, textureOffsetY + d,
+		}, textureOffsetX + d + w, textureOffsetY, textureOffsetX + d + w + w, textureOffsetY + d,
 		qParam[3], qParam[3]*qParam[11], qParam[11], 1F);
 		poly[4] = addPolygonReturn(new PositionTextureVertex[] {
 			positionTexturevertex1, positionTexturevertex, positionTexturevertex3, positionTexturevertex2
@@ -1372,8 +1372,8 @@ public class ModelRendererTurbo extends ModelRenderer
 			}
 		}
 		
-		int texStartX = textureOffsetX + (mirrorX ? w * 1 - 1 : 0);
-		int texStartY = textureOffsetY + (mirrorY ? h * 1 - 1 : 0);
+		int texStartX = textureOffsetX + (mirrorX ? w - 1 : 0);
+		int texStartY = textureOffsetY + (mirrorY ? h - 1 : 0);
 		int texDirX = (mirrorX ? -1 : 1);
 		int texDirY = (mirrorY ? -1 : 1);
 		

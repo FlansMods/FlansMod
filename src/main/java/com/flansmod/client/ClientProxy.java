@@ -118,8 +118,7 @@ public class ClientProxy extends CommonProxy
 			{
 				try
 				{
-					method.invoke(classloader, new Object[]
-							{ file.toURI().toURL() });
+					method.invoke(classloader, file.toURI().toURL());
 					
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("modid", "FlansMod");
@@ -224,7 +223,7 @@ public class ClientProxy extends CommonProxy
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		//Null riding entity, don't open GUI in this case
-		if(((ID >= 6 && ID <= 10) || ID == 12) && ((EntitySeat)player.ridingEntity) == null) return null;
+		if(((ID >= 6 && ID <= 10) || ID == 12) && player.ridingEntity == null) return null;
 		
 		switch(ID) 
 		{

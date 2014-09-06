@@ -12,9 +12,6 @@ package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.vector.Vector3f;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class Model4xScope extends ModelAttachment 
 {

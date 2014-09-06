@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.GunType;
@@ -113,10 +112,7 @@ public class PlayerData
 		}
 		
 		//Move all snapshots along one place
-		for(int i = snapshots.length - 2; i >= 0; i--)
-		{
-			snapshots[i + 1] = snapshots[i];
-		}
+        System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 	}
