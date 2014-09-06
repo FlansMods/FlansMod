@@ -462,14 +462,14 @@ public class ItemGun extends Item
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(data == null)
 				return;
-			if(data.lastMeleePositions == null || data.lastMeleePositions.length != type.meleeDamagePoints.size())
-			{
-				data.lastMeleePositions = new Vector3f[type.meleeDamagePoints.size()];
-				for(int j = 0; j < type.meleeDamagePoints.size(); j++)
-					data.lastMeleePositions[j] = new Vector3f(player.posX, player.posY, player.posZ);
-			}
+			//if(data.lastMeleePositions == null || data.lastMeleePositions.length != type.meleeDamagePoints.size())
+			//{
+			//	data.lastMeleePositions = new Vector3f[type.meleeDamagePoints.size()];
+			//	for(int j = 0; j < type.meleeDamagePoints.size(); j++)
+			//		data.lastMeleePositions[j] = new Vector3f(player.posX, player.posY, player.posZ);
+			//}
 			//Melee weapon
-			if(data.meleeLength > 0 && type.meleePath.size() > 0)
+			if(data.meleeLength > 0 && type.meleePath.size() > 0 && player.inventory.getCurrentItem() == itemstack)
 			{
 				for(int k = 0; k < type.meleeDamagePoints.size(); k++)
 				{
@@ -477,9 +477,12 @@ public class ItemGun extends Item
 					//Do a raytrace from the prev pos to the current pos and attack anything in the way
 					Vector3f nextPos = type.meleePath.get((data.meleeProgress + 1) % type.meleePath.size());
 					Vector3f nextAngles = type.meleePathAngles.get((data.meleeProgress + 1) % type.meleePathAngles.size());
-					RotatedAxes nextAxes = new RotatedAxes(-nextAngles.y, nextAngles.x, nextAngles.z);
-					nextPos = Vector3f.add(meleeDamagePoint, nextPos, null);
-					Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextAxes.findLocalVectorGlobally(nextPos));
+					RotatedAxes nextAxes = new RotatedAxes(-nextAngles.y, -nextAngles.z, nextAngles.x);
+					
+					Vector3f nextPosInGunCoords = nextAxes.findLocalVectorGlobally(meleeDamagePoint);
+					Vector3f.add(nextPos, nextPosInGunCoords, nextPosInGunCoords);
+					Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextPosInGunCoords);
+					
 					
 					if(!FlansMod.proxy.isThePlayer(player))
 						nextPosInPlayerCoords.y += 1.6F;

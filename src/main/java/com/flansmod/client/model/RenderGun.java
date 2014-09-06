@@ -157,14 +157,15 @@ public class RenderGun implements IItemRenderer
 						GL11.glTranslatef(0.75F, -0.22F, -0.08F);
 						GL11.glScalef(1F, 1F, -1F);
 					}
-					
+					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
+					/*
 					if(animations.meleeAnimationProgress > 0 && animations.meleeAnimationProgress < gunType.meleePath.size()) 
 					{
 						Vector3f meleePos = gunType.meleePath.get(animations.meleeAnimationProgress);
 						Vector3f nextMeleePos = animations.meleeAnimationProgress + 1 < gunType.meleePath.size() ? gunType.meleePath.get(animations.meleeAnimationProgress + 1) : new Vector3f();
 						GL11.glTranslatef(meleePos.x + (nextMeleePos.x - meleePos.x) * smoothing, meleePos.y + (nextMeleePos.y - meleePos.y) * smoothing, meleePos.z + (nextMeleePos.z - meleePos.z) * smoothing);
-
 					}
+					*/
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:

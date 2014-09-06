@@ -177,16 +177,24 @@ public class PlayerData
 	public void doMelee(EntityPlayer player, int meleeTime, GunType type)	
 	{
 		meleeLength = meleeTime;
-		Vector3f nextPos = type.meleePath.get(0);
-		Vector3f nextAngles = type.meleePathAngles.get(0);
-		RotatedAxes nextAxes = new RotatedAxes(nextAngles.x, nextAngles.y, nextAngles.z);
-		Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw, player.rotationPitch, 0F).findLocalVectorGlobally(nextAxes.findLocalVectorGlobally(nextPos));
+		lastMeleePositions = new Vector3f[type.meleePath.size()];
 		
-		if(!FlansMod.proxy.isThePlayer(player))
-			nextPosInPlayerCoords.y += 1.6F;
-		
-		for(int k = 0; k < lastMeleePositions.length; k++)
+		for(int k = 0; k < type.meleeDamagePoints.size(); k++)
+		{
+			Vector3f meleeDamagePoint = type.meleeDamagePoints.get(k);
+			//Do a raytrace from the prev pos to the current pos and attack anything in the way
+			Vector3f nextPos = type.meleePath.get(0);
+			Vector3f nextAngles = type.meleePathAngles.get(0);
+			RotatedAxes nextAxes = new RotatedAxes(-nextAngles.y, -nextAngles.z, nextAngles.x);
+			
+			Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextAxes.findLocalVectorGlobally(meleeDamagePoint));
+			Vector3f.add(nextPos, nextPosInPlayerCoords, nextPosInPlayerCoords);
+			
+			if(!FlansMod.proxy.isThePlayer(player))
+				nextPosInPlayerCoords.y += 1.6F;
+			
 			lastMeleePositions[k] = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
+		}
 	}
 	
 }

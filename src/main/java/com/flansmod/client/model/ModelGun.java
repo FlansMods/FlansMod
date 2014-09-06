@@ -48,6 +48,9 @@ public class ModelGun extends ModelBase
 	/** If true, then the grip attachment will move with the shotgun pump */
 	public boolean gripIsOnPump = false;
 	
+	/** This offsets the render position for third person */
+	public Vector3f thirdPersonOffset = new Vector3f();
+	
 	public void renderGun(float f)
 	{
 		render(gunModel, f);
