@@ -60,7 +60,7 @@ public class PlayerData
 	/** Melee weapon custom hit simulation */
 	public int meleeProgress, meleeLength;
 	
-	public Vector3f lastMeleePos = new Vector3f(0F, 0F, 0F);
+	public Vector3f[] lastMeleePositions;
 	
 	//Teams related fields
 	/** Gametype variables */
@@ -189,7 +189,8 @@ public class PlayerData
 		if(!FlansMod.proxy.isThePlayer(player))
 			nextPosInPlayerCoords.y += 1.6F;
 		
-		lastMeleePos = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
+		for(int k = 0; k < lastMeleePositions.length; k++)
+			lastMeleePositions[k] = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
 	}
 	
 }

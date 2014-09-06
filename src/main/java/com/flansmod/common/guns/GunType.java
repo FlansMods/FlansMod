@@ -66,8 +66,8 @@ public class GunType extends InfoType implements IScope
 	public int meleeTime = 1;
 	/** The path the melee weapon takes */
 	public ArrayList<Vector3f> meleePath = new ArrayList<Vector3f>(), meleePathAngles = new ArrayList<Vector3f>();
-	/** The point on the melee weapon that damage is actually done from. */
-	public Vector3f meleeDamagePoint = new Vector3f();
+	/** The points on the melee weapon that damage is actually done from. */
+	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<Vector3f>();
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -337,7 +337,7 @@ public class GunType extends InfoType implements IScope
 			}
 			if(split[0].equals("MeleeDamagePoint") || split[0].equals("MeleeDamageOffset"))
 			{
-				meleeDamagePoint = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
+				meleeDamagePoints.add(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F));
 			}
 			
 			//Attachment settings
