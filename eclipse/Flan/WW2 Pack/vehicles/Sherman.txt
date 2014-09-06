@@ -34,12 +34,13 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 17 0 -360 360 -4 4
+Driver 0 34 0 -360 360 -4 4
 RotatedDriverOffset 14 0 -9
 //Secondary gun
 AddGun 8 34 8 turret browning
 Passengers 1
-Passenger 1 0 34 0 turret -360 360 -15 60 browning Browning
+Passenger 1 0 36 0 turret -360 360 -15 60 browning Browning
+RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 2
