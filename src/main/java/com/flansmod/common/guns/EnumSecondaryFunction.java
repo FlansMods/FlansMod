@@ -2,15 +2,17 @@ package com.flansmod.common.guns;
 
 public enum EnumSecondaryFunction 
 {
-	ZOOM, ADS_ZOOM, MELEE;
+	ZOOM, ADS_ZOOM, MELEE, CUSTOM_MELEE;
 	
 	public static EnumSecondaryFunction get(String s)
 	{
 		s = s.toLowerCase();
 		if(s.equals("zoom")) 
 			return ZOOM;
-		if(s.equals("melee")) 
+		else if(s.equals("melee")) 
 			return MELEE;
-		return ADS_ZOOM;
+		else if(s.equals("custommelee")) 
+			return CUSTOM_MELEE;
+		else return ADS_ZOOM;
 	}
 }

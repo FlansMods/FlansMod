@@ -962,7 +962,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 		
 	/** Attack method called by bullets hitting the plane. Does advanced raytracing to detect which part of the plane is hit */
-	public ArrayList<BulletHit> attackFromBullet(EntityBullet bullet, Vector3f origin, Vector3f motion)
+	public ArrayList<BulletHit> attackFromBullet(Vector3f origin, Vector3f motion)
 	{
 		//Make an array to contain the hits
 		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
@@ -974,7 +974,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			DriveableHit hit = part.rayTrace(this, bullet, rotatedPosVector, rotatedMotVector);
+			DriveableHit hit = part.rayTrace(this, rotatedPosVector, rotatedMotVector);
 			if(hit != null)
 				hits.add(hit);
 		}
@@ -1010,7 +1010,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(DriveablePart part : getDriveableData().parts.values())
 		{
 			//Ray trace the bullet
-			if(part.rayTrace(this, rotatedPosVector, rotatedMotVector))
+			if(part.rayTrace(this, rotatedPosVector, rotatedMotVector) != null)
 			{
 				return part;
 			}

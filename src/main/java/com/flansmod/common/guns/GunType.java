@@ -19,6 +19,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
+import com.flansmod.common.vector.Vector3i;
 
 public class GunType extends InfoType implements IScope
 {
@@ -60,6 +61,13 @@ public class GunType extends InfoType implements IScope
 	public boolean consumeGunUponUse = false;
 	/** Item to drop on shooting */
 	public String dropItemOnShoot = null;
+	//Custom Melee Stuff
+	/** The time delay between custom melee attacks */
+	public int meleeTime = 1;
+	/** The path the melee weapon takes */
+	public ArrayList<Vector3f> meleePath = new ArrayList<Vector3f>(), meleePathAngles = new ArrayList<Vector3f>();
+	/** The point on the melee weapon that damage is actually done from. */
+	public Vector3f meleeDamagePoint = new Vector3f();
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -201,6 +209,7 @@ public class GunType extends InfoType implements IScope
 				consumeGunUponUse = Boolean.parseBoolean(split[1]);
 			if (split[0].equals("DropItemOnShoot"))
 				dropItemOnShoot = split[1];
+			
 			//Sounds
 			if (split[0].equals("ShootDelay"))
 				shootDelay = Integer.parseInt(split[1]);
@@ -230,6 +239,7 @@ public class GunType extends InfoType implements IScope
 				meleeSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
+			
 			//Looping sounds
 			if (split[0].equals("WarmupSound"))
 			{
@@ -251,6 +261,7 @@ public class GunType extends InfoType implements IScope
 				cooldownSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
+			
 			//Modes and zoom settings
 			if (split[0].equals("Mode"))
 				mode = EnumFireMode.getFireMode(split[1]);
@@ -315,6 +326,19 @@ public class GunType extends InfoType implements IScope
 				oneHanded = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);
+			if(split[0].equals("UseCustomMelee") && Boolean.parseBoolean(split[1]))
+				secondaryFunction = EnumSecondaryFunction.CUSTOM_MELEE;
+			if(split[0].equals("MeleeTime"))
+				meleeTime = Integer.parseInt(split[1]);
+			if(split[0].equals("AddNode"))
+			{
+				meleePath.add(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F));
+				meleePathAngles.add(new Vector3f(Float.parseFloat(split[4]), Float.parseFloat(split[5]), Float.parseFloat(split[6])));
+			}
+			if(split[0].equals("MeleeDamagePoint") || split[0].equals("MeleeDamageOffset"))
+			{
+				meleeDamagePoint = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
+			}
 			
 			//Attachment settings
 			if(split[0].equals("AllowAllAttachments"))

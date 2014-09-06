@@ -3,6 +3,7 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -20,6 +21,7 @@ import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.vector.Vector3f;
 
 import cpw.mods.fml.relauncher.Side;
 
@@ -54,6 +56,9 @@ public class RenderGun implements IItemRenderer
 		if(!(item.getItem() instanceof ItemGun))
 			return;
 		
+		RenderBlocks renderBlocks = (RenderBlocks)data[0];
+		
+		
 		GunType gunType = ((ItemGun)item.getItem()).type;
 		if(gunType == null)
 			return;
@@ -64,13 +69,7 @@ public class RenderGun implements IItemRenderer
 
 		//Render main hand gun
 		{
-			GunAnimations animations = FlansModClient.gunAnimationsRight.get(data[1]);
-			if(animations == null)
-			{
-				animations = new GunAnimations();
-				if(type != ItemRenderType.ENTITY)
-					FlansModClient.gunAnimationsRight.put((EntityLivingBase)data[1], animations);
-			}
+			GunAnimations animations = type == ItemRenderType.ENTITY ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
 			renderGun(type, item, gunType, animations, false, data);
 		}
 		
@@ -158,6 +157,13 @@ public class RenderGun implements IItemRenderer
 						GL11.glTranslatef(0.75F, -0.22F, -0.08F);
 						GL11.glScalef(1F, 1F, -1F);
 					}
+					
+					if(animations.meleeAnimationProgress > 0 && animations.meleeAnimationProgress < gunType.meleePath.size()) 
+					{
+						Vector3f meleePos = gunType.meleePath.get(animations.meleeAnimationProgress);
+						Vector3f nextMeleePos = animations.meleeAnimationProgress + 1 < gunType.meleePath.size() ? gunType.meleePath.get(animations.meleeAnimationProgress + 1) : new Vector3f();
+						GL11.glTranslatef(meleePos.x + (nextMeleePos.x - meleePos.x) * smoothing, meleePos.y + (nextMeleePos.y - meleePos.y) * smoothing, meleePos.z + (nextMeleePos.z - meleePos.z) * smoothing);
+					}
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
@@ -185,6 +191,13 @@ public class RenderGun implements IItemRenderer
 							GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
 						GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
 						GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
+					}
+					
+					if(animations.meleeAnimationProgress > 0 && animations.meleeAnimationProgress < gunType.meleePath.size()) 
+					{
+						Vector3f meleePos = gunType.meleePath.get(animations.meleeAnimationProgress);
+						Vector3f nextMeleePos = animations.meleeAnimationProgress + 1 < gunType.meleePath.size() ? gunType.meleePath.get(animations.meleeAnimationProgress + 1) : new Vector3f();
+						GL11.glTranslatef(meleePos.x + (nextMeleePos.x - meleePos.x) * smoothing, meleePos.y + (nextMeleePos.y - meleePos.y) * smoothing, meleePos.z + (nextMeleePos.z - meleePos.z) * smoothing);
 					}
 					
 					if(animations.reloading)

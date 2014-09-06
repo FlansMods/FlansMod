@@ -625,4 +625,30 @@ public class FlansModClient extends FlansMod
             mc.effectRenderer.addEffect(fx);
 		return fx;
 	}
+
+	public static GunAnimations getGunAnimations(EntityLivingBase living, boolean offHand) 
+	{
+		GunAnimations animations = null;
+		if(offHand)
+		{
+			if(FlansModClient.gunAnimationsLeft.containsKey(living))
+				animations = FlansModClient.gunAnimationsLeft.get(living);
+			else 
+			{
+				animations = new GunAnimations();
+				FlansModClient.gunAnimationsLeft.put((EntityLivingBase)living, animations);
+			}
+		}
+		else
+		{
+			if(FlansModClient.gunAnimationsRight.containsKey(living))
+				animations = FlansModClient.gunAnimationsRight.get(living);
+			else 
+			{
+				animations = new GunAnimations();
+				FlansModClient.gunAnimationsRight.put((EntityLivingBase)living, animations);
+			}
+		}
+		return animations;
+	}
 }

@@ -9,12 +9,14 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsRound;
+import com.flansmod.common.vector.Vector3f;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -55,6 +57,10 @@ public class PlayerData
 	public int loopedSoundDelay;
 	/** Sound delay parameters */
 	public boolean shouldPlayCooldownSound, shouldPlayWarmupSound;
+	/** Melee weapon custom hit simulation */
+	public int meleeProgress, meleeLength;
+	
+	public Vector3f lastMeleePos = new Vector3f(0F, 0F, 0F);
 	
 	//Teams related fields
 	/** Gametype variables */
@@ -113,8 +119,6 @@ public class PlayerData
 		}
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
-
-		
 	}
 
 	public PlayerClass getPlayerClass()
@@ -173,4 +177,19 @@ public class PlayerData
 		
 		FlansMod.getPacketHandler().sendToServer(new PacketSelectOffHandGun(offHandGunSlot));
 	}
+	
+	public void doMelee(EntityPlayer player, int meleeTime, GunType type)	
+	{
+		meleeLength = meleeTime;
+		Vector3f nextPos = type.meleePath.get(0);
+		Vector3f nextAngles = type.meleePathAngles.get(0);
+		RotatedAxes nextAxes = new RotatedAxes(nextAngles.x, nextAngles.y, nextAngles.z);
+		Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw, player.rotationPitch, 0F).findLocalVectorGlobally(nextAxes.findLocalVectorGlobally(nextPos));
+		
+		if(!FlansMod.proxy.isThePlayer(player))
+			nextPosInPlayerCoords.y += 1.6F;
+		
+		lastMeleePos = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
+	}
+	
 }

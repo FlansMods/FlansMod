@@ -260,7 +260,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
 				{
 					//Raytrace the bullet
-					ArrayList<BulletHit> driveableHits = driveable.attackFromBullet(this, origin, motion);
+					ArrayList<BulletHit> driveableHits = driveable.attackFromBullet(origin, motion);
 					hits.addAll(driveableHits);
 				}
 			}

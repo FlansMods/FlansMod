@@ -1,5 +1,7 @@
 package com.flansmod.common.guns;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.settings.GameSettings;
@@ -24,6 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -37,15 +41,31 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.guns.raytracing.BlockHit;
+import com.flansmod.common.guns.raytracing.BulletHit;
+import com.flansmod.common.guns.raytracing.DriveableHit;
+import com.flansmod.common.guns.raytracing.EntityHit;
+import com.flansmod.common.guns.raytracing.EnumHitboxType;
+import com.flansmod.common.guns.raytracing.PlayerBulletHit;
+import com.flansmod.common.guns.raytracing.PlayerHitbox;
+import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
+import com.flansmod.common.network.PacketSelectOffHandGun;
+import com.flansmod.common.teams.Team;
+import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 import com.google.common.collect.Multimap;
 
 public class ItemGun extends Item
@@ -347,12 +367,15 @@ public class ItemGun extends Item
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(data == null)
 				return;
+			
 			if(player.inventory.getCurrentItem() != itemstack)
 			{
 				//If the player is no longer holding a gun, emulate a release of the shoot button
 				if(player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() == null || !(player.inventory.getCurrentItem().getItem() instanceof ItemGun))
 				{
 					data.isShootingRight = data.isShootingLeft = false;
+					data.offHandGunSlot = 0;
+					(new PacketSelectOffHandGun(0)).handleServerSide(player);
 				}
 				return;
 			}
@@ -421,15 +444,199 @@ public class ItemGun extends Item
 					}
 				}
 			}
+			
+
 		}
 	}
 	
 	@Override
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
+	public void onUpdate(ItemStack itemstack, World world, Entity pEnt, int i, boolean flag)
 	{
 		if(world.isRemote)
-			onUpdateClient(itemstack, world, entity, i, flag);
-		else onUpdateServer(itemstack, world, entity, i, flag);
+			onUpdateClient(itemstack, world, pEnt, i, flag);
+		else onUpdateServer(itemstack, world, pEnt, i, flag);
+		
+		if(pEnt instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)pEnt;
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(data == null)
+				return;
+			//Melee weapon
+			if(data.meleeLength > 0 && type.meleePath.size() > 0)
+			{
+				//Do a raytrace from the prev pos to the current pos and attack anything in the way
+				Vector3f nextPos = type.meleePath.get((data.meleeProgress + 1) % type.meleePath.size());
+				Vector3f nextAngles = type.meleePathAngles.get((data.meleeProgress + 1) % type.meleePathAngles.size());
+				RotatedAxes nextAxes = new RotatedAxes(nextAngles.x, nextAngles.y, nextAngles.z);
+				nextPos = Vector3f.add(type.meleeDamagePoint, nextPos, null);
+				Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextAxes.findLocalVectorGlobally(nextPos));
+				
+				if(!FlansMod.proxy.isThePlayer(player))
+					nextPosInPlayerCoords.y += 1.6F;
+				
+				Vector3f nextPosInWorldCoords = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
+				
+				Vector3f dPos = Vector3f.sub(nextPosInWorldCoords, data.lastMeleePos, null);
+				
+				if(player.worldObj.isRemote && FlansMod.DEBUG)
+					player.worldObj.spawnEntityInWorld(new EntityDebugVector(player.worldObj, data.lastMeleePos, dPos, 200, 1F, 0F, 0F));
+				
+				//Do the raytrace
+				{
+					//Create a list for all bullet hits
+					ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
+									
+					//Iterate over all entities
+					for(int j = 0; j < world.loadedEntityList.size(); j++)
+					{
+						Object obj = world.loadedEntityList.get(j);
+						//Get players
+						if(obj instanceof EntityPlayer)
+						{
+							EntityPlayer otherPlayer = (EntityPlayer)obj;
+							PlayerData otherData = PlayerHandler.getPlayerData(otherPlayer);
+							boolean shouldDoNormalHitDetect = false;
+							if(otherPlayer == player)
+								continue;
+							if(otherData != null)
+							{
+								if(otherPlayer.isDead || otherData.team == Team.spectators)
+								{
+									continue;
+								}
+								int snapshotToTry = player instanceof EntityPlayerMP ? ((EntityPlayerMP)player).ping / 50 : 0;
+								if(snapshotToTry >= otherData.snapshots.length)
+									snapshotToTry = otherData.snapshots.length - 1;
+								
+								PlayerSnapshot snapshot = otherData.snapshots[snapshotToTry];
+								if(snapshot == null)
+									snapshot = otherData.snapshots[0];
+								
+								//DEBUG
+								//snapshot = new PlayerSnapshot(player);
+								
+								//Check one last time for a null snapshot. If this is the case, fall back to normal hit detection
+								if(snapshot == null)
+									shouldDoNormalHitDetect = true;
+								else
+								{
+									//Raytrace
+									ArrayList<BulletHit> playerHits = snapshot.raytrace(data.lastMeleePos, dPos);
+									hits.addAll(playerHits);
+								}
+							}
+							
+							//If we couldn't get a snapshot, use normal entity hitbox calculations
+							if(otherData == null || shouldDoNormalHitDetect)
+							{
+								MovingObjectPosition mop = player.boundingBox.calculateIntercept(data.lastMeleePos.toVec3(), nextPosInWorldCoords.toVec3());
+								if(mop != null)
+								{
+									Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePos.x, mop.hitVec.yCoord - data.lastMeleePos.y, mop.hitVec.zCoord - data.lastMeleePos.z);
+									float hitLambda = 1F;
+									if(dPos.x != 0F)
+										hitLambda = hitPoint.x / dPos.x;
+									else if(dPos.y != 0F)
+										hitLambda = hitPoint.y / dPos.y;
+									else if(dPos.z != 0F)
+										hitLambda = hitPoint.z / dPos.z;
+									if(hitLambda < 0)
+										hitLambda = -hitLambda;
+									
+									hits.add(new PlayerBulletHit(new PlayerHitbox(otherPlayer, new RotatedAxes(), new Vector3f(), new Vector3f(), new Vector3f(), EnumHitboxType.BODY), hitLambda));
+								}
+							}
+						}
+						else
+						{
+							Entity entity = (Entity)obj;
+							if(entity != player && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun))
+							{
+								MovingObjectPosition mop = entity.boundingBox.calculateIntercept(data.lastMeleePos.toVec3(), nextPosInWorldCoords.toVec3());
+								if(mop != null)
+								{
+									Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePos.x, mop.hitVec.yCoord - data.lastMeleePos.y, mop.hitVec.zCoord - data.lastMeleePos.z);
+									float hitLambda = 1F;
+									if(dPos.x != 0F)
+										hitLambda = hitPoint.x / dPos.x;
+									else if(dPos.y != 0F)
+										hitLambda = hitPoint.y / dPos.y;
+									else if(dPos.z != 0F)
+										hitLambda = hitPoint.z / dPos.z;
+									if(hitLambda < 0)
+										hitLambda = -hitLambda;
+									
+									hits.add(new EntityHit(entity, hitLambda));
+								}
+							}
+						}
+					}
+					
+					//We hit something
+					if(!hits.isEmpty())
+					{
+						//Sort the hits according to the intercept position
+						Collections.sort(hits);
+						
+						float swingDistance = dPos.length();
+						
+						for(BulletHit bulletHit : hits)
+						{
+							if(bulletHit instanceof PlayerBulletHit)
+							{
+								PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
+								float damageMultiplier = 1F;
+								switch(playerHit.hitbox.type)
+								{
+								case LEFTITEM : case RIGHTITEM : //Hit a shield. Stop the swing. 
+								{
+									data.meleeProgress = data.meleeLength = 0;
+									return;
+								}
+								case HEAD : damageMultiplier = 2F; break;
+								case RIGHTARM : case LEFTARM : damageMultiplier = 0.6F; break;
+								default :
+								}
+								
+								if(playerHit.hitbox.player.attackEntityFrom(DamageSource.causePlayerDamage(player), swingDistance * type.meleeDamage))
+								{
+									//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+									playerHit.hitbox.player.arrowHitTimer++;
+									playerHit.hitbox.player.hurtResistantTime = playerHit.hitbox.player.maxHurtResistantTime / 2;
+								}
+								
+								if(FlansMod.DEBUG)
+									world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(data.lastMeleePos.x + dPos.x * playerHit.intersectTime, data.lastMeleePos.y + dPos.y * playerHit.intersectTime, data.lastMeleePos.z + dPos.z * playerHit.intersectTime), 1000, 1F, 0F, 0F));
+							}
+							else if(bulletHit instanceof EntityHit)
+							{
+								EntityHit entityHit = (EntityHit)bulletHit;
+								if(entityHit.entity.attackEntityFrom(DamageSource.causePlayerDamage(player), swingDistance * type.meleeDamage) && entityHit.entity instanceof EntityLivingBase)
+								{
+									EntityLivingBase living = (EntityLivingBase)entityHit.entity;
+									//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+									living.arrowHitTimer++;
+									living.hurtResistantTime = living.maxHurtResistantTime / 2;
+								}
+								
+								if(FlansMod.DEBUG)
+									world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(data.lastMeleePos.x + dPos.x * entityHit.intersectTime, data.lastMeleePos.y + dPos.y * entityHit.intersectTime, data.lastMeleePos.z + dPos.z * entityHit.intersectTime), 1000, 1F, 0F, 0F));
+							}
+						}	
+					}
+				}
+				//End raytrace
+				
+				//Increment the progress meter
+				data.meleeProgress++;
+				//If we are done, reset the counters
+				if(data.meleeProgress == data.meleeLength)
+					data.meleeProgress = data.meleeLength = 0;
+				
+				data.lastMeleePos = nextPosInWorldCoords;
+			}
+		}
 	}
 	 
 	
@@ -730,6 +937,13 @@ public class ItemGun extends Item
         	multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
+	
+	//Stop damage being done to entities when scoping etc.
+	@Override
+    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
+    {
+        return type.secondaryFunction != EnumSecondaryFunction.MELEE;
+    }
 
 	@Override
 	public boolean isFull3D()
@@ -742,6 +956,22 @@ public class ItemGun extends Item
 	{
 		if (type.meleeSound != null)
 			PacketPlaySound.sendSoundPacket(entityLiving.posX, entityLiving.posY, entityLiving.posZ, FlansMod.soundRange, entityLiving.dimension, type.meleeSound, true);
+		//Do custom melee code here
+		if(type.secondaryFunction == EnumSecondaryFunction.CUSTOM_MELEE)
+		{
+			//Do animation
+			if(entityLiving.worldObj.isRemote)
+			{
+				GunAnimations animations = FlansModClient.getGunAnimations(entityLiving, false);
+				animations.doMelee(type.meleeTime);
+			}
+			//Do custom melee hit detection
+			if(entityLiving instanceof EntityPlayer)
+			{
+				PlayerData data = PlayerHandler.getPlayerData((EntityPlayer)entityLiving);
+				data.doMelee((EntityPlayer)entityLiving, type.meleeTime, type);
+			}
+		}
 		return type.secondaryFunction != EnumSecondaryFunction.MELEE;
 	}
 	

@@ -73,28 +73,10 @@ public class DriveablePart
 		health -= (int)(damage / 2F);
 		return damage / 2F;
 	}
-	
-	/** Called by tools */
-	public boolean rayTrace(EntityDriveable driveable, Vector3f origin, Vector3f motion)
-	{
-		if(box == null || health <= 0 || dead)
-			return false;
-		if(!driveable.canHitPart(type))
-			return false;
-
-		//Complicated. Will explain later. Someone remind me.
-		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x, (box.x + box.w));
-		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, box.y, (box.y + box.h));
-		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, box.z, (box.z + box.d));
-		boolean inX = coordIsIn(origin.x, origin.x + motion.x, box.x, (box.x + box.w));
-		boolean inY = coordIsIn(origin.y, origin.y + motion.y, box.y, (box.y + box.h));
-		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z, (box.z + box.d));
-		return (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
-	}
-	
+		
 	/** Called by bullets that may have hit the plane 
 	 * @return A bullet hit if it hit. Otherwise null */
-	public DriveableHit rayTrace(EntityDriveable driveable, EntityBullet bullet, Vector3f origin, Vector3f motion)
+	public DriveableHit rayTrace(EntityDriveable driveable, Vector3f origin, Vector3f motion)
 	{
 		if(box == null || health <= 0 || dead)
 			return null;
