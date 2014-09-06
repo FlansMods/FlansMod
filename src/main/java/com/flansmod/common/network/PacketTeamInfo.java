@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
@@ -44,6 +45,7 @@ public class PacketTeamInfo extends PacketBase
 		public int kills;
 		public int deaths;
 		public TeamData team;
+		public PlayerClass playerClass;
 	}
 	
 	public static PlayerScoreData getPlayerScoreData(String username)
@@ -119,12 +121,14 @@ public class PacketTeamInfo extends PacketBase
 		        				data.writeInt(0);
 		        				data.writeInt(0);
 		        				data.writeInt(0);
+		        				writeUTF(data, "");
 		        			}
 		        			else
 		        			{
 			        			data.writeInt(playerData.score);
 			        			data.writeInt(playerData.kills);
 			        			data.writeInt(playerData.deaths);
+			        			writeUTF(data, playerData.playerClass.shortName);
 		        			}
 		        		}
 		        	}
@@ -156,12 +160,14 @@ public class PacketTeamInfo extends PacketBase
         				data.writeInt(0);
         				data.writeInt(0);
         				data.writeInt(0);
+        				writeUTF(data, "");
         			}
         			else
         			{
 	        			data.writeInt(playerData.score);
 	        			data.writeInt(playerData.kills);
 	        			data.writeInt(playerData.deaths);
+	        			writeUTF(data, playerData.playerClass.shortName);
         			}
         		}
 	        	
@@ -215,6 +221,7 @@ public class PacketTeamInfo extends PacketBase
 						teamData[i].playerData[j].score = data.readInt();
 						teamData[i].playerData[j].kills = data.readInt();
 						teamData[i].playerData[j].deaths = data.readInt();
+						teamData[i].playerData[j].playerClass = PlayerClass.getClass(readUTF(data));
 					}
 				}
 			}
@@ -235,6 +242,7 @@ public class PacketTeamInfo extends PacketBase
 					teamData[0].playerData[j].score = data.readInt();
 					teamData[0].playerData[j].kills = data.readInt();
 					teamData[0].playerData[j].deaths = data.readInt();
+					teamData[0].playerData[j].playerClass = PlayerClass.getClass(readUTF(data));
 				}
 			}
 		}

@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.client.particle.EntityBlockDustFX;
@@ -66,8 +67,10 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
+import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 public class FlansModClient extends FlansMod
 {
@@ -197,8 +200,7 @@ public class FlansModClient extends FlansMod
 			if(data.snapshots[0] != null)
 				data.snapshots[0].renderSnapshot();
 		}
-				
-		//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, zombieSkin);
+					
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
 		if(event.entity instanceof EntityPlayer && teamInfo != null && teamInfo.gametype != null && !"No Gametype".equals(teamInfo.gametype))
@@ -208,6 +210,9 @@ public class FlansModClient extends FlansMod
 			
 			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
 			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
+						
+			//Do custom skin overrides
+			((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass));
 			
 			//Spectators see all
 			if(thePlayerTeam == Team.spectators)

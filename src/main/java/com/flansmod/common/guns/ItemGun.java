@@ -991,6 +991,12 @@ public class ItemGun extends Item
     }
 
 	@Override
+    public boolean func_150897_b(Block p_150897_1_)
+    {
+        return false;
+    }
+    
+	@Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

@@ -41,6 +41,8 @@ public class PlayerClass extends InfoType
 		{
 			startingItemStrings.add(split);
 		}
+		if(split[0].equals("SkinOverride"))
+			texture = split[1];
 		if(split[0].equals("Hat") || split[0].equals("Helmet"))
 		{
 			if(split[1].equals("None"))

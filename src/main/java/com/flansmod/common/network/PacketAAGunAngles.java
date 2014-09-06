@@ -4,6 +4,7 @@ import com.flansmod.common.guns.EntityAAGun;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -47,9 +48,10 @@ public class PacketAAGunAngles extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		EntityAAGun aa = (EntityAAGun)clientPlayer.worldObj.getEntityByID(entityID);
-		if(aa != null)
+		Entity entity = clientPlayer.worldObj.getEntityByID(entityID);
+		if(entity instanceof EntityAAGun)
 		{
+			EntityAAGun aa = (EntityAAGun)entity;
 			aa.prevGunYaw = aa.gunYaw;
 			aa.prevGunPitch = aa.gunPitch;
 			aa.gunYaw = gunYaw;

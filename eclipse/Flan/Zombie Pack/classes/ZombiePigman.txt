@@ -1,0 +1,5 @@
+Name Pigman
+ShortName zombiePigman
+SkinOverride ZombiePigman
+AddItem swordGold
+AddItem fleshLump 2
