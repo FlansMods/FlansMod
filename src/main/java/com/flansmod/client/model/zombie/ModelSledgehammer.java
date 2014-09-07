@@ -1,4 +1,4 @@
-package com.flansmod.client.model.zom;
+package com.flansmod.client.model.zombie;
 
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
