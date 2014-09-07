@@ -1,4 +1,4 @@
-package com.flansmod.client.model.zom;
+package com.flansmod.client.model.zombie;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
