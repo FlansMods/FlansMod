@@ -532,6 +532,10 @@ public class TeamsManager
 				if(attackerData == null)
 					return;
 				
+				//Can hurt self
+				if(attacker == player)
+					return;
+				
 				//Cannot be attacked by a spectator
 				if(attackerData.team == Team.spectators)
 				{

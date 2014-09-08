@@ -66,6 +66,7 @@ import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
+import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
@@ -85,6 +86,7 @@ public class ClientProxy extends CommonProxy
 	public static String modelDir = "com.flansmod.client.model.";
 	
 	public static RenderGun gunRenderer;
+	public static RenderGrenade grenadeRenderer;
 	public List<File> contentPacks;
 
 	@Override
@@ -92,10 +94,16 @@ public class ClientProxy extends CommonProxy
 	{
 		new FlansModClient().load();
 		gunRenderer = new RenderGun();
+		grenadeRenderer = new RenderGrenade();
 		for(GunType gunType : GunType.guns.values())
 		{
 			if(gunType.model != null)
 				MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
+		}
+		for(GrenadeType grenadeType : GrenadeType.grenades)
+		{
+			if(grenadeType.model != null)
+				MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
 		}
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());

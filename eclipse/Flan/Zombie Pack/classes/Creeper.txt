@@ -1,0 +1,4 @@
+Name Creeper
+ShortName creeper
+SkinOverride Creeper
+AddItem creeperExplode

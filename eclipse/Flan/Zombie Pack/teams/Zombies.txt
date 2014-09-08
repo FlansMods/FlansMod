@@ -11,3 +11,4 @@ AddClass zombieNormal
 AddClass zombieSpeedy
 AddClass zombiePigman
 AddClass skeleton
+AddClass creeper

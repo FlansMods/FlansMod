@@ -116,11 +116,13 @@ public class GametypeZombies extends Gametype
 			PlayerData attackerData = getPlayerData(attacker);
 			
 			//They killed themself. Oh noes. Do nothing
-			//if(attacker == player)
+			if(attacker == player)
+			{
 				//playerData.score--;
+			}
 			
 			//They teamkilled. +3 to hunters. -1 to zombies.
-			if(attackerData.team == playerData.team)
+			else if(attackerData.team == playerData.team)
 			{
 				if(isHuman(attackerData.team))
 					attackerData.humanScore += 3;
