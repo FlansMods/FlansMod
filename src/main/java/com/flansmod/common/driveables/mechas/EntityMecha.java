@@ -818,14 +818,12 @@ public class EntityMecha extends EntityDriveable
 									}
 								}
 								//Destroy block
-								
 								worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
 					        }
 						}
 					}
 				}
 			}
-			
 		}
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
