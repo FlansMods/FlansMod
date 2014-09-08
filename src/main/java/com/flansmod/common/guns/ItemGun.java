@@ -477,10 +477,11 @@ public class ItemGun extends Item
 					//Do a raytrace from the prev pos to the current pos and attack anything in the way
 					Vector3f nextPos = type.meleePath.get((data.meleeProgress + 1) % type.meleePath.size());
 					Vector3f nextAngles = type.meleePathAngles.get((data.meleeProgress + 1) % type.meleePathAngles.size());
-					RotatedAxes nextAxes = new RotatedAxes(-nextAngles.y, -nextAngles.z, nextAngles.x);
+					RotatedAxes nextAxes = new RotatedAxes().rotateGlobalRoll(-nextAngles.x).rotateGlobalPitch(-nextAngles.z).rotateGlobalYaw(-nextAngles.y);
 					
 					Vector3f nextPosInGunCoords = nextAxes.findLocalVectorGlobally(meleeDamagePoint);
 					Vector3f.add(nextPos, nextPosInGunCoords, nextPosInGunCoords);
+					Vector3f.add(new Vector3f(0F, 0F, 0F), nextPosInGunCoords, nextPosInGunCoords);
 					Vector3f nextPosInPlayerCoords = new RotatedAxes(player.rotationYaw + 90F, player.rotationPitch, 0F).findLocalVectorGlobally(nextPosInGunCoords);
 					
 					
