@@ -19,9 +19,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 import com.google.common.collect.Multimap;
 
-public class ItemTeamArmour extends ItemArmor implements ISpecialArmor 
+public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanItem
 {
 	public ArmourType type;
 	protected static final UUID[] uuid = new UUID[] { UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID() };
@@ -102,4 +104,10 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor
        	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
        	return map;
     }
+
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

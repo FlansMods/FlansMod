@@ -64,11 +64,12 @@ import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 import com.google.common.collect.Multimap;
 
-public class ItemGun extends Item
+public class ItemGun extends Item implements IFlanItem
 {
 	public GunType type;
 	private static boolean rightMouseHeld;
@@ -1059,4 +1060,10 @@ public class ItemGun extends Item
     {
         return EnumAction.bow;
     }
+
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

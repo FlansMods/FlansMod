@@ -11,10 +11,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.common.PlayerHandler;
@@ -194,36 +193,41 @@ public class EntityGunItem extends EntityItem {
     {
 		if(worldObj.isRemote)
 			return true;
-    	ItemStack currentItem = player.getCurrentEquippedItem();
-    	if(currentItem != null && currentItem.getItem() instanceof ItemGun)
-    	{
-    		GunType gunType = ((ItemGun)currentItem.getItem()).type;
-    		List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
-    		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
-    		{
-    			ItemStack stack = player.inventory.getStackInSlot(i);
-    			if(stack != null && stack.getItem() instanceof ItemBullet)
-    			{
-    				BulletType bulletType = ((ItemBullet)stack.getItem()).type;
-    				if(gunType.isAmmo(bulletType))
-    				{
-    					newAmmoStacks.add(stack.copy());
-    					player.inventory.setInventorySlotContents(i, null);
-    				}
-    			}
-    		}
-    		EntityGunItem newGunItem = new EntityGunItem(worldObj, posX, posY, posZ, currentItem.copy(), newAmmoStacks); 
-    		worldObj.spawnEntityInWorld(newGunItem);
-    		player.inventory.setInventorySlotContents(player.inventory.currentItem, getEntityItem());
-    		for(ItemStack stack : ammoStacks)
-    		{
-    			player.inventory.addItemStackToInventory(stack);
-    		}
-    		setDead();
-    		PlayerHandler.getPlayerData(player).shootClickDelay = 10;
-    		PlayerHandler.getPlayerData(player).isShootingRight = false;
-    		return true;
-    	}
+		EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
+		TeamsManager.getInstance().playerLoot(event);
+		if(!event.isCanceled())
+		{
+	    	ItemStack currentItem = player.getCurrentEquippedItem();
+	    	if(currentItem != null && currentItem.getItem() instanceof ItemGun)
+	    	{
+	    		GunType gunType = ((ItemGun)currentItem.getItem()).type;
+	    		List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
+	    		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+	    		{
+	    			ItemStack stack = player.inventory.getStackInSlot(i);
+	    			if(stack != null && stack.getItem() instanceof ItemBullet)
+	    			{
+	    				BulletType bulletType = ((ItemBullet)stack.getItem()).type;
+	    				if(gunType.isAmmo(bulletType))
+	    				{
+	    					newAmmoStacks.add(stack.copy());
+	    					player.inventory.setInventorySlotContents(i, null);
+	    				}
+	    			}
+	    		}
+	    		EntityGunItem newGunItem = new EntityGunItem(worldObj, posX, posY, posZ, currentItem.copy(), newAmmoStacks); 
+	    		worldObj.spawnEntityInWorld(newGunItem);
+	    		player.inventory.setInventorySlotContents(player.inventory.currentItem, getEntityItem());
+	    		for(ItemStack stack : ammoStacks)
+	    		{
+	    			player.inventory.addItemStackToInventory(stack);
+	    		}
+	    		setDead();
+	    		PlayerHandler.getPlayerData(player).shootClickDelay = 10;
+	    		PlayerHandler.getPlayerData(player).isShootingRight = false;
+	    		return true;
+	    	}
+		}
     	return false;
     }
 }

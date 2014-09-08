@@ -87,7 +87,7 @@ public class PacketTeamInfo extends PacketBase
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
     		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
-    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);
+    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);    		
     		
     		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{

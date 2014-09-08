@@ -23,7 +23,7 @@ Scope None
 FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-MeleeDamage 4
+MeleeDamage 2
 //Model settings
 Model zombie.Screwdriver
 Texture Screwdriver

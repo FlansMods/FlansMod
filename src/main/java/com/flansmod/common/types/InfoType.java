@@ -331,4 +331,14 @@ public class InfoType
 	{
 		
 	}
+
+	public static InfoType getType(ItemStack itemStack) 
+	{
+		if(itemStack == null)
+			return null;
+		Item item = itemStack.getItem();
+		if(item instanceof IFlanItem)
+			return ((IFlanItem)item).getInfoType();
+		return null;
+	}
 }

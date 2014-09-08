@@ -171,6 +171,7 @@ public class TeamsManager
 		if(time % 40 == 0)
 		{
 			FlansMod.INSTANCE.getPacketHandler().sendToAll(new PacketTeamInfo());
+			showTeamsMenuToAll(true);
 		}
 		
 		if(!enabled)
@@ -471,6 +472,11 @@ public class TeamsManager
 	/** Called at the start of a round. Shows all players the team selection menu. Exludes people on the building / op team */
 	public void showTeamsMenuToAll()
 	{
+		showTeamsMenuToAll(false);
+	}
+	
+	public void showTeamsMenuToAll(boolean info)
+	{
 		for(EntityPlayer player : getPlayers())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player);
@@ -481,7 +487,7 @@ public class TeamsManager
 			if(data.builder && playerIsOp(player))
 				continue;
 
-			sendTeamsMenuToPlayer((EntityPlayerMP)player);
+			sendTeamsMenuToPlayer((EntityPlayerMP)player, info);
 		}
 	}
 			
@@ -732,9 +738,16 @@ public class TeamsManager
 	@SubscribeEvent
 	public void playerLoot(EntityItemPickupEvent event)
 	{
-		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer);
-		if(data != null && data.team == Team.spectators)
-			event.setCanceled(true);
+		if(event.entity instanceof EntityPlayer)
+		{
+			ItemStack itemStack = event.item.getEntityItem();
+			PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer);
+			if(enabled && currentRound != null && data != null)
+			{
+				if(data.team == Team.spectators || !currentRound.gametype.playerCanLoot(itemStack, InfoType.getType(itemStack), event.entityPlayer, data.team))
+					event.setCanceled(true);
+			}
+		}
 	}
 		
 	@SubscribeEvent
@@ -834,6 +847,11 @@ public class TeamsManager
 	
 	public void sendTeamsMenuToPlayer(EntityPlayerMP player)
 	{
+		sendTeamsMenuToPlayer(player, false);
+	}
+	
+	public void sendTeamsMenuToPlayer(EntityPlayerMP player, boolean info)
+	{
 		if(!enabled || currentRound == null || currentRound.teams == null)
 			return;
 		//Get the available teams from the gametype
@@ -844,7 +862,7 @@ public class TeamsManager
         System.arraycopy(currentRound.teams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
-		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams), player);
+		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams, info), player);
 	}
 	
 	public void sendClassMenuToPlayer(EntityPlayerMP player)
@@ -920,9 +938,12 @@ public class TeamsManager
 		if(selectedTeam == Team.spectators)
 		{
 			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
+			if(data.team != null)
+				data.team.removePlayer(player);
 			data.newTeam = data.team = Team.spectators;
 			player.inventory.armorInventory = new ItemStack[4];
 			player.inventory.mainInventory = new ItemStack[36];
+			data.team.addPlayer(player);
 			player.heal(9001);
 			respawnPlayer(player, true);
 		}

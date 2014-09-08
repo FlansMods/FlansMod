@@ -18,7 +18,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,9 +25,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
-public class ItemPlane extends Item
+public class ItemPlane extends Item implements IFlanItem
 {
+	public PlaneType type;
+	
     public ItemPlane(PlaneType type1)
     {
         maxStackSize = 1;
@@ -186,6 +189,10 @@ public class ItemPlane extends Item
     	planeStack.stackTagCompound = tags;
         list.add(planeStack);
     }
-    
-	public PlaneType type;
+	
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

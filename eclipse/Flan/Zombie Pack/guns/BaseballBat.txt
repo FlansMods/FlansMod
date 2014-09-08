@@ -23,7 +23,7 @@ Scope None
 FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-MeleeDamage 9
+MeleeDamage 7
 //Model settings
 Model zombie.BaseballBat
 Texture BaseballBat

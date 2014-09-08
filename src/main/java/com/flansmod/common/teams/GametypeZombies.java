@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flansmod.common.PlayerData;
+import com.flansmod.common.types.InfoType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
@@ -146,7 +148,8 @@ public class GametypeZombies extends Gametype
 		//We're outside the human prep time. Switch to zombie
 		if(teamsManager.roundTimeLeft + humanPrepTime <= teamsManager.currentRound.timeLimit * 20 * 60)
 		{
-			playerData.team.removePlayer(player);
+			if(playerData.team != null)
+				playerData.team.removePlayer(player);
 			playerData.team = playerData.newTeam = teamsManager.currentRound.teams[1];
 			playerData.team.addPlayer(player);
 			teamsManager.sendClassMenuToPlayer(player);
@@ -228,6 +231,12 @@ public class GametypeZombies extends Gametype
 		}
 		
 		return null;
+	}
+	
+	//Zombies can't loot
+	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) 
+	{ 
+		return playerTeam != teamsManager.currentRound.teams[1]; 
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
@@ -18,6 +19,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
+import com.flansmod.common.types.InfoType;
 
 public abstract class Gametype 
 {
@@ -78,6 +80,8 @@ public abstract class Gametype
 	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) {}
 	
 	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) {}
+	
+	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) { return true; }
 	
 	public abstract Vec3 getSpawnPoint(EntityPlayerMP player);
 	

@@ -13,20 +13,21 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
-public class ItemAAGun extends Item
+public class ItemAAGun extends Item implements IFlanItem
 {
     public static final ArrayList<String> names = new ArrayList<String>();
     @SideOnly(Side.CLIENT)
     private ArrayList<IIcon> icons;
+	public AAGunType type;
     
 	public ItemAAGun(AAGunType type1)
 	{
@@ -95,6 +96,10 @@ public class ItemAAGun extends Item
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
-
-	public AAGunType type;
+	
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

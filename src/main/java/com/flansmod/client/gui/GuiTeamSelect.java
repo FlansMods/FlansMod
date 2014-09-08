@@ -25,7 +25,7 @@ public class GuiTeamSelect extends GuiScreen
 	private boolean classMenu;
 	//This is static so that players may switch teams whenever they wish. 
 	//This is updated because the server forces players to pick teams when the teams change
-	private static Team[] teamChoices;
+	public static Team[] teamChoices;
 	private PlayerClass[] classChoices;
 	
 	private int guiHeight;

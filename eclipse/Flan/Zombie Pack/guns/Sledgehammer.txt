@@ -23,7 +23,7 @@ Scope None
 FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-MeleeDamage 25
+MeleeDamage 8
 //Model settings
 Model zombie.Sledgehammer
 Texture Sledgehammer

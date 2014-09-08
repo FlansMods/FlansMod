@@ -7,15 +7,18 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
-public class ItemMechaAddon extends Item 
+public class ItemMechaAddon extends Item implements IFlanItem
 {
+	public MechaItemType type;
+	
 	public ItemMechaAddon(MechaItemType type1)
 	{
 		type = type1;
@@ -47,6 +50,10 @@ public class ItemMechaAddon extends Item
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
-
-	public MechaItemType type;
+    
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }
