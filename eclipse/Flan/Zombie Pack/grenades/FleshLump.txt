@@ -28,6 +28,7 @@ BreaksGlass true
 PenetratesBlocks false
 HitBoxSize 0.5
 Sticky false
+StackSize 8
 //BounceSound <sound>
 ////Detonation conditions
 VehicleProximityTrigger -1.0

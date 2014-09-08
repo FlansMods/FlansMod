@@ -7,6 +7,7 @@ TextColour Red
 TeamColour 255 0 0
 //Specify the armour this team should spawn with
 AddClass zombieHeavy
+AddClass zombieNormal
 AddClass zombieSpeedy
 AddClass zombiePigman
 AddClass skeleton

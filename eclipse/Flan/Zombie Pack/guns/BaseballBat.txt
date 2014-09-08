@@ -25,7 +25,7 @@ Deployable False
 DeployedModel None
 MeleeDamage 9
 //Model settings
-Model zom.BaseballBat
+Model zombie.BaseballBat
 Texture BaseballBat
 ModelScale 1.0
 //Custom melee animation and hits

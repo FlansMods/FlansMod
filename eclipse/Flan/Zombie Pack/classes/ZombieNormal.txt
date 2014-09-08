@@ -1,0 +1,5 @@
+Name Zombie
+ShortName zombieNormal
+SkinOverride Zombie
+AddItem baseballBat
+AddItem fleshLump 4
