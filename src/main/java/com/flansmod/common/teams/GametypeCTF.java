@@ -317,4 +317,10 @@ public class GametypeCTF extends Gametype
 	{
 		return true;
 	}
+	
+	@Override
+	public boolean teamHasWon(Team team) 
+	{
+		return teamsManager.currentRound != null && team.score == teamsManager.currentRound.scoreLimit;
+	}
 }

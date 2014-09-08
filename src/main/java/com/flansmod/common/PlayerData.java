@@ -64,6 +64,8 @@ public class PlayerData
 	//Teams related fields
 	/** Gametype variables */
 	public int score, kills, deaths;
+	/** Zombies variables */
+	public int humanScore, zombieScore;
 	/** Gametype variable for Nerf */
 	public boolean out;
 	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */

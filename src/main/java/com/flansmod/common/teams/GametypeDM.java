@@ -207,4 +207,10 @@ public class GametypeDM extends Gametype
 	{ 
 		return false; 
 	}
+	
+	@Override
+	public boolean teamHasWon(Team team) 
+	{
+		return false;
+	}
 }

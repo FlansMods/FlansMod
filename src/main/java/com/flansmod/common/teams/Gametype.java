@@ -51,6 +51,8 @@ public abstract class Gametype
 	/** Called when the scoreboards and voting are finished */
 	public abstract void roundCleanup();
 	
+	public abstract boolean teamHasWon(Team team);
+	
 	public void tick() {}
 	
 	public Team[] getTeamsCanSpawnAs(TeamsRound currentRound, EntityPlayer player)

@@ -136,6 +136,7 @@ public class TeamsManager
 		
 		//Testing stuff. TODO : Replace with automatic Gametype loader
 		new GametypeTDM();
+		new GametypeZombies();
 		//new GametypeConquest();
 		new GametypeDM();
 		new GametypeCTF();
@@ -243,7 +244,7 @@ public class TeamsManager
 				messageAll(randomTimeOutString());
 			for(Team team : currentRound.teams)
 			{
-				if(team.score >= currentRound.scoreLimit)
+				if(currentRound.gametype.teamHasWon(team))
 				{
 					roundEnded = true;
 					messageAll(team.name + " won the round!");
