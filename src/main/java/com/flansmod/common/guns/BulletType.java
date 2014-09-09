@@ -86,7 +86,7 @@ public class BulletType extends InfoType
 			if (split[0].equals("Fire"))
 			{
 				fire = Integer.parseInt(split[1]);
-				setEntitiesOnFire = true;
+				//setEntitiesOnFire = true;
 			}
 			if(split[0].equals("SetEntitiesOnFire"))
 				setEntitiesOnFire = Boolean.parseBoolean(split[1]);

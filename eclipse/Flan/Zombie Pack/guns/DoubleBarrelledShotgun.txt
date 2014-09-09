@@ -1,26 +1,28 @@
-Name M4 Carbine
-ShortName m4Carbine
+Name Double Barrelled Shotgun
+ShortName doubleBarrelledShotgun
 //The ammo this gun uses (shortName)
-Ammo m4CarbineAmmo
-Icon M4Carbine
+Ammo 12gaugeShell
+Icon DoubleBarrelledShotgun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 40
+ReloadTime 52
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
-Recoil 3
+Recoil 12
 //Damage in half hearts
-Damage 8
+Damage 6
 //The higher this value, the more the bullets spread
-Accuracy 4
+Accuracy 30
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 6
+//For guns in which the magazine is integrated
+LoadIntoGun 2
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound M4CarbineShoot
-ReloadSound M4CarbineReload
-Mode Burst
-//The number of bullets to fire each round
-NumBurstRounds 3
-OneHanded False
+ShootSound ShotgunShoot
+ReloadSound ShotgunReload
+Mode SemiAuto
+OneHanded True
 //Bullet speed, default 3.0
 BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
@@ -31,18 +33,18 @@ FOVZoomLevel 1.25
 Deployable False
 DeployedModel None
 //Model settings
-Model zombie.M4Carbine
-Texture M4Carbine
+Model zombie.DoubleBarrelledShotgun
+Texture DoubleBarrelledShotgun
 //Attachment Settings
 AllowAllAttachments true
 //List here all the attachments allowed on this gun by shortName and separated by spaces
 //AllowAttachments
-AllowBarrelAttachments true
-AllowScopeAttachments true
+AllowBarrelAttachments false
+AllowScopeAttachments false
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-//Paintjob MP5K_Green MP5K_Green lime 1
+//Paintjob FlareGun_Red FlareGun_Red red 1

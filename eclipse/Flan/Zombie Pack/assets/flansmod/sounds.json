@@ -18,6 +18,26 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:ColtPythonReload" ]
 	},
+	
+	"M4CarbineShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M4CarbineShoot" ]
+	},
+	
+	"M4CarbineReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M4CarbineReload" ]
+	},
+	
+	"ShotgunShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ShotgunShoot" ]
+	},
+	
+	"ShotgunReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ShotgunReload" ]
+	},
 		
 	"FlareGunShoot": {
 		"category" : "player",

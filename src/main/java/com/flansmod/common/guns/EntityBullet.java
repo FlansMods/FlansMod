@@ -157,9 +157,9 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		d *= speed;
 		d1 *= speed;
 		d2 *= speed;
-		d += rand.nextGaussian() * 0.005D * spread;
-		d1 += rand.nextGaussian() * 0.005D * spread;
-		d2 += rand.nextGaussian() * 0.005D * spread;
+		d += rand.nextGaussian() * 0.005D * spread * speed;
+		d1 += rand.nextGaussian() * 0.005D * spread * speed;
+		d2 += rand.nextGaussian() * 0.005D * spread * speed;
 		motionX = d;
 		motionY = d1;
 		motionZ = d2;
