@@ -158,6 +158,12 @@ public class GunType extends InfoType implements IScope
 	public static HashMap<String, GunType> guns = new HashMap<String, GunType>();
 	/** The static list of all guns */
 	public static ArrayList<GunType> gunList = new ArrayList<GunType>();
+	
+	//Modifiers
+	/** Speeds up or slows down player movement when this item is held */
+	public float moveSpeedModifier = 1F;
+	/** Gives knockback resistance to the player */
+	public float knockbackModifier = 0F;
 
 	public GunType(TypeFile file)
 	{
@@ -326,6 +332,8 @@ public class GunType extends InfoType implements IScope
 				oneHanded = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);
+			
+			//Custom Melee Stuff
 			if(split[0].equals("UseCustomMelee") && Boolean.parseBoolean(split[1]))
 				secondaryFunction = EnumSecondaryFunction.CUSTOM_MELEE;
 			if(split[0].equals("MeleeTime"))
@@ -339,6 +347,12 @@ public class GunType extends InfoType implements IScope
 			{
 				meleeDamagePoints.add(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F));
 			}
+			
+			//Player modifiers
+			if(split[0].equals("MoveSpeedModifier") || split[0].equals("Slowness"))
+				moveSpeedModifier = Float.parseFloat(split[1]);
+			if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
+				knockbackModifier = Float.parseFloat(split[1]);
 			
 			//Attachment settings
 			if(split[0].equals("AllowAllAttachments"))

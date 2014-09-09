@@ -1,0 +1,22 @@
+{
+	"MP5KShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MP5KShoot" ]
+	},
+	
+	"MP5KReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MP5KReload" ]
+	},
+		
+	"FlareGunShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FlareGunShoot" ]
+	},
+	
+	"FlareGunReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FlareGunReload" ]
+	}
+	
+}

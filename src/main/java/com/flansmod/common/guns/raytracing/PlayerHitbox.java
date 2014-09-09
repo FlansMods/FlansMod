@@ -141,6 +141,8 @@ public class PlayerHitbox
 
 	public float hitByBullet(EntityBullet bullet, float penetratingPower) 
 	{
+		if(bullet.type.setEntitiesOnFire)
+			player.setFire(20);
 		float damageModifier = bullet.type.penetratingPower < 0.1F ? penetratingPower / bullet.type.penetratingPower : 1;
 		switch(type)
 		{

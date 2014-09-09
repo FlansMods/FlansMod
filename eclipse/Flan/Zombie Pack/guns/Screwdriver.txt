@@ -23,11 +23,14 @@ Scope None
 FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-MeleeDamage 2
+MeleeDamage 3
 //Model settings
 Model zombie.Screwdriver
 Texture Screwdriver
 ModelScale 1.0
+//Modifiers
+MoveSpeedModifier 1.25
+KnockbackModifier 0.8
 //Custom melee animation and hits
 UseCustomMelee True
 //The time it takes to perform a melee attack in ticks

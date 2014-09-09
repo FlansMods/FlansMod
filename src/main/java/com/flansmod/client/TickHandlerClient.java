@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
@@ -40,6 +41,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
@@ -378,6 +380,28 @@ public class TickHandlerClient
 								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
 							}
 						}
+					}
+				}
+			}
+			
+			for(Object obj : mc.theWorld.loadedEntityList)
+			{
+				if(obj instanceof EntityBullet)
+				{
+					EntityBullet bullet = (EntityBullet)obj;
+					if(!bullet.isDead && bullet.type.hasLight)
+					{
+						int x = MathHelper.floor_double(bullet.posX);
+						int y = MathHelper.floor_double(bullet.posY);
+						int z = MathHelper.floor_double(bullet.posZ);
+						blockLightOverrides.add(new Vector3i(x, y, z));
+						mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, 15);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
 					}
 				}
 			}

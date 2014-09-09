@@ -20,14 +20,21 @@ public class BulletType extends InfoType
 	public int explosion = 0;
 	public boolean explodeOnImpact = false;
 	public int fuse = 0;
+	/** The number of flak particles to spawn upon exploding */
 	public int flak = 0;
+	/** The type of flak particles to spawn */
+	public String flakParticles = "largesmoke";
+	/** The radius of fire to spawn upon hitting the ground */
 	public int fire = 0;
+	/** If true then this bullet will burn entites it hits */
+	public boolean setEntitiesOnFire = false;
 	public String dropItemOnReload = null;
 	public String dropItemOnShoot = null;
 	public String dropItemOnHit = null;
 	public boolean breaksGlass = false;
+	/** The type of trail particles to have */
 	public String trailParticles = "smoke";
-	public String flakParticles = "largesmoke";
+	/** Whether to have trail particles following the bullet or not */
 	public boolean smokeTrail = false;
 	/** Exclusively for driveable usage. Replaces old isBomb and isShell booleans with something more flexible */
 	public EnumWeaponType weaponType = EnumWeaponType.NONE;
@@ -77,7 +84,12 @@ public class BulletType extends InfoType
 			if (split[0].equals("FlakParticleType"))
 				flakParticles = split[1];
 			if (split[0].equals("Fire"))
+			{
 				fire = Integer.parseInt(split[1]);
+				setEntitiesOnFire = true;
+			}
+			if(split[0].equals("SetEntitiesOnFire"))
+				setEntitiesOnFire = Boolean.parseBoolean(split[1]);
 			if (split[0].equals("ExplodeOnImpact"))
 				explodeOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
 			if (split[0].equals("Fuse"))

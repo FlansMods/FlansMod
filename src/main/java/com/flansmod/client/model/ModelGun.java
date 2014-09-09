@@ -18,6 +18,7 @@ public class ModelGun extends ModelBase
 	//Animated models follow. 
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] revolverBarrelModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] breakActionModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] minigunBarrelModel = new ModelRendererTurbo[0];
@@ -47,6 +48,8 @@ public class ModelGun extends ModelBase
 	public float endLoadedAmmoDistance = 1F;
 	/** If true, then the grip attachment will move with the shotgun pump */
 	public boolean gripIsOnPump = false;
+	/** The rotation point for the barrel break */
+	public Vector3f barrelBreakPoint = new Vector3f();
 	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
@@ -100,6 +103,12 @@ public class ModelGun extends ModelBase
 	{
 		render(revolverBarrelModel, f);
 	}
+	
+	public void renderBreakAction(float f)
+	{
+		render(breakActionModel, f);
+	}
+
 
 	/** For renderering models simply */
 	private void render(ModelRendererTurbo[] models, float f)

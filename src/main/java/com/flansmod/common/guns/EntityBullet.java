@@ -398,6 +398,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 						living.arrowHitTimer++;
 						living.hurtResistantTime = living.maxHurtResistantTime / 2;
 					}
+					if(type.setEntitiesOnFire)
+						entityHit.entity.setFire(20);
 					penetratingPower -= 1F;
 					if(FlansMod.DEBUG)
 						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(posX + motionX * entityHit.intersectTime, posY + motionY * entityHit.intersectTime, posZ + motionZ * entityHit.intersectTime), 1000, 1F, 1F, 0F));

@@ -942,15 +942,6 @@ public class ItemGun extends Item implements IFlanItem
 			return false;
 		return block.getMaterial().isSolid() && block.isOpaqueCube();
 	}
-
-	@Override
-    public Multimap getAttributeModifiers(ItemStack stack)
-    {
-        Multimap multimap = super.getAttributeModifiers(stack);
-        if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
-        	multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
-        return multimap;
-    }
 	
 	//Stop damage being done to entities when scoping etc.
 	@Override
@@ -1059,6 +1050,17 @@ public class ItemGun extends Item implements IFlanItem
     public EnumAction getItemUseAction(ItemStack par1ItemStack)
     {
         return EnumAction.bow;
+    }
+    
+    @Override
+    public Multimap getAttributeModifiers(ItemStack stack)
+    {
+       	Multimap map = super.getAttributeModifiers(stack);
+       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", type.knockbackModifier, 0));
+       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
+        if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
+        	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+       	return map;
     }
 
 	@Override

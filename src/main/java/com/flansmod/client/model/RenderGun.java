@@ -347,6 +347,16 @@ public class RenderGun implements IItemRenderer
 			}
 			GL11.glPopMatrix();
 			
+			//Render the break action
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
+				GL11.glRotatef(reloadRotate * -45F, 0F, 0F, 1F);
+				GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
+				model.renderBreakAction(f);
+			}
+			GL11.glPopMatrix();
+			
 			//Render the pump-action handle
 			GL11.glPushMatrix();
 			{
@@ -409,6 +419,14 @@ public class RenderGun implements IItemRenderer
 					//Rotate the gun dependent on the animation type
 					switch(model.animationType)
 					{
+						case BREAK_ACTION : 
+						{
+							GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
+							GL11.glRotatef(reloadRotate * -45F, 0F, 0F, 1F);
+							GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
+							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
+							break;
+						}
 						case REVOLVER :
 						{
 							GL11.glRotatef(15F * reloadRotate, 1F, 0F, 0F);

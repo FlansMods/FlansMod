@@ -28,6 +28,9 @@ MeleeDamage 8
 Model zombie.Sledgehammer
 Texture Sledgehammer
 ModelScale 1.0
+//Modifiers
+MoveSpeedModifier 0.5
+KnockbackModifier 0.8
 //Custom melee animation and hits
 UseCustomMelee True
 //The time it takes to perform a melee attack in ticks

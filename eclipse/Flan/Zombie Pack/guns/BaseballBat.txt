@@ -28,6 +28,9 @@ MeleeDamage 7
 Model zombie.BaseballBat
 Texture BaseballBat
 ModelScale 1.0
+//Modifiers
+MoveSpeedModifier 0.9
+KnockbackModifier 0.8
 //Custom melee animation and hits
 UseCustomMelee True
 //The time it takes to perform a melee attack in ticks

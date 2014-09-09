@@ -169,7 +169,7 @@ public class DriveablePart
 		if(bullet != null)
 		{
 			health -= bullet.damage * bullet.type.damageVsDriveable;
-			if(bullet.type.fire > 0)
+			if(bullet.type.setEntitiesOnFire)
 			{
 				fireTime = 20;
 				onFire = true;
