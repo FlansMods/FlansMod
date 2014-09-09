@@ -25,7 +25,7 @@ minecraft {
     version = "1.7.10-10.13.0.1180"
     assetDir = "eclipse/assets"
 
-    replace "@ALLOWED_VERSION@", "[4.6,4.7)"
+    replace "@ALLOWED_VERSION@", "[4.7,4.8)"
     replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
