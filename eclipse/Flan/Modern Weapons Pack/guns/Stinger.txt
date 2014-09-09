@@ -40,3 +40,6 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 1
+//Modifiers
+MoveSpeedModifier 0.6
+KnockbackModifier 0

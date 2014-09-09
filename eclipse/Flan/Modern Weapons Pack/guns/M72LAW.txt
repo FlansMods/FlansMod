@@ -25,3 +25,6 @@ DeployedModel None
 Model mw.M72LAW
 Texture M72LAW
 DropItemOnShoot m72law
+//Modifiers
+MoveSpeedModifier 0.6
+KnockbackModifier 0

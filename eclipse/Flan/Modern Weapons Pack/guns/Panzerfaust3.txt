@@ -25,3 +25,6 @@ DeployedModel None
 Model mw.Panzerfaust3
 Texture Panzerfaust3
 DropItemOnShoot panzerfaust3
+//Modifiers
+MoveSpeedModifier 0.6
+KnockbackModifier 0
