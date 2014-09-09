@@ -72,5 +72,7 @@ public class ModelMinigun extends ModelGun
 		minigunBarrelOrigin = new Vector3f(8F / 16F, -1F / 16F, 0F);
 		
 		animationType = EnumAnimationType.SIDE_CLIP;
+		
+		thirdPersonOffset = new Vector3f(0F, -0.15F, 0F);
 	}
 }

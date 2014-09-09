@@ -13,6 +13,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelAT4 extends ModelGun
 {
@@ -76,5 +77,6 @@ public class ModelAT4 extends ModelGun
 
 		flipAll();
 		translateAll(0, 0, 3);
+		thirdPersonOffset = new Vector3f(0F, 0F, -0.2F);
 	}
 }
