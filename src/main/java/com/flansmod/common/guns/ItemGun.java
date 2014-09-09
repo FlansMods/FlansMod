@@ -218,9 +218,10 @@ public class ItemGun extends Item implements IFlanItem
 				rightMouseHeld = Mouse.isButtonDown(1);
 				leftMouseHeld = Mouse.isButtonDown(0);
 				
+				
 				boolean offHandFull = false;
 				
-				//Off hand item
+				//----------------------------- Off hand item ---------------------------------------------------------------------
 				if(type.oneHanded) 
 				{
 					if(data.offHandGunSlot == player.inventory.currentItem + 1)
@@ -239,43 +240,61 @@ public class ItemGun extends Item implements IFlanItem
 						if(offHandGunStack != null && offHandGunStack.getItem() instanceof ItemGun)
 						{
 							GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
-							
-							//Send packet when firing a semi or starting to fire a full
-							if(leftMouseHeld && !lastLeftMouseHeld) 
-							{
-								FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
-								if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
-									player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
-							}
-							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
-							{
-								FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
-							}
-							if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
+							//If we are using a burst mode gun, and there is burst left to be done, try to do it
+							if(offHandGunType.mode == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
 							{
 								if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
 									player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+							}
+							else
+							{
+								//Send packet when firing a semi or starting to fire a full
+								if(leftMouseHeld && !lastLeftMouseHeld) 
+								{
+									FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
+									if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
+										player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+								}
+								if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
+								{
+									FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
+								}
+								if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
+								{
+									if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
+										player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+								}
 							}
 						}
 						else data.offHandGunSlot = 0;
 					}
 				}
 				
-				//Send packet when firing a semi or starting to fire a full
-				if(rightMouseHeld && !lastRightMouseHeld) 
-				{
-					FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, true));
-					if(clientSideShoot(player, itemstack, type, false))
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-				}
-				if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
-				{
-					FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, false));
-				}
-				if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && rightMouseHeld)
+				//--------------------------------- Main hand item ---------------------------------------------
+				//If we are using a burst mode gun, and there is burst left to be done, try to do it
+				if(type.mode == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
 				{
 					if(clientSideShoot(player, itemstack, type, false))
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+				}
+				else
+				{
+					//Send packet when firing a semi or starting to fire a full
+					if(rightMouseHeld && !lastRightMouseHeld) 
+					{
+						FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, true));
+						if(clientSideShoot(player, itemstack, type, false))
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+					}
+					if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
+					{
+						FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, false));
+					}
+					if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && rightMouseHeld)
+					{
+						if(clientSideShoot(player, itemstack, type, false))
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+					}
 				}
 				
 				IScope currentScope = type.getCurrentScope(itemstack);
@@ -313,6 +332,7 @@ public class ItemGun extends Item implements IFlanItem
 	 * @return whether to consume the gun item  */
 	public boolean clientSideShoot(EntityPlayer player, ItemStack stack, GunType gunType, boolean left)
 	{
+		PlayerData data = PlayerHandler.getPlayerData(player);
 		if(FlansModClient.shootTime <= 0)
 		{
 			boolean hasAmmo = false;
@@ -353,9 +373,26 @@ public class ItemGun extends Item implements IFlanItem
 				animations.doShoot(pumpDelay, pumpTime);
 				FlansModClient.playerRecoil += gunType.getRecoil(stack);
 				FlansModClient.shootTime = gunType.shootDelay;
-				if(type.consumeGunUponUse)
+				if(gunType.consumeGunUponUse)
 					return true;
+
 			}
+			if(gunType.mode == EnumFireMode.BURST)
+			{
+				if(left)
+				{
+					if(data.burstRoundsRemainingLeft > 0)
+						data.burstRoundsRemainingLeft--;
+					else data.burstRoundsRemainingLeft = gunType.numBurstRounds;
+				}
+				else 
+				{
+					if(data.burstRoundsRemainingRight > 0)
+						data.burstRoundsRemainingRight--;
+					else data.burstRoundsRemainingRight = gunType.numBurstRounds;
+				}
+			}
+			
 		}
 		return false;
 	}
@@ -382,9 +419,13 @@ public class ItemGun extends Item implements IFlanItem
 			}
 			
 			//Right hand gun
+			if(type.mode == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
+			{
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
+			}
 			if(data.isShootingRight)
 			{
-				//Shoot full auto weapons
+				//Shoot burst and full auto weapons
 				if(type.mode == EnumFireMode.FULLAUTO)
 				{
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
@@ -417,6 +458,10 @@ public class ItemGun extends Item implements IFlanItem
 				{
 					GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
 					
+					if(offHandGunType.mode == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
+					{
+						player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
+					}
 					if(data.isShootingLeft)
 					{
 						//Shoot full auto weapons
@@ -673,6 +718,12 @@ public class ItemGun extends Item implements IFlanItem
 					data.isShootingLeft = false;
 					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
 				}
+				if(gunType.mode == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingLeft == 0)
+				{
+					data.isShootingLeft = false;
+					data.burstRoundsRemainingLeft = gunType.numBurstRounds;
+					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
+				}
 			}
 			else
 			{
@@ -680,6 +731,12 @@ public class ItemGun extends Item implements IFlanItem
 				if(type.mode == EnumFireMode.SEMIAUTO && isShooting)
 				{
 					data.isShootingRight = false;
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
+				}
+				if(type.mode == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingRight == 0)
+				{
+					data.isShootingRight = false;
+					data.burstRoundsRemainingRight = type.numBurstRounds;
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
 				}
 			}
@@ -720,9 +777,17 @@ public class ItemGun extends Item implements IFlanItem
 					//Set player shoot delay to be the reload delay
 					//Set both gun delays to avoid reloading two guns at once
 					data.shootTimeRight = data.shootTimeLeft = (int)gunType.getReloadTime(gunStack);
+					
 					if(left)
+					{
 						data.reloadingLeft = true;
-					else data.reloadingRight = true;
+						data.burstRoundsRemainingLeft = 0;
+					}
+					else
+					{
+						data.reloadingRight = true;
+						data.burstRoundsRemainingRight = 0;
+					}
 					//Send reload packet to induce reload effects client side
 					FlansMod.getPacketHandler().sendTo(new PacketReload(left), entityplayer);
 					//Play reload sound
@@ -740,6 +805,14 @@ public class ItemGun extends Item implements IFlanItem
 				
 				//Update the stack in the gun
 				setBulletItemStack(gunStack, bulletStack, bulletID);
+				
+				if(gunType.mode == EnumFireMode.BURST)
+				{
+					if(left && data.burstRoundsRemainingLeft > 0)
+						data.burstRoundsRemainingLeft--;
+					if(!left && data.burstRoundsRemainingRight > 0)
+						data.burstRoundsRemainingRight--;
+				}
 				
 				if(gunType.consumeGunUponUse)
 					return null;
