@@ -71,5 +71,7 @@ public class ModelStinger extends ModelGun
 		unloadClipTime = 0.25F;
 		loadClipTime = 0.25F;
 		untiltGunTime = 0.25F;
+		
+		thirdPersonOffset = new Vector3f(0F, 0F, -0.1F);
 	}
 }

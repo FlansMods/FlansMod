@@ -13,6 +13,7 @@ package com.flansmod.client.model.ww2;
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelWebley extends ModelGun
 {
@@ -125,5 +126,6 @@ public class ModelWebley extends ModelGun
 		
 		flipAll();
 		translateAll(0F, 13F, 0F);
+		thirdPersonOffset = new Vector3f(-0.05F, -0.05F, 0F);
 	}
 }
