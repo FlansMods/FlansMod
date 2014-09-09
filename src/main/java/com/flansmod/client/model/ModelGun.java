@@ -50,6 +50,8 @@ public class ModelGun extends ModelBase
 	public boolean gripIsOnPump = false;
 	/** The rotation point for the barrel break */
 	public Vector3f barrelBreakPoint = new Vector3f();
+	/** The amount the revolver barrel flips out by */
+	public float revolverFlipAngle = 15F;
 	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();

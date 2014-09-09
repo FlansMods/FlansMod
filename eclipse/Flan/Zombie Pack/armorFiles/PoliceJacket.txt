@@ -1,0 +1,9 @@
+Name Police Jacket
+ShortName policeJacket
+Icon PoliceJacket
+Colour 255 255 255
+Type Chest
+Defence 0.4
+ArmourTexture PoliceJacket
+MoveSpeedModifier 0.85
+KnockbackModifier 0.5

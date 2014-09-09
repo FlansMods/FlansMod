@@ -8,6 +8,16 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:MP5KReload" ]
 	},
+	
+	"ColtPythonShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ColtPythonShoot" ]
+	},
+	
+	"ColtPythonReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ColtPythonReload" ]
+	},
 		
 	"FlareGunShoot": {
 		"category" : "player",

@@ -104,20 +104,20 @@ public class TickHandlerClient
 					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 					{
 						ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
-						if(bulletStack != null && bulletStack.getItem() != null)
+						if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 						{
 							RenderHelper.enableGUIStandardItemLighting();
-							GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 							OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-							drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 54 - x, j - 65);
+							
+								drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
 							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 							RenderHelper.disableStandardItemLighting();
 							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 							if(bulletStack.getMaxDamage() == 1)
 								s = "";
-							mc.fontRenderer.drawString(s, i / 2 + 70 - x, j - 59, 0x000000);
-							mc.fontRenderer.drawString(s, i / 2 + 69 - x, j - 60, 0xffffff);
+							mc.fontRenderer.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
+							mc.fontRenderer.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
 							x += 16 + mc.fontRenderer.getStringWidth(s);
 						}
 					}
@@ -133,21 +133,21 @@ public class TickHandlerClient
 							for(int n = 0; n < offHandGunType.numAmmoItemsInGun; n++)
 							{
 								ItemStack bulletStack = ((ItemGun)offHandStack.getItem()).getBulletItemStack(offHandStack, n);
-								if(bulletStack != null && bulletStack.getItem() != null)
+								if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 								{
-									RenderHelper.enableGUIStandardItemLighting();
-									GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-									GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-									OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 89 + x, j - 65);
 									GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 									RenderHelper.disableStandardItemLighting();
 									String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 									if(bulletStack.getMaxDamage() == 1)
 										s = "";
-									mc.fontRenderer.drawString(s, i / 2 - 71 + x, j - 59, 0x000000);
-									mc.fontRenderer.drawString(s, i / 2 - 72 + x, j - 60, 0xffffff);
+									mc.fontRenderer.drawString(s, i / 2 - 48 - x, j - 59, 0x000000);
+									mc.fontRenderer.drawString(s, i / 2 - 47 - x, j - 60, 0xffffff);
 									x += 16 + mc.fontRenderer.getStringWidth(s);
+									RenderHelper.enableGUIStandardItemLighting();
+									GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+									GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+									OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 18 - x, j - 65);	
 								}
 							}
 						}

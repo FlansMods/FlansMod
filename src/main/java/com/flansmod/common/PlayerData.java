@@ -89,6 +89,8 @@ public class PlayerData
 	
 	public void tick(EntityPlayer player)
 	{
+		if(player.worldObj.isRemote)
+			clientTick(player);
 		if(shootTimeRight > 0)
 			shootTimeRight--;
 		if(shootTimeRight == 0)
@@ -117,6 +119,15 @@ public class PlayerData
         System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
+	}
+	
+	public void clientTick(EntityPlayer player)
+	{
+		if(player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemGun) || ((ItemGun)player.getCurrentEquippedItem().getItem()).type.oneHanded || player.getCurrentEquippedItem() == offHandGunStack)
+		{
+			//offHandGunSlot = 0;
+			offHandGunStack = null;
+		}
 	}
 
 	public PlayerClass getPlayerClass()
