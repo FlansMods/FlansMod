@@ -2,6 +2,7 @@ Name Olympia Shotgun
 ShortName olympia
 //The ammo this gun uses (shortName)
 Ammo 12gaugeShell
+Ammo 12gaugeShellIncendiary
 Icon Olympia
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

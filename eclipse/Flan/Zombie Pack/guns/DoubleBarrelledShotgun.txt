@@ -2,6 +2,7 @@ Name Double Barrelled Shotgun
 ShortName doubleBarrelledShotgun
 //The ammo this gun uses (shortName)
 Ammo 12gaugeShell
+Ammo 12gaugeShellIncendiary
 Icon DoubleBarrelledShotgun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
