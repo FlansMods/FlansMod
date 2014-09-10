@@ -135,6 +135,7 @@ public class ModelGun extends ModelBase
 		flip(pumpModel);
 		flip(minigunBarrelModel);
 		flip(revolverBarrelModel);
+		flip(breakActionModel);
 	}	
 	
 	protected void flip(ModelRendererTurbo[] model)
@@ -159,6 +160,7 @@ public class ModelGun extends ModelBase
 		translate(pumpModel, x, y, z);
 		translate(minigunBarrelModel, x, y, z);
 		translate(revolverBarrelModel, x, y, z);
+		translate(breakActionModel, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
