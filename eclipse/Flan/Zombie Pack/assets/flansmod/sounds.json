@@ -38,6 +38,16 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:ShotgunReload" ]
 	},
+	
+	"WinchesterModel70Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:WinchesterModel70Shoot" ]
+	},
+	
+	"WinchesterModel70Reload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:WinchesterModel70Reload" ]
+	},
 		
 	"FlareGunShoot": {
 		"category" : "player",
