@@ -351,7 +351,7 @@ public class RenderGun implements IItemRenderer
 			GL11.glPushMatrix();
 			{
 				GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
-				GL11.glRotatef(reloadRotate * -45F, 0F, 0F, 1F);
+				GL11.glRotatef(reloadRotate * -model.breakAngle, 0F, 0F, 1F);
 				GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
 				model.renderBreakAction(f);
 			}
@@ -422,7 +422,7 @@ public class RenderGun implements IItemRenderer
 						case BREAK_ACTION : 
 						{
 							GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
-							GL11.glRotatef(reloadRotate * -45F, 0F, 0F, 1F);
+							GL11.glRotatef(reloadRotate * -model.breakAngle, 0F, 0F, 1F);
 							GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
 							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
 							break;

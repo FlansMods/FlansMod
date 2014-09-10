@@ -52,6 +52,8 @@ public class ModelGun extends ModelBase
 	public Vector3f barrelBreakPoint = new Vector3f();
 	/** The amount the revolver barrel flips out by */
 	public float revolverFlipAngle = 15F;
+	/** The angle the gun is broken by for break actions */
+	public float breakAngle = 45F;
 	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
