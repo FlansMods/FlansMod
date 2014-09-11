@@ -14,6 +14,8 @@ public class ModelCustomArmour extends ModelBiped
 	public ModelRendererTurbo[] rightArmModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] leftLegModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightLegModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] skirtFrontModel = new ModelRendererTurbo[0]; //Acts like a leg piece, but its pitch is set to the maximum of the two legs
+	public ModelRendererTurbo[] skirtRearModel = new ModelRendererTurbo[0]; //Acts like a leg piece, but its pitch is set to the minimum of the two legs
 
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{ 
@@ -25,6 +27,32 @@ public class ModelCustomArmour extends ModelBiped
 		render(rightArmModel, bipedRightArm, f5);
 		render(leftLegModel, bipedLeftLeg, f5);
 		render(rightLegModel, bipedRightLeg, f5);
+		//Skirt front
+		{
+			for(ModelRendererTurbo mod : skirtFrontModel)
+			{
+				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F;
+				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F;
+				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F;
+				mod.rotateAngleX = Math.min(bipedLeftLeg.rotateAngleX, bipedRightLeg.rotateAngleX);
+				mod.rotateAngleY = bipedLeftLeg.rotateAngleY;
+				mod.rotateAngleZ = bipedLeftLeg.rotateAngleZ;
+				mod.render(f5);
+			}
+		}
+		//Skirt back
+		{
+			for(ModelRendererTurbo mod : skirtRearModel)
+			{
+				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F;
+				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F;
+				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F;
+				mod.rotateAngleX = Math.max(bipedLeftLeg.rotateAngleX, bipedRightLeg.rotateAngleX);
+				mod.rotateAngleY = bipedLeftLeg.rotateAngleY;
+				mod.rotateAngleZ = bipedLeftLeg.rotateAngleZ;
+				mod.render(f5);
+			}
+		}
 	} 
 	
 	public void render(ModelRendererTurbo[] models, ModelRenderer bodyPart, float f5)
