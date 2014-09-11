@@ -67,6 +67,8 @@ public class GrenadeType extends InfoType
 	public boolean detonateWhenShot = false;
 	/** If true, then this grenade can be detonated by any remote detonator tool */
 	public boolean remote = false;
+	/** How much damage to deal to the entity that triggered it */
+	public float damageToTriggerer = 0F;
 	
 	//Detonation
 	/** The radius in which to spread fire */
@@ -153,6 +155,8 @@ public class GrenadeType extends InfoType
 				livingProximityTrigger = Float.parseFloat(split[1]);	
 			if(split[0].equals("VehicleProximityTrigger"))
 				driveableProximityTrigger = Float.parseFloat(split[1]);	
+			if(split[0].equals("DamageToTriggerer"))
+				damageToTriggerer = Float.parseFloat(split[1]);
 			if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
 			if(split[0].equals("DetonateWhenShot"))

@@ -3,7 +3,6 @@ package com.flansmod.common.guns;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -19,13 +18,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -126,11 +125,15 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)))
 								continue;
 						}
+						if(type.damageToTriggerer > 0)
+							((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.damageToTriggerer);
 						detonate();
 						break;
 					}
 					if(obj instanceof EntityDriveable && getDistanceToEntity((Entity)obj) < type.driveableProximityTrigger)
 					{
+						if(type.damageToTriggerer > 0)
+							((EntityDriveable)obj).attackEntityFrom(getGrenadeDamage(), type.damageToTriggerer);
 						detonate();
 						break;
 					}
@@ -304,7 +307,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		detonated = true;
 		
 		//Play detonate sound
-		playSound(type.detonateSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+		PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.detonateSound, true);
 		
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)

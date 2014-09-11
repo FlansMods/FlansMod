@@ -269,14 +269,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 	
 	@Override
-	/** Do nothing when attacked by standard methods. It'll take more than that to break a genuine Flan's Mod Driveable (TM) */
+	/** Pass generic damage to the core */
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
     {
 	    if(worldObj.isRemote || isDead)
         {
             return true;
         }
-		return true;
+	    return attackPart(EnumDriveablePart.core, damagesource, i);
 	}
 	
 	@Override

@@ -1,4 +1,9 @@
 {
+	"BearTrap": {
+		"category" : "player",
+		"sounds" : [ "flansmod:BearTrap" ]
+	},
+
 	"MP5KShoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:MP5KShoot" ]

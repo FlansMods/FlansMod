@@ -1,0 +1,9 @@
+Name Hunter
+ShortName hunter
+AddItem winchesterModel70
+AddItem flareGun+FlareGun_Red
+AddItem bearTrap 3
+AddItem zombieMachete
+AddItem 3006Bullet 20
+AddItem flareGunAmmo 3
+AddItem beefCooked 2

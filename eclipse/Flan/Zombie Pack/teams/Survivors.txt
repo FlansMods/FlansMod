@@ -8,5 +8,6 @@ TeamColour 128 255 0
 //Specify the armour this team should spawn with
 AddClass soldier
 AddClass police
+AddClass hunter
 AddClass shopkeeper
 AddClass doctor
