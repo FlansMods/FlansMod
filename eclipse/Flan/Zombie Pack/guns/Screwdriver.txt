@@ -44,3 +44,10 @@ AddNode 16 0 0 0 0 -60
 AddNode 24 0 0 0 0 -90
 AddNode 16 0 0 0 0 -60
 AddNode 8 0 0 0 0 -30
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob Screwdriver_Green Screwdriver_Green lime 1
+Paintjob Screwdriver_Red Screwdriver_Red red 1
+Paintjob Screwdriver_Blue Screwdriver_Blue lightBlue 1
+Paintjob Screwdriver_Purple Screwdriver_Purple purple 1

@@ -7,3 +7,4 @@ AddItem surgicalAxe
 AddItem 12gaugeShell 24
 AddItem flareGunAmmo 5
 AddItem apple 1
+Chest labCoat
