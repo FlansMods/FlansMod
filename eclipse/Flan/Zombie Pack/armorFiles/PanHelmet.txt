@@ -7,4 +7,4 @@ Model zombie.PanHelmet
 Defence 0.2
 ArmourTexture PanHelmet
 MoveSpeedModifier 0.95
-KnockbackModifier 0.5
+KnockbackModifier 0.25

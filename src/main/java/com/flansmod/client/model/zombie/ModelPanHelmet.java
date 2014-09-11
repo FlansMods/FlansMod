@@ -22,12 +22,6 @@ public class ModelPanHelmet extends ModelCustomArmour
 		headModel[2] = new ModelRendererTurbo(this, 27, 0, textureX, textureY);
 		headModel[2].addBox(-9.5F, -7F, -1F, 5, 2, 2);
 		
-		for(int i = 0; i < 3; i++)
-		{
-			headModel[i].setRotationPoint(0F, 0F, 0F);
-			//bipedHead.addChild(headModel[i]);
-		}
-		
-		
+		setBodyPart(headModel, bipedHead);
 	}
 }
