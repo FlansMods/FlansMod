@@ -276,6 +276,14 @@ public class RenderGun implements IItemRenderer
 								GL11.glTranslatef(-0.2F * reloadRotate, -0.5F * reloadRotate, 0F);
 								break;
 							}
+							case CUSTOM :
+							{
+								GL11.glRotatef(model.rotateGunVertical * reloadRotate, 0F, 0F, 1F);
+								GL11.glRotatef(model.rotateGunHorizontal * reloadRotate, 0F, 1F, 0F);
+								GL11.glRotatef(model.tiltGun * reloadRotate, 1F, 0F, 0F);
+								GL11.glTranslatef(model.translateGun.x * reloadRotate,  model.translateGun.y * reloadRotate, model.translateGun.z * reloadRotate);
+								break;
+							}
 							default : break;
 						}
 					}
@@ -506,6 +514,14 @@ public class RenderGun implements IItemRenderer
 							GL11.glRotatef(bulletProgress * -30F, 0F, 0F, 1F);
 							GL11.glTranslatef(bulletProgress * -0.5F, bulletProgress * -1F, 0F);
 							
+							break;
+						}
+						case CUSTOM :
+						{
+							GL11.glRotatef(model.rotateClipVertical * clipPosition, 0F, 0F, 1F);
+							GL11.glRotatef(model.rotateClipHorizontal * clipPosition, 0F, 1F, 0F);
+							GL11.glRotatef(model.tiltClip * clipPosition, 1F, 0F, 0F);
+							GL11.glTranslatef(model.translateClip.x * clipPosition,  model.translateClip.y * clipPosition, model.translateClip.z * clipPosition);
 							break;
 						}
 						case END_LOADED :

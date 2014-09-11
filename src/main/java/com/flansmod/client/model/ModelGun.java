@@ -58,6 +58,17 @@ public class ModelGun extends ModelBase
 	/** The angle the gun is broken by for break actions */
 	public float breakAngle = 45F;
 	
+	/** Custom reload Parameters. If Enum.CUSTOM is set, these parameters can build an animation within the gun model classes */
+	public float rotateGunVertical = 0F;
+	public float rotateGunHorizontal = 0F;
+	public float tiltGun = 0F;
+	public Vector3f translateGun = new Vector3f(0F, 0F, 0F);
+	/* Ammo Model reload parameters */
+	public float rotateClipVertical = 0F;
+	public float rotateClipHorizontal = 0F;
+	public float tiltClip = 0F;
+	public Vector3f translateClip = new Vector3f(0F, 0F, 0F);
+	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
 	
