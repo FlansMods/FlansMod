@@ -45,7 +45,7 @@ AddGun 8 34 8 turret mg42
 AllowAllAmmo False
 AddAmmo shell
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 1
+ShootDelay 2
 ShellDelay 110
 //Sounds
 StartSound Engine
