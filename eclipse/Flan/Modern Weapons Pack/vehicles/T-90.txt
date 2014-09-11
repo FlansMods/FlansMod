@@ -9,7 +9,7 @@ Texture T-90
 CameraDistance 7.5
 //Throttle
 MaxThrottle 2.5
-MaxNegativeThrottle 0.0
+MaxNegativeThrottle 1.0
 //Steering modifiers
 TurnLeftSpeed 0.5
 TurnRightSpeed 0.5
