@@ -115,7 +115,7 @@ public class PlayerSnapshot
 		for(PlayerHitbox hitbox : hitboxes)
 		{
 			PlayerBulletHit hit = hitbox.raytrace(localOrigin, motion);
-			if(hit != null)
+			if(hit != null && hit.intersectTime >= 0F && hit.intersectTime <= 1F)
 			{
 				hits.add(hit);
 			}

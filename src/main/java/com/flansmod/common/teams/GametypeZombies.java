@@ -16,7 +16,7 @@ import net.minecraft.util.Vec3;
 public class GametypeZombies extends Gametype 
 {
 	public boolean friendlyFire = false;
-	public int humanPrepTime = 10 * 20;
+	public int humanPrepTime = 30 * 20;
 	
 	public GametypeZombies() 
 	{

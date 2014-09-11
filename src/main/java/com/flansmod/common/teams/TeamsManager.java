@@ -859,7 +859,7 @@ public class TeamsManager
 		//Add in the spectators as an option and "none" if the player is an op
 		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
-        System.arraycopy(currentRound.teams, 0, allAvailableTeams, 0, availableTeams.length);
+        System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
 		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams, info), player);

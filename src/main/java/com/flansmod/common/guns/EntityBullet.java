@@ -347,6 +347,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		Vec3 nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
 		MovingObjectPosition hit = worldObj.func_147447_a(posVec, nextPosVec, false, true, true);
 		
+		posVec = Vec3.createVectorHelper(posX, posY, posZ);
+		
 		if(hit != null)
 		{
 			//Calculate the lambda value of the intercept
