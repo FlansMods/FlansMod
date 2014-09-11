@@ -50,8 +50,8 @@ StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound BrowningShoot
-ShellSound TankShell
+ShootSoundPrimary TankShell
+ShootSoundSecondary BrowningShoot
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,

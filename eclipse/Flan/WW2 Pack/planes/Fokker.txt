@@ -67,8 +67,8 @@ StartSound propStart
 StartSoundLength 20
 PropSound propSound
 PropSoundLength 30
-ShootSound PlaneShoot
-BombSound bomb
+ShootSoundPrimary PlaneShoot
+//ShootSoundSecondary bomb
 // ------------------------------------------------------ Recipe ------------------------------------------------------
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
