@@ -37,21 +37,21 @@ ShellSlots 5
 Driver 3 5 15 -1.5 1.5 -2 15
 RotatedDriverOffset 13 0 -8
 Passengers 1
-Passenger 1 10 28 0 turret -360 360 -15 60 mg42 MG42
+Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
 RotatedPassengerOffset 1 0 0 0
 BarrelPosition 0 34 0
 //Secondary gun
-AddGun 8 34 8 turret mg42
+AddGun 8 34 8 turret type99
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 1
+ShootDelay 2
 ShellDelay 200
 //Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound MG42Shoot
-ShellSound TankShell
+ShootSoundPrimary TankShell
+ShootSoundSecondary BrenShoot
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,

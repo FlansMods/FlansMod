@@ -45,15 +45,15 @@ AddGun 8 34 8 turret mg42
 AllowAllAmmo False
 AddAmmo shell
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 1
+ShootDelay 2
 ShellDelay 110
 //Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSound MG42Shoot
-ShellSound TankShell
+ShootSoundPrimary TankShell
+ShootSoundSecondary MG42Shoot
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
