@@ -1,9 +1,8 @@
 Name Nerd
 ShortName nerd
-AddItem winchesterModel70
-AddItem coltPython
-AddItem bearTrap 3
 AddItem samuraiSword
+AddItem coltPython+ColtPython_Black
 AddItem 357Magnum 24
-AddItem 357Magnum 24
-AddItem cookie 4
+AddItem cookie 5
+Helmet panHelmet
+Chest dustbinLidChestplate
