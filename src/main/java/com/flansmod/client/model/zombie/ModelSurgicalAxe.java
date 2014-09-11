@@ -28,6 +28,6 @@ public class ModelSurgicalAxe extends ModelGun
 		for(int i = 0; i < 4; i++)
 			gunModel[i].setRotationPoint(0F, 6F, 0F);
 		
-		thirdPersonOffset = new Vector3f(4F / 16F, -12F / 16F, 0F);
+		thirdPersonOffset = new Vector3f(0F / 16F, -0F / 16F, 0F);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -104,7 +105,14 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
        	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
        	return map;
     }
-
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
+    {
+        return type.model;
+    }
+    
 	@Override
 	public InfoType getInfoType() 
 	{

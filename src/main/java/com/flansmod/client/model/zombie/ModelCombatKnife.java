@@ -23,7 +23,7 @@ public class ModelCombatKnife extends ModelGun
 		gunModel[2].addShapeBox(0F, -1F, -0.5F, 5, 2, 1, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 		
 		for(int i = 0; i < 3; i++)
-			gunModel[i].setRotationPoint(0F, 4F, 0F);
+			gunModel[i].setRotationPoint(4F, 0F, 0F);
 		
 	}
 }

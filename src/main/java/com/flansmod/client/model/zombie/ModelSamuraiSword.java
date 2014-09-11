@@ -28,6 +28,6 @@ public class ModelSamuraiSword extends ModelGun
 		for(int i = 0; i < 4; i++)
 			gunModel[i].setRotationPoint(0F, 8F, 0F);
 		
-		thirdPersonOffset = new Vector3f(0F, 0F, 0F);
+		thirdPersonOffset = new Vector3f(0F, -2F / 16F, 0F);
 	}
 }
