@@ -1,0 +1,10 @@
+Name Police Officer
+ShortName police
+AddItem mp5k
+AddItem zomRiotShield
+AddItem coltPython
+AddItem combatKnife
+AddItem mp5kAmmo 6
+AddItem 357Magnum 24
+AddItem porkchopCooked 1
+Chest policeJacket

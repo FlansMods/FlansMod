@@ -1,0 +1,35 @@
+Name Police Riot Shield
+ShortName zomRiotShield
+//The ammo this gun uses (shortName)
+Icon ZombieRiotShield
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 0
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 0
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 0
+//Damage in half hearts
+Damage 0
+//The higher this value, the more the bullets spread
+Accuracy 0
+//Time in ticks between rounds
+ShootDelay 0
+//ShootSound DesertEagleShoot
+//ReloadSound lugerReload
+Mode SemiAuto
+OneHanded True
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+Scope None
+FOVZoomLevel 1.0
+Deployable False
+DeployedModel None
+MeleeDamage 0
+//3D Model Settings
+Model zombie.RiotShield
+Texture ZombieRiotShield
+//Shield Settings
+//Format is Shield <Defense> <xOrigin> <yOrigin> <zOrigin> <width> <height> <depth> (all in model coordinates)
+Shield 1.0 4.0 -20.0 -8.0 1.0 32.0 16.0
