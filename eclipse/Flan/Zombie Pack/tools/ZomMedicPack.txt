@@ -5,7 +5,7 @@ Icon MedicPackZombies
 Colour 255 255 255
 Heal true
 Repair false
-HealAmount 8
+HealAmount 7
 ToolLife 5
 DestroyOnEmpty true
 StackSize 1
