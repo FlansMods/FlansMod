@@ -74,7 +74,7 @@ public class ModelJeep extends ModelVehicle
 		
 		browningModel[1][0].addBox(-7F, -1.5F, -1.5F, 12, 3, 3);
 		browningModel[1][1].addBox(5F, -0.5F, -0.5F, 10, 1, 1);
-		browningModel[1][2].addBox(-9F, -0F, -1F, 2, 3, 2);		
+		browningModel[1][2].addBox(-9F, 0F, -1F, 2, 3, 2);		
 		browningModel[1][3].addBox(1F, -1F, -6F, 2, 4, 5);
 		
 		//Set the origin
