@@ -33,7 +33,7 @@ Penetrates False
 SmokeTrail False
 MaxStackSize 64
 RecipeOutput 16
-Recipe I iron G sulphur
+Recipe I ingotIron G sulphur
 IGG
 IGG
 IGG

@@ -38,4 +38,4 @@ AddGun zombieMachete 5 ingotIron 3 wood
 AddGun screwdriver 2 ingotIron
 AddGun baseballBat 16 wood
 AddGun sledgehammer 12 ingotIron 8 wood
-AddGun bearTrap 12 iron
+AddGun bearTrap 12 ingotIron
