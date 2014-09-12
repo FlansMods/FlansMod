@@ -1,15 +1,9 @@
-﻿//This File was created with the Minecraft-SMP Modelling Toolbox 2.0.0.0
-// Copyright (C) 2014 Minecraft-SMP.de
-// This file is for Flan's Flying Mod Version 4.7.x+
-
 package com.flansmod.client.model.zombie;
 
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
-public class ModelPoliceHat extends ModelCustomArmour
+public class ModelPoliceHat extends ModelCustomArmour 
 {
 	int textureX = 64;
 	int textureY = 32;
