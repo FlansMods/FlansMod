@@ -127,14 +127,14 @@ public class GametypeZombies extends Gametype
 			else if(attackerData.team == playerData.team)
 			{
 				if(isHuman(attackerData.team))
-					attackerData.humanScore += 1;
+					attackerData.score += 1;
 				else attackerData.zombieScore--;
 			}
 			//They killed an enemy. +1 point to them and their team
 			else 
 			{	
 				if(isHuman(attackerData.team))
-					attackerData.humanScore++;
+					attackerData.score++;
 				else if(isZombie(attackerData.team))
 					attackerData.zombieScore++;
 				attackerData.kills++;
@@ -231,6 +231,12 @@ public class GametypeZombies extends Gametype
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public boolean showZombieScore()
+	{
+		return true;
 	}
 	
 	//Zombies can't loot

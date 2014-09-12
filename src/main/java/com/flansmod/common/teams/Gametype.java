@@ -93,6 +93,8 @@ public abstract class Gametype
 	public abstract void saveToNBT(NBTTagCompound tags);
 	
 	public boolean sortScoreboardByTeam() { return true; }
+	
+	public boolean showZombieScore() { return false; }
 
 	/** Whether "attacker" can attack "victim" */
 	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) { return true; }

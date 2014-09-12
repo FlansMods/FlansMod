@@ -67,7 +67,7 @@ public class PlayerData
 	/** Gametype variables */
 	public int score, kills, deaths;
 	/** Zombies variables */
-	public int humanScore, zombieScore;
+	public int zombieScore;
 	/** Gametype variable for Nerf */
 	public boolean out;
 	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */
@@ -141,7 +141,7 @@ public class PlayerData
 
 	public void resetScore() 
 	{
-		score = kills = deaths = 0;
+		score = zombieScore = kills = deaths = 0;
 		team = newTeam = null;
 		playerClass = newPlayerClass = null;
 	}

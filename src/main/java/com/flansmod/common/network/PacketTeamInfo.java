@@ -22,6 +22,7 @@ public class PacketTeamInfo extends PacketBase
 	public static String mapShortName;
 	public static String map;
 	public static String gametype;
+	public static boolean showZombieScore;
 	public static int numTeams;
 	public static TeamData[] teamData;
 	public static boolean sortedByTeam;
@@ -36,6 +37,7 @@ public class PacketTeamInfo extends PacketBase
 		public int score;
 		public int numPlayers;
 		public PlayerScoreData[] playerData;
+		public boolean winner;
 	}
 	
 	public static class PlayerScoreData
@@ -46,6 +48,7 @@ public class PacketTeamInfo extends PacketBase
 		public int deaths;
 		public TeamData team;
 		public PlayerClass playerClass;
+		public int zombieScore;
 	}
 	
 	public static PlayerScoreData getPlayerScoreData(String username)
@@ -84,6 +87,7 @@ public class PacketTeamInfo extends PacketBase
     	else
     	{
     		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
+    		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.showZombieScore());
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
     		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
@@ -109,6 +113,7 @@ public class PacketTeamInfo extends PacketBase
 		        		}
 		        		writeUTF(data, team.shortName);
 		        		data.writeInt(team.score);
+		        		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.teamHasWon(team));
 		        		team.sortPlayers();
 		        		data.writeInt(team.members.size());
 		        		for(int j = 0; j < team.members.size(); j++)
@@ -126,6 +131,7 @@ public class PacketTeamInfo extends PacketBase
 		        			else
 		        			{
 			        			data.writeInt(playerData.score);
+			        			data.writeInt(playerData.zombieScore);
 			        			data.writeInt(playerData.kills);
 			        			data.writeInt(playerData.deaths);
 			        			writeUTF(data, playerData.playerClass.shortName);
@@ -191,6 +197,7 @@ public class PacketTeamInfo extends PacketBase
 		}
 		else
 		{
+			showZombieScore = data.readBoolean();
 			map = readUTF(data);
 			mapShortName = readUTF(data);
 			timeLeft = data.readInt();
@@ -210,15 +217,18 @@ public class PacketTeamInfo extends PacketBase
 						continue;
 					teamData[i].team = Team.getTeam(teamName);
 					teamData[i].score = data.readInt();
+					teamData[i].winner = data.readBoolean();
 					teamData[i].numPlayers = data.readInt();
 					teamData[i].playerData = new PlayerScoreData[teamData[i].numPlayers];
-					numLines += teamData[i].numPlayers;
+					if(teamData[i].numPlayers > numLines)
+						numLines = teamData[i].numPlayers;
 					for(int j = 0; j < teamData[i].numPlayers; j++)
 					{
 						teamData[i].playerData[j] = new PlayerScoreData();
 						teamData[i].playerData[j].team = teamData[i];
 						teamData[i].playerData[j].username = readUTF(data);
 						teamData[i].playerData[j].score = data.readInt();
+						teamData[i].playerData[j].zombieScore = data.readInt();
 						teamData[i].playerData[j].kills = data.readInt();
 						teamData[i].playerData[j].deaths = data.readInt();
 						teamData[i].playerData[j].playerClass = PlayerClass.getClass(readUTF(data));
@@ -288,7 +298,7 @@ public class PacketTeamInfo extends PacketBase
 	{
 		for(int i = 0; i < teamData.length; i++)
 		{
-			if(teamData[i].score == scoreLimit)
+			if(teamData[i].winner)
 				return teamData[i].team;
 		}
 		return null;

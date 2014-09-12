@@ -44,12 +44,25 @@ public class GuiTeamScores extends GuiScreen
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
 		mc.renderEngine.bindTexture(texture2);
+		
+		int guiHeight = 68 + 9 * teamInfo.numLines;
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = k / 2 - 156;
-		int n = l / 2 - 180 / 2;
+		int n = l / 2 - guiHeight / 2 ;
 		//Like draw texturedModalRect, but with custom image size
-		func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
+		//func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
+		
+		func_146110_a(m, n, 100, 0, 312, 66, 512, 256);
+		for(int p = 0; p < teamInfo.numLines; p++)
+			func_146110_a(m, n + 66 + 9 * p, 100, 71, 312, 9, 512, 256);
+		func_146110_a(m, n + 66 + teamInfo.numLines * 9, 100, 168, 312, 12, 512, 256);
+		
+		if(teamInfo.showZombieScore)
+		{
+			func_146110_a(m + 103, n + 51, 412, 0, 29, 11, 512, 256);
+			func_146110_a(m + 254, n + 51, 412, 0, 29, 11, 512, 256);
+		}
 		
 		//No idea why this works, but it makes the text bind its texture correctly
 		//mc.renderEngine.bindTexture("/terrain.png");
@@ -88,7 +101,7 @@ public class GuiTeamScores extends GuiScreen
 			{
 				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 151 * i, n + 67 + 9 * j, 0xffffff);
 				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].kills, m + 127 + 151 * i, n + 67 + 9 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 67 + 9 * j, 0xffffff);
 				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 67 + 9 * j, 0xffffff);
 			}
 		}
