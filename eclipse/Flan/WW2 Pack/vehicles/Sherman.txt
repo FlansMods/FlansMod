@@ -40,6 +40,7 @@ RotatedDriverOffset 14 0 -9
 AddGun 8 34 8 turret browning
 Passengers 1
 Passenger 1 0 36 0 turret -360 360 -15 60 browning Browning
+GunOrigin 1 0 32 0
 RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds

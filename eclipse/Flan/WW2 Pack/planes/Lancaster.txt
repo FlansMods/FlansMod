@@ -68,10 +68,13 @@ Pilot 115 20 0
 Passengers 5
 //Passenger <ID> <x> <y> <z> <part> [minYaw] [maxYaw] [minPitch] [maxPitch] [gunType] [gunModelName]
 Passenger 1 148 2 0 nose -30 30 -25 25 browning Nose
+GunOrigin 1 148 -2 0
 Passenger 2 90 10 0 core
 Passenger 3 70 10 0 core
 Passenger 4 -48 36 0 tail -360 360 0 45 browning Dorsal
+GunOrigin 4 -48 32 0
 Passenger 5 -128 20 0 tail 135 225 -30 30 browning Tail
+GunOrigin 5 -128 16 0
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound propStart
 StartSoundLength 20

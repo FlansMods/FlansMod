@@ -38,6 +38,7 @@ Driver 0 43 0 -360 360 0 45
 RotatedDriverOffset -12 0 0
 Passengers 1
 Passenger 1 0 34 0 turret -360 360 -15 60 dp28 DP28
+GunOrigin 1 0 30 0
 BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret dp28
