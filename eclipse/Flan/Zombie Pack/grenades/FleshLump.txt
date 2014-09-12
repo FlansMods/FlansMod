@@ -42,3 +42,4 @@ ExplosionBreaksBlocks false
 //Detonate Sound <sound>
 ////Misc
 MeleeDamage 3
+ShapelessRecipe rottenFlesh

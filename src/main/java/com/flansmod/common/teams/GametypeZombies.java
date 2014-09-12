@@ -123,11 +123,11 @@ public class GametypeZombies extends Gametype
 				//playerData.score--;
 			}
 			
-			//They teamkilled. +3 to hunters. -1 to zombies.
+			//They teamkilled. +1 to hunters. -1 to zombies.
 			else if(attackerData.team == playerData.team)
 			{
 				if(isHuman(attackerData.team))
-					attackerData.humanScore += 3;
+					attackerData.humanScore += 1;
 				else attackerData.zombieScore--;
 			}
 			//They killed an enemy. +1 point to them and their team

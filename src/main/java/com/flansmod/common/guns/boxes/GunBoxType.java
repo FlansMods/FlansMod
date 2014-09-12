@@ -33,6 +33,7 @@ public class GunBoxType extends InfoType
 	public IIcon bottom;
 	public int numGuns;
 	public int nextGun = -1;
+	/** */
 	public InfoType[] guns;
 	public BulletType[] bullets;
 	public BulletType[] altBullets;
