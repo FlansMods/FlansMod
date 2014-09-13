@@ -40,7 +40,10 @@ public class ArmourType extends InfoType
 		try
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
+			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelCustomArmour.class);
+				model.type = this;
+			}
 			if(split[0].equals("Type"))
 			{
 				if(split[1].equals("Hat") || split[1].equals("Helmet"))
@@ -85,5 +88,6 @@ public class ArmourType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelCustomArmour.class);
+		model.type = this;
 	}
 }

@@ -1,6 +1,9 @@
 package com.flansmod.client.model;
 
+import org.lwjgl.opengl.GL11;
+
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.teams.ArmourType;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
@@ -8,6 +11,8 @@ import net.minecraft.entity.Entity;
 
 public class ModelCustomArmour extends ModelBiped 
 {
+	public ArmourType type;
+	
 	public ModelRendererTurbo[] headModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] bodyModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] leftArmModel = new ModelRendererTurbo[0];
@@ -19,21 +24,23 @@ public class ModelCustomArmour extends ModelBiped
 
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{ 
+		GL11.glPushMatrix();
+		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 
-		render(headModel, bipedHead, f5);
-		render(bodyModel, bipedBody, f5);
-		render(leftArmModel, bipedLeftArm, f5);
-		render(rightArmModel, bipedRightArm, f5);
-		render(leftLegModel, bipedLeftLeg, f5);
-		render(rightLegModel, bipedRightLeg, f5);
+		render(headModel, bipedHead, f5, type.modelScale);
+		render(bodyModel, bipedBody, f5, type.modelScale);
+		render(leftArmModel, bipedLeftArm, f5, type.modelScale);
+		render(rightArmModel, bipedRightArm, f5, type.modelScale);
+		render(leftLegModel, bipedLeftLeg, f5, type.modelScale);
+		render(rightLegModel, bipedRightLeg, f5, type.modelScale);
 		//Skirt front
 		{
 			for(ModelRendererTurbo mod : skirtFrontModel)
 			{
-				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F;
-				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F;
-				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F;
+				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F / type.modelScale;
+				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F / type.modelScale;
+				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F / type.modelScale;
 				mod.rotateAngleX = Math.min(bipedLeftLeg.rotateAngleX, bipedRightLeg.rotateAngleX);
 				mod.rotateAngleY = bipedLeftLeg.rotateAngleY;
 				mod.rotateAngleZ = bipedLeftLeg.rotateAngleZ;
@@ -44,20 +51,21 @@ public class ModelCustomArmour extends ModelBiped
 		{
 			for(ModelRendererTurbo mod : skirtRearModel)
 			{
-				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F;
-				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F;
-				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F;
+				mod.rotationPointX = (bipedLeftLeg.rotationPointX + bipedRightLeg.rotationPointX) / 2F / type.modelScale;
+				mod.rotationPointY = (bipedLeftLeg.rotationPointY + bipedRightLeg.rotationPointY) / 2F / type.modelScale;
+				mod.rotationPointZ = (bipedLeftLeg.rotationPointZ + bipedRightLeg.rotationPointZ) / 2F / type.modelScale;
 				mod.rotateAngleX = Math.max(bipedLeftLeg.rotateAngleX, bipedRightLeg.rotateAngleX);
 				mod.rotateAngleY = bipedLeftLeg.rotateAngleY;
 				mod.rotateAngleZ = bipedLeftLeg.rotateAngleZ;
 				mod.render(f5);
 			}
 		}
+		GL11.glPopMatrix();
 	} 
 	
-	public void render(ModelRendererTurbo[] models, ModelRenderer bodyPart, float f5)
+	public void render(ModelRendererTurbo[] models, ModelRenderer bodyPart, float f5, float scale)
 	{
-		setBodyPart(models, bodyPart);
+		setBodyPart(models, bodyPart, scale);
 		for(ModelRendererTurbo mod : models)
 		{
 			mod.rotateAngleX = bodyPart.rotateAngleX;
@@ -67,13 +75,13 @@ public class ModelCustomArmour extends ModelBiped
 		}
 	}
 	
-	public void setBodyPart(ModelRendererTurbo[] models, ModelRenderer bodyPart)
+	public void setBodyPart(ModelRendererTurbo[] models, ModelRenderer bodyPart, float scale)
 	{
 		for(ModelRendererTurbo mod : models)
 		{
-			mod.rotationPointX = bodyPart.rotationPointX;
-			mod.rotationPointY = bodyPart.rotationPointY;
-			mod.rotationPointZ = bodyPart.rotationPointZ;
+			mod.rotationPointX = bodyPart.rotationPointX / scale;
+			mod.rotationPointY = bodyPart.rotationPointY / scale;
+			mod.rotationPointZ = bodyPart.rotationPointZ / scale;
 		}
 	}
 }

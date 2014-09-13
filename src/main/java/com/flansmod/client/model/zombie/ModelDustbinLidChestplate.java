@@ -40,7 +40,5 @@ public class ModelDustbinLidChestplate extends ModelCustomArmour
 
 		bodyModel[8] = new ModelRendererTurbo(this, 0, 33, textureX, textureY);
 		bodyModel[8].addBox(3F, -0.5F, -2.5F, 1, 13, 5);
-
-		setBodyPart(bodyModel, bipedBody);
 	}
 }

@@ -38,8 +38,5 @@ public class ModelPoliceHat extends ModelCustomArmour
 		headModel[7].addShapeBox(-1F, -8F, -5.5F, 2, 1, 1, 0F,0F, 0F, -0.3F,0F, 0F, -0.3F,0F, 0F, 0F,0F, 0F, 0F,-0.25F, 0F, -0.4F,-0.25F, 0F, -0.4F,-0.25F, 0F, 0F,-0.25F, 0F, 0F); // Box 7
 
 		headModel[8].addShapeBox(-5F, -8F, -5F, 10, 1, 5, 0F,-0.4F, -0.6F, -0.4F,-0.4F, -0.6F, -0.4F,-0.4F, -0.6F, -0.4F,-0.4F, -0.6F, -0.4F,-0.4F, 0F, -0.4F,-0.4F, 0F, -0.4F,-0.4F, 0F, -0.4F,-0.4F, 0F, -0.4F); // Box 8
-
-
-		setBodyPart(headModel, bipedHead);
 	}
 }
