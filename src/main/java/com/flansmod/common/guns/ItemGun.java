@@ -536,7 +536,7 @@ public class ItemGun extends Item implements IFlanItem
 					
 					Vector3f nextPosInWorldCoords = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
 					
-					Vector3f dPos = Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
+					Vector3f dPos = data.lastMeleePositions[k] == null ? nextPosInWorldCoords : Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
 					
 					if(player.worldObj.isRemote && FlansMod.DEBUG)
 						player.worldObj.spawnEntityInWorld(new EntityDebugVector(player.worldObj, data.lastMeleePositions[k], dPos, 200, 1F, 0F, 0F));

@@ -45,6 +45,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -212,7 +213,15 @@ public class FlansModClient extends FlansMod
 			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
 						
 			//Do custom skin overrides
-			((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass));
+			//If we have no stored skin, try to get it
+			if(data.skin == null)
+				data.skin = ((AbstractClientPlayer)event.entityPlayer).getLocationSkin();
+			//Only once we have the stored skin may we override
+			if(data.skin != null)
+			{
+				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
+				((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
+			}
 			
 			//Spectators see all
 			if(thePlayerTeam == Team.spectators)

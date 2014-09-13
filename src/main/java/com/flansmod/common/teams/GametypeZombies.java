@@ -248,12 +248,24 @@ public class GametypeZombies extends Gametype
 	@Override
 	public void readFromNBT(NBTTagCompound tags) 
 	{
-
+		humanPrepTime = tags.getInteger("ZOMPrepTime");
 	}
 
 	@Override
 	public void saveToNBT(NBTTagCompound tags) 
 	{
+		tags.setInteger("ZOMPrepTime", humanPrepTime);
+	}
+	
 
+	@Override
+	public boolean setVariable(String variable, String value) 
+	{
+		if(variable.toLowerCase().equals("humanpreptime"))
+		{
+			humanPrepTime = Integer.parseInt(value) * 20;
+			return true;
+		}
+		return false;
 	}
 }
