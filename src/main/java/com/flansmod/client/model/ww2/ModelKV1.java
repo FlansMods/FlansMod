@@ -297,7 +297,7 @@ public class ModelKV1 extends ModelVehicle
 		rightTrackModel[11].rotateAngleZ = 1.117011F;
 
 
-		translateAll(0, 0, 0);
+		translateAll(0, 6F, 0);
 
 
 		flipAll();
