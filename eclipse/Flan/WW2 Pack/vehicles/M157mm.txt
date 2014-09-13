@@ -49,15 +49,13 @@ ShellSound TankShell
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 2 aaBarrel 1 vehicleSeat
-AddRecipeParts core 1 tankBody
-AddRecipeParts leftTrack 2 largeWheel
-AddRecipeParts rightTrack 2 largeWheel
+AddRecipeParts core 2 aaBarrel 1 vehicleSeat
+AddRecipeParts leftTrack 1 largeWheel
+AddRecipeParts rightTrack 1 largeWheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 500 -40 -8 -20 80 36 40
-SetupPart turret 400 -16 28 -16 32 12 32
-SetupPart leftTrack 200 -40 -8 -24 80 20 4
-SetupPart rightTrack 200 -40 -8 20 80 20 4
+SetupPart core 500 -40 -8 -18 60 24 36
+SetupPart leftTrack 200 4 -8 -22 12 12 4
+SetupPart rightTrack 200 4 -8 18 12 12 4
 BulletDetection 7

@@ -240,6 +240,8 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		Vector3f origin = new Vector3f(posX, posY, posZ);
 		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
 		
+		float speed = motion.length();
+		
 		//Iterate over all entities
 		for(int i = 0; i < worldObj.loadedEntityList.size(); i++)
 		{
@@ -253,7 +255,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					continue;
 				
 				//If this bullet is within the driveable's detection range
-				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius)
+				if(getDistanceToEntity(driveable) <= driveable.getDriveableType().bulletDetectionRadius + speed)
 				{
 					//Raytrace the bullet
 					ArrayList<BulletHit> driveableHits = driveable.attackFromBullet(origin, motion);
@@ -352,7 +354,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		if(hit != null)
 		{
 			//Calculate the lambda value of the intercept
-			Vec3 hitVec = hit.hitVec.subtract(posVec);
+			Vec3 hitVec = posVec.subtract(hit.hitVec);
 			float lambda = 1;
 			//Try each co-ordinate one at a time.
 			if(motionX != 0)
