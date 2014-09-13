@@ -1,0 +1,16 @@
+itemGroup.tabFlan0=Armes Flan
+itemGroup.tabFlan1=Véhicules Flan
+itemGroup.tabFlan2=Composants Flan
+itemGroup.tabFlan3=Matériel d'Equipe Flan
+itemGroup.tabFlan4=Méchas Flan
+tile.flansWorkbench.0.name=Table de Fabrication de Véhicules
+tile.flansWorkbench.1.name=Table de Modification d'Armes
+tile.flansWorkbench.2.name=Tables de Fabrication de Composants
+item.opStick.0.name=Bâton de la Propriété
+item.opStick.1.name=Bâton de la Connection
+item.opStick.2.name=Bâton de la Cartographie
+item.opStick.3.name=Bâton de la Destruction
+item.flagpole.name=Base de Drapeau
+tile.teamsSpawner.0.name=Spawner à Item
+tile.teamsSpawner.1.name=Spawner à Joueur
+tile.teamsSpawner.2.name=Spawner à Véhicules
