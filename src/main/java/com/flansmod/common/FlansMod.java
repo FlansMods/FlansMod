@@ -100,7 +100,7 @@ public class FlansMod
 	public static boolean DEBUG = false;
     public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "4.7.0";
+	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
     public static int generalConfigInteger = 32;
