@@ -45,3 +45,4 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob AK47_JungleCamo AK47_JungleCamo green 1
 Paintjob AK47_Redline AK47_Redline red 1 black 1
+Paintjob AK47_CaseHardened AK47_CaseHardened yellow 1 blue 1 purple 1
