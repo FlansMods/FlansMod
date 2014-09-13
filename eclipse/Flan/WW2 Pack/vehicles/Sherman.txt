@@ -40,7 +40,6 @@ RotatedDriverOffset 14 0 -9
 AddGun 8 34 8 turret browning
 Passengers 1
 Passenger 1 0 36 0 turret -360 360 -15 60 browning Browning
-GunOrigin 1 0 32 0
 RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
@@ -51,8 +50,8 @@ StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSoundPrimary TankShell
-ShootSoundSecondary BrowningShoot
+ShootSound BrowningShoot
+ShellSound TankShell
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
@@ -64,8 +63,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 //Health and collision
-SetupPart core 100 -55 -3 -19 108 29 38
-SetupPart turret 100 -15 27 -19 39 17 38
-SetupPart leftTrack 100 -54 -12 -27 104 21 10
-SetupPart rightTrack 100 -54 -12 16 104 21 10
+SetupPart core 730 -55 -3 -19 108 29 38
+SetupPart turret 630 -15 27 -19 39 17 38
+SetupPart leftTrack 530 -54 -12 -27 104 21 10
+SetupPart rightTrack 530 -54 -12 16 104 21 10
 BulletDetection 7

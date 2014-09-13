@@ -38,7 +38,6 @@ Driver 0 9 0 -360 360 -2.5 3
 RotatedDriverOffset 12 0 -8
 Passengers 1
 Passenger 1 0 28 0 turret -360 360 -15 60 mg42 MG42
-GunOrigin 1 -12 24 0
 RotatedPassengerOffset 1 -12 0 0
 BarrelPosition 0 34 0
 //Secondary gun
@@ -46,15 +45,15 @@ AddGun 8 34 8 turret mg42
 AllowAllAmmo False
 AddAmmo shell
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 2
+ShootDelay 1
 ShellDelay 110
 //Sounds
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSoundPrimary TankShell
-ShootSoundSecondary MG42Shoot
+ShootSound MG42Shoot
+ShellSound TankShell
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
@@ -66,8 +65,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 500 -40 -8 -20 80 36 40
-SetupPart turret 400 -16 28 -16 32 12 32
-SetupPart leftTrack 200 -40 -8 -24 80 20 4
-SetupPart rightTrack 200 -40 -8 20 80 20 4
+SetupPart leftTrack 680 -47 -11 -27 105 20 9
+SetupPart rightTrack 680 -47 -11 17 105 20 9
+SetupPart turret 780 -24 21 -22 45 18 45
+SetupPart core 880 -45 -6 -18 102 27 36
 BulletDetection 7
