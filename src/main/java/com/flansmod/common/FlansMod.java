@@ -16,10 +16,13 @@ import java.util.zip.ZipInputStream;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -97,7 +100,7 @@ public class FlansMod
 	public static boolean DEBUG = false;
     public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "4.7.0";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
     public static int generalConfigInteger = 32;
@@ -277,6 +280,26 @@ public class FlansMod
 		
 		log("ICBM hooking complete.");
 		*/
+	}
+	
+	@SubscribeEvent
+	public void playerDrops(PlayerDropsEvent event)
+	{
+		for(int i = event.drops.size() - 1; i >= 0; i--)
+		{
+			EntityItem ent = event.drops.get(i);
+			InfoType type = InfoType.getType(ent.getEntityItem());
+			if(type != null && !type.canDrop)
+				event.drops.remove(i);
+		}
+	}
+	
+	@SubscribeEvent
+	public void playerDrops(ItemTossEvent event)
+	{
+		InfoType type = InfoType.getType(event.entityItem.getEntityItem());
+		if(type != null && !type.canDrop)
+			event.setCanceled(true);
 	}
 	
 	/** Teams command register method */

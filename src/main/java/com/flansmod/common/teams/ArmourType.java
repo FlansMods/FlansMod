@@ -88,6 +88,7 @@ public class ArmourType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelCustomArmour.class);
-		model.type = this;
+		if(model != null)
+			model.type = this;
 	}
 }

@@ -74,12 +74,6 @@ public class EntityGunItem extends EntityItem {
     }
 	
 	@Override
-    public boolean canAttackWithItem()
-    {
-        return true;
-    }
-	
-	@Override
 	public void onUpdate()
 	{
 		onEntityUpdate();
@@ -229,5 +223,11 @@ public class EntityGunItem extends EntityItem {
 	    	}
 		}
     	return false;
+    }
+    
+    @Override
+    public boolean canAttackWithItem()
+    {
+        return false;
     }
 }

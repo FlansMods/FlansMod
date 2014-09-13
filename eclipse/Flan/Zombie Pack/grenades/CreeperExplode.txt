@@ -16,7 +16,7 @@ SmokeTime 0
 SpinWhenThrown true
 ////Throwing
 ThrowDelay 100
-//ThrowSound <sound>
+ThrowSound CreeperExplode
 //DropItemOnThrow <itemID.damage>
 ////Physics
 DetonateOnImpact false
@@ -33,11 +33,15 @@ StackSize 1
 ////Detonation conditions
 VehicleProximityTrigger -1.0
 LivingProximityTrigger 0.5
-Fuse 1
+//Sticks to the thrower
+StickToThrower true
+//And explodes after 1.5 seconds
+Fuse 30
 DetonateWhenShot false
 ////Detonation
 FireRadius 0.0
-ExplosionRadius 5.0
+ExplosionRadius 4.0
 ExplosionBreaksBlocks true
 //Detonate Sound <sound>
 ////Misc
+CanDrop false

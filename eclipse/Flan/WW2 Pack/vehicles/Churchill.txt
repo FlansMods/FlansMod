@@ -6,6 +6,7 @@ ItemID 23493
 Icon Churchill
 Model ww2.Churchill
 Texture Churchill
+ModelScale 0.75
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
@@ -63,8 +64,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart leftTrack 200 -66 6 16 142 17 14
-SetupPart rightTrack 200 -66 6 -30 142 17 14
-SetupPart core 500 -70 -13 -33 149 24 64
-SetupPart turret 200 -23 33 -16 43 22 32
+SetupPart leftTrack 200 -52 -10 12 110 32 12
+SetupPart rightTrack 200 -52 -10 -24 110 32 12
+SetupPart core 500 -52 -4 -12 90 24 24
+SetupPart turret 200 -16 20 -16 32 16 32
 BulletDetection 7

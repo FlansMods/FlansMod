@@ -71,6 +71,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		motionZ = axes.getXAxis().z * speed;
 		if(type.spinWhenThrown)
 			angularVelocity = new Vector3f(0F, 0F, 10F);
+		if(type.throwSound != null)
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.throwSound, true);
 	}
 	
 	@Override
@@ -146,7 +148,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			stuck = false;
 		
 		//Physics and motion (Don't move if stuck)
-		if(!stuck)
+		if(!stuck && !type.stickToThrower)
 		{
 			prevRotationYaw = axes.getYaw();
 			prevRotationPitch = axes.getPitch();
@@ -266,6 +268,13 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 			//Update the grenade position
 			setPosition(posX, posY, posZ);
+		}
+		
+		if(type.stickToThrower)
+		{
+			if(thrower == null || thrower.isDead)
+				setDead();
+			else setPosition(thrower.posX, thrower.posY, thrower.posZ);
 		}
 		
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so

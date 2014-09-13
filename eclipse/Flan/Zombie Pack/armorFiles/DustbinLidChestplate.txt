@@ -6,5 +6,5 @@ Type Chest
 Model zombie.DustbinLidChestplate
 Defence 0.5
 ArmourTexture DustbinLidChestplate
-MoveSpeedModifier 0.6
+MoveSpeedModifier 0.7
 KnockbackModifier 0.5

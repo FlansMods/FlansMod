@@ -1,17 +1,14 @@
 package com.flansmod.common.teams;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -136,4 +133,10 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	{
 		setDead();
 	}
+	
+    @Override
+    public boolean canAttackWithItem()
+    {
+        return false;
+    }
 }

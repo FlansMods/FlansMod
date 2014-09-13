@@ -3,6 +3,11 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:BearTrap" ]
 	},
+	
+	"CreeperExplode": {
+		"category" : "player",
+		"sounds" : [ "flansmod:CreeperExplode" ]
+	},
 
 	"MP5KShoot": {
 		"category" : "player",

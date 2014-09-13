@@ -32,6 +32,8 @@ public class InfoType
 	public String modelString;
 	public String description;
 	public float modelScale = 1F;
+	/** If this is set to false, then this item cannot be dropped */
+	public boolean canDrop = true;
 	
 	public InfoType(TypeFile file)
 	{
@@ -139,6 +141,8 @@ public class InfoType
 			{
 				smeltableFrom = split[1];
 			}
+			if(split[0].equals("CanDrop"))
+				canDrop = Boolean.parseBoolean(split[1]);
 		} catch (Exception e)
 		{
 			FlansMod.log("Reading file failed : " + shortName);
