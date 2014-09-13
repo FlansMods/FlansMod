@@ -44,6 +44,7 @@ RotatedDriverOffset 0 0 0
 Passengers 2
 Passenger 1 0 -6 8 core
 Passenger 2 -16 6 0 core -60 60 -30 60 browning Browning
+GunOrigin 2 0 -4 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 999
 ShellDelay 999
