@@ -509,9 +509,11 @@ public class EntityMecha extends EntityDriveable
 			{
 				DriveablePart thisPart = data.parts.get(part);
 				if(thisPart != null && thisPart.health < thisPart.maxHealth && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 10F))
+				{
 					thisPart.health += 1;
-				if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-					data.fuelInTank -= 10F;
+					if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						data.fuelInTank -= 10F;
+				}
 			}
 			toggleTimer = 20;
 		}
@@ -605,13 +607,15 @@ public class EntityMecha extends EntityDriveable
 		moveZ = 0;
 		
 		/** TODO add rockets here */
-		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPackPower())))
+		float jetPack = jetPackPower();
+		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && FlansMod.proxy.isKeyDown(4) && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
 		{
-			motionY += 11F;
+			motionY *= 0.95;
+			motionY += (0.07*jetPack);
 			if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-				data.fuelInTank -= (10F*jetPackPower());
+				data.fuelInTank -= (10F*jetPack);
 		}
-		if(isInWater() && shouldFloat())
+		else if(isInWater() && shouldFloat())
 		{
 			motionY *= 0.89;
 			motionY += 0.1;
