@@ -8,6 +8,9 @@ import com.flansmod.common.teams.ArmourType;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
 
 public class ModelCustomArmour extends ModelBiped 
 {
@@ -27,6 +30,22 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glPushMatrix();
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
+		ItemStack itemstack = ((EntityPlayer)entity).inventory.getCurrentItem();
+        heldItemRight = itemstack != null ? 1 : 0;
+
+        if (itemstack != null && ((EntityPlayer)entity).getItemInUseCount() > 0)
+        {
+            EnumAction enumaction = itemstack.getItemUseAction();
+
+            if (enumaction == EnumAction.block)
+            {
+                heldItemRight = 3;
+            }
+            else if (enumaction == EnumAction.bow)
+            {
+                aimedBow = true;
+            }
+        }
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 
 		render(headModel, bipedHead, f5, type.modelScale);
 		render(bodyModel, bipedBody, f5, type.modelScale);

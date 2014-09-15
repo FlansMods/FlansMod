@@ -21,7 +21,7 @@ ThrowDelay 10
 ////Physics
 DetonateOnImpact false
 Bounciness 1.0
-HitEntityDamage 8
+HitEntityDamage 5
 ThrowSpeed 2.0
 FallSpeed 1.0
 BreaksGlass true

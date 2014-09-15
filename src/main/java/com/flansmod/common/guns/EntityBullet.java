@@ -560,6 +560,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		{
 			spawnParticles();
 		}
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -749,4 +753,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 			e.printStackTrace();
 		}	
 	}
+	
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }
