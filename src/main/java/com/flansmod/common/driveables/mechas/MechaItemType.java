@@ -36,13 +36,15 @@ public class MechaItemType extends InfoType
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
 	 * dropRate - floor(dropRate) chance of getting one more */
 	public float fortuneDiamond = 1F, fortuneRedstone = 1F, fortuneCoal = 1F, fortuneEmerald = 1F;
 	
+	/** The power of any attached jet pack is multiplied by this float */
+	public float rocketPower = 1F;
 	
 	/** The model */
 	@SideOnly(Side.CLIENT)
@@ -73,32 +75,40 @@ public class MechaItemType extends InfoType
 				toolHardness = Float.parseFloat(split[1]);
 			if(split[0].equals("Reach"))
 				reach = Float.parseFloat(split[1]);
-			if(split[0].equals("StopMechaFallDamage"))
-				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("ForceBlockFallDamage"))
-				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("ItemVacuum"))
-				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("IronRefine"))
-				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
+			
+			/** The following are the upgrade booleans and multipliers, which
+			 *  are alphabetised. Mess with the order at your peril*/
+			
 			if(split[0].equals("AutoFuel"))
 				autoCoal = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Floatation"))
-				floater = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("SpeedMultiplier"))
-				speedMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("DiamondMultiplier"))
-				fortuneDiamond = Float.parseFloat(split[1]);
-			if(split[0].equals("RedstoneMultiplier"))
-				fortuneRedstone = Float.parseFloat(split[1]);
-			if(split[0].equals("EmeraldMultiplier"))
-				fortuneEmerald = Float.parseFloat(split[1]);
-			if(split[0].equals("CoalMultiplier"))
-				fortuneCoal = Float.parseFloat(split[1]);
-			if(split[0].equals("Nanorepair"))
-				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Armour"))
 				damageResistance = Float.parseFloat(split[1]);
+			if(split[0].equals("CoalMultiplier"))
+				fortuneCoal = Float.parseFloat(split[1]);
+			if(split[0].equals("DiamondMultiplier"))
+				fortuneDiamond = Float.parseFloat(split[1]);
+			if(split[0].equals("EmeraldMultiplier"))
+				fortuneEmerald = Float.parseFloat(split[1]);
+			if(split[0].equals("Floatation"))
+				floater = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ForceBlockFallDamage"))
+				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("IronRefine"))
+				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ItemVacuum"))
+				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Nanorepair"))
+				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("RedstoneMultiplier"))
+				fortuneRedstone = Float.parseFloat(split[1]);
+			if(split[0].equals("RocketPack"))
+				rocketPack = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("RocketPower"))
+				rocketPower = Float.parseFloat(split[1]);
+			if(split[0].equals("SpeedMultiplier"))
+				speedMultiplier = Float.parseFloat(split[1]);
+			if(split[0].equals("StopMechaFallDamage"))
+				stopMechaFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
 		}
 		catch (Exception ignored)
 		{

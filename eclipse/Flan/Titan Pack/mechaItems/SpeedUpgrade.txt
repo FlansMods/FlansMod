@@ -1,17 +1,16 @@
-Name Floatation Device
+Name Speed Upgrade
 //Description for hover text. Underscores represent new lines.
-Description Allows the mecha to float in water or lava
-ShortName mechaFloat
-Icon FloatationDevice
+Description Increaes mecha speed by 50%
+ShortName mechaSpeedUpgrade
+Icon speedUpgrade
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23427
 RecipeOutput 1
-Recipe C canister P pistonBase
-C C
-C C
- P 
+Recipe A advHydraulics I ingotIron
+I I
+A A
+I I
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type hipsUpgrade
+Type legUpgrade
 //The modifiers this item enacts on the mecha
-Floatation true
+SpeedMultiplier 1.5
