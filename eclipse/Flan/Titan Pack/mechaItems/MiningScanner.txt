@@ -1,17 +1,15 @@
-Name Floatation Device
 //Description for hover text. Underscores represent new lines.
-Description Allows the mecha to float in water or lava
-ShortName mechaFloat
-Icon FloatationDevice
+Description Scans for nearby_resources
+ShortName mechaMiningScanner
+Icon MiningScanner
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23427
 RecipeOutput 1
-Recipe C canister P pistonBase
-C C
-C C
- P 
+Recipe H helmetDiamond A advCPU
+   
+AHA
+   
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type hipsUpgrade
+Type headUpgrade
 //The modifiers this item enacts on the mecha
-Floatation true
+Scanner true

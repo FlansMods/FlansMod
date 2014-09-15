@@ -511,7 +511,8 @@ public class EntityMecha extends EntityDriveable
 				if(thisPart != null && thisPart.health < thisPart.maxHealth && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 10F))
 					thisPart.health += 1;
 				if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-					data.fuelInTank -= 10F;			}
+					data.fuelInTank -= 10F;
+			}
 			toggleTimer = 20;
 		}
 			
@@ -603,6 +604,13 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
+		/** TODO add rockets here */
+		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPackPower())))
+		{
+			motionY += 11F;
+			if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+				data.fuelInTank -= (10F*jetPackPower());
+		}
 		if(isInWater() && shouldFloat())
 		{
 			motionY *= 0.89;
@@ -620,7 +628,7 @@ public class EntityMecha extends EntityDriveable
 				if(FlansMod.proxy.isKeyDown(0)) moveX = 1;
 				if(FlansMod.proxy.isKeyDown(1)) moveX = -1;
 				if(FlansMod.proxy.isKeyDown(2)) moveZ = -1;
-				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;				
+				if(FlansMod.proxy.isKeyDown(3)) moveZ = 1;
 			}
 			else if(seats[0].riddenByEntity instanceof EntityLiving && !(seats[0].riddenByEntity instanceof EntityPlayer))
 			{
@@ -937,7 +945,10 @@ public class EntityMecha extends EntityDriveable
 		return f - MathHelper.floor_float(f);
 	}
 	
-	/** Check all upgrades to see if any stop fall damage */
+	/** This is a series of iterators which check all upgrades
+	 *  for various triggers and multipliers */
+	
+	/** Stop fall damage? */
 	public boolean stopFallDamage()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -948,7 +959,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	/** Check all upgrades to see if any force fall damage */
+	/** Force fall to break blocks? */
 	public boolean breakBlocksUponFalling()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -959,6 +970,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Vacuum items? */
 	public boolean vacuumItems()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -969,6 +981,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Refine iron? */
 	public boolean refineIron()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -979,6 +992,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Diamond yield multiplier */
 	public float diamondMultiplier()
 	{
 		float multiplier = 1F;
@@ -989,6 +1003,7 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
+	/** Movement speed multiplier */
 	public float speedMultiplier()
 	{
 		float multiplier = 1F;
@@ -999,6 +1014,7 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
+	/** Coal yield multiplier */
 	public float coalMultiplier()
 	{
 		float multiplier = 1F;
@@ -1009,6 +1025,7 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
+	/** Redstone yield multiplier */
 	public float redstoneMultiplier()
 	{
 		float multiplier = 1F;
@@ -1019,6 +1036,8 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
+	/** Vulnerability
+	 * TODO check that this implements correctly */
 	public float armourPierce()
 	{
 		float multiplier = 1F;
@@ -1029,6 +1048,7 @@ public class EntityMecha extends EntityDriveable
 		return 1 - multiplier;
 	}
 	
+	/** Emerald yield multiplier */
 	public float emeraldMultiplier()
 	{
 		float multiplier = 1F;
@@ -1039,7 +1059,7 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 
-	
+	/** Convert coal to fuel? */
 	public boolean autoCoal()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -1050,6 +1070,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Automatically repair damage? */
 	public boolean autoRepair()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -1060,6 +1081,7 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Float in water? */
 	public boolean shouldFloat()
 	{
 		for(MechaItemType type : getUpgradeTypes())
@@ -1068,6 +1090,28 @@ public class EntityMecha extends EntityDriveable
 				return true;
 		}
 		return false;
+	}
+	
+	/** Have a jetpack? */
+	public boolean shouldFly()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.rocketPack)
+				return true;
+		}
+		return false;
+	}
+	
+	/** Jetpack multiplier */
+	public float jetPackPower()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.rocketPower;
+		}
+		return multiplier;
 	}
 	
 	public ArrayList<MechaItemType> getUpgradeTypes()
