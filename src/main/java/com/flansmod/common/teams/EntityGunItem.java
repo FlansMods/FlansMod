@@ -140,6 +140,10 @@ public class EntityGunItem extends EntityItem {
         {
             setDead();
         }
+        
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 	
 	@Override
@@ -229,5 +233,11 @@ public class EntityGunItem extends EntityItem {
     public boolean canAttackWithItem()
     {
         return false;
+    }
+    
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
     }
 }

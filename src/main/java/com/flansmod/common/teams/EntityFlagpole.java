@@ -242,6 +242,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 				flag.setPosition(posX, posY + 2F, posZ);
 		}
 		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 		
 	@Override
@@ -342,4 +345,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 			uninitialized = false;
 		}
 	}*/
+	
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

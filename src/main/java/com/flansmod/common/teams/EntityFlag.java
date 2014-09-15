@@ -85,6 +85,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 				}
 			}
 		}
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 	
 	@Override
@@ -221,4 +225,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		return false;
 	}
+	
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

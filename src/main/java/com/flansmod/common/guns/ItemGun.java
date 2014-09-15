@@ -536,7 +536,7 @@ public class ItemGun extends Item implements IFlanItem
 					
 					Vector3f nextPosInWorldCoords = new Vector3f(player.posX + nextPosInPlayerCoords.x, player.posY + nextPosInPlayerCoords.y, player.posZ + nextPosInPlayerCoords.z);
 					
-					Vector3f dPos = data.lastMeleePositions[k] == null ? nextPosInWorldCoords : Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
+					Vector3f dPos = data.lastMeleePositions[k] == null ? new Vector3f() : Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
 					
 					if(player.worldObj.isRemote && FlansMod.DEBUG)
 						player.worldObj.spawnEntityInWorld(new EntityDebugVector(player.worldObj, data.lastMeleePositions[k], dPos, 200, 1F, 0F, 0F));
@@ -581,7 +581,7 @@ public class ItemGun extends Item implements IFlanItem
 									else
 									{
 										//Raytrace
-										ArrayList<BulletHit> playerHits = snapshot.raytrace(data.lastMeleePositions[k], dPos);
+										ArrayList<BulletHit> playerHits = snapshot.raytrace(data.lastMeleePositions[k] == null ? nextPosInWorldCoords : data.lastMeleePositions[k], dPos);
 										hits.addAll(playerHits);
 									}
 								}
@@ -589,7 +589,7 @@ public class ItemGun extends Item implements IFlanItem
 								//If we couldn't get a snapshot, use normal entity hitbox calculations
 								if(otherData == null || shouldDoNormalHitDetect)
 								{
-									MovingObjectPosition mop = player.boundingBox.calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.boundingBox.calculateIntercept(nextPosInWorldCoords.toVec3(), Vec3.createVectorHelper(0F, 0F, 0F)) : player.boundingBox.calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
 										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);

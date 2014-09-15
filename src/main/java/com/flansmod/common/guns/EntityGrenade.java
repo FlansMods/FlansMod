@@ -294,6 +294,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 		//Apply gravity
 		motionY -= 9.81D / 400D * type.fallSpeed;
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 	
 	@Override
@@ -440,4 +444,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			angularVelocity = new Vector3f(0F, 0F, 10F);
 	}
 
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

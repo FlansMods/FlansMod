@@ -57,6 +57,10 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	        angle += 0.05D;
 	        setPosition(xCoord + 0.5F + Math.cos(angle) * 0.3F, yCoord + 0.5F, zCoord + 0.5F + Math.sin(angle) * 0.3F);
         }
+        
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
     }
     
     public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
@@ -138,5 +142,11 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
     public boolean canAttackWithItem()
     {
         return false;
+    }
+    
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
     }
 }
