@@ -50,7 +50,7 @@ public class ModelM4Carbine extends ModelGun
 		stockAttachPoint = new Vector3f(1F / 16F, 4F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(18F / 16F, 4F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(16F / 16F, 4F / 16F, 0F);
 		
 		//Grip
 		gripAttachPoint = new Vector3f(10F / 16F, 3F / 16F, 0F);
