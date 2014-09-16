@@ -1,0 +1,11 @@
+Name Engineer
+ShortName gignEngineer1
+AddItem m1014
+AddItem stinger
+AddItem m1911
+AddItem c4 2
+AddItem c4Remote
+AddItem mwKnife
+AddItem m1014Ammo 3
+AddItem stingerAmmo 2
+AddItem m1911Ammo 2
