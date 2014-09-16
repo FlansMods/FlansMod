@@ -28,6 +28,7 @@ item.m4CarbineAmmo.name=Боеприпасы M4 Carbine
 item.doubleBarrelledShotgun.name=Двуствольное ружье
 item.olympia.name=Олимпия
 item.12gaugeShell.name=Дробь 12-го калибра
+item.12gaugeShellIncendiary.name=Зажигательная дробь 12-го калибра
 item.winchesterModel70.name=Winchester Model 70
 item.3006Bullet.name=.30-06 Springfield
 tile.zombieBox.name=Ящик с оружием против зомби
