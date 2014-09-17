@@ -1,0 +1,7 @@
+Name French GIGN Bodyarmour
+ShortName gignBody
+Icon GIGNCoat
+Colour 255 255 255
+Type Chest
+Defence 0.1
+ArmourTexture GIGN
