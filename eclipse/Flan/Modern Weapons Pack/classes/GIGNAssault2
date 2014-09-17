@@ -1,0 +1,8 @@
+Name Heavy Assault
+ShortName gignAssault2
+AddItem m60
+AddItem m1911
+AddItem m67 3
+AddItem mwKnife
+AddItem m60Ammo 2
+AddItem m1911Ammo 2
