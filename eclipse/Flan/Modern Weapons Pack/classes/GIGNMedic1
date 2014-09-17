@@ -1,0 +1,9 @@
+Name Medic
+ShortName gignMedic1
+AddItem mp5
+AddItem m1911
+AddItem m67 1
+AddItem mwMedKit
+AddItem mwKnife
+AddItem mp5Ammo 3
+AddItem m1911Ammo 3
