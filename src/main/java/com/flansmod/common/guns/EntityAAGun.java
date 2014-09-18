@@ -60,6 +60,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	//Sentry stuff
 	/** Stops the sentry shooting whoever placed it or their teammates */
 	public EntityPlayer placer = null;
+	/** For getting the placer after a reload */
+	public String placerName = null;
 	/** The sentry's current target */
 	public Entity target = null;
 	/** How often to check for new targets */
@@ -82,6 +84,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		this(world);
 		placer = p;
+		placerName = p.getCommandSenderName();
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -403,6 +406,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(worldObj.isRemote)
 			return null;
+		if(placer == null && placerName != null)
+			placer = worldObj.getPlayerEntityByName(placerName);
 		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
@@ -414,7 +419,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer)
+						if(candidateEntity == placer || candidateEntity.getCommandSenderName().equals(placerName))
 							continue;
 						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
@@ -499,6 +504,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if (ammo[i] != null)
 				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
+		nbttagcompound.setString("Placer", placer.getCommandSenderName());
 	}
 
 	@Override
@@ -513,6 +519,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			ammo[i] = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("Ammo " + i));
 		}
+		placerName = nbttagcompound.getString("Placer");
 	}
 
 	@Override
