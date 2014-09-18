@@ -109,6 +109,8 @@ public class PacketDriveableControl extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
+		if(clientPlayer == null || clientPlayer.worldObj == null)
+			return;
 		EntityDriveable driveable = null;
 		for(Object obj : clientPlayer.worldObj.loadedEntityList)
 		{

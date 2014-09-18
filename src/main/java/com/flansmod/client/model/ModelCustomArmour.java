@@ -34,10 +34,10 @@ public class ModelCustomArmour extends ModelBiped
 		ItemStack itemstack = ((EntityLivingBase)entity).getEquipmentInSlot(0);
         heldItemRight = itemstack != null ? 1 : 0;
 
+        aimedBow = false;
         if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
         {
-            EnumAction enumaction = itemstack.getItemUseAction();
-
+        	EnumAction enumaction = itemstack.getItemUseAction();
             if (enumaction == EnumAction.block)
             {
                 heldItemRight = 3;
