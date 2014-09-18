@@ -8,6 +8,7 @@ import com.flansmod.common.teams.ArmourType;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
@@ -30,10 +31,10 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glPushMatrix();
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
-		ItemStack itemstack = ((EntityPlayer)entity).inventory.getCurrentItem();
+		ItemStack itemstack = ((EntityLivingBase)entity).getEquipmentInSlot(0);
         heldItemRight = itemstack != null ? 1 : 0;
 
-        if (itemstack != null && ((EntityPlayer)entity).getItemInUseCount() > 0)
+        if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
         {
             EnumAction enumaction = itemstack.getItemUseAction();
 
