@@ -432,12 +432,13 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					}
 					
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
-					//setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+					setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 					setDead();
 					break;
 				}
 				if(penetratingPower <= 0F || (type.explodeOnImpact && ticksInAir > 1))
 				{
+					setPosition(posX + motionX * bulletHit.intersectTime, posY + motionY * bulletHit.intersectTime, posZ + motionZ * bulletHit.intersectTime);
 					setDead();
 					break;
 				}
