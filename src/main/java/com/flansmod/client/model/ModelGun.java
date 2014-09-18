@@ -41,6 +41,8 @@ public class ModelGun extends ModelBase
 	public float tiltGunTime = 0.25F, unloadClipTime = 0.25F, loadClipTime = 0.25F, untiltGunTime = 0.25F;
 	/** If true, then the scope attachment will move with the top slide */
 	public boolean scopeIsOnSlide = false;
+	/** If true, then the scope attachment will move with the break action. Can be combined with the above */
+	public boolean scopeIsOnBreakAction = false;
 	/** For rifles and shotguns. Currently a generic reload animation regardless of how full the internal magazine already is */
 	public float numBulletsInReloadAnimation = 1;
 	/** For shotgun pump handles and rifle bolts */

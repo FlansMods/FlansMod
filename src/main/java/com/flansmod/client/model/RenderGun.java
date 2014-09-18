@@ -335,7 +335,7 @@ public class RenderGun implements IItemRenderer
 			GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 
 			model.renderGun(f);
-			if(scopeAttachment == null && !model.scopeIsOnSlide)
+			if(scopeAttachment == null && !model.scopeIsOnSlide && !model.scopeIsOnBreakAction)
 				model.renderDefaultScope(f);
 			if(barrelAttachment == null)
 				model.renderDefaultBarrel(f);
@@ -362,6 +362,8 @@ public class RenderGun implements IItemRenderer
 				GL11.glRotatef(reloadRotate * -model.breakAngle, 0F, 0F, 1F);
 				GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
 				model.renderBreakAction(f);
+				if(scopeAttachment == null && model.scopeIsOnBreakAction)
+					model.renderDefaultScope(f);
 			}
 			GL11.glPopMatrix();
 			
@@ -588,7 +590,14 @@ public class RenderGun implements IItemRenderer
 			GL11.glPushMatrix();
 			{
 				renderEngine.bindTexture(FlansModResourceHandler.getTexture(scopeAttachment));
+				if(model.scopeIsOnBreakAction)
+				{
+					GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
+					GL11.glRotatef(reloadRotate * -model.breakAngle, 0F, 0F, 1F);
+					GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
+				}
 				GL11.glTranslatef(model.scopeAttachPoint.x * type.modelScale, model.scopeAttachPoint.y * type.modelScale, model.scopeAttachPoint.z * type.modelScale);
+
 				if(model.scopeIsOnSlide)
 					GL11.glTranslatef(-(animations.lastGunSlide + (animations.gunSlide - animations.lastGunSlide) * smoothing) * model.gunSlideDistance, 0F, 0F);
 				GL11.glScalef(scopeAttachment.modelScale, scopeAttachment.modelScale, scopeAttachment.modelScale);
@@ -601,22 +610,22 @@ public class RenderGun implements IItemRenderer
 		}
 		
 		//Grip
-				if(gripAttachment != null)
-				{
-					GL11.glPushMatrix();
-					{
-						renderEngine.bindTexture(FlansModResourceHandler.getTexture(gripAttachment));
-						GL11.glTranslatef(model.gripAttachPoint.x * type.modelScale, model.gripAttachPoint.y * type.modelScale, model.gripAttachPoint.z * type.modelScale);
-						if(model.gripIsOnPump)
-							GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
-						GL11.glScalef(gripAttachment.modelScale, gripAttachment.modelScale, gripAttachment.modelScale);
-						ModelAttachment gripModel = gripAttachment.model;
-						if(gripModel != null)
-							gripModel.renderAttachment(f);
-						renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
-					}
-					GL11.glPopMatrix();
-				}
+		if(gripAttachment != null)
+		{
+			GL11.glPushMatrix();
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(gripAttachment));
+				GL11.glTranslatef(model.gripAttachPoint.x * type.modelScale, model.gripAttachPoint.y * type.modelScale, model.gripAttachPoint.z * type.modelScale);
+				if(model.gripIsOnPump)
+					GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
+				GL11.glScalef(gripAttachment.modelScale, gripAttachment.modelScale, gripAttachment.modelScale);
+				ModelAttachment gripModel = gripAttachment.model;
+				if(gripModel != null)
+					gripModel.renderAttachment(f);
+				renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
+			}
+			GL11.glPopMatrix();
+		}
 		
 		//Barrel
 		if(barrelAttachment != null)
