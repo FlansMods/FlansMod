@@ -61,7 +61,9 @@ import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EntityWheel;
 import com.flansmod.common.driveables.PlaneType;
+import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
@@ -87,6 +89,9 @@ public class ClientProxy extends CommonProxy
 	
 	public static RenderGun gunRenderer;
 	public static RenderGrenade grenadeRenderer;
+	public static RenderPlane planeRenderer;
+	public static RenderVehicle vehicleRenderer;
+	public static RenderMecha mechaRenderer;
 	public List<File> contentPacks;
 
 	@Override
@@ -95,16 +100,25 @@ public class ClientProxy extends CommonProxy
 		new FlansModClient().load();
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade();
+		planeRenderer = new RenderPlane();
+		vehicleRenderer = new RenderVehicle();
+		mechaRenderer = new RenderMecha();
+		
+		//Register custom item renderers
 		for(GunType gunType : GunType.guns.values())
-		{
-			if(gunType.model != null)
-				MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
-		}
+			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
+		
 		for(GrenadeType grenadeType : GrenadeType.grenades)
-		{
-			if(grenadeType.model != null)
-				MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
-		}
+			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
+		
+		for(PlaneType planeType : PlaneType.types)
+			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);
+		
+		for(VehicleType vehicleType : VehicleType.types)
+			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);
+		
+		for(MechaType mechaType : MechaType.types)
+			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();

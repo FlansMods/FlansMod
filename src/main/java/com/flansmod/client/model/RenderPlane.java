@@ -2,20 +2,28 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
+import com.flansmod.common.guns.GrenadeType;
+import com.flansmod.common.guns.ItemGrenade;
 
-public class RenderPlane extends Render
+public class RenderPlane extends Render implements IItemRenderer 
 {	
     public RenderPlane()
     {
@@ -123,5 +131,69 @@ public class RenderPlane extends Render
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityPlane)entity).getPlaneType());
+	}
+
+	@Override
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
+	{
+		switch(type)
+		{
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON : case ENTITY : return Minecraft.getMinecraft().gameSettings.fancyGraphics && item != null && item.getItem() instanceof ItemPlane && ((ItemPlane)item.getItem()).type.model != null;
+		default : break;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
+	{
+		return false;
+	}
+
+	@Override
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	{
+		GL11.glPushMatrix();
+		if(item != null && item.getItem() instanceof ItemPlane)
+		{
+			PlaneType planeType = ((ItemPlane)item.getItem()).type;
+			if(planeType.model != null)
+			{
+				float scale = 0.5F;
+				switch(type)
+				{
+				case ENTITY:
+				{
+					scale = 1.5F;
+					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					break;
+				}
+				case EQUIPPED:
+				{
+					GL11.glRotatef(15F, 0F, 0F, 1F);
+					GL11.glRotatef(15F, 1F, 0F, 0F);
+					GL11.glRotatef(90F, 0F, 1F, 0F);
+					GL11.glTranslatef(0F, 0.2F, 0.4F);
+					scale = 1F;
+					break;
+				}
+				case EQUIPPED_FIRST_PERSON:
+				{
+					GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.15F, 0.45F, -0.6F);
+					GL11.glRotatef(180F, 0F, 1F, 0F);
+					break;
+				}
+				default : break;
+				}
+				
+				GL11.glScalef(scale / planeType.cameraDistance, scale / planeType.cameraDistance, scale / planeType.cameraDistance);
+				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(planeType));
+				ModelDriveable model = planeType.model;
+				model.render(planeType);
+			}
+		}
+		GL11.glPopMatrix();
 	}
 }

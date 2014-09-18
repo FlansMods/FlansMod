@@ -9,11 +9,15 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.FlansModResourceHandler;
@@ -21,15 +25,18 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.ItemVehicle;
+import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.EnumMechaSlotType;
+import com.flansmod.common.driveables.mechas.ItemMecha;
 import com.flansmod.common.driveables.mechas.ItemMechaAddon;
 import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 
-public class RenderMecha extends Render 
+public class RenderMecha extends Render implements IItemRenderer
 {
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
     private static final ItemRenderer renderer = new ItemRenderer(Minecraft.getMinecraft());
@@ -356,4 +363,68 @@ public class RenderMecha extends Render
 		}
         GL11.glPopMatrix();
     }
+    
+    @Override
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
+	{
+		switch(type)
+		{
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON : case ENTITY : return Minecraft.getMinecraft().gameSettings.fancyGraphics && item != null && item.getItem() instanceof ItemMecha && ((ItemMecha)item.getItem()).type.model != null;
+		default : break;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
+	{
+		return false;
+	}
+
+	@Override
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	{
+		GL11.glPushMatrix();
+		if(item != null && item.getItem() instanceof ItemMecha)
+		{
+			MechaType mechaType = ((ItemMecha)item.getItem()).type;
+			if(mechaType.model != null)
+			{
+				float scale = 0.5F;
+				switch(type)
+				{
+				case ENTITY:
+				{
+					scale = 1.5F;
+					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					break;
+				}
+				case EQUIPPED:
+				{
+					GL11.glRotatef(15F, 0F, 0F, 1F);
+					GL11.glRotatef(15F, 1F, 0F, 0F);
+					GL11.glRotatef(270F, 0F, 1F, 0F);
+					GL11.glTranslatef(0F, 0.1F, -0.4F);
+					scale = 1F;
+					break;
+				}
+				case EQUIPPED_FIRST_PERSON:
+				{
+					GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.15F, 0.35F, -0.6F);
+					GL11.glRotatef(90F, 0F, 1F, 0F);
+					break;
+				}
+				default : break;
+				}
+				
+				GL11.glScalef(scale / mechaType.cameraDistance, scale / mechaType.cameraDistance, scale / mechaType.cameraDistance);
+				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(mechaType));
+				ModelDriveable model = mechaType.model;
+				model.render(mechaType);
+			}
+		}
+		GL11.glPopMatrix();
+	}
 }
