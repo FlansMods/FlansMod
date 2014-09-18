@@ -19,6 +19,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.vector.Vector3f;
@@ -170,7 +171,8 @@ public class RenderGun implements IItemRenderer
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					if(FlansModClient.zoomProgress > 0.9F && gunType.hasScopeOverlay)
+					IScope scope = gunType.getCurrentScope(item);
+					if(FlansModClient.zoomProgress > 0.9F && scope.hasZoomOverlay())
 					{
 						GL11.glPopMatrix();
 						return;
