@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -658,7 +659,7 @@ public class ItemGun extends Item implements IFlanItem
 									default :
 									}
 									
-									if(playerHit.hitbox.player.attackEntityFrom(DamageSource.causePlayerDamage(player), swingDistance * type.meleeDamage))
+									if(playerHit.hitbox.player.attackEntityFrom(getMeleeDamage(player), swingDistance * type.meleeDamage))
 									{
 										//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
 										playerHit.hitbox.player.arrowHitTimer++;
@@ -699,6 +700,10 @@ public class ItemGun extends Item implements IFlanItem
 		}
 	}
 	 
+	public DamageSource getMeleeDamage(EntityPlayer attacker)
+	{
+		return new EntityDamageSourceGun(type.shortName, attacker, attacker, type, false);
+	}
 	
 	public void onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean left, boolean isShooting)
 	{
