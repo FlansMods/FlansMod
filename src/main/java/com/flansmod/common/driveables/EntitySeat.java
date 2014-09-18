@@ -383,10 +383,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(worldObj.isRemote && foundDriveable)
 		{
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKeyHeld(key, held));
-			if(driver)
-			{
-				driveable.updateKeyHeldState(key, held);
-			}
+
+		}
+		if(driver)
+		{
+			driveable.updateKeyHeldState(key, held);
 		}
 		else if(key == 9)
 		{ 
