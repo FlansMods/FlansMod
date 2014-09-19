@@ -635,7 +635,7 @@ public class FlansModClient extends FlansMod
 			else 
 			{
 				animations = new GunAnimations();
-				FlansModClient.gunAnimationsLeft.put((EntityLivingBase)living, animations);
+				FlansModClient.gunAnimationsLeft.put(living, animations);
 			}
 		}
 		else
@@ -645,7 +645,7 @@ public class FlansModClient extends FlansMod
 			else 
 			{
 				animations = new GunAnimations();
-				FlansModClient.gunAnimationsRight.put((EntityLivingBase)living, animations);
+				FlansModClient.gunAnimationsRight.put(living, animations);
 			}
 		}
 		return animations;
