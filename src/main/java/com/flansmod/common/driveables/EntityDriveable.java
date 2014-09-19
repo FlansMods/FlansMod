@@ -41,6 +41,7 @@ import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
@@ -498,7 +499,46 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{		
 			case BOMB :
 			{
-				
+				if(TeamsManager.bombsEnabled)
+				{
+					int slot = -1;
+					for(int i = driveableData.getBombInventoryStart(); i < driveableData.getBombInventoryStart() + type.numBombSlots; i++)
+					{
+						ItemStack bomb = driveableData.getStackInSlot(i);
+						if(bomb != null && bomb.getItem() instanceof ItemBullet && type.isValidAmmo(((ItemBullet)bomb.getItem()).type, weaponType))
+						{
+							slot = i;
+						}
+					}
+					
+					if(slot != -1)
+					{
+						int spread = 0;
+						int damageMultiplier = 1;
+						float shellSpeed = 0F;
+
+						ItemStack bulletStack = driveableData.getStackInSlot(slot);
+						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
+						EntityBullet bulletEntity = bulletItem.getEntity(worldObj, Vec3.createVectorHelper(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						worldObj.spawnEntityInWorld(bulletEntity);
+						
+						if(type.shootSound(secondary) != null)
+							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
+						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						{
+							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
+							{
+								bulletStack.setItemDamage(0);
+								bulletStack.stackSize--;
+								if(bulletStack.stackSize == 0)
+									bulletStack = null;
+							}
+							driveableData.setInventorySlotContents(slot, bulletStack);
+						}
+						setShootDelay(type.shootDelay(secondary), secondary);
+					}
+				}
 				break;
 			}		
 			case MISSILE : //These two are actually almost identical
