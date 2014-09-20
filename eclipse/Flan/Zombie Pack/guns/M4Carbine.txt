@@ -17,7 +17,7 @@ Accuracy 4
 ShootDelay 2
 ShootSound M4CarbineShoot
 ReloadSound M4CarbineReload
-Mode Burst
+Mode FullAuto
 //The number of bullets to fire each round
 NumBurstRounds 3
 OneHanded False
