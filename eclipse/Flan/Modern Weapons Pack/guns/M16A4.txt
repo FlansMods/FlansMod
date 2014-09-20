@@ -18,7 +18,9 @@ Accuracy 2
 ShootDelay 2
 ShootSound M14Shoot
 ReloadSound MP44Reload
-Mode FullAuto
+Mode Burst
+//The number of bullets to fire each round
+NumBurstRounds 3
 //Bullet speed, default 3.0
 BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
