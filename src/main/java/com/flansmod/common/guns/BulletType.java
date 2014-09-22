@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionEffect;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EnumWeaponType;
@@ -52,6 +53,8 @@ public class BulletType extends InfoType
 	/** Lock on force that pulls the bullet towards its prey */
 	public float lockOnForce = 1F;
 	
+	public ArrayList<PotionEffect> hitEffects = new ArrayList<PotionEffect>();
+	
 	public BulletType(TypeFile file)
 	{
 		super(file);
@@ -65,89 +68,92 @@ public class BulletType extends InfoType
 		super.read(split, file);
 		try
 		{
-			if (split[0].equals("Model"))
+			if(split[0].equals("Model"))
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
 			}
-			if (split[0].equals("Texture"))
+			else if(split[0].equals("Texture"))
 				texture = split[1];
-			if (split[0].equals("FallSpeed"))
+			else if(split[0].equals("FallSpeed"))
 				fallSpeed = Float.parseFloat(split[1]);
-			if (split[0].equals("Damage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
+			else if(split[0].equals("Damage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
 				damageVsLiving = Integer.parseInt(split[1]);
-			if (split[0].equals("DamageVsVehicles"))
+			else if(split[0].equals("DamageVsVehicles"))
 				damageVsDriveable = Integer.parseInt(split[1]);
-			if (split[0].equals("Explosion"))
+			else if(split[0].equals("Explosion"))
 				explosion = Integer.parseInt(split[1]);
-			if (split[0].equals("FlakParticles"))
+			else if(split[0].equals("FlakParticles"))
 				flak = Integer.parseInt(split[1]);
-			if (split[0].equals("FlakParticleType"))
+			else if(split[0].equals("FlakParticleType"))
 				flakParticles = split[1];
-			if (split[0].equals("Fire"))
+			else if(split[0].equals("Fire"))
 			{
 				fire = Integer.parseInt(split[1]);
 				//setEntitiesOnFire = true;
 			}
-			if(split[0].equals("SetEntitiesOnFire"))
+			else if(split[0].equals("SetEntitiesOnFire"))
 				setEntitiesOnFire = Boolean.parseBoolean(split[1]);
-			if (split[0].equals("ExplodeOnImpact"))
+			else if(split[0].equals("ExplodeOnImpact"))
 				explodeOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("Fuse"))
+			else if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
-			if (split[0].equals("BreaksGlass"))
+			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("HitBoxSize"))
+			else if(split[0].equals("HitBoxSize"))
 				hitBoxSize = Float.parseFloat(split[1]);
-			if (split[0].equals("HitSound"))
+			else if(split[0].equals("HitSound"))
 				hitSound = split[1];
-			if (split[0].equals("Penetrates"))
+			else if(split[0].equals("Penetrates"))
 				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 1F : 0.25F);
-			if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))
+			else if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))
 				penetratingPower = Float.parseFloat(split[1]);
-			if (split[0].equals("SmokeTrail"))
+			else if(split[0].equals("SmokeTrail"))
 				smokeTrail = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("TrailParticleType"))
+			else if(split[0].equals("TrailParticleType"))
 			{
 				smokeTrail = true;
 				trailParticles = split[1];
 			}
-			if (split[0].equals("RoundsPerItem"))
+			else if(split[0].equals("RoundsPerItem"))
 				roundsPerItem = Integer.parseInt(split[1]);
-			if (split[0].equals("MaxStackSize"))
+			else if(split[0].equals("MaxStackSize"))
 				maxStackSize = Integer.parseInt(split[1]);
-			if (split[0].equals("Bomb"))
+			else if(split[0].equals("Bomb"))
 				weaponType = EnumWeaponType.BOMB;
-			if (split[0].equals("Shell"))
+			else if(split[0].equals("Shell"))
 				weaponType = EnumWeaponType.SHELL;
-			if(split[0].equals("Missile"))
+			else if(split[0].equals("Missile"))
 				weaponType = EnumWeaponType.MISSILE;
-			if(split[0].equals("WeaponType"))
+			else if(split[0].equals("WeaponType"))
 				weaponType = EnumWeaponType.valueOf(split[1].toUpperCase());
-			if (split[0].equals("DropItemOnShoot"))
+			else if(split[0].equals("DropItemOnShoot"))
 				dropItemOnShoot = split[1];
-			if (split[0].equals("DropItemOnReload"))
+			else if(split[0].equals("DropItemOnReload"))
 				dropItemOnReload = split[1];
-			if (split[0].equals("DropItemOnHit"))
+			else if(split[0].equals("DropItemOnHit"))
 				dropItemOnHit = split[1];
-			if (split[0].equals("HasLight"))
+			else if(split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("LockOnToDriveables"))
+			else if(split[0].equals("LockOnToDriveables"))
 				lockOnToPlanes = lockOnToVehicles = lockOnToMechas = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("LockOnToVehicles"))
+			else if(split[0].equals("LockOnToVehicles"))
 				lockOnToVehicles = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("LockOnToPlanes"))
+			else if(split[0].equals("LockOnToPlanes"))
 				lockOnToPlanes = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("LockOnToMechas"))
+			else if(split[0].equals("LockOnToMechas"))
 				lockOnToMechas = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("LockOnToPlayers"))
+			else if(split[0].equals("LockOnToPlayers"))
 				lockOnToPlayers = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("LockOnToLivings"))
+			else if(split[0].equals("LockOnToLivings"))
 				lockOnToLivings = Boolean.parseBoolean(split[1].toLowerCase());
-			if (split[0].equals("MaxLockOnAngle"))
+			else if(split[0].equals("MaxLockOnAngle"))
 				maxLockOnAngle = Float.parseFloat(split[1]);			
-			if (split[0].equals("LockOnForce") || split[0].equals("TurningForce"))
+			else if(split[0].equals("LockOnForce") || split[0].equals("TurningForce"))
 				lockOnForce = Float.parseFloat(split[1]);
-		} catch (Exception e)
+			else if(split[0].equals("PotionEffect"))
+				hitEffects.add(getPotionEffect(split));
+		} 
+		catch (Exception e)
 		{
 			System.out.println("Reading bullet file failed.");
 			e.printStackTrace();
@@ -156,9 +162,9 @@ public class BulletType extends InfoType
 
 	public static BulletType getBullet(String s)
 	{
-		for (BulletType bullet : bullets)
+		for(BulletType bullet : bullets)
 		{
-			if (bullet.shortName.equals(s))
+			if(bullet.shortName.equals(s))
 				return bullet;
 		}
 		return null;
@@ -166,9 +172,9 @@ public class BulletType extends InfoType
 
 	public static BulletType getBullet(Item item)
 	{
-		for (BulletType bullet : bullets)
+		for(BulletType bullet : bullets)
 		{
-			if (bullet.item == item)
+			if(bullet.item == item)
 				return bullet;
 		}
 		return null;
@@ -178,5 +184,13 @@ public class BulletType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);
+	}
+	
+	public PotionEffect getPotionEffect(String[] split)
+	{
+		int potionID = Integer.parseInt(split[1]);
+		int duration = Integer.parseInt(split[2]);
+		int amplifier = Integer.parseInt(split[3]);
+		return new PotionEffect(potionID, duration, amplifier, false);
 	}
 }

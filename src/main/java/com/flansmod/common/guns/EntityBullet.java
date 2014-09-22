@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
@@ -398,6 +399,10 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 					if(entityHit.entity.attackEntityFrom(getBulletDamage(false), damage * type.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
 					{
 						EntityLivingBase living = (EntityLivingBase)entityHit.entity;
+						for(PotionEffect effect : type.hitEffects)
+						{
+							living.addPotionEffect(new PotionEffect(effect));
+						}
 						//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
 						living.arrowHitTimer++;
 						living.hurtResistantTime = living.maxHurtResistantTime / 2;

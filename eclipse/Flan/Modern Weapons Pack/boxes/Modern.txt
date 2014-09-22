@@ -74,6 +74,7 @@ AddGun m9 8 ingotIron
 AddAmmo m9Ammo 2 ingotIron 2 gunpowder
 AddGun usp 10 ingotIron
 AddAmmo uspAmmo 2 ingotIron 2 gunpowder
+AddAltAmmo uspPoisonAmmo 2 ingotIron 2 gunpowder 2 spiderEye
 AddGun m1911 8 ingotIron 1 leather
 AddAmmo m1911Ammo 2 ingotIron 1 gunpowder
 AddGun sigP226 8 ingotIron
