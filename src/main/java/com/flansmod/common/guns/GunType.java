@@ -70,6 +70,8 @@ public class GunType extends InfoType implements IScope
 	public ArrayList<Vector3f> meleePath = new ArrayList<Vector3f>(), meleePathAngles = new ArrayList<Vector3f>();
 	/** The points on the melee weapon that damage is actually done from. */
 	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<Vector3f>();
+	/** Set these to make guns only usable by a certain type of entity */
+	public boolean usableByPlayers = true, usableByMechas = true;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -336,6 +338,10 @@ public class GunType extends InfoType implements IScope
 				oneHanded = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);
+			else if(split[0].equals("UsableByPlayers"))
+				usableByPlayers = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("UsableByMechas"))
+				usableByMechas = Boolean.parseBoolean(split[1]);
 			
 			//Custom Melee Stuff
 			else if(split[0].equals("UseCustomMelee") && Boolean.parseBoolean(split[1]))
