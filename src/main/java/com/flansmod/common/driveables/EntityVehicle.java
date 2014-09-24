@@ -399,6 +399,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					}
 				}
 			}
+			
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			{
+				wheel.motionY += type.buoyancy;
+			}
 
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
 			

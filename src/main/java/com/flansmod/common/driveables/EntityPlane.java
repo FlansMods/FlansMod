@@ -535,7 +535,7 @@ public class EntityPlane extends EntityDriveable
 				proportionOfMotionToCorrect = 0.5F;
 			
 			//Apply gravity
-			g = 0.98F;
+			g = 0.98F / 20F;
 			motionY -= g;
 			
 			//Apply lift
@@ -566,6 +566,15 @@ public class EntityPlane extends EntityDriveable
 			break;
 		default:
 			break;
+		}
+				
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel != null && worldObj != null)
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			{
+				motionY += type.buoyancy;
+			}
 		}
 		
 		//Move the wheels first

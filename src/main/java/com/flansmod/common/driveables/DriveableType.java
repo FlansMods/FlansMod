@@ -97,6 +97,14 @@ public class DriveableType extends InfoType
 	/** Coefficient of drag */
 	public float drag = 1F;
 	
+	//Boat Stuff
+	/** If true, then the vehicles wheels float on water */
+	public boolean floatOnWater = false;
+	/** Defines where you can place this vehicle */
+	public boolean placeableOnLand = true, placeableOnWater = false;
+	/** The upwards force to apply to the vehicle per wheel when on water */
+	public float buoyancy = 0.0165F;
+	
 	/** The radius within which to check for bullets */
 	public float bulletDetectionRadius = 5F;
 
@@ -169,77 +177,90 @@ public class DriveableType extends InfoType
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelDriveable.class);
 			
-			if(split[0].equals("Texture"))
-			{
+			else if(split[0].equals("Texture"))
 				texture = split[1];
-			}
 			
 			//Movement Variables
-			if(split[0].equals("MaxThrottle"))
+			else if(split[0].equals("MaxThrottle"))
 				maxThrottle = Float.parseFloat(split[1]);
-			if(split[0].equals("MaxNegativeThrottle"))
+			else if(split[0].equals("MaxNegativeThrottle"))
 				maxNegativeThrottle = Float.parseFloat(split[1]);
-			if(split[0].equals("Drag"))
+			else if(split[0].equals("Drag"))
 				drag = Float.parseFloat(split[1]);
-            if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
+			else if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
             	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
-            if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
+			else if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
             	collisionPoints.add(new DriveablePosition(split));
+			//Boats
+			else if(split[0].equals("PlaceableOnLand"))
+            	placeableOnLand = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("PlaceableOnWater"))
+            	placeableOnWater = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("FloatOnWater"))
+            	floatOnWater = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("Boat"))
+            {
+            	placeableOnLand = false;
+            	placeableOnWater = true;
+            	floatOnWater = true;
+            }
+			else if(split[0].equals("Buoyancy"))
+				buoyancy = Float.parseFloat(split[1]);
             
             //Wheels
-            if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
+			else if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
             {
             	wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
             }
-            if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
+			else if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
             	wheelStepHeight = Float.parseFloat(split[1]);            
-            if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
+			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
                 wheelSpringStrength = Float.parseFloat(split[1]);
             
 			//Cargo / Payload
-			if(split[0].equals("CargoSlots"))
+			else if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);
-			if(split[0].equals("BombSlots") || split[0].equals("MineSlots"))
+			else if(split[0].equals("BombSlots") || split[0].equals("MineSlots"))
 				numBombSlots = Integer.parseInt(split[1]);
-			if(split[0].equals("MissileSlots") || split[0].equals("ShellSlots"))
+			else if(split[0].equals("MissileSlots") || split[0].equals("ShellSlots"))
 				numMissileSlots = Integer.parseInt(split[1]);
-			if(split[0].equals("FuelTankSize"))
+			else if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);
 			
-			if(split[0].equals("BulletDetection"))
+			else if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
 			
 			//Ammo limiters
-			if(split[0].equals("AddAmmo"))
+			else if(split[0].equals("AddAmmo"))
 				ammo.add(BulletType.getBullet(split[1]));
-			if(split[0].equals("AllowAllAmmo") || split[0].equals("AcceptAllAmmo"))
+			else if(split[0].equals("AllowAllAmmo") || split[0].equals("AcceptAllAmmo"))
 				acceptAllAmmo = Boolean.parseBoolean(split[1]);
 			
 			//Weaponry
-			if(split[0].equals("Primary"))
+			else if(split[0].equals("Primary"))
 				primary = EnumWeaponType.valueOf(split[1].toUpperCase());
-			if(split[0].equals("Secondary"))
+			else if(split[0].equals("Secondary"))
 				secondary = EnumWeaponType.valueOf(split[1].toUpperCase());
-			if(split[0].equals("ShootDelayPrimary"))
+			else if(split[0].equals("ShootDelayPrimary"))
 				shootDelayPrimary = Integer.parseInt(split[1]);
-			if(split[0].equals("ShootDelaySecondary"))
+			else if(split[0].equals("ShootDelaySecondary"))
 				shootDelaySecondary = Integer.parseInt(split[1]);
-			if(split[0].equals("AlternatePrimary"))
+			else if(split[0].equals("AlternatePrimary"))
 				alternatePrimary = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("AlternateSecondary"))
+			else if(split[0].equals("AlternateSecondary"))
 				alternateSecondary = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("ModePrimary"))
+			else if(split[0].equals("ModePrimary"))
 				modePrimary = EnumFireMode.valueOf(split[1].toUpperCase());
-			if(split[0].equals("ModeSecondary"))
+			else if(split[0].equals("ModeSecondary"))
 				modeSecondary = EnumFireMode.valueOf(split[1].toUpperCase());
-			if(split[0].equals("ShootPointPrimary"))
+			else if(split[0].equals("ShootPointPrimary"))
 			{
 				DriveablePosition shootPoint = getShootPoint(split);
 				shootPointsPrimary.add(shootPoint);
 				if(shootPoint instanceof PilotGun)
 					pilotGuns.add((PilotGun)shootPoint);
 			}
-			if(split[0].equals("ShootPointSecondary"))
+			else if(split[0].equals("ShootPointSecondary"))
 			{
 				DriveablePosition shootPoint = getShootPoint(split);
 				shootPointsSecondary.add(shootPoint);
@@ -249,7 +270,7 @@ public class DriveableType extends InfoType
 			
 			
 			//Backwards compatibility stuff
-			if(split[0].equals("AddGun"))
+			else if(split[0].equals("AddGun"))
 			{
 				secondary = EnumWeaponType.GUN;
 				PilotGun pilotGun = (PilotGun)getShootPoint(split);
@@ -257,23 +278,23 @@ public class DriveableType extends InfoType
 				pilotGuns.add(pilotGun);
 				recipe.add(new ItemStack(pilotGun.type.item));
 			}
-			if(split[0].equals("BombPosition"))
+			else if(split[0].equals("BombPosition"))
 			{
 				primary = EnumWeaponType.BOMB;
 				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.core));	
 			}
-			if(split[0].equals("BarrelPosition"))
+			else if(split[0].equals("BarrelPosition"))
 			{
 				primary = EnumWeaponType.SHELL;
 				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.turret));	
 			}
-			if(split[0].equals("ShootDelay"))
+			else if(split[0].equals("ShootDelay"))
 				shootDelaySecondary = Integer.parseInt(split[1]);
-			if(split[0].equals("ShellDelay") || split[0].equals("BombDelay"))
+			else if(split[0].equals("ShellDelay") || split[0].equals("BombDelay"))
 				shootDelayPrimary = Integer.parseInt(split[1]);
 			
 			//Recipe
-			if(split[0].equals("AddRecipeParts"))
+			else if(split[0].equals("AddRecipeParts"))
 			{
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
 				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
@@ -290,7 +311,7 @@ public class DriveableType extends InfoType
 			}
 			
 			//Dyes
-			if(split[0].equals("AddDye"))
+			else if(split[0].equals("AddDye"))
 			{
 				int amount = Integer.parseInt(split[1]);
 				int damage = -1;
@@ -309,7 +330,7 @@ public class DriveableType extends InfoType
 			
 			
 			//Health
-			if(split[0].equals("SetupPart"))
+			else if(split[0].equals("SetupPart"))
 			{
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
 				CollisionBox box = new CollisionBox(Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]), Integer.parseInt(split[8]));
@@ -317,24 +338,24 @@ public class DriveableType extends InfoType
 			}
 			
 			//Driver Position
-			if(split[0].equals("Driver") || split[0].equals("Pilot"))
+			else if(split[0].equals("Driver") || split[0].equals("Pilot"))
 			{
 				if(split.length > 4)
 					seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]), Float.parseFloat(split[6]), Float.parseFloat(split[7]));
 				else seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
 			}
 			
-			if(split[0].equals("RotatedDriverOffset"))
+			else if(split[0].equals("RotatedDriverOffset"))
 			{
 				seats[0].rotatedOffset = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
 			}
-			if(split[0].equals("RotatedPassengerOffset"))
+			else if(split[0].equals("RotatedPassengerOffset"))
 			{
 				seats[Integer.parseInt(split[1])].rotatedOffset = new Vector3f(Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F, Integer.parseInt(split[4]) / 16F);
 			}
 			
 			//Passengers / Gunner Seats
-			if(split[0].equals("Passenger"))
+			else if(split[0].equals("Passenger"))
 			{
 				Seat seat = new Seat(split);
 				seats[seat.id] = seat;
@@ -344,43 +365,43 @@ public class DriveableType extends InfoType
 					recipe.add(new ItemStack(seat.gunType.item));
 				}
 			}
-			if(split[0].equals("GunOrigin"))
+			else if(split[0].equals("GunOrigin"))
 				seats[Integer.parseInt(split[1])].gunOrigin = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
 						
 			//Y offset for badly built models :P
-			if(split[0].equals("YOffset"))
+			else if(split[0].equals("YOffset"))
 				yOffset = Float.parseFloat(split[1]);
             //Third person camera distance
-			if(split[0].equals("CameraDistance"))
+			else if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
 			
 			//Sound
-			if(split[0].equals("StartSoundLength"))
+			else if(split[0].equals("StartSoundLength"))
 				startSoundLength = Integer.parseInt(split[1]);
-			if(split[0].equals("EngineSoundLength"))
+			else if(split[0].equals("EngineSoundLength"))
 				engineSoundLength = Integer.parseInt(split[1]);
-			if(split[0].equals("StartSound"))
+			else if(split[0].equals("StartSound"))
 			{
 				startSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
-			if(split[0].equals("EngineSound"))
+			else if(split[0].equals("EngineSound"))
 			{
 				engineSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
-			if(split[0].equals("ShootMainSound") || split[0].equals("ShootSoundPrimary") || split[0].equals("ShellSound") || split[0].equals("BombSound"))
+			else if(split[0].equals("ShootMainSound") || split[0].equals("ShootSoundPrimary") || split[0].equals("ShellSound") || split[0].equals("BombSound"))
 			{
 				shootSoundPrimary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
-			if(split[0].equals("ShootSecondarySound") || split[0].equals("ShootSoundSecondary"))
+			else if(split[0].equals("ShootSecondarySound") || split[0].equals("ShootSoundSecondary"))
 			{
 				shootSoundSecondary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			// ICBM Mod Radar
-            if(split[0].equals("OnRadar"))
+			else if(split[0].equals("OnRadar"))
                 onRadar = split[1].equals("True");
 		}
 		catch (Exception e)
