@@ -75,31 +75,6 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
 		//ClientRegistry.registerKeyBinding(zoomKey);
-		/*
-		 *  TODO : Note. This information (hold key or single shot key) has been lost.
-				true, // accelerate key
-				true, // decelerate
-				true, // left
-				true, // right
-				true, // up
-				true, // down
-				false, // exit
-				false, // inventory
-				true, // bomb
-				true, // gun
-				false, // control switch
-				true, //left Roll
-				true, //right Roll
-                false, // gear
-                false, // door
-                false, //wing
-                false, // trim button
-				false, // teams menu
-				false, // teams scores menu
-				false, //reload
-				false, //debug
-				false //reloadModels
-						});*/
 		
 		mc = Minecraft.getMinecraft();
 	}

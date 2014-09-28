@@ -54,11 +54,6 @@ public class CommonProxy
 		return contentPacks;
 	}
 	
-	public void tick()
-	{
-		
-	}
-	
 	/** A ton of client only methods follow */
 	public void load()
 	{
