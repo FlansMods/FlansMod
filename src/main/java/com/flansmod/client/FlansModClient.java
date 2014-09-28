@@ -444,12 +444,14 @@ public class FlansModClient extends FlansMod
 		return true;
 	}
 	
-	public static void reloadModels()
+	public static void reloadModels(boolean reloadSkins)
 	{
 		for(InfoType type : InfoType.infoTypes)
 		{
 			type.reloadModel();
 		}
+		if(reloadSkins)
+			proxy.forceReload();
 	}
 	
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();

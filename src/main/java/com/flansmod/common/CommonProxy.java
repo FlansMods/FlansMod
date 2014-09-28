@@ -67,12 +67,7 @@ public class CommonProxy
 	public void forceReload()
 	{
 	}
-	
-	public List<File> getContentList()
-	{
-		return null;
-	}	
-	
+		
 	public void registerRenderers()
 	{
 	}

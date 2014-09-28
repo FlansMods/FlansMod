@@ -87,11 +87,14 @@ public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "com.flansmod.client.model.";
 	
+	/* These renderers handle rendering in hand items */
 	public static RenderGun gunRenderer;
 	public static RenderGrenade grenadeRenderer;
 	public static RenderPlane planeRenderer;
 	public static RenderVehicle vehicleRenderer;
 	public static RenderMecha mechaRenderer;
+	
+	/** The file locations of the content packs, used for loading */
 	public List<File> contentPacks;
 
 	@Override
@@ -165,12 +168,6 @@ public class ClientProxy extends CommonProxy
 		return contentPacks;
 	}
 	
-	@Override
-	public List<File> getContentList()
-	{
-		return contentPacks;
-	}
-
 	@Override
 	public void registerRenderers()
 	{		

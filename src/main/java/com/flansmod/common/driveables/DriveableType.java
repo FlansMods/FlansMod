@@ -203,6 +203,7 @@ public class DriveableType extends InfoType
             	placeableOnLand = false;
             	placeableOnWater = true;
             	floatOnWater = true;
+            	wheelStepHeight = 0F;
             }
 			else if(split[0].equals("Buoyancy"))
 				buoyancy = Float.parseFloat(split[1]);

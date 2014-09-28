@@ -130,7 +130,7 @@ public class GuiDriveableController extends GuiScreen
 		}
 		if(i == KeyInputHandler.reloadModelsKey.getKeyCode())
 		{
-			FlansModClient.reloadModels();
+			FlansModClient.reloadModels(false);
 		}
     }
 	
