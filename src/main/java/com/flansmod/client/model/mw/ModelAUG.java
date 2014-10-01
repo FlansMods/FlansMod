@@ -1,7 +1,3 @@
-//This File was created with the Minecraft-SMP Modelling Toolbox 2.0.0.0
-// Copyright (C) 2014 Minecraft-SMP.de
-// This file is for Flan's Flying Mod Version 4.0.x+
-
 package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.EnumAnimationType;
