@@ -2,15 +2,15 @@ package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.EntityVehicle;
 
 public class PacketDriveableControl extends PacketBase
 {
@@ -21,6 +21,7 @@ public class PacketDriveableControl extends PacketBase
 	public float avelx, avely, avelz;
 	public float throttle;
 	public float fuelInTank;
+	public float steeringYaw;
 	
 	public PacketDriveableControl() {}
 	
@@ -41,6 +42,16 @@ public class PacketDriveableControl extends PacketBase
 		avelz = driveable.angularVelocity.z;
 		throttle = driveable.throttle;
 		fuelInTank = driveable.driveableData.fuelInTank;
+		if(driveable instanceof EntityVehicle)
+		{
+			EntityVehicle veh = (EntityVehicle)driveable;
+			steeringYaw = veh.wheelsYaw;
+		}
+		else if(driveable instanceof EntityPlane)
+		{
+			EntityPlane plane = (EntityPlane)driveable;
+			steeringYaw = plane.flapsYaw;
+		}
 	}
 		
 	@Override
@@ -61,6 +72,7 @@ public class PacketDriveableControl extends PacketBase
     	data.writeFloat(avelz);
     	data.writeFloat(throttle);
     	data.writeFloat(fuelInTank);
+    	data.writeFloat(steeringYaw);
 	}
 
 	@Override
@@ -81,6 +93,7 @@ public class PacketDriveableControl extends PacketBase
 		avelz = data.readFloat();
 		throttle = data.readFloat();
 		fuelInTank = data.readFloat();
+		steeringYaw = data.readFloat();
 	}
 
 	@Override
@@ -101,7 +114,7 @@ public class PacketDriveableControl extends PacketBase
 	
 	protected void updateDriveable(EntityDriveable driveable, boolean clientSide)
 	{
-		driveable.setPositionRotationAndMotion(posX, posY, posZ, yaw, pitch, roll, motX, motY, motZ, avelx, avely, avelz, throttle);
+		driveable.setPositionRotationAndMotion(posX, posY, posZ, yaw, pitch, roll, motX, motY, motZ, avelx, avely, avelz, throttle, steeringYaw);
 		driveable.driveableData.fuelInTank = fuelInTank;
 	}
 

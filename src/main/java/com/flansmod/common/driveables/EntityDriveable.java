@@ -352,7 +352,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
     }
 	
-	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throt)
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throt, float steeringYaw)
 	{
 		if(worldObj.isRemote)
 		{
