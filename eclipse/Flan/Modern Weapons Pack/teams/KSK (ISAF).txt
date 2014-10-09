@@ -1,0 +1,19 @@
+Name German KSK (ISAF)
+ShortName isaf
+//TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
+//This is used for player names and such
+TextColour Yellow
+//TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
+TeamColour 80 80 0
+//Specify the armour this team should spawn with
+Hat isafHelmet
+Chest isafBody
+Legs isafPants
+Shoes isafBoots
+AddClass kskSniper1
+AddClass kskSniper2
+AddClass kskDualWield1
+AddClass kskAssault1
+AddClass kskAssault2
+AddClass kskMedic1
+AddClass kskEngineer1
