@@ -13,6 +13,11 @@ marineHelmet cloth.8 5
 marineBody cloth.8 8
 marinePants cloth.8 7
 marineBoots cloth.4 4
+AddArmour isaf German KSK (ISAF)
+isafHelmet cloth.4 5
+isafBody cloth.4 8
+isafPants cloth.4 7
+isafBoots cloth.4 4
 AddArmour spetsnaz Spetsnaz
 spetsnazHelmet cloth.13 5
 spetsnazBody cloth.7 8
