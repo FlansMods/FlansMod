@@ -1,0 +1,7 @@
+Name German KSK (ISAF) Helmet
+ShortName isafHelmet
+Icon ISAFHelmet
+Colour 255 255 255
+Type Hat
+Defence 0.1
+ArmourTexture ISAF
