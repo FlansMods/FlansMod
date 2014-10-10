@@ -147,7 +147,10 @@ public class AAGunType extends InfoType
 				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("ShareAmmo"))
 				shareAmmo = Boolean.parseBoolean(split[1]);
-
+			if (split[0].equals("TargetRange"))
+			{
+				targetRange = Float.parseFloat(split[1]);
+			}
 		} catch (Exception e)
 		{
 			FlansMod.log("" + e);
