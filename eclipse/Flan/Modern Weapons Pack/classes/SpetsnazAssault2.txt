@@ -1,9 +1,12 @@
 Name Heavy Assault
 ShortName spetsnazAssault2
 AddItem rpd
-AddItem m9
-AddItem rpg
+AddItem desertEagle
+AddItem m67 1
 AddItem mwKnife
 AddItem rpdAmmo 2
-AddItem m9Ammo 2
-AddItem rpgAmmo 2
+AddItem desertEagleAmmo 4
+Hat juggernautHelmet
+Chest juggernautBody
+Legs juggernautPants
+Shoes juggernautBoots

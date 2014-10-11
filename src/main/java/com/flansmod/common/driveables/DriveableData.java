@@ -13,15 +13,17 @@ import com.flansmod.common.parts.PartType;
 
 public class DriveableData implements IInventory
 {
-	public int numGuns;
-	public int numBombs;
-	public int numCargo;
+	/** The name of this driveable's type */
 	public String type;
+	/** The sizes of each inventory (guns, bombs / mines, missiles / shells, cargo) */
+	public int numGuns, numBombs, numMissiles, numCargo;
+	/** The inventory stacks */
+	public ItemStack[] ammo, bombs, missiles, cargo;
+	/** The engine in this driveable */
 	public PartType engine;
-	public ItemStack[] ammo;
-	public ItemStack[] bombs;
-	public ItemStack[] cargo;
+	/** The stack in the fuel slot */
 	public ItemStack fuel;
+	/** The amount of fuel in the tank */
 	public float fuelInTank;
 	/** Each driveable part has a small class that holds its current status */
 	public HashMap<EnumDriveablePart, DriveablePart> parts;
@@ -43,23 +45,25 @@ public class DriveableData implements IInventory
 		DriveableType dType = DriveableType.getDriveable(type);
 		numBombs = dType.numBombSlots;
 		numCargo = dType.numCargoSlots;
-		numGuns = dType.numPassengerGunners + dType.guns.size();
+		numMissiles = dType.numMissileSlots;
+		numGuns = dType.ammoSlots();
 		engine = PartType.getPart(tag.getString("Engine"));
 		ammo = new ItemStack[numGuns];
 		bombs = new ItemStack[numBombs];
+		missiles = new ItemStack[numMissiles];
 		cargo = new ItemStack[numCargo];
 		for(int i = 0; i < numGuns; i++)
-		{
 			ammo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Ammo " + i));
-		}
+		
 		for(int i = 0; i < numBombs; i++)
-		{
 			bombs[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Bombs " + i));
-		}
+
+		for(int i = 0; i < numMissiles; i++)
+			missiles[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Missiles " + i));
+
  		for(int i = 0; i < numCargo; i++)
-		{
 			cargo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Cargo " + i));
-		}
+
 		fuel = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Fuel"));
 		fuelInTank = tag.getInteger("FuelInTank");
 		for(EnumDriveablePart part : EnumDriveablePart.values())
@@ -85,6 +89,11 @@ public class DriveableData implements IInventory
 		{
 			if(bombs[i] != null)
 				tag.setTag("Bombs " + i, bombs[i].writeToNBT(new NBTTagCompound()));
+		}
+		for(int i = 0; i < missiles.length; i++)
+		{
+			if(missiles[i] != null)
+				tag.setTag("Missiles " + i, missiles[i].writeToNBT(new NBTTagCompound()));
 		}
 		for(int i = 0; i < cargo.length; i++)
 		{
@@ -118,10 +127,15 @@ public class DriveableData implements IInventory
 			if(i >= bombs.length)
 			{
 				i -= bombs.length;
-				inv = cargo;
-				if(i >= cargo.length)
+				inv = missiles;
+				if(i >= missiles.length)
 				{
-					return fuel;
+					i -= missiles.length;
+					inv = cargo;
+					if(i >= cargo.length)
+					{
+						return fuel;
+					}
 				}
 			}	
 		}
@@ -141,15 +155,20 @@ public class DriveableData implements IInventory
 			if(i >= bombs.length)
 			{
 				i -= bombs.length;
-				inv = cargo;
-				if(i >= cargo.length)
+				inv = missiles;
+				if(i >= missiles.length)
 				{
-					//Put the fuel stack in a stack array just to simplify the code
-					i -= cargo.length;
-					inv = new ItemStack[1];
-					inv[0] = fuel;		
-
-					setInventorySlotContents(getFuelSlot(), null);
+					i -= missiles.length;
+					inv = cargo;
+					if(i >= cargo.length)
+					{
+						//Put the fuel stack in a stack array just to simplify the code
+						i -= cargo.length;
+						inv = new ItemStack[1];
+						inv[0] = fuel;		
+	
+						setInventorySlotContents(getFuelSlot(), null);
+					}
 				}
 			}	
 		}
@@ -193,11 +212,16 @@ public class DriveableData implements IInventory
 			if(i >= bombs.length)
 			{
 				i -= bombs.length;
-				inv = cargo;
-				if(i >= cargo.length)
+				inv = missiles;
+				if(i >= missiles.length)
 				{
-					fuel = stack;
-					return;
+					i -= missiles.length;
+					inv = cargo;
+					if(i >= cargo.length)
+					{
+						fuel = stack;
+						return;
+					}
 				}
 			}	
 		}
@@ -242,14 +266,19 @@ public class DriveableData implements IInventory
 		return ammo.length;
 	}	
 	
-	public int getCargoInventoryStart()
+	public int getMissileInventoryStart()
 	{
 		return ammo.length + bombs.length;
+	}	
+	
+	public int getCargoInventoryStart()
+	{
+		return ammo.length + bombs.length + missiles.length; 
 	}
 	
 	public int getFuelSlot()
 	{
-		return ammo.length + bombs.length + cargo.length;
+		return ammo.length + bombs.length + missiles.length + cargo.length;
 	}
 
 	@Override
@@ -265,7 +294,11 @@ public class DriveableData implements IInventory
 		{
 			return true;
 		}		
-		if(i >= getBombInventoryStart() && i < getCargoInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
+		if(i >= getBombInventoryStart() && i < getMissileInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
+		{
+			return true;
+		}
+		if(i >= getMissileInventoryStart() && i < getCargoInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet)
 		{
 			return true;
 		}

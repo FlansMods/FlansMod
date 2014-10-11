@@ -54,11 +54,6 @@ public class CommonProxy
 		return contentPacks;
 	}
 	
-	public void tick()
-	{
-		
-	}
-	
 	/** A ton of client only methods follow */
 	public void load()
 	{
@@ -67,12 +62,7 @@ public class CommonProxy
 	public void forceReload()
 	{
 	}
-	
-	public List<File> getContentList()
-	{
-		return null;
-	}	
-	
+		
 	public void registerRenderers()
 	{
 	}
@@ -127,16 +117,20 @@ public class CommonProxy
 	{
 		switch(ID) 
 		{	
-			case 2: return new ContainerGunModTable(player.inventory, world);
-			case 3: return new ContainerDriveableMenu(player.inventory, world);
-			case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
-			
-			//Plane inventory screens
-			case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
-			case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
-			case 8: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
-			case 9: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
-			case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
+		case 0 : return null; //Driveable crafting. No server side
+		case 1 : return null; //Driveable repair. No server side
+		case 2: return new ContainerGunModTable(player.inventory, world);
+		case 3: return new ContainerDriveableMenu(player.inventory, world);
+		case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
+		case 5 : return null; //Gun box. No server side
+		//Plane inventory screens
+		case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
+		case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
+		case 8: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
+		case 9: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
+		case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
+		case 11 : return null; //Armour box. No server side
+		case 12 : return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
 		}
 		return null;
 	}

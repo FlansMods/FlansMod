@@ -1,0 +1,9 @@
+Name Juggernaut Heavy Bodyarmour (Brown)
+ShortName juggernautBodyBrown
+Icon JuggernautBodyBrown
+Colour 255 255 255
+Type Chest
+Defence 0.4
+ArmourTexture BrownJuggernaut
+MoveSpeedModifier 0.65
+KnockbackModifier 0.25

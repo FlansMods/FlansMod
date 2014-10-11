@@ -12,7 +12,7 @@ ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 22
 //Damage in half hearts
-Damage 18
+Damage 25
 //The higher this value, the more the bullets spread
 Accuracy 3
 //Time in ticks between rounds
@@ -20,6 +20,8 @@ ShootDelay 12
 ShootSound BarrettShoot
 ReloadSound BARReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 20.0
 //Default Scope Settings
 Scope mwbarrett
 ZoomLevel 6.0
@@ -33,7 +35,7 @@ Texture Barrett
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

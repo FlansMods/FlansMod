@@ -1,0 +1,7 @@
+Name German KSK Helmet
+ShortName kskHelmet
+Icon KSKHelmet
+Colour 255 255 255
+Type Hat
+Defence 0.1
+ArmourTexture KSK

@@ -14,8 +14,6 @@ import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelM1carbine extends ModelGun
 {
@@ -102,5 +100,6 @@ public class ModelM1carbine extends ModelGun
 
 		flipAll();
 		translateAll(0F, 2F, 0F);
+		thirdPersonOffset = new Vector3f(0F, -0.1F, 0F);
 	}
 }

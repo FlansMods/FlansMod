@@ -55,6 +55,8 @@ public class GrenadeType extends InfoType
 	public String bounceSound = "";
 	/** Whether the grenade should stick to surfaces */
 	public boolean sticky = false;
+	/** If true, then the grenade will stick to the player that threw it. Used to make delayed self destruct weapons */
+	public boolean stickToThrower = false;
 	
 	//Conditions for detonation
 	/** If > 0 this will act like a mine and explode when a living entity comes within this radius of the grenade */
@@ -67,6 +69,8 @@ public class GrenadeType extends InfoType
 	public boolean detonateWhenShot = false;
 	/** If true, then this grenade can be detonated by any remote detonator tool */
 	public boolean remote = false;
+	/** How much damage to deal to the entity that triggered it */
+	public float damageToTriggerer = 0F;
 	
 	//Detonation
 	/** The radius in which to spread fire */
@@ -153,6 +157,8 @@ public class GrenadeType extends InfoType
 				livingProximityTrigger = Float.parseFloat(split[1]);	
 			if(split[0].equals("VehicleProximityTrigger"))
 				driveableProximityTrigger = Float.parseFloat(split[1]);	
+			if(split[0].equals("DamageToTriggerer"))
+				damageToTriggerer = Float.parseFloat(split[1]);
 			if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
 			if(split[0].equals("DetonateWhenShot"))
@@ -163,6 +169,8 @@ public class GrenadeType extends InfoType
 				fireRadius = Float.parseFloat(split[1]);
 			if(split[0].equals("ExplosionRadius"))
 				explosionRadius = Float.parseFloat(split[1]);
+			if(split[0].equals("StickToThrower"))
+				stickToThrower = Boolean.parseBoolean(split[1]);
 			
 			if(split[0].equals("ExplosionDamageVsLiving"))
 				explosionDamageVsLiving = Float.parseFloat(split[1]);

@@ -1,17 +1,14 @@
 package com.flansmod.common.teams;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -60,6 +57,10 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	        angle += 0.05D;
 	        setPosition(xCoord + 0.5F + Math.cos(angle) * 0.3F, yCoord + 0.5F, zCoord + 0.5F + Math.sin(angle) * 0.3F);
         }
+        
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
     }
     
     public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
@@ -111,9 +112,18 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{
-		data.writeInt(spawner.xCoord);
-		data.writeInt(spawner.yCoord);
-		data.writeInt(spawner.zCoord);
+		if(spawner == null)
+		{
+			data.writeInt(0);
+			data.writeInt(0);
+			data.writeInt(0);
+		}
+		else
+		{
+			data.writeInt(spawner.xCoord);
+			data.writeInt(spawner.yCoord);
+			data.writeInt(spawner.zCoord);
+		}
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();
 		//Getter of EntityItem
@@ -136,4 +146,16 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	{
 		setDead();
 	}
+	
+    @Override
+    public boolean canAttackWithItem()
+    {
+        return false;
+    }
+    
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

@@ -1,0 +1,7 @@
+Name German KSK Boots
+ShortName kskBoots
+Icon KSKBoots
+Colour 255 255 255
+Type Boots
+Defence 0.1
+ArmourTexture KSK

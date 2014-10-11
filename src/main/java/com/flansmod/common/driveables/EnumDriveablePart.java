@@ -16,6 +16,10 @@ public enum EnumDriveablePart
 	nose(new EnumDriveablePart[] { }, "nose", "Nose"),
 	coreWheel(new EnumDriveablePart[] { }, "coreWheel", "Wheel (Core)"),
 	
+	//Helicopter parts
+	skids(new EnumDriveablePart[] { }, "skids", "Skids"),
+	blades(new EnumDriveablePart[] { }, "blades", "Blades"),
+	
 	//Vehicle parts
 	turret(new EnumDriveablePart[] { }, "turret", "Turret"),
 	backWheel(new EnumDriveablePart[] { }, "backWheel", "Back Wheel"),
@@ -33,9 +37,10 @@ public enum EnumDriveablePart
 	rightArm(new EnumDriveablePart[] { }, "rightArm", "Right Arm"),
 	head(new EnumDriveablePart[] { }, "head", "Head"),
 	hips(new EnumDriveablePart[] { }, "hips", "Hips"),
+	barrel(new EnumDriveablePart[] { }, "barrel", "Barrel"),
 
 	//Shared part
-	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, leftArm, rightArm, head, hips, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
+	core(new EnumDriveablePart[] { bay, leftWing, rightWing, nose, turret, coreWheel, leftArm, rightArm, head, hips, blades, skids, backWheel, frontWheel, backLeftWheel, frontLeftWheel, backRightWheel, frontRightWheel, leftTrack, rightTrack, trailer }, "core", "Core");
 	
 	private String shortName;
 	private String name;
@@ -66,7 +71,7 @@ public enum EnumDriveablePart
 					parents.add(part);
 			}
 		}
-		return parents.toArray(new EnumDriveablePart[0]);
+		return parents.toArray(new EnumDriveablePart[parents.size()]);
 	}
 	
 	public String getShortName()

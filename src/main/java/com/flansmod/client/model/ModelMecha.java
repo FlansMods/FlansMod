@@ -21,6 +21,7 @@ public class ModelMecha extends ModelDriveable
 	public ModelRendererTurbo[] leftFootModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] rightFootModel = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo[] headModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] barrelModel = new ModelRendererTurbo[0];
 	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
@@ -39,6 +40,7 @@ public class ModelMecha extends ModelDriveable
 		renderPart(rightLegModel);
 		renderPart(leftFootModel);
 		renderPart(rightFootModel);
+		renderPart(barrelModel);
 		renderPart(headModel);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(mechaType.leftArmOrigin.x / mechaType.modelScale, mechaType.leftArmOrigin.y / mechaType.modelScale, mechaType.leftArmOrigin.z / mechaType.modelScale);
@@ -62,6 +64,17 @@ public class ModelMecha extends ModelDriveable
         if(mecha.isPartIntact(EnumDriveablePart.head))
         	for(ModelRendererTurbo model : headModel)
         		model.render(f5);
+
+		float pitch = mecha.seats[0] == null ? 0F : mecha.seats[0].looking.getPitch();
+        
+        if(mecha.isPartIntact(EnumDriveablePart.barrel))
+        {
+			for(int i = 0; i < barrelModel.length; i++)
+			{
+				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
+				barrelModel[i].render(f5, oldRotateOrder);
+			}
+        }
 	}
 		
 	public void renderLeftArm(float f5, EntityMecha mecha, float f)
@@ -132,6 +145,7 @@ public class ModelMecha extends ModelDriveable
 		flip(leftFootModel);
 		flip(rightFootModel);
 		flip(headModel);
+		flip(barrelModel);
 	}	
 	
 	@Override
@@ -148,5 +162,6 @@ public class ModelMecha extends ModelDriveable
 		translate(leftFootModel, x, y, z);
 		translate(rightFootModel, x, y, z);
 		translate(headModel, x, y, z);
+		translate(barrelModel, x, y, z);
 	}
 }

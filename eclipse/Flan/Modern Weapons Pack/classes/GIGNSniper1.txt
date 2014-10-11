@@ -1,0 +1,9 @@
+Name Heavy Sniper
+ShortName gignSniper1
+AddItem l96
+AddItem m1911
+AddItem m67 2
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem l96Ammo 3
+AddItem m1911Ammo 2

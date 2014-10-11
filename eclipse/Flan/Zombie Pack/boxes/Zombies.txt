@@ -1,0 +1,41 @@
+Name Anti-Zombie Weapons Box
+ShortName zombieBox
+TopTexture ZombieWeaponBoxTop
+SideTexture ZombieWeaponBox
+BottomTexture ZombieWeaponBox
+Recipe I ingotIron W wood
+WWW
+III
+WWW
+//AddGun shortName amountOf item
+//AddAmmo must come immediately after AddGun for them to be in the same slot
+//The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
+//And with parts from this mod, they are the shortName of the item
+//Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
+//NumGuns must come before all the addGun lines and must be correct.
+NumGuns 16
+AddGun winchesterModel70 12 ingotIron 8 wood 4 glass
+AddAmmo 3006Bullet 1 ingotIron 1 gunpowder
+AddGun m4Carbine 16 ingotIron
+AddAmmo m4CarbineAmmo 3 ingotIron 3 gunpowder
+AddGun mp5k 10 ingotIron
+AddAmmo mp5kAmmo 2 ingotIron 2 gunpowder
+AddGun olympia 12 ingotIron 8 wood
+AddAmmo 12gaugeShell 1 ingotIron 1 gunpowder
+AddAltAmmo 12gaugeShellIncendiary 1 ingotIron 3 gunpowder
+AddGun doubleBarrelledShotgun 8 ingotIron 6 wood
+AddAmmo 12gaugeShell 1 ingotIron 1 gunpowder
+AddAltAmmo 12gaugeShellIncendiary 1 ingotIron 3 gunpowder
+AddGun coltPython 8 ingotIron
+AddAmmo 357Magnum 1 ingotIron 1 gunpowder
+AddGun flareGun 9 ingotIron
+AddAmmo flareGunAmmo 2 ingotIron 2 gunpowder 1 redstone
+AddGun zomRiotShield 16 ingotIron
+AddGun combatKnife 6 ingotIron
+AddGun surgicalAxe 8 ingotIron
+AddGun samuraiSword 12 ingotIron
+AddGun zombieMachete 5 ingotIron 3 wood
+AddGun screwdriver 2 ingotIron
+AddGun baseballBat 16 wood
+AddGun sledgehammer 12 ingotIron 8 wood
+AddGun bearTrap 12 ingotIron

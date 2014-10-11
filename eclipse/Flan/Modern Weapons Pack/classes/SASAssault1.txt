@@ -1,0 +1,8 @@
+Name Light Assault
+ShortName sasAssault1
+AddItem fnscar
+AddItem sigP226
+AddItem m67 2
+AddItem mwKnife
+AddItem fnscarAmmo 3
+AddItem sigP226Ammo 2

@@ -129,6 +129,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	{
 		channels = NetworkRegistry.INSTANCE.newChannel("FlansMod", this);
 		
+		registerPacket(PacketAAGunAngles.class);
 		registerPacket(PacketBaseEdit.class);
 		registerPacket(PacketBreakSound.class);
 		registerPacket(PacketBuyArmour.class);
@@ -146,17 +147,19 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketMechaControl.class);	
 		registerPacket(PacketMGFire.class);	
 		registerPacket(PacketMGMount.class);	
+		registerPacket(PacketOffHandGunInfo.class);	
 		registerPacket(PacketPlaneControl.class);	
 		registerPacket(PacketPlaySound.class);	
 		registerPacket(PacketReload.class);	
 		registerPacket(PacketRepairDriveable.class);
 		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);	
+		registerPacket(PacketSelectOffHandGun.class);	
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
 		registerPacket(PacketVehicleControl.class);
-		
-		
+		registerPacket(PacketVoteCast.class);
+		registerPacket(PacketVoting.class);
 	}
 
 	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 

@@ -3,6 +3,7 @@ package com.flansmod.common.driveables;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.vector.Vector3f;
 
 public class DriveablePart 
@@ -11,6 +12,7 @@ public class DriveablePart
 	public CollisionBox box;
 	public int maxHealth;
 	public int health;
+	public int fireTime;
 	public boolean onFire;
 	/** Keeps track of whether death code has been called or not */
 	public boolean dead;
@@ -24,6 +26,10 @@ public class DriveablePart
 	
 	public void update(EntityDriveable driveable)
 	{
+		if(fireTime > 0)
+			fireTime--;
+		if(fireTime == 0)
+			onFire = false;
 		if(onFire)
 			health--;
 		if(health <= 0 && maxHealth > 0)
@@ -66,18 +72,18 @@ public class DriveablePart
 		health -= (int)(damage / 2F);
 		return damage / 2F;
 	}
-	
+		
 	/** Called by bullets that may have hit the plane 
-	 * Pass in a null bullet to simply do a raytrace check
-	 * @return Whether the bullet should consider itself to have hit something (which would mean destroying the bullet unless it penetrates) */
-	public boolean rayTrace(EntityDriveable driveable, EntityBullet bullet, Vector3f origin, Vector3f motion)
+	 * @return A bullet hit if it hit. Otherwise null */
+	public DriveableHit rayTrace(EntityDriveable driveable, Vector3f origin, Vector3f motion)
 	{
 		if(box == null || health <= 0 || dead)
-			return false;
+			return null;
 		if(!driveable.canHitPart(type))
-			return false;
+			return null;
 
 		//Complicated. Will explain later. Someone remind me.
+		/*
 		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
 		boolean enteringY = coordIsEntering(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
 		boolean enteringZ = coordIsEntering(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
@@ -85,15 +91,90 @@ public class DriveablePart
 		boolean inY = coordIsIn(origin.y, origin.y + motion.y, box.y / 16F, (box.y + box.h) / 16F);
 		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
 		boolean hit = (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
+		*/
+				
+		//We now have an AABB starting at box(x, y, z) and with dimensions box(w, h, d) and our ray in the same coordinate system
+		//We are looking for a point at which the ray enters the box, so we need only consider faces that the ray can see. Partition the space into 3 areas in each axis
 		
-		//If the bullet hits, perform damage code here, and then tell the bullet that it hit
-		if(bullet != null && hit)
+		//X - axis and faces x = box.x and x = box.x + box.w
+		if(motion.x != 0F)
+		{
+			if(origin.x < box.x) //Check face x = o.x
+			{
+				float intersectTime = (box.x - origin.x) / motion.x;
+				float intersectY = origin.y + motion.y * intersectTime;
+				float intersectZ = origin.z + motion.z * intersectTime;
+				if(intersectY >= box.y && intersectY <= box.y + box.h && intersectZ >= box.z && intersectZ <= box.z + box.d)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+			else if(origin.x > box.x + box.w) //Check face x = o.x + d.x
+			{
+				float intersectTime = (box.x + box.w - origin.x) / motion.x;
+				float intersectY = origin.y + motion.y * intersectTime;
+				float intersectZ = origin.z + motion.z * intersectTime;
+				if(intersectY >= box.y && intersectY <= box.y + box.h && intersectZ >= box.z && intersectZ <= box.z + box.d)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+		}
+		
+		//Z - axis and faces z = box.z and z = box.z + box.d
+		if(motion.z != 0F)
+		{
+			if(origin.z < box.z) //Check face z = box.z
+			{
+				float intersectTime = (box.z - origin.z) / motion.z;
+				float intersectX = origin.x + motion.x * intersectTime;
+				float intersectY = origin.y + motion.y * intersectTime;
+				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectY >= box.y && intersectY <= box.y + box.h)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+			else if(origin.z > box.z + box.d) //Check face z = box.z + box.d
+			{
+				float intersectTime = (box.z + box.d - origin.z) / motion.z;
+				float intersectX = origin.x + motion.x * intersectTime;
+				float intersectY = origin.y + motion.y * intersectTime;
+				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectY >= box.y && intersectY <= box.y + box.h)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+		}
+		
+		//Y - axis and faces y = box.y and y = box.y + box.h
+		if(motion.y != 0F)
+		{
+			if(origin.y < box.y) //Check face y = o.y
+			{
+				float intersectTime = (box.y - origin.y) / motion.y;
+				float intersectX = origin.x + motion.x * intersectTime;
+				float intersectZ = origin.z + motion.z * intersectTime;
+				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectZ >= box.z && intersectZ <= box.z + box.d)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+			else if(origin.y > box.y + box.h) //Check face x = box.y + box.h
+			{
+				float intersectTime = (box.y + box.h - origin.y) / motion.y;
+				float intersectX = origin.x + motion.x * intersectTime;
+				float intersectZ = origin.z + motion.z * intersectTime;
+				if(intersectX >= box.x && intersectX <= box.x + box.w && intersectZ >= box.z && intersectZ <= box.z + box.d)
+					return new DriveableHit(driveable, type, intersectTime);
+			}
+		}
+
+		return null;
+	}
+	
+	/** Called when the bullet decided that it hit this driveable part */
+	public void hitByBullet(EntityBullet bullet)
+	{
+		//Perform damage code
+		if(bullet != null)
 		{
 			health -= bullet.damage * bullet.type.damageVsDriveable;
-			if(bullet.type.fire > 0)
+			if(bullet.type.setEntitiesOnFire)
+			{
+				fireTime = 20;
 				onFire = true;
+			}
 		}
-		return hit;
 	}
 	
 	/** Ray traces a single co-ordinate 
@@ -137,10 +218,14 @@ public class DriveablePart
 		return false;	
 	}
 
-	public void attack(float damage, boolean fireDamage) 
+	public boolean attack(float damage, boolean fireDamage) 
 	{
 		health -= damage;
 		if(fireDamage)
+		{				
+			fireTime = 20;
 			onFire = true;
+		}
+		return health <= 0;
 	}
 }

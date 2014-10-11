@@ -42,11 +42,11 @@ public class KeyInputHandler
 	public static KeyBinding rightRollKey = new KeyBinding("Roll Right Key", Keyboard.KEY_X, "Flan's Mod");
     public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
     public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
-    public static KeyBinding wingKey = new KeyBinding("Wing Reposition Key", Keyboard.KEY_J, "Flan's Mod");
-    public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
+    public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
+    //public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
     public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
     public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
-    public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
+    //public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
 
 	Minecraft mc;
 	
@@ -70,36 +70,11 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(rightRollKey);
 		ClientRegistry.registerKeyBinding(gearKey);
 		ClientRegistry.registerKeyBinding(doorKey);
-		ClientRegistry.registerKeyBinding(wingKey);
-		ClientRegistry.registerKeyBinding(trimKey);
+		ClientRegistry.registerKeyBinding(modeKey);
+		//ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
-		ClientRegistry.registerKeyBinding(zoomKey);
-		/*
-		 *  TODO : Note. This information (hold key or single shot key) has been lost.
-				true, // accelerate key
-				true, // decelerate
-				true, // left
-				true, // right
-				true, // up
-				true, // down
-				false, // exit
-				false, // inventory
-				true, // bomb
-				true, // gun
-				false, // control switch
-				true, //left Roll
-				true, //right Roll
-                false, // gear
-                false, // door
-                false, //wing
-                false, // trim button
-				false, // teams menu
-				false, // teams scores menu
-				false, //reload
-				false, //debug
-				false //reloadModels
-						});*/
+		//ClientRegistry.registerKeyBinding(zoomKey);
 		
 		mc = Minecraft.getMinecraft();
 	}
@@ -126,7 +101,7 @@ public class KeyInputHandler
 		}
 		if(reloadKey.isPressed() && FlansModClient.shootTime <= 0)
 		{
-			FlansMod.getPacketHandler().sendToServer(new PacketReload());
+			FlansMod.getPacketHandler().sendToServer(new PacketReload(false));
 			return;
 		}
 		if(debugKey.isPressed())
@@ -135,7 +110,7 @@ public class KeyInputHandler
 		}
 		if(reloadModelsKey.isPressed())
 		{
-			FlansModClient.reloadModels();
+			FlansModClient.reloadModels(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
 		}
 		
 		//Handle driving keys
@@ -172,10 +147,10 @@ public class KeyInputHandler
 				riding.pressKey(13, player);
 			if(doorKey.isPressed())
 				riding.pressKey(14, player);
-			if(wingKey.isPressed())
+			if(modeKey.isPressed())
 				riding.pressKey(15, player);
-			if(trimKey.isPressed())
-				riding.pressKey(16, player);
+			//if(trimKey.isPressed())
+			//	riding.pressKey(16, player);
 			
 			/*
 			for(KeyBinding key : mc.gameSettings.keyBindings )

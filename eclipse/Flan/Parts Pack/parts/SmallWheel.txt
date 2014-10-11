@@ -8,7 +8,7 @@ ItemID 23260
 Category Wheel
 StackSize 8
 RecipeOutput 1
-Recipe I iron L leather
+Recipe I ingotIron L leather
  L 
 LIL
  L 

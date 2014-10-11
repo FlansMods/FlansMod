@@ -9,6 +9,14 @@ import net.minecraft.world.World;
 
 public class ContainerDriveableInventory extends Container
 {
+	public InventoryPlayer inventory;
+    public World world;
+	public EntityDriveable plane;
+	public int numItems;
+	public int screen;
+	public int maxScroll;
+	public int scroll;
+	
     public ContainerDriveableInventory(InventoryPlayer inventoryplayer, World worldy, EntityDriveable entPlane, int i)
     {
 		inventory = inventoryplayer;
@@ -37,6 +45,12 @@ public class ContainerDriveableInventory extends Container
 				maxScroll = (((numItems + 7) / 8) > 3 ? ((numItems + 7) / 8) - 3 : 0);
 				break;
 			}	
+			case 3 : 
+			{
+				numItems = plane.getDriveableType().numMissileSlots;
+				maxScroll = (((numItems + 7) / 8) > 3 ? ((numItems + 7) / 8) - 3 : 0);
+				break;
+			}	
 		}
 		
 		//Add screen specific slots
@@ -57,10 +71,13 @@ public class ContainerDriveableInventory extends Container
 			}
 			case 1 : //Bombs
 			case 2 : //Cargo
+			case 3 : //Missiles
 			{
 				int startSlot = plane.driveableData.getBombInventoryStart();
 				if(screen == 2)
 					startSlot = plane.driveableData.getCargoInventoryStart();
+				if(screen == 3)
+					startSlot = plane.driveableData.getMissileInventoryStart();
 				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
 				{
@@ -112,6 +129,7 @@ public class ContainerDriveableInventory extends Container
 			}
 			case 1 :
 			case 2 :
+			case 3 : 
 			{
 				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < m; row++)
@@ -162,7 +180,7 @@ public class ContainerDriveableInventory extends Container
             
             if (slotStack.stackSize == 0)
             {
-                currentSlot.putStack((ItemStack)null);
+                currentSlot.putStack(null);
             }
             else
             {
@@ -179,12 +197,4 @@ public class ContainerDriveableInventory extends Container
 
         return stack;
     }
-
-	public InventoryPlayer inventory;
-    public World world;
-	public EntityDriveable plane;
-	public int numItems;
-	public int screen;
-	public int maxScroll;
-	public int scroll;
 }

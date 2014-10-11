@@ -25,7 +25,7 @@ public class ModelArrow extends ModelBase
         byte var11 = 0;
         float var12 = 0.0F;
         float var13 = 0.5F;
-        float var14 = (0 + var11 * 10) / 32.0F;
+        float var14 = (var11 * 10) / 32.0F;
         float var15 = (5 + var11 * 10) / 32.0F;
         float var16 = 0.0F;
         float var17 = 0.15625F;

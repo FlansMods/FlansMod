@@ -1,7 +1,5 @@
 package com.flansmod.common.types;
 
-import net.minecraft.item.Item;
-
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.PlaneType;

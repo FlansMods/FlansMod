@@ -1,0 +1,8 @@
+Name Light Assault
+ShortName gignAssault1
+AddItem m4Carbine
+AddItem m1911
+AddItem m67 2
+AddItem mwKnife
+AddItem m4CarbineAmmo 3
+AddItem m1911Ammo 2

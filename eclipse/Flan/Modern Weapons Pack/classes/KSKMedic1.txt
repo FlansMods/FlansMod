@@ -1,0 +1,9 @@
+Name Medic
+ShortName kskMedic1
+AddItem g3
+AddItem glock
+AddItem m67 1
+AddItem mwMedKit
+AddItem mwKnife
+AddItem g3Ammo 3
+AddItem glockAmmo 3

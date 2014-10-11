@@ -1,0 +1,9 @@
+Name Soldier
+ShortName soldier
+AddItem m4Carbine
+AddItem coltPython
+AddItem combatKnife
+AddItem m4CarbineAmmo 4
+AddItem 357Magnum 30
+AddItem mushroomStew
+Chest flakJacket

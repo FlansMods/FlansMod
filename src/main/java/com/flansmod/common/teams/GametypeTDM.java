@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 
@@ -46,6 +45,7 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void tick() 
 	{
+		/*
 		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
 		{
 			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
@@ -54,6 +54,7 @@ public class GametypeTDM extends Gametype
 		{
 			autobalance();
 		}
+		*/
 	}
 	
 	public boolean needAutobalance()
@@ -109,58 +110,6 @@ public class GametypeTDM extends Gametype
 	{
 	}
 	
-	/*
-	@Override
-	public void playerChoseTeam(EntityPlayerMP player, Team team, Team previousTeam) 
-	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return;
-		if(team == Team.spectators)
-		{
-			return;
-		}
-		if(autoBalance)
-		{
-			int membersOnTeamTheyWantToJoin = team.members.size();
-			int membersOnBothTeams = teamsManager.teams[0].members.size() + teamsManager.teams[1].members.size();
-			int membersOnTeamTheyDontWantToJoin = membersOnBothTeams - membersOnTeamTheyWantToJoin;
-			if(membersOnTeamTheyWantToJoin > membersOnTeamTheyDontWantToJoin)
-				return false;
-		}
-		if(previousTeam != null && previousTeam != Team.spectators && previousTeam != team && isAValidTeam(previousTeam, true))
-		{
-			getPlayerData(player).deaths++;
-			getPlayerData(player).score--;
-			getPlayerData(player).playerClass = null;
-			getPlayerData(player).newPlayerClass = null;
-		}
-		sendClassMenuToPlayer(player);
-		if(team != previousTeam)
-			teamsManager.forceRespawn(player);
-		return true;
-	}
-	*/
-
-	/*
-	@Override
-	public boolean playerChoseClass(EntityPlayerMP player, PlayerClass playerClass) 
-	{
-		Team team = getPlayerData(player).team;
-		if(!team.classes.contains(playerClass))
-			return false;
-		getPlayerData(player).newPlayerClass = playerClass;
-		if(getPlayerData(player).playerClass == null)
-		{
-			teamsManager.resetInventory(player);
-		}
-		else
-		{
-			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.name.toLowerCase() + " class")); 
-		}
-		return true;
-	}
-	*/
-
 	@Override
 	public void playerQuit(EntityPlayerMP player) 
 	{
@@ -327,5 +276,9 @@ public class GametypeTDM extends Gametype
 		return true;
 	}
 
-
+	@Override
+	public boolean teamHasWon(Team team) 
+	{
+		return teamsManager.currentRound != null && team.score == teamsManager.currentRound.scoreLimit;
+	}
 }

@@ -14,7 +14,7 @@ Recoil 10
 //Number of bullet entities to create, useful for shotguns, defaults to 1
 NumBullets 6
 //Damage in half hearts
-Damage 3
+Damage 6
 //The higher this value, the more the bullets spread
 Accuracy 11
 //Time in ticks between rounds
@@ -22,6 +22,8 @@ ShootDelay 15
 ShootSound W1200Shoot
 ReloadSound W1200Reload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 7.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
@@ -35,7 +37,7 @@ Texture W1200
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMWForegrip
+AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

@@ -16,12 +16,16 @@ import java.util.zip.ZipInputStream;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
-
+import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -41,6 +45,7 @@ import cpw.mods.fml.relauncher.Side;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EntityWheel;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.driveables.PlaneType;
@@ -103,7 +108,7 @@ public class FlansMod
 	public static FlansMod INSTANCE;
     public static int generalConfigInteger = 32;
     public static String generalConfigString = "Hello!";
-    public static boolean generalConfigBoolean = false;
+    public static boolean addGunpowderRecipe = true;
     public static int teamsConfigInteger = 32;
     public static String teamsConfigString = "Hello!";
     public static boolean teamsConfigBoolean = false;
@@ -115,6 +120,9 @@ public class FlansMod
 	public static File flanDir;
 	public static final float soundRange = 50F;
 	public static final float driveableUpdateRange = 200F;
+	public static final int numPlayerSnapshots = 20;
+	
+	public static float armourSpawnRate = 0.25F;
 	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
 	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
@@ -212,6 +220,11 @@ public class FlansMod
 		{
 			type.addRecipe();
 		}
+		if(addGunpowderRecipe)
+		{
+			ItemStack charcoal = new ItemStack(Items.coal, 1, 1);
+			GameRegistry.addShapelessRecipe(new ItemStack(Items.gunpowder), charcoal, charcoal, charcoal, new ItemStack(Items.glowstone_dust));
+		}
 		log("Loaded recipes.");
 		
 		//Register teams mod entities
@@ -226,11 +239,13 @@ public class FlansMod
 		
 		//Register driveables
 		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 15, false);
+		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 3, false);
 		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 20, false);
+		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);
 		EntityRegistry.registerGlobalEntityID(EntitySeat.class, "Seat", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 250, 20, false);
+		EntityRegistry.registerGlobalEntityID(EntityWheel.class, "Wheel", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(EntityWheel.class, "Wheel", 103, this, 250, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntityParachute.class, "Parachute", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityParachute.class, "Parachute", 101, this, 40, 20, false);
 		EntityRegistry.registerGlobalEntityID(EntityMecha.class, "Mecha", EntityRegistry.findGlobalUniqueEntityId());
@@ -238,7 +253,7 @@ public class FlansMod
 		
 		//Register bullets and grenades
 		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, true);
+		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, false);
 		EntityRegistry.registerGlobalEntityID(EntityGrenade.class, "Grenade", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
 
@@ -247,7 +262,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
-
+		
 		//Register the chunk loader 
 		//TODO : Re-do chunk loading
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
@@ -272,6 +287,26 @@ public class FlansMod
 		*/
 	}
 	
+	@SubscribeEvent
+	public void playerDrops(PlayerDropsEvent event)
+	{
+		for(int i = event.drops.size() - 1; i >= 0; i--)
+		{
+			EntityItem ent = event.drops.get(i);
+			InfoType type = InfoType.getType(ent.getEntityItem());
+			if(type != null && !type.canDrop)
+				event.drops.remove(i);
+		}
+	}
+	
+	@SubscribeEvent
+	public void playerDrops(ItemTossEvent event)
+	{
+		InfoType type = InfoType.getType(event.entityItem.getEntityItem());
+		if(type != null && !type.canDrop)
+			event.setCanceled(true);
+	}
+	
 	/** Teams command register method */
 	@EventHandler
 	public void registerCommand(FMLServerStartedEvent e)
@@ -285,6 +320,36 @@ public class FlansMod
         if(eventArgs.modID.equals(MODID))
             syncConfig();
     }
+    
+	@SubscribeEvent
+	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
+	{
+		double chance = event.world.rand.nextDouble();
+
+		if(chance < armourSpawnRate && event.entityLiving instanceof EntityZombie || event.entityLiving instanceof EntitySkeleton)
+		{
+			if(event.world.rand.nextBoolean() && ArmourType.armours.size() > 0)
+			{
+				//Give a completely random piece of armour
+				ArmourType armour = ArmourType.armours.get(event.world.rand.nextInt(ArmourType.armours.size()));
+				if(armour != null && armour.type != 2)
+					event.entityLiving.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
+			}
+			else if(Team.teams.size() > 0)
+			{
+				//Give a random set of armour
+				Team team = Team.teams.get(event.world.rand.nextInt(Team.teams.size()));
+				if(team.hat != null)
+					event.entityLiving.setCurrentItemOrArmor(1, team.hat.copy());
+				if(team.chest != null)
+					event.entityLiving.setCurrentItemOrArmor(2, team.chest.copy());
+				//if(team.legs != null)
+				//	event.entityLiving.setCurrentItemOrArmor(3, team.legs.copy());
+				if(team.shoes != null)
+					event.entityLiving.setCurrentItemOrArmor(4, team.shoes.copy());
+			}
+		}
+	}
 	
 	/** Reads type files from all content packs */
 	private void getTypeFiles(List<File> contentPacks)
@@ -463,13 +528,13 @@ public class FlansMod
 	}
 
     public static void syncConfig() {
-        generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
-        generalConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, generalConfigBoolean, "A Boolean!");
+        //generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        //generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+        addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
 
-        teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
-        teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+        //teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+        //teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
+        //teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
 
         if(configFile.hasChanged())
             configFile.save();

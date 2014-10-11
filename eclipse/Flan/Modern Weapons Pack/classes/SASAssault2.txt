@@ -1,0 +1,12 @@
+Name Heavy Assault
+ShortName sasAssault2
+AddItem l86
+AddItem sigP226
+AddItem m67 1
+AddItem mwKnife
+AddItem l86Ammo 2
+AddItem sigP226Ammo 3
+Hat juggernautHelmet
+Chest juggernautBody
+Legs juggernautPants
+Shoes juggernautBoots

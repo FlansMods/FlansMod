@@ -13,20 +13,21 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
-public class ItemAAGun extends Item
+public class ItemAAGun extends Item implements IFlanItem
 {
     public static final ArrayList<String> names = new ArrayList<String>();
     @SideOnly(Side.CLIENT)
     private ArrayList<IIcon> icons;
+	public AAGunType type;
     
 	public ItemAAGun(AAGunType type1)
 	{
@@ -62,7 +63,7 @@ public class ItemAAGun extends Item
 			int k = movingobjectposition.blockZ;
 			if (!world.isRemote && world.isSideSolid(i, j, k, ForgeDirection.UP))
 			{
-				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F));
+				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F, entityplayer));
 			}
 			if (!entityplayer.capabilities.isCreativeMode)
 			{
@@ -74,7 +75,7 @@ public class ItemAAGun extends Item
 	
     public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
     {
-    	Entity entity = new EntityAAGun(world, type, x, y, z);
+    	Entity entity = new EntityAAGun(world, type, x, y, z, null);
     	if(!world.isRemote)
         {
 			world.spawnEntityInWorld(entity);
@@ -95,6 +96,10 @@ public class ItemAAGun extends Item
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
-
-	public AAGunType type;
+	
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

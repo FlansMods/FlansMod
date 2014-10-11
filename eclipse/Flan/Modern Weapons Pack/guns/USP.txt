@@ -2,6 +2,7 @@ Name USP .45
 ShortName usp
 //The ammo this gun uses (shortName)
 Ammo uspAmmo
+Ammo uspPoisonAmmo
 Icon USP
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -21,6 +22,9 @@ ShootDelay 1
 ShootSound USPShoot
 ReloadSound TT33Reload
 Mode SemiAuto
+OneHanded true
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
@@ -34,7 +38,7 @@ Texture M9
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

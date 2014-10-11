@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
+import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketDriveableGUI;
 
@@ -34,10 +35,33 @@ public class GuiDriveableMenu extends GuiContainer
 	public void initGui()
 	{
 		super.initGui();
-		buttonList.add(new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Guns"));
-		buttonList.add(new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, entity.getBombInventoryName()));
-		buttonList.add(new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel"));
-		buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, "Cargo"));
+		DriveableType type = entity.getDriveableType();
+		//Cargo button
+		GuiButton cargoButton = new GuiButton(0, width / 2 - 60, height / 2 - 71, 58, 20, "Cargo");
+		cargoButton.enabled = type.numCargoSlots > 0;
+		buttonList.add(cargoButton);
+		
+		//Gun button
+		GuiButton gunsButton = new GuiButton(1, width / 2 + 2, height / 2 - 71, 58, 20, "Guns");
+		gunsButton.enabled = type.ammoSlots() > 0;
+		buttonList.add(gunsButton);
+		
+		//Fuel button
+		GuiButton fuelButton = new GuiButton(2, width / 2 -60, height / 2 - 49, 58, 20, "Fuel");
+		fuelButton.enabled = type.fuelTankSize > 0;
+		buttonList.add(fuelButton);
+		
+		//Missile / Shell Button
+		GuiButton missileButton = new GuiButton(3, width / 2 + 2, height / 2 - 49, 58, 20, entity.getMissileInventoryName());
+		missileButton.enabled = type.numMissileSlots > 0;
+		buttonList.add(missileButton);
+		
+		//Mine / Bomb Button
+		GuiButton bombButton = new GuiButton(5, width / 2 + 2, height / 2 - 27, 58, 20, entity.getBombInventoryName());
+		bombButton.enabled = type.numBombSlots > 0;
+		buttonList.add(bombButton);
+		
+		//Repair button
 		buttonList.add(new GuiButton(4, width / 2 - 60, height / 2 - 27, 58, 20, "Repair"));
 	}
 	
@@ -45,31 +69,37 @@ public class GuiDriveableMenu extends GuiContainer
 	protected void actionPerformed(GuiButton button)
     {
 		//Replace with a packet requesting the GUI from the server
-        if(button.id == 0) //Guns
+		if(button.id == 0) //Cargo
+        {
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(3));
+			//inventory.player.openGui(FlansMod.INSTANCE, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        }
+        if(button.id == 1) //Guns
         {
         	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(0));
-        	inventory.player.openGui(FlansMod.INSTANCE, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
-        }
-        if(button.id == 1) //Bombs
-        {
-        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
-        	inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	//inventory.player.openGui(FlansMod.INSTANCE, 6, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
         if(button.id == 2) //Fuel
         {
         	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(2));
-        	inventory.player.openGui(FlansMod.INSTANCE, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	//inventory.player.openGui(FlansMod.INSTANCE, 8, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         } 
-		if(button.id == 3) //Cargo
+        if(button.id == 3) //Missiles
         {
-			FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(3));
-			inventory.player.openGui(FlansMod.INSTANCE, 9, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(5));
+        	//inventory.player.openGui(FlansMod.INSTANCE, 12, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
         }
 		if(button.id == 4) //Repair
 		{
 			//No server side required. No interactive slots in this one
 			inventory.player.openGui(FlansMod.INSTANCE, 1, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
 		}
+        if(button.id == 5) //Bombs
+        {
+        	FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(1));
+        	//inventory.player.openGui(FlansMod.INSTANCE, 7, world, entity.chunkCoordX, entity.chunkCoordY, entity.chunkCoordZ);
+        }
+
     }
 
     @Override

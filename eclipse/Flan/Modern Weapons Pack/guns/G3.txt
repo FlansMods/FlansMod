@@ -19,6 +19,8 @@ ShootDelay 1
 ShootSound P90Shoot
 ReloadSound ThompsonReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
@@ -33,7 +35,7 @@ ModelScale 1.0
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

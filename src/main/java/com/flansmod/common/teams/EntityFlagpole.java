@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -10,14 +9,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -44,7 +37,6 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 	
 	//Chunk loading
-	private Ticket chunkTicket; //TODO REMOVE
 	private boolean uninitialized = true;
 	private int loadDistance = 1;
 
@@ -98,6 +90,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		map = teamsManager.maps.get(tags.getString("Map"));
 		name = tags.getString("Name");
 		setMap(map);
+	
+		//flag = new EntityFlag(worldObj, this);
+		//objects.add(flag);
+		//worldObj.spawnEntityInWorld(flag);
 		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
 	}
 
@@ -128,6 +124,19 @@ public class EntityFlagpole extends Entity implements ITeamBase
 			map.removeBase(this);
 		map = newMap;
 		newMap.addBase(this);
+	}
+	
+	public void setMapFirstTime(TeamsMap newMap)
+	{
+		if(newMap == null)
+		{
+			FlansMod.log("Flagpole given invalid map");
+			return;
+		}
+		if(map != null && map != newMap)
+			map.removeBase(this);
+		map = newMap;
+		newMap.addBaseFirstTime(this);
 	}
 
 	@Override
@@ -203,6 +212,13 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
+	public void roundCleanup()
+	{
+		if(flag != null)
+			flag.reset();
+	}
+	
+	@Override
 	public ITeamObject getFlag() 
 	{
 		return flag;
@@ -212,14 +228,29 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public void onUpdate()
 	{
 		super.onUpdate();
-    	//updateChunkLoading();
+		
+		if(!worldObj.isRemote)
+		{
+			if(flag == null)
+			{
+				flag = new EntityFlag(worldObj, this);
+				objects.add(flag);
+			}
+			if(!flag.addedToChunk)
+				worldObj.spawnEntityInWorld(flag);
+			if(flag.isHome)
+				flag.setPosition(posX, posY + 2F, posZ);
+		}
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 		
 	@Override
 	public void setDead() 
 	{
 		super.setDead();
-		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
 	
 	@Override
@@ -314,4 +345,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 			uninitialized = false;
 		}
 	}*/
+	
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

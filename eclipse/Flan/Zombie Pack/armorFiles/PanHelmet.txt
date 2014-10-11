@@ -1,0 +1,10 @@
+Name Pan Helmet
+ShortName panHelmet
+Icon PanHelmet
+Colour 255 255 255
+Type Helmet
+Model zombie.PanHelmet
+Defence 0.2
+ArmourTexture PanHelmet
+MoveSpeedModifier 0.95
+KnockbackModifier 0.25

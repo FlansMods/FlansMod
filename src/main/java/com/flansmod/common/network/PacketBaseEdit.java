@@ -1,9 +1,6 @@
 package com.flansmod.common.network;
 
-import java.util.ArrayList;
-
 import com.flansmod.client.gui.GuiBaseEditor;
-import com.flansmod.client.gui.GuiTeamSelect;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ITeamBase;
 import com.flansmod.common.teams.TeamsManager;
@@ -99,7 +96,7 @@ public class PacketBaseEdit extends PacketBase
 		base.setDefaultOwnerID(teamID);
 		base.setOwnerID(teamID);
 		if(mapID != -1)
-			base.setMap(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
+			base.setMapFirstTime(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
 		base.setName(baseName);
 		
 		FlansMod.log(playerEntity.getCommandSenderName() + " modified attributes of base " + baseID);

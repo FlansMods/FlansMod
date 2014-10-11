@@ -33,6 +33,7 @@ public class GunBoxType extends InfoType
 	public IIcon bottom;
 	public int numGuns;
 	public int nextGun = -1;
+	/** */
 	public InfoType[] guns;
 	public BulletType[] bullets;
 	public BulletType[] altBullets;
@@ -46,6 +47,12 @@ public class GunBoxType extends InfoType
 	public GunBoxType(TypeFile file)
 	{
 		super(file);
+	}
+	
+	@Override
+	public void preRead(TypeFile file)
+	{
+		super.preRead(file);
 		//Make sure NumGuns is read before anything else
 		for(String line : file.lines)
 		{
@@ -77,8 +84,9 @@ public class GunBoxType extends InfoType
 	}
 	
 	@Override
-	public void postRead()
+	public void postRead(TypeFile file)
 	{
+    	super.postRead(file);
 		gunBoxMap.put(this.shortName, this);
 	}
 
@@ -104,9 +112,9 @@ public class GunBoxType extends InfoType
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
-						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
+						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
 					else
-						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
+						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
 				}
 				
 			}
@@ -118,9 +126,9 @@ public class GunBoxType extends InfoType
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
-						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
+						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
 					else
-						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
+						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
 				}
 			}
 			if (split[0].equals("AddAltAmmo") || split[0].equals("AddAlternateAmmo"))
@@ -131,9 +139,9 @@ public class GunBoxType extends InfoType
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
-						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1])));
+						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
 					else
-						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0));
+						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
 				}
 			}
 		} catch (Exception e)
@@ -156,15 +164,6 @@ public class GunBoxType extends InfoType
 				return type;
 		}
 		return null;
-	}
-
-	public static ItemStack getRecipeElement(String stringy, int amount, int damage)
-	{
-		ItemStack stack = getRecipeElement(stringy, damage);
-		if (stack == null)
-			return stack;
-		stack.stackSize = amount;
-		return stack;
 	}
 	
 	/** Reimported from old code */

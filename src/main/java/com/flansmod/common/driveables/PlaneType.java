@@ -12,6 +12,8 @@ import com.flansmod.common.vector.Vector3f;
 
 public class PlaneType extends DriveableType
 {
+	/** What type of flying vehicle is this? */
+	public EnumPlaneMode mode = EnumPlaneMode.PLANE;	
 	/** Pitch modifiers */
 	public float lookDownModifier = 1F, lookUpModifier = 1F;
 	/** Roll modifiers */
@@ -30,6 +32,8 @@ public class PlaneType extends DriveableType
 	
 	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
+	/** The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly */
+	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
 				
 	/** Aesthetic features */
     public boolean hasGear = false, hasDoor = false, hasWing = false;
@@ -48,11 +52,20 @@ public class PlaneType extends DriveableType
     }
     
     @Override
+    public void preRead(TypeFile file)
+    {
+    	super.preRead(file);
+    }
+    
+    @Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
 		{		
+			//Plane Mode
+			if(split[0].equals("Mode"))
+				mode = EnumPlaneMode.getMode(split[1]);
 			//Yaw modifiers
 			if(split[0].equals("TurnLeftSpeed"))
 				turnLeftModifier = Float.parseFloat(split[1]);
@@ -74,10 +87,7 @@ public class PlaneType extends DriveableType
 				lift = Float.parseFloat(split[1]);
 				
 			//Propellers and Armaments
-			if(split[0].equals("BombPosition"))
-			{
-				bombPosition = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);	
-			}
+
 			if(split[0].equals("ShootDelay"))
 				planeShootDelay = Integer.parseInt(split[1]);
 			if(split[0].equals("BombDelay"))
@@ -88,6 +98,18 @@ public class PlaneType extends DriveableType
 			{
 				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
 				propellers.add(propeller);
+				recipe.add(new ItemStack(propeller.itemType.item));
+			}
+			if(split[0].equals("HeliPropeller"))
+			{
+				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+				heliPropellers.add(propeller);
+				recipe.add(new ItemStack(propeller.itemType.item));
+			}
+			if(split[0].equals("HeliTailPropeller"))
+			{
+				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
+				heliTailPropellers.add(propeller);
 				recipe.add(new ItemStack(propeller.itemType.item));
 			}
 
@@ -101,12 +123,12 @@ public class PlaneType extends DriveableType
 			}
 			if(split[0].equals("ShootSound"))
 			{
-				shootMainSound = split[1];
+				shootSoundPrimary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			if(split[0].equals("BombSound"))
 			{
-				shootSecondarySound = split[1];
+				shootSoundSecondary = split[1];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			
@@ -124,7 +146,7 @@ public class PlaneType extends DriveableType
             if(split[0].equals("InflightInventory"))
                 invInflight = split[1].equals("False");
 		}
-		catch (Exception e)
+		catch (Exception ignored)
 		{
 		}
 	}
@@ -132,7 +154,13 @@ public class PlaneType extends DriveableType
     @Override
     public int numEngines()
     {
-    	return propellers.size();
+    	switch(mode)
+    	{
+    	case VTOL : return Math.max(propellers.size(), heliPropellers.size());
+    	case PLANE : return propellers.size();
+    	case HELI : return heliPropellers.size();
+    	default : return 1;
+    	}
     }
     
     /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
@@ -152,7 +180,7 @@ public class PlaneType extends DriveableType
     	}
     	return stacks;
     }
-	
+    
 	public static PlaneType getPlane(String find)
 	{
 		for(PlaneType type : types)

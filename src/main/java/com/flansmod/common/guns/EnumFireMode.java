@@ -2,7 +2,7 @@ package com.flansmod.common.guns;
 
 public enum EnumFireMode 
 {
-	SEMIAUTO, FULLAUTO, MINIGUN;
+	SEMIAUTO, FULLAUTO, MINIGUN, BURST;
 	
 	public static EnumFireMode getFireMode(String s)
 	{
@@ -11,6 +11,8 @@ public enum EnumFireMode
 			return FULLAUTO;
 		if(s.equals("minigun"))
 			return MINIGUN;
+		if(s.equals("burst"))
+			return BURST;
 		return SEMIAUTO;
 	}
 }

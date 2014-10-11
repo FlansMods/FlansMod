@@ -15,11 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -32,6 +30,7 @@ import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.EntityGunItem;
+import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
 public class EntityMG extends Entity implements IEntityAdditionalSpawnData
@@ -217,7 +216,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		if (damagesource.damageType.equals("player"))
 		{
-			Entity player = ((EntityDamageSource) damagesource).getEntity();
+			Entity player = damagesource.getEntity();
 			if (player == gunner)
 			{
 				// Player left clicked on the gun
@@ -267,17 +266,26 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 		if (!worldObj.isRemote)
 		{
+			//If this is the player currently using this MG, dismount
 			if(gunner == player)
 			{
 				mountGun(player, false);
 				FlansMod.getPacketHandler().sendToAllAround(new PacketMGMount(player, this, false), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 				return true;
 			}
+			
+			//If this person is already mounting a gun, dismount it first
 			if(PlayerHandler.getPlayerData(player).mountingGun != null && !PlayerHandler.getPlayerData(player).mountingGun.isDead)
 			{
+				PlayerHandler.getPlayerData(player).mountingGun.mountGun(player, false);
 				return true;
 			}
+			
+			//Spectators can't mount guns
+			if(TeamsManager.instance.currentRound != null && PlayerHandler.getPlayerData(player).team == Team.spectators)
+				return true;
 
+			//None of the above applied, so mount the gun
 			mountGun(player, true);
 			FlansMod.getPacketHandler().sendToAllAround(new PacketMGMount(player, this, true), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 			if (ammo == null)
@@ -336,7 +344,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			if(TeamsManager.weaponDrops == 2)
 			{
-				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(new ItemStack[] {ammo}));
+				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
 				worldObj.spawnEntityInWorld(gunEntity);
 			}
 			else if(TeamsManager.weaponDrops == 1)

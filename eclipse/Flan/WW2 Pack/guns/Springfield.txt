@@ -19,6 +19,8 @@ ShootDelay 20
 ShootSound springfieldShoot
 ReloadSound springfieldReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope wwiispringfieldsniper
 Deployable False
 DeployedModel None

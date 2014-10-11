@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.relauncher.Side;
@@ -14,6 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
@@ -22,6 +22,7 @@ public class PacketTeamInfo extends PacketBase
 	public static String mapShortName;
 	public static String map;
 	public static String gametype;
+	public static boolean showZombieScore;
 	public static int numTeams;
 	public static TeamData[] teamData;
 	public static boolean sortedByTeam;
@@ -36,6 +37,7 @@ public class PacketTeamInfo extends PacketBase
 		public int score;
 		public int numPlayers;
 		public PlayerScoreData[] playerData;
+		public boolean winner;
 	}
 	
 	public static class PlayerScoreData
@@ -45,6 +47,8 @@ public class PacketTeamInfo extends PacketBase
 		public int kills;
 		public int deaths;
 		public TeamData team;
+		public PlayerClass playerClass;
+		public int zombieScore;
 	}
 	
 	public static PlayerScoreData getPlayerScoreData(String username)
@@ -71,6 +75,10 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+    	data.writeBoolean(TeamsManager.canBreakGlass);
+    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
+    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+    	
 		if(TeamsManager.getInstance().currentRound == null)
     	{
 			writeUTF(data, "No Gametype");
@@ -79,10 +87,11 @@ public class PacketTeamInfo extends PacketBase
     	else
     	{
     		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
+    		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.showZombieScore());
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
     		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
     		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
-    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);
+    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);    		
     		
     		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
     		{
@@ -104,6 +113,7 @@ public class PacketTeamInfo extends PacketBase
 		        		}
 		        		writeUTF(data, team.shortName);
 		        		data.writeInt(team.score);
+		        		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.teamHasWon(team));
 		        		team.sortPlayers();
 		        		data.writeInt(team.members.size());
 		        		for(int j = 0; j < team.members.size(); j++)
@@ -116,12 +126,15 @@ public class PacketTeamInfo extends PacketBase
 		        				data.writeInt(0);
 		        				data.writeInt(0);
 		        				data.writeInt(0);
+		        				writeUTF(data, "");
 		        			}
 		        			else
 		        			{
 			        			data.writeInt(playerData.score);
+			        			data.writeInt(playerData.zombieScore);
 			        			data.writeInt(playerData.kills);
 			        			data.writeInt(playerData.deaths);
+			        			writeUTF(data, playerData.playerClass.shortName);
 		        			}
 		        		}
 		        	}
@@ -153,26 +166,29 @@ public class PacketTeamInfo extends PacketBase
         				data.writeInt(0);
         				data.writeInt(0);
         				data.writeInt(0);
+        				writeUTF(data, "");
         			}
         			else
         			{
 	        			data.writeInt(playerData.score);
 	        			data.writeInt(playerData.kills);
 	        			data.writeInt(playerData.deaths);
+	        			writeUTF(data, playerData.playerClass.shortName);
         			}
         		}
 	        	
     		}
     	}
     	
-    	data.writeBoolean(TeamsManager.canBreakGlass);
-    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
-    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+		TeamsManager.canBreakGlass = data.readBoolean();
+		TeamsManager.vehiclesNeedFuel = data.readBoolean();
+		TeamsManager.driveablesBreakBlocks = data.readBoolean();
 		gametype = readUTF(data);
 		if(gametype.equals("No Gametype"))
 		{
@@ -181,6 +197,7 @@ public class PacketTeamInfo extends PacketBase
 		}
 		else
 		{
+			showZombieScore = data.readBoolean();
 			map = readUTF(data);
 			mapShortName = readUTF(data);
 			timeLeft = data.readInt();
@@ -200,17 +217,21 @@ public class PacketTeamInfo extends PacketBase
 						continue;
 					teamData[i].team = Team.getTeam(teamName);
 					teamData[i].score = data.readInt();
+					teamData[i].winner = data.readBoolean();
 					teamData[i].numPlayers = data.readInt();
 					teamData[i].playerData = new PlayerScoreData[teamData[i].numPlayers];
-					numLines += teamData[i].numPlayers;
+					if(teamData[i].numPlayers > numLines)
+						numLines = teamData[i].numPlayers;
 					for(int j = 0; j < teamData[i].numPlayers; j++)
 					{
 						teamData[i].playerData[j] = new PlayerScoreData();
 						teamData[i].playerData[j].team = teamData[i];
 						teamData[i].playerData[j].username = readUTF(data);
 						teamData[i].playerData[j].score = data.readInt();
+						teamData[i].playerData[j].zombieScore = data.readInt();
 						teamData[i].playerData[j].kills = data.readInt();
 						teamData[i].playerData[j].deaths = data.readInt();
+						teamData[i].playerData[j].playerClass = PlayerClass.getClass(readUTF(data));
 					}
 				}
 			}
@@ -231,12 +252,11 @@ public class PacketTeamInfo extends PacketBase
 					teamData[0].playerData[j].score = data.readInt();
 					teamData[0].playerData[j].kills = data.readInt();
 					teamData[0].playerData[j].deaths = data.readInt();
+					teamData[0].playerData[j].playerClass = PlayerClass.getClass(readUTF(data));
 				}
 			}
 		}
-		TeamsManager.canBreakGlass = data.readBoolean();
-		TeamsManager.vehiclesNeedFuel = data.readBoolean();
-		TeamsManager.driveablesBreakBlocks = data.readBoolean();
+
 	}
 
 	@Override
@@ -278,7 +298,7 @@ public class PacketTeamInfo extends PacketBase
 	{
 		for(int i = 0; i < teamData.length; i++)
 		{
-			if(teamData[i].score == scoreLimit)
+			if(teamData[i].winner)
 				return teamData[i].team;
 		}
 		return null;

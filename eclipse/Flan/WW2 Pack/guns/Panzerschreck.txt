@@ -24,3 +24,6 @@ Deployable False
 DeployedModel None
 Model ww2.Panzerschreck
 Texture panzerschreck
+//Modifiers
+MoveSpeedModifier 0.6
+KnockbackModifier 0

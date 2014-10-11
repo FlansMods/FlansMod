@@ -2,8 +2,8 @@ Name Support
 ShortName japaneseSupport
 AddItem type99
 AddItem panzerschreck
-AddItem luger
+AddItem type14
 AddItem ww2Knife
 AddItem type99Ammo 2
 AddItem panzerschreckAmmo 2
-AddItem lugerAmmo
+AddItem type14Ammo

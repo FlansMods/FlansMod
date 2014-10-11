@@ -1,8 +1,0 @@
-Name Assassin
-ShortName spetsnazMulti1
-AddItem m21+flanMWSilencer
-AddItem skorpion+flanMWSilencer+flanMWRedDot
-AddItem m67 2
-AddItem mwKnife
-AddItem m21Ammo 3
-AddItem skorpionAmmo 3

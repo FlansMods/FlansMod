@@ -1,5 +1,6 @@
 package com.flansmod.common.guns;
 
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -10,17 +11,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 /** Implemented from old source. */
-public class ItemBullet extends Item
+public class ItemBullet extends Item implements IFlanItem
 {
 	public ItemBullet(InfoType infoType)
 	{
@@ -29,7 +30,11 @@ public class ItemBullet extends Item
 		setMaxStackSize(type.maxStackSize);
 		setHasSubtypes(true);
 		type.item = this;
-		setCreativeTab(FlansMod.tabFlanGuns);
+		switch(type.weaponType)
+		{
+		case SHELL : case BOMB : case MINE : case MISSILE : setCreativeTab(FlansMod.tabFlanDriveables); break;
+		default : setCreativeTab(FlansMod.tabFlanGuns);
+		}
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
@@ -52,8 +57,7 @@ public class ItemBullet extends Item
 	{
 		if(type.description != null)
 		{
-			for(String s : type.description.split("_"))
-				lines.add(s);
+            Collections.addAll(lines, type.description.split("_"));
 		}
 	}
     
@@ -88,5 +92,11 @@ public class ItemBullet extends Item
 			int itemDamage, InfoType shotFrom) 
 	{
 		return new EntityBullet(worldObj, player, bulletSpread, damage, this.type, bulletSpeed, b, shotFrom);
+	}
+	
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
 	}
 }

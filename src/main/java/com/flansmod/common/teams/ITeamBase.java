@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.List;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -35,10 +34,14 @@ public interface ITeamBase
 	//Called when a new round is started
 	public void startRound();	
 	
+	public void roundCleanup(); 
+	
 	//Return the map that this base is a part of
 	public TeamsMap getMap();
 	//Set the map that this base is a part of
 	public void setMap(TeamsMap newMap);
+	//Set the map for the first time. This is when chunk loading should be registered
+	public void setMapFirstTime(TeamsMap newMap);
 	
 	//Return the objects that belong to this base
 	public List<ITeamObject> getObjects();
@@ -64,4 +67,6 @@ public interface ITeamBase
 	
 	//Returns the flag object for CTF like gametypes. May return null, but then this base may not be used in CTF like gametypes
 	public ITeamObject getFlag();
+	
+
 }

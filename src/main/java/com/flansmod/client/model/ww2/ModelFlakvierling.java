@@ -13,7 +13,7 @@ public class ModelFlakvierling extends ModelAAGun
         baseModel[2] = new ModelRendererTurbo(this, 0, 18, 128, 64);
         baseModel[3] = new ModelRendererTurbo(this, 0, 18, 128, 64);
 
-        baseModel[0].addBox(-12F, -4F , -8F, 24, 2, 16, 0.0F);	//Base piece
+        baseModel[0].addBox(-4F, 8F , -4F, 8, 2, 8, 0.0F);	//Base piece
 		baseModel[1].addBox(-20F, -4F , -4F, 8, 4, 8, 0.0F);	//Support
 		baseModel[2].addBox(4F, -4F , 8F, 8, 4, 8, 0.0F);		//Support
 		baseModel[3].addBox(4F, -4F , -16F, 8, 4, 8, 0.0F);		//Support

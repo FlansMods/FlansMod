@@ -160,8 +160,7 @@ public class MechaInventory implements IInventory
 		{
 		case leftTool : case rightTool : return item instanceof ItemGun || item instanceof ItemMechaAddon;
 		case leftArm : case rightArm : return item instanceof ItemBullet;
-		
+		default : return false;
 		}
-		return false;
 	}
 }

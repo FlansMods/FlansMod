@@ -23,6 +23,9 @@ public class GunAnimations
 	public float minigunBarrelRotation = 0F;
 	public float minigunBarrelRotationSpeed = 0F;
 	
+	/** Melee animations */
+	public int meleeAnimationProgress = 0, meleeAnimationLength = 0;
+	
 	public GunAnimations()
 	{
 		
@@ -62,6 +65,14 @@ public class GunAnimations
 		
 		minigunBarrelRotation += minigunBarrelRotationSpeed;
 		minigunBarrelRotationSpeed *= 0.9F;
+		
+		if(meleeAnimationLength > 0)
+		{
+			meleeAnimationProgress++;
+			//If we are done, reset
+			if(meleeAnimationProgress == meleeAnimationLength)
+				meleeAnimationProgress = meleeAnimationLength = 0;
+		}
 	}
 	
 	public void doShoot(int pumpDelay, int pumpTime)
@@ -79,5 +90,10 @@ public class GunAnimations
 		reloadAnimationTime = reloadTime;
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;
+	}
+	
+	public void doMelee(int meleeTime)
+	{
+		meleeAnimationLength = meleeTime;
 	}
 }

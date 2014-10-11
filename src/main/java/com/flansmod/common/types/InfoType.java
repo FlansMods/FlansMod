@@ -32,6 +32,8 @@ public class InfoType
 	public String modelString;
 	public String description;
 	public float modelScale = 1F;
+	/** If this is set to false, then this item cannot be dropped */
+	public boolean canDrop = true;
 	
 	public InfoType(TypeFile file)
 	{
@@ -41,7 +43,7 @@ public class InfoType
 	
 	public void read(TypeFile file)
 	{
-		preRead();
+		preRead(file);
 		for(;;)
 		{
 			String line = null;
@@ -55,14 +57,14 @@ public class InfoType
 				continue;
 			read(split, file);
 		}
-		postRead();
+		postRead(file);
 	}
 	
 	/** Method for performing actions prior to reading the type file */
-	protected void preRead() {}
+	protected void preRead(TypeFile file) {}
 	
 	/** Method for performing actions after reading the type file */
-	protected void postRead() {}
+	protected void postRead(TypeFile file) {}
 
 	/** Pack reader */
 	protected void read(String[] split, TypeFile file)
@@ -139,6 +141,8 @@ public class InfoType
 			{
 				smeltableFrom = split[1];
 			}
+			if(split[0].equals("CanDrop"))
+				canDrop = Boolean.parseBoolean(split[1]);
 		} catch (Exception e)
 		{
 			FlansMod.log("Reading file failed : " + shortName);
@@ -261,12 +265,18 @@ public class InfoType
 		return item;
 	}
 	
+	
 	public static ItemStack getRecipeElement(String s, int damage)
 	{
 		return getRecipeElement(s, 1, damage);
 	}
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage)
+	{
+		return getRecipeElement(s, amount, damage, "nothing");
+	}
+	
+	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
 	{
 		if (s.equals("doorIron"))
 		{
@@ -301,7 +311,7 @@ public class InfoType
 		{
 			return new ItemStack(Items.iron_ingot, amount);
 		}
-		FlansMod.log("Could not find " + s + " when adding recipe");
+		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
 		return null;
 	}
 	
@@ -324,5 +334,15 @@ public class InfoType
 	public void onWorldLoad(World world) 
 	{
 		
+	}
+
+	public static InfoType getType(ItemStack itemStack) 
+	{
+		if(itemStack == null)
+			return null;
+		Item item = itemStack.getItem();
+		if(item instanceof IFlanItem)
+			return ((IFlanItem)item).getInfoType();
+		return null;
 	}
 }

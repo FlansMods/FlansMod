@@ -8,7 +8,7 @@ ItemID 23258
 Category Propeller
 StackSize 4
 RecipeOutput 1
-Recipe I iron S stick
+Recipe I ingotIron S stick
  S 
  I 
 S S

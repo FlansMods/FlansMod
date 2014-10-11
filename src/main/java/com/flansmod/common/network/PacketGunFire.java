@@ -16,11 +16,13 @@ import com.flansmod.common.guns.ItemGun;
 public class PacketGunFire extends PacketBase 
 {
 	public boolean held;
+	public boolean left;
 	
 	public PacketGunFire() {}
 	
-	public PacketGunFire(boolean h)
+	public PacketGunFire(boolean l, boolean h)
 	{
+		left = l;
 		held = h;
 	}
 
@@ -28,12 +30,14 @@ public class PacketGunFire extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeBoolean(held);
+		data.writeBoolean(left);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		held = data.readBoolean();
+		left = data.readBoolean();
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class PacketGunFire extends PacketBase
 		ItemStack currentItem = playerEntity.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemGun)
 		{
-			((ItemGun)currentItem.getItem()).onMouseHeld(currentItem, playerEntity.worldObj, playerEntity, held);
+			((ItemGun)currentItem.getItem()).onMouseHeld(currentItem, playerEntity.worldObj, playerEntity, left, held);
 		}
 	}
 

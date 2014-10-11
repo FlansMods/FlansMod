@@ -9,8 +9,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 
 public class CommandTeams extends CommandBase 
 {
@@ -64,6 +62,7 @@ public class CommandTeams extends CommandBase
 			teamsManager.bombsEnabled = true;
 			teamsManager.bulletsEnabled = true;
 			teamsManager.forceAdventureMode = false;
+			teamsManager.overrideHunger = false;
 			teamsManager.canBreakGuns = true;
 			teamsManager.canBreakGlass = true;
 			teamsManager.armourDrops = true;
@@ -80,6 +79,7 @@ public class CommandTeams extends CommandBase
 			teamsManager.bombsEnabled = true;
 			teamsManager.bulletsEnabled = true;
 			teamsManager.forceAdventureMode = true;
+			teamsManager.overrideHunger = true;
 			teamsManager.canBreakGuns = true;
 			teamsManager.canBreakGlass = false;
 			teamsManager.armourDrops = false;
@@ -195,27 +195,22 @@ public class CommandTeams extends CommandBase
 			
 			return;
 		}
-		/*
-		 * No longer used
-		if(split[0].equals("setMap"))
+		if(split[0].equals("setRound"))
 		{
 			if(split.length != 2)
 			{
-				sender.addChatMessage(new ChatComponentText("You need to specify a map's short name"));
+				sender.addChatMessage(new ChatComponentText("You need to specify the round index (see /teams listRounds)"));
 				return;
 			}
-			TeamsMap map = teamsManager.maps.get(split[1]);
-			if(map != null)
+			TeamsRound round = teamsManager.rounds.get(Integer.parseInt(split[1]));
+			if(round != null)
 			{
-				TeamsManager.messageAll("\u00a72Map changed to " + map.name + ".");
-				teamsManager.currentMap = map;
-				if(teamsManager.currentGametype != null)
-				{
-					teamsManager.currentGametype.startNewRound();
-				}
+				teamsManager.nextRound = round;
+				TeamsManager.messageAll("\u00a72Next round will be " + round.gametype.shortName + " in " + round.map.name);
 			}
 			return;
 		}
+		/*
 		if(split[0].equals("listTeams"))
 		{
 			if(teamsManager.currentGametype == null || teamsManager.teams == null)
@@ -308,6 +303,17 @@ public class CommandTeams extends CommandBase
 			}
 			return;
 		}
+		if(split[0].toLowerCase().equals("autobalance"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			TeamsManager.autoBalance = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Autobalance is now " + (TeamsManager.autoBalance ? "enabled" : "disabled")));
+			return;
+		}
 		if(split[0].equals("useRotation"))
 		{
 			if(split.length != 2)
@@ -357,6 +363,7 @@ public class CommandTeams extends CommandBase
 				}
 				s += ", " + entry.timeLimit;
 				s += ", " + entry.scoreLimit;
+				s += ", Pop : " + (int)(entry.popularity * 100F) + "%";
 				sender.addChatMessage(new ChatComponentText(s));
 			}
 			return;
@@ -412,7 +419,7 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Started teams map rotation"));
 			return;
 		}
-		if(split[0].equals("nextMap"))
+		if(split[0].equals("nextMap") || split[0].equals("next") || split[0].equals("nextRound"))
 		{
 			teamsManager.roundTimeLeft = 1;
 			return;
@@ -443,6 +450,17 @@ public class CommandTeams extends CommandBase
 			}
 			TeamsManager.forceAdventureMode = Boolean.parseBoolean(split[1]);
 			sender.addChatMessage(new ChatComponentText("Adventure mode will " + (TeamsManager.forceAdventureMode ? "now" : "no longer") + " be forced"));
+			return;
+		}
+		if(split[0].equals("overrideHunger") || split[0].equals("noHunger"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <true/false>"));	
+				return;
+			}
+			TeamsManager.overrideHunger = Boolean.parseBoolean(split[1]);
+			sender.addChatMessage(new ChatComponentText("Players will " + (TeamsManager.overrideHunger ? "no longer" : "now") + " get hungry during rounds"));
 			return;
 		}
 		if(split[0].equals("explosions"))
@@ -630,7 +648,7 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			TeamsManager.scoreDisplayTime = Integer.parseInt(split[1]) * 20;
-			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
+			sender.addChatMessage(new ChatComponentText("Score summary menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
 			return;
 		}
 		if(split[0].equals("votingTime"))
@@ -642,6 +660,17 @@ public class CommandTeams extends CommandBase
 			}
 			TeamsManager.votingTime = Integer.parseInt(split[1]) * 20;
 			sender.addChatMessage(new ChatComponentText("Voting menu will appear for " + TeamsManager.votingTime / 20 + " seconds"));
+			return;
+		}
+		if(split[0].toLowerCase().equals("autobalancetime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.autoBalanceInterval = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Autobalance will now occur every " + TeamsManager.autoBalanceInterval / 20 + " seconds"));
 			return;
 		}
 		if(split[0].equals("setVariable"))
@@ -713,6 +742,7 @@ public class CommandTeams extends CommandBase
 		{
 			sender.addChatMessage(new ChatComponentText("/teams setVariable <variable> <value>"));
 			sender.addChatMessage(new ChatComponentText("/teams forceAdventure <true / false>"));
+			sender.addChatMessage(new ChatComponentText("/teams overrideHunger <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams explosions <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams canBreakGuns <true / false>"));
 			sender.addChatMessage(new ChatComponentText("/teams canBreakGlass <true / false>"));

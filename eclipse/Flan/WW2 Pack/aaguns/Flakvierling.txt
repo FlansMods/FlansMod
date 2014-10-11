@@ -32,7 +32,7 @@ GunnerPos 8 28 8
 TopViewLimit 75
 BottomViewLimit 0
 RecipeOutput 1
-Recipe I iron B blockIron A aaBarrel L leather
+Recipe I ingotIron B blockIron A aaBarrel L leather
  AA
 LAA
 IBI

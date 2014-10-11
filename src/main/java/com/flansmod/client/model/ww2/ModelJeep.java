@@ -72,14 +72,14 @@ public class ModelJeep extends ModelVehicle
 		browningModel[1][2] = new ModelRendererTurbo(this, 80, 68, textureX, textureY);
 		browningModel[1][3] = new ModelRendererTurbo(this, 66, 64, textureX, textureY);	//Ammo box
 		
-		browningModel[1][0].addBox(-8F, -1.5F, -1.5F, 12, 3, 3);
-		browningModel[1][1].addBox(4F, -0.5F, -0.5F, 10, 1, 1);
-		browningModel[1][2].addBox(-10F, 0F, -1F, 2, 3, 2);		
-		browningModel[1][3].addBox(0F, -1F, -6F, 2, 4, 5);
+		browningModel[1][0].addBox(-7F, -1.5F, -1.5F, 12, 3, 3);
+		browningModel[1][1].addBox(5F, -0.5F, -0.5F, 10, 1, 1);
+		browningModel[1][2].addBox(-9F, 0F, -1F, 2, 3, 2);		
+		browningModel[1][3].addBox(1F, -1F, -6F, 2, 4, 5);
 		
 		//Set the origin
 		for(ModelRendererTurbo gunPart : browningModel[1])
-			gunPart.setRotationPoint(-6F, -18F, 0F);
+			gunPart.setRotationPoint(-6F, -22F, 0F);
 		
 		//No recoil part
 		browningModel[2] = new ModelRendererTurbo[0];

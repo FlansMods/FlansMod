@@ -1,0 +1,10 @@
+Name Lab Coat
+ShortName labCoat
+Icon LabCoat
+Colour 255 255 255
+Type Chest
+Model zombie.Coat
+Defence 0.2
+ArmourTexture LabCoat
+MoveSpeedModifier 1.0
+KnockbackModifier 0.5

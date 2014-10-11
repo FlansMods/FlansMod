@@ -17,12 +17,14 @@ Accuracy 3
 //Time in ticks between rounds
 ShootDelay 2
 //The length of the sound. 0 for a single shot sound. Other values are for looping sounds
-SoundLength 19
+//SoundLength 19
 //Whether or not to distort the sound. This works well for single shots but not for loops
 DistortSound False
 ShootSound BrenShoot
 ReloadSound BrenReload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable True
 //-----------------------------------------------------------------------------

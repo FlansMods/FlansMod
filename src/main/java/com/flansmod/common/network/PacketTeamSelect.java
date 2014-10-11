@@ -23,14 +23,22 @@ public class PacketTeamSelect extends PacketBase
 	public boolean classChoicesPacket = false;
 	public Team[] teams;
 	public PlayerClass[] playerClasses;
+	/** If true, then this packet simply updates the available choices, rather than forcing the player to choose */
+	public boolean info = false;
 	
 	public PacketTeamSelect() {}
-
-	public PacketTeamSelect(Team[] t)
+	
+	public PacketTeamSelect(Team[] t, boolean i)
 	{
 		selectionPacket = false;
 		classChoicesPacket = false;
 		teams = t;
+		info = i;
+	}
+
+	public PacketTeamSelect(Team[] t)
+	{
+		this(t, false);
 	}
 	
 	public PacketTeamSelect(PlayerClass[] c)
@@ -52,6 +60,7 @@ public class PacketTeamSelect extends PacketBase
 	{
 		data.writeBoolean(selectionPacket);
 		data.writeBoolean(classChoicesPacket);
+		data.writeBoolean(info);
 
 		//If it is a selection packet, then we need only send the selection
 		if(selectionPacket)
@@ -85,6 +94,7 @@ public class PacketTeamSelect extends PacketBase
 	{
 		selectionPacket = data.readBoolean();
 		classChoicesPacket = data.readBoolean();
+		info = data.readBoolean();
 		
 		if(selectionPacket)
 		{
@@ -145,6 +155,10 @@ public class PacketTeamSelect extends PacketBase
 		if(classChoicesPacket)
 		{
 			Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(playerClasses));
+		}
+		else if(info)
+		{
+			GuiTeamSelect.teamChoices = teams;
 		}
 		else Minecraft.getMinecraft().displayGuiScreen(new GuiTeamSelect(teams));
 	}

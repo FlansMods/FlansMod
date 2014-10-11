@@ -1,0 +1,6 @@
+Name Tank
+ShortName zombieHeavy
+SkinOverride Zombie
+AddItem sledgehammer
+AddItem fleshLump 2
+Chest DustbinlidChestplate

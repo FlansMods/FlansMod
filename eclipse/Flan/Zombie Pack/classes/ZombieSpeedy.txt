@@ -1,0 +1,7 @@
+Name Speedy
+ShortName zombieSpeedy
+SkinOverride Zombie
+AddItem screwdriver
+AddItem screwdriver+Screwdriver_Green
+AddItem screwdriver+Screwdriver_Red
+AddItem fleshLump 3

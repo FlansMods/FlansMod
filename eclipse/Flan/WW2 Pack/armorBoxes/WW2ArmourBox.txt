@@ -19,10 +19,10 @@ britishCoat cloth.4 8
 britishPants cloth.4 7
 britishBoots cloth.4 4
 AddArmour german German
-germanHelmet cloth.13 5
-germanCoat cloth.13 8
-germanPants cloth.13 7
-germanBoots cloth.13 4
+germanHelmet cloth.7 5
+germanCoat cloth.7 8
+germanPants cloth.7 7
+germanBoots cloth.7 4
 AddArmour japanese Japanese
 japaneseHelmet cloth.13 5
 japaneseCoat cloth.13 8
@@ -53,3 +53,8 @@ germanSnowHelmet cloth.0 5
 germanSnowCoat cloth.0 8
 germanSnowPants cloth.0 7
 germanSnowBoots cloth.0 4
+AddArmour germanForest German Forest
+germanForestHelmet cloth.13 5
+germanForestCoat cloth.13 8
+germanForestPants cloth.13 7
+germanForestBoots cloth.13 4

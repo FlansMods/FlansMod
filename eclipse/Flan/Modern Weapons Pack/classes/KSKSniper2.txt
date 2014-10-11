@@ -1,0 +1,8 @@
+Name Stealth Sniper
+ShortName kskSniper2
+AddItem sg550+flanMWSilencer+flanMW4xScope
+AddItem usp+flanMWSilencer
+AddItem mwKnife
+AddItem claymore 2
+AddItem sg550Ammo 2
+AddItem uspAmmo 2

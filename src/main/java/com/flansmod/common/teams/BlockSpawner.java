@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -38,16 +37,21 @@ public class BlockSpawner extends BlockContainer
 	}
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tabs, List list)
+    public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        list.add(new ItemStack(item, 1, 0));
-        list.add(new ItemStack(item, 1, 1));
-        list.add(new ItemStack(item, 1, 2));
+    	if(tab == FlansMod.tabFlanTeams)
+    	{
+	        list.add(new ItemStack(item, 1, 0));
+	        list.add(new ItemStack(item, 1, 1));
+	        list.add(new ItemStack(item, 1, 2));
+    	}
     }
     
     @Override
     public IIcon getIcon(int i, int j)
     {
+    	if(j > 2)
+    		j = 2;
     	return icons[colouredPass ? 1 : 0][j];
     }
     

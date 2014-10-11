@@ -1,0 +1,33 @@
+Name Flashlight
+ShortName flanMWFlashlight
+Icon Flashlight
+//The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
+AttachmentType grip
+//If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment
+Silencer false
+//Flashlight variables
+Flashlight true
+FlashlightRange 10
+FlashlightStrength 12
+//These multipliers stack between attachments and do what they say
+MeleeDamageMultiplier 1.0
+DamageMultiplier 1.0
+SpreadMultiplier 1.0
+RecoilMultiplier 1.0
+BulletSpeedMultiplier 1.0
+ReloadTimeMultiplier 1.0
+//These variables only come into effect if this is a scope
+//The ZoomLevel affects how much the view zooms in (note that this removes the model from the zooming animation and so is useless for iron sights)
+//The FOVZoomLevel affects how much the view narrows when zooming. Very useful for iron sights as it gives the illusion of zooming without killing off the model
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+ZoomOverlay None
+//Model
+Model mw.Flashlight
+Texture Flashlight
+//Recipe
+RecipeOutput 1
+Recipe F fiberglass G yellowDust R redstone
+FFF
+GRR
+FFF

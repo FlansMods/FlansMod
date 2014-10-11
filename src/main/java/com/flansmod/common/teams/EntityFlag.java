@@ -16,6 +16,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	public int baseID;
 	public EntityFlagpole base;
 	public boolean isHome = true;
+	public int timeUntilReturn;
 
 	public EntityFlag(World world) 
 	{
@@ -63,9 +64,46 @@ public class EntityFlag extends Entity implements ITeamObject {
 				TeamsManager.getInstance();
 				TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
-			ridingEntity = null;
+			mountEntity(null);
 			
 		}
+		if(!addedToChunk)
+			worldObj.spawnEntityInWorld(this);
+		
+		if(timeUntilReturn > 0)
+		{
+			if(ridingEntity != null || isHome)
+				timeUntilReturn = 0;
+			else
+			{
+				timeUntilReturn--;
+				if(timeUntilReturn == 0)
+				{
+					reset();
+					Team flagTeam = TeamsManager.getInstance().getTeam(getBase().getOwnerID());
+					TeamsManager.messageAll("\u00a7fThe \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag returned itself");
+				}
+			}
+		}
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
+	}
+	
+	@Override
+	public void mountEntity(Entity entity)
+	{
+		if(entity == null)
+		{
+			if(TeamsManager.getInstance().currentRound != null && TeamsManager.getInstance().currentRound.gametype instanceof GametypeCTF)
+			{
+				timeUntilReturn = ((GametypeCTF)TeamsManager.getInstance().currentRound.gametype).flagReturnTime * 20;
+			}
+			else timeUntilReturn = 600; //30 seconds
+		}
+		
+		super.mountEntity(entity);
 	}
 	
 	public void reset()
@@ -76,16 +114,23 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 
 	@Override
+    public boolean writeToNBTOptional(NBTTagCompound tags)
+    {
+        return false;
+    }
+	
+	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
-		baseID = tags.getInteger("Base");
-		setBase(TeamsManager.getInstance().getBase(baseID));
+		//baseID = tags.getInteger("Base");
+		//setBase(TeamsManager.getInstance().getBase(baseID));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		tags.setInteger("Base", base == null ? -1 : base.getBaseID());
+		//tags.setInteger("Base", base == null ? -1 : base.getBaseID());
+		
 	}
 
 	@Override
@@ -180,4 +225,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		return false;
 	}
+	
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

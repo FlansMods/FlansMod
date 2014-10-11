@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import com.flansmod.common.FlansMod;
 
@@ -9,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
@@ -51,6 +49,12 @@ public class TeamsMap
 	public void addBase(ITeamBase base)
 	{
 		bases.add(base);
+		
+	}
+	
+	public void addBaseFirstTime(ITeamBase base)
+	{
+		addBase(base);
 		//Add the chunk this base is in to our chunk loading ticket
 		ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
 		FlansMod.log("Added chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " to chunk loading ticket for base " + name );
@@ -71,6 +75,10 @@ public class TeamsMap
 	
 	public void addObject(ITeamObject object)
 	{
+	}
+	
+	public void addObjectFirstTime(ITeamObject object)
+	{
 		//Add the chunk this object is in to our chunk loading ticket
 		if(object.forceChunkLoading())
 			ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)object.getPosX() >> 4, (int)object.getPosZ() >> 4));
@@ -78,7 +86,8 @@ public class TeamsMap
 	
 	public TeamsMap(World world, NBTTagCompound tags)
 	{
-		this(world, tags.getString("ShortName"), tags.getString("Name"));
+		shortName = tags.getString("ShortName");
+		name = tags.getString("Name");
 		minPlayers = tags.getInteger("MinPlayers");
 		maxPlayers = tags.getInteger("MaxPlayers");
 	}

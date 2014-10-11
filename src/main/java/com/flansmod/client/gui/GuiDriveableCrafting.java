@@ -142,6 +142,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			//Render rotating driveable model
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
 			if(selectedType instanceof MechaType)
 				GL11.glTranslatef(0, 15, 0);
@@ -152,6 +153,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render(selectedType);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glPopMatrix();
 			
 			recipeName = selectedType.name;
@@ -163,7 +165,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			drawString(fontRendererObj, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
 			drawString(fontRendererObj, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
 			drawString(fontRendererObj, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
-			drawString(fontRendererObj, "Guns : " + (selectedType.numPassengerGunners + selectedType.guns.size()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
+			drawString(fontRendererObj, "Guns : " + (selectedType.ammoSlots()), guiOriginX + 82, guiOriginY + 104, 0xffffff);
 			drawString(fontRendererObj, selectedType.numEngines() + "x", guiOriginX + 100, guiOriginY + 141, 0xffffff);
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required

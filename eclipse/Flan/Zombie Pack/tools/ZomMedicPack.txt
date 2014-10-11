@@ -1,0 +1,17 @@
+Name Medical Kit
+ShortName zomMedicPack
+Icon MedicPackZombies
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+Heal true
+Repair false
+HealAmount 7
+ToolLife 5
+DestroyOnEmpty true
+StackSize 1
+RecipeOutput 1
+Recipe F paper P potion.8229
+FFF
+PPP
+FFF
+RechargeRecipe 3 potion.8229

@@ -1,0 +1,9 @@
+Name Juggernaut Heavy Trousers (Brown)
+ShortName juggernautPantsBrown
+Icon JuggernautPantsBrown
+Colour 255 255 255
+Type Legs
+Defence 0.2
+ArmourTexture BrownJuggernaut
+MoveSpeedModifier 0.75
+KnockbackModifier 0.25

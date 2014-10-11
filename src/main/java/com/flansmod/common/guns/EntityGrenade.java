@@ -3,7 +3,6 @@ package com.flansmod.common.guns;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -19,13 +18,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -72,6 +71,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		motionZ = axes.getXAxis().z * speed;
 		if(type.spinWhenThrown)
 			angularVelocity = new Vector3f(0F, 0F, 10F);
+		if(type.throwSound != null)
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.throwSound, true);
 	}
 	
 	@Override
@@ -123,14 +124,18 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 						//If we are in a gametype and both thrower and triggerer are playing, check for friendly fire
 						if(TeamsManager.getInstance() != null && TeamsManager.getInstance().currentRound != null && obj instanceof EntityPlayerMP && thrower instanceof EntityPlayer)
 						{
-							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)))
+							if(!TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)obj, new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)))
 								continue;
 						}
+						if(type.damageToTriggerer > 0)
+							((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.damageToTriggerer);
 						detonate();
 						break;
 					}
 					if(obj instanceof EntityDriveable && getDistanceToEntity((Entity)obj) < type.driveableProximityTrigger)
 					{
+						if(type.damageToTriggerer > 0)
+							((EntityDriveable)obj).attackEntityFrom(getGrenadeDamage(), type.damageToTriggerer);
 						detonate();
 						break;
 					}
@@ -143,7 +148,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			stuck = false;
 		
 		//Physics and motion (Don't move if stuck)
-		if(!stuck)
+		if(!stuck && !type.stickToThrower)
 		{
 			prevRotationYaw = axes.getYaw();
 			prevRotationPitch = axes.getPitch();
@@ -265,6 +270,13 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			setPosition(posX, posY, posZ);
 		}
 		
+		if(type.stickToThrower)
+		{
+			if(thrower == null || thrower.isDead)
+				setDead();
+			else setPosition(thrower.posX, thrower.posY, thrower.posZ);
+		}
+		
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
 		//(Don't attack entities when stuck to stuff)
 		if(type.hitEntityDamage > 0 && !stuck)
@@ -282,6 +294,10 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	
 		//Apply gravity
 		motionY -= 9.81D / 400D * type.fallSpeed;
+		
+		//Temporary fire glitch fix
+		if(worldObj.isRemote)
+			extinguish();
 	}
 	
 	@Override
@@ -304,7 +320,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		detonated = true;
 		
 		//Play detonate sound
-		playSound(type.detonateSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+		PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.detonateSound, true);
 		
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
@@ -376,7 +392,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	private DamageSource getGrenadeDamage()
 	{
 		if(thrower instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type)).setProjectile();
+			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)).setProjectile();
 		else return (new EntityDamageSourceIndirect(type.shortName, this, thrower)).setProjectile();
 	}
 
@@ -428,4 +444,9 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 			angularVelocity = new Vector3f(0F, 0F, 10F);
 	}
 
+	@Override
+    public boolean isBurning()
+    {
+    	return false;
+    }
 }

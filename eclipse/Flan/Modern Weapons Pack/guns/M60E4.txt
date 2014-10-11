@@ -21,6 +21,8 @@ ShootDelay 2
 ShootSound RPDShoot
 ReloadSound BrowningReload
 Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
 Scope None
 ZoomLevel 1.0
@@ -35,7 +37,7 @@ ModelScale 1.0
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMWForegrip
+AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

@@ -3,8 +3,6 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
@@ -41,8 +39,9 @@ public class ArmourBoxType extends InfoType
 	}
 	
 	@Override
-	public void postRead()
+	public void postRead(TypeFile file)
 	{
+    	super.postRead(file);
 		boxes.put(shortName, this);
 	}
 	
@@ -83,9 +82,9 @@ public class ArmourBoxType extends InfoType
 					{
 						ItemStack stack = null;
 						if(lineSplit[j * 2 + 1].contains("."))
-							stack = getRecipeElement(lineSplit[j * 2 + 1].split("\\.")[0], Integer.valueOf(lineSplit[j * 2 + 2]), Integer.valueOf(lineSplit[j * 2 + 1].split("\\.")[1]));
+							stack = getRecipeElement(lineSplit[j * 2 + 1].split("\\.")[0], Integer.valueOf(lineSplit[j * 2 + 2]), Integer.valueOf(lineSplit[j * 2 + 1].split("\\.")[1]), shortName);
 						else
-							stack = getRecipeElement(lineSplit[j * 2 + 1], Integer.valueOf(lineSplit[j * 2 + 2]), 0);
+							stack = getRecipeElement(lineSplit[j * 2 + 1], Integer.valueOf(lineSplit[j * 2 + 2]), 0, shortName);
 						
 						if(stack != null)
 							entry.requiredStacks[i].add(stack);

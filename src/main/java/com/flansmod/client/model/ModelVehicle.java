@@ -6,12 +6,14 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.driveables.VehicleType;
 
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelDriveable
 {
     public ModelRendererTurbo turretModel[] = new ModelRendererTurbo[0];			//The turret (for tanks)
 	public ModelRendererTurbo barrelModel[] = new ModelRendererTurbo[0];			//The barrel of the main turret
+	public ModelRendererTurbo ammoModel[][] = new ModelRendererTurbo[0][0];			//Ammo models for the main turret. ammoModel[i] will render if the vehicle has less than 3 ammo slots or if slot i is full. Checks shell / missile inventory
     public ModelRendererTurbo frontWheelModel[] = new ModelRendererTurbo[0];		//Front and back wheels are for bicycles and motorbikes and whatnot
     public ModelRendererTurbo backWheelModel[] = new ModelRendererTurbo[0];
     public ModelRendererTurbo leftFrontWheelModel[] = new ModelRendererTurbo[0];	//This set of 4 wheels are for 4 or more wheeled things
@@ -51,6 +53,8 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(trailerModel);
 		renderPart(turretModel);
 		renderPart(barrelModel);
+		for(ModelRendererTurbo[] mods : ammoModel)
+			renderPart(mods);
 		renderPart(steeringWheelModel);
 	}
 	
@@ -67,12 +71,12 @@ public class ModelVehicle extends ModelDriveable
 	        }	
 			for(int i = 0; i < bodyDoorOpenModel.length; i++)
 			{
-				if(vehicle.varDoor == true)
+				if(vehicle.varDoor)
 					bodyDoorOpenModel[i].render(f5, oldRotateOrder);
 			}
 			for(int i = 0; i < bodyDoorCloseModel.length; i++)
 			{
-				if(vehicle.varDoor == false)
+				if(!vehicle.varDoor)
 					bodyDoorCloseModel[i].render(f5, oldRotateOrder);
 			}
 			for(int i = 0; i < steeringWheelModel.length; i++)
@@ -173,7 +177,7 @@ public class ModelVehicle extends ModelDriveable
         for(EntitySeat seat : vehicle.seats)
         {
         	//If the seat has a gun model attached
-        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part))// && !vehicle.rotateWithTurret(seat.seatInfo))
+        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part) && !vehicle.rotateWithTurret(seat.seatInfo))
         	{
         		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
         		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;     
@@ -207,9 +211,12 @@ public class ModelVehicle extends ModelDriveable
         }
 	}
 		
-    /** Render the tank turret */
-	public void renderTurret(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle)
+    /** Render the tank turret 
+     * @param dt */
+	public void renderTurret(float f, float f1, float f2, float f3, float f4, float f5, EntityVehicle vehicle, float dt)
     {		
+		VehicleType type = vehicle.getVehicleType();
+		
 		//Render main turret barrel
 		{
 			float yaw = vehicle.seats[0].looking.getYaw();
@@ -224,16 +231,32 @@ public class ModelVehicle extends ModelDriveable
 				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
 				barrelModel[i].render(f5, oldRotateOrder);
 			}
+			for(int i = 0; i < ammoModel.length; i++)
+			{
+				if(i >= type.numMissileSlots || vehicle.getDriveableData().missiles[i] != null)
+				{
+					for(int j = 0; j < ammoModel[i].length; j++)
+					{
+						ammoModel[i][j].rotateAngleZ = -pitch * 3.14159265F / 180F;
+						ammoModel[i][j].render(f5, oldRotateOrder);
+					}
+				}
+			}
 		}
 		
         //Render turret guns
-        /*for(EntitySeat seat : vehicle.seats)
+        for(EntitySeat seat : vehicle.seats)
         {
         	//If the seat has a gun model attached
         	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && vehicle.isPartIntact(seat.seatInfo.part) && vehicle.rotateWithTurret(seat.seatInfo))
         	{
-        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
-        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;     
+        		EntitySeat driverSeat = vehicle.seats[0];
+        		
+        		float driverYaw = driverSeat.prevLooking.getYaw() + (driverSeat.looking.getYaw() - driverSeat.prevLooking.getYaw()) * dt;
+        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * dt;
+        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * dt;     
+        		
+        		float effectiveYaw = yaw - driverYaw;
         		
         		//Iterate over the parts of that model
         		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
@@ -241,14 +264,14 @@ public class ModelVehicle extends ModelDriveable
     			for(ModelRendererTurbo gunModelPart : gunModel[0])
     			{
     				//Yaw and render
-        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = -effectiveYaw * 3.14159265F / 180F;
         			gunModelPart.render(f5, oldRotateOrder);
     			}
         		//Yaw and pitch, no recoil parts
     			for(ModelRendererTurbo gunModelPart : gunModel[1])
     			{
     				//Yaw, pitch and render
-        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = -effectiveYaw * 3.14159265F / 180F;
         			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
         			gunModelPart.render(f5, oldRotateOrder);
     			}
@@ -256,12 +279,12 @@ public class ModelVehicle extends ModelDriveable
     			for(ModelRendererTurbo gunModelPart : gunModel[2])
     			{
     				//Yaw, pitch, recoil and render
-        			gunModelPart.rotateAngleY = -yaw * 3.14159265F / 180F;
+        			gunModelPart.rotateAngleY = -effectiveYaw * 3.14159265F / 180F;
         			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
         			gunModelPart.render(f5, oldRotateOrder);
     			}
         	}
-        }*/
+        }
     }
 	
 	@Override

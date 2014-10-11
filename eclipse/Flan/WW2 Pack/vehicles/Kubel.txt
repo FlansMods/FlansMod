@@ -10,8 +10,8 @@ RotateWheels false
 //Third Person Camera Distance
 CameraDistance 5.0
 //Throttle
-MaxThrottle 2.0
-MaxNegativeThrottle 0.0
+MaxThrottle 1.0
+MaxNegativeThrottle 0.5
 //Steering modifiers
 TurnLeftSpeed 1
 TurnRightSpeed 1
@@ -24,7 +24,13 @@ MomentOfInertia 10.0
 //More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
 Bounciness 0.3
 //For calculating whether wheels are on the ground or not for driving
-WheelRadius 0.5
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -22 -8 -14
+WheelPosition 1 -22 -8 14
+WheelPosition 2 22 -8 14
+WheelPosition 3 22 -8 -14
+WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive false
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
@@ -38,6 +44,7 @@ RotatedDriverOffset 0 0 0
 Passengers 2
 Passenger 1 0 -6 8 core
 Passenger 2 -16 6 0 core -60 60 -30 60 mg42 MG42
+GunOrigin 2 0 -4 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 999
 ShellDelay 999

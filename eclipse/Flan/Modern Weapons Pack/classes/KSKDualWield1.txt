@@ -1,0 +1,8 @@
+Name Gunslinger
+ShortName kskDualWield1
+AddItem glock
+AddItem glock
+AddItem m67 2
+AddItem mwKnife
+AddItem glockAmmo 3
+AddItem glockAmmo 3

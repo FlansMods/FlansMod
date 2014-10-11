@@ -2,6 +2,7 @@ package com.flansmod.client.debug;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.flansmod.common.vector.Vector3f;
@@ -11,6 +12,11 @@ public class EntityDebugVector extends Entity
 	public Vector3f vector;
 	public int life;
 	public float red = 1F, green = 1F, blue = 1F;
+	
+	public EntityDebugVector(World w) 
+	{
+		super(w);
+	}
 	
 	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i, float r, float g, float b) 
 	{
@@ -37,6 +43,12 @@ public class EntityDebugVector extends Entity
 		life--;
 		if(life <= 0)
 			setDead();
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox()
+	{
+		return null;
 	}
 
 

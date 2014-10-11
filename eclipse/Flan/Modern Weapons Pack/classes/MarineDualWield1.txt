@@ -1,0 +1,8 @@
+Name Gunslinger
+ShortName marineDualWield1
+AddItem m9
+AddItem m9
+AddItem m67 2
+AddItem mwKnife
+AddItem m9Ammo 4
+AddItem m9Ammo 4

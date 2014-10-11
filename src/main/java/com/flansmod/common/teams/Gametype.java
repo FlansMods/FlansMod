@@ -1,6 +1,5 @@
 package com.flansmod.common.teams;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -8,6 +7,7 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
@@ -19,7 +19,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
-import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.types.InfoType;
 
 public abstract class Gametype 
 {
@@ -53,6 +53,8 @@ public abstract class Gametype
 	/** Called when the scoreboards and voting are finished */
 	public abstract void roundCleanup();
 	
+	public abstract boolean teamHasWon(Team team);
+	
 	public void tick() {}
 	
 	public Team[] getTeamsCanSpawnAs(TeamsRound currentRound, EntityPlayer player)
@@ -79,6 +81,8 @@ public abstract class Gametype
 	
 	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) {}
 	
+	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) { return true; }
+	
 	public abstract Vec3 getSpawnPoint(EntityPlayerMP player);
 	
 	//Return whether or not the variable exists
@@ -89,6 +93,8 @@ public abstract class Gametype
 	public abstract void saveToNBT(NBTTagCompound tags);
 	
 	public boolean sortScoreboardByTeam() { return true; }
+	
+	public boolean showZombieScore() { return false; }
 
 	/** Whether "attacker" can attack "victim" */
 	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) { return true; }
@@ -146,14 +152,16 @@ public abstract class Gametype
 		EntityPlayerMP attacker = null;
 		if(source instanceof EntityDamageSource)
 		{
-			if(((EntityDamageSource)source).getEntity() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)((EntityDamageSource)source).getEntity();
+			if(source.getEntity() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP) source.getEntity();
 		}
 		if(source instanceof EntityDamageSourceIndirect)
 		{
-			if(((EntityDamageSourceIndirect)source).getSourceOfDamage() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP)((EntityDamageSourceIndirect)source).getSourceOfDamage(); 
+			if(source.getSourceOfDamage() instanceof EntityPlayerMP)
+				attacker = (EntityPlayerMP) source.getSourceOfDamage();
 		}
 		return attacker;
 	}
+	
+	public boolean shouldAutobalance() { return true; }
 }

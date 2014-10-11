@@ -1,0 +1,45 @@
+////Name and icon
+Name Flesh Lump
+ShortName fleshLump
+Icon FleshLump
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Visuals
+Model zombie.FleshLump
+Texture FleshLump
+TrailParticles false
+//TrailParticleType <particleType>
+ExplodeParticles 0
+//ExplodeParticleType <particleType>
+SmokeTime 0
+//SmokeParticleType <particleType>
+SpinWhenThrown true
+////Throwing
+ThrowDelay 10
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact false
+Bounciness 1.0
+HitEntityDamage 5
+ThrowSpeed 2.0
+FallSpeed 1.0
+BreaksGlass true
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+StackSize 8
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger 0.5
+Fuse 1200
+DetonateWhenShot false
+////Detonation
+FireRadius 0.0
+ExplosionRadius 0.0
+ExplosionBreaksBlocks false
+//Detonate Sound <sound>
+////Misc
+MeleeDamage 3
+ShapelessRecipe rottenFlesh

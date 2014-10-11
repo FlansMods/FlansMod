@@ -10,7 +10,9 @@ import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
@@ -21,6 +23,9 @@ public class PlayerClass extends InfoType
 	public List<String[]> startingItemStrings = new ArrayList<String[]>();
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public boolean horse = false;
+	
+	/** Override armour. If this is set, then it will override the team armour */
+	public ItemStack hat, chest, legs, shoes;
 	
 	public PlayerClass(TypeFile file)
 	{
@@ -36,12 +41,59 @@ public class PlayerClass extends InfoType
 		{
 			startingItemStrings.add(split);
 		}
+		if(split[0].equals("SkinOverride"))
+			texture = split[1];
+		if(split[0].equals("Hat") || split[0].equals("Helmet"))
+		{
+			if(split[1].equals("None"))
+				return;
+			for(Item item : FlansMod.armourItems)
+			{
+				ArmourType armour = ((ItemTeamArmour)item).type;
+				if(armour != null && armour.shortName.equals(split[1]))
+					hat = new ItemStack(item);
+			}
+		}
+		if(split[0].equals("Chest") || split[0].equals("Top"))
+		{
+			if(split[1].equals("None"))
+				return;
+			for(Item item : FlansMod.armourItems)
+			{
+				ArmourType armour = ((ItemTeamArmour)item).type;
+				if(armour != null && armour.shortName.equals(split[1]))
+					chest = new ItemStack(item);
+			}
+		}
+		if(split[0].equals("Legs") || split[0].equals("Bottom"))
+		{
+			if(split[1].equals("None"))
+				return;
+			for(Item item : FlansMod.armourItems)
+			{
+				ArmourType armour = ((ItemTeamArmour)item).type;
+				if(armour != null && armour.shortName.equals(split[1]))
+					legs = new ItemStack(item);
+			}
+		}
+		if(split[0].equals("Shoes") || split[0].equals("Boots"))
+		{
+			if(split[1].equals("None"))
+				return;
+			for(Item item : FlansMod.armourItems)
+			{
+				ArmourType armour = ((ItemTeamArmour)item).type;
+				if(armour != null && armour.shortName.equals(split[1]))
+					shoes = new ItemStack(item);
+			}
+		}
 	}
 	
 	/** This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once */
 	@Override
-	protected void postRead() 
+	protected void postRead(TypeFile file) 
 	{
+    	super.postRead(file);
 		onWorldLoad(null);
 	}
 	
@@ -90,24 +142,35 @@ public class PlayerClass extends InfoType
 				ItemStack stack = new ItemStack(matchingItem, amount, damage);
 				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
 				{
+					GunType gunType = ((ItemGun)matchingItem).type;
 			    	NBTTagCompound tags = new NBTTagCompound();
 			    	NBTTagCompound attachmentTags = new NBTTagCompound();
 			    	int genericID = 0;
 			    	for(int i = 0; i < itemNames.length - 1; i++)
 			    	{
 			    		AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
-			    		String tagName = null;
-			    		switch(attachment.type)
+			    		if(attachment != null)
 			    		{
-			    			case sights : tagName = "scope"; break;
-			    			case barrel : tagName = "barrel"; break;
-			    			case stock : tagName = "stock"; break;
-			    			case grip : tagName = "grip"; break;
-			    			case generic : tagName = "generic_" + genericID++; break;
+				    		String tagName = null;
+				    		switch(attachment.type)
+				    		{
+				    			case sights : tagName = "scope"; break;
+				    			case barrel : tagName = "barrel"; break;
+				    			case stock : tagName = "stock"; break;
+				    			case grip : tagName = "grip"; break;
+				    			case generic : tagName = "generic_" + genericID++; break;
+				    		}
+				    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
+				    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
+				    		attachmentTags.setTag(tagName, specificAttachmentTags);
 			    		}
-			    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
-			    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
-			    		attachmentTags.setTag(tagName, specificAttachmentTags);
+			    		//Maybe it was a paintjob
+			    		else
+			    		{
+			    			Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
+			    			if(paintjob != null)
+			    				tags.setString("Paint", paintjob.iconName);
+			    		}
 			    	}
 			    	tags.setTag("attachments", attachmentTags);
 			    	stack.stackTagCompound = tags;

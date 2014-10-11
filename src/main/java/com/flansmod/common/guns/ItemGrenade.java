@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,10 +16,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.google.common.collect.Multimap;
 
-public class ItemGrenade extends Item {
+public class ItemGrenade extends Item implements IFlanItem
+{
 
 	public GrenadeType type;
 	
@@ -58,10 +59,10 @@ public class ItemGrenade extends Item {
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player, world.isRemote ? Side.CLIENT : Side.SERVER);
 		//If can throw grenade
-		if(data != null && data.shootTime <= 0)
+		if(data != null && data.shootTimeRight <= 0 && data.shootTimeLeft <= 0)
 		{
 			//Delay the next throw / weapon fire / whatnot
-			data.shootTime = type.throwDelay;
+			data.shootTimeRight = type.throwDelay;
 			//Create a new grenade entity
 			EntityGrenade grenade = new EntityGrenade(world, type, player);
 			//Spawn the entity server side
@@ -103,4 +104,10 @@ public class ItemGrenade extends Item {
     {
     	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
+    
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
+	}
 }

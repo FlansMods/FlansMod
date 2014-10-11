@@ -3,15 +3,12 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 
 import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 
 public class GametypeDM extends Gametype 
 {
@@ -128,11 +125,9 @@ public class GametypeDM extends Gametype
 			return null;
 		
 		//Check each team's spawnpoints
-		for(int k = 2; k < 4; k++)
+		if(data.newTeam == Team.spectators)
 		{
-			if(data.newTeam == Team.spectators)
-				k = 1;
-			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
+			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
 			for(int j = 0; j < bases.size(); j++)
 			{
 				ITeamBase base = bases.get(j);
@@ -145,7 +140,24 @@ public class GametypeDM extends Gametype
 				}
 			}
 		}
-		
+		else
+		{
+			for(int k = 2; k < 4; k++)
+			{
+				ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
+				for(int j = 0; j < bases.size(); j++)
+				{
+					ITeamBase base = bases.get(j);
+					if(base.getMap() != teamsManager.currentRound.map)
+						continue;
+					for(int i = 0; i < base.getObjects().size(); i++)
+					{
+						if(base.getObjects().get(i).isSpawnPoint())
+							validSpawnPoints.add(base.getObjects().get(i));
+					}
+				}
+			}
+		}
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
@@ -187,6 +199,17 @@ public class GametypeDM extends Gametype
 	
 	@Override
 	public boolean sortScoreboardByTeam()
+	{
+		return false;
+	}
+	
+	public boolean shouldAutobalance() 
+	{ 
+		return false; 
+	}
+	
+	@Override
+	public boolean teamHasWon(Team team) 
 	{
 		return false;
 	}

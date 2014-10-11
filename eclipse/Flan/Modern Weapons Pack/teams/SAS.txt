@@ -1,0 +1,19 @@
+Name British SAS
+ShortName sas
+//TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
+//This is used for player names and such
+TextColour Green
+//TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
+TeamColour 0 150 0
+//Specify the armour this team should spawn with
+Hat sasHelmet
+Chest sasBody
+Legs sasPants
+Shoes sasBoots
+AddClass sasSniper1
+AddClass sasSniper2
+AddClass sasDualWield1
+AddClass sasAssault1
+AddClass sasAssault2
+AddClass sasMedic1
+AddClass sasEngineer1

@@ -1,0 +1,9 @@
+Name Flak Jacket
+ShortName flakJacket
+Icon FlakJacket
+Colour 255 255 255
+Type Chest
+Defence 0.4
+ArmourTexture FlakJacket
+MoveSpeedModifier 0.9
+KnockbackModifier 0.5

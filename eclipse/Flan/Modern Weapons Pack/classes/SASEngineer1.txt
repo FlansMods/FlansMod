@@ -1,0 +1,11 @@
+Name Engineer
+ShortName sasEngineer1
+AddItem r870
+AddItem m72law
+AddItem m9
+AddItem c4 2
+AddItem c4Remote
+AddItem mwKnife
+AddItem r870Ammo 3
+AddItem m72lawAmmo 1
+AddItem m9Ammo 2

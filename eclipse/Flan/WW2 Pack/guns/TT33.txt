@@ -19,6 +19,9 @@ ShootDelay 6
 ShootSound TT33Shoot
 ReloadSound TT33Reload
 Mode SemiAuto
+OneHanded true
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None

@@ -1,19 +1,12 @@
 package com.flansmod.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.HashMap;
 
-import com.flansmod.common.guns.GunType;
-
-import scala.actors.threadpool.Arrays;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 
 public class CraftingInstance 
 {

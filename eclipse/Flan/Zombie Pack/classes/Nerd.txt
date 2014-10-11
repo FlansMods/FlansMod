@@ -1,0 +1,8 @@
+Name Nerd
+ShortName nerd
+AddItem samuraiSword
+AddItem coltPython+ColtPython_Black
+AddItem 357Magnum 24
+AddItem cookie 5
+Helmet panHelmet
+Chest dustbinLidChestplate

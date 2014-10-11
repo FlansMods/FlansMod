@@ -1,0 +1,10 @@
+Name Shopkeeper's Apron
+ShortName shopkeepersApron
+Icon ShopkeepersApron
+Colour 255 255 255
+Type Chest
+Model zombie.Apron
+Defence 0.2
+ArmourTexture ShopkeepersApron
+MoveSpeedModifier 1.0
+KnockbackModifier 0.5

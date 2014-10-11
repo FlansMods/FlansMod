@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "4.4.0"
+version = "4.8.0"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -25,7 +25,7 @@ minecraft {
     version = "1.7.10-10.13.0.1180"
     assetDir = "eclipse/assets"
 
-    replace "@ALLOWED_VERSION@", "[4.4,4.5)"
+    replace "@ALLOWED_VERSION@", "[4.8,4.9)"
     replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
@@ -52,6 +52,12 @@ processResources
 }
 
 version = "${project.minecraft.version}-${project.version}"
+
+task mechaParts(type: Jar) {
+    from 'eclipse/Flan/Mecha Parts Pack'
+    baseName = 'Mecha Parts'
+    appendix = 'Content Pack'
+}
 
 task modernWeapons(type: Jar) {
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
@@ -80,12 +86,6 @@ task titan(type: Jar) {
     appendix = 'Content Pack'
 }
 
-task mechaParts(type: Jar) {
-    from 'eclipse/Flan/Mecha Parts Pack'
-    baseName = 'Mecha Parts'
-    appendix = 'Content Pack'
-}
-
 task ww2(type: Jar) {
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
@@ -100,14 +100,22 @@ task yeOlde(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task zombie(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/zombie/'}
+    from 'eclipse/Flan/Zombie Pack'
+    baseName = 'Zombie'
+    appendix = 'Content Pack'
+}
+
 task contentPacks() {
+    dependsOn mechaParts
     dependsOn modernWeapons
     dependsOn nerf
     dependsOn simpleParts
-    dependsOn mechaParts
     dependsOn titan
     dependsOn ww2
     dependsOn yeOlde
+    dependsOn zombie
 }
 
 task clearOutput(type: Delete) {
@@ -122,6 +130,7 @@ task outputJar(type: Jar) {
         exclude '**/titan/'
         exclude '**/ww2/'
         exclude '**/yeolde/'
+        exclude '**/zombie/'
     }
 }
 

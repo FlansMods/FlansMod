@@ -84,7 +84,7 @@ public class PacketSeatUpdates extends PacketBase
 		if(driveable != null)
 		{
     		//If this is the player who sent the packet in the first place, don't read it
-    		if(driveable.seats[seatId] != null && driveable.seats[seatId].riddenByEntity == clientPlayer)
+    		if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
     			return;
     		driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
     		driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);

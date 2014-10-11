@@ -1,0 +1,9 @@
+Name Heavy Sniper
+ShortName kskSniper1
+AddItem m40a3
+AddItem glock
+AddItem m67 2
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem m40a3Ammo 3
+AddItem glockAmmo 2

@@ -11,7 +11,7 @@ ReloadTime 87
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 20
 //Damage in half hearts
-Damage 15
+Damage 23
 //The higher this value, the more the bullets spread
 Accuracy 2
 //Time in ticks between rounds
@@ -19,6 +19,8 @@ ShootDelay 10
 ShootSound R700Shoot
 ReloadSound SpringfieldReload
 Mode SemiAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
 //Default Scope Settings
 Scope mwm40a3
 ZoomLevel 6.0
@@ -32,7 +34,7 @@ Texture M40A3
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

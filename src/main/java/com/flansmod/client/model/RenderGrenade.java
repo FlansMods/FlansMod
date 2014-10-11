@@ -2,16 +2,23 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.common.guns.EntityGrenade;
+import com.flansmod.common.guns.GrenadeType;
+import com.flansmod.common.guns.ItemGrenade;
+import com.flansmod.common.guns.ItemGun;
 
-public class RenderGrenade extends Render {
-
+public class RenderGrenade extends Render implements IItemRenderer 
+{
 	public RenderGrenade()
 	{
 		shadowSize = 0.5F;
@@ -44,7 +51,8 @@ public class RenderGrenade extends Render {
 			GL11.glRotatef(grenade.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
         }
 		ModelBase model = grenade.type.model;
-		model.render(grenade, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		if(model != null)
+			model.render(grenade, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
 	}
 
@@ -57,7 +65,65 @@ public class RenderGrenade extends Render {
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
-		return FlansModResourceHandler.getTexture(((EntityGrenade)entity).type);
+		ResourceLocation texture = FlansModResourceHandler.getTexture(((EntityGrenade)entity).type);
+		if(texture == null)
+			return FlansModResourceHandler.getIcon(((EntityGrenade)entity).type);
+		return texture;
+	}
+
+	@Override
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
+	{
+		switch(type)
+		{
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON : return item != null && item.getItem() instanceof ItemGrenade && ((ItemGrenade)item.getItem()).type.model != null;
+		default : break;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
+	{
+		return false;
+	}
+
+	@Override
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	{
+		GL11.glPushMatrix();
+		if(item != null && item.getItem() instanceof ItemGrenade)
+		{
+			GrenadeType grenadeType = ((ItemGrenade)item.getItem()).type;
+			if(grenadeType.model != null)
+			{
+				switch(type)
+				{
+				case EQUIPPED:
+				{
+					GL11.glRotatef(35F, 0F, 0F, 1F);
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+					GL11.glTranslatef(0F, 0.25F, 0F);
+					break;
+				}
+				case EQUIPPED_FIRST_PERSON:
+				{
+					GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.15F, 0.2F, -0.6F);
+					GL11.glTranslatef(0F, 0.25F, 0F);
+					break;
+				}
+				default : break;
+				}
+				
+				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(grenadeType));
+				ModelBase model = grenadeType.model;
+				model.render(null, 0F, 0F, 0F, 0F, 0F, 1F / 16F);
+			}
+		}
+		GL11.glPopMatrix();
 	}
 
 }

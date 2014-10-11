@@ -1,6 +1,9 @@
 package com.flansmod.api;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IControllable
@@ -34,4 +37,7 @@ public interface IControllable
 	
 	/** @return The player's 3rd person view distance */
 	public float getCameraDistance();
+	
+	@SideOnly(Side.CLIENT)
+	public EntityLivingBase getCamera();
 }

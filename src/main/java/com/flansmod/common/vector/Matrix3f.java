@@ -12,10 +12,7 @@ public class Matrix3f
 	{
 		for(int i = 0;i < 3;i++)
 		{
-			for(int j =0;j<3;j++)
-			{
-				matrix[i][j] = Matrix[i][j];
-			}
+            System.arraycopy(Matrix[i], 0, matrix[i], 0, 3);
 		}
 	}
 	

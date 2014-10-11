@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import com.flansmod.common.guns.GunType;
+import com.flansmod.common.vector.Vector3f;
 
 public class Seat 
 {
@@ -21,6 +22,10 @@ public class Seat
 	public EnumDriveablePart part;
 	/** Auto assigned by driveable type. Indicates what ammo slot the gun should take from */
 	public int gunnerID;
+	/** For turret mounted seats on tanks, the seat will be positioned differently according to this offset and the yaw of the turret */
+	public Vector3f rotatedOffset = new Vector3f();
+	/** Where the bullets come from */
+	public Vector3f gunOrigin = new Vector3f();
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z
@@ -33,6 +38,7 @@ public class Seat
 		x = Integer.parseInt(split[2]);
 		y = Integer.parseInt(split[3]);
 		z = Integer.parseInt(split[4]);
+		gunOrigin = new Vector3f(x, y, z);
 		part = EnumDriveablePart.getPart(split[5]);
 		if(split.length > 6)
 		{

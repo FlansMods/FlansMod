@@ -1,0 +1,9 @@
+Name Medic
+ShortName sasMedic1
+AddItem mp5+flanMWRedDot
+AddItem m9
+AddItem m67 1
+AddItem mwMedKit
+AddItem mwKnife
+AddItem mp5Ammo 3
+AddItem m9Ammo 3

@@ -31,7 +31,7 @@ Penetrates False
 SmokeTrail False
 MaxStackSize 16
 RecipeOutput 4
-//Recipe I iron G gunpowder
+//Recipe I ingotIron G gunpowder
 //III
 //GGG
 //GGG

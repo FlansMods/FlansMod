@@ -7,6 +7,9 @@ import com.flansmod.common.vector.Vector3f;
 
 public class ModelGun extends ModelBase 
 {
+	//Shapebox template. For quick copy pasting
+	//, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+	
 	//These first 4 models are static with no animation
 	public ModelRendererTurbo[] gunModel = new ModelRendererTurbo[0];
 	//These models appear when no attachment exists
@@ -17,6 +20,8 @@ public class ModelGun extends ModelBase
 	
 	//Animated models follow. 
 	public ModelRendererTurbo[] ammoModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] revolverBarrelModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] breakActionModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] minigunBarrelModel = new ModelRendererTurbo[0];
@@ -32,15 +37,42 @@ public class ModelGun extends ModelBase
 	//Various animation parameters
 	public float gunSlideDistance = 1F / 4F;
 	public EnumAnimationType animationType = EnumAnimationType.NONE;
+	public EnumMeleeAnimation meleeAnimation = EnumMeleeAnimation.DEFAULT;
 	public float tiltGunTime = 0.25F, unloadClipTime = 0.25F, loadClipTime = 0.25F, untiltGunTime = 0.25F;
 	/** If true, then the scope attachment will move with the top slide */
 	public boolean scopeIsOnSlide = false;
+	/** If true, then the scope attachment will move with the break action. Can be combined with the above */
+	public boolean scopeIsOnBreakAction = false;
 	/** For rifles and shotguns. Currently a generic reload animation regardless of how full the internal magazine already is */
 	public float numBulletsInReloadAnimation = 1;
 	/** For shotgun pump handles and rifle bolts */
 	public int pumpDelay = 0, pumpDelayAfterReload = 0, pumpTime = 1;
 	/** For shotgun pump handle */
 	public float pumpHandleDistance = 4F / 16F;
+	/** For end loaded projectiles */
+	public float endLoadedAmmoDistance = 1F;
+	/** If true, then the grip attachment will move with the shotgun pump */
+	public boolean gripIsOnPump = false;
+	/** The rotation point for the barrel break */
+	public Vector3f barrelBreakPoint = new Vector3f();
+	/** The amount the revolver barrel flips out by */
+	public float revolverFlipAngle = 15F;
+	/** The angle the gun is broken by for break actions */
+	public float breakAngle = 45F;
+	
+	/** Custom reload Parameters. If Enum.CUSTOM is set, these parameters can build an animation within the gun model classes */
+	public float rotateGunVertical = 0F;
+	public float rotateGunHorizontal = 0F;
+	public float tiltGun = 0F;
+	public Vector3f translateGun = new Vector3f(0F, 0F, 0F);
+	/* Ammo Model reload parameters */
+	public float rotateClipVertical = 0F;
+	public float rotateClipHorizontal = 0F;
+	public float tiltClip = 0F;
+	public Vector3f translateClip = new Vector3f(0F, 0F, 0F);
+	
+	/** This offsets the render position for third person */
+	public Vector3f thirdPersonOffset = new Vector3f();
 	
 	public void renderGun(float f)
 	{
@@ -86,6 +118,17 @@ public class ModelGun extends ModelBase
 	{
 		render(minigunBarrelModel, f);
 	}
+	
+	public void renderRevolverBarrel(float f) 
+	{
+		render(revolverBarrelModel, f);
+	}
+	
+	public void renderBreakAction(float f)
+	{
+		render(breakActionModel, f);
+	}
+
 
 	/** For renderering models simply */
 	private void render(ModelRendererTurbo[] models, float f)
@@ -107,6 +150,8 @@ public class ModelGun extends ModelBase
 		flip(slideModel);
 		flip(pumpModel);
 		flip(minigunBarrelModel);
+		flip(revolverBarrelModel);
+		flip(breakActionModel);
 	}	
 	
 	protected void flip(ModelRendererTurbo[] model)
@@ -130,6 +175,8 @@ public class ModelGun extends ModelBase
 		translate(slideModel, x, y, z);
 		translate(pumpModel, x, y, z);
 		translate(minigunBarrelModel, x, y, z);
+		translate(revolverBarrelModel, x, y, z);
+		translate(breakActionModel, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
@@ -141,4 +188,6 @@ public class ModelGun extends ModelBase
 			mod.rotationPointZ += z;
 		}
 	}
+
+
 }

@@ -8,7 +8,7 @@ ItemID 23456
 Category Chassis
 StackSize 4
 RecipeOutput 1
-Recipe I iron G glass L leather
+Recipe I ingotIron G glass L leather
   G
 ILI
 III

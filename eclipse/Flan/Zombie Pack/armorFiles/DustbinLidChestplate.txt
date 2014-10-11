@@ -1,0 +1,10 @@
+Name Dustbin Lid Chestplate
+ShortName dustbinLidChestplate
+Icon DustbinLidChestplate
+Colour 255 255 255
+Type Chest
+Model zombie.DustbinLidChestplate
+Defence 0.5
+ArmourTexture DustbinLidChestplate
+MoveSpeedModifier 0.7
+KnockbackModifier 0.5

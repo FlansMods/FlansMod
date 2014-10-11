@@ -1,0 +1,16 @@
+itemGroup.tabFlan0=Flans Mod Armas
+itemGroup.tabFlan1=Flans Mod VeÃ­culos
+itemGroup.tabFlan2=Flans Mod Partes
+itemGroup.tabFlan3=Flans Mod Times
+itemGroup.tabFlan4=Flans Mod Mecha
+tile.flansWorkbench.0.name=Bancada de Trabalho de VeÃ­culos
+tile.flansWorkbench.1.name=Bancada de ModificaÃ§Ã£o de Armas
+tile.flansWorkbench.2.name=Bancada de Trabalho de Partes
+item.opStick.0.name=BastÃ£o de Posse
+item.opStick.1.name=BastÃ£o de ConecÃ§Ã£o
+item.opStick.2.name=BastÃ£o de Mapeamento
+item.opStick.3.name=BastÃ£o de DestruiÃ§Ã£o
+item.flagpole.name=Mastro da Bandeira
+tile.teamsSpawner.0.name=Spawner de Itens
+tile.teamsSpawner.1.name=Spawner de Jogadores
+tile.teamsSpawner.2.name=Spawner de VeÃ­culos

@@ -1,7 +1,9 @@
-Name Juggernaut Heavy Boots
+Name Juggernaut Heavy Boots (Green)
 ShortName juggernautBoots
 Icon JuggernautBoots
 Colour 255 255 255
 Type Boots
 Defence 0.1
 ArmourTexture Juggernaut
+MoveSpeedModifier 0.9
+KnockbackModifier 0.25

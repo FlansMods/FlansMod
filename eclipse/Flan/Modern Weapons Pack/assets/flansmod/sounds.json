@@ -74,6 +74,11 @@
 		"sounds" : [ "flansmod:LugerReload" ]
 	},
 	
+	"L96Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:L96Shoot" ]
+	},
+	
 	"M1CarbineReload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:M1CarbineReload" ]
@@ -107,6 +112,11 @@
 	"M1014Reload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:M1014Reload" ]
+	},
+	
+	"M1014Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M1014Shoot" ]
 	},
 	
 	"MG42Reload": {
@@ -198,11 +208,86 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:W1200Reload" ]
 	},
-	
+		
 	"W1200Shoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:W1200Shoot" ]
 	},
+	
+	"GlockShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:GlockShoot" ]
+	},
+	
+	"SG550Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:SG550Shoot" ]
+	},
+	
+	"AT4Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:AT4Shoot" ]
+	},
+	
+	"MakarovShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MakarovShoot" ]
+	},
+	
+	"SIGP229Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MakarovShoot" ]
+	},
+	
+	"R870Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:R870Shoot" ]
+	},
+	
+	"FNSCARShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FNSCARShoot" ]
+	},
+	
+	"Helicopter1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Helicopter1" ]
+	},	
+	
+	"Helicopter2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Helicopter2" ]
+	},	
+	
+	"HelicopterStart": {
+		"category" : "player",
+		"sounds" : [ "flansmod:HelicopterStart" ]
+	},	
+	
+	"JetEngine1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JetEngine1" ]
+	},	
+
+	"JetEngine2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JetEngine2" ]
+	},	
+
+	"RocketFire1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:RocketFire1" ]
+	},	
+	
+	"RocketFire2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:RocketFire2" ]
+	},	
+	
+	"BulletHit": {
+		"category" : "player",
+		"sounds" : [ "flansmod:BulletHit" ]
+	},	
 	
 	"MinigunWarmup": {
 		"category" : "player",

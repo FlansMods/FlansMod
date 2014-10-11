@@ -1,13 +1,12 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 /** This represents a round in the teams mod 
  * It designates the map, gametype and teams to be played that round 
  * A list of valid rounds is kept by the TeamsManager and then either
  * players vote on which rounds to play or there is a rotation */
-public class TeamsRound 
+public class TeamsRound implements Comparable<TeamsRound>
 {
 	public Gametype gametype;
 	public TeamsMap map;
@@ -17,6 +16,10 @@ public class TeamsRound
 	public int timeLimit;
 	/** The round score limit */
 	public int scoreLimit;
+	/** 0 is almost never picked, 1 is always always picked. Used to pick vote options */
+	public float popularity;
+	/** Number of rounds since it was offered as an option in the vote. Used to pick vote options */
+	public int roundsSincePlayed;
 	
 	public TeamsRound(TeamsMap map2, Gametype gametype2, Team[] teams2, int timeLimit, int scoreLimit) 
 	{
@@ -25,6 +28,7 @@ public class TeamsRound
 		teams = teams2;
 		this.timeLimit = timeLimit;
 		this.scoreLimit = scoreLimit;
+		popularity = 0.5F;
 	}
 	
 	public TeamsRound(NBTTagCompound tags)
@@ -39,6 +43,8 @@ public class TeamsRound
 		{
 			teams[i] = Team.getTeam(tags.getString("Team_" + i));
 		}
+		
+		popularity = tags.getFloat("Pop");
 	}
 
 	public void writeToNBT(NBTTagCompound tags) 
@@ -53,6 +59,8 @@ public class TeamsRound
 		{
 			tags.setString("Team_" + i, teams[i].shortName);
 		}
+		
+		tags.setFloat("Pop", popularity);
 	}
 	
 	public int getTeamID(Team team)
@@ -74,5 +82,30 @@ public class TeamsRound
 		case 1 : return Team.spectators;
 		default : return teams[id - 2];
 		}
+	}
+	
+	/** In two team gametypes, returns the opposite team */
+	public Team getOtherTeam(Team team)
+	{
+		if(team == Team.spectators || team == null || teams.length != 2)
+			return team;
+		if(team == teams[0])
+			return teams[1];
+		return teams[0];
+	}
+	
+	public float getWeight()
+	{
+		return popularity * 4F + roundsSincePlayed;
+	}
+
+	@Override
+	public int compareTo(TeamsRound o) 
+	{
+		if(getWeight() < o.getWeight())
+			return 1;
+		else if(getWeight() > o.getWeight())
+			return -1;
+		else return 0;
 	}
 }

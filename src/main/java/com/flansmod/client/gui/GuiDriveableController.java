@@ -26,9 +26,17 @@ public class GuiDriveableController extends GuiScreen
 	}
 	
 	@Override
+	public void initGui()
+	{
+		if(mc.gameSettings.thirdPersonView == 1)
+			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+	}
+	
+	@Override
 	public void onGuiClosed()
     {
 		mc.mouseHelper.ungrabMouseCursor();
+		mc.renderViewEntity = mc.thePlayer;
     }
 	
 	@Override
@@ -46,8 +54,12 @@ public class GuiDriveableController extends GuiScreen
 		{
 			player.inventory.changeCurrentItem(dWheel);
 		}
-
-		if(!leftMouseHeld&& Mouse.isButtonDown(0)) //Left mouse
+		
+		//Right mouse. Fires shells, drops bombs. Is not a holding thing
+		if(Mouse.isButtonDown(1))
+			plane.pressKey(8, player);
+		
+		if(!leftMouseHeld&& Mouse.isButtonDown(0)) //Left mouse, for MGs. Is a holding thing
 		{
 			leftMouseHeld = true;
 			plane.updateKeyHeldState(9, true);
@@ -88,6 +100,9 @@ public class GuiDriveableController extends GuiScreen
 		if(i == 63)
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
+			if(mc.gameSettings.thirdPersonView == 1)
+				mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+			else mc.renderViewEntity = mc.thePlayer;
 		}
 		if(i == 66)
 		{
@@ -115,9 +130,17 @@ public class GuiDriveableController extends GuiScreen
 		}
 		if(i == KeyInputHandler.reloadModelsKey.getKeyCode())
 		{
-			FlansModClient.reloadModels();
+			FlansModClient.reloadModels(false);
 		}
     }
+	
+	@Override
+	public void updateScreen()
+	{
+		if(mc.gameSettings.thirdPersonView == 1)
+			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+		else mc.renderViewEntity = mc.thePlayer;
+	}
 	
     @Override
 	public void handleInput()
@@ -202,21 +225,20 @@ public class GuiDriveableController extends GuiScreen
 			{
 				plane.pressKey(14, player);
 			}				
-			if(FlansMod.proxy.keyDown(KeyInputHandler.wingKey.getKeyCode()))
+			if(FlansMod.proxy.keyDown(KeyInputHandler.modeKey.getKeyCode()))
 			{
 				plane.pressKey(15, player);
 			}				
-			if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.getKeyCode()))
-			{
-				plane.pressKey(16, player);
-			}				
+			//if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.getKeyCode()))
+			//{
+			//	plane.pressKey(16, player);
+			//}				
 	
 		}
 		else
 		{
             mc.displayGuiScreen(null);
-			return;
-		}
+        }
     }
 	   
 	@Override

@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.teams.Gametype;
 import com.flansmod.common.teams.TeamsManager;
 
 public class PlayerHandler
@@ -52,24 +52,37 @@ public class PlayerHandler
 		EntityLivingBase entity = event.entityLiving;
 		if(entity instanceof EntityPlayer)
 		{
-			getPlayerData((EntityPlayer)entity).isShooting = false;
+			getPlayerData((EntityPlayer)entity).playerKilled();
+		}
+	}
+		
+	public void serverTick()
+	{
+		for(WorldServer world : MinecraftServer.getServer().worldServers)
+		{
+			for(Object player : world.playerEntities)
+			{
+				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
+			}
 		}
 	}
 	
-	/** Ticker for player data. Called from Flan's Mod ticker */
-	public void tick()
+	public void clientTick()
 	{
-		for(PlayerData d : serverSideData.values())
-			d.tick();
-		for(PlayerData d : clientSideData.values())
-			d.tick();
+		if(Minecraft.getMinecraft().theWorld != null)
+		{
+			for(Object player : Minecraft.getMinecraft().theWorld.playerEntities)
+			{
+				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
+			}	
+		}
 	}
 	
 	public static PlayerData getPlayerData(EntityPlayer player)
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getCommandSenderName(), Side.SERVER);
+		return getPlayerData(player.getCommandSenderName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
 	}
 	
 	public static PlayerData getPlayerData(String username)
@@ -90,6 +103,11 @@ public class PlayerHandler
 		{
 			if(!clientSideData.containsKey(username))
 				clientSideData.put(username, new PlayerData(username));
+		}
+		else
+		{
+			if(!serverSideData.containsKey(username))
+				serverSideData.put(username, new PlayerData(username));
 		}
 		return side.isClient() ? clientSideData.get(username) : serverSideData.get(username);
 	}
@@ -113,6 +131,13 @@ public class PlayerHandler
 			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
+		}
+		else if(event instanceof PlayerRespawnEvent)
+		{
+			EntityPlayer player = event.player;
+			String username = player.getCommandSenderName();
+			if(!serverSideData.containsKey(username))
+				serverSideData.put(username, new PlayerData(username));
 		}
 	}
 	

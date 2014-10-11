@@ -1,0 +1,8 @@
+Name Gunslinger
+ShortName sasDualWield1
+AddItem sigP226
+AddItem sigP226
+AddItem m67 2
+AddItem mwKnife
+AddItem sigP226Ammo 3
+AddItem sigP226Ammo 3

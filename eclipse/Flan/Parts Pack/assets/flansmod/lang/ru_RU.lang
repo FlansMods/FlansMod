@@ -33,3 +33,7 @@ item.largeWheel.name=Большое колесо
 item.metalCockpit.name=Металлический кокпит
 item.metalNose.name=Металлический нос
 item.blowTorch.name=Паяльная лампа
+item.helicopterBlade.name=Лопасть вертолета
+item.helicopterSkid.name=Лыжа вертолета
+item.advancedMetalCockpit.name=Продвинутый металлический кокпит
+item.advancedTankBody.name=Продвинутое шасси танка

@@ -2,23 +2,18 @@ package com.flansmod.client.gui;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketBaseEdit;
-import com.flansmod.common.teams.ITeamBase;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.CreativeCrafting;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
 
 public class GuiBaseEditor extends GuiScreen 
 {
@@ -60,11 +55,8 @@ public class GuiBaseEditor extends GuiScreen
 		teamButtons[1] = new GuiButton(1, width / 2 - 128 + 68, height / 2 - 94 + 38, 58, 20, "Spectator");
 		teamButtons[2] = new GuiButton(2, width / 2 - 128 + 130, height / 2 - 94 + 38, 58, 20, "Team 1");
 		teamButtons[3] = new GuiButton(3, width / 2 - 128 + 192, height / 2 - 94 + 38, 58, 20, "Team 2");
-		
-		for(int i = 0; i < 4; i++)
-		{
-			buttonList.add(teamButtons[i]);
-		}
+
+        buttonList.addAll(Arrays.asList(teamButtons).subList(0, 4));
 		
 		mapButtons = new GuiButton[5];
 		for(int i = 0; i < 5; i++)

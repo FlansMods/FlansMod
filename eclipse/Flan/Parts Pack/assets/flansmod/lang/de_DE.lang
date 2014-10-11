@@ -33,3 +33,6 @@ item.largeWheel.name=Großes Red
 item.metalCockpit.name=Metallcockpit
 item.metalNose.name=Metallnase
 item.blowTorch.name=Schneidbrenner
+item.helicopterBlade.name=Helikopter Rotorblatt
+item.helicopterSkid.name=Helikopter Kuffen
+item.advancedMetalCockpit.name=Modernes Metalcockpit

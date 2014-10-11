@@ -1,7 +1,9 @@
-Name Juggernaut Heavy Trousers
+Name Juggernaut Heavy Trousers (Green)
 ShortName juggernautPants
 Icon JuggernautPants
 Colour 255 255 255
 Type Legs
 Defence 0.2
 ArmourTexture Juggernaut
+MoveSpeedModifier 0.75
+KnockbackModifier 0.25
