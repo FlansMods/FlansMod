@@ -365,7 +365,7 @@ public class ClientProxy extends CommonProxy
 		case 3 : //Press Right
 			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode()); //(KeyInputHandler.rightKey.getKeyCode());
 
-		case 4 : //Press Jump. Sorry James, please don't hate me.
+		case 4 : //Press Jump. Sorry Flan, please don't hate me.
 			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode());
 		}
 		return false;
