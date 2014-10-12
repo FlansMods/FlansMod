@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -114,7 +116,7 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
         double length = 5D;
         Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
+        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
         
         //Result check
         if(movingobjectposition == null)
@@ -126,14 +128,18 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
             int i = movingobjectposition.blockX;
             int j = movingobjectposition.blockY;
             int k = movingobjectposition.blockZ;
-            if(!world.isRemote)
+            Block block = world.getBlock(i, j, k);
+            if(type.placeableOnLand || block instanceof BlockLiquid)
             {
-				world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
+	            if(!world.isRemote)
+	            {
+					world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
+	            }
+				if(!entityplayer.capabilities.isCreativeMode)
+				{	
+					itemstack.stackSize--;
+				}
             }
-			if(!entityplayer.capabilities.isCreativeMode)
-			{	
-				itemstack.stackSize--;
-			}
         }
         return itemstack;
     }

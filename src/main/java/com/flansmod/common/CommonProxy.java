@@ -54,11 +54,6 @@ public class CommonProxy
 		return contentPacks;
 	}
 	
-	public void tick()
-	{
-		
-	}
-	
 	/** A ton of client only methods follow */
 	public void load()
 	{
@@ -67,12 +62,7 @@ public class CommonProxy
 	public void forceReload()
 	{
 	}
-	
-	public List<File> getContentList()
-	{
-		return null;
-	}	
-	
+		
 	public void registerRenderers()
 	{
 	}

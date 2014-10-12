@@ -486,6 +486,10 @@ public class EntityMecha extends EntityDriveable
 		if(soundDelayLeft > 0)  soundDelayLeft--;
 		if(soundDelayRight > 0) soundDelayRight--;
 		
+		//If the player left the driver's seat, stop digging / whatever
+		if(!worldObj.isRemote && (seats[0] == null || seats[0].riddenByEntity == null))
+			rightMouseHeld = leftMouseHeld = false;
+		
 		//Update gun animations
 		leftAnimations.update();
 		rightAnimations.update();

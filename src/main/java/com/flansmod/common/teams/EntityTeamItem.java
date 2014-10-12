@@ -112,9 +112,18 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	@Override
 	public void writeSpawnData(ByteBuf data) 
 	{
-		data.writeInt(spawner.xCoord);
-		data.writeInt(spawner.yCoord);
-		data.writeInt(spawner.zCoord);
+		if(spawner == null)
+		{
+			data.writeInt(0);
+			data.writeInt(0);
+			data.writeInt(0);
+		}
+		else
+		{
+			data.writeInt(spawner.xCoord);
+			data.writeInt(spawner.yCoord);
+			data.writeInt(spawner.zCoord);
+		}
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();
 		//Getter of EntityItem

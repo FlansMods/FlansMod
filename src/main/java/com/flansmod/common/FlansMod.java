@@ -17,11 +17,14 @@ import java.util.zip.ZipInputStream;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -118,6 +121,8 @@ public class FlansMod
 	public static final float soundRange = 50F;
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
+	
+	public static float armourSpawnRate = 0.25F;
 	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
 	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
@@ -315,6 +320,36 @@ public class FlansMod
         if(eventArgs.modID.equals(MODID))
             syncConfig();
     }
+    
+	@SubscribeEvent
+	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
+	{
+		double chance = event.world.rand.nextDouble();
+
+		if(chance < armourSpawnRate && event.entityLiving instanceof EntityZombie || event.entityLiving instanceof EntitySkeleton)
+		{
+			if(event.world.rand.nextBoolean() && ArmourType.armours.size() > 0)
+			{
+				//Give a completely random piece of armour
+				ArmourType armour = ArmourType.armours.get(event.world.rand.nextInt(ArmourType.armours.size()));
+				if(armour != null && armour.type != 2)
+					event.entityLiving.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
+			}
+			else if(Team.teams.size() > 0)
+			{
+				//Give a random set of armour
+				Team team = Team.teams.get(event.world.rand.nextInt(Team.teams.size()));
+				if(team.hat != null)
+					event.entityLiving.setCurrentItemOrArmor(1, team.hat.copy());
+				if(team.chest != null)
+					event.entityLiving.setCurrentItemOrArmor(2, team.chest.copy());
+				//if(team.legs != null)
+				//	event.entityLiving.setCurrentItemOrArmor(3, team.legs.copy());
+				if(team.shoes != null)
+					event.entityLiving.setCurrentItemOrArmor(4, team.shoes.copy());
+			}
+		}
+	}
 	
 	/** Reads type files from all content packs */
 	private void getTypeFiles(List<File> contentPacks)

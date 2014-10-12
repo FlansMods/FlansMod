@@ -1,0 +1,8 @@
+Name Stealth Sniper
+ShortName gignSniper2
+AddItem g3+flanMWSilencer+flanMW4xScope
+AddItem mp5k+flanMWSilencer
+AddItem mwKnife
+AddItem claymore 2
+AddItem g3Ammo 3
+AddItem mp5kAmmo 2

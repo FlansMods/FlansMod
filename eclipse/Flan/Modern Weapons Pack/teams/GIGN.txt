@@ -1,0 +1,19 @@
+Name French GIGN
+ShortName gign
+//TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
+//This is used for player names and such
+TextColour Aqua
+//TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
+TeamColour 0 50 255
+//Specify the armour this team should spawn with
+Hat gignHelmet
+Chest gignBody
+Legs gignPants
+Shoes gignBoots
+AddClass gignSniper1
+AddClass gignSniper2
+AddClass gignDualWield1
+AddClass gignAssault1
+AddClass gignAssault2
+AddClass gignMedic1
+AddClass gignEngineer1

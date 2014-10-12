@@ -103,6 +103,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public void onMouseMoved(int deltaX, int deltaY)
 	{
 	}
+	
+	@Override
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throt, float steeringYaw)
+	{
+		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll, throt, steeringYaw);
+		wheelsYaw = steeringYaw;
+	}
 			
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
@@ -398,6 +405,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 						wheel.motionZ *= 0.9F;
 					}
 				}
+			}
+			
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			{
+				wheel.motionY += type.buoyancy;
 			}
 
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);

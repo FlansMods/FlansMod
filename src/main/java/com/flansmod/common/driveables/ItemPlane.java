@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -112,7 +114,7 @@ public class ItemPlane extends Item implements IFlanItem
         double length = 5D;
         Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
+        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
         
         //Result check
         if(movingobjectposition == null)
@@ -124,16 +126,20 @@ public class ItemPlane extends Item implements IFlanItem
             int i = movingobjectposition.blockX;
             int j = movingobjectposition.blockY;
             int k = movingobjectposition.blockZ;
-            if(!world.isRemote)
+            Block block = world.getBlock(i, j, k);
+            if(type.placeableOnLand || block instanceof BlockLiquid)
             {
-            	DriveableData data = getPlaneData(itemstack, world);
-            	if(data != null)
-            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
+	            if(!world.isRemote)
+	            {
+	            	DriveableData data = getPlaneData(itemstack, world);
+	            	if(data != null)
+	            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
+	            }
+				if(!entityplayer.capabilities.isCreativeMode)
+				{	
+					itemstack.stackSize--;
+				}
             }
-			if(!entityplayer.capabilities.isCreativeMode)
-			{	
-				itemstack.stackSize--;
-			}
         }
         return itemstack;
     }

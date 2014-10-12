@@ -3,6 +3,7 @@ package com.flansmod.common.guns.raytracing;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -143,6 +144,10 @@ public class PlayerHitbox
 	{
 		if(bullet.type.setEntitiesOnFire)
 			player.setFire(20);
+		for(PotionEffect effect : bullet.type.hitEffects)
+		{
+			player.addPotionEffect(new PotionEffect(effect));
+		}
 		float damageModifier = bullet.type.penetratingPower < 0.1F ? penetratingPower / bullet.type.penetratingPower : 1;
 		switch(type)
 		{

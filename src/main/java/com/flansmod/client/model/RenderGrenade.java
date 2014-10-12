@@ -114,7 +114,8 @@ public class RenderGrenade extends Render implements IItemRenderer
 					GL11.glTranslatef(0.15F, 0.2F, -0.6F);
 					GL11.glTranslatef(0F, 0.25F, 0F);
 					break;
-				}				
+				}
+				default : break;
 				}
 				
 				Minecraft.getMinecraft().renderEngine.bindTexture(FlansModResourceHandler.getTexture(grenadeType));

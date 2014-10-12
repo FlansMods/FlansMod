@@ -1,11 +1,11 @@
 package com.flansmod.common.tools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -17,7 +17,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class ToolType extends InfoType 
 {
-	public static ArrayList<ToolType> tools = new ArrayList<ToolType>();
+	public static HashMap<String, ToolType> tools = new HashMap<String, ToolType>();
 	
 	@SideOnly(value = Side.CLIENT)
 	/** The parachute model */
@@ -39,11 +39,18 @@ public class ToolType extends InfoType
 	public boolean parachute = false;
 	/** If true, then this will detonate the least recently placed remote explosive */
 	public boolean remote = false;
+	/** If > 0, then the player can eat this and recover this much hunger */
+	public int foodness = 0;
 	
 	public ToolType(TypeFile file) 
 	{
 		super(file);
-		tools.add(this);
+	}
+	
+	@Override
+	protected void postRead(TypeFile file)
+	{
+		tools.put(shortName, this);
 	}
 
 	/** Pack reader */
@@ -55,23 +62,23 @@ public class ToolType extends InfoType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-			if(split[0].equals("Texture"))
+			else if(split[0].equals("Texture"))
 				texture = split[1];
-			if(split[0].equals("Parachute"))
+			else if(split[0].equals("Parachute"))
 				parachute = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("ExplosiveRemote"))
+			else if(split[0].equals("ExplosiveRemote"))
 				remote = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Heal") || split[0].equals("HealPlayers"))
+			else if(split[0].equals("Heal") || split[0].equals("HealPlayers"))
 				healPlayers = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Repair") || split[0].equals("RepairVehicles"))
+			else if(split[0].equals("Repair") || split[0].equals("RepairVehicles"))
 				healDriveables = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("HealAmount") || split[0].equals("RepairAmount"))
+			else if(split[0].equals("HealAmount") || split[0].equals("RepairAmount"))
 				healAmount = Integer.parseInt(split[1]);
-			if(split[0].equals("ToolLife") || split[0].equals("ToolUses"))
+			else if(split[0].equals("ToolLife") || split[0].equals("ToolUses"))
 				toolLife = Integer.parseInt(split[1]);
-			if(split[0].equals("EUPerCharge"))
+			else if(split[0].equals("EUPerCharge"))
 				EUPerCharge = Integer.parseInt(split[1]);
-			if(split[0].equals("RechargeRecipe"))
+			else if(split[0].equals("RechargeRecipe"))
 			{
 				for(int i = 0; i < (split.length - 1) / 2; i++)
 				{
@@ -82,8 +89,10 @@ public class ToolType extends InfoType
 					rechargeRecipe.add(getRecipeElement(itemName, amount, damage, shortName));
 				}
 			}
-			if(split[0].equals("DestroyOnEmpty"))
+			else if(split[0].equals("DestroyOnEmpty"))
 				destroyOnEmpty = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("Food") || split[0].equals("Foodness"))
+				foodness = Integer.parseInt(split[1]);
 		} 
 		catch (Exception e)
 		{
@@ -105,11 +114,6 @@ public class ToolType extends InfoType
 	
 	public static ToolType getType(String shortName)
 	{
-		for(ToolType type : tools)
-		{
-			if(type.shortName.equals(shortName))
-				return type;
-		}
-		return null;
+		return tools.get(shortName);
 	}
 }

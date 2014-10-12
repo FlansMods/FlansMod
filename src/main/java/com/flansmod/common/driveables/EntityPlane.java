@@ -109,6 +109,13 @@ public class EntityPlane extends EntityDriveable
 		flapsPitchLeft -= sensitivity * deltaX;
 		flapsPitchRight += sensitivity * deltaX;
 	}
+	
+	@Override
+	public void setPositionRotationAndMotion(double x, double y, double z, float yaw, float pitch, float roll, double motX, double motY, double motZ, float velYaw, float velPitch, float velRoll, float throt, float steeringYaw)
+	{
+		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll, throt, steeringYaw);
+		flapsYaw = steeringYaw;
+	}
 		
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
@@ -535,7 +542,7 @@ public class EntityPlane extends EntityDriveable
 				proportionOfMotionToCorrect = 0.5F;
 			
 			//Apply gravity
-			g = 0.98F;
+			g = 0.98F / 20F;
 			motionY -= g;
 			
 			//Apply lift
@@ -566,6 +573,15 @@ public class EntityPlane extends EntityDriveable
 			break;
 		default:
 			break;
+		}
+				
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel != null && worldObj != null)
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			{
+				motionY += type.buoyancy;
+			}
 		}
 		
 		//Move the wheels first

@@ -444,12 +444,14 @@ public class FlansModClient extends FlansMod
 		return true;
 	}
 	
-	public static void reloadModels()
+	public static void reloadModels(boolean reloadSkins)
 	{
 		for(InfoType type : InfoType.infoTypes)
 		{
 			type.reloadModel();
 		}
+		if(reloadSkins)
+			proxy.forceReload();
 	}
 	
 	public static Minecraft minecraft = FMLClientHandler.instance().getClient();
@@ -635,7 +637,7 @@ public class FlansModClient extends FlansMod
 			else 
 			{
 				animations = new GunAnimations();
-				FlansModClient.gunAnimationsLeft.put((EntityLivingBase)living, animations);
+				FlansModClient.gunAnimationsLeft.put(living, animations);
 			}
 		}
 		else
@@ -645,7 +647,7 @@ public class FlansModClient extends FlansMod
 			else 
 			{
 				animations = new GunAnimations();
-				FlansModClient.gunAnimationsRight.put((EntityLivingBase)living, animations);
+				FlansModClient.gunAnimationsRight.put(living, animations);
 			}
 		}
 		return animations;

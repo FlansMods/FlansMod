@@ -142,6 +142,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			//Render rotating driveable model
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
 			if(selectedType instanceof MechaType)
 				GL11.glTranslatef(0, 15, 0);
@@ -152,6 +153,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(selectedType));
 			selectedType.model.render(selectedType);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glPopMatrix();
 			
 			recipeName = selectedType.name;

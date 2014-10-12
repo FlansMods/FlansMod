@@ -61,7 +61,9 @@ import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EntityWheel;
 import com.flansmod.common.driveables.PlaneType;
+import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
@@ -85,8 +87,14 @@ public class ClientProxy extends CommonProxy
 {
 	public static String modelDir = "com.flansmod.client.model.";
 	
+	/* These renderers handle rendering in hand items */
 	public static RenderGun gunRenderer;
 	public static RenderGrenade grenadeRenderer;
+	public static RenderPlane planeRenderer;
+	public static RenderVehicle vehicleRenderer;
+	public static RenderMecha mechaRenderer;
+	
+	/** The file locations of the content packs, used for loading */
 	public List<File> contentPacks;
 
 	@Override
@@ -95,27 +103,38 @@ public class ClientProxy extends CommonProxy
 		new FlansModClient().load();
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade();
+		planeRenderer = new RenderPlane();
+		vehicleRenderer = new RenderVehicle();
+		mechaRenderer = new RenderMecha();
+		
+		//Register custom item renderers
 		for(GunType gunType : GunType.guns.values())
-		{
-			if(gunType.model != null)
-				MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
-		}
+			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
+		
 		for(GrenadeType grenadeType : GrenadeType.grenades)
-		{
-			if(grenadeType.model != null)
-				MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
-		}
+			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
+		
+		for(PlaneType planeType : PlaneType.types)
+			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);
+		
+		for(VehicleType vehicleType : VehicleType.types)
+			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);
+		
+		for(MechaType mechaType : MechaType.types)
+			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();
 	}
 	
+	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */
 	@Override
 	public void forceReload()
 	{
 		Minecraft.getMinecraft().refreshResources();
 	}
 
+	/** This method grabs all the content packs and puts them in a list. The client side part registers them as FMLModContainers which adds their resources to the game after a refresh */
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
@@ -151,12 +170,7 @@ public class ClientProxy extends CommonProxy
 		return contentPacks;
 	}
 	
-	@Override
-	public List<File> getContentList()
-	{
-		return contentPacks;
-	}
-
+	/** Register entity renderers */
 	@Override
 	public void registerRenderers()
 	{		
@@ -179,6 +193,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}
 	
+	/** Old one time tutorial code that displays messages the first time you enter a plane / vehicle. Needs reworking */
 	@Override
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
@@ -202,6 +217,7 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
+	/** Adds the client side text message regarding mouse control mode switching */
 	@Override
 	public void changeControlMode(EntityPlayer player)
 	{
@@ -209,24 +225,14 @@ public class ClientProxy extends CommonProxy
 			player.addChatComponentMessage(new ChatComponentText("Mouse Control mode is now set to " + FlansModClient.controlModeMouse));
 	}
 	
+	/** Whether the player is in mouse control mode for planes. Now the default setting for planes, but it can be deactivated to look around while flying */
 	@Override
 	public boolean mouseControlEnabled()
 	{
 		return FlansModClient.controlModeMouse;
 	}
-	
-	@Override
-	public void playBlockBreakSound(int x, int y, int z, Block block)
-	{
-		super.playBlockBreakSound(x, y, z, block);
-	}
-	
-	@Override
-	public void tick()
-	{
-		
-	}
 
+	/** Client GUI object getter */
 	@Override
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
@@ -250,18 +256,25 @@ public class ClientProxy extends CommonProxy
 		return null;
 	}
 	
+	/** Called when the player presses the plane inventory key. Opens menu client side */
 	@Override
 	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
 		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiDriveableMenu(player.inventory, world, driveable));
 	}
 	
+	/** Helper method that sorts out packages with model name input
+	 * For example, the model class "com.flansmod.client.model.mw.ModelMP5"
+	 * is referenced in the type file by the string "mw.MP5" */
 	private String getModelName(String in)
 	{
+		//Split about dots
 		String[] split = in.split("\\.");
+		//If there is no dot, our model class is in the default model package
 		if(split.length == 1)
 			return "Model" + in;
-		if(split.length > 1)
+		//Otherwise, we need to slightly rearrange the wording of the string for it to make sense
+		else if(split.length > 1)
 		{
 			String out = "Model" + split[split.length - 1];
 			for(int i = split.length - 2; i >= 0; i--)
@@ -273,6 +286,7 @@ public class ClientProxy extends CommonProxy
 		return in;
 	}
 	
+	/** Generic model loader method for getting model classes and casting them to the required class type */
 	@Override
 	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
@@ -290,6 +304,7 @@ public class ClientProxy extends CommonProxy
 		return null;
 	}
 	
+	/** Sound loading method. Defers to FlansModResourceHandler */
 	@Override
 	public void loadSound(String contentPack, String type, String sound)
 	{
@@ -297,12 +312,14 @@ public class ClientProxy extends CommonProxy
 		//FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
 	}
 	
+	/** Checks whether "player" is the current player. Always false on server, since there is no current player */
 	@Override
 	public boolean isThePlayer(EntityPlayer player)
 	{
 		return player == FMLClientHandler.instance().getClient().thePlayer;
 	}
 	
+	/* Gun and armour box crafting methods */
 	@Override
 	public void buyGun(GunBoxType type, int gun)
 	{
@@ -342,35 +359,38 @@ public class ClientProxy extends CommonProxy
 			FlansMod.getPacketHandler().sendToServer(new PacketRepairDriveable(part.type));
 	}
 	
+	/** Helper method that returns whether there is a GUI open */
 	@Override
 	public boolean isScreenOpen()
 	{
 		return Minecraft.getMinecraft().currentScreen != null;
 	}
 	
+	/** Mecha input getters */
 	@Override
 	public boolean isKeyDown(int key)
 	{
 		switch(key)
 		{
 		case 0 : //Press Forwards
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode()); //(KeyInputHandler.accelerateKey.getKeyCode());
+			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode());
 			
 		case 1 : //Press Backwards
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode()); //(KeyInputHandler.decelerateKey.getKeyCode());
+			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode()); 
 			
 		case 2 : //Press Left
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode()); //(KeyInputHandler.leftKey.getKeyCode());
+			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode());
 			
 		case 3 : //Press Right
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode()); //(KeyInputHandler.rightKey.getKeyCode());
+			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode()); 
 
-		case 4 : //Press Jump. Sorry Flan, please don't hate me.
+		case 4 : //Press Jump
 			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode());
 		}
 		return false;
 	}
 	
+	/** Helper method that deals with the way Minecraft handles binding keys to the mouse */
 	@Override
 	public boolean keyDown(int keyCode)
 	{
