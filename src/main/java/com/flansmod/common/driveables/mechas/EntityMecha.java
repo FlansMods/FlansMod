@@ -219,7 +219,7 @@ public class EntityMecha extends EntityDriveable
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					jumpDelay = 10;
+					jumpDelay = 30;
 					motionY += type.jumpVelocity;
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption;
@@ -685,8 +685,16 @@ public class EntityMecha extends EntityDriveable
 	
 				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
+					if(onGround || jumpDelay != 0)
+					{
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
+					}
+					else if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
+					{
+						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
+						Vector3f.add(actualMotion, flyMotion, actualMotion);
+					}
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
@@ -1149,19 +1157,19 @@ public class EntityMecha extends EntityDriveable
 	}
 
 	@Override
-	public boolean hasMouseControlMode() 
+	public boolean hasMouseControlMode()
 	{
 		return false;
 	}
 
 	@Override
-	public String getBombInventoryName() 
+	public String getBombInventoryName()
 	{
 		return "";
 	}
 	
 	@Override
-	public String getMissileInventoryName() 
+	public String getMissileInventoryName()
 	{
 		return "";
 	}
