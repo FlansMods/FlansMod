@@ -8,6 +8,7 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelMecha extends ModelDriveable 
 {
@@ -22,6 +23,9 @@ public class ModelMecha extends ModelDriveable
 	public ModelRendererTurbo[] rightFootModel = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo[] headModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] barrelModel = new ModelRendererTurbo[0];
+	
+	/** The point at which various attachment models are rendered */
+	public Vector3f hipsAttachmentPoint = new Vector3f();
 	
 	@Override
 	public void render(EntityDriveable driveable, float f1)

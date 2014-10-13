@@ -9,11 +9,11 @@ public class ModelRocketPack extends ModelMechaTool
 {
 	public ModelRocketPack()
 	{
-		int textureX = 32;
-		int textureY = 32;
+		int textureX = 2;
+		int textureY = 2;
 		
 		baseModel = new ModelRendererTurbo[1];
 		baseModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		baseModel[0].addBox(-10, -30, -60, 15, 45, 90);
+		baseModel[0].addBox(-8, -10, -8, 8, 20, 16);
 	}
 }

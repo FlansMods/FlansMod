@@ -4,6 +4,7 @@ import com.flansmod.client.model.ModelMecha;
 import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelProtoTitan extends ModelMecha 
 {
@@ -11,6 +12,8 @@ public class ModelProtoTitan extends ModelMecha
 	{
 		int textureX = 256;
 		int textureY = 256;
+		
+		hipsAttachmentPoint = new Vector3f(-12.1F / 16F, 36F / 16F, 0F);
 		
 		//Body
 		bodyModel = new ModelRendererTurbo[8];

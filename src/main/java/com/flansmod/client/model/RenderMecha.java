@@ -66,12 +66,31 @@ public class RenderMecha extends Render implements IItemRenderer
         GL11.glRotatef(mecha.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(mecha.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 		float modelScale = mecha.getMechaType().modelScale;	
-		GL11.glPushMatrix();
-		GL11.glScalef(modelScale, modelScale, modelScale);
-        ModelMecha model = (ModelMecha)type.model;
-		if(model != null)
-			model.render(mecha, f1);	
-		GL11.glPopMatrix();
+		ModelMecha model = (ModelMecha)type.model;
+		
+		//Body Render
+		{
+			GL11.glPushMatrix();
+			GL11.glScalef(modelScale, modelScale, modelScale);
+			if(model != null)
+				model.render(mecha, f1);	
+			
+			//Render hips slot : jetpack item
+			ItemStack hipsSlot = mecha.inventory.getStackInSlot(EnumMechaSlotType.hips);
+			if(hipsSlot != null && hipsSlot.getItem() instanceof ItemMechaAddon)
+			{
+				MechaItemType hipsAddon = ((ItemMechaAddon)hipsSlot.getItem()).type;
+				if(hipsAddon.model != null)
+				{
+					GL11.glTranslatef(model.hipsAttachmentPoint.x, model.hipsAttachmentPoint.y, model.hipsAttachmentPoint.z);
+					if(hipsAddon.texture != null)
+						bindTexture(FlansModResourceHandler.getTexture(hipsAddon));
+					hipsAddon.model.render(mecha, f1);
+				}
+			}
+			
+			GL11.glPopMatrix();
+		}
 		
 		//Left arm render
         if(mecha.isPartIntact(EnumDriveablePart.leftArm))

@@ -508,7 +508,7 @@ public class FlansMod
 					case armourBox : armourBoxBlocks.add((BlockArmourBox)new BlockArmourBox((ArmourBoxType)infoType).setBlockName(infoType.shortName)); break; 
 					case playerClass : break;
 					case team : break;
-					default : log("Unrecognised type."); break;
+					default : log("Unrecognised type for " + infoType.shortName); break;
 					}
 				}
 				catch(Exception e)
