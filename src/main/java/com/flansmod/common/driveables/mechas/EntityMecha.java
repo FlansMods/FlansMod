@@ -431,7 +431,11 @@ public class EntityMecha extends EntityDriveable
 		}		
 	}
 	
-
+	@Override
+    protected void fall(float f)
+    {
+		attackEntityFrom(DamageSource.fall, f);
+    }
 	
 	@Override
     public boolean attackEntityFrom(DamageSource damagesource, float i)
@@ -851,7 +855,7 @@ public class EntityMecha extends EntityDriveable
 		}
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
-		
+		//FlansMod.log("" + fallDistance);
     	setPosition(posX, posY, posZ);
 		
 		//Fuel Handling
