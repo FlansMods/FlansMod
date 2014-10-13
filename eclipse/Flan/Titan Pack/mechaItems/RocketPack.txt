@@ -2,12 +2,13 @@
 Description Yup, it's a_rocket pack
 ShortName mechaRocketPack
 Icon RocketPack
+Model titan.RocketPack
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
 Recipe C canister L bucketLava P pistonBase B blockIron
-CIC
-CIC
+CBC
+CBC
 LPL
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type hipsUpgrade
