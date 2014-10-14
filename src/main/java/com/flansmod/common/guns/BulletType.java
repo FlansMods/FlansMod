@@ -185,12 +185,4 @@ public class BulletType extends InfoType
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);
 	}
-	
-	public PotionEffect getPotionEffect(String[] split)
-	{
-		int potionID = Integer.parseInt(split[1]);
-		int duration = Integer.parseInt(split[2]);
-		int amplifier = Integer.parseInt(split[3]);
-		return new PotionEffect(potionID, duration, amplifier, false);
-	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
@@ -19,12 +20,17 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -32,7 +38,10 @@ import com.flansmod.common.vector.Vector3f;
 public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
+	/** The entity that threw them */
 	public EntityLivingBase thrower;
+	/** This is to avoid players grenades teamkilling after they switch team */
+	public Team teamOfThrower;
 	/** Yeah, I want my grenades to have fancy physics */
 	public RotatedAxes axes = new RotatedAxes();
 	public Vector3f angularVelocity = new Vector3f(0F, 0F, 0F);
@@ -47,6 +56,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	public int stuckToX, stuckToY, stuckToZ;
 	/** Stop repeat detonations */
 	public boolean detonated = false;
+	/** For deployable bags */
+	public int numUsesRemaining = 0;
 	
 	public EntityGrenade(World w) 
 	{
@@ -58,7 +69,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		this(w);
 		setPosition(t.posX, t.posY + t.getEyeHeight(), t.posZ);
 		type = g;
+		numUsesRemaining = type.numUses;
 		thrower = t;
+		if(thrower instanceof EntityPlayer && PlayerHandler.getPlayerData((EntityPlayer)thrower) != null)
+		{
+			teamOfThrower = PlayerHandler.getPlayerData((EntityPlayer)thrower).team;
+		}
 		setSize(g.hitBoxSize, g.hitBoxSize);
 		//Set the grenade to be facing the way the player is looking
 		axes.setAngles(t.rotationYaw + 90F, g.spinWhenThrown ? t.rotationPitch : 0F, 0F);
@@ -449,4 +465,47 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
     {
     	return false;
     }
+	
+	@Override
+	public boolean canBeCollidedWith()
+	{
+		return !isDead && type.isDeployableBag;
+	}
+	
+	@Override
+	public boolean interactFirst(EntityPlayer player)
+	{
+		// Player right clicked on grenade
+		//For deployable bags, give player rewards
+		if(type.isDeployableBag && !worldObj.isRemote)
+		{
+			boolean used = false;
+			//Handle healing
+			if(type.healAmount > 0 && player.getHealth() < player.getMaxHealth())
+			{
+				player.heal(type.healAmount);
+	        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
+	        	used = true;
+			}
+			//Handle potion effects
+			for(PotionEffect effect : type.potionEffects)
+			{
+				player.addPotionEffect(new PotionEffect(effect));
+				used = true;
+			}
+			//Handle ammo
+			if(type.numClips > 0)
+			{
+				used = true;
+			}
+			//If the bag is all used up, get rid of it
+			if(used)
+			{
+				numUsesRemaining--;
+				if(numUsesRemaining <= 0)
+					setDead();
+			}
+		}
+		return true;
+	}
 }

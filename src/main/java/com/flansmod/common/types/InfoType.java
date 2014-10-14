@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -344,5 +345,13 @@ public class InfoType
 		if(item instanceof IFlanItem)
 			return ((IFlanItem)item).getInfoType();
 		return null;
+	}
+	
+	public PotionEffect getPotionEffect(String[] split)
+	{
+		int potionID = Integer.parseInt(split[1]);
+		int duration = Integer.parseInt(split[2]);
+		int amplifier = Integer.parseInt(split[3]);
+		return new PotionEffect(potionID, duration, amplifier, false);
 	}
 }

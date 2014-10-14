@@ -3,7 +3,7 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelBase;
-
+import net.minecraft.potion.PotionEffect;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -105,6 +105,22 @@ public class GrenadeType extends InfoType
 	/** Whether the grenade should spin when thrown. Generally false for mines or things that should lie flat */
 	public boolean spinWhenThrown = true;
 	
+	//Deployed bag functionality
+	/** If true, then right clicking this "grenade" will give the player health or buffs or ammo as defined below */
+	public boolean isDeployableBag = false;
+	/** The number of times players can use this bag before it runs out */
+	public int numUses = 1;
+	/** The amount to heal the player using this bag */
+	public float healAmount = 0;
+	/** The potion effects to apply to users of this bag */
+	public ArrayList<PotionEffect> potionEffects = new ArrayList<PotionEffect>();
+	/** The number of clips to give to the player when using this bag 
+	 * When they right click with a gun, they will get this number of clips for that gun.
+	 * They get the first ammo type, as listed in the gun type file 
+	 * The number of clips they get is multiplied by numBulletsInGun too
+	 * TODO : Give guns a "can get ammo from bag" variable. Stops miniguns and such getting ammo */
+	public int numClips = 0;
+	
 	public GrenadeType(TypeFile file) 
 	{
 		super(file);
@@ -119,88 +135,100 @@ public class GrenadeType extends InfoType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-			if(split[0].equals("Texture"))
+			else if(split[0].equals("Texture"))
 				texture = split[1];
-			if(split[0].equals("MeleeDamage"))
+			else if(split[0].equals("MeleeDamage"))
 				meleeDamage = Integer.parseInt(split[1]);
-			if(split[0].equals("StackSize"))
+			else if(split[0].equals("StackSize"))
 				maxStackSize = Integer.parseInt(split[1]);
-			if(split[0].equals("ThrowDelay"))
+			else if(split[0].equals("ThrowDelay"))
 				throwDelay = Integer.parseInt(split[1]);
-			if(split[0].equals("ThrowSound"))
+			else if(split[0].equals("ThrowSound"))
 				throwSound = split[1];
-			if(split[0].equals("DropItemOnThrow"))
+			else if(split[0].equals("DropItemOnThrow"))
 				dropItemOnThrow = split[1];
-			if(split[0].equals("DetonateOnImpact"))
+			else if(split[0].equals("DetonateOnImpact"))
 				detonateOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Bounciness"))
+			else if(split[0].equals("Bounciness"))
 				bounciness = Float.parseFloat(split[1]);
-			if(split[0].equals("HitEntityDamage"))
+			else if(split[0].equals("HitEntityDamage"))
 				hitEntityDamage = Integer.parseInt(split[1]);
-			if(split[0].equals("ThrowSpeed"))
+			else if(split[0].equals("ThrowSpeed"))
 				throwSpeed = Float.parseFloat(split[1]);
-			if(split[0].equals("FallSpeed"))
+			else if(split[0].equals("FallSpeed"))
 				fallSpeed = Float.parseFloat(split[1]);
-			if(split[0].equals("BreaksGlass"))
+			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("PenetratesEntities"))
+			else if(split[0].equals("PenetratesEntities"))
 				penetratesEntities = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("PenetratesBlocks"))
+			else if(split[0].equals("PenetratesBlocks"))
 				penetratesBlocks = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("HitBoxSize"))
+			else if(split[0].equals("HitBoxSize"))
 				hitBoxSize = Float.parseFloat(split[1]);
-			if(split[0].equals("BounceSound"))
+			else if(split[0].equals("BounceSound"))
 				bounceSound = split[1];
-			if(split[0].equals("Sticky"))
+			else if(split[0].equals("Sticky"))
 				sticky = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("LivingProximityTrigger"))
+			else if(split[0].equals("LivingProximityTrigger"))
 				livingProximityTrigger = Float.parseFloat(split[1]);	
-			if(split[0].equals("VehicleProximityTrigger"))
+			else if(split[0].equals("VehicleProximityTrigger"))
 				driveableProximityTrigger = Float.parseFloat(split[1]);	
-			if(split[0].equals("DamageToTriggerer"))
+			else if(split[0].equals("DamageToTriggerer"))
 				damageToTriggerer = Float.parseFloat(split[1]);
-			if(split[0].equals("Fuse"))
+			else if(split[0].equals("Fuse"))
 				fuse = Integer.parseInt(split[1]);
-			if(split[0].equals("DetonateWhenShot"))
+			else if(split[0].equals("DetonateWhenShot"))
 				detonateWhenShot = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("PrimeDelay") || split[0].equals("TriggerDelay"))
+			else if(split[0].equals("PrimeDelay") || split[0].equals("TriggerDelay"))
 				primeDelay = Integer.parseInt(split[1]);		
-			if(split[0].equals("FireRadius"))
+			else if(split[0].equals("FireRadius"))
 				fireRadius = Float.parseFloat(split[1]);
-			if(split[0].equals("ExplosionRadius"))
+			else if(split[0].equals("ExplosionRadius"))
 				explosionRadius = Float.parseFloat(split[1]);
-			if(split[0].equals("StickToThrower"))
+			else if(split[0].equals("StickToThrower"))
 				stickToThrower = Boolean.parseBoolean(split[1]);
 			
-			if(split[0].equals("ExplosionDamageVsLiving"))
+			else if(split[0].equals("ExplosionDamageVsLiving"))
 				explosionDamageVsLiving = Float.parseFloat(split[1]);
-			if(split[0].equals("ExplosionDamageVsDrivable"))
+			else if(split[0].equals("ExplosionDamageVsDrivable"))
 				explosionDamageVsDriveable = Float.parseFloat(split[1]);
 
-			if(split[0].equals("ExplosionBreaksBlocks"))
+			else if(split[0].equals("ExplosionBreaksBlocks"))
 				explosionBreaksBlocks = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("DropItemOnDetonate"))
+			else if(split[0].equals("DropItemOnDetonate"))
 				dropItemOnDetonate = split[1];
-			if(split[0].equals("DetonateSound"))
+			else if(split[0].equals("DetonateSound"))
 				detonateSound = split[1];
-			if(split[0].equals("HasTrailParticles"))
+			else if(split[0].equals("HasTrailParticles"))
 				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());	
-			if(split[0].equals("TrailParticles"))
+			else if(split[0].equals("TrailParticles"))
 				trailParticleType = split[1];
-			if(split[0].equals("NumExplodeParticles"))
+			else if(split[0].equals("NumExplodeParticles"))
 				explodeParticles = Integer.parseInt(split[1]);	
-			if(split[0].equals("ExplodeParticles"))
+			else if(split[0].equals("ExplodeParticles"))
 				explodeParticleType = split[1];
-			if(split[0].equals("SmokeTime"))
+			else if(split[0].equals("SmokeTime"))
 				smokeTime = Integer.parseInt(split[1]);
-			if(split[0].equals("SmokeParticles"))
+			else if(split[0].equals("SmokeParticles"))
 				smokeParticleType = split[1];
-			if(split[0].equals("SpinWhenThrown"))
+			else if(split[0].equals("SpinWhenThrown"))
 				spinWhenThrown = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("Remote"))
+			else if(split[0].equals("Remote"))
 				remote = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("DespawnTime"))
+			else if(split[0].equals("DespawnTime"))
 				despawnTime = Integer.parseInt(split[1]);		
+			
+			//Deployable Bag Stuff
+			else if(split[0].equals("DeployableBag"))
+				isDeployableBag = true;
+			else if(split[0].equals("NumUses"))
+				numUses = Integer.parseInt(split[1]);
+			else if(split[0].equals("HealAmount"))
+				healAmount = Float.parseFloat(split[1]);
+			else if(split[0].equals("AddPotionEffect") || split[0].equals("PotionEffect"))
+				potionEffects.add(getPotionEffect(split));
+			else if(split[0].equals("NumClips"))
+				numClips = Integer.parseInt(split[1]);
 		} 
 		catch (Exception e)
 		{
