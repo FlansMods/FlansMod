@@ -99,7 +99,7 @@ public class KeyInputHandler
 			mc.displayGuiScreen(new GuiTeamScores());
 			return;
 		}
-		if(reloadKey.isPressed() && FlansModClient.shootTime <= 0)
+		if(reloadKey.isPressed() && FlansModClient.shootTime(false) <= 0)
 		{
 			FlansMod.getPacketHandler().sendToServer(new PacketReload(false));
 			return;

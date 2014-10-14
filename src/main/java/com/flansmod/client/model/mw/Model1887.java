@@ -68,7 +68,7 @@ public class Model1887 extends ModelGun
 			
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.RIFLE_TOP;
-		pumpDelayAfterReload = 115;
+		pumpDelayAfterReload = 100;
 		pumpDelay = 6;
 		pumpTime = 12;
 		gripIsOnPump = true;
@@ -77,7 +77,7 @@ public class Model1887 extends ModelGun
 		spinningCocking = true;
 		spinPoint = new Vector3f(1F / 16F, 2F / 16F, 0F);
 		
-		numBulletsInReloadAnimation = 7;
+		numBulletsInReloadAnimation = 5;
 		tiltGunTime = 0.159F;
 		unloadClipTime = 0.0F;
 		loadClipTime = 0.708F;

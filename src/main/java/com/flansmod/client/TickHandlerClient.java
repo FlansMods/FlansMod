@@ -109,8 +109,7 @@ public class TickHandlerClient
 							RenderHelper.enableGUIStandardItemLighting();
 							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 							OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-							
-								drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
+							drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
 							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 							RenderHelper.disableStandardItemLighting();
 							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
@@ -135,19 +134,24 @@ public class TickHandlerClient
 								ItemStack bulletStack = ((ItemGun)offHandStack.getItem()).getBulletItemStack(offHandStack, n);
 								if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 								{
-									GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-									RenderHelper.disableStandardItemLighting();
+									//Find the string we are displaying next to the ammo item
 									String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 									if(bulletStack.getMaxDamage() == 1)
 										s = "";
-									mc.fontRenderer.drawString(s, i / 2 - 48 - x, j - 59, 0x000000);
-									mc.fontRenderer.drawString(s, i / 2 - 47 - x, j - 60, 0xffffff);
-									x += 16 + mc.fontRenderer.getStringWidth(s);
+									
+									//Draw the slot and then move leftwards
 									RenderHelper.enableGUIStandardItemLighting();
 									GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 									GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 									OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 18 - x, j - 65);	
+									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);	
+									x += 16 + mc.fontRenderer.getStringWidth(s);
+									
+									//Draw the string
+									GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+									RenderHelper.disableStandardItemLighting();
+									mc.fontRenderer.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
+									mc.fontRenderer.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
 								}
 							}
 						}

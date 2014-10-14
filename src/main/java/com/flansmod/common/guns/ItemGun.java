@@ -340,7 +340,7 @@ public class ItemGun extends Item implements IFlanItem
 	public boolean clientSideShoot(EntityPlayer player, ItemStack stack, GunType gunType, boolean left)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(FlansModClient.shootTime <= 0)
+		if(FlansModClient.shootTime(left) <= 0)
 		{
 			boolean hasAmmo = false;
 			for(int i = 0; i < gunType.numAmmoItemsInGun; i++)
@@ -379,7 +379,9 @@ public class ItemGun extends Item implements IFlanItem
 				int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
 				animations.doShoot(pumpDelay, pumpTime);
 				FlansModClient.playerRecoil += gunType.getRecoil(stack);
-				FlansModClient.shootTime = gunType.shootDelay;
+				if(left)
+					FlansModClient.shootTimeLeft = gunType.shootDelay;
+				else FlansModClient.shootTimeRight = gunType.shootDelay;
 				if(gunType.consumeGunUponUse)
 					return true;
 
