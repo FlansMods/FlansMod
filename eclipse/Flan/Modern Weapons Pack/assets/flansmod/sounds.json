@@ -304,6 +304,11 @@
 		"sounds" : [ "flansmod:MinigunCooldown" ]
 	},
 	
+		"M1887Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:M1887Shoot" ]
+	},
+	
 		"M1887Reload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:M1887Reload" ]

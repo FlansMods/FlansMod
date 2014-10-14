@@ -68,8 +68,8 @@ public class Model1887 extends ModelGun
 			
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.RIFLE_TOP;
-		pumpDelayAfterReload = 100;
-		pumpDelay = 6;
+		pumpDelayAfterReload = 86;
+		pumpDelay = 7;
 		pumpTime = 12;
 		gripIsOnPump = true;
 		pumpHandleDistance = -0.25F;
