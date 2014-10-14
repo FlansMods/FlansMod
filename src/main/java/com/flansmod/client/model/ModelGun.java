@@ -25,6 +25,7 @@ public class ModelGun extends ModelBase
 	public ModelRendererTurbo[] slideModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] pumpModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] minigunBarrelModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] leverActionModel = new ModelRendererTurbo[0];
 	/** The point about which the minigun barrel rotates. Rotation is along the line of the gun through this point */
 	public Vector3f minigunBarrelOrigin = new Vector3f();
 	
@@ -59,6 +60,10 @@ public class ModelGun extends ModelBase
 	public float revolverFlipAngle = 15F;
 	/** The angle the gun is broken by for break actions */
 	public float breakAngle = 45F;
+	/** If true, then the gun will perform a spinning reload animation */
+	public boolean spinningCocking = false;
+	/** The point, in model co-ordinates, about which the gun is spun */
+	public Vector3f spinPoint = new Vector3f();
 	
 	/** Custom reload Parameters. If Enum.CUSTOM is set, these parameters can build an animation within the gun model classes */
 	public float rotateGunVertical = 0F;
