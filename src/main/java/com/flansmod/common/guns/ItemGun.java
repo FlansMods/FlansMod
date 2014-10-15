@@ -63,6 +63,9 @@ import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketSelectOffHandGun;
+import com.flansmod.common.teams.EntityFlag;
+import com.flansmod.common.teams.EntityFlagpole;
+import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.IFlanItem;
@@ -210,6 +213,11 @@ public class ItemGun extends Item implements IFlanItem
 					gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
 					gameSettings.fovSetting = FlansModClient.originalFOV;
 				}	
+			}
+			//Do not shoot ammo bags, flags or dropped gun items
+			else if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
+			{
+				
 			}
 			//Else do shoot code
 			else 

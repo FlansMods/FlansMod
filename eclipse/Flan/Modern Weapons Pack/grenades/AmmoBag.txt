@@ -1,14 +1,14 @@
 ////Name and icon
-Name Medic Bag
-ShortName mwMedicBag
-Icon MWMedicBag
+Name Ammo Bag
+ShortName mwAmmoBag
+Icon MWAmmoBag
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
 StackSize 1
 ////Visuals
 Model mw.DeployableBag
-Texture MedicBag
+Texture AmmoBag
 TrailParticles false
 //TrailParticleType <particleType>
 ExplodeParticles 0
@@ -49,7 +49,7 @@ ExplosionBreaksBlocks false
 MeleeDamage 2
 //Deployable Stuff
 DeployableBag True
-NumUses 2
-HealAmount 20
+NumUses 5
+HealAmount 0
 //PotionEffect ...
-//NumClips 0
+NumClips 3

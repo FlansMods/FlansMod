@@ -431,11 +431,16 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		tags.setString("Type", type.shortName);
-		if(thrower != null)
-			tags.setString("Thrower", thrower.getCommandSenderName());
-		tags.setFloat("RotationYaw", axes.getYaw());
-		tags.setFloat("RotationPitch", axes.getPitch());
+		if(type == null)
+			setDead();
+		else
+		{
+			tags.setString("Type", type.shortName);
+			if(thrower != null)
+				tags.setString("Thrower", thrower.getCommandSenderName());
+			tags.setFloat("RotationYaw", axes.getYaw());
+			tags.setFloat("RotationPitch", axes.getPitch());
+		}
 	}
 
 	@Override
@@ -494,9 +499,18 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				used = true;
 			}
 			//Handle ammo
-			if(type.numClips > 0)
+			if(type.numClips > 0 && player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemGun)
 			{
-				used = true;
+				GunType gun = ((ItemGun)player.getCurrentEquippedItem().getItem()).type;
+				if(gun.ammo.size() > 0)
+				{
+					BulletType bulletToGive = gun.ammo.get(0);
+					int numToGive = Math.min(bulletToGive.maxStackSize, type.numClips * gun.numAmmoItemsInGun);
+					if(player.inventory.addItemStackToInventory(new ItemStack(bulletToGive.item, numToGive)))
+					{
+						used = true;
+					}
+				}
 			}
 			//If the bag is all used up, get rid of it
 			if(used)
