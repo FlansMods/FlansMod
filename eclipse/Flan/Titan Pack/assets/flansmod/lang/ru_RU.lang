@@ -1,14 +1,17 @@
 item.mechaAutoFueler.name=Авто-заправщик
 item.mechaDiamondArmour.name=Алмазная броня
 item.mechaDiamondCutter.name=Алмазный резак
+item.mechaEnergyShield.name=Энергетический щит
 item.mechaFloat.name=Плавательное приспособление
 item.mechaIronArmour.name=Железная броня
 item.mechaIronRefiner.name=Переплавщик железа
 item.mechaItemVacuum.name=Вакуумный поглотитель предметов
 item.mechaLaserDiamondCutter.name=Лазерный алмазный резак
+item.mechaMiningScanner.name=Шахтерский сканер
 item.mechaNanobots.name=Нанороботы
 item.obsidianMechaBoots.name=Обсидиановые ботинки меха
 item.mechaRedstoneMagnet.name=Магнит из красного камня
+item.mechaRocketPack.name=Ракетная установка
 item.mechaSpeedUpgrade.name=Улучшение скорости
 item.AlphaTitan.name=Альфа-титан
 item.ProtoTitan.name=Прото-титан
