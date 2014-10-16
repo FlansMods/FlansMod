@@ -5,6 +5,8 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +24,11 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
@@ -106,15 +112,26 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		
 		//Visuals
 		if(worldObj.isRemote)
-		{
+		{	
 			if(type.trailParticles)
-				worldObj.spawnParticle(type.trailParticleType, posX, posY, posZ, 0F, 0F, 0F);
+			{			
+				double dX = (posX - prevPosX) / 10;
+				double dY = (posY - prevPosY) / 10;
+				double dZ = (posZ - prevPosZ) / 10;
+				for (int i = 0; i < 10; i++)
+				{
+					EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+					if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
+						particle.renderDistanceWeight = 100D;
+					//worldObj.spawnEntityInWorld(particle);
+				}
+			}
 			
 			//Smoke
-			if(!smoking)
+			if(smoking)
 			{
 				for(int i = 0; i < 20; i++)
-					worldObj.spawnParticle(type.trailParticleType, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0F, 0F, 0F);
+					worldObj.spawnParticle(type.smokeParticleType, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0F, 0F, 0F);
 				smokeTime--;
 				if(smokeTime == 0)
 					setDead();
@@ -355,12 +372,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				{
 					for(float k = -type.fireRadius; k < type.fireRadius; k++)
 					{
-						int x = MathHelper.floor_float(i);
-						int y = MathHelper.floor_float(j);
-						int z = MathHelper.floor_float(k);
-						if(worldObj.getBlock(x, y, z) == null)
+						int x = MathHelper.floor_double(i + posX);
+						int y = MathHelper.floor_double(j + posY);
+						int z = MathHelper.floor_double(k + posZ);
+						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlock(x, y, z) == Blocks.air && rand.nextBoolean())
 						{
-							worldObj.setBlock(x, y, z, Blocks.fire);
+							worldObj.setBlock(x, y, z, Blocks.fire, 0, 3);
 						}
 					}
 				}

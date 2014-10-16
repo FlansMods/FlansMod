@@ -1,0 +1,49 @@
+////Name and icon
+Name Molotov Cocktail
+ShortName molotovCocktail
+Icon Molotov
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Item and recipe
+StackSize 4
+////Visuals
+Model mw.Molotov
+Texture Molotov
+TrailParticles true
+TrailParticleType flame
+ExplodeParticles 10
+ExplodeParticleType flame
+SmokeTime 0
+//SmokeParticleType <particleType>
+SpinWhenThrown true
+////Throwing
+ThrowDelay 10
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact true
+Bounciness 0.8
+HitEntityDamage 1
+ThrowSpeed 1.0
+FallSpeed 1.0
+BreaksGlass true
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger -1.0
+Fuse 80
+DetonateWhenShot true
+Remote false
+//DespawnTime 0
+PrimeDelay 0
+////Detonation
+FireRadius 2.0
+ExplosionRadius 0.0
+ExplosionBreaksBlocks false
+//DropItemOnDetonate <itemID.damage>
+//Detonate Sound <sound>
+////Misc
+MeleeDamage 4

@@ -199,9 +199,9 @@ public class GrenadeType extends InfoType
 				dropItemOnDetonate = split[1];
 			else if(split[0].equals("DetonateSound"))
 				detonateSound = split[1];
-			else if(split[0].equals("HasTrailParticles"))
-				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());	
 			else if(split[0].equals("TrailParticles"))
+				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());	
+			else if(split[0].equals("TrailParticleType"))
 				trailParticleType = split[1];
 			else if(split[0].equals("NumExplodeParticles"))
 				explodeParticles = Integer.parseInt(split[1]);	
