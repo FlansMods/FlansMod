@@ -63,6 +63,9 @@ import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketSelectOffHandGun;
+import com.flansmod.common.teams.EntityFlag;
+import com.flansmod.common.teams.EntityFlagpole;
+import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.IFlanItem;
@@ -211,6 +214,11 @@ public class ItemGun extends Item implements IFlanItem
 					gameSettings.fovSetting = FlansModClient.originalFOV;
 				}	
 			}
+			//Do not shoot ammo bags, flags or dropped gun items
+			else if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
+			{
+				
+			}
 			//Else do shoot code
 			else 
 			{
@@ -340,7 +348,7 @@ public class ItemGun extends Item implements IFlanItem
 	public boolean clientSideShoot(EntityPlayer player, ItemStack stack, GunType gunType, boolean left)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(FlansModClient.shootTime <= 0)
+		if(FlansModClient.shootTime(left) <= 0)
 		{
 			boolean hasAmmo = false;
 			for(int i = 0; i < gunType.numAmmoItemsInGun; i++)
@@ -379,7 +387,9 @@ public class ItemGun extends Item implements IFlanItem
 				int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
 				animations.doShoot(pumpDelay, pumpTime);
 				FlansModClient.playerRecoil += gunType.getRecoil(stack);
-				FlansModClient.shootTime = gunType.shootDelay;
+				if(left)
+					FlansModClient.shootTimeLeft = gunType.shootDelay;
+				else FlansModClient.shootTimeRight = gunType.shootDelay;
 				if(gunType.consumeGunUponUse)
 					return true;
 

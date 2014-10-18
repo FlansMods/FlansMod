@@ -1,0 +1,55 @@
+////Name and icon
+Name Ammo Bag
+ShortName mwAmmoBag
+Icon MWAmmoBag
+//Colour in Red, Green, Blue, each going up to 255
+Colour 255 255 255
+////Item and recipe
+StackSize 1
+////Visuals
+Model mw.DeployableBag
+Texture AmmoBag
+TrailParticles false
+//TrailParticleType <particleType>
+ExplodeParticles 0
+//ExplodeParticleType <particleType>
+SmokeTime 0
+//SmokeParticleType <particleType>
+SpinWhenThrown false
+////Throwing
+ThrowDelay 10
+//ThrowSound <sound>
+//DropItemOnThrow <itemID.damage>
+////Physics
+DetonateOnImpact false
+Bounciness 0.0
+HitEntityDamage 0
+ThrowSpeed 0.0
+FallSpeed 1.0
+BreaksGlass false
+PenetratesBlocks false
+HitBoxSize 0.5
+Sticky false
+//BounceSound <sound>
+////Detonation conditions
+VehicleProximityTrigger -1.0
+LivingProximityTrigger -1.0
+Fuse 0
+DetonateWhenShot false
+Remote false
+DespawnTime 12000
+PrimeDelay 20
+////Detonation
+FireRadius 0.0
+ExplosionRadius 0.0
+ExplosionBreaksBlocks false
+//DropItemOnDetonate <itemID.damage>
+//Detonate Sound <sound>
+////Misc
+MeleeDamage 2
+//Deployable Stuff
+DeployableBag True
+NumUses 5
+HealAmount 0
+//PotionEffect ...
+NumClips 3

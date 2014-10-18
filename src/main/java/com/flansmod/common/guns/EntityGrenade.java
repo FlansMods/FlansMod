@@ -5,6 +5,8 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
@@ -19,12 +22,21 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -32,7 +44,10 @@ import com.flansmod.common.vector.Vector3f;
 public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
+	/** The entity that threw them */
 	public EntityLivingBase thrower;
+	/** This is to avoid players grenades teamkilling after they switch team */
+	public Team teamOfThrower;
 	/** Yeah, I want my grenades to have fancy physics */
 	public RotatedAxes axes = new RotatedAxes();
 	public Vector3f angularVelocity = new Vector3f(0F, 0F, 0F);
@@ -47,6 +62,8 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	public int stuckToX, stuckToY, stuckToZ;
 	/** Stop repeat detonations */
 	public boolean detonated = false;
+	/** For deployable bags */
+	public int numUsesRemaining = 0;
 	
 	public EntityGrenade(World w) 
 	{
@@ -58,7 +75,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		this(w);
 		setPosition(t.posX, t.posY + t.getEyeHeight(), t.posZ);
 		type = g;
+		numUsesRemaining = type.numUses;
 		thrower = t;
+		if(thrower instanceof EntityPlayer && PlayerHandler.getPlayerData((EntityPlayer)thrower) != null)
+		{
+			teamOfThrower = PlayerHandler.getPlayerData((EntityPlayer)thrower).team;
+		}
 		setSize(g.hitBoxSize, g.hitBoxSize);
 		//Set the grenade to be facing the way the player is looking
 		axes.setAngles(t.rotationYaw + 90F, g.spinWhenThrown ? t.rotationPitch : 0F, 0F);
@@ -90,15 +112,26 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		
 		//Visuals
 		if(worldObj.isRemote)
-		{
+		{	
 			if(type.trailParticles)
-				worldObj.spawnParticle(type.trailParticleType, posX, posY, posZ, 0F, 0F, 0F);
+			{			
+				double dX = (posX - prevPosX) / 10;
+				double dY = (posY - prevPosY) / 10;
+				double dZ = (posZ - prevPosZ) / 10;
+				for (int i = 0; i < 10; i++)
+				{
+					EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+					if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
+						particle.renderDistanceWeight = 100D;
+					//worldObj.spawnEntityInWorld(particle);
+				}
+			}
 			
 			//Smoke
-			if(!smoking)
+			if(smoking)
 			{
 				for(int i = 0; i < 20; i++)
-					worldObj.spawnParticle(type.trailParticleType, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0F, 0F, 0F);
+					worldObj.spawnParticle(type.smokeParticleType, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0F, 0F, 0F);
 				smokeTime--;
 				if(smokeTime == 0)
 					setDead();
@@ -339,12 +372,12 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				{
 					for(float k = -type.fireRadius; k < type.fireRadius; k++)
 					{
-						int x = MathHelper.floor_float(i);
-						int y = MathHelper.floor_float(j);
-						int z = MathHelper.floor_float(k);
-						if(worldObj.getBlock(x, y, z) == null)
+						int x = MathHelper.floor_double(i + posX);
+						int y = MathHelper.floor_double(j + posY);
+						int z = MathHelper.floor_double(k + posZ);
+						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlock(x, y, z) == Blocks.air && rand.nextBoolean())
 						{
-							worldObj.setBlock(x, y, z, Blocks.fire);
+							worldObj.setBlock(x, y, z, Blocks.fire, 0, 3);
 						}
 					}
 				}
@@ -415,11 +448,16 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		tags.setString("Type", type.shortName);
-		if(thrower != null)
-			tags.setString("Thrower", thrower.getCommandSenderName());
-		tags.setFloat("RotationYaw", axes.getYaw());
-		tags.setFloat("RotationPitch", axes.getPitch());
+		if(type == null)
+			setDead();
+		else
+		{
+			tags.setString("Type", type.shortName);
+			if(thrower != null)
+				tags.setString("Thrower", thrower.getCommandSenderName());
+			tags.setFloat("RotationYaw", axes.getYaw());
+			tags.setFloat("RotationPitch", axes.getPitch());
+		}
 	}
 
 	@Override
@@ -449,4 +487,56 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
     {
     	return false;
     }
+	
+	@Override
+	public boolean canBeCollidedWith()
+	{
+		return !isDead && type.isDeployableBag;
+	}
+	
+	@Override
+	public boolean interactFirst(EntityPlayer player)
+	{
+		// Player right clicked on grenade
+		//For deployable bags, give player rewards
+		if(type.isDeployableBag && !worldObj.isRemote)
+		{
+			boolean used = false;
+			//Handle healing
+			if(type.healAmount > 0 && player.getHealth() < player.getMaxHealth())
+			{
+				player.heal(type.healAmount);
+	        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
+	        	used = true;
+			}
+			//Handle potion effects
+			for(PotionEffect effect : type.potionEffects)
+			{
+				player.addPotionEffect(new PotionEffect(effect));
+				used = true;
+			}
+			//Handle ammo
+			if(type.numClips > 0 && player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemGun)
+			{
+				GunType gun = ((ItemGun)player.getCurrentEquippedItem().getItem()).type;
+				if(gun.ammo.size() > 0)
+				{
+					BulletType bulletToGive = gun.ammo.get(0);
+					int numToGive = Math.min(bulletToGive.maxStackSize, type.numClips * gun.numAmmoItemsInGun);
+					if(player.inventory.addItemStackToInventory(new ItemStack(bulletToGive.item, numToGive)))
+					{
+						used = true;
+					}
+				}
+			}
+			//If the bag is all used up, get rid of it
+			if(used)
+			{
+				numUsesRemaining--;
+				if(numUsesRemaining <= 0)
+					setDead();
+			}
+		}
+		return true;
+	}
 }

@@ -324,21 +324,21 @@ public class ClientProxy extends CommonProxy
 	public void buyGun(GunBoxType type, int gun)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(type, 0, gun));
-		FlansModClient.shootTime = 10;
+		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
 	}
 
 	@Override
 	public void buyAmmo(GunBoxType box, int ammo, int type)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(box, type, ammo));
-		FlansModClient.shootTime = 10;
+		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
 	}
 	
 	@Override
 	public void buyArmour(String shortName, int piece, ArmourBoxType box)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyArmour(box.shortName, shortName, piece));
-		FlansModClient.shootTime = 10;
+		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
 	}
 	
 	@Override

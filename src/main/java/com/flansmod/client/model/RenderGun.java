@@ -210,6 +210,14 @@ public class RenderGun implements IItemRenderer
 
 					}
 					
+					if(model.spinningCocking)
+					{
+						GL11.glTranslatef(model.spinPoint.x, model.spinPoint.y, model.spinPoint.z);
+						float pumped = (animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing);
+						GL11.glRotatef(pumped * 180F + 180F, 0F, 0F, 1F);
+						GL11.glTranslatef(-model.spinPoint.x, -model.spinPoint.y, -model.spinPoint.z);
+					}
+					
 					if(animations.reloading)
 					{
 						//Calculate the amount of tilt required for the reloading animation
