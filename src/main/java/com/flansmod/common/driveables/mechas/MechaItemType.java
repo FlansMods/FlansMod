@@ -31,12 +31,15 @@ public class MechaItemType extends InfoType
 	public float speedMultiplier = 1F;
 	/** This allows upgrades to reduce incoming damage */
 	public float damageResistance = 1F;
-	
+	/** This allows a sound to be played upon use (RocketPack only for the moment) */
+	public String soundEffect = "";
+	public String detectSound = "";
+	public float soundTime = 0;
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
@@ -50,7 +53,7 @@ public class MechaItemType extends InfoType
 	@SideOnly(Side.CLIENT)
 	public ModelMechaTool model;
 	
-	public MechaItemType(TypeFile file) 
+	public MechaItemType(TypeFile file)
 	{
 		super(file);
 	}
@@ -85,6 +88,10 @@ public class MechaItemType extends InfoType
 				damageResistance = Float.parseFloat(split[1]);
 			if(split[0].equals("CoalMultiplier"))
 				fortuneCoal = Float.parseFloat(split[1]);
+			if(split[0].equals("DetectSound"))
+				detectSound = split[1];
+			if(split[0].equals("DiamondDetect"))
+				diamondDetect = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("DiamondMultiplier"))
 				fortuneDiamond = Float.parseFloat(split[1]);
 			if(split[0].equals("EmeraldMultiplier"))
@@ -105,6 +112,10 @@ public class MechaItemType extends InfoType
 				rocketPack = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("RocketPower"))
 				rocketPower = Float.parseFloat(split[1]);
+			if(split[0].equals("SoundEffect"))
+				soundEffect = split[1];
+			if(split[0].equals("SoundTime"))
+				soundTime = Float.parseFloat(split[1]);
 			if(split[0].equals("SpeedMultiplier"))
 				speedMultiplier = Float.parseFloat(split[1]);
 			if(split[0].equals("StopMechaFallDamage"))

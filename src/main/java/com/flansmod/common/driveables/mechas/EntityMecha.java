@@ -74,6 +74,9 @@ public class EntityMecha extends EntityDriveable
     public Vector3i breakingBlock = null;
     /** Progress made towards breaking each block */
     public float breakingProgress = 0F;
+    /** Timer for the RocketPack Sound */
+    private float rocketTimer = 0F;
+    private int diamondTimer = 0;
     
     /** Gun animations */
     public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
@@ -219,7 +222,7 @@ public class EntityMecha extends EntityDriveable
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					jumpDelay = 30;
+					jumpDelay = 20;
 					motionY += type.jumpVelocity;
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption;
@@ -525,7 +528,34 @@ public class EntityMecha extends EntityDriveable
 			}
 			toggleTimer = 20;
 		}
-			
+
+		if(diamondDetect() != null && diamondTimer == 0)
+		{
+			float distance = 901;
+			for(float i = -30; i <= 30; i++)
+			{
+				for(float j = -30; j <= 30; j++)
+				{
+					for(float k = -30; k <= 30; k++)
+					{
+						int x = MathHelper.floor_double(i + posX);
+						int y = MathHelper.floor_double(j + posY);
+						int z = MathHelper.floor_double(k + posZ);
+						if(i * i + j * j + k * k <= distance && worldObj.getBlock(x, y, z) == Blocks.diamond_ore)
+						{
+							distance = i * i + j * j + k * k;
+						}
+					}
+				}
+			}
+			if(distance != 901)
+			{
+				diamondTimer = 10 * MathHelper.floor_float(MathHelper.sqrt_float(distance));
+				playSound(diamondDetect().detectSound, 1F, 1F);
+			}
+		}
+		--diamondTimer;
+		
 		//TODO better implement this
 		if(isPartIntact(EnumDriveablePart.hips))
 		{
@@ -620,8 +650,14 @@ public class EntityMecha extends EntityDriveable
 		{
 			motionY *= 0.95;
 			motionY += (0.07*jetPack);
+			fallDistance = 0;
 			if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 				data.fuelInTank -= (10F*jetPack);
+			if(rocketTimer <= 0 && rocketPack().soundEffect != null)
+			{
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, rocketPack().soundEffect, false);
+				rocketTimer = rocketPack().soundTime;
+			}
 		}
 		else if(isInWater() && shouldFloat())
 		{
@@ -629,7 +665,9 @@ public class EntityMecha extends EntityDriveable
 			motionY += 0.1;
 		}
 		
-		Vector3f actualMotion = new Vector3f(0F, motionY - 9.81F / 400F, 0F);
+		if(rocketTimer != 0) rocketTimer --;
+		
+		Vector3f actualMotion = new Vector3f(0F, motionY - (16F / 400F), 0F);
 		
 		if(driverIsLiving)
 		{
@@ -694,7 +732,7 @@ public class EntityMecha extends EntityDriveable
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
 					}
-					else if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
+					else if(!onGround && shouldFly())
 					{
 						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
 						Vector3f.add(actualMotion, flyMotion, actualMotion);
@@ -1012,6 +1050,17 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Detect Diamonds? */
+	public MechaItemType diamondDetect()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.diamondDetect)
+				return type;
+		}
+		return null;
+	}
+	
 	/** Diamond yield multiplier */
 	public float diamondMultiplier()
 	{
@@ -1112,15 +1161,20 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	/** Have a jetpack? */
-	public boolean shouldFly()
+	/** Have a Rocket Pack? */
+	public MechaItemType rocketPack()
 	{
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.rocketPack)
-				return true;
+				return type;
 		}
-		return false;
+		return null;
+	}
+	
+	public boolean shouldFly()
+	{
+		return rocketPack() != null;
 	}
 	
 	/** Jetpack multiplier */

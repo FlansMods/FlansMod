@@ -3,6 +3,7 @@ Description Yup, it's a_rocket pack
 ShortName mechaRocketPack
 Icon RocketPack
 Model titan.RocketPack
+Texture RocketPack
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
@@ -15,3 +16,7 @@ Type hipsUpgrade
 //The modifiers this item enacts on the mecha
 RocketPack true
 RocketPower 1
+//Add a Sound Effect. For the moment, RocketPacks only
+SoundEffect RocketRumble
+//The length of your sound in ticks
+SoundTime 10

@@ -1,7 +1,6 @@
 //Naming
 Name Proto Titan
 ShortName ProtoTitan
-ItemID 23400
 //Visuals
 Icon ProtoTitan
 Model titan.ProtoTitan
