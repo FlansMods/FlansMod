@@ -1,5 +1,4 @@
 //Naming
-Name Proto Titan
 ShortName ProtoTitan
 //Visuals
 Icon ProtoTitan

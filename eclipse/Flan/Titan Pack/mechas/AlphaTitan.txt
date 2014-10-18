@@ -1,7 +1,5 @@
 //Naming
-Name Alpha Titan
 ShortName AlphaTitan
-ItemID 23422
 //Visuals
 Icon AlphaTitan
 Model titan.ProtoTitan
