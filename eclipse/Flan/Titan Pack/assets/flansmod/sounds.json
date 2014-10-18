@@ -2,7 +2,7 @@
 	"RocketRumble": {
 		"category" : "player",
 		"sounds" : [ "flansmod:RocketRumble" ]
-	}
+	},
 	
 	"Chirp": {
 		"category" : "player",

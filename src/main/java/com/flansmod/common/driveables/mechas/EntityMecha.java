@@ -529,7 +529,7 @@ public class EntityMecha extends EntityDriveable
 			toggleTimer = 20;
 		}
 
-		if(diamondDetect() != null && diamondTimer == 0)
+		if(worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity) && diamondDetect() != null && diamondTimer == 0)
 		{
 			float distance = 901;
 			for(float i = -30; i <= 30; i++)
@@ -548,10 +548,11 @@ public class EntityMecha extends EntityDriveable
 					}
 				}
 			}
-			if(distance != 901)
+			if(distance < 901)
 			{
 				diamondTimer = 10 * MathHelper.floor_float(MathHelper.sqrt_float(distance));
 				playSound(diamondDetect().detectSound, 1F, 1F);
+				System.out.println("dayum");
 			}
 		}
 		--diamondTimer;
