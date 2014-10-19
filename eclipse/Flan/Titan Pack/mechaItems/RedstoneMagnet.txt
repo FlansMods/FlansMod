@@ -5,10 +5,10 @@ Icon RedstoneMagnet
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe I blockIron R blockRedstone
+Recipe I blockIron R redstone
+RR
+IRR
  IR
-I I
- I 
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type armUpgrade
 //The modifiers this item enacts on the mecha

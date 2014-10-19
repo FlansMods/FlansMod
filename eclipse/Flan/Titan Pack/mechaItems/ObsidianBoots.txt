@@ -1,7 +1,7 @@
 Name Obsidian Boots
 //Description for hover text. Underscores represent new lines.
 Description Deflects fall damage into_the surrounding terrain
-ShortName obsidianMechaBoots
+ShortName mechaObsidianBoots
 Icon ObsidianBoots
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

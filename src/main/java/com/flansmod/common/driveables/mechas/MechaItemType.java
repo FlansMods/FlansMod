@@ -35,6 +35,7 @@ public class MechaItemType extends InfoType
 	public String soundEffect = "";
 	public String detectSound = "";
 	public float soundTime = 0;
+	public int energyShield = 0;
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
@@ -44,7 +45,7 @@ public class MechaItemType extends InfoType
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
 	 * dropRate - floor(dropRate) chance of getting one more */
-	public float fortuneDiamond = 1F, fortuneRedstone = 1F, fortuneCoal = 1F, fortuneEmerald = 1F;
+	public float fortuneDiamond = 1F, fortuneRedstone = 1F, fortuneCoal = 1F, fortuneEmerald = 1F, fortuneIron = 1F;
 	
 	/** The power of any attached jet pack is multiplied by this float */
 	public float rocketPower = 1F;
@@ -100,6 +101,8 @@ public class MechaItemType extends InfoType
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("IronMultiplier"))
+				fortuneIron = Float.parseFloat(split[1]);
 			if(split[0].equals("IronRefine"))
 				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ItemVacuum"))

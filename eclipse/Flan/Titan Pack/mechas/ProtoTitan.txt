@@ -20,7 +20,7 @@ FuelTankSize 10000
 //Inventory Slots
 CargoSlots 24
 //How quickly the legs react to a change in direction
-RotateSpeed 14
+RotateSpeed 25
 //Will it squash puny mobs?
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)

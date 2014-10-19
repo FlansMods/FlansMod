@@ -541,7 +541,7 @@ public class EntityMecha extends EntityDriveable
 						int x = MathHelper.floor_double(i + posX);
 						int y = MathHelper.floor_double(j + posY);
 						int z = MathHelper.floor_double(k + posZ);
-						if(i * i + j * j + k * k < sqDistance && worldObj.getBlock(x, y, z).equals(Blocks.diamond_ore))
+						if(i * i + j * j + k * k < sqDistance && worldObj.getBlock(x, y, z) == (Blocks.diamond_ore))
 						{
 							sqDistance = i * i + j * j + k * k;
 						}
@@ -867,6 +867,11 @@ public class EntityMecha extends EntityDriveable
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
 										}
+										if(stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z) || stack.getItem() == Items.iron_ingot)
+										{
+											float multiplier = ironMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
 										
 										//Check for auto coal consumption
 										if(autoCoal() && (stack.getItem() == Items.coal) && (data.fuelInTank + 250F < type.fuelTankSize))
@@ -1124,6 +1129,17 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			multiplier *= type.fortuneEmerald;
+		}
+		return multiplier;
+	}
+	
+	/** Iron yield multiplier */
+	public float ironMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneIron;
 		}
 		return multiplier;
 	}
