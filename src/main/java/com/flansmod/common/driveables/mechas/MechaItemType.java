@@ -30,7 +30,7 @@ public class MechaItemType extends InfoType
 	/** This allows an upgrade to affect the mecha's move speed */
 	public float speedMultiplier = 1F;
 	/** This allows upgrades to reduce incoming damage */
-	public float damageResistance = 1F;
+	public float damageResistance = 0F;
 	/** This allows a sound to be played upon use (RocketPack only for the moment) */
 	public String soundEffect = "";
 	public String detectSound = "";
@@ -40,7 +40,7 @@ public class MechaItemType extends InfoType
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false, infiniteAmmo = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
@@ -101,6 +101,8 @@ public class MechaItemType extends InfoType
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("InfiniteAmmo"))
+				infiniteAmmo = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("IronMultiplier"))
 				fortuneIron = Float.parseFloat(split[1]);
 			if(split[0].equals("IronRefine"))

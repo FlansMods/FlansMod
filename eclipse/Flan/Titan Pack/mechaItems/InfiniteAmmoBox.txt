@@ -1,17 +1,17 @@
+Name Infinite Ammo Box
 //Description for hover text. Underscores represent new lines.
-Description Reduces the damage_taken by your mecha_and gives it a recharging_shield
-ShortName mechaEnergyShield
-Icon EnergyShield
+Description You never even_have to reload
+ShortName mechaInfiniteAmmoBox
+Icon InfiniteAmmoBox
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23426
 RecipeOutput 1
-Recipe A advCPU D mechaDiamondArmour B basicCPU
- A 
-BDB
- A 
+Recipe N nether_star I blockIron
+III
+INI
+III
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type shoulderUpgrade
+Type upgrade
 //The modifiers this item enacts on the mecha
-EnergyShield 100
-//'Armour' value indicates the proportion of damage the armour will negate
-Armour 0.2
+InfiniteAmmo true

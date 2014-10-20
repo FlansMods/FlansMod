@@ -356,7 +356,7 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, creative, false);				
+						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() ? true : creative), false);				
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
@@ -453,7 +453,7 @@ public class EntityMecha extends EntityDriveable
         	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
         	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * armourPierce() : 0;
+        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * vulnerability() : 0;
         	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
         	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
@@ -476,7 +476,7 @@ public class EntityMecha extends EntityDriveable
 		}
         else
         {
-        	driveableData.parts.get(EnumDriveablePart.core).attack(i * armourPierce(), damagesource.isFireDamage());
+        	driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
         }
         return true;
     }
@@ -519,10 +519,11 @@ public class EntityMecha extends EntityDriveable
 			for(EnumDriveablePart part: EnumDriveablePart.values())
 			{
 				DriveablePart thisPart = data.parts.get(part);
-				if(thisPart != null && thisPart.health < thisPart.maxHealth && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 10F))
+				boolean hasCreativePlayer = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+				if(thisPart != null && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
-					if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+					if(!hasCreativePlayer)
 						data.fuelInTank -= 10F;
 				}
 			}
@@ -644,7 +645,6 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
-		/** TODO add rockets here */
 		float jetPack = jetPackPower();
 		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && FlansMod.proxy.isKeyDown(4) && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
 		{
@@ -1110,16 +1110,15 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
-	/** Vulnerability
-	 * TODO check that this implements correctly */
-	public float armourPierce()
+	/** Vulnerability */
+	public float vulnerability()
 	{
 		float multiplier = 1F;
 		for(MechaItemType type : getUpgradeTypes())
 		{
-			multiplier *= type.damageResistance;
+			multiplier *= (1 - type.damageResistance);
 		}
-		return 1 - multiplier;
+		return multiplier;
 	}
 	
 	/** Emerald yield multiplier */
@@ -1172,6 +1171,17 @@ public class EntityMecha extends EntityDriveable
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.floater)
+				return true;
+		}
+		return false;
+	}
+	
+	/** Have infinite ammo? */
+	public boolean infiniteAmmo()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.infiniteAmmo)
 				return true;
 		}
 		return false;
