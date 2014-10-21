@@ -36,11 +36,12 @@ public class MechaItemType extends InfoType
 	public String detectSound = "";
 	public float soundTime = 0;
 	public int energyShield = 0;
+	public int lightLevel = 0;
 	/** The following are a ton of upgrade flags and modifiers. The mecha will iterate over all upgrades in its
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false, infiniteAmmo = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false, infiniteAmmo = false, forceDark = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
@@ -97,6 +98,8 @@ public class MechaItemType extends InfoType
 				fortuneDiamond = Float.parseFloat(split[1]);
 			if(split[0].equals("EmeraldMultiplier"))
 				fortuneEmerald = Float.parseFloat(split[1]);
+			if(split[0].equals("ForceDark"))
+				forceDark = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
@@ -109,6 +112,8 @@ public class MechaItemType extends InfoType
 				refineIron = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ItemVacuum"))
 				vacuumItems = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("LightLevel"))
+				lightLevel = Integer.parseInt(split[1]);
 			if(split[0].equals("Nanorepair"))
 				autoRepair = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("RedstoneMultiplier"))

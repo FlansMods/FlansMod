@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
@@ -40,6 +41,7 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
+import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
@@ -406,6 +408,41 @@ public class TickHandlerClient
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
 						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+					}
+				}
+				else if(obj instanceof EntityMecha)
+				{
+					EntityMecha mecha = (EntityMecha)obj;
+					int x = MathHelper.floor_double(mecha.posX);
+					int y = MathHelper.floor_double(mecha.posY);
+					int z = MathHelper.floor_double(mecha.posZ);
+					if(mecha.lightLevel() > 0)
+					{
+						blockLightOverrides.add(new Vector3i(x, y, z));
+						mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, Math.max(mc.theWorld.getBlockLightValue(x, y, z), mecha.lightLevel()));
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y + 1, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
+						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+					}
+					if(mecha.forceDark())
+					{
+						for(int i = -3; i <= 3; i++)
+						{
+							for(int j = -3; j <= 3; j++)
+							{
+								for(int k = -3; k <= 3; k++)
+								{
+									int xd = i + x;
+									int yd = j + y;
+									int zd = k + z;
+									blockLightOverrides.add(new Vector3i(xd, yd, zd));
+									mc.theWorld.setLightValue(EnumSkyBlock.Sky, xd, yd, zd, Math.abs(i) + Math.abs(j) + Math.abs(k));
+								}
+							}
+						}
 					}
 				}
 			}

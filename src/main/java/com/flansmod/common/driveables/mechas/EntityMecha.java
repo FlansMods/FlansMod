@@ -20,6 +20,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
@@ -352,7 +353,7 @@ public class EntityMecha extends EntityDriveable
 							break;
 						}
 					}
-					
+
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
@@ -388,7 +389,6 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
         }
-		
 		return true;
 	}
 
@@ -529,7 +529,7 @@ public class EntityMecha extends EntityDriveable
 			}
 			toggleTimer = 20;
 		}
-		
+
 		if(diamondDetect() != null && diamondTimer == 0 && worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity))
 		{
 			float sqDistance = 901;
@@ -1141,6 +1141,28 @@ public class EntityMecha extends EntityDriveable
 			multiplier *= type.fortuneIron;
 		}
 		return multiplier;
+	}
+	
+	/** Light Level */
+	public int lightLevel()
+	{
+		int level = 0;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			level = Math.max(level, type.lightLevel);
+		}
+		return level;
+	}
+	
+	/** Force Darkness */
+	public boolean forceDark()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.forceDark)
+				return true;
+		}
+		return false;
 	}
 
 	/** Convert coal to fuel? */
