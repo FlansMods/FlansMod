@@ -20,6 +20,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
@@ -74,6 +75,9 @@ public class EntityMecha extends EntityDriveable
     public Vector3i breakingBlock = null;
     /** Progress made towards breaking each block */
     public float breakingProgress = 0F;
+    /** Timer for the RocketPack Sound */
+    private float rocketTimer = 0F;
+    private int diamondTimer = 0;
     
     /** Gun animations */
     public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
@@ -219,7 +223,7 @@ public class EntityMecha extends EntityDriveable
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 				if(onGround && (jumpDelay == 0) && (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					jumpDelay = 30;
+					jumpDelay = 20;
 					motionY += type.jumpVelocity;
 					if(!canThrustCreatively)
 						data.fuelInTank -= data.engine.fuelConsumption;
@@ -349,11 +353,11 @@ public class EntityMecha extends EntityDriveable
 							break;
 						}
 					}
-					
+
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, creative, false);				
+						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() ? true : creative), false);				
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
@@ -385,7 +389,6 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
         }
-		
 		return true;
 	}
 
@@ -450,7 +453,7 @@ public class EntityMecha extends EntityDriveable
         	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
         	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * armourPierce() : 0;
+        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * vulnerability() : 0;
         	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
         	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
@@ -473,7 +476,7 @@ public class EntityMecha extends EntityDriveable
 		}
         else
         {
-        	driveableData.parts.get(EnumDriveablePart.core).attack(i * armourPierce(), damagesource.isFireDamage());
+        	driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
         }
         return true;
     }
@@ -516,16 +519,44 @@ public class EntityMecha extends EntityDriveable
 			for(EnumDriveablePart part: EnumDriveablePart.values())
 			{
 				DriveablePart thisPart = data.parts.get(part);
-				if(thisPart != null && thisPart.health < thisPart.maxHealth && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 10F))
+				boolean hasCreativePlayer = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+				if(thisPart != null && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
-					if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+					if(!hasCreativePlayer)
 						data.fuelInTank -= 10F;
 				}
 			}
 			toggleTimer = 20;
 		}
-			
+
+		if(diamondDetect() != null && diamondTimer == 0 && worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity))
+		{
+			float sqDistance = 901;
+			for(float i = -30; i <= 30; i++)
+			{
+				for(float j = -30; j <= 30; j++)
+				{
+					for(float k = -30; k <= 30; k++)
+					{
+						int x = MathHelper.floor_double(i + posX);
+						int y = MathHelper.floor_double(j + posY);
+						int z = MathHelper.floor_double(k + posZ);
+						if(i * i + j * j + k * k < sqDistance && worldObj.getBlock(x, y, z) == (Blocks.diamond_ore))
+						{
+							sqDistance = i * i + j * j + k * k;
+						}
+					}
+				}
+			}
+			if(sqDistance < 901)
+			{
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, diamondDetect().detectSound, false);
+				diamondTimer = 1 + 2 * MathHelper.floor_float(MathHelper.sqrt_float(sqDistance));
+			}
+		}
+		if(diamondTimer > 0) --diamondTimer;
+		
 		//TODO better implement this
 		if(isPartIntact(EnumDriveablePart.hips))
 		{
@@ -614,14 +645,19 @@ public class EntityMecha extends EntityDriveable
 		moveX = 0;
 		moveZ = 0;
 		
-		/** TODO add rockets here */
 		float jetPack = jetPackPower();
 		if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && FlansMod.proxy.isKeyDown(4) && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
 		{
 			motionY *= 0.95;
 			motionY += (0.07*jetPack);
+			fallDistance = 0;
 			if(!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
 				data.fuelInTank -= (10F*jetPack);
+			if(rocketTimer <= 0 && rocketPack().soundEffect != null)
+			{
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, rocketPack().soundEffect, false);
+				rocketTimer = rocketPack().soundTime;
+			}
 		}
 		else if(isInWater() && shouldFloat())
 		{
@@ -629,7 +665,9 @@ public class EntityMecha extends EntityDriveable
 			motionY += 0.1;
 		}
 		
-		Vector3f actualMotion = new Vector3f(0F, motionY - 9.81F / 400F, 0F);
+		if(rocketTimer != 0) rocketTimer --;
+		
+		Vector3f actualMotion = new Vector3f(0F, motionY - (16F / 400F), 0F);
 		
 		if(driverIsLiving)
 		{
@@ -694,7 +732,7 @@ public class EntityMecha extends EntityDriveable
 			    	//Move!
 					Vector3f.add(actualMotion, motion, actualMotion);
 					}
-					else if(!onGround && thePlayerIsDrivingThis && Minecraft.getMinecraft().currentScreen instanceof GuiDriveableController && shouldFly() && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= (10F*jetPack)))
+					else if(!onGround && shouldFly())
 					{
 						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
 						Vector3f.add(actualMotion, flyMotion, actualMotion);
@@ -827,6 +865,11 @@ public class EntityMecha extends EntityDriveable
 										if(stack.getItem() == Items.emerald)
 										{
 											float multiplier = emeraldMultiplier();
+											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+										}
+										if(stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z) || stack.getItem() == Items.iron_ingot)
+										{
+											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
 										}
 										
@@ -1012,6 +1055,17 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
+	/** Detect Diamonds? */
+	public MechaItemType diamondDetect()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.diamondDetect)
+				return type;
+		}
+		return null;
+	}
+	
 	/** Diamond yield multiplier */
 	public float diamondMultiplier()
 	{
@@ -1056,16 +1110,15 @@ public class EntityMecha extends EntityDriveable
 		return multiplier;
 	}
 	
-	/** Vulnerability
-	 * TODO check that this implements correctly */
-	public float armourPierce()
+	/** Vulnerability */
+	public float vulnerability()
 	{
 		float multiplier = 1F;
 		for(MechaItemType type : getUpgradeTypes())
 		{
-			multiplier *= type.damageResistance;
+			multiplier *= (1 - type.damageResistance);
 		}
-		return 1 - multiplier;
+		return multiplier;
 	}
 	
 	/** Emerald yield multiplier */
@@ -1077,6 +1130,39 @@ public class EntityMecha extends EntityDriveable
 			multiplier *= type.fortuneEmerald;
 		}
 		return multiplier;
+	}
+	
+	/** Iron yield multiplier */
+	public float ironMultiplier()
+	{
+		float multiplier = 1F;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			multiplier *= type.fortuneIron;
+		}
+		return multiplier;
+	}
+	
+	/** Light Level */
+	public int lightLevel()
+	{
+		int level = 0;
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			level = Math.max(level, type.lightLevel);
+		}
+		return level;
+	}
+	
+	/** Force Darkness */
+	public boolean forceDark()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.forceDark)
+				return true;
+		}
+		return false;
 	}
 
 	/** Convert coal to fuel? */
@@ -1112,15 +1198,31 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	/** Have a jetpack? */
-	public boolean shouldFly()
+	/** Have infinite ammo? */
+	public boolean infiniteAmmo()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.infiniteAmmo)
+				return true;
+		}
+		return false;
+	}
+	
+	/** Have a Rocket Pack? */
+	public MechaItemType rocketPack()
 	{
 		for(MechaItemType type : getUpgradeTypes())
 		{
 			if(type.rocketPack)
-				return true;
+				return type;
 		}
-		return false;
+		return null;
+	}
+	
+	public boolean shouldFly()
+	{
+		return rocketPack() != null;
 	}
 	
 	/** Jetpack multiplier */

@@ -12,4 +12,5 @@ IBI
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type shoulderUpgrade
 //The modifiers this item enacts on the mecha
+//'Armour' value indicates the proportion of damage the armour will negate
 Armour 0.4

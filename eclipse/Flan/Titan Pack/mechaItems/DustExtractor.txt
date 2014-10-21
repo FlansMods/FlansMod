@@ -1,17 +1,15 @@
 //Description for hover text. Underscores represent new lines.
-Description Reduces the damage_taken by your mecha_and gives it a recharging_shield
-ShortName mechaEnergyShield
-Icon EnergyShield
+Description Extracts and combines_coal dust to increase yield_(1.5x Coal Drop Rate)
+ShortName mechaDustExtractor
+Icon DustExtractor
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe A advCPU D mechaDiamondArmour B basicCPU
- A 
-BDB
- A 
+Recipe I blockIron C coal R redstone
+CR 
+ICR
+ IC
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type shoulderUpgrade
+Type armUpgrade
 //The modifiers this item enacts on the mecha
-EnergyShield 100
-//'Armour' value indicates the proportion of damage the armour will negate
-Armour 0.2
+CoalMultiplier 1.5

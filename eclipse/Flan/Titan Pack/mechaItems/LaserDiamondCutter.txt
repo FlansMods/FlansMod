@@ -6,9 +6,9 @@ Icon LaserDiamondCutter
 Colour 255 255 255
 RecipeOutput 1
 Recipe I blockIron D diamond R blockRedstone C mechaDiamondCutter
- IC
-DRD
- D 
+DR 
+ICR
+ ID
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type armUpgrade
 //The modifiers this item enacts on the mecha

@@ -1,17 +1,15 @@
 //Description for hover text. Underscores represent new lines.
-Description Reduces the damage_taken by your mecha_and gives it a recharging_shield
-ShortName mechaEnergyShield
-Icon EnergyShield
+Description Emits lvl15 light
+ShortName mechaIlluminator
+Icon Illuminator
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe A advCPU D mechaDiamondArmour B basicCPU
- A 
-BDB
- A 
+Recipe G glowstone A advCPU
+   
+GAG
+   
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type shoulderUpgrade
+Type headUpgrade
 //The modifiers this item enacts on the mecha
-EnergyShield 100
-//'Armour' value indicates the proportion of damage the armour will negate
-Armour 0.2
+LightLevel 15

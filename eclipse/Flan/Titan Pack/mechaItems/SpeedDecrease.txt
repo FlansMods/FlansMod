@@ -1,15 +1,16 @@
+Name Speed Decrease
 //Description for hover text. Underscores represent new lines.
-Description Scans for nearby_resources
-ShortName mechaMiningScanner
-Icon MiningScanner
+Description Decrease mecha speed by 50%_for more precise control
+ShortName mechaSpeedDecrease
+Icon speedDecrease
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe H helmetDiamond A advCPU
+Recipe A advHydraulics I ingotIron
+IAI
    
-AHA
-   
+IAI
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type headUpgrade
+Type legUpgrade
 //The modifiers this item enacts on the mecha
-Scanner true
+SpeedMultiplier 0.5

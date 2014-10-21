@@ -1,8 +1,8 @@
-Name Speed Upgrade
+Name Speed Increase
 //Description for hover text. Underscores represent new lines.
-Description Increaes mecha speed by 50%
-ShortName mechaSpeedUpgrade
-Icon speedUpgrade
+Description Increase mecha speed by 50%
+ShortName mechaSpeedIncrease
+Icon speedIncrease
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
