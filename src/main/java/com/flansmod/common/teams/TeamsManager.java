@@ -54,6 +54,8 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemAAGun;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamInfo;
@@ -701,9 +703,9 @@ public class TeamsManager
 			for(EntityItem ammoEntity : event.drops)
 			{
 				ItemStack ammoItemstack = ammoEntity.getEntityItem();
-				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemBullet)
+				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
-					BulletType bulletType = ((ItemBullet)ammoItemstack.getItem()).type;
+					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
 					if(gunType.isAmmo(bulletType))
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());

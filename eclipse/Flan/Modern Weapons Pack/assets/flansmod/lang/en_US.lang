@@ -152,3 +152,5 @@ item.mwAmmoBag.name=Deployable Ammo Bag
 item.rpk.name=RPK
 item.rpkAmmo.name=RPK Ammo
 item.molotov.name=Molotov Cocktail
+item.gl1.name=GL1 Grenade Launcher
+item.grenadeLauncherAmmo.name=Grenade Launcher Ammo

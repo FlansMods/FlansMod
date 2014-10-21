@@ -21,6 +21,8 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootableType;
 
 public class EntityGunItem extends EntityItem {
 	
@@ -168,7 +170,7 @@ public class EntityGunItem extends EntityItem {
 	        			for(int j = ammoStacks.size() - 1; j >= 0; j--)
 	        			{
 	        				ItemStack ammoStack = ammoStacks.get(j);
-	        				if(type.isAmmo(((ItemBullet)ammoStack.getItem()).type))
+	        				if(type.isAmmo(((ItemShootable)ammoStack.getItem()).type))
 	        				{
 	        					if(player.inventory.addItemStackToInventory(ammoStack))
 	        					{
@@ -203,9 +205,9 @@ public class EntityGunItem extends EntityItem {
 	    		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 	    		{
 	    			ItemStack stack = player.inventory.getStackInSlot(i);
-	    			if(stack != null && stack.getItem() instanceof ItemBullet)
+	    			if(stack != null && stack.getItem() instanceof ItemShootable)
 	    			{
-	    				BulletType bulletType = ((ItemBullet)stack.getItem()).type;
+	    				ShootableType bulletType = ((ItemShootable)stack.getItem()).type;
 	    				if(gunType.isAmmo(bulletType))
 	    				{
 	    					newAmmoStacks.add(stack.copy());

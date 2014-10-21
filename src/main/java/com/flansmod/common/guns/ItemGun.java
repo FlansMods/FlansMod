@@ -817,7 +817,7 @@ public class ItemGun extends Item implements IFlanItem
 				}
 			}
 			//A bullet stack was found, so try shooting with it
-			else if(bulletStack.getItem() instanceof ItemBullet)
+			else if(bulletStack.getItem() instanceof ItemShootable)
 			{
 				//Shoot
 				shoot(gunStack, gunType, world, bulletStack, entityplayer, left);
@@ -874,7 +874,7 @@ public class ItemGun extends Item implements IFlanItem
 				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack item = inventory.getStackInSlot(j);
-					if (item != null && item.getItem() instanceof ItemBullet && gunType.isAmmo(((ItemBullet)(item.getItem())).type))
+					if (item != null && item.getItem() instanceof ItemShootable && gunType.isAmmo(((ItemShootable)(item.getItem())).type))
 					{
 						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
 						if(bulletsInThisSlot > bulletsInBestSlot)
@@ -888,10 +888,10 @@ public class ItemGun extends Item implements IFlanItem
 				if(bestSlot != -1)
 				{
 					ItemStack newBulletStack = inventory.getStackInSlot(bestSlot);
-					BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
+					ShootableType newBulletType = ((ItemShootable)newBulletStack.getItem()).type;
 					//Unload the old magazine (Drop an item if it is required and the player is not in creative mode)
-					if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet && ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload != null && !creative)
-						dropItem(world, entity, ((ItemBullet)bulletStack.getItem()).type.dropItemOnReload);
+					if(bulletStack != null && bulletStack.getItem() instanceof ItemShootable && ((ItemShootable)bulletStack.getItem()).type.dropItemOnReload != null && !creative)
+						dropItem(world, entity, ((ItemShootable)bulletStack.getItem()).type.dropItemOnReload);
 					//The magazine was not finished, pull it out and give it back to the player or, failing that, drop it
 					if(bulletStack != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 						if(!InventoryHelper.addItemStackToInventory(inventory, bulletStack, creative))
@@ -937,7 +937,7 @@ public class ItemGun extends Item implements IFlanItem
 	/** Method for shooting to avoid repeated code */
 	private void shoot(ItemStack stack, GunType gunType, World world, ItemStack bulletStack, EntityPlayer entityplayer, boolean left)
 	{
-		BulletType bullet = ((ItemBullet)bulletStack.getItem()).type;
+		ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 		// Play a sound if the previous sound has finished
 		if (soundDelay <= 0 && gunType.shootSound != null)
 		{
@@ -953,7 +953,7 @@ public class ItemGun extends Item implements IFlanItem
 			
 			for (int k = 0; k < gunType.numBullets; k++)
 			{
-				world.spawnEntityInWorld(((ItemBullet)bulletStack.getItem()).getEntity(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * gunType.getSpread(stack), gunType.getDamage(stack), gunType.getBulletSpeed(stack), gunType.numBullets > 1,bulletStack.getItemDamage(), gunType));
+				world.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(world, entityplayer, (entityplayer.isSneaking() ? 0.7F : 1F) * gunType.getSpread(stack), gunType.getDamage(stack), gunType.getBulletSpeed(stack), gunType.numBullets > 1,bulletStack.getItemDamage(), gunType));
 			}
 			// Drop item on shooting if bullet requires it
 			if(bullet.dropItemOnShoot != null && !entityplayer.capabilities.isCreativeMode)

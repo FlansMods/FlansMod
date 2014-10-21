@@ -1,6 +1,7 @@
 package com.flansmod.common.guns;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -8,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -18,20 +20,19 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 import com.google.common.collect.Multimap;
 
-public class ItemGrenade extends Item implements IFlanItem
+public class ItemGrenade extends ItemShootable implements IFlanItem
 {
-
 	public GrenadeType type;
 	
 	public ItemGrenade(GrenadeType t) 
 	{
+		super(t);
 		type = t;
-		maxStackSize = type.maxStackSize;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanGuns);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 	
 	@Override
@@ -59,7 +60,7 @@ public class ItemGrenade extends Item implements IFlanItem
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player, world.isRemote ? Side.CLIENT : Side.SERVER);
 		//If can throw grenade
-		if(data != null && data.shootTimeRight <= 0 && data.shootTimeLeft <= 0)
+		if(type.canThrow && data != null && data.shootTimeRight <= 0 && data.shootTimeLeft <= 0)
 		{
 			//Delay the next throw / weapon fire / whatnot
 			data.shootTimeRight = type.throwDelay;
@@ -109,5 +110,48 @@ public class ItemGrenade extends Item implements IFlanItem
 	public InfoType getInfoType() 
 	{
 		return type;
+	}
+
+	@Override
+	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+			float pitch, double motionX, double motionY, double motionZ,
+			EntityLivingBase shooter, float gunDamage, int itemDamage,
+			InfoType shotFrom) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EntityShootable getEntity(World worldObj, Vector3f origin,
+			Vector3f direction, EntityLivingBase thrower, float spread,
+			float damage, float speed, int itemDamage, InfoType shotFrom) 
+	{
+		return getGrenade(worldObj, thrower);
+	}
+
+	@Override
+	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+			float pitch, EntityLivingBase shooter, float spread, float damage,
+			int itemDamage, InfoType shotFrom) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public EntityShootable getEntity(World worldObj, EntityLivingBase player,
+			float bulletSpread, float damage, float bulletSpeed, boolean b,
+			int itemDamage, InfoType shotFrom) 
+	{
+		return getGrenade(worldObj, player);
+	}
+	
+	public EntityGrenade getGrenade(World world, EntityLivingBase thrower)
+	{
+		//Create a new grenade entity
+		EntityGrenade grenade = new EntityGrenade(world, type, thrower);
+		//If this can be remotely detonated, add it to the players detonate list
+		if(type.remote && thrower instanceof EntityPlayer)
+			PlayerHandler.getPlayerData((EntityPlayer)thrower).remoteExplosives.add(grenade);
+		return grenade;
 	}
 }

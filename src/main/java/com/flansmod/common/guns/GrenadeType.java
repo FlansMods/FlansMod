@@ -12,17 +12,13 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class GrenadeType extends InfoType 
+public class GrenadeType extends ShootableType 
 {
 	public static ArrayList<GrenadeType> grenades = new ArrayList<GrenadeType>();
 	
 	//Misc
 	/** The damage imparted by smacking someone over the head with this grenade */
 	public int meleeDamage = 1;
-	/** The maximum number of grenades that can be stacked together */
-	public int maxStackSize = 1;
-	/** After this time the grenade will despawn quietly. 0 means no despawn time */
-	public int despawnTime = 0;
 	
 	//Throwing
 	/** The delay between subsequent grenade throws */
@@ -31,26 +27,14 @@ public class GrenadeType extends InfoType
 	public String throwSound = "";	
 	/** The name of the item to drop (if any) when throwing the grenade */
 	public String dropItemOnThrow = null;
+	/** Whether you can throw this grenade by right clicking */
+	public boolean canThrow = true;
 	
 	//Physics
-	/** True implies that the grenade will explode the moment it hits something */
-	public boolean detonateOnImpact = false;
 	/** Upon hitting a block or entity, the grenade will be deflected and its motion will be multiplied by this constant */
 	public float bounciness = 0.9F;
-	/** The damage to impart upon bouncing off an entity */
-	public int hitEntityDamage = 0;
-	/** The speed at which to throw the grenade. 0 will just drop it on the floor */
-	public float throwSpeed = 1.0F;
-	/** The speed at which the grenade should fall */
-	public float fallSpeed = 1.0F;
-	/** Whether this grenade will break glass when thrown against it */
-	public boolean breaksGlass = false;
-	/** Whether this grenade may pass through entities */
-	public boolean penetratesEntities = false;
-	/** Whether this grenade may pass through blocks */
-	public boolean penetratesBlocks = false;
-	/** The size of this grenade's hitbox */
-	public float hitBoxSize = 0.5F;
+	/** Whether this grenade may pass through entities or blocks */
+	public boolean penetratesEntities = false, penetratesBlocks = false;
 	/** The sound to play upon bouncing off a surface */
 	public String bounceSound = "";
 	/** Whether the grenade should stick to surfaces */
@@ -63,8 +47,6 @@ public class GrenadeType extends InfoType
 	public float livingProximityTrigger = -1F;
 	/** If > 0 this will act like a mine and explode when a driveable comes within this radius of the grenade */
 	public float driveableProximityTrigger = -1F;
-	/** If 0, then the grenade will last until some other detonation condition is met, else the grenade will detonate after this time (in ticks) */
-	public int fuse = 0;
 	/**  If true, then anything attacking this entity will detonate it */
 	public boolean detonateWhenShot = false;
 	/** If true, then this grenade can be detonated by any remote detonator tool */
@@ -73,28 +55,12 @@ public class GrenadeType extends InfoType
 	public float damageToTriggerer = 0F;
 	
 	//Detonation
-	/** The radius in which to spread fire */
-	public float fireRadius = 0F;
-	/** The size of explosion to produce */
-	public float explosionRadius = 0F;
-	/** Whether the explosion can destroy blocks */
-	public boolean explosionBreaksBlocks = false;
 	/** Explosion damage vs various classes of entities */
 	public float explosionDamageVsLiving = 0F, explosionDamageVsDriveable = 0F;
-	/** The name of the item to drop upon detonating */
-	public String dropItemOnDetonate = null;
-	/** Sound to play upon detonation */
-	public String detonateSound = "";
 	/** Detonation will not occur until after this time */
 	public int primeDelay = 0;
 	
 	//Aesthetics
-	/** The model to render for this grenade in the world */
-	@SideOnly(Side.CLIENT)
-	public ModelBase model;
-	/** Trail particles given off by the grenade while being thrown */
-	public boolean trailParticles = false;
-	public String trailParticleType = "smoke";
 	/** Particles given off in the detonation */
 	public int explodeParticles = 0;
 	public String explodeParticleType = "largesmoke";
@@ -133,38 +99,27 @@ public class GrenadeType extends InfoType
 		super.read(split, file);
 		try
 		{
-			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
-				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-			else if(split[0].equals("Texture"))
-				texture = split[1];
-			else if(split[0].equals("MeleeDamage"))
+			if(split[0].equals("MeleeDamage"))
 				meleeDamage = Integer.parseInt(split[1]);
-			else if(split[0].equals("StackSize"))
-				maxStackSize = Integer.parseInt(split[1]);
+			
+			//Grenade Throwing
 			else if(split[0].equals("ThrowDelay"))
 				throwDelay = Integer.parseInt(split[1]);
 			else if(split[0].equals("ThrowSound"))
 				throwSound = split[1];
 			else if(split[0].equals("DropItemOnThrow"))
 				dropItemOnThrow = split[1];
-			else if(split[0].equals("DetonateOnImpact"))
-				detonateOnImpact = Boolean.parseBoolean(split[1].toLowerCase());
+			else if(split[0].equals("CanThrow"))
+				canThrow = Boolean.parseBoolean(split[1]);
+			
+			//Grenade Physics
 			else if(split[0].equals("Bounciness"))
 				bounciness = Float.parseFloat(split[1]);
-			else if(split[0].equals("HitEntityDamage"))
-				hitEntityDamage = Integer.parseInt(split[1]);
-			else if(split[0].equals("ThrowSpeed"))
-				throwSpeed = Float.parseFloat(split[1]);
-			else if(split[0].equals("FallSpeed"))
-				fallSpeed = Float.parseFloat(split[1]);
-			else if(split[0].equals("BreaksGlass"))
-				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("PenetratesEntities"))
 				penetratesEntities = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("PenetratesBlocks"))
 				penetratesBlocks = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("HitBoxSize"))
-				hitBoxSize = Float.parseFloat(split[1]);
+
 			else if(split[0].equals("BounceSound"))
 				bounceSound = split[1];
 			else if(split[0].equals("Sticky"))
@@ -175,16 +130,11 @@ public class GrenadeType extends InfoType
 				driveableProximityTrigger = Float.parseFloat(split[1]);	
 			else if(split[0].equals("DamageToTriggerer"))
 				damageToTriggerer = Float.parseFloat(split[1]);
-			else if(split[0].equals("Fuse"))
-				fuse = Integer.parseInt(split[1]);
 			else if(split[0].equals("DetonateWhenShot"))
 				detonateWhenShot = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("PrimeDelay") || split[0].equals("TriggerDelay"))
 				primeDelay = Integer.parseInt(split[1]);		
-			else if(split[0].equals("FireRadius"))
-				fireRadius = Float.parseFloat(split[1]);
-			else if(split[0].equals("ExplosionRadius"))
-				explosionRadius = Float.parseFloat(split[1]);
+
 			else if(split[0].equals("StickToThrower"))
 				stickToThrower = Boolean.parseBoolean(split[1]);
 			
@@ -193,16 +143,7 @@ public class GrenadeType extends InfoType
 			else if(split[0].equals("ExplosionDamageVsDrivable"))
 				explosionDamageVsDriveable = Float.parseFloat(split[1]);
 
-			else if(split[0].equals("ExplosionBreaksBlocks"))
-				explosionBreaksBlocks = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("DropItemOnDetonate"))
-				dropItemOnDetonate = split[1];
-			else if(split[0].equals("DetonateSound"))
-				detonateSound = split[1];
-			else if(split[0].equals("TrailParticles"))
-				trailParticles = Boolean.parseBoolean(split[1].toLowerCase());	
-			else if(split[0].equals("TrailParticleType"))
-				trailParticleType = split[1];
+
 			else if(split[0].equals("NumExplodeParticles"))
 				explodeParticles = Integer.parseInt(split[1]);	
 			else if(split[0].equals("ExplodeParticles"))
@@ -214,9 +155,7 @@ public class GrenadeType extends InfoType
 			else if(split[0].equals("SpinWhenThrown"))
 				spinWhenThrown = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("Remote"))
-				remote = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("DespawnTime"))
-				despawnTime = Integer.parseInt(split[1]);		
+				remote = Boolean.parseBoolean(split[1].toLowerCase());	
 			
 			//Deployable Bag Stuff
 			else if(split[0].equals("DeployableBag"))

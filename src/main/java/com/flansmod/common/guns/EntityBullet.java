@@ -54,7 +54,7 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
+public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static int bulletLife = 600; //Kill bullets after 30 seconds
 	public Entity owner;
@@ -562,7 +562,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		
 		//Particles 
-		if (type.smokeTrail && worldObj.isRemote)
+		if (type.trailParticles && worldObj.isRemote)
 		{
 			spawnParticles();
 		}
@@ -580,7 +580,7 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		double dZ = (posZ - prevPosZ) / 10;
 		for (int i = 0; i < 10; i++)
 		{
-			EntityFX particle = FlansModClient.getParticle(type.trailParticles, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
 			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
 			//worldObj.spawnEntityInWorld(particle);
@@ -625,23 +625,23 @@ public class EntityBullet extends Entity implements IEntityAdditionalSpawnData
 		super.setDead();
 		if(worldObj.isRemote)
 			return;
-		if (type.explosion > 0)
+		if(type.explosionRadius > 0)
 		{
 	        if(owner instanceof EntityPlayer)
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosion, TeamsManager.explosions);
-	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosion, TeamsManager.explosions);
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
 		}
-		if (type.fire > 0)
+		if(type.fireRadius > 0)
 		{
-			for (int i = (int) posX - type.fire; i < (int) posX + type.fire; i++)
+			for(float i = -type.fireRadius; i < type.fireRadius; i++)
 			{
-				for (int k = (int) posZ - type.fire; k < (int) posZ + type.fire; k++)
+				for(float k = -type.fireRadius; k < type.fireRadius; k++)
 				{
-					for (int j = (int) posY - 1; j < (int) posY + 1; j++)
+					for(int j = -1; j < 1; j++)
 					{
-						if (worldObj.getBlock(i, j, k).getMaterial() == Material.air)
+						if (worldObj.getBlock((int)(posX + i), (int)(posY + j), (int)(posZ + k)).getMaterial() == Material.air)
 						{
-							worldObj.setBlock(i, j, k, Blocks.fire);
+							worldObj.setBlock((int)(posX + i), (int)(posY + j), (int)(posZ + k), Blocks.fire);
 						}
 					}
 				}

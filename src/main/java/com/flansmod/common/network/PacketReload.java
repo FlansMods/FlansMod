@@ -2,11 +2,9 @@ package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -19,6 +17,8 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootableType;
 
 //When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
 //When the server receives one, it is interpreted as a forced reload
@@ -120,7 +120,7 @@ public class PacketReload extends PacketBase
 			for (int j = 0; j < clientPlayer.inventory.getSizeInventory(); j++)
 			{
 				ItemStack item = clientPlayer.inventory.getStackInSlot(j);
-				if (item != null && item.getItem() instanceof ItemBullet && type.isAmmo(((ItemBullet)(item.getItem())).type))
+				if (item != null && item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
 				{
 					int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
 					if(bulletsInThisSlot > bulletsInBestSlot)
@@ -134,7 +134,7 @@ public class PacketReload extends PacketBase
 			if(bestSlot != -1)
 			{
 				ItemStack newBulletStack = clientPlayer.inventory.getStackInSlot(bestSlot);
-				BulletType newBulletType = ((ItemBullet)newBulletStack.getItem()).type;
+				ShootableType newBulletType = ((ItemShootable)newBulletStack.getItem()).type;
 				//Remove the magazine from the inventory
 				if(!clientPlayer.capabilities.isCreativeMode)
 					newBulletStack.stackSize--;
