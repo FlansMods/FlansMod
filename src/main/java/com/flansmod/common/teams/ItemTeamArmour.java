@@ -13,7 +13,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -118,4 +121,11 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		return type;
 	}
+	
+	@Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+    {
+		if(type.nightVision && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 250));
+    }
 }

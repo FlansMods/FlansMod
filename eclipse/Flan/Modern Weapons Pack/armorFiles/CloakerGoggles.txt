@@ -1,0 +1,12 @@
+Name Cloaker Goggles
+ShortName cloakerGoggles
+Icon CloakerGoggles
+Colour 255 255 255
+Type Helmet
+Model mw.CloakerGoggles
+Defence 0.1
+ArmourTexture CloakerGoggles
+MoveSpeedModifier 1.4
+KnockbackModifier 0.25
+NightVision True
+Overlay CloakerGoggles

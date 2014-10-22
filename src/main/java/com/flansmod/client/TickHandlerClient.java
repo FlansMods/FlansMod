@@ -47,6 +47,7 @@ import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
+import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3i;
@@ -86,14 +87,57 @@ public class TickHandlerClient
 			event.setCanceled(true);
 			return;
 		}
+		
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		int i = scaledresolution.getScaledWidth();
+		int j = scaledresolution.getScaledHeight();
+					
+		Tessellator tessellator = Tessellator.instance;
+		
+		if(!event.isCancelable() && event.type == ElementType.HELMET)
+		{
+			//Scopes and helmet overlays
+			String overlayTexture = null;
+			if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
+			{
+				overlayTexture = FlansModClient.currentScope.getZoomOverlay();
+			}
+			else if(mc.thePlayer != null)
+			{
+				ItemStack stack = mc.thePlayer.inventory.armorInventory[3];
+				if(stack != null && stack.getItem() instanceof ItemTeamArmour)
+				{
+					overlayTexture = ((ItemTeamArmour)stack.getItem()).type.overlay;
+				}
+			}
+			
+			if(overlayTexture != null)
+			{
+				FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
+				GL11.glEnable(3042 /* GL_BLEND */);
+				GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+				GL11.glDepthMask(false);
+				GL11.glBlendFunc(770, 771);
+				GL11.glColor4f(1F, 1F, 1F, 1.0F);
+				GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
+				mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
+
+				tessellator.startDrawingQuads();
+				tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+				tessellator.draw();
+				GL11.glDepthMask(true);
+				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
+				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			}
+		}
+		
 	    if(!event.isCancelable() && event.type == ElementType.HOTBAR)
 	    {      
-			ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
-			int i = scaledresolution.getScaledWidth();
-			int j = scaledresolution.getScaledHeight();
-						
-			Tessellator tessellator = Tessellator.instance;
 			//Player ammo overlay
 			if(mc.thePlayer != null)
 			{
@@ -484,21 +528,36 @@ public class TickHandlerClient
 
 	public void renderTickEnd(Minecraft mc)
 	{
+		/*
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 		
+		String overlayTexture = null;
 		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
+			overlayTexture = FlansModClient.currentScope.getZoomOverlay();
+		}
+		else if(mc.thePlayer != null)
+		{
+			ItemStack stack = mc.thePlayer.inventory.armorInventory[3];
+			if(stack != null && stack.getItem() instanceof ItemTeamArmour)
+			{
+				overlayTexture = ((ItemTeamArmour)stack.getItem()).type.overlay;
+			}
+		}
+		
+		if(overlayTexture != null)
+		{
 			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
-			GL11.glEnable(3042 /* GL_BLEND */);
-			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
+			GL11.glEnable(3042);
+			GL11.glDisable(2929);
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, mc.ingameGUI.prevVignetteBrightness, 1.0F);
-			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
+			GL11.glDisable(3008);
 
-			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(FlansModClient.currentScope.getZoomOverlay()));
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
 
 			Tessellator tessellator = Tessellator.instance;
 			tessellator.startDrawingQuads();
@@ -508,10 +567,11 @@ public class TickHandlerClient
 			tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
 			tessellator.draw();
 			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
+			GL11.glEnable(2929);
+			GL11.glEnable(3008);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		}
+		*/
 	}
 	
 	private void drawSlotInventory(FontRenderer fontRenderer, ItemStack itemstack, int i, int j)
