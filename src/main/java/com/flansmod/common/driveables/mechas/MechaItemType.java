@@ -41,7 +41,7 @@ public class MechaItemType extends InfoType
 		inventory multiplying multipliers and looking for true booleans in order to decide if things should happen
 		or what certain values should take
 	*/
-	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false, infiniteAmmo = false, forceDark = false, wasteCompact = false;
+	public boolean stopMechaFallDamage = false, forceBlockFallDamage = false, vacuumItems = false, refineIron = false, autoCoal = false, autoRepair = false, rocketPack = false, diamondDetect = false, infiniteAmmo = false, forceDark = false, wasteCompact = false, fireBurst = false;
 	
 	/** The drop rate of these items are multiplied by this float. They stack between items too. 
 	 * Once dropRate has been calculated, each block then gives floor(dropRate) items with a 
@@ -98,12 +98,14 @@ public class MechaItemType extends InfoType
 				fortuneDiamond = Float.parseFloat(split[1]);
 			if(split[0].equals("EmeraldMultiplier"))
 				fortuneEmerald = Float.parseFloat(split[1]);
-			if(split[0].equals("ForceDark"))
-				forceDark = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("FireBurst"))
+				fireBurst = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Floatation"))
 				floater = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("ForceBlockFallDamage"))
 				forceBlockFallDamage = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("ForceDark"))
+				forceDark = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("InfiniteAmmo"))
 				infiniteAmmo = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("IronMultiplier"))
