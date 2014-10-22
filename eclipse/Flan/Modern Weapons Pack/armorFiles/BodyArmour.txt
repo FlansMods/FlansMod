@@ -1,0 +1,7 @@
+Name Body Armour
+ShortName bodyArmour
+Icon BodyArmour
+Colour 255 255 255
+Type Chest
+Defence 0.4
+ArmourTexture HeavyCriminal

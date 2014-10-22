@@ -1,0 +1,7 @@
+Name Black Sweater
+ShortName blackSweater
+Icon BlackSweater
+Colour 255 255 255
+Type Chest
+Defence 0.1
+ArmourTexture Criminal
