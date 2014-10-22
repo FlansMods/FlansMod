@@ -1,0 +1,10 @@
+Name Bulldozer Helmet
+ShortName bulldozerHelmet
+Icon BulldozerHelmet
+Colour 255 255 255
+Type Helmet
+Model mw.SuperHeavyHelmet
+Defence 0.15
+ArmourTexture Bulldozer
+MoveSpeedModifier 0.85
+KnockbackModifier 0.25
