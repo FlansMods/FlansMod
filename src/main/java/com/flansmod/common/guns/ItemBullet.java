@@ -21,12 +21,14 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 /** Implemented from old source. */
-public class ItemBullet extends Item implements IFlanItem
+public class ItemBullet extends ItemShootable implements IFlanItem
 {
-	public ItemBullet(InfoType infoType)
+	public BulletType type;
+	
+	public ItemBullet(BulletType infoType)
 	{
-		type = (BulletType)infoType;
-		setMaxDamage(type.roundsPerItem);
+		super(infoType);
+		type = infoType;
 		setMaxStackSize(type.maxStackSize);
 		setHasSubtypes(true);
 		type.item = this;
@@ -35,7 +37,6 @@ public class ItemBullet extends Item implements IFlanItem
 		case SHELL : case BOMB : case MINE : case MISSILE : setCreativeTab(FlansMod.tabFlanDriveables); break;
 		default : setCreativeTab(FlansMod.tabFlanGuns);
 		}
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
     @SideOnly(Side.CLIENT)
@@ -60,11 +61,9 @@ public class ItemBullet extends Item implements IFlanItem
             Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-    
-	public BulletType type;
 
 	//Can be overriden to allow new types of bullets to be created, for planes
-	public EntityBullet getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
 			float pitch, double motionX, double motionY, double motionZ,
 			EntityLivingBase shooter,float gunDamage, int itemDamage, InfoType shotFrom) 
 	{
@@ -72,14 +71,14 @@ public class ItemBullet extends Item implements IFlanItem
 	}
 
 	//Can be overriden to allow new types of bullets to be created, vector constructor
-	public EntityBullet getEntity(World worldObj, Vector3f origin, Vector3f direction,
+	public EntityShootable getEntity(World worldObj, Vector3f origin, Vector3f direction,
 			EntityLivingBase shooter, float spread, float damage, float speed, int itemDamage, InfoType shotFrom)
 	{
 		return new EntityBullet(worldObj, origin, direction, shooter, spread, damage, this.type, speed, shotFrom);
 	}
 
 	//Can be overriden to allow new types of bullets to be created, AA/MG constructor
-	public Entity getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
 			float pitch, EntityLivingBase shooter, float spread, float damage,
 			int itemDamage, InfoType shotFrom) 
 	{
@@ -87,7 +86,7 @@ public class ItemBullet extends Item implements IFlanItem
 	}
 
 	//Can be overriden to allow new types of bullets to be created, Handheld constructor
-	public Entity getEntity(World worldObj, EntityLivingBase player,
+	public EntityShootable getEntity(World worldObj, EntityLivingBase player,
 			float bulletSpread, float damage, float bulletSpeed, boolean b,
 			int itemDamage, InfoType shotFrom) 
 	{

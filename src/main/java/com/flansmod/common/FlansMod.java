@@ -57,6 +57,7 @@ import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.AAGunType;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
@@ -492,7 +493,7 @@ public class FlansMod
 					infoType.read(typeFile);
 					switch(type)
 					{
-					case bullet : bulletItems.add((ItemBullet)new ItemBullet(infoType).setUnlocalizedName(infoType.shortName)); break;
+					case bullet : bulletItems.add((ItemBullet)new ItemBullet((BulletType)infoType).setUnlocalizedName(infoType.shortName)); break;
 					case attachment : attachmentItems.add((ItemAttachment)new ItemAttachment((AttachmentType)infoType).setUnlocalizedName(infoType.shortName)); break;
 					case gun : gunItems.add((ItemGun)new ItemGun((GunType)infoType).setUnlocalizedName(infoType.shortName)); break;
 					case grenade : grenadeItems.add((ItemGrenade)new ItemGrenade((GrenadeType)infoType).setUnlocalizedName(infoType.shortName)); break;

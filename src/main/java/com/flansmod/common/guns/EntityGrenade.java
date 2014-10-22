@@ -41,7 +41,7 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
+public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
 	/** The entity that threw them */
@@ -203,7 +203,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				Material mat = block.getMaterial();
 				
 				//If this grenade detonates on impact, do so
-				if(type.detonateOnImpact)
+				if(type.explodeOnImpact)
 					detonate();
 				
 				//If we hit glass and can break it, do so
@@ -312,7 +312,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 		
 		//If throwing this grenade at an entity should hurt them, this bit checks for entities in the way and does so
 		//(Don't attack entities when stuck to stuff)
-		if(type.hitEntityDamage > 0 && !stuck)
+		if(type.damageVsLiving > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
 			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
@@ -321,7 +321,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
 					continue;
 				if(obj instanceof EntityLivingBase)
-					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.hitEntityDamage * motVec.lengthSquared() * 3);
+					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.damageVsLiving * motVec.lengthSquared() * 3);
 			}
 		}
 	
@@ -521,7 +521,7 @@ public class EntityGrenade extends Entity implements IEntityAdditionalSpawnData
 				GunType gun = ((ItemGun)player.getCurrentEquippedItem().getItem()).type;
 				if(gun.ammo.size() > 0)
 				{
-					BulletType bulletToGive = gun.ammo.get(0);
+					ShootableType bulletToGive = gun.ammo.get(0);
 					int numToGive = Math.min(bulletToGive.maxStackSize, type.numClips * gun.numAmmoItemsInGun);
 					if(player.inventory.addItemStackToInventory(new ItemStack(bulletToGive.item, numToGive)))
 					{

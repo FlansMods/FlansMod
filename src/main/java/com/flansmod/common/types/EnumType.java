@@ -22,7 +22,7 @@ import com.flansmod.common.tools.ToolType;
 
 public enum EnumType 
 {
-	part("parts"), bullet("bullets"), attachment("attachments"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), grenade("grenades"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams");
+	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams");
 	
 	public String folderName;
 	

@@ -25,7 +25,7 @@ public class GunType extends InfoType implements IScope
 {
 	//Gun Behaviour Variables
 	/** The list of bullet types that can be used in this gun */
-	public List<BulletType> ammo = new ArrayList<BulletType>();
+	public List<ShootableType> ammo = new ArrayList<ShootableType>();
 	/** Whether the player can press the reload key (default R) to reload this gun */
 	public boolean canForceReload = true;
 	/** The time (in ticks) it takes to reload this gun */
@@ -324,7 +324,7 @@ public class GunType extends InfoType implements IScope
 				pivotHeight = Float.parseFloat(split[1]);
 			else if(split[0].equals("Ammo"))
 			{
-				BulletType type = BulletType.getBullet(split[1]);
+				ShootableType type = ShootableType.getShootableType(split[1]);
 				if(type != null)
 					ammo.add(type);
 			}
@@ -427,7 +427,7 @@ public class GunType extends InfoType implements IScope
 		return damage;
 	}
 	
-	public boolean isAmmo(BulletType type)
+	public boolean isAmmo(ShootableType type)
 	{
 		return ammo.contains(type);
 	}
@@ -436,9 +436,13 @@ public class GunType extends InfoType implements IScope
 	{
 		if (stack == null)
 			return false;
-		if (stack.getItem() instanceof ItemBullet)
+		else if(stack.getItem() instanceof ItemBullet)
 		{
-			return isAmmo(((ItemBullet) stack.getItem()).type);
+			return isAmmo(((ItemBullet)stack.getItem()).type);
+		}
+		else if(stack.getItem() instanceof ItemGrenade)
+		{
+			return isAmmo(((ItemGrenade)stack.getItem()).type);
 		}
 		return false;
 	}

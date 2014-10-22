@@ -312,5 +312,15 @@
 		"M1887Reload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:M1887Reload" ]
+	},
+	
+		"GrenadeLauncherShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:GrenadeLauncherShoot" ]
+	},
+	
+		"GrenadeLauncherReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:GrenadeLauncherReload" ]
 	}
 }

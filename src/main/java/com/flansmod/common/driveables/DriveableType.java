@@ -187,7 +187,7 @@ public class DriveableType extends InfoType
 				maxNegativeThrottle = Float.parseFloat(split[1]);
 			else if(split[0].equals("Drag"))
 				drag = Float.parseFloat(split[1]);
-			else if(split[0].equals("TurretOrigin") || split[0].equals("BarrelPosition"))
+			else if(split[0].equals("TurretOrigin"))
             	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			else if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
             	collisionPoints.add(new DriveablePosition(split));

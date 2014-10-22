@@ -32,9 +32,12 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
+import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.raytracing.BulletHit;
 import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
@@ -461,13 +464,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			GunType gunType = pilotGun.type;
 			ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
 			//Check that neither is null and that the bullet item is actually a bullet
-			if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemBullet && TeamsManager.bulletsEnabled)
+			if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable && TeamsManager.bulletsEnabled)
 			{
-				BulletType bullet = ((ItemBullet)bulletItemStack.getItem()).type;
+				ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
 				if(gunType.isAmmo(bullet))
 				{
 					//Spawn a new bullet item
-					worldObj.spawnEntityInWorld(((ItemBullet)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
+					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 2.0F,bulletItemStack.getItemDamage(), type));
 					//Play the shoot sound
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
 					//Get the bullet item damage and increment it
@@ -519,7 +522,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
 						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-						EntityBullet bulletEntity = bulletItem.getEntity(worldObj, Vec3.createVectorHelper(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, Vec3.createVectorHelper(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
@@ -564,7 +567,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
 						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-						EntityBullet bulletEntity = bulletItem.getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed, driveableData.getStackInSlot(slot).getItemDamage(), type);
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
