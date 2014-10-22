@@ -18,11 +18,18 @@ public class ArmourType extends InfoType
 {
 	public static ArrayList<ArmourType> armours = new ArrayList<ArmourType>();
 	
+	/** 0 = Helmet, 1 = Chestplate, 2 = Legs, 3 = Shoes */
 	public int type;
+	/** The amount of damage to absorb. From 0 to 1. Stacks additively between armour pieces */
 	public double defence;
+	/** The name for the armour texture. Texture path/name is assets/flansmod/armor/<armourTextureName>_1.png or _2 for legs */
 	public String armourTextureName;
-	public float moveSpeedModifier = 1F;
-	public float knockbackModifier = 0.2F;
+	/** Modifiers for various player stats */
+	public float moveSpeedModifier = 1F, knockbackModifier = 0.2F;
+	/** If true, then the player gets a night vision buff every couple of seconds */
+	public boolean nightVision = false;
+	/** The overlay to display when using this helmet. Textures are pulled from the scopes directory */
+	public String overlay = null;
 	
 	@SideOnly(Side.CLIENT)
 	public ModelCustomArmour model;
@@ -63,6 +70,11 @@ public class ArmourType extends InfoType
 			if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
 				knockbackModifier = Float.parseFloat(split[1]);
 			
+			if(split[0].equals("NightVision"))
+				nightVision = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("Overlay"))
+				overlay = split[1];
+				
 			if(split[0].equals("ArmourTexture") || split[0].equals("ArmorTexture"))
 			{
 				armourTextureName = split[1];
