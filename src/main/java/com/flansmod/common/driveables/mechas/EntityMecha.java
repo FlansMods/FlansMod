@@ -846,6 +846,12 @@ public class EntityMecha extends EntityDriveable
 												data.fuelInTank -= 5F;
 										}
 										
+										//Check for waste to be compacted
+										if(wasteCompact() && ((stack.getItem() == Blocks.cobblestone.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z))))
+										{
+											stack.stackSize = 0;
+										}
+										
 										//Check for item multipliers
 										if(stack.getItem() == Items.diamond)
 										{
@@ -1064,6 +1070,17 @@ public class EntityMecha extends EntityDriveable
 				return type;
 		}
 		return null;
+	}
+	
+	/** Compact Waste? */
+	public Boolean wasteCompact()
+	{
+		for(MechaItemType type : getUpgradeTypes())
+		{
+			if(type.wasteCompact)
+				return true;
+		}
+		return false;
 	}
 	
 	/** Diamond yield multiplier */

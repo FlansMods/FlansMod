@@ -1,17 +1,15 @@
-Name Floatation Device
 //Description for hover text. Underscores represent new lines.
-Description Allows the mecha to_float in water or lava
-ShortName mechaFloat
-Icon FloatationDevice
+Description Destroys all mined_cobblestone, dirt and_sand
+ShortName mechaWasteCompacter
+Icon WasteCompacter
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23427
 RecipeOutput 1
-Recipe C canister P pistonBase
-C C
-C C
+Recipe P pistonBase F furnace
+ P 
+PFP
  P 
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type hipsUpgrade
+Type upgrade
 //The modifiers this item enacts on the mecha
-Floatation true
+WasteCompact true
