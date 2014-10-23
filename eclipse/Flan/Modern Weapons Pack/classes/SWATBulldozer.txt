@@ -1,0 +1,11 @@
+Name Bulldozer
+ShortName SWATBulldozer
+AddItem m249
+AddItem m72law
+AddItem mwKnife
+AddItem m249Ammo 3
+AddItem m72lawAmmo 1
+Hat bulldozerHelmet
+Chest bulldozerBody
+Legs bulldozerLegs
+Shoes bulldozerBoots

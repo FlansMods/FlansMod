@@ -1,0 +1,8 @@
+Name Assault
+ShortName CriminalAssault
+AddItem fnscar+flanMWACOG
+AddItem desertEagle
+AddItem m67 2
+AddItem mwKnife
+AddItem fnscarAmmo 3
+AddItem desertEagleAmmo 3

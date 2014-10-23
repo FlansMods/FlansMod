@@ -1,0 +1,9 @@
+Name Sniper
+ShortName CriminalSniper
+AddItem r700+flanMWSilencer
+AddItem usp+flanMWSilencer
+AddItem claymore 3
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem r700Ammo 3
+AddItem uspAmmo 3

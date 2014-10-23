@@ -1,0 +1,9 @@
+Name Demolitions
+ShortName CriminalDemolitions
+AddItem gl1
+AddItem usp
+AddItem c4 2
+AddItem c4Remote
+AddItem mwKnife
+AddItem grenadeLauncherBouncyAmmo 4
+AddItem uspAmmo 2

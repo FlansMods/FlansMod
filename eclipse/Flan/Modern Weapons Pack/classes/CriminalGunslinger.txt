@@ -1,0 +1,8 @@
+Name Gunslinger
+ShortName CriminalGunslinger
+AddItem m1887
+AddItem m1887
+AddItem m67 1
+AddItem mwKnife
+AddItem m1887Ammo 2
+AddItem m1887Ammo 2

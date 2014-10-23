@@ -1,0 +1,9 @@
+Name Combat Medic
+ShortName SWATCombatMedic
+AddItem spas
+AddItem m9
+AddItem m67 2
+AddItem mwMedKit
+AddItem mwKnife
+AddItem spasAmmo 4
+AddItem m9Ammo 3

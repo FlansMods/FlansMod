@@ -1,0 +1,9 @@
+Name Sniper
+ShortName SWATSniper
+AddItem m14+flanMW4xScope
+AddItem m9+flanMWSilencer
+AddItem m67 2
+AddItem mwKnife
+AddItem mwBinoculars
+AddItem m14Ammo 2
+AddItem m9Ammo 3

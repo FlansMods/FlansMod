@@ -1,0 +1,9 @@
+Name Medic
+ShortName CriminalMedic
+AddItem ak74+flanMWRedDot
+AddItem desertEagle
+AddItem m67 2
+AddItem mwMedicBag
+AddItem mwKnife
+AddItem ak74Ammo 3
+AddItem desertEagleAmmo 2

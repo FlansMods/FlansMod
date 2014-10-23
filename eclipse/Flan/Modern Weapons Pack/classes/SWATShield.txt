@@ -1,0 +1,7 @@
+Name Shield
+ShortName SWATShield
+AddItem uzi
+AddItem mwRiotShield
+AddItem m67 2
+AddItem mwKnife
+AddItem uziAmmo 5
