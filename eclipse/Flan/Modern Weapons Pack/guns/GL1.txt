@@ -2,6 +2,8 @@ Name GL1 Grenade Launcher
 ShortName gl1
 //The ammo this gun uses (shortName)
 Ammo grenadeLauncherAmmo
+Ammo grenadeLauncherBouncyAmmo
+Ammo grenadeLauncherIncendiaryAmmo
 Icon GL1
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

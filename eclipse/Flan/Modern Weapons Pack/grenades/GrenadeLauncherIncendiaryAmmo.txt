@@ -1,7 +1,7 @@
 ////Name and icon
-Name Impact Grenade
-ShortName grenadeLauncherAmmo
-Icon GrenadeLauncherAmmo
+Name Incendiary Grenade
+ShortName grenadeLauncherIncendiaryAmmo
+Icon GrenadeLauncherIncendiaryAmmo
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
@@ -41,8 +41,8 @@ Remote false
 //DespawnTime 0
 PrimeDelay 0
 ////Detonation
-FireRadius 0.0
-ExplosionRadius 4.0
+FireRadius 3.0
+ExplosionRadius 1.0
 ExplosionBreaksBlocks true
 //DropItemOnDetonate <itemID.damage>
 //Detonate Sound <sound>

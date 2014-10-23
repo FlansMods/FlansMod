@@ -7,7 +7,7 @@ public class ModelSuperHeavyChest extends ModelCustomArmour
 {
 	public ModelSuperHeavyChest()
 	{
-		int textureX = 64;
+		int textureX = 128;
 		int textureY = 64;
 		
 		bodyModel = new ModelRendererTurbo[6];

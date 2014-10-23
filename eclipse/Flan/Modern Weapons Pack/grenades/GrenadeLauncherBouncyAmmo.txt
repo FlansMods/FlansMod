@@ -1,7 +1,7 @@
 ////Name and icon
-Name Impact Grenade
-ShortName grenadeLauncherAmmo
-Icon GrenadeLauncherAmmo
+Name Bouncing Grenade
+ShortName grenadeLauncherBouncyAmmo
+Icon GrenadeLauncherBouncyAmmo
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
@@ -22,7 +22,7 @@ ThrowDelay 10
 //ThrowSound <sound>
 //DropItemOnThrow <itemID.damage>
 ////Physics
-DetonateOnImpact true
+DetonateOnImpact false
 Bounciness 0.8
 HitEntityDamage 1
 ThrowSpeed 3.0
