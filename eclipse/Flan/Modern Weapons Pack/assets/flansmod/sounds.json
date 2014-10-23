@@ -319,6 +319,11 @@
 		"sounds" : [ "flansmod:GrenadeLauncherShoot" ]
 	},
 	
+		"GL6Reload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:GL6Reload" ]
+	},
+	
 		"GrenadeLauncherReload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:GrenadeLauncherReload" ]

@@ -403,7 +403,9 @@ public class RenderGun implements IItemRenderer
 			//Render the revolver barrel
 			GL11.glPushMatrix();
 			{
+				GL11.glTranslatef(model.revolverFlipPoint.x, model.revolverFlipPoint.y, model.revolverFlipPoint.z);
 				GL11.glRotatef(reloadRotate * model.revolverFlipAngle, 1F, 0F, 0F);
+				GL11.glTranslatef(-model.revolverFlipPoint.x, -model.revolverFlipPoint.y, -model.revolverFlipPoint.z);
 				model.renderRevolverBarrel(f);
 			}
 			GL11.glPopMatrix();
@@ -448,8 +450,10 @@ public class RenderGun implements IItemRenderer
 							break;
 						}
 						case REVOLVER :
-						{
+						{				
+							GL11.glTranslatef(model.revolverFlipPoint.x, model.revolverFlipPoint.y, model.revolverFlipPoint.z);
 							GL11.glRotatef(reloadRotate * model.revolverFlipAngle, 1F, 0F, 0F);
+							GL11.glTranslatef(-model.revolverFlipPoint.x, -model.revolverFlipPoint.y, -model.revolverFlipPoint.z);
 							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
 							break;
 						}
