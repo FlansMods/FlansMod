@@ -388,27 +388,27 @@ public class ModelZeroTitan extends ModelMecha
 		leftLegModel[8].rotateAngleX = 0.01745329F;
 
 		leftLegModel[9].addShapeBox(18F, 85F, 4F, 22, 4, 10, 0F,0F, 0F, 0F,-4F, 0F, 0F,-4F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 23
-		leftLegModel[9].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[9].setRotationPoint(-1F, -90.9F, 19F);
 		leftLegModel[9].rotateAngleX = 0.01745329F;
 
 		leftLegModel[10].addBox(18F, 89F, 4F, 22, 2, 10, 0F); // Box 24
-		leftLegModel[10].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[10].setRotationPoint(-1F, -90.9F, 19F);
 		leftLegModel[10].rotateAngleX = 0.01745329F;
 
 		leftLegModel[11].addShapeBox(-27F, 85F, 4F, 22, 4, 10, 0F,-4F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,-4F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 25
-		leftLegModel[11].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[11].setRotationPoint(-1F, -90.9F, 19F);
 		leftLegModel[11].rotateAngleX = 0.01745329F;
 
 		leftLegModel[12].addBox(-27F, 89F, 4F, 22, 2, 10, 0F); // Box 26
-		leftLegModel[12].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[12].setRotationPoint(-1F, -90.9F, 19F);
 		leftLegModel[12].rotateAngleX = 0.01745329F;
 
 		leftLegModel[13].addBox(2F, 89F, -8F, 10, 2, 34, 0F); // Box 27
-		leftLegModel[13].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[13].setRotationPoint(-1F, -91.5F, 19F);
 		leftLegModel[13].rotateAngleX = 0.01745329F;
 
 		leftLegModel[14].addShapeBox(2F, 85F, -8F, 10, 4, 34, 0F,0F, 0F, -4F,0F, 0F, -4F,0F, 0F, -4F,0F, 0F, -4F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 28
-		leftLegModel[14].setRotationPoint(-1F, -91F, 19F);
+		leftLegModel[14].setRotationPoint(-1F, -91.5F, 19F);
 		leftLegModel[14].rotateAngleX = 0.01745329F;
 
 		leftLegModel[15].addBox(-5F, 29F, 6F, 10, 6, 6, 0F); // Box 29
