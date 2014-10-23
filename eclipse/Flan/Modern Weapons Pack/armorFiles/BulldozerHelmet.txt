@@ -8,3 +8,4 @@ Defence 0.15
 ArmourTexture Bulldozer
 MoveSpeedModifier 0.85
 KnockbackModifier 0.25
+SmokeProtection True

@@ -30,6 +30,8 @@ public class ArmourType extends InfoType
 	public boolean nightVision = false;
 	/** The overlay to display when using this helmet. Textures are pulled from the scopes directory */
 	public String overlay = null;
+	/** If true, then smoke effects from grenades will have no effect on players wearing this */
+	public boolean smokeProtection = false;
 	
 	@SideOnly(Side.CLIENT)
 	public ModelCustomArmour model;
@@ -74,6 +76,10 @@ public class ArmourType extends InfoType
 				nightVision = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("Overlay"))
 				overlay = split[1];
+			
+			if(split[0].equals("SmokeProtection"))
+				smokeProtection = Boolean.parseBoolean(split[1]);
+
 				
 			if(split[0].equals("ArmourTexture") || split[0].equals("ArmorTexture"))
 			{

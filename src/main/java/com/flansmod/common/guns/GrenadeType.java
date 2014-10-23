@@ -64,12 +64,18 @@ public class GrenadeType extends ShootableType
 	/** Particles given off in the detonation */
 	public int explodeParticles = 0;
 	public String explodeParticleType = "largesmoke";
+	/** Whether the grenade should spin when thrown. Generally false for mines or things that should lie flat */
+	public boolean spinWhenThrown = true;
+	
+	//Smoke
 	/** Time to remain after detonation */
 	public int smokeTime = 0;
 	/** Particles given off after detonation */
 	public String smokeParticleType = "explode";
-	/** Whether the grenade should spin when thrown. Generally false for mines or things that should lie flat */
-	public boolean spinWhenThrown = true;
+	/** The effects to be given to people coming too close */
+	public ArrayList<PotionEffect> smokeEffects = new ArrayList<PotionEffect>();
+	/** The radius for smoke effects to take place in */
+	public float smokeRadius = 5F;
 	
 	//Deployed bag functionality
 	/** If true, then right clicking this "grenade" will give the player health or buffs or ammo as defined below */
@@ -152,6 +158,10 @@ public class GrenadeType extends ShootableType
 				smokeTime = Integer.parseInt(split[1]);
 			else if(split[0].equals("SmokeParticles"))
 				smokeParticleType = split[1];
+			else if(split[0].equals("SmokeEffect"))
+				smokeEffects.add(getPotionEffect(split));
+			else if(split[0].equals("SmokeRadius"))
+				smokeRadius = Float.parseFloat(split[1]);
 			else if(split[0].equals("SpinWhenThrown"))
 				spinWhenThrown = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("Remote"))

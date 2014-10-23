@@ -36,6 +36,7 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
@@ -127,15 +128,43 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				}
 			}
 			
-			//Smoke
-			if(smoking)
+
+		}
+		
+		//Smoke
+		if(smoking)
+		{
+			//Send flak packet to spawn particles
+			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(posX, posY, posZ, 50, type.smokeParticleType), posX, posY, posZ, 30, dimension);
+			//
+			List list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox.expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
+			for(Object obj : list)
 			{
-				for(int i = 0; i < 20; i++)
-					worldObj.spawnParticle(type.smokeParticleType, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), 0F, 0F, 0F);
-				smokeTime--;
-				if(smokeTime == 0)
-					setDead();
+				EntityLivingBase entity = ((EntityLivingBase)obj);
+				if(entity.getDistanceToEntity(this) < type.smokeRadius)
+				{
+					//Do some checks first
+					boolean smokeThem = true;
+					for(int i = 0; i < 5; i++)
+					{
+						//If any currently equipped item has smoke protection (gas masks), stop the effects
+						ItemStack stack = entity.getEquipmentInSlot(i);
+						if(stack != null && stack.getItem() instanceof ItemTeamArmour)
+						{
+							if(((ItemTeamArmour)stack.getItem()).type.smokeProtection)
+								smokeThem = false;
+						}
+					}
+					
+					if(smokeThem)
+						for(PotionEffect effect : type.smokeEffects)
+							entity.addPotionEffect(new PotionEffect(effect));
+				}
 			}
+			
+			smokeTime--;
+			if(smokeTime == 0)
+				setDead();
 		}
 		
 		//Detonation conditions

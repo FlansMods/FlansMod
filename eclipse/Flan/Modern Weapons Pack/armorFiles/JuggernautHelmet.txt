@@ -7,3 +7,4 @@ Defence 0.15
 ArmourTexture Juggernaut
 MoveSpeedModifier 0.85
 KnockbackModifier 0.25
+SmokeProtection True

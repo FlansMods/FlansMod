@@ -10,3 +10,4 @@ MoveSpeedModifier 1.4
 KnockbackModifier 0.25
 NightVision True
 Overlay CloakerGoggles
+SmokeProtection True

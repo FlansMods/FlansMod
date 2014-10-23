@@ -77,6 +77,10 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		{
             Collections.addAll(lines, type.description.split("_"));
 		}
+		if(type.smokeProtection)
+			lines.add("\u00a72+Smoke Protection");
+		if(type.nightVision)
+			lines.add("\u00a72+Night Vision");
 	}
 	
     @Override
