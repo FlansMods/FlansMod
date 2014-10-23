@@ -1,0 +1,10 @@
+Name Bulldozer Leg Armour
+ShortName bulldozerLegs
+Icon BulldozerLegs
+Colour 255 255 255
+Type Legs
+Model mw.SuperHeavyLegs
+Defence 0.2
+ArmourTexture Bulldozer
+MoveSpeedModifier 0.75
+KnockbackModifier 0.25

@@ -1,0 +1,10 @@
+Name Bulldozer Boots
+ShortName bulldozerBoots
+Icon BulldozerBoots
+Colour 255 255 255
+Type Boots
+Model mw.SuperHeavyBoots
+Defence 0.1
+ArmourTexture Bulldozer
+MoveSpeedModifier 0.9
+KnockbackModifier 0.25
