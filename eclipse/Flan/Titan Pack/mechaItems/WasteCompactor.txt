@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description Destroys all mined_cobblestone, dirt and_sand
+Description Destroys all mined dirt,_sand and cobblestone_Requires Item Vacuum
 ShortName mechaWasteCompactor
 Icon WasteCompactor
 //Colour in Red, Green, Blue, each going up to 255.
