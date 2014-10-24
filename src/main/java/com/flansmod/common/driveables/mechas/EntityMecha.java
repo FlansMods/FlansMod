@@ -847,7 +847,7 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && ((stack.getItem() == Blocks.cobblestone.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z))))
+										if(wasteCompact() && ((stack.getItem() == Blocks.cobblestone.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.dirt.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z))))
 										{
 											stack.stackSize = 0;
 										}

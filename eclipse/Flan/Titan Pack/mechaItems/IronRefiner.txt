@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description Automatically refines_vacuumed iron ore
+Description Automatically refines_iron ore_Requires Item Vacuum
 ShortName mechaIronRefiner
 Icon IronRefiner
 //Colour in Red, Green, Blue, each going up to 255.
