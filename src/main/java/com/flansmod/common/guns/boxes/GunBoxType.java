@@ -8,13 +8,13 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
@@ -35,8 +35,8 @@ public class GunBoxType extends InfoType
 	public int nextGun = -1;
 	/** */
 	public InfoType[] guns;
-	public BulletType[] bullets;
-	public BulletType[] altBullets;
+	public ShootableType[] bullets;
+	public ShootableType[] altBullets;
 	public List<ItemStack>[] gunParts;
 	public List<ItemStack>[] bulletParts;
 	public List<ItemStack>[] altBulletParts;
@@ -68,8 +68,8 @@ public class GunBoxType extends InfoType
 			{
 				numGuns = Integer.parseInt(split[1]);
 				guns = new InfoType[numGuns];
-				bullets = new BulletType[numGuns];
-				altBullets = new BulletType[numGuns];
+				bullets = new ShootableType[numGuns];
+				altBullets = new ShootableType[numGuns];
 				gunParts = new List[numGuns];
 				bulletParts = new List[numGuns];
 				altBulletParts = new List[numGuns];
@@ -122,7 +122,7 @@ public class GunBoxType extends InfoType
 			{
 				if (bulletParts[nextGun] == null)
 					FlansMod.log("NumGuns was not found or was incorrect");
-				bullets[nextGun] = BulletType.getBullet(split[1]);
+				bullets[nextGun] = ShootableType.getShootableType(split[1]);
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))
@@ -135,7 +135,7 @@ public class GunBoxType extends InfoType
 			{
 				if (altBulletParts[nextGun] == null)
 					FlansMod.log("NumGuns was not found or was incorrect");
-				altBullets[nextGun] = BulletType.getBullet(split[1]);
+				altBullets[nextGun] = ShootableType.getShootableType(split[1]);
 				for (int i = 0; i < (split.length - 2) / 2; i++)
 				{
 					if (split[i * 2 + 3].contains("."))

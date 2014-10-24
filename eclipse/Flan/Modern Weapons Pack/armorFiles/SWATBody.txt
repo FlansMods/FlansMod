@@ -1,6 +1,6 @@
 Name SWAT Bodyarmour
 ShortName SWATBody
-Icon SWATCoat
+Icon SWATChest
 Colour 255 255 255
 Type Chest
 Defence 0.2

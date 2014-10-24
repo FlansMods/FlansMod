@@ -6,7 +6,7 @@ Type Helmet
 Model mw.CloakerGoggles
 Defence 0.1
 ArmourTexture CloakerGoggles
-MoveSpeedModifier 1.4
+MoveSpeedModifier 1.8
 KnockbackModifier 0.25
 NightVision True
 Overlay CloakerGoggles

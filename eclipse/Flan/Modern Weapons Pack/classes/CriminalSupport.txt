@@ -1,5 +1,5 @@
 Name Support
-ShortName marineAssault2
+ShortName CriminalSupport
 AddItem rpk
 AddItem desertEagle
 AddItem mwAmmoBag
