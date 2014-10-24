@@ -1,7 +1,7 @@
 //Description for hover text. Underscores represent new lines.
 Description Destroys all mined_cobblestone, dirt and_sand
-ShortName mechaWasteCompacter
-Icon WasteCompacter
+ShortName mechaWasteCompactor
+Icon WasteCompactor
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
