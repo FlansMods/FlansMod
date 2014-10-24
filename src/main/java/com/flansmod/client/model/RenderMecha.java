@@ -83,6 +83,7 @@ public class RenderMecha extends Render implements IItemRenderer
 				if(hipsAddon.model != null)
 				{
 					GL11.glTranslatef(model.hipsAttachmentPoint.x, model.hipsAttachmentPoint.y, model.hipsAttachmentPoint.z);
+					GL11.glScalef(type.heldItemScale, type.heldItemScale, type.heldItemScale);
 					if(hipsAddon.texture != null)
 						bindTexture(FlansModResourceHandler.getTexture(hipsAddon));
 					hipsAddon.model.render(mecha, f1);
