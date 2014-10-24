@@ -1,0 +1,7 @@
+Name SWAT Bodyarmour
+ShortName SWATBody
+Icon SWATCoat
+Colour 255 255 255
+Type Chest
+Defence 0.2
+ArmourTexture SWAT

@@ -1,0 +1,7 @@
+Name Cloaker
+ShortName SWATCloaker
+AddItem mwKnife
+AddItem glock+flanMWSilencer
+AddItem mwKnife
+AddItem glockAmmo 3
+Helmet cloakerHelmet
