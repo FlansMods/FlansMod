@@ -5,7 +5,7 @@ Icon LaserDiamondCutter
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe I blockIron D diamond R blockRedstone C mechaDiamondCutter
+Recipe I blockIron D blockDiamond R blockRedstone C mechaDiamondCutter
 DR 
 ICR
  ID

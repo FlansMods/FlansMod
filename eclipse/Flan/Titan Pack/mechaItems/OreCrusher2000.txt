@@ -5,7 +5,7 @@ Icon OreCrusher2000
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe I blockIron B mechaDustExtractor C mechaRedstoneMagnet D mechaRobotMagpie E mechaRotaryMagnet R blockRedstone A mechaDiamondCutter
+Recipe I blockIron B mechaDustExtractor C mechaRedstoneMagnet D mechaMetalMagpie E mechaRotaryMagnet R blockRedstone A mechaDiamondCutter
 BRC
 IAR
 EID

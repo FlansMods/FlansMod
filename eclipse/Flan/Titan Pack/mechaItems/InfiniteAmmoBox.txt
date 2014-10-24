@@ -1,13 +1,13 @@
 Name Infinite Ammo Box
 //Description for hover text. Underscores represent new lines.
-Description You never even_have to reload
+Description You never even_have to reload_(For Mechas)
 ShortName mechaInfiniteAmmoBox
 Icon InfiniteAmmoBox
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 ItemID 23426
 RecipeOutput 1
-Recipe N nether_star I blockIron
+Recipe N netherStar I blockIron
 III
 INI
 III

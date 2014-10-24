@@ -6,7 +6,7 @@ Icon RedstoneMagnet
 Colour 255 255 255
 RecipeOutput 1
 Recipe I blockIron R redstone
-RR
+RR 
 IRR
  IR
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.

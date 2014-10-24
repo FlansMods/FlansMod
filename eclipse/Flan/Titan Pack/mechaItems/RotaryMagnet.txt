@@ -5,7 +5,7 @@ Icon RotaryMagnet
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe I blockIron E emerald R redstone
+Recipe I blockIron R redstone
 IR 
 IIR
  II
