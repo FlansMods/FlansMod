@@ -11,6 +11,6 @@ item.opStick.1.name=Bâton de la Connection
 item.opStick.2.name=Bâton de la Cartographie
 item.opStick.3.name=Bâton de la Destruction
 item.flagpole.name=Base de Drapeau
-tile.teamsSpawner.0.name=Spawner à Item
+tile.teamsSpawner.0.name=Spawner à Eléments
 tile.teamsSpawner.1.name=Spawner à Joueur
 tile.teamsSpawner.2.name=Spawner à Véhicules
