@@ -1,0 +1,18 @@
+Name SWAT
+ShortName swat
+//TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
+//This is used for player names and such
+TextColour White
+//TeamColour is a more specific colour for banners, flags and spawn points. It is specified by Red, Green and Blue, each ranging from 0 to 255
+TeamColour 0 0 0
+//Specify the armour this team should spawn with
+Hat SWATHelmet
+Chest SWATBody
+Legs blackTrousers
+Shoes sasBoots
+AddClass SWATSniper
+AddClass SWATCloaker
+AddClass SWATShield
+AddClass SWATFumigator
+AddClass SWATCombatMedic
+AddClass SWATBulldozer

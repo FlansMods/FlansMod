@@ -1,0 +1,9 @@
+Name Fumigator
+ShortName SWATFumigator
+AddItem mp5
+AddItem gl6
+AddItem m9
+AddItem mwKnife
+AddItem mp5Ammo 3
+AddItem m9Ammo 2
+AddItem grenadeLauncherGasAmmo 3
