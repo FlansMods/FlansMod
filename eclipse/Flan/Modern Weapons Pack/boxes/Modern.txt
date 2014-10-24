@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 43
+NumGuns 50
 AddGun m40a3 12 ingotIron 8 fiberglass 4 glass 2 dyePowder.2
 AddAmmo m40a3Ammo 3 ingotIron 2 gunpowder
 AddGun m21 10 ingotIron 10 fiberglass 5 glass
@@ -42,6 +42,10 @@ AddGun g3 22 ingotIron
 AddAmmo g3Ammo 4 ingotIron 4 gunpowder
 AddGun g36 5 ingotIron 15 fiberglass
 AddAmmo g36Ammo 2 ingotIron 4 fiberglass 4 gunpowder
+AddGun aug 8 ingotIron 8 fiberglass
+AddAmmo augAmmo 3 fiberglass 3 gunpowder
+AddGun mtar 6 ingotIron 10 fiberglass
+AddAmmo mtarAmmo 4 fiberglass 3 gunpowder
 AddGun mp5 15 ingotIron
 AddAmmo mp5Ammo 3 ingotIron 4 gunpowder
 AddGun skorpion 12 ingotIron 3 log
@@ -59,10 +63,18 @@ AddAmmo w1200Ammo 8 ingotIron 2 fiberglass 5 gunpowder
 AddAltAmmo w1200IncendiaryAmmo 8 ingotIron 2 fiberglass 8 gunpowder 2 blazePowder
 AddGun m1014 12 ingotIron 10 fiberglass
 AddAmmo m1014Ammo 6 ingotIron 1 fiberglass 3 gunpowder
+AddGun r870 12 ingotIron 4 log
+AddAmmo r870Ammo 5 ingotIron 3 gunpowder
+AddGun spas 10 fiberglass 4 ingotIron
+AddAmmo spasAmmo 3 fiberglass 3 gunpowder
+AddGun m1887 6 ingotIron 4 log
+AddAmmo m1887Ammo 2 iron 1 paper 4 gunpowder
 AddGun m249 24 ingotIron 5 fiberglass
 AddAmmo m249Ammo 10 ingotIron 10 fiberglass 10 gunpowder 1 dyePowder.6
 AddGun rpd 20 ingotIron 5 log
 AddAmmo rpdAmmo 12 ingotIron 11 gunpowder
+AddGun rpk 12 ingotIron 8 log
+AddAmmo rpkAmmo 6 ingotIron 4 gunpowder
 AddGun m60 24 ingotIron
 AddAmmo m60Ammo 9 ingotIron 3 fiberglass 10 gunpowder
 AddGun l86 20 ingotIron 5 fiberglass
@@ -95,8 +107,14 @@ AddGun at4 5 fiberglass 4 ingotIron
 AddAmmo at4Ammo 3 ingotIron 5 gunpowder
 AddGun stinger 20 ingotIron 10 fiberglass 20 redstone
 AddAmmo stingerAmmo 12 ingotIron 4 ingotGold 12 gunpowder 6 redstone
+AddGun gl1 12 ingotIron 6 log
+AddAmmo grenadeLauncherAmmo 3 ingotIron 5 gunpowder
+AddAltAmmo grenadeLauncherIncendiaryAmmo 3 ingotIron 3 gunpowder 2 blazePowder
+AddGun gl6 20 ingotIron 12 fiberglass
+AddAmmo grenadeLauncherBouncyAmmo 3 ingotIron 5 gunpowder
+AddAltAmmo grenadeLauncherGasAmmo 3 ingotIron 3 gunpowder 4 spiderEye
 AddGun m67 4 fiberglass 2 gunpowder
 AddGun claymore 4 fiberglass 2 gunpowder 1 redstone
-AddGun c4 3 gunpowder 2 slimeball 1 redstone
 AddGun c4Remote 1 fiberglass 1 redstone
+AddAmmo c4 3 gunpowder 2 slimeball 1 redstone
 AddGun mwRiotShield 12 fiberglass 12 thinGlass 16 ingotIron

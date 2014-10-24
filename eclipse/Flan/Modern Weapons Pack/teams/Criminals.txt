@@ -13,6 +13,6 @@ Shoes sasBoots
 AddClass CriminalSniper
 AddClass CriminalGunslinger
 AddClass CriminalAssault
-AddClass CriminalDemolitionist
+AddClass CriminalDemolitions
 AddClass CriminalMedic
 AddClass CriminalSupport
