@@ -14,7 +14,7 @@ Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 35 0 0
 //Speed Modifier, 1 is player speed
-MoveSpeed 1.5
+MoveSpeed 2
 //YOffset
 YOffset 0
 //Fuel Tank Size
@@ -35,7 +35,7 @@ RightArmOrigin -11 104 49
 ArmLength 48
 LegLength 91
 //The scale multiplier for rendering the items and tools being held (1 will automatically scale with model)
-HeldItemScale 2
+HeldItemScale 2.5
 //Recipe
 //Each section of the mecha may have many parts
 //The sections are core, leftArm, rightArm, hips, head
