@@ -1,7 +1,7 @@
 item.sledgehammer.name=Кувалда
 item.screwdriver.name=Отвертка
 item.baseballBat.name=Бейсбольная бита
-item.samuraiSword.name=Самурайский меч
+item.samuraiSword.name=Катана
 item.surgicalAxe.name=Хирургический топор
 item.combatKnife.name=Боевой нож
 item.zombieMachete.name=Мачете
@@ -23,7 +23,7 @@ item.flareGun.name=Сигнальный пистолет
 item.flareGunAmmo.name=Сигнальный фальшфейер
 item.coltPython.name=Colt Python
 item.357Magnum.name=.357 Magnum
-item.m4Carbine.name=M4 Carbine
+item.m4Carbine.name=M4 Карабин
 item.m4CarbineAmmo.name=Боеприпасы M4 Carbine
 item.doubleBarrelledShotgun.name=Двуствольное ружье
 item.olympia.name=Олимпия
