@@ -1,0 +1,120 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name Chinook
+ShortName chinook
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon Chinook
+Model mw.Chinook
+Texture Chinook
+//Third Person Camera Distance
+CameraDistance 25.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 0.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Heli
+//Throttle
+MaxThrottle 3.5
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 1.25
+TurnRightSpeed 1.25
+//Pitch modifiers
+LookUpSpeed 1.25
+LookDownSpeed 1.25
+//Roll modifiers
+RollLeftSpeed 1.25
+RollRightSpeed 1.25
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 2.5
+//Wheels (Fake wheels imitating skids)
+NumWheels 4
+WheelPosition 0 80 -27 -24
+WheelPosition 1 80 -27 24
+WheelPosition 2 -80 -27 -24
+WheelPosition 3 -80 -27 24
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+HeliPropeller 0 84 48 0 blades metalPropeller
+HeliPropeller 1 -128 48 0 blades metalPropeller
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary None
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 0
+ShootDelaySecondary 0
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+//ShootPointPrimary -13 7 -53 rightWing
+//ShootPointPrimary -13 7 53 leftWing
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 8
+AllowAllAmmo False
+AddAmmo mk4Rocket
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 5000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 108 16 16
+Passengers 27
+Passenger 1 108 16 -16 nose
+//Left side passengers
+Passenger 2 84 18 -22 core
+Passenger 3 70 18 -22 core
+Passenger 4 56 18 -22 core
+Passenger 5 42 18 -22 core
+Passenger 6 28 18 -22 core
+Passenger 7 14 18 -22 core
+Passenger 8 0 18 -22 core
+Passenger 9 -14 18 -22 core
+Passenger 10 -28 18 -22 core
+Passenger 11 -42 18 -22 core
+Passenger 12 -56 18 -22 core
+Passenger 13 -70 18 -22 core
+Passenger 14 -84 18 -22 core
+//Right side passengers
+Passenger 15 84 18 22 core
+Passenger 16 70 18 22 core
+Passenger 17 56 18 22 core
+Passenger 18 42 18 22 core
+Passenger 19 28 18 22 core
+Passenger 20 14 18 22 core
+Passenger 21 0 18 22 core
+Passenger 22 -14 18 22 core
+Passenger 23 -28 18 22 core
+Passenger 24 -42 18 22 core
+Passenger 25 -56 18 22 core
+Passenger 26 -70 18 22 core
+Passenger 27 -84 18 22 core
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound HelicopterStart
+StartSoundLength 100
+PropSound Helicopter1
+PropSoundLength 93
+//ShootSoundPrimary RocketFire1
+//ShootSoundSecondary None
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 3 passengerBay
+AddRecipeParts nose 1 advancedMetalCockpit
+AddRecipeParts coreWheel 4 wheel
+AddRecipeParts blades 6 helicopterBlade
+AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 16 green
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+SetupPart core 800 -96 -9 -32 192 67 64
+SetupPart nose 300 96 -8 -32 64 64 64
+SetupPart tail 200 -128 16 -10 32 72 20
+SetupPart coreWheel 200 69 -27 -24 12 18 48
+BulletDetection 24
