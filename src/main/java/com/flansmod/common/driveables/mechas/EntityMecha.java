@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -839,7 +840,7 @@ public class EntityMecha extends EntityDriveable
 									for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 									{
 										//Check for iron regarding refining
-										if(refineIron() && (stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
 										{
 											stack = (new ItemStack(Items.iron_ingot, 1, 0));
 											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
@@ -847,10 +848,8 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && ((stack.getItem() == Blocks.cobblestone.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.sand.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z)) || (stack.getItem() == Blocks.dirt.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z))))
-										{
+										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).field_150939_a == Blocks.cobblestone || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.dirt || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.sand))
 											stack.stackSize = 0;
-										}
 										
 										//Check for item multipliers
 										if(stack.getItem() == Items.diamond)
@@ -873,7 +872,7 @@ public class EntityMecha extends EntityDriveable
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
 										}
-										if(stack.getItem() == Blocks.iron_ore.getItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z) || stack.getItem() == Items.iron_ingot)
+										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
