@@ -2,6 +2,8 @@ Name Ak47
 ShortName ak47
 //The ammo this gun uses (shortName)
 Ammo ak47Ammo
+Ammo rpdAmmo
+Ammo rpkAmmo
 Icon AK47
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
