@@ -358,7 +358,7 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() ? true : creative), false);				
+						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative), false);
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
