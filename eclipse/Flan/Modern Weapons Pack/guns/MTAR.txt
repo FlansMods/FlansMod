@@ -2,6 +2,7 @@ Name MTAR
 ShortName mtar
 //The ammo this gun uses (shortName)
 Ammo mtarAmmo
+Ammo betaCMag
 Icon MTAR
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

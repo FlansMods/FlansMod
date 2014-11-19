@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 50
+NumGuns 51
 AddGun m40a3 12 ingotIron 8 fiberglass 4 glass 2 dyePowder.2
 AddAmmo m40a3Ammo 3 ingotIron 2 gunpowder
 AddGun m21 10 ingotIron 10 fiberglass 5 glass
@@ -34,8 +34,13 @@ AddGun m14 10 ingotIron 10 fiberglass
 AddAmmo m14Ammo 2 ingotIron 3 gunpowder
 AddGun m16a4 15 ingotIron 5 fiberglass
 AddAmmo m16a4Ammo 6 ingotIron 5 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun fnscar 6 ingotIron 10 fiberglass
 AddAmmo fnscarAmmo 3 fiberglass 4 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
+AddGun acr 6 ingotIron 12 fiberglass
+AddAmmo acrAmmo 2 fiberglass 3 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun ak47 10 ingotIron 10 log
 AddAmmo ak47Ammo 5 ingotIron 4 gunpowder
 AddGun g3 22 ingotIron
@@ -44,8 +49,10 @@ AddGun g36 5 ingotIron 15 fiberglass
 AddAmmo g36Ammo 2 ingotIron 4 fiberglass 4 gunpowder
 AddGun aug 8 ingotIron 8 fiberglass
 AddAmmo augAmmo 3 fiberglass 3 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun mtar 6 ingotIron 10 fiberglass
 AddAmmo mtarAmmo 4 fiberglass 3 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun mp5 15 ingotIron
 AddAmmo mp5Ammo 3 ingotIron 4 gunpowder
 AddGun skorpion 12 ingotIron 3 log

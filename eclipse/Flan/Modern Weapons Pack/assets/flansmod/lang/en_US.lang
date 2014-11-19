@@ -170,3 +170,6 @@ item.gl6.name=GL6 Grenade Launcher
 item.SWATHelmet.name=SWAT Helmet
 item.SWATBody.name=SWAT Bodyarmour
 item.chinook.name=Chinook
+item.acr.name=ACR
+item.acrAmmo.name=ACR Ammo
+item.betaCMag.name=Beta C-Mag

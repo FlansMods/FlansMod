@@ -2,6 +2,7 @@ Name M16A4
 ShortName m16a4
 //The ammo this gun uses (shortName)
 Ammo m16a4Ammo
+Ammo betaCMag
 Icon M16A4
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
