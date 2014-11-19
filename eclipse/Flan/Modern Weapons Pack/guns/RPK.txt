@@ -2,6 +2,8 @@ Name RPK
 ShortName rpk
 //The ammo this gun uses (shortName)
 Ammo rpkAmmo
+Ammo ak47Ammo
+Ammo rpdAmmo
 Icon RPK
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

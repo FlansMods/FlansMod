@@ -323,7 +323,7 @@ public class FlansMod
     }
     
 	@SubscribeEvent
-	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
+	public void onLivingSpecialSpawn(LivingSpawnEvent event)
 	{
 		double chance = event.world.rand.nextDouble();
 
