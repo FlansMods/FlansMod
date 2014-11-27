@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL12;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
