@@ -2,7 +2,6 @@ Name MTAR
 ShortName mtar
 //The ammo this gun uses (shortName)
 Ammo mtarAmmo
-Ammo betaCMag
 Icon MTAR
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -43,4 +42,4 @@ NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-//Paintjob AUG_Green AUG_Green green 2
+Paintjob MTAR_Green MTAR_Green green 2
