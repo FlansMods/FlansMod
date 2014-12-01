@@ -45,3 +45,4 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob MP5K_Green MP5K_Green lime 1
 Paintjob MP5K_Red MP5K_Red red 1
+Paintjob MP5K_Urban MP5K_Urban black 1 grey 1 white 1
