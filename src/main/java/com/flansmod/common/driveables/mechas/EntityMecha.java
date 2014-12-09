@@ -825,7 +825,7 @@ public class EntityMecha extends EntityDriveable
 							boolean cancelled = false;
 							if(entity instanceof EntityPlayerMP)
 							{
-								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP) seats[0].riddenByEntity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 								cancelled = event.isCanceled();
 							}
 					        if(!cancelled)
@@ -872,7 +872,7 @@ public class EntityMecha extends EntityDriveable
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
 										}
-										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
+										if(((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot) && refineIron())
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
