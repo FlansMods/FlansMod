@@ -1,4 +1,5 @@
 //Naming
+Name Alpha Titan
 ShortName AlphaTitan
 //Visuals
 Icon AlphaTitan
