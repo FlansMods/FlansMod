@@ -83,10 +83,7 @@ public class EntityMecha extends EntityDriveable
     /** Gun animations */
     public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
     
-    /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
-    private int foundFuel = -1;
-    /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
-    public boolean couldNotFindFuel = false;
+
 
 	public EntityMecha(World world) 
 	{
@@ -905,82 +902,6 @@ public class EntityMecha extends EntityDriveable
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		//FlansMod.log("" + fallDistance);
     	setPosition(posX, posY, posZ);
-		
-		//Fuel Handling
-		if(!couldNotFindFuel)
-		{
-			ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
-			
-			//If the fuel item has stack size <= 0, delete it
-			if(fuelStack != null && fuelStack.stackSize <= 0)
-			{
-				driveableData.setInventorySlotContents(foundFuel, null);
-				fuelStack = null;
-			}
-			
-			//Find the next fuelling slot
-			if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
-			{
-				foundFuel = -1;
-				couldNotFindFuel = true;
-				for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
-				{
-					ItemStack tempStack = driveableData.getStackInSlot(i);
-					if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
-					{
-						foundFuel = i;
-						fuelStack = tempStack;
-						couldNotFindFuel = false;
-						break;
-					}
-				}
-			}
-			
-			//Work out if we are fuelling (from a Flan's Mod fuel item)
-			fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
-			
-			//If we are fuelling
-			if(fuelling)
-			{
-				int damage = fuelStack.getItemDamage();
-				//Consume 10 points of fuel (1 damage)
-				fuelStack.setItemDamage(damage + 1);
-				//Put 10 points of fuel 
-				data.fuelInTank += 10;
-				//If we have finished this fuel item
-				if(damage >= fuelStack.getMaxDamage())
-				{
-					//Reset the damage to 0
-					fuelStack.setItemDamage(0);
-					//Consume one item
-					fuelStack.stackSize--;
-					//If we consumed the last one, destroy the stack
-					if(fuelStack.stackSize <= 0)
-						data.fuel = null;
-				}	
-			}
-			
-			//Check inventory slots for buildcraft buckets and if found, take fuel from them
-			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
-			{
-				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
-				{
-					ItemStack stack = data.getStackInSlot(i);
-					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 5000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 10000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-				}
-			}
-		}
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)

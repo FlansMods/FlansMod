@@ -448,74 +448,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			if(type.tank)
 			{
 				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) + (float)Math.PI / 2F;
-				//yaw = averageAngles((float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX),(float)Math.atan2(wheels[1].posZ - wheels[0].posZ, wheels[1].posX - wheels[0].posX));
 			}
 			
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
 		checkForCollisions();
-		
-		/*
-		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
-		Vec3 xAxis = subtract(wheelVectors[3], wheelVectors[0]).normalize();
-		Vec3 yAxis = crossProduct(zAxis2, xAxis);
-		Matrix4f rotationMatrix = new Matrix4f();
-		rotationMatrix.m00 = (float)xAxis.xCoord;
-		rotationMatrix.m10 = (float)xAxis.yCoord;
-		rotationMatrix.m20 = (float)xAxis.zCoord;
-		rotationMatrix.m01 = (float)yAxis.xCoord;
-		rotationMatrix.m11 = (float)yAxis.yCoord;
-		rotationMatrix.m21 = (float)yAxis.zCoord;
-		rotationMatrix.m02 = (float)zAxis2.xCoord;
-		rotationMatrix.m12 = (float)zAxis2.yCoord;
-		rotationMatrix.m22 = (float)zAxis2.zCoord;
-		axes = new RotatedAxes(rotationMatrix);
-*/
-		
-		//Fuel Handling
-		
-		//If the fuel item has stack size <= 0, delete it
-		if(data.fuel != null && data.fuel.stackSize <= 0)
-			data.fuel = null;
-		
-		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
-		
-		//If we are fuelling
-		if(fuelling)
-		{
-			int damage = data.fuel.getItemDamage();
-			//Consume 10 points of fuel (1 damage)
-			data.fuel.setItemDamage(damage + 1);
-			//Put 10 points of fuel 
-			data.fuelInTank += 10;
-			//If we have finished this fuel item
-			if(damage >= data.fuel.getMaxDamage())
-			{
-				//Reset the damage to 0
-				data.fuel.setItemDamage(0);
-				//Consume one item
-				data.fuel.stackSize--;
-				//If we consumed the last one, destroy the stack
-				if(data.fuel.stackSize <= 0)
-					data.fuel = null;
-			}	
-		}
-		//Check fuel slot for builcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
-		{
-			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 5000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 10000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-		}
 
 		//Sounds
 		//Starting sound

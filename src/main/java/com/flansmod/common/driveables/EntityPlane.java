@@ -467,6 +467,8 @@ public class EntityPlane extends EntityDriveable
 		int numPropsWorking = 0;
 		int numProps = 0;
 		
+		float fuelConsumptionMultiplier = 2F;
+		
 		switch(mode)
 		{
 		case HELI :
@@ -511,6 +513,8 @@ public class EntityPlane extends EntityDriveable
 			motionX *= drag;
 			motionY *= drag;
 			motionZ *= drag;
+			
+			data.fuelInTank -= upwardsForce * fuelConsumptionMultiplier * data.engine.fuelConsumption;
 
 			break;
 			
@@ -570,6 +574,8 @@ public class EntityPlane extends EntityDriveable
 			motionX *= drag;
 			motionY *= drag;
 			motionZ *= drag;
+			
+			data.fuelInTank -= throttleScaled * fuelConsumptionMultiplier * data.engine.fuelConsumption;
 			break;
 		default:
 			break;
@@ -670,51 +676,7 @@ public class EntityPlane extends EntityDriveable
 		}
 				
 		checkForCollisions();
-		
-		//Fuel Handling
-		
-		//If the fuel item has stack size <= 0, delete it
-		if(data.fuel != null && data.fuel.stackSize <= 0)
-			data.fuel = null;
-		
-		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
-		
-		//If we are fuelling
-		if(fuelling)
-		{
-			int damage = data.fuel.getItemDamage();
-			//Consume 100 points of fuel (1 damage)
-			data.fuel.setItemDamage(damage + 1);
-			//Put 100 points of fuel 
-			data.fuelInTank += 100;
-			//If we have finished this fuel item
-			if(damage >= data.fuel.getMaxDamage())
-			{
-				//Reset the damage to 0
-				data.fuel.setItemDamage(0);
-				//Consume one item
-				data.fuel.stackSize--;
-				//If we consumed the last one, destroy the stack
-				if(data.fuel.stackSize <= 0)
-					data.fuel = null;
-			}	
-		}
-		//Check fuel slot for builcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
-		{
-			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 5000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 10000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-		}
-
+				
 		//Sounds
 		//Starting sound
 		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())

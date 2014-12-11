@@ -9,6 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -22,6 +24,7 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import cofh.api.energy.IEnergyContainerItem;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
@@ -43,6 +46,8 @@ import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.parts.ItemPart;
+import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -87,6 +92,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public RotatedAxes axes;
 	
 	public EntitySeat[] seats;
+	
+    /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
+    private int foundFuel = -1;
+    /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
+    public boolean couldNotFindFuel = false;
 	
 	@SideOnly(Side.CLIENT)
 	public EntityLivingBase camera;
@@ -628,6 +638,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         super.onUpdate();
         
         DriveableType type = getDriveableType();
+        DriveableData data = getDriveableData();
         
         if(!worldObj.isRemote)
         {
@@ -749,8 +760,78 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					shoot(true);
 			}
 		}
-    }
-	
+
+		//Handle fuel
+			
+		int fuelMultiplier = 2;
+		
+		//The tank is currently full, so do nothing
+		if(data.fuelInTank >= type.fuelTankSize)
+			return;
+		
+		//Look through the entire inventory for fuel cans, buildcraft fuel buckets and RedstoneFlux power sources
+		for(int i = 0; i < data.getSizeInventory(); i++)
+		{
+			ItemStack stack = data.getStackInSlot(i);
+			if(stack == null || stack.stackSize <= 0)
+				continue;
+			Item item = stack.getItem();
+			//If we have an electric engine, look for RedstoneFlux power source items, such as power cubes
+			if(data.engine.useRFPower)
+			{
+				if(item instanceof IEnergyContainerItem)
+				{
+					IEnergyContainerItem energy = (IEnergyContainerItem)item;
+					data.fuelInTank += (fuelMultiplier * energy.extractEnergy(stack, data.engine.RFDrawRate, false)) / data.engine.RFDrawRate;
+				}
+			}
+			else
+			{
+				//Check for Flan's Mod fuel items
+				if(item instanceof ItemPart)
+				{
+					PartType part = ((ItemPart)item).type;
+					//Check it is a fuel item
+					if(part.category == 9)
+					{
+						//Put 2 points of fuel 
+						data.fuelInTank += fuelMultiplier;
+						
+						//Damage the fuel item to indicate being used up
+						int damage = stack.getItemDamage();
+						stack.setItemDamage(damage + 1);
+		
+						//If we have finished this fuel item
+						if(damage >= stack.getMaxDamage())
+						{
+							//Reset the damage to 0
+							stack.setItemDamage(0);
+							//Consume one item
+							stack.stackSize--;
+							//If we consumed the last one, destroy the stack
+							if(stack.stackSize <= 0)
+								data.setInventorySlotContents(i, null);
+						}
+						
+						//We found a fuel item and consumed some, so we are done
+						break;
+					}
+				}
+				//Check for Buildcraft oil and fuel buckets
+				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 1000 * fuelMultiplier <= type.fuelTankSize)
+				{
+					data.fuelInTank += 1000 * fuelMultiplier;
+					data.setInventorySlotContents(i, new ItemStack(Items.bucket));
+				}
+				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 2000 * fuelMultiplier <= type.fuelTankSize)
+				{
+					data.fuelInTank += 2000 * fuelMultiplier;
+					data.setInventorySlotContents(i, new ItemStack(Items.bucket));
+				}
+			}
+		}
+	}
+		
 	public void checkForCollisions()
 	{
 		boolean crashInWater = false;
