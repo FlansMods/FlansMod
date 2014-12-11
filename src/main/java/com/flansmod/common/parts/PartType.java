@@ -47,7 +47,7 @@ public class PartType extends InfoType {
 	@Override
 	public void postRead(TypeFile file) 
 	{
-		if(category == 2)
+		if(category == 2 && !useRFPower)
 		{
 			for(EnumType type : worksWith)
 			{
