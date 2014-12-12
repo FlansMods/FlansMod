@@ -306,6 +306,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(EntitySeat seat : seats)
 			if(seat != null)
 				seat.setDead();
+		
+		if(!worldObj.isRemote)
+		{
+			for(DriveablePart part : driveableData.parts.values())
+			{
+				if(part.health > 0)
+					killPart(part);
+			}
+		}
 	}
 	
 	@Override

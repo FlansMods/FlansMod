@@ -580,6 +580,14 @@ public class EntityPlane extends EntityDriveable
 		default:
 			break;
 		}
+		
+		double motion = Math.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+		if(motion > 10)
+		{
+			motionX *= 10 / motion;
+			motionY *= 10 / motion;
+			motionZ *= 10 / motion;
+		}
 				
 		for(EntityWheel wheel : wheels)
 		{

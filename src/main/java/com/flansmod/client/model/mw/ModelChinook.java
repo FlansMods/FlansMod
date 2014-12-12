@@ -4,7 +4,8 @@ import com.flansmod.client.model.ModelPlane;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelChinook extends ModelPlane {
+public class ModelChinook extends ModelPlane 
+{
 	public ModelChinook()
     {
 		int textureX = 1024; //The x-size of the texture
