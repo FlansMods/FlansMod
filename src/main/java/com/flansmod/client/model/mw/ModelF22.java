@@ -22,6 +22,7 @@ public class ModelF22 extends ModelPlane
         bodyModel[2] = new ModelRendererTurbo(this, 48, 80, textureX, textureY); 
 		bodyModel[2].addBox(80F, 10F, 8F, 8, 12, 16);	
 		
+		
 		noseModel = new ModelRendererTurbo[6];
 		
 		noseModel[0] = new ModelRendererTurbo(this, 0, 108, textureX, textureY);
