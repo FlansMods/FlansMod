@@ -96,6 +96,7 @@ import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.eventhandler.PlayerDeathEventListener;
 
 @Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
@@ -270,6 +271,9 @@ public class FlansMod
 
 		//Config
         FMLCommonHandler.instance().bus().register(INSTANCE);
+        
+        //Event Handlers
+        new PlayerDeathEventListener();
 		log("Loading complete.");
 	}
 	
@@ -323,7 +327,7 @@ public class FlansMod
     }
     
 	@SubscribeEvent
-	public void onLivingSpecialSpawn(LivingSpawnEvent event)
+	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		double chance = event.world.rand.nextDouble();
 
