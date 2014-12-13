@@ -717,24 +717,21 @@ public class EntityMecha extends EntityDriveable
 					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
 				}
 				
-				Vector3f motion = legAxes.getXAxis();
-				
-				motion.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F)*(intent.lengthSquared()));
+				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
 				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(onGround || jumpDelay != 0)
+					if(!onGround && shouldFly() && (canThrustCreatively || data.fuelInTank > 10F*jetPack + data.engine.fuelConsumption))
 					{
-			    	//Move!
-					Vector3f.add(actualMotion, motion, actualMotion);
+						intent.scale(jetPack);
+						if(!canThrustCreatively)
+							data.fuelInTank -= 10F*jetPack;
 					}
-					else if(!onGround && shouldFly())
-					{
-						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
-						Vector3f.add(actualMotion, flyMotion, actualMotion);
-					}
+					
+					//Move!
+					Vector3f.add(actualMotion, intent, actualMotion);
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
