@@ -271,7 +271,8 @@ public class FlansMod
 
 		//Config
         FMLCommonHandler.instance().bus().register(INSTANCE);
-        //TODO
+        
+        //Event Handlers
         new PlayerDeathEventListener();
 		log("Loading complete.");
 	}
