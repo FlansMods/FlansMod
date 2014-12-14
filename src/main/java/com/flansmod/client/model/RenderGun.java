@@ -140,6 +140,7 @@ public class RenderGun implements IItemRenderer
 				{
 					EntityItem entity = (EntityItem)data[1];
 					GL11.glRotatef(entity.age + (entity.age == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					GL11.glTranslatef(-0.2F + model.itemFrameOffset.x, 0.2F + model.itemFrameOffset.y, 0.1F + model.itemFrameOffset.z);
 					break;
 				}
 				case EQUIPPED:

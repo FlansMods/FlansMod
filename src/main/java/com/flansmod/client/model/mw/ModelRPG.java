@@ -67,5 +67,7 @@ public class ModelRPG extends ModelGun
 		unloadClipTime = 0.1F;
 		loadClipTime = 0.1F;
 		untiltGunTime = 0.4F;
+		
+		itemFrameOffset = new Vector3f(4F / 16F, 0F / 16F, 0F);
 	}
 }

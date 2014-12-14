@@ -306,15 +306,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(EntitySeat seat : seats)
 			if(seat != null)
 				seat.setDead();
-		
-		if(!worldObj.isRemote)
-		{
-			for(DriveablePart part : driveableData.parts.values())
-			{
-				if(part.health > 0)
-					killPart(part);
-			}
-		}
 	}
 	
 	@Override
@@ -1170,7 +1161,18 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		
 		//If the core was destroyed, kill the driveable
 		if(getDriveableData().parts.get(EnumDriveablePart.core).dead)
+		{
+			if(!worldObj.isRemote)
+			{
+				for(DriveablePart part : driveableData.parts.values())
+				{
+					if(part.health > 0 && !part.dead)
+						killPart(part);
+				}
+			}
 			setDead();
+		}
+			
 	}
 	
 	/** Internal method for killing driveable parts */

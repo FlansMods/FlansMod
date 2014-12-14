@@ -81,6 +81,9 @@ public class ModelGun extends ModelBase
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
 	
+	/** This offsets the render position for item frames */
+	public Vector3f itemFrameOffset = new Vector3f();
+	
 	public void renderGun(float f)
 	{
 		render(gunModel, f);

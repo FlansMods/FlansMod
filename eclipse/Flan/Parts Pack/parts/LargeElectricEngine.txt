@@ -8,7 +8,7 @@ Category Engine
 EngineSpeed 1.6
 FuelConsumption 1.8
 UseRF True
-RFDrawRate 400
+RFDrawRate 2000
 WorksWith vehicles planes
 StackSize 4
 RecipeOutput 1
