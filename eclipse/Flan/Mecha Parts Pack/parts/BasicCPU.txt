@@ -6,7 +6,7 @@ Colour 255 255 255
 ItemID 23415
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Engine
-EngineSpeed 0.75
+EngineSpeed 0.7
 FuelConsumption 1
 WorksWith mechas
 StackSize 8

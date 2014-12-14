@@ -1,16 +1,15 @@
-Name Speed Decrease
 //Description for hover text. Underscores represent new lines.
-Description Decrease mecha speed by 50%_for more precise control
-ShortName mechaSpeedDecrease
-Icon speedDecrease
+Description Rips ferrous rocks apart_with magnetism (2x Iron_Ingot Yield) Requires_Item Vacuum & Iron Refiner
+ShortName mechaRotarySuperMagnet
+Icon RotarySuperMagnet
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 RecipeOutput 1
-Recipe A advHydraulics I ingotIron
-IAI
-   
-IAI
+Recipe I blockIron R redstone M mechaRotaryMagnet
+MR 
+IMR
+ IM
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
-Type legUpgrade
+Type armUpgrade
 //The modifiers this item enacts on the mecha
-SpeedMultiplier 0.8
+IronMultiplier 2

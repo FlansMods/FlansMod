@@ -518,7 +518,7 @@ public class EntityMecha extends EntityDriveable
 			{
 				DriveablePart thisPart = data.parts.get(part);
 				boolean hasCreativePlayer = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-				if(thisPart != null && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
+				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
 					if(!hasCreativePlayer)
@@ -717,24 +717,21 @@ public class EntityMecha extends EntityDriveable
 					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
 				}
 				
-				Vector3f motion = legAxes.getXAxis();
-				
-				motion.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F)*(intent.lengthSquared()));
+				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-	
+
 				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(onGround || jumpDelay != 0)
+					if(!onGround && shouldFly() && (canThrustCreatively || data.fuelInTank > 10F*jetPack + data.engine.fuelConsumption))
 					{
-			    	//Move!
-					Vector3f.add(actualMotion, motion, actualMotion);
+						intent.scale(jetPack);
+						if(!canThrustCreatively)
+							data.fuelInTank -= 10F*jetPack;
 					}
-					else if(!onGround && shouldFly())
-					{
-						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
-						Vector3f.add(actualMotion, flyMotion, actualMotion);
-					}
+					
+					//Move!
+					Vector3f.add(actualMotion, intent, actualMotion);
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
@@ -837,7 +834,8 @@ public class EntityMecha extends EntityDriveable
 									for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 									{
 										//Check for iron regarding refining
-										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										boolean fuelCheck = (data.fuelInTank >= 5F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore)
 										{
 											stack = (new ItemStack(Items.iron_ingot, 1, 0));
 											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
@@ -845,34 +843,54 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).field_150939_a == Blocks.cobblestone || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.dirt || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.sand))
+										fuelCheck = (data.fuelInTank >= 0.1F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).field_150939_a == Blocks.cobblestone || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.dirt || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.sand))
+										{
 											stack.stackSize = 0;
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 0.1F;
+										}
 										
 										//Check for item multipliers
-										if(stack.getItem() == Items.diamond)
+										fuelCheck = (data.fuelInTank >= 3F*diamondMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.diamond)
 										{
 											float multiplier = diamondMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 3F*diamondMultiplier();
 										}
-										if(stack.getItem() == Items.redstone)
+										fuelCheck = (data.fuelInTank >= 2F*redstoneMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.redstone)
 										{
 											float multiplier = redstoneMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*redstoneMultiplier();
 										}
-										if(stack.getItem() == Items.coal)
+										fuelCheck = (data.fuelInTank >= 2F*coalMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.coal)
 										{
 											float multiplier = coalMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*coalMultiplier();
 										}
-										if(stack.getItem() == Items.emerald)
+										fuelCheck = (data.fuelInTank >= 2F*emeraldMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.emerald)
 										{
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*emeraldMultiplier();
 										}
-										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
+										fuelCheck = (data.fuelInTank >= 2F*ironMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.iron_ingot)
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*ironMultiplier();
 										}
 										
 										//Check for auto coal consumption

@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description 1.2x Diamond Drop Rate_1.5x Coal, Redstone,_Emerald and Iron_Drop Rate
+Description 1.2x Diamond Drop Rate_1.5x Coal, Redstone,_Emerald and Iron_Ingot Drop Rate
 ShortName mechaOreCrusher2000
 Icon OreCrusher2000
 //Colour in Red, Green, Blue, each going up to 255.
