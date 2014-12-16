@@ -11,11 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;
-import com.flansmod.common.guns.ItemGun;
 
 public class RenderGrenade extends Render implements IItemRenderer 
 {

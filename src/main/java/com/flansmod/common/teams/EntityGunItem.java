@@ -17,7 +17,6 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;

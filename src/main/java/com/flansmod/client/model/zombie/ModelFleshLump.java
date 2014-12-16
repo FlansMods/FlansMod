@@ -4,7 +4,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.FlansMod;
 
 public class ModelFleshLump extends ModelBase 
 {

@@ -9,7 +9,6 @@ import net.minecraft.potion.PotionEffect;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EnumWeaponType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
 public class BulletType extends ShootableType

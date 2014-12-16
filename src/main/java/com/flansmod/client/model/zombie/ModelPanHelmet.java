@@ -2,7 +2,6 @@ package com.flansmod.client.model.zombie;
 
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.vector.Vector3f;
 
 public class ModelPanHelmet extends ModelCustomArmour 
 {

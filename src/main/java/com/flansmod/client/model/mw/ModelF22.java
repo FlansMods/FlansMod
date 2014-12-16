@@ -2,7 +2,6 @@ package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.vector.Vector3f;
 
 public class ModelF22 extends ModelPlane 
 {

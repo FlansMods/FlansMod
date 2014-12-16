@@ -1,9 +1,7 @@
 package com.flansmod.client.model.titan;
 
 import com.flansmod.client.model.ModelMechaTool;
-import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelRocketPack extends ModelMechaTool 
 {
