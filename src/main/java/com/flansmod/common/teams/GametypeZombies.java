@@ -101,11 +101,8 @@ public class GametypeZombies extends Gametype
 	}
 
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) 
-	{ 
-		if(attackerTeam == victimTeam)
-			return friendlyFire;
-		return true;
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+		return attackerTeam != victimTeam || friendlyFire;
 	}
 
 	@Override

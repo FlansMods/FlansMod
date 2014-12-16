@@ -1023,12 +1023,9 @@ public class ItemGun extends Item implements IFlanItem
 		return itemstack;
 	}
 
-	private boolean isSolid(World world, int i, int j, int k)
-	{
+	private boolean isSolid(World world, int i, int j, int k) {
 		Block block = world.getBlock(i, j, k);
-		if (block == null)
-			return false;
-		return block.getMaterial().isSolid() && block.isOpaqueCube();
+		return block != null && block.getMaterial().isSolid() && block.isOpaqueCube();
 	}
 	
 	//Stop damage being done to entities when scoping etc.

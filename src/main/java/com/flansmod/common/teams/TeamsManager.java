@@ -884,11 +884,8 @@ public class TeamsManager
 		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 	
-	public boolean autoBalance()
-	{
-		if(currentRound != null && !currentRound.gametype.shouldAutobalance())
-			return false;
-		return autoBalance;
+	public boolean autoBalance() {
+		return !(currentRound != null && !currentRound.gametype.shouldAutobalance()) && autoBalance;
 	}
 	
 	//

@@ -470,11 +470,8 @@ public class FlansModClient extends FlansMod
 		else return teamInfo.getTeam(spawnerTeamID);
 	}
 
-	public static boolean isCurrentMap(String map) 
-	{
-		if(teamInfo == null || teamInfo.mapShortName == null)
-			return false;
-		else return teamInfo.mapShortName.equals(map);
+	public static boolean isCurrentMap(String map) {
+		return !(teamInfo == null || teamInfo.mapShortName == null) && teamInfo.mapShortName.equals(map);
 	}
 	
 	@SideOnly(Side.CLIENT)

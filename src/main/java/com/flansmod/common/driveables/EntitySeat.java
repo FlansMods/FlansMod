@@ -578,11 +578,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float f)
-	{
-		if(worldObj.isRemote && !foundDriveable)
-			return false;
-		return driveable.attackEntityFrom(source, f);
+	public boolean attackEntityFrom(DamageSource source, float f) {
+		return !(worldObj.isRemote && !foundDriveable) && driveable.attackEntityFrom(source, f);
 	}
 
 	@Override

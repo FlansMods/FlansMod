@@ -594,27 +594,20 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 
-	private boolean isPartOfOwner(Entity entity)
-	{
-		if(owner == null)
+	private boolean isPartOfOwner(Entity entity) {
+		if (owner == null)
 			return false;
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
-		if (owner instanceof EntityPlayer)
-		{
-			if(PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
+		if (owner instanceof EntityPlayer) {
+			if (PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
 				return false;
-			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
-			if (mg != null && mg == entity)
-			{
+			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
+			if (mg != null && mg == entity) {
 				return true;
 			}
 		}
-		if(owner.ridingEntity instanceof EntitySeat)
-		{
-			return ((EntitySeat)owner.ridingEntity).driveable == null || ((EntitySeat)owner.ridingEntity).driveable.isPartOfThis(entity);
-		}
-		return false;
+		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null || ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
 	}
 
 	@Override
