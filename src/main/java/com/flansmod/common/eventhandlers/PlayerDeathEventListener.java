@@ -53,11 +53,11 @@ public void PlayerDied(LivingDeathEvent DamageEvent)
 		}
 		killerTeam=PlayerHandler.getPlayerData(killer).team;
 		killedTeam=PlayerHandler.getPlayerData(killed).team;
-		if(DamageEvent.entityLiving instanceof EntityPlayer&&isGrenade==false)
+		if(DamageEvent.entityLiving instanceof EntityPlayer&& !isGrenade)
 		{
 			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityBullet)DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)DamageEvent.entity).getDisplayName(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)DamageEvent.source.getSourceOfDamage()).getDisplayName()), DamageEvent.entityLiving.dimension);
 		}
-		if(DamageEvent.entityLiving instanceof EntityPlayer&&isGrenade==true)
+		if(DamageEvent.entityLiving instanceof EntityPlayer&& isGrenade)
 		{
 			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityGrenade)DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)DamageEvent.entity).getDisplayName(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer)DamageEvent.source.getSourceOfDamage()).getDisplayName()), DamageEvent.entityLiving.dimension);
 		}
