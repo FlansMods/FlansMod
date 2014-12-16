@@ -130,34 +130,30 @@ public class FlansModExplosion extends Explosion
         List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(i, k, i2, j, l1, j2));
         Vec3 vec3 = Vec3.createVectorHelper(explosionX, explosionY, explosionZ);
 
-        for (int k2 = 0; k2 < list.size(); ++k2)
-        {
-            Entity entity = (Entity)list.get(k2);
+        for (Object aList : list) {
+            Entity entity = (Entity) aList;
             double d7 = entity.getDistance(explosionX, explosionY, explosionZ) / explosionSize;
 
-            if (d7 <= 1.0D)
-            {
+            if (d7 <= 1.0D) {
                 d0 = entity.posX - explosionX;
                 d1 = entity.posY + entity.getEyeHeight() - explosionY;
                 d2 = entity.posZ - explosionZ;
                 double d8 = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
 
-                if (d8 != 0.0D)
-                {
+                if (d8 != 0.0D) {
                     d0 /= d8;
                     d1 /= d8;
                     d2 /= d8;
                     double d9 = worldObj.getBlockDensity(vec3, entity.boundingBox);
                     double d10 = (1.0D - d7) * d9;
-                    entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type, false), ((int)((d10 * d10 + d10) / 2.0D * 8.0D * explosionSize + 1.0D)));
+                    entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type, false), ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * explosionSize + 1.0D)));
                     double d11 = EnchantmentProtection.func_92092_a(entity, d10);
                     entity.motionX += d0 * d11;
                     entity.motionY += d1 * d11;
                     entity.motionZ += d2 * d11;
 
-                    if (entity instanceof EntityPlayer)
-                    {
-                    	playerLocations.put((EntityPlayer)entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10));
+                    if (entity instanceof EntityPlayer) {
+                        playerLocations.put((EntityPlayer) entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10));
                     }
                 }
             }

@@ -62,8 +62,7 @@ public class ModelMecha extends ModelDriveable
 	{
 		//Rendering the body
         if(mecha.isPartIntact(EnumDriveablePart.core))
-	        for(int i = 0; i < bodyModel.length; i++)
-				bodyModel[i].render(f5);
+			for (ModelRendererTurbo aBodyModel : bodyModel) aBodyModel.render(f5);
             
         if(mecha.isPartIntact(EnumDriveablePart.head))
         	for(ModelRendererTurbo model : headModel)
@@ -73,10 +72,9 @@ public class ModelMecha extends ModelDriveable
         
         if(mecha.isPartIntact(EnumDriveablePart.barrel))
         {
-			for(int i = 0; i < barrelModel.length; i++)
-			{
-				barrelModel[i].rotateAngleZ = -pitch * 3.14159265F / 180F;
-				barrelModel[i].render(f5, oldRotateOrder);
+			for (ModelRendererTurbo aBarrelModel : barrelModel) {
+				aBarrelModel.rotateAngleZ = -pitch * 3.14159265F / 180F;
+				aBarrelModel.render(f5, oldRotateOrder);
 			}
         }
 	}

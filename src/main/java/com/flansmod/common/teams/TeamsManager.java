@@ -919,9 +919,8 @@ public class TeamsManager
 		//Validate the selected team
 		boolean isValid = selectedTeam == Team.spectators;
 		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
-		for(int i = 0; i < validTeams.length; i++)
-		{
-			if(selectedTeam == validTeams[i])
+		for (Team validTeam : validTeams) {
+			if (selectedTeam == validTeam)
 				isValid = true;
 		}
 		//Default to spectator

@@ -57,8 +57,7 @@ public class PacketBaseEdit extends PacketBase
 		data.writeInt(baseID);
 		writeUTF(data, baseName);
 		data.writeInt(maps.length);
-		for(int i = 0; i < maps.length; i++)
-			writeUTF(data, maps[i]);
+		for (String map : maps) writeUTF(data, map);
 		
 		data.writeInt(mapID);
 		data.writeByte((byte)teamID);

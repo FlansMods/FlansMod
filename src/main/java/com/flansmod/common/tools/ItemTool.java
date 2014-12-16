@@ -182,18 +182,17 @@ public class ItemTool extends ItemFood
 				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
 						Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
 						Math.max(posVec.xCoord, lookVec.xCoord), Math.max(posVec.yCoord, lookVec.yCoord), Math.max(posVec.zCoord, lookVec.zCoord)));
-				for (int l = 0; l < list.size(); l++)
-				{
-					if(!(list.get(l) instanceof EntityLivingBase))
+				for (Object aList : list) {
+					if (!(aList instanceof EntityLivingBase))
 						continue;
-					EntityLivingBase checkEntity = (EntityLivingBase)list.get(l);
+					EntityLivingBase checkEntity = (EntityLivingBase) aList;
 					//Don't check the player using it
-					if(checkEntity == entityplayer)
+					if (checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
 					MovingObjectPosition hit = checkEntity.boundingBox.calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
-					if(hit != null)
+					if (hit != null)
 						hitLiving = checkEntity;
 				}
 		        //Now heal whatever it was we just decided to heal
