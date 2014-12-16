@@ -46,9 +46,9 @@ public class ModelChinook extends ModelPlane
 		{
 			for(int j = 0; j < 2; j++)
 			{
-				bodyWheelModel[0 + 3 * i + 6 * j] = new ModelRendererTurbo(this, 624, 32, textureX, textureY); // Wheel connector
-				bodyWheelModel[0 + 3 * i + 6 * j].addBox(0F, -8F, -2F, 4, 16, 4);
-				bodyWheelModel[0 + 3 * i + 6 * j].setRotationPoint(-80F * (i == 0 ? 1 : -1), 0F, -24F * (j == 0 ? 1 : -1));
+				bodyWheelModel[(3 * i + 6 * j)] = new ModelRendererTurbo(this, 624, 32, textureX, textureY); // Wheel connector
+				bodyWheelModel[(3 * i + 6 * j)].addBox(0F, -8F, -2F, 4, 16, 4);
+				bodyWheelModel[(3 * i + 6 * j)].setRotationPoint(-80F * (i == 0 ? 1 : -1), 0F, -24F * (j == 0 ? 1 : -1));
 		
 				bodyWheelModel[1 + 3 * i + 6 * j] = new ModelRendererTurbo(this, 640, 12, textureX, textureY); // Wheel
 				bodyWheelModel[1 + 3 * i + 6 * j].addBox(-6F, -14F, -4F, 16, 16, 3);	
