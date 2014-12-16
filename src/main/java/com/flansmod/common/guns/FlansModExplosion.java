@@ -41,7 +41,7 @@ public class FlansModExplosion extends Explosion
 	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r, boolean breakBlocks) 
 	{
 		super(w, e, x, y, z, r);
-		this.radius=r;
+		this.radius = r;
 		worldObj = w;
 		type = t;
 		player = p;
