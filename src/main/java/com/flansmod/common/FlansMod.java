@@ -184,8 +184,8 @@ public class FlansMod
 		//Set up mod blocks and items
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setBlockName("flansWorkbench").setBlockTextureName("flansWorkbench"));
 		GameRegistry.registerBlock(workbench, ItemBlockManyNames.class, "flansWorkbench");
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", Character.valueOf('B'), Items.bowl, Character.valueOf('I'), Items.iron_ingot );
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", Character.valueOf('C'), Items.cauldron, Character.valueOf('I'), Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", 'B', Items.bowl, 'I', Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", 'C', Items.cauldron, 'I', Items.iron_ingot );
 		opStick = new ItemOpStick();
 		GameRegistry.registerItem(opStick, "opStick", MODID);
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));

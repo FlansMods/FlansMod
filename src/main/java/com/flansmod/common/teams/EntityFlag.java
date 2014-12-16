@@ -42,7 +42,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(2, new Byte((byte)0));
+		dataWatcher.addObject(2, (byte) 0);
 	}
 	
 	@Override
