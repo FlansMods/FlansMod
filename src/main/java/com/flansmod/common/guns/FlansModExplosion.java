@@ -54,15 +54,12 @@ public class FlansModExplosion extends Explosion
         {
 	        if (!breakBlocks)
 	            affectedBlockPositions.clear();
-	
-	        Iterator iterator = worldObj.playerEntities.iterator();
-	
-	        while (iterator.hasNext())
-	        {
-	            EntityPlayer entityplayer = (EntityPlayer)iterator.next();
-	            if (entityplayer.getDistanceSq(x, y, z) < 4096.0D)
-	                ((EntityPlayerMP)entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(x, y, z, r, affectedBlockPositions, (Vec3)func_77277_b().get(entityplayer)));
-	        }
+
+            for (Object playerEntity : worldObj.playerEntities) {
+                EntityPlayer entityplayer = (EntityPlayer) playerEntity;
+                if (entityplayer.getDistanceSq(x, y, z) < 4096.0D)
+                    ((EntityPlayerMP) entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(x, y, z, r, affectedBlockPositions, (Vec3) func_77277_b().get(entityplayer)));
+            }
         }
 	}
 
