@@ -466,8 +466,7 @@ public class FlansMod
 		Method method = null;
 		try
 		{
-			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", new Class[]
-			{ java.net.URL.class });
+			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", java.net.URL.class);
 			method.setAccessible(true);
 		} catch (Exception e)
 		{
