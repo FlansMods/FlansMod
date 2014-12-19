@@ -97,7 +97,7 @@ public class AttachmentType extends InfoType implements IScope
 			else if(split[0].equals("FlashlightStrength"))
 				flashlightStrength = Integer.parseInt(split[1]);
 			//Mode override
-			else if(split[0].equals("Mode"))
+			else if(split[0].equals("ModeOverride"))
 				modeOverride = EnumFireMode.getFireMode(split[1]);
 			
 			//Multipliers
