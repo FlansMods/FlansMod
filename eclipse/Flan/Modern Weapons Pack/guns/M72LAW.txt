@@ -28,3 +28,7 @@ DropItemOnShoot m72law
 //Modifiers
 MoveSpeedModifier 0.6
 KnockbackModifier 0
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob M72LAW_Blue M72LAW_Blue blue 2 white 1
