@@ -25,8 +25,6 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-
 import com.flansmod.common.types.InfoType;
 
 public class FlansModExplosion extends Explosion 
@@ -38,10 +36,12 @@ public class FlansModExplosion extends Explosion
     public InfoType type;
     public EntityPlayer player;
     public List nonProcessedBlockPositions = new ArrayList();
+    private float radius;
     
 	public FlansModExplosion(World w, Entity e, EntityPlayer p, InfoType t, double x, double y, double z, float r, boolean breakBlocks) 
 	{
 		super(w, e, x, y, z, r);
+		this.radius = r;
 		worldObj = w;
 		type = t;
 		player = p;
@@ -54,15 +54,12 @@ public class FlansModExplosion extends Explosion
         {
 	        if (!breakBlocks)
 	            affectedBlockPositions.clear();
-	
-	        Iterator iterator = worldObj.playerEntities.iterator();
-	
-	        while (iterator.hasNext())
-	        {
-	            EntityPlayer entityplayer = (EntityPlayer)iterator.next();
-	            if (entityplayer.getDistanceSq(x, y, z) < 4096.0D)
-	                ((EntityPlayerMP)entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(x, y, z, r, affectedBlockPositions, (Vec3)func_77277_b().get(entityplayer)));
-	        }
+
+            for (Object playerEntity : worldObj.playerEntities) {
+                EntityPlayer entityplayer = (EntityPlayer) playerEntity;
+                if (entityplayer.getDistanceSq(x, y, z) < 4096.0D)
+                    ((EntityPlayerMP) entityplayer).playerNetServerHandler.sendPacket(new S27PacketExplosion(x, y, z, r, affectedBlockPositions, (Vec3) func_77277_b().get(entityplayer)));
+            }
         }
 	}
 
@@ -130,34 +127,30 @@ public class FlansModExplosion extends Explosion
         List list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(i, k, i2, j, l1, j2));
         Vec3 vec3 = Vec3.createVectorHelper(explosionX, explosionY, explosionZ);
 
-        for (int k2 = 0; k2 < list.size(); ++k2)
-        {
-            Entity entity = (Entity)list.get(k2);
+        for (Object aList : list) {
+            Entity entity = (Entity) aList;
             double d7 = entity.getDistance(explosionX, explosionY, explosionZ) / explosionSize;
 
-            if (d7 <= 1.0D)
-            {
+            if (d7 <= 1.0D) {
                 d0 = entity.posX - explosionX;
                 d1 = entity.posY + entity.getEyeHeight() - explosionY;
                 d2 = entity.posZ - explosionZ;
                 double d8 = MathHelper.sqrt_double(d0 * d0 + d1 * d1 + d2 * d2);
 
-                if (d8 != 0.0D)
-                {
+                if (d8 != 0.0D) {
                     d0 /= d8;
                     d1 /= d8;
                     d2 /= d8;
                     double d9 = worldObj.getBlockDensity(vec3, entity.boundingBox);
                     double d10 = (1.0D - d7) * d9;
-                    entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type, false), ((int)((d10 * d10 + d10) / 2.0D * 8.0D * explosionSize + 1.0D)));
+                    entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, entity, player, type, false), ((int) ((d10 * d10 + d10) / 2.0D * 8.0D * explosionSize + 1.0D)));
                     double d11 = EnchantmentProtection.func_92092_a(entity, d10);
                     entity.motionX += d0 * d11;
                     entity.motionY += d1 * d11;
                     entity.motionZ += d2 * d11;
 
-                    if (entity instanceof EntityPlayer)
-                    {
-                    	playerLocations.put((EntityPlayer)entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10));
+                    if (entity instanceof EntityPlayer) {
+                        playerLocations.put((EntityPlayer) entity, Vec3.createVectorHelper(d0 * d10, d1 * d10, d2 * d10));
                     }
                 }
             }
@@ -192,53 +185,7 @@ public class FlansModExplosion extends Explosion
 
         if (isSmoking)
         {
-            iterator = nonProcessedBlockPositions.iterator();
-
-            while (iterator.hasNext())
-            {
-                chunkposition = (ChunkPosition)iterator.next();
-                i = chunkposition.chunkPosX;
-                j = chunkposition.chunkPosY;
-                k = chunkposition.chunkPosZ;
-                block = worldObj.getBlock(i, j, k);
-
-                if (par1)
-                {
-                    double d0 = (i + worldObj.rand.nextFloat());
-                    double d1 = (j + worldObj.rand.nextFloat());
-                    double d2 = (k + worldObj.rand.nextFloat());
-                    double d3 = d0 - explosionX;
-                    double d4 = d1 - explosionY;
-                    double d5 = d2 - explosionZ;
-                    double d6 = MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
-                    d3 /= d6;
-                    d4 /= d6;
-                    d5 /= d6;
-                    double d7 = 0.5D / (d6 / explosionSize + 0.1D);
-                    d7 *= (worldObj.rand.nextFloat() * worldObj.rand.nextFloat() + 0.3F);
-                    d3 *= d7;
-                    d4 *= d7;
-                    d5 *= d7;
-                    worldObj.spawnParticle("explode", (d0 + explosionX * 1.0D) / 2.0D, (d1 + explosionY * 1.0D) / 2.0D, (d2 + explosionZ * 1.0D) / 2.0D, d3, d4, d5);
-                    worldObj.spawnParticle("smoke", d0, d1, d2, d3, d4, d5);
-                }
-
-                if (block != null)
-                {
-                    BreakEvent breakEvent = new BreakEvent(i, j, k, worldObj, block, worldObj.getBlockMetadata(i, j, k), player);
-
-                    if(!breakEvent.isCanceled())
-                    {
-                        if (block.canDropFromExplosion(this))
-                        {
-                            block.dropBlockAsItemWithChance(worldObj, i, j, k, worldObj.getBlockMetadata(i, j, k), 1.0F / explosionSize, 0);
-                        }
-
-                        block.onBlockExploded(worldObj, i, j, k, this);
-                        affectedBlockPositions.add(chunkposition);
-                    }
-                }
-            }
+            worldObj.createExplosion(player, explosionX, explosionY, explosionZ, radius, true);
         }
 
         if (isFlaming)

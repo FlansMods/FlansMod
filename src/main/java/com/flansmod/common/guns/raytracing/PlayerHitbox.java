@@ -7,7 +7,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;

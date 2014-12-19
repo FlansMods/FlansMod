@@ -49,7 +49,6 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemAAGun;
 import com.flansmod.common.guns.ItemBullet;
@@ -885,11 +884,8 @@ public class TeamsManager
 		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
 	}
 	
-	public boolean autoBalance()
-	{
-		if(currentRound != null && !currentRound.gametype.shouldAutobalance())
-			return false;
-		return autoBalance;
+	public boolean autoBalance() {
+		return !(currentRound != null && !currentRound.gametype.shouldAutobalance()) && autoBalance;
 	}
 	
 	//
@@ -923,9 +919,8 @@ public class TeamsManager
 		//Validate the selected team
 		boolean isValid = selectedTeam == Team.spectators;
 		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
-		for(int i = 0; i < validTeams.length; i++)
-		{
-			if(selectedTeam == validTeams[i])
+		for (Team validTeam : validTeams) {
+			if (selectedTeam == validTeam)
 				isValid = true;
 		}
 		//Default to spectator

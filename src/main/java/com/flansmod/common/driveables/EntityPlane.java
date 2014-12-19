@@ -1,7 +1,6 @@
 package com.flansmod.common.driveables;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -15,7 +14,6 @@ import com.flansmod.common.network.PacketDriveableControl;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketPlaneControl;
 import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Matrix4f;

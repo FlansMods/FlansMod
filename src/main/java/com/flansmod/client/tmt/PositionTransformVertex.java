@@ -41,20 +41,17 @@ public class PositionTransformVertex extends PositionTextureVertex
 			return;
 		}
 		double weight = 0D;
-		for(int i = 0; i < transformGroups.size(); i++)
-		{
-			weight += transformGroups.get(i).getWeight();
+		for (TransformGroup transformGroup : transformGroups) {
+			weight += transformGroup.getWeight();
 		}
 		vector3D.xCoord = 0;
 		vector3D.yCoord = 0;
 		vector3D.zCoord = 0;
-		
-		for(int i = 0; i < transformGroups.size(); i++)
-		{
-			TransformGroup group = transformGroups.get(i);
+
+		for (TransformGroup group : transformGroups) {
 			double cWeight = group.getWeight() / weight;
 			Vec3 vector = group.doTransformation(this);
-			
+
 			vector3D.xCoord += cWeight * vector.xCoord;
 			vector3D.yCoord += cWeight * vector.yCoord;
 			vector3D.zCoord += cWeight * vector.zCoord;

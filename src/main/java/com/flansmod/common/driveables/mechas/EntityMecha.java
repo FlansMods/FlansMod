@@ -21,7 +21,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
@@ -52,7 +51,6 @@ import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
@@ -82,6 +80,7 @@ public class EntityMecha extends EntityDriveable
     
     /** Gun animations */
     public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
+	boolean couldNotFindFuel;
     
 
 
@@ -819,7 +818,7 @@ public class EntityMecha extends EntityDriveable
 							boolean cancelled = false;
 							if(entity instanceof EntityPlayerMP)
 							{
-								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)seats[0].riddenByEntity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 								cancelled = event.isCanceled();
 							}
 					        if(!cancelled)
@@ -885,7 +884,8 @@ public class EntityMecha extends EntityDriveable
 												data.fuelInTank -= 2F*emeraldMultiplier();
 										}
 										fuelCheck = (data.fuelInTank >= 2F*ironMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
-										if(fuelCheck && stack.getItem() == Items.iron_ingot)
+										//check for refineIron OTHERWISE NICE DUPE. think about it and you will get why
+										if(fuelCheck && (stack.getItem() == Items.iron_ingot) && refineIron())
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);

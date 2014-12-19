@@ -11,30 +11,26 @@ public class ModelAAGun extends ModelBase
 
     public void renderBase(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
     {
-        for(int i = 0; i < baseModel.length; i++)
-        {
-            baseModel[i].render(f5);
-        }
+		for (ModelRendererTurbo aBaseModel : baseModel) {
+			aBaseModel.render(f5);
+		}
     }
 	
 	public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
     {
-        for(int i = 0; i < seatModel.length; i++)
-        {
-            seatModel[i].render(f5);
-        }
-		
-		for(int i = 0; i < gunModel.length; i++)
-        {
-			gunModel[i].setPosition(barrelX, barrelY, barrelZ);
-			gunModel[i].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
-            gunModel[i].render(f5);
-        }
+		for (ModelRendererTurbo aSeatModel : seatModel) {
+			aSeatModel.render(f5);
+		}
 
-		for(int i = 0; i <gunsightModel.length; i++)
-		{
-			gunsightModel[i].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
-			gunsightModel[i].render(f5);
+		for (ModelRendererTurbo aGunModel : gunModel) {
+			aGunModel.setPosition(barrelX, barrelY, barrelZ);
+			aGunModel.rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
+			aGunModel.render(f5);
+		}
+
+		for (ModelRendererTurbo aGunsightModel : gunsightModel) {
+			aGunsightModel.rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
+			aGunsightModel.render(f5);
 		}
 
         for(int i = 0; i < barrelModel.length; i++)
@@ -67,40 +63,32 @@ public class ModelAAGun extends ModelBase
 	
 	public void flipAll()
 	{
-		for(int i = 0; i < baseModel.length; i++)
-		{
-			baseModel[i].doMirror(false, true, true);
-			baseModel[i].setRotationPoint(baseModel[i].rotationPointX, - baseModel[i].rotationPointY, - baseModel[i].rotationPointZ);
+		for (ModelRendererTurbo aBaseModel : baseModel) {
+			aBaseModel.doMirror(false, true, true);
+			aBaseModel.setRotationPoint(aBaseModel.rotationPointX, -aBaseModel.rotationPointY, -aBaseModel.rotationPointZ);
 		}
-		for(int i = 0; i < seatModel.length; i++)
-		{
-			seatModel[i].doMirror(false, true, true);
-			seatModel[i].setRotationPoint(seatModel[i].rotationPointX, - seatModel[i].rotationPointY, - seatModel[i].rotationPointZ);
+		for (ModelRendererTurbo aSeatModel : seatModel) {
+			aSeatModel.doMirror(false, true, true);
+			aSeatModel.setRotationPoint(aSeatModel.rotationPointX, -aSeatModel.rotationPointY, -aSeatModel.rotationPointZ);
 		}
-		for(int i = 0; i < gunModel.length; i++)
-		{
-			gunModel[i].doMirror(false, true, true);
-			gunModel[i].setRotationPoint(gunModel[i].rotationPointX, - gunModel[i].rotationPointY, - gunModel[i].rotationPointZ);
+		for (ModelRendererTurbo aGunModel : gunModel) {
+			aGunModel.doMirror(false, true, true);
+			aGunModel.setRotationPoint(aGunModel.rotationPointX, -aGunModel.rotationPointY, -aGunModel.rotationPointZ);
 		}
-		for(int i = 0; i < gunsightModel.length; i++)
-		{
-			gunsightModel[i].doMirror(false, true, true);
-			gunsightModel[i].setRotationPoint(gunsightModel[i].rotationPointX, - gunsightModel[i].rotationPointY, - gunsightModel[i].rotationPointZ);
+		for (ModelRendererTurbo aGunsightModel : gunsightModel) {
+			aGunsightModel.doMirror(false, true, true);
+			aGunsightModel.setRotationPoint(aGunsightModel.rotationPointX, -aGunsightModel.rotationPointY, -aGunsightModel.rotationPointZ);
 		}
-		for(int i = 0; i < barrelModel.length; i++)
-		{
-			for(int j = 0; j < barrelModel[i].length; j++)
-			{
-				barrelModel[i][j].doMirror(false, true, true);
-				barrelModel[i][j].setRotationPoint(barrelModel[i][j].rotationPointX, - barrelModel[i][j].rotationPointY, - barrelModel[i][j].rotationPointZ);
+		for (ModelRendererTurbo[] aBarrelModel : barrelModel) {
+			for (int j = 0; j < aBarrelModel.length; j++) {
+				aBarrelModel[j].doMirror(false, true, true);
+				aBarrelModel[j].setRotationPoint(aBarrelModel[j].rotationPointX, -aBarrelModel[j].rotationPointY, -aBarrelModel[j].rotationPointZ);
 			}
 		}
-		for(int i = 0; i < ammoModel.length; i++)
-		{
-			for(int j = 0; j < ammoModel[i].length; j++)
-			{
-				ammoModel[i][j].doMirror(false, true, true);
-				ammoModel[i][j].setRotationPoint(ammoModel[i][j].rotationPointX, - ammoModel[i][j].rotationPointY, - ammoModel[i][j].rotationPointZ);
+		for (ModelRendererTurbo[] anAmmoModel : ammoModel) {
+			for (int j = 0; j < anAmmoModel.length; j++) {
+				anAmmoModel[j].doMirror(false, true, true);
+				anAmmoModel[j].setRotationPoint(anAmmoModel[j].rotationPointX, -anAmmoModel[j].rotationPointY, -anAmmoModel[j].rotationPointZ);
 			}
 		}
 	}	

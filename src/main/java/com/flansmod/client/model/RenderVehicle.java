@@ -19,9 +19,7 @@ import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
-import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render implements IItemRenderer

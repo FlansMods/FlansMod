@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
@@ -282,9 +281,7 @@ public class TickHandlerClient
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
 			}
-			for(int n = 0; n < killMessages.size(); n++)
-			{
-				KillMessage killMessage = killMessages.get(n);
+			for (KillMessage killMessage : killMessages) {
 				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 			}
 						
@@ -292,10 +289,8 @@ public class TickHandlerClient
 			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);	
-			for(int n = 0; n < killMessages.size(); n++)
-			{
-				KillMessage killMessage = killMessages.get(n);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+			for (KillMessage killMessage : killMessages) {
 				drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 			}
 			GL11.glDisable(3042 /*GL_BLEND*/);

@@ -1,6 +1,5 @@
 package com.flansmod.common.guns;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBase;

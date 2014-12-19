@@ -33,7 +33,6 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
@@ -49,7 +48,6 @@ import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
@@ -284,13 +282,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	@Override
 	/** Pass generic damage to the core */
-	public boolean attackEntityFrom(DamageSource damagesource, float i)
-    {
-	    if(worldObj.isRemote || isDead)
-        {
-            return true;
-        }
-	    return attackPart(EnumDriveablePart.core, damagesource, i);
+	public boolean attackEntityFrom(DamageSource damagesource, float i) {
+		return worldObj.isRemote || isDead || attackPart(EnumDriveablePart.core, damagesource, i);
 	}
 	
 	@Override
@@ -1028,24 +1021,18 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 	
     
-    public boolean hasFuel()
-    {
-    	if(seats == null || seats[0] == null || seats[0].riddenByEntity == null)
-    		return false;
-    	if(seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-    		return true;
-    	return driveableData.fuelInTank > 0;
-    }
+    public boolean hasFuel() {
+		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
+			return false;
+		return seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode || driveableData.fuelInTank > 0;
+	}
     
-    public boolean hasEnoughFuel()
-    {
-    	if(seats == null || seats[0] == null || seats[0].riddenByEntity == null)
-    		return false;
-    	if(seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
-    		return true;
-    	
-		return driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
-    }
+    public boolean hasEnoughFuel() {
+		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
+			return false;
+		return seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
+
+	}
 	
 	//Physics time! Oooh yeah
 	

@@ -3,7 +3,6 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -20,8 +19,6 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
-import com.flansmod.common.guns.GrenadeType;
-import com.flansmod.common.guns.ItemGrenade;
 
 public class RenderPlane extends Render implements IItemRenderer 
 {	

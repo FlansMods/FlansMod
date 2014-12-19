@@ -24,10 +24,8 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketDriveableKey;
@@ -580,11 +578,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float f)
-	{
-		if(worldObj.isRemote && !foundDriveable)
-			return false;
-		return driveable.attackEntityFrom(source, f);
+	public boolean attackEntityFrom(DamageSource source, float f) {
+		return !(worldObj.isRemote && !foundDriveable) && driveable.attackEntityFrom(source, f);
 	}
 
 	@Override

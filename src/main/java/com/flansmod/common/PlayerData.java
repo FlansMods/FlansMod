@@ -15,7 +15,6 @@ import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsRound;
 import com.flansmod.common.vector.Vector3f;
 
 import cpw.mods.fml.relauncher.Side;

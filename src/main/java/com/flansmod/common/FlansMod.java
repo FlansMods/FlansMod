@@ -96,8 +96,9 @@ import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWEDVERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
@@ -183,8 +184,8 @@ public class FlansMod
 		//Set up mod blocks and items
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setBlockName("flansWorkbench").setBlockTextureName("flansWorkbench"));
 		GameRegistry.registerBlock(workbench, ItemBlockManyNames.class, "flansWorkbench");
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", Character.valueOf('B'), Items.bowl, Character.valueOf('I'), Items.iron_ingot );
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", Character.valueOf('C'), Items.cauldron, Character.valueOf('I'), Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", 'B', Items.bowl, 'I', Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", 'C', Items.cauldron, 'I', Items.iron_ingot );
 		opStick = new ItemOpStick();
 		GameRegistry.registerItem(opStick, "opStick", MODID);
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
@@ -270,6 +271,8 @@ public class FlansMod
 
 		//Config
         FMLCommonHandler.instance().bus().register(INSTANCE);
+        //Starting the EventListener
+        new PlayerDeathEventListener();
 		log("Loading complete.");
 	}
 	
@@ -323,7 +326,7 @@ public class FlansMod
     }
     
 	@SubscribeEvent
-	public void onLivingSpecialSpawn(LivingSpawnEvent event)
+	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		double chance = event.world.rand.nextDouble();
 
@@ -463,8 +466,7 @@ public class FlansMod
 		Method method = null;
 		try
 		{
-			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", new Class[]
-			{ java.net.URL.class });
+			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", java.net.URL.class);
 			method.setAccessible(true);
 		} catch (Exception e)
 		{

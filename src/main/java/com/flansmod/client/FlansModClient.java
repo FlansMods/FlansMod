@@ -68,7 +68,6 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
-import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -471,11 +470,8 @@ public class FlansModClient extends FlansMod
 		else return teamInfo.getTeam(spawnerTeamID);
 	}
 
-	public static boolean isCurrentMap(String map) 
-	{
-		if(teamInfo == null || teamInfo.mapShortName == null)
-			return false;
-		else return teamInfo.mapShortName.equals(map);
+	public static boolean isCurrentMap(String map) {
+		return !(teamInfo == null || teamInfo.mapShortName == null) && teamInfo.mapShortName.equals(map);
 	}
 	
 	@SideOnly(Side.CLIENT)

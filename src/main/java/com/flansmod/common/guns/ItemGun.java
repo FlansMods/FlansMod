@@ -9,7 +9,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.settings.GameSettings;
@@ -28,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -49,11 +47,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.raytracing.BlockHit;
 import com.flansmod.common.guns.raytracing.BulletHit;
-import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.guns.raytracing.EntityHit;
 import com.flansmod.common.guns.raytracing.EnumHitboxType;
 import com.flansmod.common.guns.raytracing.PlayerBulletHit;
@@ -67,7 +62,6 @@ import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -1029,12 +1023,9 @@ public class ItemGun extends Item implements IFlanItem
 		return itemstack;
 	}
 
-	private boolean isSolid(World world, int i, int j, int k)
-	{
+	private boolean isSolid(World world, int i, int j, int k) {
 		Block block = world.getBlock(i, j, k);
-		if (block == null)
-			return false;
-		return block.getMaterial().isSolid() && block.isOpaqueCube();
+		return block != null && block.getMaterial().isSolid() && block.isOpaqueCube();
 	}
 	
 	//Stop damage being done to entities when scoping etc.
