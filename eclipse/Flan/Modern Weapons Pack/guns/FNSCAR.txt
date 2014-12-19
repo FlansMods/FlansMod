@@ -44,3 +44,4 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob FNSCAR_Green FNSCAR_Green green 1 lime 1
+Paintjob FNSCAR_TwoTone FNSCAR_TwoTone brown 1 black 1

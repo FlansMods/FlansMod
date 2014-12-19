@@ -75,8 +75,21 @@ public class ModelF22 extends ModelPlane
 		tailModel[3] = new ModelRendererTurbo(this, 296, 300, textureX, textureY); //Tail
 		tailModel[3].addShapeBox(48F, 16F, 32F, 48, 48, 4, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -16F, 0F, -16F, /* 5 */ 0F, 0F, -16F, /* 6 */ 0F, 0F, 16F, /* 7 */ -16F, 0F, 16F);
 		
+		bodyWheelModel = new ModelRendererTurbo[2];
+		bodyWheelModel[0] = new ModelRendererTurbo(this, 416, 0, textureX, textureY);
+		bodyWheelModel[0].addBox(-58F, 0F, -3, 4, 8, 6);
+		bodyWheelModel[1] = new ModelRendererTurbo(this, 384, 0, textureX, textureY);
+		bodyWheelModel[1].addBox(-62F, -10F, -2, 12, 12, 4);
 		
-		bodyWheelModel = new ModelRendererTurbo[0];
+		tailWheelModel = new ModelRendererTurbo[4];
+		
+		for(int i = 0; i < 2; i++)
+		{
+			tailWheelModel[2*i] = new ModelRendererTurbo(this, 416, 0, textureX, textureY);
+			tailWheelModel[2*i].addBox(58F, 0F, -27F + i * 48F, 4, 8, 6);
+			tailWheelModel[2*i + 1] = new ModelRendererTurbo(this, 384, 0, textureX, textureY);
+			tailWheelModel[2*i + 1].addBox(54F, -10F, -26F + i * 48F, 12, 12, 4);
+		}
 		
 		translateAll(0F, 0F, 0F);
 		
