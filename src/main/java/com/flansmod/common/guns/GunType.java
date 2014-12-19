@@ -626,6 +626,17 @@ public class GunType extends InfoType implements IScope
 		}
 		return stackReloadTime;
 	}
+	
+	/** Get the firing mode of a specific gun, taking into account attachments */
+	public EnumFireMode getFireMode(ItemStack stack)
+	{
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			if(attachment.modeOverride != null)
+				return attachment.modeOverride;
+		}
+		return mode;
+	}
 
 	/** Static String to GunType method */
 	public static GunType getGun(String s)

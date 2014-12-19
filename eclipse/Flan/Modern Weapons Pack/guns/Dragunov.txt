@@ -45,3 +45,4 @@ NumGenericAttachmentSlots 2
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob Dragunov_Grey Dragunov_Grey gray 2
 Paintjob Dragunov_Rainbow Dragunov_Rainbow red 1 yellow 1 green 1 blue 1
+Paintjob Dragunov_Birch Dragunov_Birch white 1 yellow 1

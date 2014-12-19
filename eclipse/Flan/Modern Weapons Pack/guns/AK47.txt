@@ -48,3 +48,4 @@ NumGenericAttachmentSlots 1
 Paintjob AK47_JungleCamo AK47_JungleCamo green 1
 Paintjob AK47_Redline AK47_Redline red 1 black 1
 Paintjob AK47_CaseHardened AK47_CaseHardened yellow 1 blue 1 purple 1
+Paintjob AK47_Birch AK47_Birch white 1 yellow 1
