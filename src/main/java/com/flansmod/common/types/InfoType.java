@@ -3,6 +3,7 @@ package com.flansmod.common.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -347,11 +348,16 @@ public class InfoType
 		return null;
 	}
 	
-	public PotionEffect getPotionEffect(String[] split)
+	public static PotionEffect getPotionEffect(String[] split)
 	{
 		int potionID = Integer.parseInt(split[1]);
 		int duration = Integer.parseInt(split[2]);
 		int amplifier = Integer.parseInt(split[3]);
 		return new PotionEffect(potionID, duration, amplifier, false);
+	}
+	
+	public static Material getMaterial(String mat)
+	{
+		return Material.ground;
 	}
 }

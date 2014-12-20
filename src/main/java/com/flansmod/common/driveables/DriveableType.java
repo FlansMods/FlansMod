@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,11 @@ public class DriveableType extends InfoType
 	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
+	//Harvesting variables
+	/** If true, then this vehicle harvests blocks from the harvester hitbox and places them in the inventory */
+	public boolean harvestBlocks = false;
+	/** What materials this harvester eats */
+	public ArrayList<Material> materialsHarvested = new ArrayList<Material>();
 	
 	
 	//Weapon variables
@@ -218,6 +224,45 @@ public class DriveableType extends InfoType
 			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
                 wheelSpringStrength = Float.parseFloat(split[1]);
             
+			//Harvesting
+			else if(split[0].equals("Harvester"))
+            	harvestBlocks = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("HarvestMaterial"))
+			{
+				materialsHarvested.add(getMaterial(split[1]));
+			}
+			else if(split[0].equals("HarvestToolType"))
+			{
+				if(split[1].equals("Axe"))
+				{
+					materialsHarvested.add(Material.wood);
+					materialsHarvested.add(Material.plants);
+					materialsHarvested.add(Material.vine);
+				}
+				else if(split[1].equals("Pickaxe") || split[1].equals("Drill"))
+				{
+					materialsHarvested.add(Material.iron);
+					materialsHarvested.add(Material.anvil);
+					materialsHarvested.add(Material.rock);
+				}
+				else if(split[1].equals("Spade") || split[1].equals("Shovel") || split[1].equals("Excavator"))
+				{
+					materialsHarvested.add(Material.ground);
+					materialsHarvested.add(Material.grass);
+					materialsHarvested.add(Material.sand);
+					materialsHarvested.add(Material.snow);
+					materialsHarvested.add(Material.clay);
+				}				
+				else if(split[1].equals("Hoe") || split[1].equals("Combine"))
+				{
+					materialsHarvested.add(Material.plants);
+					materialsHarvested.add(Material.leaves);
+					materialsHarvested.add(Material.vine);
+					materialsHarvested.add(Material.cactus);
+					materialsHarvested.add(Material.gourd);
+				}
+			}
+			
 			//Cargo / Payload
 			else if(split[0].equals("CargoSlots"))
 				numCargoSlots = Integer.parseInt(split[1]);

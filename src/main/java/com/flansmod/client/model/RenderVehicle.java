@@ -92,6 +92,17 @@ public class RenderVehicle extends Render implements IItemRenderer
 					}
 				}
 				GL11.glPopMatrix();
+				if(modVehicle != null)
+				{
+					GL11.glPushMatrix();
+					
+					GL11.glTranslatef(modVehicle.drillHeadOrigin.x, modVehicle.drillHeadOrigin.y, modVehicle.drillHeadOrigin.z);
+					GL11.glRotatef(vehicle.harvesterAngle * 50F, 1.0F, 0.0F, 0.0F);
+					GL11.glTranslatef(-modVehicle.drillHeadOrigin.x, -modVehicle.drillHeadOrigin.y, -modVehicle.drillHeadOrigin.z);
+					modVehicle.renderDrillBit(vehicle, f1);
+					
+					GL11.glPopMatrix();
+				}
 			}
 			GL11.glPopMatrix();
 			

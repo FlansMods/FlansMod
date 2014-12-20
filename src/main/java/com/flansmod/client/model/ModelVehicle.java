@@ -7,6 +7,7 @@ import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.VehicleType;
+import com.flansmod.common.vector.Vector3f;
 
 //Extensible ModelVehicle class for rendering vehicle models
 public class ModelVehicle extends ModelDriveable
@@ -29,6 +30,9 @@ public class ModelVehicle extends ModelDriveable
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo trailerModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo steeringWheelModel[] = new ModelRendererTurbo[0];
+	
+	public ModelRendererTurbo drillHeadModel[] = new ModelRendererTurbo[0]; 		//Drill head. Rotates around
+	public Vector3f drillHeadOrigin = new Vector3f();								//this point
 	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
@@ -53,6 +57,7 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(trailerModel);
 		renderPart(turretModel);
 		renderPart(barrelModel);
+		renderPart(drillHeadModel);
 		for(ModelRendererTurbo[] mods : ammoModel)
 			renderPart(mods);
 		renderPart(steeringWheelModel);
@@ -157,7 +162,7 @@ public class ModelVehicle extends ModelDriveable
 				aTrailerModel.render(f5, oldRotateOrder);
 			}
         }
-        
+                
         //Render guns
         for(EntitySeat seat : vehicle.seats)
         {
@@ -270,6 +275,16 @@ public class ModelVehicle extends ModelDriveable
         }
     }
 	
+	public void renderDrillBit(EntityVehicle vehicle, float f) 
+	{
+        if(vehicle.isPartIntact(EnumDriveablePart.harvester))
+        {
+			for (ModelRendererTurbo adrillHeadModel : drillHeadModel) {
+				adrillHeadModel.render(0.0625F, oldRotateOrder);
+			}
+        }
+	}
+	
 	@Override
 	public void flipAll()
 	{
@@ -290,6 +305,7 @@ public class ModelVehicle extends ModelDriveable
 		flip(steeringWheelModel);
 		flip(frontWheelModel);
 		flip(backWheelModel);
+		flip(drillHeadModel);
 	}	
 	
 	@Override
@@ -312,5 +328,6 @@ public class ModelVehicle extends ModelDriveable
 		translate(steeringWheelModel, x, y, z);
 		translate(frontWheelModel, x, y, z);
 		translate(backWheelModel, x, y, z);
+		translate(drillHeadModel, x, y, z);
 	}
 }

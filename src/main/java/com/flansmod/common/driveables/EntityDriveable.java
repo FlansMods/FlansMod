@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,7 @@ import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
@@ -85,6 +87,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public float minigunSpeedPrimary, minigunSpeedSecondary;
 	/** Current gun variables for alternating weapons. */
 	public int currentGunPrimary, currentGunSecondary;
+	
+    /** Angle of harvester aesthetic piece */
+	public float harvesterAngle;
 	
 	public RotatedAxes prevAxes;
 	public RotatedAxes axes;
@@ -652,6 +657,52 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		}
         	}
         }
+
+		boolean driverIsCreative = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+		
+		//Harvest stuff
+		//Aesthetics
+		if(hasEnoughFuel())
+		{
+			harvesterAngle += throttle / 5F;	
+		}
+		//Actual harvesting
+		if(type.harvestBlocks && type.health.get(EnumDriveablePart.harvester) != null)
+		{
+			CollisionBox box = type.health.get(EnumDriveablePart.harvester);
+			for(float x = box.x; x <= box.x + box.w; x++)
+			{
+				for(float y = box.y; y <= box.y + box.h; y++)
+				{
+					for(float z = box.z; z <= box.z + box.d; z++)
+					{
+						Vector3f v = axes.findLocalVectorGlobally(new Vector3f(x, y, z));
+						
+						int blockX = (int)Math.round(posX + v.x);
+						int blockY = (int)Math.round(posY + v.y);
+						int blockZ = (int)Math.round(posZ + v.z);
+						Block block = worldObj.getBlock(blockX, blockY, blockZ);
+						
+						if(type.materialsHarvested.contains(block.getMaterial()) && block.getBlockHardness(worldObj, blockX, blockY, blockZ) >= 0F);
+						{
+							//Add the itemstack to mecha inventory
+							ArrayList<ItemStack> stacks = block.getDrops(worldObj, blockX, blockY, blockZ, worldObj.getBlockMetadata(blockX, blockY, blockZ), 0);
+							for(int i = 0; i < stacks.size(); i++)
+							{
+								ItemStack stack = stacks.get(i);
+								FlansMod.log("");
+								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+								{
+									worldObj.spawnEntityInWorld(new EntityItem(worldObj, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
+								}
+							}
+							//Destroy block
+							worldObj.func_147480_a(blockX, blockY, blockZ, false);
+						}
+					}
+				}
+			}
+		}
         
         for(DriveablePart part : getDriveableData().parts.values())
         {
