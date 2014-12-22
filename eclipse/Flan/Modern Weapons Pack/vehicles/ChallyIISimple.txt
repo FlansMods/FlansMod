@@ -1,30 +1,28 @@
 //Naming
-Name KV1
-ShortName KV1
-ItemID 33335
+Name Challenger II
+ShortName ChallyII
 //Visuals
-Icon KV1
-Model ww2.KV1
-Texture KV1
-ModelScale 1.0
+Icon ChallyII
+Model mw.ChallengerII
+Texture ChallySimple
 //Third Person Camera Distance
-CameraDistance 7.5
+CameraDistance 11.5
 //Throttle
-MaxThrottle 0.2
-MaxNegativeThrottle 0.1
+MaxThrottle 0.5
+MaxNegativeThrottle 1.0
 //Steering modifiers
-TurnLeftSpeed 0.15
-TurnRightSpeed 0.15
+TurnLeftSpeed 0.5
+TurnRightSpeed 0.5
+//Drag
+Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
-WheelRadius 1.0
+WheelRadius 1.5
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -32 -16 -18
-WheelPosition 1 -32 -16 18
-WheelPosition 2 32 -16 18
-WheelPosition 3 32 -16 -18
+WheelPosition 0 -51 -10 -33
+WheelPosition 1 -51 -10 33
+WheelPosition 2 56 -10 33
+WheelPosition 3 56 -10 -33
 WheelSpringStrength 0.5
-//Bouncy bouncy
-Bounciness 0.3
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
 //Tank mode activate
@@ -32,41 +30,38 @@ Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 2000
 //Inventory Slots
-CargoSlots 20
+CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 16 0 -360 360 -10 20
-RotatedDriverOffset -16 0 0
+Driver 0 33 0 -360 360 -10 20
+RotatedDriverOffset -5 0 10
 Passengers 0
-Passenger 1 0 16 0 turret -360 360 -15 60 dp28 DP28
-GunOrigin 1 0 30 0
-BarrelPosition 0 34 0
+BarrelPosition 131 26 0
 //Secondary gun
-AddGun 8 34 8 turret dp28
+AddGun 8 34 8 turret m60
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 2
-ShellDelay 110
+ShootDelay 1
+ShellDelay 70
 //Sounds
-//Sounds
-StartSound TankIdle
+StartSound Engine
 StartSoundLength 20
-EngineSound TankMove
-EngineSoundLength 60
-ShootSoundPrimary Tank1Shoot
-ShootSoundSecondary DP28Shoot
+EngineSound Engine
+EngineSoundLength 20
+ShootSoundPrimary TankShell
+ShootSoundSecondary M60Shoot
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret 1 vehicleSeat
-AddRecipeParts core 1 tankBody 1 vehicleSeat
+AddRecipeParts turret 1 tankTurret
+AddRecipeParts core 1 advancedTankBody 1 vehicleSeat
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 790 -61 -4 -16 102 18 32
-SetupPart turret 690 -25 14 -25 50 15 50
-SetupPart leftTrack 395 -57 -10 -28 98 17 12
-SetupPart rightTrack 395 -57 -10 16 98 17 12
+SetupPart core 1000 -69 0 -33 137 23 66
+SetupPart rightTrack 300 -69 -10 -33 136 10 12
+SetupPart leftTrack 300 -69 -10 21 136 10 12
+SetupPart turret 500 -48 23 -27 92 16 54
 BulletDetection 7

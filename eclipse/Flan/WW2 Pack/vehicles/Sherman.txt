@@ -9,11 +9,11 @@ Texture Sherman
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.8
+MaxThrottle 0.5
 MaxNegativeThrottle 0.4
 //Steering modifiers
-TurnLeftSpeed 1.4
-TurnRightSpeed 1.4
+TurnLeftSpeed 0.5
+TurnRightSpeed 0.5
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -31,10 +31,10 @@ Tank true
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 2000
 //Inventory Slots
-CargoSlots 0
+CargoSlots 20
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 34 0 -360 360 -4 4
+Driver 0 18 0 -360 360 -4 4
 RotatedDriverOffset 14 0 -9
 //Secondary gun
 AddGun 8 34 8 turret browning
@@ -44,14 +44,14 @@ RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 2
-ShellDelay 100
+ShellDelay 90
 //Sounds
-StartSound Engine
+StartSound TankIdle
 StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSound BrowningShoot
-ShellSound TankShell
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank2Shoot
+ShootSoundSecondary BrowningShoot
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
@@ -63,8 +63,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 //Health and collision
-SetupPart core 730 -55 -3 -19 108 29 38
-SetupPart turret 630 -15 27 -19 39 17 38
-SetupPart leftTrack 530 -54 -12 -27 104 21 10
-SetupPart rightTrack 530 -54 -12 16 104 21 10
+SetupPart core 500 -55 -3 -19 108 29 38
+SetupPart turret 400 -15 27 -19 39 17 38
+SetupPart leftTrack 250 -54 -12 -27 104 21 10
+SetupPart rightTrack 250 -54 -12 16 104 21 10
 BulletDetection 7

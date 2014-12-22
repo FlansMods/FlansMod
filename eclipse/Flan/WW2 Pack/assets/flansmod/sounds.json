@@ -317,5 +317,46 @@
 	"webleyShoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:webleyShoot" ]
+		
+	},
+	
+	"Tank1Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Tank1Shoot" ]
+	},
+	
+	"Tank2Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Tank2Shoot" ]
+	},
+	
+	"Tank3Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Tank3Shoot" ]
+	},
+	
+	"Tank4Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Tank4Shoot" ]
+	},
+	
+	"Tank1Reload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Tank1Reload" ]
+	},	
+			
+	"TankMove": {
+		"category" : "player",
+		"sounds" : [ "flansmod:TankMove" ]
+	},
+	
+	"TankIdle": {
+		"category" : "player",
+		"sounds" : [ "flansmod:TankIdle" ]
+	},
+	
+	"Flak1Shoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:Flak1Shoot" ]
 	}
 }
