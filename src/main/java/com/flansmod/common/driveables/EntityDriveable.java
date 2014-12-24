@@ -683,7 +683,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						int blockZ = (int)Math.round(posZ + v.z);
 						Block block = worldObj.getBlock(blockX, blockY, blockZ);
 						
-						if(type.materialsHarvested.contains(block.getMaterial()) && block.getBlockHardness(worldObj, blockX, blockY, blockZ) >= 0F);
+						if(type.materialsHarvested.contains(block.getMaterial()) && block.getBlockHardness(worldObj, blockX, blockY, blockZ) >= 0F)
 						{
 							//Add the itemstack to mecha inventory
 							ArrayList<ItemStack> stacks = block.getDrops(worldObj, blockX, blockY, blockZ, worldObj.getBlockMetadata(blockX, blockY, blockZ), 0);

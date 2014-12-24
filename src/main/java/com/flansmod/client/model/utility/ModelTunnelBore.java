@@ -13,17 +13,17 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelTunnelBore extends ModelVehicle
 {
 	int textureX = 256;
-	int textureY = 256;
+	int textureY = 512;
 
 	public ModelTunnelBore()
 	{
 		bodyModel = new ModelRendererTurbo[6];
 		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Part
-		bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 13
-		bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 14
-		bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 36
-		bodyModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 37
-		bodyModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 38
+		bodyModel[1] = new ModelRendererTurbo(this, 0, 56, textureX, textureY); // Box 13
+		bodyModel[2] = new ModelRendererTurbo(this, 0, 104, textureX, textureY); // Box 14
+		bodyModel[3] = new ModelRendererTurbo(this, 0, 200, textureX, textureY); // Box 36
+		bodyModel[4] = new ModelRendererTurbo(this, 0, 216, textureX, textureY); // Box 37
+		bodyModel[5] = new ModelRendererTurbo(this, 0, 232, textureX, textureY); // Box 38
 
 		bodyModel[0].addBox(0F, 0F, 0F, 64, 8, 48, 0F); // Part
 		bodyModel[0].setRotationPoint(-32F, -16F, -24F);
@@ -45,15 +45,15 @@ public class ModelTunnelBore extends ModelVehicle
 
 
 		drillHeadModel = new ModelRendererTurbo[9];
-		drillHeadModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 16
-		drillHeadModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 18
-		drillHeadModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 19
-		drillHeadModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 20
-		drillHeadModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 21
-		drillHeadModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 22
-		drillHeadModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 23
-		drillHeadModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 24
-		drillHeadModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 25
+		drillHeadModel[0] = new ModelRendererTurbo(this, 0, 288, textureX, textureY); // Box 16
+		drillHeadModel[1] = new ModelRendererTurbo(this, 0, 360, textureX, textureY); // Box 18
+		drillHeadModel[2] = new ModelRendererTurbo(this, 0, 424, textureX, textureY); // Box 19
+		drillHeadModel[3] = new ModelRendererTurbo(this, 80, 288, textureX, textureY); // Box 20
+		drillHeadModel[4] = new ModelRendererTurbo(this, 80, 336, textureX, textureY); // Box 21
+		drillHeadModel[5] = new ModelRendererTurbo(this, 72, 376, textureX, textureY); // Box 22
+		drillHeadModel[6] = new ModelRendererTurbo(this, 72, 408, textureX, textureY); // Box 23
+		drillHeadModel[7] = new ModelRendererTurbo(this, 64, 432, textureX, textureY); // Box 24
+		drillHeadModel[8] = new ModelRendererTurbo(this, 64, 448, textureX, textureY); // Box 25
 
 		drillHeadModel[0].addBox(0F, -18F, -18F, 4, 36, 36, 0F); // Box 16
 		drillHeadModel[0].setRotationPoint(48F, -16F, 0F);
@@ -94,16 +94,16 @@ public class ModelTunnelBore extends ModelVehicle
 		
 
 		leftTrackModel = new ModelRendererTurbo[10];
-		leftTrackModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 26
-		leftTrackModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 27
-		leftTrackModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 28
-		leftTrackModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 29
-		leftTrackModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 30
-		leftTrackModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 31
-		leftTrackModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 32
-		leftTrackModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 33
-		leftTrackModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 34
-		leftTrackModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 35
+		leftTrackModel[0] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 26
+		leftTrackModel[1] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 27
+		leftTrackModel[2] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 28
+		leftTrackModel[3] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 29
+		leftTrackModel[4] = new ModelRendererTurbo(this, 0, 480, textureX, textureY); // Box 30
+		leftTrackModel[5] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 31
+		leftTrackModel[6] = new ModelRendererTurbo(this, 32, 490, textureX, textureY); // Box 32
+		leftTrackModel[7] = new ModelRendererTurbo(this, 0, 480, textureX, textureY); // Box 33
+		leftTrackModel[8] = new ModelRendererTurbo(this, 32, 490, textureX, textureY); // Box 34
+		leftTrackModel[9] = new ModelRendererTurbo(this, 54, 490, textureX, textureY); // Box 35
 
 		leftTrackModel[0].addBox(0F, 0F, 0F, 8, 8, 6, 0F); // Box 26
 		leftTrackModel[0].setRotationPoint(2F, 0F, 17F);
@@ -137,16 +137,16 @@ public class ModelTunnelBore extends ModelVehicle
 
 
 		rightTrackModel = new ModelRendererTurbo[10];
-		rightTrackModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Part
-		rightTrackModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 3
-		rightTrackModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 5
-		rightTrackModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 6
-		rightTrackModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 7
-		rightTrackModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 8
-		rightTrackModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 9
-		rightTrackModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 10
-		rightTrackModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 11
-		rightTrackModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 12
+		rightTrackModel[0] = new ModelRendererTurbo(this, 0, 480, textureX, textureY); // Box 26
+		rightTrackModel[1] = new ModelRendererTurbo(this, 0, 480, textureX, textureY); // Box 27
+		rightTrackModel[2] = new ModelRendererTurbo(this, 32, 490, textureX, textureY); // Box 28
+		rightTrackModel[3] = new ModelRendererTurbo(this, 32, 490, textureX, textureY); // Box 29
+		rightTrackModel[4] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 30
+		rightTrackModel[5] = new ModelRendererTurbo(this, 54, 490, textureX, textureY); // Box 31
+		rightTrackModel[6] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 32
+		rightTrackModel[7] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 33
+		rightTrackModel[8] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 34
+		rightTrackModel[9] = new ModelRendererTurbo(this, 0, 489, textureX, textureY); // Box 35
 
 		rightTrackModel[0].addBox(0F, 0F, 0F, 60, 1, 8, 0F); // Part
 		rightTrackModel[0].setRotationPoint(-30F, 8F, -24F);
