@@ -36,11 +36,12 @@ CargoSlots 20
 ShellSlots 5
 //Driver and passenger positions
 Driver 0 23 0 -360 360 -7 20
-RotatedDriverOffset -12 0 0
+RotatedDriverOffset -8 0 -4
 Passengers 0
 //Passenger 1 0 34 0 turret -360 360 -15 60 bren Bren
 //GunOrigin 1 0 40 0
 BarrelPosition 0 34 0
+AddAmmo shell
 //Secondary gun
 AddGun 8 34 8 turret bren
 //Delays are in ticks or 1/20ths of seconds
