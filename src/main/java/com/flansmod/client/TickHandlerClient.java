@@ -13,11 +13,14 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -92,7 +95,7 @@ public class TickHandlerClient
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 					
-		Tessellator tessellator = Tessellator.instance;
+		WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
 		
 		if(!event.isCancelable() && event.type == ElementType.HELMET)
 		{
@@ -128,7 +131,7 @@ public class TickHandlerClient
 				tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
 				tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
 				tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-				tessellator.draw();
+				tessellator.finishDrawing();
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
@@ -155,15 +158,15 @@ public class TickHandlerClient
 							RenderHelper.enableGUIStandardItemLighting();
 							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 							OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-							drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
+							drawSlotInventory(mc.fontRendererObj, bulletStack, i / 2 + 16 + x, j - 65);
 							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 							RenderHelper.disableStandardItemLighting();
 							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 							if(bulletStack.getMaxDamage() == 1)
 								s = "";
-							mc.fontRenderer.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
-							mc.fontRenderer.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
-							x += 16 + mc.fontRenderer.getStringWidth(s);
+							mc.fontRendererObj.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
+							mc.fontRendererObj.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
+							x += 16 + mc.fontRendererObj.getStringWidth(s);
 						}
 					}
 					//Render secondary gun
@@ -190,14 +193,14 @@ public class TickHandlerClient
 									GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 									GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 									OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-									drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);	
-									x += 16 + mc.fontRenderer.getStringWidth(s);
+									drawSlotInventory(mc.fontRendererObj, bulletStack, i / 2 - 32 - x, j - 65);	
+									x += 16 + mc.fontRendererObj.getStringWidth(s);
 									
 									//Draw the string
 									GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 									RenderHelper.disableStandardItemLighting();
-									mc.fontRenderer.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
-									mc.fontRenderer.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
+									mc.fontRendererObj.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
+									mc.fontRendererObj.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
 								}
 							}
 						}
@@ -207,7 +210,7 @@ public class TickHandlerClient
 			
 			PacketTeamInfo teamInfo = FlansModClient.teamInfo;
 			
-			if(teamInfo != null && FlansModClient.minecraft.thePlayer != null && (teamInfo.numTeams > 0 || !teamInfo.sortedByTeam) && teamInfo.getPlayerScoreData(FlansModClient.minecraft.thePlayer.getCommandSenderName()) != null)
+			if(teamInfo != null && FlansModClient.minecraft.thePlayer != null && (teamInfo.numTeams > 0 || !teamInfo.sortedByTeam) && teamInfo.getPlayerScoreData(FlansModClient.minecraft.thePlayer.getName()) != null)
 			{
 				GL11.glEnable(3042 /* GL_BLEND */);
 				GL11.glDisable(2929 /* GL_DEPTH_TEST */);
@@ -223,7 +226,7 @@ public class TickHandlerClient
 				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
 				tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
 				tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
-				tessellator.draw();
+				tessellator.finishDrawing();
 				
 				//If we are in a two team gametype, draw the team scores at the top of the screen
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
@@ -236,7 +239,7 @@ public class TickHandlerClient
 					tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
 					tessellator.addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
 					tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
-					tessellator.draw();
+					tessellator.finishDrawing();
 					//Draw team 2 colour bit
 					colour = teamInfo.teamData[1].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
@@ -245,7 +248,7 @@ public class TickHandlerClient
 					tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
 					tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
 					tessellator.addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
-					tessellator.draw();
+					tessellator.finishDrawing();
 					
 					GL11.glDepthMask(true);
 					GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -253,39 +256,39 @@ public class TickHandlerClient
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					
 					//Draw the team scores
-					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
-					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
-					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
+					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
+					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
+					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
 				}
 				
-				mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
-				mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
-				mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9, 0x000000);
-				mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
+				mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
+				mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
+				mc.fontRendererObj.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRendererObj.getStringWidth(teamInfo.map + ""), 9, 0x000000);
+				mc.fontRendererObj.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRendererObj.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
 				
 				int secondsLeft = teamInfo.timeLeft / 20;
 				int minutesLeft = secondsLeft / 60;
 				secondsLeft = secondsLeft % 60;
 				String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
-				mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
-				mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
+				mc.fontRendererObj.drawString(timeLeft, i / 2 - mc.fontRendererObj.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
+				mc.fontRendererObj.drawString(timeLeft, i / 2 - mc.fontRendererObj.getStringWidth(timeLeft) / 2, 30, 0xffffff);
 	
 				
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-				String playerUsername = FlansModClient.minecraft.thePlayer.getCommandSenderName();
+				String playerUsername = FlansModClient.minecraft.thePlayer.getName();
 				
-				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
-				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
-				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
+				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
+				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
+				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
 			}
 			for(int n = 0; n < killMessages.size(); n++)
 			{
 				KillMessage killMessage = killMessages.get(n);
-				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
+				mc.fontRendererObj.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRendererObj.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 			}
 						
 			//Draw icons indicated weapons used
@@ -296,7 +299,7 @@ public class TickHandlerClient
 			for(int n = 0; n < killMessages.size(); n++)
 			{
 				KillMessage killMessage = killMessages.get(n);
-				drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+				drawSlotInventory(mc.fontRendererObj, new ItemStack(killMessage.weapon.item), i - mc.fontRendererObj.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 			}
 			GL11.glDisable(3042 /*GL_BLEND*/);
 			RenderHelper.disableStandardItemLighting();
@@ -318,7 +321,7 @@ public class TickHandlerClient
 						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 32D / 64D, 16D / 32D);
 						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 32D / 64D, 0D / 32D);
 						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
-						tessellator.draw();
+						tessellator.finishDrawing();
 					}
 					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
 					{					
@@ -327,7 +330,7 @@ public class TickHandlerClient
 						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
 						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
 						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 0D / 64D, 0D / 32D);
-						tessellator.draw();
+						tessellator.finishDrawing();
 					}
 				}
 			}
@@ -336,11 +339,11 @@ public class TickHandlerClient
 			if(FlansMod.DEBUG && mc.thePlayer.ridingEntity instanceof EntitySeat)
 			{
 				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
-				mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
-				mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
-				mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
-				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
-				mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				mc.fontRendererObj.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
+				mc.fontRendererObj.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
+				mc.fontRendererObj.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
+				mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
+				mc.fontRendererObj.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
 
 			}
 	    }
@@ -386,7 +389,7 @@ public class TickHandlerClient
 			//Reset old light values
 			for(Vector3i v : blockLightOverrides)
 			{
-				mc.theWorld.updateLightByType(EnumSkyBlock.Block, v.x, v.y, v.z);
+				mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(v.x, v.y, v.z));
 			}
 			//Clear the list
 			blockLightOverrides.clear();
@@ -407,27 +410,27 @@ public class TickHandlerClient
 							MovingObjectPosition ray = player.rayTrace(grip.flashlightRange / 2F * (i + 1), 1F);
 							if(ray != null)
 							{
-								int x = ray.blockX;
-								int y = ray.blockY;
-								int z = ray.blockZ;
-								int side = ray.sideHit;
+								int x = ray.getBlockPos().getX();
+								int y = ray.getBlockPos().getY();
+								int z = ray.getBlockPos().getZ();
+								EnumFacing side = ray.sideHit;
 								switch(side)
 								{
-								case 0 : y--; break;
-								case 1 : y++; break;
-								case 2 : z--; break;
-								case 3 : z++; break;
-								case 4 : x--; break;
-								case 5 : x++; break;
+								case DOWN : y--; break;
+								case UP : y++; break;
+								case NORTH : z--; break;
+								case SOUTH : z++; break;
+								case WEST : x--; break;
+								case EAST : x++; break;
 								}
 								blockLightOverrides.add(new Vector3i(x, y, z));
-								mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, 12);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
-								mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+								mc.theWorld.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), 12);
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y - 1, z));
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1, y, z));
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x - 1, y, z));
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z + 1));
+								mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z - 1));
 							}
 						}
 					}
@@ -445,13 +448,13 @@ public class TickHandlerClient
 						int y = MathHelper.floor_double(bullet.posY);
 						int z = MathHelper.floor_double(bullet.posZ);
 						blockLightOverrides.add(new Vector3i(x, y, z));
-						mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, 15);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+						mc.theWorld.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), 15);
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y - 1, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1, y, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x - 1, y, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z + 1));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z - 1));
 					}
 				}
 				else if(obj instanceof EntityMecha)
@@ -463,13 +466,13 @@ public class TickHandlerClient
 					if(mecha.lightLevel() > 0)
 					{
 						blockLightOverrides.add(new Vector3i(x, y, z));
-						mc.theWorld.setLightValue(EnumSkyBlock.Block, x, y, z, Math.max(mc.theWorld.getBlockLightValue(x, y, z), mecha.lightLevel()));
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x + 1, y, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x - 1, y + 1, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y + 1, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y - 1, z);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z + 1);
-						mc.theWorld.updateLightByType(EnumSkyBlock.Block, x, y, z - 1);
+						mc.theWorld.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), Math.max(mc.theWorld.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z)), mecha.lightLevel()));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y - 1, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x + 1, y, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x - 1, y, z));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z + 1));
+						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z - 1));
 					}
 					if(mecha.forceDark())
 					{
@@ -483,7 +486,7 @@ public class TickHandlerClient
 									int yd = j + y;
 									int zd = k + z;
 									blockLightOverrides.add(new Vector3i(xd, yd, zd));
-									mc.theWorld.setLightValue(EnumSkyBlock.Sky, xd, yd, zd, Math.abs(i) + Math.abs(j) + Math.abs(k));
+									mc.theWorld.setLightFor(EnumSkyBlock.SKY, new BlockPos(xd, yd, zd), Math.abs(i) + Math.abs(j) + Math.abs(k));
 								}
 							}
 						}
@@ -578,8 +581,8 @@ public class TickHandlerClient
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
-		itemRenderer.renderItemIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, FlansModClient.minecraft.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemIntoGUI(itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null); //May be something other than null
 	}
 		
 	public static void addKillMessage(boolean headshot, InfoType infoType, String killer, String killed)

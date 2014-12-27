@@ -159,7 +159,7 @@ public class FlansModClient extends FlansMod
 				
 		//Render!
 		GL11.glPushMatrix();
-		renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);
+		renderer.getPlayerModel().bipedLeftArm.postRender(0.0625F);
         GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
         float f2 = 1F;
@@ -206,8 +206,8 @@ public class FlansModClient extends FlansMod
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
 		if(event.entity instanceof EntityPlayer && teamInfo != null && teamInfo.gametype != null && !"No Gametype".equals(teamInfo.gametype))
 		{
-			PlayerScoreData rendering = teamInfo.getPlayerScoreData(event.entity.getCommandSenderName());
-			PlayerScoreData thePlayer = teamInfo.getPlayerScoreData(minecraft.thePlayer.getCommandSenderName());
+			PlayerScoreData rendering = teamInfo.getPlayerScoreData(event.entity.getName());
+			PlayerScoreData thePlayer = teamInfo.getPlayerScoreData(minecraft.thePlayer.getName());
 			
 			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
 			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
