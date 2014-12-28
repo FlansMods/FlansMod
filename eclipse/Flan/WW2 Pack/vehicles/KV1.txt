@@ -47,7 +47,6 @@ AddGun 8 34 8 turret dp28
 ShootDelay 2
 ShellDelay 110
 //Sounds
-//Sounds
 StartSound TankIdle
 StartSoundLength 20
 EngineSound TankMove
