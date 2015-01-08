@@ -10,8 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
@@ -37,12 +37,12 @@ public class PlayerHandler
 	}
 
 	@SubscribeEvent
-	public void onEntityHurt(LivingHurtEvent event) 
+	public void onEntityHurt(LivingAttackEvent event)
 	{
 		EntityLivingBase entity = event.entityLiving;
-		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
+		if(event instanceof LivingAttackEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
 		{
-			event.ammount = 0;
+			event.setCanceled(true);
 		}
 	}
 	

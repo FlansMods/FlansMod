@@ -74,4 +74,4 @@ SetupPart leftTrack 375 -57 -9 -32 123 20 17
 BulletDetection 5
 
 //Size Multiplier; scales up the model
-ModelScale 0,8
+ModelScale 0.8

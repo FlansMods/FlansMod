@@ -177,3 +177,5 @@ item.f22.name=F22 "Раптор"
 item.flanMWSingleFire.name=Модификация для одиночного огня
 item.flanMWAutoFire.name=Модификация для автоматического огня
 item.flanMWBurstFire.name=Модификация для стрельбы очередями
+item.ChallyII.name=Challenger II
+item.SU25.name=Су-25

@@ -37,7 +37,7 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 28 0 -360 360 -10 20
 RotatedDriverOffset -26 0 0
-Passengers 0
+Passengers 1
 Passenger 1 0 16 0 turret -360 360 -15 60 dp28 DP28
 GunOrigin 1 0 30 0
 BarrelPosition 0 34 0
@@ -46,7 +46,6 @@ AddGun 8 34 8 turret dp28
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 2
 ShellDelay 110
-//Sounds
 //Sounds
 StartSound TankIdle
 StartSoundLength 20
