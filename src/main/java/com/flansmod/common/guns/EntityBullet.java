@@ -562,7 +562,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		
 		//Particles 
-		if (type.trailParticles && worldObj.isRemote)
+		if (type.trailParticles && worldObj.isRemote && ticksInAir > 1)
 		{
 			spawnParticles();
 		}
@@ -578,9 +578,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		double dX = (posX - prevPosX) / 10;
 		double dY = (posY - prevPosY) / 10;
 		double dZ = (posZ - prevPosZ) / 10;
+		
+		float spread = 0.1F;
 		for (int i = 0; i < 10; i++)
 		{
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread, prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
 			//worldObj.spawnEntityInWorld(particle);

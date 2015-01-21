@@ -46,10 +46,12 @@ public class GunType extends InfoType implements IScope
 	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
 	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
 	public int numAmmoItemsInGun = 1;
-	/** The firing mode of the gun. Currently semi auto or full auto. Burst coming soon maybe */
+	/** The firing mode of the gun. One of semi-auto, full-auto, minigun or burst */
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** The number of bullets to fire per burst in burst mode */
 	public int numBurstRounds = 3;
+	/** The required speed for minigun mode guns to start firing */
+	public float minigunStartSpeed = 15F;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
 	/** The amount of knockback to impact upon the player per shot */
@@ -220,6 +222,8 @@ public class GunType extends InfoType implements IScope
 				dropItemOnShoot = split[1];
 			else if(split[0].equals("NumBurstRounds"))
 				numBurstRounds = Integer.parseInt(split[1]);
+			else if(split[0].equals("MinigunStartSpeed"))
+				minigunStartSpeed = Float.parseFloat(split[1]);
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))

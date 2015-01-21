@@ -444,12 +444,12 @@ public class ItemGun extends Item implements IFlanItem
 				//Play looping sounds for minigun
 				if(type.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingRight)
 				{
-					data.loopedSoundDelay = type.loopedSoundLength;
+					data.loopedSoundDelay = data.shouldPlayWarmupSound ? type.warmupSoundLength : type.loopedSoundLength;
 					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? type.warmupSound : type.loopedSound, false);
 					data.shouldPlayWarmupSound = false;
 				}
 				//Minigun is sufficiently fast to shoot
-				if(type.getFireMode(itemstack) == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
+				if(type.getFireMode(itemstack) == EnumFireMode.MINIGUN && data.minigunSpeed > type.minigunStartSpeed)
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 			}
 			else
@@ -483,12 +483,12 @@ public class ItemGun extends Item implements IFlanItem
 						//Play looping sounds for minigun
 						if(offHandGunType.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingLeft)
 						{
-							data.loopedSoundDelay = offHandGunType.loopedSoundLength;
+							data.loopedSoundDelay = data.shouldPlayWarmupSound ? offHandGunType.warmupSoundLength : offHandGunType.loopedSoundLength;
 							PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? offHandGunType.warmupSound : offHandGunType.loopedSound, false);
 							data.shouldPlayWarmupSound = false;
 						}
 						//Minigun is sufficiently fast to shoot
-						if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
+						if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN && data.minigunSpeed > offHandGunType.minigunStartSpeed)
 							player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 					}
 					else

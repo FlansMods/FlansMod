@@ -358,5 +358,20 @@
 	"Flak1Shoot": {
 		"category" : "player",
 		"sounds" : [ "flansmod:Flak1Shoot" ]
+	},
+	
+	"FlamethrowerWarmup": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FlamethrowerWarmup" ]
+	},
+	
+	"FlamethrowerLoop": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FlamethrowerLoop" ]
+	},
+	
+	"FlamethrowerCooldown": {
+		"category" : "player",
+		"sounds" : [ "flansmod:FlamethrowerCooldown" ]
 	}
 }
