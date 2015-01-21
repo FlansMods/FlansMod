@@ -1,6 +1,6 @@
 Name Flamethrower Ammo
 ShortName flamethrowerAmmo
-Model Bullet
+Model Null
 //Colour of icon and model
 Colour 255 255 255
 Icon FlamethrowerAmmo
