@@ -9,11 +9,11 @@ Texture ChiHa
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.8
-MaxNegativeThrottle 0.4
+MaxThrottle 1.0
+MaxNegativeThrottle 0.6
 //Steering modifiers
-TurnLeftSpeed 1.4
-TurnRightSpeed 1.4
+TurnLeftSpeed 0.6
+TurnRightSpeed 0.6
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -37,6 +37,9 @@ ShellSlots 5
 Driver 0 14 0 -360 360 -3 3.5
 RotatedDriverOffset 5 0 1
 Passengers 0
+Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
+GunOrigin 1 10 24 0
+RotatedPassengerOffset 1 0 0 0
 BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret type99

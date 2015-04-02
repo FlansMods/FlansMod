@@ -1,6 +1,6 @@
 Name Exoskeleton Chest Piece
 ShortName exoskeletonBody
-Icon ExoskeletonBody
+Icon ExoskeletonChest
 Colour 255 255 255
 Type Chest
 Model mw.ExoskeletonBody

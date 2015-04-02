@@ -9,11 +9,11 @@ Texture T34
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.55
-MaxNegativeThrottle 0.4
+MaxThrottle 0.75
+MaxNegativeThrottle 0.6
 //Steering modifiers
-TurnLeftSpeed 0.5
-TurnRightSpeed 0.5
+TurnLeftSpeed 0.55
+TurnRightSpeed 0.55
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.

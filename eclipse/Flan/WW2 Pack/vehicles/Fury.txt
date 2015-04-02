@@ -9,11 +9,11 @@ Texture SkinFury
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.45
-MaxNegativeThrottle 0.35
+MaxThrottle 0.65
+MaxNegativeThrottle 0.55
 //Steering modifiers
-TurnLeftSpeed 0.4
-TurnRightSpeed 0.4
+TurnLeftSpeed 0.5
+TurnRightSpeed 0.5
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -39,6 +39,8 @@ RotatedDriverOffset -6 0 7
 //Secondary gun
 AddGun 8 34 8 turret browning
 Passengers 0
+Passenger 1 0 36 0 turret -360 360 -15 60 browning Browning
+RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0
 AddAmmo shell
 //Delays are in ticks or 1/20ths of seconds

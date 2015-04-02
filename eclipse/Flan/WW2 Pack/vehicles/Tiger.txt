@@ -8,11 +8,11 @@ Texture SkinTiger
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.4
-MaxNegativeThrottle 0.2
+MaxThrottle 0.5
+MaxNegativeThrottle 0.4
 //Steering modifiers
-TurnLeftSpeed 0.2
-TurnRightSpeed 0.2
+TurnLeftSpeed 0.4
+TurnRightSpeed 0.4
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
