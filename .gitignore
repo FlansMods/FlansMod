@@ -1,14 +1,22 @@
+# Build and Bins
+.gradle/
 build/
+bin/
+out/
+
+# IDEs
 .classpath
 .project
-.gradle/
 .settings/
 .idea/
 eclipse/*
-bin/
-out/
 *.iml
 *.ipr
 *.iws
 
+# System
+Thumbs.db
+.DS_Store
+
+# Flan's Mod
 !eclipse/Flan/
