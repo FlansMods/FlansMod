@@ -373,5 +373,10 @@
 	"FlamethrowerCooldown": {
 		"category" : "player",
 		"sounds" : [ "flansmod:FlamethrowerCooldown" ]
+	},
+	
+	"gewehr43Shoot": {
+		"category" : "player",
+		"sounds" : [ "gewehr43Shoot" ]
 	}
 }

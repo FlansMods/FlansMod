@@ -17,10 +17,10 @@ TurnRightSpeed 0.7
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -20 -8 -18
-WheelPosition 1 -20 -8 18
-WheelPosition 2 20 -8 18
-WheelPosition 3 20 -8 -18
+WheelPosition 0 -25 -8 -18
+WheelPosition 1 -25 -8 18
+WheelPosition 2 25 -8 18
+WheelPosition 3 25 -8 -18
 WheelSpringStrength 0.5
 //Bouncy bouncy
 Bounciness 0.3
@@ -32,7 +32,7 @@ Tank true
 FuelTankSize 2000
 //Inventory Slots
 CargoSlots 10
-ShellSlots 5
+ShellSlots 1
 //Driver and passenger positions
 Driver 0 18 0 -360 360 -2 4
 RotatedDriverOffset 0 0 0
@@ -44,7 +44,7 @@ AllowAllAmmo False
 AddAmmo 20mm
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
-ShellDelay 10
+ShellDelay 12
 //Sounds
 StartSound TankIdle
 StartSoundLength 20

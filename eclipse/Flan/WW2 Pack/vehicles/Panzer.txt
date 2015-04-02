@@ -5,7 +5,7 @@ ItemID 23490
 //Visuals
 Icon Panzer
 Model ww2.Panzer
-Texture Panzer
+Texture SkinPanzer
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
@@ -17,10 +17,10 @@ TurnRightSpeed 0.5
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -32 -8 -18
-WheelPosition 1 -32 -8 18
-WheelPosition 2 32 -8 18
-WheelPosition 3 32 -8 -18
+WheelPosition 0 -35 0 -22
+WheelPosition 1 -35 0 22
+WheelPosition 2 35 0 22
+WheelPosition 3 35 0 -22
 WheelSpringStrength 0.5
 //Bouncy bouncy
 Bounciness 0.3
@@ -34,12 +34,10 @@ FuelTankSize 2000
 CargoSlots 20
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 9 0 -360 360 -2.5 3
-RotatedDriverOffset 12 0 -8
-Passengers 1
-Passenger 1 0 28 0 turret -360 360 -15 60 mg42 MG42
-RotatedPassengerOffset 1 -12 0 0
-BarrelPosition 0 34 0
+Driver 0 28 0 -360 360 -10 20
+RotatedDriverOffset -13 0 0
+Passengers 0
+BarrelPosition 10 34 0
 //Secondary gun
 AddGun 8 34 8 turret mg42
 AllowAllAmmo False
@@ -65,8 +63,9 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart leftTrack 270 -47 -11 -27 105 20 9
-SetupPart rightTrack 270 -47 -11 17 105 20 9
-SetupPart turret 440 -24 21 -22 45 18 45
-SetupPart core 540 -45 -6 -18 102 27 36
+SetupPart core 540 -43 -3 -26 85 23 52
+SetupPart turret 440 -28 20 -25 50 12 49
+SetupPart rightTrack 270 -48 -10 -25 102 19 7
+SetupPart leftTrack 270 -48 -10 18 102 19 7
 BulletDetection 7
+ModelScale 0.85

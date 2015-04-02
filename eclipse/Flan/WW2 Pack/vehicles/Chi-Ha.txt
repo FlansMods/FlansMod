@@ -36,22 +36,19 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 14 0 -360 360 -3 3.5
 RotatedDriverOffset 5 0 1
-Passengers 1
-Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
-GunOrigin 1 10 24 0
-RotatedPassengerOffset 1 0 0 0
+Passengers 0
 BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret type99
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 2
-ShellDelay 110
+ShootDelay 1
+ShellDelay 70
 //Sounds
-StartSound Engine
+StartSound TankIdle
 StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSoundPrimary TankShell
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank4Shoot
 ShootSoundSecondary BrenShoot
 //Recipe
 //Each section of the plane may have many parts

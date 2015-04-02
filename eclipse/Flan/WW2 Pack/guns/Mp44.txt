@@ -25,4 +25,9 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Mp44
-Texture Mp44
+Texture SkinSTG44
+AllowAttachments ZF4Scope
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
