@@ -450,8 +450,11 @@ public class EntityMecha extends EntityDriveable
         	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
         	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * vulnerability() : 0;
-        	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
+        	byte wouldBeNegativeDamage;
+        	if(((i * type.fallDamageMultiplier * vulnerability())-2)<0){wouldBeNegativeDamage=0;} else {wouldBeNegativeDamage=1;};
+        	
+        	float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
+        	float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
         	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
         	checkParts();
