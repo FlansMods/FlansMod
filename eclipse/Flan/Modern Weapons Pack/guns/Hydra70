@@ -1,0 +1,50 @@
+Name Hydra 70
+ShortName Hydra70
+//The ammo this gun uses (shortName)
+Ammo Hydra70Ammo
+Icon Hydra70
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 100
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//The amount of knockback dealt to the player when using this. Negated by sneaking
+Knockback 0.5
+//Damage in half hearts
+Damage 10
+//The higher this value, the more the bullets spread
+Accuracy 0
+//Time in ticks between rounds
+ShootDelay 5
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//Spin sound plays the whole time the player holds the shoot button, on loop. Warmup plays first, and cooldown plays when they stop firing
+ShootSound BarrettShoot
+ReloadSound BrowningReload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+//Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
+Scope None
+ZoomLevel 1.0
+FOVZoomLevel 1.0
+//Deployable Settings
+Deployable False
+DeployedModel None
+//Attachment Settings
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+//AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
+AllowBarrelAttachments false
+AllowScopeAttachments false
+AllowStockAttachments false
+AllowGripAttachments false
+NumGenericAttachmentSlots 1
+//Modifiers
+MoveSpeedModifier 0.4
+KnockbackModifier 0
+usableByMechas false
+UsableByMechas false
+UsableByPlayers false
+usableByPlayers false
