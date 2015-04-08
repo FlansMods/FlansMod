@@ -11,28 +11,29 @@ public class ModelExoskeletonLegs extends ModelCustomArmour
 		int textureY = 512;
 		
 		rightLegModel = new ModelRendererTurbo[19];
-		rightLegModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 63
-		rightLegModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 64
-		rightLegModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 65
-		rightLegModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 66
-		rightLegModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 67
-		rightLegModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 68
-		rightLegModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 69
-		rightLegModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 71
-		rightLegModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 81
-		rightLegModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 83
-		rightLegModel[10] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 90
-		rightLegModel[11] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 91
-		rightLegModel[12] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 94
-		rightLegModel[13] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 96
-		rightLegModel[14] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 98
-		//rightLegModel[15] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 100
-		//rightLegModel[16] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 102
-		//rightLegModel[17] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 104
-		rightLegModel[15] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 108
-		rightLegModel[16] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 112
-		rightLegModel[17] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 113
-		rightLegModel[18] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 117
+		
+		rightLegModel[0] = new ModelRendererTurbo(this, 497, 81, textureX, textureY); // Box 63
+		rightLegModel[1] = new ModelRendererTurbo(this, 273, 89, textureX, textureY); // Box 64
+		rightLegModel[2] = new ModelRendererTurbo(this, 337, 89, textureX, textureY); // Box 65
+		rightLegModel[3] = new ModelRendererTurbo(this, 353, 89, textureX, textureY); // Box 66
+		rightLegModel[4] = new ModelRendererTurbo(this, 409, 89, textureX, textureY); // Box 67
+		rightLegModel[5] = new ModelRendererTurbo(this, 465, 89, textureX, textureY); // Box 68
+		rightLegModel[6] = new ModelRendererTurbo(this, 433, 1, textureX, textureY); // Box 69
+		rightLegModel[7] = new ModelRendererTurbo(this, 393, 49, textureX, textureY); // Box 71
+		rightLegModel[8] = new ModelRendererTurbo(this, 73, 105, textureX, textureY); // Box 81
+		rightLegModel[9] = new ModelRendererTurbo(this, 105, 105, textureX, textureY); // Box 83
+		rightLegModel[10] = new ModelRendererTurbo(this, 121, 105, textureX, textureY); // Box 90
+		rightLegModel[11] = new ModelRendererTurbo(this, 145, 105, textureX, textureY); // Box 91
+		rightLegModel[12] = new ModelRendererTurbo(this, 409, 105, textureX, textureY); // Box 94
+		rightLegModel[13] = new ModelRendererTurbo(this, 169, 113, textureX, textureY); // Box 96
+		rightLegModel[14] = new ModelRendererTurbo(this, 217, 41, textureX, textureY); // Box 98
+		//leftLegModel[15] = new ModelRendererTurbo(this, 313, 113, textureX, textureY); // Box 100
+		//leftLegModel[16] = new ModelRendererTurbo(this, 57, 121, textureX, textureY); // Box 102
+		//leftLegModel[17] = new ModelRendererTurbo(this, 217, 121, textureX, textureY); // Box 104
+		rightLegModel[15] = new ModelRendererTurbo(this, 385, 113, textureX, textureY); // Box 108
+		rightLegModel[16] = new ModelRendererTurbo(this, 353, 145, textureX, textureY); // Box 112
+		rightLegModel[17] = new ModelRendererTurbo(this, 1, 65, textureX, textureY); // Box 113
+		rightLegModel[18] = new ModelRendererTurbo(this, 121, 1, textureX, textureY); // Box 117
 		
 		float x = 8.5F;
 		float y = 24F;
@@ -97,25 +98,29 @@ public class ModelExoskeletonLegs extends ModelCustomArmour
 	
 	
 		leftLegModel = new ModelRendererTurbo[19];
-		leftLegModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 72
-		leftLegModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 73
-		leftLegModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 74
-		leftLegModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 75
-		leftLegModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 76
-		leftLegModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 77
-		leftLegModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 78
-		leftLegModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 79
-		leftLegModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 80
-		leftLegModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 82
-		leftLegModel[10] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 84
-		leftLegModel[11] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 92
-		leftLegModel[12] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 93
-		leftLegModel[13] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 95
-		leftLegModel[14] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 97
-		leftLegModel[15] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 99
-		leftLegModel[16] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 109
-		leftLegModel[17] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 111
-		leftLegModel[18] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 118
+		
+		leftLegModel[0] = new ModelRendererTurbo(this, 153, 81, textureX, textureY); // Box 72
+		leftLegModel[1] = new ModelRendererTurbo(this, 1, 25, textureX, textureY); // Box 73
+		leftLegModel[2] = new ModelRendererTurbo(this, 193, 97, textureX, textureY); // Box 74
+		leftLegModel[3] = new ModelRendererTurbo(this, 369, 89, textureX, textureY); // Box 75
+		leftLegModel[4] = new ModelRendererTurbo(this, 217, 97, textureX, textureY); // Box 76
+		leftLegModel[5] = new ModelRendererTurbo(this, 233, 97, textureX, textureY); // Box 77
+		leftLegModel[6] = new ModelRendererTurbo(this, 257, 97, textureX, textureY); // Box 78
+		leftLegModel[7] = new ModelRendererTurbo(this, 433, 97, textureX, textureY); // Box 79
+		leftLegModel[8] = new ModelRendererTurbo(this, 449, 97, textureX, textureY); // Box 80
+		leftLegModel[9] = new ModelRendererTurbo(this, 89, 105, textureX, textureY); // Box 82
+		leftLegModel[10] = new ModelRendererTurbo(this, 361, 25, textureX, textureY); // Box 84
+		leftLegModel[11] = new ModelRendererTurbo(this, 289, 105, textureX, textureY); // Box 92
+		leftLegModel[12] = new ModelRendererTurbo(this, 313, 105, textureX, textureY); // Box 93
+		leftLegModel[13] = new ModelRendererTurbo(this, 465, 105, textureX, textureY); // Box 95
+		leftLegModel[14] = new ModelRendererTurbo(this, 193, 113, textureX, textureY); // Box 97
+		leftLegModel[15] = new ModelRendererTurbo(this, 185, 81, textureX, textureY); // Box 99
+		//leftLegModel[16] = new ModelRendererTurbo(this, 1, 121, textureX, textureY); // Box 101
+		//leftLegModel[17] = new ModelRendererTurbo(this, 105, 121, textureX, textureY); // Box 103
+		//leftLegModel[18] = new ModelRendererTurbo(this, 409, 121, textureX, textureY); // Box 105
+		leftLegModel[16] = new ModelRendererTurbo(this, 489, 113, textureX, textureY); // Box 109
+		leftLegModel[17] = new ModelRendererTurbo(this, 273, 145, textureX, textureY); // Box 111
+		leftLegModel[18] = new ModelRendererTurbo(this, 129, 41, textureX, textureY); // Box 118
 	
 		leftLegModel[0].addBox(8F - x, -11F + y, 8F, 3, 14, 3, 0F); // Box 72
 		leftLegModel[0].setRotationPoint(0F, 0F, 0F);

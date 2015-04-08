@@ -11,10 +11,10 @@ public class ModelExoskeletonBoots extends ModelCustomArmour
 		int textureY = 512;
 		
 		rightLegModel = new ModelRendererTurbo[3];
-
-		rightLegModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 100
-		rightLegModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 102
-		rightLegModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 104
+		
+		rightLegModel[0] = new ModelRendererTurbo(this, 313, 113, textureX, textureY); // Box 100
+		rightLegModel[1] = new ModelRendererTurbo(this, 57, 121, textureX, textureY); // Box 102
+		rightLegModel[2] = new ModelRendererTurbo(this, 217, 121, textureX, textureY); // Box 104
 
 		
 		float x = 8.5F;
@@ -34,9 +34,9 @@ public class ModelExoskeletonBoots extends ModelCustomArmour
 	
 		leftLegModel = new ModelRendererTurbo[3];
 
-		leftLegModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 101
-		leftLegModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 103
-		leftLegModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 105
+		leftLegModel[0] = new ModelRendererTurbo(this, 1, 121, textureX, textureY); // Box 101
+		leftLegModel[1] = new ModelRendererTurbo(this, 105, 121, textureX, textureY); // Box 103
+		leftLegModel[2] = new ModelRendererTurbo(this, 409, 121, textureX, textureY); // Box 105
 	
 
 	

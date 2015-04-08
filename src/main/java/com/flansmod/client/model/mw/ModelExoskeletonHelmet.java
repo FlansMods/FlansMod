@@ -11,16 +11,17 @@ public class ModelExoskeletonHelmet extends ModelCustomArmour
 		int textureY = 512;
 		
 		headModel = new ModelRendererTurbo[10];
-		headModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 0
-		headModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 6
-		headModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 7
-		headModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 8
-		headModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 9
-		headModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 10
-		headModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 11
-		headModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 12
-		headModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 14
-		headModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 15
+		
+		headModel[0] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Box 0
+		headModel[1] = new ModelRendererTurbo(this, 129, 1, textureX, textureY); // Box 6
+		headModel[2] = new ModelRendererTurbo(this, 233, 1, textureX, textureY); // Box 7
+		headModel[3] = new ModelRendererTurbo(this, 345, 9, textureX, textureY); // Box 8
+		headModel[4] = new ModelRendererTurbo(this, 1, 41, textureX, textureY); // Box 9
+		headModel[5] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Box 10
+		headModel[6] = new ModelRendererTurbo(this, 17, 1, textureX, textureY); // Box 11
+		headModel[7] = new ModelRendererTurbo(this, 345, 1, textureX, textureY); // Box 12
+		headModel[8] = new ModelRendererTurbo(this, 97, 1, textureX, textureY); // Box 14
+		headModel[9] = new ModelRendererTurbo(this, 129, 1, textureX, textureY); // Box 15
 		
 		float y = 64F;
 
