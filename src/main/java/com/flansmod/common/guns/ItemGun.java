@@ -156,6 +156,10 @@ public class ItemGun extends Item implements IFlanItem
 	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
+		if(type.description != null)
+		{
+			Collections.addAll(lines, type.description.split("_"));
+		}
 		for(AttachmentType attachment : type.getCurrentAttachments(stack))
 		{
 			String line = attachment.name;
