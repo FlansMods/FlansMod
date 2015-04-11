@@ -224,6 +224,9 @@ public class RenderMecha extends Render implements IItemRenderer
 		if(model != null)
 		{
 			float legLength = type.legLength;
+			float legTrans = type.LegTrans;
+			float rearlegTrans = type.RearLegTrans;
+			float frontlegTrans = type.FrontLegTrans;			
 	    	
 	    	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / type.legSwingTime) * mecha.legSwing;
 	    	float footH = (float)Math.sin(legsYaw) * legLength;
@@ -234,7 +237,7 @@ public class RenderMecha extends Render implements IItemRenderer
 			
 			GL11.glPushMatrix();
 			{
-				GL11.glTranslatef(0F, legLength, 0F);
+				GL11.glTranslatef(legTrans, legLength, 0F);
 				
 				//Left Foot
 				GL11.glPushMatrix();
@@ -263,6 +266,70 @@ public class RenderMecha extends Render implements IItemRenderer
 				GL11.glPopMatrix();
 			}
 			GL11.glPopMatrix();
+			
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(rearlegTrans, legLength, 0F);
+				
+				//Left Rear Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(-footH, -footV, 0F);
+				model.renderLeftRearFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Rear Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(footH, -footV, 0F);
+				model.renderRightRearFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Left Rear Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(-legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F );
+				model.renderLeftRearLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F);
+				model.renderRightRearLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+			}
+			GL11.glPopMatrix();
+			
+			GL11.glPushMatrix();
+			{
+				GL11.glTranslatef(frontlegTrans, legLength, 0F);
+				
+				//Left Front Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(-footH, -footV, 0F);
+				model.renderLeftFrontFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Front Foot
+				GL11.glPushMatrix();
+				GL11.glTranslatef(footH, -footV, 0F);
+				model.renderRightFrontFoot(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Left Front Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(-legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F );
+				model.renderLeftFrontLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+				
+				//Right Front Leg
+				GL11.glPushMatrix();
+				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
+				GL11.glTranslatef(0F, -legLength, 0F);
+				model.renderRightFrontLeg(scale, mecha, f1);
+				GL11.glPopMatrix();
+			}
+			GL11.glPopMatrix();			
 			
 		}
 		GL11.glPopMatrix();
