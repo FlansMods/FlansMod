@@ -1,7 +1,7 @@
 Name Hydra 70 Rockets
 Description Hydra 70 rocket salvo
 ShortName Hydra70Ammo
-Model bullet
+Model Bullet
 //Colour of icon and model
 Colour 255 255 255
 Icon Hydra70Ammo
