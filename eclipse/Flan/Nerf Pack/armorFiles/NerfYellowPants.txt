@@ -1,6 +1,5 @@
 Name Yellow Nerf Kneepads
 ShortName nerfYellowKnees
-ItemID 23995
 Icon NerfYellowKnees
 Colour 255 255 255
 Type Pants

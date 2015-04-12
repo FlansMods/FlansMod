@@ -1,7 +1,6 @@
 //Naming
 Name Kubelwagen
 ShortName Kubel
-ItemID 23487
 //Visuals
 Icon Kubelwagen
 Model ww2.Kubel

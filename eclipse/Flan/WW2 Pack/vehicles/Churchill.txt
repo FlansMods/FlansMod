@@ -1,7 +1,6 @@
 //Naming
 Name Churchill mk VII
 ShortName Churchill
-ItemID 23493
 //Visuals
 Icon Churchill
 Model ww2.Churchill

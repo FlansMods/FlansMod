@@ -1,6 +1,5 @@
 Name Russian Spetsnaz Trousers
 ShortName spetsnazPants
-ItemID 23883
 Icon SpetsnazPants
 Colour 255 255 255
 Type Legs

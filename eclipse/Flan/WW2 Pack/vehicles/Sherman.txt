@@ -1,7 +1,6 @@
 //Naming
 Name M4 Sherman
 ShortName Sherman
-ItemID 23489
 //Visuals
 Icon Sherman
 Model ww2.Sherman

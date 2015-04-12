@@ -1,6 +1,5 @@
 Name American WW2 Snow Pants
 ShortName americanSnowPants
-ItemID 23639
 Icon AmericanSnowPants
 Colour 255 255 255
 Type Pants

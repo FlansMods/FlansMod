@@ -3,7 +3,6 @@ ShortName flakvierling
 //The ammo this gun uses (shortName)
 Ammo flakvierlingAmmo
 Icon Flakvierling
-ItemID 23286
 Model ww2.Flakvierling
 //Place the texture .png in the skins folder
 Texture Flakvierling

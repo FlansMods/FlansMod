@@ -5,7 +5,6 @@ Model titan.Excavator
 Texture IronExcavator
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23419
 RecipeOutput 1
 Recipe S shovelIron I ingotIron R redstone
  S 

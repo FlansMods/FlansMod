@@ -1,7 +1,6 @@
 //Naming
 Name Panzer II Luchs
 ShortName PanzerIIL
-ItemID 89898
 //Visuals
 Icon PanzerIIL
 Model ww2.PanzerIILuchs

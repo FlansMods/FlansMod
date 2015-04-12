@@ -1,7 +1,6 @@
 //Naming
 Name KV1
 ShortName KV1
-ItemID 33335
 //Visuals
 Icon KV1
 Model ww2.KV1

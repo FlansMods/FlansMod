@@ -1,6 +1,5 @@
 Name Green Nerf Vest
 ShortName nerfGreenVest
-ItemID 23990
 Icon NerfGreenVest
 Colour 255 255 255
 Type Body

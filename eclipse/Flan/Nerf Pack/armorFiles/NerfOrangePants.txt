@@ -1,6 +1,5 @@
 Name Orange Nerf Kneepads
 ShortName nerfOrangeKnees
-ItemID 23989
 Icon NerfOrangeKnees
 Colour 255 255 255
 Type Pants

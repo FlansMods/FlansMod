@@ -5,7 +5,6 @@ Ammo m21Ammo
 Icon M21
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23803
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 70
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20

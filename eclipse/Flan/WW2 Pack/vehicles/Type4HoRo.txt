@@ -1,7 +1,6 @@
 //Naming
 Name Type 4 Ho-Ro
 ShortName Type4HoRo
-ItemID 33334
 //Visuals
 Icon HoRo
 Model ww2.Type4HoRo

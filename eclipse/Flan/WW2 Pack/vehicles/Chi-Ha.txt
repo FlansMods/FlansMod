@@ -1,7 +1,6 @@
 //Naming
 Name Chi-Ha
 ShortName ChiHa
-ItemID 33333
 //Visuals
 Icon ChiHa
 Model ww2.ChiHa

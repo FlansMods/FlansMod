@@ -4,7 +4,6 @@ Model Bullet
 Texture nerfBullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23902
 Icon 6DartClip
 //How affected by gravity the bullet is
 FallSpeed 1

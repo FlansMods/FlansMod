@@ -1,7 +1,6 @@
 //Naming
 Name Panzer IV
 ShortName Panzer
-ItemID 23490
 //Visuals
 Icon Panzer
 Model ww2.Panzer

@@ -1,6 +1,5 @@
 Name Blue Nerf Vest
 ShortName nerfBlueVest
-ItemID 23992
 Icon NerfBlueVest
 Colour 255 255 255
 Type Body

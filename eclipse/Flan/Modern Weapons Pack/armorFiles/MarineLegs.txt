@@ -1,6 +1,5 @@
 Name U.S. Marine Trousers
 ShortName marinePants
-ItemID 23887
 Icon MarinePants
 Colour 255 255 255
 Type Legs
