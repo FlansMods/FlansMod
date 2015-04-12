@@ -35,5 +35,5 @@ Shell True
 RecipeOutput 3
 Recipe I ingotIron G gunpowder
    
-GG
-II
+GG 
+II 
