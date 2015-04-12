@@ -35,7 +35,7 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 14 0 -360 360 -3 3.5
 RotatedDriverOffset 5 0 1
-Passengers 0
+Passengers 1
 Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
 GunOrigin 1 10 24 0
 RotatedPassengerOffset 1 0 0 0
