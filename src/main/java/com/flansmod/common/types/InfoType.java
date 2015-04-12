@@ -21,7 +21,6 @@ public class InfoType
 	public String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
-	public int itemID;
 	public String iconPath;
 	public Object[] recipe;
 	public String[] recipeLine;
@@ -100,10 +99,6 @@ public class InfoType
 			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
-			}
-			if (split[0].equals("ItemID"))
-			{
-				itemID = Integer.parseInt(split[1]);
 			}
 			if (split[0].equals("Icon"))
 			{
