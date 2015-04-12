@@ -86,6 +86,13 @@ task titan(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task utility(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/utility/'}
+    from 'eclipse/Flan/Utility Pack'
+    baseName = 'Utility'
+    appendix = 'Content Pack'
+}
+
 task ww2(type: Jar) {
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
@@ -113,6 +120,7 @@ task contentPacks() {
     dependsOn nerf
     dependsOn simpleParts
     dependsOn titan
+    dependsOn utility
     dependsOn ww2
     dependsOn yeOlde
     dependsOn zombie
@@ -128,6 +136,7 @@ task outputJar(type: Jar) {
         exclude '**/mw/'
         exclude '**/nerf/'
         exclude '**/titan/'
+        exclude '**/utility/'
         exclude '**/ww2/'
         exclude '**/yeolde/'
         exclude '**/zombie/'
