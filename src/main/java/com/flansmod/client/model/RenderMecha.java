@@ -224,13 +224,19 @@ public class RenderMecha extends Render implements IItemRenderer
 		if(model != null)
 		{
 			float legLength = type.legLength;
+			float rearlegLength = type.RearlegLength;
+			float frontlegLength = type.FrontlegLength;
 			float legTrans = type.LegTrans;
 			float rearlegTrans = type.RearLegTrans;
-			float frontlegTrans = type.FrontLegTrans;			
+			float frontlegTrans = type.FrontLegTrans;
 	    	
 	    	float legsYaw = (float)Math.sin(((mecha.ticksExisted) + f1) / type.legSwingTime) * mecha.legSwing;
 	    	float footH = (float)Math.sin(legsYaw) * legLength;
 	    	float footV = (float)Math.cos(legsYaw) * legLength;
+	    	float footRH = (float)Math.sin(legsYaw) * rearlegLength;
+	    	float footRV = (float)Math.cos(legsYaw) * rearlegLength;
+	    	float footFH = (float)Math.sin(legsYaw) * frontlegLength;
+	    	float footFV = (float)Math.cos(legsYaw) * frontlegLength;
 	    	
 			//Hips
 			model.renderHips(scale, mecha, f1);
@@ -254,7 +260,7 @@ public class RenderMecha extends Render implements IItemRenderer
 				//Left Leg
 				GL11.glPushMatrix();
 				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
-				GL11.glTranslatef(0F, -legLength, 0F);
+				GL11.glTranslatef(0F, -legLength, 0F );
 				model.renderLeftLeg(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
@@ -269,31 +275,31 @@ public class RenderMecha extends Render implements IItemRenderer
 			
 			GL11.glPushMatrix();
 			{
-				GL11.glTranslatef(rearlegTrans, legLength, 0F);
+				GL11.glTranslatef(rearlegTrans, rearlegLength, 0F);
 				
 				//Left Rear Foot
 				GL11.glPushMatrix();
-				GL11.glTranslatef(-footH, -footV, 0F);
+				GL11.glTranslatef(-footRH, -footRV, 0F);
 				model.renderLeftRearFoot(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Right Rear Foot
 				GL11.glPushMatrix();
-				GL11.glTranslatef(footH, -footV, 0F);
+				GL11.glTranslatef(footRH, -footRV, 0F);
 				model.renderRightRearFoot(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Left Rear Leg
 				GL11.glPushMatrix();
 				GL11.glRotatef(-legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
-				GL11.glTranslatef(0F, -legLength, 0F );
+				GL11.glTranslatef(0F, -rearlegLength, 0F );
 				model.renderLeftRearLeg(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Right Leg
 				GL11.glPushMatrix();
 				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
-				GL11.glTranslatef(0F, -legLength, 0F);
+				GL11.glTranslatef(0F, -rearlegLength, 0F);
 				model.renderRightRearLeg(scale, mecha, f1);
 				GL11.glPopMatrix();
 			}
@@ -301,31 +307,31 @@ public class RenderMecha extends Render implements IItemRenderer
 			
 			GL11.glPushMatrix();
 			{
-				GL11.glTranslatef(frontlegTrans, legLength, 0F);
+				GL11.glTranslatef(frontlegTrans, frontlegLength, 0F);
 				
 				//Left Front Foot
 				GL11.glPushMatrix();
-				GL11.glTranslatef(-footH, -footV, 0F);
+				GL11.glTranslatef(-footFH, -footFV, 0F);
 				model.renderLeftFrontFoot(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Right Front Foot
 				GL11.glPushMatrix();
-				GL11.glTranslatef(footH, -footV, 0F);
+				GL11.glTranslatef(footFH, -footFV, 0F);
 				model.renderRightFrontFoot(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Left Front Leg
 				GL11.glPushMatrix();
 				GL11.glRotatef(-legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
-				GL11.glTranslatef(0F, -legLength, 0F );
+				GL11.glTranslatef(0F, -frontlegLength, 0F );
 				model.renderLeftFrontLeg(scale, mecha, f1);
 				GL11.glPopMatrix();
 				
 				//Right Front Leg
 				GL11.glPushMatrix();
 				GL11.glRotatef(legsYaw * 180F / 3.14159265F, 0F, 0F, 1F);
-				GL11.glTranslatef(0F, -legLength, 0F);
+				GL11.glTranslatef(0F, -frontlegLength, 0F);
 				model.renderRightFrontLeg(scale, mecha, f1);
 				GL11.glPopMatrix();
 			}
