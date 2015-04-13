@@ -24,7 +24,7 @@ public class MechaType extends DriveableType
 	/** Origin of the mecha arms */
 	public Vector3f leftArmOrigin, rightArmOrigin;
 	/** Length of the mecha arms and legs */
-	public float armLength = 1F, legLength = 1F, LegTrans = 0F, RearLegTrans = 0F, FrontLegTrans = 0F;
+	public float armLength = 1F, legLength = 1F, RearlegLength = legLength, FrontlegLength = legLength, LegTrans = 0F, RearLegTrans = 0F, FrontLegTrans = 0F;
 	/** The amount to scale the held items / tools by when rendering */
 	public float heldItemScale = 1F;
 	/** Height and Width of the world collision box */
@@ -111,6 +111,10 @@ public class MechaType extends DriveableType
 				legLength = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("LegTrans"))
 				LegTrans = Float.parseFloat(split[1]) / 16F;
+			if(split[0].equals("RearLegLength"))
+				RearlegLength = Float.parseFloat(split[1]) / 16F;
+			if(split[0].equals("FrontLegLength"))
+				FrontlegLength = Float.parseFloat(split[1]) / 16F;				
 			if(split[0].equals("RearLegTrans"))
 				RearLegTrans = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("FrontLegTrans"))
