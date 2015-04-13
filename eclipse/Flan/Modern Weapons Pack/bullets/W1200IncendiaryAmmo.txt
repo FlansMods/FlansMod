@@ -3,7 +3,6 @@ ShortName w1200IncendiaryAmmo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23864
 Icon W1200IncendiaryAmmo
 //How affected by gravity the bullet is
 FallSpeed 0.25

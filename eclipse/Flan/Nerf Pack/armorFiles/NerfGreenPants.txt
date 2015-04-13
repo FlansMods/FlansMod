@@ -1,6 +1,5 @@
 Name Green Nerf Kneepads
 ShortName nerfGreenKnees
-ItemID 23991
 Icon NerfGreenKnees
 Colour 255 255 255
 Type Pants

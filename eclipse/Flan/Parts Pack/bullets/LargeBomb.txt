@@ -3,7 +3,6 @@ ShortName largeBomb
 Model Bomb
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23272
 Icon BigBomb
 //How affected by gravity the bullet is
 FallSpeed 1

@@ -1,41 +1,39 @@
-Name TRIGAT-LR
-Description Ammunition for the EC665 Tiger
-ShortName TRIGAT
-Model mw.StingerMissile
-Texture Stinger
+Name 20mm Auto Cannon Ammo
+ShortName 20mmAmmo
+Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-Icon TRIGAT
+Icon 20mmAmmo
 //How affected by gravity the bullet is
 FallSpeed 1
-//The maximum stack size
-MaxStackSize 24
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 0.5
+RoundsPerItem 24
+//The maximum stack size of a stack of these
+MaxStackSize 1
 //The damage multiplier caused by the bullet on hitting an entity
-DamageVsLiving 20
-DamageVsVehicles 600
+Damage 10
+DamageVsLiving 35
+DamageVsVehicles 50
 //Size of explosion caused
-Explosion 6
+Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
 ExplodeOnImpact True
-Fuse 1000
-FlakParticles 0
+Fuse 200
+FlakParticles 1
 //Amount of fire to spread on exploding; for each increment, it will increase the dimensions of the burning area by 2. i.e. 1 will burn a 3x3 square, 2 will burn a 5x5 square
 Fire 0
 BreaksGlass True
 //Size of box to check for entities to hit / detonate
-HitBoxSize 0.1
-HitSound bullet
-//WeaponType : One of Missile, Shell, Bomb, Gun, None. Only affects driveable entities
-WeaponType Missile
+HitBoxSize 1.0
+HitSound bomb
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates False
 SmokeTrail True
-TrailParticleType explode
-LockOnToPlanes False
-LockOnToVehicles True
-LockOnToMechas True
-LockOnToPlayers False
-LockOnToLivings False
-MaxLockOnAngle 20.0
+//True if this is a bomb
+Bomb False
+Shell True
+RecipeOutput 3
+Recipe I ingotIron G gunpowder
+   
+GG 
+II 

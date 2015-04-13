@@ -1,6 +1,5 @@
 Name German WW2 Forest Helmet
 ShortName germanForestHelmet
-ItemID 44446
 Icon GermanForestHelmet
 Colour 255 255 255
 Type Helmet

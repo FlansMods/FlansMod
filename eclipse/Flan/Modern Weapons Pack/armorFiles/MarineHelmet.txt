@@ -1,6 +1,5 @@
 Name U.S. Marine Helmet
 ShortName marineHelmet
-ItemID 23885
 Icon MarineHelmet
 Colour 255 255 255
 Type Hat

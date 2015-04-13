@@ -339,11 +339,6 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:Tank4Shoot" ]
 	},
-	
-	"Tank1Reload": {
-		"category" : "player",
-		"sounds" : [ "flansmod:Tank1Reload" ]
-	},	
 			
 	"TankMove": {
 		"category" : "player",

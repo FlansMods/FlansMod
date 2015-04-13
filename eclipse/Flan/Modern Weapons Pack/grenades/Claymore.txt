@@ -5,7 +5,6 @@ Icon Claymore
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
-ItemID 23853
 StackSize 3
 ////Visuals
 Model mw.Claymore

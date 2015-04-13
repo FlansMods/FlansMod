@@ -3,7 +3,6 @@ ShortName kar98kAmmo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23560
 Icon kar98kAmmo
 //How affected by gravity the bullet is
 FallSpeed 0.25
