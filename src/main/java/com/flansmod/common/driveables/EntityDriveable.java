@@ -457,6 +457,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				shootEach(type, shootPoints.get(i), i, secondary, weaponType);
 		}
 	}
+
+	boolean driverIsCreative = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	
 	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
 	{
@@ -489,7 +491,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					{
 						//Set the damage to 0 and consume one ammo item (unless in creative)
 						bulletItemStack.setItemDamage(0);
-						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						if(driverIsCreative)
 						{
 							bulletItemStack.stackSize--;
 							if(bulletItemStack.stackSize <= 0)
@@ -535,7 +537,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
-						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						if(driverIsCreative)
 						{
 							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
@@ -580,7 +582,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
-						if(seats[0].riddenByEntity instanceof EntityPlayer && !((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+						if(driverIsCreative)
 						{
 							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
@@ -657,8 +659,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		}
         	}
         }
-
-		boolean driverIsCreative = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 		
 		//Harvest stuff
 		//Aesthetics
@@ -769,10 +769,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
-		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
+		boolean canThrust = driverIsCreative || driveableData.fuelInTank > 0;
 
-		//If the player jumps out or dies, smoothly return the throttle to 0 so the plane might actually come down again */
-		if((seats[0] != null && seats[0].riddenByEntity == null) || !canThrust)
+		//If there's no player in the driveable or it cannot thrust, slow the plane and turn off mouse held actions
+		if((seats[0] != null && seats[0].riddenByEntity == null) || !canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
 		{
 			throttle *= 0.98F;
 			rightMouseHeld = leftMouseHeld = false;
@@ -1075,13 +1075,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public boolean hasFuel() {
 		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
 			return false;
-		return seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode || driveableData.fuelInTank > 0;
+		return driverIsCreative || driveableData.fuelInTank > 0;
 	}
     
     public boolean hasEnoughFuel() {
 		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
 			return false;
-		return seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
+		return driverIsCreative || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
 
 	}
 	
