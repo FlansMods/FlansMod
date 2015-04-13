@@ -72,11 +72,11 @@ public class InfoType
 	{
 		try
 		{
-			if(split[0].toLowerCase().equals("model"))
+			if(split[0].equals("Model"))
 				modelString = split[1];
-			if(split[0].toLowerCase().equals("modelscale"))
+			if(split[0].equals("ModelScale"))
 				modelScale = Float.parseFloat(split[1]);
-			if (split[0].toLowerCase().equals("name"))
+			if (split[0].equals("Name"))
 			{
 				name = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -84,7 +84,7 @@ public class InfoType
 					name = name + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("description"))
+			if (split[0].equals("Description"))
 			{
 				description = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -92,7 +92,7 @@ public class InfoType
 					description = description + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("shortname"))
+			if (split[0].equals("ShortName"))
 			{
 				shortName = split[1];
 			}
