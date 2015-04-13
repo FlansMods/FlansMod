@@ -328,15 +328,18 @@ public class TickHandlerClient
 			}
 			
 			//DEBUG vehicles
-			if(FlansMod.DEBUG && mc.thePlayer.ridingEntity instanceof EntitySeat)
+			if(mc.thePlayer.ridingEntity instanceof EntitySeat)
 			{
 				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
-				mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
-				mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
-				mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
-				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
-				mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 2, 0xffffff);
 
+				if(FlansMod.DEBUG)
+				{
+					mc.fontRenderer.drawString("MotionX : " + ent.motionX, 2, 12, 0xffffff);
+					mc.fontRenderer.drawString("MotionY : " + ent.motionY, 2, 22, 0xffffff);
+					mc.fontRenderer.drawString("MotionZ : " + ent.motionZ, 2, 32, 0xffffff);
+					mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				}
 			}
 	    }
 	}
