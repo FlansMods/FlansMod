@@ -7,7 +7,6 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -20,6 +19,7 @@ import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.GuiTeamSelect;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketReload;
+import com.flansmod.common.network.PacketRequestDebug;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
@@ -106,7 +106,12 @@ public class KeyInputHandler
 		}
 		if(debugKey.isPressed())
 		{
-			FlansMod.DEBUG = !FlansMod.DEBUG;
+			if(FlansMod.DEBUG)
+				FlansMod.DEBUG = false;
+			else
+			{
+				FlansMod.packetHandler.sendToServer(new PacketRequestDebug());
+			}
 		}
 		if(reloadModelsKey.isPressed())
 		{
