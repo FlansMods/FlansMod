@@ -26,7 +26,6 @@ minecraft {
     runDir = "eclipse"
 
     replace "@ALLOWED_VERSION@", "[4.10,4.11)"
-    replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 }
