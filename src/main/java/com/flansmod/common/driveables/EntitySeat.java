@@ -455,14 +455,16 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							}
 							//Get the bullet item damage and increment it
 							int damage = bulletItemStack.getItemDamage();
-							bulletItemStack.setItemDamage(damage + 1);	
+							if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
+							bulletItemStack.setItemDamage(damage + 1);
 							//If the bullet item is completely damaged (empty)
-							if(damage + 1 == bulletItemStack.getMaxDamage())
+							if(damage == bulletItemStack.getMaxDamage())
 							{
 								//Set the damage to 0 and consume one ammo item (unless in creative)
-								bulletItemStack.setItemDamage(0);
+								//bulletItemStack.setItemDamage(0);
 								if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
-									driveable.getDriveableData().decrStackSize(3 + seatID, 1);
+									driveable.getDriveableData().decrStackSize(0, 1);
+
 							}
 							//Reset the shoot delay
 							gunDelay = gun.shootDelay;
