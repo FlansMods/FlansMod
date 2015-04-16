@@ -179,6 +179,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 			case 4 : //Up : Do nothing
 			{
+				if(throttle > 0F)
+					throttle -= 0.04F;
+				if(throttle <= 0F)
+					throttle = 0F;
 				return true;
 			}
 			case 5 : //Down : Do nothing
