@@ -458,7 +458,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							if(!((EntityPlayer)riddenByEntity).capabilities.isCreativeMode)
 							bulletItemStack.setItemDamage(damage + 1);
 							//If the bullet item is completely damaged (empty)
-							if(damage == bulletItemStack.getMaxDamage())
+							if(damage >= bulletItemStack.getMaxDamage())
 							{
 								//Set the damage to 0 and consume one ammo item (unless in creative)
 								//bulletItemStack.setItemDamage(0);
