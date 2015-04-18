@@ -119,7 +119,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public EntityDriveable(World world, DriveableType t, DriveableData d)
 	{
 		this(world);
-		driveableType = t.shortName;
+		driveableType = t.shortNamedri;
 		driveableData = d;
 	}
 	
@@ -458,7 +458,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 
-	boolean driverIsCreative = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+	private boolean driverIsCreative()
+	{
+		return seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
+	}
 	
 	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
 	{
@@ -491,7 +494,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					{
 						//Set the damage to 0 and consume one ammo item (unless in creative)
 						bulletItemStack.setItemDamage(0);
-						if(driverIsCreative)
+						if(!driverIsCreative())
 						{
 							bulletItemStack.stackSize--;
 							if(bulletItemStack.stackSize <= 0)
@@ -537,7 +540,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
-						if(driverIsCreative)
+						if(!driverIsCreative())
 						{
 							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
@@ -582,7 +585,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
-						if(driverIsCreative)
+						if(!driverIsCreative())
 						{
 							bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
 							if(bulletStack.getItemDamage() == bulletStack.getMaxDamage())
@@ -691,7 +694,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							{
 								ItemStack stack = stacks.get(i);
 								FlansMod.log("");
-								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative()) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 								{
 									worldObj.spawnEntityInWorld(new EntityItem(worldObj, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
 								}
@@ -769,7 +772,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(riddenByEntity != null)
 			riddenByEntity.fallDistance = 0F;
 		
-		boolean canThrust = driverIsCreative || driveableData.fuelInTank > 0;
+		boolean canThrust = driverIsCreative() || driveableData.fuelInTank > 0;
 
 		//If there's no player in the driveable or it cannot thrust, slow the plane and turn off mouse held actions
 		if((seats[0] != null && seats[0].riddenByEntity == null) || !canThrust && getDriveableType().maxThrottle != 0 && getDriveableType().maxNegativeThrottle != 0)
@@ -1075,13 +1078,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public boolean hasFuel() {
 		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
 			return false;
-		return driverIsCreative || driveableData.fuelInTank > 0;
+		return driverIsCreative() || driveableData.fuelInTank > 0;
 	}
     
     public boolean hasEnoughFuel() {
 		if (seats == null || seats[0] == null || seats[0].riddenByEntity == null)
 			return false;
-		return driverIsCreative || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
+		return driverIsCreative() || driveableData.fuelInTank > driveableData.engine.fuelConsumption * throttle;
 
 	}
 	
