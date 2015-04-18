@@ -177,12 +177,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				wheelsYaw += 1F;
 				return true;
 			}
-			case 4 : //Up : Do nothing
+			case 4 : //Up : Brake
 			{
-				if(throttle > 0F)
-					throttle -= 0.04F;
-				if(throttle <= 0F)
-					throttle = 0F;
+				throttle *= 0.8F;
 				return true;
 			}
 			case 5 : //Down : Do nothing
