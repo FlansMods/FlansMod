@@ -119,7 +119,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public EntityDriveable(World world, DriveableType t, DriveableData d)
 	{
 		this(world);
-		driveableType = t.shortNamedri;
+		driveableType = t.shortName;
 		driveableData = d;
 	}
 	
