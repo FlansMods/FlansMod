@@ -264,6 +264,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     public AxisAlignedBB getCollisionBox(Entity entity)
     {
+    	if(getDriveableType().collisionDamageEnable)
+	{
+		if(throttle > getDriveableType().collisionDamageThrottle)
+		entity.attackEntityFrom(DamageSource.generic, throttle*getDriveableType().collisionDamageTimes);
+	}
         return null;//entity.boundingBox;
     }
 
