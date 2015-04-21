@@ -123,7 +123,10 @@ public class DriveableType extends InfoType
 	public int startSoundLength;
 	public String engineSound;
 	public int engineSoundLength;
-
+	
+	public boolean collisionDamageEnable = false;
+	public float collisionDamageThrottle = 0;
+	public float collisionDamageTimes = 0;
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
 	
@@ -197,6 +200,12 @@ public class DriveableType extends InfoType
             	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			else if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
             	collisionPoints.add(new DriveablePosition(split));
+            		else if(split[0].equals("CollisionDamageEnable"))
+            	collisionDamageEnable = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("CollisionDamageThrottle"))
+		collisionDamageThrottle = Float.parseFloat(split[1]);
+			else if(split[0].equals("CollisionDamageTimes"))
+		collisionDamageTimes = Float.parseFloat(split[1]);
 			//Boats
 			else if(split[0].equals("PlaceableOnLand"))
             	placeableOnLand = Boolean.parseBoolean(split[1]);
