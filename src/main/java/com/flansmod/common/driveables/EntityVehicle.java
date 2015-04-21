@@ -180,6 +180,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			case 4 : //Up : Brake
 			{
 				throttle *= 0.8F;
+				if(throttle < 0.05F && throttle > 0F)
+					throttle = 0;
+				if(throttle > -0.05F && throttle < 0F)
+					throttle = 0;
 				return true;
 			}
 			case 5 : //Down : Do nothing
