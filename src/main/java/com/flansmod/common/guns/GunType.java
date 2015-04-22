@@ -74,6 +74,15 @@ public class GunType extends InfoType implements IScope
 	/** Set these to make guns only usable by a certain type of entity */
 	public boolean usableByPlayers = true, usableByMechas = true;
 	
+	//Information
+	//Show any variables into the GUI when hovering over items.
+	/** If false, then attachments wil not be listed in item GUI */
+	public boolean showAttachments = true;
+	/** Show statistics */
+	public boolean showDamage = false, showRecoil = false, showSpread = false;
+	/** Show reload time in seconds */
+	public boolean showReloadTime = false;
+	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
 	//and a load of shield code on top. This means that guns can have in built shields (think Nerf Stampede)
@@ -224,6 +233,18 @@ public class GunType extends InfoType implements IScope
 				numBurstRounds = Integer.parseInt(split[1]);
 			else if(split[0].equals("MinigunStartSpeed"))
 				minigunStartSpeed = Float.parseFloat(split[1]);
+				
+			//Information
+			else if(split[0].equals("ShowAttachments"))
+				showAttachments = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowDamage"))
+				showDamage = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowRecoil"))
+				showRecoil = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowAccuracy"))
+				showSpread = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowReloadTime"))
+				showReloadTime = Boolean.parseBoolean(split[1]);
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))
