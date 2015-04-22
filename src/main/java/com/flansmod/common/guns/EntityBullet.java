@@ -438,6 +438,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
 					setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+					//play sound when bullet hits block
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, type.hitSoundRange, dimension, type.hitSound, true);
 					setDead();
 					break;
 				}
