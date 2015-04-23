@@ -190,167 +190,148 @@ public class ItemGun extends Item implements IFlanItem
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void onUpdateClient(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
-	{
-		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == itemstack)
-		{			
-			//Get useful objects
-			Minecraft mc = Minecraft.getMinecraft();
-			EntityPlayer player = (EntityPlayer)entity;
-			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
-			
-			//Play idle sounds
-			if (soundDelay <= 0 && type.idleSound != null)
-			{
-				PacketPlaySound.sendSoundPacket(entity.posX, entity.posY, entity.posZ, FlansMod.soundRange, entity.dimension, type.idleSound, false);
-				soundDelay = type.idleSoundLength;
-			}
-			
-			//This code is not for deployables
-			if (type.deployable)
-				return;
-			
-			
-			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
-			//If in a GUI
-			if(FMLClientHandler.instance().getClient().currentScreen != null)
-			{
-				if(FlansModClient.currentScope != null)
-				{
-					FlansModClient.currentScope = null;
-					gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
-					gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
-					gameSettings.fovSetting = FlansModClient.originalFOV;
-				}	
-			}
-			//Do not shoot ammo bags, flags or dropped gun items
-			else if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
-			{
-				
-			}
-			//Else do shoot code
-			else 
-			{
-				//Get whether mice are held
-				lastRightMouseHeld = rightMouseHeld;
-				lastLeftMouseHeld = leftMouseHeld;
-				rightMouseHeld = Mouse.isButtonDown(1);
-				leftMouseHeld = Mouse.isButtonDown(0);
-				
-				
-				boolean offHandFull = false;
-				
-				//----------------------------- Off hand item ---------------------------------------------------------------------
-				if(type.oneHanded) 
-				{
-					if(data.offHandGunSlot == player.inventory.currentItem + 1)
-						data.offHandGunSlot = 0;
-					//Cycle selection
-					int dWheel = Mouse.getDWheel();
-					if(Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && dWheel != 0)
-					{
-						data.cycleOffHandItem(player, dWheel);
-					}
-					
-					if(data.offHandGunSlot != 0)
-					{
-						offHandFull = true;
-						ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-						if(offHandGunStack != null && offHandGunStack.getItem() instanceof ItemGun)
-						{
-							GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
-							if(offHandGunType.usableByPlayers)
-							{
-								//If we are using a burst mode gun, and there is burst left to be done, try to do it
-								if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
-								{
-									if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
-										player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
-								}
-								else
-								{
-									//Send packet when firing a semi or starting to fire a full
-									if(leftMouseHeld && !lastLeftMouseHeld) 
-									{
-										FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
-										if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
-											player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
-									}
-									if((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
-									{
-										FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
-									}
-									if((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && leftMouseHeld)
-									{
-										if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
-											player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
-									}
-								}
-							}
-						}
-						else data.offHandGunSlot = 0;
-					}
-				}
-				
-				//--------------------------------- Main hand item ---------------------------------------------
-				//If we are using a burst mode gun, and there is burst left to be done, try to do it
-				if(type.usableByPlayers)
-				{
-					if(type.getFireMode(itemstack) == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
-					{
-						if(clientSideShoot(player, itemstack, type, false))
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-					}
-					else
-					{
-						//Send packet when firing a semi or starting to fire a full
-						if(rightMouseHeld && !lastRightMouseHeld) 
-						{
-							FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, true));
-							if(clientSideShoot(player, itemstack, type, false))
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-						}
-						if((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
-						{
-							FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, false));
-						}
-						if((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && rightMouseHeld)
-						{
-							if(clientSideShoot(player, itemstack, type, false))
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
-						}
-					}
-				}
-				IScope currentScope = type.getCurrentScope(itemstack);
-				if(!offHandFull && (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM) && Mouse.isButtonDown(0) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
-				{
-					if(FlansModClient.currentScope == null)
-					{
-						FlansModClient.currentScope = currentScope;
-						FlansModClient.lastZoomLevel = currentScope.getZoomFactor();
-						FlansModClient.lastFOVZoomLevel = currentScope.getFOVFactor();
-						float f = FlansModClient.originalMouseSensitivity = gameSettings.mouseSensitivity;
-						gameSettings.mouseSensitivity = f / (float) Math.sqrt(currentScope.getZoomFactor());
-						FlansModClient.originalThirdPerson = gameSettings.thirdPersonView;
-						gameSettings.thirdPersonView = 0;
-						FlansModClient.originalFOV = gameSettings.fovSetting;
-					}
-					else
-					{
-						FlansModClient.currentScope = null;
-						gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
-						gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
-						gameSettings.fovSetting = FlansModClient.originalFOV;
-					}
-					FlansModClient.scopeTime = 10;
-				}
-			}
-		}
-		if (soundDelay > 0)
-		{
-			soundDelay--;
-		}
-	}
+    public void onUpdateClient(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.getCurrentItem() == itemstack) {
+            //Get useful objects
+            Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = (EntityPlayer) entity;
+            PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+
+            //Play idle sounds
+            if (soundDelay <= 0 && type.idleSound != null) {
+                PacketPlaySound.sendSoundPacket(entity.posX, entity.posY, entity.posZ, FlansMod.soundRange, entity.dimension, type.idleSound, false);
+                soundDelay = type.idleSoundLength;
+            }
+
+            //This code is not for deployables
+            if (type.deployable) {
+                return;
+            }
+
+            GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
+            //If in a GUI
+            if (FMLClientHandler.instance().getClient().currentScreen != null) {
+                if (FlansModClient.currentScope != null) {
+                    FlansModClient.currentScope = null;
+                    gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+                    gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+                    gameSettings.fovSetting = FlansModClient.originalFOV;
+                }
+            } //Do not shoot ammo bags, flags or dropped gun items
+            else if (mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade) mc.objectMouseOver.entityHit).type.isDeployableBag))) {
+
+            } else {
+                //Get whether mice are held
+                lastRightMouseHeld = rightMouseHeld;
+                lastLeftMouseHeld = leftMouseHeld;
+                rightMouseHeld = Mouse.isButtonDown(1);
+                leftMouseHeld = Mouse.isButtonDown(0);
+
+                boolean offHandFull = false;
+
+                //----------------------------- Off hand item ---------------------------------------------------------------------
+                if (type.oneHanded) {
+                    if (data.offHandGunSlot == player.inventory.currentItem + 1) {
+                        data.offHandGunSlot = 0;
+                    }
+                    //Cycle selection
+                    int dWheel = Mouse.getDWheel();
+                    if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && dWheel != 0) {
+                        data.cycleOffHandItem(player, dWheel);
+                    }
+
+                    if (data.offHandGunSlot != 0) {
+                        offHandFull = true;
+                        ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
+                        if (offHandGunStack != null && offHandGunStack.getItem() instanceof ItemGun) {
+                            GunType offHandGunType = ((ItemGun) offHandGunStack.getItem()).type;
+                            if (offHandGunType.usableByPlayers) {
+                                //If we are using a burst mode gun, and there is burst left to be done, try to do it
+                                if (offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0) {
+                                    if (clientSideShoot(player, offHandGunStack, offHandGunType, true)) {
+                                        player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+                                    }
+                                } else {
+                                    //TODO
+                                    //Send packet when firing a semi or starting to fire a full
+                                    if (leftMouseHeld && !lastLeftMouseHeld) {
+                                        FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, true));
+                                        if (clientSideShoot(player, offHandGunStack, offHandGunType, true)) {
+                                            player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+                                        }
+                                    }
+                                    if ((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
+                                    {
+                                        FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
+                                    }
+                                    if ((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && leftMouseHeld) {
+                                        if (clientSideShoot(player, offHandGunStack, offHandGunType, true)) {
+                                            player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            data.offHandGunSlot = 0;
+                        }
+                    }
+                }
+
+                //--------------------------------- Main hand item ---------------------------------------------
+                //If we are using a burst mode gun, and there is burst left to be done, try to do it
+                if (type.usableByPlayers) {
+                    if (type.getFireMode(itemstack) == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0) {
+                        if (clientSideShoot(player, itemstack, type, false)) {
+                            player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                        }
+                    } else {
+                        //Send packet when firing a semi or starting to fire a full
+                        //Helpful boolean for fix
+                        boolean b = data.offHandGunSlot != 0 ? rightMouseHeld : leftMouseHeld;
+                        boolean bLast = data.offHandGunSlot != 0 ? lastRightMouseHeld : lastLeftMouseHeld;
+                        if (b && !bLast) {
+                            FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, true));
+                            if (clientSideShoot(player, itemstack, type, false)) {
+                                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                            }
+                        }
+
+                        if ((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
+                        {
+                            FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, false));
+                        }
+                        if ((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && leftMouseHeld) {
+                            if (clientSideShoot(player, itemstack, type, false)) {
+                                player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+                            }
+                        }
+                    }
+                }
+                IScope currentScope = type.getCurrentScope(itemstack);
+                if (!offHandFull && (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM) && Mouse.isButtonDown(1) && FlansModClient.scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null) {
+                    if (FlansModClient.currentScope == null) {
+                        FlansModClient.currentScope = currentScope;
+                        FlansModClient.lastZoomLevel = currentScope.getZoomFactor();
+                        FlansModClient.lastFOVZoomLevel = currentScope.getFOVFactor();
+                        float f = FlansModClient.originalMouseSensitivity = gameSettings.mouseSensitivity;
+                        gameSettings.mouseSensitivity = f / (float) Math.sqrt(currentScope.getZoomFactor());
+                        FlansModClient.originalThirdPerson = gameSettings.thirdPersonView;
+                        gameSettings.thirdPersonView = 0;
+                        FlansModClient.originalFOV = gameSettings.fovSetting;
+                    } else {
+                        FlansModClient.currentScope = null;
+                        gameSettings.mouseSensitivity = FlansModClient.originalMouseSensitivity;
+                        gameSettings.thirdPersonView = FlansModClient.originalThirdPerson;
+                        gameSettings.fovSetting = FlansModClient.originalFOV;
+                    }
+                    FlansModClient.scopeTime = 10;
+                }
+            }
+        }
+        if (soundDelay > 0) {
+            soundDelay--;
+        }
+    }
 	
 	/** Client side shoot method for animations and delayers
 	 * @return whether to consume the gun item  */
