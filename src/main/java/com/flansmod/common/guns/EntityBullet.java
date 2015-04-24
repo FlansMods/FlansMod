@@ -49,6 +49,7 @@ import com.flansmod.common.guns.raytracing.PlayerBulletHit;
 import com.flansmod.common.guns.raytracing.PlayerHitbox;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
