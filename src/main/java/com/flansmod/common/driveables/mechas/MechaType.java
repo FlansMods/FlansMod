@@ -119,13 +119,6 @@ public class MechaType extends DriveableType
 				RearLegTrans = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("FrontLegTrans"))
 				FrontLegTrans = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("HeldItemScale")				
-				if(split[0].equals("LegTrans"))
-				LegTrans = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("RearLegTrans"))
-				RearLegTrans = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("FrontLegTrans"))
-				FrontLegTrans = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("HeldItemScale"))
 				heldItemScale = Float.parseFloat(split[1]);
 			if(split[0].equals("Height"))
