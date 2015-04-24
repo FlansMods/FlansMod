@@ -32,21 +32,21 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		ItemStack itemstack = ((EntityLivingBase)entity).getEquipmentInSlot(0);
-        heldItemRight = itemstack != null ? 1 : 0;
+		heldItemRight = itemstack != null ? 1 : 0;
 
-        aimedBow = false;
-        if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
-        {
-        	EnumAction enumaction = itemstack.getItemUseAction();
-            if (enumaction == EnumAction.block)
-            {
-                heldItemRight = 3;
-            }
-            else if (enumaction == EnumAction.bow)
-            {
-                aimedBow = true;
-            }
-        }
+		aimedBow = false;
+		if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
+		{
+			EnumAction enumaction = itemstack.getItemUseAction();
+			if (enumaction == EnumAction.block)
+			{
+				heldItemRight = 3;
+			}
+			else if (enumaction == EnumAction.bow)
+			{
+				aimedBow = true;
+			}
+		}
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 
 		render(headModel, bipedHead, f5, type.modelScale);
 		render(bodyModel, bipedBody, f5, type.modelScale);

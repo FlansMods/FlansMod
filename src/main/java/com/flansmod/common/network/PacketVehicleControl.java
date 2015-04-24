@@ -22,8 +22,8 @@ public class PacketVehicleControl extends PacketDriveableControl
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	super.encodeInto(ctx, data);
-    	data.writeBoolean(doors);
+		super.encodeInto(ctx, data);
+		data.writeBoolean(doors);
 	}
 
 	@Override

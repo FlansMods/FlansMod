@@ -24,29 +24,29 @@ import com.flansmod.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render implements IItemRenderer
 {
-    public RenderVehicle()
-    {
-        shadowSize = 0.5F;
-    }
+	public RenderVehicle()
+	{
+		shadowSize = 0.5F;
+	}
 
-    public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
-    {
-    	bindEntityTexture(vehicle);
-    	VehicleType type = vehicle.getVehicleType();
-        GL11.glPushMatrix();
-        {
-	        GL11.glTranslatef((float)d, (float)d1, (float)d2);
-	        float dYaw = (vehicle.axes.getYaw() - vehicle.prevRotationYaw);
-	        for(; dYaw > 180F; dYaw -= 360F) {}
-	        for(; dYaw <= -180F; dYaw += 360F) {}
-	        float dPitch = (vehicle.axes.getPitch() - vehicle.prevRotationPitch);
-	        for(; dPitch > 180F; dPitch -= 360F) {}
-	        for(; dPitch <= -180F; dPitch += 360F) {}
-	        float dRoll = (vehicle.axes.getRoll() - vehicle.prevRotationRoll);
-	        for(; dRoll > 180F; dRoll -= 360F) {}
-	        for(; dRoll <= -180F; dRoll += 360F) {}
-	        GL11.glRotatef(180F - vehicle.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-	        GL11.glRotatef(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+	public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
+	{
+		bindEntityTexture(vehicle);
+		VehicleType type = vehicle.getVehicleType();
+		GL11.glPushMatrix();
+		{
+			GL11.glTranslatef((float)d, (float)d1, (float)d2);
+			float dYaw = (vehicle.axes.getYaw() - vehicle.prevRotationYaw);
+			for(; dYaw > 180F; dYaw -= 360F) {}
+			for(; dYaw <= -180F; dYaw += 360F) {}
+			float dPitch = (vehicle.axes.getPitch() - vehicle.prevRotationPitch);
+			for(; dPitch > 180F; dPitch -= 360F) {}
+			for(; dPitch <= -180F; dPitch += 360F) {}
+			float dRoll = (vehicle.axes.getRoll() - vehicle.prevRotationRoll);
+			for(; dRoll > 180F; dRoll -= 360F) {}
+			for(; dRoll <= -180F; dRoll += 360F) {}
+			GL11.glRotatef(180F - vehicle.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(vehicle.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(vehicle.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
 	
@@ -54,7 +54,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 			GL11.glPushMatrix();
 			{
 				GL11.glScalef(modelScale, modelScale, modelScale);
-		        ModelVehicle modVehicle = (ModelVehicle)type.model;
+				ModelVehicle modVehicle = (ModelVehicle)type.model;
 				if(modVehicle != null)
 					modVehicle.render(vehicle, f1);
 				
@@ -62,11 +62,11 @@ public class RenderVehicle extends Render implements IItemRenderer
 				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
 				{
 					dYaw = (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw());
-			        for(; dYaw > 180F; dYaw -= 360F) {}
-			        for(; dYaw <= -180F; dYaw += 360F) {}
-		    		float yaw = vehicle.seats[0].prevLooking.getYaw() + dYaw * f1;
-		    		
-		    		GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
+					for(; dYaw > 180F; dYaw -= 360F) {}
+					for(; dYaw <= -180F; dYaw += 360F) {}
+					float yaw = vehicle.seats[0].prevLooking.getYaw() + dYaw * f1;
+
+					GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
 					GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
 					GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 					
@@ -75,7 +75,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 					
 					if(FlansMod.DEBUG)
 					{					
-			    		GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
+						GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
 						GL11.glRotatef(-vehicle.seats[0].looking.getPitch(), 0.0F, 0.0F, 1.0F);
 						GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 						
@@ -141,16 +141,16 @@ public class RenderVehicle extends Render implements IItemRenderer
 				GL11.glDisable(GL11.GL_BLEND);
 				GL11.glColor4f(1F, 1F, 1F, 1F);
 			}
-        }
-        GL11.glPopMatrix();
-    }
+		}
+		GL11.glPopMatrix();
+	}
 
-    @Override
+	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-    {
-        render((EntityVehicle)entity, d, d1, d2, f, f1);
-    }
-    
+	{
+		render((EntityVehicle)entity, d, d1, d2, f, f1);
+	}
+
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{

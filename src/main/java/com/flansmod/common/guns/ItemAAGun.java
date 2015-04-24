@@ -24,11 +24,11 @@ import com.flansmod.common.types.InfoType;
 
 public class ItemAAGun extends Item implements IFlanItem
 {
-    public static final ArrayList<String> names = new ArrayList<String>();
-    @SideOnly(Side.CLIENT)
-    private ArrayList<IIcon> icons;
+	public static final ArrayList<String> names = new ArrayList<String>();
+	@SideOnly(Side.CLIENT)
+	private ArrayList<IIcon> icons;
 	public AAGunType type;
-    
+
 	public ItemAAGun(AAGunType type1)
 	{
 		maxStackSize = 1;
@@ -38,20 +38,20 @@ public class ItemAAGun extends Item implements IFlanItem
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
-    @Override
+	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-    	//Raytracing
-        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-        double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
-        
-        //Result check
+		//Raytracing
+		float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+		float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+		float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
+		float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
+		double length = 5D;
+		Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);
+		Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+		MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
+
+		//Result check
 		if (movingobjectposition == null)
 		{
 			return itemstack;
@@ -73,29 +73,29 @@ public class ItemAAGun extends Item implements IFlanItem
 		return itemstack;
 	}
 	
-    public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
-    {
-    	Entity entity = new EntityAAGun(world, type, x, y, z, null);
-    	if(!world.isRemote)
-        {
+	public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
+	{
+		Entity entity = new EntityAAGun(world, type, x, y, z, null);
+		if(!world.isRemote)
+		{
 			world.spawnEntityInWorld(entity);
-        }
-    	return entity;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
+		}
+		return entity;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
 	
 	@Override
 	public InfoType getInfoType() 

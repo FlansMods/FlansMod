@@ -33,24 +33,24 @@ public class ItemMechaAddon extends Item implements IFlanItem
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(list, type.description.split("_"));
+			Collections.addAll(list, type.description.split("_"));
 		}
 	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
 	@Override
 	public InfoType getInfoType() 
 	{

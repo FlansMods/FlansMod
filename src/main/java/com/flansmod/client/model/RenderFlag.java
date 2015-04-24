@@ -50,9 +50,9 @@ public class RenderFlag extends Render
 		}
 
 		GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
-        GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
-        
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
+
 		List ents = flag.worldObj.getEntitiesWithinAABB(EntityFlagpole.class, flag.boundingBox.expand(1F, 2F, 1F));
 		if(ents.size() == 0)
 		{
@@ -60,8 +60,8 @@ public class RenderFlag extends Render
 			 GL11.glTranslatef(0.5F, 0F, 0F);
 		}
 		
-        GL11.glScalef(-1F, -1F, 1F);        
-        modelFlagpole.renderFlag(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flag);
+		GL11.glScalef(-1F, -1F, 1F);
+		modelFlagpole.renderFlag(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flag);
 		GL11.glPopMatrix();
 	}
 	

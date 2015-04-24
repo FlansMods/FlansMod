@@ -29,14 +29,14 @@ public class BlockGunBox extends Block
 	{
 		super(Material.wood);
 		setHardness(2F);
-	    setResistance(4F);
-	    type = t;
+		setResistance(4F);
+		type = t;
 
-	    setBlockName(type.shortName);
-	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
+		setBlockName(type.shortName);
+		GameRegistry.registerBlock(this, "gunBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
-	    type.block = this;
-	    type.item = Item.getItemFromBlock(this);	
+		type.block = this;
+		type.item = Item.getItemFromBlock(this);
 	}
 		
 	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
@@ -247,27 +247,27 @@ public class BlockGunBox extends Block
 	
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
-    {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, 0));
-        return ret;
-    }
+		return ret;
+	}
 	
-    @Override
+	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
-    {
-        super.breakBlock(world, x, y, z, block, metadata);
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
-    	//for(GunBoxType type : GunBoxType.gunBoxMap.values())
-    	//{
-    		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
-    		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
-    		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
-    	//}
-    }
+	{
+		super.breakBlock(world, x, y, z, block, metadata);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register)
+	{
+		//for(GunBoxType type : GunBoxType.gunBoxMap.values())
+		//{
+			type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
+			type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
+			type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
+		//}
+	}
 }

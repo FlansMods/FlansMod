@@ -33,12 +33,12 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-    public Multimap getAttributeModifiers(ItemStack stack)
-    {
-        Multimap multimap = super.getAttributeModifiers(stack);
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
-        return multimap;
-    }
+	public Multimap getAttributeModifiers(ItemStack stack)
+	{
+		Multimap multimap = super.getAttributeModifiers(stack);
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+		return multimap;
+	}
 	
 	@Override
 	public boolean isFull3D()
@@ -90,19 +90,19 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
 	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
 	@Override
 	public InfoType getInfoType() 
 	{

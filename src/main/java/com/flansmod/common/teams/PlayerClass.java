@@ -93,7 +93,7 @@ public class PlayerClass extends InfoType
 	@Override
 	protected void postRead(TypeFile file) 
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		onWorldLoad(null);
 	}
 	
@@ -143,37 +143,37 @@ public class PlayerClass extends InfoType
 				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
 				{
 					GunType gunType = ((ItemGun)matchingItem).type;
-			    	NBTTagCompound tags = new NBTTagCompound();
-			    	NBTTagCompound attachmentTags = new NBTTagCompound();
-			    	int genericID = 0;
-			    	for(int i = 0; i < itemNames.length - 1; i++)
-			    	{
-			    		AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
-			    		if(attachment != null)
-			    		{
-				    		String tagName = null;
-				    		switch(attachment.type)
-				    		{
-				    			case sights : tagName = "scope"; break;
-				    			case barrel : tagName = "barrel"; break;
-				    			case stock : tagName = "stock"; break;
-				    			case grip : tagName = "grip"; break;
-				    			case generic : tagName = "generic_" + genericID++; break;
-				    		}
-				    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
-				    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
-				    		attachmentTags.setTag(tagName, specificAttachmentTags);
-			    		}
-			    		//Maybe it was a paintjob
-			    		else
-			    		{
-			    			Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
-			    			if(paintjob != null)
-			    				tags.setString("Paint", paintjob.iconName);
-			    		}
-			    	}
-			    	tags.setTag("attachments", attachmentTags);
-			    	stack.stackTagCompound = tags;
+					NBTTagCompound tags = new NBTTagCompound();
+					NBTTagCompound attachmentTags = new NBTTagCompound();
+					int genericID = 0;
+					for(int i = 0; i < itemNames.length - 1; i++)
+					{
+						AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
+						if(attachment != null)
+						{
+							String tagName = null;
+							switch(attachment.type)
+							{
+								case sights : tagName = "scope"; break;
+								case barrel : tagName = "barrel"; break;
+								case stock : tagName = "stock"; break;
+								case grip : tagName = "grip"; break;
+								case generic : tagName = "generic_" + genericID++; break;
+							}
+							NBTTagCompound specificAttachmentTags = new NBTTagCompound();
+							new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
+							attachmentTags.setTag(tagName, specificAttachmentTags);
+						}
+						//Maybe it was a paintjob
+						else
+						{
+							Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
+							if(paintjob != null)
+								tags.setString("Paint", paintjob.iconName);
+						}
+					}
+					tags.setTag("attachments", attachmentTags);
+					stack.stackTagCompound = tags;
 				}
 				startingItems.add(stack);
 			}

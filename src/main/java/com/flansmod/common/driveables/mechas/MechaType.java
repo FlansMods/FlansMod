@@ -76,9 +76,9 @@ public class MechaType extends DriveableType
 		types.add(this);
 	}
 	
-    @Override
+	@Override
 	protected void read(String[] split, TypeFile file)
-    {
+	{
 		super.read(split, file);
 		try
 		{
@@ -173,14 +173,14 @@ public class MechaType extends DriveableType
 		catch (Exception ignored)
 		{
 		}
-    }
-    
+	}
+
 	/** To be overriden by subtypes for model reloading */
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelMecha.class);
 	}
-    
+
 	public static MechaType getMecha(String find)
 	{
 		for(MechaType type : types)

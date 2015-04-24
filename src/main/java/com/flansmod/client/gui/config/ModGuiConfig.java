@@ -10,9 +10,9 @@ import cpw.mods.fml.client.config.GuiConfig;
 import com.flansmod.common.FlansMod;
 
 public class ModGuiConfig extends GuiConfig {
-    public ModGuiConfig(GuiScreen parent) {
-        super(parent,
-                new ConfigElement(FlansMod.configFile.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                FlansMod.MODID, false, false, GuiConfig.getAbridgedConfigPath(FlansMod.configFile.toString()));
-    }
+	public ModGuiConfig(GuiScreen parent) {
+		super(parent,
+				new ConfigElement(FlansMod.configFile.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+				FlansMod.MODID, false, false, GuiConfig.getAbridgedConfigPath(FlansMod.configFile.toString()));
+	}
 }

@@ -430,10 +430,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					if(type.breaksGlass && mat == Material.glass)
 					{
 						if(TeamsManager.canBreakGlass)
-                        {
-                            worldObj.setBlockToAir(xTile, yTile, zTile);
-                            FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
-                        }
+						{
+							worldObj.setBlockToAir(xTile, yTile, zTile);
+							FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
+						}
 					}
 					
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
@@ -624,9 +624,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
-	        if(owner instanceof EntityPlayer)
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
-	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+			if(owner instanceof EntityPlayer)
+				new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+			else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
 		}
 		if(type.fireRadius > 0)
 		{
@@ -758,8 +758,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 	
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

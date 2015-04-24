@@ -57,22 +57,22 @@ public class EntityGunItem extends EntityItem {
 	}
 	
 	@Override
-    public boolean canBeCollidedWith()
-    {
-        return true;
-    }
+	public boolean canBeCollidedWith()
+	{
+		return true;
+	}
 	
 	@Override
-    protected boolean canTriggerWalking()
-    {
-        return true;
-    }
+	protected boolean canTriggerWalking()
+	{
+		return true;
+	}
 	
 	@Override
-    public AxisAlignedBB getBoundingBox()
-    {
-    	return null;
-    }
+	public AxisAlignedBB getBoundingBox()
+	{
+		return null;
+	}
 	
 	@Override
 	public void onUpdate()
@@ -84,161 +84,161 @@ public class EntityGunItem extends EntityItem {
 		if(!worldObj.isRemote && ammoStacks == null)
 			setDead();
 
-        prevPosX = posX;
-        prevPosY = posY;
-        prevPosZ = posZ;
-        motionY -= 0.03999999910593033D;
-        func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0D, posZ); //PushOutOfBlocks
-        moveEntity(motionX, motionY, motionZ);
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+		motionY -= 0.03999999910593033D;
+		func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0D, posZ); //PushOutOfBlocks
+		moveEntity(motionX, motionY, motionZ);
 
-        float var2 = 0.98F;
+		float var2 = 0.98F;
 
-        if (onGround)
-        {
-            var2 = 0.58800006F;
-            Block block = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ));
+		if (onGround)
+		{
+			var2 = 0.58800006F;
+			Block block = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ));
 
-            if (block != null)
-            {
-                var2 = block.slipperiness * 0.98F;
-            }
-        }
+			if (block != null)
+			{
+				var2 = block.slipperiness * 0.98F;
+			}
+		}
 
-        motionX *= var2;
-        motionY *= 0.9800000190734863D;
-        motionZ *= var2;
+		motionX *= var2;
+		motionY *= 0.9800000190734863D;
+		motionZ *= var2;
 
-        if (onGround)
-        {
-            motionY *= -0.5D;
-        }
+		if (onGround)
+		{
+			motionY *= -0.5D;
+		}
 
-        ++age;
+		++age;
 
-        ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
+		ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 
-        if (!worldObj.isRemote && age >= lifespan)
-        {
-            if (item != null)
-            {   
-                ItemExpireEvent event = new ItemExpireEvent(this, (item.getItem() == null ? 6000 : item.getItem().getEntityLifespan(item, worldObj)));
-                if (MinecraftForge.EVENT_BUS.post(event))
-                {
-                    lifespan += event.extraLife;
-                }
-                else
-                {
-                    setDead();
-                }
-            }
-            else
-            {
-                setDead();
-            }
-        }
+		if (!worldObj.isRemote && age >= lifespan)
+		{
+			if (item != null)
+			{
+				ItemExpireEvent event = new ItemExpireEvent(this, (item.getItem() == null ? 6000 : item.getItem().getEntityLifespan(item, worldObj)));
+				if (MinecraftForge.EVENT_BUS.post(event))
+				{
+					lifespan += event.extraLife;
+				}
+				else
+				{
+					setDead();
+				}
+			}
+			else
+			{
+				setDead();
+			}
+		}
 
-        if (item != null && item.stackSize <= 0)
-        {
-            setDead();
-        }
-        
+		if (item != null && item.stackSize <= 0)
+		{
+			setDead();
+		}
+
 		//Temporary fire glitch fix
 		if(worldObj.isRemote)
 			extinguish();
 	}
 	
 	@Override
-    public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
-    {
-     	return false;
-    }
-    
-    @Override
-    public void onCollideWithPlayer(EntityPlayer player)
-    {
-        if (!worldObj.isRemote)
-        {
-        	if(ammoStacks != null && ammoStacks.size() > 0)
-        	{
-	        	for(int i = 0; i < player.inventory.getSizeInventory(); i++)
-	        	{
-	        		ItemStack stack = player.inventory.getStackInSlot(i);
-	        		if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
-	        		{
-	        			GunType type = ((ItemGun)stack.getItem()).type;
-	        			for(int j = ammoStacks.size() - 1; j >= 0; j--)
-	        			{
-	        				ItemStack ammoStack = ammoStacks.get(j);
-	        				if(type.isAmmo(((ItemShootable)ammoStack.getItem()).type))
-	        				{
-	        					if(player.inventory.addItemStackToInventory(ammoStack))
-	        					{
-	        						FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
-	        		                playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-	        						ammoStacks.remove(j);
-	        					}
-	        				}
-	        			}
-	        			if(ammoStacks.size() == 0)
-	        				setDead();
-	        		}
-	        	}
-        	}
-        }
-    }
-    
-    @Override
-    public boolean interactFirst(EntityPlayer player) //interact
-    {
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	{
+	 	return false;
+	}
+
+	@Override
+	public void onCollideWithPlayer(EntityPlayer player)
+	{
+		if (!worldObj.isRemote)
+		{
+			if(ammoStacks != null && ammoStacks.size() > 0)
+			{
+				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+				{
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
+					{
+						GunType type = ((ItemGun)stack.getItem()).type;
+						for(int j = ammoStacks.size() - 1; j >= 0; j--)
+						{
+							ItemStack ammoStack = ammoStacks.get(j);
+							if(type.isAmmo(((ItemShootable)ammoStack.getItem()).type))
+							{
+								if(player.inventory.addItemStackToInventory(ammoStack))
+								{
+									FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
+									playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+									ammoStacks.remove(j);
+								}
+							}
+						}
+						if(ammoStacks.size() == 0)
+							setDead();
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean interactFirst(EntityPlayer player) //interact
+	{
 		if(worldObj.isRemote)
 			return true;
 		EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
 		TeamsManager.getInstance().playerLoot(event);
 		if(!event.isCanceled())
 		{
-	    	ItemStack currentItem = player.getCurrentEquippedItem();
-	    	if(currentItem != null && currentItem.getItem() instanceof ItemGun)
-	    	{
-	    		GunType gunType = ((ItemGun)currentItem.getItem()).type;
-	    		List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
-	    		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
-	    		{
-	    			ItemStack stack = player.inventory.getStackInSlot(i);
-	    			if(stack != null && stack.getItem() instanceof ItemShootable)
-	    			{
-	    				ShootableType bulletType = ((ItemShootable)stack.getItem()).type;
-	    				if(gunType.isAmmo(bulletType))
-	    				{
-	    					newAmmoStacks.add(stack.copy());
-	    					player.inventory.setInventorySlotContents(i, null);
-	    				}
-	    			}
-	    		}
-	    		EntityGunItem newGunItem = new EntityGunItem(worldObj, posX, posY, posZ, currentItem.copy(), newAmmoStacks); 
-	    		worldObj.spawnEntityInWorld(newGunItem);
-	    		player.inventory.setInventorySlotContents(player.inventory.currentItem, getEntityItem());
-	    		for(ItemStack stack : ammoStacks)
-	    		{
-	    			player.inventory.addItemStackToInventory(stack);
-	    		}
-	    		setDead();
-	    		PlayerHandler.getPlayerData(player).shootClickDelay = 10;
-	    		PlayerHandler.getPlayerData(player).isShootingRight = false;
-	    		return true;
-	    	}
+			ItemStack currentItem = player.getCurrentEquippedItem();
+			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
+			{
+				GunType gunType = ((ItemGun)currentItem.getItem()).type;
+				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
+				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+				{
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if(stack != null && stack.getItem() instanceof ItemShootable)
+					{
+						ShootableType bulletType = ((ItemShootable)stack.getItem()).type;
+						if(gunType.isAmmo(bulletType))
+						{
+							newAmmoStacks.add(stack.copy());
+							player.inventory.setInventorySlotContents(i, null);
+						}
+					}
+				}
+				EntityGunItem newGunItem = new EntityGunItem(worldObj, posX, posY, posZ, currentItem.copy(), newAmmoStacks);
+				worldObj.spawnEntityInWorld(newGunItem);
+				player.inventory.setInventorySlotContents(player.inventory.currentItem, getEntityItem());
+				for(ItemStack stack : ammoStacks)
+				{
+					player.inventory.addItemStackToInventory(stack);
+				}
+				setDead();
+				PlayerHandler.getPlayerData(player).shootClickDelay = 10;
+				PlayerHandler.getPlayerData(player).isShootingRight = false;
+				return true;
+			}
 		}
-    	return false;
-    }
-    
-    @Override
-    public boolean canAttackWithItem()
-    {
-        return false;
-    }
-    
+		return false;
+	}
+
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean canAttackWithItem()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

@@ -45,27 +45,27 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 	}
 	
 	@Override
-    public Packet getDescriptionPacket()
-    {
-        NBTTagCompound tags = new NBTTagCompound();
-        tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
-        tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tags);
-    }
-    
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
-    {
-    	teamID = packet.func_148857_g().getByte("TeamID");
-    	map = packet.func_148857_g().getString("Map");
-    }
-    
-    @Override
-    public void updateEntity()
-    {
-    	if(worldObj.isRemote)
-    		return;
-    	//updateChunkLoading();
+	public Packet getDescriptionPacket()
+	{
+		NBTTagCompound tags = new NBTTagCompound();
+		tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
+		tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tags);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+	{
+		teamID = packet.func_148857_g().getByte("TeamID");
+		map = packet.func_148857_g().getString("Map");
+	}
+
+	@Override
+	public void updateEntity()
+	{
+		if(worldObj.isRemote)
+			return;
+		//updateChunkLoading();
 		//If the base was loaded after the spawner, check to see if the base has now been loaded
 		if(baseID >= 0 && base == null)
 		{
@@ -124,11 +124,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 				}
 			}
 		}
-    }
-    
+	}
+
 	@Override
-    public void writeToNBT(NBTTagCompound nbt)
-    {
+	public void writeToNBT(NBTTagCompound nbt)
+	{
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
 		nbt.setInteger("Base", baseID);
@@ -141,11 +141,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 			nbt.setTag("stack" + i, stackNBT);
 		}
 			
-    }
+	}
 	
 	@Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
+	public void readFromNBT(NBTTagCompound nbt)
+	{
 		super.readFromNBT(nbt);
 		currentDelay = spawnDelay = nbt.getInteger("delay");
 		baseID = nbt.getInteger("Base");
@@ -157,7 +157,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject
 		{
 			stacksToSpawn.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack" + i)));
 		}
-    }
+	}
 
 	@Override
 	public ITeamBase getBase() 

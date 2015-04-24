@@ -31,11 +31,11 @@ public class PacketMechaControl extends PacketDriveableControl
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	super.encodeInto(ctx, data);
-    	data.writeFloat(legYaw);
-    	data.writeFloat(legSwing);
-    	ByteBufUtils.writeItemStack(data, leftStack);
-    	ByteBufUtils.writeItemStack(data, rightStack);
+		super.encodeInto(ctx, data);
+		data.writeFloat(legYaw);
+		data.writeFloat(legSwing);
+		ByteBufUtils.writeItemStack(data, leftStack);
+		ByteBufUtils.writeItemStack(data, rightStack);
 	}
 
 	@Override

@@ -39,10 +39,10 @@ public class PacketFlak extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeDouble(x);
-    	data.writeDouble(y);
-    	data.writeDouble(z);
-    	data.writeInt(numParticles);
-    	writeUTF(data, particleType);
+		data.writeDouble(y);
+		data.writeDouble(z);
+		data.writeInt(numParticles);
+		writeUTF(data, particleType);
 	}
 
 	@Override

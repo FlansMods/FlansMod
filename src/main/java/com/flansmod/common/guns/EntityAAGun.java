@@ -102,15 +102,15 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
-    {
+	public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
+	{
 		sPosX = d;
 		sPosY = d1;
 		sPosZ = d2;
 		sYaw = f;
 		sPitch = f1;
 		sUpdateTime = i;
-    }
+	}
 
 	public void initType()
 	{
@@ -125,7 +125,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
+	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
 		
 	}
@@ -490,7 +490,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double z2 = -x * sinYaw + z * cosYaw;
 
 		riddenByEntity.setPosition(posX + x2, posY + y, posZ + z2);
-    }
+	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
@@ -602,15 +602,15 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public boolean canRiderInteract()
-    {
-        return false;
-    }
+	public boolean canRiderInteract()
+	{
+		return false;
+	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
-    }
+	}
 }

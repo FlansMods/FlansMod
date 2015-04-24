@@ -154,7 +154,7 @@ public class ItemGun extends Item implements IFlanItem
 	}
 
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
 	{
 		if(type.description != null)
 		{
@@ -776,7 +776,7 @@ public class ItemGun extends Item implements IFlanItem
 				data.shouldPlayWarmupSound = true;
 			}
 		}
-    }
+	}
 		
 	public ItemStack tryToShoot(ItemStack gunStack, GunType gunType, World world, EntityPlayerMP entityplayer, boolean left)
 	{
@@ -986,17 +986,17 @@ public class ItemGun extends Item implements IFlanItem
 	{
 		if (type.deployable)
 		{
-	    	//Raytracing
-	        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-	        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-	        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-	        double length = 5D;
-	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
-	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-	        MovingObjectPosition look = world.rayTraceBlocks(posVec, lookVec, true);
-	        
-	        //Result check
+			//Raytracing
+			float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+			float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+			float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
+			float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
+			double length = 5D;
+			Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);
+			Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+			MovingObjectPosition look = world.rayTraceBlocks(posVec, lookVec, true);
+
+			//Result check
 			if (look != null && look.typeOfHit == MovingObjectType.BLOCK)
 			{
 				if (look.sideHit == 1)
@@ -1045,10 +1045,10 @@ public class ItemGun extends Item implements IFlanItem
 	
 	//Stop damage being done to entities when scoping etc.
 	@Override
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
-    {
-        return type.secondaryFunction != EnumSecondaryFunction.MELEE;
-    }
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
+	{
+		return type.secondaryFunction != EnumSecondaryFunction.MELEE;
+	}
 
 	@Override
 	public boolean isFull3D()
@@ -1081,87 +1081,87 @@ public class ItemGun extends Item implements IFlanItem
 	}
 	
 	@Override
-    public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
-    {
-        return true;
-    }
+	public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
+	{
+		return true;
+	}
 
 	@Override
-    public boolean func_150897_b(Block p_150897_1_)
-    {
-        return false;
-    }
-    
+	public boolean func_150897_b(Block p_150897_1_)
+	{
+		return false;
+	}
+
 	@Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
 
 	public boolean isItemStackDamageable()
 	{
 		return true;
 	}
 	
-    @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list)
-    {
-    	ItemStack gunStack = new ItemStack(item, 1, 0);
-    	GunType type = ((ItemGun)item).type;
-    	NBTTagCompound tags = new NBTTagCompound();
-    	tags.setString("Paint", type.defaultPaintjob.iconName);
-    	gunStack.stackTagCompound = tags;
-        list.add(gunStack);
-    }
+	@Override
+	public void getSubItems(Item item, CreativeTabs tabs, List list)
+	{
+		ItemStack gunStack = new ItemStack(item, 1, 0);
+		GunType type = ((ItemGun)item).type;
+		NBTTagCompound tags = new NBTTagCompound();
+		tags.setString("Paint", type.defaultPaintjob.iconName);
+		gunStack.stackTagCompound = tags;
+		list.add(gunStack);
+	}
 	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-        itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    	for(Paintjob paintjob : type.paintjobs)
-    	{
-    		icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
-    		//itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    	}
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack)
-    {
-    	//For backwards compatibility, give old guns the default paint job
-    	if(stack.stackTagCompound == null)
-    		stack.stackTagCompound = new NBTTagCompound();
-    	if(!stack.stackTagCompound.hasKey("Paint"))
-    		stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+		for(Paintjob paintjob : type.paintjobs)
+		{
+			icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
+			//itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+		}
+	}
 
-        return icons.get(stack.stackTagCompound.getString("Paint"));
-    }
-    
-    @Override
-    public int getMaxItemUseDuration(ItemStack par1ItemStack)
-    {
-        return 100;
-    }
-    
-    @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack)
-    {
-        return EnumAction.bow;
-    }
-    
-    @Override
-    public Multimap getAttributeModifiers(ItemStack stack)
-    {
-       	Multimap map = super.getAttributeModifiers(stack);
-       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", type.knockbackModifier, 0));
-       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
-        if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
-        	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
-       	return map;
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack)
+	{
+		//For backwards compatibility, give old guns the default paint job
+		if(stack.stackTagCompound == null)
+			stack.stackTagCompound = new NBTTagCompound();
+		if(!stack.stackTagCompound.hasKey("Paint"))
+			stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
+
+		return icons.get(stack.stackTagCompound.getString("Paint"));
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	{
+		return 100;
+	}
+
+	@Override
+	public EnumAction getItemUseAction(ItemStack par1ItemStack)
+	{
+		return EnumAction.bow;
+	}
+
+	@Override
+	public Multimap getAttributeModifiers(ItemStack stack)
+	{
+	   	Multimap map = super.getAttributeModifiers(stack);
+	   	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", type.knockbackModifier, 0));
+	   	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
+		if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
+			map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+	   	return map;
+	}
 
 	@Override
 	public InfoType getInfoType() 

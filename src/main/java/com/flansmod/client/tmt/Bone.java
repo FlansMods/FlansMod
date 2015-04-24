@@ -447,18 +447,18 @@ public class Bone
 		float x = xRot;
 		float y = yRot;
 		float z = zRot;
-        float xC = MathHelper.cos(x);
-        float xS = MathHelper.sin(x);
-        float yC = MathHelper.cos(y);
-        float yS = MathHelper.sin(y);
-        float zC = MathHelper.cos(z);
-        float zS = MathHelper.sin(z);
-        
-        double xVec = vector.xCoord;
-        double yVec = vector.yCoord;
-        double zVec = vector.zCoord;
-        
-        // rotation around x
+		float xC = MathHelper.cos(x);
+		float xS = MathHelper.sin(x);
+		float yC = MathHelper.cos(y);
+		float yS = MathHelper.sin(y);
+		float zC = MathHelper.cos(z);
+		float zS = MathHelper.sin(z);
+
+		double xVec = vector.xCoord;
+		double yVec = vector.yCoord;
+		double zVec = vector.zCoord;
+
+		// rotation around x
 		double xy = xC*yVec - xS*zVec;
 		double xz = xC*zVec + xS*yVec;
 		// rotation around y
@@ -472,9 +472,9 @@ public class Bone
 		yVec = zy;
 		zVec = yz;
 		
-        vector.xCoord = xVec;
-        vector.yCoord = yVec;
-        vector.zCoord = zVec;
+		vector.xCoord = xVec;
+		vector.yCoord = yVec;
+		vector.zCoord = zVec;
 	}
 
 	protected void addVector(Vec3 destVec, Vec3 srcVec)

@@ -135,8 +135,8 @@ public class TickHandlerClient
 			}
 		}
 		
-	    if(!event.isCancelable() && event.type == ElementType.HOTBAR)
-	    {      
+		if(!event.isCancelable() && event.type == ElementType.HOTBAR)
+		{
 			//Player ammo overlay
 			if(mc.thePlayer != null)
 			{
@@ -282,7 +282,7 @@ public class TickHandlerClient
 				mc.fontRenderer.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
 			}
 			for (KillMessage killMessage : killMessages) {
-				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
+				mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "	 " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "	 " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 			}
 						
 			//Draw icons indicated weapons used
@@ -291,7 +291,7 @@ public class TickHandlerClient
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 			for (KillMessage killMessage : killMessages) {
-				drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+				drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item), i - mc.fontRenderer.getStringWidth("	 " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 			}
 			GL11.glDisable(3042 /*GL_BLEND*/);
 			RenderHelper.disableStandardItemLighting();
@@ -341,7 +341,7 @@ public class TickHandlerClient
 					mc.fontRenderer.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
 				}
 			}
-	    }
+		}
 	}
 	
 	@SubscribeEvent

@@ -104,7 +104,7 @@ public class FlansModClient extends FlansMod
 	public static float zoomProgress = 0F, lastZoomProgress = 0F;
 	/** The zoom level of the last scope used, for transitioning out of being scoped, even after the scope is forgotten */
 	public static float lastZoomLevel = 1F, lastFOVZoomLevel = 1F;
-    
+
 	//Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
 	/** The player's mouse sensitivity setting, as it was before being hacked by my mod */
 	public static float originalMouseSensitivity = 0.5F;
@@ -159,35 +159,35 @@ public class FlansModClient extends FlansMod
 		//Render!
 		GL11.glPushMatrix();
 		renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);
-        GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
+		GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
-        float f2 = 1F;
-        
-        GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
-        GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glScalef(-f2, -f2, f2);
-               
-        int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
-        float f11 = (float)(k >> 16 & 255) / 255.0F;
-        float f12 = (float)(k >> 8 & 255) / 255.0F;
-        float f3 = (float)(k & 255) / 255.0F;
-        GL11.glColor4f(f11, f12, f3, 1.0F);
-        ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);  
-        
-        GL11.glPopMatrix();
+		float f2 = 1F;
+
+		GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
+		GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glScalef(-f2, -f2, f2);
+
+		int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
+		float f11 = (float)(k >> 16 & 255) / 255.0F;
+		float f12 = (float)(k >> 8 & 255) / 255.0F;
+		float f3 = (float)(k & 255) / 255.0F;
+		GL11.glColor4f(f11, f12, f3, 1.0F);
+		ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);
+
+		GL11.glPopMatrix();
 	}
 	
-    private float interpolateRotation(float x, float y, float dT)
-    {
-        float f3;
+	private float interpolateRotation(float x, float y, float dT)
+	{
+		float f3;
 
-        for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
-        for( ; f3 >= 180.0F; f3 -= 360.0F) { }
+		for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
+		for( ; f3 >= 180.0F; f3 -= 360.0F) { }
 
-        return x + dT * f3;
-    }
-    	
+		return x + dT * f3;
+	}
+
 	//Handle player hiding / name tag removal for teams
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
@@ -243,7 +243,7 @@ public class FlansModClient extends FlansMod
 			{
 				RendererLivingEntity.NAME_TAG_RANGE = 0F;
 				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
-            }
+			}
 		}
 		
 
@@ -500,7 +500,7 @@ public class FlansModClient extends FlansMod
 		{
 			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
 			fx.setRBGColorF(fx.getRedColorF() * 0.3F, fx.getGreenColorF() * 0.8F, fx.getBlueColorF());
-            fx.nextTextureIndexX();
+			fx.nextTextureIndexX();
 		}
 		else if(s.equals("smoke"))
 			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
@@ -512,8 +512,8 @@ public class FlansModClient extends FlansMod
 		else if(s.equals("mobSpellAmbient"))
 		{
 			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
-            fx.setAlphaF(0.15F);
-            fx.setRBGColorF(0F, 0F, 0F);
+			fx.setAlphaF(0.15F);
+			fx.setRBGColorF(0F, 0F, 0F);
 		}
 		else if(s.equals("spell"))
 			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
@@ -526,8 +526,8 @@ public class FlansModClient extends FlansMod
 		{
 			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
 			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
-            float f = w.rand.nextFloat() * 0.5F + 0.35F;
-            fx.setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
+			float f = w.rand.nextFloat() * 0.5F + 0.35F;
+			fx.setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
 		}
 		else if(s.equals("note"))
 			fx = new EntityNoteFX(w, x, y, z, 0D, 0D, 0D);
@@ -575,7 +575,7 @@ public class FlansModClient extends FlansMod
 		{
 			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
 			fx.setParticleTextureIndex(82);
-            fx.setRBGColorF(1.0F, 1.0F, 1.0F);
+			fx.setRBGColorF(1.0F, 1.0F, 1.0F);
 		}
 		else if(s.equals("snowshovel"))
 			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
@@ -584,49 +584,49 @@ public class FlansModClient extends FlansMod
 		else if(s.equals("snowshovel"))
 			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
 
-        else
-        {
-            int k;
-            String[] astring;
+		else
+		{
+			int k;
+			String[] astring;
 
-            if (s.startsWith("iconcrack_"))
-            {
-                astring = s.split("_", 3);
-                int j = Integer.parseInt(astring[1]);
+			if (s.startsWith("iconcrack_"))
+			{
+				astring = s.split("_", 3);
+				int j = Integer.parseInt(astring[1]);
 
-                if (astring.length > 2)
-                {
-                    k = Integer.parseInt(astring[2]);
-                    fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), k);
-                }
-                else fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), 0);
-            }
-            else
-            {
-                Block block;
+				if (astring.length > 2)
+				{
+					k = Integer.parseInt(astring[2]);
+					fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), k);
+				}
+				else fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), 0);
+			}
+			else
+			{
+				Block block;
 
-                if (s.startsWith("blockcrack_"))
-                {
-                    astring = s.split("_", 3);
-                    block = Block.getBlockById(Integer.parseInt(astring[1]));
-                    k = Integer.parseInt(astring[2]);
-                    fx = (new EntityDiggingFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
-                }
-                else if (s.startsWith("blockdust_"))
-                {
-                    astring = s.split("_", 3);
-                    block = Block.getBlockById(Integer.parseInt(astring[1]));
-                    k = Integer.parseInt(astring[2]);
-                    fx = (new EntityBlockDustFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
-                }
-            }
-        }
+				if (s.startsWith("blockcrack_"))
+				{
+					astring = s.split("_", 3);
+					block = Block.getBlockById(Integer.parseInt(astring[1]));
+					k = Integer.parseInt(astring[2]);
+					fx = (new EntityDiggingFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+				}
+				else if (s.startsWith("blockdust_"))
+				{
+					astring = s.split("_", 3);
+					block = Block.getBlockById(Integer.parseInt(astring[1]));
+					k = Integer.parseInt(astring[2]);
+					fx = (new EntityBlockDustFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+				}
+			}
+		}
 		
 		if(mc.gameSettings.fancyGraphics)
 			fx.renderDistanceWeight = 200D;
 		
-        if(fx != null)
-            mc.effectRenderer.addEffect(fx);
+		if(fx != null)
+			mc.effectRenderer.addEffect(fx);
 		return fx;
 	}
 

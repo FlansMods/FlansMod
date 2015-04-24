@@ -14,25 +14,25 @@ public class RenderNull extends Render
 {
 	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
 
-    public RenderNull()
-    {
-        shadowSize = 0.5F;
-    }
+	public RenderNull()
+	{
+		shadowSize = 0.5F;
+	}
 
-    public void func_157_a(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
-    {
-    }
+	public void func_157_a(Entity entity, double d, double d1, double d2,
+			float f, float f1)
+	{
+	}
 
-    @Override
+	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
-    {
-    	if(FlansMod.DEBUG)
-    	{
-    		GL11.glPushMatrix();
-            GL11.glTranslatef((float)d, (float)d1, (float)d2);      
-            GL11.glRotatef(-entity.rotationYaw, 0F, 1F, 0F);
+			float f, float f1)
+	{
+		if(FlansMod.DEBUG)
+		{
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float)d, (float)d1, (float)d2);
+			GL11.glRotatef(-entity.rotationYaw, 0F, 1F, 0F);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
 			//GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -44,14 +44,14 @@ public class RenderNull extends Render
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			GL11.glPopMatrix();
-    	}
-    }
-    
+		}
+	}
+
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return texture;
 	}
 	
-    protected ModelBase model;
+	protected ModelBase model;
 }

@@ -25,13 +25,13 @@ public class RenderFlagpole extends Render
 		bindEntityTexture(entity);
 		EntityFlagpole flagpole = (EntityFlagpole)entity;
 		GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
-        GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
 		
-        GL11.glScalef(-1F, -1F, 1F);
-        GL11.glColor3f(1F, 1F, 1F);
-        
-        modelFlagpole.renderPole(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flagpole);
+		GL11.glScalef(-1F, -1F, 1F);
+		GL11.glColor3f(1F, 1F, 1F);
+
+		modelFlagpole.renderPole(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flagpole);
 		GL11.glPopMatrix();
 	}
 

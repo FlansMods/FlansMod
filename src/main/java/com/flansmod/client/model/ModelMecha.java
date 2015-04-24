@@ -77,124 +77,124 @@ public class ModelMecha extends ModelDriveable
 	public void render(float f5, EntityMecha mecha, float f)
 	{
 		//Rendering the body
-        if(mecha.isPartIntact(EnumDriveablePart.core))
+		if(mecha.isPartIntact(EnumDriveablePart.core))
 			for (ModelRendererTurbo aBodyModel : bodyModel) aBodyModel.render(f5);
-            
-        if(mecha.isPartIntact(EnumDriveablePart.head))
-        	for(ModelRendererTurbo model : headModel)
-        		model.render(f5);
+
+		if(mecha.isPartIntact(EnumDriveablePart.head))
+			for(ModelRendererTurbo model : headModel)
+				model.render(f5);
 
 		float pitch = mecha.seats[0] == null ? 0F : mecha.seats[0].looking.getPitch();
-        
-        if(mecha.isPartIntact(EnumDriveablePart.barrel))
-        {
+
+		if(mecha.isPartIntact(EnumDriveablePart.barrel))
+		{
 			for (ModelRendererTurbo aBarrelModel : barrelModel) {
 				aBarrelModel.rotateAngleZ = -pitch * 3.14159265F / 180F;
 				aBarrelModel.render(f5, oldRotateOrder);
 			}
-        }
+		}
 	}
 		
 	public void renderLeftArm(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftArmModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftArmModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftHand(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftHandModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftHandModel)
+				model.render(f5);
 	}
 	
 	public void renderRightArm(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightArmModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightArmModel)
+				model.render(f5);
 	}
 	
 	public void renderRightHand(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightHandModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightHandModel)
+				model.render(f5);
 	}
 	
 	public void renderRightFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightFootModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftFootModel)
+				model.render(f5);
 	}
 	
 	public void renderRightLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightLegModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftLegModel)
+				model.render(f5);
 	}
 	
 	public void renderRightRearFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightRearFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightRearFootModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftRearFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftRearFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftRearFootModel)
+				model.render(f5);
 	}
 	
 	public void renderRightRearLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightRearLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightRearLegModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftRearLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftRearLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftRearLegModel)
+				model.render(f5);
 	}
 	
 	public void renderRightFrontFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightFrontFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightFrontFootModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftFrontFoot(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftFrontFootModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftFrontFootModel)
+				model.render(f5);
 	}
 	
 	public void renderRightFrontLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : rightFrontLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : rightFrontLegModel)
+				model.render(f5);
 	}
 	
 	public void renderLeftFrontLeg(float f5, EntityMecha mecha, float f)
 	{
-        	for(ModelRendererTurbo model : leftFrontLegModel)
-        		model.render(f5);
+			for(ModelRendererTurbo model : leftFrontLegModel)
+				model.render(f5);
 	}
 	
 	public void renderHips(float f5, EntityMecha mecha, float f)
-	{        
-        	for(ModelRendererTurbo model : hipsModel)
-        		model.render(f5);
+	{
+			for(ModelRendererTurbo model : hipsModel)
+				model.render(f5);
 	}
 	
 	@Override

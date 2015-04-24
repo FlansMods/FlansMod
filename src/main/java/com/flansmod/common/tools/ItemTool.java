@@ -31,10 +31,10 @@ public class ItemTool extends ItemFood
 {
 	public ToolType type;
 
-    public ItemTool(ToolType t)
-    {
-    	super(t.foodness, false);
-        maxStackSize = 1;
+	public ItemTool(ToolType t)
+	{
+		super(t.foodness, false);
+		maxStackSize = 1;
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
@@ -47,34 +47,34 @@ public class ItemTool extends ItemFood
 				setCreativeTab(FlansMod.tabFlanDriveables);
 		}
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-    }
-    
+	}
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-    
-    @Override
-	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
+
 	@Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
 		if(type.foodness > 0)
 			super.onItemRightClick(itemstack, world, entityplayer);
 		
@@ -123,22 +123,22 @@ public class ItemTool extends ItemFood
 		else
 		{
 		
-	    	//Raytracing
-	        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
-	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
-	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
-	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
-	        double length = -5D;
-	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
-	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-	        
-	        if(world.isRemote && FlansMod.DEBUG)
-	        {
-	        	world.spawnEntityInWorld(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
-	        }
-	        
-	        if(type.healDriveables)
-	        {
+			//Raytracing
+			float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
+			float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
+			float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
+			float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
+			double length = -5D;
+			Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);
+			Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+
+			if(world.isRemote && FlansMod.DEBUG)
+			{
+				world.spawnEntityInWorld(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
+			}
+
+			if(type.healDriveables)
+			{
 				//Iterate over all EntityDriveables
 				for(int i = 0; i < world.loadedEntityList.size(); i++)
 				{
@@ -171,13 +171,13 @@ public class ItemTool extends ItemFood
 						}
 					}
 				}
-	        }
+			}
 	
-	        if(!world.isRemote && type.healPlayers)
-	        {
-	        	//By default, heal the player
-		        EntityLivingBase hitLiving = entityplayer;
-		        
+			if(!world.isRemote && type.healPlayers)
+			{
+				//By default, heal the player
+				EntityLivingBase hitLiving = entityplayer;
+
 				//Iterate over entities within range of the ray
 				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
 						Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
@@ -195,27 +195,27 @@ public class ItemTool extends ItemFood
 					if (hit != null)
 						hitLiving = checkEntity;
 				}
-		        //Now heal whatever it was we just decided to heal
-		        if(hitLiving != null)
-		        {        		
-		        	//If its finished, don't use it
-		        	if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
-		        		return itemstack;
-		        	
-		        	hitLiving.heal(type.healAmount);
-		        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
-		        	
+				//Now heal whatever it was we just decided to heal
+				if(hitLiving != null)
+				{
+					//If its finished, don't use it
+					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
+						return itemstack;
+
+					hitLiving.heal(type.healAmount);
+					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
+
 					//If not in creative and the tool should decay, damage it
 					if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
 						itemstack.setItemDamage(itemstack.getItemDamage() + 1);
 					//If the tool is damagable and is destroyed upon being used up, then destroy it
 					if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() >= itemstack.getMaxDamage())
 						itemstack.stackSize--;
-		        }
-	        }
+				}
+			}
 		}
-        return itemstack;
-    }
+		return itemstack;
+	}
 	
 	@Override
 	public String toString()

@@ -38,15 +38,15 @@ public class ModelMechaTool extends ModelBase
 				
 		for(ModelRendererTurbo model : sawModel)
 		{
-	        GL11.glPushMatrix();
-	        if(spin)
-	        {
-		        GL11.glTranslatef(model.rotationPointX / 16F, model.rotationPointY / 16F, model.rotationPointZ / 16F);
+			GL11.glPushMatrix();
+			if(spin)
+			{
+				GL11.glTranslatef(model.rotationPointX / 16F, model.rotationPointY / 16F, model.rotationPointZ / 16F);
 				GL11.glRotatef(25F * (float)mecha.ticksExisted, 0F, 1F, 0F);
-		        GL11.glTranslatef(-model.rotationPointX / 16F, -model.rotationPointY / 16F, -model.rotationPointZ / 16F);
-	        }
-	        model.render(f5);
-	        GL11.glPopMatrix();
+				GL11.glTranslatef(-model.rotationPointX / 16F, -model.rotationPointY / 16F, -model.rotationPointZ / 16F);
+			}
+			model.render(f5);
+			GL11.glPopMatrix();
 		}
 			
 	}

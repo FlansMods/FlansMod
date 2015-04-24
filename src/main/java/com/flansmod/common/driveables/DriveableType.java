@@ -115,7 +115,7 @@ public class DriveableType extends InfoType
 	public float bulletDetectionRadius = 5F;
 
 	/** Plane is shown on ICBM Radar and engaged by AA Guns */
-    public boolean onRadar = false;
+	public boolean onRadar = false;
 	
 	/** Sounds */
 	//TODO : Overhaul sounds
@@ -127,15 +127,15 @@ public class DriveableType extends InfoType
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
 	
-    public DriveableType(TypeFile file)
-    {
+	public DriveableType(TypeFile file)
+	{
 		super(file);
-    }
-    
-    @Override
-    public void preRead(TypeFile file)
-    {
-    	super.preRead(file);
+	}
+
+	@Override
+	public void preRead(TypeFile file)
+	{
+		super.preRead(file);
 		//Make sure the passenger arrays are set up first
 		for(String line : file.lines)
 		{
@@ -172,9 +172,9 @@ public class DriveableType extends InfoType
 			}
 		}
 		types.add(this);
-    }
+	}
 	
-    @Override
+	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
@@ -194,39 +194,39 @@ public class DriveableType extends InfoType
 			else if(split[0].equals("Drag"))
 				drag = Float.parseFloat(split[1]);
 			else if(split[0].equals("TurretOrigin"))
-            	turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
+				turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			else if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
-            	collisionPoints.add(new DriveablePosition(split));
+				collisionPoints.add(new DriveablePosition(split));
 			//Boats
 			else if(split[0].equals("PlaceableOnLand"))
-            	placeableOnLand = Boolean.parseBoolean(split[1]);
+				placeableOnLand = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("PlaceableOnWater"))
-            	placeableOnWater = Boolean.parseBoolean(split[1]);
+				placeableOnWater = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("FloatOnWater"))
-            	floatOnWater = Boolean.parseBoolean(split[1]);
+				floatOnWater = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("Boat"))
-            {
-            	placeableOnLand = false;
-            	placeableOnWater = true;
-            	floatOnWater = true;
-            	wheelStepHeight = 0F;
-            }
+			{
+				placeableOnLand = false;
+				placeableOnWater = true;
+				floatOnWater = true;
+				wheelStepHeight = 0F;
+			}
 			else if(split[0].equals("Buoyancy"))
 				buoyancy = Float.parseFloat(split[1]);
-            
-            //Wheels
+
+			//Wheels
 			else if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
-            {
-            	wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
-            }
+			{
+				wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
+			}
 			else if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
-            	wheelStepHeight = Float.parseFloat(split[1]);            
+				wheelStepHeight = Float.parseFloat(split[1]);
 			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
-                wheelSpringStrength = Float.parseFloat(split[1]);
-            
+				wheelSpringStrength = Float.parseFloat(split[1]);
+
 			//Harvesting
 			else if(split[0].equals("Harvester"))
-            	harvestBlocks = Boolean.parseBoolean(split[1]);
+				harvestBlocks = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("HarvestMaterial"))
 			{
 				materialsHarvested.add(getMaterial(split[1]));
@@ -417,7 +417,7 @@ public class DriveableType extends InfoType
 			//Y offset for badly built models :P
 			else if(split[0].equals("YOffset"))
 				yOffset = Float.parseFloat(split[1]);
-            //Third person camera distance
+			//Third person camera distance
 			else if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
 			
@@ -448,7 +448,7 @@ public class DriveableType extends InfoType
 			}
 			// ICBM Mod Radar
 			else if(split[0].equals("OnRadar"))
-                onRadar = split[1].equals("True");
+				onRadar = split[1].equals("True");
 		}
 		catch (Exception e)
 		{
@@ -456,86 +456,86 @@ public class DriveableType extends InfoType
 			e.printStackTrace();
 		}
 	}
-    
-    private DriveablePosition getShootPoint(String[] split) 
-    {
-    	//Its a gun with a type
-    	if(split.length == 6)
-    	{
-    		return new PilotGun(split);
-    	}
-    	else if(split.length == 5)
-    	{
-    		return new DriveablePosition(split);
-    	}
+
+	private DriveablePosition getShootPoint(String[] split)
+	{
+		//Its a gun with a type
+		if(split.length == 6)
+		{
+			return new PilotGun(split);
+		}
+		else if(split.length == 5)
+		{
+			return new DriveablePosition(split);
+		}
 		return new DriveablePosition(new Vector3f(), EnumDriveablePart.core);
 	}
-    
-    public ArrayList<DriveablePosition> shootPoints(boolean s)
-    {
-    	return s ? shootPointsSecondary : shootPointsPrimary;
-    }
 
-    public boolean alternate(boolean s)
-    {
-    	return s ? alternateSecondary : alternatePrimary;
-    }
-    
-    public EnumWeaponType weaponType(boolean s)
-    {
-    	return s ? secondary : primary;
-    }
-    
-    public int shootDelay(boolean s)
-    {
-    	return s ? shootDelaySecondary : shootDelayPrimary;
-    }
-    
-    public String shootSound(boolean s)
-    {
-    	return s ? shootSoundSecondary : shootSoundPrimary;
-    }
-    
+	public ArrayList<DriveablePosition> shootPoints(boolean s)
+	{
+		return s ? shootPointsSecondary : shootPointsPrimary;
+	}
+
+	public boolean alternate(boolean s)
+	{
+		return s ? alternateSecondary : alternatePrimary;
+	}
+
+	public EnumWeaponType weaponType(boolean s)
+	{
+		return s ? secondary : primary;
+	}
+
+	public int shootDelay(boolean s)
+	{
+		return s ? shootDelaySecondary : shootDelayPrimary;
+	}
+
+	public String shootSound(boolean s)
+	{
+		return s ? shootSoundSecondary : shootSoundPrimary;
+	}
+
 	public int numEngines()
-    {
-    	return 1;
-    }
-    
-    public int ammoSlots()
-    {
-    	return numPassengerGunners + pilotGuns.size();
-    }
-        
-    public boolean isValidAmmo(BulletType bulletType, EnumWeaponType weaponType)
-    {
-    	return (acceptAllAmmo || ammo.contains(bulletType)) && bulletType.weaponType == weaponType;
-    }
-    
-    /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
-    public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
-    {
-    	ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
-    	//Start with the items required to build this part
-    	if(partwiseRecipe.get(part.type) != null)
-    	{
-	    	for(ItemStack stack : partwiseRecipe.get(part.type))
-	    	{
-	    		stacks.add(stack.copy());
-	    	}
-    	}
-    	//Add the items required for the guns connected to this part
-    	for(PilotGun gun : pilotGuns)
-    	{
-    		if(gun.part == part.type)
-    			stacks.add(new ItemStack(gun.type.item));
-    	}
-    	for(Seat seat : seats)
-    	{
-    		if(seat != null && seat.part == part.type && seat.gunType != null)
-    			stacks.add(new ItemStack(seat.gunType.item));
-    	}
-    	return stacks;
-    }
+	{
+		return 1;
+	}
+
+	public int ammoSlots()
+	{
+		return numPassengerGunners + pilotGuns.size();
+	}
+
+	public boolean isValidAmmo(BulletType bulletType, EnumWeaponType weaponType)
+	{
+		return (acceptAllAmmo || ammo.contains(bulletType)) && bulletType.weaponType == weaponType;
+	}
+
+	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+	{
+		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
+		//Start with the items required to build this part
+		if(partwiseRecipe.get(part.type) != null)
+		{
+			for(ItemStack stack : partwiseRecipe.get(part.type))
+			{
+				stacks.add(stack.copy());
+			}
+		}
+		//Add the items required for the guns connected to this part
+		for(PilotGun gun : pilotGuns)
+		{
+			if(gun.part == part.type)
+				stacks.add(new ItemStack(gun.type.item));
+		}
+		for(Seat seat : seats)
+		{
+			if(seat != null && seat.part == part.type && seat.gunType != null)
+				stacks.add(new ItemStack(seat.gunType.item));
+		}
+		return stacks;
+	}
 	
 	public static DriveableType getDriveable(String find)
 	{

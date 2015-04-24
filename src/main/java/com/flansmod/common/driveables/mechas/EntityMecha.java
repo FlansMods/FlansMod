@@ -59,29 +59,29 @@ import com.flansmod.common.vector.Vector3i;
 public class EntityMecha extends EntityDriveable
 {
 	private int ticksSinceUsed;
-    public int toggleTimer = 0;
-    private float moveX = 0, moveZ = 0;
-    public RotatedAxes legAxes;
-    public float prevLegsYaw = 0F;
-    private int jumpDelay = 0;
-    public MechaInventory inventory;
-    public float legSwing = 0;
-    /** Used for shooting guns */
-    public int shootDelayLeft = 0, shootDelayRight = 0;
-    /** Used for gun sounds */
-    public int soundDelayLeft = 0, soundDelayRight = 0;
-    /** The coords of the blocks being destroyed */
-    public Vector3i breakingBlock = null;
-    /** Progress made towards breaking each block */
-    public float breakingProgress = 0F;
-    /** Timer for the RocketPack Sound */
-    private float rocketTimer = 0F;
-    private int diamondTimer = 0;
-    
-    /** Gun animations */
-    public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
+	public int toggleTimer = 0;
+	private float moveX = 0, moveZ = 0;
+	public RotatedAxes legAxes;
+	public float prevLegsYaw = 0F;
+	private int jumpDelay = 0;
+	public MechaInventory inventory;
+	public float legSwing = 0;
+	/** Used for shooting guns */
+	public int shootDelayLeft = 0, shootDelayRight = 0;
+	/** Used for gun sounds */
+	public int soundDelayLeft = 0, soundDelayRight = 0;
+	/** The coords of the blocks being destroyed */
+	public Vector3i breakingBlock = null;
+	/** Progress made towards breaking each block */
+	public float breakingProgress = 0F;
+	/** Timer for the RocketPack Sound */
+	private float rocketTimer = 0F;
+	private int diamondTimer = 0;
+
+	/** Gun animations */
+	public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
 	boolean couldNotFindFuel;
-    
+
 
 
 	public EntityMecha(World world) 
@@ -112,29 +112,29 @@ public class EntityMecha extends EntityDriveable
 		prevLegsYaw = legAxes.getYaw();
 	}
 	
-    @Override
-    protected void initType(DriveableType type, boolean clientSide)
-    {
-    	super.initType(type, clientSide);
-    	setSize(((MechaType)type).width, ((MechaType)type).height);
-    	stepHeight = ((MechaType)type).stepHeight;
-    }
+	@Override
+	protected void initType(DriveableType type, boolean clientSide)
+	{
+		super.initType(type, clientSide);
+		setSize(((MechaType)type).width, ((MechaType)type).height);
+		stepHeight = ((MechaType)type).stepHeight;
+	}
 	
 	@Override
-    protected void writeEntityToNBT(NBTTagCompound tag)
-    {
-        super.writeEntityToNBT(tag);
-        tag.setFloat("LegsYaw", legAxes.getYaw());
-        tag.setTag("Inventory", inventory.writeToNBT(new NBTTagCompound()));
-    }
+	protected void writeEntityToNBT(NBTTagCompound tag)
+	{
+		super.writeEntityToNBT(tag);
+		tag.setFloat("LegsYaw", legAxes.getYaw());
+		tag.setTag("Inventory", inventory.writeToNBT(new NBTTagCompound()));
+	}
 
 	@Override
-    protected void readEntityFromNBT(NBTTagCompound tag)
-    {
-        super.readEntityFromNBT(tag);
-        legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
-        inventory.readFromNBT(tag.getCompoundTag("Inventory"));
-    }
+	protected void readEntityFromNBT(NBTTagCompound tag)
+	{
+		super.readEntityFromNBT(tag);
+		legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
+		inventory.readFromNBT(tag.getCompoundTag("Inventory"));
+	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf data)
@@ -160,7 +160,7 @@ public class EntityMecha extends EntityDriveable
 	
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
-    {
+	{
 		if(isDead)
 			return false;
 		if(worldObj.isRemote)
@@ -178,8 +178,8 @@ public class EntityMecha extends EntityDriveable
 			if(seats[i].interactFirst(entityplayer))
 				return true;
 		}
-        return false;
-    }
+		return false;
+	}
 	
 	public MechaType getMechaType()
 	{
@@ -190,31 +190,31 @@ public class EntityMecha extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		MechaType type = getMechaType();
-    	DriveableData data = getDriveableData();
+		DriveableData data = getDriveableData();
 		//send keys which require server side updates to the server
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
-    	{
-    		FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-    		return true;
-    	}
-    	switch(key)
-    	{
-    		case 0 : //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
-    		{
-    			return true;
-    		}
-    		case 1 : //Backwards
-    		{
-    			return true;
-    		}
-    		case 2 : //Left
-    		{
-    			return true;
-    		}
-    		case 3 : //Right
-    		{
-    			return true;
-    		}
+		if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+			return true;
+		}
+		switch(key)
+		{
+			case 0 : //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
+			{
+				return true;
+			}
+			case 1 : //Backwards
+			{
+				return true;
+			}
+			case 2 : //Left
+			{
+				return true;
+			}
+			case 3 : //Right
+			{
+				return true;
+			}
 			case 4 : //Jump
 			{
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
@@ -234,7 +234,7 @@ public class EntityMecha extends EntityDriveable
 			case 6 : //Exit : Get out
 			{
 				seats[0].riddenByEntity.mountEntity(null);
-          		return true;
+		  		return true;
 			}
 			case 7 : //Inventory
 			{
@@ -283,14 +283,14 @@ public class EntityMecha extends EntityDriveable
 				return true;
 			}
 			
-    	}
+		}
 		return false;
 	}
 	
 	private boolean useItem(boolean left)
 	{
-        if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
-	        {
+		if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
+			{
 			boolean creative = !(seats[0].riddenByEntity instanceof EntityPlayer) || ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode;
 			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(heldStack == null)
@@ -385,7 +385,7 @@ public class EntityMecha extends EntityDriveable
 					}
 				}
 			}
-        }
+		}
 		return true;
 	}
 
@@ -432,40 +432,40 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
-    protected void fall(float f)
-    {
+	protected void fall(float f)
+	{
 		attackEntityFrom(DamageSource.fall, f);
-    }
+	}
 	
 	@Override
-    public boolean attackEntityFrom(DamageSource damagesource, float i)
-    {
-        if(worldObj.isRemote || isDead)
-            return true;
-        
-        MechaType type = getMechaType();
-        
-        if(damagesource.getDamageType().equals("fall"))
-        {
-        	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
-        	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
-        	
-        	byte wouldBeNegativeDamage;
-        	if(((i * type.fallDamageMultiplier * vulnerability())-2)<0){wouldBeNegativeDamage=0;} else {wouldBeNegativeDamage=1;};
-        	
-        	float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
-        	float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
-        	        	
-        	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
-        	checkParts();
-        	FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
-        	if(blockDamageFromFalling > 1)
-        	{
-        		worldObj.createExplosion(this, posX, posY, posZ, blockDamageFromFalling, TeamsManager.explosions);
-        	}
-        }
-        
-        else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
+	{
+		if(worldObj.isRemote || isDead)
+			return true;
+
+		MechaType type = getMechaType();
+
+		if(damagesource.getDamageType().equals("fall"))
+		{
+			boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
+			boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
+
+			byte wouldBeNegativeDamage;
+			if(((i * type.fallDamageMultiplier * vulnerability())-2)<0){wouldBeNegativeDamage=0;} else {wouldBeNegativeDamage=1;};
+
+			float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
+			float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
+
+			driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
+			checkParts();
+			FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			if(blockDamageFromFalling > 1)
+			{
+				worldObj.createExplosion(this, posX, posY, posZ, blockDamageFromFalling, TeamsManager.explosions);
+			}
+		}
+
+		else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.item, 1, 0);
 			mechaStack.stackTagCompound = new NBTTagCompound();
@@ -474,12 +474,12 @@ public class EntityMecha extends EntityDriveable
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}
-        else
-        {
-        	driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
-        }
-        return true;
-    }
+		else
+		{
+			driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
+		}
+		return true;
+	}
 	
 	@Override
 	public void onUpdate()
@@ -590,23 +590,23 @@ public class EntityMecha extends EntityDriveable
 		if(worldObj.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
-            if (serverPositionTransitionTicker > 0)
-            {
-                double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
-                double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
-                double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
-                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
-                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
-                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
-                rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
-                rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
-                float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
-                --serverPositionTransitionTicker;
-                setPosition(x, y, z);
-                setRotation(rotationYaw, rotationPitch, rotationRoll);
-                //return;
-            }
-            //If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
+			if (serverPositionTransitionTicker > 0)
+			{
+				double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+				double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+				double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+				double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
+				double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
+				double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+				rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+				rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+				float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
+				--serverPositionTransitionTicker;
+				setPosition(x, y, z);
+				setRotation(rotationYaw, rotationPitch, rotationRoll);
+				//return;
+			}
+			//If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
 		}
 		
 		//Movement
@@ -824,9 +824,9 @@ public class EntityMecha extends EntityDriveable
 								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)seats[0].riddenByEntity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 								cancelled = event.isCanceled();
 							}
-					        if(!cancelled)
-					        {
-				        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
+							if(!cancelled)
+							{
+								//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
 								//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 								//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 	
@@ -913,7 +913,7 @@ public class EntityMecha extends EntityDriveable
 								}
 								//Destroy block
 								worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
-					        }
+							}
 						}
 					}
 				}
@@ -922,7 +922,7 @@ public class EntityMecha extends EntityDriveable
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		//FlansMod.log("" + fallDistance);
-    	setPosition(posX, posY, posZ);
+		setPosition(posX, posY, posZ);
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)

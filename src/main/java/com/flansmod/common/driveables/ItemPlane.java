@@ -34,15 +34,15 @@ public class ItemPlane extends Item implements IFlanItem
 {
 	public PlaneType type;
 	
-    public ItemPlane(PlaneType type1)
-    {
-        maxStackSize = 1;
+	public ItemPlane(PlaneType type1)
+	{
+		maxStackSize = 1;
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanDriveables);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-    }
-    
+	}
+
 	@Override
 	/** Make sure client and server side NBTtags update */
 	public boolean getShareTag()
@@ -67,21 +67,21 @@ public class ItemPlane extends Item implements IFlanItem
 	}
 	
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
-    {
+	{
 		try
 		{
 			File file1 = world.getSaveHandler().getMapFileFromName("plane_" + stack.getItemDamage());
 			if(file1 != null && file1.exists())
 			{
-		        FileInputStream fileinputstream = new FileInputStream(file1);
-		        NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
-		    	for(EnumDriveablePart part : EnumDriveablePart.values())
-		    	{
-		    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-		    		tags.setBoolean(part.getShortName() + "_Fire", false);
-		    	}
-		        fileinputstream.close();
-		        return tags;
+				FileInputStream fileinputstream = new FileInputStream(file1);
+				NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
+				for(EnumDriveablePart part : EnumDriveablePart.values())
+				{
+					tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+					tags.setBoolean(part.getShortName() + "_Fire", false);
+				}
+				fileinputstream.close();
+				return tags;
 			}
 		}
 		catch(IOException e)
@@ -90,11 +90,11 @@ public class ItemPlane extends Item implements IFlanItem
 			e.printStackTrace();
 		}
 		return null;
-    }
+	}
 
 
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
 	{
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
@@ -104,97 +104,97 @@ public class ItemPlane extends Item implements IFlanItem
 	}
 	
 	@Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
-    	//Raytracing
-        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-        double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
-        
-        //Result check
-        if(movingobjectposition == null)
-        {
-            return itemstack;
-        }
-        if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
-        {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
-            Block block = world.getBlock(i, j, k);
-            if(type.placeableOnLand || block instanceof BlockLiquid)
-            {
-	            if(!world.isRemote)
-	            {
-	            	DriveableData data = getPlaneData(itemstack, world);
-	            	if(data != null)
-	            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
-	            }
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
+		//Raytracing
+		float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+		float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+		float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
+		float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
+		double length = 5D;
+		Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);
+		Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+		MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
+
+		//Result check
+		if(movingobjectposition == null)
+		{
+			return itemstack;
+		}
+		if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
+		{
+			int i = movingobjectposition.blockX;
+			int j = movingobjectposition.blockY;
+			int k = movingobjectposition.blockZ;
+			Block block = world.getBlock(i, j, k);
+			if(type.placeableOnLand || block instanceof BlockLiquid)
+			{
+				if(!world.isRemote)
+				{
+					DriveableData data = getPlaneData(itemstack, world);
+					if(data != null)
+						world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
+				}
 				if(!entityplayer.capabilities.isCreativeMode)
 				{	
 					itemstack.stackSize--;
 				}
-            }
-        }
-        return itemstack;
-    }
-    
-    public Entity spawnPlane(World world, double x, double y, double z, ItemStack stack)
-    {
-    	DriveableData data = getPlaneData(stack, world);
-    	if(data != null)
-    	{
-	    	Entity entity = new EntityPlane(world, x, y, z, type, data);
-	    	if(!world.isRemote)
-	        {
+			}
+		}
+		return itemstack;
+	}
+
+	public Entity spawnPlane(World world, double x, double y, double z, ItemStack stack)
+	{
+		DriveableData data = getPlaneData(stack, world);
+		if(data != null)
+		{
+			Entity entity = new EntityPlane(world, x, y, z, type, data);
+			if(!world.isRemote)
+			{
 				world.spawnEntityInWorld(entity);
-	        }
-	    	return entity;
-    	}
-    	return null;
-    }
+			}
+			return entity;
+		}
+		return null;
+	}
 	
 	public DriveableData getPlaneData(ItemStack itemstack, World world)
-    {
+	{
 		return new DriveableData(getTagCompound(itemstack, world));
-    }
+	}
 		
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
 	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
-    /** Make sure that creatively spawned planes have nbt data */
-    @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list)
-    {
-    	ItemStack planeStack = new ItemStack(item, 1, 0);
-    	NBTTagCompound tags = new NBTTagCompound();
-    	tags.setString("Type", type.shortName);
-    	if(PartType.defaultEngines.containsKey(EnumType.plane))
-    		tags.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
-    	for(EnumDriveablePart part : EnumDriveablePart.values())
-    	{
-    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-    		tags.setBoolean(part.getShortName() + "_Fire", false);
-    	}
-    	planeStack.stackTagCompound = tags;
-        list.add(planeStack);
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
+	/** Make sure that creatively spawned planes have nbt data */
+	@Override
+	public void getSubItems(Item item, CreativeTabs tabs, List list)
+	{
+		ItemStack planeStack = new ItemStack(item, 1, 0);
+		NBTTagCompound tags = new NBTTagCompound();
+		tags.setString("Type", type.shortName);
+		if(PartType.defaultEngines.containsKey(EnumType.plane))
+			tags.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
+		for(EnumDriveablePart part : EnumDriveablePart.values())
+		{
+			tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+			tags.setBoolean(part.getShortName() + "_Fire", false);
+		}
+		planeStack.stackTagCompound = tags;
+		list.add(planeStack);
+	}
 	
 	@Override
 	public InfoType getInfoType() 

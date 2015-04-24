@@ -54,14 +54,14 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    protected void fall(float k)
-    {
+	protected void fall(float k)
+	{
 		if(vehicle == null || k <= 0) 
-        	return;
-        int i = MathHelper.ceiling_float_int(k - 3F);
-        if(i > 0)
-        	vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.fall, i);
-    }
+			return;
+		int i = MathHelper.ceiling_float_int(k - 3F);
+		if(i > 0)
+			vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.fall, i);
+	}
 
 	@Override
 	protected void entityInit() 
@@ -161,9 +161,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
-    {
-    }
+	public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
+	{
+	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf data) 

@@ -32,17 +32,17 @@ public class EntityPlane extends EntityDriveable
 	/** Despawn timer */
 	public int ticksSinceUsed = 0;
 	/** Mostly aesthetic model variables. Gear actually has a variable hitbox */
-    public boolean varGear = true, varDoor = false, varWing = false;
-    /** Delayer for gear, door and wing buttons */
-    public int toggleTimer = 0;
-    /** Current plane mode */
-    public EnumPlaneMode mode;
+	public boolean varGear = true, varDoor = false, varWing = false;
+	/** Delayer for gear, door and wing buttons */
+	public int toggleTimer = 0;
+	/** Current plane mode */
+	public EnumPlaneMode mode;
 	
-    public EntityPlane(World world)
-    {
-        super(world);
-    }
-    
+	public EntityPlane(World world)
+	{
+		super(world);
+	}
+
 	public EntityPlane(World world, double x, double y, double z, PlaneType type, DriveableData data)
 	{
 		super(world, type, data);
@@ -52,12 +52,12 @@ public class EntityPlane extends EntityDriveable
 		prevPosZ = z;
 		initType(type, false);
 	}
-    
+
 	public EntityPlane(World world, double x, double y, double z, EntityPlayer placer, PlaneType type, DriveableData data)
 	{
 		this(world, x, y, z, type, data);
 		rotateYaw(placer.rotationYaw + 90F);
-        rotatePitch(type.restingPitch);
+		rotatePitch(type.restingPitch);
 	}
 	
 	@Override
@@ -68,23 +68,23 @@ public class EntityPlane extends EntityDriveable
 	}
 	
 	@Override
-    protected void writeEntityToNBT(NBTTagCompound tag)
-    {
+	protected void writeEntityToNBT(NBTTagCompound tag)
+	{
 		super.writeEntityToNBT(tag);
 		tag.setTag("Pos", this.newDoubleNBTList(this.posX, this.posY + 1D, this.posZ));
-        tag.setBoolean("VarGear", varGear);
-        tag.setBoolean("VarDoor", varDoor);
-        tag.setBoolean("VarWing", varWing);
-    }
+		tag.setBoolean("VarGear", varGear);
+		tag.setBoolean("VarDoor", varDoor);
+		tag.setBoolean("VarWing", varWing);
+	}
 
 	@Override
-    protected void readEntityFromNBT(NBTTagCompound tag)
-    {
+	protected void readEntityFromNBT(NBTTagCompound tag)
+	{
 		super.readEntityFromNBT(tag);
-        varGear = tag.getBoolean("VarGear");
-        varDoor = tag.getBoolean("VarDoor");
-        varWing = tag.getBoolean("VarWing");
-    }
+		varGear = tag.getBoolean("VarGear");
+		varDoor = tag.getBoolean("VarDoor");
+		varWing = tag.getBoolean("VarWing");
+	}
 		
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
@@ -117,7 +117,7 @@ public class EntityPlane extends EntityDriveable
 		
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
-    {
+	{
 		if(isDead)
 			return false;
 		if(worldObj.isRemote)
@@ -142,20 +142,20 @@ public class EntityPlane extends EntityDriveable
 				return true;
 			}
 		}
-        return false;
-    }
-    
-    @Override
+		return false;
+	}
+
+	@Override
 	public boolean pressKey(int key, EntityPlayer player)
 	{
-    	PlaneType type = this.getPlaneType();
-    	//Send keys which require server side updates to the server
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
-    	{
-    		FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-    		return true;
-    	}
-    	boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0;
+		PlaneType type = this.getPlaneType();
+		//Send keys which require server side updates to the server
+		if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+			return true;
+		}
+		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0;
 		switch(key)
 		{
 			case 0 : //Accelerate : Increase the throttle, up to 1.
@@ -206,14 +206,14 @@ public class EntityPlane extends EntityDriveable
 			{
 				if(seats[0].riddenByEntity != null)
 					seats[0].riddenByEntity.mountEntity(null);
-          		return true;
+		  		return true;
 			}
 			case 7 : //Inventory : Check to see if this plane allows in-flight inventory editing or if the plane is on the ground
 			{
 				if(worldObj.isRemote && (type.invInflight || (Math.abs(throttle) < 0.1F && onGround)))
-                {
+				{
 					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].riddenByEntity, worldObj, this);
-                }
+				}
 				return true;
 			}
 			case 8 : //Drop bomb
@@ -282,19 +282,19 @@ public class EntityPlane extends EntityDriveable
 				}
 				return true;
 			}
-            case 16 : // Trim Button
-            {
-                axes.setAngles(axes.getYaw(), 0, 0);
+			case 16 : // Trim Button
+			{
+				axes.setAngles(axes.getYaw(), 0, 0);
 				return true;
-            }
-            case 17 : //Park
-            {
-                break;
-            }
+			}
+			case 17 : //Park
+			{
+				break;
+			}
 		}
 		return false;
 	}
-    
+
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
 	{
@@ -310,24 +310,24 @@ public class EntityPlane extends EntityDriveable
 		}
 	}
 	
-    @Override
+	@Override
 	public void onUpdate()
-    {
-        super.onUpdate();
-        
+	{
+		super.onUpdate();
+
 		//Get plane type
-        PlaneType type = getPlaneType();
-        DriveableData data = getDriveableData();
-        if(type == null)
-        {
-        	FlansMod.log("Plane type null. Not ticking plane");
-        	return;
-        }
-        
-        //Work out if this is the client side and the player is driving
-        boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
-                
-        //Despawning
+		PlaneType type = getPlaneType();
+		DriveableData data = getDriveableData();
+		if(type == null)
+		{
+			FlansMod.log("Plane type null. Not ticking plane");
+			return;
+		}
+
+		//Work out if this is the client side and the player is driving
+		boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
+
+		//Despawning
 		ticksSinceUsed++;
 		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
 			ticksSinceUsed = 0;
@@ -375,23 +375,23 @@ public class EntityPlane extends EntityDriveable
 		if(worldObj.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
-            if (serverPositionTransitionTicker > 0)
-            {
-                double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
-                double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
-                double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
-                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
-                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
-                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
-                rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
-                rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
-                float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
-                --serverPositionTransitionTicker;
-                setPosition(x, y, z);
-                setRotation(rotationYaw, rotationPitch, rotationRoll);
-                //return;
-            }
-            //If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side plane would, so continue
+			if (serverPositionTransitionTicker > 0)
+			{
+				double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+				double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+				double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+				double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
+				double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
+				double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+				rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+				rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+				float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
+				--serverPositionTransitionTicker;
+				setPosition(x, y, z);
+				setRotation(rotationYaw, rotationPitch, rotationRoll);
+				//return;
+			}
+			//If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side plane would, so continue
 		}
 		
 		//Movement
@@ -723,30 +723,30 @@ public class EntityPlane extends EntityDriveable
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketPlaneControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
-    }
-    
-    @Override
-    public void setDead()
-    {
-    	super.setDead();
-    	for(EntityWheel wheel : wheels)
-    		if(wheel != null)
-    			wheel.setDead();	
-    }
-    
+	}
+
+	@Override
+	public void setDead()
+	{
+		super.setDead();
+		for(EntityWheel wheel : wheels)
+			if(wheel != null)
+				wheel.setDead();
+	}
+
 	@Override
 	public boolean gearDown()
 	{
 		return varGear;
 	}
-    	
-    public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
-    {
-        if(worldObj.isRemote || isDead)
-            return true;
-        
-        PlaneType type = PlaneType.getPlane(driveableType);
-        
+
+	public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)
+	{
+		if(worldObj.isRemote || isDead)
+			return true;
+
+		PlaneType type = PlaneType.getPlane(driveableType);
+
 		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack planeStack = new ItemStack(type.item, 1, 0);
@@ -755,18 +755,18 @@ public class EntityPlane extends EntityDriveable
 			entityDropItem(planeStack, 0.5F);
 	 		setDead();
 		}
-        return true;
-    }
+		return true;
+	}
   
-    @Override
+	@Override
 	public boolean canHitPart(EnumDriveablePart part)
 	{
-    	return varGear || (part != EnumDriveablePart.coreWheel && part != EnumDriveablePart.leftWingWheel && part != EnumDriveablePart.rightWingWheel && part != EnumDriveablePart.tailWheel);
+		return varGear || (part != EnumDriveablePart.coreWheel && part != EnumDriveablePart.leftWingWheel && part != EnumDriveablePart.rightWingWheel && part != EnumDriveablePart.tailWheel);
 	}
-    
+
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
-    {
+	{
 		return attackEntityFrom(damagesource, i, true);
 	}
 		

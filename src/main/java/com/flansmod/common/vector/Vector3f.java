@@ -314,7 +314,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	@Override
 	public String toString() {
 
-        return "Vector3f[" + x + ", " + y + ", " + z + ']';
+		return "Vector3f[" + x + ", " + y + ", " + z + ']';
 	}
 
 	/**

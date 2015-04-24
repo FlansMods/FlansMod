@@ -122,7 +122,7 @@ public class PlayerData
 		}
 				
 		//Move all snapshots along one place
-        System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
+		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 	}

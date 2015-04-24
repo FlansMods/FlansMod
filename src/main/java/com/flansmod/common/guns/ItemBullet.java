@@ -36,26 +36,26 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		}
 	}
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-        
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 

@@ -383,9 +383,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
-	        if((thrower instanceof EntityPlayer))
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
-	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+			if((thrower instanceof EntityPlayer))
+				new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+			else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
@@ -508,10 +508,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 	
 	@Override
 	public boolean canBeCollidedWith()
@@ -531,8 +531,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(type.healAmount > 0 && player.getHealth() < player.getMaxHealth())
 			{
 				player.heal(type.healAmount);
-	        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
-	        	used = true;
+				FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
+				used = true;
 			}
 			//Handle potion effects
 			for(PotionEffect effect : type.potionEffects)

@@ -204,7 +204,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(riddenByEntity != null)
 		{
-	    	DriveableType type = driveable.getDriveableType();
+			DriveableType type = driveable.getDriveableType();
 			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
 			
 			playerPosX = posX + yOffset.xCoord;
@@ -214,9 +214,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
 			riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
 			riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
-            riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);  
-            
-            //Calculate the local look axes globally
+			riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
+
+			//Calculate the local look axes globally
 			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 			//Set the player's rotation based on this
 			playerYaw = -90F + globalLookAxes.getYaw();
@@ -247,8 +247,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-    public void updateRiderPosition()
-    {
+	public void updateRiderPosition()
+	{
 		if(riddenByEntity instanceof EntityPlayer)
 		{
 			riddenByEntity.rotationYaw = playerYaw;
@@ -259,7 +259,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
 		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
 		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
-    }
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -269,21 +269,21 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 
 	@Override
-    public boolean canBeCollidedWith()
-    {
-        return !isDead;
-    }
+	public boolean canBeCollidedWith()
+	{
+		return !isDead;
+	}
 	
 	@Override
-    protected void entityInit()
-    {
-    }
+	protected void entityInit()
+	{
+	}
 	
 	@Override
-    public float getShadowSize()
-    {
-        return 4.0F;
-    }
+	public float getShadowSize()
+	{
+		return 4.0F;
+	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
@@ -298,16 +298,16 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-    public boolean writeToNBTOptional(NBTTagCompound tags)
-    {
-        return false;
-    }
+	public boolean writeToNBTOptional(NBTTagCompound tags)
+	{
+		return false;
+	}
 	
 	@Override
-    public boolean writeMountToNBT(NBTTagCompound tags)
-    {
-        return false;
-    }
+	public boolean writeMountToNBT(NBTTagCompound tags)
+	{
+		return false;
+	}
 
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY) 
@@ -476,7 +476,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
-    {
+	{
 		if(isDead)
 			return false;
 		if(worldObj.isRemote)
@@ -514,8 +514,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			entityplayer.mountEntity(this);
 			return true;
 		}
-        return false;
-    }
+		return false;
+	}
 	
 	@Override
 	public Entity getControllingEntity() 
@@ -537,31 +537,31 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	/**
 	@Override
-    public void updateRiderPosition()
-    {
+	public void updateRiderPosition()
+	{
 		if(riddenByEntity == null || (worldObj.isRemote && !foundDriveable))
-        {
-            return;
-        } else
-        {
-        	DriveableType type = driveable.getDriveableType();
+		{
+			return;
+		} else
+		{
+			DriveableType type = driveable.getDriveableType();
 			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
-        
-            
+
+
 
 			return;
-        }
-    }
+		}
+	}
 	**/
 	
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		if(worldObj.isRemote && !foundDriveable)
 			return null;
 		return driveable.getPickedResult(target);
-    }
+	}
 	
 	@Override
 	public float getPlayerRoll() 

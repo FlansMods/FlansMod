@@ -75,7 +75,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 		if(Math.abs(type.jumpModifier - 1F) > 0.01F)
 			lines.add("\u00a73+" + (int)((type.jumpModifier - 1F) * 100F) + "% Jump Height");
@@ -87,43 +87,43 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 			lines.add("\u00a72+Negates Fall Damage");
 	}
 	
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-    
-    @Override
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return false;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
-    @Override
-    public Multimap getAttributeModifiers(ItemStack stack)
-    {
-       	Multimap map = super.getAttributeModifiers(stack);
-       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
-       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
-       	return map;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
-    {
-        return type.model;
-    }
-    
+	public boolean requiresMultipleRenderPasses()
+	{
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister icon)
+	{
+		itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+	}
+
+	@Override
+	public Multimap getAttributeModifiers(ItemStack stack)
+	{
+	   	Multimap map = super.getAttributeModifiers(stack);
+	   	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
+	   	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
+	   	return map;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
+	{
+		return type.model;
+	}
+
 	@Override
 	public InfoType getInfoType() 
 	{
@@ -131,13 +131,13 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	}
 	
 	@Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-    {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+	{
 		if(type.nightVision && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 250));
 		if(type.jumpModifier > 1.01F && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.jump.id, 250, (int)((type.jumpModifier - 1F) * 2F), true));
 		if(type.negateFallDamage)
 			player.fallDistance = 0F;
-    }
+	}
 }

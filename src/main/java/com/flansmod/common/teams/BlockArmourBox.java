@@ -29,8 +29,8 @@ public class BlockArmourBox extends Block
 
 		setBlockName(type.shortName);
 		setHardness(2F);
-	    setResistance(4F);
-	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
+		setResistance(4F);
+		GameRegistry.registerBlock(this, "armorBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		type.block = this;
 		type.item = Item.getItemFromBlock(this);
@@ -76,14 +76,14 @@ public class BlockArmourBox extends Block
 		return type.side;
 	}
 	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register)
+	{
 		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
 		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
 		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
-    }
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
