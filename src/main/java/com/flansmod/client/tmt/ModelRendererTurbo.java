@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -1849,9 +1851,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			PositionTextureVertex[] verts = faces[i].vertexPositions;
 			for(int j = 0; j < verts.length; j++)
 			{
-				verts[j].vector3D.xCoord *= (x ? -1 : 1);
-				verts[j].vector3D.yCoord *= (y ? -1 : 1);
-				verts[j].vector3D.zCoord *= (z ? -1 : 1);			   
+				verts[j].vector3D = new Vec3(verts[j].vector3D.xCoord * (x ? -1 : 1), verts[j].vector3D.yCoord * (y ? -1 : 1), verts[j].vector3D.zCoord * (z ? -1 : 1));	
 			}
 			if(x^y^z)
 				faces[i].flipFace();
@@ -2213,7 +2213,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			GL11.glCallList(displayList);
 		else
 		{
-			TextureManager renderEngine = RenderManager.instance.renderEngine;
+			TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 			
 			Collection<TextureGroup> textures = textureGroup.values();
 			

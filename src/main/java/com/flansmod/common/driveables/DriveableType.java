@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -316,9 +317,9 @@ public class DriveableType extends InfoType
 			{
 				int amount = Integer.parseInt(split[1]);
 				int damage = -1;
-				for(int i = 0; i < ItemDye.field_150923_a.length; i++)
+				for(int i = 0; i < EnumDyeColor.values().length; i++)
 				{
-					if(ItemDye.field_150923_a[i].equals(split[2]))
+					if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(split[2]))
 						damage = i;
 				}
 				if(damage == -1)

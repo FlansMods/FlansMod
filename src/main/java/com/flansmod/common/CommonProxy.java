@@ -277,7 +277,7 @@ public class CommonProxy
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-		driveableStack.stackTagCompound = tags;
+		driveableStack.setTagCompound(tags);
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropPlayerItemWithRandomChoice(driveableStack, false);
 	}

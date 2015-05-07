@@ -82,7 +82,7 @@ public class PlayerHandler
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getCommandSenderName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+		return getPlayerData(player.getName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
 	}
 	
 	public static PlayerData getPlayerData(String username)
@@ -94,7 +94,7 @@ public class PlayerHandler
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getCommandSenderName(), side);
+		return getPlayerData(player.getName(), side);
 	}
 	
 	public static PlayerData getPlayerData(String username, Side side)
@@ -118,7 +118,7 @@ public class PlayerHandler
 		if(event instanceof PlayerLoggedInEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getCommandSenderName();
+			String username = player.getName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
 			if(clientsToRemoveAfterThisRound.contains(username))
@@ -127,7 +127,7 @@ public class PlayerHandler
 		else if(event instanceof PlayerLoggedOutEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getCommandSenderName();
+			String username = player.getName();
 			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
@@ -135,7 +135,7 @@ public class PlayerHandler
 		else if(event instanceof PlayerRespawnEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getCommandSenderName();
+			String username = player.getName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
 		}

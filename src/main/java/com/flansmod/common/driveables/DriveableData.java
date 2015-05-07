@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.parts.ItemPart;
@@ -230,12 +231,6 @@ public class DriveableData implements IInventory
 	}
 
     @Override
-	public String getInventoryName() 
-	{ 
-		return "Flan's Secret Data"; 
-	}
-
-    @Override
 	public int getInventoryStackLimit() 
 	{ 
 		return 64; 
@@ -249,12 +244,6 @@ public class DriveableData implements IInventory
 	{ 
 		return true; 
 	}
-
-    @Override
-	public void openInventory() {}
-
-    @Override
-	public void closeInventory() {}
 	
 	public int getAmmoInventoryStart()
 	{
@@ -282,12 +271,6 @@ public class DriveableData implements IInventory
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() 
-	{
-		return false;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) 
 	{
 		if(i < getBombInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
@@ -312,5 +295,57 @@ public class DriveableData implements IInventory
 		}
 
 		return false;
+	}
+
+	@Override
+	public String getName() 
+	{
+		return "Flan's Secret Data"; 
+	}
+
+	@Override
+	public boolean hasCustomName() 
+	{
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() 
+	{
+		return null;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) 
+	{
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) 
+	{
+	}
+
+	@Override
+	public int getField(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
 	}
 }
