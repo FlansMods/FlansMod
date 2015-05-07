@@ -45,6 +45,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -483,154 +484,79 @@ public class FlansModClient extends FlansMod
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		//return mc.renderGlobal.doSpawnParticle(s, x, y, z, 0.01D, 0.01D, 0.01D);
-		EntityFX fx = null;
-		if(s.equals("hugeexplosion"))
-			fx = new EntityHugeExplodeFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("largeexplode"))
-			fx = new EntityLargeExplodeFX(mc.renderEngine, w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("fireworksSpark"))
-			fx = new EntityFireworkSparkFX(w, x, y, z, 0D, 0D, 0D, mc.effectRenderer);
-		else if(s.equals("bubble"))
-			fx = new EntityBubbleFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("suspended"))
-			fx = new EntitySuspendFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("depthsuspend"))
-			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("townaura"))
-			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("crit"))
-			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("magicCrit"))
-		{
-			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
-			fx.setRBGColorF(fx.getRedColorF() * 0.3F, fx.getGreenColorF() * 0.8F, fx.getBlueColorF());
-            fx.nextTextureIndexX();
-		}
-		else if(s.equals("smoke"))
-			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("mobSpell"))
-		{
-			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
-			fx.setRBGColorF(0F, 0F, 0F);
-		}
-		else if(s.equals("mobSpellAmbient"))
-		{
-			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
-            fx.setAlphaF(0.15F);
-            fx.setRBGColorF(0F, 0F, 0F);
-		}
-		else if(s.equals("spell"))
-			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("instantSpell"))
-		{
-			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
-			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
-		}
-		else if(s.equals("witchMagic"))
-		{
-			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
-			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
-            float f = w.rand.nextFloat() * 0.5F + 0.35F;
-            fx.setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
-		}
-		else if(s.equals("note"))
-			fx = new EntityNoteFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("portal"))
-			fx = new EntityPortalFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("enchantmenttable"))
-			fx = new EntityEnchantmentTableParticleFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("explode"))
-			fx = new EntityExplodeFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("flame"))
-			fx = new EntityFlameFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("lava"))
-			fx = new EntityLavaFX(w, x, y, z);
-		else if(s.equals("footstep"))
-			fx = new EntityFootStepFX(mc.renderEngine, w, x, y, z);
-		else if(s.equals("splash"))
-			fx = new EntitySplashFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("wake"))
-			fx = new EntityFishWakeFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("largesmoke"))
-			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D, 2.5F);
-		else if(s.equals("cloud"))
-			fx = new EntityCloudFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("reddust"))
-			fx = new EntityReddustFX(w, x, y, z, 0F, 0F, 0F);
-		else if(s.equals("snowballpoof"))
-			fx = new EntityBreakingFX(w, x, y, z, Items.snowball);
-		else if(s.equals("dripWater"))
-			fx = new EntityDropParticleFX(w, x, y, z, Material.water);
-		else if(s.equals("dripLava"))
-			fx = new EntityDropParticleFX(w, x, y, z, Material.lava);
-		else if(s.equals("snowshovel"))
-			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("slime"))
-			fx = new EntityBreakingFX(w, x, y, z, Items.slime_ball);
-		else if(s.equals("heart"))
-			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("angryVillager"))
-		{
-			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
-			fx.setParticleTextureIndex(81);
-			fx.setRBGColorF(1.0F, 1.0F, 1.0F);
-		}
-		else if(s.equals("happyVillager"))
-		{
-			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
-			fx.setParticleTextureIndex(82);
-            fx.setRBGColorF(1.0F, 1.0F, 1.0F);
-		}
-		else if(s.equals("snowshovel"))
-			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("snowshovel"))
-			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
-		else if(s.equals("snowshovel"))
-			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
-
-        else
+		
+        int particleID = 0;
+        int[] data = new int[0];
+              
+		if(s.equals("hugeexplosion")) 		particleID = EnumParticleTypes.EXPLOSION_HUGE.getParticleID();
+		else if(s.equals("largeexplode"))	particleID = EnumParticleTypes.EXPLOSION_LARGE.getParticleID();
+		else if(s.equals("explode"))		particleID = EnumParticleTypes.EXPLOSION_NORMAL.getParticleID();
+		else if(s.equals("fireworksSpark"))	particleID = EnumParticleTypes.FIREWORKS_SPARK.getParticleID();
+		else if(s.equals("bubble"))			particleID = EnumParticleTypes.WATER_BUBBLE.getParticleID();
+		else if(s.equals("splash"))			particleID = EnumParticleTypes.WATER_SPLASH.getParticleID();
+		else if(s.equals("wake"))			particleID = EnumParticleTypes.WATER_WAKE.getParticleID();
+		else if(s.equals("drop"))			particleID = EnumParticleTypes.WATER_DROP.getParticleID();
+		else if(s.equals("suspended"))		particleID = EnumParticleTypes.SUSPENDED.getParticleID();
+		else if(s.equals("depthsuspend"))	particleID = EnumParticleTypes.SUSPENDED_DEPTH.getParticleID();
+		else if(s.equals("townaura"))		particleID = EnumParticleTypes.TOWN_AURA.getParticleID();
+		else if(s.equals("crit"))			particleID = EnumParticleTypes.CRIT.getParticleID();
+		else if(s.equals("magicCrit"))		particleID = EnumParticleTypes.CRIT_MAGIC.getParticleID();
+		else if(s.equals("smoke"))			particleID = EnumParticleTypes.SMOKE_NORMAL.getParticleID();
+		else if(s.equals("largesmoke"))		particleID = EnumParticleTypes.SMOKE_LARGE.getParticleID();
+		else if(s.equals("spell"))			particleID = EnumParticleTypes.SPELL.getParticleID();
+		else if(s.equals("instantSpell"))	particleID = EnumParticleTypes.SPELL_INSTANT.getParticleID();
+		else if(s.equals("mobSpell"))		particleID = EnumParticleTypes.SPELL_MOB.getParticleID();
+		else if(s.equals("mobSpellAmbient"))particleID = EnumParticleTypes.SPELL_MOB_AMBIENT.getParticleID();
+		else if(s.equals("witchMagic"))		particleID = EnumParticleTypes.SPELL_WITCH.getParticleID();
+		else if(s.equals("dripWater"))		particleID = EnumParticleTypes.DRIP_WATER.getParticleID();
+		else if(s.equals("dripLava"))		particleID = EnumParticleTypes.DRIP_LAVA.getParticleID();
+		else if(s.equals("angryVillager"))	particleID = EnumParticleTypes.VILLAGER_ANGRY.getParticleID();
+		else if(s.equals("happyVillager"))	particleID = EnumParticleTypes.VILLAGER_HAPPY.getParticleID();
+		else if(s.equals("note"))			particleID = EnumParticleTypes.NOTE.getParticleID();
+		else if(s.equals("portal"))			particleID = EnumParticleTypes.PORTAL.getParticleID();
+		else if(s.equals("enchantmenttable"))particleID = EnumParticleTypes.ENCHANTMENT_TABLE.getParticleID();
+		else if(s.equals("flame"))			particleID = EnumParticleTypes.FLAME.getParticleID();
+		else if(s.equals("lava"))			particleID = EnumParticleTypes.LAVA.getParticleID();
+		else if(s.equals("footstep"))		particleID = EnumParticleTypes.FOOTSTEP.getParticleID();
+		else if(s.equals("cloud"))			particleID = EnumParticleTypes.CLOUD.getParticleID();
+		else if(s.equals("reddust"))		particleID = EnumParticleTypes.REDSTONE.getParticleID();
+		else if(s.equals("snowballpoof"))	particleID = EnumParticleTypes.SNOWBALL.getParticleID();
+		else if(s.equals("snowshovel"))		particleID = EnumParticleTypes.SNOW_SHOVEL.getParticleID();
+		else if(s.equals("slime"))			particleID = EnumParticleTypes.SLIME.getParticleID();
+		else if(s.equals("heart"))			particleID = EnumParticleTypes.HEART.getParticleID();
+		else if(s.equals("barrier"))		particleID = EnumParticleTypes.BARRIER.getParticleID();
+        else if(s.contains("_"))
         {
             int k;
-            String[] astring;
+            String[] split = s.split("_", 3);
+            
+            
 
-            if (s.startsWith("iconcrack_"))
+            if(split[0].equals("iconcrack"))
             {
-                astring = s.split("_", 3);
-                int j = Integer.parseInt(astring[1]);
-
-                if (astring.length > 2)
-                {
-                    k = Integer.parseInt(astring[2]);
-                    fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), k);
-                }
-                else fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), 0);
+                data = new int[] { Item.getIdFromItem(InfoType.getRecipeElement(split[1],0).getItem()) };
+                particleID = EnumParticleTypes.ITEM_CRACK.getParticleID();
             }
             else
             {
-                Block block;
+            	data = new int[] { Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1],0).getItem())) };
 
-                if (s.startsWith("blockcrack_"))
+                if(split[0].equals("blockcrack"))
                 {
-                    astring = s.split("_", 3);
-                    block = Block.getBlockById(Integer.parseInt(astring[1]));
-                    k = Integer.parseInt(astring[2]);
-                    fx = (new EntityDiggingFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+                	 particleID = EnumParticleTypes.BLOCK_CRACK.getParticleID();
                 }
-                else if (s.startsWith("blockdust_"))
+                else if(split[0].equals("blockdust"))
                 {
-                    astring = s.split("_", 3);
-                    block = Block.getBlockById(Integer.parseInt(astring[1]));
-                    k = Integer.parseInt(astring[2]);
-                    fx = (new EntityBlockDustFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
+                	 particleID = EnumParticleTypes.BLOCK_DUST.getParticleID();
                 }
             }
         }
-		
+
+        
+        EntityFX fx = mc.effectRenderer.spawnEffectParticle(particleID, x, y, z, 0D, 0D, 0D, data);
+        
 		if(mc.gameSettings.fancyGraphics)
 			fx.renderDistanceWeight = 200D;
-		
-        if(fx != null)
-            mc.effectRenderer.addEffect(fx);
 		return fx;
 	}
 
