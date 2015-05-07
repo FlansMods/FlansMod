@@ -3,12 +3,12 @@ package com.flansmod.common.driveables.mechas;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -59,16 +59,20 @@ public class ItemMecha extends Item implements IFlanItem
 	{
 		return true;
 	}
-
+	
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
-		if(stack.stackTagCompound == null)
+		if(stack.getTagCompound() == null)
 		{
-			stack.stackTagCompound = new NBTTagCompound();
-			stack.stackTagCompound.setString("Type", type.shortName);
-			stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
+			if(stack.getTagCompound() == null)
+			{
+				NBTTagCompound tags = new NBTTagCompound();
+				stack.setTagCompound(tags);
+				tags.setString("Type", type.shortName);
+				tags.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
+			}
 		}
-		return stack.stackTagCompound;
+		return stack.getTagCompound();
 	}
 	
     @Override
@@ -80,7 +84,7 @@ public class ItemMecha extends Item implements IFlanItem
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
         
@@ -91,12 +95,10 @@ public class ItemMecha extends Item implements IFlanItem
         }
         if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
         {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
+        	BlockPos pos = movingobjectposition.getBlockPos();
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 1.5F + type.yOffset, (double)k + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
+				world.spawnEntityInWorld(new EntityMecha(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 1.5F + type.yOffset, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
@@ -131,7 +133,7 @@ public class ItemMecha extends Item implements IFlanItem
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-    	mechaStack.stackTagCompound = tags;
+    	mechaStack.setTagCompound(tags);
         list.add(mechaStack);
     }
     

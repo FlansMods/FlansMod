@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -12,7 +13,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -87,6 +90,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public RotatedAxes axes;
 	
 	public EntitySeat[] seats;
+	
+	private float yOffset;
 	
 	@SideOnly(Side.CLIENT)
 	public EntityLivingBase camera;
@@ -255,12 +260,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 
 	@Override
-    public AxisAlignedBB getBoundingBox()
-    {
-        return boundingBox;
-    }
-
-	@Override
     public boolean canBePushed()
     {
         return false;
@@ -270,6 +269,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public double getMountedYOffset()
     {
         return -0.3D;
+    }
+	
+	@Override
+    public double getYOffset()
+    {
+    	return yOffset;
     }
 	
 	@Override
@@ -320,7 +325,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     }
 	
 	@Override
-    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
+    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
     {
 		if(ticksExisted > 1)
 			return;
@@ -522,7 +527,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
 						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, Vec3.createVectorHelper(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, new Vec3(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
@@ -662,13 +667,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
 		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + rand.nextFloat() * part.box.w, part.box.y + rand.nextFloat() * part.box.h, part.box.z + rand.nextFloat() * part.box.d));
-		        		worldObj.spawnParticle("flame", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+		        		worldObj.spawnParticle(EnumParticleTypes.FLAME, posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	           		if(part.health > 0 && part.health < part.maxHealth / 2)
 	        		{
 	        			//Pick a random position within the bounding box and spawn a flame there
 		        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + rand.nextFloat() * part.box.w, part.box.y + rand.nextFloat() * part.box.h, part.box.z + rand.nextFloat() * part.box.d));
-		        		worldObj.spawnParticle(part.health < part.maxHealth / 4 ? "largesmoke" : "smoke", posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
+		        		worldObj.spawnParticle(part.health < part.maxHealth / 4 ? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL, posX + pos.x, posY + pos.y, posZ + pos.z, 0, 0, 0);
 	        		}
 	        	}
 	        	//Server side fire handling
@@ -680,7 +685,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        		//Also water blocks
 	        		//Get the centre point of the part
 	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + part.box.w / 2F, part.box.y + part.box.h / 2F, part.box.z + part.box.d / 2F));
-	        		if(worldObj.getBlock(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)).getMaterial() == Material.water)
+	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z))).getBlock().getMaterial() == Material.water)
 	        		{
 	        			part.onFire = false;
 	        		}
@@ -688,7 +693,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        	else
 	        	{
 	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
-	        		if(worldObj.getBlock(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z)).getMaterial() == Material.lava)
+	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z))).getBlock().getMaterial() == Material.lava)
 	        		{
 	        			part.onFire = true;
 	        		}
@@ -760,10 +765,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(driveableData.parts.get(p.part).dead)
 				continue;
 			Vector3f lastRelPos = prevAxes.findLocalVectorGlobally(p.position);
-			Vec3 lastPos = Vec3.createVectorHelper(prevPosX + lastRelPos.x, prevPosY + lastRelPos.y, prevPosZ + lastRelPos.z);
+			Vec3 lastPos = new Vec3(prevPosX + lastRelPos.x, prevPosY + lastRelPos.y, prevPosZ + lastRelPos.z);
 			
 			Vector3f currentRelPos = axes.findLocalVectorGlobally(p.position);
-			Vec3 currentPos = Vec3.createVectorHelper(posX + currentRelPos.x, posY + currentRelPos.y, posZ + currentRelPos.z);
+			Vec3 currentPos = new Vec3(posX + currentRelPos.x, posY + currentRelPos.y, posZ + currentRelPos.z);
 			
 			if(FlansMod.DEBUG && worldObj.isRemote)
 			{
@@ -773,24 +778,22 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			MovingObjectPosition hit = worldObj.rayTraceBlocks(lastPos, currentPos, crashInWater);
 			if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
 			{
-				int x = hit.blockX;
-				int y = hit.blockY;
-				int z = hit.blockZ;
-				Block blockHit = worldObj.getBlock(x, y, z);
-				int meta = worldObj.getBlockMetadata(x, y, z);
+				BlockPos pos = hit.getBlockPos();
+				IBlockState state =  worldObj.getBlockState(pos);
+				Block blockHit = state.getBlock();
 				
-				float blockHardness = blockHit.getBlockHardness(worldObj, x, y, z);
+				float blockHardness = blockHit.getBlockHardness(worldObj, pos);
 				
 				//Attack the part
 				if(!attackPart(p.part, DamageSource.inWall, blockHardness * blockHardness * (float)speed) && TeamsManager.driveablesBreakBlocks)
 				{
 					//And if it didn't die from the attack, break the block
-					worldObj.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(blockHit) + (meta << 12));					
+					worldObj.playAuxSFXAtEntity(null, 2001, pos, Block.getStateId(state));					
 					
 					if(!worldObj.isRemote)
 					{	
-						blockHit.dropBlockAsItem(worldObj, x, y, z, meta, 1);		
-						worldObj.setBlockToAir(x, y, z);
+						blockHit.dropBlockAsItem(worldObj, pos, state, 1);		
+						worldObj.setBlockToAir(pos);
 					}
 				}
 				else
@@ -804,15 +807,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	@Override
-    protected void fall(float k)
+    public void fall(float distance, float damageMultiplier)
     {
-        if (k <= 0) 
+        if (distance <= 0) 
         	return;
         //super.fall(k);
-        int i = MathHelper.ceiling_float_int(k - 10F);
+        int i = MathHelper.ceiling_float_int(distance - 10F);
 
         if(i > 0)
-        	attackPart(EnumDriveablePart.core, DamageSource.fall, i / 5);
+        	attackPart(EnumDriveablePart.core, DamageSource.fall, damageMultiplier * i / 5);
     }
 	
 	/** Attack a certain part of a driveable and return whether it broke or not */
@@ -908,12 +911,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		return ent == this;	
 	}
-
-	@Override
-    public float getShadowSize()
-    {
-        return 0.0F;
-    }
     
     public DriveableType getDriveableType()
     {
@@ -941,8 +938,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
     public ItemStack getPickedResult(MovingObjectPosition target)
     {
 		ItemStack stack = new ItemStack(getDriveableType().item, 1, 0);
-		stack.stackTagCompound = new NBTTagCompound();
-		driveableData.writeToNBT(stack.stackTagCompound);
+		NBTTagCompound tags = new NBTTagCompound();
+		stack.setTagCompound(tags);
+		driveableData.writeToNBT(tags);
 		return stack;
     }
 	
@@ -1172,7 +1170,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	@Override
-	public String getCommandSenderName()
+	public String getName()
 	{
 		return getDriveableType().name;
 	}

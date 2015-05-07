@@ -103,7 +103,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
+	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
 	{
 		//setPosition(x, y, z);
 	}
@@ -281,12 +281,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
     {
     }
 	
-	@Override
-    public float getShadowSize()
-    {
-        return 4.0F;
-    }
-
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
@@ -497,7 +491,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				return true;
 			}
 			double checkRange = 10;
-			List nearbyMobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange, posY + checkRange, posZ + checkRange));
+			List nearbyMobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange, posY + checkRange, posZ + checkRange));
 			for(Object obj : nearbyMobs)
 			{
 				EntityLiving entity = (EntityLiving)obj;

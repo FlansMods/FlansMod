@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -88,6 +90,8 @@ public class EntityMecha extends EntityDriveable
     /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
     public boolean couldNotFindFuel = false;
 
+    public float yOffset;
+    
 	public EntityMecha(World world) 
 	{
 		super(world);
@@ -155,6 +159,12 @@ public class EntityMecha extends EntityDriveable
 		prevLegsYaw = legAxes.getYaw();
 
 		inventory.readFromNBT(ByteBufUtils.readTag(data));
+	}
+	
+	@Override
+	public double getYOffset()
+	{
+		return yOffset;
 	}
 
 	@Override
@@ -325,9 +335,10 @@ public class EntityMecha extends EntityDriveable
 				//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
 				if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
 				{
-					if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
+					BlockPos pos = hit.getBlockPos();
+					if(breakingBlock == null || breakingBlock.x != pos.getX() || breakingBlock.y != pos.getY() || breakingBlock.z != pos.getZ())
 						breakingProgress = 0F;
-					breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
+					breakingBlock = new Vector3i(pos.getX(), pos.getY(), pos.getZ());
 				}
 			}
 			
@@ -436,7 +447,7 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
-    protected void fall(float f)
+    public void fall(float f, float l)
     {
 		attackEntityFrom(DamageSource.fall, f);
     }
@@ -469,9 +480,10 @@ public class EntityMecha extends EntityDriveable
         else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.item, 1, 0);
-			mechaStack.stackTagCompound = new NBTTagCompound();
-			driveableData.writeToNBT(mechaStack.stackTagCompound);
-			inventory.writeToNBT(mechaStack.stackTagCompound);
+			NBTTagCompound tags = new NBTTagCompound();
+			mechaStack.setTagCompound(tags); 
+			driveableData.writeToNBT(tags);
+			inventory.writeToNBT(tags);
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}
@@ -543,7 +555,7 @@ public class EntityMecha extends EntityDriveable
 						int x = MathHelper.floor_double(i + posX);
 						int y = MathHelper.floor_double(j + posY);
 						int z = MathHelper.floor_double(k + posZ);
-						if(i * i + j * j + k * k < sqDistance && worldObj.getBlock(x, y, z) == (Blocks.diamond_ore))
+						if(i * i + j * j + k * k < sqDistance && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == (Blocks.diamond_ore))
 						{
 							sqDistance = i * i + j * j + k * k;
 						}
@@ -758,8 +770,8 @@ public class EntityMecha extends EntityDriveable
 				if(breakingBlock != null)
 				{
 					//Get block and material
-					Block blockHit = worldObj.getBlock(breakingBlock.x, breakingBlock.y, breakingBlock.z);
-					int metadata = worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+					IBlockState state = worldObj.getBlockState(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+					Block blockHit = state.getBlock();
 					Material material = blockHit.getMaterial();
 					
 					//Get the itemstacks in each hand
@@ -781,7 +793,7 @@ public class EntityMecha extends EntityDriveable
 					else
 					{
 						//Get the block hardness
-						float blockHardness = blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+						float blockHardness = blockHit.getBlockHardness(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 						
 						//Calculate the mine speed
 						float mineSpeed = 1F;
@@ -813,7 +825,7 @@ public class EntityMecha extends EntityDriveable
 							mineSpeed = 9001F;
 						else
 						{
-							mineSpeed /= blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+							mineSpeed /= blockHit.getBlockHardness(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 						}
 						
 						//Add block digging overlay
@@ -825,8 +837,8 @@ public class EntityMecha extends EntityDriveable
 							boolean cancelled = false;
 							if(entity instanceof EntityPlayerMP)
 							{
-								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
-								cancelled = event.isCanceled();
+								int eventOutcome = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+								cancelled = eventOutcome == -1;
 							}
 					        if(!cancelled)
 					        {
@@ -837,10 +849,10 @@ public class EntityMecha extends EntityDriveable
 								boolean vacuumItems = vacuumItems();
 								if(vacuumItems)
 								{
-									for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
+									for(ItemStack stack : blockHit.getDrops(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), state, 0))
 									{
 										//Check for iron regarding refining
-										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
 										{
 											stack = (new ItemStack(Items.iron_ingot, 1, 0));
 											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
@@ -848,7 +860,7 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).field_150939_a == Blocks.cobblestone || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.dirt || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.sand))
+										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).block == Blocks.cobblestone || ((ItemBlock)stack.getItem()).block == Blocks.dirt || ((ItemBlock)stack.getItem()).block == Blocks.sand))
 											stack.stackSize = 0;
 										
 										//Check for item multipliers
@@ -872,7 +884,7 @@ public class EntityMecha extends EntityDriveable
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
 										}
-										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
+										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
@@ -894,7 +906,7 @@ public class EntityMecha extends EntityDriveable
 									}
 								}
 								//Destroy block
-								worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
+								worldObj.destroyBlock(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), atLeastOneEffectiveTool && !vacuumItems);
 					        }
 						}
 					}

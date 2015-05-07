@@ -578,7 +578,7 @@ public class EntityPlane extends EntityDriveable
 		for(EntityWheel wheel : wheels)
 		{
 			if(wheel != null && worldObj != null)
-			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getBoundingBox()))
 			{
 				motionY += type.buoyancy;
 			}
@@ -782,8 +782,9 @@ public class EntityPlane extends EntityDriveable
 		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack planeStack = new ItemStack(type.item, 1, 0);
-			planeStack.stackTagCompound = new NBTTagCompound();
-			driveableData.writeToNBT(planeStack.stackTagCompound);
+			NBTTagCompound tags = new NBTTagCompound();
+			planeStack.setTagCompound(tags);
+			driveableData.writeToNBT(tags);
 			entityDropItem(planeStack, 0.5F);
 	 		setDead();
 		}

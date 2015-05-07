@@ -407,7 +407,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 			}
 			
-			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getBoundingBox()))
 			{
 				wheel.motionY += type.buoyancy;
 			}
@@ -574,12 +574,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     
 	private Vec3 subtract(Vec3 a, Vec3 b)
 	{
-		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
+		return new Vec3(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
 	}
 	
 	private Vec3 crossProduct(Vec3 a, Vec3 b)
 	{
-        return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
+        return new Vec3(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
 	}
 	    
     @Override
@@ -599,8 +599,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.item, 1, 0);
-			vehicleStack.stackTagCompound = new NBTTagCompound();
-			driveableData.writeToNBT(vehicleStack.stackTagCompound);
+			NBTTagCompound tags = new NBTTagCompound();
+			vehicleStack.setTagCompound(tags);
+			driveableData.writeToNBT(tags);
 			entityDropItem(vehicleStack, 0.5F);
 	 		setDead();
 		}

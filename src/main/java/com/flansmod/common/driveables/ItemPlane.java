@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -52,18 +52,19 @@ public class ItemPlane extends Item implements IFlanItem
 	
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
-		if(stack.stackTagCompound == null)
+		if(stack.getTagCompound() == null)
 		{
 			if(!world.isRemote && stack.getItemDamage() != 0)
-				stack.stackTagCompound = getOldTagCompound(stack, world);
-			if(stack.stackTagCompound == null)
+				stack.setTagCompound(getOldTagCompound(stack, world));
+			if(stack.getTagCompound() == null)
 			{
-				stack.stackTagCompound = new NBTTagCompound();
-				stack.stackTagCompound.setString("Type", type.shortName);
-				stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
+				NBTTagCompound tags = new NBTTagCompound();
+				stack.setTagCompound(tags);
+				tags.setString("Type", type.shortName);
+				tags.setString("Engine", PartType.defaultEngines.get(EnumType.plane).shortName);
 			}
 		}
-		return stack.stackTagCompound;
+		return stack.getTagCompound();
 	}
 	
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
@@ -112,7 +113,7 @@ public class ItemPlane extends Item implements IFlanItem
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
         
@@ -123,17 +124,15 @@ public class ItemPlane extends Item implements IFlanItem
         }
         if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
         {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
-            Block block = world.getBlock(i, j, k);
+        	BlockPos pos = movingobjectposition.getBlockPos();
+            Block block = world.getBlockState(pos).getBlock();
             if(type.placeableOnLand || block instanceof BlockLiquid)
             {
 	            if(!world.isRemote)
 	            {
 	            	DriveableData data = getPlaneData(itemstack, world);
 	            	if(data != null)
-	            		world.spawnEntityInWorld(new EntityPlane(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, data));
+	            		world.spawnEntityInWorld(new EntityPlane(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 2.5F, (double)pos.getZ() + 0.5F, entityplayer, type, data));
 	            }
 				if(!entityplayer.capabilities.isCreativeMode)
 				{	
@@ -192,7 +191,7 @@ public class ItemPlane extends Item implements IFlanItem
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-    	planeStack.stackTagCompound = tags;
+    	planeStack.setTagCompound(tags);
         list.add(planeStack);
     }
 	
