@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -95,8 +97,8 @@ public class GuiDriveableInventory extends GuiContainer
 	
 	private void drawStack(ItemStack itemstack, int i, int j)
     {
-		itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRender.renderItemIntoGUI(itemstack, i, j);
+		itemRender.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
     }
 	
 	private static String getGunSlotName(int i)
@@ -154,7 +156,7 @@ public class GuiDriveableInventory extends GuiContainer
     }
 	
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
     {
         super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;

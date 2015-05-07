@@ -1,10 +1,14 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +27,7 @@ public class GuiMechaInventory extends GuiContainer
 	private static final RenderMecha mechaRenderer;
 	static
 	{
-		mechaRenderer = new RenderMecha();
-		mechaRenderer.setRenderManager(RenderManager.instance);
+		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
 	}
 	
 	public ContainerMechaInventory container;
@@ -123,12 +126,13 @@ public class GuiMechaInventory extends GuiContainer
     {
         float f = 1F / 512F;
         float f1 = 1F / 256F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)(par1), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4) * f1));
-        tessellator.addVertexWithUV((double)(par1), (double)(par2), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4) * f1));
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.startDrawingQuads();
+        worldrenderer.addVertexWithUV((double)(par1), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4 + par6) * f1));
+        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
+        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4) * f1));
+        worldrenderer.addVertexWithUV((double)(par1), (double)(par2), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4) * f1));
         tessellator.draw();
     }
 
@@ -154,7 +158,7 @@ public class GuiMechaInventory extends GuiContainer
     }
     
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
 	{
 		super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;

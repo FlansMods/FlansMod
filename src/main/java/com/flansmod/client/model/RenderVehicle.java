@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -26,11 +27,12 @@ import com.flansmod.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render implements IItemRenderer
 {
-    public RenderVehicle()
-    {
-        shadowSize = 0.5F;
-    }
-
+	protected RenderVehicle(RenderManager renderManager) 
+	{
+		super(renderManager);
+		shadowSize = 0.5F;
+	}
+	
     public void render(EntityVehicle vehicle, double d, double d1, double d2, float f, float f1)
     {
     	bindEntityTexture(vehicle);
@@ -85,12 +87,12 @@ public class RenderVehicle extends Render implements IItemRenderer
 						GL11.glColor4f(0F, 0F, 1F, 0.3F);
 						for(DriveablePosition point : type.shootPointsPrimary)			
 							if(point.part == EnumDriveablePart.turret)
-								renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 						
 						GL11.glColor4f(0F, 1F, 0F, 0.3F);
 						for(DriveablePosition point : type.shootPointsSecondary)	
 							if(point.part == EnumDriveablePart.turret)
-								renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+								renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 					}
 				}
 				GL11.glPopMatrix();
@@ -109,7 +111,7 @@ public class RenderVehicle extends Render implements IItemRenderer
 					if(part.box == null)
 						continue;
 					
-					renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
+					renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 				}
 				//GL11.glColor4f(0F, 1F, 0F, 0.3F);
 				//if(type.barrelPosition != null)
@@ -119,12 +121,12 @@ public class RenderVehicle extends Render implements IItemRenderer
 				GL11.glColor4f(0F, 0F, 1F, 0.3F);
 				for(DriveablePosition point : type.shootPointsPrimary)			
 					if(point.part != EnumDriveablePart.turret)
-						renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 				
 				GL11.glColor4f(0F, 1F, 0F, 0.3F);
 				for(DriveablePosition point : type.shootPointsSecondary)	
 					if(point.part != EnumDriveablePart.turret)
-						renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+						renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 
 				
 				GL11.glEnable(GL11.GL_TEXTURE_2D);

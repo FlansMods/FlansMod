@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -596,7 +597,8 @@ public class TickHandlerClient
 		killMessages.add(new KillMessage(headshot, infoType, killer, killed));
 	}
 	
-	private static RenderItem itemRenderer = new RenderItem();
+	//TODO : Unsure about fix. Check it
+	private static RenderItem itemRenderer = new RenderItem(Minecraft.getMinecraft().renderEngine, new ModelManager(Minecraft.getMinecraft().getTextureMapBlocks()));
 	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
 	
 	private static class KillMessage

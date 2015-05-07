@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -22,7 +24,7 @@ public class GuiGunBox extends GuiScreen
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
 	private InventoryPlayer inventory;
 	private Minecraft mc;
-	private static RenderItem itemRenderer = new RenderItem();
+	private static RenderItem itemRenderer;
 	private GunBoxType type;
 	private int page;
 	private int guiOriginX;
@@ -43,6 +45,12 @@ public class GuiGunBox extends GuiScreen
 		super.updateScreen();
 		scroll++;
 	}
+	
+	@Override
+	public void initGui()
+	{
+		itemRenderer = mc.getRenderItem();
+	}
 
 	@Override
 	public void drawScreen(int i, int j, float f)
@@ -50,7 +58,7 @@ public class GuiGunBox extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -172,14 +180,14 @@ public class GuiGunBox extends GuiScreen
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemIntoGUI(itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 		GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
 	{
 		super.mouseClicked(i, j, k);
 		int m = i - guiOriginX;

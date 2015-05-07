@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -59,9 +61,9 @@ public class GuiDriveableFuel extends GuiContainer
     }
 	
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
     {
-        super.mouseClicked(i, j, k);
+		super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;
 		int n = j - (height - ySize) / 2;
 		if(m > 161 && m < 171 && n > 5 && n < 15)

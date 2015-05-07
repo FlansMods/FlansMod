@@ -7,13 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -41,8 +41,9 @@ public class RenderMecha extends Render implements IItemRenderer
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
     private static final ItemRenderer renderer = new ItemRenderer(Minecraft.getMinecraft());
     
-	public RenderMecha()
+	public RenderMecha(RenderManager manager)
 	{
+		super(manager);
 		shadowSize = 0.5F;
 	}
 	
@@ -191,17 +192,17 @@ public class RenderMecha extends Render implements IItemRenderer
 				if(part.box == null)
 					continue;
 				
-				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F));
+				renderOffsetAABB(new AxisAlignedBB(part.box.x / 16F, part.box.y / 16F, part.box.z / 16F, (part.box.x + part.box.w) / 16F, (part.box.y + part.box.h) / 16F, (part.box.z + part.box.d) / 16F), 0, 0, 0);
 			}
 			
 			//Render shoot points
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			for(DriveablePosition point : type.shootPointsPrimary)			
-				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(DriveablePosition point : type.shootPointsSecondary)			
-				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -331,7 +332,7 @@ public class RenderMecha extends Render implements IItemRenderer
 	        }
 	
 	        texturemanager.bindTexture(texturemanager.getResourceLocation(stack.getItemSpriteNumber()));
-	        Tessellator tessellator = Tessellator.instance;
+	        Tessellator tessellator = Tessellator.getInstance();
 	        float f = icon.getMinU();
 	        float f1 = icon.getMaxU();
 	        float f2 = icon.getMinV();
@@ -348,7 +349,7 @@ public class RenderMecha extends Render implements IItemRenderer
 	        
 	        renderer.renderItemIn2D(tessellator, f1, f2, f, f3, icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
 	
-	        if (stack.hasEffect(par3))
+	        if (stack.hasEffect())
 	        {
 	            GL11.glDepthFunc(GL11.GL_EQUAL);
 	            GL11.glDisable(GL11.GL_LIGHTING);

@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -29,14 +31,14 @@ public class GuiDriveableController extends GuiScreen
 	public void initGui()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
 	}
 	
 	@Override
 	public void onGuiClosed()
     {
 		mc.mouseHelper.ungrabMouseCursor();
-		mc.renderViewEntity = mc.thePlayer;
+		mc.setRenderViewEntity(mc.thePlayer);
     }
 	
 	@Override
@@ -101,8 +103,8 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
 			if(mc.gameSettings.thirdPersonView == 1)
-				mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
-			else mc.renderViewEntity = mc.thePlayer;
+				mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
+			else mc.setRenderViewEntity(mc.thePlayer);
 		}
 		if(i == 66)
 		{
@@ -138,8 +140,8 @@ public class GuiDriveableController extends GuiScreen
 	public void updateScreen()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
-		else mc.renderViewEntity = mc.thePlayer;
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
+		else mc.setRenderViewEntity(mc.thePlayer);
 	}
 	
     @Override
@@ -156,7 +158,7 @@ public class GuiDriveableController extends GuiScreen
 			mc.mouseHelper.grabMouseCursor();
 		}
 		handleMouseInput();
-        for(; Keyboard.next(); handleKeyboardInput()) { }
+        for(; Keyboard.next(); ) {try {handleKeyboardInput();} catch(IOException e){} }
         
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();

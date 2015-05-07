@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,8 +14,9 @@ import com.flansmod.common.guns.EntityBullet;
 
 public class RenderBullet extends Render
 {
-	public RenderBullet()
+	protected RenderBullet(RenderManager renderManager) 
 	{
+		super(renderManager);
 		shadowSize = 0.5F;
 	}
 

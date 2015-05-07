@@ -39,7 +39,7 @@ public class GuiTeamScores extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
@@ -53,15 +53,15 @@ public class GuiTeamScores extends GuiScreen
 		//Like draw texturedModalRect, but with custom image size
 		//func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
 		
-		func_146110_a(m, n, 100, 0, 312, 66, 512, 256);
+		drawModalRectWithCustomSizedTexture(m, n, 100, 0, 312, 66, 512, 256);
 		for(int p = 0; p < teamInfo.numLines; p++)
-			func_146110_a(m, n + 66 + 9 * p, 100, 71, 312, 9, 512, 256);
-		func_146110_a(m, n + 66 + teamInfo.numLines * 9, 100, 168, 312, 12, 512, 256);
+			drawModalRectWithCustomSizedTexture(m, n + 66 + 9 * p, 100, 71, 312, 9, 512, 256);
+		drawModalRectWithCustomSizedTexture(m, n + 66 + teamInfo.numLines * 9, 100, 168, 312, 12, 512, 256);
 		
 		if(teamInfo.showZombieScore)
 		{
-			func_146110_a(m + 103, n + 51, 412, 0, 29, 11, 512, 256);
-			func_146110_a(m + 254, n + 51, 412, 0, 29, 11, 512, 256);
+			drawModalRectWithCustomSizedTexture(m + 103, n + 51, 412, 0, 29, 11, 512, 256);
+			drawModalRectWithCustomSizedTexture(m + 254, n + 51, 412, 0, 29, 11, 512, 256);
 		}
 		
 		//No idea why this works, but it makes the text bind its texture correctly
@@ -152,7 +152,7 @@ public class GuiTeamScores extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 

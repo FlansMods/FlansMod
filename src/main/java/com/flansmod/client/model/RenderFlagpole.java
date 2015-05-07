@@ -3,6 +3,7 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,8 +15,9 @@ public class RenderFlagpole extends Render
 	
 	public ModelFlagpole modelFlagpole;
 	
-	public RenderFlagpole()
+	protected RenderFlagpole(RenderManager renderManager) 
 	{
+		super(renderManager);
 		modelFlagpole = new ModelFlagpole();
 	}
 	

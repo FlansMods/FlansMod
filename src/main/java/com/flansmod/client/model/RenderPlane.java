@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -25,10 +26,11 @@ import com.flansmod.common.guns.ItemGrenade;
 
 public class RenderPlane extends Render implements IItemRenderer 
 {	
-    public RenderPlane()
-    {
-        shadowSize = 0.5F;
-    }
+	protected RenderPlane(RenderManager renderManager) 
+	{
+		super(renderManager);
+		shadowSize = 0.5F;
+	}
 
     public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
     {
@@ -91,22 +93,22 @@ public class RenderPlane extends Render implements IItemRenderer
 				
 				GL11.glColor4f(1F, entityPlane.isPartIntact(part.type) ? 1F : 0F, 0F, 0.3F);
 				
-				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
+				renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
 			}
 			GL11.glColor4f(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{				
-				renderAABB(AxisAlignedBB.getBoundingBox(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F));
+				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
 			}
 			
 			//Render shoot points
 			GL11.glColor4f(1F, 0F, 1F, 0.3F);
 			for(DriveablePosition point : type.shootPointsPrimary)			
-				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(DriveablePosition point : type.shootPointsSecondary)			
-				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
+				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			//GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			//if(type.bombPosition != null)

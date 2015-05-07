@@ -21,7 +21,7 @@ public class GuiTeamSelect extends GuiScreen
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teams.png");
 
 	
-	private static RenderItem itemRenderer = new RenderItem();
+	private static RenderItem itemRenderer;
 	private boolean classMenu;
 	//This is static so that players may switch teams whenever they wish. 
 	//This is updated because the server forces players to pick teams when the teams change
@@ -82,6 +82,7 @@ public class GuiTeamSelect extends GuiScreen
 				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
 			}
 		}
+		itemRenderer = mc.getRenderItem();
 	}
 	
 	@Override
@@ -133,8 +134,8 @@ public class GuiTeamSelect extends GuiScreen
 	
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemIntoGUI(itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 	}
 	
 	@Override
