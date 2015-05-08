@@ -283,10 +283,6 @@ public class InfoType
 		{
 			return new ItemStack(Items.iron_door, amount);
 		}
-		if (s.equals("doorWood"))
-		{
-			return new ItemStack(Items.wooden_door, amount);
-		}
 		if (s.equals("clayItem"))
 		{
 			return new ItemStack(Items.clay_ball, amount);
@@ -352,6 +348,6 @@ public class InfoType
 		int potionID = Integer.parseInt(split[1]);
 		int duration = Integer.parseInt(split[2]);
 		int amplifier = Integer.parseInt(split[3]);
-		return new PotionEffect(potionID, duration, amplifier, false);
+		return new PotionEffect(potionID, duration, amplifier, false, false);
 	}
 }

@@ -60,9 +60,9 @@ public class EntityFlag extends Entity implements ITeamObject {
 			if(ridingEntity instanceof EntityPlayerMP)
 			{
 				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
-				Team team = PlayerHandler.getPlayerData(player.getCommandSenderName()).team;
+				Team team = PlayerHandler.getPlayerData(player.getName()).team;
 				TeamsManager.getInstance();
-				TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
+				TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
 			mountEntity(null);
 			

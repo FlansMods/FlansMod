@@ -21,10 +21,11 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	public TileEntitySpawner spawner;
 	public double angle;
 	public int xCoord, yCoord, zCoord;
+	private int age;
 	
 	public EntityTeamItem(TileEntitySpawner te, int i) 
 	{
-		super(te.getWorldObj(), te.xCoord + 0.5F, te.yCoord + 0.5F, te.zCoord + 0.5F, te.stacksToSpawn.get(i).copy());
+		super(te.getWorld(), te.getPos().getX() + 0.5F, te.getPos().getY() + 0.5F, te.getPos().getZ() + 0.5F, te.stacksToSpawn.get(i).copy());
 		te.itemEntities.add(this);
 		angle = i * Math.PI * 2 / te.stacksToSpawn.size();
         motionX = motionY = motionZ = 0D;
@@ -38,7 +39,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	}
 	
 	@Override
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
+	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
 	{
 		
 	}
@@ -120,9 +121,9 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 		}
 		else
 		{
-			data.writeInt(spawner.xCoord);
-			data.writeInt(spawner.yCoord);
-			data.writeInt(spawner.zCoord);
+			data.writeInt(spawner.getPos().getX());
+			data.writeInt(spawner.getPos().getY());
+			data.writeInt(spawner.getPos().getZ());
 		}
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();

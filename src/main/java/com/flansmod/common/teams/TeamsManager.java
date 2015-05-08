@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -19,8 +20,10 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
@@ -643,7 +646,7 @@ public class TeamsManager
 		
 		if(event.entityPlayer.worldObj.isRemote)
 			return;
-		TileEntity te = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
+		TileEntity te = event.entityPlayer.worldObj.getTileEntity(event.pos);
 		if(te != null)
 		{
 			ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
@@ -815,9 +818,9 @@ public class TeamsManager
 		currentRound.gametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
-	private void setPlayersNextSpawnpoint(EntityPlayerMP player, ChunkCoordinates coords)
+	private void setPlayersNextSpawnpoint(EntityPlayerMP player, BlockPos pos, int dimension)
 	{
-		player.setSpawnChunk(coords, true);
+		player.setSpawnChunk(pos, true, dimension);
 	}	
 	
 	private void setPlayersNextSpawnpoint(EntityPlayerMP player)
@@ -829,7 +832,7 @@ public class TeamsManager
 
 		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(player);
 		if(spawnPoint != null)
-			setPlayersNextSpawnpoint(player, new ChunkCoordinates(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)));
+			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), 0);
 		else
 			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.newTeam == null ? "null" : data.newTeam.name));
 	}
@@ -859,7 +862,7 @@ public class TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
+		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
         System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -882,7 +885,7 @@ public class TeamsManager
 	
 	public boolean playerIsOp(EntityPlayer player)
 	{ 
-		return MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
+		return MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 	}
 	
 	public boolean autoBalance()
@@ -932,14 +935,14 @@ public class TeamsManager
 		if(!isValid)
 		{
 			player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + " for it is invalid. Please try again"));
-			FlansMod.log(player.getCommandSenderName() + " tried to spawn on an invalid team : " + selectedTeam.name);
+			FlansMod.log(player.getName() + " tried to spawn on an invalid team : " + selectedTeam.name);
 			selectedTeam = Team.spectators;
 		}
 		
 		//Spawn spectators immediately
 		if(selectedTeam == Team.spectators)
 		{
-			messageAll(player.getCommandSenderName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
+			messageAll(player.getName() + " joined \u00a7" + selectedTeam.textColour + selectedTeam.name);
 			if(data.team != null)
 				data.team.removePlayer(player);
 			data.newTeam = data.team = Team.spectators;
@@ -979,7 +982,7 @@ public class TeamsManager
 		if(!data.newTeam.classes.contains(playerClass))
 		{
 			player.addChatMessage(new ChatComponentText("You may not select " + playerClass.name + ". Please try again"));
-			FlansMod.log(player.getCommandSenderName() + " tried to pick an invalid class : " + playerClass.name);
+			FlansMod.log(player.getName() + " tried to pick an invalid class : " + playerClass.name);
 			//sendClassMenuToPlayer(player);
 			return;
 		}
@@ -995,7 +998,7 @@ public class TeamsManager
 		//2 : Player switched team
 		else if(data.team != null && data.team != data.newTeam)
 		{
-			messageAll(player.getCommandSenderName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
+			messageAll(player.getName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerDefected(player, data.team, data.newTeam);
 			setPlayersNextSpawnpoint(player);
 			player.attackEntityFrom(DamageSource.generic, 10000F);
@@ -1008,7 +1011,7 @@ public class TeamsManager
 		//3 : Player has only just joined
 		else if(data.team == null)
 		{
-			messageAll(player.getCommandSenderName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
+			messageAll(player.getName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerEnteredTheGame(player, data.newTeam, playerClass);
 			data.newTeam.addPlayer(player);
 			data.team = data.newTeam;
@@ -1077,10 +1080,13 @@ public class TeamsManager
 	public void chunkLoaded(ChunkDataEvent event)
 	{
 		Chunk chunk = event.getChunk();
-		for(List<Entity> list : chunk.entityLists)
+		for(ClassInheritanceMultiMap list : chunk.getEntityLists())
 		{
-			for(Entity entity : list)
+			Iterator it = list.iterator();
+			Entity entity;
+			while(it.hasNext())
 			{
+				entity = (Entity)it.next();
 				if(entity instanceof ITeamBase)
 				{
 					bases.add((ITeamBase)entity);
@@ -1317,7 +1323,7 @@ public class TeamsManager
 	
 	public EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
+		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
 	}
 	
 	public static void log(String s)

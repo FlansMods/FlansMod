@@ -130,7 +130,7 @@ public class ItemTool extends ItemFood
 	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
 	        double length = -5D;
-	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
+	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
 	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        
 	        if(world.isRemote && FlansMod.DEBUG)
@@ -180,7 +180,7 @@ public class ItemTool extends ItemFood
 		        EntityLivingBase hitLiving = entityplayer;
 		        
 				//Iterate over entities within range of the ray
-				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
+				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
 						Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
 						Math.max(posVec.xCoord, lookVec.xCoord), Math.max(posVec.yCoord, lookVec.yCoord), Math.max(posVec.zCoord, lookVec.zCoord)));
 				for (int l = 0; l < list.size(); l++)
@@ -192,7 +192,7 @@ public class ItemTool extends ItemFood
 					if(checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
-					MovingObjectPosition hit = checkEntity.boundingBox.calculateIntercept(posVec, lookVec);
+					MovingObjectPosition hit = checkEntity.getBoundingBox().calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
 					if(hit != null)
 						hitLiving = checkEntity;

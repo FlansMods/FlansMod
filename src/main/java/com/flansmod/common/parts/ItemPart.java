@@ -2,7 +2,6 @@ package com.flansmod.common.parts;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ public class ItemPart extends Item implements IFlanItem
 			setHasSubtypes(true);
 		}
 		type.item = this;
-		setTextureName("FlansMod:" + type.iconPath);
+		setUnlocalizedName("FlansMod:" + type.iconPath);
 		setCreativeTab(FlansMod.tabFlanParts);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}

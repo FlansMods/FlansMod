@@ -11,15 +11,14 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
@@ -86,7 +85,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		//Get the packet class to encode our packet
 		msg.encodeInto(ctx, encodedData);
 		//Convert our packet into a Forge packet to get it through the Netty system
-		FMLProxyPacket proxyPacket = new FMLProxyPacket(encodedData.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+		FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(encodedData.copy()), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 		//Add our packet to the outgoing packet queue
 		out.add(proxyPacket);
 	}

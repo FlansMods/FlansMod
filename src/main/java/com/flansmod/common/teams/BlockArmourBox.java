@@ -10,12 +10,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockArmourBox extends Block 
@@ -27,7 +29,7 @@ public class BlockArmourBox extends Block
 		super(Material.wood);
 		type = t;
 
-		setBlockName(type.shortName);
+		setUnlocalizedName(type.shortName);
 		setHardness(2F);
 	    setResistance(4F);
 	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
@@ -86,11 +88,11 @@ public class BlockArmourBox extends Block
     }
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumFacing side, float par7, float par8, float par9)
 	{
 		if(entityplayer.isSneaking())
 			return false;
-		entityplayer.openGui(FlansMod.INSTANCE, 11, world, i, j, k);
+		entityplayer.openGui(FlansMod.INSTANCE, 11, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 }

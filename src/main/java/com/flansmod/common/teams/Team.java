@@ -177,7 +177,7 @@ public class Team extends InfoType
 	
 	public void removePlayer(EntityPlayer player)
 	{
-		removePlayer(player.getCommandSenderName());
+		removePlayer(player.getName());
 	}
 	
 	public String removePlayer(String username)
@@ -190,7 +190,7 @@ public class Team extends InfoType
 	
 	public EntityPlayer addPlayer(EntityPlayer player)
 	{
-		addPlayer(player.getCommandSenderName());
+		addPlayer(player.getName());
 		return player;
 	}
 	

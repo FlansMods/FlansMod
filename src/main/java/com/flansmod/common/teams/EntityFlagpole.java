@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -63,7 +64,12 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		this(world, x + 0.5D, y, z + 0.5D);
 	}
 		
-    @Override
+    public EntityFlagpole(World world, BlockPos pos) 
+    {
+		this(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+	}
+
+	@Override
 	public AxisAlignedBB getBoundingBox()
     {
     	return null;

@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -56,7 +58,7 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
     {
         return null;
     }
@@ -68,25 +70,13 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean canPlaceBlockAt(World par1World, BlockPos pos)
     {
-        return false;
-    }
-
-    @Override
-    public boolean getBlocksMovement(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-    {
-        return true;
+        return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
     }
     
     @Override
-    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
-    {
-        return par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) || BlockFence.func_149825_a(par1World.getBlock(par2, par3 - 1, par4));
-    }
-    
-    @Override
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
     {
         if (!par1World.isRemote)
         {

@@ -173,7 +173,7 @@ public class PlayerClass extends InfoType
 			    		}
 			    	}
 			    	tags.setTag("attachments", attachmentTags);
-			    	stack.stackTagCompound = tags;
+			    	stack.setTagCompound(tags);
 				}
 				startingItems.add(stack);
 			}

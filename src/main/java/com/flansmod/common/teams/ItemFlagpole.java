@@ -6,12 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,9 +31,9 @@ public class ItemFlagpole extends Item {
         float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
         float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
         double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * f;
-        double d1 = (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * f + 1.6200000000000001D) - entityplayer.yOffset;
+        double d1 = (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * f + 1.6200000000000001D) - entityplayer.getYOffset();
         double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * f;
-        Vec3 vec3d = Vec3.createVectorHelper(d, d1, d2);
+        Vec3 vec3d = new Vec3(d, d1, d2);
         float f3 = MathHelper.cos(-f2 * 0.01745329F - 3.141593F);
         float f4 = MathHelper.sin(-f2 * 0.01745329F - 3.141593F);
         float f5 = -MathHelper.cos(-f1 * 0.01745329F);
@@ -50,27 +50,25 @@ public class ItemFlagpole extends Item {
         }
         if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
         {
-            int i = movingobjectposition.blockX;
-            int j = movingobjectposition.blockY;
-            int k = movingobjectposition.blockZ;
+            BlockPos pos = movingobjectposition.getBlockPos();
             if(!world.isRemote)
             {
-				if(world.getBlock(i, j, k) == Blocks.snow)
+				if(world.getBlockState(pos).getBlock() == Blocks.snow)
 				{
-					j--;
+					pos.add(0, -1, 0);
 				}
-				if(isSolid(world, i, j, k))
+				if(isSolid(world, pos))
 				{
-					world.spawnEntityInWorld(new EntityFlagpole(world, i, j + 1, k));
+					world.spawnEntityInWorld(new EntityFlagpole(world, pos));
 				}		            
 			}
         }
 		return itemstack;
 	}
 	
-	private boolean isSolid(World world, int i, int j, int k)
+	private boolean isSolid(World world, BlockPos pos)
 	{
-		Block block = world.getBlock(i, j, k);
+		Block block = world.getBlockState(pos).getBlock();
 		if (block == null)
 			return false;
 		return block.getMaterial().isSolid() && block.isOpaqueCube();

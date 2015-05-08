@@ -144,7 +144,7 @@ public class GametypeCTF extends Gametype
 		{
 			Team flagTeam = teamsManager.getTeam(((EntityFlag)player.riddenByEntity).getBase().getOwnerID());
 			player.riddenByEntity.mountEntity(null);
-			TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
+			TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 		}
 	}
 
@@ -194,7 +194,7 @@ public class GametypeCTF extends Gametype
 						{
 							flag.reset();
 							playerData.score += 2;
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");		
+							TeamsManager.messageAll("\u00a7f" + player.getName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");		
 						}
 						
 						//TODO : Move to be a proximity thing?
@@ -210,7 +210,7 @@ public class GametypeCTF extends Gametype
 								playerTeam.score++;
 								playerData.score += 10;
 								otherFlag.reset();
-								TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " captured the \u00a7" + otherFlagTeam.textColour + otherFlagTeam.name + "\u00a7f flag");
+								TeamsManager.messageAll("\u00a7f" + player.getName() + " captured the \u00a7" + otherFlagTeam.textColour + otherFlagTeam.name + "\u00a7f flag");
 							}
 						}
 					}
@@ -220,14 +220,14 @@ public class GametypeCTF extends Gametype
 						if(flag.ridingEntity == player)
 						{
 							flag.mountEntity(null);
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
+							TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 						}
 						else if(flag.ridingEntity == null)
 						{
 							if(flag.isHome)
 								playerData.score += 3;
 							flag.mountEntity(player);
-							TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " picked up the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
+							TeamsManager.messageAll("\u00a7f" + player.getName() + " picked up the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 							flag.isHome = false;
 						}
 						
@@ -263,7 +263,7 @@ public class GametypeCTF extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

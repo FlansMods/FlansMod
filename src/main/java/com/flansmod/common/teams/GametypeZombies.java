@@ -68,7 +68,7 @@ public class GametypeZombies extends Gametype
 		if(teamsManager.currentRound.teams[0].members.size() > 0)
 		{
 			EntityPlayer zombifiedPlayer = teamsManager.getPlayer(teamsManager.currentRound.teams[0].members.get(rand.nextInt(teamsManager.currentRound.teams[0].members.size())));
-			teamsManager.messageAll("\u00a74" + zombifiedPlayer.getCommandSenderName() + "\u00a7c was infected with the \u00a74zombie plague\u00a7c!");
+			teamsManager.messageAll("\u00a74" + zombifiedPlayer.getName() + "\u00a7c was infected with the \u00a74zombie plague\u00a7c!");
 			zombifiedPlayer.attackEntityFrom(DamageSource.generic, 1000000000F);
 		}
 	}
@@ -227,7 +227,7 @@ public class GametypeZombies extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;
