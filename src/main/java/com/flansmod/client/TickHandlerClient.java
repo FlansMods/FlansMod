@@ -598,7 +598,7 @@ public class TickHandlerClient
 	}
 	
 	//TODO : Unsure about fix. Check it
-	private static RenderItem itemRenderer = new RenderItem(Minecraft.getMinecraft().renderEngine, new ModelManager(Minecraft.getMinecraft().getTextureMapBlocks()));
+	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
 	
 	private static class KillMessage

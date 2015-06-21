@@ -137,13 +137,6 @@ public class ItemMecha extends Item implements IFlanItem
         list.add(mechaStack);
     }
     
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
 	@Override
 	public InfoType getInfoType() 
 	{

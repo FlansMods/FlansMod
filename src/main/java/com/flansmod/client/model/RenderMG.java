@@ -12,7 +12,7 @@ import com.flansmod.common.guns.EntityMG;
 
 public class RenderMG extends Render
 {
-	protected RenderMG(RenderManager renderManager) 
+	public RenderMG(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

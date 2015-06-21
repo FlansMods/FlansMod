@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -103,10 +104,10 @@ public class ClientProxy extends CommonProxy
 	{
 		new FlansModClient().load();
 		gunRenderer = new RenderGun();
-		grenadeRenderer = new RenderGrenade();
-		planeRenderer = new RenderPlane();
-		vehicleRenderer = new RenderVehicle();
-		mechaRenderer = new RenderMecha();
+		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
+		planeRenderer = new RenderPlane(Minecraft.getMinecraft().getRenderManager());
+		vehicleRenderer = new RenderVehicle(Minecraft.getMinecraft().getRenderManager());
+		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
 		
 		//Register custom item renderers
 		for(GunType gunType : GunType.guns.values())
@@ -175,21 +176,23 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers()
 	{		
-		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade());
-		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
-		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle());
-		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());		
-		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull());
-		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
-		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha());
+		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull(rm));		
+		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha(rm));
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}

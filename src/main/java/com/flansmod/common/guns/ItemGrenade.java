@@ -1,6 +1,5 @@
 package com.flansmod.common.guns;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -39,7 +38,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
     public Multimap getAttributeModifiers(ItemStack stack)
     {
         Multimap multimap = super.getAttributeModifiers(stack);
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
+        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
 	
@@ -97,13 +96,6 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
-    }
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override

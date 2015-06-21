@@ -165,13 +165,6 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
     	return type.colour;
     }
     
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
     /** Make sure that creatively spawned planes have nbt data */
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list)

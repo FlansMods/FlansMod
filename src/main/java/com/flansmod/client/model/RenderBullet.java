@@ -14,7 +14,7 @@ import com.flansmod.common.guns.EntityBullet;
 
 public class RenderBullet extends Render
 {
-	protected RenderBullet(RenderManager renderManager) 
+	public RenderBullet(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

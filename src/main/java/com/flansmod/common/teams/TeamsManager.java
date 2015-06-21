@@ -22,7 +22,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -1137,9 +1136,10 @@ public class TeamsManager
 				maps.put(map.shortName, map);
 			}
 			
+			int dimension = 0; //TODO : FIX THIS
 			if(maps.size() == 0)
 			{
-				maps.put("default" + world.getWorldInfo().getVanillaDimension(), new TeamsMap(world, "default" + world.getWorldInfo().getVanillaDimension(), "Default " + world.getWorldInfo().getWorldName()));
+				maps.put("default" + dimension, new TeamsMap(world, "default" + dimension, "Default " + world.getWorldInfo().getWorldName()));
 			}
 
 			//Read the rounds list		

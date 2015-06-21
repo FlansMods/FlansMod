@@ -169,13 +169,6 @@ public class ItemPlane extends Item implements IFlanItem
     {
     	return type.colour;
     }
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
     
     /** Make sure that creatively spawned planes have nbt data */
     @Override

@@ -193,13 +193,11 @@ public class FlansMod
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
 		
-		proxy.registerRenderers();
+		
 		
 		//Read content packs
 		readContentPacks(event);
-					
-		//Do proxy loading
-		proxy.load();
+
 		//Force Minecraft to reload all resources in order to load content pack resources.
 		proxy.forceReload();
 						
@@ -211,6 +209,11 @@ public class FlansMod
 	public void init(FMLInitializationEvent event)
 	{
 		log("Initialising Flan's Mod.");
+		
+		
+		//Do proxy loading
+		proxy.load();
+		proxy.registerRenderers();
 				
 		//Initialising handlers
 		packetHandler.initialise();

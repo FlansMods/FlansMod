@@ -12,7 +12,7 @@ import com.flansmod.common.FlansMod;
 
 public class RenderDebugAABB extends Render 
 {
-	protected RenderDebugAABB(RenderManager renderManager) 
+	public RenderDebugAABB(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}

@@ -13,7 +13,7 @@ import com.flansmod.common.tools.EntityParachute;
 
 public class RenderParachute extends Render 
 {
-	protected RenderParachute(RenderManager renderManager) 
+	public RenderParachute(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

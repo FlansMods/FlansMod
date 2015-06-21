@@ -6,7 +6,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,8 +28,6 @@ import com.flansmod.common.FlansMod;
 public class BlockSpawner extends BlockContainer 
 {
 	public static boolean colouredPass = false;
-	
-	public IIcon[][] icons;
 	
 	public BlockSpawner(Material material) 
 	{
@@ -47,14 +44,6 @@ public class BlockSpawner extends BlockContainer
 	        list.add(new ItemStack(item, 1, 1));
 	        list.add(new ItemStack(item, 1, 2));
     	}
-    }
-    
-    @Override
-    public IIcon getIcon(int i, int j)
-    {
-    	if(j > 2)
-    		j = 2;
-    	return icons[colouredPass ? 1 : 0][j];
     }
     
     @Override
@@ -78,16 +67,10 @@ public class BlockSpawner extends BlockContainer
     @Override
     public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
     {
-        if (!par1World.isRemote)
-        {
-            if (par1World.getBlockMetadata(par2, par3, par4) != 1)
-            {
-            }
-        }
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, int i, int j, int k)
+    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
     {
     	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.03125F, 1.0F);
     }
@@ -114,13 +97,13 @@ public class BlockSpawner extends BlockContainer
 	}
 	
 	@Override
-	public int colorMultiplier(IBlockAccess access, int x, int y, int z)
+	public int colorMultiplier(IBlockAccess access, BlockPos pos, int renderPass)
 	{
 		if(!colouredPass)
 			return 0xffffff;
 		try
 		{
-			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(x, y, z);
+			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(pos);
             int spawnerTeamID = spawner.getTeamID();
             Team spawnerTeam = FlansModClient.getTeam(spawnerTeamID);
             
@@ -147,7 +130,7 @@ public class BlockSpawner extends BlockContainer
 	}
 	
     @Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
     {
     	if(world.isRemote)
     		return true;
@@ -155,9 +138,9 @@ public class BlockSpawner extends BlockContainer
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
     	*/
-    	if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
+    	if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile()))
     	{
-    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(x, y, z);
+    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(pos);
     		ItemStack item = player.getCurrentEquippedItem();
     		if(item == null || item.getItem() == null)
     		{
@@ -175,19 +158,5 @@ public class BlockSpawner extends BlockContainer
     		}
     	}
         return true;
-    }
-    
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
-    	icons = new IIcon[2][3];
-    	for(int i = 0; i < 2; i++)
-    	{
-    		icons[i][0] = register.registerIcon("FlansMod:" + "spawner_item_" + (i + 1));
-    		icons[i][1] = register.registerIcon("FlansMod:" + "spawner_player_" + (i + 1));
-    		icons[i][2] = register.registerIcon("FlansMod:" + "spawner_vehicle_" + (i + 1));
-    	}
     }
 }

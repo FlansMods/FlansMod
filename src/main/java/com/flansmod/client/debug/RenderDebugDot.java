@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderDebugDot extends Render {
 
-	protected RenderDebugDot(RenderManager renderManager) 
+	public RenderDebugDot(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}

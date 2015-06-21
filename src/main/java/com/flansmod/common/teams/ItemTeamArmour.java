@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -34,7 +33,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	
 	public ItemTeamArmour(ArmourType t)
 	{
-		super(ItemArmor.ArmorMaterial.CLOTH, 0, t.type);
+		super(ItemArmor.ArmorMaterial.LEATHER, 0, t.type);
 		type = t;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanTeams);
@@ -88,20 +87,6 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
-    }
-    
-    @Override
-	@SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return false;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
     @Override

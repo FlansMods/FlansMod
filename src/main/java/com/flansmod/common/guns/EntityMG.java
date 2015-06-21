@@ -12,8 +12,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
@@ -92,7 +94,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			setDead();
 		}
-		if (worldObj.getBlock(blockX, blockY - 1, blockZ) == null)
+		if (worldObj.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.air)
 		{
 			if(!worldObj.isRemote)
 			{
@@ -179,7 +181,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, Vec3.createVectorHelper(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, ammo.getItemDamage(), type));
+			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, ammo.getItemDamage(), type));
 			if (soundDelay <= 0)
 			{
 				soundDelay = type.shootSoundLength;

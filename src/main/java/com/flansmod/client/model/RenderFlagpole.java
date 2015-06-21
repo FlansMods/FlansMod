@@ -15,7 +15,7 @@ public class RenderFlagpole extends Render
 	
 	public ModelFlagpole modelFlagpole;
 	
-	protected RenderFlagpole(RenderManager renderManager) 
+	public RenderFlagpole(RenderManager renderManager) 
 	{
 		super(renderManager);
 		modelFlagpole = new ModelFlagpole();

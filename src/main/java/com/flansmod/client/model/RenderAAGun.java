@@ -13,7 +13,7 @@ import com.flansmod.common.guns.EntityAAGun;
 
 public class RenderAAGun extends Render
 {
-	protected RenderAAGun(RenderManager renderManager) 
+	public RenderAAGun(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

@@ -2,18 +2,17 @@ package com.flansmod.common.guns;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,8 +24,6 @@ import com.flansmod.common.types.InfoType;
 public class ItemAAGun extends Item implements IFlanItem
 {
     public static final ArrayList<String> names = new ArrayList<String>();
-    @SideOnly(Side.CLIENT)
-    private ArrayList<IIcon> icons;
 	public AAGunType type;
     
 	public ItemAAGun(AAGunType type1)
@@ -47,7 +44,7 @@ public class ItemAAGun extends Item implements IFlanItem
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
+        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
         
@@ -58,10 +55,10 @@ public class ItemAAGun extends Item implements IFlanItem
 		}
 		if (movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
 		{
-			int i = movingobjectposition.blockX;
-			int j = movingobjectposition.blockY;
-			int k = movingobjectposition.blockZ;
-			if (!world.isRemote && world.isSideSolid(i, j, k, ForgeDirection.UP))
+			int i = movingobjectposition.getBlockPos().getX();
+			int j = movingobjectposition.getBlockPos().getY();
+			int k = movingobjectposition.getBlockPos().getZ();
+			if (!world.isRemote && world.isSideSolid(movingobjectposition.getBlockPos(), EnumFacing.UP))
 			{
 				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F, entityplayer));
 			}
@@ -88,13 +85,6 @@ public class ItemAAGun extends Item implements IFlanItem
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
 	
 	@Override

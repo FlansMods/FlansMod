@@ -4,21 +4,21 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFlansWorkbench extends Block
 {
-	private IIcon side;
-	private IIcon[] top;
+	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
     public BlockFlansWorkbench(int j, int k)
     {
@@ -40,42 +40,19 @@ public class BlockFlansWorkbench extends Block
     }
 
     @Override
-    public IIcon getIcon(int i, int j)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumFacing side, float par7, float par8, float par9)
     {
-        if(i == 1)
-        {
-            return top[j];
-        } else
-        {
-            return side;
-        }
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
-    {
-    	switch(world.getBlockMetadata(i, j, k))
+    	switch(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue())
     	{
-    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 0, world, i, j, k); break;
-    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 2, world, i, j, k); break; 
+    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 0, world, pos.getX(), pos.getY(), pos.getZ()); break;
+    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ()); break; 
     	}    	
 		return true;
     }
     
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
+    public int damageDropped(IBlockState state)
     {
-    	top = new IIcon[3];
-    	top[0] = register.registerIcon("FlansMod:" + "planeCraftingTableSmall");
-    	top[1] = register.registerIcon("FlansMod:" + "planeCraftingTableLarge");
-    	top[2] = register.registerIcon("FlansMod:" + "vehicleCraftingTable");
-    	side = register.registerIcon("FlansMod:" + "planeCraftingTableSide");
-    }
-    
-    @Override
-    public int damageDropped(int par1)
-    {
-        return par1;
+        return ((Integer)state.getValue(TYPE)).intValue();
     }
 }

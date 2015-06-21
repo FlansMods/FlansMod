@@ -55,10 +55,7 @@ public class RenderGun implements IItemRenderer
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
-			return;
-		
-		RenderBlocks renderBlocks = (RenderBlocks)data[0];
-		
+			return;	
 		
 		GunType gunType = ((ItemGun)item.getItem()).type;
 		if(gunType == null)
@@ -139,7 +136,7 @@ public class RenderGun implements IItemRenderer
 				case ENTITY :
 				{
 					EntityItem entity = (EntityItem)data[1];
-					GL11.glRotatef(entity.age + (entity.age == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
 					break;
 				}
 				case EQUIPPED:
@@ -334,7 +331,7 @@ public class RenderGun implements IItemRenderer
 		}
 				
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.stackTagCompound.getString("Paint"))));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);

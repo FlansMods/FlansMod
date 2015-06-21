@@ -3,13 +3,11 @@ package com.flansmod.common.teams;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketBaseEdit;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,8 +17,6 @@ public class ItemOpStick extends Item
 {
 	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
 	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
-    @SideOnly(Side.CLIENT)
-    private IIcon[] icons;
     
 	public ItemOpStick()
 	{
@@ -189,26 +185,6 @@ public class ItemOpStick extends Item
 	    	}
     	}
 	}
-	
-	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister register)
-    {
-    	icons = new IIcon[stickNames.length];
-
-        for(int i = 0; i < stickNames.length; ++i)
-        {
-        	icons[i] = register.registerIcon("FlansMod:" + stickNames[i]);
-        	itemIcon = icons[i];
-        }
-    }
-	
-	@Override
-    public IIcon getIconFromDamage(int damage)
-    {
-        int j = MathHelper.clamp_int(damage, 0, 15);
-        return icons[j];
-    }
 	
 	@Override
     public String getUnlocalizedName(ItemStack stack)

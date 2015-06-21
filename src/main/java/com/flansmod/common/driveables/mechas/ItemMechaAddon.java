@@ -3,7 +3,6 @@ package com.flansmod.common.driveables.mechas;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,12 +43,6 @@ public class ItemMechaAddon extends Item implements IFlanItem
     	return type.colour;
     }
     
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
     
 	@Override
 	public InfoType getInfoType() 

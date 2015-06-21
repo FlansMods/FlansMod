@@ -21,7 +21,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -31,6 +30,12 @@ import com.flansmod.common.types.InfoType;
 
 public class FlansModExplosion extends Explosion 
 {
+	public FlansModExplosion(World worldObj, Entity entity, EntityPlayer thrower, InfoType type, double posX, double posY, double posZ, float explosionRadius, boolean b) 
+	{
+		super(worldObj, entity, posX, posY, posZ, explosionRadius, b, false);
+	}
+	
+	/*
 	private int boomRadius = 16;
     private Random explosionRNG = new Random();
     private HashMap<EntityPlayer, Vec3> playerLocations = new HashMap<EntityPlayer, Vec3>();
@@ -166,9 +171,8 @@ public class FlansModExplosion extends Explosion
         explosionSize = f;
     }
 
-    /**
-     * Does the second part of the explosion (sound, particles, drop spawn)
-     */
+    //Does the second part of the explosion (sound, particles, drop spawn)
+    
     @Override
 	public void doExplosionB(boolean par1)
     {
@@ -272,4 +276,5 @@ public class FlansModExplosion extends Explosion
     {
         return exploder == null ? null : (exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed)exploder).getTntPlacedBy() : (exploder instanceof EntityLivingBase ? (EntityLivingBase)exploder : null));
     }
+    */
 }

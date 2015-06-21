@@ -1,7 +1,6 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -17,8 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 
-public class ItemFlagpole extends Item {
-
+public class ItemFlagpole extends Item 
+{
 	public ItemFlagpole() 
 	{
 		setCreativeTab(FlansMod.tabFlanTeams);
@@ -73,11 +72,4 @@ public class ItemFlagpole extends Item {
 			return false;
 		return block.getMaterial().isSolid() && block.isOpaqueCube();
 	}
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:flagpole");
-    }
 }

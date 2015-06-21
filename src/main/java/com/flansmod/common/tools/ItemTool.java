@@ -3,7 +3,6 @@ package com.flansmod.common.tools;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -64,13 +63,6 @@ public class ItemTool extends ItemFood
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
-    }
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override

@@ -59,33 +59,6 @@ public class BlockArmourBox extends Block
 			crafting.craft(inventory.player);
 		}
 	}
-	
-	@SideOnly(value = Side.CLIENT)
-	@Override
-	public IIcon getIcon(int side, int metadata)
-	{		
-		if (type == null)
-			return null;
-		
-		if (side == 1)
-		{
-			return type.top;
-		}
-		if (side == 0)
-		{
-			return type.bottom;
-		}
-		return type.side;
-	}
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
-		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
-		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
-		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
-    }
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumFacing side, float par7, float par8, float par9)

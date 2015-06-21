@@ -15,7 +15,7 @@ public class RenderNull extends Render
 {
 	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
 
-	protected RenderNull(RenderManager renderManager) 
+	public RenderNull(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

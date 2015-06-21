@@ -3,7 +3,6 @@ package com.flansmod.common.guns;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,13 +43,6 @@ public class ItemBullet extends ItemShootable implements IFlanItem
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
-    }
-        
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override

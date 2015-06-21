@@ -27,7 +27,7 @@ import com.flansmod.common.driveables.VehicleType;
 
 public class RenderVehicle extends Render implements IItemRenderer
 {
-	protected RenderVehicle(RenderManager renderManager) 
+	public RenderVehicle(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

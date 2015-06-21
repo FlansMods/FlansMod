@@ -12,7 +12,7 @@ import com.flansmod.common.FlansMod;
 public class RenderDebugVector extends Render 
 {
 
-	protected RenderDebugVector(RenderManager renderManager) 
+	public RenderDebugVector(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}

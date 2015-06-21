@@ -20,7 +20,7 @@ import com.flansmod.common.guns.ItemGun;
 
 public class RenderGrenade extends Render implements IItemRenderer 
 {
-	protected RenderGrenade(RenderManager renderManager) 
+	public RenderGrenade(RenderManager renderManager) 
 	{
 		super(renderManager);
 		shadowSize = 0.5F;

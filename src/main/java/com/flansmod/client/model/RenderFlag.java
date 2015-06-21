@@ -21,7 +21,7 @@ public class RenderFlag extends Render
 	public ModelFlagpole modelFlagpole;
 	public static float angle;
 		
-	protected RenderFlag(RenderManager renderManager) 
+	public RenderFlag(RenderManager renderManager) 
 	{
 		super(renderManager);
 		modelFlagpole = new ModelFlagpole();

@@ -7,7 +7,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,12 +24,6 @@ public class GunBoxType extends InfoType
 	public String topTexturePath;
 	public String sideTexturePath;
 	public String bottomTexturePath;
-	@SideOnly(Side.CLIENT)
-	public IIcon top;
-	@SideOnly(Side.CLIENT)
-	public IIcon side;
-	@SideOnly(Side.CLIENT)
-	public IIcon bottom;
 	public int numGuns;
 	public int nextGun = -1;
 	/** */
