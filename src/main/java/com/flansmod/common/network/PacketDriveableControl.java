@@ -100,8 +100,9 @@ public class PacketDriveableControl extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		EntityDriveable driveable = null;
-		for(Object obj : playerEntity.worldObj.loadedEntityList)
+		for(int i = 0; i < playerEntity.worldObj.loadedEntityList.size(); i++)
 		{
+			Object obj = playerEntity.worldObj.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;

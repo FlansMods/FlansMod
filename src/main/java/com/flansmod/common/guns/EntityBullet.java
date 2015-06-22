@@ -18,6 +18,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -154,6 +155,12 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	@Override
 	protected void entityInit()
 	{
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox()
+	{
+		return getEntityBoundingBox();
 	}
 
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed)
@@ -330,7 +337,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			else
 			{
 				Entity entity = (Entity)obj;
-				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade))
+				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade) && entity.getBoundingBox() != null)
 				{
 					MovingObjectPosition mop = entity.getBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)

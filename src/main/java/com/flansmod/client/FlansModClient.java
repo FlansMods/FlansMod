@@ -49,6 +49,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -221,7 +222,7 @@ public class FlansModClient extends FlansMod
 			if(data.skin != null)
 			{
 				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
-				((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
+				//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
 			}
 			
 			//Spectators see all
@@ -254,6 +255,16 @@ public class FlansModClient extends FlansMod
 	public static int shootTime(boolean left)
 	{
 		return left ? shootTimeLeft : shootTimeRight;
+	}
+	
+	@SubscribeEvent
+	public void cameraSetup(CameraSetup event)
+	{
+		if(minecraft.thePlayer.ridingEntity instanceof IControllable)
+		{
+			IControllable cont = (IControllable)minecraft.thePlayer.ridingEntity;
+			event.roll = cont.getPrevPlayerRoll() + (cont.getPlayerRoll() - cont.getPrevPlayerRoll()) * (float)event.renderPartialTicks;
+		}
 	}
 
 	public static void tick()
@@ -342,37 +353,18 @@ public class FlansModClient extends FlansMod
 		
 		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
-			inPlane = true;
+			inPlane = true;	
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getPlayerRoll(), "camRoll", "R", "field_78495_O");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "E", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
-			}			
-			if(minecraft.thePlayer.ridingEntity instanceof IControllable)
-			{
-				try
-				{
-					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "E", "field_78490_B");
-				} catch (Exception e)
-				{
-					log("I forgot to update obfuscated reflection D:");
-					throw new RuntimeException(e);
-				}		
-			}
+			}		
 		}
 		else if(inPlane)
 		{
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "R", "field_78495_O");
-			} catch (Exception e)
-			{
-				log("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}			
 			try
 			{
 				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "E", "field_78490_B");

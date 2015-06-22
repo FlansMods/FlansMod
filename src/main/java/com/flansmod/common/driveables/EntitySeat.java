@@ -184,6 +184,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		prevPlayerYaw = playerYaw;
 		prevPlayerPitch = playerPitch;
+		prevPlayerRoll = playerRoll;
 
 		//Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
@@ -207,7 +208,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(riddenByEntity != null)
 		{
 	    	DriveableType type = driveable.getDriveableType();
-			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
+			Vec3 yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0, riddenByEntity.getEyeHeight() * 3 / 4, 0)).toVec3().subtract(0, riddenByEntity.getEyeHeight(), 0);
+			//driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
 			
 			playerPosX = posX + yOffset.xCoord;
 			playerPosY = posY + yOffset.yCoord;
@@ -242,26 +244,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			//If the entity is a player, roll its view accordingly
 			if(worldObj.isRemote)
 			{
-				prevPlayerRoll = playerRoll;
 				playerRoll = -globalLookAxes.getRoll();
 			}		
 		}
 	}
 	
-	@Override
-    public void updateRiderPosition()
-    {
-		if(riddenByEntity instanceof EntityPlayer)
-		{
-			riddenByEntity.rotationYaw = playerYaw;
-			riddenByEntity.rotationPitch = playerPitch;
-			riddenByEntity.prevRotationYaw = prevPlayerYaw;
-			riddenByEntity.prevRotationPitch = prevPlayerPitch;
-		}
-		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
-		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
-		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
-    }
+
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -531,25 +519,23 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		super.setDead();
 	}
 	
-	/**
+	
 	@Override
     public void updateRiderPosition()
     {
-		if(riddenByEntity == null || (worldObj.isRemote && !foundDriveable))
-        {
-            return;
-        } else
-        {
-        	DriveableType type = driveable.getDriveableType();
-			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
-        
-            
-
-			return;
-        }
+		if(riddenByEntity instanceof EntityPlayer)
+		{
+			riddenByEntity.rotationYaw = playerYaw;
+			riddenByEntity.rotationPitch = playerPitch;
+			riddenByEntity.prevRotationYaw = prevPlayerYaw;
+			riddenByEntity.prevRotationPitch = prevPlayerPitch;
+		}
+		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
+		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
+		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
+		
+		//riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
     }
-	**/
-	
 	
 	@Override
     public ItemStack getPickedResult(MovingObjectPosition target)
@@ -562,9 +548,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getPlayerRoll() 
 	{
-		for(; playerRoll - prevPlayerRoll > 180F; playerRoll -= 360F) ;
-		for(; playerRoll - prevPlayerRoll < -180F; playerRoll += 360F) ;
-		return playerRoll;
+		return playerRoll;	
+	}	
+	
+	@Override
+	public float getPrevPlayerRoll() 
+	{
+		return prevPlayerRoll;
 	}
 	
 	@Override

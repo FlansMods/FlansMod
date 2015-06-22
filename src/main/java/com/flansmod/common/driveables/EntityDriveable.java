@@ -1139,6 +1139,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return axes.getRoll();
 	}
+	
+	@Override
+	public float getPrevPlayerRoll() 
+	{
+		return prevAxes.getRoll();
+	}
 
 	@Override
 	public void explode() 
