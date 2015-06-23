@@ -5,7 +5,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -14,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -21,10 +24,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.renderhack.ITextureHandler;
+import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;
 
-public class BlockGunBox extends Block
+public class BlockGunBox extends Block implements ITextureHandler
 {
 	public GunBoxType type;
 	
@@ -237,4 +243,39 @@ public class BlockGunBox extends Block
 		ret.add(new ItemStack(this, 1, 0));
         return ret;
     }
+	
+	@SideOnly(Side.CLIENT)
+    public int getRenderType() 
+    {
+        return 100;
+    }
+	
+	@SideOnly(Side.CLIENT)
+    private TextureLoader textureLoader;
+    
+	public static ResourceLocation workbench1 = new ResourceLocation("flansmod", "blocks/planeCraftingTableSmall");
+	public static ResourceLocation workbench2 = new ResourceLocation("flansmod", "blocks/planeCraftingTableLarge");
+	public static ResourceLocation workbench3 = new ResourceLocation("flansmod", "blocks/vehicleCraftingTable");
+	
+	@Override
+	public void loadTextures(TextureLoader loader) 
+	{
+        this.textureLoader = loader;
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.topTexturePath));
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.sideTexturePath));
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.bottomTexturePath));
+	}
+
+	@Override
+	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
+	{
+		ResourceLocation res = FlansModResourceHandler.getBlockTexture(type.sideTexturePath);
+		switch(facing)
+		{
+		case UP:   res = FlansModResourceHandler.getBlockTexture(type.topTexturePath); break;
+		case DOWN: res = FlansModResourceHandler.getBlockTexture(type.bottomTexturePath); break;
+		default:
+		}
+		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
+	}
 }

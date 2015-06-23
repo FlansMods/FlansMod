@@ -2,21 +2,28 @@ package com.flansmod.common;
 
 import java.util.List;
 
+import com.flansmod.client.renderhack.ITextureHandler;
+import com.flansmod.client.renderhack.TextureLoader;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockFlansWorkbench extends Block
+public class BlockFlansWorkbench extends Block implements ITextureHandler
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
@@ -26,6 +33,7 @@ public class BlockFlansWorkbench extends Block
         setHardness(3F);
         setResistance(6F);
         setCreativeTab(FlansMod.tabFlanDriveables);
+        setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
     }
     
     @Override
@@ -50,9 +58,66 @@ public class BlockFlansWorkbench extends Block
 		return true;
     }
     
+    @SideOnly(Side.CLIENT)
+    public int getRenderType() 
+    {
+        return 100;
+    }
+    
+    @Override
+    protected BlockState createBlockState()
+    {
+        return new BlockState(this, new IProperty[] {TYPE});
+    }
+    
+    @Override
+    public IBlockState getStateFromMeta(int meta)
+    {
+        return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
+    }
+    
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return ((Integer)state.getValue(TYPE)).intValue();
+    }
+    
     @Override
     public int damageDropped(IBlockState state)
     {
         return ((Integer)state.getValue(TYPE)).intValue();
     }
+
+    @SideOnly(Side.CLIENT)
+    private TextureLoader textureLoader;
+    
+	public static ResourceLocation workbench1 = new ResourceLocation("flansmod", "blocks/planeCraftingTableSmall");
+	public static ResourceLocation workbench2 = new ResourceLocation("flansmod", "blocks/planeCraftingTableLarge");
+	public static ResourceLocation workbench3 = new ResourceLocation("flansmod", "blocks/vehicleCraftingTable");
+	public static ResourceLocation side = new ResourceLocation("flansmod", "blocks/planeCraftingTableSide");
+	public static ResourceLocation bottom = new ResourceLocation("flansmod", "blocks/boxBottom");
+	
+	@Override
+	public void loadTextures(TextureLoader loader) 
+	{
+        this.textureLoader = loader;
+        loader.registerTexture(workbench1);
+        loader.registerTexture(workbench2);
+        loader.registerTexture(workbench3);
+        loader.registerTexture(side);
+        loader.registerTexture(bottom);
+	}
+
+	@Override
+	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
+	{
+		ResourceLocation res = side;
+		switch(facing)
+		{
+		case UP: switch(((Integer)state.getValue(TYPE)).intValue()) { case 0: res = workbench1; break; case 1: res = workbench2; break; case 2: res = workbench3; break; } break;
+		case DOWN: res = bottom;
+		default:
+		}
+		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
+	}
 }

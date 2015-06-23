@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;

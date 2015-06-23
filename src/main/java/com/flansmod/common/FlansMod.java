@@ -192,9 +192,7 @@ public class FlansMod
 		spawner = (BlockSpawner)(new BlockSpawner(Material.iron).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
-		
-		
-		
+				
 		//Read content packs
 		readContentPacks(event);
 

@@ -37,10 +37,20 @@ import net.minecraft.client.particle.EntitySnowShovelFX;
 import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.particle.EntitySplashFX;
 import net.minecraft.client.particle.EntitySuspendFX;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.RenderEntityItem;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.tileentity.RenderItemFrame;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -51,9 +61,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,6 +74,9 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
+import com.flansmod.client.renderhack.FlansModRendererDispatcher;
+import com.flansmod.client.renderhack.RenderItemOld;
+import com.flansmod.client.renderhack.RenderRegistry;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -128,6 +143,31 @@ public class FlansModClient extends FlansMod
 	{		
 		log("Loading Flan's mod client side.");
 		MinecraftForge.EVENT_BUS.register(this);
+		Minecraft mc = Minecraft.getMinecraft();
+
+        // Prerequisite
+        ModelManager modelManager = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, "aL", "field_175617_aL", "modelManager");
+        RenderManager renderManager = mc.getRenderManager();
+        IReloadableResourceManager resourceManager = ((IReloadableResourceManager) mc.getResourceManager());
+
+        // Render Item Hook
+        RenderItem item = new RenderItemOld(mc.getTextureManager(), modelManager);
+        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, item, "X", "field_175621_X", "renderItem");
+        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, new ItemRenderer(mc), "Y", "field_175620_Y", "itemRenderer");
+        renderManager.entityRenderMap.remove(EntityItem.class);
+        renderManager.entityRenderMap.put(EntityItem.class, new RenderEntityItem(renderManager, item));
+        renderManager.entityRenderMap.remove(EntityItemFrame.class);
+        renderManager.entityRenderMap.put(EntityItemFrame.class, new RenderItemFrame(renderManager, item));
+        mc.entityRenderer = new EntityRenderer(mc, resourceManager);
+
+        // Render Block Dispatcher Hook
+        BlockRendererDispatcher rendererDispatcher = new FlansModRendererDispatcher(modelManager.getBlockModelShapes(), mc.gameSettings);
+        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, rendererDispatcher, "aM", "field_175618_aM", "blockRenderDispatcher");
+
+        // Register Reload Listeners
+        resourceManager.registerReloadListener(rendererDispatcher);
+        resourceManager.registerReloadListener(item);
+        resourceManager.registerReloadListener(mc.entityRenderer);
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
@@ -620,4 +660,14 @@ public class FlansModClient extends FlansMod
 		}
 		return animations;
 	}
+	
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onTextureStitch(TextureStitchEvent.Pre event)
+    {
+        if (event.map == Minecraft.getMinecraft().getTextureMapBlocks())
+        {
+            RenderRegistry.instance().injectTexture(event.map);
+        }
+    }
 }

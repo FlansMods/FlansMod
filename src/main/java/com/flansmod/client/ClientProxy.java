@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.FMLModContainer;
 import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.discovery.ContainerType;
 import net.minecraftforge.fml.common.discovery.ModCandidate;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -53,6 +54,9 @@ import com.flansmod.client.model.RenderNull;
 import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.client.renderhack.ITextureHandler;
+import com.flansmod.client.renderhack.RenderBlock;
+import com.flansmod.client.renderhack.RenderRegistry;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
@@ -98,11 +102,14 @@ public class ClientProxy extends CommonProxy
 	
 	/** The file locations of the content packs, used for loading */
 	public List<File> contentPacks;
+	
+	private FlansModClient flansModClient;
 
 	@Override
 	public void load()
 	{
-		new FlansModClient().load();
+		flansModClient = new FlansModClient();
+		flansModClient.load();
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
 		planeRenderer = new RenderPlane(Minecraft.getMinecraft().getRenderManager());
@@ -125,10 +132,15 @@ public class ClientProxy extends CommonProxy
 		for(MechaType mechaType : MechaType.types)
 			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
 		
+        RenderRegistry.registerBlockHandler(new RenderBlock(FlansMod.workbench.getRenderType()));
+        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.workbench);
+		for(GunBoxType gunBoxType : GunBoxType.gunBoxMap.values())
+			RenderRegistry.registerTextureHandler((ITextureHandler)gunBoxType.block);
+		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();
 	}
-	
+		
 	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */
 	@Override
 	public void forceReload()
