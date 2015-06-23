@@ -25,9 +25,11 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class ItemTool extends ItemFood 
+public class ItemTool extends ItemFood implements IFlanItem
 {
 	public ToolType type;
 
@@ -215,5 +217,11 @@ public class ItemTool extends ItemFood
 	public String toString()
 	{
 		return type == null ? getUnlocalizedName() : type.name;
+	}
+
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
 	}
 }

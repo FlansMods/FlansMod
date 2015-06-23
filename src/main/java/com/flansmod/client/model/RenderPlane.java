@@ -164,10 +164,16 @@ public class RenderPlane extends Render implements IItemRenderer
 				float scale = 0.5F;
 				switch(type)
 				{
+				case INVENTORY:
+				{
+					GL11.glRotatef(180F, 0F, 1F, 0F);
+					scale = 1.0F;
+					break;
+				}
 				case ENTITY:
 				{
 					scale = 1.5F;
-					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
 					break;
 				}
 				case EQUIPPED:

@@ -176,13 +176,19 @@ public class RenderVehicle extends Render implements IItemRenderer
 			VehicleType vehicleType = ((ItemVehicle)item.getItem()).type;
 			if(vehicleType.model != null)
 			{
-				float scale = 0.5F;
+				float scale = 1F;
 				switch(type)
 				{
 				case ENTITY:
 				{
 					scale = 1.5F;
-					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					break;
+				}
+				case INVENTORY:
+				{
+					scale = 0.70F;
+					GL11.glTranslatef(0F, -0.05F, 0F);
 					break;
 				}
 				case EQUIPPED:

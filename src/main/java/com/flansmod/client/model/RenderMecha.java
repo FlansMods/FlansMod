@@ -367,13 +367,19 @@ public class RenderMecha extends Render implements IItemRenderer
 			MechaType mechaType = ((ItemMecha)item.getItem()).type;
 			if(mechaType.model != null)
 			{
-				float scale = 0.5F;
+				float scale = 2F;
 				switch(type)
 				{
+				case INVENTORY:
+				{
+					scale = 1.0F;
+					GL11.glTranslatef(0F, -0.35F, 0F);
+					break;
+				}
 				case ENTITY:
 				{
 					scale = 1.5F;
-					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
 					break;
 				}
 				case EQUIPPED:

@@ -67,7 +67,7 @@ public class RenderGun implements IItemRenderer
 
 		//Render main hand gun
 		{
-			GunAnimations animations = type == ItemRenderType.ENTITY ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
+			GunAnimations animations = (type == ItemRenderType.ENTITY || type == ItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
 			renderGun(type, item, gunType, animations, false, data);
 		}
 		
@@ -135,8 +135,14 @@ public class RenderGun implements IItemRenderer
 			{
 				case ENTITY :
 				{
-					EntityItem entity = (EntityItem)data[1];
-					GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					//EntityItem entity = (EntityItem)data[1];
+					//GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					break;
+				}
+				case INVENTORY :
+				{
+
+					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
 					break;
 				}
 				case EQUIPPED:

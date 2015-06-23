@@ -1,25 +1,65 @@
 package com.flansmod.client.renderhack;
 
+import org.lwjgl.opengl.GL11;
+
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.model.RenderGrenade;
+import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderMecha;
+import com.flansmod.client.model.RenderPlane;
+import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.common.driveables.PlaneType;
+import com.flansmod.common.driveables.VehicleType;
+import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.guns.GrenadeType;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 public class RenderItemOld extends RenderItem 
 {
 	protected TextureManager textureManager;
+	
+	private RenderGun renderGun;
+	private RenderVehicle renderVehicle;
+	private RenderPlane renderPlane;
+	private RenderMecha renderMecha;
+	private RenderGrenade renderGrenade;
 
 	public RenderItemOld(TextureManager textureManager, ModelManager modelManager) 
 	{
 		super(textureManager, modelManager);
 		this.textureManager = textureManager;
+		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		renderGun = new RenderGun();
+		renderVehicle = new RenderVehicle(renderManager);
+		renderPlane = new RenderPlane(renderManager);
+		renderMecha = new RenderMecha(renderManager);
+		renderGrenade = new RenderGrenade(renderManager);
 	}
 
 	@Override
@@ -28,10 +68,9 @@ public class RenderItemOld extends RenderItem
 	    this.renderItem(stack, model, TransformType.NONE);
 	}
 	
-	@Override
-    protected void renderItemModelTransform(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType)
+    protected void renderItemModelTransform(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, Object... obj)
     {
-        this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
+    	this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
         this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
         this.preTransform(stack);
         GlStateManager.enableRescaleNormal();
@@ -42,12 +81,64 @@ public class RenderItemOld extends RenderItem
 
         model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, cameraTransformType);
 
-        renderItem(stack, model, cameraTransformType);
+        renderItem(stack, model, cameraTransformType, obj);
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableBlend();
         this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
         this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+    }
+	
+	@Override
+    protected void renderItemModelTransform(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType)
+    {
+		renderItemModelTransform(stack, model, cameraTransformType);
+    }
+	
+	@Override
+    public void renderItemModelForEntity(ItemStack stack, EntityLivingBase entityToRenderFor, ItemCameraTransforms.TransformType cameraTransformType)
+    {
+        IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
+
+        if (entityToRenderFor instanceof EntityPlayer)
+        {
+            EntityPlayer entityplayer = (EntityPlayer)entityToRenderFor;
+            Item item = stack.getItem();
+            ModelResourceLocation modelresourcelocation = null;
+
+            if (item == Items.fishing_rod && entityplayer.fishEntity != null)
+            {
+                modelresourcelocation = new ModelResourceLocation("fishing_rod_cast", "inventory");
+            }
+            else if (item == Items.bow && entityplayer.getItemInUse() != null)
+            {
+                int i = stack.getMaxItemUseDuration() - entityplayer.getItemInUseCount();
+
+                if (i >= 18)
+                {
+                    modelresourcelocation = new ModelResourceLocation("bow_pulling_2", "inventory");
+                }
+                else if (i > 13)
+                {
+                    modelresourcelocation = new ModelResourceLocation("bow_pulling_1", "inventory");
+                }
+                else if (i > 0)
+                {
+                    modelresourcelocation = new ModelResourceLocation("bow_pulling_0", "inventory");
+                }
+            }
+            else
+            {
+                modelresourcelocation = item.getModel(stack, entityplayer, entityplayer.getItemInUseCount());
+            }
+
+            if (modelresourcelocation != null)
+            {
+                ibakedmodel = this.getItemModelMesher().getModelManager().getModel(modelresourcelocation);
+            }
+        }
+
+        this.renderItemModelTransform(stack, ibakedmodel, cameraTransformType, null, entityToRenderFor);
     }
 	
     private void preTransform(ItemStack stack)
@@ -115,12 +206,86 @@ public class RenderItemOld extends RenderItem
         }
     }
 
-    public void renderItem(ItemStack paramItemStack, IBakedModel paramIBakedModel, ItemCameraTransforms.TransformType paramTransformType)
+    public void renderItem(ItemStack paramItemStack, IBakedModel paramIBakedModel, ItemCameraTransforms.TransformType paramTransformType, Object... obj)
     {
+    	//Look for Flan's Mod blocks
         if (((paramItemStack.getItem() instanceof ItemBlock)) && (((ItemBlock) paramItemStack.getItem()).getBlock().getRenderType() > 4))
             RenderRegistry.instance().renderInventoryBlock(paramItemStack, paramTransformType);
+        
+        else if(paramItemStack.getItem() instanceof IFlanItem)
+        {     	
+        	InfoType type = ((IFlanItem)paramItemStack.getItem()).getInfoType();
+        	if(paramTransformType == TransformType.GUI)
+        	{
+        		render2DItem(paramItemStack, type);
+        	}
+        	else
+        	{
+	        	
+	        	if(type instanceof GunType)
+	        		renderGun.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	else if(type instanceof VehicleType)
+	        		renderVehicle.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	else if(type instanceof PlaneType)
+	        		renderPlane.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	else if(type instanceof MechaType)
+	        		renderMecha.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	else if(type instanceof GrenadeType)
+	        		renderGrenade.renderItem(convert(paramTransformType), paramItemStack, obj);
+        	}
+        }
         else
             super.renderItem(paramItemStack, paramIBakedModel);
+    }
+    
+    private void render2DItem(ItemStack stack, InfoType type)
+    {
+    	GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        ResourceLocation resourcelocation = FlansModResourceHandler.getIcon(type);
+        textureManager.bindTexture(resourcelocation);
+        
+		GL11.glRotatef(-45F, 0F, 1F, 0F);
+		GL11.glRotatef(30F, 1F, 0F, 0F);
+		GL11.glRotatef(180F, 0F, 0F, 1F);
+		float scale = 0.05F;
+		GL11.glScalef(scale, scale, scale);
+		GL11.glTranslatef(-8F, -8F, 0F);
+        int x = 0, y = 0;
+
+        /*
+        int l = stack.getItem().getColorFromItemStack(stack, 0);
+        float f3 = (float)(l >> 16 & 255) / 255.0F;
+        float f4 = (float)(l >> 8 & 255) / 255.0F;
+        float f = (float)(l & 255) / 255.0F;
+
+        if(renderWithColor)
+        {
+            GL11.glColor4f(f3, f4, f, 1.0F);
+        }
+         */
+        
+        GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+
+        this.renderIcon(x, y, 16, 16);
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        //GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
+    }
+    
+    public void renderIcon(int p_94149_1_, int p_94149_2_, int p_94149_4_, int p_94149_5_)
+    {
+        Tessellator tessellator = Tessellator.getInstance();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().addVertexWithUV((double)(p_94149_1_ + 0), (double)(p_94149_2_ + p_94149_5_), 			(double)this.zLevel, 0, 1);
+        tessellator.getWorldRenderer().addVertexWithUV((double)(p_94149_1_ + p_94149_4_), (double)(p_94149_2_ + p_94149_5_), 	(double)this.zLevel, 1, 1);
+        tessellator.getWorldRenderer().addVertexWithUV((double)(p_94149_1_ + p_94149_4_), (double)(p_94149_2_ + 0), 			(double)this.zLevel, 1, 0);
+        tessellator.getWorldRenderer().addVertexWithUV((double)(p_94149_1_ + 0), (double)(p_94149_2_ + 0), 						(double)this.zLevel, 0, 0);
+        tessellator.draw();
     }
 
     @Override
@@ -131,5 +296,19 @@ public class RenderItemOld extends RenderItem
         	return RenderRegistry.instance().shouldRender3DInInventory(stack);
 
         return ibakedmodel.isGui3d();
+    }
+    
+    private ItemRenderType convert(ItemCameraTransforms.TransformType type)
+    {
+    	switch(type)
+    	{
+		case FIRST_PERSON: 	return ItemRenderType.EQUIPPED_FIRST_PERSON;
+		case GUI:			return ItemRenderType.INVENTORY;
+		case HEAD:			return ItemRenderType.FIRST_PERSON_MAP;
+		case NONE:			return ItemRenderType.ENTITY;
+		case THIRD_PERSON:	return ItemRenderType.EQUIPPED;
+		default:
+			return ItemRenderType.ENTITY;
+    	}
     }
 }
