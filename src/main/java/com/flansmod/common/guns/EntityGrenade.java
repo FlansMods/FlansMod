@@ -179,7 +179,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(type.livingProximityTrigger > 0 || type.driveableProximityTrigger > 0)
 			{
 				float checkRadius = Math.max(type.livingProximityTrigger, type.driveableProximityTrigger);
-				List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getBoundingBox().expand(checkRadius, checkRadius, checkRadius));
+				List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(checkRadius, checkRadius, checkRadius));
 				for(Object obj : list)
 				{
 					if(obj == thrower && ticksExisted < 10)
@@ -308,14 +308,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-						case UP : axes.setAngles(yaw, 180F, 0F); break;
-						case DOWN : axes.setAngles(yaw, 0F, 0F); break;
+						case DOWN : axes.setAngles(yaw, 180F, 0F); break;
+						case UP : axes.setAngles(yaw, 0F, 0F); break;
 						case NORTH : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case EAST : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case SOUTH : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case WEST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case SOUTH : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case WEST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case EAST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
 						}
-						//TODO : Check these!
 						
 						//Set the stuck flag on
 						stuck = true;
@@ -349,7 +348,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(type.damageVsLiving > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getBoundingBox());
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox());
 			for(Object obj : list)
 			{
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)

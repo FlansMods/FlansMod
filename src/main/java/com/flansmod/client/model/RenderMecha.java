@@ -332,7 +332,8 @@ public class RenderMecha extends Render implements IItemRenderer
 		}
 		else
 		{
-			//TODO : Render 2D Items. No idea if this is good.
+			GL11.glRotatef(-90F, 0F, 0F, 1F);
+
             IBakedModel ibakedmodel = renderItem.getItemModelMesher().getItemModel(stack);
             renderItem.renderItem(stack, ibakedmodel);
 	

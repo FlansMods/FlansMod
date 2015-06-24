@@ -156,9 +156,9 @@ public class RenderGun implements IItemRenderer
 					}
 					else
 					{
-						GL11.glRotatef(35F, 0F, 0F, 1F);
-						GL11.glRotatef(-5F, 0F, 1F, 0F);
-						GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+						GL11.glRotatef(90F, 0F, 0F, 1F);
+						GL11.glRotatef(-90F, 1F, 0F, 0F);
+						GL11.glTranslatef(0.25F, 0F, 0F);
 						GL11.glScalef(1F, 1F, -1F);
 					}
 					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
@@ -184,16 +184,15 @@ public class RenderGun implements IItemRenderer
 					
 					if(offHand)
 					{
-						GL11.glTranslatef(0F, 0.03F, -0.76F);
-						GL11.glRotatef(23F, 0F, 0F, 1F); 
-						GL11.glRotatef(-4F, 0F, 1F, 0F);
-						GL11.glTranslatef(0.15F, 0.2F, -0.6F);
+						GL11.glRotatef(45F, 0F, 1F, 0F);
+						GL11.glTranslatef(-1F, 0.675F, -1.8F);
 					}
 					else
 					{
-						GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
-						GL11.glRotatef(-5F, 0F, 1F, 0F);
-						GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
+						GL11.glRotatef(45F, 0F, 1F, 0F);
+						GL11.glRotatef(0F - 5F * adsSwitch, 0F, 0F, 1F); 
+						
+						GL11.glTranslatef(-1F, 0.675F + 0.180F * adsSwitch, -1F - 0.395F * adsSwitch);
 						if(gunType.hasScopeOverlay)
 							GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
 						GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);

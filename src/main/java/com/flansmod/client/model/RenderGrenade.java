@@ -103,18 +103,18 @@ public class RenderGrenade extends Render implements IItemRenderer
 				{
 				case EQUIPPED:
 				{
-					GL11.glRotatef(35F, 0F, 0F, 1F);
-					GL11.glRotatef(-5F, 0F, 1F, 0F);
-					GL11.glTranslatef(0.75F, -0.22F, -0.08F);
-					GL11.glTranslatef(0F, 0.25F, 0F);
+					//GL11.glRotatef(35F, 0F, 0F, 1F);
+					//GL11.glRotatef(-5F, 0F, 1F, 0F);
+					//GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+					//GL11.glTranslatef(0F, 0.25F, 0F);
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					GL11.glRotatef(25F, 0F, 0F, 1F); 
-					GL11.glRotatef(-5F, 0F, 1F, 0F);
-					GL11.glTranslatef(0.15F, 0.2F, -0.6F);
-					GL11.glTranslatef(0F, 0.25F, 0F);
+					//GL11.glRotatef(25F, 0F, 0F, 1F); 
+					//GL11.glRotatef(-5F, 0F, 1F, 0F);
+					//GL11.glTranslatef(0.15F, 0.2F, -0.6F);
+					GL11.glTranslatef(-1.25F, 0.8F, 0.1F);
 					break;
 				}
 				default : break;

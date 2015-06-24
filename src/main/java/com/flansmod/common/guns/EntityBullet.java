@@ -165,6 +165,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed)
 	{
+		spread /= 5F;
 		float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 		d /= f2;
 		d1 /= f2;
@@ -337,9 +338,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			else
 			{
 				Entity entity = (Entity)obj;
-				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade) && entity.getBoundingBox() != null)
+				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade) && entity.getEntityBoundingBox() != null)
 				{
-					MovingObjectPosition mop = entity.getBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
+					MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)
 					{
 						Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - posX, mop.hitVec.yCoord - posY, mop.hitVec.zCoord - posZ);
@@ -754,8 +755,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			String name = ByteBufUtils.readUTF8String(data);
 			for(Object obj : worldObj.loadedEntityList)
 			{
-				if(((Entity)obj).getName().equals(name))
+				if(obj != null && ((Entity)obj).getName().equals(name))
+				{
 					owner = (EntityPlayer)obj;
+					break;
+				}
 			}
 		}
 		catch(Exception e)

@@ -1135,4 +1135,10 @@ public class ItemGun extends Item implements IFlanItem
 	{
 		return type;
 	}
+	
+	@Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+    {
+        return slotChanged;
+    }
 }

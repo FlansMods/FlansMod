@@ -404,7 +404,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return null;
 		if(placer == null && placerName != null)
 			placer = worldObj.getPlayerEntityByName(placerName);
-		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, getBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
+		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
 			

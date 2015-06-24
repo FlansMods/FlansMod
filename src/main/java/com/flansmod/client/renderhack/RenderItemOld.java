@@ -11,6 +11,7 @@ import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
@@ -217,28 +218,59 @@ public class RenderItemOld extends RenderItem
         	InfoType type = ((IFlanItem)paramItemStack.getItem()).getInfoType();
         	if(paramTransformType == TransformType.GUI)
         	{
-        		render2DItem(paramItemStack, type);
+        		render2DItem(paramItemStack, type, false);
         	}
         	else
         	{
-	        	
-	        	if(type instanceof GunType)
-	        		renderGun.renderItem(convert(paramTransformType), paramItemStack, obj);
-	        	else if(type instanceof VehicleType)
-	        		renderVehicle.renderItem(convert(paramTransformType), paramItemStack, obj);
-	        	else if(type instanceof PlaneType)
-	        		renderPlane.renderItem(convert(paramTransformType), paramItemStack, obj);
-	        	else if(type instanceof MechaType)
-	        		renderMecha.renderItem(convert(paramTransformType), paramItemStack, obj);
-	        	else if(type instanceof GrenadeType)
-	        		renderGrenade.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	if(type.modelString == null || type instanceof BulletType)
+	        	{
+	        		switch(paramTransformType)
+	        		{
+					case FIRST_PERSON:	
+						
+						GL11.glTranslatef(-1.5F, 0.75F, 0.5F);
+						GL11.glRotatef(60F, 0F, 1F, 0F);
+						GL11.glRotatef(-30F, 0F, 0F, 1F);
+						break;
+					case GUI:
+						break;
+					case HEAD:
+						break;
+					case NONE:
+						GL11.glTranslatef(-0.4F, 0.25F, 0F);
+						GL11.glRotatef(-45F, 0F, 0F, 1F);
+						break;
+					case THIRD_PERSON:
+						GL11.glTranslatef(0F, -0.25F, -0.25F);
+						GL11.glRotatef(-90F, 0F, 1F, 0F);
+						GL11.glRotatef(45F, 0F, 0F, 1F);
+						break;
+					default:
+						break;
+	        		
+	        		}
+	        		render2DItem(paramItemStack, type, true);
+	        	}
+	        	else
+	        	{
+		        	if(type instanceof GunType)
+		        		renderGun.renderItem(convert(paramTransformType), paramItemStack, obj);
+		        	else if(type instanceof VehicleType)
+		        		renderVehicle.renderItem(convert(paramTransformType), paramItemStack, obj);
+		        	else if(type instanceof PlaneType)
+		        		renderPlane.renderItem(convert(paramTransformType), paramItemStack, obj);
+		        	else if(type instanceof MechaType)
+		        		renderMecha.renderItem(convert(paramTransformType), paramItemStack, obj);
+		        	else if(type instanceof GrenadeType)
+		        		renderGrenade.renderItem(convert(paramTransformType), paramItemStack, obj);
+	        	}
         	}
         }
         else
             super.renderItem(paramItemStack, paramIBakedModel);
     }
     
-    private void render2DItem(ItemStack stack, InfoType type)
+    private void render2DItem(ItemStack stack, InfoType type, boolean depth)
     {
     	GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
@@ -246,35 +278,112 @@ public class RenderItemOld extends RenderItem
         ResourceLocation resourcelocation = FlansModResourceHandler.getIcon(type);
         textureManager.bindTexture(resourcelocation);
         
-		GL11.glRotatef(-45F, 0F, 1F, 0F);
-		GL11.glRotatef(30F, 1F, 0F, 0F);
-		GL11.glRotatef(180F, 0F, 0F, 1F);
-		float scale = 0.05F;
-		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(-8F, -8F, 0F);
-        int x = 0, y = 0;
-
-        /*
-        int l = stack.getItem().getColorFromItemStack(stack, 0);
-        float f3 = (float)(l >> 16 & 255) / 255.0F;
-        float f4 = (float)(l >> 8 & 255) / 255.0F;
-        float f = (float)(l & 255) / 255.0F;
-
-        if(renderWithColor)
-        {
-            GL11.glColor4f(f3, f4, f, 1.0F);
-        }
-         */
-        
         GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_BLEND);
-
-        this.renderIcon(x, y, 16, 16);
+        
+        if(depth)
+        {
+        	renderIconWithThickness();
+        }
+        else
+        {
+			GL11.glRotatef(-45F, 0F, 1F, 0F);
+			GL11.glRotatef(30F, 1F, 0F, 0F);
+			GL11.glRotatef(180F, 0F, 0F, 1F);
+			float scale = 0.05F;
+			GL11.glScalef(scale, scale, scale);
+			GL11.glTranslatef(-8F, -8F, 0F);
+			this.renderIcon(0, 0, 16, 16);
+        }
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        //GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
+    }
+    
+    private void renderIconWithThickness()
+    {
+    	float minU = 0, maxU = 1, minV = 0, maxV = 1, iconWidth = 16, iconHeight = 16, scale = 0.0625F;
+    	
+    	Tessellator tessellator = Tessellator.getInstance();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(0.0F, 0.0F, 1.0F);
+        tessellator.getWorldRenderer().addVertexWithUV(0.0D, 0.0D, 0.0D, (double)maxU, (double)maxV);
+        tessellator.getWorldRenderer().addVertexWithUV(1.0D, 0.0D, 0.0D, (double)minU, (double)maxV);
+        tessellator.getWorldRenderer().addVertexWithUV(1.0D, 1.0D, 0.0D, (double)minU, (double)minV);
+        tessellator.getWorldRenderer().addVertexWithUV(0.0D, 1.0D, 0.0D, (double)maxU, (double)minV);
+        tessellator.draw();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(0.0F, 0.0F, -1.0F);
+        tessellator.getWorldRenderer().addVertexWithUV(0.0D, 1.0D, (double)(0.0F - scale), (double)maxU, (double)minV);
+        tessellator.getWorldRenderer().addVertexWithUV(1.0D, 1.0D, (double)(0.0F - scale), (double)minU, (double)minV);
+        tessellator.getWorldRenderer().addVertexWithUV(1.0D, 0.0D, (double)(0.0F - scale), (double)minU, (double)maxV);
+        tessellator.getWorldRenderer().addVertexWithUV(0.0D, 0.0D, (double)(0.0F - scale), (double)maxU, (double)maxV);
+        tessellator.draw();
+        float f5 = 0.5F * (maxU - minU) / (float)iconWidth;
+        float f6 = 0.5F * (maxV - minV) / (float)iconHeight;
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(-1.0F, 0.0F, 0.0F);
+        int k;
+        float f7;
+        float f8;
+
+        for (k = 0; k < iconWidth; ++k)
+        {
+            f7 = (float)k / (float)iconWidth;
+            f8 = maxU + (minU - maxU) * f7 - f5;
+            tessellator.getWorldRenderer().addVertexWithUV((double)f7, 0.0D, (double)(0.0F - scale), (double)f8, (double)maxV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f7, 0.0D, 0.0D, (double)f8, (double)maxV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f7, 1.0D, 0.0D, (double)f8, (double)minV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f7, 1.0D, (double)(0.0F - scale), (double)f8, (double)minV);
+        }
+
+        tessellator.draw();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(1.0F, 0.0F, 0.0F);
+        float f9;
+
+        for (k = 0; k < iconWidth; ++k)
+        {
+            f7 = (float)k / (float)iconWidth;
+            f8 = maxU + (minU - maxU) * f7 - f5;
+            f9 = f7 + 1.0F / (float)iconWidth;
+            tessellator.getWorldRenderer().addVertexWithUV((double)f9, 1.0D, (double)(0.0F - scale), (double)f8, (double)minV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f9, 1.0D, 0.0D, (double)f8, (double)minV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f9, 0.0D, 0.0D, (double)f8, (double)maxV);
+            tessellator.getWorldRenderer().addVertexWithUV((double)f9, 0.0D, (double)(0.0F - scale), (double)f8, (double)maxV);
+        }
+
+        tessellator.draw();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(0.0F, 1.0F, 0.0F);
+
+        for (k = 0; k < iconHeight; ++k)
+        {
+            f7 = (float)k / (float)iconHeight;
+            f8 = maxV + (minV - maxV) * f7 - f6;
+            f9 = f7 + 1.0F / (float)iconHeight;
+            tessellator.getWorldRenderer().addVertexWithUV(0.0D, (double)f9, 0.0D, (double)maxU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(1.0D, (double)f9, 0.0D, (double)minU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(1.0D, (double)f9, (double)(0.0F - scale), (double)minU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(0.0D, (double)f9, (double)(0.0F - scale), (double)maxU, (double)f8);
+        }
+
+        tessellator.draw();
+        tessellator.getWorldRenderer().startDrawingQuads();
+        tessellator.getWorldRenderer().setNormal(0.0F, -1.0F, 0.0F);
+
+        for (k = 0; k < iconHeight; ++k)
+        {
+            f7 = (float)k / (float)iconHeight;
+            f8 = maxV + (minV - maxV) * f7 - f6;
+            tessellator.getWorldRenderer().addVertexWithUV(1.0D, (double)f7, 0.0D, (double)minU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(0.0D, (double)f7, 0.0D, (double)maxU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(0.0D, (double)f7, (double)(0.0F - scale), (double)maxU, (double)f8);
+            tessellator.getWorldRenderer().addVertexWithUV(1.0D, (double)f7, (double)(0.0F - scale), (double)minU, (double)f8);
+        }
+
+        tessellator.draw();
     }
     
     public void renderIcon(int p_94149_1_, int p_94149_2_, int p_94149_4_, int p_94149_5_)
