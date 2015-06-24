@@ -10,11 +10,15 @@ import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
+import com.flansmod.common.driveables.mechas.MechaItemType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.teams.ArmourType;
+import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
@@ -222,12 +226,11 @@ public class RenderItemOld extends RenderItem
         	}
         	else
         	{
-	        	if(type.modelString == null || type instanceof BulletType)
+	        	if(type.modelString == null || type instanceof BulletType || type instanceof ArmourType || type instanceof AttachmentType || type instanceof ToolType || type instanceof MechaItemType)
 	        	{
 	        		switch(paramTransformType)
 	        		{
 					case FIRST_PERSON:	
-						
 						GL11.glTranslatef(-1.5F, 0.75F, 0.5F);
 						GL11.glRotatef(60F, 0F, 1F, 0F);
 						GL11.glRotatef(-30F, 0F, 0F, 1F);
@@ -238,7 +241,7 @@ public class RenderItemOld extends RenderItem
 						break;
 					case NONE:
 						GL11.glTranslatef(-0.4F, 0.25F, 0F);
-						GL11.glRotatef(-45F, 0F, 0F, 1F);
+						//GL11.glRotatef(-45F, 0F, 0F, 1F);
 						break;
 					case THIRD_PERSON:
 						GL11.glTranslatef(0F, -0.25F, -0.25F);

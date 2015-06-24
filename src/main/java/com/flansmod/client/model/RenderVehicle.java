@@ -193,18 +193,18 @@ public class RenderVehicle extends Render implements IItemRenderer
 				}
 				case EQUIPPED:
 				{
-					GL11.glRotatef(15F, 0F, 0F, 1F);
-					GL11.glRotatef(15F, 1F, 0F, 0F);
+					GL11.glRotatef(0F, 0F, 0F, 1F);
+					GL11.glRotatef(270F, 1F, 0F, 0F);
 					GL11.glRotatef(270F, 0F, 1F, 0F);
-					GL11.glTranslatef(0F, 0.15F, -0.4F);
-					scale = 1F;
+					GL11.glTranslatef(0F, 0.25F, 0F);
+					scale = 0.5F;
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					GL11.glRotatef(25F, 0F, 0F, 1F); 
-					GL11.glRotatef(-5F, 0F, 1F, 0F);
-					GL11.glTranslatef(0.15F, 0.45F, -0.6F);
+					//GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(45F, 0F, 1F, 0F);
+					GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
 					break;
 				}
 				default : break;
