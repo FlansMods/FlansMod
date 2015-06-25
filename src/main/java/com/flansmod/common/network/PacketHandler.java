@@ -49,7 +49,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	
 	/** Store received packets in these queues and have the main Minecraft threads use these */
 	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
-	private HashMap<EntityPlayer, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<EntityPlayer, ConcurrentLinkedQueue<PacketBase>>();
+	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
 	
 	/** Registers a packet with the handler */
 	public boolean registerPacket(Class<? extends PacketBase> cl)
@@ -126,9 +126,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		{
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
-			if(!receivedPacketsServer.containsKey(player))
-				receivedPacketsServer.put(player, new ConcurrentLinkedQueue<PacketBase>());
-			receivedPacketsServer.get(player).offer(packet);
+			if(!receivedPacketsServer.containsKey(player.getName()))
+				receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
+			receivedPacketsServer.get(player.getName()).offer(packet);
 			//packet.handleServerSide();
 			break;
 		}
@@ -145,12 +145,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	
 	public void handleServerPackets()
 	{
-		for(EntityPlayer player : receivedPacketsServer.keySet())
+		for(String playerName : receivedPacketsServer.keySet())
 		{
-			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(player);
+			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
+			EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(playerName); 
 			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
 			{
-				packet.handleServerSide((EntityPlayerMP)player);
+				packet.handleServerSide(player);
 			}
 		}
 	}

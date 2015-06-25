@@ -640,9 +640,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
-	        if(owner instanceof EntityPlayer)
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
-	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        //if(owner instanceof EntityPlayer)
+	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        //else 
+			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
 		}
 		if(type.fireRadius > 0)
 		{

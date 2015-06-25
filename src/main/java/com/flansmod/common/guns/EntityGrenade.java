@@ -391,9 +391,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
-	        if((thrower instanceof EntityPlayer))
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
-	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+	        //if((thrower instanceof EntityPlayer))
+	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+	        //else 
+			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
