@@ -37,6 +37,8 @@ public class CommonTickHandler
 		{
 		case START :
 		{
+			//Handle all packets received since last tick
+			FlansMod.getPacketHandler().handleServerPackets();
 			break;
 		}
 		case END :

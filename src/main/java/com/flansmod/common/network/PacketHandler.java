@@ -1,10 +1,13 @@
 package com.flansmod.common.network;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -43,6 +46,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
 	//Whether or not Flan's Mod has initialised yet. Once true, no more packets may be registered.
 	private boolean modInitialised = false;
+	
+	/** Store received packets in these queues and have the main Minecraft threads use these */
+	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
+	private HashMap<EntityPlayer, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<EntityPlayer, ConcurrentLinkedQueue<PacketBase>>();
 	
 	/** Registers a packet with the handler */
 	public boolean registerPacket(Class<? extends PacketBase> cl)
@@ -111,15 +118,40 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		{
 		case CLIENT : 
 		{
-			packet.handleClientSide(getClientPlayer());
+			receivedPacketsClient.offer(packet);
+			//packet.handleClientSide(getClientPlayer());
 			break;
 		}
 		case SERVER :
 		{
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			packet.handleServerSide(((NetHandlerPlayServer)netHandler).playerEntity);
+			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
+			if(!receivedPacketsServer.containsKey(player))
+				receivedPacketsServer.put(player, new ConcurrentLinkedQueue<PacketBase>());
+			receivedPacketsServer.get(player).offer(packet);
+			//packet.handleServerSide();
 			break;
 		}
+		}
+	}
+	
+	public void handleClientPackets()
+	{
+		for(PacketBase packet = receivedPacketsClient.poll(); packet != null; packet = receivedPacketsClient.poll())
+		{
+			packet.handleClientSide(getClientPlayer());
+		}
+	}
+	
+	public void handleServerPackets()
+	{
+		for(EntityPlayer player : receivedPacketsServer.keySet())
+		{
+			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(player);
+			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
+			{
+				packet.handleServerSide((EntityPlayerMP)player);
+			}
 		}
 	}
 	

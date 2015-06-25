@@ -382,6 +382,10 @@ public class TickHandlerClient
 	/** Handle flashlight block light override */	
 	public void clientTickStart(Minecraft mc)
 	{
+		//Handle all packets received since last tick
+		FlansMod.getPacketHandler().handleClientPackets();
+		
+		//Handle lighting from flashlights and glowing bullets
 		if(FlansMod.ticker % lightOverrideRefreshRate == 0 && mc.theWorld != null)
 		{
 			//Check graphics setting and adjust refresh rate
