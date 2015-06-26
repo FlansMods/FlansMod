@@ -808,10 +808,10 @@ public class SimpleBlockRender {
         }
         this.renderFromInside = true;
         boolean inside = this.renderStandardBlockWithColorMultiplier(block, textureManager, pos, f, f1,
-                f2);
+                f2, 0F);
         this.renderFromInside = false;
         return inside && this.renderStandardBlockWithColorMultiplier(block, textureManager, pos,
-                f, f1, f2);
+                f, f1, f2, 0F);
     }
 
     /**
@@ -820,7 +820,7 @@ public class SimpleBlockRender {
      */
     public boolean renderStandardBlockWithColorMultiplier(Block block,
                                                           ITextureHandler textureManager, BlockPos pos, float r,
-                                                          float g, float b) {
+                                                          float g, float b, float a) {
         if (world == null)
             world = minecraft.theWorld;
         this.enableAO = false;
@@ -862,7 +862,7 @@ public class SimpleBlockRender {
                 EnumFacing.DOWN)) {
             worldRenderer.setBrightness(this.renderMinY > 0.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.down()));
-            worldRenderer.setColorOpaque_F(f10, f13, f16);
+            worldRenderer.setColorRGBA_F(f10, f13, f16, a);
             this.renderFaceYNeg(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.DOWN));
             flag = true;
@@ -872,7 +872,7 @@ public class SimpleBlockRender {
                 || block.shouldSideBeRendered(world, pos.up(), EnumFacing.UP)) {
             worldRenderer.setBrightness(this.renderMaxY < 1.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.up()));
-            worldRenderer.setColorOpaque_F(f7, f8, f9);
+            worldRenderer.setColorRGBA_F(f7, f8, f9, a);
             this.renderFaceYPos(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.UP));
             flag = true;
@@ -883,7 +883,7 @@ public class SimpleBlockRender {
                 EnumFacing.NORTH)) {
             worldRenderer.setBrightness(this.renderMinZ > 0.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.north()));
-            worldRenderer.setColorOpaque_F(f11, f14, f17);
+            worldRenderer.setColorRGBA_F(f11, f14, f17, a);
             this.renderFaceZNeg(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.NORTH));
 
@@ -895,7 +895,7 @@ public class SimpleBlockRender {
                 EnumFacing.SOUTH)) {
             worldRenderer.setBrightness(this.renderMaxZ < 1.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.south()));
-            worldRenderer.setColorOpaque_F(f11, f14, f17);
+            worldRenderer.setColorRGBA_F(f11, f14, f17, a);
             this.renderFaceZPos(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.SOUTH));
 
@@ -907,7 +907,7 @@ public class SimpleBlockRender {
                 EnumFacing.WEST)) {
             worldRenderer.setBrightness(this.renderMinX > 0.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.west()));
-            worldRenderer.setColorOpaque_F(f12, f15, f18);
+            worldRenderer.setColorRGBA_F(f12, f15, f18, a);
             ;
             this.renderFaceXNeg(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.WEST));
@@ -920,7 +920,7 @@ public class SimpleBlockRender {
                 EnumFacing.EAST)) {
             worldRenderer.setBrightness(this.renderMaxX < 1.0D ? l : block
                     .getMixedBrightnessForBlock(world, pos.east()));
-            worldRenderer.setColorOpaque_F(f12, f15, f18);
+            worldRenderer.setColorRGBA_F(f12, f15, f18, a);
             this.renderFaceXPos(pos.getX(), pos.getY(), pos.getZ(),
                     textureManager.getSidedTexture(state, EnumFacing.EAST));
 

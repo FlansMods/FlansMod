@@ -1,5 +1,8 @@
 package com.flansmod.common.teams;
 
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.renderhack.ITextureHandler;
+import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.CraftingInstance;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
@@ -11,16 +14,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockArmourBox extends Block 
+public class BlockArmourBox extends Block implements ITextureHandler
 {
 	public ArmourBoxType type;
 	
@@ -67,5 +72,36 @@ public class BlockArmourBox extends Block
 			return false;
 		entityplayer.openGui(FlansMod.INSTANCE, 11, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public int getRenderType() 
+    {
+        return 100;
+    }
+	
+	@SideOnly(Side.CLIENT)
+    private TextureLoader textureLoader;
+	
+	@Override
+	public void loadTextures(TextureLoader loader) 
+	{
+        this.textureLoader = loader;
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.topTexturePath));
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.sideTexturePath));
+        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.bottomTexturePath));
+	}
+
+	@Override
+	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
+	{
+		ResourceLocation res = FlansModResourceHandler.getBlockTexture(type.sideTexturePath);
+		switch(facing)
+		{
+		case UP:   res = FlansModResourceHandler.getBlockTexture(type.topTexturePath); break;
+		case DOWN: res = FlansModResourceHandler.getBlockTexture(type.bottomTexturePath); break;
+		default:
+		}
+		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
 	}
 }

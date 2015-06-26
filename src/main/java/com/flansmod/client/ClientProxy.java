@@ -57,6 +57,7 @@ import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.client.renderhack.ITextureHandler;
 import com.flansmod.client.renderhack.RenderBlock;
 import com.flansmod.client.renderhack.RenderRegistry;
+import com.flansmod.client.renderhack.RenderSpawner;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
@@ -118,24 +119,27 @@ public class ClientProxy extends CommonProxy
 		
 		//Register custom item renderers
 		for(GunType gunType : GunType.guns.values())
-			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
-		
+			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);		
 		for(GrenadeType grenadeType : GrenadeType.grenades)
-			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
-		
+			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);		
 		for(PlaneType planeType : PlaneType.types)
-			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);
-		
+			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);		
 		for(VehicleType vehicleType : VehicleType.types)
-			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);
-		
+			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
 		for(MechaType mechaType : MechaType.types)
 			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
 		
         RenderRegistry.registerBlockHandler(new RenderBlock(FlansMod.workbench.getRenderType()));
         RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.workbench);
+        
 		for(GunBoxType gunBoxType : GunBoxType.gunBoxMap.values())
 			RenderRegistry.registerTextureHandler((ITextureHandler)gunBoxType.block);
+		for(ArmourBoxType armourBoxType : ArmourBoxType.boxes.values())
+			RenderRegistry.registerTextureHandler((ITextureHandler)armourBoxType.block);
+		
+        RenderRegistry.registerBlockHandler(new RenderSpawner(FlansMod.spawner.getRenderType()));
+        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.spawner);
+		
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+import com.flansmod.client.renderhack.ITextureHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
@@ -12,7 +13,7 @@ import com.flansmod.common.types.TypeFile;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ArmourBoxType extends InfoType 
+public class ArmourBoxType extends InfoType
 {
 	//Textures
 	public String topTexturePath;

@@ -42,7 +42,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(2, new Byte((byte)0));
+		dataWatcher.addObject(5, new Byte((byte)0));
 	}
 	
 	@Override
@@ -142,7 +142,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		dataWatcher.updateObject(2, (byte)newTeamID);
+		dataWatcher.updateObject(5, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
@@ -194,7 +194,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 
 	public int getTeamID()
 	{
-		return dataWatcher.getWatchableObjectByte(2);
+		return dataWatcher.getWatchableObjectByte(5);
 	}
 		
 	@Override

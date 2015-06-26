@@ -8,6 +8,7 @@ import com.flansmod.client.model.RenderGun;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.MechaItemType;
@@ -226,7 +227,7 @@ public class RenderItemOld extends RenderItem
         	}
         	else
         	{
-	        	if(type.modelString == null || type instanceof BulletType || type instanceof ArmourType || type instanceof AttachmentType || type instanceof ToolType || type instanceof MechaItemType)
+	        	if(type == null || type.modelString == null || type instanceof BulletType || type instanceof ArmourType || type instanceof AttachmentType || type instanceof ToolType || type instanceof MechaItemType)
 	        	{
 	        		switch(paramTransformType)
 	        		{
@@ -278,7 +279,16 @@ public class RenderItemOld extends RenderItem
     	GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        ResourceLocation resourcelocation = FlansModResourceHandler.getIcon(type);
+        ResourceLocation resourcelocation;
+        if(type == null)
+        {
+        	if(stack.getItem() == FlansMod.opStick)
+        	{
+        		resourcelocation = FlansModResourceHandler.opStick[stack.getItemDamage()];
+        	}
+        	else resourcelocation = FlansModResourceHandler.flag;
+        }
+        else resourcelocation = FlansModResourceHandler.getIcon(type);
         textureManager.bindTexture(resourcelocation);
         
         GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.

@@ -618,10 +618,10 @@ public class TeamsManager
 		ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
 		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 		{
-			if(event.target instanceof ITeamObject)
-				((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
-			if(event.target instanceof ITeamBase)
-				((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
+			//if(event.target instanceof ITeamObject)
+			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
+			//if(event.target instanceof ITeamBase)
+			//	((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
 		}
 		else if(currentRound != null)
 		{

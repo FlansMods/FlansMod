@@ -15,7 +15,12 @@ public class FlansModResourceHandler
 	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();	
-	private static HashMap<String, ResourceLocation> blockMap = new HashMap<String, ResourceLocation>();	
+	private static HashMap<String, ResourceLocation> blockMap = new HashMap<String, ResourceLocation>();
+	
+	public static ResourceLocation flag = new ResourceLocation("flansmod", "textures/items/flagpole.png");
+	public static ResourceLocation[] opStick = new ResourceLocation[] { new ResourceLocation("flansmod", "textures/items/opStick_ownership.png"),
+		new ResourceLocation("flansmod", "textures/items/opStick_connecting.png"), new ResourceLocation("flansmod", "textures/items/opStick_mapping.png"), 
+		new ResourceLocation("flansmod", "textures/items/opStick_destruction.png")  };
 	
 	public static ResourceLocation getIcon(InfoType infoType)
 	{

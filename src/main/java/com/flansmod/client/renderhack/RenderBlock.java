@@ -32,7 +32,7 @@ public class RenderBlock implements ISimpleBlockRenderingHandler
         SimpleBlockRender render = new SimpleBlockRender();
         render.worldRenderer = tessellator.getWorldRenderer();
         render.setRenderBounds(0F, 0F, 0F, 1F, 1F, 1F);
-        this.renderInInventory(tessellator, render, block, transformType);
+        this.renderInInventory(tessellator, render, block, transformType, itemStack);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class RenderBlock implements ISimpleBlockRenderingHandler
         return null;
     }
 
-    protected void renderInInventory(Tessellator tessellator, SimpleBlockRender render, Block block, TransformType transformType) 
+    protected void renderInInventory(Tessellator tessellator, SimpleBlockRender render, Block block, TransformType transformType, ItemStack stack)  
     {
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         GlStateManager.pushMatrix();
@@ -99,7 +99,7 @@ public class RenderBlock implements ISimpleBlockRenderingHandler
             GlStateManager.translate(-1.4F, -1.9F, -1F);
         }
 
-        render.renderInventoryStandardBlock((ITextureHandler)block, block.getDefaultState(), tessellator);
+        render.renderInventoryStandardBlock((ITextureHandler)block, block.getStateFromMeta(stack.getItemDamage()), tessellator);
         GlStateManager.popMatrix();
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
     }

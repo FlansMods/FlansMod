@@ -55,7 +55,7 @@ public class RenderFlag extends Render
         GL11.glTranslatef((float)d, (float)d1, (float)d2);
         GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
         
-		List ents = flag.worldObj.getEntitiesWithinAABB(EntityFlagpole.class, flag.getBoundingBox().expand(1F, 2F, 1F));
+		List ents = flag.worldObj.getEntitiesWithinAABB(EntityFlagpole.class, flag.getEntityBoundingBox().expand(1F, 2F, 1F));
 		if(ents.size() == 0)
 		{
 			 GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);

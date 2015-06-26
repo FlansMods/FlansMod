@@ -66,7 +66,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		
     public EntityFlagpole(World world, BlockPos pos) 
     {
-		this(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+		this(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
 	}
 
 	@Override

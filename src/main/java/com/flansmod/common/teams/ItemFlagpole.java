@@ -15,8 +15,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
-public class ItemFlagpole extends Item 
+public class ItemFlagpole extends Item implements IFlanItem
 {
 	public ItemFlagpole() 
 	{
@@ -71,5 +73,11 @@ public class ItemFlagpole extends Item
 		if (block == null)
 			return false;
 		return block.getMaterial().isSolid() && block.isOpaqueCube();
+	}
+
+	@Override
+	public InfoType getInfoType() 
+	{
+		return null;
 	}
 }
