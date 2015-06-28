@@ -183,4 +183,10 @@ public class AAGunType extends InfoType
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
 	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		//Do not add AA guns to dungeon chests. That would be so op.
+	}
 }

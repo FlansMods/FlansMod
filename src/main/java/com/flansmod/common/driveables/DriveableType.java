@@ -547,4 +547,10 @@ public class DriveableType extends InfoType
 		}
 		return null;
 	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		//Do not add vehicles to dungeon chests. That would be so op.
+	}
 }

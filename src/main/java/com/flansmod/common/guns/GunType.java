@@ -198,6 +198,8 @@ public class GunType extends InfoType implements IScope
 		newPaintjobList.add(defaultPaintjob);
 		newPaintjobList.addAll(paintjobs);
 		paintjobs = newPaintjobList;
+		
+		totalDungeonChance += dungeonChance * (paintjobs.size() - 1);
 	}
 	
 	@Override
@@ -678,5 +680,20 @@ public class GunType extends InfoType implements IScope
 				return paintjob;
 		}
 		return defaultPaintjob;
+	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		if(dungeonChance > 0)
+			for(int i = 0; i < paintjobs.size(); i++)
+			{
+				ItemStack stack = new ItemStack(this.item);
+				NBTTagCompound tags = new NBTTagCompound();
+				tags.setString("Paint", paintjobs.get(i).iconName);
+				stack.setTagCompound(tags);
+				
+				addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
+			}
 	}
 }

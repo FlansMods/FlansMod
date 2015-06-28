@@ -126,6 +126,8 @@ public class FlansMod
 	
 	public static float armourSpawnRate = 0.25F;
 	
+	public static int dungeonLootChance = 500;
+	
 	/** The spectator team. Moved here to avoid a concurrent modification error */
 	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
 
@@ -222,6 +224,7 @@ public class FlansMod
 		for (InfoType type : InfoType.infoTypes)
 		{
 			type.addRecipe();
+			type.addDungeonLoot();
 		}
 		if(addGunpowderRecipe)
 		{
