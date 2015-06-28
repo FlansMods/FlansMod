@@ -113,6 +113,18 @@ public class GuiGunModTable extends GuiContainer
         	int numPaintjobs = gunType.paintjobs.size();
         	int numRows = numPaintjobs / 2 + 1;
         	
+        	for(int y = 0; y < numRows; y++)
+			{
+				for(int x = 0; x < 2; x++)
+				{
+					//If this row has only one paintjob, don't try and render the second one
+					if(2 * y + x >= numPaintjobs)
+						continue;
+
+					drawTexturedModalRect(xOrigin + 131 + 18 * x, yOrigin + 82 + 18 * y, 178, 54, 18, 18);
+				}
+			}
+        	
             for(int y = 0; y < numRows; y++)
             {
             	for(int x = 0; x < 2; x++)

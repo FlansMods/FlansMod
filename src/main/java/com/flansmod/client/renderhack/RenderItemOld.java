@@ -309,6 +309,7 @@ public class RenderItemOld extends RenderItem
         }
         else
         {
+        	GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glRotatef(-45F, 0F, 1F, 0F);
 			GL11.glRotatef(30F, 1F, 0F, 0F);
 			GL11.glRotatef(180F, 0F, 0F, 1F);
@@ -316,6 +317,7 @@ public class RenderItemOld extends RenderItem
 			GL11.glScalef(scale, scale, scale);
 			GL11.glTranslatef(-8F, -8F, 0F);
 			this.renderIcon(0, 0, 16, 16);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
 
         GL11.glEnable(GL11.GL_ALPHA_TEST);
