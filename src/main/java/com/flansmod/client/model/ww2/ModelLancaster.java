@@ -15,7 +15,7 @@ public class ModelLancaster extends ModelPlane
 			   |7|
 			   |6|					   
 	 __________|5|__________	   
-	|	        4           |
+	|			4		   |
 	|__________ 3 __________|
 			   |2|
 			   |1|
@@ -26,11 +26,11 @@ public class ModelLancaster extends ModelPlane
 	private int textureX = 512; //The x-size of the texture
 	private int textureY = 512;	//The y-size of the texture
 
-    public ModelLancaster()
-    {
+	public ModelLancaster()
+	{
 		//Initializing Model
 	
-        bodyModel = new ModelRendererTurbo[25];	//number of blocks in your model (0 is a block so its highest number block + 1)
+		bodyModel = new ModelRendererTurbo[25];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
 		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
@@ -332,7 +332,7 @@ public class ModelLancaster extends ModelPlane
 		pitchFlapLeftModel = new ModelRendererTurbo[1];		
 		pitchFlapLeftModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
 		pitchFlapLeftModel[0].addBox(0, -32, -1, 16, 64, 2, 0.0F);
-	    pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
+		pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
 		pitchFlapLeftModel[0].setPosition(112F, -81F, 48F);	
 		
 		pitchFlapRightWingModel = new ModelRendererTurbo[1]; //Two right pitch flaps
@@ -345,13 +345,13 @@ public class ModelLancaster extends ModelPlane
 		pitchFlapRightModel = new ModelRendererTurbo[1];		
 		pitchFlapRightModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0, -32, -1, 16, 64, 2, 0.0F);
-	    pitchFlapRightModel[0].rotateAngleX = 1.570796F;
+		pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(112F, -81F, -48F);
 		
 		translateAll(0, 52, 0);
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-    }
+	}
 	
 
 	//Return a propeller at the specified position
@@ -361,9 +361,9 @@ public class ModelLancaster extends ModelPlane
 		prop[0] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
 		prop[1] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
 		prop[2] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
-	    prop[0].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);	
+		prop[0].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);
 		prop[0].setRotationPoint(i, j, k);
-        prop[1].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);	
+		prop[1].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);
 		prop[1].setRotationPoint(i, j, k);
 		prop[2].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);		
 		prop[2].setRotationPoint(i, j, k);

@@ -141,7 +141,6 @@ public class RenderGun implements IItemRenderer
 				}
 				case INVENTORY :
 				{
-
 					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
 					break;
 				}
@@ -385,7 +384,7 @@ public class RenderGun implements IItemRenderer
 				GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
 				model.renderPump(f);
 				if(gripAttachment == null && model.gripIsOnPump)
-				       model.renderDefaultGrip(f);
+					   model.renderDefaultGrip(f);
 			}
 			GL11.glPopMatrix();
 			

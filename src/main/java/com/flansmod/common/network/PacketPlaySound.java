@@ -57,11 +57,11 @@ public class PacketPlaySound extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeFloat(posX);
-    	data.writeFloat(posY);
-    	data.writeFloat(posZ);
-    	writeUTF(data, sound);
-    	data.writeBoolean(distort);
-    	data.writeBoolean(silenced);
+		data.writeFloat(posY);
+		data.writeFloat(posZ);
+		writeUTF(data, sound);
+		data.writeBoolean(distort);
+		data.writeBoolean(silenced);
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class PacketPlaySound extends PacketBase
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
-	{           	
-    	FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound(sound), silenced ? 5F : 10F, (distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), posX, posY, posZ));
+	{
+		FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound(sound), silenced ? 5F : 10F, (distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), posX, posY, posZ));
 	}
 
 }

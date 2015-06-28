@@ -88,7 +88,6 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
-import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -125,7 +124,7 @@ public class FlansModClient extends FlansMod
 	public static float zoomProgress = 0F, lastZoomProgress = 0F;
 	/** The zoom level of the last scope used, for transitioning out of being scoped, even after the scope is forgotten */
 	public static float lastZoomLevel = 1F, lastFOVZoomLevel = 1F;
-    
+
 	//Variables to hold the state of some settings so that after being hacked for scopes, they may be restored
 	/** The player's mouse sensitivity setting, as it was before being hacked by my mod */
 	public static float originalMouseSensitivity = 0.5F;
@@ -204,36 +203,38 @@ public class FlansModClient extends FlansMod
 				
 		//Render!
 		GL11.glPushMatrix();
+
 		renderer.getPlayerModel().bipedLeftArm.postRender(0.0625F);
         GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
-        float f2 = 1F;
-        
-        GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
-        GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-        GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glScalef(-f2, -f2, f2);
-               
-        int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
-        float f11 = (float)(k >> 16 & 255) / 255.0F;
-        float f12 = (float)(k >> 8 & 255) / 255.0F;
-        float f3 = (float)(k & 255) / 255.0F;
-        GL11.glColor4f(f11, f12, f3, 1.0F);
-        ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);  
-        
-        GL11.glPopMatrix();
+
+		float f2 = 1F;
+
+		GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
+		GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
+		GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glScalef(-f2, -f2, f2);
+
+		int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
+		float f11 = (float)(k >> 16 & 255) / 255.0F;
+		float f12 = (float)(k >> 8 & 255) / 255.0F;
+		float f3 = (float)(k & 255) / 255.0F;
+		GL11.glColor4f(f11, f12, f3, 1.0F);
+		ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);
+
+		GL11.glPopMatrix();
 	}
 	
-    private float interpolateRotation(float x, float y, float dT)
-    {
-        float f3;
+	private float interpolateRotation(float x, float y, float dT)
+	{
+		float f3;
 
-        for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
-        for( ; f3 >= 180.0F; f3 -= 360.0F) { }
+		for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
+		for( ; f3 >= 180.0F; f3 -= 360.0F) { }
 
-        return x + dT * f3;
-    }
-    	
+		return x + dT * f3;
+	}
+
 	//Handle player hiding / name tag removal for teams
 	@SubscribeEvent
 	public void renderLiving(RenderPlayerEvent.Pre event)
@@ -289,7 +290,7 @@ public class FlansModClient extends FlansMod
 			{
 				RendererLivingEntity.NAME_TAG_RANGE = 0F;
 				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
-            }
+			}
 		}
 		
 
@@ -500,11 +501,8 @@ public class FlansModClient extends FlansMod
 		else return teamInfo.getTeam(spawnerTeamID);
 	}
 
-	public static boolean isCurrentMap(String map) 
-	{
-		if(teamInfo == null || teamInfo.mapShortName == null)
-			return false;
-		else return teamInfo.mapShortName.equals(map);
+	public static boolean isCurrentMap(String map) {
+		return !(teamInfo == null || teamInfo.mapShortName == null) && teamInfo.mapShortName.equals(map);
 	}
 	
 	public static EnumParticleTypes getParticleType(String s)
@@ -628,6 +626,7 @@ public class FlansModClient extends FlansMod
         
 		if(mc.gameSettings.fancyGraphics)
 			fx.renderDistanceWeight = 200D;
+		
 		return fx;
 	}
 

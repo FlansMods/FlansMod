@@ -20,7 +20,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
-import com.flansmod.common.vector.Vector3i;
 
 public class GunType extends InfoType implements IScope
 {
@@ -48,10 +47,12 @@ public class GunType extends InfoType implements IScope
 	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
 	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
 	public int numAmmoItemsInGun = 1;
-	/** The firing mode of the gun. Currently semi auto or full auto. Burst coming soon maybe */
+	/** The firing mode of the gun. One of semi-auto, full-auto, minigun or burst */
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** The number of bullets to fire per burst in burst mode */
 	public int numBurstRounds = 3;
+	/** The required speed for minigun mode guns to start firing */
+	public float minigunStartSpeed = 15F;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
 	/** The amount of knockback to impact upon the player per shot */
@@ -73,6 +74,15 @@ public class GunType extends InfoType implements IScope
 	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<Vector3f>();
 	/** Set these to make guns only usable by a certain type of entity */
 	public boolean usableByPlayers = true, usableByMechas = true;
+	
+	//Information
+	//Show any variables into the GUI when hovering over items.
+	/** If false, then attachments wil not be listed in item GUI */
+	public boolean showAttachments = true;
+	/** Show statistics */
+	public boolean showDamage = false, showRecoil = false, showSpread = false;
+	/** Show reload time in seconds */
+	public boolean showReloadTime = false;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -222,6 +232,20 @@ public class GunType extends InfoType implements IScope
 				dropItemOnShoot = split[1];
 			else if(split[0].equals("NumBurstRounds"))
 				numBurstRounds = Integer.parseInt(split[1]);
+			else if(split[0].equals("MinigunStartSpeed"))
+				minigunStartSpeed = Float.parseFloat(split[1]);
+				
+			//Information
+			else if(split[0].equals("ShowAttachments"))
+				showAttachments = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowDamage"))
+				showDamage = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowRecoil"))
+				showRecoil = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowAccuracy"))
+				showSpread = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowReloadTime"))
+				showReloadTime = Boolean.parseBoolean(split[1]);
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))
@@ -627,6 +651,17 @@ public class GunType extends InfoType implements IScope
 			stackReloadTime *= attachment.reloadTimeMultiplier;
 		}
 		return stackReloadTime;
+	}
+	
+	/** Get the firing mode of a specific gun, taking into account attachments */
+	public EnumFireMode getFireMode(ItemStack stack)
+	{
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			if(attachment.modeOverride != null)
+				return attachment.modeOverride;
+		}
+		return mode;
 	}
 
 	/** Static String to GunType method */

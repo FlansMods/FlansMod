@@ -37,30 +37,30 @@ public class GuiGunModTable extends GuiContainer
 		ySize = 256;
 	}
 	
-    @Override
+	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y)
-    {
-    	fontRendererObj.drawString("Inventory", 8, (ySize - 94) + 2, 0x404040);
-    	fontRendererObj.drawString("Gun Modification Table", 8, 6, 0x404040);
-       	
-        ItemStack gunStack = inventorySlots.getSlot(0).getStack();
-        if(gunStack != null && gunStack.getItem() instanceof ItemGun)
-        {
-        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
-        	if(gunType.model != null)
-        	{
-        		GL11.glPushMatrix();
-        		GL11.glColor3f(1F, 1F, 1F);
-        		GL11.glTranslatef(110, 54, 100);
-        		
-        		GL11.glRotatef(160, 1F, 0F, 0F);
-        		GL11.glRotatef(20, 0F, 1F, 0F);
-        		GL11.glScalef(-50F, 50F, 50F);
-        		ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
-        		GL11.glPopMatrix();
-        	}
-        }
-    }
+	{
+		fontRendererObj.drawString("Inventory", 8, (ySize - 94) + 2, 0x404040);
+		fontRendererObj.drawString("Gun Modification Table", 8, 6, 0x404040);
+
+		ItemStack gunStack = inventorySlots.getSlot(0).getStack();
+		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+		{
+			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			if(gunType.model != null)
+			{
+				GL11.glPushMatrix();
+				GL11.glColor3f(1F, 1F, 1F);
+				GL11.glTranslatef(110, 54, 100);
+
+				GL11.glRotatef(160, 1F, 0F, 0F);
+				GL11.glRotatef(20, 0F, 1F, 0F);
+				GL11.glScalef(-50F, 50F, 50F);
+				ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
+				GL11.glPopMatrix();
+			}
+		}
+	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) 
@@ -151,14 +151,14 @@ public class GuiGunModTable extends GuiContainer
 	        		}
 					if(amountNeeded <= 0)
 						haveDyes[n] = true;
-	        	}
-	        	        	
-	        	GL11.glColor4f(1F, 1F, 1F, 1F);
-	        	GL11.glDisable(GL11.GL_LIGHTING);
-	        	mc.renderEngine.bindTexture(texture);
-	        	
-	        	int originX = mouseX + 6;
-	        	int originY = mouseY - 20;
+				}
+
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+				GL11.glDisable(GL11.GL_LIGHTING);
+				mc.renderEngine.bindTexture(texture);
+
+				int originX = mouseX + 6;
+				int originY = mouseY - 20;
 	
 	        	//If we have only one, use the double ended slot 
 	        	if(numDyes == 1)
@@ -237,5 +237,5 @@ public class GuiGunModTable extends GuiContainer
 		
 		FlansMod.getPacketHandler().sendToServer(new PacketGunPaint(hoveringOver.iconName));
 		((ContainerGunModTable)inventorySlots).clickPaintjob(hoveringOver);
-    }
+	}
 }

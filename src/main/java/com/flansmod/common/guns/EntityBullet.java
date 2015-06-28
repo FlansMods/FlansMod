@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
@@ -54,6 +55,7 @@ import com.flansmod.common.guns.raytracing.PlayerBulletHit;
 import com.flansmod.common.guns.raytracing.PlayerHitbox;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
@@ -451,6 +453,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
 					setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+					//play sound when bullet hits block
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, type.hitSoundRange, dimension, type.hitSound, true);
 					setDead();
 					break;
 				}
@@ -575,7 +579,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		
 		//Particles 
-		if (type.trailParticles && worldObj.isRemote)
+		if (type.trailParticles && worldObj.isRemote && ticksInAir > 1)
 		{
 			spawnParticles();
 		}
@@ -591,9 +595,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		double dX = (posX - prevPosX) / 10;
 		double dY = (posY - prevPosY) / 10;
 		double dZ = (posZ - prevPosZ) / 10;
+		
+		float spread = 0.1F;
 		for (int i = 0; i < 10; i++)
 		{
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread, prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
 			//worldObj.spawnEntityInWorld(particle);
@@ -607,27 +613,20 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 
-	private boolean isPartOfOwner(Entity entity)
-	{
-		if(owner == null)
+	private boolean isPartOfOwner(Entity entity) {
+		if (owner == null)
 			return false;
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
-		if (owner instanceof EntityPlayer)
-		{
-			if(PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
+		if (owner instanceof EntityPlayer) {
+			if (PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
 				return false;
-			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
-			if (mg != null && mg == entity)
-			{
+			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
+			if (mg != null && mg == entity) {
 				return true;
 			}
 		}
-		if(owner.ridingEntity instanceof EntitySeat)
-		{
-			return ((EntitySeat)owner.ridingEntity).driveable == null || ((EntitySeat)owner.ridingEntity).driveable.isPartOfThis(entity);
-		}
-		return false;
+		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null || ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
 	}
 
 	@Override
@@ -640,10 +639,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
-	        //if(owner instanceof EntityPlayer)
-	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
-	        //else 
-			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        if((owner instanceof EntityPlayer))
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.flak > 0, type.explosionBreaksBlocks);
+	        else 
+	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		if(type.fireRadius > 0)
 		{
@@ -772,8 +771,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 	
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

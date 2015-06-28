@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -50,7 +49,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 

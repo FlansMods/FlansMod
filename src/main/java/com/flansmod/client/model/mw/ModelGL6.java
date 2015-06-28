@@ -95,5 +95,7 @@ public class ModelGL6 extends ModelGun
 		unloadClipTime = 0.2F;
 		loadClipTime = 0.4F;
 		untiltGunTime = 0.2F;
+		
+		itemFrameOffset = new Vector3f(-2F / 16F, 0F / 16F, 0F);
 	}
 }

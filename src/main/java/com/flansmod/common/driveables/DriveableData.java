@@ -36,12 +36,12 @@ public class DriveableData implements IInventory
 	}
 
 	public void readFromNBT(NBTTagCompound tag)
-    {
+	{
 		if(tag == null)
 			return;
-    	if(!tag.hasKey("Type"))
-    		return;
-    	
+		if(!tag.hasKey("Type"))
+			return;
+
 		type = tag.getString("Type");
 		DriveableType dType = DriveableType.getDriveable(type);
 		numBombs = dType.numBombSlots;
@@ -75,10 +75,10 @@ public class DriveableData implements IInventory
 		{
 			part.readFromNBT(tag);
 		}
-    }
+	}
 
-    public void writeToNBT(NBTTagCompound tag)
-    {
+	public void writeToNBT(NBTTagCompound tag)
+	{
 		tag.setString("Type", type);
 		tag.setString("Engine", engine.shortName);
 		for(int i = 0; i < ammo.length; i++)
@@ -108,7 +108,7 @@ public class DriveableData implements IInventory
 		{
 			part.writeToNBT(tag);
 		}
-    }
+	}
 	
 	@Override
 	public int getSizeInventory() 
@@ -116,7 +116,7 @@ public class DriveableData implements IInventory
 		return getFuelSlot() + 1; 
 	}
 
-    @Override
+	@Override
 	public ItemStack getStackInSlot(int i) 
 	{ 
 		//Find the correct inventory
@@ -144,7 +144,7 @@ public class DriveableData implements IInventory
 		return inv[i];
 	}
 
-    @Override
+	@Override
 	public ItemStack decrStackSize(int i, int j) 
 	{
 		//Find the correct inventory
@@ -175,33 +175,33 @@ public class DriveableData implements IInventory
 		}
 		//Decrease the stack size
 		if(inv[i] != null)
-        {
-            if(inv[i].stackSize <= j)
-            {
-                ItemStack itemstack = inv[i];
-                inv[i] = null;
-                return itemstack;
-            }
-            ItemStack itemstack1 = inv[i].splitStack(j);
-            if(inv[i].stackSize <= 0)
-            {
-                inv[i] = null;
-            }
-            return itemstack1;
-        } else
-        {
-            return null;
-        }
+		{
+			if(inv[i].stackSize <= j)
+			{
+				ItemStack itemstack = inv[i];
+				inv[i] = null;
+				return itemstack;
+			}
+			ItemStack itemstack1 = inv[i].splitStack(j);
+			if(inv[i].stackSize <= 0)
+			{
+				inv[i] = null;
+			}
+			return itemstack1;
+		} else
+		{
+			return null;
+		}
 		
 	}
 
-    @Override
+	@Override
 	public ItemStack getStackInSlotOnClosing(int i) 
 	{ 
 		return getStackInSlot(i);	
 	}
 
-    @Override
+	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) 
 	{ 
 		//Find the correct inventory
@@ -236,10 +236,10 @@ public class DriveableData implements IInventory
 		return 64; 
 	}
 
-    @Override
+	@Override
 	public void markDirty() {}
 
-    @Override
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) 
 	{ 
 		return true; 

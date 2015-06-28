@@ -36,8 +36,8 @@ public class BlockArmourBox extends Block implements ITextureHandler
 
 		setUnlocalizedName(type.shortName);
 		setHardness(2F);
-	    setResistance(4F);
-	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
+		setResistance(4F);
+		GameRegistry.registerBlock(this, "armorBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		type.block = this;
 		type.item = Item.getItemFromBlock(this);

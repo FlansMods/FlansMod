@@ -22,30 +22,30 @@ public class VehicleType extends DriveableType
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
 	/** Aesthetic door variable */
-    public boolean hasDoor = false;
+	public boolean hasDoor = false;
 
 	public static ArrayList<VehicleType> types = new ArrayList<VehicleType>();
 	
-    public VehicleType(TypeFile file)
-    {
+	public VehicleType(TypeFile file)
+	{
 		super(file);
 		types.add(this);
-    }
-    
-    @Override
+	}
+
+	@Override
 	public void preRead(TypeFile file)
-    {
-    	super.preRead(file);
-    	wheelPositions = new DriveablePosition[4];
-    }
-    
-    @Override
+	{
+		super.preRead(file);
+		wheelPositions = new DriveablePosition[4];
+	}
+
+	@Override
 	protected void postRead(TypeFile file)
-    {
-    	super.postRead(file);
-    }
+	{
+		super.postRead(file);
+	}
 	
-    @Override
+	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
@@ -58,16 +58,16 @@ public class VehicleType extends DriveableType
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("FourWheelDrive"))
-            	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("Tank") || split[0].equals("TankMode"))
-            	tank = Boolean.parseBoolean(split[1].toLowerCase());
-            
-            //Visuals
-            if(split[0].equals("HasDoor"))
-                hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("RotateWheels"))
-            	rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("FourWheelDrive"))
+				fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Tank") || split[0].equals("TankMode"))
+				tank = Boolean.parseBoolean(split[1].toLowerCase());
+
+			//Visuals
+			if(split[0].equals("HasDoor"))
+				hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("RotateWheels"))
+				rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
 
 			//Armaments
 			if(split[0].equals("ShootDelay"))
@@ -91,7 +91,7 @@ public class VehicleType extends DriveableType
 		{
 		}
 	}
-    	
+
 	public static VehicleType getVehicle(String find)
 	{
 		for(VehicleType type : types)

@@ -53,7 +53,6 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemAAGun;
 import com.flansmod.common.guns.ItemBullet;
@@ -576,7 +575,7 @@ public class TeamsManager
 			else
 			{
 				//Not being attacked by a player, so this is fine
-            }
+			}
 			
 		}
 	}
@@ -869,7 +868,7 @@ public class TeamsManager
 		//Add in the spectators as an option and "none" if the player is an op
 		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
-        System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
+		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
 		
 		sendPacketToPlayer(new PacketTeamSelect(allAvailableTeams, info), player);
@@ -881,7 +880,7 @@ public class TeamsManager
 		if(team == null)
 		{
 			sendTeamsMenuToPlayer(player);
-        }
+		}
 		else if(team != Team.spectators && team.classes.size() > 0)
 		{
 			sendPacketToPlayer(new PacketTeamSelect(team.classes.toArray(new PlayerClass[team.classes.size()])), player);
@@ -893,11 +892,8 @@ public class TeamsManager
 		return MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 	}
 	
-	public boolean autoBalance()
-	{
-		if(currentRound != null && !currentRound.gametype.shouldAutobalance())
-			return false;
-		return autoBalance;
+	public boolean autoBalance() {
+		return !(currentRound != null && !currentRound.gametype.shouldAutobalance()) && autoBalance;
 	}
 	
 	//
@@ -931,9 +927,8 @@ public class TeamsManager
 		//Validate the selected team
 		boolean isValid = selectedTeam == Team.spectators;
 		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
-		for(int i = 0; i < validTeams.length; i++)
-		{
-			if(selectedTeam == validTeams[i])
+		for (Team validTeam : validTeams) {
+			if (selectedTeam == validTeam)
 				isValid = true;
 		}
 		//Default to spectator
@@ -1128,7 +1123,7 @@ public class TeamsManager
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
 		if(!checkFileExists(file))
 			return;
 		try
@@ -1194,7 +1189,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, World world)
 	{
-        File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
 		checkFileExists(file);
 		try
 		{

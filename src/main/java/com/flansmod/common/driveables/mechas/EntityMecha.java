@@ -23,7 +23,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
@@ -54,7 +53,6 @@ import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
@@ -63,32 +61,30 @@ import com.flansmod.common.vector.Vector3i;
 public class EntityMecha extends EntityDriveable
 {
 	private int ticksSinceUsed;
-    public int toggleTimer = 0;
-    private float moveX = 0, moveZ = 0;
-    public RotatedAxes legAxes;
-    public float prevLegsYaw = 0F;
-    private int jumpDelay = 0;
-    public MechaInventory inventory;
-    public float legSwing = 0;
-    /** Used for shooting guns */
-    public int shootDelayLeft = 0, shootDelayRight = 0;
-    /** Used for gun sounds */
-    public int soundDelayLeft = 0, soundDelayRight = 0;
-    /** The coords of the blocks being destroyed */
-    public Vector3i breakingBlock = null;
-    /** Progress made towards breaking each block */
-    public float breakingProgress = 0F;
-    /** Timer for the RocketPack Sound */
-    private float rocketTimer = 0F;
-    private int diamondTimer = 0;
-    
-    /** Gun animations */
-    public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
-    
-    /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
-    private int foundFuel = -1;
-    /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
-    public boolean couldNotFindFuel = false;
+	public int toggleTimer = 0;
+	private float moveX = 0, moveZ = 0;
+	public RotatedAxes legAxes;
+	public float prevLegsYaw = 0F;
+	private int jumpDelay = 0;
+	public MechaInventory inventory;
+	public float legSwing = 0;
+	/** Used for shooting guns */
+	public int shootDelayLeft = 0, shootDelayRight = 0;
+	/** Used for gun sounds */
+	public int soundDelayLeft = 0, soundDelayRight = 0;
+	/** The coords of the blocks being destroyed */
+	public Vector3i breakingBlock = null;
+	/** Progress made towards breaking each block */
+	public float breakingProgress = 0F;
+	/** Timer for the RocketPack Sound */
+	private float rocketTimer = 0F;
+	private int diamondTimer = 0;
+
+	/** Gun animations */
+	public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
+	boolean couldNotFindFuel;
+
+
 
     public float yOffset;
     
@@ -120,29 +116,29 @@ public class EntityMecha extends EntityDriveable
 		prevLegsYaw = legAxes.getYaw();
 	}
 	
-    @Override
-    protected void initType(DriveableType type, boolean clientSide)
-    {
-    	super.initType(type, clientSide);
-    	setSize(((MechaType)type).width, ((MechaType)type).height);
-    	stepHeight = ((MechaType)type).stepHeight;
-    }
+	@Override
+	protected void initType(DriveableType type, boolean clientSide)
+	{
+		super.initType(type, clientSide);
+		setSize(((MechaType)type).width, ((MechaType)type).height);
+		stepHeight = ((MechaType)type).stepHeight;
+	}
 	
 	@Override
-    protected void writeEntityToNBT(NBTTagCompound tag)
-    {
-        super.writeEntityToNBT(tag);
-        tag.setFloat("LegsYaw", legAxes.getYaw());
-        tag.setTag("Inventory", inventory.writeToNBT(new NBTTagCompound()));
-    }
+	protected void writeEntityToNBT(NBTTagCompound tag)
+	{
+		super.writeEntityToNBT(tag);
+		tag.setFloat("LegsYaw", legAxes.getYaw());
+		tag.setTag("Inventory", inventory.writeToNBT(new NBTTagCompound()));
+	}
 
 	@Override
-    protected void readEntityFromNBT(NBTTagCompound tag)
-    {
-        super.readEntityFromNBT(tag);
-        legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
-        inventory.readFromNBT(tag.getCompoundTag("Inventory"));
-    }
+	protected void readEntityFromNBT(NBTTagCompound tag)
+	{
+		super.readEntityFromNBT(tag);
+		legAxes.setAngles(tag.getFloat("LegsYaw"), 0, 0);
+		inventory.readFromNBT(tag.getCompoundTag("Inventory"));
+	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf data)
@@ -174,7 +170,7 @@ public class EntityMecha extends EntityDriveable
 	
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer)
-    {
+	{
 		if(isDead)
 			return false;
 		if(worldObj.isRemote)
@@ -192,8 +188,8 @@ public class EntityMecha extends EntityDriveable
 			if(seats[i].interactFirst(entityplayer))
 				return true;
 		}
-        return false;
-    }
+		return false;
+	}
 	
 	public MechaType getMechaType()
 	{
@@ -204,31 +200,31 @@ public class EntityMecha extends EntityDriveable
 	public boolean pressKey(int key, EntityPlayer player)
 	{
 		MechaType type = getMechaType();
-    	DriveableData data = getDriveableData();
+		DriveableData data = getDriveableData();
 		//send keys which require server side updates to the server
-    	if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
-    	{
-    		FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
-    		return true;
-    	}
-    	switch(key)
-    	{
-    		case 0 : //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
-    		{
-    			return true;
-    		}
-    		case 1 : //Backwards
-    		{
-    			return true;
-    		}
-    		case 2 : //Left
-    		{
-    			return true;
-    		}
-    		case 3 : //Right
-    		{
-    			return true;
-    		}
+		if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+		{
+			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
+			return true;
+		}
+		switch(key)
+		{
+			case 0 : //Forwards (these movement cases are redundant, as Mechas need to stop when the key is released)
+			{
+				return true;
+			}
+			case 1 : //Backwards
+			{
+				return true;
+			}
+			case 2 : //Left
+			{
+				return true;
+			}
+			case 3 : //Right
+			{
+				return true;
+			}
 			case 4 : //Jump
 			{
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
@@ -248,7 +244,7 @@ public class EntityMecha extends EntityDriveable
 			case 6 : //Exit : Get out
 			{
 				seats[0].riddenByEntity.mountEntity(null);
-          		return true;
+		  		return true;
 			}
 			case 7 : //Inventory
 			{
@@ -297,14 +293,14 @@ public class EntityMecha extends EntityDriveable
 				return true;
 			}
 			
-    	}
+		}
 		return false;
 	}
 	
 	private boolean useItem(boolean left)
 	{
-        if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
-	        {
+		if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
+			{
 			boolean creative = !(seats[0].riddenByEntity instanceof EntityPlayer) || ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode;
 			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(heldStack == null)
@@ -400,7 +396,7 @@ public class EntityMecha extends EntityDriveable
 					}
 				}
 			}
-        }
+		}
 		return true;
 	}
 
@@ -450,34 +446,37 @@ public class EntityMecha extends EntityDriveable
     public void fall(float f, float l)
     {
 		attackEntityFrom(DamageSource.fall, f);
-    }
+	}
 	
 	@Override
-    public boolean attackEntityFrom(DamageSource damagesource, float i)
-    {
-        if(worldObj.isRemote || isDead)
-            return true;
-        
-        MechaType type = getMechaType();
-        
-        if(damagesource.getDamageType().equals("fall"))
-        {
-        	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
-        	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
-        	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * vulnerability() : 0;
-        	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
-        	        	
-        	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
-        	checkParts();
-        	FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
-        	if(blockDamageFromFalling > 1)
-        	{
-        		worldObj.createExplosion(this, posX, posY, posZ, blockDamageFromFalling, TeamsManager.explosions);
-        	}
-        }
-        
-        else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+	public boolean attackEntityFrom(DamageSource damagesource, float i)
+	{
+		if(worldObj.isRemote || isDead)
+			return true;
+
+		MechaType type = getMechaType();
+
+		if(damagesource.getDamageType().equals("fall"))
+		{
+			boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
+			boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
+
+			byte wouldBeNegativeDamage;
+			if(((i * type.fallDamageMultiplier * vulnerability())-2)<0){wouldBeNegativeDamage=0;} else {wouldBeNegativeDamage=1;};
+
+			float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
+			float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
+
+			driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
+			checkParts();
+			FlansMod.getPacketHandler().sendToAllAround(new PacketDriveableDamage(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			if(blockDamageFromFalling > 1)
+			{
+				worldObj.createExplosion(this, posX, posY, posZ, blockDamageFromFalling, TeamsManager.explosions);
+			}
+		}
+
+		else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.item, 1, 0);
 			NBTTagCompound tags = new NBTTagCompound();
@@ -487,12 +486,12 @@ public class EntityMecha extends EntityDriveable
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}
-        else
-        {
-        	driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
-        }
-        return true;
-    }
+		else
+		{
+			driveableData.parts.get(EnumDriveablePart.core).attack(i * vulnerability(), damagesource.isFireDamage());
+		}
+		return true;
+	}
 	
 	@Override
 	public void onUpdate()
@@ -533,7 +532,7 @@ public class EntityMecha extends EntityDriveable
 			{
 				DriveablePart thisPart = data.parts.get(part);
 				boolean hasCreativePlayer = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-				if(thisPart != null && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
+				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
 					if(!hasCreativePlayer)
@@ -603,23 +602,23 @@ public class EntityMecha extends EntityDriveable
 		if(worldObj.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
-            if (serverPositionTransitionTicker > 0)
-            {
-                double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
-                double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
-                double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
-                double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
-                double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
-                double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
-                rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
-                rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
-                float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
-                --serverPositionTransitionTicker;
-                setPosition(x, y, z);
-                setRotation(rotationYaw, rotationPitch, rotationRoll);
-                //return;
-            }
-            //If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
+			if (serverPositionTransitionTicker > 0)
+			{
+				double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+				double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+				double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+				double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
+				double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
+				double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+				rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+				rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+				float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
+				--serverPositionTransitionTicker;
+				setPosition(x, y, z);
+				setRotation(rotationYaw, rotationPitch, rotationRoll);
+				//return;
+			}
+			//If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
 		}
 		
 		//Movement
@@ -732,24 +731,21 @@ public class EntityMecha extends EntityDriveable
 					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
 				}
 				
-				Vector3f motion = legAxes.getXAxis();
-				
-				motion.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F)*(intent.lengthSquared()));
+				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-	
+
 				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(onGround || jumpDelay != 0)
+					if(!onGround && shouldFly() && (canThrustCreatively || data.fuelInTank > 10F*jetPack + data.engine.fuelConsumption))
 					{
-			    	//Move!
-					Vector3f.add(actualMotion, motion, actualMotion);
+						intent.scale(jetPack);
+						if(!canThrustCreatively)
+							data.fuelInTank -= 10F*jetPack;
 					}
-					else if(!onGround && shouldFly())
-					{
-						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
-						Vector3f.add(actualMotion, flyMotion, actualMotion);
-					}
+					
+					//Move!
+					Vector3f.add(actualMotion, intent, actualMotion);
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
@@ -840,9 +836,9 @@ public class EntityMecha extends EntityDriveable
 								int eventOutcome = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 								cancelled = eventOutcome == -1;
 							}
-					        if(!cancelled)
-					        {
-				        		//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
+							if(!cancelled)
+							{
+								//blockHit.dropBlockAsItem(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z), 1);
 								//FlansMod.proxy.playBlockBreakSound(breakingBlock.x, breakingBlock.y, breakingBlock.z, worldObj.getBlockId(breakingBlock.x, breakingBlock.y, breakingBlock.z));
 								//worldObj.setBlockToAir(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 	
@@ -852,7 +848,8 @@ public class EntityMecha extends EntityDriveable
 									for(ItemStack stack : blockHit.getDrops(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), state, 0))
 									{
 										//Check for iron regarding refining
-										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										boolean fuelCheck = (data.fuelInTank >= 5F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore)
 										{
 											stack = (new ItemStack(Items.iron_ingot, 1, 0));
 											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
@@ -860,34 +857,55 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).block == Blocks.cobblestone || ((ItemBlock)stack.getItem()).block == Blocks.dirt || ((ItemBlock)stack.getItem()).block == Blocks.sand))
+										fuelCheck = (data.fuelInTank >= 0.1F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).block == Blocks.cobblestone || ((ItemBlock)stack.getItem()).block == Blocks.dirt || ((ItemBlock)stack.getItem()).block == Blocks.sand))
+										{
 											stack.stackSize = 0;
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 0.1F;
+										}
 										
 										//Check for item multipliers
-										if(stack.getItem() == Items.diamond)
+										fuelCheck = (data.fuelInTank >= 3F*diamondMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.diamond)
 										{
 											float multiplier = diamondMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 3F*diamondMultiplier();
 										}
-										if(stack.getItem() == Items.redstone)
+										fuelCheck = (data.fuelInTank >= 2F*redstoneMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.redstone)
 										{
 											float multiplier = redstoneMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*redstoneMultiplier();
 										}
-										if(stack.getItem() == Items.coal)
+										fuelCheck = (data.fuelInTank >= 2F*coalMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.coal)
 										{
 											float multiplier = coalMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*coalMultiplier();
 										}
-										if(stack.getItem() == Items.emerald)
+										fuelCheck = (data.fuelInTank >= 2F*emeraldMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.emerald)
 										{
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*emeraldMultiplier();
 										}
-										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
+										fuelCheck = (data.fuelInTank >= 2F*ironMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										//check for refineIron OTHERWISE NICE DUPE. think about it and you will get why
+										if(fuelCheck && (stack.getItem() == Items.iron_ingot) && refineIron())
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*ironMultiplier();
 										}
 										
 										//Check for auto coal consumption
@@ -916,83 +934,7 @@ public class EntityMecha extends EntityDriveable
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		//FlansMod.log("" + fallDistance);
-    	setPosition(posX, posY, posZ);
-		
-		//Fuel Handling
-		if(!couldNotFindFuel)
-		{
-			ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
-			
-			//If the fuel item has stack size <= 0, delete it
-			if(fuelStack != null && fuelStack.stackSize <= 0)
-			{
-				driveableData.setInventorySlotContents(foundFuel, null);
-				fuelStack = null;
-			}
-			
-			//Find the next fuelling slot
-			if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
-			{
-				foundFuel = -1;
-				couldNotFindFuel = true;
-				for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
-				{
-					ItemStack tempStack = driveableData.getStackInSlot(i);
-					if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
-					{
-						foundFuel = i;
-						fuelStack = tempStack;
-						couldNotFindFuel = false;
-						break;
-					}
-				}
-			}
-			
-			//Work out if we are fuelling (from a Flan's Mod fuel item)
-			fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
-			
-			//If we are fuelling
-			if(fuelling)
-			{
-				int damage = fuelStack.getItemDamage();
-				//Consume 10 points of fuel (1 damage)
-				fuelStack.setItemDamage(damage + 1);
-				//Put 10 points of fuel 
-				data.fuelInTank += 10;
-				//If we have finished this fuel item
-				if(damage >= fuelStack.getMaxDamage())
-				{
-					//Reset the damage to 0
-					fuelStack.setItemDamage(0);
-					//Consume one item
-					fuelStack.stackSize--;
-					//If we consumed the last one, destroy the stack
-					if(fuelStack.stackSize <= 0)
-						data.fuel = null;
-				}	
-			}
-			
-			//Check inventory slots for buildcraft buckets and if found, take fuel from them
-			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
-			{
-				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
-				{
-					ItemStack stack = data.getStackInSlot(i);
-					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 5000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 10000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-				}
-			}
-		}
+		setPosition(posX, posY, posZ);
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)

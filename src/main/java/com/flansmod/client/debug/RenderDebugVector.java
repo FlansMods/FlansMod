@@ -28,15 +28,15 @@ public class RenderDebugVector extends Render
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor3f(ent.red, ent.green, ent.blue);
 		GL11.glPushMatrix();
-	    GL11.glTranslatef((float)d0, (float)d1, (float)d2);
-	    GL11.glLineWidth(5F);
-	    GL11.glBegin(GL11.GL_LINE_STRIP);
-	    GL11.glVertex3f(0F, 0F, 0F);
-	    GL11.glVertex3f(ent.vector.x, ent.vector.y, ent.vector.z);
-	    GL11.glEnd();
-	    GL11.glPopMatrix();
-	    GL11.glEnable(GL11.GL_TEXTURE_2D);
-	    GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glTranslatef((float)d0, (float)d1, (float)d2);
+		GL11.glLineWidth(5F);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		GL11.glVertex3f(0F, 0F, 0F);
+		GL11.glVertex3f(ent.vector.x, ent.vector.y, ent.vector.z);
+		GL11.glEnd();
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

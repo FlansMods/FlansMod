@@ -72,12 +72,12 @@ public class GuiDriveableCrafting extends GuiScreen
 	
 	@Override
 	protected void actionPerformed(GuiButton button)
-    {
-        if (button.id == 0)
-        {
-        	FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
-        }
-    }
+	{
+		if (button.id == 0)
+		{
+			FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
+		}
+	}
 		
 	@Override
 	public void drawScreen(int i, int j, float f)
@@ -301,7 +301,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 		GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 	
 	@Override

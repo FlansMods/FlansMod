@@ -36,28 +36,28 @@ public class PlaneType extends DriveableType
 	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
 				
 	/** Aesthetic features */
-    public boolean hasGear = false, hasDoor = false, hasWing = false;
-    /** Default pitch for when parked. Will implement better system soon */
-    public float restingPitch = 0F;
-    
-    /** Whether the player can access the inventory while in the air */
-    public boolean invInflight = true;
+	public boolean hasGear = false, hasDoor = false, hasWing = false;
+	/** Default pitch for when parked. Will implement better system soon */
+	public float restingPitch = 0F;
+
+	/** Whether the player can access the inventory while in the air */
+	public boolean invInflight = true;
 
 	public static ArrayList<PlaneType> types = new ArrayList<PlaneType>();
 	
-    public PlaneType(TypeFile file)
-    {
+	public PlaneType(TypeFile file)
+	{
 		super(file);
 		types.add(this);
-    }
-    
-    @Override
-    public void preRead(TypeFile file)
-    {
-    	super.preRead(file);
-    }
-    
-    @Override
+	}
+
+	@Override
+	public void preRead(TypeFile file)
+	{
+		super.preRead(file);
+	}
+
+	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
@@ -133,54 +133,54 @@ public class PlaneType extends DriveableType
 			}
 			
 			//Aesthetics
-            if(split[0].equals("HasGear"))
-                hasGear = split[1].equals("True");
-            if(split[0].equals("HasDoor"))
-                hasDoor = split[1].equals("True");
-            if(split[0].equals("HasWing"))
-                hasWing = split[1].equals("True");
-            if(split[0].equals("RestingPitch"))
-                restingPitch = Float.parseFloat(split[1]);
-            
-            //In-flight inventory
-            if(split[0].equals("InflightInventory"))
-                invInflight = split[1].equals("False");
+			if(split[0].equals("HasGear"))
+				hasGear = split[1].equals("True");
+			if(split[0].equals("HasDoor"))
+				hasDoor = split[1].equals("True");
+			if(split[0].equals("HasWing"))
+				hasWing = split[1].equals("True");
+			if(split[0].equals("RestingPitch"))
+				restingPitch = Float.parseFloat(split[1]);
+
+			//In-flight inventory
+			if(split[0].equals("InflightInventory"))
+				invInflight = split[1].equals("False");
 		}
 		catch (Exception ignored)
 		{
 		}
 	}
-    
-    @Override
-    public int numEngines()
-    {
-    	switch(mode)
-    	{
-    	case VTOL : return Math.max(propellers.size(), heliPropellers.size());
-    	case PLANE : return propellers.size();
-    	case HELI : return heliPropellers.size();
-    	default : return 1;
-    	}
-    }
-    
-    /** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
-    @Override
-    public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
-    {
-    	//Get the list of items required by the driveable
-    	ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
-    	//Add the propellers and engines
-    	for(Propeller propeller : propellers)
-    	{
-    		if(propeller.planePart == part.type)
-    		{
-	    		stacks.add(new ItemStack(propeller.itemType.item));
-	    		stacks.add(new ItemStack(engine.item));
-    		}
-    	}
-    	return stacks;
-    }
-    
+
+	@Override
+	public int numEngines()
+	{
+		switch(mode)
+		{
+		case VTOL : return Math.max(propellers.size(), heliPropellers.size());
+		case PLANE : return propellers.size();
+		case HELI : return heliPropellers.size();
+		default : return 1;
+		}
+	}
+
+	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	@Override
+	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+	{
+		//Get the list of items required by the driveable
+		ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
+		//Add the propellers and engines
+		for(Propeller propeller : propellers)
+		{
+			if(propeller.planePart == part.type)
+			{
+				stacks.add(new ItemStack(propeller.itemType.item));
+				stacks.add(new ItemStack(engine.item));
+			}
+		}
+		return stacks;
+	}
+
 	public static PlaneType getPlane(String find)
 	{
 		for(PlaneType type : types)

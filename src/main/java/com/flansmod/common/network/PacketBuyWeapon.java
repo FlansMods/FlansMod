@@ -30,9 +30,9 @@ public class PacketBuyWeapon extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	writeUTF(data, boxShortName);
-    	data.writeInt(purchaseType);
-    	data.writeInt(weaponID);
+		writeUTF(data, boxShortName);
+		data.writeInt(purchaseType);
+		data.writeInt(weaponID);
 	}
 
 	@Override

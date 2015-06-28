@@ -34,15 +34,15 @@ public class ItemPlane extends Item implements IFlanItem
 {
 	public PlaneType type;
 	
-    public ItemPlane(PlaneType type1)
-    {
-        maxStackSize = 1;
+	public ItemPlane(PlaneType type1)
+	{
+		maxStackSize = 1;
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanDriveables);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-    }
-    
+	}
+
 	@Override
 	/** Make sure client and server side NBTtags update */
 	public boolean getShareTag()
@@ -68,21 +68,21 @@ public class ItemPlane extends Item implements IFlanItem
 	}
 	
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
-    {
+	{
 		try
 		{
 			File file1 = world.getSaveHandler().getMapFileFromName("plane_" + stack.getItemDamage());
 			if(file1 != null && file1.exists())
 			{
-		        FileInputStream fileinputstream = new FileInputStream(file1);
-		        NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
-		    	for(EnumDriveablePart part : EnumDriveablePart.values())
-		    	{
-		    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-		    		tags.setBoolean(part.getShortName() + "_Fire", false);
-		    	}
-		        fileinputstream.close();
-		        return tags;
+				FileInputStream fileinputstream = new FileInputStream(file1);
+				NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
+				for(EnumDriveablePart part : EnumDriveablePart.values())
+				{
+					tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+					tags.setBoolean(part.getShortName() + "_Fire", false);
+				}
+				fileinputstream.close();
+				return tags;
 			}
 		}
 		catch(IOException e)
@@ -91,11 +91,11 @@ public class ItemPlane extends Item implements IFlanItem
 			e.printStackTrace();
 		}
 		return null;
-    }
+	}
 
 
 	@Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
+	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
 	{
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
@@ -138,32 +138,32 @@ public class ItemPlane extends Item implements IFlanItem
 				{	
 					itemstack.stackSize--;
 				}
-            }
-        }
-        return itemstack;
-    }
-    
-    public Entity spawnPlane(World world, double x, double y, double z, ItemStack stack)
-    {
-    	DriveableData data = getPlaneData(stack, world);
-    	if(data != null)
-    	{
-	    	Entity entity = new EntityPlane(world, x, y, z, type, data);
-	    	if(!world.isRemote)
-	        {
+			}
+		}
+		return itemstack;
+	}
+
+	public Entity spawnPlane(World world, double x, double y, double z, ItemStack stack)
+	{
+		DriveableData data = getPlaneData(stack, world);
+		if(data != null)
+		{
+			Entity entity = new EntityPlane(world, x, y, z, type, data);
+			if(!world.isRemote)
+			{
 				world.spawnEntityInWorld(entity);
-	        }
-	    	return entity;
-    	}
-    	return null;
-    }
+			}
+			return entity;
+		}
+		return null;
+	}
 	
 	public DriveableData getPlaneData(ItemStack itemstack, World world)
-    {
+	{
 		return new DriveableData(getTagCompound(itemstack, world));
-    }
+	}
 		
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

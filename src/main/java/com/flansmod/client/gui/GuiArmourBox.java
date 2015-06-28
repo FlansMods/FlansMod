@@ -150,7 +150,7 @@ public class GuiArmourBox extends GuiScreen
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 		GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 	
 	@Override

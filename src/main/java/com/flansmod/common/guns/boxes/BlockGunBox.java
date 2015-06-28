@@ -38,14 +38,14 @@ public class BlockGunBox extends Block implements ITextureHandler
 	{
 		super(Material.wood);
 		setHardness(2F);
-	    setResistance(4F);
-	    type = t;
+		setResistance(4F);
+		type = t;
 
 	    setUnlocalizedName(type.shortName);
 	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
-	    type.block = this;
-	    type.item = Item.getItemFromBlock(this);	
+		type.block = this;
+		type.item = Item.getItemFromBlock(this);
 	}
 		
 	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
@@ -241,8 +241,8 @@ public class BlockGunBox extends Block implements ITextureHandler
     {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, 0));
-        return ret;
-    }
+		return ret;
+	}
 	
 	@SideOnly(Side.CLIENT)
     public int getRenderType() 

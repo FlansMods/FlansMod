@@ -168,7 +168,7 @@ public class Vector3i extends Vector
 	public String toString() 
 	{
 
-        return "Vector3i[" + x + ", " + y + ", " + z + ']';
+		return "Vector3i[" + x + ", " + y + ", " + z + ']';
 	}
 
 	public final int getX() 

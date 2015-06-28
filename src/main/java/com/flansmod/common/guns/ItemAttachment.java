@@ -39,7 +39,7 @@ public class ItemAttachment extends Item implements IFlanItem
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

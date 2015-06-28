@@ -3,7 +3,6 @@ ShortName flakvierling
 //The ammo this gun uses (shortName)
 Ammo flakvierlingAmmo
 Icon Flakvierling
-ItemID 23286
 Model ww2.Flakvierling
 //Place the texture .png in the skins folder
 Texture Flakvierling
@@ -31,8 +30,3 @@ GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
 TopViewLimit 75
 BottomViewLimit 0
-RecipeOutput 1
-Recipe I ingotIron B blockIron A aaBarrel L leather
- AA
-LAA
-IBI

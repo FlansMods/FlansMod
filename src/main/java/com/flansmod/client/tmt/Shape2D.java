@@ -17,7 +17,7 @@ public class Shape2D
 	{
 		coords = new ArrayList<Coord2D>();
 
-        Collections.addAll(coords, coordArray);
+		Collections.addAll(coords, coordArray);
 	}
 	
 	public Shape2D(ArrayList<Coord2D> coordList)
@@ -115,18 +115,18 @@ public class Shape2D
 		float x = xRot;
 		float y = yRot;
 		float z = zRot;
-        float xC = MathHelper.cos(x);
-        float xS = MathHelper.sin(x);
-        float yC = MathHelper.cos(y);
-        float yS = MathHelper.sin(y);
-        float zC = MathHelper.cos(z);
-        float zS = MathHelper.sin(z);
-        
-        double xVec = vector.xCoord;
-        double yVec = vector.yCoord;
-        double zVec = vector.zCoord;
-        
-        // rotation around x
+		float xC = MathHelper.cos(x);
+		float xS = MathHelper.sin(x);
+		float yC = MathHelper.cos(y);
+		float yS = MathHelper.sin(y);
+		float zC = MathHelper.cos(z);
+		float zS = MathHelper.sin(z);
+
+		double xVec = vector.xCoord;
+		double yVec = vector.yCoord;
+		double zVec = vector.zCoord;
+
+		// rotation around x
 		double xy = xC*yVec - xS*zVec;
 		double xz = xC*zVec + xS*yVec;
 		// rotation around y

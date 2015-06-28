@@ -13,4 +13,4 @@ I I
 //The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
 Type legUpgrade
 //The modifiers this item enacts on the mecha
-SpeedMultiplier 1.5
+SpeedMultiplier 1.2

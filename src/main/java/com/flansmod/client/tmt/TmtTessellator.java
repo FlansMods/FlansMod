@@ -634,9 +634,9 @@ public class TmtTessellator extends Tessellator
      * Offsets the translation for all vertices in the current draw call.
      */
 	public void addTranslation(float par1, float par2, float par3)
-    {
-        this.xOffset += par1;
-        this.yOffset += par2;
-        this.zOffset += par3;
-    }
+	{
+		this.xOffset += par1;
+		this.yOffset += par2;
+		this.zOffset += par3;
+	}
 }

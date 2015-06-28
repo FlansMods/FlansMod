@@ -28,9 +28,9 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 		super(te.getWorld(), te.getPos().getX() + 0.5F, te.getPos().getY() + 0.5F, te.getPos().getZ() + 0.5F, te.stacksToSpawn.get(i).copy());
 		te.itemEntities.add(this);
 		angle = i * Math.PI * 2 / te.stacksToSpawn.size();
-        motionX = motionY = motionZ = 0D;
-        lifespan = 1000000000;
-        spawner = te;
+		motionX = motionY = motionZ = 0D;
+		lifespan = 1000000000;
+		spawner = te;
 	}
 	
 	public EntityTeamItem(World world)
@@ -45,70 +45,70 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	}
 		
 	@Override
-    public void onUpdate()
-    {
-    	++ticksExisted;
-    	prevPosX = posX;
-    	prevPosY = posY;
-    	prevPosZ = posZ;
-        prevRotationYaw = rotationYaw;
-        ++age;
-        if(worldObj.isRemote)
-        {
-	        angle += 0.05D;
-	        setPosition(xCoord + 0.5F + Math.cos(angle) * 0.3F, yCoord + 0.5F, zCoord + 0.5F + Math.sin(angle) * 0.3F);
-        }
-        
+	public void onUpdate()
+	{
+		++ticksExisted;
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+		prevRotationYaw = rotationYaw;
+		++age;
+		if(worldObj.isRemote)
+		{
+			angle += 0.05D;
+			setPosition(xCoord + 0.5F + Math.cos(angle) * 0.3F, yCoord + 0.5F, zCoord + 0.5F + Math.sin(angle) * 0.3F);
+		}
+
 		//Temporary fire glitch fix
 		if(worldObj.isRemote)
 			extinguish();
-    }
-    
-    public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
-    {
-     	return false;
-    }
-    
-    @Override
+	}
+
+	public boolean attackEntityFrom(DamageSource par1DamageSource, int par2)
+	{
+	 	return false;
+	}
+
+	@Override
 	public void onCollideWithPlayer(EntityPlayer player)
-    {
-        if (!worldObj.isRemote)
-        {
-            EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
+	{
+		if (!worldObj.isRemote)
+		{
+			EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
 
-            if (MinecraftForge.EVENT_BUS.post(event))
-            {
-                return;
-            }
-            
-            int spawnerTeamID = spawner.getTeamID();
-            Team spawnerTeam = TeamsManager.getInstance().getTeam(spawnerTeamID);
-            Team playerTeam = PlayerHandler.getPlayerData(player).team;
-            if(spawnerTeam != null)
-            {
-            	if(playerTeam != spawnerTeam)
-            		return;
-            }
+			if (MinecraftForge.EVENT_BUS.post(event))
+			{
+				return;
+			}
 
-            //Getter of EntityItem
-            int var2 = getEntityItem().stackSize;
+			int spawnerTeamID = spawner.getTeamID();
+			Team spawnerTeam = TeamsManager.getInstance().getTeam(spawnerTeamID);
+			Team playerTeam = PlayerHandler.getPlayerData(player).team;
+			if(spawnerTeam != null)
+			{
+				if(playerTeam != spawnerTeam)
+					return;
+			}
 
-            if ((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(getEntityItem())))
-            {
-            	FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
+			//Getter of EntityItem
+			int var2 = getEntityItem().stackSize;
 
-                playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                player.onItemPickup(this, var2);
+			if ((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(getEntityItem())))
+			{
+				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
 
-                //Getter of EntityItem
-                if (getEntityItem().stackSize <= 0)
-                {
-                	spawner.itemEntities.remove(this);
-                    setDead();
-                }
-            }
-        }
-    }
+				playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+				player.onItemPickup(this, var2);
+
+				//Getter of EntityItem
+				if (getEntityItem().stackSize <= 0)
+				{
+					spawner.itemEntities.remove(this);
+					setDead();
+				}
+			}
+		}
+	}
 
 	@Override
 	public void writeSpawnData(ByteBuf data) 
@@ -148,15 +148,15 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 		setDead();
 	}
 	
-    @Override
-    public boolean canAttackWithItem()
-    {
-        return false;
-    }
-    
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean canAttackWithItem()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

@@ -13,9 +13,7 @@ import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
@@ -48,60 +46,60 @@ public class PacketReload extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-    	PlayerData data = PlayerHandler.getPlayerData(playerEntity);
-    	ItemStack stack = playerEntity.getCurrentEquippedItem();
-    	if(left && data.offHandGunSlot != 0)
-    	{
-    		stack = playerEntity.inventory.getStackInSlot(data.offHandGunSlot - 1);
-    	}
-    	if(data != null && stack != null && stack.getItem() instanceof ItemGun)
-    	{
-    		GunType type = ((ItemGun)stack.getItem()).type;
-    		if(((ItemGun)stack.getItem()).reload(stack, type, playerEntity.worldObj, playerEntity, true, left))
-    		{
-    			//Set the reload delay
-    			data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
-    			if(left)
-    				data.reloadingLeft = true;
-    			else data.reloadingRight = true;
+		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
+		ItemStack stack = playerEntity.getCurrentEquippedItem();
+		if(left && data.offHandGunSlot != 0)
+		{
+			stack = playerEntity.inventory.getStackInSlot(data.offHandGunSlot - 1);
+		}
+		if(data != null && stack != null && stack.getItem() instanceof ItemGun)
+		{
+			GunType type = ((ItemGun)stack.getItem()).type;
+			if(((ItemGun)stack.getItem()).reload(stack, type, playerEntity.worldObj, playerEntity, true, left))
+			{
+				//Set the reload delay
+				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
+				if(left)
+					data.reloadingLeft = true;
+				else data.reloadingRight = true;
 				//Send reload packet to induce reload effects client side
 				FlansMod.getPacketHandler().sendTo(new PacketReload(left), playerEntity);
 				//Play reload sound
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
-    		}
-    	}
+			}
+		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-    	ItemStack stack = clientPlayer.getCurrentEquippedItem();
-    	PlayerData data = PlayerHandler.getPlayerData(clientPlayer, Side.CLIENT);
-    	if(left)
-    		stack = clientPlayer.inventory.getStackInSlot(data.offHandGunSlot - 1);
-    	if(stack != null && stack.getItem() instanceof ItemGun)
-    	{
-    		GunType type = ((ItemGun)stack.getItem()).type;
-    		if(left)
-    			FlansModClient.shootTimeLeft = type.reloadTime;
-    		else FlansModClient.shootTimeRight = type.reloadTime;
-    		
-    		//Apply animations
-    		GunAnimations animations = null;
-    		if(left)
-    		{
-    			if(FlansModClient.gunAnimationsLeft.containsKey(clientPlayer))
+		ItemStack stack = clientPlayer.getCurrentEquippedItem();
+		PlayerData data = PlayerHandler.getPlayerData(clientPlayer, Side.CLIENT);
+		if(left)
+			stack = clientPlayer.inventory.getStackInSlot(data.offHandGunSlot - 1);
+		if(stack != null && stack.getItem() instanceof ItemGun)
+		{
+			GunType type = ((ItemGun)stack.getItem()).type;
+			if(left)
+				FlansModClient.shootTimeLeft = type.reloadTime;
+			else FlansModClient.shootTimeRight = type.reloadTime;
+
+			//Apply animations
+			GunAnimations animations = null;
+			if(left)
+			{
+				if(FlansModClient.gunAnimationsLeft.containsKey(clientPlayer))
 					animations = FlansModClient.gunAnimationsLeft.get(clientPlayer);
 				else 
 				{
 					animations = new GunAnimations();
 					FlansModClient.gunAnimationsLeft.put(clientPlayer, animations);
 				}
-    		}
-    		else
-    		{
+			}
+			else
+			{
 				if(FlansModClient.gunAnimationsRight.containsKey(clientPlayer))
 					animations = FlansModClient.gunAnimationsRight.get(clientPlayer);
 				else 
@@ -109,11 +107,11 @@ public class PacketReload extends PacketBase
 					animations = new GunAnimations();
 					FlansModClient.gunAnimationsRight.put(clientPlayer, animations);
 				}
-    		}
+			}
 			int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 			int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 			animations.doReload(type.reloadTime, pumpDelay, pumpTime);
-    		
+
 			//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 			int bestSlot = -1;
 			int bulletsInBestSlot = 0;
@@ -142,6 +140,6 @@ public class PacketReload extends PacketBase
 					newBulletStack = null;
 				clientPlayer.inventory.setInventorySlotContents(bestSlot, newBulletStack);
 			}
-    	}
+		}
 	}
 }

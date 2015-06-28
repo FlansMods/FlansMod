@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
 public class GrenadeType extends ShootableType 

@@ -75,111 +75,106 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	data.writeBoolean(TeamsManager.canBreakGlass);
-    	data.writeBoolean(TeamsManager.vehiclesNeedFuel);
-    	data.writeBoolean(TeamsManager.driveablesBreakBlocks);
-    	
+		data.writeBoolean(TeamsManager.canBreakGlass);
+		data.writeBoolean(TeamsManager.vehiclesNeedFuel);
+		data.writeBoolean(TeamsManager.driveablesBreakBlocks);
+
 		if(TeamsManager.getInstance().currentRound == null)
-    	{
+		{
 			writeUTF(data, "No Gametype");
-    		data.writeInt(0);
-    	}
-    	else
-    	{
-    		writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
-    		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.showZombieScore());
-    		writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
-    		writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
-    		data.writeInt(TeamsManager.getInstance().roundTimeLeft);
-    		data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);    		
-    		
-    		if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
-    		{
-    			data.writeBoolean(true);
-	        	if(TeamsManager.getInstance().currentRound.teams == null)
-	        	{
-	        		data.writeInt(0);
-	        	}
-	        	else
-	        	{
-		        	data.writeInt(TeamsManager.getInstance().currentRound.teams.length);
-		        	for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
-		        	{
-		        		Team team = TeamsManager.getInstance().currentRound.teams[i];
-		        		if(team == null)
-		        		{
-		        			writeUTF(data, "none");
-		        			continue;
-		        		}
-		        		writeUTF(data, team.shortName);
-		        		data.writeInt(team.score);
-		        		data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.teamHasWon(team));
-		        		team.sortPlayers();
-		        		data.writeInt(team.members.size());
-		        		for(int j = 0; j < team.members.size(); j++)
-		        		{
-		        			String username = team.members.get(j);
-		        			PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
-		        			writeUTF(data, username);
-		        			if(playerData == null)
-		        			{
-		        				data.writeInt(0);
-		        				data.writeInt(0);
-		        				data.writeInt(0);
-		        				writeUTF(data, "");
-		        			}
-		        			else
-		        			{
-			        			data.writeInt(playerData.score);
-			        			data.writeInt(playerData.zombieScore);
-			        			data.writeInt(playerData.kills);
-			        			data.writeInt(playerData.deaths);
-			        			writeUTF(data, playerData.playerClass.shortName);
-		        			}
-		        		}
-		        	}
-	        	}
-    		}
-    		else
-    		{
-    			data.writeBoolean(false);
-    			ArrayList<String> playerNames = new ArrayList<String>();
-    			for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
-	        	{
-	        		Team team = TeamsManager.getInstance().currentRound.teams[i];
-	        		if(team == null || team.members == null)
-	        		{
-	        			continue;
-	        		}
-	        		playerNames.addAll(team.members);
-	        	}
-    			
-    			Collections.sort(playerNames, new Team.ComparatorScore());
-        		data.writeInt(playerNames.size());
-        		for(int j = 0; j < playerNames.size(); j++)
-        		{
-        			String username = playerNames.get(j);
-        			PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
-        			writeUTF(data, username);
-        			if(playerData == null)
-        			{
-        				data.writeInt(0);
-        				data.writeInt(0);
-        				data.writeInt(0);
-        				writeUTF(data, "");
-        			}
-        			else
-        			{
-	        			data.writeInt(playerData.score);
-	        			data.writeInt(playerData.kills);
-	        			data.writeInt(playerData.deaths);
-	        			writeUTF(data, playerData.playerClass.shortName);
-        			}
-        		}
-	        	
-    		}
-    	}
-    	
+			data.writeInt(0);
+		}
+		else
+		{
+			writeUTF(data, TeamsManager.getInstance().currentRound.gametype.name);
+			data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.showZombieScore());
+			writeUTF(data, TeamsManager.getInstance().currentRound.map.name);
+			writeUTF(data, TeamsManager.getInstance().currentRound.map.shortName);
+			data.writeInt(TeamsManager.getInstance().roundTimeLeft);
+			data.writeInt(TeamsManager.getInstance().currentRound.scoreLimit);
+
+			if(TeamsManager.getInstance().currentRound.gametype.sortScoreboardByTeam())
+			{
+				data.writeBoolean(true);
+				if(TeamsManager.getInstance().currentRound.teams == null)
+				{
+					data.writeInt(0);
+				}
+				else
+				{
+					data.writeInt(TeamsManager.getInstance().currentRound.teams.length);
+					for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
+					{
+						Team team = TeamsManager.getInstance().currentRound.teams[i];
+						if(team == null)
+						{
+							writeUTF(data, "none");
+							continue;
+						}
+						writeUTF(data, team.shortName);
+						data.writeInt(team.score);
+						data.writeBoolean(TeamsManager.getInstance().currentRound.gametype.teamHasWon(team));
+						team.sortPlayers();
+						data.writeInt(team.members.size());
+						for(int j = 0; j < team.members.size(); j++)
+						{
+							String username = team.members.get(j);
+							PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
+							writeUTF(data, username);
+							if(playerData == null)
+							{
+								data.writeInt(0);
+								data.writeInt(0);
+								data.writeInt(0);
+								writeUTF(data, "");
+							}
+							else
+							{
+								data.writeInt(playerData.score);
+								data.writeInt(playerData.zombieScore);
+								data.writeInt(playerData.kills);
+								data.writeInt(playerData.deaths);
+								writeUTF(data, playerData.playerClass.shortName);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				data.writeBoolean(false);
+				ArrayList<String> playerNames = new ArrayList<String>();
+				for(int i = 0; i < TeamsManager.getInstance().currentRound.teams.length; i++)
+				{
+					Team team = TeamsManager.getInstance().currentRound.teams[i];
+					if(team == null || team.members == null)
+					{
+						continue;
+					}
+					playerNames.addAll(team.members);
+				}
+
+				Collections.sort(playerNames, new Team.ComparatorScore());
+				data.writeInt(playerNames.size());
+				for (String username : playerNames) {
+					PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
+					writeUTF(data, username);
+					if (playerData == null) {
+						data.writeInt(0);
+						data.writeInt(0);
+						data.writeInt(0);
+						writeUTF(data, "");
+					} else {
+						data.writeInt(playerData.score);
+						data.writeInt(playerData.kills);
+						data.writeInt(playerData.deaths);
+						writeUTF(data, playerData.playerClass.shortName);
+					}
+				}
+
+			}
+		}
+
 
 	}
 
@@ -286,9 +281,8 @@ public class PacketTeamInfo extends PacketBase
 	{
 		if(timeLeft == 0)
 			return true;
-		for(int i = 0; i < teamData.length; i++)
-		{
-			if(teamData[i].score == scoreLimit)
+		for (TeamData aTeamData : teamData) {
+			if (aTeamData.score == scoreLimit)
 				return true;
 		}
 		return false;
@@ -296,10 +290,9 @@ public class PacketTeamInfo extends PacketBase
 	
 	public Team getWinner()
 	{
-		for(int i = 0; i < teamData.length; i++)
-		{
-			if(teamData[i].winner)
-				return teamData[i].team;
+		for (TeamData aTeamData : teamData) {
+			if (aTeamData.winner)
+				return aTeamData.team;
 		}
 		return null;
 	}

@@ -106,10 +106,10 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
     }
 
 	@Override
-    public int getMobilityFlag()
-    {
-        return 1;
-    }
+	public int getMobilityFlag()
+	{
+		return 1;
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i)

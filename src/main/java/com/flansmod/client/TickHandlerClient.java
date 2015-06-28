@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -140,8 +139,8 @@ public class TickHandlerClient
 			}
 		}
 		
-	    if(!event.isCancelable() && event.type == ElementType.HOTBAR)
-	    {      
+		if(!event.isCancelable() && event.type == ElementType.HOTBAR)
+		{
 			//Player ammo overlay
 			if(mc.thePlayer != null)
 			{
@@ -302,6 +301,7 @@ public class TickHandlerClient
 			RenderHelper.enableGUIStandardItemLighting();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);	
 			for(int n = 0; n < killMessages.size(); n++)
 			{
@@ -343,17 +343,21 @@ public class TickHandlerClient
 			}
 			
 			//DEBUG vehicles
-			if(FlansMod.DEBUG && mc.thePlayer.ridingEntity instanceof EntitySeat)
+			if(mc.thePlayer.ridingEntity instanceof EntitySeat)
 			{
 				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
-				mc.fontRendererObj.drawString("MotionX : " + ent.motionX, 2, 2, 0xffffff);
-				mc.fontRendererObj.drawString("MotionY : " + ent.motionY, 2, 12, 0xffffff);
-				mc.fontRendererObj.drawString("MotionZ : " + ent.motionZ, 2, 22, 0xffffff);
-				mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 32, 0xffffff);
-				mc.fontRendererObj.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				
+				mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 2, 0xffffff);
 
+				if(FlansMod.DEBUG)
+				{
+					mc.fontRendererObj.drawString("MotionX : " + ent.motionX, 2, 12, 0xffffff);
+					mc.fontRendererObj.drawString("MotionY : " + ent.motionY, 2, 22, 0xffffff);
+					mc.fontRendererObj.drawString("MotionZ : " + ent.motionZ, 2, 32, 0xffffff);
+					mc.fontRendererObj.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+				}
 			}
-	    }
+		}
 	}
 	
 	@SubscribeEvent

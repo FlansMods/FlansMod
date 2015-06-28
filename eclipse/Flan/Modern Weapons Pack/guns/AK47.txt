@@ -7,7 +7,6 @@ Ammo rpkAmmo
 Icon AK47
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23813
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -36,7 +35,7 @@ Texture AK47
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -48,3 +47,4 @@ NumGenericAttachmentSlots 1
 Paintjob AK47_JungleCamo AK47_JungleCamo green 1
 Paintjob AK47_Redline AK47_Redline red 1 black 1
 Paintjob AK47_CaseHardened AK47_CaseHardened yellow 1 blue 1 purple 1
+Paintjob AK47_Birch AK47_Birch white 1 yellow 1

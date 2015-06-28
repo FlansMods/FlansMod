@@ -3,7 +3,6 @@ ShortName blowTorch
 Icon Blowtorch
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23463
 Heal false
 Repair true
 HealAmount 10
@@ -15,3 +14,4 @@ Recipe I ingotIron C coal
 II 
  I 
 ICI
+RechargeRecipe 3 coal

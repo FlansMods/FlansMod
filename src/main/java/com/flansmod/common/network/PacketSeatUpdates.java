@@ -33,9 +33,9 @@ public class PacketSeatUpdates extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeInt(entityId);
-    	data.writeInt(seatId);
-    	data.writeFloat(yaw);
-    	data.writeFloat(pitch);
+		data.writeInt(seatId);
+		data.writeFloat(yaw);
+		data.writeFloat(pitch);
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class PacketSeatUpdates extends PacketBase
 		if(driveable != null)
 		{
 			driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
-    		driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
-    		//If on the server, update all surrounding players with these new angles
+			driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
+			//If on the server, update all surrounding players with these new angles
 			FlansMod.getPacketHandler().sendToAllAround(this, driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange, driveable.dimension);
 		}
 	}
@@ -84,11 +84,11 @@ public class PacketSeatUpdates extends PacketBase
 		}
 		if(driveable != null)
 		{
-    		//If this is the player who sent the packet in the first place, don't read it
-    		if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
-    			return;
-    		driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
-    		driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
+			//If this is the player who sent the packet in the first place, don't read it
+			if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
+				return;
+			driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
+			driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
 		}
 	}
 }

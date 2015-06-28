@@ -1,7 +1,6 @@
 Name ACOG Sight
 ShortName flanMWACOG
 Icon ACOGSight
-ItemID 23861
 //The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
 AttachmentType sights
 //If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment

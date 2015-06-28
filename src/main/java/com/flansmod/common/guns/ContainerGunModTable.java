@@ -39,27 +39,27 @@ public class ContainerGunModTable extends Container
 		}
 		
 		//Main inventory slots
-        for(int row = 0; row < 3; row++)
-        {
-            for(int col = 0; col < 9; col++)
-            {
-            	addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 176 + row * 18));
-            }
+		for(int row = 0; row < 3; row++)
+		{
+			for(int col = 0; col < 9; col++)
+			{
+				addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 176 + row * 18));
+			}
 
-        }
+		}
 		//Quickbar slots
-        for(int col = 0; col < 9; col++)
-        {
-        	addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 234));
-        }
+		for(int col = 0; col < 9; col++)
+		{
+			addSlotToContainer(new Slot(playerInv, col, 8 + col * 18, 234));
+		}
 	}
 	
 	@Override
-    public void onContainerClosed(EntityPlayer player)
-    {
+	public void onContainerClosed(EntityPlayer player)
+	{
 		if(inventory.getStackInSlot(0) != null)
 			player.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
-    }
+	}
 		
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) 
@@ -68,47 +68,47 @@ public class ContainerGunModTable extends Container
 	}
 	
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
-    {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+	{
 		ItemStack stack = null;
-        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		Slot currentSlot = (Slot)inventorySlots.get(slotID);
 
-        if(currentSlot != null && currentSlot.getHasStack())
-        {
-            ItemStack slotStack = currentSlot.getStack();
-            stack = slotStack.copy();
-            
-            if(slotID >= 13)
-            {
-            	return null;
-            }
-            else 
-            {
-            	if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
-            	{
-            		return null;
-            	}
-            }
-            
-            if (slotStack.stackSize == 0)
-            {
-                currentSlot.putStack(null);
-            }
-            else
-            {
-                currentSlot.onSlotChanged();
-            }
+		if(currentSlot != null && currentSlot.getHasStack())
+		{
+			ItemStack slotStack = currentSlot.getStack();
+			stack = slotStack.copy();
 
-            if (slotStack.stackSize == stack.stackSize)
-            {
-                return null;
-            }
+			if(slotID >= 13)
+			{
+				return null;
+			}
+			else
+			{
+				if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
+				{
+					return null;
+				}
+			}
 
-            currentSlot.onPickupFromSlot(player, slotStack);
-        }
+			if (slotStack.stackSize == 0)
+			{
+				currentSlot.putStack(null);
+			}
+			else
+			{
+				currentSlot.onSlotChanged();
+			}
 
-        return stack;
-    }
+			if (slotStack.stackSize == stack.stackSize)
+			{
+				return null;
+			}
+
+			currentSlot.onPickupFromSlot(player, slotStack);
+		}
+
+		return stack;
+	}
 
 	public void pressButton(boolean paint, boolean left)
 	{
@@ -118,37 +118,37 @@ public class ContainerGunModTable extends Container
 	public void clickPaintjob(String name)
 	{
 		ItemStack gunStack = inventory.getStackInSlot(0);
-        if(gunStack != null && gunStack.getItem() instanceof ItemGun)
-        {
-        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
-        	clickPaintjob(gunType.getPaintjob(name));
-        }
+		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+		{
+			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			clickPaintjob(gunType.getPaintjob(name));
+		}
 	}
 	
 	public void clickPaintjob(Paintjob paintjob)
 	{
 		ItemStack gunStack = inventory.getStackInSlot(0);
-        if(gunStack != null && gunStack.getItem() instanceof ItemGun)
-        {
-        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
-	        	
+		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+		{
+			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+
 			int numDyes = paintjob.dyesNeeded.length;
-	    	
-	    	if(!playerInv.player.capabilities.isCreativeMode)
-	    	{
-	    		//Calculate which dyes we have in our inventory
-	        	for(int n = 0; n < numDyes; n++)
-	        	{
-	        		int amountNeeded = paintjob.dyesNeeded[n].stackSize;
-	        		for(int s = 0; s < playerInv.getSizeInventory(); s++)
-	        		{
-	        			ItemStack stack = playerInv.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
-	        			{
-	        				amountNeeded -= stack.stackSize;
-	        			}
-	        		}
-	        		//We don't have enough of this dye
+
+			if(!playerInv.player.capabilities.isCreativeMode)
+			{
+				//Calculate which dyes we have in our inventory
+				for(int n = 0; n < numDyes; n++)
+				{
+					int amountNeeded = paintjob.dyesNeeded[n].stackSize;
+					for(int s = 0; s < playerInv.getSizeInventory(); s++)
+					{
+						ItemStack stack = playerInv.getStackInSlot(s);
+						if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						{
+							amountNeeded -= stack.stackSize;
+						}
+					}
+					//We don't have enough of this dye
 					if(amountNeeded > 0)
 						return;
 	        	}

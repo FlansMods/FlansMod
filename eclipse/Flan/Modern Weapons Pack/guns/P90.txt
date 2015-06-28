@@ -5,7 +5,6 @@ Ammo p90Ammo
 Icon P90
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23829
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 50
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -34,7 +33,7 @@ Texture P90
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false

@@ -5,9 +5,7 @@
 package com.flansmod.client.model.titan;
 
 import com.flansmod.client.model.ModelMecha;
-import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Shape2D;
 import com.flansmod.common.vector.Vector3f;
 
 public class ModelZeroTitan extends ModelMecha

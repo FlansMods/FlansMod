@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
@@ -79,7 +78,7 @@ public class GunBoxType extends InfoType
 	@Override
 	public void postRead(TypeFile file)
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		gunBoxMap.put(this.shortName, this);
 	}
 

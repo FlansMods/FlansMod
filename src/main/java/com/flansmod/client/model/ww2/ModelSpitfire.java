@@ -5,23 +5,23 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelSpitfire extends ModelPlane
 {
-    public ModelSpitfire()
-    {
+	public ModelSpitfire()
+	{
 		int textureX = 256; //The x-size of the texture
 		int textureY = 128;	//The y-size of the texture
 		//Initializing Model
 	
-        bodyModel = new ModelRendererTurbo[4];	//number of blocks in your model (0 is a block so its highest number block + 1)
+		bodyModel = new ModelRendererTurbo[4];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
 		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
 		//It is recommended however as the base mod requires it so you will have it anyway and it allows you to use textures larger than 64 square. 
 		//(Dont forget the crazy shapes you can make with it)
 			
-        
-        bodyModel[0] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);
-        bodyModel[1] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
-        bodyModel[2] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
+
+		bodyModel[0] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);
+		bodyModel[1] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
+		bodyModel[2] = new ModelRendererTurbo(this, 60, 76, textureX, textureY);
 		bodyModel[3] = new ModelRendererTurbo(this, 0, 76, textureX, textureY);
 
 		//Cockpit bottom
@@ -105,15 +105,15 @@ public class ModelSpitfire extends ModelPlane
 
 		//Propellers
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
-        propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
-        propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
-        propellerModels[0][2] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 2		
-        propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
-        propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
-        propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		
-        propellerModels[0][0].setRotationPoint(-54, 0, 0);	//Set the position of the propeller
-        propellerModels[0][1].setRotationPoint(-54, 0, 0);	
-        propellerModels[0][2].setRotationPoint(-54, 0, 0);	
+		propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
+		propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
+		propellerModels[0][2] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 2
+		propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
+		propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
+		propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);
+		propellerModels[0][0].setRotationPoint(-54, 0, 0);	//Set the position of the propeller
+		propellerModels[0][1].setRotationPoint(-54, 0, 0);
+		propellerModels[0][2].setRotationPoint(-54, 0, 0);
 		
 		yawFlapModel = new ModelRendererTurbo[1]; //Only one part to the yaw flap
 		yawFlapModel[0] = new ModelRendererTurbo(this, 220, 12, textureX, textureY);
@@ -123,16 +123,16 @@ public class ModelSpitfire extends ModelPlane
 		pitchFlapLeftModel = new ModelRendererTurbo[1]; //Only one part to the left pitch flap
 		pitchFlapLeftModel[0] = new ModelRendererTurbo(this, 220, 12, textureX, textureY);
 		pitchFlapLeftModel[0].addBox(0F, 0F , 0F, 16, 22, 2, 0.0F);
-        pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
+		pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
 		pitchFlapLeftModel[0].setPosition(76F, 1F, -22F);
 		
 		pitchFlapRightModel = new ModelRendererTurbo[1]; //Only one part to the right pitch flap
 		pitchFlapRightModel[0] = new ModelRendererTurbo(this, 220, 12, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0F, 0F , 0F, 16, 22, 2, 0.0F);
-        pitchFlapRightModel[0].rotateAngleX = 1.570796F;
+		pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(76F, 1F, 0F);
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-    }
+	}
 }		
  

@@ -10,8 +10,9 @@ public class ModelGun extends ModelBase
 	//Shapebox template. For quick copy pasting
 	//, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 	
-	//These first 4 models are static with no animation
+	//These first 6 models are static with no animation
 	public ModelRendererTurbo[] gunModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] backpackModel = new ModelRendererTurbo[0]; //For flamethrowers and such like. Rendered on the player's back
 	//These models appear when no attachment exists
 	public ModelRendererTurbo[] defaultBarrelModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] defaultScopeModel = new ModelRendererTurbo[0];
@@ -80,6 +81,9 @@ public class ModelGun extends ModelBase
 	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
+	
+	/** This offsets the render position for item frames */
+	public Vector3f itemFrameOffset = new Vector3f();
 	
 	public void renderGun(float f)
 	{

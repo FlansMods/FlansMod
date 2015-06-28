@@ -72,19 +72,17 @@ public class PacketTeamSelect extends PacketBase
 		{
 			if(classChoicesPacket)
 			{
-		    	data.writeByte(playerClasses.length);
-		    	for(int i = 0; i < playerClasses.length; i++)
-		    	{
-		    		writeUTF(data, playerClasses[i].shortName);
-		    	}
+				data.writeByte(playerClasses.length);
+				for (PlayerClass playerClass : playerClasses) {
+					writeUTF(data, playerClass.shortName);
+				}
 			}
 			else
 			{
-		    	data.writeByte(teams.length);
-		    	for(int i = 0; i < teams.length; i++)
-		    	{
-		    		writeUTF(data, teams[i] == null ? "null" : teams[i].shortName);
-		    	}
+				data.writeByte(teams.length);
+				for (Team team : teams) {
+					writeUTF(data, team == null ? "null" : team.shortName);
+				}
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 Name Orange Nerf Vest
 ShortName nerfOrangeVest
-ItemID 23988
 Icon NerfOrangeVest
 Colour 255 255 255
 Type Body

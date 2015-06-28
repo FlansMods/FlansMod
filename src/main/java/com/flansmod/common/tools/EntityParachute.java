@@ -77,7 +77,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	public void fall(float par1, float k)
     {
 		//Ignore fall damage
-    }
+	}
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float f)
@@ -104,11 +104,11 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
-    }
+	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) 

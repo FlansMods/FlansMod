@@ -425,9 +425,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
-    }
+	}
 }

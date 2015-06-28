@@ -3,7 +3,6 @@ ShortName ww2Parachute
 Icon WW2Parachute
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23695
 Heal false
 Repair false
 HealAmount 0

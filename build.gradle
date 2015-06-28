@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "4.8.1"
+version = "4.10.0"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -25,8 +25,7 @@ minecraft {
     version = "1.8-11.14.3.1474"
     runDir = "eclipse"
 
-    replace "@ALLOWED_VERSION@", "[4.8,4.9)"
-    replace "@MC_VERSION@", project.minecraft.version
+    replace "@ALLOWED_VERSION@", "[4.10,4.11)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 	
@@ -88,6 +87,13 @@ task titan(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task utility(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/utility/'}
+    from 'eclipse/Flan/Utility Pack'
+    baseName = 'Utility'
+    appendix = 'Content Pack'
+}
+
 task ww2(type: Jar) {
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
@@ -115,6 +121,7 @@ task contentPacks() {
     dependsOn nerf
     dependsOn simpleParts
     dependsOn titan
+    dependsOn utility
     dependsOn ww2
     dependsOn yeOlde
     dependsOn zombie
@@ -130,6 +137,7 @@ task outputJar(type: Jar) {
         exclude '**/mw/'
         exclude '**/nerf/'
         exclude '**/titan/'
+        exclude '**/utility/'
         exclude '**/ww2/'
         exclude '**/yeolde/'
         exclude '**/zombie/'

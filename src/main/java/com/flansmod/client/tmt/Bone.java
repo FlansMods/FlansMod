@@ -228,9 +228,8 @@ public class Bone
 		}
 		if(doRecursive && !childNodes.isEmpty())
 		{
-			for(int index = 0; index < childNodes.size(); index++)
-			{
-				childNodes.get(index).resetOffset(doRecursive);
+			for (Bone childNode : childNodes) {
+				childNode.resetOffset(doRecursive);
 			}
 		}
 	}
@@ -417,9 +416,8 @@ public class Bone
 		absoluteAngles.angleX = relativeAngles.angleX;
 		absoluteAngles.angleY = relativeAngles.angleY;
 		absoluteAngles.angleZ = relativeAngles.angleZ;
-		for(int i = 0; i < childNodes.size(); i++)
-		{
-			childNodes.get(i).setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
+		for (Bone childNode : childNodes) {
+			childNode.setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
 		}
 	}
 	
@@ -428,9 +426,8 @@ public class Bone
 		absoluteAngles.angleX = relativeAngles.angleX + x;
 		absoluteAngles.angleY = relativeAngles.angleY + y;
 		absoluteAngles.angleZ = relativeAngles.angleZ + z;
-		for(int i = 0; i < childNodes.size(); i++)
-		{
-			childNodes.get(i).setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
+		for (Bone childNode : childNodes) {
+			childNode.setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
 		}
 		
 	}
@@ -448,18 +445,18 @@ public class Bone
 		float x = xRot;
 		float y = yRot;
 		float z = zRot;
-        float xC = MathHelper.cos(x);
-        float xS = MathHelper.sin(x);
-        float yC = MathHelper.cos(y);
-        float yS = MathHelper.sin(y);
-        float zC = MathHelper.cos(z);
-        float zS = MathHelper.sin(z);
-        
-        double xVec = vector.xCoord;
-        double yVec = vector.yCoord;
-        double zVec = vector.zCoord;
-        
-        // rotation around x
+		float xC = MathHelper.cos(x);
+		float xS = MathHelper.sin(x);
+		float yC = MathHelper.cos(y);
+		float yS = MathHelper.sin(y);
+		float zC = MathHelper.cos(z);
+		float zS = MathHelper.sin(z);
+
+		double xVec = vector.xCoord;
+		double yVec = vector.yCoord;
+		double zVec = vector.zCoord;
+
+		// rotation around x
 		double xy = xC*yVec - xS*zVec;
 		double xz = xC*zVec + xS*yVec;
 		// rotation around y
@@ -487,9 +484,8 @@ public class Bone
 		positionVector = new Vec3(offsetX, offsetY, offsetZ);
 		addVector(tempVec, positionVector);
 		setVectorRotations(tempVec);
-		for(int i = 0; i < childNodes.size(); i++)
-		{
-			childNodes.get(i).setVectors(tempVec);
+		for (Bone childNode : childNodes) {
+			childNode.setVectors(tempVec);
 		}
 	}
 	
@@ -499,9 +495,8 @@ public class Bone
 		Vec3 tempVec = new Vec3(0, 0, length);
 		setVectorRotations(tempVec);
 		addVector(tempVec, vector);
-		for(int i = 0; i < childNodes.size(); i++)
-		{
-			childNodes.get(i).setVectors(tempVec);
+		for (Bone childNode : childNodes) {
+			childNode.setVectors(tempVec);
 		}
 		
 	}
@@ -511,21 +506,18 @@ public class Bone
 	 */
 	public void setAnglesToModels()
 	{
-		for(int i = 0; i < models.size(); i++)
-		{
-			ModelRenderer currentModel = models.get(i);
+		for (ModelRenderer currentModel : models) {
 			Angle3D baseAngles = modelBaseRot.get(currentModel);
 			currentModel.rotateAngleX = baseAngles.angleX + absoluteAngles.angleX;
 			currentModel.rotateAngleY = baseAngles.angleY + absoluteAngles.angleY;
 			currentModel.rotateAngleZ = baseAngles.angleZ + absoluteAngles.angleZ;
-			currentModel.rotationPointX = (float)positionVector.xCoord;
-			currentModel.rotationPointY = (float)positionVector.yCoord;
-			currentModel.rotationPointZ = (float)positionVector.zCoord;
+			currentModel.rotationPointX = (float) positionVector.xCoord;
+			currentModel.rotationPointY = (float) positionVector.yCoord;
+			currentModel.rotationPointZ = (float) positionVector.zCoord;
 		}
-		
-		for(int i = 0; i < childNodes.size(); i++)
-		{
-			childNodes.get(i).setAnglesToModels();
+
+		for (Bone childNode : childNodes) {
+			childNode.setAnglesToModels();
 		}
 	}
 		

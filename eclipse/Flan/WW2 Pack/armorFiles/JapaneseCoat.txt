@@ -1,6 +1,5 @@
 Name Japanese WW2 Coat
 ShortName japaneseCoat
-ItemID 23662
 Icon JapaneseCoat
 Colour 255 255 255
 Type Body

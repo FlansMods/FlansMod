@@ -3,7 +3,6 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -21,8 +20,6 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
-import com.flansmod.common.guns.GrenadeType;
-import com.flansmod.common.guns.ItemGrenade;
 
 public class RenderPlane extends Render implements IItemRenderer 
 {	
@@ -32,23 +29,23 @@ public class RenderPlane extends Render implements IItemRenderer
 		shadowSize = 0.5F;
 	}
 
-    public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
-    {
-    	bindEntityTexture(entityPlane);
-    	PlaneType type = entityPlane.getPlaneType();
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);      
-        float dYaw = (entityPlane.axes.getYaw() - entityPlane.prevRotationYaw);
-        for(; dYaw > 180F; dYaw -= 360F) {}
-        for(; dYaw <= -180F; dYaw += 360F) {}
-        float dPitch = (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch);
-        for(; dPitch > 180F; dPitch -= 360F) {}
-        for(; dPitch <= -180F; dPitch += 360F) {}
-        float dRoll = (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll);
-        for(; dRoll > 180F; dRoll -= 360F) {}
-        for(; dRoll <= -180F; dRoll += 360F) {}
-        GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+	public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
+	{
+		bindEntityTexture(entityPlane);
+		PlaneType type = entityPlane.getPlaneType();
+		GL11.glPushMatrix();
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		float dYaw = (entityPlane.axes.getYaw() - entityPlane.prevRotationYaw);
+		for(; dYaw > 180F; dYaw -= 360F) {}
+		for(; dYaw <= -180F; dYaw += 360F) {}
+		float dPitch = (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch);
+		for(; dPitch > 180F; dPitch -= 360F) {}
+		for(; dPitch <= -180F; dPitch += 360F) {}
+		float dRoll = (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll);
+		for(; dRoll > 180F; dRoll -= 360F) {}
+		for(; dRoll <= -180F; dRoll += 360F) {}
+		GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
 
 		float modelScale = type.modelScale;
@@ -62,8 +59,8 @@ public class RenderPlane extends Render implements IItemRenderer
 			{
 				GL11.glPushMatrix();
 				GL11.glTranslatef(model.heliMainRotorOrigins[i].x, model.heliMainRotorOrigins[i].y, model.heliMainRotorOrigins[i].z);
-			    GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F / 3.14159265F, 0.0F, 1.0F, 0.0F);
-			    GL11.glTranslatef(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y, -model.heliMainRotorOrigins[i].z);
+				GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * model.heliRotorSpeeds[i] * 1440F / 3.14159265F, 0.0F, 1.0F, 0.0F);
+				GL11.glTranslatef(-model.heliMainRotorOrigins[i].x, -model.heliMainRotorOrigins[i].y, -model.heliMainRotorOrigins[i].z);
 				model.renderRotor(entityPlane, 0.0625F, i);
 				GL11.glPopMatrix();
 			}
@@ -72,7 +69,7 @@ public class RenderPlane extends Render implements IItemRenderer
 			{
 				GL11.glPushMatrix();
 				GL11.glTranslatef(model.heliTailRotorOrigins[i].x, model.heliTailRotorOrigins[i].y, model.heliTailRotorOrigins[i].z);
-			    GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
+				GL11.glRotatef((entityPlane.propAngle + f1 * entityPlane.throttle / 7F) * 1440F / 3.14159265F, 0.0F, 0.0F, 1.0F);
 				GL11.glTranslatef(-model.heliTailRotorOrigins[i].x, -model.heliTailRotorOrigins[i].y, -model.heliTailRotorOrigins[i].z);
 				model.renderTailRotor(entityPlane, 0.0625F, i);
 				GL11.glPopMatrix();
@@ -119,15 +116,15 @@ public class RenderPlane extends Render implements IItemRenderer
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 		}
-        GL11.glPopMatrix();
-    }   
+		GL11.glPopMatrix();
+	}
 
-    @Override
+	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, 
-            float f, float f1)
-    {
-        render((EntityPlane)entity, d, d1, d2, f, f1);
-    }
+			float f, float f1)
+	{
+		render((EntityPlane)entity, d, d1, d2, f, f1);
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 

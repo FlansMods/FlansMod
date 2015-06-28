@@ -42,7 +42,7 @@ public class ItemPart extends Item implements IFlanItem
 		}
 	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

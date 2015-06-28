@@ -32,7 +32,7 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		ItemStack itemstack = ((EntityLivingBase)entity).getEquipmentInSlot(0);
-        heldItemRight = itemstack != null ? 1 : 0;
+		heldItemRight = itemstack != null ? 1 : 0;
 
         aimedBow = false;
         if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)

@@ -74,20 +74,24 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
+		if(Math.abs(type.jumpModifier - 1F) > 0.01F)
+			lines.add("\u00a73+" + (int)((type.jumpModifier - 1F) * 100F) + "% Jump Height");
 		if(type.smokeProtection)
 			lines.add("\u00a72+Smoke Protection");
 		if(type.nightVision)
 			lines.add("\u00a72+Night Vision");
+		if(type.negateFallDamage)
+			lines.add("\u00a72+Negates Fall Damage");
 	}
 	
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
     
     @Override
     public Multimap getAttributeModifiers(ItemStack stack)
@@ -112,9 +116,13 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	}
 	
 	@Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-    {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+	{
 		if(type.nightVision && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 250));
-    }
+		if(type.jumpModifier > 1.01F && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.jump.id, 250, (int)((type.jumpModifier - 1F) * 2F), true, false));
+		if(type.negateFallDamage)
+			player.fallDistance = 0F;
+	}
 }

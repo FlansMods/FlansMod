@@ -3,6 +3,7 @@ package com.flansmod.common.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,6 @@ public class InfoType
 	public String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
-	public int itemID;
 	public String iconPath;
 	public Object[] recipe;
 	public String[] recipeLine;
@@ -72,11 +72,11 @@ public class InfoType
 	{
 		try
 		{
-			if(split[0].toLowerCase().equals("model"))
+			if(split[0].equals("Model"))
 				modelString = split[1];
-			if(split[0].toLowerCase().equals("modelscale"))
+			if(split[0].equals("ModelScale"))
 				modelScale = Float.parseFloat(split[1]);
-			if (split[0].toLowerCase().equals("name"))
+			if (split[0].equals("Name"))
 			{
 				name = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -84,7 +84,7 @@ public class InfoType
 					name = name + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("description"))
+			if (split[0].equals("Description"))
 			{
 				description = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -92,17 +92,13 @@ public class InfoType
 					description = description + " " + split[i + 2];
 				}
 			}
-			if (split[0].toLowerCase().equals("shortname"))
+			if (split[0].equals("ShortName"))
 			{
 				shortName = split[1];
 			}
 			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
-			}
-			if (split[0].equals("ItemID"))
-			{
-				itemID = Integer.parseInt(split[1]);
 			}
 			if (split[0].equals("Icon"))
 			{
@@ -343,11 +339,16 @@ public class InfoType
 		return null;
 	}
 	
-	public PotionEffect getPotionEffect(String[] split)
+	public static PotionEffect getPotionEffect(String[] split)
 	{
 		int potionID = Integer.parseInt(split[1]);
 		int duration = Integer.parseInt(split[2]);
 		int amplifier = Integer.parseInt(split[3]);
 		return new PotionEffect(potionID, duration, amplifier, false, false);
+	}
+	
+	public static Material getMaterial(String mat)
+	{
+		return Material.ground;
 	}
 }

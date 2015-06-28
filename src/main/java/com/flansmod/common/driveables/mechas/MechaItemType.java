@@ -60,9 +60,9 @@ public class MechaItemType extends InfoType
 		super(file);
 	}
 	
-    @Override
+	@Override
 	protected void read(String[] split, TypeFile file)
-    {
+	{
 		super.read(split, file);
 		try
 		{
@@ -138,7 +138,7 @@ public class MechaItemType extends InfoType
 		catch (Exception ignored)
 		{
 		}
-    }
+	}
 	
 	public static MechaItemType getTool(String find)
 	{

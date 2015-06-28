@@ -3,88 +3,84 @@
 // This file is for Flan's Flying Mod Version 3.0.x+
 
 // Model Checklist
-//    Model: 
-//    - Check Left/Right    [ ]  (Left = + / Right = -)
-//    - Code Cleaned        [ ]
-//    - Coverted to Version [ ]
+//	Model:
+//	- Check Left/Right	[ ]  (Left = + / Right = -)
+//	- Code Cleaned		[ ]
+//	- Coverted to Version [ ]
 
 package com.flansmod.client.model.ww2;
 
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelFlamethrower extends ModelGun
 {
-	int textureX = 512;
-	int textureY = 512;
+	int textureX = 64;
+	int textureY = 16;
 
 	public ModelFlamethrower()	
 	{
+		gunModel = new ModelRendererTurbo[11];
+		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 0
+		gunModel[1] = new ModelRendererTurbo(this, 14, 0, textureX, textureY); // Box 1
+		gunModel[2] = new ModelRendererTurbo(this, 20, 0, textureX, textureY); // Box 2
+		gunModel[3] = new ModelRendererTurbo(this, 0, 4, textureX, textureY); // Box 9
+		gunModel[4] = new ModelRendererTurbo(this, 28, 0, textureX, textureY); // Box 13
+		gunModel[5] = new ModelRendererTurbo(this, 0, 6, textureX, textureY); // Box 20
+		gunModel[6] = new ModelRendererTurbo(this, 36, 0, textureX, textureY); // Box 21
+		gunModel[7] = new ModelRendererTurbo(this, 22, 3, textureX, textureY); // Box 22
+		gunModel[8] = new ModelRendererTurbo(this, 8, 6, textureX, textureY); // Box 23
+		gunModel[9] = new ModelRendererTurbo(this, 30, 3, textureX, textureY); // Box 24
+		gunModel[10] = new ModelRendererTurbo(this, 0, 10, textureX, textureY); // Box 25
 
+		gunModel[0].addShapeBox(0F, 0F, 0F, 5, 2, 2, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 0
+		gunModel[0].setRotationPoint(0F, -4F, -1F);
 
-// Gun
-		gunModel = new ModelRendererTurbo[10];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape1
-		gunModel[1] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape2
-		gunModel[2] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape4
-		gunModel[3] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape4
-		gunModel[4] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape5
-		gunModel[5] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape6
-		gunModel[6] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape7
-		gunModel[7] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape8
-		gunModel[8] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape9
-		gunModel[9] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape10
+		gunModel[1].addShapeBox(0F, 0F, 0F, 1, 1, 2, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0.5F, -0.25F,0F, 0.5F, -0.25F,0F, 0.5F, -0.25F,0F, 0.5F, -0.25F); // Box 1
+		gunModel[1].setRotationPoint(3.25F, -2F, -1F);
 
-		gunModel[0].addBox(0F, 0F, 0F, 1, 4, 1, 0F); // Shape1
-		gunModel[0].setRotationPoint(0F, -3.5F, -0.5F);
-		gunModel[0].rotateAngleZ = -0.1396263F;
+		gunModel[2].addShapeBox(0F, 0F, 0F, 2, 1, 2, 0F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0.5F, -0.25F,-0.25F, 0.5F, -0.25F,-0.25F, 0.5F, -0.25F,-0.25F, 0.5F, -0.25F); // Box 2
+		gunModel[2].setRotationPoint(0F, -2F, -1F);
 
-		gunModel[1].addBox(0F, 0F, 0F, 16, 1, 1, 0F); // Shape2
-		gunModel[1].setRotationPoint(-3F, -4F, -0.5F);
+		gunModel[3].addBox(0F, 0F, 0F, 10, 1, 1, 0F); // Box 9
+		gunModel[3].setRotationPoint(-10F, -3.5F, -0.5F);
 
-		gunModel[2].addBox(0F, 0F, 0F, 1, 1, 1, 0F); // Shape4
-		gunModel[2].setRotationPoint(-12F, -1F, 3F);
+		gunModel[4].addShapeBox(0F, 0F, 0F, 2, 1, 2, 0F,-0.25F, -0.8F, -0.25F,-0.25F, -0.8F, -0.25F,-0.25F, -0.8F, -0.25F,-0.25F, -0.8F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F); // Box 13
+		gunModel[4].setRotationPoint(1.5F, -1.5F, -1F);
 
-		gunModel[3].addBox(0F, 0F, 0F, 1, 1, 1, 0F); // Shape4
-		gunModel[3].setRotationPoint(-12F, -1F, 8F);
+		gunModel[5].addShapeBox(0F, 0F, 0F, 2, 2, 2, 0F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,0F, 0.5F, -0.25F,-0.5F, 0.5F, -0.25F,-0.5F, 0.5F, -0.25F,0F, 0.5F, -0.25F); // Box 20
+		gunModel[5].setRotationPoint(0F, -0.5F, -1F);
 
-		gunModel[4].addBox(0F, 0F, 0F, 4, 2, 2, 0F); // Shape5
-		gunModel[4].setRotationPoint(13F, -4.5F, -1F);
+		gunModel[6].addShapeBox(0F, 0F, 0F, 2, 1, 2, 0F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, 0F, -0.25F,-0.25F, -0.5F, -0.25F,-0.25F, -0.5F, -0.25F,-0.25F, -0.5F, -0.25F,-0.25F, -0.5F, -0.25F); // Box 21
+		gunModel[6].setRotationPoint(1.5F, -2F, -1F);
 
-		gunModel[5].addBox(0F, 0F, 0F, 1, 4, 1, 0F); // Shape6
-		gunModel[5].setRotationPoint(8F, -4F, -0.5F);
-		gunModel[5].rotateAngleZ = -0.1570796F;
+		gunModel[7].addShapeBox(0F, 0F, 0F, 1, 3, 3, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 22
+		gunModel[7].setRotationPoint(5F, -4.5F, -1.5F);
 
-		gunModel[6].addBox(0F, 0F, 0F, 6, 1, 1, 0F); // Shape7
-		gunModel[6].setRotationPoint(-10F, -2.7F, -0.5F);
-		gunModel[6].rotateAngleZ = 0.05235988F;
+		gunModel[8].addShapeBox(0F, 0F, 0F, 2, 2, 2, 0F,0F, 0F, 0F,0F, -0.25F, -0.25F,0F, -0.25F, -0.25F,0F, 0F, 0F,0F, 0F, 0F,0F, -0.25F, -0.25F,0F, -0.25F, -0.25F,0F, 0F, 0F); // Box 23
+		gunModel[8].setRotationPoint(8F, -4F, -1F);
 
-		gunModel[7].addBox(0F, 0F, 0F, 6, 1, 1, 0F); // Shape8
-		gunModel[7].setRotationPoint(-15F, -1F, 1.5F);
-		gunModel[7].rotateAngleY = -0.3665192F;
-		gunModel[7].rotateAngleZ = 0.3141593F;
+		gunModel[9].addShapeBox(0F, 0F, 0F, 2, 3, 3, 0F,0F, 0F, 0F,0F, -0.25F, -0.25F,0F, -0.25F, -0.25F,0F, 0F, 0F,0F, 0F, 0F,0F, -0.25F, -0.25F,0F, -0.25F, -0.25F,0F, 0F, 0F); // Box 24
+		gunModel[9].setRotationPoint(6F, -4.5F, -1.5F);
 
-		gunModel[8].addBox(0F, 0F, 0F, 3, 1, 2, 0F); // Shape9
-		gunModel[8].setRotationPoint(-4F, -3F, -1F);
-
-		gunModel[9].addBox(0F, 0F, 0F, 1, 1, 4, 0F); // Shape10
-		gunModel[9].setRotationPoint(-15F, -1F, 1.5F);
+		gunModel[10].addShapeBox(0F, 0F, 0F, 3, 2, 2, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F); // Box 25
+		gunModel[10].setRotationPoint(-13F, -4F, -1F);
 
 
 
-// Ammo
-		ammoModel = new ModelRendererTurbo[1];
-		ammoModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Tank
-
-		ammoModel[0].addBox(-17.5F, -2F, 3F, 6, 12, 6, 0F); // Tank
-		ammoModel[0].setRotationPoint(0F, 0F, 0F);
-
-		
-
+		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		scopeAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
 
 		gunSlideDistance = 0F;
 		animationType = EnumAnimationType.NONE;
+
+
+		translateAll(0F, 0F, 0F);
+
 
 		flipAll();
 	}

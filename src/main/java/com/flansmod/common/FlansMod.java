@@ -96,23 +96,24 @@ import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
+import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "[4.8, 4.9)", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWEDVERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
-    public static Configuration configFile;
+	public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "4.8.1";
+	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
-    public static int generalConfigInteger = 32;
-    public static String generalConfigString = "Hello!";
-    public static boolean addGunpowderRecipe = true;
-    public static int teamsConfigInteger = 32;
-    public static String teamsConfigString = "Hello!";
-    public static boolean teamsConfigBoolean = false;
+	public static int generalConfigInteger = 32;
+	public static String generalConfigString = "Hello!";
+	public static boolean addGunpowderRecipe = true;
+	public static int teamsConfigInteger = 32;
+	public static String teamsConfigString = "Hello!";
+	public static boolean teamsConfigBoolean = false;
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
 	public static CommonProxy proxy;
 	//A standardised ticker for all bits of the mod to call upon if they need one
@@ -163,8 +164,8 @@ public class FlansMod
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		log("Preinitialising Flan's mod.");
-        configFile = new Configuration(event.getSuggestedConfigurationFile());
-        syncConfig();
+		configFile = new Configuration(event.getSuggestedConfigurationFile());
+		syncConfig();
 
 		//TODO : Load properties
 		//configuration = new Configuration(event.getSuggestedConfigurationFile());
@@ -183,8 +184,8 @@ public class FlansMod
 		//Set up mod blocks and items
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setUnlocalizedName("flansWorkbench"));
 		GameRegistry.registerBlock(workbench, ItemBlockManyNames.class, "flansWorkbench");
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", Character.valueOf('B'), Items.bowl, Character.valueOf('I'), Items.iron_ingot );
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", Character.valueOf('C'), Items.cauldron, Character.valueOf('I'), Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", 'B', Items.bowl, 'I', Items.iron_ingot );
+		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", 'C', Items.cauldron, 'I', Items.iron_ingot );
 		opStick = new ItemOpStick();
 		GameRegistry.registerItem(opStick, "opStick", MODID);
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
@@ -270,7 +271,9 @@ public class FlansMod
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
 
 		//Config
-        FMLCommonHandler.instance().bus().register(INSTANCE);
+		FMLCommonHandler.instance().bus().register(INSTANCE);
+		//Starting the EventListener
+		new PlayerDeathEventListener();
 		log("Loading complete.");
 	}
 	
@@ -317,14 +320,14 @@ public class FlansMod
 		handler.registerCommand(new CommandTeams());
 	}
 
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-        if(eventArgs.modID.equals(MODID))
-            syncConfig();
-    }
-    
 	@SubscribeEvent
-	public void onLivingSpecialSpawn(LivingSpawnEvent event)
+	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+		if(eventArgs.modID.equals(MODID))
+			syncConfig();
+	}
+
+	@SubscribeEvent
+	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
 	{
 		double chance = event.world.rand.nextDouble();
 
@@ -444,7 +447,7 @@ public class FlansMod
 					}
 					while(zipEntry != null);
 					reader.close();
-                    zip.close();
+					zip.close();
 					zipStream.close();
 				}
 				catch(IOException e)
@@ -464,8 +467,7 @@ public class FlansMod
 		Method method = null;
 		try
 		{
-			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", new Class[]
-			{ java.net.URL.class });
+			method = (java.net.URLClassLoader.class).getDeclaredMethod("addURL", java.net.URL.class);
 			method.setAccessible(true);
 		} catch (Exception e)
 		{
@@ -529,18 +531,18 @@ public class FlansMod
 		return INSTANCE.packetHandler;
 	}
 
-    public static void syncConfig() {
-        //generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        //generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
-        addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
+	public static void syncConfig() {
+		//generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+		//generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+		addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
 
-        //teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-        //teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
-        //teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+		//teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
+		//teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
+		//teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
 
-        if(configFile.hasChanged())
-            configFile.save();
-    }
+		if(configFile.hasChanged())
+			configFile.save();
+	}
 
 	//TODO : Proper logger
 	public static void log(String string) 

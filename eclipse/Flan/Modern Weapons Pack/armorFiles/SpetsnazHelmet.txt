@@ -1,6 +1,5 @@
 Name Russian Spetsnaz Helmet
 ShortName spetsnazHelmet
-ItemID 23881
 Icon SpetsnazHelmet
 Colour 255 255 255
 Type Hat

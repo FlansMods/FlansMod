@@ -24,10 +24,8 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketDriveableKey;
@@ -217,9 +215,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
 			riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
 			riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
-            riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);  
-            
-            //Calculate the local look axes globally
+			riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
+
+			//Calculate the local look axes globally
 			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
 			//Set the player's rotation based on this
 			playerYaw = -90F + globalLookAxes.getYaw();
@@ -247,9 +245,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			}		
 		}
 	}
-	
-
-	
+		
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EntityLivingBase getCamera()
@@ -258,15 +254,15 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 
 	@Override
-    public boolean canBeCollidedWith()
-    {
-        return !isDead;
-    }
+	public boolean canBeCollidedWith()
+	{
+		return !isDead;
+	}
 	
 	@Override
-    protected void entityInit()
-    {
-    }
+	protected void entityInit()
+	{
+	}
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
@@ -281,16 +277,16 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-    public boolean writeToNBTOptional(NBTTagCompound tags)
-    {
-        return false;
-    }
+	public boolean writeToNBTOptional(NBTTagCompound tags)
+	{
+		return false;
+	}
 	
 	@Override
-    public boolean writeMountToNBT(NBTTagCompound tags)
-    {
-        return false;
-    }
+	public boolean writeMountToNBT(NBTTagCompound tags)
+	{
+		return false;
+	}
 
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY) 
@@ -459,7 +455,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	@Override
 	public boolean interactFirst(EntityPlayer entityplayer) //interact : change back when Forge updates
-    {
+	{
 		if(isDead)
 			return false;
 		if(worldObj.isRemote)
@@ -497,8 +493,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			entityplayer.mountEntity(this);
 			return true;
 		}
-        return false;
-    }
+		return false;
+	}
 	
 	@Override
 	public Entity getControllingEntity() 
@@ -537,12 +533,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
     }
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		if(worldObj.isRemote && !foundDriveable)
 			return null;
 		return driveable.getPickedResult(target);
-    }
+	}
 	
 	@Override
 	public float getPlayerRoll() 
@@ -563,11 +559,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float f)
-	{
-		if(worldObj.isRemote && !foundDriveable)
-			return false;
-		return driveable.attackEntityFrom(source, f);
+	public boolean attackEntityFrom(DamageSource source, float f) {
+		return !(worldObj.isRemote && !foundDriveable) && driveable.attackEntityFrom(source, f);
 	}
 
 	@Override

@@ -7,13 +7,13 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelCobra extends ModelPlane 
 {
 	public ModelCobra()
-    {
+	{
 		int textureX = 512; //The x-size of the texture
 		int textureY = 256;	//The y-size of the texture
 	
-        bodyModel = new ModelRendererTurbo[12];
-        
-        bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body section
+		bodyModel = new ModelRendererTurbo[12];
+
+		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body section
 		bodyModel[0].addBox(-24F, 8F, -10F, 48, 32, 20);		
 		
 		bodyModel[1] = new ModelRendererTurbo(this, 0, 54, textureX, textureY); //Front body section
@@ -36,7 +36,7 @@ public class ModelCobra extends ModelPlane
 		bodyModel[6] = new ModelRendererTurbo(this, 0, 130, textureX, textureY); //Top blade base
 		bodyModel[6].addTrapezoid(-24F, 40F, -10F, 48, 8, 20, 0F, -4F, ModelRendererTurbo.MR_BOTTOM);	
 		
-        bodyModel[7] = new ModelRendererTurbo(this, 0, 160, textureX, textureY); //Rear jet
+		bodyModel[7] = new ModelRendererTurbo(this, 0, 160, textureX, textureY); //Rear jet
 		bodyModel[7].addBox(24F, 26F, -6F, 8, 12, 12);		
 		
 		bodyModel[8] = new ModelRendererTurbo(this, 42, 160, textureX, textureY); //Side jet
@@ -54,10 +54,10 @@ public class ModelCobra extends ModelPlane
 
 		//Right wing
 		rightWingModel = new ModelRendererTurbo[4];
-		    
+
 		rightWingModel[0] = new ModelRendererTurbo(this, 162, 52, textureX, textureY); //Main piece
 		rightWingModel[0].addShapeBox(-12F, 21F, -38F, 24, 2, 28, 0F, /* 0 */ -8F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -8F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);			
-        
+
 		rightWingModel[1] = new ModelRendererTurbo(this, 162, 84, textureX, textureY); //Tip
 		rightWingModel[1].addBox(-8F, 20F, -42F, 24, 4, 4);	
 		
@@ -69,10 +69,10 @@ public class ModelCobra extends ModelPlane
 		
 		//Left wing
 		leftWingModel = new ModelRendererTurbo[4];
-		    
+
 		leftWingModel[0] = new ModelRendererTurbo(this, 268, 52, textureX, textureY); //Main piece
 		leftWingModel[0].addShapeBox(-12F, 21F, 10F, 24, 2, 28, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -8F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -8F, 0F, 0F);			
-        
+
 		leftWingModel[1] = new ModelRendererTurbo(this, 268, 84, textureX, textureY); //Tip
 		leftWingModel[1].addBox(-8F, 20F, 38F, 24, 4, 4);	
 		
@@ -196,5 +196,5 @@ public class ModelCobra extends ModelPlane
 		
 		//Shapebox template
 		//bodyModel[2].addShapeBox(24F, 24F, -10F, 16, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-    }
+	}
 }

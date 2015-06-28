@@ -13,9 +13,9 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
+import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsRound;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -120,9 +120,9 @@ public class PlayerData
 			if(loopedSoundDelay == 0 && !isShootingRight)
 				shouldPlayCooldownSound = true;
 		}
-		
+				
 		//Move all snapshots along one place
-        System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
+		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 	}

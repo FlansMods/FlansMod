@@ -29,6 +29,7 @@ public class RenderDebugAABB extends Render
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(ent.red, ent.green, ent.blue, 0.2F);
 		GL11.glPushMatrix();
+
 	    GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 	    GL11.glRotatef(-ent.rotationYaw, 0F, 1F, 0F);
 	    GL11.glRotatef(ent.rotationPitch, 1F, 0F, 0F);
@@ -36,8 +37,8 @@ public class RenderDebugAABB extends Render
 	    renderOffsetAABB(new AxisAlignedBB(ent.offset.x, ent.offset.y, ent.offset.z, ent.offset.x + ent.vector.x, ent.offset.y + ent.vector.y, ent.offset.z + ent.vector.z), 0, 0, 0);
 	    GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
-	    GL11.glEnable(GL11.GL_TEXTURE_2D);
-	    GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

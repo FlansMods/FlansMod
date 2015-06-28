@@ -128,11 +128,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 				}
 			}
 		}
-    }
-    
+	}
+
 	@Override
-    public void writeToNBT(NBTTagCompound nbt)
-    {
+	public void writeToNBT(NBTTagCompound nbt)
+	{
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
 		nbt.setInteger("Base", baseID);
@@ -145,11 +145,11 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 			nbt.setTag("stack" + i, stackNBT);
 		}
 			
-    }
+	}
 	
 	@Override
-    public void readFromNBT(NBTTagCompound nbt)
-    {
+	public void readFromNBT(NBTTagCompound nbt)
+	{
 		super.readFromNBT(nbt);
 		currentDelay = spawnDelay = nbt.getInteger("delay");
 		baseID = nbt.getInteger("Base");
@@ -161,7 +161,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 		{
 			stacksToSpawn.add(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack" + i)));
 		}
-    }
+	}
 
 	@Override
 	public ITeamBase getBase() 

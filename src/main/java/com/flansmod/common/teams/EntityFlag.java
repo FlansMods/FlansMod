@@ -33,11 +33,11 @@ public class EntityFlag extends Entity implements ITeamObject {
 		setBase(pole);
 	}
 	
-    @Override
+	@Override
 	public boolean canBeCollidedWith()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 
 	@Override
 	protected void entityInit() 
@@ -114,10 +114,10 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 
 	@Override
-    public boolean writeToNBTOptional(NBTTagCompound tags)
-    {
-        return false;
-    }
+	public boolean writeToNBTOptional(NBTTagCompound tags)
+	{
+		return false;
+	}
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
@@ -204,21 +204,21 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-    public boolean interactFirst(EntityPlayer player) //interact
-    {
-    	/* TODO : Check the generalised code in TeamsManager works
-    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-    		TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
-    		*/
-        return false;
-    }
+	public boolean interactFirst(EntityPlayer player) //interact
+	{
+		/* TODO : Check the generalised code in TeamsManager works
+		if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+			TeamsManager.getInstance().currentGametype.objectClickedByPlayer(this, (EntityPlayerMP)player);
+			*/
+		return false;
+	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;
-    }
+	}
 
 	@Override
 	public boolean forceChunkLoading() 
@@ -227,8 +227,8 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

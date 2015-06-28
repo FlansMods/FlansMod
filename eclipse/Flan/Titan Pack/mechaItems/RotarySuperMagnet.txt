@@ -1,0 +1,15 @@
+//Description for hover text. Underscores represent new lines.
+Description Rips ferrous rocks apart_with magnetism (2x Iron_Ingot Yield) Requires_Item Vacuum & Iron Refiner
+ShortName mechaRotarySuperMagnet
+Icon RotarySuperMagnet
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+RecipeOutput 1
+Recipe I blockIron R redstone M mechaRotaryMagnet
+MR 
+IMR
+ IM
+//The item type. This decides the slot it goes in. Options are upgrade, tool, armUpgrade, legUpgrade, headUpgrade, shoulderUpgrade, hipsUpgrade.
+Type armUpgrade
+//The modifiers this item enacts on the mecha
+IronMultiplier 2

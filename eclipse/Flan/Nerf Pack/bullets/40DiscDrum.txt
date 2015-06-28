@@ -4,7 +4,6 @@ Model nerf.Disc
 Texture pyragonDisc
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23953
 Icon 40DiscDrum
 //How affected by gravity the bullet is
 FallSpeed 0.8
