@@ -604,7 +604,7 @@ public class ItemGun extends Item implements IFlanItem
 								//If we couldn't get a snapshot, use normal entity hitbox calculations
 								if(otherData == null || shouldDoNormalHitDetect)
 								{
-									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.getBoundingBox().calculateIntercept(nextPosInWorldCoords.toVec3(), new Vec3(0F, 0F, 0F)) : player.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.getEntityBoundingBox().calculateIntercept(nextPosInWorldCoords.toVec3(), new Vec3(0F, 0F, 0F)) : player.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
 										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);
@@ -627,7 +627,7 @@ public class ItemGun extends Item implements IFlanItem
 								Entity entity = (Entity)obj;
 								if(entity != player && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun))
 								{
-									MovingObjectPosition mop = entity.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
 										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);

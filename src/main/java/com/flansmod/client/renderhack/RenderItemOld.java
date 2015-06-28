@@ -18,6 +18,7 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.teams.ArmourType;
 import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.IFlanItem;
@@ -98,7 +99,7 @@ public class RenderItemOld extends RenderItem
 	@Override
     protected void renderItemModelTransform(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType)
     {
-		renderItemModelTransform(stack, model, cameraTransformType);
+		super.renderItemModelTransform(stack, model, cameraTransformType);
     }
 	
 	@Override
@@ -289,6 +290,13 @@ public class RenderItemOld extends RenderItem
         	else resourcelocation = FlansModResourceHandler.flag;
         }
         else resourcelocation = FlansModResourceHandler.getIcon(type);
+        
+        if(type instanceof GunType && stack.hasTagCompound())
+        {
+        	GunType gunType = (GunType)type;
+        	Paintjob paintjob = gunType.getPaintjob(stack.getTagCompound().getString("Paint"));
+        	resourcelocation = FlansModResourceHandler.getIcon(gunType, paintjob);
+        }
         textureManager.bindTexture(resourcelocation);
         
         GL11.glDisable(GL11.GL_LIGHTING); //Forge: Make sure that render states are reset, a renderEffect can derp them up.

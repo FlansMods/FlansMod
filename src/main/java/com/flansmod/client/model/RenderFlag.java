@@ -65,6 +65,7 @@ public class RenderFlag extends Render
         GL11.glScalef(-1F, -1F, 1F);        
         modelFlagpole.renderFlag(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flag);
 		GL11.glPopMatrix();
+		GL11.glColor3f(1F, 1F, 1F);
 	}
 	
 	@Override

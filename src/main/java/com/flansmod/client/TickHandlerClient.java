@@ -96,7 +96,7 @@ public class TickHandlerClient
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 					
-		WorldRenderer tessellator = Tessellator.getInstance().getWorldRenderer();
+		Tessellator tessellator = Tessellator.getInstance();
 		
 		if(!event.isCancelable() && event.type == ElementType.HELMET)
 		{
@@ -127,12 +127,12 @@ public class TickHandlerClient
 
 				mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
 
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-				tessellator.finishDrawing();
+				tessellator.getWorldRenderer().startDrawingQuads();
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+				tessellator.draw();
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
@@ -222,12 +222,12 @@ public class TickHandlerClient
 	
 				mc.renderEngine.bindTexture(GuiTeamScores.texture);
 								
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
-				tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
-				tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
-				tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
-				tessellator.finishDrawing();
+				tessellator.getWorldRenderer().startDrawingQuads();
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
+				tessellator.draw();
 				
 				//If we are in a two team gametype, draw the team scores at the top of the screen
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
@@ -235,21 +235,21 @@ public class TickHandlerClient
 					//Draw team 1 colour bit
 					int colour = teamInfo.teamData[0].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
-					tessellator.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
-					tessellator.addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
-					tessellator.addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
-					tessellator.finishDrawing();
+					tessellator.getWorldRenderer().startDrawingQuads();
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
+					tessellator.draw();
 					//Draw team 2 colour bit
 					colour = teamInfo.teamData[1].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
-					tessellator.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
-					tessellator.addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
-					tessellator.addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
-					tessellator.finishDrawing();
+					tessellator.getWorldRenderer().startDrawingQuads();
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
+					tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
+					tessellator.draw();
 					
 					GL11.glDepthMask(true);
 					GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -257,10 +257,13 @@ public class TickHandlerClient
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 					
 					//Draw the team scores
-					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
-					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					if(teamInfo.teamData[0] != null && teamInfo.teamData[1] != null)
+					{
+						mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
+						mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
+						mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
+						mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					}
 				}
 				
 				mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
@@ -282,9 +285,12 @@ public class TickHandlerClient
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				String playerUsername = FlansModClient.minecraft.thePlayer.getName();
 				
-				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
-				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
-				mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
+				if(teamInfo.getPlayerScoreData(playerUsername) != null)
+				{
+					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
+					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
+					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
+				}
 			}
 			for(int n = 0; n < killMessages.size(); n++)
 			{
@@ -317,21 +323,21 @@ public class TickHandlerClient
 				{
 					if(data.offHandGunSlot == n + 1)
 					{
-						tessellator.startDrawingQuads();
-						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 32D / 64D, 16D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 32D / 64D, 0D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
-						tessellator.finishDrawing();
+						tessellator.getWorldRenderer().startDrawingQuads();
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 32D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 32D / 64D, 0D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
+						tessellator.draw();
 					}
 					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
 					{					
-						tessellator.startDrawingQuads();
-						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 0D / 64D, 16D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
-						tessellator.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 0D / 64D, 0D / 32D);
-						tessellator.finishDrawing();
+						tessellator.getWorldRenderer().startDrawingQuads();
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 0D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 0D / 64D, 0D / 32D);
+						tessellator.draw();
 					}
 				}
 			}

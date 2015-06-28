@@ -33,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -140,7 +141,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			//Send flak packet to spawn particles
 			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(posX, posY, posZ, 50, type.smokeParticleType), posX, posY, posZ, 30, dimension);
 			//
-			List list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getBoundingBox().expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
+			List list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
 			for(Object obj : list)
 			{
 				EntityLivingBase entity = ((EntityLivingBase)obj);
@@ -391,10 +392,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
-	        //if((thrower instanceof EntityPlayer))
-	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
-	        //else 
-			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+	        if((thrower instanceof EntityPlayer))
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
+	        else 
+	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire

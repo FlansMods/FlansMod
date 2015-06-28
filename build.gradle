@@ -29,6 +29,8 @@ minecraft {
     replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
+	
+	mappings = "snapshot_20141130"
 }
 
 processResources

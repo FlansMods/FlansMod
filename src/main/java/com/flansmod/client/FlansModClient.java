@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Project;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -39,6 +40,7 @@ import net.minecraft.client.particle.EntitySplashFX;
 import net.minecraft.client.particle.EntitySuspendFX;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -56,6 +58,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -396,7 +399,7 @@ public class FlansModClient extends FlansMod
 			inPlane = true;	
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "E", "field_78490_B");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -430,16 +433,9 @@ public class FlansModClient extends FlansMod
 			float FOVZoomLevel = actualZoomProgress * lastFOVZoomLevel + (1 - actualZoomProgress);
 			if(Math.abs(zoomLevel - 1F) < 0.01F)
 				zoomLevel = 1.0D;
-			try
-			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, zoomLevel, "cameraZoom", "af", "field_78503_V");
-				minecraft.gameSettings.fovSetting = (((originalFOV * 40 + 70) / FOVZoomLevel) - 70) / 40;
-			} 
-			catch (Exception e)
-			{
-				log("I forgot to update obfuscated reflection D:");
-				throw new RuntimeException(e);
-			}
+			
+			float zoomToApply = Math.max(FOVZoomLevel, (float)zoomLevel);
+			minecraft.gameSettings.fovSetting = (((originalFOV * 40 + 70) / zoomToApply) - 70) / 40;
 		}
 	}
 	

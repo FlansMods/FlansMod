@@ -186,7 +186,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 					if(checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
-					MovingObjectPosition hit = checkEntity.getBoundingBox().calculateIntercept(posVec, lookVec);
+					MovingObjectPosition hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
 					if(hit != null)
 						hitLiving = checkEntity;

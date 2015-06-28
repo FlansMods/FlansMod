@@ -317,7 +317,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				//If we couldn't get a snapshot, use normal entity hitbox calculations
 				if(data == null || shouldDoNormalHitDetect)
 				{
-					MovingObjectPosition mop = player.getBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
+					MovingObjectPosition mop = player.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)
 					{
 						Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - posX, mop.hitVec.yCoord - posY, mop.hitVec.zCoord - posZ);

@@ -142,7 +142,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
 	{
-		return entity.getBoundingBox();
+		return entity.getEntityBoundingBox();
 	}
 
 	@Override

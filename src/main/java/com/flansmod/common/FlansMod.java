@@ -97,14 +97,14 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSION@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "[4.8, 4.9)", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
     public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "4.8.1";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
     public static int generalConfigInteger = 32;

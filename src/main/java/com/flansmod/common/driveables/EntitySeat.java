@@ -47,7 +47,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private int seatID;
 	public EntityDriveable driveable;
 	
-	@SideOnly(Side.CLIENT)
 	public float playerRoll, prevPlayerRoll;
 	
 	public Seat seatInfo;
