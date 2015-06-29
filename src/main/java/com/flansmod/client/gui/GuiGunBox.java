@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -85,8 +86,8 @@ public class GuiGunBox extends GuiScreen
 			drawTexturedModalRect(m + 89, n + 109, 186, 0, 10, 10);
 
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
 		// Fill the gun panels with guns
@@ -180,10 +181,9 @@ public class GuiGunBox extends GuiScreen
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
+		
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

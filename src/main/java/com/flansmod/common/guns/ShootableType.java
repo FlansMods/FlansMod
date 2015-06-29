@@ -59,7 +59,7 @@ public class ShootableType extends InfoType
 	/** The radius of explosion upon detonation */
 	public float explosionRadius = 0F;
 	/** Whether the explosion can destroy blocks */
-	public boolean explosionBreaksBlocks = false;
+	public boolean explosionBreaksBlocks = true;
 	/** The name of the item to drop upon detonating */
 	public String dropItemOnDetonate = null;
 	/** Sound to play upon detonation */

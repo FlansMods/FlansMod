@@ -347,14 +347,20 @@ public class TickHandlerClient
 			{
 				EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
 				
-				mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 2, 0xffffff);
-
+				double dX = ent.posX - ent.prevPosX;
+				double dY = ent.posY - ent.prevPosY;
+				double dZ = ent.posZ - ent.prevPosZ;
+				
+				//Convert to chunks per Minecraft hour
+				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F; 
+				
+				speed = (int)(speed * 10F) / 10F;
+				
+				mc.fontRendererObj.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
+				
 				if(FlansMod.DEBUG)
 				{
-					mc.fontRendererObj.drawString("MotionX : " + ent.motionX, 2, 12, 0xffffff);
-					mc.fontRendererObj.drawString("MotionY : " + ent.motionY, 2, 22, 0xffffff);
-					mc.fontRendererObj.drawString("MotionZ : " + ent.motionZ, 2, 32, 0xffffff);
-					mc.fontRendererObj.drawString("Break Blocks : " + TeamsManager.driveablesBreakBlocks, 2, 42, 0xffffff);
+					mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
 				}
 			}
 		}
