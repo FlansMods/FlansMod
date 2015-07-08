@@ -198,6 +198,11 @@ public class FlansMod
 		
 		//Read content packs
 		readContentPacks(event);
+		
+		if(gunItems.size() >= 1)
+		{
+			MinecraftForge.EVENT_BUS.register(gunItems.get(0));
+		}
 					
 		//Do proxy loading
 		proxy.load();
