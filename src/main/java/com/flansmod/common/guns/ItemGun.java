@@ -1091,6 +1091,19 @@ public class ItemGun extends Item implements IFlanItem
 	{
 		return false;
 	}
+	
+	@SubscribeEvent
+	public void onEventBlockBreak(BlockEvent.BreakEvent event)
+	{
+		EntityPlayer player = event.getPlayer();
+		if(player != null && player.getHeldItem()!=null)
+		{
+			if(player.getHeldItem().getItem() instanceof ItemGun)
+			{
+				event.setCanceled(true);
+			}
+		}
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
