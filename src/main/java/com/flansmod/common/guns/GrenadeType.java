@@ -97,6 +97,12 @@ public class GrenadeType extends ShootableType
 		super(file);
 		grenades.add(this);
 	}
+	
+	@Override
+	public void postRead(TypeFile file)
+	{
+		super.postRead(file);
+	}
 
 	@Override
 	protected void read(String[] split, TypeFile file)

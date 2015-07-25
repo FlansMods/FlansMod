@@ -69,7 +69,7 @@ public class FlansModExplosion extends Explosion
 		this.detonator = detonator;
 		this.affectedBlockPositions = Lists.newArrayList();
         this.isFlaming = flaming;
-        this.isSmoking = smoking;
+        this.isSmoking = true;
         this.breaksBlocks = breaksBlocks && TeamsManager.explosions;
         this.position = new Vec3(x, y, z);
         

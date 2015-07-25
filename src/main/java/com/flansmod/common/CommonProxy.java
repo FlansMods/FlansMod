@@ -29,6 +29,7 @@ import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.ContainerGunModTable;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
+import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.ArmourBoxType;
@@ -210,7 +211,7 @@ public class CommonProxy
 			{
 				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 				//Check its an engine
-				if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(type)))
+				if(partType.category == EnumPartCategory.ENGINE && partType.worksWith.contains(EnumType.getFromObject(type)))
 				{
 					//If we already have engines of this type, add these ones to the stack
 					if(engines.containsKey(partType))

@@ -28,3 +28,5 @@ HitSound bullet
 Penetrates False
 SmokeTrail False
 DropItemOnHit vortexDisc
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

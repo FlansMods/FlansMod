@@ -3,6 +3,7 @@ package com.flansmod.common.driveables;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.common.FlansMod;
@@ -195,5 +196,11 @@ public class PlaneType extends DriveableType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelPlane.class);
+	}
+
+	@Override
+	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
+	{
+		return new EntityPlane(world, x, y, z, this, data);
 	}
 }

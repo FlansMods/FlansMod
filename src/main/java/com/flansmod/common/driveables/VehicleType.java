@@ -2,8 +2,12 @@ package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 
 public class VehicleType extends DriveableType
@@ -91,6 +95,20 @@ public class VehicleType extends DriveableType
 		{
 		}
 	}
+	
+	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	@Override
+	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+	{
+		//Get the list of items required by the driveable
+		ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
+		//Add the propellers and engines
+		if(EnumDriveablePart.core == part.type)
+		{
+			stacks.add(new ItemStack(engine.item));
+		}
+		return stacks;
+	}
 
 	public static VehicleType getVehicle(String find)
 	{
@@ -106,5 +124,11 @@ public class VehicleType extends DriveableType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelVehicle.class);
+	}
+	
+	@Override
+	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
+	{
+		return new EntityVehicle(world, x, y, z, this, data);
 	}
 }

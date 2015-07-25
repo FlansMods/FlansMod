@@ -180,6 +180,11 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			case 4 : //Up : Brake
 			{
 				throttle *= 0.8F;
+				if(onGround)
+				{
+					motionX *= 0.8F;
+					motionZ *= 0.8F;
+				}
 				return true;
 			}
 			case 5 : //Down : Do nothing

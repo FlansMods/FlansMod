@@ -8,3 +8,5 @@ Category Misc
 StackSize 64
 RecipeOutput 32
 ShapelessRecipe slimeball sand
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

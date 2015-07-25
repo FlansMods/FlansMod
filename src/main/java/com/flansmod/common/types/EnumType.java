@@ -1,5 +1,6 @@
 package com.flansmod.common.types;
 
+import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.PlaneType;
@@ -22,7 +23,7 @@ import com.flansmod.common.tools.ToolType;
 
 public enum EnumType 
 {
-	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams");
+	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams"), itemHolder("itemHolders");
 	
 	public String folderName;
 	
@@ -61,6 +62,7 @@ public enum EnumType
 		case team :			return Team.class;
 		case box :			return GunBoxType.class;
 		case part :			return PartType.class;
+		case itemHolder:	return ItemHolderType.class;
 		default : 		return InfoType.class;
 		}
 	}

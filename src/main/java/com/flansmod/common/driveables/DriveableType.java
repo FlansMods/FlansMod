@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,7 +23,7 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
-public class DriveableType extends InfoType
+public abstract class DriveableType extends InfoType
 {
 	@SideOnly(value = Side.CLIENT)
 	/** The plane model */
@@ -458,6 +459,8 @@ public class DriveableType extends InfoType
 		}
 	}
 
+	public abstract EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data);
+	
 	private DriveablePosition getShootPoint(String[] split)
 	{
 		//Its a gun with a type
@@ -528,12 +531,20 @@ public class DriveableType extends InfoType
 		for(PilotGun gun : pilotGuns)
 		{
 			if(gun.part == part.type)
+			{
 				stacks.add(new ItemStack(gun.type.item));
+				//if(data.ammo[numPassengerGunners + pilotGuns.indexOf(gun)] != null)
+				//	stacks.add(data.ammo[numPassengerGunners + pilotGuns.indexOf(gun)]);
+			}
 		}
 		for(Seat seat : seats)
 		{
 			if(seat != null && seat.part == part.type && seat.gunType != null)
+			{
 				stacks.add(new ItemStack(seat.gunType.item));
+				//if(data.ammo[seat.id] != null)
+				//	stacks.add(data.ammo[seat.id]);
+			}
 		}
 		return stacks;
 	}

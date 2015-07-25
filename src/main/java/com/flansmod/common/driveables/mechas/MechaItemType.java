@@ -58,6 +58,7 @@ public class MechaItemType extends InfoType
 	public MechaItemType(TypeFile file)
 	{
 		super(file);
+		types.add(this);
 	}
 	
 	@Override

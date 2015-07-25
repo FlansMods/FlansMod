@@ -139,6 +139,39 @@ public class TickHandlerClient
 			}
 		}
 		
+		if(event.isCancelable() && event.type == ElementType.HOTBAR)
+		{
+			//Off-hand weapon graphics
+			mc.renderEngine.bindTexture(offHand);
+			
+			ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
+			PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
+			
+			if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).type.oneHanded)
+			{
+				for(int n = 0; n < 9; n++)
+				{
+					if(data.offHandGunSlot == n + 1)
+					{
+						tessellator.getWorldRenderer().startDrawingQuads();
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 32D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 32D / 64D, 0D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
+						tessellator.draw();
+					}
+					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
+					{					
+						tessellator.getWorldRenderer().startDrawingQuads();
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 0D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
+						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 0D / 64D, 0D / 32D);
+						tessellator.draw();
+					}
+				}
+			}
+		}
 		if(!event.isCancelable() && event.type == ElementType.HOTBAR)
 		{
 			//Player ammo overlay
@@ -311,36 +344,7 @@ public class TickHandlerClient
 			GL11.glDisable(3042 /*GL_BLEND*/);
 			RenderHelper.disableStandardItemLighting();
 			
-			//Off-hand weapon graphics
-			mc.renderEngine.bindTexture(offHand);
-			
-			ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
-			PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
-			
-			if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).type.oneHanded)
-			{
-				for(int n = 0; n < 9; n++)
-				{
-					if(data.offHandGunSlot == n + 1)
-					{
-						tessellator.getWorldRenderer().startDrawingQuads();
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 32D / 64D, 16D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 32D / 64D, 0D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
-						tessellator.draw();
-					}
-					else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
-					{					
-						tessellator.getWorldRenderer().startDrawingQuads();
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, -90D, 0D / 64D, 16D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, -90D, 16D / 64D, 16D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, -90D, 16D / 64D, 0D / 32D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, -90D, 0D / 64D, 0D / 32D);
-						tessellator.draw();
-					}
-				}
-			}
+
 			
 			//DEBUG vehicles
 			if(mc.thePlayer.ridingEntity instanceof EntitySeat)

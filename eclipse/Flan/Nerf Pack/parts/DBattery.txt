@@ -11,3 +11,5 @@ Recipe I ingotIron R redstone
  I 
  R 
    
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

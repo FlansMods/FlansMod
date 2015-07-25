@@ -62,7 +62,8 @@ public class EntityMecha extends EntityDriveable
 {
 	private int ticksSinceUsed;
 	public int toggleTimer = 0;
-	private float moveX = 0, moveZ = 0;
+	protected float moveX = 0;
+	protected float moveZ = 0;
 	public RotatedAxes legAxes;
 	public float prevLegsYaw = 0F;
 	private int jumpDelay = 0;
@@ -84,7 +85,7 @@ public class EntityMecha extends EntityDriveable
 	public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
 	boolean couldNotFindFuel;
 
-
+	public EntityPlayer placer;
 
     public float yOffset;
     
@@ -114,6 +115,7 @@ public class EntityMecha extends EntityDriveable
 		rotateYaw(placer.rotationYaw + 90F);
 		legAxes.rotateGlobalYaw(placer.rotationYaw + 90F);
 		prevLegsYaw = legAxes.getYaw();
+		this.placer = placer;
 	}
 	
 	@Override
@@ -297,11 +299,15 @@ public class EntityMecha extends EntityDriveable
 		return false;
 	}
 	
-	private boolean useItem(boolean left)
+	protected boolean creative()
+	{
+		return !(seats[0].riddenByEntity instanceof EntityPlayer) || ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode;
+	}
+	
+	protected boolean useItem(boolean left)
 	{
 		if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
-			{
-			boolean creative = !(seats[0].riddenByEntity instanceof EntityPlayer) || ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode;
+		{
 			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
 			if(heldStack == null)
 				return false;
@@ -365,13 +371,13 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative), false);
+						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative()), false);
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
 					{
 						//Shoot
-						shoot(heldStack, gunType, bulletStack, creative, left);
+						shoot(heldStack, gunType, bulletStack, creative(), left);
 						
 						//Apply animations to 3D modelled guns
 						//TODO : Move to client side and sync
@@ -625,6 +631,10 @@ public class EntityMecha extends EntityDriveable
 		
 		if(seats[0] != null)
 		{
+			//if(seats[0].riddenByEntity == null)
+			//{
+			//	axes.rotateGlobalYaw(2F);
+			//}
 			if(seats[0].riddenByEntity instanceof EntityLivingBase && !(seats[0].riddenByEntity instanceof EntityPlayer))
 				axes.setAngles(((EntityLivingBase)seats[0].riddenByEntity).renderYawOffset + 90F, 0F, 0F);
 			else
@@ -706,7 +716,6 @@ public class EntityMecha extends EntityDriveable
 				moveZ = (float) target.zCoord;
 				*/
 			}
-			
 			Vector3f intent = new Vector3f(moveX, 0, moveZ);
 			
 			if(Math.abs(intent.lengthSquared()) > 0.1) 
@@ -931,6 +940,8 @@ public class EntityMecha extends EntityDriveable
 				}
 			}
 		}
+		else moveAI(actualMotion);
+		
 		motionY = actualMotion.y;	
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		//FlansMod.log("" + fallDistance);
@@ -962,6 +973,11 @@ public class EntityMecha extends EntityDriveable
 			legSwing = legSwing / type.legSwingLimit;
 	}
 	
+	protected void moveAI(Vector3f actualMotion) 
+	{
+
+	}
+
 	private float tailFloat(float f)
 	{
 		return f - MathHelper.floor_float(f);

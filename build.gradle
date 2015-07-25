@@ -115,6 +115,13 @@ task zombie(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task apoc(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/apocalypse/'}
+    from 'eclipse/Flan/Apocalypse Pack'
+    baseName = 'Apocalypse'
+    appendix = 'Content Pack'
+}
+
 task contentPacks() {
     dependsOn mechaParts
     dependsOn modernWeapons
@@ -125,6 +132,7 @@ task contentPacks() {
     dependsOn ww2
     dependsOn yeOlde
     dependsOn zombie
+	dependsOn apoc
 }
 
 task clearOutput(type: Delete) {

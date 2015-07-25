@@ -40,3 +40,5 @@ BottomViewLimit 30
 SideViewLimit 45
 //The height of the pivot above the block the gun is on.
 PivotHeight 0.375
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

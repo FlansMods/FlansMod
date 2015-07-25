@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +29,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -35,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
@@ -82,6 +85,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public float penetratingPower;
 	
 	private float yOffset;
+	
+	@SideOnly(Side.CLIENT)
+	private boolean playedFlybySound;
 	
 
 	public EntityBullet(World world)
@@ -251,6 +257,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		if(isDead)
 			return;
+		
+		if(worldObj.isRemote)
+			onUpdateClient();
 		
 		//Create a list for all bullet hits
 		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
@@ -454,7 +463,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
 					setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 					//play sound when bullet hits block
-					PacketPlaySound.sendSoundPacket(posX, posY, posZ, type.hitSoundRange, dimension, type.hitSound, true);
+					if(!worldObj.isRemote)
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, type.hitSoundRange, dimension, type.hitSound, true);
 					setDead();
 					break;
 				}
@@ -590,6 +600,17 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 	
 	@SideOnly(Side.CLIENT)
+	private void onUpdateClient() 
+	{
+		if(this.getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer) < 5 && !playedFlybySound)
+		{
+			playedFlybySound = true;
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound("bulletFlyby"), 10F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), (float)posX, (float)posY, (float)posZ));
+			//worldObj.playSound(posX, posY, posZ, "flansmod:bulletFlyby", 0.5F, 1F, false);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
 	private void spawnParticles()
 	{
 		double dX = (posX - prevPosX) / 10;
@@ -654,7 +675,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					{
 						if (worldObj.getBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k))).getBlock().getMaterial() == Material.air)
 						{
-							worldObj.setBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k)), new BlockState(Blocks.fire).getBaseState());
+							worldObj.setBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k)), Blocks.fire.getDefaultState(), 2);
 						}
 					}
 				}
@@ -757,7 +778,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			{
 				if(obj != null && ((Entity)obj).getName().equals(name))
 				{
-					owner = (EntityPlayer)obj;
+					owner = (EntityLivingBase)obj;
 					break;
 				}
 			}

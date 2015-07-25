@@ -20,6 +20,7 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.mechas.MechaType;
+import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
@@ -238,7 +239,7 @@ public class GuiDriveableCrafting extends GuiScreen
 				{
 					PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 					//Check its an engine that we can use
-					if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
+					if(partType.category == EnumPartCategory.ENGINE && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
 					{
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))

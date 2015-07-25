@@ -31,3 +31,5 @@ SmokeTrail False
 //Item to drop on reload. Damage is seperated by a dot
 DropItemOnReload 10DiscClip.10
 DropItemOnHit vortexDisc
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

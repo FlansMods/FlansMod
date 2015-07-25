@@ -137,11 +137,12 @@ public class RenderGun implements IItemRenderer
 				{
 					//EntityItem entity = (EntityItem)data[1];
 					//GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					GL11.glTranslatef(-0.45F + model.itemFrameOffset.x, -0.05F + model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
 				}
 				case INVENTORY :
 				{
-					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
+					GL11.glTranslatef(model.itemFrameOffset.x, model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
 				}
 				case EQUIPPED:

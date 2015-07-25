@@ -25,7 +25,7 @@ public class BulletType extends ShootableType
 	public EnumWeaponType weaponType = EnumWeaponType.NONE;
 
 	public String hitSound;
-	public float hitSoundRange;
+	public float hitSoundRange = 50;
 	
 	public boolean hasLight = false;
 	public float penetratingPower = 1F;

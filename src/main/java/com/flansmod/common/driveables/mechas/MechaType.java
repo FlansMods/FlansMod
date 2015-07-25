@@ -2,9 +2,19 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.flansmod.client.model.ModelMecha;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.DriveableData;
+import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.driveables.EntityPlane;
+import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
@@ -168,6 +178,20 @@ public class MechaType extends DriveableType
 		}
 	}
 
+	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	@Override
+	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+	{
+		//Get the list of items required by the driveable
+		ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
+		//Add the propellers and engines
+		if(EnumDriveablePart.core == part.type)
+		{
+			stacks.add(new ItemStack(engine.item));
+		}
+		return stacks;
+	}
+	
 	/** To be overriden by subtypes for model reloading */
 	public void reloadModel()
 	{
@@ -182,5 +206,11 @@ public class MechaType extends DriveableType
 				return type;
 		}
 		return null;
+	}
+	
+	@Override
+	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
+	{
+		return new EntityMecha(world, x, y, z, this, data, new NBTTagCompound());
 	}
 }

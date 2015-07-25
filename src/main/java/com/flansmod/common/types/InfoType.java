@@ -42,6 +42,8 @@ public class InfoType
 	/** If this is set to false, then this item cannot be dropped */
 	public boolean canDrop = true;
 	
+
+	
 	/** The probability that this item will appear in a dungeon chest. 
 	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
 	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
@@ -256,7 +258,7 @@ public class InfoType
 					if (recipeLine[i * 2 + 2].contains("."))
 						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2].split("\\.")[0], Integer.valueOf(recipeLine[i * 2 + 2].split("\\.")[1]));
 					else
-						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 0);
+						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 32767);
 				}
 				GameRegistry.addRecipe(new ItemStack(item, recipeOutput), recipe);
 			} else
@@ -267,7 +269,7 @@ public class InfoType
 					if (recipeLine[i + 1].contains("."))
 						recipe[i] = getRecipeElement(recipeLine[i + 1].split("\\.")[0], Integer.valueOf(recipeLine[i + 1].split("\\.")[1]));
 					else
-						recipe[i] = getRecipeElement(recipeLine[i + 1], 0);
+						recipe[i] = getRecipeElement(recipeLine[i + 1], 32767);
 				}
 				GameRegistry.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
 			}

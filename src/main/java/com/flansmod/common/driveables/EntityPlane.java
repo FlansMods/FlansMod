@@ -155,7 +155,7 @@ public class EntityPlane extends EntityDriveable
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
 			return true;
 		}
-		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0;
+		boolean canThrust = ((seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0) && hasWorkingProp();
 		switch(key)
 		{
 			case 0 : //Accelerate : Increase the throttle, up to 1.
@@ -396,14 +396,12 @@ public class EntityPlane extends EntityDriveable
 		
 		//Movement
 		
-		boolean canThrust = (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || data.fuelInTank > 0;
-		
 		//Throttle handling
 		//Without a player, default to 0
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI && canThrust)
+		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI && canThrust())
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
 		//Get the speed of the plane
@@ -436,11 +434,12 @@ public class EntityPlane extends EntityDriveable
 			{
 				yaw = 0;
 				pitch = 0;
+				roll = 0;
 			}
 			if(!isPartIntact(EnumDriveablePart.leftWing))
-				roll -= 2F * getSpeedXZ();		
+				roll -= 7F * getSpeedXZ();		
 			if(!isPartIntact(EnumDriveablePart.rightWing))
-				roll += 2F * getSpeedXZ();		
+				roll += 7F * getSpeedXZ();		
 		}
 		
 		axes.rotateLocalYaw(yaw);
@@ -459,7 +458,7 @@ public class EntityPlane extends EntityDriveable
 		
 		float throttleScaled = 0.01F * (type.maxThrottle + (data.engine == null ? 0 : data.engine.engineSpeed));
 		
-		if(!canThrust)
+		if(!canThrust())
 			throttleScaled = 0;
 		
 		int numPropsWorking = 0;
@@ -476,14 +475,10 @@ public class EntityPlane extends EntityDriveable
 				if(isPartIntact(prop.planePart))
 					numPropsWorking++;
 			numProps = type.heliPropellers.size();
-			
-			//Got no propellers. Derp.
-			if(numProps == 0)
-				break;
-			
+						
 			Vector3f up = axes.getYAxis();
 			
-			throttleScaled *= numPropsWorking / numProps * 2F;
+			throttleScaled *= numProps == 0 ? 0 : numPropsWorking / numProps * 2F;
 						
 			float upwardsForce = throttle * throttleScaled + (g - throttleScaled / 2F);
 			if(throttle < 0.5F)
@@ -522,10 +517,8 @@ public class EntityPlane extends EntityDriveable
 				if(isPartIntact(prop.planePart))
 					numPropsWorking++;
 			numProps = type.propellers.size();
-			
-			//Got no propellers. Derp.
-			if(numProps == 0)
-				break;
+						
+			float throttleTemp = throttle * (numProps == 0 ? 0 : numPropsWorking / numProps * 2F);
 			
 			//Apply forces
 			Vector3f forwards = (Vector3f)axes.getXAxis().normalise();
@@ -537,7 +530,7 @@ public class EntityPlane extends EntityDriveable
 			float newSpeed = lastTickSpeed + throttleScaled * 2F;
 			
 			//Calculate the amount to alter motion by
-			float proportionOfMotionToCorrect = 2F * throttle - 0.5F;
+			float proportionOfMotionToCorrect = 2F * throttleTemp - 0.5F;
 			if(proportionOfMotionToCorrect < 0F)
 				proportionOfMotionToCorrect = 0F;
 			if(proportionOfMotionToCorrect > 0.5F)
@@ -552,9 +545,12 @@ public class EntityPlane extends EntityDriveable
 			if(isPartIntact(EnumDriveablePart.rightWing)) numWingsIntact++;
 			if(isPartIntact(EnumDriveablePart.leftWing)) numWingsIntact++; 
 			
-			float amountOfLift = 2F * g * throttle * numWingsIntact / 2F;
+			float amountOfLift = 2F * g * throttleTemp * numWingsIntact / 2F;
 			if(amountOfLift > g)
 				amountOfLift = g;
+			
+			if(!isPartIntact(EnumDriveablePart.tail))
+				amountOfLift *= 0.75F;
 			
 			motionY += amountOfLift;
 			
@@ -725,6 +721,11 @@ public class EntityPlane extends EntityDriveable
 		}
 	}
 
+	public boolean canThrust() 
+	{
+		return (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
+	}
+
 	@Override
 	public void setDead()
 	{
@@ -738,6 +739,20 @@ public class EntityPlane extends EntityDriveable
 	public boolean gearDown()
 	{
 		return varGear;
+	}
+	
+	private boolean hasWorkingProp()
+	{
+		PlaneType type = getPlaneType();
+		if(type.mode == EnumPlaneMode.HELI || type.mode == EnumPlaneMode.VTOL)
+			for(Propeller prop : type.heliPropellers)
+				if(isPartIntact(prop.planePart))
+					return true;
+		if(type.mode == EnumPlaneMode.PLANE || type.mode == EnumPlaneMode.VTOL)
+			for(Propeller prop : type.propellers)
+				if(isPartIntact(prop.planePart))
+					return true;
+		return false;
 	}
 
 	public boolean attackEntityFrom(DamageSource damagesource, float i, boolean doDamage)

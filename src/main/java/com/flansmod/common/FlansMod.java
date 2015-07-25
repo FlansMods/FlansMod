@@ -23,6 +23,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
@@ -87,6 +88,7 @@ import com.flansmod.common.teams.EntityTeamItem;
 import com.flansmod.common.teams.ItemFlagpole;
 import com.flansmod.common.teams.ItemOpStick;
 import com.flansmod.common.teams.ItemTeamArmour;
+import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.teams.TileEntitySpawner;
@@ -123,6 +125,7 @@ public class FlansMod
 	public static final float soundRange = 50F;
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
+	public static boolean isApocalypseLoaded = false;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -143,20 +146,10 @@ public class FlansMod
 	public static BlockSpawner spawner;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
-	public static ArrayList<BlockGunBox> gunBoxBlocks = new ArrayList<BlockGunBox>();
-	public static ArrayList<ItemBullet> bulletItems = new ArrayList<ItemBullet>();
-	public static ArrayList<ItemGun> gunItems = new ArrayList<ItemGun>();
-	public static ArrayList<ItemAttachment> attachmentItems = new  ArrayList<ItemAttachment>();
 	public static ArrayList<ItemPart> partItems = new ArrayList<ItemPart>();
-	public static ArrayList<ItemPlane> planeItems = new ArrayList<ItemPlane>();
-	public static ArrayList<ItemVehicle> vehicleItems = new ArrayList<ItemVehicle>();
-	public static ArrayList<ItemMechaAddon> mechaToolItems = new ArrayList<ItemMechaAddon>();
 	public static ArrayList<ItemMecha> mechaItems = new ArrayList<ItemMecha>();
-	public static ArrayList<ItemAAGun> aaGunItems = new ArrayList<ItemAAGun>();
-	public static ArrayList<ItemGrenade> grenadeItems = new ArrayList<ItemGrenade>();
 	public static ArrayList<ItemTool> toolItems = new ArrayList<ItemTool>();
 	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
-	public static ArrayList<BlockArmourBox> armourBoxBlocks = new ArrayList<BlockArmourBox>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
 
@@ -172,6 +165,16 @@ public class FlansMod
 		//TODO : Load properties
 		//configuration = new Configuration(event.getSuggestedConfigurationFile());
 		//loadProperties();
+		
+		try
+		{
+			isApocalypseLoaded = true;
+			Class.forName("com.flansmod.apocalypse.common.FlansModApocalypse");
+		}
+		catch(Exception e)
+		{
+			isApocalypseLoaded = false;
+		}
 		
 		flanDir = new File(event.getModConfigurationDirectory().getParentFile(), "/Flan/");
 	
@@ -196,6 +199,9 @@ public class FlansMod
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
 				
+		
+		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
+		
 		//Read content packs
 		readContentPacks(event);
 
@@ -330,31 +336,44 @@ public class FlansMod
 	}
 
 	@SubscribeEvent
-	public void onLivingSpecialSpawn(LivingSpawnEvent.CheckSpawn event)
+	public void onLivingSpecialSpawn(EntityJoinWorldEvent event)
 	{
 		double chance = event.world.rand.nextDouble();
 
-		if(chance < armourSpawnRate && event.entityLiving instanceof EntityZombie || event.entityLiving instanceof EntitySkeleton)
+		if(chance < armourSpawnRate && event.entity instanceof EntityZombie || event.entity instanceof EntitySkeleton)
 		{
 			if(event.world.rand.nextBoolean() && ArmourType.armours.size() > 0)
 			{
 				//Give a completely random piece of armour
 				ArmourType armour = ArmourType.armours.get(event.world.rand.nextInt(ArmourType.armours.size()));
 				if(armour != null && armour.type != 2)
-					event.entityLiving.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
+					event.entity.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
 			}
 			else if(Team.teams.size() > 0)
 			{
 				//Give a random set of armour
 				Team team = Team.teams.get(event.world.rand.nextInt(Team.teams.size()));
 				if(team.hat != null)
-					event.entityLiving.setCurrentItemOrArmor(1, team.hat.copy());
+					event.entity.setCurrentItemOrArmor(1, team.hat.copy());
 				if(team.chest != null)
-					event.entityLiving.setCurrentItemOrArmor(2, team.chest.copy());
-				//if(team.legs != null)
-				//	event.entityLiving.setCurrentItemOrArmor(3, team.legs.copy());
+					event.entity.setCurrentItemOrArmor(2, team.chest.copy());
+				if(team.legs != null)
+					event.entity.setCurrentItemOrArmor(3, team.legs.copy());
 				if(team.shoes != null)
-					event.entityLiving.setCurrentItemOrArmor(4, team.shoes.copy());
+					event.entity.setCurrentItemOrArmor(4, team.shoes.copy());
+				
+				if(team.classes.size() > 0)
+				{
+					PlayerClass playerClass = team.classes.get(event.world.rand.nextInt(team.classes.size()));
+					if(playerClass.hat != null)
+						event.entity.setCurrentItemOrArmor(1, playerClass.hat.copy());
+					if(playerClass.chest != null)
+						event.entity.setCurrentItemOrArmor(2, playerClass.chest.copy());
+					if(playerClass.legs != null)
+						event.entity.setCurrentItemOrArmor(3, playerClass.legs.copy());
+					if(playerClass.shoes != null)
+						event.entity.setCurrentItemOrArmor(4, playerClass.shoes.copy());
+				}
 			}
 		}
 	}
@@ -499,22 +518,23 @@ public class FlansMod
 					infoType.read(typeFile);
 					switch(type)
 					{
-					case bullet : bulletItems.add((ItemBullet)new ItemBullet((BulletType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case attachment : attachmentItems.add((ItemAttachment)new ItemAttachment((AttachmentType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case gun : gunItems.add((ItemGun)new ItemGun((GunType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case grenade : grenadeItems.add((ItemGrenade)new ItemGrenade((GrenadeType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case part : partItems.add((ItemPart)new ItemPart((PartType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case plane : planeItems.add((ItemPlane)new ItemPlane((PlaneType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case vehicle : vehicleItems.add((ItemVehicle)new ItemVehicle((VehicleType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case aa : aaGunItems.add((ItemAAGun)new ItemAAGun((AAGunType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case mechaItem : mechaToolItems.add((ItemMechaAddon)new ItemMechaAddon((MechaItemType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case mecha : mechaItems.add((ItemMecha)new ItemMecha((MechaType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case tool : toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case box : gunBoxBlocks.add((BlockGunBox)new BlockGunBox((GunBoxType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case armour : armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setUnlocalizedName(infoType.shortName)); break;
-					case armourBox : armourBoxBlocks.add((BlockArmourBox)new BlockArmourBox((ArmourBoxType)infoType).setUnlocalizedName(infoType.shortName)); break; 
-					case playerClass : break;
-					case team : break;
+					case bullet : 		new ItemBullet((BulletType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case attachment : 	new ItemAttachment((AttachmentType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case gun : 			new ItemGun((GunType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case grenade : 		new ItemGrenade((GrenadeType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case part : 		partItems.add((ItemPart)new ItemPart((PartType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case plane : 		new ItemPlane((PlaneType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case vehicle : 		new ItemVehicle((VehicleType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case aa : 			new ItemAAGun((AAGunType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case mechaItem : 	new ItemMechaAddon((MechaItemType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case mecha : 		mechaItems.add((ItemMecha)new ItemMecha((MechaType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case tool : 		toolItems.add((ItemTool)new ItemTool((ToolType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case box : 			new BlockGunBox((GunBoxType)infoType).setUnlocalizedName(infoType.shortName); break;
+					case armour : 		armourItems.add((ItemTeamArmour)new ItemTeamArmour((ArmourType)infoType).setUnlocalizedName(infoType.shortName)); break;
+					case armourBox : 	new BlockArmourBox((ArmourBoxType)infoType).setUnlocalizedName(infoType.shortName); break; 
+					case playerClass : 	break;
+					case team : 		break;
+					case itemHolder:	new BlockItemHolder((ItemHolderType)infoType); break;
 					default : log("Unrecognised type for " + infoType.shortName); break;
 					}
 				}

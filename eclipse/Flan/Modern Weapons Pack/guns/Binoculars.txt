@@ -21,6 +21,8 @@ ShootDelay 0
 Mode SemiAuto
 Scope Binoculars
 ZoomLevel 16
+FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-MeleeDamage 2
+Model mw.Binoculars
+Texture SkinBinoculars

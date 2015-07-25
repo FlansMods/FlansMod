@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 //import cofh.api.energy.IEnergyContainerItem;
 
+
 import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
@@ -54,6 +55,7 @@ import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
+import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.TeamsManager;
@@ -853,7 +855,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				{
 					PartType part = ((ItemPart)item).type;
 					//Check it is a fuel item
-					if(part.category == 9)
+					if(part.category == EnumPartCategory.FUEL)
 					{
 						//Put 2 points of fuel 
 						getDriveableData().fuelInTank += fuelMultiplier;

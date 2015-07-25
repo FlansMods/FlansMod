@@ -27,3 +27,5 @@ DeployedModel None
 LoadIntoGun 6
 //Bullet speed, default 3.0
 BulletSpeed 1.2
+//Make Nerf guns not appear in dungeon chests
+DungeonLootChance 0

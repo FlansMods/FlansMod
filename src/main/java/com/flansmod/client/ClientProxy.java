@@ -11,6 +11,7 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -47,6 +48,7 @@ import com.flansmod.client.model.RenderFlag;
 import com.flansmod.client.model.RenderFlagpole;
 import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderItemHolder;
 import com.flansmod.client.model.RenderMG;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.model.RenderNull;
@@ -59,6 +61,7 @@ import com.flansmod.client.renderhack.RenderRegistry;
 import com.flansmod.client.renderhack.RenderSpawner;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -88,6 +91,7 @@ import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.TileEntitySpawner;
 import com.flansmod.common.tools.EntityParachute;
+import com.flansmod.common.types.InfoType;
 
 public class ClientProxy extends CommonProxy
 {
@@ -110,6 +114,14 @@ public class ClientProxy extends CommonProxy
 	{
 		flansModClient = new FlansModClient();
 		flansModClient.load();
+		
+		//Register a null vanilla renderer to avoid error messages spamming chat - doesn't work.
+		for(InfoType type : InfoType.infoTypes)
+		{
+			if(type != null && type.item != null)
+				Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, 0, new ModelResourceLocation(FlansMod.MODID + ":" + type.shortName, "inventory"));
+		}
+		
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
 		planeRenderer = new RenderPlane(Minecraft.getMinecraft().getRenderManager());
@@ -139,6 +151,7 @@ public class ClientProxy extends CommonProxy
         RenderRegistry.registerBlockHandler(new RenderSpawner(FlansMod.spawner.getRenderType()));
         RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.spawner);
 		
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();

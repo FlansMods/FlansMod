@@ -45,3 +45,5 @@ ExplosionBreaksBlocks true
 //Detonate Sound <sound>
 ////Misc
 CanDrop false
+//Stop this spawning anywhere
+DungeonChance 0

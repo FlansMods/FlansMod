@@ -8,17 +8,7 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:bomb" ]
 	},
-	
-	"bullet": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bullet" ]
-	},
-	
-	"bulletHit": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bulletHit" ]
-	},
-	
+
 	"Engine": {
 		"category" : "player",
 		"sounds" : [ "flansmod:Engine" ]
