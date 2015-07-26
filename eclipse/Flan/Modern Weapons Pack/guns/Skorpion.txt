@@ -2,6 +2,10 @@ Name Skorpion
 ShortName skorpion
 //The ammo this gun uses (shortName)
 Ammo skorpionAmmo
+Ammo uziAmmo
+Ammo mp5Ammo
+Ammo mp5kAmmo
+Ammo glockAmmo
 Icon Skorpion
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -41,3 +45,5 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 1
+//Description - note the ammo type
+Description Ammo Type : SMG

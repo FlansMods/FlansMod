@@ -59,6 +59,8 @@ public abstract class DriveableType extends InfoType
 	public int shootDelayPrimary = 1, shootDelaySecondary = 1;
 	/** Firing modes for primary and secondary guns. Minigun also an option */
 	public EnumFireMode modePrimary = EnumFireMode.FULLAUTO, modeSecondary = EnumFireMode.FULLAUTO;
+	/** Damage modifiers, so that different vehicles firing the same weapons can do different damage */
+	public int damageModifierPrimary = 1, damageModifierSecondary = 1;
 	/** Sounds */
 	public String shootSoundPrimary, shootSoundSecondary;
 	/** Positions of primary and secondary weapons */
@@ -293,6 +295,10 @@ public abstract class DriveableType extends InfoType
 				shootDelayPrimary = Integer.parseInt(split[1]);
 			else if(split[0].equals("ShootDelaySecondary"))
 				shootDelaySecondary = Integer.parseInt(split[1]);
+			else if(split[0].equals("DamageModifierPrimary"))
+				damageModifierPrimary = Integer.parseInt(split[1]);
+			else if(split[0].equals("DamageModifierSecondary"))
+				damageModifierSecondary = Integer.parseInt(split[1]);
 			else if(split[0].equals("AlternatePrimary"))
 				alternatePrimary = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("AlternateSecondary"))

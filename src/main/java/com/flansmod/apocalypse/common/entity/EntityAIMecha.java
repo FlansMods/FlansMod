@@ -29,6 +29,8 @@ public class EntityAIMecha extends EntityMecha
 	private float targetingRange = 20F;
 	private int targetAcquireInterval = 40;
 	
+	private boolean usingLeft = false;
+	
 	public EntityAIMecha(World world)
 	{
 		super(world);
@@ -83,10 +85,10 @@ public class EntityAIMecha extends EntityMecha
 		}
 				
 		//And if we have line of sight, shoot it
-		if(target != null)
+		if(!worldObj.isRemote && target != null)
 		{
-			Vec3 rightArmOrigin = getMechaType().rightArmOrigin.toVec3().addVector(posX, posY, posZ);
-			Vec3 targetOrigin = new Vec3(target.posX, target.posY + target.getEyeHeight(), target.posZ);
+			Vec3 rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().addVector(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().addVector(posX, posY, posZ);
+			Vec3 targetOrigin = new Vec3(target.posX, target.posY + target.getEyeHeight() / 2D, target.posZ);
 			
 			double dX = targetOrigin.xCoord - rightArmOrigin.xCoord;
 			double dY = targetOrigin.yCoord - rightArmOrigin.yCoord;
@@ -103,7 +105,7 @@ public class EntityAIMecha extends EntityMecha
 			
 			if(worldObj.isRemote)
 			{
-				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(rightArmOrigin), new Vector3f(dX, dY, dZ), 2));
+				//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(rightArmOrigin), new Vector3f(dX, dY, dZ), 2));
 			}
 			{
 				double blockHitX = hit == null ? 0 : hit.hitVec.xCoord - rightArmOrigin.xCoord; 
@@ -113,8 +115,9 @@ public class EntityAIMecha extends EntityMecha
 				//If the target is nearer than the block hit or there was no block
 				if(hit == null || hit.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
 				{
-					useItem(false);
-					useItem(true);
+					useItem(usingLeft);
+					if(rand.nextInt(5) == 0)
+					usingLeft = !usingLeft;
 				}
 				//Otherwise, move closer
 				else

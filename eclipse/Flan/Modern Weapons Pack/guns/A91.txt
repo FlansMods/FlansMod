@@ -2,7 +2,10 @@ Name A-91
 ShortName a91
 //The ammo this gun uses (shortName)
 Ammo a91Ammo
-Ammo betaCMag
+Ammo ak47Ammo
+Ammo ak74Ammo
+Ammo rpkAmmo
+Ammo rpdAmmo
 Icon A91
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -44,3 +47,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob FNSCAR_Green FNSCAR_Green green 1 lime 1
+//Description - note the ammo type
+Description Ammo Type : AK

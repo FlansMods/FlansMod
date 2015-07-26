@@ -2,6 +2,8 @@ Name M21
 ShortName m21
 //The ammo this gun uses (shortName)
 Ammo m21Ammo
+Ammo dragunovAmmo
+Ammo l96Ammo
 Icon M21
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -44,3 +46,5 @@ NumGenericAttachmentSlots 2
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M21_Red M21_Red red 2
 Paintjob M21_Jungle M21_Jungle green 2
+//Description - note the ammo type
+Description Ammo Type : Heavy Rifle

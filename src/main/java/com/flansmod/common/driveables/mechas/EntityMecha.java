@@ -48,6 +48,8 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
@@ -382,7 +384,7 @@ public class EntityMecha extends EntityDriveable
 						//Apply animations to 3D modelled guns
 						//TODO : Move to client side and sync
 						if(worldObj.isRemote)
-						{
+						{							
 							int pumpDelay = gunType.model == null ? 0 : gunType.model.pumpDelay;
 							int pumpTime = gunType.model == null ? 1 : gunType.model.pumpTime;
 							if(left)
@@ -409,7 +411,7 @@ public class EntityMecha extends EntityDriveable
 	private void shoot(ItemStack stack, GunType gunType, ItemStack bulletStack, boolean creative, boolean left)
 	{
 		MechaType mechaType = getMechaType();
-		BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
+		ShootableType bulletType = ((ItemShootable)bulletStack.getItem()).type;
 		RotatedAxes a = new RotatedAxes();
 		
 		Vector3f armVector = new Vector3f(mechaType.armLength, 0F, 0F);
@@ -428,8 +430,8 @@ public class EntityMecha extends EntityDriveable
 		bulletOrigin  = Vector3f.add(new Vector3f(posX, posY, posZ), bulletOrigin, null);
 				
 		if(!worldObj.isRemote)
-			for (int k = 0; k < gunType.numBullets; k++)
-				worldObj.spawnEntityInWorld(((ItemBullet)bulletStack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),bulletStack.getItemDamage(), mechaType));
+			for (int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
+				worldObj.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),bulletStack.getItemDamage(), mechaType));
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
@@ -1245,7 +1247,14 @@ public class EntityMecha extends EntityDriveable
 	@Override
 	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) 
 	{
-
+		if(part.type == EnumDriveablePart.core)
+		{
+			for(int i = 0; i < inventory.getSizeInventory(); i++)
+			{
+				if(inventory.getStackInSlot(i) != null)
+					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, inventory.getStackInSlot(i)));
+			}
+		}
 	}
 
 	@Override

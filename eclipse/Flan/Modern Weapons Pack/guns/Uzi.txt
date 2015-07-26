@@ -1,7 +1,11 @@
 Name Mini-Uzi
 ShortName uzi
 //The ammo this gun uses (shortName)
+Ammo skorpionAmmo
 Ammo uziAmmo
+Ammo mp5Ammo
+Ammo mp5kAmmo
+Ammo glockAmmo
 Icon MiniUzi
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -46,3 +50,5 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob MiniUzi_Red MiniUzi_Red red 1
 Paintjob MiniUzi_Yellow MiniUzi_Yellow yellow 1
+//Description - note the ammo type
+Description Ammo Type : SMG

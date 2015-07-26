@@ -2,6 +2,8 @@ Name G3
 ShortName g3
 //The ammo this gun uses (shortName)
 Ammo g3Ammo
+Ammo m14Ammo
+Ammo sg550Ammo
 Icon G3
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -45,3 +47,5 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob G3_Quartz G3_Quartz white 2
 Paintjob G3_Blue G3_Blue blue 1 lightBlue 1
+//Description - note the ammo type
+Description Ammo Type : Light Rifle

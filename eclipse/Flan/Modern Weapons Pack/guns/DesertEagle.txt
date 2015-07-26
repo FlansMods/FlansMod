@@ -47,3 +47,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob DesertEagle_Neon DesertEagle_Neon magenta 1
+//Description - note the ammo type
+Description Ammo Type : Heavy Pistol

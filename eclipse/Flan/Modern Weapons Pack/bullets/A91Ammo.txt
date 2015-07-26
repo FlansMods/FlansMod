@@ -1,15 +1,15 @@
-Name USP Ammo
-ShortName uspAmmo
+Name A-91 Ammo
+ShortName a91Ammo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-Icon USPAmmo
+Icon A91Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
 //The maximum stack size
-MaxStackSize 5
+MaxStackSize 4
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 10
+RoundsPerItem 30
 //The damage multiplier caused by the bullet on hitting an entity
 Damage 1
 //Size of explosion caused
@@ -28,4 +28,4 @@ HitSound bullet
 Penetrates True
 SmokeTrail False
 //Description - note the ammo type
-Description Ammo Type : Pistol
+Description Ammo Type : AK

@@ -2,6 +2,7 @@ Name M249 SAW
 ShortName m249
 //The ammo this gun uses (shortName)
 Ammo m249Ammo
+Ammo m60Ammo
 Icon M249
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -46,3 +47,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M249_White M249_White white 2 red 1
+//Description - note the ammo type
+Description Ammo Type : Belt-Fed

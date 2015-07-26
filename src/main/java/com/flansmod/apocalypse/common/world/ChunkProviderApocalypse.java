@@ -319,13 +319,12 @@ public class ChunkProviderApocalypse implements IChunkProvider
 
         MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag));
         
-        int xOrigin = p_73153_2_ / 4;
+        int xOrigin = ModuloHelper.divide(p_73153_2_, 4);
         
         this.rand.setSeed(this.worldObj.getSeed());
         i1 = this.rand.nextLong() / 2L * 2L + 1L;
         j1 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long)xOrigin * i1 + (long)p_73153_3_ * j1 ^ this.worldObj.getSeed());
-        
         
         if(rand.nextInt(FlansModApocalypse.AIRPORT_RARITY) == 0)
         {
@@ -348,7 +347,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         j1 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long)xOrigin * i1 + (long)zOrigin * j1 ^ this.worldObj.getSeed());
         
-        if(rand.nextInt(FlansModApocalypse.LAB_RARITY) == 0)
+        //if(rand.nextInt(FlansModApocalypse.LAB_RARITY) == 0)
         {
         	boolean canSpawn = true;
         	for(int i = 0; i < 5; i++)

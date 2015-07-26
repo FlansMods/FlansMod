@@ -1,7 +1,9 @@
 Name Dragunov
 ShortName dragunov
 //The ammo this gun uses (shortName)
+Ammo m21Ammo
 Ammo dragunovAmmo
+Ammo l96Ammo
 Icon Dragunov
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -45,3 +47,5 @@ NumGenericAttachmentSlots 2
 Paintjob Dragunov_Grey Dragunov_Grey gray 2
 Paintjob Dragunov_Rainbow Dragunov_Rainbow red 1 yellow 1 green 1 blue 1
 Paintjob Dragunov_Birch Dragunov_Birch white 1 yellow 1
+//Description - note the ammo type
+Description Ammo Type : Heavy Rifle

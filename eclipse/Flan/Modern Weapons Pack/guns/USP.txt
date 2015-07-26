@@ -1,6 +1,10 @@
 Name USP .45
 ShortName usp
 //The ammo this gun uses (shortName)
+Ammo m9Ammo
+Ammo makarovAmmo
+Ammo m1911Ammo
+Ammo sigP226Ammo
 Ammo uspAmmo
 Ammo uspPoisonAmmo
 Icon USP
@@ -32,14 +36,16 @@ FOVZoomLevel 1.2
 Deployable False
 DeployedModel None
 //3D Model Settings
-Model mw.M9
-Texture M9
+Model mw.USP
+Texture USP
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire flanMWPistolFlashlight
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
-AllowGripAttachments false
+AllowGripAttachments true
 NumGenericAttachmentSlots 1
+//Description - note the ammo type
+Description Ammo Type : Pistol

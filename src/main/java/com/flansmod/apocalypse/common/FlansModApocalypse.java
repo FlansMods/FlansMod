@@ -53,18 +53,19 @@ public class FlansModApocalypse
 	public static Configuration configFile;
 	/** The time it takes between an AI chip being activated and the apocalypse happening (in ticks) */
 	public static int apocalypseCountdownLength = 319;
-	public static final int SURVIVOR_RARITY = 450;
-	public static final int SKELETON_RARITY = 50;
-	public static final int DEAD_TREE_RARITY = 100;
-	public static final int VEHICLE_RARITY = 2000;
-	public static final int AIRPORT_RARITY = 125;
-	public static final int DYE_FACTORY_RARITY = 400;
-	public static final int LAB_RARITY = 100;
+	public static int SURVIVOR_RARITY = 450;
+	public static int SKELETON_RARITY = 50;
+	public static int DEAD_TREE_RARITY = 100;
+	public static int VEHICLE_RARITY = 2000;
+	public static int AIRPORT_RARITY = 125;
+	public static int DYE_FACTORY_RARITY = 400;
+	public static int LAB_RARITY = 100;
 	/** The distance between where the player left the overworld, and where they return */
-	public static final int RETURN_RADIUS = 100;
+	public static int RETURN_RADIUS = 100;
 	/** How far from their death point does the player respawn? */
-	public static final int SPAWN_RADIUS = 100;
-	
+	public static int SPAWN_RADIUS = 100;
+	/** Who gets teleported to the apocalypse when a player places a mecha? */
+	public static TeleportOption OPTION = TeleportOption.PLACER_ONLY;
 	
 	public static int dimensionID;
 	public static FlansModLootGenerator lootGenerator;
@@ -88,7 +89,10 @@ public class FlansModApocalypse
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-
+		//Load config
+		configFile = new Configuration(event.getSuggestedConfigurationFile());
+		syncConfig();
+		
 		//Custom apoclypse defined items and blocks
 		
 		//Sulphur block and item
@@ -108,11 +112,11 @@ public class FlansModApocalypse
 		sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.rock).setUnlocalizedName("labStone").setCreativeTab(tabApocalypse);
+		blockLabStone = new BlockStatic(Material.rock).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setCreativeTab(tabApocalypse);
 		GameRegistry.registerBlock(blockLabStone, "labStone");
 		
 		//Power Cube
-		blockPowerCube = new BlockPowerCube(Material.circuits).setUnlocalizedName("powerCube").setCreativeTab(tabApocalypse);
+		blockPowerCube = new BlockPowerCube(Material.circuits).setUnlocalizedName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
 		GameRegistry.registerBlock(blockPowerCube, "powerCube");
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, "powerCube");
 		
@@ -166,5 +170,43 @@ public class FlansModApocalypse
 	public static FlansModLootGenerator getLootGenerator() 
 	{
 		return lootGenerator;
+	}
+	
+	public static void syncConfig() 
+	{
+		apocalypseCountdownLength = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, apocalypseCountdownLength, 19, Integer.MAX_VALUE, "Time between placing an AI mecha and going to the apocalypse");
+		SURVIVOR_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities");
+		SKELETON_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SKELETON_RARITY, 1, Integer.MAX_VALUE, "Rarity of buried skeletons");
+		DEAD_TREE_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, DEAD_TREE_RARITY, 1, Integer.MAX_VALUE, "Rarity of dead trees");
+		VEHICLE_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, VEHICLE_RARITY, 1, Integer.MAX_VALUE, "Rarity of broken vehicles");
+		AIRPORT_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, AIRPORT_RARITY, 1, Integer.MAX_VALUE, "Rarity of airstrips");
+		DYE_FACTORY_RARITY = 		configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, DYE_FACTORY_RARITY, 1, Integer.MAX_VALUE, "Rarity of dye factories");
+		LAB_RARITY = 				configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, LAB_RARITY, 1, Integer.MAX_VALUE, "Rarity of the research lab");
+		RETURN_RADIUS = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
+		SPAWN_RADIUS = 				configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
+		OPTION = 					TeleportOption.getOption(configFile.getString("Config Integer", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
+
+		if(configFile.hasChanged())
+			configFile.save();
+	}
+	
+	public static enum TeleportOption
+	{
+		PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN;
+		
+		public static TeleportOption getOption(String s)
+		{
+			if(s.equals("PLACER_ONLY"))
+				return PLACER_ONLY;
+			else if(s.equals("DIM"))
+				return DIM;
+			else if(s.equals("DIM_OPT_IN"))
+				return DIM_OPT_IN;
+			else if(s.equals("NEARBY"))
+				return NEARBY;
+			else if(s.equals("NEARBY_OPT_IN"))
+				return NEARBY_OPT_IN;
+			return PLACER_ONLY;
+		}
 	}
 }

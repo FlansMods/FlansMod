@@ -489,7 +489,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				if(gunType.isAmmo(bullet))
 				{
 					//Spawn a new bullet item
-					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, gunType.bulletSpread / 2, gunType.damage, 10.0F,bulletItemStack.getItemDamage(), type));
+					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, bullet.bulletSpread * gunType.bulletSpread / 2, gunType.damage, 10.0F,bulletItemStack.getItemDamage(), type));
 					//Play the shoot sound
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
 					//Get the bullet item damage and increment it
@@ -536,7 +536,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					if(slot != -1)
 					{
 						int spread = 0;
-						int damageMultiplier = 1;
+						int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 						float shellSpeed = 0F;
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
@@ -581,7 +581,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					if(slot != -1)
 					{
 						int spread = 0;
-						int damageMultiplier = 1;
+						int damageMultiplier = secondary ? type.damageModifierSecondary : type.damageModifierPrimary;
 						float shellSpeed = 3F;
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);

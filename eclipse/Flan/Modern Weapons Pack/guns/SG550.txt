@@ -1,6 +1,8 @@
 Name SG550
 ShortName sg550
 //The ammo this gun uses (shortName)
+Ammo g3Ammo
+Ammo m14Ammo
 Ammo sg550Ammo
 Icon SG550
 //Colour in Red, Green, Blue, each going up to 255.
@@ -44,3 +46,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 //Paintjob M16A4_Orange M16A4_Orange orange 1 white 1
+//Description - note the ammo type
+Description Ammo Type : Light Rifle

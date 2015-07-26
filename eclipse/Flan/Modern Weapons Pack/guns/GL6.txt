@@ -54,3 +54,5 @@ KnockbackModifier 0
 Paintjob GL6_Yellow GL6_Yellow yellow 3
 Paintjob GL6_Red GL6_Red red 2 white 1
 Paintjob GL6_Lurid GL6_Lurid lime 3
+//Description - note the ammo type
+Description Ammo Type : Grenade

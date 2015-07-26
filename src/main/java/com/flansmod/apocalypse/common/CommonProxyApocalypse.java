@@ -132,24 +132,26 @@ public class CommonProxyApocalypse
 					if(getApocalypseCountdown() == 0)
 					{
 						FlansMod.log("The apocalypse has begun!");
-						EntityPlayer player = apocalypseMecha.placer;
+						EntityPlayer placer = apocalypseMecha.placer;
 						
-						if(player != null)
+						switch(FlansModApocalypse.OPTION)
 						{
-							//Make a copy of the player to hold their inventory and hang around until they get back
-							EntityFakePlayer fakePlayer = new EntityFakePlayer(player.worldObj, player);
-							player.worldObj.spawnEntityInWorld(fakePlayer);
-							
-							player.inventory.clear();
-							
-							//Teleport them, making note of where they got in
-							player.timeUntilPortal = 10;
-							data.entryPoints.put(player.getPersistentID(), new BlockPos(apocalypseMecha.posX, apocalypseMecha.posY, apocalypseMecha.posZ));
-							BlockPos exitPoint = new BlockPos(apocalypseMecha.posX, 128, apocalypseMecha.posZ);
-							for(; MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
-							MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
-							
-							giveStarterKit(player);
+						case DIM:
+							for(Object player : placer.worldObj.playerEntities)
+								sendPlayerToApocalypse((EntityPlayer)player);
+							break;
+						case DIM_OPT_IN:
+							break;
+						case NEARBY:
+							for(Object player : placer.worldObj.playerEntities)
+								if(((Entity)player).getDistanceToEntity(placer) < 50)
+									sendPlayerToApocalypse((EntityPlayer)player);
+							break;
+						case NEARBY_OPT_IN:
+							break;
+						case PLACER_ONLY:
+							sendPlayerToApocalypse(placer);
+							break;
 						}
 						apocalypseMecha.setDead();
 					}
@@ -208,6 +210,24 @@ public class CommonProxyApocalypse
 		}
 	}
 	
+	private void sendPlayerToApocalypse(EntityPlayer player)
+	{
+		//Make a copy of the player to hold their inventory and hang around until they get back
+		EntityFakePlayer fakePlayer = new EntityFakePlayer(player.worldObj, player);
+		player.worldObj.spawnEntityInWorld(fakePlayer);
+		
+		player.inventory.clear();
+		
+		//Teleport them, making note of where they got in
+		player.timeUntilPortal = 10;
+		data.entryPoints.put(player.getPersistentID(), new BlockPos(apocalypseMecha.posX, apocalypseMecha.posY, apocalypseMecha.posZ));
+		BlockPos exitPoint = new BlockPos(apocalypseMecha.posX, 128, apocalypseMecha.posZ);
+		for(; MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
+		MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
+		
+		giveStarterKit(player);
+	}
+	
 	private void giveStarterKit(EntityPlayer player) 
 	{
 		player.inventory.addItemStackToInventory(new ItemStack(Items.stone_pickaxe));		
@@ -219,7 +239,7 @@ public class CommonProxyApocalypse
 	@SubscribeEvent
 	public void itemPlaced(EntityJoinWorldEvent event)
 	{
-		if(!event.world.isRemote && event.entity instanceof EntityMecha)
+		if(!event.world.isRemote && event.entity instanceof EntityMecha && event.entity.dimension == 0)
 		{
 			EntityMecha mecha = (EntityMecha)event.entity;
 			PartType engine = mecha.getDriveableData().engine;

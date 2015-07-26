@@ -48,10 +48,10 @@ public class WorldGenResearchLab extends WorldGenFlan
 		int pieceX = ModuloHelper.modulo(chunkX, 3);
 		int pieceZ = ModuloHelper.modulo(chunkZ, 3);
 		
-		int topLayerHeight = 107;
+		int topLayerHeight = 99;
 		
 		//Generate empty rooms
-		for(int i = 0; i < 8; i++)
+		for(int i = (pieceX == 1 & pieceZ == 1 ? -1 : 0); i < 8; i++)
 		{
 			fillArea(world, chunkX * 16, topLayerHeight - 8 * i, chunkZ * 16, chunkX * 16 + 16, topLayerHeight - 8 * i + 8, chunkZ * 16 + 16, FlansModApocalypse.blockLabStone.getDefaultState(), Blocks.air.getDefaultState());			
 			fillArea(world, chunkX * 16, topLayerHeight - 8 * i + 6, chunkZ * 16, chunkX * 16 + 16, topLayerHeight - 8 * i + 7, chunkZ * 16 + 16, FlansModApocalypse.blockLabStone.getDefaultState());	
@@ -107,6 +107,34 @@ public class WorldGenResearchLab extends WorldGenFlan
 				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 6, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 7, Blocks.stone_slab.getStateFromMeta(7));
 				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 10, Blocks.stone_slab.getStateFromMeta(7));
 				world.setBlockState(new BlockPos(chunkX * 16 + 6, topLayerHeight - 8 * i + 2, chunkZ * 16 + 6), FlansModApocalypse.blockPowerCube.getDefaultState());
+				
+				for(int k = 0; k < 8; k++)
+					spawnMecha(world, rand, chunkX * 16 + 4 + rand.nextInt(8), topLayerHeight - 8 * i + 2, chunkZ * 16 + 4 + rand.nextInt(8));
+			}
+			//Build entrance
+			else if(i == 0 && pieceX == 1 && pieceZ == 1)
+			{
+				i--;
+				
+				//Make hole
+				fillArea(world, chunkX * 16 + 4, topLayerHeight - 8 * i + 1, chunkZ * 16 + 4, chunkX * 16 + 12, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.nether_brick_fence.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i + 2, chunkZ * 16 + 11, Blocks.air.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i + 1, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i + 2, chunkZ * 16 + 12, Blocks.air.getDefaultState());	
+				
+				//Build stairs
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 1, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 2, chunkZ * 16 + 9, chunkX * 16 + 7, topLayerHeight - 8 * i - 1, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 9, topLayerHeight - 8 * i - 2, chunkZ * 16 + 9, chunkX * 16 + 11, topLayerHeight - 8 * i - 1, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 9, topLayerHeight - 8 * i - 3, chunkZ * 16 + 7, chunkX * 16 + 11, topLayerHeight - 8 * i - 2, chunkZ * 16 + 9, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 3, chunkZ * 16 + 7, chunkX * 16 + 7, topLayerHeight - 8 * i - 2, chunkZ * 16 + 9, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 4, chunkZ * 16 + 5, chunkX * 16 + 11, topLayerHeight - 8 * i - 3, chunkZ * 16 + 7, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 5, chunkZ * 16 + 7, chunkX * 16 + 9, topLayerHeight - 8 * i - 4, chunkZ * 16 + 9, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 6, chunkZ * 16 + 9, chunkX * 16 + 9, topLayerHeight - 8 * i - 5, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 7, topLayerHeight - 8 * i - 7, chunkZ * 16 + 11, chunkX * 16 + 9, topLayerHeight - 8 * i - 6, chunkZ * 16 + 13, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 5, topLayerHeight - 8 * i - 7, chunkZ * 16 + 9, chunkX * 16 + 7, topLayerHeight - 8 * i - 6, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				fillArea(world, chunkX * 16 + 9, topLayerHeight - 8 * i - 7, chunkZ * 16 + 9, chunkX * 16 + 11, topLayerHeight - 8 * i - 6, chunkZ * 16 + 11, FlansModApocalypse.blockLabStone.getDefaultState());	
+				
+				i++;
 			}
 			else
 			{
@@ -197,7 +225,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 						{
 							if(rand.nextBoolean())
 								world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.crafting_table.getDefaultState());
-							else world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), FlansMod.workbench.getStateFromMeta(0));
+							else world.setBlockState(new BlockPos(chunkX * 16 + 2 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), FlansMod.workbench.getStateFromMeta(1));
 							world.setBlockState(new BlockPos(chunkX * 16 + 4 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
 							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 2, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
 							world.setBlockState(new BlockPos(chunkX * 16 + 5 + 8 * j, topLayerHeight - 8 * i + 1, chunkZ * 16 + 1), Blocks.iron_block.getDefaultState());
@@ -231,35 +259,40 @@ public class WorldGenResearchLab extends WorldGenFlan
 				}
 				if(spawnMecha && rand.nextBoolean())
 				{
-					MechaType type = FlansModApocalypse.getLootGenerator().getRandomDungeonMecha(rand);
-		        	NBTTagCompound tags = new NBTTagCompound();
-		        	tags.setString("Engine", FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand).shortName);
-		        	tags.setString("Type", type.shortName);
-		        	for(EnumDriveablePart part : EnumDriveablePart.values())
-		        	{
-		        		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-		        		tags.setBoolean(part.getShortName() + "_Fire", false);
-		        	}
-		        	for(int k = 0; k < 2; k++)
-		        	{
-			    		ItemStack randomGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand);
-			    		GunType gunType = ((ItemGun)randomGun.getItem()).type;
-			    		tags.setTag(k == 1 ? EnumMechaSlotType.rightTool.toString() : EnumMechaSlotType.leftTool.toString(), randomGun.writeToNBT(new NBTTagCompound()));
-			    		if(gunType.ammo.size() > 0)
-			    		{
-				        	for(int j = 0; j < 1 + rand.nextInt(2); j++)
-				        	{
-				        		ShootableType ammo = gunType.ammo.get(rand.nextInt(gunType.ammo.size()));
-				        		tags.setTag("Cargo " + rand.nextInt(type.numCargoSlots), new ItemStack(ammo.item, (ammo.maxStackSize > 1 ? rand.nextInt(ammo.maxStackSize - 1) + 1 : 1)).writeToNBT(new NBTTagCompound()));
-				        	}
-			    		}
-		        	}
-		        	EntityAIMecha entity = new EntityAIMecha(world, chunkX * 16 + 8, topLayerHeight - 8 * i + 1, chunkZ * 16 + 8, type, new DriveableData(tags), tags);
-		            world.spawnEntityInWorld(entity);
+					spawnMecha(world, rand, chunkX * 16 + 8, topLayerHeight - 8 * i + 1, chunkZ * 16 + 8);
 				}
 			}
 		}
 		return false;
+	}
+	
+	private void spawnMecha(World world, Random rand, int x, int y, int z)
+	{
+		MechaType type = FlansModApocalypse.getLootGenerator().getRandomDungeonMecha(rand);
+    	NBTTagCompound tags = new NBTTagCompound();
+    	tags.setString("Engine", FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand).shortName);
+    	tags.setString("Type", type.shortName);
+    	for(EnumDriveablePart part : EnumDriveablePart.values())
+    	{
+    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+    		tags.setBoolean(part.getShortName() + "_Fire", false);
+    	}
+    	for(int k = 0; k < 2; k++)
+    	{
+    		ItemStack randomGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand);
+    		GunType gunType = ((ItemGun)randomGun.getItem()).type;
+    		tags.setTag(k == 1 ? EnumMechaSlotType.rightTool.toString() : EnumMechaSlotType.leftTool.toString(), randomGun.writeToNBT(new NBTTagCompound()));
+    		if(gunType.ammo.size() > 0)
+    		{
+	        	for(int j = 0; j < 1 + rand.nextInt(2); j++)
+	        	{
+	        		ShootableType ammo = gunType.ammo.get(rand.nextInt(gunType.ammo.size()));
+	        		tags.setTag("Cargo " + rand.nextInt(type.numCargoSlots), new ItemStack(ammo.item, (ammo.maxStackSize > 1 ? rand.nextInt(ammo.maxStackSize - 1) + 1 : 1)).writeToNBT(new NBTTagCompound()));
+	        	}
+    		}
+    	}
+    	EntityAIMecha entity = new EntityAIMecha(world, x + 0.5D, y, z + 0.5D, type, new DriveableData(tags), tags);
+        world.spawnEntityInWorld(entity);
 	}
 	
 	private void generateServerPower(World world, Random rand, int x, int y, int z) 

@@ -39,6 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerData;
@@ -242,6 +243,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		if(worldObj.isRemote)
+			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ), new Vector3f(motionX, motionY, motionZ), 20));
+
 		
 		//Check the fuse to see if the bullet should explode
 		ticksInAir++;

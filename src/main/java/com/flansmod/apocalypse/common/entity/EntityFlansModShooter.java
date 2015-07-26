@@ -287,7 +287,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			float inaccuracy = 0.5F;
 			
 			// Spawn the bullet entities
-			for (int k = 0; k < gunType.numBullets; k++)
+			for (int k = 0; k < gunType.numBullets * bullet.numBullets; k++)
 			{
 				Vector3f origin = new Vector3f(posX, posY + getEyeHeight(), posZ);
 				Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);

@@ -1,7 +1,13 @@
 Name G36C
 ShortName g36
 //The ammo this gun uses (shortName)
+Ammo m16a4Ammo
+Ammo acrAmmo
+Ammo mtarAmmo
 Ammo g36Ammo
+Ammo augAmmo
+Ammo m4CarbineAmmo
+Ammo betaCMag
 Icon G36
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -43,8 +49,7 @@ NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-<<<<<<< HEAD
 Paintjob G36_Prismarine G36_Prismarine lime 1 cyan 1
-=======
 Paintjob G36_Devgru G36_Devgru green 1 brown 1
->>>>>>> eb84c5ea5e1de238dc750f822c33710cd17b11f6
+//Description - note the ammo type
+Description Ammo Type : Light Assault

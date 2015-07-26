@@ -2,6 +2,7 @@ Name M60E4
 ShortName m60
 //The ammo this gun uses (shortName)
 Ammo m60Ammo
+Ammo m249Ammo
 Icon M60E4
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -42,3 +43,5 @@ AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments true
 NumGenericAttachmentSlots 1
+//Description - note the ammo type
+Description Ammo Type : Belt-Fed

@@ -44,3 +44,5 @@ NumGenericAttachmentSlots 2
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob Barrett_Hazard Barrett_Hazard yellow 2
+//Description - note the ammo type
+Description Ammo Type : .50 Cal

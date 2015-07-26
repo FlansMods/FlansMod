@@ -1,7 +1,11 @@
 Name AK74
 ShortName ak74
 //The ammo this gun uses (shortName)
+Ammo a91Ammo
+Ammo ak47Ammo
 Ammo ak74Ammo
+Ammo rpdAmmo
+Ammo rpkAmmo
 Icon AK74
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -44,3 +48,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob AK74_Blue AK74_Blue blue 1 lightBlue 1
+//Description - note the ammo type
+Description Ammo Type : AK
