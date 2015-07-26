@@ -26,7 +26,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import com.flansmod.apocalypse.client.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.client.model.RenderFakePlayer;
 import com.flansmod.apocalypse.client.model.RenderNukeDrop;
 import com.flansmod.apocalypse.client.model.RenderPowerCube;
@@ -37,6 +36,7 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
+import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.apocalypse.common.network.PacketApocalypseCountdown;

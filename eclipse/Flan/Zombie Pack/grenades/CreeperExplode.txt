@@ -46,4 +46,4 @@ ExplosionBreaksBlocks true
 ////Misc
 CanDrop false
 //Stop this spawning anywhere
-DungeonChance 0
+DungeonLootChance 0

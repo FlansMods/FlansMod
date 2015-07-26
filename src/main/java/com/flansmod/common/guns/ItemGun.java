@@ -82,7 +82,7 @@ public class ItemGun extends Item implements IFlanItem
 		maxStackSize = 1;
 		type = gun;
 		type.item = this;
-		setMaxDamage(type.numAmmoItemsInGun);
+		setMaxDamage(0);
 		setCreativeTab(FlansMod.tabFlanGuns);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
@@ -1019,7 +1019,13 @@ public class ItemGun extends Item implements IFlanItem
 							}
 							if(!world.isRemote)
 							{
-								world.spawnEntityInWorld(new EntityMG(world, i, j + 1, k, playerDir, type));
+								EntityMG mg = new EntityMG(world, i, j + 1, k, playerDir, type);
+								if(getBulletItemStack(itemstack, 0) != null)
+								{
+									mg.ammo = getBulletItemStack(itemstack, 0);
+								}
+								world.spawnEntityInWorld(mg);
+								
 							}
 							if (!entityplayer.capabilities.isCreativeMode)
 								itemstack.stackSize = 0;

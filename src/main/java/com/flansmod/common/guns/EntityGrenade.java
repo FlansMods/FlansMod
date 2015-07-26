@@ -412,7 +412,16 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						int z = MathHelper.floor_double(k + posZ);
 						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.air && rand.nextBoolean())
 						{
-							worldObj.setBlockState(new BlockPos(x, y, z), Blocks.fire.getDefaultState());
+							/*
+							 if(!worldObj.getBlockState(new BlockPos(x + 1, y, z)).getBlock(). || !worldObj.isAirBlock(new BlockPos(x - 1, y, z)) 
+							 
+							|| !worldObj.isAirBlock(new BlockPos(x, y + 1, z)) || !worldObj.isAirBlock(new BlockPos(x, y - 1, z))
+							|| !worldObj.isAirBlock(new BlockPos(x, y, z + 1)) || !worldObj.isAirBlock(new BlockPos(x, y, z - 1))) 
+							*/
+							{
+								worldObj.setBlockState(new BlockPos(x, y, z), Blocks.fire.getDefaultState(), 2);
+								worldObj.markBlockForUpdate(new BlockPos(x, y, z));
+							}
 						}
 					}
 				}

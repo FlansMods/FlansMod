@@ -5,10 +5,10 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 
-import com.flansmod.apocalypse.client.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityFlyByPlane;
+import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.apocalypse.common.network.PacketApocalypseCountdown;
@@ -137,14 +137,15 @@ public class CommonProxyApocalypse
 						switch(FlansModApocalypse.OPTION)
 						{
 						case DIM:
-							for(Object player : placer.worldObj.playerEntities)
-								sendPlayerToApocalypse((EntityPlayer)player);
+							for(int i = 0; i < placer.worldObj.playerEntities.size(); i++)
+								if(((Entity)placer.worldObj.playerEntities.get(i)).dimension == 0)
+									sendPlayerToApocalypse((EntityPlayer)placer.worldObj.playerEntities.get(i));
 							break;
 						case DIM_OPT_IN:
 							break;
 						case NEARBY:
 							for(Object player : placer.worldObj.playerEntities)
-								if(((Entity)player).getDistanceToEntity(placer) < 50)
+								if(((Entity)player).dimension == 0 && ((Entity)player).getDistanceToEntity(placer) < 50)
 									sendPlayerToApocalypse((EntityPlayer)player);
 							break;
 						case NEARBY_OPT_IN:
@@ -204,6 +205,19 @@ public class CommonProxyApocalypse
 						world.spawnEntityInWorld(pilot);
 						
 						pilot.mountEntity(plane.seats[0]);
+					}
+					
+					if(world.rand.nextInt(FlansModApocalypse.WANDERING_SURVIVOR_RARITY) == 0 && !world.provider.isDaytime())
+					{
+						double angle = world.rand.nextFloat() * 3.14159F * 2F;
+						double dist = 50D;
+						double dX = Math.cos(angle) * dist;
+						double dZ = Math.sin(angle) * dist;
+						
+						EntitySurvivor survivor = new EntitySurvivor(world);
+						survivor.setPosition(player.posX + dX, world.getTopSolidOrLiquidBlock(new BlockPos(player.posX + dX, 0, player.posZ + dZ)).getY() + 1D, player.posZ + dZ);
+						
+						world.spawnEntityInWorld(survivor);
 					}
 				}
 			}

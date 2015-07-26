@@ -54,11 +54,12 @@ public class FlansModApocalypse
 	/** The time it takes between an AI chip being activated and the apocalypse happening (in ticks) */
 	public static int apocalypseCountdownLength = 319;
 	public static int SURVIVOR_RARITY = 450;
+	public static int WANDERING_SURVIVOR_RARITY = 1500;
 	public static int SKELETON_RARITY = 50;
 	public static int DEAD_TREE_RARITY = 100;
 	public static int VEHICLE_RARITY = 2000;
 	public static int AIRPORT_RARITY = 125;
-	public static int DYE_FACTORY_RARITY = 400;
+	public static int DYE_FACTORY_RARITY = 800;
 	public static int LAB_RARITY = 100;
 	/** The distance between where the player left the overworld, and where they return */
 	public static int RETURN_RADIUS = 100;
@@ -174,17 +175,18 @@ public class FlansModApocalypse
 	
 	public static void syncConfig() 
 	{
-		apocalypseCountdownLength = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, apocalypseCountdownLength, 19, Integer.MAX_VALUE, "Time between placing an AI mecha and going to the apocalypse");
-		SURVIVOR_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities");
-		SKELETON_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SKELETON_RARITY, 1, Integer.MAX_VALUE, "Rarity of buried skeletons");
-		DEAD_TREE_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, DEAD_TREE_RARITY, 1, Integer.MAX_VALUE, "Rarity of dead trees");
-		VEHICLE_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, VEHICLE_RARITY, 1, Integer.MAX_VALUE, "Rarity of broken vehicles");
-		AIRPORT_RARITY = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, AIRPORT_RARITY, 1, Integer.MAX_VALUE, "Rarity of airstrips");
-		DYE_FACTORY_RARITY = 		configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, DYE_FACTORY_RARITY, 1, Integer.MAX_VALUE, "Rarity of dye factories");
-		LAB_RARITY = 				configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, LAB_RARITY, 1, Integer.MAX_VALUE, "Rarity of the research lab");
-		RETURN_RADIUS = 			configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
-		SPAWN_RADIUS = 				configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
-		OPTION = 					TeleportOption.getOption(configFile.getString("Config Integer", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
+		apocalypseCountdownLength = configFile.getInt("Apocalypse Countdown Length", Configuration.CATEGORY_GENERAL, apocalypseCountdownLength, 19, Integer.MAX_VALUE, "Time between placing an AI mecha and going to the apocalypse");
+		SURVIVOR_RARITY = 			configFile.getInt("Survivor Rarity", Configuration.CATEGORY_GENERAL, SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities spawned during world creation");
+		WANDERING_SURVIVOR_RARITY = configFile.getInt("Wandering Survivor Rarity", Configuration.CATEGORY_GENERAL, WANDERING_SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities spawned at night");
+		SKELETON_RARITY = 			configFile.getInt("Skeleton Rarity", Configuration.CATEGORY_GENERAL, SKELETON_RARITY, 1, Integer.MAX_VALUE, "Rarity of buried skeletons");
+		DEAD_TREE_RARITY = 			configFile.getInt("Dead Tree Rarity", Configuration.CATEGORY_GENERAL, DEAD_TREE_RARITY, 1, Integer.MAX_VALUE, "Rarity of dead trees");
+		VEHICLE_RARITY = 			configFile.getInt("Vehicle Rarity", Configuration.CATEGORY_GENERAL, VEHICLE_RARITY, 1, Integer.MAX_VALUE, "Rarity of broken vehicles");
+		AIRPORT_RARITY = 			configFile.getInt("Airport Rarity", Configuration.CATEGORY_GENERAL, AIRPORT_RARITY, 1, Integer.MAX_VALUE, "Rarity of airstrips");
+		DYE_FACTORY_RARITY = 		configFile.getInt("Dye Factory Rarity", Configuration.CATEGORY_GENERAL, DYE_FACTORY_RARITY, 1, Integer.MAX_VALUE, "Rarity of dye factories");
+		LAB_RARITY = 				configFile.getInt("Lab Rarity", Configuration.CATEGORY_GENERAL, LAB_RARITY, 1, Integer.MAX_VALUE, "Rarity of the research lab");
+		RETURN_RADIUS = 			configFile.getInt("Return Radius", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
+		SPAWN_RADIUS = 				configFile.getInt("Spawn Radius", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
+		OPTION = 					TeleportOption.getOption(configFile.getString("Option", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
 
 		if(configFile.hasChanged())
 			configFile.save();

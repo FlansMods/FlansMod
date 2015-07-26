@@ -306,6 +306,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
+			if(seatInfo.id == 0)
+				lookSpeed = 4F / driveable.getDriveableType().turretRotationSpeed;
 			
 			//Calculate the new pitch and consider pitch limiters
 			float newPitch = looking.getPitch() - deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
@@ -488,7 +490,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return true;
 		}
 		//Put them in the seat
-		if(riddenByEntity == null)
+		if(riddenByEntity == null && !driveable.getDriveableData().engine.isAIChip)
 		{
 			entityplayer.mountEntity(this);
 			return true;

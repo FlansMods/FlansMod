@@ -92,7 +92,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute( SharedMonsterAttributes.followRange).setBaseValue(50D);
+        this.getEntityAttribute( SharedMonsterAttributes.followRange).setBaseValue(80D);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
     }
 	

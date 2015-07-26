@@ -122,7 +122,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
 	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
-	        double length = -5D;
+	        double length = 5D;
 	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
 	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        

@@ -347,7 +347,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         j1 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long)xOrigin * i1 + (long)zOrigin * j1 ^ this.worldObj.getSeed());
         
-        //if(rand.nextInt(FlansModApocalypse.LAB_RARITY) == 0)
+        if(rand.nextInt(FlansModApocalypse.LAB_RARITY) == 0)
         {
         	boolean canSpawn = true;
         	for(int i = 0; i < 5; i++)

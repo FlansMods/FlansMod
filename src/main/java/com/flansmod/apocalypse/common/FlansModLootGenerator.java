@@ -22,6 +22,7 @@ import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.tools.ToolType;
 import com.flansmod.common.types.EnumType;
 
 import net.minecraft.block.Block;
@@ -181,6 +182,12 @@ public class FlansModLootGenerator
 		if(rand.nextBoolean())
 		{
 			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(MechaItemType.types.get(rand.nextInt(MechaItemType.types.size())).item));
+		}
+		
+		//Add 0~1 tools
+		if(rand.nextBoolean())
+		{
+			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(ToolType.tools.get(new ArrayList<String>(ToolType.tools.keySet()).get(rand.nextInt(ToolType.tools.size()))).item));
 		}
 	}
 	
@@ -357,8 +364,8 @@ public class FlansModLootGenerator
 
 	public void fillDyeFactoryChest(TileEntityChest chest, Random rand) 
 	{
-		int numDyes = rand.nextInt(8);
-		int numMisc = rand.nextInt(4);
+		int numDyes = rand.nextInt(4);
+		int numMisc = rand.nextInt(2);
 		
 		for(int i = 0; i < numDyes; i++)
 		{

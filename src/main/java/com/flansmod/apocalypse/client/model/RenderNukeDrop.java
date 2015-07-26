@@ -2,7 +2,7 @@ package com.flansmod.apocalypse.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.apocalypse.client.entity.EntityNukeDrop;
+import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.common.driveables.EntityPlane;
 
 import net.minecraft.client.Minecraft;

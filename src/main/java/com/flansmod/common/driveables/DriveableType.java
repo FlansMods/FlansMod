@@ -100,6 +100,8 @@ public abstract class DriveableType extends InfoType
 	public float wheelSpringStrength = 0.5F;
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
+	/** */
+	public float turretRotationSpeed = 1F;
 	
 	/** Collision points for block based collisions */
 	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<DriveablePosition>();
@@ -201,6 +203,8 @@ public abstract class DriveableType extends InfoType
 				turretOrigin = new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F);
 			else if(split[0].equals("CollisionPoint") || split[0].equals("AddCollisionPoint"))
 				collisionPoints.add(new DriveablePosition(split));
+			if(split[0].equals("TurretRotationSpeed"))
+				turretRotationSpeed = Float.parseFloat(split[1]);
 			//Boats
 			else if(split[0].equals("PlaceableOnLand"))
 				placeableOnLand = Boolean.parseBoolean(split[1]);

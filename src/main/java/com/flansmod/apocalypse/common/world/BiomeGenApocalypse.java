@@ -27,13 +27,13 @@ public class BiomeGenApocalypse extends BiomeGenBase
 
 	public static void registerBiomes()
 	{
-		deepCanyon = (new BiomeGenDesertCanyon(240, true)).setColor(6316128).setBiomeName("Deep Canyon").setHeight(height_DeepCanyon).setTemperatureRainfall(2F, 0F);
-		canyon = (new BiomeGenDesertCanyon(241, true)).setColor(6316128).setBiomeName("Canyon").setHeight(height_Canyon).setTemperatureRainfall(2F, 0F);
-		desert = (new BiomeGenDesertCanyon(242, true)).setColor(6316128).setBiomeName("Desert").setHeight(height_Ground).setTemperatureRainfall(2F, 0F);
-		plateau = (new BiomeGenDesertCanyon(243, true)).setColor(6316128).setBiomeName("Plateau").setHeight(height_Plateau).setTemperatureRainfall(2F, 0F);
-		highPlateau = (new BiomeGenDesertCanyon(244, true)).setColor(6316128).setBiomeName("High Plateau").setHeight(height_HighPlateau).setTemperatureRainfall(2F, 0F);
+		deepCanyon = (new BiomeGenDesertCanyon(240, true)).setColor(6316128).setBiomeName("Deep Canyon").setHeight(height_DeepCanyon).setDisableRain().setTemperatureRainfall(2F, 0F);
+		canyon = (new BiomeGenDesertCanyon(241, true)).setColor(6316128).setBiomeName("Canyon").setHeight(height_Canyon).setDisableRain().setTemperatureRainfall(2F, 0F);
+		desert = (new BiomeGenDesertCanyon(242, true)).setColor(6316128).setBiomeName("Desert").setHeight(height_Ground).setDisableRain().setTemperatureRainfall(2F, 0F);
+		plateau = (new BiomeGenDesertCanyon(243, true)).setColor(6316128).setBiomeName("Plateau").setHeight(height_Plateau).setDisableRain().setTemperatureRainfall(2F, 0F);
+		highPlateau = (new BiomeGenDesertCanyon(244, true)).setColor(6316128).setBiomeName("High Plateau").setHeight(height_HighPlateau).setDisableRain().setTemperatureRainfall(2F, 0F);
 		
-		sulphurPits = (new BiomeGenSulphurPits(245, true)).setColor(6316128).setBiomeName("Sulphur Pits").setHeight(height_DeepCanyon).setTemperatureRainfall(2F, 0.5F);
+		sulphurPits = (new BiomeGenSulphurPits(245, true)).setColor(6316128).setBiomeName("Sulphur Pits").setHeight(height_DeepCanyon).setDisableRain().setTemperatureRainfall(2F, 0F);
 		
 		addBiomes(deepCanyon, canyon, desert, plateau, highPlateau, sulphurPits);
 	}

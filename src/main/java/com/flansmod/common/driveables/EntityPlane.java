@@ -586,6 +586,15 @@ public class EntityPlane extends EntityDriveable
 		for(EntityWheel wheel : wheels)
 		{
 			if(wheel != null && worldObj != null)
+			{
+				wheel.prevPosX = wheel.posX;
+				wheel.prevPosY = wheel.posY;
+				wheel.prevPosZ = wheel.prevPosZ;
+			}
+		}
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel != null && worldObj != null)
 			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getEntityBoundingBox()))
 			{
 				motionY += type.buoyancy;
