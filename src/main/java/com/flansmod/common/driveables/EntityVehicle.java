@@ -301,7 +301,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Rotate the wheels
 		if(hasEnoughFuel())
 		{
-			wheelsAngle += throttle / 7F;	
+			wheelsAngle += (Math.pow(throttle, 0.4))*0.2;	
 		}
 		
 		//Return the wheels to their resting position
