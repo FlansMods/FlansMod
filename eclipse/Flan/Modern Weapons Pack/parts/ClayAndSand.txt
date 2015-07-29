@@ -7,4 +7,4 @@ Colour 255 255 255
 Category Misc
 StackSize 64
 RecipeOutput 1
-ShapelessRecipe clay sand
+ShapelessRecipe clayItem sand

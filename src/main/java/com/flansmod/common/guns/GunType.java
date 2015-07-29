@@ -25,7 +25,7 @@ public class GunType extends InfoType implements IScope
 {
 	//Gun Behaviour Variables
 	/** The list of bullet types that can be used in this gun */
-	public List<ShootableType> ammo = new ArrayList<ShootableType>();
+	public List<ShootableType> ammo = new ArrayList<ShootableType>(), nonExplosiveAmmo = new ArrayList<ShootableType>();
 	/** Whether the player can press the reload key (default R) to reload this gun */
 	public boolean canForceReload = true;
 	/** The time (in ticks) it takes to reload this gun */
@@ -355,6 +355,8 @@ public class GunType extends InfoType implements IScope
 				ShootableType type = ShootableType.getShootableType(split[1]);
 				if(type != null)
 					ammo.add(type);
+				if(type.explosionRadius <= 0F)
+					nonExplosiveAmmo.add(type);
 			}
 			else if(split[0].equals("NumAmmoSlots") || split[0].equals("NumAmmoItemsInGun") || split[0].equals("LoadIntoGun"))
 				numAmmoItemsInGun = Integer.parseInt(split[1]);

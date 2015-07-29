@@ -1,14 +1,20 @@
 package com.flansmod.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.teams.TeamsManager;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -43,16 +49,16 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public int getSizeInventory() { return 1; }
 
 	@Override
-	public ItemStack getStackInSlot(int index) { return stack; }
+	public ItemStack getStackInSlot(int index) { return getStack(); }
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) { if(stack != null) { stack.stackSize -= count; if(stack.stackSize <= 0) stack = null; } return stack; }
+	public ItemStack decrStackSize(int index, int count) { if(getStack() != null) { getStack().stackSize -= count; if(getStack().stackSize <= 0) setStack(null); } return getStack(); }
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int index) { return getStackInSlot(index); }
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) { this.stack = stack; }
+	public void setInventorySlotContents(int index, ItemStack stack) { this.setStack(stack); }
 
 	@Override
 	public int getInventoryStackLimit() { return 64; }
@@ -87,8 +93,8 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 		super.writeToNBT(nbt);
 
 		NBTTagCompound stackNBT = new NBTTagCompound();
-		if(stack != null)
-			stack.writeToNBT(stackNBT);
+		if(getStack() != null)
+			getStack().writeToNBT(stackNBT);
 		nbt.setTag("stack", stackNBT);		
 		nbt.setString("type", type.shortName);
 	}
@@ -98,7 +104,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	{
 		super.readFromNBT(nbt);
 
-		stack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack"));
+		setStack(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack")));
 		type = ItemHolderType.getItemHolder(nbt.getString("type"));
 	}
 
@@ -122,10 +128,13 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 		readFromNBT(packet.getNbtCompound());
     }
 
-	public void addRandomLoot(Random rand) 
+	public ItemStack getStack() 
 	{
-		//Add a gun, 2/3rds of the time
-		if(rand.nextInt(3) != 0)
-			stack = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand);
+		return stack;
+	}
+
+	public void setStack(ItemStack stack) 
+	{
+		this.stack = stack;
 	}
 }

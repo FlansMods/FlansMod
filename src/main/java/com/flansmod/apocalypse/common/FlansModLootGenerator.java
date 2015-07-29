@@ -1,8 +1,10 @@
 package com.flansmod.apocalypse.common;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumPlaneMode;
@@ -34,7 +36,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
 
@@ -102,19 +106,20 @@ public class FlansModLootGenerator
 			if(type.dungeonChance != 0)
 				validGuns.add(type);
 	}
-	
-	public ItemStack getRandomLoadedGun(Random rand) 
+
+	public ItemStack getRandomLoadedGun(Random rand, boolean explosivesAllowed) 
 	{
 		ItemStack stack = getRandomUnloadedGun(rand);
 		
 		GunType gunType = ((ItemGun)stack.getItem()).type;
-		if(gunType.ammo.size() > 0)
+		List<ShootableType> ammoList = explosivesAllowed ? gunType.ammo : gunType.nonExplosiveAmmo;
+		if(ammoList.size() > 0)
 		{
 			NBTTagList ammoTagsList = new NBTTagList();
 			for(int i = 0; i < gunType.numAmmoItemsInGun; i++)
 			{
 				NBTTagCompound ammoTag = new NBTTagCompound();
-				ShootableType ammoType = gunType.ammo.get(rand.nextInt(gunType.ammo.size()));
+				ShootableType ammoType = ammoList.get(rand.nextInt(ammoList.size()));
 				ItemStack ammoStack = new ItemStack(ammoType.item);
 				ammoStack.setItemDamage(rand.nextInt(ammoType.roundsPerItem));
 				ammoStack.writeToNBT(ammoTag);
@@ -135,6 +140,17 @@ public class FlansModLootGenerator
 		return stack;
 	}
 
+	public void addRandomLoot(TileEntityItemHolder holder, Random rand, boolean gunsOnly) 
+	{
+		//Add a gun, 2/3rds of the time
+		if(gunsOnly || rand.nextInt(3) != 0)
+			holder.setStack(getRandomLoadedGun(rand, true));
+		else if(rand.nextBoolean())
+			holder.setStack(getSurvivorJournal(rand));
+		else if(rand.nextBoolean())
+			holder.setStack(new ItemStack(Items.rotten_flesh, 1 + rand.nextInt(3)));
+	}
+	
 	public void fillVillageChest(Random rand, TileEntityChest chest) 
 	{
 		int numParts = rand.nextInt(6) + 1;
@@ -311,9 +327,10 @@ public class FlansModLootGenerator
 
 	public void fillLiquidLabChest(Random rand, TileEntityChest chest) 
 	{
-		for(int i = 0; i < 3 + rand.nextInt(3); i++)
+		int numItems = 3 + rand.nextInt(4);
+		for(int i = 0; i < numItems; i++)
 		{
-			switch(rand.nextInt(8))
+			switch(rand.nextInt(10))
 			{
 			case 0 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.bowl, rand.nextInt(5) + 1)); break;
 			case 1 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.water_bucket)); break;
@@ -321,8 +338,10 @@ public class FlansModLootGenerator
 			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
 			case 4 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
 			case 5 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem)); break;
-			case 6 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem, potions[rand.nextInt(9)])); break;
+			case 6 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.potionitem, 1, potions[rand.nextInt(9)])); break;
 			case 7 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(FlansModApocalypse.sulphur, rand.nextInt(12) + 1)); break;
+			case 8 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getScientistJournal(rand)); break;
+			case 9 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getScientistJournal(rand)); break;
 			}
 		}
 	}
@@ -382,6 +401,110 @@ public class FlansModLootGenerator
 			case 3 : chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(Items.clay_ball, rand.nextInt(32) + 1)); break;
 			}
 		}
+	}
+	
+	public ItemStack getScientistJournal(Random rand)
+	{
+		ItemStack stack = new ItemStack(Items.written_book);
 		
+		//Give the book an author
+		stack.setTagInfo("author", new NBTTagString("Dr. Brazier"));
+		NBTTagList pages = new NBTTagList();
+		
+		//Write in a random journal entry
+		switch(rand.nextInt(8))
+		{
+		case 0 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 1"));
+			pages.appendTag(new NBTTagString("We are trying to find ways to disable the AI mechas. Unfortunately, this involves bringing specimens into our lab for testing. I protested to management, but they wouldn't listen, as ever. This will be the death of us, I know it."));
+			break;
+		case 1 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 2"));
+			pages.appendTag(new NBTTagString("The Mechas are almost... evolving... We try something new (today it was EMPs), boot them back up for another test and they've become resistant. Just like that. And I fear that the mechas we have here may be contacting others on the outside."));
+			break;
+		case 2 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 3"));
+			pages.appendTag(new NBTTagString("I lose hope with every passing day. There is no clever way to destroy these Mechas or shut them down. Their programming forms a vast, global, interconnected web. You shut down one and already every other Mecha knows what you did and how to become immune to it"));
+			break;		
+		case 3 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 4"));
+			pages.appendTag(new NBTTagString("Finally, we are looking into other approaches, though I must say, I am quite surprised. Management must have gone a bit mad, they've got us looking for a way to travel back in time... back in time! To destroy the first AI Mecha! How absurd!"));
+			break;
+		case 4 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 5"));
+			pages.appendTag(new NBTTagString("The time travel research is slow, but having heard some of the ideas from the others, I think we may actually have a shot. Not that this helps, though. I've been trying to explain stable time loops to management, but they either don't understand, or are just too desperate."));
+			break;
+		case 5 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 6"));
+			pages.appendTag(new NBTTagString("We actually did it! I cannot believe it, but we sent someone back in time! Admittedly, they ended up walking with Creepersauruses, but nonetheless, we did it!"));
+			break;
+		case 6 : 
+			stack.setTagInfo("title", new NBTTagString("Research Journal: Entry 7"));
+			pages.appendTag(new NBTTagString("They're here! The mechas are here! If you read this, please, go back in time, destroy the creator, stop th..."));
+			break;
+		case 7 : 
+			stack.setTagInfo("title", new NBTTagString("Time Portal: Instruction Manual"));
+			pages.appendTag(new NBTTagString("The Time Portal uses the portal properties of obsidian combined with our state-of-the-art power cubes. Place one in each corner of the obsidian grid to activate the portal."));
+			break;
+		}
+		
+		stack.setTagInfo("pages", pages);
+		
+		return stack;
+	}
+	
+	public ItemStack getSurvivorJournal(Random rand)
+	{
+		ItemStack stack = new ItemStack(Items.written_book);
+		
+		//Give the book an author
+		switch(rand.nextInt(1))
+		{
+		case 0: stack.setTagInfo("author", new NBTTagString("Flan")); break;
+		}
+		NBTTagList pages = new NBTTagList();
+		
+		//Write in a random journal entry
+		switch(rand.nextInt(8))
+		{
+		case 0 : 
+			stack.setTagInfo("title", new NBTTagString("Help me!"));
+			pages.appendTag(new NBTTagString("I have no food. My child has no food. We are going to die. Why did this have to happen?"));
+			break;
+		case 1 : 
+			stack.setTagInfo("title", new NBTTagString("The Endtimes"));
+			pages.appendTag(new NBTTagString("It's amazing how fast your world can be torn down around you. Just three days ago, I was happily trading emeralds at the village market. Now all that is gone. I am left to wander this wasteland alone. I don't know how long I'll last, or how long I'll stay sane..."));
+			break;
+		case 2 : 
+			stack.setTagInfo("title", new NBTTagString("Day 5"));
+			pages.appendTag(new NBTTagString("We found water today! At the bottom of a village well. We drank and bathed and filled our bottles and left. But for reference, the village was at- *bloodstains*"));
+			break;		
+		case 3 : 
+			stack.setTagInfo("title", new NBTTagString("Day 7"));
+			pages.appendTag(new NBTTagString("They got my brother! Just after we left the village, he was snatched by some sort of... robot... Also, I think the water may have been contaminated. I've been sweating an awful lot, and it's not just the heat."));
+			break;
+		case 4 : 
+			stack.setTagInfo("title", new NBTTagString("Day 10"));
+			pages.appendTag(new NBTTagString("I have been violently ill, but have not found a new water source yet. I may have to drink more contaminated water to stay alive. I couldn't get worse, could I?"));
+			break;
+		case 5 : 
+			stack.setTagInfo("title", new NBTTagString("The Wasteland"));
+			pages.appendTag(new NBTTagString("This world is harsh and unforgiving. I've had to make difficult choices, but they are necessary in order to survive. If I hadn't pulled the trigger, they would have done so instead. I'm sure of it."));
+			break;
+		case 6 : 
+			stack.setTagInfo("title", new NBTTagString(""));
+			pages.appendTag(new NBTTagString("We spotted an airstrip in the distance! We're going to head over there under cover of darkness and see if we can acquire ourselves a plane. Let's get out of this terrible place."));
+			break;
+		case 7 : 
+			stack.setTagInfo("title", new NBTTagString("Time Portal: Instruction Manual"));
+			stack.setTagInfo("generation", new NBTTagInt(3));
+			pages.appendTag(new NBTTagString("The Time Portal uses the portal properties of obsidian combined with-"));
+			pages.appendTag(new NBTTagString("Beware! The mechas are coming! The time portal is of great importance! You must-"));
+			break;
+		}
+		
+		stack.setTagInfo("pages", pages);
+		
+		return stack;
 	}
 }

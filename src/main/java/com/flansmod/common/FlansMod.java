@@ -126,6 +126,7 @@ public class FlansMod
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
 	public static boolean isApocalypseLoaded = false;
+	public static boolean addAllPaintjobsToCreative = false;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -559,9 +560,7 @@ public class FlansMod
 		//generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
 		addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
 
-		//teamsConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, teamsConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-		//teamsConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, teamsConfigString, "A String!");
-		//teamsConfigBoolean = configFile.getBoolean("Config Boolean", Configuration.CATEGORY_GENERAL, teamsConfigBoolean, "A Boolean!");
+		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
 
 		if(configFile.hasChanged())
 			configFile.save();

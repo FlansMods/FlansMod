@@ -44,3 +44,4 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob Bizon_Orange Bizon_Orange orange 2
+Paintjob Bizon_Blue Bizon_Blue blue 1 lightBlue 1 cyan 1

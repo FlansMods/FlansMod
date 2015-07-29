@@ -279,14 +279,14 @@ public class WorldGenResearchLab extends WorldGenFlan
     	}
     	for(int k = 0; k < 2; k++)
     	{
-    		ItemStack randomGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand);
+    		ItemStack randomGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand, false);
     		GunType gunType = ((ItemGun)randomGun.getItem()).type;
     		tags.setTag(k == 1 ? EnumMechaSlotType.rightTool.toString() : EnumMechaSlotType.leftTool.toString(), randomGun.writeToNBT(new NBTTagCompound()));
-    		if(gunType.ammo.size() > 0)
+    		if(gunType.nonExplosiveAmmo.size() > 0)
     		{
 	        	for(int j = 0; j < 1 + rand.nextInt(2); j++)
 	        	{
-	        		ShootableType ammo = gunType.ammo.get(rand.nextInt(gunType.ammo.size()));
+	        		ShootableType ammo = gunType.nonExplosiveAmmo.get(rand.nextInt(gunType.nonExplosiveAmmo.size()));
 	        		tags.setTag("Cargo " + rand.nextInt(type.numCargoSlots), new ItemStack(ammo.item, (ammo.maxStackSize > 1 ? rand.nextInt(ammo.maxStackSize - 1) + 1 : 1)).writeToNBT(new NBTTagCompound()));
 	        	}
     		}
@@ -329,7 +329,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		for(int i = 0; i < 2; i++)
 			for(int j = 0; j < 2; j++)
 				if(rand.nextInt(3) != 0)
-					((TileEntityItemHolder)world.getTileEntity(new BlockPos(x + 1 + i, y + 1, z + j))).addRandomLoot(rand);
+					FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)world.getTileEntity(new BlockPos(x + 1 + i, y + 1, z + j)), rand, true);
 		
 		for(int i = 0; i < 2; i++)
 		{
@@ -399,7 +399,7 @@ public class WorldGenResearchLab extends WorldGenFlan
 		for(int i = 0; i < 2; i++)
 		{
 			if(rand.nextInt(3) != 0)
-				((TileEntityItemHolder)world.getTileEntity(new BlockPos(x + i, y + 1, z))).addRandomLoot(rand);
+				FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)world.getTileEntity(new BlockPos(x + i, y + 1, z)), rand, true);
 		}
 	}
 	

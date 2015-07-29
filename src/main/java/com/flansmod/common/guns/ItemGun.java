@@ -1115,10 +1115,20 @@ public class ItemGun extends Item implements IFlanItem
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list)
     {
-    	ItemStack gunStack = new ItemStack(item, 1, 0);
     	GunType type = ((ItemGun)item).type;
+    	if(FlansMod.addAllPaintjobsToCreative)
+    	{
+    		for(Paintjob paintjob : type.paintjobs)
+    			addPaintjobToList(item, type, paintjob, list);
+    	}
+        else addPaintjobToList(item, type, type.defaultPaintjob, list);
+    }
+    
+    private void addPaintjobToList(Item item, GunType type, Paintjob paintjob, List list)
+    {
+    	ItemStack gunStack = new ItemStack(item, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
-    	tags.setString("Paint", type.defaultPaintjob.iconName);
+    	tags.setString("Paint", paintjob.iconName);
     	gunStack.setTagCompound(tags);
         list.add(gunStack);
     }

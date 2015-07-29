@@ -901,7 +901,7 @@ public class StructureAbandonedVillagePieces
 	                //Dead skeleton with weapon
 	                BlockPos skeletonPos = new BlockPos(this.getXWithOffset(5, 4), this.getYWithOffset(1), this.getZWithOffset(5, 4));
 	                worldIn.setBlockState(skeletonPos, FlansModApocalypse.slumpedSkeleton.getStateFromMeta((4 - Blocks.chest.getMetaFromState(chestState)) % 4), 2);
-	                ((TileEntityItemHolder)worldIn.getTileEntity(skeletonPos)).addRandomLoot(p_74875_2_);
+	                FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)worldIn.getTileEntity(skeletonPos), p_74875_2_, false);
                 }
                 
                 this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 1, 1, 0, p_74875_3_);

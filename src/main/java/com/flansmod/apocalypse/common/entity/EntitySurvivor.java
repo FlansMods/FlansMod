@@ -104,5 +104,10 @@ public class EntitySurvivor extends EntityFlansModShooter
     		dropItem(Items.iron_shovel, 1);
     	if(rand.nextInt(4) == 0)
     		dropItem(Item.getItemFromBlock(Blocks.torch), rand.nextInt(5) + 1);
+    	
+    	if(rand.nextBoolean())
+    	{
+    		worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, FlansModApocalypse.getLootGenerator().getSurvivorJournal(rand)));
+    	}
     }
 }

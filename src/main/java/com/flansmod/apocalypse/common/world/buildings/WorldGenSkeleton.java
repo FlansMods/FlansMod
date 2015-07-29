@@ -22,7 +22,7 @@ public class WorldGenSkeleton extends WorldGenerator
 			if(world.isAirBlock(pos) && World.doesBlockHaveSolidTopSurface(world, pos.down()))
 			{
 				world.setBlockState(pos, FlansModApocalypse.skeleton.getDefaultState().withProperty(BlockItemHolder.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]), 2);
-				((TileEntityItemHolder)world.getTileEntity(pos)).addRandomLoot(rand);
+				FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)world.getTileEntity(pos), rand, false);
 				break;
 			}
 		}	
