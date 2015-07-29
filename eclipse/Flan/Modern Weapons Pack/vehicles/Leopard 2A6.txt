@@ -1,14 +1,14 @@
 //Naming
-Name Challenger II
-ShortName ChallyII
+Name Leopard 2A6
+ShortName Leo2A6
 //Visuals
-Icon ChallyII
-Model mw.ChallengerII
-Texture ChallySimple
+Icon Leo2
+Model mw.Leopard2A6
+Texture Leopard2A6
 //Third Person Camera Distance
 CameraDistance 11.5
 //Throttle
-MaxThrottle 0.7
+MaxThrottle 1.1
 MaxNegativeThrottle 1.0
 //Steering modifiers
 TurnLeftSpeed 0.5
@@ -18,10 +18,10 @@ Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.5
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -51 -10 -33
-WheelPosition 1 -51 -10 33
-WheelPosition 2 56 -10 33
-WheelPosition 3 56 -10 -33
+WheelPosition 0 -57 -10 -27
+WheelPosition 1 -57 -10 27
+WheelPosition 2 57 -10 27
+WheelPosition 3 57 -10 -27
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
@@ -33,16 +33,16 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 33 0 -360 360 -10 20
-RotatedDriverOffset -5 0 10
+Driver 0 30 0 -360 360 -9 20
+RotatedDriverOffset -6 0 -11
 Passengers 1
-Passenger 1 0 33 0 turret -360 360 -15 40 m60 L37A2
-RotatedPassengerOffset 1 -4 0 -14
-GunOrigin 1 -7 33 -13
+Passenger 1 0 20 0 turret -360 360 -15 40 m60 MG3
+RotatedPassengerOffset 1 -10 0 13
+GunOrigin 1 -5 47 -15
 
-BarrelPosition 131 26 0
+BarrelPosition 101 26 1 
 //Secondary gun
-AddGun 8 34 8 turret m60
+AddGun 52 28 -2 turret m60
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 70
@@ -64,10 +64,11 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 27500 -69 0 -33 137 23 66
-SetupPart rightTrack 15000 -69 -10 -33 136 10 12
-SetupPart leftTrack 15000 -69 -10 21 136 10 12
-SetupPart turret 18000 -48 23 -27 92 16 54
+SetupPart core 24500 -78 -1 -36 149 22 72
+SetupPart leftTrack 10000 -68 -11 -32 133 21 11
+SetupPart rightTrack 10000 -68 -11 21 133 21 11
+SetupPart turret 15000 -60 21 -29 112 14 58
 BulletDetection 7
+ModelScale 0.77
 
 RotateWheels true
