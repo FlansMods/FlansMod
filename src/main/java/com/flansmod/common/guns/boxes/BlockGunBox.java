@@ -25,12 +25,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;
 
-public class BlockGunBox extends Block implements ITextureHandler
+public class BlockGunBox extends Block
 {
 	public GunBoxType type;
 	
@@ -42,7 +40,7 @@ public class BlockGunBox extends Block implements ITextureHandler
 		type = t;
 
 	    setUnlocalizedName(type.shortName);
-	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
+	    GameRegistry.registerBlock(this, type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 		type.block = this;
 		type.item = Item.getItemFromBlock(this);
@@ -242,40 +240,5 @@ public class BlockGunBox extends Block implements ITextureHandler
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, 0));
 		return ret;
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public int getRenderType() 
-    {
-        return 100;
-    }
-	
-	@SideOnly(Side.CLIENT)
-    private TextureLoader textureLoader;
-    
-	public static ResourceLocation workbench1 = new ResourceLocation("flansmod", "blocks/planeCraftingTableSmall");
-	public static ResourceLocation workbench2 = new ResourceLocation("flansmod", "blocks/planeCraftingTableLarge");
-	public static ResourceLocation workbench3 = new ResourceLocation("flansmod", "blocks/vehicleCraftingTable");
-	
-	@Override
-	public void loadTextures(TextureLoader loader) 
-	{
-        this.textureLoader = loader;
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.topTexturePath));
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.sideTexturePath));
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.bottomTexturePath));
-	}
-
-	@Override
-	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
-	{
-		ResourceLocation res = FlansModResourceHandler.getBlockTexture(type.sideTexturePath);
-		switch(facing)
-		{
-		case UP:   res = FlansModResourceHandler.getBlockTexture(type.topTexturePath); break;
-		case DOWN: res = FlansModResourceHandler.getBlockTexture(type.bottomTexturePath); break;
-		default:
-		}
-		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
 	}
 }

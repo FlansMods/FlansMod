@@ -1,8 +1,6 @@
 package com.flansmod.common;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.teams.ItemOpStick;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TileEntitySpawner;

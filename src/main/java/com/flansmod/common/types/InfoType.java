@@ -56,7 +56,7 @@ public class InfoType
 	
 	public InfoType(TypeFile file)
 	{
-		contentPack = file.name;
+		contentPack = file.contentPack;
 		infoTypes.add(this);
 	}
 	

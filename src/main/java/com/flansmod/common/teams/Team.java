@@ -37,7 +37,7 @@ public class Team extends InfoType
 	
 	public Team(String s, String s1, int teamCol, char textCol)
 	{
-		super(new TypeFile(EnumType.team, s, false));
+		super(new TypeFile("NoPack", EnumType.team, s, false));
 		shortName = s;
 		name = s1;
 		teamColour = teamCol;

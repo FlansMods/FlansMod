@@ -135,7 +135,8 @@ public class GuiGunModTable extends GuiContainer
             		
             		Paintjob paintjob = gunType.paintjobs.get(2 * y + x);
             		ItemStack stack = gunStack.copy();
-            		stack.getTagCompound().setString("Paint", paintjob.iconName);
+            		//stack.getTagCompound().setString("Paint", paintjob.iconName);
+            		stack.setItemDamage(paintjob.ID);
             		itemRender.renderItemIntoGUI(stack, xOrigin + 132 + x * 18, yOrigin + 83 + y * 18);
             	}
             }
@@ -247,7 +248,7 @@ public class GuiGunModTable extends GuiContainer
 		if(hoveringOver == null)
 			return;
 		
-		FlansMod.getPacketHandler().sendToServer(new PacketGunPaint(hoveringOver.iconName));
-		((ContainerGunModTable)inventorySlots).clickPaintjob(hoveringOver);
+		FlansMod.getPacketHandler().sendToServer(new PacketGunPaint(hoveringOver.ID));
+		((ContainerGunModTable)inventorySlots).clickPaintjob(hoveringOver.ID);
 	}
 }

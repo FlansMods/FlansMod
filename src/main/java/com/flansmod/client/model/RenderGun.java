@@ -114,7 +114,7 @@ public class RenderGun implements IItemRenderer
 		if(!offHandGunType.oneHanded)
 			return;
 		
-		renderGun(ItemRenderType.EQUIPPED, offHandItemStack, offHandGunType, animations, true, player);
+		renderGun(ItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
 	}
 		
 	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
@@ -336,7 +336,8 @@ public class RenderGun implements IItemRenderer
 		}
 				
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		//renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getItemDamage())));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);

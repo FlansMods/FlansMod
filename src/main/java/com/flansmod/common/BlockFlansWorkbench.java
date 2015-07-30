@@ -2,9 +2,6 @@ package com.flansmod.common;
 
 import java.util.List;
 
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -23,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockFlansWorkbench extends Block implements ITextureHandler
+public class BlockFlansWorkbench extends Block
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
@@ -58,11 +55,7 @@ public class BlockFlansWorkbench extends Block implements ITextureHandler
 		return true;
     }
     
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() 
-    {
-        return 100;
-    }
+
     
     @Override
     protected BlockState createBlockState()
@@ -88,36 +81,4 @@ public class BlockFlansWorkbench extends Block implements ITextureHandler
         return ((Integer)state.getValue(TYPE)).intValue();
     }
 
-    @SideOnly(Side.CLIENT)
-    private TextureLoader textureLoader;
-    
-	public static ResourceLocation workbench1 = new ResourceLocation("flansmod", "blocks/planeCraftingTableSmall");
-	public static ResourceLocation workbench2 = new ResourceLocation("flansmod", "blocks/planeCraftingTableLarge");
-	public static ResourceLocation workbench3 = new ResourceLocation("flansmod", "blocks/vehicleCraftingTable");
-	public static ResourceLocation side = new ResourceLocation("flansmod", "blocks/planeCraftingTableSide");
-	public static ResourceLocation bottom = new ResourceLocation("flansmod", "blocks/boxBottom");
-	
-	@Override
-	public void loadTextures(TextureLoader loader) 
-	{
-        this.textureLoader = loader;
-        loader.registerTexture(workbench1);
-        loader.registerTexture(workbench2);
-        loader.registerTexture(workbench3);
-        loader.registerTexture(side);
-        loader.registerTexture(bottom);
-	}
-
-	@Override
-	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
-	{
-		ResourceLocation res = side;
-		switch(facing)
-		{
-		case UP: switch(((Integer)state.getValue(TYPE)).intValue()) { case 0: res = workbench1; break; case 1: res = workbench2; break; case 2: res = workbench3; break; } break;
-		case DOWN: res = bottom;
-		default:
-		}
-		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
-	}
 }

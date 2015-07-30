@@ -43,6 +43,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.flansmod.client.FlansModClient;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
@@ -397,7 +398,7 @@ public class FlansMod
 						{
 							BufferedReader reader = new BufferedReader(new FileReader(file));
 							String[] splitName = file.getName().split("/");
-							TypeFile typeFile = new TypeFile(typeToCheckFor, splitName[splitName.length - 1].split("\\.")[0]);
+							TypeFile typeFile = new TypeFile(contentPack.getName(), typeToCheckFor, splitName[splitName.length - 1].split("\\.")[0]);
 							for(;;)
 							{
 								String line = null;
@@ -445,7 +446,7 @@ public class FlansMod
 							if(zipEntry.getName().startsWith(type.folderName + "/") && zipEntry.getName().split(type.folderName + "/").length > 1 && zipEntry.getName().split(type.folderName + "/")[1].length() > 0)
 							{
 								String[] splitName = zipEntry.getName().split("/");
-								typeFile = new TypeFile(type, splitName[splitName.length - 1].split("\\.")[0]);
+								typeFile = new TypeFile(zip.getName(), type, splitName[splitName.length - 1].split("\\.")[0]);
 							}
 						}
 						if(typeFile == null)
@@ -499,13 +500,8 @@ public class FlansMod
 		}
 
 		List<File> contentPacks = proxy.getContentList(method, classloader);
-		
-		if (!event.getSide().equals(Side.CLIENT))
-		{
-			//Gametypes (Server only)
-			// TODO: gametype loader
-		}
-		
+
+		//TODO : Add gametype loader
 		getTypeFiles(contentPacks);
 		
 		for(EnumType type : EnumType.values())
@@ -548,6 +544,9 @@ public class FlansMod
 			log("Loaded " + type.name() + ".");
 		}		
 		Team.spectators = spectators;
+		
+		//Automates JSON adding for old content packs
+		FlansModClient.addMissingJSONs(InfoType.infoTypes);
 	}
 	
 	public static PacketHandler getPacketHandler()

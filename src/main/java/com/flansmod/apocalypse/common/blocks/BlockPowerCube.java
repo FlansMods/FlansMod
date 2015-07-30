@@ -2,8 +2,6 @@ package com.flansmod.apocalypse.common.blocks;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.TileEntityItemHolder;
 

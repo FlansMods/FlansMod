@@ -11,8 +11,10 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -55,10 +57,6 @@ import com.flansmod.client.model.RenderNull;
 import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.RenderBlock;
-import com.flansmod.client.renderhack.RenderRegistry;
-import com.flansmod.client.renderhack.RenderSpawner;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.TileEntityItemHolder;
@@ -79,7 +77,9 @@ import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.guns.boxes.BlockGunBox;
+import com.flansmod.common.guns.boxes.BoxType;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
@@ -119,8 +119,24 @@ public class ClientProxy extends CommonProxy
 		for(InfoType type : InfoType.infoTypes)
 		{
 			if(type != null && type.item != null)
-				Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, 0, new ModelResourceLocation(FlansMod.MODID + ":" + type.shortName, "inventory"));
+			{
+				if(type instanceof GunType)
+				{
+					for(Paintjob paintjob : ((GunType)type).paintjobs)
+					{
+						ModelBakery.addVariantName(type.item, new String[] {"flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName))});
+						Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
+					}
+				}
+				
+				else Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
+			}
 		}
+		
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 0, new ModelResourceLocation("flansmod:flansWorkbench_guns", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 1, new ModelResourceLocation("flansmod:flansWorkbench_vehicles", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 2, new ModelResourceLocation("flansmod:flansWorkbench_parts", "inventory"));
+		ModelBakery.addVariantName(Item.getItemFromBlock(FlansMod.workbench), new String[] {"flansmod:flansWorkbench_guns", "flansmod:flansWorkbench_parts", "flansmod:flansWorkbench_vehicles"});
 		
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
@@ -139,17 +155,7 @@ public class ClientProxy extends CommonProxy
 			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
 		for(MechaType mechaType : MechaType.types)
 			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
-		
-        RenderRegistry.registerBlockHandler(new RenderBlock(FlansMod.workbench.getRenderType()));
-        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.workbench);
-        
-		for(GunBoxType gunBoxType : GunBoxType.gunBoxMap.values())
-			RenderRegistry.registerTextureHandler((ITextureHandler)gunBoxType.block);
-		for(ArmourBoxType armourBoxType : ArmourBoxType.boxes.values())
-			RenderRegistry.registerTextureHandler((ITextureHandler)armourBoxType.block);
-		
-        RenderRegistry.registerBlockHandler(new RenderSpawner(FlansMod.spawner.getRenderType()));
-        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.spawner);
+
 		
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
 		

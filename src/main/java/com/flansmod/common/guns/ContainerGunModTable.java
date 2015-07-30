@@ -115,13 +115,13 @@ public class ContainerGunModTable extends Container
 		//Nope.
 	}
 	
-	public void clickPaintjob(String name)
+	public void clickPaintjob(int i)
 	{
 		ItemStack gunStack = inventory.getStackInSlot(0);
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)gunStack.getItem()).type;
-			clickPaintjob(gunType.getPaintjob(name));
+			clickPaintjob(gunType.getPaintjob(i));
 		}
 	}
 	
@@ -171,7 +171,8 @@ public class ContainerGunModTable extends Container
 	    	}
 	    	
 	    	//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
-			gunStack.getTagCompound().setString("Paint", paintjob.iconName);
+			//gunStack.getTagCompound().setString("Paint", paintjob.iconName);
+			gunStack.setItemDamage(paintjob.ID);
 		}
 	}
 }

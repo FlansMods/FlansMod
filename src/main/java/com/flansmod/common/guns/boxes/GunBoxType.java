@@ -16,13 +16,11 @@ import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class GunBoxType extends InfoType
+public class GunBoxType extends BoxType
 {
 	public BlockGunBox block;
 	
-	public String topTexturePath;
-	public String sideTexturePath;
-	public String bottomTexturePath;
+
 	public int numGuns;
 	public int nextGun = -1;
 	/** */
@@ -88,12 +86,6 @@ public class GunBoxType extends InfoType
 		super.read(split, file);
 		try
 		{		
-			if (split[0].equals("TopTexture"))
-				topTexturePath = split[1];
-			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = split[1];
-			if (split[0].equals("SideTexture"))
-				sideTexturePath = split[1];
 			if (split[0].equals("AddGun"))
 			{
 				nextGun++;

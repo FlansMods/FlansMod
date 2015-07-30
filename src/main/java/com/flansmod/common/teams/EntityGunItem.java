@@ -27,7 +27,7 @@ import com.flansmod.common.guns.ShootableType;
 public class EntityGunItem extends EntityItem {
 	
 	public List<ItemStack> ammoStacks;
-	
+	private boolean teamsModEnabled = false;
 	private int age;
 	
 	public EntityGunItem(World w)
@@ -52,6 +52,7 @@ public class EntityGunItem extends EntityItem {
 			if(ammoStack != null && ammoStack.getItem() != null && (ammoStack.getItem() instanceof ItemBullet))
 				ammoStacks.add(ammoStack);
 		}
+		teamsModEnabled = true;
 	}	
 	
 	public EntityGunItem(World w, double x, double y, double z)
@@ -153,7 +154,7 @@ public class EntityGunItem extends EntityItem {
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
 	{
-	 	return false;
+	 	return true;
 	}
 
 	@Override
@@ -187,6 +188,8 @@ public class EntityGunItem extends EntityItem {
 					}
 				}
 			}
+			else if(!teamsModEnabled)
+				super.onCollideWithPlayer(player);
 		}
 	}
 
@@ -236,7 +239,7 @@ public class EntityGunItem extends EntityItem {
 	@Override
 	public boolean canAttackWithItem()
 	{
-		return false;
+		return true;
 	}
 
 	@Override

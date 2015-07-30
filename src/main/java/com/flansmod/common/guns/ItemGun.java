@@ -93,6 +93,12 @@ public class ItemGun extends Item implements IFlanItem
 	{
 		return true;
 	}
+	
+	@Override
+    public String getUnlocalizedName(ItemStack stack)
+    {
+        return getUnlocalizedName();//stack.getTagCompound().getString("Paint");
+    }
 		
 	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
 	public ItemStack getBulletItemStack(ItemStack gun, int id)
@@ -1126,9 +1132,8 @@ public class ItemGun extends Item implements IFlanItem
     
     private void addPaintjobToList(Item item, GunType type, Paintjob paintjob, List list)
     {
-    	ItemStack gunStack = new ItemStack(item, 1, 0);
+    	ItemStack gunStack = new ItemStack(item, 1, paintjob.ID);
     	NBTTagCompound tags = new NBTTagCompound();
-    	tags.setString("Paint", paintjob.iconName);
     	gunStack.setTagCompound(tags);
         list.add(gunStack);
     }

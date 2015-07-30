@@ -179,6 +179,9 @@ public class GunType extends InfoType implements IScope
 	public float moveSpeedModifier = 1F;
 	/** Gives knockback resistance to the player */
 	public float knockbackModifier = 0F;
+	
+	/** Assigns IDs to paintjobs */
+	private int nextPaintjobID = 1;
 
 	public GunType(TypeFile file)
 	{
@@ -193,7 +196,7 @@ public class GunType extends InfoType implements IScope
 		guns.put(shortName, this);
 		
 		//After all lines have been read, set up the default paintjob
-		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
+		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first
 		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
 		newPaintjobList.add(defaultPaintjob);
@@ -421,7 +424,13 @@ public class GunType extends InfoType implements IScope
 				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
 				for(int i = 0; i < (split.length - 3) / 2; i++)
 					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
-				paintjobs.add(new Paintjob(split[1], split[2], dyeStacks));
+				if(split[1].contains("_"))
+				{
+					String[] splat = split[1].split("_");
+					if(splat[0].equals(iconPath))
+						split[1] = splat[1];
+				}
+				paintjobs.add(new Paintjob(nextPaintjobID++, split[1], split[2], dyeStacks));
 			}
 			
 			//Shield settings
@@ -683,6 +692,11 @@ public class GunType extends InfoType implements IScope
 				return paintjob;
 		}
 		return defaultPaintjob;
+	}
+	
+	public Paintjob getPaintjob(int i)
+	{
+		return paintjobs.get(i);
 	}
 	
 	@Override

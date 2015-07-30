@@ -20,10 +20,6 @@ import net.minecraft.world.IBlockAccess;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.model.apocalypse.ModelGroundSkeleton;
-import com.flansmod.client.renderhack.ISimpleBlockRenderingHandler;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.SimpleBlockRender;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.TileEntityItemHolder;

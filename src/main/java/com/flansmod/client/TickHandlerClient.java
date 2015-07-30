@@ -138,7 +138,7 @@ public class TickHandlerClient
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 		}
-		
+				
 		if(event.isCancelable() && event.type == ElementType.HOTBAR)
 		{
 			//Off-hand weapon graphics
@@ -552,6 +552,7 @@ public class TickHandlerClient
 		}
 		
 		FlansModClient.renderTick(smoothing);
+		ClientRenderHooks.updateRenderTick(smoothing);
 	}
 
 	public void renderTickEnd(Minecraft mc)

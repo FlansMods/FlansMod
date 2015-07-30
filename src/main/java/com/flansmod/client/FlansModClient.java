@@ -1,7 +1,20 @@
 package com.flansmod.client;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
@@ -38,19 +51,20 @@ import net.minecraft.client.particle.EntitySnowShovelFX;
 import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.particle.EntitySplashFX;
 import net.minecraft.client.particle.EntitySuspendFX;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderItemOld;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.tileentity.RenderItemFrame;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -64,6 +78,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -78,18 +93,20 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
-import com.flansmod.client.renderhack.FlansModRendererDispatcher;
-import com.flansmod.client.renderhack.RenderRegistry;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.guns.boxes.BoxType;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.TypeFile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 
 public class FlansModClient extends FlansMod
@@ -141,175 +158,29 @@ public class FlansModClient extends FlansMod
 	/** When a round ends, the teams score GUI is locked for this length of time */
 	public static int teamsScoreGUILock = 0;	
 	
+	private static ClientRenderHooks renderHooks;
+	
 	public void load()
 	{		
 		log("Loading Flan's mod client side.");
+		MinecraftForge.EVENT_BUS.register(renderHooks = new ClientRenderHooks());
 		MinecraftForge.EVENT_BUS.register(this);
 		Minecraft mc = Minecraft.getMinecraft();
-
-        // Prerequisite
-        ModelManager modelManager = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, "aL", "field_175617_aL", "modelManager");
-        RenderManager renderManager = mc.getRenderManager();
-        IReloadableResourceManager resourceManager = ((IReloadableResourceManager) mc.getResourceManager());
-
-        // Render Item Hook
-        RenderItem item = new RenderItemOld(mc.getTextureManager(), modelManager);
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, item, "X", "field_175621_X", "renderItem");
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, new ItemRenderer(mc), "Y", "field_175620_Y", "itemRenderer");
-        renderManager.entityRenderMap.remove(EntityItem.class);
-        renderManager.entityRenderMap.put(EntityItem.class, new RenderEntityItem(renderManager, item));
-        renderManager.entityRenderMap.remove(EntityItemFrame.class);
-        renderManager.entityRenderMap.put(EntityItemFrame.class, new RenderItemFrame(renderManager, item));
-        mc.entityRenderer = new EntityRenderer(mc, resourceManager);
-
-        // Render Block Dispatcher Hook
-        BlockRendererDispatcher rendererDispatcher = new FlansModRendererDispatcher(modelManager.getBlockModelShapes(), mc.gameSettings);
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, rendererDispatcher, "aM", "field_175618_aM", "blockRenderDispatcher");
-
-        // Register Reload Listeners
-        resourceManager.registerReloadListener(rendererDispatcher);
-        resourceManager.registerReloadListener(item);
-        resourceManager.registerReloadListener(mc.entityRenderer);
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
 			
-	@SubscribeEvent
-	public void renderOffHandGun(RenderPlayerEvent.Specials.Post event)
-	{
-		RenderPlayer renderer = event.renderer;
-		EntityPlayer player = event.entityPlayer;
-		float dt = event.partialRenderTick;
-		PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
-		
-		ItemStack gunStack = null;
-		
-		//Check current stack is a one handed gun
-		if(player instanceof EntityOtherPlayerMP)
-		{
-			gunStack = data.offHandGunStack;
-		}
-		else
-		{
-			ItemStack currentStack = player.getCurrentEquippedItem();
-			if(currentStack == null || !(currentStack.getItem() instanceof ItemGun) || !((ItemGun)currentStack.getItem()).type.oneHanded || data.offHandGunSlot == 0)
-				return;
-			gunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-		}
-				
-		if(gunStack == null || !(gunStack.getItem() instanceof ItemGun))
-			return;
-		GunType gunType = ((ItemGun)gunStack.getItem()).type;
-				
-		//Render!
-		GL11.glPushMatrix();
-
-		renderer.getPlayerModel().bipedLeftArm.postRender(0.0625F);
-        GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
 
-		float f2 = 1F;
-
-		GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
-		GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glScalef(-f2, -f2, f2);
-
-		int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
-		float f11 = (float)(k >> 16 & 255) / 255.0F;
-		float f12 = (float)(k >> 8 & 255) / 255.0F;
-		float f3 = (float)(k & 255) / 255.0F;
-		GL11.glColor4f(f11, f12, f3, 1.0F);
-		ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);
-
-		GL11.glPopMatrix();
-	}
 	
-	private float interpolateRotation(float x, float y, float dT)
-	{
-		float f3;
 
-		for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
-		for( ; f3 >= 180.0F; f3 -= 360.0F) { }
-
-		return x + dT * f3;
-	}
-
-	//Handle player hiding / name tag removal for teams
-	@SubscribeEvent
-	public void renderLiving(RenderPlayerEvent.Pre event)
-	{
-		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
-		
-		//Render debug boxes for player snapshots
-		if(FlansMod.DEBUG && data != null)
-		{
-			if(data.snapshots[0] != null)
-				data.snapshots[0].renderSnapshot();
-		}
-					
-		RendererLivingEntity.NAME_TAG_RANGE = 64F;
-		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
-		if(event.entity instanceof EntityPlayer && teamInfo != null && teamInfo.gametype != null && !"No Gametype".equals(teamInfo.gametype))
-		{
-			PlayerScoreData rendering = teamInfo.getPlayerScoreData(event.entity.getName());
-			PlayerScoreData thePlayer = teamInfo.getPlayerScoreData(minecraft.thePlayer.getName());
-			
-			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
-			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
-						
-			//Do custom skin overrides
-			//If we have no stored skin, try to get it
-			if(data.skin == null)
-				data.skin = ((AbstractClientPlayer)event.entityPlayer).getLocationSkin();
-			//Only once we have the stored skin may we override
-			if(data.skin != null)
-			{
-				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
-				//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
-			}
-			
-			//Spectators see all
-			if(thePlayerTeam == Team.spectators)
-				return;
-			//Nobody sees spectators
-			if(renderingTeam == Team.spectators)
-			{
-				event.setCanceled(true);
-				return;
-			}
-			//If we are on the other team, don't render the name tag
-			if(renderingTeam != thePlayerTeam)
-			{
-				RendererLivingEntity.NAME_TAG_RANGE = 0F;
-				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
-				return;
-			}
-			//If its DM, don't render the name tag
-			if(!teamInfo.sortedByTeam)
-			{
-				RendererLivingEntity.NAME_TAG_RANGE = 0F;
-				RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 0F;
-			}
-		}
-		
-
-	}
 	
 	public static int shootTime(boolean left)
 	{
 		return left ? shootTimeLeft : shootTimeRight;
 	}
 	
-	@SubscribeEvent
-	public void cameraSetup(CameraSetup event)
-	{
-		if(minecraft.thePlayer.ridingEntity instanceof IControllable)
-		{
-			IControllable cont = (IControllable)minecraft.thePlayer.ridingEntity;
-			event.roll = cont.getPrevPlayerRoll() + (cont.getPlayerRoll() - cont.getPrevPlayerRoll()) * (float)event.renderPartialTicks;
-		}
-	}
+
 
 	public static void tick()
 	{
@@ -318,6 +189,8 @@ public class FlansModClient extends FlansMod
 		
 		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
 			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
+		
+		renderHooks.update();
 		
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
@@ -656,13 +529,67 @@ public class FlansModClient extends FlansMod
 		return animations;
 	}
 	
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onTextureStitch(TextureStitchEvent.Pre event)
-    {
-        if (event.map == Minecraft.getMinecraft().getTextureMapBlocks())
-        {
-            RenderRegistry.instance().injectTexture(event.map);
-        }
-    }
+	public static void addMissingJSONs(List<InfoType> types)
+	{
+		for(InfoType type : types)
+		{
+			try
+			{
+				EnumType typeToCheckFor = EnumType.getFromObject(type);
+				File contentPackDir = new File(FlansMod.flanDir, type.contentPack);
+				if(contentPackDir.isDirectory())
+				{
+					File itemModelsDir = new File(contentPackDir, "/assets/flansmod/models/item");
+					if(!itemModelsDir.exists())
+						itemModelsDir.mkdirs();
+
+					//Do block json for boxes
+					if(typeToCheckFor == EnumType.armourBox || typeToCheckFor == EnumType.box)
+					{
+						BoxType box = (BoxType)type;
+						
+						File blockModelsDir = new File(contentPackDir, "/assets/flansmod/models/block");
+						File blockstatesDir = new File(contentPackDir, "/assets/flansmod/blockstates");
+						if(!blockModelsDir.exists())
+							blockModelsDir.mkdirs();
+						if(!blockstatesDir.exists())
+							blockstatesDir.mkdirs();
+						
+						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"flansmod:block/" + type.shortName + "\", \"display\": { \"thirdperson\": { \"rotation\": [ 10, -45, 170 ], \"translation\": [ 0, 1.5, -2.75 ], \"scale\": [ 0.375, 0.375, 0.375 ] } } }");
+						createJSONFile(new File(blockModelsDir, type.shortName + ".json"), "{ \"parent\": \"block/cube\", \"textures\": { \"particle\": \"flansmod:blocks/" + box.sideTexturePath + 
+								"\", \"down\": \"flansmod:blocks/" + box.bottomTexturePath + "\", \"up\": \"flansmod:blocks/" + box.topTexturePath + "\", \"north\": \"flansmod:blocks/" + box.sideTexturePath + 
+								"\", \"east\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"south\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"west\": \"flansmod:blocks/" + box.sideTexturePath + "\" } } ");
+						createJSONFile(new File(blockstatesDir, type.shortName + ".json"), "{ \"variants\": { \"normal\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");
+					}
+					else if(typeToCheckFor == EnumType.gun)
+					{
+						for(Paintjob paintjob : ((GunType)type).paintjobs)
+						{
+							createJSONFile(new File(itemModelsDir, type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");							
+						}
+					}
+					//Create the item JSON for normal items
+					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)
+					{
+						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static void createJSONFile(File file, String contents) throws Exception
+	{
+		//if(!file.exists())
+		{
+			file.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(file));
+			out.write(contents);
+			out.close();
+		}
+	}
 }
