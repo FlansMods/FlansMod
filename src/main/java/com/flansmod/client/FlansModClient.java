@@ -169,18 +169,11 @@ public class FlansModClient extends FlansMod
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
-			
 
-
-	
-
-	
 	public static int shootTime(boolean left)
 	{
 		return left ? shootTimeLeft : shootTimeRight;
 	}
-	
-
 
 	public static void tick()
 	{
@@ -202,7 +195,6 @@ public class FlansModClient extends FlansMod
 			if(minecraft.currentScreen == null)
 				minecraft.displayGuiScreen(new GuiTeamScores());
 		}
-		
 		
 		// Guns
 		if (shootTimeLeft > 0)
@@ -542,18 +534,17 @@ public class FlansModClient extends FlansMod
 					File itemModelsDir = new File(contentPackDir, "/assets/flansmod/models/item");
 					if(!itemModelsDir.exists())
 						itemModelsDir.mkdirs();
-
+					File blockModelsDir = new File(contentPackDir, "/assets/flansmod/models/block");
+					if(!blockModelsDir.exists())
+						blockModelsDir.mkdirs();
+					File blockstatesDir = new File(contentPackDir, "/assets/flansmod/blockstates");
+					if(!blockstatesDir.exists())
+						blockstatesDir.mkdirs();
+					
 					//Do block json for boxes
 					if(typeToCheckFor == EnumType.armourBox || typeToCheckFor == EnumType.box)
 					{
 						BoxType box = (BoxType)type;
-						
-						File blockModelsDir = new File(contentPackDir, "/assets/flansmod/models/block");
-						File blockstatesDir = new File(contentPackDir, "/assets/flansmod/blockstates");
-						if(!blockModelsDir.exists())
-							blockModelsDir.mkdirs();
-						if(!blockstatesDir.exists())
-							blockstatesDir.mkdirs();
 						
 						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"flansmod:block/" + type.shortName + "\", \"display\": { \"thirdperson\": { \"rotation\": [ 10, -45, 170 ], \"translation\": [ 0, 1.5, -2.75 ], \"scale\": [ 0.375, 0.375, 0.375 ] } } }");
 						createJSONFile(new File(blockModelsDir, type.shortName + ".json"), "{ \"parent\": \"block/cube\", \"textures\": { \"particle\": \"flansmod:blocks/" + box.sideTexturePath + 
@@ -567,6 +558,16 @@ public class FlansModClient extends FlansMod
 						{
 							createJSONFile(new File(itemModelsDir, type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");							
 						}
+					}
+					else if(typeToCheckFor == EnumType.itemHolder)
+					{
+						createJSONFile(new File(blockstatesDir, type.shortName + ".json"), 
+					"{ \"variants\": { \"facing=north\": { \"model\": \"flansmod:" + type.shortName + 
+								"\" }, \"facing=east\": { \"model\": \"flansmod:" + type.shortName + 
+								"\" }, \"facing=south\": { \"model\": \"flansmod:" + type.shortName + 
+								"\" }, \"facing=west\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");	
+						createJSONFile(new File(blockModelsDir, type.shortName + ".json"), "{ \"ambientocclusion\": false, \"textures\": { \"particle\": \"flansmod:items/" + type.iconPath + "\" }, \"elements\": [ {\"from\": [ 0, 0, 0 ],\"to\": [ 0, 0, 0 ], \"faces\": { \"down\":  { \"texture\": \"#down\", \"cullface\": \"down\" }, \"up\":    { \"texture\": \"#up\", \"cullface\": \"up\" }, \"north\": { \"texture\": \"#north\", \"cullface\": \"north\" }, \"south\": { \"texture\": \"#south\", \"cullface\": \"south\" }, \"west\":  { \"texture\": \"#west\", \"cullface\": \"west\" }, \"east\":  { \"texture\": \"#east\", \"cullface\": \"east\" } } } ] }");
+						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");						
 					}
 					//Create the item JSON for normal items
 					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)

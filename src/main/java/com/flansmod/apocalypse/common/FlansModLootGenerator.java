@@ -155,7 +155,7 @@ public class FlansModLootGenerator
 	{
 		int numParts = rand.nextInt(6) + 1;
 		int numAmmo = rand.nextInt(6) + 1;
-		int numFuel = rand.nextInt(2) + 1;
+		int numFuel = rand.nextInt(3);
 		int numFood = rand.nextInt(3);
 		
 		//Add 1~5 random parts
@@ -173,7 +173,7 @@ public class FlansModLootGenerator
 				chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(type.item, 1 + (type.maxStackSize > 1 && rand.nextBoolean() ? 1 : 0)));
 		}
 		
-		//Add 1~2 fuel items
+		//Add 0~2 fuel items
 		ArrayList<PartType> fuelItems = PartType.partsByCategory.get(EnumPartCategory.FUEL);
 		
 		for(int i = 0; i < numFuel; i++)
@@ -195,7 +195,7 @@ public class FlansModLootGenerator
 		}
 		
 		//Add 0~1 mecha parts
-		if(rand.nextBoolean())
+		if(rand.nextBoolean() && rand.nextBoolean())
 		{
 			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(MechaItemType.types.get(rand.nextInt(MechaItemType.types.size())).item));
 		}

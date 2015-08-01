@@ -14,9 +14,10 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.PlayerHandler;
 
-public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawnData {
+public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdditionalSpawnData {
 
 	public TileEntitySpawner spawner;
 	public double angle;

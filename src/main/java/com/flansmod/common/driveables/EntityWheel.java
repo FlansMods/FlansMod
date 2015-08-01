@@ -1,5 +1,6 @@
 package com.flansmod.common.driveables;
 
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.vector.Vector3f;
 
 import io.netty.buffer.ByteBuf;
@@ -91,9 +92,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//If on the client and the vehicle parent has yet to be found, search for it
 		if(worldObj.isRemote && !foundVehicle)
 		{
-			vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
-			if(vehicle == null)
+			if(!(worldObj.getEntityByID(vehicleID) instanceof EntityDriveable))
 				return;
+			vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
 			foundVehicle = true;
 			vehicle.wheels[ID] = this;
 		}	
@@ -177,8 +178,8 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	{
 		vehicleID = data.readInt();
 		ID = data.readInt();
-		vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
-		
+		if(worldObj.getEntityByID(vehicleID) instanceof EntityDriveable)
+			vehicle = (EntityDriveable)worldObj.getEntityByID(vehicleID);
 		if(vehicle != null)
 			setPosition(posX, posY, posZ);
 	}

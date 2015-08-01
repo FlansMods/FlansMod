@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
@@ -24,7 +25,7 @@ import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 
-public class EntityGunItem extends EntityItem {
+public class EntityGunItem extends EntityItemCustomRender {
 	
 	public List<ItemStack> ammoStacks;
 	private boolean teamsModEnabled = false;

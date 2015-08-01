@@ -53,12 +53,6 @@ public class BlockSpawner extends BlockContainer
     	}
     }
     
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() 
-    {
-        return 101;
-    }
-    
     @Override
     public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
     {
@@ -92,15 +86,6 @@ public class BlockSpawner extends BlockContainer
     public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
     {
     	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.03125F, 1.0F);
-    }
-    
-    @Override
-    public void setBlockBoundsForItemRender()
-    {
-        float var1 = 0.5F;
-        float var2 = 0.015625F;
-        float var3 = 0.5F;
-        this.setBlockBounds(0.0F, 0.5F - var2, 0.0F, 1F, 0.5F + var2, 1F);
     }
 
 	@Override

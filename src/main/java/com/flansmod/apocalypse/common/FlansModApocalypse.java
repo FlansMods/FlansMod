@@ -54,7 +54,7 @@ public class FlansModApocalypse
 	/** The time it takes between an AI chip being activated and the apocalypse happening (in ticks) */
 	public static int apocalypseCountdownLength = 469;
 	public static int SURVIVOR_RARITY = 450;
-	public static int WANDERING_SURVIVOR_RARITY = 1500;
+	public static int WANDERING_SURVIVOR_RARITY = 2500;
 	public static int SKELETON_RARITY = 50;
 	public static int DEAD_TREE_RARITY = 100;
 	public static int VEHICLE_RARITY = 2000;

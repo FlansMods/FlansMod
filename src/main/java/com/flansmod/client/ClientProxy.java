@@ -50,6 +50,7 @@ import com.flansmod.client.model.RenderFlag;
 import com.flansmod.client.model.RenderFlagpole;
 import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderGunItem;
 import com.flansmod.client.model.RenderItemHolder;
 import com.flansmod.client.model.RenderMG;
 import com.flansmod.client.model.RenderMecha;
@@ -58,7 +59,9 @@ import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.common.CommonProxy;
+import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
@@ -128,7 +131,6 @@ public class ClientProxy extends CommonProxy
 						Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
 					}
 				}
-				
 				else Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
 			}
 		}
@@ -137,6 +139,13 @@ public class ClientProxy extends CommonProxy
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 1, new ModelResourceLocation("flansmod:flansWorkbench_vehicles", "inventory"));
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 2, new ModelResourceLocation("flansmod:flansWorkbench_parts", "inventory"));
 		ModelBakery.addVariantName(Item.getItemFromBlock(FlansMod.workbench), new String[] {"flansmod:flansWorkbench_guns", "flansmod:flansWorkbench_parts", "flansmod:flansWorkbench_vehicles"});
+		
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 0, new ModelResourceLocation("flansmod:teamsSpawner_items", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 1, new ModelResourceLocation("flansmod:teamsSpawner_players", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 2, new ModelResourceLocation("flansmod:teamsSpawner_vehicles", "inventory"));
+		ModelBakery.addVariantName(Item.getItemFromBlock(FlansMod.spawner), new String[] {"flansmod:teamsSpawner_items", "flansmod:teamsSpawner_players", "flansmod:teamsSpawner_vehicles"});
+
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
 		
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
@@ -227,6 +236,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector(rm));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB(rm));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityItemCustomRender.class, new RenderGunItem(rm, Minecraft.getMinecraft().getRenderItem(), gunRenderer));
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}

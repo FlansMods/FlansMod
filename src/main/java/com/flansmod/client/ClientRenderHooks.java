@@ -27,6 +27,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
@@ -58,6 +59,31 @@ public class ClientRenderHooks
 	public ClientRenderHooks()
 	{
 		mc = Minecraft.getMinecraft();
+	}
+	
+	/** Render guns in 3D in item frames */
+	@SubscribeEvent
+	public void renderItemFrame(RenderItemInFrameEvent event)
+	{
+		if(event.item.getItem() instanceof ItemGun)
+		{
+			GunType type = ((ItemGun)event.item.getItem()).type;
+			if(type.model != null)
+			{
+				event.setCanceled(true);
+				
+				int rotation = event.entityItemFrame.getRotation();
+				GlStateManager.rotate(-rotation * 45F, 0F, 0F, 1F);
+				RenderHelper.enableStandardItemLighting();
+				GlStateManager.rotate(rotation * 45F, 0F, 0F, 1F);
+				GlStateManager.pushMatrix();
+				float scale = 0.75F;
+				GlStateManager.scale(scale, scale, scale);
+				GlStateManager.translate(0.15F, -0.15F, 0F);
+				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, event.item);
+				GlStateManager.popMatrix();
+			}
+		}
 	}
 	
 	/** When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too. */
@@ -132,7 +158,7 @@ public class ClientRenderHooks
         float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
         float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
         
-        //Do player rotations
+        //Setup lighting
         GlStateManager.pushMatrix();
         GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
@@ -169,7 +195,6 @@ public class ClientRenderHooks
         GlStateManager.scale(0.4F, 0.4F, 0.4F);
 
         ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.theWorld, mc.thePlayer);
-        //this.renderItem(entityplayersp, this.itemToRender, ItemCameraTransforms.TransformType.FIRST_PERSON);
 
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
@@ -435,62 +460,7 @@ public class ClientRenderHooks
 	        GlStateManager.popMatrix();
 		}
 	}
-	/*
-	private void doStuff(Event event)
-	{
-		RenderPlayer renderer = event.renderer;
-		EntityPlayer player = event.entityPlayer;
-		float dt = event.partialRenderTick;
-		PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
-		
-		ItemStack gunStack = null;
-		
-		//Check current stack is a one handed gun
-		if(player instanceof EntityOtherPlayerMP)
-		{
-			gunStack = data.offHandGunStack;
-		}
-		else
-		{
-			ItemStack currentStack = player.getCurrentEquippedItem();
-			if(currentStack == null || !(currentStack.getItem() instanceof ItemGun) || !((ItemGun)currentStack.getItem()).type.oneHanded || data.offHandGunSlot == 0)
-				return;
-			gunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-		}
-				
-		if(gunStack == null || !(gunStack.getItem() instanceof ItemGun))
-			return;
-		GunType gunType = ((ItemGun)gunStack.getItem()).type;
-				
-		//Render!
-		GL11.glPushMatrix();
-		
-		renderer.getPlayerModel().bipedLeftArm.postRender(0.0625F);
-        GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
-
-
-		float f2 = 1F;
-
-		GL11.glTranslatef(0.0F, 0.1875F, -0.3125F);
-		GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glScalef(-f2, -f2, f2);
-
-		int k = gunStack.getItem().getColorFromItemStack(gunStack, 0);
-		float f11 = (float)(k >> 16 & 255) / 255.0F;
-		float f12 = (float)(k >> 8 & 255) / 255.0F;
-		float f3 = (float)(k & 255) / 255.0F;
-		GL11.glColor4f(f11, f12, f3, 1.0F);
-		ClientProxy.gunRenderer.renderOffHandGun(player, gunStack);
-
-		GL11.glPopMatrix();
-		
-		
-		
-		//Render main hand gun?
-		
-	}
-	*/
+	
 	private float interpolateRotation(float x, float y, float dT)
 	{
 		float f3;

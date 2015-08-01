@@ -576,7 +576,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public void readSpawnData(ByteBuf data) 
 	{
 		driveableID = data.readInt();
-		driveable = (EntityDriveable)worldObj.getEntityByID(driveableID);
+		if(worldObj.getEntityByID(driveableID) instanceof EntityDriveable)
+			driveable = (EntityDriveable)worldObj.getEntityByID(driveableID);
 		seatID = data.readInt();
 		driver = seatID == 0;
 		if(driveable != null)
