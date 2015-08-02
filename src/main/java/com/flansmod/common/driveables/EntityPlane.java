@@ -349,7 +349,7 @@ public class EntityPlane extends EntityDriveable
 		//Rotate the propellers
 		if(hasEnoughFuel())
 		{
-			propAngle += throttle / 7F;	
+			propAngle += (Math.pow(throttle, 0.4))*1.5;	
 		}
 		
 		//Return the flaps to their resting position
