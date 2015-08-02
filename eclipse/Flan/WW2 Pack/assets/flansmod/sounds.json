@@ -8,17 +8,7 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:bomb" ]
 	},
-	
-	"bullet": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bullet" ]
-	},
-	
-	"bulletHit": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bulletHit" ]
-	},
-	
+
 	"Engine": {
 		"category" : "player",
 		"sounds" : [ "flansmod:Engine" ]
@@ -339,11 +329,6 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:Tank4Shoot" ]
 	},
-	
-	"Tank1Reload": {
-		"category" : "player",
-		"sounds" : [ "flansmod:Tank1Reload" ]
-	},	
 			
 	"TankMove": {
 		"category" : "player",

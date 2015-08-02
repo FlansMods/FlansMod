@@ -6,8 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.GunBoxType;
@@ -30,9 +30,9 @@ public class PacketBuyWeapon extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	writeUTF(data, boxShortName);
-    	data.writeInt(purchaseType);
-    	data.writeInt(weaponID);
+		writeUTF(data, boxShortName);
+		data.writeInt(purchaseType);
+		data.writeInt(weaponID);
 	}
 
 	@Override

@@ -22,13 +22,14 @@ group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.7.10-10.13.2.1230"
+    version = "1.8-11.14.3.1474"
     runDir = "eclipse"
 
     replace "@ALLOWED_VERSION@", "[4.10,4.11)"
-    replace "@MC_VERSION@", project.minecraft.version
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
+	
+	mappings = "snapshot_20141130"
 }
 
 processResources
@@ -86,6 +87,13 @@ task titan(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task utility(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/utility/'}
+    from 'eclipse/Flan/Utility Pack'
+    baseName = 'Utility'
+    appendix = 'Content Pack'
+}
+
 task ww2(type: Jar) {
     from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
     from 'eclipse/Flan/WW2 Pack'
@@ -107,15 +115,24 @@ task zombie(type: Jar) {
     appendix = 'Content Pack'
 }
 
+task apoc(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/apocalypse/'}
+    from 'eclipse/Flan/Apocalypse Pack'
+    baseName = 'Apocalypse'
+    appendix = 'Content Pack'
+}
+
 task contentPacks() {
     dependsOn mechaParts
     dependsOn modernWeapons
     dependsOn nerf
     dependsOn simpleParts
     dependsOn titan
+    dependsOn utility
     dependsOn ww2
     dependsOn yeOlde
     dependsOn zombie
+	dependsOn apoc
 }
 
 task clearOutput(type: Delete) {
@@ -128,6 +145,7 @@ task outputJar(type: Jar) {
         exclude '**/mw/'
         exclude '**/nerf/'
         exclude '**/titan/'
+        exclude '**/utility/'
         exclude '**/ww2/'
         exclude '**/yeolde/'
         exclude '**/zombie/'

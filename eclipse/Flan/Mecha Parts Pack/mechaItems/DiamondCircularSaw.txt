@@ -5,7 +5,6 @@ Model titan.CircularSaw
 Texture DiamondCircularSaw
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23430
 RecipeOutput 1
 Recipe P hatchetDiamond D diamond R redstone
  P 

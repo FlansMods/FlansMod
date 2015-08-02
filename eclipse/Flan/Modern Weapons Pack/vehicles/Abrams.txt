@@ -4,11 +4,11 @@ ShortName abrams
 //Visuals
 Icon Abrams
 Model mw.Abrams
-Texture Abrams
+Texture M1A2
 //Third Person Camera Distance
-CameraDistance 7.5
+CameraDistance 12
 //Throttle
-MaxThrottle 2.5
+MaxThrottle 1.5
 MaxNegativeThrottle 1.0
 //Steering modifiers
 TurnLeftSpeed 0.5
@@ -18,10 +18,10 @@ Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.5
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -68 -6 -26
-WheelPosition 1 -68 -6 26
-WheelPosition 2 72 -6 26
-WheelPosition 3 72 -6 -26
+WheelPosition 0 -57 -10 -27
+WheelPosition 1 -57 -10 27
+WheelPosition 2 57 -10 27
+WheelPosition 3 57 -10 -27
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
@@ -33,21 +33,24 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 33 0 -360 360 -10 20
-RotatedDriverOffset -8 0 -8
-Passengers 0
-BarrelPosition 0 34 0
+Driver 0 37 0 -360 360 -10 20
+RotatedDriverOffset -18 0 -14
+Passengers 1
+Passenger 1 0 36 0 turret -360 360 -15 40 m60 M2
+RotatedPassengerOffset 1 -14 0 12
+GunOrigin 1 6 50 1
+BarrelPosition 110 30 0
 //Secondary gun
-AddGun 8 34 8 turret m60
+AddGun 46 31 4 turret m60
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 70
 //Sounds
-StartSound Engine
-StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSoundPrimary TankShell
+StartSound M1A2Start
+StartSoundLength 300
+EngineSound M1A2_Run
+EngineSoundLength 40
+ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
 //Recipe
 //Each section of the plane may have many parts
@@ -60,8 +63,9 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 800 -69 -4 -21 143 24 42
-SetupPart turret 200 -40 25 -32 85 11 64
-SetupPart rightTrack 250 -63 -14 -34 133 25 13
-SetupPart leftTrack 250 -63 -14 22 133 25 12
+SetupPart core 1200 -82 -1 -34 153 26 68
+SetupPart turret 800 -59 25 -29 98 15 58
+SetupPart rightTrack 500 -81 -10 -34 154 20 13
+SetupPart leftTrack 500 -81 -10 21 154 21 13
 BulletDetection 7
+RotateWheels true

@@ -1,7 +1,12 @@
 Name Makarov
 ShortName makarov
 //The ammo this gun uses (shortName)
+Ammo m9Ammo
 Ammo makarovAmmo
+Ammo m1911Ammo
+Ammo sigP226Ammo
+Ammo uspAmmo
+Ammo uspPoisonAmmo
 Icon Makarov
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -36,9 +41,11 @@ Texture Makarov
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 1
+//Description - note the ammo type
+Description Ammo Type : Pistol

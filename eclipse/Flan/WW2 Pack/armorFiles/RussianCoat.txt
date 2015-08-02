@@ -1,6 +1,5 @@
 Name Russian WW2 Coat
 ShortName russianCoat
-ItemID 23692
 Icon RussianCoat
 Colour 255 255 255
 Type Body

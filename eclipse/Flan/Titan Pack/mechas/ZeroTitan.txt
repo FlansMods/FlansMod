@@ -1,7 +1,6 @@
 //Naming
 Name Zero Titan
 ShortName ZeroTitan
-ItemID 23422
 //Visuals
 Icon ZeroTitan
 Model titan.ZeroTitan

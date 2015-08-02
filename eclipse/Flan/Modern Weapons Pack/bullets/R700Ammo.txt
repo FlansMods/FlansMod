@@ -1,16 +1,15 @@
-Name R700 Ammo
+Name Sniper Ammo
 ShortName r700Ammo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23806
 Icon R700Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
 //The maximum stack size
-MaxStackSize 5
+MaxStackSize 24
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 4
+RoundsPerItem 1
 //The damage multiplier caused by the bullet on hitting an entity
 Damage 1
 //Size of explosion caused
@@ -29,3 +28,5 @@ HitSound bullet
 //Each object penetrated detracts from the bullet's power and so the total damage it does should be constant
 Penetration 3.0
 SmokeTrail False
+//Description - note the ammo type
+Description Ammo Type : Sniper

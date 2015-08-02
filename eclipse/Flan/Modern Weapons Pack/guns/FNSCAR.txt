@@ -2,7 +2,7 @@ Name FN SCAR
 ShortName fnscar
 //The ammo this gun uses (shortName)
 Ammo fnscarAmmo
-Ammo betaCMag
+Ammo l86Ammo
 Icon FNSCAR
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -34,7 +34,7 @@ Texture FNSCAR
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -45,3 +45,5 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob FNSCAR_Green FNSCAR_Green green 1 lime 1
 Paintjob FNSCAR_TwoTone FNSCAR_TwoTone brown 1 black 1
+//Description - note the ammo type
+Description Ammo Type : Heavy Assault

@@ -5,7 +5,7 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.TeamsManager;
 
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +40,7 @@ public class PacketVoteCast extends PacketBase
 	{
 		if(vote < 0 || vote > TeamsManager.getInstance().voteOptions.length)
 		{
-			FlansMod.log("Invalid vote " + vote + " from " + playerEntity.getCommandSenderName());
+			FlansMod.log("Invalid vote " + vote + " from " + playerEntity.getName());
 			return;
 		}
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity, Side.SERVER);

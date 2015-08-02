@@ -1,6 +1,5 @@
 Name German WW2 Desert Boots
 ShortName germanDesertBoots
-ItemID 23580
 Icon GermanDesertBoots
 Colour 255 255 255
 Type Boots

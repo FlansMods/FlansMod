@@ -1,6 +1,7 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -16,13 +17,13 @@ public class CommandTeams extends CommandBase
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 
 	@Override
-	public String getCommandName() 
+	public String getName() 
 	{
 		return "teams";
 	}
-
+	
 	@Override
-	public void processCommand(ICommandSender sender, String[] split) 
+	public void execute(ICommandSender sender, String[] split) throws CommandException 
 	{
 		if(teamsManager == null)
 		{
@@ -288,7 +289,7 @@ public class CommandTeams extends CommandBase
 		*/
 		if(split[0].equals("getSticks") || split[0].equals("getOpSticks") || split[0].equals("getOpKit"))
 		{
-			EntityPlayerMP player = getPlayer(sender.getCommandSenderName());
+			EntityPlayerMP player = getPlayer(sender.getName());
 			if(player != null)
 			{
 				player.inventory.addItemStackToInventory(new ItemStack(FlansMod.opStick, 1, 0));
@@ -762,7 +763,7 @@ public class CommandTeams extends CommandBase
 
 	public EntityPlayerMP getPlayer(String name)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().func_152612_a(name);
+		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(name);
 	}
 
 	@Override

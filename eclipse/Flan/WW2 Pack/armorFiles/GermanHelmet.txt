@@ -1,6 +1,5 @@
 Name German WW2 Helmet
 ShortName germanHelmet
-ItemID 23581
 Icon GermanHelmet
 Colour 255 255 255
 Type Helmet

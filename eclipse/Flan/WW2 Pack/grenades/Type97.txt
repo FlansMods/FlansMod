@@ -5,7 +5,6 @@ Icon Type97
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
-ItemID 23653
 StackSize 4
 ////Visuals
 Model ww2.FragGrenade

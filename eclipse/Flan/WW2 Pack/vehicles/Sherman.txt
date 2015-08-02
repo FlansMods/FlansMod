@@ -1,7 +1,6 @@
 //Naming
 Name M4 Sherman
 ShortName Sherman
-ItemID 23489
 //Visuals
 Icon Sherman
 Model ww2.Sherman
@@ -38,7 +37,7 @@ Driver 0 36 0 -360 360 -10 25
 RotatedDriverOffset -6 0 7
 //Secondary gun
 AddGun 8 34 8 turret browning
-Passengers 0
+Passengers 1
 Passenger 1 0 36 0 turret -360 360 -15 60 browning Browning
 RotatedPassengerOffset 1 0 0 6
 BarrelPosition 0 34 0

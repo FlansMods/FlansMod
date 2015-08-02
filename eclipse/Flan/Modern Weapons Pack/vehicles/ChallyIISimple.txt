@@ -8,7 +8,7 @@ Texture ChallySimple
 //Third Person Camera Distance
 CameraDistance 11.5
 //Throttle
-MaxThrottle 0.5
+MaxThrottle 0.7
 MaxNegativeThrottle 1.0
 //Steering modifiers
 TurnLeftSpeed 0.5
@@ -35,7 +35,11 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 33 0 -360 360 -10 20
 RotatedDriverOffset -5 0 10
-Passengers 0
+Passengers 1
+Passenger 1 0 33 0 turret -360 360 -15 40 m60 L37A2
+RotatedPassengerOffset 1 -4 0 -14
+GunOrigin 1 -7 33 -13
+
 BarrelPosition 131 26 0
 //Secondary gun
 AddGun 8 34 8 turret m60
@@ -43,11 +47,11 @@ AddGun 8 34 8 turret m60
 ShootDelay 1
 ShellDelay 70
 //Sounds
-StartSound Engine
-StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSoundPrimary TankShell
+StartSound ChallengerIdle
+StartSoundLength 40
+EngineSound ChallengerRun
+EngineSoundLength 40
+ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
 //Recipe
 //Each section of the plane may have many parts
@@ -60,8 +64,10 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 gray
 //Health and collision
-SetupPart core 1000 -69 0 -33 137 23 66
-SetupPart rightTrack 300 -69 -10 -33 136 10 12
-SetupPart leftTrack 300 -69 -10 21 136 10 12
-SetupPart turret 500 -48 23 -27 92 16 54
+SetupPart core 2000 -69 0 -33 137 23 66
+SetupPart rightTrack 500 -69 -10 -33 136 10 12
+SetupPart leftTrack 500 -69 -10 21 136 10 12
+SetupPart turret 1500 -48 23 -27 92 16 54
 BulletDetection 7
+
+RotateWheels true

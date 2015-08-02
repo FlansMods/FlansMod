@@ -7,29 +7,20 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class GunBoxType extends InfoType
+public class GunBoxType extends BoxType
 {
 	public BlockGunBox block;
 	
-	public String topTexturePath;
-	public String sideTexturePath;
-	public String bottomTexturePath;
-	@SideOnly(Side.CLIENT)
-	public IIcon top;
-	@SideOnly(Side.CLIENT)
-	public IIcon side;
-	@SideOnly(Side.CLIENT)
-	public IIcon bottom;
+
 	public int numGuns;
 	public int nextGun = -1;
 	/** */
@@ -85,7 +76,7 @@ public class GunBoxType extends InfoType
 	@Override
 	public void postRead(TypeFile file)
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		gunBoxMap.put(this.shortName, this);
 	}
 
@@ -95,12 +86,6 @@ public class GunBoxType extends InfoType
 		super.read(split, file);
 		try
 		{		
-			if (split[0].equals("TopTexture"))
-				topTexturePath = split[1];
-			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = split[1];
-			if (split[0].equals("SideTexture"))
-				sideTexturePath = split[1];
 			if (split[0].equals("AddGun"))
 			{
 				nextGun++;

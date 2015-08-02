@@ -1,6 +1,5 @@
 Name Russian WW2 Trousers
 ShortName russianPants
-ItemID 23693
 Icon RussianPants
 Colour 255 255 255
 Type Pants

@@ -1,23 +1,30 @@
 package com.flansmod.common.guns.boxes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;
 
@@ -29,14 +36,14 @@ public class BlockGunBox extends Block
 	{
 		super(Material.wood);
 		setHardness(2F);
-	    setResistance(4F);
-	    type = t;
+		setResistance(4F);
+		type = t;
 
-	    setBlockName(type.shortName);
-	    GameRegistry.registerBlock(this, "gunBox." + type.shortName);
+	    setUnlocalizedName(type.shortName);
+	    GameRegistry.registerBlock(this, type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
-	    type.block = this;
-	    type.item = Item.getItemFromBlock(this);	
+		type.block = this;
+		type.item = Item.getItemFromBlock(this);
 	}
 		
 	public void buyGun(int i, InventoryPlayer inventory, GunBoxType type)
@@ -92,7 +99,7 @@ public class BlockGunBox extends Block
 					}
 					tags.setTag("ammo", ammoTagsList);
 					
-					gunStack.stackTagCompound = tags;
+					gunStack.setTagCompound(tags);
 				}
 				if (!inventory.addItemStackToInventory(gunStack))
 				{
@@ -207,30 +214,12 @@ public class BlockGunBox extends Block
 		}
 	}
 	
-	@SideOnly(value = Side.CLIENT)
 	@Override
-	public IIcon getIcon(int side, int metadata)
-	{		
-		if (type == null)
-			return null;
-		
-		if (side == 1)
-		{
-			return type.top;
-		}
-		if (side == 0)
-		{
-			return type.bottom;
-		}
-		return type.side;
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
 	{
-		if(entityplayer.isSneaking())
+		if(player.isSneaking())
 			return false;
-		entityplayer.openGui(FlansMod.INSTANCE, 5, world, i, j, k);
+		player.openGui(FlansMod.INSTANCE, 5, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	
@@ -246,28 +235,10 @@ public class BlockGunBox extends Block
 	}
 	
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, 0));
-        return ret;
-    }
-	
-    @Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int metadata)
-    {
-        super.breakBlock(world, x, y, z, block, metadata);
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
-    	//for(GunBoxType type : GunBoxType.gunBoxMap.values())
-    	//{
-    		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
-    		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
-    		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
-    	//}
-    }
+		return ret;
+	}
 }

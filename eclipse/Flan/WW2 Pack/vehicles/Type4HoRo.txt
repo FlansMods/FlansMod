@@ -1,7 +1,6 @@
 //Naming
 Name Type 4 Ho-Ro
 ShortName Type4HoRo
-ItemID 33334
 //Visuals
 Icon HoRo
 Model ww2.Type4HoRo
@@ -36,7 +35,7 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 3 5 15 -1.5 1.5 -2 15
 RotatedDriverOffset 13 0 -8
-Passengers 0
+Passengers 1
 Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
 GunOrigin 1 10 24 0
 RotatedPassengerOffset 1 0 0 0

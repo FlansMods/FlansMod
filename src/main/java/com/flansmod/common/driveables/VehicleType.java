@@ -2,8 +2,12 @@ package com.flansmod.common.driveables;
 
 import java.util.ArrayList;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 
 public class VehicleType extends DriveableType
@@ -22,30 +26,30 @@ public class VehicleType extends DriveableType
 	/** Shoot delays */
 	public int vehicleShootDelay, vehicleShellDelay;
 	/** Aesthetic door variable */
-    public boolean hasDoor = false;
+	public boolean hasDoor = false;
 
 	public static ArrayList<VehicleType> types = new ArrayList<VehicleType>();
 	
-    public VehicleType(TypeFile file)
-    {
+	public VehicleType(TypeFile file)
+	{
 		super(file);
 		types.add(this);
-    }
-    
-    @Override
+	}
+
+	@Override
 	public void preRead(TypeFile file)
-    {
-    	super.preRead(file);
-    	wheelPositions = new DriveablePosition[4];
-    }
-    
-    @Override
+	{
+		super.preRead(file);
+		wheelPositions = new DriveablePosition[4];
+	}
+
+	@Override
 	protected void postRead(TypeFile file)
-    {
-    	super.postRead(file);
-    }
+	{
+		super.postRead(file);
+	}
 	
-    @Override
+	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
@@ -58,16 +62,16 @@ public class VehicleType extends DriveableType
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("FourWheelDrive"))
-            	fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("Tank") || split[0].equals("TankMode"))
-            	tank = Boolean.parseBoolean(split[1].toLowerCase());
-            
-            //Visuals
-            if(split[0].equals("HasDoor"))
-                hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
-            if(split[0].equals("RotateWheels"))
-            	rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("FourWheelDrive"))
+				fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("Tank") || split[0].equals("TankMode"))
+				tank = Boolean.parseBoolean(split[1].toLowerCase());
+
+			//Visuals
+			if(split[0].equals("HasDoor"))
+				hasDoor = Boolean.parseBoolean(split[1].toLowerCase());
+			if(split[0].equals("RotateWheels"))
+				rotateWheels = Boolean.parseBoolean(split[1].toLowerCase());
 
 			//Armaments
 			if(split[0].equals("ShootDelay"))
@@ -91,7 +95,21 @@ public class VehicleType extends DriveableType
 		{
 		}
 	}
-    	
+	
+	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	@Override
+	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
+	{
+		//Get the list of items required by the driveable
+		ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
+		//Add the propellers and engines
+		if(EnumDriveablePart.core == part.type)
+		{
+			stacks.add(new ItemStack(engine.item));
+		}
+		return stacks;
+	}
+
 	public static VehicleType getVehicle(String find)
 	{
 		for(VehicleType type : types)
@@ -106,5 +124,11 @@ public class VehicleType extends DriveableType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelVehicle.class);
+	}
+	
+	@Override
+	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
+	{
+		return new EntityVehicle(world, x, y, z, this, data);
 	}
 }

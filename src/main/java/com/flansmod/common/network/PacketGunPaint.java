@@ -10,35 +10,35 @@ import com.flansmod.common.guns.ContainerGunModTable;
 
 public class PacketGunPaint extends PacketBase 
 {
-	private String paintjobName; 
+	private int paintjobID; 
 	
 	public PacketGunPaint()
 	{
 		
 	}
 	
-	public PacketGunPaint(String name)
+	public PacketGunPaint(int i)
 	{
-		paintjobName = name;
+		paintjobID = i;
 	}
 	
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		writeUTF(data, paintjobName);
+		data.writeInt(paintjobID);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		paintjobName = readUTF(data);
+		paintjobID = data.readInt();
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		ContainerGunModTable gunModTable = ((ContainerGunModTable)playerEntity.openContainer);
-		gunModTable.clickPaintjob(paintjobName);
+		gunModTable.clickPaintjob(paintjobID);
 	}
 
 	@Override

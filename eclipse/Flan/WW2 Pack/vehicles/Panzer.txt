@@ -1,7 +1,6 @@
 //Naming
 Name Panzer IV
 ShortName Panzer
-ItemID 23490
 //Visuals
 Icon Panzer
 Model ww2.Panzer
@@ -36,7 +35,7 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 28 0 -360 360 -10 20
 RotatedDriverOffset -13 0 0
-Passengers 0
+Passengers 1
 Passenger 1 0 28 0 turret -360 360 -15 60 mg42 MG42
 RotatedPassengerOffset 1 -15 0 0
 BarrelPosition 10 34 0

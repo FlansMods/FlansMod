@@ -42,11 +42,11 @@ public class GuiVoting extends GuiScreen
 	
 	
 	@Override
-    protected void actionPerformed(GuiButton button)
-    {
+	protected void actionPerformed(GuiButton button)
+	{
 		myVote = button.id + 1;
 		FlansMod.getPacketHandler().sendToServer(new PacketVoteCast(myVote));
-    }		
+	}
 	
 	@Override
 	public void drawScreen(int i, int j, float f)
@@ -54,7 +54,7 @@ public class GuiVoting extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
