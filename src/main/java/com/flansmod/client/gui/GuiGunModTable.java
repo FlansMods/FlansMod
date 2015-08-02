@@ -7,11 +7,16 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.model.GunAnimations;
@@ -46,17 +51,30 @@ public class GuiGunModTable extends GuiContainer
 		ItemStack gunStack = inventorySlots.getSlot(0).getStack();
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
+			ItemStack tempStack = gunStack.copy();
+			if(hoveringOver != null)
+				tempStack.setItemDamage(hoveringOver.ID);
 			GunType gunType = ((ItemGun)gunStack.getItem()).type;
 			if(gunType.model != null)
 			{
 				GL11.glPushMatrix();
-				GL11.glColor3f(1F, 1F, 1F);
-				GL11.glTranslatef(110, 54, 100);
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+
+		        GlStateManager.disableLighting();
+		        GlStateManager.pushMatrix();
+		        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
+		        GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
+		        RenderHelper.enableStandardItemLighting();
+		        GlStateManager.popMatrix();
+		        GlStateManager.enableRescaleNormal();
+		        
+				GL11.glTranslatef(80, 48, 100);
 
 				GL11.glRotatef(160, 1F, 0F, 0F);
 				GL11.glRotatef(20, 0F, 1F, 0F);
 				GL11.glScalef(-50F, 50F, 50F);
-				ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
+				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
+				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack);
 				GL11.glPopMatrix();
 			}
 		}
@@ -109,6 +127,16 @@ public class GuiGunModTable extends GuiContainer
         				inventorySlots.getSlot(5 + x + y * 2).yDisplayPosition = 83 + 18 * y;
         		}
         	}
+        	
+        	//Render generic slot backgrounds
+        	for(int x = 0; x < 2; x++)
+        	{
+        		for(int y = 0; y < 4; y++)
+        		{
+        			if(x + y * 2 < gunType.numGenericAttachmentSlots)
+        				 drawTexturedModalRect(xOrigin + 9 + 18 * x, yOrigin + 82 + 18 * y, 178, 54, 18, 18);
+				}
+			}
         	
         	int numPaintjobs = gunType.paintjobs.size();
         	int numRows = numPaintjobs / 2 + 1;

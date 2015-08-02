@@ -9,6 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -146,6 +148,16 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
+			
+			//Do lights
+	        GlStateManager.disableLighting();
+	        GlStateManager.pushMatrix();
+	        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
+	        GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
+	        RenderHelper.enableStandardItemLighting();
+	        GlStateManager.popMatrix();
+	        GlStateManager.enableRescaleNormal();
+			
 			if(selectedType instanceof MechaType)
 				GL11.glTranslatef(0, 15, 0);
 			GL11.glScalef(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);

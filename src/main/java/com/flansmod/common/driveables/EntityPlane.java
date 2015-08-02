@@ -589,7 +589,7 @@ public class EntityPlane extends EntityDriveable
 			{
 				wheel.prevPosX = wheel.posX;
 				wheel.prevPosY = wheel.posY;
-				wheel.prevPosZ = wheel.prevPosZ;
+				wheel.prevPosZ = wheel.posZ;
 			}
 		}
 		for(EntityWheel wheel : wheels)
@@ -638,7 +638,6 @@ public class EntityPlane extends EntityDriveable
 				float dLength = targetWheelLength - currentWheelLength;
 				float dAngle = Vector3f.angle(targetWheelPos, currentWheelPos);
 				
-				//if(dLength > 0.01F || dAngle > 1F)
 				{
 					//Now Lerp by wheelSpringStrength and work out the new positions		
 					float newLength = currentWheelLength + dLength * type.wheelSpringStrength;
@@ -678,7 +677,6 @@ public class EntityPlane extends EntityDriveable
 					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 													
 					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
-
 				}
 			}
 		
