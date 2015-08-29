@@ -1,6 +1,6 @@
 //Naming
-Name Fury
-ShortName Fury
+Name M4A3E8 Jumbo "Fury"
+ShortName M4A3E8 Fury
 //Visuals
 Icon Fury
 Model ww2.Fury
@@ -63,8 +63,8 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 //Health and collision
-SetupPart core 550 -61 -3 -15 114 28 30
-SetupPart turret 450 -25 25 -25 50 18 50
+SetupPart core 600 -61 -3 -15 114 28 30
+SetupPart turret 480 -25 25 -25 50 18 50
 SetupPart leftTrack 300 -61 -10 -28 112 17 13
 SetupPart rightTrack 300 -61 -10 15 112 17 13
 BulletDetection 7
