@@ -39,7 +39,7 @@ public class Shape2D
 		
 		Vec3 extrudeVector = new Vec3(0, 0, depth);
 
-		setVectorRotations(extrudeVector, rotX, rotY, rotZ);
+		extrudeVector = setVectorRotations(extrudeVector, rotX, rotY, rotZ);
 		
 		if(faceLengths != null && faceLengths.length < coords.size())
 			faceLengths = null;
@@ -56,7 +56,7 @@ public class Shape2D
 			
 			Vec3 vecCoord = new Vec3(curCoord.xCoord, curCoord.yCoord, 0);
 			
-			setVectorRotations(vecCoord, rotX, rotY, rotZ);
+			vecCoord = setVectorRotations(vecCoord, rotX, rotY, rotZ);
 									
 			verts[idx] = new PositionTransformVertex(
 													x + (float)vecCoord.xCoord,
@@ -110,7 +110,7 @@ public class Shape2D
 		return new Shape3D(verts, poly);
 	}
 	
-	protected void setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)
+	protected Vec3 setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)
 	{
 		float x = xRot;
 		float y = yRot;
@@ -140,7 +140,7 @@ public class Shape2D
 		yVec = zy;
 		zVec = yz;
 		
-		vector = new Vec3(xVec, yVec, zVec);
+		return new Vec3(xVec, yVec, zVec);
 	}
 	
 	public ArrayList<Coord2D> coords;

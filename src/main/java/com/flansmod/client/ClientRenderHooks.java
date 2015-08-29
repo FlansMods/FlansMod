@@ -451,8 +451,12 @@ public class ClientRenderHooks
 	        }
 	
 	        GlStateManager.enableAlpha();
-	        mainModel.setLivingAnimations(entity, f8, f7, partialTicks);
-	        mainModel.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
+	        
+	        biped.isSneak = false;
+	        biped.heldItemRight = 1;
+	        biped.setLivingAnimations(entity, f8, f7, partialTicks);
+	        biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
+
 	
 	        //Render main hand gun
 	        {
@@ -581,7 +585,7 @@ public class ClientRenderHooks
 		if(mc.thePlayer.ridingEntity instanceof IControllable)
 		{
 			IControllable cont = (IControllable)mc.thePlayer.ridingEntity;
-			event.roll = cont.getPrevPlayerRoll() + (cont.getPlayerRoll() - cont.getPrevPlayerRoll()) * (float)event.renderPartialTicks;
+			event.roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
 		}
 	}
 	

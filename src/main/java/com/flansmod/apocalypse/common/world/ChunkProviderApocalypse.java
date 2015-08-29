@@ -336,7 +336,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         	}
         	//Generate runway section xOffset at chunk p_73153_2_
         	if(canSpawn)
-        		runwayGenerator.generate(worldObj, rand, new BlockPos(p_73153_2_ * 16, 0, p_73153_3_ * 16));
+        		runwayGenerator.generate(worldObj, rand, new BlockPos(xOrigin * 4 * 16, 0, p_73153_3_ * 16));
         }
         
         xOrigin = ModuloHelper.divide(p_73153_2_, 3);

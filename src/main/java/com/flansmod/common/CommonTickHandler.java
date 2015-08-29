@@ -72,13 +72,14 @@ public class CommonTickHandler
 		}
 	}
 
+	
 	public void onEntitySpawn(EntityJoinWorldEvent event) 
 	{
 		//Replace gun items with custom render gun items
 		if(event.entity instanceof EntityItem && !(event.entity instanceof EntityItemCustomRender))
 		{
 			ItemStack stack = getEntityItem((EntityItem)event.entity);
-			if(stack != null && stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).type.model != null)
+			if(stack != null && stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).type.modelString != null)
 			{
 				//event.world.spawnEntityInWorld(new EntityItemCustomRender((EntityItem)event.entity));
 				replacementItemEntities.add(new EntityItemCustomRender((EntityItem)event.entity));

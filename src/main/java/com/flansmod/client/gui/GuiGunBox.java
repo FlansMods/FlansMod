@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -16,28 +17,43 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+import com.flansmod.common.driveables.ContainerDriveableMenu;
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.guns.boxes.ContainerGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
+import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntry;
+import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntryTopLevel;
+import com.flansmod.common.guns.boxes.GunBoxType.GunBoxPage;
 
-public class GuiGunBox extends GuiScreen
+public class GuiGunBox extends GuiContainer
 {
-	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
+	/** Texture location */
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBoxNew.png");
+	/** Texture sizes */
+	private final int textureX = 512, textureY = 256;
 	private InventoryPlayer inventory;
-	private Minecraft mc;
 	private static RenderItem itemRenderer;
 	private GunBoxType type;
 	private int page;
+	private GunBoxPage currentPage;
+	private GunBoxEntryTopLevel currentEntry;
+	private GunBoxEntry currentSubEntry;
 	private int guiOriginX;
 	private int guiOriginY;
 	private int scroll;
+
 	
-	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
+	public GuiGunBox(InventoryPlayer inventory, GunBoxType type)
 	{
-		inventory = playerinventory;
-		mc = FMLClientHandler.instance().getClient();
+		super(new ContainerGunBox(inventory));
+		this.inventory = inventory;
 		this.type = type;
 		page = 0;
+		
+		xSize = ySize = 256;
 	}
 	
 	@Override
@@ -52,7 +68,8 @@ public class GuiGunBox extends GuiScreen
 	{
 		itemRenderer = mc.getRenderItem();
 	}
-
+	
+	/*
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
@@ -61,7 +78,7 @@ public class GuiGunBox extends GuiScreen
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
-		GL11.glEnable(3042 /*GL_BLEND*/);
+		GL11.glEnable(GL11.GL_BLEND);
 		mc.renderEngine.bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
@@ -107,8 +124,24 @@ public class GuiGunBox extends GuiScreen
 			drawSlotInventory(inventory.getStackInSlot(col), m + 8 + col * 18, n + 180);
 		}
 
-		GL11.glDisable(3042 /*GL_BLEND*/);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
+	*/
+	
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
+	{
+		GlStateManager.color(1F, 1F, 1F, 1F);
+		mc.renderEngine.bindTexture(texture);
+
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		
+		drawModalRectWithCustomSizedTexture(j, k, 0, 0, xSize, ySize, textureX, textureY);
+	}
+	
+	
+	/*
 
 	private void drawRecipe(FontRenderer fontrenderer, int m, int n, int q, int offset)
 	{
@@ -175,6 +208,7 @@ public class GuiGunBox extends GuiScreen
 
 		}
 	}
+	*/
 
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
@@ -186,6 +220,7 @@ public class GuiGunBox extends GuiScreen
 		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 	}
 
+	/*
 	@Override
 	protected void mouseClicked(int i, int j, int k) throws IOException
 	{
@@ -241,7 +276,8 @@ public class GuiGunBox extends GuiScreen
 			}
 		}
 	}
-
+*/
+	
 	@Override
 	protected void keyTyped(char c, int i)
 	{

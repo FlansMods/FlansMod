@@ -17,6 +17,12 @@ public class GuiDriveableFuel extends GuiContainer
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/planeFuel.png");
 
+	public World world;
+	public InventoryPlayer inventory;
+	public EntityDriveable plane;
+	private int anim = 0;
+	private long lastTime;
+	
 	public GuiDriveableFuel(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane)
 	{
 		super(new ContainerDriveableMenu(inventoryplayer, world1, true, entPlane));
@@ -72,9 +78,4 @@ public class GuiDriveableFuel extends GuiContainer
 		}
 	}
 
-	public World world;
-	public InventoryPlayer inventory;
-	public EntityDriveable plane;
-	private int anim = 0;
-	private long lastTime;
 }

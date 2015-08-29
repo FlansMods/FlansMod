@@ -552,7 +552,7 @@ public class FlansMod
 		Team.spectators = spectators;
 		
 		//Automates JSON adding for old content packs
-		FlansModClient.addMissingJSONs(InfoType.infoTypes);
+		proxy.addMissingJSONs(InfoType.infoTypes);
 	}
 	
 	public static PacketHandler getPacketHandler()

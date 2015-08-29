@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntry;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
@@ -20,16 +21,11 @@ public class GunBoxType extends BoxType
 {
 	public BlockGunBox block;
 	
-
-	public int numGuns;
-	public int nextGun = -1;
-	/** */
-	public InfoType[] guns;
-	public ShootableType[] bullets;
-	public ShootableType[] altBullets;
-	public List<ItemStack>[] gunParts;
-	public List<ItemStack>[] bulletParts;
-	public List<ItemStack>[] altBulletParts;
+	/** Stores pages for the gun box indexed by their title (unlocalized!) */
+	public HashMap<String, GunBoxPage> pages;
+	
+	/** Points to the page we are currently adding to. */
+	private GunBoxPage currentPage;
 	
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
@@ -37,6 +33,8 @@ public class GunBoxType extends BoxType
 	public GunBoxType(TypeFile file)
 	{
 		super(file);
+		
+		pages = new HashMap<String, GunBoxPage>();
 	}
 	
 	@Override
@@ -56,19 +54,7 @@ public class GunBoxType extends BoxType
 			
 			if (split[0].equals("NumGuns"))
 			{
-				numGuns = Integer.parseInt(split[1]);
-				guns = new InfoType[numGuns];
-				bullets = new ShootableType[numGuns];
-				altBullets = new ShootableType[numGuns];
-				gunParts = new List[numGuns];
-				bulletParts = new List[numGuns];
-				altBulletParts = new List[numGuns];
-				for (int i = 0; i < numGuns; i++)
-				{
-					gunParts[i] = new ArrayList<ItemStack>();
-					bulletParts[i] = new ArrayList<ItemStack>();
-					altBulletParts[i] = new ArrayList<ItemStack>();
-				}
+				pages.put("default", currentPage = new GunBoxPage("default"));
 			}
 		}
 	}
@@ -86,53 +72,45 @@ public class GunBoxType extends BoxType
 		super.read(split, file);
 		try
 		{		
-			if (split[0].equals("AddGun"))
+			//Sets the current page of the reader.
+			if(split[0].equals("SetPage"))
 			{
-				nextGun++;
-				if (gunParts[nextGun] == null)
-					FlansMod.log("NumGuns was not found or was incorrect");
-				
-				guns[nextGun] = InfoType.getType(split[1]);
-				for (int i = 0; i < (split.length - 2) / 2; i++)
-				{
-					if (split[i * 2 + 3].contains("."))
-						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
-					else
-						gunParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
-				}
-				
+				String pageName = split[1];
+				if(pages.get(pageName) == null)
+					pages.put(pageName, new GunBoxPage(pageName));
+				currentPage = pages.get(pageName);
 			}
-			if (split[0].equals("AddAmmo"))
+			//Add an info type at the top level.
+			else if(split[0].equals("AddGun") || split[0].equals("AddType"))
 			{
-				if (bulletParts[nextGun] == null)
-					FlansMod.log("NumGuns was not found or was incorrect");
-				bullets[nextGun] = ShootableType.getShootableType(split[1]);
-				for (int i = 0; i < (split.length - 2) / 2; i++)
-				{
-					if (split[i * 2 + 3].contains("."))
-						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
-					else
-						bulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
-				}
+				currentPage.addNewEntry(InfoType.getType(split[1]), getRecipe(split));
 			}
-			if (split[0].equals("AddAltAmmo") || split[0].equals("AddAlternateAmmo"))
+			//Add a subtype (such as ammo) to the current top level InfoType
+			else if(split[0].equals("AddAmmo") || split[0].equals("AddAltType") || split[0].equals("AddAltAmmo") || split[0].equals("AddAlternateAmmo"))
 			{
-				if (altBulletParts[nextGun] == null)
-					FlansMod.log("NumGuns was not found or was incorrect");
-				altBullets[nextGun] = ShootableType.getShootableType(split[1]);
-				for (int i = 0; i < (split.length - 2) / 2; i++)
-				{
-					if (split[i * 2 + 3].contains("."))
-						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
-					else
-						altBulletParts[nextGun].add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
-				}
+				currentPage.addAmmoToCurrentEntry(InfoType.getType(split[1]), getRecipe(split));
 			}
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+
+	private List<ItemStack> getRecipe(String[] split) 
+	{
+		List<ItemStack> recipe = new ArrayList<ItemStack>();
+		
+		for(int i = 0; i < (split.length - 2) / 2; i++)
+		{
+			if (split[i * 2 + 3].contains("."))
+				recipe.add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
+			else
+				recipe.add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
+		}
+		
+		return recipe;
 	}
 
 	public static GunBoxType getBox(String s)
@@ -150,7 +128,7 @@ public class GunBoxType extends BoxType
 		return null;
 	}
 	
-	/** Reimported from old code */
+	/* Reimported from old code
 	@Override
 	public void addRecipe(Item par1Item)
 	{
@@ -254,5 +232,84 @@ public class GunBoxType extends BoxType
 			FlansMod.log("Failed to add recipe for : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	*/
+	
+	/** Represents a page in the gun box */
+	public static class GunBoxPage
+	{
+		public List<GunBoxEntryTopLevel> entries;
+		/** Points to the gun box entry we are currently reading from file. Allows for the old format to write in ammo on a separate line to the gun. */
+		private GunBoxEntryTopLevel currentlyEditing;
+		public String name;
+		
+		public GunBoxPage(String s)
+		{
+			name = s;
+			entries = new ArrayList<GunBoxEntryTopLevel>();
+		}
+		
+		public void addNewEntry(InfoType type, List<ItemStack> requiredParts)
+		{
+			GunBoxEntryTopLevel entry = new GunBoxEntryTopLevel(type, requiredParts);
+			entries.add(entry);
+			currentlyEditing = entry;
+		}
+		
+		public void addAmmoToCurrentEntry(InfoType type, List<ItemStack> requiredParts)
+		{
+			currentlyEditing.addAmmo(type, requiredParts);
+		}
+	}
+	
+	/** Represents an entry on a page of the gun box. */
+	public static class GunBoxEntry
+	{
+		public InfoType type;
+		public List<ItemStack> requiredParts;
+		
+		public GunBoxEntry(InfoType type, List<ItemStack> requiredParts)
+		{
+			this.type = type;
+			this.requiredParts = requiredParts;
+		}
+	}
+	
+	/** Represents a top level entry, normally a gun. This has child entries, normally ammo that are listed below in the GUI. */
+	public static class GunBoxEntryTopLevel extends GunBoxEntry
+	{
+		public List<GunBoxEntry> childEntries;
+		
+		public GunBoxEntryTopLevel(InfoType type, List<ItemStack> requiredParts)
+		{
+			super(type, requiredParts);
+			childEntries = new ArrayList<GunBoxEntry>();
+		}
+
+		public void addAmmo(InfoType type, List<ItemStack> requiredParts) 
+		{
+			childEntries.add(new GunBoxEntry(type, requiredParts));
+		}
+	}
+
+	public GunBoxEntry canCraft(InfoType type) 
+	{
+		for(GunBoxPage page : pages.values())
+		{
+			for(GunBoxEntryTopLevel entry : page.entries)
+			{
+				if(entry.type == type)
+					return entry;
+				else 
+				{
+					for(GunBoxEntry child : entry.childEntries)
+					{
+						if(child.type == type)
+							return child;
+					}
+				}
+			}
+		}
+		return null;
 	}
 }
