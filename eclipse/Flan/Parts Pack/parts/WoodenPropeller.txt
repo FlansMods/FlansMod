@@ -3,6 +3,7 @@ ShortName woodenPropeller
 Icon WoodenPropeller
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23258
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Propeller
 StackSize 4

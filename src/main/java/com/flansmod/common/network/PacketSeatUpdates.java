@@ -7,8 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -33,9 +33,9 @@ public class PacketSeatUpdates extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeInt(entityId);
-		data.writeInt(seatId);
-		data.writeFloat(yaw);
-		data.writeFloat(pitch);
+    	data.writeInt(seatId);
+    	data.writeFloat(yaw);
+    	data.writeFloat(pitch);
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class PacketSeatUpdates extends PacketBase
 		if(driveable != null)
 		{
 			driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
-			driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
-			//If on the server, update all surrounding players with these new angles
+    		driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
+    		//If on the server, update all surrounding players with these new angles
 			FlansMod.getPacketHandler().sendToAllAround(this, driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange, driveable.dimension);
 		}
 	}
@@ -73,9 +73,8 @@ public class PacketSeatUpdates extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityDriveable driveable = null;
-		for(int i = 0; i < clientPlayer.worldObj.loadedEntityList.size(); i++)
+		for(Object obj : clientPlayer.worldObj.loadedEntityList)
 		{
-			Object obj = clientPlayer.worldObj.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;
@@ -84,11 +83,11 @@ public class PacketSeatUpdates extends PacketBase
 		}
 		if(driveable != null)
 		{
-			//If this is the player who sent the packet in the first place, don't read it
-			if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
-				return;
-			driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
-			driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
+    		//If this is the player who sent the packet in the first place, don't read it
+    		if(driveable.seats[seatId] == null || driveable.seats[seatId].riddenByEntity == clientPlayer)
+    			return;
+    		driveable.seats[seatId].prevLooking = driveable.seats[seatId].looking.clone();
+    		driveable.seats[seatId].looking.setAngles(yaw, pitch, 0F);
 		}
 	}
 }

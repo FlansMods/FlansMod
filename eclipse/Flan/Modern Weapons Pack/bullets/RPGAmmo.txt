@@ -4,6 +4,7 @@ Model mw.RPGRocket
 Texture RPG
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23849
 Icon RPGAmmo
 //How affected by gravity the bullet is
 FallSpeed 0.25

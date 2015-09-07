@@ -6,24 +6,24 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelSentryGun extends ModelAAGun 
 {
 	public ModelSentryGun()
-	{
+    {
 		int textureX = 64;
 		int textureY = 64;
 		
-		baseModel = new ModelRendererTurbo[5];
-		baseModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		baseModel[0].addBox(-4F, 16F , -4F, 8, 2, 8, 0.0F);	//Base piece
-
-		baseModel[1] = new ModelRendererTurbo(this, 32, 0, textureX, textureY);
+        baseModel = new ModelRendererTurbo[5];
+        baseModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        baseModel[0].addBox(-4F, 16F , -4F, 8, 2, 8, 0.0F);	//Base piece
+        
+        baseModel[1] = new ModelRendererTurbo(this, 32, 0, textureX, textureY);
 		baseModel[1].addShapeBox(-4F, 0F, -4F, 2, 16, 2, 0F, /* 0 */ 4F, 0F, 4F, /* 1 */ -4F, 0F, 4F, /* 2 */ -4F, 0F, -4F, /* 3 */ 4F, 0F, -4F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 		
-		baseModel[2] = new ModelRendererTurbo(this, 40, 0, textureX, textureY);
+        baseModel[2] = new ModelRendererTurbo(this, 40, 0, textureX, textureY);
 		baseModel[2].addShapeBox(2F, 0F, -4F, 2, 16, 2, 0F, /* 0 */ -4F, 0F, 4F, /* 1 */ 4F, 0F, 4F, /* 2 */ 4F, 0F, -4F, /* 3 */ -4F, 0F, -4F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
  
-		baseModel[3] = new ModelRendererTurbo(this, 48, 0, textureX, textureY);
+        baseModel[3] = new ModelRendererTurbo(this, 48, 0, textureX, textureY);
 		baseModel[3].addShapeBox(2F, 0F, 2F, 2, 16, 2, 0F, /* 0 */ -4F, 0F, -4F, /* 1 */ 4F, 0F, -4F, /* 2 */ 4F, 0F, 4F, /* 3 */ -4F, 0F, 4F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 
-		baseModel[4] = new ModelRendererTurbo(this, 56, 0, textureX, textureY);
+        baseModel[4] = new ModelRendererTurbo(this, 56, 0, textureX, textureY);
 		baseModel[4].addShapeBox(-4F, 0F, 2F, 2, 16, 2, 0F, /* 0 */ 4F, 0F, -4F, /* 1 */ -4F, 0F, -4F, /* 2 */ -4F, 0F, 4F, /* 3 */ 4F, 0F, 4F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 
 		//"Seat" model
@@ -49,7 +49,7 @@ public class ModelSentryGun extends ModelAAGun
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 37, textureX, textureY);
 		gunModel[0].addBox(-4F, -3F, -3F, 8, 6, 6, 0.0F);		//Gun Block
-
+		       
 		gunModel[1] = new ModelRendererTurbo(this, 0, 49, textureX, textureY);
 		gunModel[1].addBox(4F, -1F, -2F, 2, 4, 4, 0.0F);		//Gun Block
 
@@ -82,5 +82,5 @@ public class ModelSentryGun extends ModelAAGun
 		barrelZ = 0;
 		
 		//flipAll(); //Used to fix old models
-	}
+    }
 }

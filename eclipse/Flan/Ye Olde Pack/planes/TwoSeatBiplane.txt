@@ -1,6 +1,7 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
 Name Two Seat Biplane
 ShortName TwoSeatBiplane
+ItemID 23321
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon TwoSeatBiplane
 Model yeolde.TwoSeatBiplane

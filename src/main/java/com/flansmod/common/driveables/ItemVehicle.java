@@ -8,6 +8,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,15 +17,14 @@ import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
@@ -36,14 +36,14 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 {
 	public VehicleType type;
 	
-	public ItemVehicle(VehicleType type1)
-	{
-		maxStackSize = 1;
+    public ItemVehicle(VehicleType type1)
+    {
+        maxStackSize = 1;
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanDriveables);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-	}
+    }
 
 	@Override
 	/** Make sure client and server side NBTtags update */
@@ -51,38 +51,37 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 	{
 		return true;
 	}
-	
+
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
-		if(stack.getTagCompound() == null)
+		if(stack.stackTagCompound == null)
 		{
-			if(!world.isRemote && stack.getItemDamage() != 0)
-				stack.setTagCompound(getOldTagCompound(stack, world));
-			if(stack.getTagCompound() == null)
+			if(!world.isRemote)
+				stack.stackTagCompound = getOldTagCompound(stack, world);
+			if(stack.stackTagCompound == null)
 			{
-				NBTTagCompound tags = new NBTTagCompound();
-				stack.setTagCompound(tags);
-				tags.setString("Type", type.shortName);
-				tags.setString("Engine", PartType.defaultEngines.get(EnumType.vehicle).shortName);
+				stack.stackTagCompound = new NBTTagCompound();
+				stack.stackTagCompound.setString("Type", type.shortName);
+				stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.vehicle).shortName);
 			}
 		}
-		return stack.getTagCompound();
+		return stack.stackTagCompound;
 	}
 	
 	private NBTTagCompound getOldTagCompound(ItemStack stack, World world)
-	{
+    {
 		try
 		{
 			File file1 = world.getSaveHandler().getMapFileFromName("vehicle_" + stack.getItemDamage());
-			FileInputStream fileinputstream = new FileInputStream(file1);
-			NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
-			for(EnumDriveablePart part : EnumDriveablePart.values())
-			{
-				tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-				tags.setBoolean(part.getShortName() + "_Fire", false);
-			}
-			fileinputstream.close();
-			return tags;
+	        FileInputStream fileinputstream = new FileInputStream(file1);
+	        NBTTagCompound tags = CompressedStreamTools.readCompressed(fileinputstream).getCompoundTag("data");
+	    	for(EnumDriveablePart part : EnumDriveablePart.values())
+	    	{
+	    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+	    		tags.setBoolean(part.getShortName() + "_Fire", false);
+	    	}
+	        fileinputstream.close();
+	        return tags;
 		}
 		catch(IOException e)
 		{
@@ -90,14 +89,14 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 			e.printStackTrace();
 			return null;
 		}
-	}
+    }
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
+    public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips) 
 	{
 		if(type.description != null)
 		{
-			Collections.addAll(lines, type.description.split("_"));
+            Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
@@ -106,7 +105,7 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 			lines.add(part.name);
 	}
 	
-	@Override
+    @Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
@@ -115,7 +114,7 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
         
@@ -126,43 +125,52 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
         }
         if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
         {
-            BlockPos pos = movingobjectposition.getBlockPos();
-            Block block = world.getBlockState(pos).getBlock();
+            int i = movingobjectposition.blockX;
+            int j = movingobjectposition.blockY;
+            int k = movingobjectposition.blockZ;
+            Block block = world.getBlock(i, j, k);
             if(type.placeableOnLand || block instanceof BlockLiquid)
             {
 	            if(!world.isRemote)
 	            {
-					world.spawnEntityInWorld(new EntityVehicle(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 2.5F, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world)));
+					world.spawnEntityInWorld(new EntityVehicle(world, (double)i + 0.5F, (double)j + 2.5F, (double)k + 0.5F, entityplayer, type, getData(itemstack, world)));
 	            }
 				if(!entityplayer.capabilities.isCreativeMode)
 				{	
 					itemstack.stackSize--;
 				}
-			}
-		}
-		return itemstack;
-	}
-
-	public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)
-	{
-		Entity entity = new EntityVehicle(world, x, y, z, type, getData(stack, world));
-		if(!world.isRemote)
-		{
+            }
+        }
+        return itemstack;
+    }
+    
+    public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)
+    {
+    	Entity entity = new EntityVehicle(world, x, y, z, type, getData(stack, world));
+    	if(!world.isRemote)
+        {
 			world.spawnEntityInWorld(entity);
-		}
-		return entity;
-	}
+        }
+    	return entity;
+    }
 	
 	public DriveableData getData(ItemStack itemstack, World world)
-	{
+    {
 		return new DriveableData(getTagCompound(itemstack, world));
-	}
+    }
 	
-	@Override
+    @Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
     /** Make sure that creatively spawned planes have nbt data */
@@ -179,7 +187,7 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-    	planeStack.setTagCompound(tags);
+    	planeStack.stackTagCompound = tags;
         list.add(planeStack);
     }
 	

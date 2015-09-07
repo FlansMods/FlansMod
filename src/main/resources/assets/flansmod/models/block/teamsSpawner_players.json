@@ -1,7 +1,0 @@
-{
-    "parent": "block/carpet",
-    "textures": {
-        "particle": "flansmod:blocks/spawner_player_1",
-        "wool": "flansmod:blocks/spawner_player_1"
-    }
-}

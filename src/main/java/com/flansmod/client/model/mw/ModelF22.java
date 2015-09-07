@@ -6,19 +6,19 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelF22 extends ModelPlane 
 {
 	public ModelF22()
-	{
+    {
 		int textureX = 512; //The x-size of the texture
 		int textureY = 512;	//The y-size of the texture
 	
-		bodyModel = new ModelRendererTurbo[3];
-
-		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body
+        bodyModel = new ModelRendererTurbo[3];
+        
+        bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body
 		bodyModel[0].addBox(-48F, 8F, -32F, 128, 16, 64);	
 		
-		bodyModel[1] = new ModelRendererTurbo(this, 0, 80, textureX, textureY);
+        bodyModel[1] = new ModelRendererTurbo(this, 0, 80, textureX, textureY);
 		bodyModel[1].addBox(80F, 10F, -24F, 8, 12, 16);	
 		
-		bodyModel[2] = new ModelRendererTurbo(this, 48, 80, textureX, textureY);
+        bodyModel[2] = new ModelRendererTurbo(this, 48, 80, textureX, textureY); 
 		bodyModel[2].addBox(80F, 10F, 8F, 8, 12, 16);	
 		
 		
@@ -94,5 +94,5 @@ public class ModelF22 extends ModelPlane
 		
 		//Shapebox template
 		//bodyModel[2].addShapeBox(24F, 24F, -10F, 16, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-	}
+    }
 }

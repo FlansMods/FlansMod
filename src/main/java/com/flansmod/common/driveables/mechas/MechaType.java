@@ -2,19 +2,9 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-
 import com.flansmod.client.model.ModelMecha;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableData;
-import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntityPlane;
-import com.flansmod.common.driveables.EnumDriveablePart;
-import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
@@ -34,7 +24,7 @@ public class MechaType extends DriveableType
 	/** Origin of the mecha arms */
 	public Vector3f leftArmOrigin, rightArmOrigin;
 	/** Length of the mecha arms and legs */
-	public float armLength = 1F, legLength = 1F, RearlegLength = legLength, FrontlegLength = legLength, LegTrans = 0F, RearLegTrans = 0F, FrontLegTrans = 0F;
+	public float armLength = 1F, legLength = 1F;
 	/** The amount to scale the held items / tools by when rendering */
 	public float heldItemScale = 1F;
 	/** Height and Width of the world collision box */
@@ -86,9 +76,9 @@ public class MechaType extends DriveableType
 		types.add(this);
 	}
 	
-	@Override
+    @Override
 	protected void read(String[] split, TypeFile file)
-	{
+    {
 		super.read(split, file);
 		try
 		{
@@ -119,16 +109,6 @@ public class MechaType extends DriveableType
 				armLength = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("LegLength"))
 				legLength = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("LegTrans"))
-				LegTrans = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("RearLegLength"))
-				RearlegLength = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("FrontLegLength"))
-				FrontlegLength = Float.parseFloat(split[1]) / 16F;				
-			if(split[0].equals("RearLegTrans"))
-				RearLegTrans = Float.parseFloat(split[1]) / 16F;
-			if(split[0].equals("FrontLegTrans"))
-				FrontLegTrans = Float.parseFloat(split[1]) / 16F;
 			if(split[0].equals("HeldItemScale"))
 				heldItemScale = Float.parseFloat(split[1]);
 			if(split[0].equals("Height"))
@@ -176,28 +156,14 @@ public class MechaType extends DriveableType
 		catch (Exception ignored)
 		{
 		}
-	}
-
-	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
-	@Override
-	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
-	{
-		//Get the list of items required by the driveable
-		ArrayList<ItemStack> stacks = super.getItemsRequired(part, engine);
-		//Add the propellers and engines
-		if(EnumDriveablePart.core == part.type)
-		{
-			stacks.add(new ItemStack(engine.item));
-		}
-		return stacks;
-	}
-	
+    }
+    
 	/** To be overriden by subtypes for model reloading */
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelMecha.class);
 	}
-
+    
 	public static MechaType getMecha(String find)
 	{
 		for(MechaType type : types)
@@ -206,11 +172,5 @@ public class MechaType extends DriveableType
 				return type;
 		}
 		return null;
-	}
-	
-	@Override
-	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
-	{
-		return new EntityMecha(world, x, y, z, this, data, new NBTTagCompound());
 	}
 }

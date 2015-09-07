@@ -5,27 +5,27 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelKubel extends ModelVehicle
 {
-	public ModelKubel()
-	{
+    public ModelKubel()
+    {
 		int textureX = 128;
 		int textureY = 128;
 	
-		bodyModel = new ModelRendererTurbo[11];
+        bodyModel = new ModelRendererTurbo[11];	
 		
-		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		bodyModel[1] = new ModelRendererTurbo(this, 0, 94, textureX, textureY);
-		bodyModel[2] = new ModelRendererTurbo(this, 0, 40, textureX, textureY);
-		bodyModel[3] = new ModelRendererTurbo(this, 0, 40, textureX, textureY);
+	    bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
+        bodyModel[1] = new ModelRendererTurbo(this, 0, 94, textureX, textureY);
+        bodyModel[2] = new ModelRendererTurbo(this, 0, 40, textureX, textureY);
+        bodyModel[3] = new ModelRendererTurbo(this, 0, 40, textureX, textureY);
 		bodyModel[4] = new ModelRendererTurbo(this, 60, 12, textureX, textureY);
-		bodyModel[5] = new ModelRendererTurbo(this, 0, 43, textureX, textureY);
+        bodyModel[5] = new ModelRendererTurbo(this, 0, 43, textureX, textureY);
 		bodyModel[6] = new ModelRendererTurbo(this, 60, 0, textureX, textureY);
-		bodyModel[7] = new ModelRendererTurbo(this, 60, 0, textureX, textureY);
+        bodyModel[7] = new ModelRendererTurbo(this, 60, 0, textureX, textureY);
 		bodyModel[8] = new ModelRendererTurbo(this, 32, 49, textureX, textureY);
-		bodyModel[9] = new ModelRendererTurbo(this, 90, 12, textureX, textureY);
-		bodyModel[10] = new ModelRendererTurbo(this, 66, 49, textureX, textureY);
-
+        bodyModel[9] = new ModelRendererTurbo(this, 90, 12, textureX, textureY);
+        bodyModel[10] = new ModelRendererTurbo(this, 66, 49, textureX, textureY);
+        
 		bodyModel[0].addBox(8F, -6F , -14F, 16, 12, 28, 0.0F);		//Bonnet
-		bodyModel[1].addBox(-24F, 4F, -16F, 32, 2, 32, 0.0F);		//Floor
+        bodyModel[1].addBox(-24F, 4F, -16F, 32, 2, 32, 0.0F);		//Floor
 		bodyModel[2].addBox(8F, 0F, -16F, 16, 1, 2, 0.0F);		//Wheel cover
 		bodyModel[3].addBox(8F, 0F, 14F, 16, 1, 2, 0.0F);			//Wheel cover
 		bodyModel[4].addBox(-6F, -4F, -14F, 1, 8, 28, 0.0F);		//Mid seat
@@ -38,7 +38,7 @@ public class ModelKubel extends ModelVehicle
 		bodyModel[10].addBox(-6F, -18F, -0.5F, 1, 14, 1, 0.0F);		//Gun pole
 			
 		leftBackWheelModel = new ModelRendererTurbo[1];	
-		leftBackWheelModel[0] = new ModelRendererTurbo(this, 90, 22, textureX, textureY);
+        leftBackWheelModel[0] = new ModelRendererTurbo(this, 90, 22, textureX, textureY);
 		leftBackWheelModel[0].addBox(-20F, 6F, 13F, 8, 4, 2, 0.0F);
 		
 		rightBackWheelModel = new ModelRendererTurbo[1];	
@@ -46,13 +46,13 @@ public class ModelKubel extends ModelVehicle
 		rightBackWheelModel[0].addBox(-20F, 6F, -15F, 8, 4, 2, 0.0F);
 		
 		leftFrontWheelModel = new ModelRendererTurbo[1];			
-		leftFrontWheelModel[0] = new ModelRendererTurbo(this, 90, 28, textureX, textureY);
+	    leftFrontWheelModel[0] = new ModelRendererTurbo(this, 90, 28, textureX, textureY);		
 		leftFrontWheelModel[0].addBox(-4F, -4F, -1F, 8, 8, 2, 0.0F);
 		leftFrontWheelModel[0].setRotationPoint(16F, 6F, 15F);
 		
 		rightFrontWheelModel = new ModelRendererTurbo[1];	
-		rightFrontWheelModel[0] = new ModelRendererTurbo(this, 90, 28, textureX, textureY);
-		rightFrontWheelModel[0].addBox(-4F, -4F, -1F, 8, 8, 2, 0.0F);
+        rightFrontWheelModel[0] = new ModelRendererTurbo(this, 90, 28, textureX, textureY);		
+        rightFrontWheelModel[0].addBox(-4F, -4F, -1F, 8, 8, 2, 0.0F);
 		rightFrontWheelModel[0].setRotationPoint(16F, 6F, -15F);	
 		
 		//Gun model stolen from the MG42
@@ -83,5 +83,5 @@ public class ModelKubel extends ModelVehicle
 		registerGunModel("MG42", mg42Model);
 	
 		flipAll(); //For old models
-	}
+    }
 }

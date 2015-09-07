@@ -5,6 +5,7 @@ Ammo m1GarandAmmo
 Icon m1Garand
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23619
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 30
 CanForceReload false

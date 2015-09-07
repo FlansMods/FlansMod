@@ -3,6 +3,7 @@ ShortName leech
 Icon Leech
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23713
 Heal true
 Repair false
 HealAmount 4

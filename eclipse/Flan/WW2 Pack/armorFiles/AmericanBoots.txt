@@ -1,5 +1,6 @@
 Name American WW2 Boots
 ShortName americanBoots
+ItemID 23644
 Icon AmericanBoots
 Colour 255 255 255
 Type Boots

@@ -30,5 +30,3 @@ Penetrates True
 SmokeTrail False
 //TrailParticleType reddust
 HasLight False
-//Description - note the ammo type
-Description Ammo Type : Sniper

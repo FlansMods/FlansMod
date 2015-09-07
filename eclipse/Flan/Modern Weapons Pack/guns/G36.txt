@@ -1,16 +1,11 @@
 Name G36C
 ShortName g36
 //The ammo this gun uses (shortName)
-Ammo m16a4Ammo
-Ammo acrAmmo
-Ammo mtarAmmo
 Ammo g36Ammo
-Ammo augAmmo
-Ammo m4CarbineAmmo
-Ammo betaCMag
 Icon G36
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23817
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -40,7 +35,7 @@ ModelScale 1.0
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -49,7 +44,4 @@ NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-Paintjob G36_Prismarine G36_Prismarine lime 1 cyan 1
 Paintjob G36_Devgru G36_Devgru green 1 brown 1
-//Description - note the ammo type
-Description Ammo Type : Light Assault

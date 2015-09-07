@@ -1,5 +1,6 @@
 Name German WW2 Coat
 ShortName germanCoat
+ItemID 23582
 Icon GermanCoat
 Colour 255 255 255
 Type Body

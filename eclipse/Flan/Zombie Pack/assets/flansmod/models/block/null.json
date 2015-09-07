@@ -1,1 +1,0 @@
-{ "parent": "block/cube", "textures": { "particle": "flansmod:blocks/null", "down": "flansmod:blocks/null", "up": "flansmod:blocks/null", "north": "flansmod:blocks/null", "east": "flansmod:blocks/null", "south": "flansmod:blocks/null", "west": "flansmod:blocks/null" } } 

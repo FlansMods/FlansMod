@@ -1,6 +1,7 @@
 //Naming
 Name Willy's Jeep
 ShortName Jeep
+ItemID 23488
 //Visuals
 Icon Jeep
 Model ww2.Jeep

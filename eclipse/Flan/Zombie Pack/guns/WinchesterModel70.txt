@@ -1,8 +1,6 @@
 Name Winchester Model 70
 ShortName winchesterModel70
 //The ammo this gun uses (shortName)
-Ammo m40a3Ammo
-Ammo r700Ammo
 Ammo 3006Bullet
 Icon WinchesterModel70
 //Colour in Red, Green, Blue, each going up to 255.
@@ -47,5 +45,3 @@ NumGenericAttachmentSlots 2
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob WinchesterModel70_Black WinchesterModel70_Black black 1
-//Description - note the ammo type
-Description Ammo Type : Sniper

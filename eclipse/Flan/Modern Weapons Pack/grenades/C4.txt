@@ -5,6 +5,7 @@ Icon C4
 //Colour in Red, Green, Blue, each going up to 255
 Colour 255 255 255
 ////Item and recipe
+ItemID 23854
 StackSize 4
 ////Visuals
 Model mw.C4

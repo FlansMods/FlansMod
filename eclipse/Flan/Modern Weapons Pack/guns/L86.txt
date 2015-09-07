@@ -1,7 +1,6 @@
 Name L86 LSW
 ShortName l86
 //The ammo this gun uses (shortName)
-Ammo fnscarAmmo
 Ammo l86Ammo
 Icon L86
 //Colour in Red, Green, Blue, each going up to 255.
@@ -49,5 +48,3 @@ NumGenericAttachmentSlots 1
 Paintjob L86_Green L86_Green green 2
 Paintjob L86_Red L86_Red red 2
 Paintjob L86_Blue L86_Blue blue 2
-//Description - note the ammo type
-Description Ammo Type : Heavy Assault

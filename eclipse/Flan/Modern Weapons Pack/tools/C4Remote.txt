@@ -3,6 +3,7 @@ ShortName c4Remote
 Icon C4Remote
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23855
 Heal false
 Repair false
 ExplosiveRemote true

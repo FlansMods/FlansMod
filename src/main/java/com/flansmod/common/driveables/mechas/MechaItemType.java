@@ -2,9 +2,9 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.common.FlansMod;
@@ -58,12 +58,11 @@ public class MechaItemType extends InfoType
 	public MechaItemType(TypeFile file)
 	{
 		super(file);
-		types.add(this);
 	}
 	
-	@Override
+    @Override
 	protected void read(String[] split, TypeFile file)
-	{
+    {
 		super.read(split, file);
 		try
 		{
@@ -139,7 +138,7 @@ public class MechaItemType extends InfoType
 		catch (Exception ignored)
 		{
 		}
-	}
+    }
 	
 	public static MechaItemType getTool(String find)
 	{

@@ -13,7 +13,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */
-	public EnumPartCategory category;
+	public int category;
 	/** Max stack size of item */
 	public int stackSize;
 	/** (Engine) Multiplier applied to the thrust of the driveable */
@@ -24,10 +24,6 @@ public class PartType extends InfoType {
 	public int fuel = 0;
 	/** The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot */
 	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
-	/** Let's just say you probably don't want to use this to power a mecha... */
-	public boolean isAIChip = false;
-	/** If set to false, then this engine will definitely not be the default for creatively spawned vehicles */
-	public boolean canBeDefaultEngine = true;
 	
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 	
@@ -42,14 +38,7 @@ public class PartType extends InfoType {
 	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
 	/** The list of all PartTypes */
 	public static List<PartType> parts = new ArrayList<PartType>();
-	/** Hash map sorted */
-	public static HashMap<EnumPartCategory, ArrayList<PartType>> partsByCategory = new HashMap<EnumPartCategory, ArrayList<PartType>>();
-	static
-	{
-		for(EnumPartCategory cat : EnumPartCategory.values())
-			partsByCategory.put(cat, new ArrayList<PartType>());
-	}
-	
+
 	public PartType(TypeFile file) {
 		super(file);
 		parts.add(this);
@@ -58,7 +47,7 @@ public class PartType extends InfoType {
 	@Override
 	public void postRead(TypeFile file) 
 	{
-		if(category == EnumPartCategory.ENGINE && !useRFPower && canBeDefaultEngine)
+		if(category == 2 && !useRFPower)
 		{
 			for(EnumType type : worksWith)
 			{
@@ -72,7 +61,6 @@ public class PartType extends InfoType {
 				else defaultEngines.put(type, this);
 			}
 		}
-		partsByCategory.get(category).add(this);
 	}
 
 	@Override
@@ -120,11 +108,6 @@ public class PartType extends InfoType {
 			else if(split[0].equals("RFDrawRate"))
 				RFDrawRate = Integer.parseInt(split[1]);
 			//-----------------------------
-			
-			else if(split[0].equals("IsAIChip"))
-				isAIChip = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("CanBeDefaultEngine"))
-				canBeDefaultEngine = Boolean.parseBoolean(split[1]);
 		} 
 		catch (Exception e) 
 		{
@@ -146,29 +129,29 @@ public class PartType extends InfoType {
 		return null;
 	}
 
-	private EnumPartCategory getCategory(String s) {
+	private int getCategory(String s) {
 		if (s.equals("Cockpit"))
-			return EnumPartCategory.COCKPIT;
+			return 0;
 		if (s.equals("Wing"))
-			return EnumPartCategory.WING;
+			return 1;
 		if (s.equals("Engine"))
-			return EnumPartCategory.ENGINE;
+			return 2;
 		if (s.equals("Propeller"))
-			return EnumPartCategory.PROPELLER;
+			return 3;
 		if (s.equals("Bay"))
-			return EnumPartCategory.BAY;
+			return 4;
 		if (s.equals("Tail"))
-			return EnumPartCategory.TAIL;
+			return 5;
 		if (s.equals("Wheel"))
-			return EnumPartCategory.WHEEL;
+			return 6;
 		if (s.equals("Chassis"))
-			return EnumPartCategory.CHASSIS;
+			return 7;
 		if (s.equals("Turret"))
-			return EnumPartCategory.TURRET;
+			return 8;
 		if (s.equals("Fuel"))
-			return EnumPartCategory.FUEL;
+			return 9;
 		if (s.equals("Misc"))
-			return EnumPartCategory.MISC;
-		return EnumPartCategory.MISC;
+			return 10;
+		return 10;
 	}
 }

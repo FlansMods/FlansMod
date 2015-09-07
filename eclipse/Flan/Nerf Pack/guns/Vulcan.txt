@@ -5,6 +5,7 @@ Ammo 25DartBelt
 Icon Vulcan
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23926
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 200
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -40,5 +41,3 @@ BottomViewLimit 30
 SideViewLimit 45
 //The height of the pivot above the block the gun is on.
 PivotHeight 0.375
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

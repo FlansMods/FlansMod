@@ -8,9 +8,9 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
@@ -39,10 +39,10 @@ public class PacketFlak extends PacketBase
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		data.writeDouble(x);
-		data.writeDouble(y);
-		data.writeDouble(z);
-		data.writeInt(numParticles);
-		writeUTF(data, particleType);
+    	data.writeDouble(y);
+    	data.writeDouble(z);
+    	data.writeInt(numParticles);
+    	writeUTF(data, particleType);
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -15,9 +14,8 @@ public class RenderFlagpole extends Render
 	
 	public ModelFlagpole modelFlagpole;
 	
-	public RenderFlagpole(RenderManager renderManager) 
+	public RenderFlagpole()
 	{
-		super(renderManager);
 		modelFlagpole = new ModelFlagpole();
 	}
 	
@@ -27,13 +25,13 @@ public class RenderFlagpole extends Render
 		bindEntityTexture(entity);
 		EntityFlagpole flagpole = (EntityFlagpole)entity;
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float)d, (float)d1, (float)d2);
-		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
+        GL11.glTranslatef((float)d, (float)d1, (float)d2);
+        GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
 		
-		GL11.glScalef(-1F, -1F, 1F);
-		GL11.glColor3f(1F, 1F, 1F);
-
-		modelFlagpole.renderPole(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flagpole);
+        GL11.glScalef(-1F, -1F, 1F);
+        GL11.glColor3f(1F, 1F, 1F);
+        
+        modelFlagpole.renderPole(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flagpole);
 		GL11.glPopMatrix();
 	}
 

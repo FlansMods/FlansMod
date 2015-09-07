@@ -1,19 +1,18 @@
-Name 12 Gauge Shell
+Name W1200 Ammo
 ShortName w1200Ammo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23830
 Icon W1200Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
 //The maximum stack size
-MaxStackSize 32
+MaxStackSize 4
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 1
-//Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 8
+RoundsPerItem 7
 //The damage multiplier caused by the bullet on hitting an entity
-Damage 4
+Damage 1
 //Size of explosion caused
 Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
@@ -29,5 +28,3 @@ HitSound bullet
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates True
 SmokeTrail False
-//Description - note the ammo type
-Description Ammo Type : Shotgun

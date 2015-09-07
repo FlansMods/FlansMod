@@ -3,6 +3,7 @@ ShortName ww2MedKit
 Icon WW2MedKit
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23699
 Heal true
 Repair false
 HealAmount 10

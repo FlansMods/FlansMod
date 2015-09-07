@@ -255,7 +255,7 @@ public class Vector2f extends Vector implements Serializable, ReadableVector2f, 
 	@Override
 	public String toString() {
 
-		return "Vector2f[" + x + ", " + y + ']';
+        return "Vector2f[" + x + ", " + y + ']';
 	}
 
 	/**

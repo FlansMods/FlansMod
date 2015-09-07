@@ -1,5 +1,6 @@
 Name American WW2 Pants
 ShortName americanPants
+ItemID 23643
 Icon AmericanPants
 Colour 255 255 255
 Type Pants

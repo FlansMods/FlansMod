@@ -18,8 +18,8 @@ import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PlayerData 
 {
@@ -122,7 +122,7 @@ public class PlayerData
 		}
 				
 		//Move all snapshots along one place
-		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
+        System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
 		snapshots[0] = new PlayerSnapshot(player);
 	}

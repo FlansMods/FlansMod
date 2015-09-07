@@ -2,20 +2,14 @@ package com.flansmod.common.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 import com.flansmod.common.FlansMod;
 
@@ -27,6 +21,7 @@ public class InfoType
 	public String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
+	public int itemID;
 	public String iconPath;
 	public Object[] recipe;
 	public String[] recipeLine;
@@ -42,21 +37,9 @@ public class InfoType
 	/** If this is set to false, then this item cannot be dropped */
 	public boolean canDrop = true;
 	
-
-	
-	/** The probability that this item will appear in a dungeon chest. 
-	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
-	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
-	public int dungeonChance = 1;
-	
-	private static Random random = new Random();
-	
-	/** Used for scaling */
-	public static int totalDungeonChance = 0;
-	
 	public InfoType(TypeFile file)
 	{
-		contentPack = file.contentPack;
+		contentPack = file.name;
 		infoTypes.add(this);
 	}
 	
@@ -77,7 +60,6 @@ public class InfoType
 			read(split, file);
 		}
 		postRead(file);
-		totalDungeonChance += dungeonChance;
 	}
 	
 	/** Method for performing actions prior to reading the type file */
@@ -91,11 +73,11 @@ public class InfoType
 	{
 		try
 		{
-			if(split[0].equals("Model"))
+			if(split[0].toLowerCase().equals("model"))
 				modelString = split[1];
-			else if(split[0].equals("ModelScale"))
+			if(split[0].toLowerCase().equals("modelscale"))
 				modelScale = Float.parseFloat(split[1]);
-			else if (split[0].equals("Name"))
+			if (split[0].toLowerCase().equals("name"))
 			{
 				name = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -103,7 +85,7 @@ public class InfoType
 					name = name + " " + split[i + 2];
 				}
 			}
-			else if (split[0].equals("Description"))
+			if (split[0].toLowerCase().equals("description"))
 			{
 				description = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -111,27 +93,27 @@ public class InfoType
 					description = description + " " + split[i + 2];
 				}
 			}
-			else if (split[0].equals("ShortName"))
+			if (split[0].toLowerCase().equals("shortname"))
 			{
 				shortName = split[1];
 			}
-			else if (split[0].equals("Colour") || split[0].equals("Color"))
+			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
 			}
-			else if (split[0].equals("Icon"))
+			if (split[0].equals("ItemID"))
+			{
+				itemID = Integer.parseInt(split[1]);
+			}
+			if (split[0].equals("Icon"))
 			{
 				iconPath = split[1];
 			}
-			else if (split[0].equals("DungeonProbabilty") || split[0].equals("DungeonLootChance"))
-			{
-				dungeonChance = Integer.parseInt(split[1]);
-			}
-			else if (split[0].equals("RecipeOutput"))
+			if (split[0].equals("RecipeOutput"))
 			{
 				recipeOutput = Integer.parseInt(split[1]);
 			}
-			else if (split[0].equals("Recipe"))
+			if (split[0].equals("Recipe"))
 			{
 				recipe = new Object[split.length + 2];
 				for (int i = 0; i < 3; i++)
@@ -152,16 +134,16 @@ public class InfoType
 				recipeLine = split;
 				shapeless = false;
 			}
-			else if (split[0].equals("ShapelessRecipe"))
+			if (split[0].equals("ShapelessRecipe"))
 			{
 				recipeLine = split;
 				shapeless = true;
 			}
-			else if (split[0].equals("SmeltableFrom"))
+			if (split[0].equals("SmeltableFrom"))
 			{
 				smeltableFrom = split[1];
 			}
-			else if(split[0].equals("CanDrop"))
+			if(split[0].equals("CanDrop"))
 				canDrop = Boolean.parseBoolean(split[1]);
 		} catch (Exception e)
 		{
@@ -258,7 +240,7 @@ public class InfoType
 					if (recipeLine[i * 2 + 2].contains("."))
 						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2].split("\\.")[0], Integer.valueOf(recipeLine[i * 2 + 2].split("\\.")[1]));
 					else
-						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 32767);
+						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 0);
 				}
 				GameRegistry.addRecipe(new ItemStack(item, recipeOutput), recipe);
 			} else
@@ -269,7 +251,7 @@ public class InfoType
 					if (recipeLine[i + 1].contains("."))
 						recipe[i] = getRecipeElement(recipeLine[i + 1].split("\\.")[0], Integer.valueOf(recipeLine[i + 1].split("\\.")[1]));
 					else
-						recipe[i] = getRecipeElement(recipeLine[i + 1], 32767);
+						recipe[i] = getRecipeElement(recipeLine[i + 1], 0);
 				}
 				GameRegistry.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
 			}
@@ -301,6 +283,10 @@ public class InfoType
 		if (s.equals("doorIron"))
 		{
 			return new ItemStack(Items.iron_door, amount);
+		}
+		if (s.equals("doorWood"))
+		{
+			return new ItemStack(Items.wooden_door, amount);
 		}
 		if (s.equals("clayItem"))
 		{
@@ -367,38 +353,11 @@ public class InfoType
 		int potionID = Integer.parseInt(split[1]);
 		int duration = Integer.parseInt(split[2]);
 		int amplifier = Integer.parseInt(split[3]);
-		return new PotionEffect(potionID, duration, amplifier, false, false);
+		return new PotionEffect(potionID, duration, amplifier, false);
 	}
 	
 	public static Material getMaterial(String mat)
 	{
 		return Material.ground;
-	}
-
-	public void addDungeonLoot() 
-	{
-		if(dungeonChance > 0)
-			addToRandomChest(new ItemStack(this.item), (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
-	}
-	
-	protected void addToRandomChest(ItemStack stack, float rawChance)
-	{
-		if(rawChance >= 1 || random.nextFloat() < rawChance)
-		{
-			int chance = MathHelper.ceiling_float_int(rawChance);
-			switch(random.nextInt(10))
-			{
-			case 0 : ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 1 : ChestGenHooks.addItem(ChestGenHooks.MINESHAFT_CORRIDOR, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 2 : ChestGenHooks.addItem(ChestGenHooks.PYRAMID_DESERT_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 3 : ChestGenHooks.addItem(ChestGenHooks.PYRAMID_JUNGLE_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 4 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 5 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_LIBRARY, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 6 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CROSSING, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 7 : ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 8 : ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 9 : ChestGenHooks.addItem(ChestGenHooks.NETHER_FORTRESS, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			}
-		}
 	}
 }

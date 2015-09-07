@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class GuiBaseEditor extends GuiScreen 
@@ -42,7 +41,7 @@ public class GuiBaseEditor extends GuiScreen
 		this.buttonList.clear();
 		//Setup the text entry field
 		Keyboard.enableRepeatEvents(true);
-		nameEntryField = new GuiTextField(0, this.fontRendererObj, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRendererObj.FONT_HEIGHT);
+		nameEntryField = new GuiTextField(this.fontRendererObj, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRendererObj.FONT_HEIGHT);
 		nameEntryField.setMaxStringLength(60);
 		nameEntryField.setEnableBackgroundDrawing(true);
 		nameEntryField.setVisible(true);
@@ -57,7 +56,7 @@ public class GuiBaseEditor extends GuiScreen
 		teamButtons[2] = new GuiButton(2, width / 2 - 128 + 130, height / 2 - 94 + 38, 58, 20, "Team 1");
 		teamButtons[3] = new GuiButton(3, width / 2 - 128 + 192, height / 2 - 94 + 38, 58, 20, "Team 2");
 
-		buttonList.addAll(Arrays.asList(teamButtons).subList(0, 4));
+        buttonList.addAll(Arrays.asList(teamButtons).subList(0, 4));
 		
 		mapButtons = new GuiButton[5];
 		for(int i = 0; i < 5; i++)
@@ -78,7 +77,7 @@ public class GuiBaseEditor extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -98,25 +97,25 @@ public class GuiBaseEditor extends GuiScreen
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button)
-	{
-		switch(button.id)
-		{
-		case 0 : case 1 : case 2 : case 3 :
-			packet.teamID = button.id;
-			break;
-		case 4 : case 5 : case 6 : case 7 : case 8 :
-			packet.mapID = mapsPage * 5 + button.id - 4;
-			break;
-		case 9 : mapsPage--; break;
-		case 10 : mapsPage++; break;
-		}
-
-	}
+    protected void actionPerformed(GuiButton button)
+    {
+    	switch(button.id)
+    	{
+    	case 0 : case 1 : case 2 : case 3 :
+    		packet.teamID = button.id;
+    		break;
+    	case 4 : case 5 : case 6 : case 7 : case 8 :
+    		packet.mapID = mapsPage * 5 + button.id - 4;
+    		break;
+    	case 9 : mapsPage--; break;
+    	case 10 : mapsPage++; break;
+    	}
+    	
+    }
 	
 	@Override
-	public void updateScreen()
-	{
+    public void updateScreen()
+    {
 		for(int i = 0; i < 4; i++)
 		{
 			teamButtons[i].enabled = packet.teamID != i;
@@ -133,40 +132,31 @@ public class GuiBaseEditor extends GuiScreen
 		rightButton.visible = packet.maps.length > (mapsPage + 1) * 5;
 		leftButton.visible = mapsPage > 0;	
 			
-		nameEntryField.updateCursorCounter();
-	}
+        nameEntryField.updateCursorCounter();
+    }
 	
 	@Override
     protected void mouseClicked(int i, int j, int k)
     {
-		try
-		{
-			super.mouseClicked(i, j, k);
-		}
-		catch(IOException e) {}
-
+		super.mouseClicked(i, j, k);
 		nameEntryField.mouseClicked(i, j, k);
-	}
+    }
 	
 	@Override
     protected void keyTyped(char c, int i)
     {
-		try
-		{
-			super.keyTyped(c, i);	
-		}
-		catch(IOException e) {}
+		super.keyTyped(c, i);			
 		nameEntryField.textboxKeyTyped(c, i);
-	}
+    }
 	
-	@Override
+    @Override
 	public void onGuiClosed() 
-	{
-		super.onGuiClosed();
-		packet.baseName = nameEntryField.getText();
-		Keyboard.enableRepeatEvents(false);
-		FlansMod.getPacketHandler().sendToServer(packet);
-	}
+    {
+    	super.onGuiClosed();
+    	packet.baseName = nameEntryField.getText();
+    	Keyboard.enableRepeatEvents(false);
+    	FlansMod.getPacketHandler().sendToServer(packet);
+    }
 	
 	@Override
 	public boolean doesGuiPauseGame()

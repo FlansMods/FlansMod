@@ -1,5 +1,6 @@
 Name German WW2 Snow Trousers
 ShortName germanSnowPants
+ItemID 23575
 Icon GermanSnowPants
 Colour 255 255 255
 Type Pants

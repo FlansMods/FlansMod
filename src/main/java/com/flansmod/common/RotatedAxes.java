@@ -11,11 +11,11 @@ public class RotatedAxes
 		rotationMatrix = new Matrix4f();
 	}
 	
-	public RotatedAxes(Matrix4f mat)
-	{
+    public RotatedAxes(Matrix4f mat)
+    {
 		rotationMatrix = mat;
 		convertMatrixToAngles();
-	}
+    }
 	
 	public RotatedAxes(float yaw, float pitch, float roll)
 	{

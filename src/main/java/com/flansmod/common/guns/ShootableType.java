@@ -8,9 +8,9 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ShootableType extends InfoType 
 {
@@ -30,10 +30,6 @@ public class ShootableType extends InfoType
 	public String dropItemOnReload = null, dropItemOnShoot = null, dropItemOnHit = null;
 	/** The number of rounds fired by a gun per item */
 	public int roundsPerItem = 1;
-	/** The number of bullet entities to create per round */
-	public int numBullets = 1;
-	/** Bullet spread multiplier to be applied to gun's bullet spread */
-	public float bulletSpread = 1F;
 	
 	//Physics and Stuff
 	/** The speed at which the grenade should fall */
@@ -63,7 +59,7 @@ public class ShootableType extends InfoType
 	/** The radius of explosion upon detonation */
 	public float explosionRadius = 0F;
 	/** Whether the explosion can destroy blocks */
-	public boolean explosionBreaksBlocks = true;
+	public boolean explosionBreaksBlocks = false;
 	/** The name of the item to drop upon detonating */
 	public String dropItemOnDetonate = null;
 	/** Sound to play upon detonation */
@@ -106,10 +102,6 @@ public class ShootableType extends InfoType
 				dropItemOnHit = split[1];
 			else if(split[0].equals("RoundsPerItem"))
 				roundsPerItem = Integer.parseInt(split[1]);
-			else if(split[0].equals("NumBullets"))
-				numBullets = Integer.parseInt(split[1]);
-			else if(split[0].equals("Accuracy") || split[0].equals("Spread"))
-				bulletSpread = Float.parseFloat(split[1]);
 			
 			//Physics
 			else if(split[0].equals("FallSpeed"))

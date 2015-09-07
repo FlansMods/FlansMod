@@ -18,29 +18,29 @@ public class SlotMecha extends Slot
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack stack)
-	{
-		if(stack == null || stack.getItem() == null)
-			return true;
-
-		EnumMechaItemType itemType = null;
-		Item item = stack.getItem();
-		if(item instanceof ItemGun && ((ItemGun)item).type.usableByMechas)
-			itemType = EnumMechaItemType.tool;
-		else if(item instanceof ItemMechaAddon)
-			itemType = ((ItemMechaAddon)item).type.type;
-		else return false;
-
-		return slotType.accepts(itemType);
-	}
+    public boolean isItemValid(ItemStack stack)
+    {
+    	if(stack == null || stack.getItem() == null)
+    		return true;
+    	
+    	EnumMechaItemType itemType = null;
+    	Item item = stack.getItem();
+    	if(item instanceof ItemGun && ((ItemGun)item).type.usableByMechas)
+    		itemType = EnumMechaItemType.tool;
+    	else if(item instanceof ItemMechaAddon)
+    		itemType = ((ItemMechaAddon)item).type.type;
+    	else return false;
+    	
+    	return slotType.accepts(itemType);
+    }
 	
 	@Override
-	public void putStack(ItemStack stack)
-	{
+    public void putStack(ItemStack stack)
+    {
 		if(!isItemValid(stack))
 			return;
-		inventory.setInventorySlotContents(slotType.ordinal(), stack);
-		onSlotChanged();
-	}
+        inventory.setInventorySlotContents(slotType.ordinal(), stack);
+        onSlotChanged();
+    }
 
 }

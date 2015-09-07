@@ -4,6 +4,7 @@ Model Bullet
 Texture eliteBullet
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23940
 Icon EliteDart
 //How affected by gravity the bullet is
 FallSpeed 1
@@ -28,5 +29,3 @@ HitSound bullet
 Penetrates False
 SmokeTrail False
 DropItemOnHit eliteDart
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

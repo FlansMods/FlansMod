@@ -1,5 +1,6 @@
 Name American WW2 Snow Coat
 ShortName americanSnowCoat
+ItemID 23638
 Icon AmericanSnowCoat
 Colour 255 255 255
 Type Body

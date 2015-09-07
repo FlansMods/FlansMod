@@ -4,6 +4,7 @@ ShortName mwBinoculars
 Icon Binoculars
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23852
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 0
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -21,8 +22,6 @@ ShootDelay 0
 Mode SemiAuto
 Scope Binoculars
 ZoomLevel 16
-FOVZoomLevel 1.0
 Deployable False
 DeployedModel None
-Model mw.Binoculars
-Texture SkinBinoculars
+MeleeDamage 2

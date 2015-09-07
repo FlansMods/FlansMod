@@ -4,6 +4,7 @@ Model nerf.Disc
 Texture vortexDisc
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23951
 Icon 10DiscClip
 //How affected by gravity the bullet is
 FallSpeed 0.8
@@ -31,5 +32,3 @@ SmokeTrail False
 //Item to drop on reload. Damage is seperated by a dot
 DropItemOnReload 10DiscClip.10
 DropItemOnHit vortexDisc
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

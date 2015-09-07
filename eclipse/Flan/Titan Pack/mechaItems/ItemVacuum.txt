@@ -5,6 +5,7 @@ ShortName mechaItemVacuum
 Icon ItemVacuum
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23426
 RecipeOutput 1
 Recipe H hopper I blockIron R redstone
 RHR

@@ -1,6 +1,7 @@
 Name Foregrip
 ShortName flanMWForegrip
 Icon Foregrip
+ItemID 23862
 //The type of attachment defines what slot in the gun it takes. Types are "generic", "barrel", "scope", "stock" and "grip"
 AttachmentType grip
 //If true, then this attachment will muffle all sounds from the gun. Needn't be a barrel attachment

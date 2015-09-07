@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLClientHandler;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketTeamSelect;
@@ -21,7 +21,7 @@ public class GuiTeamSelect extends GuiScreen
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teams.png");
 
 	
-	private static RenderItem itemRenderer;
+	private static RenderItem itemRenderer = new RenderItem();
 	private boolean classMenu;
 	//This is static so that players may switch teams whenever they wish. 
 	//This is updated because the server forces players to pick teams when the teams change
@@ -82,15 +82,14 @@ public class GuiTeamSelect extends GuiScreen
 				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
 			}
 		}
-		itemRenderer = mc.getRenderItem();
 	}
 	
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(texture);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        mc.renderEngine.bindTexture(texture);
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
 		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		if(classMenu)
@@ -124,18 +123,18 @@ public class GuiTeamSelect extends GuiScreen
 	
 	@Override
 	protected void actionPerformed(GuiButton button)
-	{
+    {
 		if(classMenu)
 			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[button.id].shortName, true));
 		else
 			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id] == null ? "null" : teamChoices[button.id].shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);
-	}
+    }
 	
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 	}
 	
 	@Override
@@ -150,19 +149,19 @@ public class GuiTeamSelect extends GuiScreen
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
 			mc.thePlayer.closeScreen();
-			if(classMenu)
-			{
-				if(classChoices != null && classChoices.length > 0)
-					FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[0].shortName, true));
-			}
-			else FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(Team.spectators.shortName, false));
+	    	if(classMenu)
+	    	{
+	    		if(classChoices != null && classChoices.length > 0)
+	    			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[0].shortName, true));
+	    	}
+	    	else FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(Team.spectators.shortName, false));
 		}
 	}
 	
-	@Override
+    @Override
 	public void onGuiClosed() 
-	{
+    {
 
-	}
+    }
 
 }

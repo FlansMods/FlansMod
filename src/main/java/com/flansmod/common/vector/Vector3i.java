@@ -37,7 +37,7 @@ public class Vector3i extends Vector
 
 	public Vec3 toVec3()
 	{
-		return new Vec3(x, y, z);
+		return Vec3.createVectorHelper(x, y, z);
 	}
 
 	public void set(int x, int y, int z) 
@@ -168,7 +168,7 @@ public class Vector3i extends Vector
 	public String toString() 
 	{
 
-		return "Vector3i[" + x + ", " + y + ", " + z + ']';
+        return "Vector3i[" + x + ", " + y + ", " + z + ']';
 	}
 
 	public final int getX() 

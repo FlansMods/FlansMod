@@ -4,6 +4,7 @@ Model nerf.Disc
 Texture vortexDisc
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23950
 Icon VortexDisc
 //How affected by gravity the bullet is
 FallSpeed 0.5
@@ -28,5 +29,3 @@ HitSound bullet
 Penetrates False
 SmokeTrail False
 DropItemOnHit vortexDisc
-//Make Nerf guns not appear in dungeon chests
-DungeonLootChance 0

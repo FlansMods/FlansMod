@@ -3,6 +3,7 @@ ShortName shell
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
+ItemID 23462
 Icon TankShell
 //How affected by gravity the bullet is
 FallSpeed 1

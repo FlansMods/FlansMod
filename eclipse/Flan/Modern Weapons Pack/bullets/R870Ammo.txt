@@ -1,4 +1,4 @@
-Name 12 Gauge Flechette Shell
+Name Remington 870 Ammo
 ShortName r870Ammo
 Model Bullet
 //Colour of icon and model
@@ -7,15 +7,11 @@ Icon R870Ammo
 //How affected by gravity the bullet is
 FallSpeed 0.25
 //The maximum stack size
-MaxStackSize 32
+MaxStackSize 4
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 1
-//Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 6
+RoundsPerItem 7
 //The damage multiplier caused by the bullet on hitting an entity
-Damage 6
-//Bullet spread modifier, multiplies by the gun's bulletSpread
-Spread 0.25
+Damage 1
 //Size of explosion caused
 Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
@@ -31,5 +27,3 @@ HitSound bullet
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates True
 SmokeTrail False
-//Description - note the ammo type
-Description Ammo Type : Shotgun_Accurate, dart-like pellets

@@ -7,16 +7,16 @@ import com.flansmod.common.vector.Vector3f;
 public class ModelChinook extends ModelPlane 
 {
 	public ModelChinook()
-	{
+    {
 		int textureX = 1024; //The x-size of the texture
 		int textureY = 512;	//The y-size of the texture
 	
-		bodyModel = new ModelRendererTurbo[9];
-
-		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body floor
+        bodyModel = new ModelRendererTurbo[9];
+        
+        bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Main body floor
 		bodyModel[0].addBox(-96F, 8F, -32F, 192, 2, 64);	
 		
-		bodyModel[1] = new ModelRendererTurbo(this, 0, 132, textureX, textureY); //Main body side
+        bodyModel[1] = new ModelRendererTurbo(this, 0, 132, textureX, textureY); //Main body side
 		bodyModel[1].addBox(-96F, 10F, -32F, 192, 64, 2);	
 		
 		bodyModel[2] = new ModelRendererTurbo(this, 0, 198, textureX, textureY); //Main body side
@@ -25,19 +25,19 @@ public class ModelChinook extends ModelPlane
 		bodyModel[3] = new ModelRendererTurbo(this, 0, 66, textureX, textureY); //Main body floor
 		bodyModel[3].addBox(-96F, 74F, -32F, 192, 2, 64);
 		
-		bodyModel[4] = new ModelRendererTurbo(this, 0, 264, textureX, textureY); //Main body side bulge
+        bodyModel[4] = new ModelRendererTurbo(this, 0, 264, textureX, textureY); //Main body side bulge
 		bodyModel[4].addShapeBox(-96F, 10F, -48F, 192, 32, 16, 0F, /* 0 */ -8F, -8F, 0F, /* 1 */ -8F, -8F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -8F, -8F, 0F, /* 5 */ -8F, -8F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);		
 		
 		bodyModel[5] = new ModelRendererTurbo(this, 0, 312, textureX, textureY); //Main body side bulge
 		bodyModel[5].addShapeBox(-96F, 10F, 32F, 192, 32, 16, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ -8F, -8F, 0F, /* 3 */ -8F, -8F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ -8F, -8F, 0F, /* 7 */ -8F, -8F, 0F);	
 		
-		bodyModel[6] = new ModelRendererTurbo(this, 512, 314, textureX, textureY); //Seats
+        bodyModel[6] = new ModelRendererTurbo(this, 512, 314, textureX, textureY); //Seats
 		bodyModel[6].addBox(-92F, 32F, -30F, 184, 2, 16);	
 		
-		bodyModel[7] = new ModelRendererTurbo(this, 512, 332, textureX, textureY); //Seats
+        bodyModel[7] = new ModelRendererTurbo(this, 512, 332, textureX, textureY); //Seats
 		bodyModel[7].addBox(-92F, 32F, 14F, 184, 2, 16);	
 		
-		bodyModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Inside floor piece
+        bodyModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); //Inside floor piece
 		bodyModel[8].addBox(-96F, 24F, -32F, 192, 2, 64);	
 		
 		bodyWheelModel = new ModelRendererTurbo[12];
@@ -158,5 +158,5 @@ public class ModelChinook extends ModelPlane
 		
 		//Shapebox template
 		//bodyModel[2].addShapeBox(24F, 24F, -10F, 16, 16, 20, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-	}
+    }
 }

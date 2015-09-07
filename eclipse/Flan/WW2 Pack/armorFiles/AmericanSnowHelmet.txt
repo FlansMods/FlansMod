@@ -1,5 +1,6 @@
 Name American WW2 Snow Helmet
 ShortName americanSnowHelmet
+ItemID 23637
 Icon AmericanSnowHelmet
 Colour 255 255 255
 Type Helmet

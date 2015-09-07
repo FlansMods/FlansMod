@@ -37,7 +37,7 @@ public class Team extends InfoType
 	
 	public Team(String s, String s1, int teamCol, char textCol)
 	{
-		super(new TypeFile("NoPack", EnumType.team, s, false));
+		super(new TypeFile(EnumType.team, s, false));
 		shortName = s;
 		name = s1;
 		teamColour = teamCol;
@@ -177,7 +177,7 @@ public class Team extends InfoType
 	
 	public void removePlayer(EntityPlayer player)
 	{
-		removePlayer(player.getName());
+		removePlayer(player.getCommandSenderName());
 	}
 	
 	public String removePlayer(String username)
@@ -190,7 +190,7 @@ public class Team extends InfoType
 	
 	public EntityPlayer addPlayer(EntityPlayer player)
 	{
-		addPlayer(player.getName());
+		addPlayer(player.getCommandSenderName());
 		return player;
 	}
 	

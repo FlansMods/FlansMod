@@ -24,10 +24,10 @@ public class PacketPlaneControl extends PacketDriveableControl
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		super.encodeInto(ctx, data);
-		data.writeBoolean(gear);
-		data.writeBoolean(doors);
-		data.writeBoolean(wings);
+    	super.encodeInto(ctx, data);
+    	data.writeBoolean(gear);
+    	data.writeBoolean(doors);
+    	data.writeBoolean(wings);
 	}
 
 	@Override

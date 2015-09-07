@@ -62,7 +62,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return String.valueOf(m00) + ' ' + m10 + ' ' + m20 + ' ' + m30 + '\n' + m01 + ' ' + m11 + ' ' + m21 + ' ' + m31 + '\n' + m02 + ' ' + m12 + ' ' + m22 + ' ' + m32 + '\n' + m03 + ' ' + m13 + ' ' + m23 + ' ' + m33 + '\n';
+        return String.valueOf(m00) + ' ' + m10 + ' ' + m20 + ' ' + m30 + '\n' + m01 + ' ' + m11 + ' ' + m21 + ' ' + m31 + '\n' + m02 + ' ' + m12 + ' ' + m22 + ' ' + m32 + '\n' + m03 + ' ' + m13 + ' ' + m23 + ' ' + m33 + '\n';
 	}
 
 	/**
@@ -725,12 +725,12 @@ public class Matrix4f extends Matrix implements Serializable {
 	 */
 
 	private static float determinant3x3(float t00, float t01, float t02,
-					 float t10, float t11, float t12,
-					 float t20, float t21, float t22)
+				     float t10, float t11, float t12,
+				     float t20, float t21, float t22)
 	{
 		return   t00 * (t11 * t22 - t12 * t21)
-			   + t01 * (t12 * t20 - t10 * t22)
-			   + t02 * (t10 * t21 - t11 * t20);
+		       + t01 * (t12 * t20 - t10 * t22)
+		       + t02 * (t10 * t21 - t11 * t20);
 	}
 
 	/**

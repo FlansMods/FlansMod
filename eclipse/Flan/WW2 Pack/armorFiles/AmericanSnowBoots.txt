@@ -1,5 +1,6 @@
 Name American WW2 Snow Boots
 ShortName americanSnowBoots
+ItemID 23640
 Icon AmericanSnowBoots
 Colour 255 255 255
 Type Boots

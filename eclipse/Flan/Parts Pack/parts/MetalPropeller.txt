@@ -3,6 +3,7 @@ ShortName metalPropeller
 Icon MetalPropeller
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23281
 //Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
 Category Propeller
 StackSize 4

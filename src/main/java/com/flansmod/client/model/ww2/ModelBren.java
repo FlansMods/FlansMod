@@ -5,8 +5,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelBren extends ModelMG
 {
-	public ModelBren()
-	{
+    public ModelBren()
+    {
 		bipodModel = new ModelRendererTurbo[2];
 		bipodModel[0] = new ModelRendererTurbo(this, 0, 0);
 		bipodModel[0].addBox(0F, 0F, 0F, 1, 8, 1);
@@ -35,5 +35,5 @@ public class ModelBren extends ModelMG
 		ammoModel[1] = new ModelRendererTurbo(this, 4, 5);
 		ammoModel[1].addBox(0F, 4F, 4.5F, 1, 2, 2);
 		ammoModel[1].setRotationPoint(0F, 6F, 0F);	
-	}
+    }
 }

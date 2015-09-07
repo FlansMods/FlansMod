@@ -1,5 +1,6 @@
 Name Japanese WW2 Helmet
 ShortName japaneseHelmet
+ItemID 23661
 Icon JapaneseHelmet
 Colour 255 255 255
 Type Helmet

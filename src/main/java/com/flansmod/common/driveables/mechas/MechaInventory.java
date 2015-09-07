@@ -7,7 +7,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
 
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
@@ -111,6 +110,18 @@ public class MechaInventory implements IInventory
 	}
 
 	@Override
+	public String getInventoryName() 
+	{
+		return "Mecha";
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() 
+	{
+		return true;
+	}
+
+	@Override
 	public int getInventoryStackLimit() 
 	{
 		return 64;
@@ -130,6 +141,16 @@ public class MechaInventory implements IInventory
 	}
 
 	@Override
+	public void openInventory() 
+	{
+	}
+
+	@Override
+	public void closeInventory() 
+	{
+	}
+
+	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) 
 	{
 		Item item = itemstack.getItem();
@@ -141,59 +162,5 @@ public class MechaInventory implements IInventory
 		case leftArm : case rightArm : return item instanceof ItemBullet;
 		default : return false;
 		}
-	}
-
-	@Override
-	public String getName() 
-	{
-		return "Mecha";
-	}
-
-	@Override
-	public boolean hasCustomName() 
-	{
-		return true;
-	}
-
-	@Override
-	public IChatComponent getDisplayName() 
-	{
-		return null;
-	}
-
-	@Override
-	public void openInventory(EntityPlayer player) 
-	{
-		
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer player) 
-	{
-		
-	}
-
-	@Override
-	public int getField(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getFieldCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		
 	}
 }

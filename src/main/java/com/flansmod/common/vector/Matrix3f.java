@@ -12,7 +12,7 @@ public class Matrix3f
 	{
 		for(int i = 0;i < 3;i++)
 		{
-			System.arraycopy(Matrix[i], 0, matrix[i], 0, 3);
+            System.arraycopy(Matrix[i], 0, matrix[i], 0, 3);
 		}
 	}
 	
@@ -34,57 +34,57 @@ public class Matrix3f
 	}
 	
 	public static Matrix3f getMatrixRotX(float r)
-	{
-		float sn = MathHelper.sin(r);
-		float cs = MathHelper.cos(r);
-
-		return new Matrix3f(new float[][]
-				{
-					{1, 0, 0},
-					{0, cs, -sn},
-					{0, sn, cs}
-				});
-	}
+    {
+    	float sn = MathHelper.sin(r);
+    	float cs = MathHelper.cos(r);
+    	
+    	return new Matrix3f(new float[][] 
+    			{
+    				{1, 0, 0},
+    				{0, cs, -sn},
+    				{0, sn, cs}
+    			});
+    }
 	
 	public static Matrix3f getMatrixRotY(float r)
-	{
-		float sn = MathHelper.sin(r);
-		float cs = MathHelper.cos(r);
-
-		return new Matrix3f(new float[][]
-				{
-					{cs, 0, sn},
-					{0, 1, 0},
-					{-sn, 0, cs}
-				});
-	}
+    {
+    	float sn = MathHelper.sin(r);
+    	float cs = MathHelper.cos(r);
+    	
+    	return new Matrix3f(new float[][] 
+    			{
+    				{cs, 0, sn},
+    				{0, 1, 0},
+    				{-sn, 0, cs}
+    			});
+    }
 	
 	public static Matrix3f getMatrixRotZ(float r)
-	{
-		float sn = MathHelper.sin(r);
-		float cs = MathHelper.cos(r);
-
-		return new Matrix3f(new float[][]
-				{
-					{cs, -sn, 0},
-					{sn, cs, 0},
-					{0, 0, 1}
-				});
-	}
-
+    {
+    	float sn = MathHelper.sin(r);
+    	float cs = MathHelper.cos(r);
+    	
+    	return new Matrix3f(new float[][] 
+    			{
+    				{cs, -sn, 0},
+    				{sn, cs, 0},
+    				{0, 0, 1}
+    			});
+    }
+    
 	public static Vec3 multVec(Matrix3f m, Vec3 vec)
-	{
-		float[][] retMat = new float[3][3];
-		float[] retVec = new float[3];
-
-		for(int i =0;i < 3;i++)
-		{
-			float[] row = {m.matrix[i][0],m.matrix[i][1],m.matrix[i][2]};
-			float[] column = {(float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord};
+    {
+    	float[][] retMat = new float[3][3];
+    	float[] retVec = new float[3];
+    	
+    	for(int i =0;i < 3;i++)
+    	{
+    		float[] row = {m.matrix[i][0],m.matrix[i][1],m.matrix[i][2]};
+    		float[] column = {(float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord};
 			for(int sm = 0; sm < 3; sm++) retVec[i] += row[sm]*column[sm];
     	}
     	
-    	return new Vec3(retVec[0], retVec[1], retVec[2]);
+    	return Vec3.createVectorHelper(retVec[0], retVec[1], retVec[2]);
     }
     
     public static Matrix3f multMatrix(Matrix3f m1, Matrix3f m2)
@@ -104,5 +104,4 @@ public class Matrix3f
     	
     	return retMat;
     }
-
 }

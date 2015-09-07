@@ -1,8 +1,6 @@
 Name L96
 ShortName l96
 //The ammo this gun uses (shortName)
-Ammo m21Ammo
-Ammo dragunovAmmo
 Ammo l96Ammo
 Icon L96
 //Colour in Red, Green, Blue, each going up to 255.
@@ -35,7 +33,7 @@ Texture L96
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -46,5 +44,3 @@ NumGenericAttachmentSlots 2
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob L96_Demon L96_Demon red 1 black 1
 Paintjob L96_Blue L96_Blue blue 1 black 1
-//Description - note the ammo type
-Description Ammo Type : Heavy Rifle

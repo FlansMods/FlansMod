@@ -27,5 +27,3 @@ HitSound bullet
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates True
 SmokeTrail False
-//Description - note the ammo type
-Description Ammo Type : Light Assault

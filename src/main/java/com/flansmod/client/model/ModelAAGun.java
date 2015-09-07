@@ -9,15 +9,15 @@ public class ModelAAGun extends ModelBase
 {
 	public boolean oldModel = false;
 
-	public void renderBase(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
-	{
+    public void renderBase(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
+    {
 		for (ModelRendererTurbo aBaseModel : baseModel) {
 			aBaseModel.render(f5);
 		}
-	}
+    }
 	
 	public void renderGun(float f, float f1, float f2, float f3, float f4, float f5, EntityAAGun aa)
-	{
+    {
 		for (ModelRendererTurbo aSeatModel : seatModel) {
 			aSeatModel.render(f5);
 		}
@@ -33,18 +33,18 @@ public class ModelAAGun extends ModelBase
 			aGunsightModel.render(f5);
 		}
 
-		for(int i = 0; i < barrelModel.length; i++)
-		{
-			for(int j = 0; j < barrelModel[i].length; j++)
+        for(int i = 0; i < barrelModel.length; i++)
+        {
+		    for(int j = 0; j < barrelModel[i].length; j++)
 			{
 				barrelModel[i][j].setPosition(-aa.barrelRecoil[i] * (float)(Math.cos(-aa.gunPitch * 3.14159265358979F / 180F)) + barrelX, - aa.barrelRecoil[i] * (float)(Math.sin(-aa.gunPitch * 3.14159265358979F / 180F)) + barrelY, barrelZ);
 				barrelModel[i][j].rotateAngleZ = -aa.gunPitch / 180F * 3.141592653589793238462643383279502884197169399F;
 				barrelModel[i][j].render(f5);
 			}
-		}
+        }
 		
 		for(int i = 0; i < ammoModel.length; i++)
-		{
+        {
 			if(aa.ammo[i] != null)
 			{
 				for(int j = 0; j < ammoModel[i].length; j++)
@@ -54,12 +54,12 @@ public class ModelAAGun extends ModelBase
 					ammoModel[i][j].render(f5);
 				}
 			}
-		}
-	}
+        }
+    }
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-	}
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+    {
+    }
 	
 	public void flipAll()
 	{
@@ -93,7 +93,7 @@ public class ModelAAGun extends ModelBase
 		}
 	}	
 
-	public ModelRendererTurbo baseModel[] = new ModelRendererTurbo[0];		//The base which stays put
+    public ModelRendererTurbo baseModel[] = new ModelRendererTurbo[0];		//The base which stays put
 	public ModelRendererTurbo seatModel[] = new ModelRendererTurbo[0];			//The bit which swivels around the yaw axis, but which does not pitch
 	public ModelRendererTurbo gunModel[] = new ModelRendererTurbo[0];			//The bit of the gun that points where you look, but doesn't move
 	public ModelRendererTurbo barrelModel[][] = new ModelRendererTurbo[0][0];		//The end of the barrel that recoils

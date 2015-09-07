@@ -4,25 +4,21 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFlansWorkbench extends Block
 {
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
+	private IIcon side;
+	private IIcon[] top;
 	
     public BlockFlansWorkbench(int j, int k)
     {
@@ -30,7 +26,6 @@ public class BlockFlansWorkbench extends Block
         setHardness(3F);
         setResistance(6F);
         setCreativeTab(FlansMod.tabFlanDriveables);
-        setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
     }
     
     @Override
@@ -45,40 +40,42 @@ public class BlockFlansWorkbench extends Block
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumFacing side, float par7, float par8, float par9)
+    public IIcon getIcon(int i, int j)
     {
-    	switch(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue())
+        if(i == 1)
+        {
+            return top[j];
+        } else
+        {
+            return side;
+        }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
+    {
+    	switch(world.getBlockMetadata(i, j, k))
     	{
-    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 0, world, pos.getX(), pos.getY(), pos.getZ()); break;
-    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ()); break; 
+    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 0, world, i, j, k); break;
+    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 2, world, i, j, k); break; 
     	}    	
 		return true;
     }
     
-
-    
     @Override
-    protected BlockState createBlockState()
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister register)
     {
-        return new BlockState(this, new IProperty[] {TYPE});
+    	top = new IIcon[3];
+    	top[0] = register.registerIcon("FlansMod:" + "planeCraftingTableSmall");
+    	top[1] = register.registerIcon("FlansMod:" + "planeCraftingTableLarge");
+    	top[2] = register.registerIcon("FlansMod:" + "vehicleCraftingTable");
+    	side = register.registerIcon("FlansMod:" + "planeCraftingTableSide");
     }
     
     @Override
-    public IBlockState getStateFromMeta(int meta)
+    public int damageDropped(int par1)
     {
-        return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
+        return par1;
     }
-    
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-    
-    @Override
-    public int damageDropped(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-
 }

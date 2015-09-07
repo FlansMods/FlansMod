@@ -51,5 +51,3 @@ KnockbackModifier 0
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob GL1_Blackwood GL1_Blackwood black 2
 Paintjob GL1_Birch GL1_Birch white 1 yellow 1
-//Description - note the ammo type
-Description Ammo Type : Grenade

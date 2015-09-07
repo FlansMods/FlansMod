@@ -48,5 +48,3 @@ ExplosionBreaksBlocks true
 //Detonate Sound <sound>
 ////Misc
 MeleeDamage 4
-//Description - note the ammo type
-Description Ammo Type : Grenade

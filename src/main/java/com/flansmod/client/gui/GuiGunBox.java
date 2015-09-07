@@ -1,7 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -9,51 +7,34 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLClientHandler;
 
-import com.flansmod.common.driveables.ContainerDriveableMenu;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.guns.boxes.ContainerGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
-import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntry;
-import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntryTopLevel;
-import com.flansmod.common.guns.boxes.GunBoxType.GunBoxPage;
 
-public class GuiGunBox extends GuiContainer
+public class GuiGunBox extends GuiScreen
 {
-	/** Texture location */
-	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBoxNew.png");
-	/** Texture sizes */
-	private final int textureX = 512, textureY = 256;
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
 	private InventoryPlayer inventory;
-	private static RenderItem itemRenderer;
+	private Minecraft mc;
+	private static RenderItem itemRenderer = new RenderItem();
 	private GunBoxType type;
 	private int page;
-	private GunBoxPage currentPage;
-	private GunBoxEntryTopLevel currentEntry;
-	private GunBoxEntry currentSubEntry;
 	private int guiOriginX;
 	private int guiOriginY;
 	private int scroll;
-
 	
-	public GuiGunBox(InventoryPlayer inventory, GunBoxType type)
+	public GuiGunBox(InventoryPlayer playerinventory, GunBoxType type)
 	{
-		super(new ContainerGunBox(inventory));
-		this.inventory = inventory;
+		inventory = playerinventory;
+		mc = FMLClientHandler.instance().getClient();
 		this.type = type;
 		page = 0;
-		
-		xSize = ySize = 256;
 	}
 	
 	@Override
@@ -62,23 +43,16 @@ public class GuiGunBox extends GuiContainer
 		super.updateScreen();
 		scroll++;
 	}
-	
-	@Override
-	public void initGui()
-	{
-		itemRenderer = mc.getRenderItem();
-	}
-	
-	/*
+
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
-		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = guiOriginX = k / 2 - 88;
@@ -103,8 +77,8 @@ public class GuiGunBox extends GuiContainer
 			drawTexturedModalRect(m + 89, n + 109, 186, 0, 10, 10);
 
 		RenderHelper.enableGUIStandardItemLighting();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
 		// Fill the gun panels with guns
@@ -124,24 +98,8 @@ public class GuiGunBox extends GuiContainer
 			drawSlotInventory(inventory.getStackInSlot(col), m + 8 + col * 18, n + 180);
 		}
 
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glDisable(3042 /*GL_BLEND*/);
 	}
-	*/
-	
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
-	{
-		GlStateManager.color(1F, 1F, 1F, 1F);
-		mc.renderEngine.bindTexture(texture);
-
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-		
-		drawModalRectWithCustomSizedTexture(j, k, 0, 0, xSize, ySize, textureX, textureY);
-	}
-	
-	
-	/*
 
 	private void drawRecipe(FontRenderer fontrenderer, int m, int n, int q, int offset)
 	{
@@ -208,21 +166,20 @@ public class GuiGunBox extends GuiContainer
 
 		}
 	}
-	*/
 
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
-		
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
-	/*
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException
+	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);
 		int m = i - guiOriginX;
@@ -276,8 +233,7 @@ public class GuiGunBox extends GuiContainer
 			}
 		}
 	}
-*/
-	
+
 	@Override
 	protected void keyTyped(char c, int i)
 	{

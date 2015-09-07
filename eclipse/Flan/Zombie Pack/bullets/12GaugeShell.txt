@@ -7,13 +7,11 @@ Icon 12GaugeShell
 //How affected by gravity the bullet is
 FallSpeed 0.25
 //The maximum stack size
-MaxStackSize 32
+MaxStackSize 16
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 1
-//Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 8
 //The damage multiplier caused by the bullet on hitting an entity
-Damage 4
+Damage 1
 //Size of explosion caused
 Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
@@ -32,5 +30,3 @@ Penetrates True
 SmokeTrail False
 //TrailParticleType reddust
 HasLight False
-//Description - note the ammo type
-Description Ammo Type : Shotgun

@@ -1,12 +1,7 @@
 Name SIG P226
 ShortName sigP226
 //The ammo this gun uses (shortName)
-Ammo m9Ammo
-Ammo makarovAmmo
-Ammo m1911Ammo
 Ammo sigP226Ammo
-Ammo uspAmmo
-Ammo uspPoisonAmmo
 Icon SIGP226
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -42,7 +37,7 @@ Texture SIGP226
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
+AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -52,5 +47,3 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 //Paintjob DesertEagle_Neon DesertEagle_Neon magenta 1
-//Description - note the ammo type
-Description Ammo Type : Pistol

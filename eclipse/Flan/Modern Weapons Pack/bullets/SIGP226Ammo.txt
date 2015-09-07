@@ -28,5 +28,3 @@ HitSound bullet
 //Each object penetrated detracts from the bullet's power and so the total damage it does should be constant
 Penetration 2.0
 SmokeTrail False
-//Description - note the ammo type
-Description Ammo Type : Pistol

@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
@@ -9,20 +8,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
@@ -41,7 +38,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	/** The crafting table co-ordinates */
 	private int x, y, z;
 	/** Item renderer */
-	private static RenderItem itemRenderer;
+	private static RenderItem itemRenderer = new RenderItem();
 	/** Gui origin */
 	private int guiOriginX, guiOriginY;
 	/** Blueprint scroller, static to save position upon exiting crafting window */
@@ -59,7 +56,6 @@ public class GuiDriveableCrafting extends GuiScreen
 	{
 		inventory = playerinventory;
 		mc = FMLClientHandler.instance().getClient();
-		itemRenderer = mc.getRenderItem();
 		world = w;
 		x = i;
 		y = j;
@@ -75,12 +71,12 @@ public class GuiDriveableCrafting extends GuiScreen
 	
 	@Override
 	protected void actionPerformed(GuiButton button)
-	{
-		if (button.id == 0)
-		{
-			FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
-		}
-	}
+    {
+        if (button.id == 0)
+        {
+        	FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
+        }
+    }
 		
 	@Override
 	public void drawScreen(int i, int j, float f)
@@ -148,16 +144,6 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
-			
-			//Do lights
-	        GlStateManager.disableLighting();
-	        GlStateManager.pushMatrix();
-	        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
-	        GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
-	        RenderHelper.enableStandardItemLighting();
-	        GlStateManager.popMatrix();
-	        GlStateManager.enableRescaleNormal();
-			
 			if(selectedType instanceof MechaType)
 				GL11.glTranslatef(0, 15, 0);
 			GL11.glScalef(-50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance, 50F * selectedType.modelScale / selectedType.cameraDistance);
@@ -251,7 +237,7 @@ public class GuiDriveableCrafting extends GuiScreen
 				{
 					PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 					//Check its an engine that we can use
-					if(partType.category == EnumPartCategory.ENGINE && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
+					if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(selectedType)))
 					{
 						//If we already have engines of this type, add these ones to the stack
 						if(engines.containsKey(partType))
@@ -311,8 +297,10 @@ public class GuiDriveableCrafting extends GuiScreen
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 	
 	@Override
@@ -325,7 +313,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	}
 	
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException
+	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);
 		int x = i - guiOriginX;

@@ -323,37 +323,9 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:GL6Reload" ]
 	},
-
 	
 		"GrenadeLauncherReload": {
 		"category" : "player",
 		"sounds" : [ "flansmod:GrenadeLauncherReload" ]
-	},
-
-	"M1A2Start": {
-		"category" : "player",
-		"sounds" : [ "flansmod:M1A2Start" ]
-	},
-
-	"M1A2_Run": {
-		"category" : "player",
-		"sounds" : [ "flansmod:M1A2_Run" ]
-	},
-
-	"90mm": {
-		"category" : "player",
-		"sounds" : [ "flansmod:90mm" ]
-	},
-
-
-	"ChallengerIdle": {
-		"category" : "player",
-		"sounds" : [ "flansmod:ChallengerIdle" ]
-	},
-
-	"ChallengerRun": {
-		"category" : "player",
-		"sounds" : [ "flansmod:ChallengerRun" ]
 	}
-
 }

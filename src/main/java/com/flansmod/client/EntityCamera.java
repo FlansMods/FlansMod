@@ -70,14 +70,9 @@ public class EntityCamera extends EntityLivingBase
 	{
 
 	}
-	@Override
-	public ItemStack getCurrentArmor(int slotIn) 
-	{
-		return null;
-	}
 
 	@Override
-	public ItemStack[] getInventory() 
+	public ItemStack[] getLastActiveItems() 
 	{
 		return null;
 	}

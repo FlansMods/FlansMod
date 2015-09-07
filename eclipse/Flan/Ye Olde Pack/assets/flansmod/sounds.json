@@ -4,6 +4,11 @@
 		"sounds" : [ "flansmod:bomb" ]
 	},
 	
+	"bullet": {
+		"category" : "player",
+		"sounds" : [ "flansmod:bullet" ]
+	},
+	
 	"bow": {
 		"category" : "player",
 		"sounds" : [ "flansmod:bow" ]

@@ -5,6 +5,7 @@ Model titan.Drill
 Texture DiamondDrill
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
+ItemID 23429
 RecipeOutput 1
 Recipe P pickaxeDiamond D diamond R redstone
  P 
