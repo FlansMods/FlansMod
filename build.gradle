@@ -1,0 +1,150 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "4.10.0"
+group= "com.flansmod"
+archivesBaseName = "Flan's Mod"
+
+minecraft {
+    version = "1.7.10-10.13.2.1230"
+    runDir = "eclipse"
+
+    replace "@ALLOWED_VERSION@", "[4.10,4.11)"
+    replace "@MC_VERSION@", project.minecraft.version
+    replace "@VERSION@", project.version
+    replaceIn "FlansMod.java"
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+version = "${project.minecraft.version}-${project.version}"
+
+task mechaParts(type: Jar) {
+    from 'eclipse/Flan/Mecha Parts Pack'
+    baseName = 'Mecha Parts'
+    appendix = 'Content Pack'
+}
+
+task modernWeapons(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/mw/'}
+    from 'eclipse/Flan/Modern Weapons Pack'
+    baseName = 'Modern Warfare'
+    appendix = 'Content Pack'
+}
+
+task nerf(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/nerf/'}
+    from 'eclipse/Flan/Nerf Pack'
+    baseName = 'Nerf'
+    appendix = 'Content Pack'
+}
+
+task simpleParts(type: Jar) {
+    from 'eclipse/Flan/Parts Pack'
+    baseName = 'Simple Parts'
+    appendix = 'Content Pack'
+}
+
+task titan(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/titan/'}
+    from 'eclipse/Flan/Titan Pack'
+    baseName = 'Titan'
+    appendix = 'Content Pack'
+}
+
+task ww2(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/ww2/'}
+    from 'eclipse/Flan/WW2 Pack'
+    baseName = 'WW2'
+    appendix = 'Content Pack'
+}
+
+task yeOlde(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/yeolde/'}
+    from 'eclipse/Flan/Ye Olde Pack'
+    baseName = 'Ye Olde'
+    appendix = 'Content Pack'
+}
+
+task zombie(type: Jar) {
+    from (zipTree("${destinationDir}/${archiveName}")) { include 'com/flansmod/client/model/zombie/'}
+    from 'eclipse/Flan/Zombie Pack'
+    baseName = 'Zombie'
+    appendix = 'Content Pack'
+}
+
+task contentPacks() {
+    dependsOn mechaParts
+    dependsOn modernWeapons
+    dependsOn nerf
+    dependsOn simpleParts
+    dependsOn titan
+    dependsOn ww2
+    dependsOn yeOlde
+    dependsOn zombie
+}
+
+task clearOutput(type: Delete) {
+    delete 'build/output/'
+}
+
+task outputJar(type: Jar) {
+    destinationDir = new File("build/output/mods/")
+    from (zipTree("build/libs/${archiveName}")) {
+        exclude '**/mw/'
+        exclude '**/nerf/'
+        exclude '**/titan/'
+        exclude '**/ww2/'
+        exclude '**/yeolde/'
+        exclude '**/zombie/'
+    }
+}
+
+task outputPacks(type: Copy) {
+    from ('build/libs/') {
+        include "**/*${version}.jar"
+        exclude "**/Flan's Mod*.jar"
+    }
+    into 'build/output/Flan/'
+}
+
+build {
+    dependsOn contentPacks
+    dependsOn clearOutput
+    dependsOn outputJar
+    dependsOn outputPacks
+}
