@@ -173,7 +173,6 @@ public class FlansModExplosion extends Explosion
                         d9 /= d13;
                         double d14 = (double)this.world.getBlockDensity(vec3, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
-                        entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
                         double d11 = EnchantmentProtection.func_92092_a(entity, d10);
                         entity.motionX += d5 * d11;
                         entity.motionY += d7 * d11;
@@ -206,9 +205,14 @@ public class FlansModExplosion extends Explosion
         Iterator iterator;
         BlockPos blockpos;
 
-        if (this.isSmoking)
+        if (this.isSmoking&&breaksBlocks)
         {
             worldObj.createExplosion(detonator, x, y, z, radius, true);
+        }
+        
+        else if (this.isSmoking)
+        {
+            entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
         }
 
         if (this.isFlaming)
