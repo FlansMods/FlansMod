@@ -1,6 +1,6 @@
 //Naming
-Name M4 Sherman
-ShortName Sherman
+Name M4A1 Sherman Medium Tank
+ShortName M4A1 Sherman
 //Visuals
 Icon Sherman
 Model ww2.Sherman
@@ -63,7 +63,7 @@ AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 green
 //Health and collision
-SetupPart core 500 -61 -3 -15 114 28 30
+SetupPart core 520 -61 -3 -15 114 28 30
 SetupPart turret 400 -25 25 -25 50 18 50
 SetupPart leftTrack 250 -61 -10 -28 112 17 13
 SetupPart rightTrack 250 -61 -10 15 112 17 13
