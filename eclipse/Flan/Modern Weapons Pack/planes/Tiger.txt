@@ -88,9 +88,9 @@ AddRecipeParts tail 1 metalTail 1 metalPropeller
 AddDye 3 green
 AddDye 3 black
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 300 -109 4 -12 212 47 24
-SetupPart tail 100 -183 10 -7 74 31 14
+SetupPart core 600 -109 4 -12 212 47 24
+SetupPart tail 200 -183 10 -7 74 31 14
 SetupPart leftWing 100 -6 25 -45 21 6 33
 SetupPart rightWing 100 -6 25 12 21 6 33
 SetupPart blades 100 -125 63 -125 250 4 250
-BulletDetection 10
+BulletDetection 8

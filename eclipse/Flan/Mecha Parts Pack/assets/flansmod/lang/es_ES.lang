@@ -1,0 +1,17 @@
+item.diamondCircularSaw.name=Sierra Circular de Diamante
+item.diamondExcavator.name=Excavadora de Diamante
+item.diamondDrill.name=Taladro de Diamante
+item.ironCircularSaw.name=Sierra Circular de Hierro
+item.ironExcavator.name=Excavadora de Hierro
+item.ironDrill.name=Taladro de Hierro
+item.advCPU.name=CPU Avanzada
+item.advHydraulics.name=Hidráulicas Avanzadas
+item.basicCPU.name=CPU Básica
+item.canister.name=Bote
+item.hydraulics.name=Hidráulicas
+item.mediumDiamondArm.name=Brazo de Diamante Mediano
+item.mediumDiamondBody.name=Cuerpo de Diamante Mediano
+item.mediumDiamondLeg.name=Pierna de Diamante Mediana
+item.smallIronLeg.name=Pierna de Hierro Pequeña
+item.smallIronArm.name=Brazo de Hierro Pequeño
+item.smallIronBody.name=Cuerpo de Hierro Pequeño
