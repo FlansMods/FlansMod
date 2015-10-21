@@ -33,6 +33,7 @@ public class RenderGunItem extends RenderEntityItem
         	GlStateManager.pushMatrix();
         	GlStateManager.translate(x, y + 0.25D, z);
         	GlStateManager.rotate(entity.ticksExisted + partialTicks, 0F, 1F, 0F);
+        	
         	gunRenderer.renderItem(ItemRenderType.ENTITY, stack);
         	GlStateManager.popMatrix();
         }

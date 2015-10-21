@@ -7,6 +7,7 @@ import com.flansmod.common.teams.ArmourType;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,6 +49,10 @@ public class ModelCustomArmour extends ModelBiped
             }
         }
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 
+        if (isSneak)
+        {
+            GlStateManager.translate(0.0F, 0.2F, 0.0F);
+        }
 		render(headModel, bipedHead, f5, type.modelScale);
 		render(bodyModel, bipedBody, f5, type.modelScale);
 		render(leftArmModel, bipedLeftArm, f5, type.modelScale);
