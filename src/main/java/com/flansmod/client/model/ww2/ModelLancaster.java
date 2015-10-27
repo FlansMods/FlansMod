@@ -219,23 +219,23 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[13] = new ModelRendererTurbo(this,52, 362, textureX, textureY);
 		bodyModel[13].addShape3D(128, -65, -15, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 16, 160, 0), new Coord2D(160, 17, 160, 1), new Coord2D(0, 1, 0, 1) } ), 30, 160, 1, 322, 30, ModelRendererTurbo.MR_FRONT, new float[] { 1, 160, 1, 160 });
-		bodyModel[13].setPosition(256F, 0F, -30F);
+		//bodyModel[13].setPosition(256F, 0F, -30F);
 		bodyModel[13].rotateAngleX = (float)Math.PI;
-		bodyModel[13].rotateAngleY = (float)Math.PI;
+		//bodyModel[13].rotateAngleY = (float)Math.PI;
 		
 		bodyModel[14] = new ModelRendererTurbo(this,52, 345, textureX, textureY);
 		bodyModel[14].addShape3D(128, -64, -16, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 0, 160, 0), new Coord2D(160, 16, 160, 16) } ), 1, 160, 16, 336, 1, ModelRendererTurbo.MR_FRONT, new float[] { 160, 16, 160 });
-		bodyModel[14].setPosition(256F, 0F, -32F);
+		//bodyModel[14].setPosition(256F, 0F, -32F);
 		bodyModel[14].rotateAngleX = (float)Math.PI;
-		bodyModel[14].rotateAngleY = (float)Math.PI;
+		//bodyModel[14].rotateAngleY = (float)Math.PI;
 
 		bodyModel[15] = new ModelRendererTurbo(this,52, 394, textureX, textureY);
 		bodyModel[15].addShape3D(128, -64, 15, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 0, 160, 0), new Coord2D(160, 16, 160, 16) } ), 1, 160, 16, 336, 1, ModelRendererTurbo.MR_FRONT, new float[] { 160, 16, 160 });
-		bodyModel[15].setPosition(256F, 0F, 30F);
+		//bodyModel[15].setPosition(256F, 0F, 30F);
 		bodyModel[15].rotateAngleX = (float)Math.PI;
-		bodyModel[15].rotateAngleY = (float)Math.PI;
+		//bodyModel[15].rotateAngleY = (float)Math.PI;
 		
 		//Tail (8 / 9)
 		tailModel = new ModelRendererTurbo[7];

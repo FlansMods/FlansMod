@@ -107,7 +107,13 @@ public class Shape2D
 			currentLengthPosition -= currentLength;
 		}
 		
-		return new Shape3D(verts, poly);
+		Shape3D shape3D = new Shape3D(verts, poly);
+		for(TexturedPolygon face : shape3D.faces)
+		{
+			face.setInvertNormal(true);
+		}
+		
+		return shape3D;
 	}
 	
 	protected Vec3 setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)

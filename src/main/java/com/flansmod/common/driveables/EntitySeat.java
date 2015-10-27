@@ -96,6 +96,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		playerPosY = prevPlayerPosY = posY;
 		playerPosZ = prevPlayerPosZ = posZ;
 		looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
+		prevLooking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 		//updatePosition();
 	}
 	
@@ -124,6 +125,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			driveable.seats[seatID] = this;
 			seatInfo = driveable.getDriveableType().seats[seatID];
 			looking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
+			prevLooking.setAngles((seatInfo.minYaw + seatInfo.maxYaw) / 2, 0F, 0F);
 			playerPosX = prevPlayerPosX = posX = driveable.posX;
 			playerPosY = prevPlayerPosY = posY = driveable.posY;
 			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
