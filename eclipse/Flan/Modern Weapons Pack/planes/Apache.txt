@@ -89,10 +89,11 @@ AddRecipeParts tail 1 metalTail 1 metalPropeller
 AddDye 4 green
 AddDye 2 black
 // Health
-SetupPart core 650 -88 16 -25 210 48 50
+SetupPart core 500 -88 16 -25 210 48 50
 SetupPart tail 300 -197 16 -12 108 30 24
 SetupPart leftWing 200 0 8 -63 44 34 38
 SetupPart rightWing 200 0 8 25 44 34 38
 BulletDetection 8
 HasGear True
 ModelScale 1
+
