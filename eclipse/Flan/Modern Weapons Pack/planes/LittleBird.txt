@@ -1,0 +1,95 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name MH-6 LittleBird
+ShortName LittleBird
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon LittleBird
+Model mw.LittleBird
+Texture SkinLittleBird
+//Third Person Camera Distance
+CameraDistance 10.5
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 1.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Heli
+//Throttle
+MaxThrottle 3.5
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 2
+TurnRightSpeed 2
+//Pitch modifiers
+LookUpSpeed 2
+LookDownSpeed 2
+//Roll modifiers
+RollLeftSpeed 2
+RollRightSpeed 2
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 2.5
+//Wheels (Fake wheels imitating skids)
+NumWheels 3
+WheelPosition 0 -7 -10 -19
+WheelPosition 1 -7 -10 19
+WheelPosition 2 33 -10 0
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+HeliPropeller 0 54 0 0 core Thruster
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary None
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 5
+ShootDelaySecondary 20
+//Whether to alternate or fire all together
+AlternatePrimary True
+AlternateSecondary True
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 0
+AllowAllAmmo False
+AddAmmo None
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 5000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 16 7 6
+Passengers 7
+Passenger 1 16 7 -6 core
+Passenger 2 0 7 -6 core
+Passenger 3 0 7 6 core
+Passenger 4 15 4 -14 core
+Passenger 5 3 4 -14 core
+Passenger 6 3 4 14 core
+Passenger 7 15 4 14 core
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound HelicopterStart
+StartSoundLength 100
+PropSound Helicopter1
+PropSoundLength 93
+ShootSoundPrimary RPGShoot
+ShootSoundSecondary RocketFire2
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 advancedMetalCockpit
+AddRecipeParts skids 2 helicopterSkid
+AddRecipeParts blades 5 helicopterBlade
+AddRecipeParts tail 1 metalTail 1 metalPropeller
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 5 black
+// Health
+SetupPart tail 1000 -83 15 -9 19 39 22
+SetupPart core 2000 -26 0 -24 64 37 48
+SetupPart tail 1000 -64 22 -5 38 13 11
+SetupPart blades 1000 -54 37 -61 122 6 122
+BulletDetection 8
+HasGear False
+ModelScale 1

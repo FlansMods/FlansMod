@@ -29,7 +29,7 @@ TargetPlayers true
 TargetVehicles false
 TargetPlanes false
 TargetMechas true
-TargetRange 10
+TargetRange 40
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound RPDShoot

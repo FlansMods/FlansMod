@@ -6,6 +6,7 @@ Ammo uziAmmo
 Ammo mp5Ammo
 Ammo mp5kAmmo
 Ammo glockAmmo
+Ammo MP7Ammo
 Icon MiniUzi
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

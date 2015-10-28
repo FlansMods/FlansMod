@@ -24,7 +24,7 @@ Texture SkinZF-4
 ModelScale
 //Recipe
 RecipeOutput 1
-Recipe R yellowDust F fiberglass G thinGlass
-FFF
+Recipe I ingotIron G thinGlass
+III
 G G
-FFF
+III

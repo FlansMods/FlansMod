@@ -14,12 +14,14 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 12
+NumGuns 13
 AddGun m1Carbine 8 ingotIron 12 log
 AddAmmo m1CarbineAmmo 3 ingotIron 1 gunpowder
 AddGun m1Garand 10 ingotIron 15 log
 AddAmmo m1GarandAmmo 2 ingotIron 1 gunpowder
-AddGun springfield 12 ingotIron 20 log 4 glass
+AddGun springfield 12 ingotIron 20 log
+AddAmmo springfieldAmmo 3 ingotIron 1 gunpowder
+AddGun springfieldSniper 12 ingotIron 20 log 4 glass
 AddAmmo springfieldAmmo 3 ingotIron 1 gunpowder
 AddGun thompson 6 ingotIron 8 log
 AddAmmo thompsonAmmo 4 ingotIron 1 gunpowder
@@ -29,12 +31,14 @@ AddGun M3A1 15 ingotIron
 AddAmmo M3A1Ammo 4 ingotIron 2 gunpowder
 AddGun trenchgun 12 ingotIron 8 log
 AddAmmo trenchgunAmmo 5 ingotIron 3 gunpowder 1 paper
+AddGun flamethrower 8 ingotIron 1 flintAndSteel
+AddAmmo flamethrowerAmmo 1 fuelCan 2 ingotIron
 AddGun colt 5 ingotIron 6 log
 AddAmmo coltAmmo 2 ingotIron 1 gunpowder
 AddGun bazooka 24 ingotIron 8 log
 AddAmmo bazookaAmmo 6 ingotIron 3 gunpowder
-AddGun browning 30 ingotIron 5 log
+AddGun browning30Cal 20 ingotIron
 AddAmmo browningAmmo 25 ingotIron 15 gunpowder
-AddGun bofors 1 aaBarrel 1 leather 1 blockIron 2 wheel
-AddAmmo boforsAmmo 1 ingotIron 2 gunpowder
+AddGun 50Cal 28 ingotIron 2 log
+AddAmmo 50CalAmmo 35 ingotIron 20 gunpowder
 AddGun mk2Frag 4 ingotIron 2 gunpowder

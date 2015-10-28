@@ -21,12 +21,12 @@ AddGun type38Sniper 12 ingotIron 10 log 4 glass
 AddAmmo type38Ammo 2 ingotIron 1 gunpowder
 AddGun type100 15 ingotIron 5 log
 AddAmmo type100Ammo 3 ingotIron 2 gunpowder
+AddGun flamethrower 8 ingotIron 1 flintAndSteel
+AddAmmo flamethrowerAmmo 1 fuelCan 2 ingotIron
 AddGun type14 5 ingotIron 5 log
 AddAmmo type14Ammo 2 ingotIron 1 gunpowder
 AddGun panzerschreck 25 ingotIron 6 log
 AddAmmo panzerschreckAmmo 5 ingotIron 3 gunpowder
 AddGun type99 20 ingotIron 5 log
 AddAmmo type99Ammo 4 ingotIron 3 gunpowder
-AddGun flakvierling 4 aaBarrel 1 leather 1 blockIron 2 ingotIron
-AddAmmo flakvierlingAmmo 5 ingotIron 8 gunpowder
-AddGun type97 4 ingotIron 2 gunpowder
+AddGun type97 2 ingotIron 2 gunpowder

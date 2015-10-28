@@ -20,11 +20,8 @@ ReloadSound springfieldReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0
-Scope wwiispringfieldsniper
 Deployable False
 DeployedModel None
 Model ww2.Springfield
-Texture Springfield
-ModelScale 0.7
-ZoomLevel 6.0
-FOVZoomLevel 1.0
+Texture SkinSpringfield
+ModelScale 0.35

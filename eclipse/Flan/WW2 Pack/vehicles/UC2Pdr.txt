@@ -1,0 +1,70 @@
+//Naming
+Name Universal Carrier 2Pdr
+ShortName UC2Pdr
+//Visuals
+Icon UC
+Model ww2.UC2Pdr
+Texture SkinUC
+RotateWheels True
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.65
+MaxNegativeThrottle 0.5
+//Steering modifiers
+TurnLeftSpeed 0.4
+TurnRightSpeed 0.4
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -20 -10 -18
+WheelPosition 1 -20 -10 18
+WheelPosition 2 20 -10 18
+WheelPosition 3 20 -10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank false
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 10
+//Driver and passenger positions
+Driver 13 3 8 -360 360 -89 89
+RotatedDriverOffset 0 0 0
+Passengers 2
+Passenger 1 13 3 -7 core -10 10 -3 15 bren PassengerGun1
+Passenger 2 -9 16 -10 core -35 35 -5 15 2Pdr PassengerGun2
+GunOrigin 1 27 -5 -7
+GunOrigin 2 0 10 0
+//Secondary gun
+AllowAllAmmo False
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 70
+//Sounds
+StartSound TankIdle
+StartSoundLength 20
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank4Shoot
+ShootSoundSecondary BrenShoot
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 lighttankBody 3 vehicleSeat
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 green
+//Health and collision
+SetupPart core 8550 -41 -2 -20 77 24 40
+SetupPart rightTrack 5600 -39 -10 -20 73 14 6
+SetupPart leftTrack 5600 -39 -10 14 73 14 6
+BulletDetection 7
+ModelScale 1
+Description British Armored Vehicle

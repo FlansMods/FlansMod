@@ -90,7 +90,7 @@ public class ModelFg42 extends ModelGun
 		
 		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
 		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
-		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F / 16F);
+		scopeAttachPoint = new Vector3f(2F / 16F, 4.5F / 16F, 0F / 16F);
 		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
 
 

@@ -11,7 +11,7 @@ RoundsPerItem 1
 //The maximum stack size of a stack of these
 MaxStackSize 5
 //The damage multiplier caused by the bullet on hitting an entity
-Damage 50
+Damage 4500
 //Size of explosion caused
 Explosion 3
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
@@ -23,7 +23,7 @@ Fire 0
 BreaksGlass True
 //Size of box to check for entities to hit / detonate
 HitBoxSize 0.5
-HitSound bomb
+HitSound
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates False
 SmokeTrail False

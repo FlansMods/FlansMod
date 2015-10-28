@@ -31,3 +31,4 @@ AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false
 AllowGripAttachments false
+Paintjob kar98k_Acacia kar98k_Acacia orange 2

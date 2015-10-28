@@ -354,6 +354,16 @@
 	"ChallengerRun": {
 		"category" : "player",
 		"sounds" : [ "flansmod:ChallengerRun" ]
+	},
+
+	"MinigunShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:MinigunShoot" ]
+		},
+
+	"JetIdle": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JetIdle" ]
 	}
 
 }

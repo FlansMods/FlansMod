@@ -25,5 +25,5 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Colt
-Texture Colt
-ModelScale 0.7
+Texture SkinColt
+ModelScale 0.22

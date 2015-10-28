@@ -13,17 +13,17 @@ RestingPitch 5.0
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode Plane
 //Throttle
-MaxThrottle 2.5
+MaxThrottle 4.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
-TurnLeftSpeed 2
-TurnRightSpeed 2
+TurnLeftSpeed 1.8
+TurnRightSpeed 1.8
 //Pitch modifiers
-LookUpSpeed 2
-LookDownSpeed 2
+LookUpSpeed 1.8
+LookDownSpeed 1.2
 //Roll modifiers
-RollLeftSpeed 2
-RollRightSpeed 2
+RollLeftSpeed 1.7
+RollRightSpeed 1.7
 //Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
 Drag 1.0
 //Wheels
@@ -49,9 +49,10 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 40 -4 44 rightWing browning
-ShootPointPrimary 40 -4 -44 leftWing browning
+ShootPointPrimary 40 -4 44 rightWing browning30Cal
+ShootPointPrimary 40 -4 -44 leftWing browning30Cal
 ShootPointSecondary -30 -12 0
+DamageModifierPrimary 50
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 4
@@ -87,14 +88,12 @@ AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 green
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 200 -17 -7 -10 20 24 20
-SetupPart coreWheel 50 0 -20 -8 6 13 16
-SetupPart nose 100 3 -7 -10 48 18 20
-SetupPart rightWing 100 -7 -5 10 32 2 78
-SetupPart leftWing 100 -7 -5 -88 32 2 78
-SetupPart bay 200 -70 -7 -10 53 18 20
-SetupPart tail 100 -93 -5 -8 23 14 16
-SetupPart tailWheel 50 -85 -12 -2 6 7 4
+SetupPart core 1000 -17 -7 -10 20 24 20
+SetupPart nose 500 3 -7 -10 48 18 20
+SetupPart rightWing 500 -7 -5 10 32 2 78
+SetupPart leftWing 500 -7 -5 -88 32 2 78
+SetupPart bay 500 -70 -7 -10 53 18 20
+SetupPart tail 500 -93 -5 -8 23 14 16
 BulletDetection 10
 //Collision points for breaking wings etc. upon crashing
 //RightWing

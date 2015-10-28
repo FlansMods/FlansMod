@@ -8,18 +8,18 @@ Texture HoRo
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.85
-MaxNegativeThrottle 0.5
+MaxThrottle 0.65
+MaxNegativeThrottle 0.45
 //Steering modifiers
-TurnLeftSpeed 0.5
-TurnRightSpeed 0.5
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -32 -8 -18
-WheelPosition 1 -32 -8 18
-WheelPosition 2 32 -8 18
-WheelPosition 3 32 -8 -18
+WheelPosition 0 -32 -10 -18
+WheelPosition 1 -32 -10 18
+WheelPosition 2 32 -10 18
+WheelPosition 3 32 -10 -18
 WheelSpringStrength 0.5
 //Bouncy bouncy
 Bounciness 0.3
@@ -35,13 +35,9 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 3 5 15 -1.5 1.5 -2 15
 RotatedDriverOffset 13 0 -8
-Passengers 1
-Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
-GunOrigin 1 10 24 0
-RotatedPassengerOffset 1 0 0 0
+Passengers 0
 BarrelPosition 0 34 0
-//Secondary gun
-AddGun 8 34 8 turret type99
+AddAmmo HEshell
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 150
@@ -52,19 +48,20 @@ EngineSound TankMove
 EngineSoundLength 75
 ShootSoundPrimary Tank2Shoot
 ShootSoundSecondary BrenShoot
+TurretRotationSpeed 0.03
+DamageModifierPrimary 50
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret 1 vehicleSeat
-AddRecipeParts core 1 tankBody 1 vehicleSeat
+AddRecipeParts core 1 lighttankBody 1 vehicleSeat 1 tankBarrel
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 10 gray
+AddDye 8 green
 //Health and collision
-SetupPart leftTrack 100 -44 -10 -21 90 20 6
-SetupPart rightTrack 100 -44 -10 15 90 20 6
-SetupPart turret 100 -24 20 -18 45 12 36
-SetupPart core 100 -40 -4 -15 86 24 30
+SetupPart core 8500 -43 -3 -26 85 23 52
+SetupPart rightTrack 7000 -48 -10 -25 102 19 7
+SetupPart leftTrack 7000 -48 -10 18 102 19 7
 BulletDetection 7
+Description Japanese Light SPG

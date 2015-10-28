@@ -22,7 +22,8 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Bazooka
-Texture Bazooka
+Texture SkinBazooka
 //Modifiers
 MoveSpeedModifier 0.6
 KnockbackModifier 0
+ModelScale 0.32

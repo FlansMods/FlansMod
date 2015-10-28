@@ -86,13 +86,14 @@ AddRecipeParts rightWing 1 blockRedstone 1 blockIron
 AddRecipeParts leftWing 1 blockRedstone 1 blockIron
 AddRecipeParts tail 1 metalTail 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 4 green
+AddDye 8 green
 AddDye 2 black
 // Health
-SetupPart core 500 -88 16 -25 210 48 50
-SetupPart tail 300 -197 16 -12 108 30 24
-SetupPart leftWing 200 0 8 -63 44 34 38
-SetupPart rightWing 200 0 8 25 44 34 38
+SetupPart core 2000 -88 16 -25 210 48 50
+SetupPart tail 2000 -197 16 -12 108 30 24
+SetupPart leftWing 1000 0 8 -63 44 34 38
+SetupPart rightWing 1000 0 8 25 44 34 38
+SetupPart blades 1000 -147 70 -147 294 16 294
 BulletDetection 8
 HasGear True
 ModelScale 1

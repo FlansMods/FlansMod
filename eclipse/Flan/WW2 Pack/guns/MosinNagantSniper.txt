@@ -27,7 +27,7 @@ DeployedModel None
 Model ww2.MosinSniper
 Texture MosinNagant
 ModelScale 1.0
-ZoomLevel 6.0
+ZoomLevel 8.0
 FOVZoomLevel 1.0
 //Attachment Settings
 AllowAllAttachments false

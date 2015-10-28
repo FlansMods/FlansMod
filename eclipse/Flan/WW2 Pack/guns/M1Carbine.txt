@@ -23,6 +23,6 @@ BulletSpeed 10.0
 Scope None
 Deployable False
 DeployedModel None
-Model ww2.M1carbine
-Texture M1Carbine
-ModelScale 0.8
+Model ww2.M1Carbine
+Texture SkinM1Carbine
+ModelScale 0.35

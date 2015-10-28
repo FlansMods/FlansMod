@@ -30,8 +30,3 @@ HitBoxSize 2.0
 Penetrates False
 SmokeTrail True
 TrailParticleType flame
-RecipeOutput 1
-//Recipe I ingotIron G gunpowder
-//III
-//GGG
-//GGG

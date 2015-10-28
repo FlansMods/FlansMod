@@ -2,10 +2,12 @@ Name MP5
 ShortName mp5
 //The ammo this gun uses (shortName)
 Ammo skorpionAmmo
+Ammo skorpionAmmo
 Ammo uziAmmo
 Ammo mp5Ammo
 Ammo mp5kAmmo
 Ammo glockAmmo
+Ammo MP7Ammo
 Icon MP5
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

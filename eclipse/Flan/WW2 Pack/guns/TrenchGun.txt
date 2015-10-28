@@ -31,5 +31,5 @@ Deployable False
 DeployedModel None
 //Model settings
 Model ww2.Trenchgun
-Texture Trenchgun
-ModelScale 0.7
+Texture SkinTrenchgun
+ModelScale 0.35

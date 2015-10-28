@@ -14,7 +14,7 @@ III
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
 //NumGuns must come before all the addGun lines and must be correct.
-NumGuns 24
+NumGuns 27
 AddGun m21 10 ingotIron 10 fiberglass 5 glass
 AddAmmo m21Ammo 2 ingotIron 3 fiberglass 3 gunpowder
 AddGun barrett 20 ingotIron 5 glass
@@ -34,6 +34,10 @@ AddGun m60 24 ingotIron
 AddAmmo m60Ammo 9 ingotIron 3 fiberglass 10 gunpowder
 AddGun l86 20 ingotIron 5 fiberglass
 AddAmmo l86Ammo 10 ingotIron 9 gunpowder
+AddGun MP7 14 ingotIron
+AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
+AddGun FMG 5 ingotIron 8 fiberglass
+AddGun HK416 12 ingotIron 8 fiberglass
 AddGun minigun 32 ingotIron 16 fiberglass 16 redstone
 AddAmmo minigunAmmo 8 ingotIron 32 gunpowder
 AddAltAmmo minigunExplosiveAmmo 8 ingotIron 256 gunpowder

@@ -26,7 +26,7 @@ SpinSound MinigunSpin
 CooldownSound MinigunCooldown
 WarmupSoundLength 11
 SpinSoundLength 9
-ShootSound RPDShoot
+ShootSound MinigunShoot
 ReloadSound BrowningReload
 Mode Minigun
 //Bullet speed, default 3.0

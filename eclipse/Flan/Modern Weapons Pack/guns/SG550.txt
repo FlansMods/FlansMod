@@ -16,7 +16,7 @@ Damage 7.5
 //The higher this value, the more the bullets spread
 Accuracy 2.5
 //Time in ticks between rounds
-ShootDelay 5
+ShootDelay 2
 ShootSound SG550Shoot
 ReloadSound MP44Reload
 Mode SemiAuto

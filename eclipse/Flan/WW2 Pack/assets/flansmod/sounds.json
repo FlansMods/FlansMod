@@ -363,5 +363,25 @@
 	"gewehr43Shoot": {
 		"category" : "player",
 		"sounds" : [ "gewehr43Shoot" ]
+	},
+	
+	"50CalShoot": {
+		"category" : "player",
+		"sounds" : [ "50CalShoot" ]
+	},
+	
+	"20mmPlane": {
+		"category" : "player",
+		"sounds" : [ "20mmPlane" ]
+	},
+	
+	"ptboatidle": {
+		"category" : "player",
+		"sounds" : [ "ptboatidle" ]
+	},
+	
+	"ptboatmove": {
+		"category" : "player",
+		"sounds" : [ "ptboatmove" ]
 	}
 }

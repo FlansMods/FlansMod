@@ -26,5 +26,5 @@ ModelScale
 RecipeOutput 1
 Recipe R yellowDust F fiberglass G thinGlass
 FFF
-GGG
+G G
 FFF

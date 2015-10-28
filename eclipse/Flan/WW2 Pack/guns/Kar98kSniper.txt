@@ -26,5 +26,6 @@ DeployedModel None
 Model ww2.Kar98kSniper
 Texture SkinKar98k
 ModelScale 0.7
-ZoomLevel 6.0
+ZoomLevel 8.0
 FOVZoomLevel 1.0
+Paintjob kar98kSniper_Acacia kar98kSniper_Acacia orange 2

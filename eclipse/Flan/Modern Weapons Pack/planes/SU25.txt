@@ -71,8 +71,8 @@ FuelTankSize 6000
 Pilot 79 32 0
 Passengers 0
 // ------------------------------------------------------ Sounds ------------------------------------------------------
-StartSound propStart
-StartSoundLength 60
+StartSound JetIdle
+StartSoundLength 140
 PropSound JetEngine2
 PropSoundLength 47
 ShootSoundPrimary M60Shoot
@@ -90,14 +90,14 @@ AddRecipeParts tail 1 metalTail
 AddRecipeParts rightWingWheel 1 wheel
 AddRecipeParts leftWingWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 5 white
-AddDye 1 gray
+AddDye 8 red
+AddDye 8 orange
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart nose 400 115 15 -11 40 23 22
-SetupPart core 600 -54 15 -12 168 45 24
-SetupPart tail 300 -152 31 -12 97 76 24
-SetupPart rightWing 200 -41 39 12 67 9 149
-SetupPart leftWing 200 -41 39 -161 67 9 149
+SetupPart nose 3000 115 15 -11 40 23 22
+SetupPart core 5000 -54 15 -12 168 45 24
+SetupPart tail 3000 -152 31 -12 97 76 24
+SetupPart rightWing 3000 -41 39 12 67 9 149
+SetupPart leftWing 3000 -41 39 -161 67 9 149
 BulletDetection 10
 
 

@@ -1,4 +1,4 @@
-Name Fg 42
+Name FG42
 ShortName fg42
 //The ammo this gun uses (shortName)
 Ammo Fg42Ammo

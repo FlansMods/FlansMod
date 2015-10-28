@@ -8,11 +8,11 @@ Texture ChallySimple
 //Third Person Camera Distance
 CameraDistance 11.5
 //Throttle
-MaxThrottle 0.7
-MaxNegativeThrottle 1.0
+MaxThrottle 0.6
+MaxNegativeThrottle 0.4
 //Steering modifiers
-TurnLeftSpeed 0.5
-TurnRightSpeed 0.5
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
 //Drag
 Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
@@ -33,13 +33,14 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 33 0 -360 360 -10 20
+Driver 0 28 0 -360 360 -10 20
 RotatedDriverOffset -5 0 10
 Passengers 1
-Passenger 1 0 33 0 turret -360 360 -15 40 m60 L37A2
-RotatedPassengerOffset 1 -4 0 -14
-GunOrigin 1 -7 33 -13
-
+Passenger 1 0 33 0 turret -360 360 -15 40 m60 PassengerGun1
+RotatedPassengerOffset 1 -13 0 -7
+GunOrigin 1 -2 28 -13
+AddAmmo shell
+AddAmmo HEshell
 BarrelPosition 131 26 0
 //Secondary gun
 AddGun 8 34 8 turret m60
@@ -53,21 +54,25 @@ EngineSound ChallengerRun
 EngineSoundLength 40
 ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
+TurretRotationSpeed 0.06
+DamageModifierPrimary 100
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret
-AddRecipeParts core 1 advancedTankBody 1 vehicleSeat
+AddRecipeParts turret 1 heavytankTurret 2 vehicleSeat
+AddRecipeParts core 1 advancedTankBody
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 10 gray
+AddDye 4 brown
+AddDye 5 yellow
 //Health and collision
-SetupPart core 2000 -69 0 -33 137 23 66
-SetupPart rightTrack 500 -69 -10 -33 136 10 12
-SetupPart leftTrack 500 -69 -10 21 136 10 12
-SetupPart turret 1500 -48 23 -27 92 16 54
+SetupPart core 23500 -69 0 -33 137 23 66
+SetupPart rightTrack 10000 -69 -10 -33 136 10 12
+SetupPart leftTrack 10000 -69 -10 21 136 10 12
+SetupPart turret 21500 -48 23 -27 92 16 54
 BulletDetection 7
 
 RotateWheels true
+Description British Main Battle Tank

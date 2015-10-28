@@ -25,8 +25,8 @@ AddGun tt33 6 ingotIron 4 log
 AddAmmo tt33Ammo 2 ingotIron 1 gunpowder
 AddGun bazooka 24 ingotIron 8 log
 AddAmmo bazookaAmmo 6 ingotIron 3 gunpowder
+AddGun panzerfaust 5 ingotIron
+AddAmmo panzerfaustAmmo 3 ingotIron 2 gunpowder
 AddGun dp28 20 ingotIron 5 log
 AddAmmo dp28Ammo 4 ingotIron 3 gunpowder
-AddGun bofors 1 aaBarrel 1 leather 1 blockIron 2 wheel
-AddAmmo boforsAmmo 1 ingotIron 2 gunpowder
-AddGun rgd33 4 ingotIron 2 gunpowder
+AddGun rgd33 2 ingotIron 2 gunpowder

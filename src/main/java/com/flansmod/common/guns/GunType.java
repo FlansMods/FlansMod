@@ -357,9 +357,12 @@ public class GunType extends InfoType implements IScope
 			{
 				ShootableType type = ShootableType.getShootableType(split[1]);
 				if(type != null)
+				{
 					ammo.add(type);
-				if(type.explosionRadius <= 0F)
-					nonExplosiveAmmo.add(type);
+					if(type.explosionRadius <= 0F)
+						nonExplosiveAmmo.add(type);
+				}
+				else FlansMod.log("Could not find " + split[1] + " when reading ammo types for " + shortName);
 			}
 			else if(split[0].equals("NumAmmoSlots") || split[0].equals("NumAmmoItemsInGun") || split[0].equals("LoadIntoGun"))
 				numAmmoItemsInGun = Integer.parseInt(split[1]);

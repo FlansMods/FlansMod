@@ -5,8 +5,8 @@ Icon Blowtorch
 Colour 255 255 255
 Heal false
 Repair true
-HealAmount 10
-ToolLife 100
+HealAmount 1000
+ToolLife 10000
 DestroyOnEmpty false
 StackSize 1
 RecipeOutput 1

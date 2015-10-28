@@ -1,0 +1,82 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name M45 .50Cal Quad Mount
+ShortName M45Quad
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon M45Quad
+Model ww2.M45Quad
+Texture SkinQuadmount
+//Third Person Camera Distance
+CameraDistance 7.5
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Throttle
+MaxThrottle 0
+MaxNegativeThrottle 0
+//Steering modifiers
+TurnLeftSpeed 0
+TurnRightSpeed 0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -26 -10 0
+WheelPosition 1 -26 -10 0
+WheelPosition 2 20 -10 18
+WheelPosition 3 20 -10 -18
+WheelSpringStrength 0.5
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Gun
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 3
+ShootDelaySecondary 0
+//Whether to alternate or fire all together
+AlternatePrimary True
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary -16 17 14 turret 50Cal
+ShootPointPrimary -12 12 16 turret 50Cal
+ShootPointPrimary -16 17 -15 turret 50Cal
+ShootPointPrimary -12 12 -17 turret 50Cal
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 0
+AllowAllAmmo False
+AddAmmo browningAmmo
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 0
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Driver 0 3 0 -360 360 -5 89
+RotatedDriverOffset -6 0 2
+Passengers 0
+// ------------------------------------------------------- Sounds -------------------------------------------------------
+StartSound None
+StartSoundLength 0
+EngineSound None
+EngineSoundLength 0
+ShootSoundPrimary 50CalShoot
+TurretRotationSpeed 0.08
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 blockIron 1 vehicleSeat 4 50Cal
+AddRecipeParts leftTrack 1 wheel
+AddRecipeParts rightTrack 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 green
+//Health and collision
+SetupPart core 50 -20 -8 -8 40 4 16
+SetupPart turret 40 -10 -4 -10 20 12 20
+SetupPart leftTrack 20 -20 -8 -10 40 6 2
+SetupPart rightTrack 20 -20 -8 8 40 6 2
+BulletDetection 7
+ModelScale 1
+Description Amercian AA Gun

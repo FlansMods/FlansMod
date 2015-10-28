@@ -23,7 +23,7 @@ Fire 2
 BreaksGlass True
 //Size of box to check for entities to hit / detonate
 HitBoxSize 0.5
-HitSound bomb
+HitSound
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates False
 SmokeTrail False

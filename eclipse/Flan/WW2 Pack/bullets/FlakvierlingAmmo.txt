@@ -11,6 +11,8 @@ MaxStackSize 16
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 20
 //The damage multiplier caused by the bullet on hitting an entity
+//WeaponType : One of Missile, Shell, Bomb, Gun, None. Only affects driveable entities
+WeaponType Shell
 DamageVsLiving 3
 DamageVsVehicles 250
 //Size of explosion caused
@@ -29,8 +31,3 @@ HitSound flakExplode
 Penetrates False
 SmokeTrail False
 MaxStackSize 16
-RecipeOutput 4
-//Recipe I ingotIron G gunpowder
-//III
-//GGG
-//GGG
