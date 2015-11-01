@@ -1,6 +1,6 @@
 //Naming
 Name T-34-85
-ShortName T3485
+ShortName T34
 //Visuals
 Icon T3485
 Model ww2.T3485

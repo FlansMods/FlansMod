@@ -13,8 +13,7 @@ III
 //The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
-//NumGuns must come before all the addGun lines and must be correct.
-NumGuns 11
+SetPage Page 1
 AddGun leeEnfield 8 ingotIron 15 log
 AddAmmo leeEnfieldAmmo 5 ingotIron 2 gunpowder
 AddGun leeEnfieldSniper 10 ingotIron 15 log 4 glass
@@ -23,8 +22,7 @@ AddGun sten 8 ingotIron
 AddAmmo stenAmmo 2 ingotIron 1 gunpowder
 AddGun webley 6 ingotIron 4 log
 AddAmmo webleyAmmo 2 ingotIron 1 gunpowder
-AddGun PIAT 24 ingotIron
-AddAmmo PIATAmmo 5 ingotIron 3 gunpowder
+SetPage Page 2
 AddGun bren 25 ingotIron 5 log
 AddAmmo brenAmmo30 3 ingotIron 2 gunpowder
 AddAltAmmo brenAmmo100 10 ingotIron 5 gunpowder
@@ -32,6 +30,9 @@ AddGun vickersk 28 ingotIron 4 log
 AddAmmo vickerskAmmo100 10 ingotIron 5 gunpowder
 AddGun vickerskGO 2 vickersk 2 ingotIron
 AddAmmo vickerskAmmo100 10 ingotIron 5 gunpowder
+SetPage Page 3
+AddGun PIAT 24 ingotIron
+AddAmmo PIATAmmo 5 ingotIron 3 gunpowder
 AddGun boforsAmmo 1 ingotIron 2 gunpowder
 AddGun millsBomb 2 ingotIron 2 gunpowder
 AddGun British2pdrAPShell 3 ingotIron 3 gunpowder

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.boxes.GunBoxType.GunBoxEntry;
 import com.flansmod.common.types.InfoType;
@@ -22,10 +24,13 @@ public class GunBoxType extends BoxType
 	public BlockGunBox block;
 	
 	/** Stores pages for the gun box indexed by their title (unlocalized!) */
-	public HashMap<String, GunBoxPage> pages;
+	public HashMap<String, GunBoxPage> pagesByTitle;
+	public ArrayList<GunBoxPage> pages;
 	
 	/** Points to the page we are currently adding to. */
 	private GunBoxPage currentPage;
+	
+	public GunBoxPage defaultPage;
 	
 	private static int lastIconIndex = 2;
 	public static HashMap<String, GunBoxType> gunBoxMap = new HashMap<String, GunBoxType>();
@@ -34,7 +39,8 @@ public class GunBoxType extends BoxType
 	{
 		super(file);
 		
-		pages = new HashMap<String, GunBoxPage>();
+		pagesByTitle = new HashMap<String, GunBoxPage>();
+		pages = new ArrayList<GunBoxPage>();
 	}
 	
 	@Override
@@ -54,7 +60,8 @@ public class GunBoxType extends BoxType
 			
 			if (split[0].equals("NumGuns"))
 			{
-				pages.put("default", currentPage = new GunBoxPage("default"));
+				pagesByTitle.put("default", currentPage = new GunBoxPage("default"));
+				pages.add(currentPage);
 			}
 		}
 	}
@@ -76,9 +83,12 @@ public class GunBoxType extends BoxType
 			if(split[0].equals("SetPage"))
 			{
 				String pageName = split[1];
-				if(pages.get(pageName) == null)
-					pages.put(pageName, new GunBoxPage(pageName));
-				currentPage = pages.get(pageName);
+				for(int i = 2; i < split.length; i++)
+					pageName += " " + split[i];
+				if(pagesByTitle.get(pageName) == null)
+					pagesByTitle.put(pageName, currentPage = new GunBoxPage(pageName));
+				pages.add(currentPage);
+				
 			}
 			//Add an info type at the top level.
 			else if(split[0].equals("AddGun") || split[0].equals("AddType"))
@@ -273,6 +283,56 @@ public class GunBoxType extends BoxType
 			this.type = type;
 			this.requiredParts = requiredParts;
 		}
+		
+		public boolean canCraft(InventoryPlayer inv, boolean takeItems)
+		{			
+			//Create a temporary copy of the player inventory for backup purposes
+			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
+			temporaryInventory.copyInventory(inv);
+			
+			//This becomes false if some recipe element is not found on the player
+			boolean canCraft = true;
+			
+			//Draw the stacks that should be in each slot
+			for(ItemStack stackNeeded : requiredParts)
+			{
+				//The total amount of items found that match this recipe stack
+				int totalAmountFound = 0;
+				//Iterate over the temporary inventory
+				for(int m = 0; m < temporaryInventory.getSizeInventory(); m++)
+				{
+					//Get the stack in each slot
+					ItemStack stackInSlot = temporaryInventory.getStackInSlot(m);
+					//If the stack is what we want
+					if(stackInSlot != null && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+					{
+						//Work out the amount to take from the stack
+						int amountFound = Math.min(stackInSlot.stackSize, stackNeeded.stackSize - totalAmountFound);
+						//Take it
+						stackInSlot.stackSize -= amountFound;
+						//Check for empty stacks
+						if(stackInSlot.stackSize <= 0)
+							stackInSlot = null;
+						//Put the modified stack back in the inventory
+						temporaryInventory.setInventorySlotContents(m, stackInSlot);
+						//Increase the amount found counter
+						totalAmountFound += amountFound;
+						//If we have enough, stop looking
+						if(totalAmountFound == stackNeeded.stackSize)
+							break;
+					}
+				}
+				if(totalAmountFound < stackNeeded.stackSize)
+					canCraft = false;
+			}
+			
+			if(canCraft && takeItems)
+			{
+				inv.copyInventory(temporaryInventory);
+			}
+			
+			return canCraft;
+		}
 	}
 	
 	/** Represents a top level entry, normally a gun. This has child entries, normally ammo that are listed below in the GUI. */
@@ -294,7 +354,7 @@ public class GunBoxType extends BoxType
 
 	public GunBoxEntry canCraft(InfoType type) 
 	{
-		for(GunBoxPage page : pages.values())
+		for(GunBoxPage page : pagesByTitle.values())
 		{
 			for(GunBoxEntryTopLevel entry : page.entries)
 			{

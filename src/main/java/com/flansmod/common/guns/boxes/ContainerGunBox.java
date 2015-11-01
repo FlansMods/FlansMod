@@ -20,14 +20,14 @@ public class ContainerGunBox extends Container
 		{
 			for(int col = 0; col < 9; col++)
 			{
-				addSlotToContainer(new Slot(inventoryplayer, col + row * 9 + 9, 80 + col * 18, 79 + row * 18));
+				addSlotToContainer(new Slot(inventoryplayer, col + row * 9 + 9, 48 + col * 18, 177 + row * 18));
 			}
 		}
 		
 		//Quickbar slots
 		for(int col = 0; col < 9; col++)
 		{
-			addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 137));
+			addSlotToContainer(new Slot(inventoryplayer, col, 48 + col * 18, 235));
 		}
 	}
 

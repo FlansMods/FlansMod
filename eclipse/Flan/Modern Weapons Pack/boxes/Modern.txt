@@ -13,8 +13,8 @@ III
 //The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
-//NumGuns must come before all the addGun lines and must be correct.
-NumGuns 31
+//Snipers
+SetPage Snipers
 AddGun m40a3 12 ingotIron 8 fiberglass 4 glass 2 dyePowder.2
 AddAmmo r700Ammo 1 ingotIron 1 gunpowder
 AddAltAmmo m40a3Ammo 1 ingotIron 3 gunpowder
@@ -23,6 +23,8 @@ AddAmmo dragunovAmmo 4 ingotIron 3 gunpowder
 AddGun r700 10 ingotIron 8 log 4 glass
 AddAmmo r700Ammo 1 ingotIron 1 gunpowder
 AddAltAmmo m40a3Ammo 1 ingotIron 3 gunpowder
+//Rifles
+SetPage Rifles
 AddGun m14 10 ingotIron 10 fiberglass
 AddAmmo m14Ammo 2 ingotIron 3 gunpowder
 AddGun g3 22 ingotIron
@@ -34,6 +36,8 @@ AddGun ak47 10 ingotIron 10 log
 AddAmmo ak47Ammo 5 ingotIron 4 gunpowder
 AddGun g36 5 ingotIron 15 fiberglass
 AddAmmo g36Ammo 2 ingotIron 4 fiberglass 4 gunpowder
+//Rifles
+SetPage Rifles 2
 AddGun p90 5 ingotIron 20 fiberglass
 AddAmmo p90Ammo 8 fiberglass 6 gunpowder
 AddGun fnscar 6 ingotIron 10 fiberglass
@@ -47,6 +51,8 @@ AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
 AddGun mtar 6 ingotIron 10 fiberglass
 AddAmmo mtarAmmo 4 fiberglass 3 gunpowder
 AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
+//SMGs
+SetPage SMGs
 AddGun mp5 15 ingotIron
 AddAmmo mp5Ammo 3 ingotIron 4 gunpowder
 AddGun skorpion 12 ingotIron 3 log
@@ -57,6 +63,8 @@ AddGun ak74 15 ingotIron 10 fiberglass
 AddAmmo ak74Ammo 3 ingotIron 4 fiberglass 3 gunpowder
 AddGun bizon 12 ingotIron 8 fiberglass
 AddAmmo bizonAmmo 5 ingotIron 4 gunpowder
+//Shotguns
+SetPage Shotguns
 AddGun w1200 16 ingotIron 6 fiberglass
 AddAmmo w1200Ammo 1 fiberglass 1 gunpowder
 AddAltAmmo w1200IncendiaryAmmo 1 fiberglass 1 gunpowder 2 blazePowder
@@ -72,6 +80,8 @@ AddAltAmmo spasAmmo 1 fiberglass 4 gunpowder
 AddGun m1887 6 ingotIron 4 log
 AddAmmo w1200Ammo 1 fiberglass 1 gunpowder
 AddAltAmmo m1887Ammo 1 ingotIron 1 fiberglass 1 gunpowder 1 spiderEye
+//Pistols
+SetPage Pistols
 AddGun m9 8 ingotIron
 AddAmmo m9Ammo 2 ingotIron 2 gunpowder
 AddGun usp 10 ingotIron
@@ -82,6 +92,8 @@ AddAmmo m1911Ammo 2 ingotIron 1 gunpowder
 AddGun sigP226 8 ingotIron
 AddAmmo sigP226Ammo 2 ingotIron 2 gunpowder
 AddGun SIGP232 8 ingotIron
+//Pistols
+SetPage Pistols 2
 AddGun makarov 8 ingotIron
 AddAmmo makarovAmmo 2 ingotIron 1 gunpowder
 AddGun glock 9 ingotIron

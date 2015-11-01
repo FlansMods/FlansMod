@@ -50,7 +50,7 @@ public class BlockGunBox extends Block
 		
 	public void buyGun(InfoType gun, InventoryPlayer inventory, GunBoxType type)
 	{
-		FlansMod.proxy.buyGun(type, gun);
+		//FlansMod.proxy.buyGun(type, gun);
 		GunBoxEntry entry = type.canCraft(gun);
 		if(entry != null)
 		{

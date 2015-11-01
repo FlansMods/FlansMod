@@ -13,8 +13,7 @@ III
 //The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
-//NumGuns must come before all the addGun lines and must be correct.
-NumGuns 8
+SetPage Page 1
 AddGun nagant 10 ingotIron 15 log
 AddAmmo nagantAmmo 5 ingotIron 2 gunpowder
 AddGun nagantSniper 10 ingotIron 15 log 4 glass
@@ -23,6 +22,7 @@ AddGun ppsh 16 ingotIron 5 log
 AddAmmo ppshAmmo 7 ingotIron 7 gunpowder
 AddGun tt33 6 ingotIron 4 log
 AddAmmo tt33Ammo 2 ingotIron 1 gunpowder
+SetPage Page 2
 AddGun bazooka 24 ingotIron 8 log
 AddAmmo bazookaAmmo 6 ingotIron 3 gunpowder
 AddGun panzerfaust 5 ingotIron
