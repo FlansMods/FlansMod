@@ -73,7 +73,7 @@ public class FlansModExplosion extends Explosion
         this.breaksBlocks = breaksBlocks && TeamsManager.explosions;
         this.position = new Vec3(x, y, z);
         
-        //if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, this))
+        if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, this))
         {
 	        this.doExplosionA();
 	        this.doExplosionB(true);

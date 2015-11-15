@@ -46,7 +46,7 @@ ShootDelayPrimary 50
 ShootDelaySecondary 50
 //Whether to alternate or fire all together
 AlternatePrimary False
-AlternateSecondary False
+AlternateSecondary True
 //Firing modes. One of SemiAuto, FullAuto or Minigun
 ModePrimary FullAuto
 ModeSecondary FullAuto
