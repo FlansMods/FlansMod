@@ -189,9 +189,9 @@ public class ModelGun extends ModelBase
 		translate(revolverBarrelModel, x, y, z);
 		translate(breakActionModel, x, y, z);
 		translateAttachment(barrelAttachPoint, x, y, z);
-                translateAttachment(scopeAttachPoint, x, y, z);
-                translateAttachment(gripAttachPoint, x, y, z);
-                translateAttachment(stockAttachPoint, x, y, z);
+               translateAttachment(scopeAttachPoint, x, y, z);
+               translateAttachment(gripAttachPoint, x, y, z);
+               translateAttachment(stockAttachPoint, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
@@ -205,11 +205,11 @@ public class ModelGun extends ModelBase
 	}
 	
 	protected void translateAttachment(Vector3f vector, float x , float y, float z)
-        {
-            vector.x -= x / 16F;
-            vector.y -= y / 16F;
-            vector.z -= z / 16F;
-        }
+       {
+           vector.x -= x / 16F;
+           vector.y -= y / 16F;
+           vector.z -= z / 16F;
+       }
 
 
 }
