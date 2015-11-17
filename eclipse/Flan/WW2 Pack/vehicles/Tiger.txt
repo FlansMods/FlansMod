@@ -1,6 +1,6 @@
 //Naming
-Name Tiger
-ShortName Tiger
+Name Tiger H1
+ShortName Tiger H1
 //Visuals
 Icon Tiger
 Model ww2.Tiger
