@@ -1,4 +1,4 @@
-Name Barrett .50cal
+Name Barrett M82
 ShortName barrett
 //The ammo this gun uses (shortName)
 Ammo barrettAmmo
