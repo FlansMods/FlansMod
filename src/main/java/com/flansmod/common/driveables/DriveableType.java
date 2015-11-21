@@ -9,11 +9,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
@@ -87,6 +89,8 @@ public abstract class DriveableType extends InfoType
 	public float yOffset = 10F / 16F;
 	/** Third person render distance */
 	public float cameraDistance = 5F;
+	/** A list of ambient particle emitters on this vehicle */
+	public ArrayList<ParticleEmitter> emitters = new ArrayList<ParticleEmitter>();
 	
 	//Movement variables
 	/** Generic movement modifiers, no longer repeated for plane and vehicle */
@@ -461,6 +465,17 @@ public abstract class DriveableType extends InfoType
 			// ICBM Mod Radar
 			else if(split[0].equals("OnRadar"))
 				onRadar = split[1].equals("True");
+			
+			else if(split[0].equalsIgnoreCase("AddParticle") || split[0].equalsIgnoreCase("AddEmitter"))
+			{
+				ParticleEmitter emitter = new ParticleEmitter();
+				emitter.effectType = FlansModClient.getParticleType(split[1]);
+				emitter.emitRate = Integer.parseInt(split[2]);
+				emitter.origin = new Vector3f(split[3], shortName);
+				emitter.extents = new Vector3f(split[4], shortName);
+				emitter.velocity = new Vector3f(split[5], shortName);
+				emitters.add(emitter);
+			}
 		}
 		catch (Exception e)
 		{
@@ -573,5 +588,19 @@ public abstract class DriveableType extends InfoType
 	public void addDungeonLoot() 
 	{
 		//Do not add vehicles to dungeon chests. That would be so op.
+	}
+	
+	public class ParticleEmitter
+	{
+		/** The name of the effect */
+		public EnumParticleTypes effectType;
+		/** The rate of emission */
+		public int emitRate;
+		/** The centre of the effect emitter */
+		public Vector3f origin;
+		/** The size of the box in which it emits */
+		public Vector3f extents;
+		/** The velocity of the particle */
+		public Vector3f velocity;
 	}
 }

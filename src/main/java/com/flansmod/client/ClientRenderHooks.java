@@ -300,7 +300,7 @@ public class ClientRenderHooks
     }
     
     public void update()
-    {
+    {    	
         float fovModifier = 1.0F;
 
         //Update the FOV Modifier

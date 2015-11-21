@@ -35,6 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 //import cofh.api.energy.IEnergyContainerItem;
 
 
+
 import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
@@ -42,6 +43,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
@@ -110,6 +112,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@SideOnly(Side.CLIENT)
 	public EntityLivingBase camera;
 	
+	private int[] emitterTimers;
+	
 	public EntityDriveable(World world)
 	{
 		super(world);
@@ -151,6 +155,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		stepHeight = type.wheelStepHeight;
 		yOffset = type.yOffset;
+		
+		emitterTimers = new int[type.emitters.size()];
+		for(int i = 0; i < type.emitters.size(); i++)
+		{
+			emitterTimers[i] = rand.nextInt(type.emitters.get(i).emitRate);
+		}
 		
 		//Register Plane to Radar on Spawning
 		//if(type.onRadar == true)
@@ -765,6 +775,23 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        			part.onFire = true;
 	        		}
 	        	}
+        	}
+        }
+        
+        for(int i = 0; i < type.emitters.size(); i++)
+        {
+        	ParticleEmitter emitter = type.emitters.get(i);
+        	emitterTimers[i]--;
+        	if(emitterTimers[i] <= 0)
+        	{
+        		//Emit!
+        		Vector3f pos = axes.findLocalVectorGlobally(
+        							new Vector3f(emitter.origin.x + rand.nextFloat() * emitter.extents.x - emitter.extents.x * 0.5f, 
+        										 emitter.origin.y + rand.nextFloat() * emitter.extents.y - emitter.extents.y * 0.5f, 
+        										 emitter.origin.z + rand.nextFloat() * emitter.extents.z - emitter.extents.z * 0.5f));
+        		worldObj.spawnParticle(emitter.effectType, 
+        				posX + pos.x, posY + pos.y, posZ + pos.z, emitter.velocity.x, emitter.velocity.y, emitter.velocity.z);
+        		emitterTimers[i] = emitter.emitRate;
         	}
         }
         
