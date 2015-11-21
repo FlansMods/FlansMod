@@ -474,6 +474,10 @@ public abstract class DriveableType extends InfoType
 				emitter.origin = new Vector3f(split[3], shortName);
 				emitter.extents = new Vector3f(split[4], shortName);
 				emitter.velocity = new Vector3f(split[5], shortName);
+				//Scale from model coords to world coords
+				emitter.origin.scale(1.0f / 16.0f);
+				emitter.extents.scale(1.0f / 16.0f);
+				emitter.velocity.scale(1.0f / 16.0f);
 				emitters.add(emitter);
 			}
 		}
