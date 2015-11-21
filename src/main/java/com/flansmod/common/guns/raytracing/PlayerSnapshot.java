@@ -39,7 +39,7 @@ public class PlayerSnapshot
 		hitboxes = new ArrayList<PlayerHitbox>();
 		
 		RotatedAxes bodyAxes = new RotatedAxes(p.renderYawOffset, 0F, 0F);
-		RotatedAxes headAxes = new RotatedAxes(p.rotationYawHead - p.renderYawOffset, 0F, -p.rotationPitch);
+		RotatedAxes headAxes = new RotatedAxes(p.rotationYawHead - p.renderYawOffset, p.rotationPitch, 0F);
 		
 		hitboxes.add(new PlayerHitbox(player, bodyAxes, new Vector3f(0F, 0F, 0F), new Vector3f(-0.25F, 0F, -0.15F), new Vector3f(0.5F, 1.4F, 0.3F), EnumHitboxType.BODY));		
 		hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(headAxes), new Vector3f(0.0F, 1.4F, 0F), new Vector3f(-0.25F, 0F, -0.25F), new Vector3f(0.5F, 0.5F, 0.5F), EnumHitboxType.HEAD));
