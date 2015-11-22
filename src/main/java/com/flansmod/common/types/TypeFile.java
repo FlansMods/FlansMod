@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class TypeFile 
 {
 	public EnumType type;
-	public String name;
+	public String name, contentPack;
 	public ArrayList<String> lines;
 	public static HashMap<EnumType, ArrayList<TypeFile>> files;
 	private int readerPosition = 0;
@@ -21,20 +21,21 @@ public class TypeFile
 		
 	}
 	
-	public TypeFile(EnumType t, String s)
+	public TypeFile(String contentPack, EnumType t, String s)
 	{
-		this(t, s, true);
+		this(contentPack, t, s, true);
 	}
 	
-	public TypeFile(EnumType t, String s, boolean addToTypeFileList)
+	public TypeFile(String contentPack, EnumType t, String s, boolean addToTypeFileList)
 	{
 		type = t;
 		name = s;
+		this.contentPack = contentPack;
 		lines = new ArrayList<String>();
 		if(addToTypeFileList)
 			files.get(type).add(this);
 	}
-	
+
 	public String readLine()
 	{
 		if(readerPosition == lines.size())

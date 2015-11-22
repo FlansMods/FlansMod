@@ -1,7 +1,6 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
 Name Yak-9
 ShortName yak9
-ItemID 23322
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Yak9
 Model ww2.Yak9
@@ -14,17 +13,17 @@ RestingPitch 5.0
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode Plane
 //Throttle
-MaxThrottle 5.0
+MaxThrottle 3.8
 MaxNegativeThrottle 0.0
 //Yaw modifiers
-TurnLeftSpeed 2
-TurnRightSpeed 2
+TurnLeftSpeed 1.5
+TurnRightSpeed 1.5
 //Pitch modifiers
-LookUpSpeed 2
-LookDownSpeed 2
+LookUpSpeed 1.2
+LookDownSpeed 1.0
 //Roll modifiers
-RollLeftSpeed 2
-RollRightSpeed 2
+RollLeftSpeed 1.0
+RollRightSpeed 1.0
 //Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
 Drag 1.0
 //Wheels
@@ -53,6 +52,7 @@ ModeSecondary FullAuto
 ShootPointPrimary 60 3 5 nose dp28
 ShootPointPrimary 60 3 -5 nose dp28
 ShootPointSecondary -30 -12 0
+DamageModifierPrimary 50
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 3
@@ -88,14 +88,12 @@ AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 silver
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 350 -8 -7 -10 25 24 20
-SetupPart coreWheel 50 20 -28 -8 6 24 16
-SetupPart nose 250 20 -7 -10 50 18 20
-SetupPart rightWing 250 -3 -2 10 28 2 72
-SetupPart leftWing 250 -3 -2 -78 28 2 72
-SetupPart bay 300 -55 -7 -10 48 18 20
-SetupPart tail 250 -70 -5 -8 18 14 16
-SetupPart tailWheel 50 -45 -17 -2 6 7 4
+SetupPart core 1000 -8 -7 -10 25 24 20
+SetupPart nose 500 20 -7 -10 50 18 20
+SetupPart rightWing 500 -3 -2 10 28 2 72
+SetupPart leftWing 500 -3 -2 -78 28 2 72
+SetupPart bay 500 -55 -7 -10 48 18 20
+SetupPart tail 500 -70 -5 -8 18 14 16
 ModelScale 1.3
 BulletDetection 11
 //Collision points for breaking wings etc. upon crashing

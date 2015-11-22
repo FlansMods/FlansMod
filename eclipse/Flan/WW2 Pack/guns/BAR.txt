@@ -5,7 +5,6 @@ Ammo BARAmmo
 Icon BAR
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23623
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 50
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -25,5 +24,5 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.BAR
-Texture BAR
-ModelScale 1
+Texture SkinBAR
+ModelScale 0.35

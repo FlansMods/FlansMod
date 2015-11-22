@@ -1,0 +1,32 @@
+Name MG151
+ShortName MG151
+//The ammo this gun uses (shortName)
+Ammo MG151Ammo
+Icon MG151
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 100
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//Damage in half hearts
+Damage 500
+//The higher this value, the more the bullets spread
+Accuracy 5
+//Time in ticks between rounds
+ShootDelay 4
+//The length of the sound. 0 for a single shot sound. Other values are for looping sounds
+//SoundLength 21
+//Whether or not to distort the sound. This works well for single shots but not for loops
+DistortSound False
+ShootSound 20mmPlane
+ReloadSound BrowningReload
+Mode FullAuto
+//Bullet speed, default 3.0
+BulletSpeed 10.0
+Scope None
+Deployable False
+add these lines: usableByMechas false
+UsableByMechas false
+UsableByPlayers false
+usableByPlayers false

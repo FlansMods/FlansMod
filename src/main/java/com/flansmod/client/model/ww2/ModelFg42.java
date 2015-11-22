@@ -3,16 +3,17 @@
 // This file is for Flan's Flying Mod Version 3.0.x+
 
 // Model Checklist
-//    Model: 
-//    - Check Left/Right    [ ]  (Left = + / Right = -)
-//    - Code Cleaned        [ ]
-//    - Coverted to Version [ ]
+//	Model:
+//	- Check Left/Right	[ ]  (Left = + / Right = -)
+//	- Code Cleaned		[ ]
+//	- Coverted to Version [ ]
 
 package com.flansmod.client.model.ww2;
 
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelFg42 extends ModelGun
 {
@@ -87,6 +88,10 @@ public class ModelFg42 extends ModelGun
 		ammoModel[0].rotateAngleY = -0.05235988F;
 
 		
+		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		scopeAttachPoint = new Vector3f(2F / 16F, 4.5F / 16F, 0F / 16F);
+		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
 
 
 		gunSlideDistance = 0F;

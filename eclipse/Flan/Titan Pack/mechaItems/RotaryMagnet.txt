@@ -1,5 +1,5 @@
 //Description for hover text. Underscores represent new lines.
-Description Pulls iron out_of the rock to_increase yield_(1.5x Iron Drop Rate)_Requires Item Vacuum
+Description Pulls iron out of_the rock to increase yield_(1.5x Iron Ingot Yield)_Requires Item Vacuum & Iron_Refiner
 ShortName mechaRotaryMagnet
 Icon RotaryMagnet
 //Colour in Red, Green, Blue, each going up to 255.

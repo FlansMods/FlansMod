@@ -39,9 +39,8 @@ public class PositionTransformVertex extends PositionTextureVertex
 			return;
 		}
 		double weight = 0D;
-		for(int i = 0; i < transformGroups.size(); i++)
-		{
-			weight += transformGroups.get(i).getWeight();
+		for (TransformGroup transformGroup : transformGroups) {
+			weight += transformGroup.getWeight();
 		}
 		vector3D = new Vec3(0, 0, 0);
 		

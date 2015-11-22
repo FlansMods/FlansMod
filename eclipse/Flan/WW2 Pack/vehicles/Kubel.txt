@@ -1,20 +1,19 @@
 //Naming
 Name Kubelwagen
 ShortName Kubel
-ItemID 23487
 //Visuals
 Icon Kubelwagen
 Model ww2.Kubel
-Texture Kubelwagen
-RotateWheels false
+Texture SkinKubel
+RotateWheels true
 //Third Person Camera Distance
 CameraDistance 5.0
 //Throttle
-MaxThrottle 1.0
-MaxNegativeThrottle 0.5
+MaxThrottle 0.7
+MaxNegativeThrottle 0.45
 //Steering modifiers
-TurnLeftSpeed 1
-TurnRightSpeed 1
+TurnLeftSpeed 0.25
+TurnRightSpeed 0.25
 //Drag
 Drag 1.0
 //Mass (In tons)
@@ -26,10 +25,10 @@ Bounciness 0.3
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -22 -8 -14
-WheelPosition 1 -22 -8 14
-WheelPosition 2 22 -8 14
-WheelPosition 3 22 -8 -14
+WheelPosition 0 -28 -10 -14
+WheelPosition 1 -28 -10 14
+WheelPosition 2 24 -10 14
+WheelPosition 3 24 -10 -14
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive false
@@ -39,12 +38,12 @@ FuelTankSize 1000
 CargoSlots 36
 ShellSlots 0
 //Driver and passenger positions
-Driver 0 -6 -8
+Driver 1 3 -7
 RotatedDriverOffset 0 0 0
 Passengers 2
-Passenger 1 0 -6 8 core
-Passenger 2 -16 6 0 core -60 60 -30 60 mg42 MG42
-GunOrigin 2 0 -4 0
+Passenger 1 -19 10 0 core -60 60 -30 60 mg42 PassengerGun1
+Passenger 2 1 3 7 core
+GunOrigin 1 -5 4 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 999
 ShellDelay 999
@@ -65,11 +64,12 @@ AddRecipeParts frontRightWheel 1 wheel
 AddRecipeParts backLeftWheel 1 wheel
 AddRecipeParts backRightWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 5 black
+AddDye 5 gray
 //Health and collision
-SetupPart core 100 -24 -6 -16 48 12 32
-SetupPart backLeftWheel 100 -20 -10 -16 8 8 2
-SetupPart backRightWheel 100 -20 -10 14 8 8 2
-SetupPart frontLeftWheel 100 12 -10 -16 8 8 2
-SetupPart frontRightWheel 100 12 -10 14 8 8 2
+SetupPart core 3000 -24 -6 -16 48 12 32
+SetupPart backLeftWheel 1500 -20 -10 -16 8 8 2
+SetupPart backRightWheel 1500 -20 -10 14 8 8 2
+SetupPart frontLeftWheel 1500 12 -10 -16 8 8 2
+SetupPart frontRightWheel 1500 12 -10 14 8 8 2
 BulletDetection 5
+Description German Jeep

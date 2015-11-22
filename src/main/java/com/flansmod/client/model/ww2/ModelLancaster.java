@@ -15,7 +15,7 @@ public class ModelLancaster extends ModelPlane
 			   |7|
 			   |6|					   
 	 __________|5|__________	   
-	|	        4           |
+	|			4		   |
 	|__________ 3 __________|
 			   |2|
 			   |1|
@@ -26,11 +26,11 @@ public class ModelLancaster extends ModelPlane
 	private int textureX = 512; //The x-size of the texture
 	private int textureY = 512;	//The y-size of the texture
 
-    public ModelLancaster()
-    {
+	public ModelLancaster()
+	{
 		//Initializing Model
 	
-        bodyModel = new ModelRendererTurbo[25];	//number of blocks in your model (0 is a block so its highest number block + 1)
+		bodyModel = new ModelRendererTurbo[25];	//number of blocks in your model (0 is a block so its highest number block + 1)
 	
 		//Creates each block with texture co-ordinates starting at the first two values. Second 2 values are the overall size of the texture
 		//I am using GaryCXJk's TurboModel thingy but you dont have to. 
@@ -219,20 +219,23 @@ public class ModelLancaster extends ModelPlane
 		bodyModel[13] = new ModelRendererTurbo(this,52, 362, textureX, textureY);
 		bodyModel[13].addShape3D(128, -65, -15, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 16, 160, 0), new Coord2D(160, 17, 160, 1), new Coord2D(0, 1, 0, 1) } ), 30, 160, 1, 322, 30, ModelRendererTurbo.MR_FRONT, new float[] { 1, 160, 1, 160 });
-		//bodyModel[13].setPosition(0F, -52F, 0F);
+		//bodyModel[13].setPosition(256F, 0F, -30F);
 		bodyModel[13].rotateAngleX = (float)Math.PI;
+		//bodyModel[13].rotateAngleY = (float)Math.PI;
 		
 		bodyModel[14] = new ModelRendererTurbo(this,52, 345, textureX, textureY);
 		bodyModel[14].addShape3D(128, -64, -16, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 0, 160, 0), new Coord2D(160, 16, 160, 16) } ), 1, 160, 16, 336, 1, ModelRendererTurbo.MR_FRONT, new float[] { 160, 16, 160 });
-		//bodyModel[14].setPosition(0F, -52F, 0F);
+		//bodyModel[14].setPosition(256F, 0F, -32F);
 		bodyModel[14].rotateAngleX = (float)Math.PI;
+		//bodyModel[14].rotateAngleY = (float)Math.PI;
 
 		bodyModel[15] = new ModelRendererTurbo(this,52, 394, textureX, textureY);
 		bodyModel[15].addShape3D(128, -64, 15, 
 		new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(160, 0, 160, 0), new Coord2D(160, 16, 160, 16) } ), 1, 160, 16, 336, 1, ModelRendererTurbo.MR_FRONT, new float[] { 160, 16, 160 });
-		//bodyModel[15].setPosition(0F, -52F, 0F);
+		//bodyModel[15].setPosition(256F, 0F, 30F);
 		bodyModel[15].rotateAngleX = (float)Math.PI;
+		//bodyModel[15].rotateAngleY = (float)Math.PI;
 		
 		//Tail (8 / 9)
 		tailModel = new ModelRendererTurbo[7];
@@ -332,7 +335,7 @@ public class ModelLancaster extends ModelPlane
 		pitchFlapLeftModel = new ModelRendererTurbo[1];		
 		pitchFlapLeftModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
 		pitchFlapLeftModel[0].addBox(0, -32, -1, 16, 64, 2, 0.0F);
-	    pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
+		pitchFlapLeftModel[0].rotateAngleX = 1.570796F;
 		pitchFlapLeftModel[0].setPosition(112F, -81F, 48F);	
 		
 		pitchFlapRightWingModel = new ModelRendererTurbo[1]; //Two right pitch flaps
@@ -345,13 +348,13 @@ public class ModelLancaster extends ModelPlane
 		pitchFlapRightModel = new ModelRendererTurbo[1];		
 		pitchFlapRightModel[0] = new ModelRendererTurbo(this,36, 279, textureX, textureY);
 		pitchFlapRightModel[0].addBox(0, -32, -1, 16, 64, 2, 0.0F);
-	    pitchFlapRightModel[0].rotateAngleX = 1.570796F;
+		pitchFlapRightModel[0].rotateAngleX = 1.570796F;
 		pitchFlapRightModel[0].setPosition(112F, -81F, -48F);
 		
 		translateAll(0, 52, 0);
 		
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
-    }
+	}
 	
 
 	//Return a propeller at the specified position
@@ -361,9 +364,9 @@ public class ModelLancaster extends ModelPlane
 		prop[0] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
 		prop[1] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
 		prop[2] = new ModelRendererTurbo(this,40, 345, textureX, textureY);
-	    prop[0].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);	
+		prop[0].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);
 		prop[0].setRotationPoint(i, j, k);
-        prop[1].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);	
+		prop[1].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);
 		prop[1].setRotationPoint(i, j, k);
 		prop[2].addBox(-0F, -32F, -2F, 2, 32, 4, 0.0F);		
 		prop[2].setRotationPoint(i, j, k);

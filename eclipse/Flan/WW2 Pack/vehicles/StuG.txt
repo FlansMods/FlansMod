@@ -1,0 +1,75 @@
+//Naming
+Name StuG IV
+ShortName StuG
+//Visuals
+Icon StuG
+Model ww2.StuG
+Texture SkinStuG
+RotateWheels True
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.55
+MaxNegativeThrottle 0.45
+//Steering modifiers
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -35 -10 -18
+WheelPosition 1 -35 -10 26
+WheelPosition 2 35 -10 26
+WheelPosition 3 35 -10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 20
+ShellSlots 5
+//Driver and passenger positions
+Driver -14 23 -7 -8 8 -6 20
+RotatedDriverOffset 0 0 0
+Passengers 1
+Passenger 1 -18 20 18 core -12 12 -10 12 mg42 PassengerGun1
+GunOrigin 1 -5 12 15
+RotatedPassengerOffset 1 0 0 0
+BarrelPosition 20 25 5
+//Secondary gun
+AllowAllAmmo False
+AddAmmo shell
+AddAmmo HEshell
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 90
+//Sounds
+StartSound TankIdle
+StartSoundLength 20
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank3Shoot
+ShootSoundSecondary MG42Shoot
+TurretRotationSpeed 0.03
+DamageModifierPrimary 42
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 tankBody 2 vehicleSeat 1 tankBarrel
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 gray
+//Health and collision
+SetupPart core 9800 -47 -3 -13 92 33 36
+SetupPart rightTrack 7000 -55 -10 -21 101 19 8
+SetupPart leftTrack 7000 -55 -10 23 101 19 7
+BulletDetection 7
+ModelScale 0.85
+Description German Medium Tank Destroyer

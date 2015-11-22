@@ -5,15 +5,14 @@ Ammo dp28Ammo
 Icon DP28
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23674
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 80
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 1
 //Damage in half hearts
-Damage 5
+Damage 4
 //The higher this value, the more the bullets spread
-Accuracy 8
+Accuracy 4
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound DP28Shoot

@@ -35,6 +35,7 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 			return super.getDeathMessage(living);
 		}
 		EntityPlayer player = (EntityPlayer)living;
+
     	Team killedTeam = PlayerHandler.getPlayerData(player).team;
     	Team killerTeam = PlayerHandler.getPlayerData(shooter).team;
     	

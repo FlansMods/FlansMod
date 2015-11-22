@@ -1,6 +1,5 @@
 Name German WW2 Snow Coat
 ShortName germanSnowCoat
-ItemID 23574
 Icon GermanSnowCoat
 Colour 255 255 255
 Type Body

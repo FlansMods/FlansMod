@@ -26,7 +26,7 @@ SpinSound MinigunSpin
 CooldownSound MinigunCooldown
 WarmupSoundLength 11
 SpinSoundLength 9
-ShootSound RPDShoot
+ShootSound MinigunShoot
 ReloadSound BrowningReload
 Mode Minigun
 //Bullet speed, default 3.0
@@ -45,7 +45,7 @@ ModelScale 1.0
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-//AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope
+//AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope
 AllowBarrelAttachments false
 AllowScopeAttachments false
 AllowStockAttachments false
@@ -59,3 +59,4 @@ KnockbackModifier 0
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob Minigun_Candy Minigun_Candy red 4 white 4
 Paintjob Minigun_Murica Minigun_Murica red 3 white 3 blue 3
+Paintjob Minigun_Rainbow Minigun_Rainbow red 1 orange 1 yellow 1 green 1 blue 1 purple 1

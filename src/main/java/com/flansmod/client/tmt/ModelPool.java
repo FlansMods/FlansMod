@@ -51,10 +51,11 @@ public class ModelPool
 		return entry;
 	}
 	
-    private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
-    private static String[] resourceDir = new String[] {
-    					"/resources/models/",
-    					"/resources/mod/models/"
-    	};
-    public static final Class OBJ = ModelPoolObjEntry.class;
+	private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
+	private static String[] resourceDir = new String[] {
+						"/resources/models/",
+						"/resources/mod/models/",
+    						"/Flan/"
+		};
+	public static final Class OBJ = ModelPoolObjEntry.class;
 }

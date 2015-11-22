@@ -1,6 +1,5 @@
 Name German WW2 Snow Boots
 ShortName germanSnowBoots
-ItemID 23576
 Icon GermanSnowBoots
 Colour 255 255 255
 Type Boots

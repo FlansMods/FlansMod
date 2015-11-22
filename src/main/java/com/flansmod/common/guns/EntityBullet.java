@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +29,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -35,8 +37,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
+import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
@@ -54,6 +59,7 @@ import com.flansmod.common.guns.raytracing.PlayerBulletHit;
 import com.flansmod.common.guns.raytracing.PlayerHitbox;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
@@ -80,6 +86,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public float penetratingPower;
 	
 	private float yOffset;
+	
+	@SideOnly(Side.CLIENT)
+	private boolean playedFlybySound;
 	
 
 	public EntityBullet(World world)
@@ -235,6 +244,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	{
 		super.onUpdate();
 		
+		if(worldObj.isRemote)
+			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ), new Vector3f(motionX, motionY, motionZ), 20));
+
+		
 		//Check the fuse to see if the bullet should explode
 		ticksInAir++;
 		if (ticksInAir > type.fuse && type.fuse > 0 && !isDead)
@@ -249,6 +262,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		if(isDead)
 			return;
+		
+		if(worldObj.isRemote)
+			onUpdateClient();
 		
 		//Create a list for all bullet hits
 		ArrayList<BulletHit> hits = new ArrayList<BulletHit>();
@@ -451,6 +467,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					
 					//penetratingPower -= block.getBlockHardness(worldObj, zTile, zTile, zTile);
 					setPosition(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
+					//play sound when bullet hits block
+					if(!worldObj.isRemote)
+						PacketPlaySound.sendSoundPacket(posX, posY, posZ, type.hitSoundRange, dimension, type.hitSound, true);
 					setDead();
 					break;
 				}
@@ -575,7 +594,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		
 		//Particles 
-		if (type.trailParticles && worldObj.isRemote)
+		if (type.trailParticles && worldObj.isRemote && ticksInAir > 1)
 		{
 			spawnParticles();
 		}
@@ -586,14 +605,27 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 	
 	@SideOnly(Side.CLIENT)
+	private void onUpdateClient() 
+	{
+		if(this.getDistanceSqToEntity(Minecraft.getMinecraft().thePlayer) < 5 && !playedFlybySound)
+		{
+			playedFlybySound = true;
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound("bulletFlyby"), 10F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), (float)posX, (float)posY, (float)posZ));
+			//worldObj.playSound(posX, posY, posZ, "flansmod:bulletFlyby", 0.5F, 1F, false);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
 	private void spawnParticles()
 	{
 		double dX = (posX - prevPosX) / 10;
 		double dY = (posY - prevPosY) / 10;
 		double dZ = (posZ - prevPosZ) / 10;
+		
+		float spread = 0.1F;
 		for (int i = 0; i < 10; i++)
 		{
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread, prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
 			//worldObj.spawnEntityInWorld(particle);
@@ -607,27 +639,20 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 
-	private boolean isPartOfOwner(Entity entity)
-	{
-		if(owner == null)
+	private boolean isPartOfOwner(Entity entity) {
+		if (owner == null)
 			return false;
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
-		if (owner instanceof EntityPlayer)
-		{
-			if(PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
+		if (owner instanceof EntityPlayer) {
+			if (PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
 				return false;
-			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
-			if (mg != null && mg == entity)
-			{
+			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
+			if (mg != null && mg == entity) {
 				return true;
 			}
 		}
-		if(owner.ridingEntity instanceof EntitySeat)
-		{
-			return ((EntitySeat)owner.ridingEntity).driveable == null || ((EntitySeat)owner.ridingEntity).driveable.isPartOfThis(entity);
-		}
-		return false;
+		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null || ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
 	}
 
 	@Override
@@ -640,10 +665,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
-	        //if(owner instanceof EntityPlayer)
-	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
-	        //else 
-			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        if((owner instanceof EntityPlayer))
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.flak > 0, type.explosionBreaksBlocks);
+	        else 
+	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		if(type.fireRadius > 0)
 		{
@@ -655,7 +680,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					{
 						if (worldObj.getBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k))).getBlock().getMaterial() == Material.air)
 						{
-							worldObj.setBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k)), new BlockState(Blocks.fire).getBaseState());
+							worldObj.setBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k)), Blocks.fire.getDefaultState(), 2);
 						}
 					}
 				}
@@ -758,7 +783,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			{
 				if(obj != null && ((Entity)obj).getName().equals(name))
 				{
-					owner = (EntityPlayer)obj;
+					owner = (EntityLivingBase)obj;
 					break;
 				}
 			}
@@ -772,8 +797,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 	
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

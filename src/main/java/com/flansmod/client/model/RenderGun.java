@@ -114,7 +114,7 @@ public class RenderGun implements IItemRenderer
 		if(!offHandGunType.oneHanded)
 			return;
 		
-		renderGun(ItemRenderType.EQUIPPED, offHandItemStack, offHandGunType, animations, true, player);
+		renderGun(ItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
 	}
 		
 	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
@@ -137,12 +137,12 @@ public class RenderGun implements IItemRenderer
 				{
 					//EntityItem entity = (EntityItem)data[1];
 					//GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					GL11.glTranslatef(-0.45F + model.itemFrameOffset.x, -0.05F + model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
 				}
 				case INVENTORY :
 				{
-
-					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
+					GL11.glTranslatef(model.itemFrameOffset.x, model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
 				}
 				case EQUIPPED:
@@ -336,7 +336,8 @@ public class RenderGun implements IItemRenderer
 		}
 				
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		//renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getItemDamage())));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);
@@ -385,7 +386,7 @@ public class RenderGun implements IItemRenderer
 				GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
 				model.renderPump(f);
 				if(gripAttachment == null && model.gripIsOnPump)
-				       model.renderDefaultGrip(f);
+					   model.renderDefaultGrip(f);
 			}
 			GL11.glPopMatrix();
 			

@@ -4,7 +4,7 @@ ShortName chinook
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Chinook
 Model mw.Chinook
-Texture Chinook
+Texture SkinChinook
 //Third Person Camera Distance
 CameraDistance 25.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
@@ -30,14 +30,14 @@ Drag 1.0
 //Lift 2.5
 //Wheels (Fake wheels imitating skids)
 NumWheels 4
-WheelPosition 0 80 -27 -24
-WheelPosition 1 80 -27 24
-WheelPosition 2 -80 -27 -24
-WheelPosition 3 -80 -27 24
+WheelPosition 0 -46 -10 -31
+WheelPosition 1 -46 -10 31
+WheelPosition 2 81 -10 27
+WheelPosition 3 81 -10 -27
 WheelSpringStrength 0.125
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
-HeliPropeller 0 84 48 0 blades metalPropeller
-HeliPropeller 1 -128 48 0 blades metalPropeller
+HeliPropeller 0 70 -97 0 core metalPropeller
+HeliPropeller 1 -154 -73 0 tail metalPropeller
 // ------------------------------------------------------ Weaponry ------------------------------------------------------
 //Weapon types. Options are Missile, Bomb, Gun, Shell, None
 Primary None
@@ -52,48 +52,41 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-//ShootPointPrimary -13 7 -53 rightWing
-//ShootPointPrimary -13 7 53 leftWing
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 0
-MissileSlots 8
+MissileSlots 0
 AllowAllAmmo False
-AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 5000
 // ------------------------------------------------------ Passengers ------------------------------------------------------
-Pilot 108 16 16
-Passengers 27
-Passenger 1 108 16 -16 nose
-//Left side passengers
-Passenger 2 84 18 -22 core
-Passenger 3 70 18 -22 core
-Passenger 4 56 18 -22 core
-Passenger 5 42 18 -22 core
-Passenger 6 28 18 -22 core
-Passenger 7 14 18 -22 core
-Passenger 8 0 18 -22 core
-Passenger 9 -14 18 -22 core
-Passenger 10 -28 18 -22 core
-Passenger 11 -42 18 -22 core
-Passenger 12 -56 18 -22 core
-Passenger 13 -70 18 -22 core
-Passenger 14 -84 18 -22 core
-//Right side passengers
-Passenger 15 84 18 22 core
-Passenger 16 70 18 22 core
-Passenger 17 56 18 22 core
-Passenger 18 42 18 22 core
-Passenger 19 28 18 22 core
-Passenger 20 14 18 22 core
-Passenger 21 0 18 22 core
-Passenger 22 -14 18 22 core
-Passenger 23 -28 18 22 core
-Passenger 24 -42 18 22 core
-Passenger 25 -56 18 22 core
-Passenger 26 -70 18 22 core
-Passenger 27 -84 18 22 core
+Pilot 154 17 10
+Passengers 25
+Passenger 1 154 17 -10 core
+Passenger 2 110 15 18 core
+Passenger 3 72 15 18 core
+Passenger 4 45 15 18 core
+Passenger 5 19 15 18 core
+Passenger 6 6 15 18 core
+Passenger 7 -20 15 18 core
+Passenger 8 -33 15 18 core
+Passenger 9 110 15 -18 core
+Passenger 10 72 15 -18 core
+Passenger 11 45 15 -18 core
+Passenger 12 19 15 -18 core
+Passenger 13 6 15 -18 core
+Passenger 14 -20 15 -18 core
+Passenger 15 -33 15 -18 core
+Passenger 16 -7 15 -18 core
+Passenger 17 32 15 -18 core
+Passenger 18 60 15 -18 core
+Passenger 19 82 15 -18 core
+Passenger 20 95 15 -18 core
+Passenger 21 85 15 18 core
+Passenger 22 97 15 18 core
+Passenger 23 59 15 18 core
+Passenger 24 32 15 18 core
+Passenger 25 -7 15 18 core
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound HelicopterStart
 StartSoundLength 100
@@ -113,8 +106,42 @@ AddRecipeParts tail 1 metalTail
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 16 green
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 800 -96 -9 -32 192 67 64
-SetupPart nose 300 96 -8 -32 64 64 64
-SetupPart tail 200 -128 16 -10 32 72 20
-SetupPart coreWheel 200 69 -27 -24 12 18 48
+SetupPart core 5000 -34 0 -35 208 69 69
+SetupPart nose 5000 175 7 -20 13 30 40
+SetupPart tail 4000 -102 0 -35 88 95 69
+SetupPart blades 3000 -239 95 -150 300 4 300
+SetupPart blades 3000 -9 71 -150 300 4 300
+CollisionPoint -9 49 -18 core
+CollisionPoint 161 49 -18 core
+CollisionPoint 161 49 18 core
+CollisionPoint -9 49 18 core
+CollisionPoint -9 5 29 core
+CollisionPoint -9 4 -29 core
+CollisionPoint 161 4 -20 core
+CollisionPoint 161 4 20 core
+CollisionPoint 162 4 20 nose
+CollisionPoint 162 4 -20 nose
+CollisionPoint 162 46 14 nose
+CollisionPoint 162 47 -14 nose
+CollisionPoint 189 20 0 nose
+CollisionPoint -10 49 -18 tail
+CollisionPoint -10 49 18 tail
+CollisionPoint -101 49 18 tail
+CollisionPoint -100 49 -18 tail
+CollisionPoint -100 94 -18 tail
+CollisionPoint -100 95 18 tail
+CollisionPoint -26 83 8 tail
+CollisionPoint -25 83 -9 tail
+CollisionPoint -103 1 -28 tail
+CollisionPoint -104 2 29 tail
+CollisionPoint -10 2 29 tail
+CollisionPoint -10 2 -29 tail
+CollisionPoint 12 96 -143 blades
+CollisionPoint 13 97 143 blades
+CollisionPoint -238 97 2 blades
+CollisionPoint -11 73 1 blades
+CollisionPoint 239 73 -146 blades
+CollisionPoint 239 73 146 blades
+HasGear False
+ModelScale 1
 BulletDetection 24

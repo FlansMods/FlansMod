@@ -1,0 +1,18 @@
+Name Lightning Engine
+ShortName lightningEngine
+Icon LightningEngine
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Engine
+EngineSpeed 5
+FuelConsumption 1.8
+UseRF True
+RFDrawRate 100000
+WorksWith vehicles planes
+StackSize 4
+RecipeOutput 1
+Recipe L lightgem D denseRedstoneCoil I blockIron
+LDL
+DID
+LDL

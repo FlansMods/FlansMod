@@ -1,0 +1,83 @@
+//Naming
+Name M8 Greyhound
+ShortName Greyhound
+//Visuals
+Icon GreyHound
+Model ww2.Greyhound
+Texture SkinGreyhound
+RotateWheels True
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.65
+MaxNegativeThrottle 0.45
+//Steering modifiers
+TurnLeftSpeed 0.35
+TurnRightSpeed 0.35
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -20 -10 -18
+WheelPosition 1 -20 -10 18
+WheelPosition 2 20 -10 18
+WheelPosition 3 20 -10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank false
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 10
+ShellSlots 5
+//Driver and passenger positions
+Driver 0 14 0 -360 360 -5 20
+RotatedDriverOffset 0 0 0
+Passengers 1
+Passenger 1 22 0 7 core -30 30 -5 20 browning PassengerGun1
+GunOrigin 1 50 -1 10
+//Secondary gun
+AddGun 8 20 10 turret browning
+AllowAllAmmo False
+AddAmmo shell
+AddAmmo HEshell
+BarrelPosition 40 28 0
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 70
+//Sounds
+StartSound Engine
+StartSoundLength 20
+EngineSound Engine
+EngineSoundLength 20
+ShootSoundPrimary Tank4Shoot
+ShootSoundSecondary BrowningShoot
+TurretRotationSpeed 0.035
+DamageModifierPrimary 22
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 lighttankTurret 1 vehicleSeat
+AddRecipeParts core 1 lighttankBody 2 vehicleSeat
+AddRecipeParts frontLeftWheel 1 wheel
+AddRecipeParts frontRightWheel 1 wheel
+AddRecipeParts backLeftWheel 1 wheel
+AddRecipeParts backRightWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 green
+//Health and collision
+SetupPart core 5500 -48 0 -19 91 19 38
+SetupPart turret 5000 -16 20 -16 32 17 32
+SetupPart frontLeftWheel 3000 18 -10 16 18 18 6
+SetupPart frontRightWheel 3000 18 -10 -22 18 18 6
+SetupPart backLeftWheel 3000 -21 -10 16 18 18 6
+SetupPart backLeftWheel 3000 -44 -10 16 18 18 6
+SetupPart backRightWheel 3000 -21 -10 -22 18 18 6
+SetupPart backRightWheel 3000 -44 -10 -22 18 18 6
+BulletDetection 7
+ModelScale 0.9
+Description American Armored Car

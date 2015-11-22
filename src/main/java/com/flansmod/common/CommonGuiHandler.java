@@ -15,10 +15,10 @@ import com.flansmod.common.guns.boxes.GunBoxType;
 public class CommonGuiHandler implements IGuiHandler
 {
 	 @Override
-     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-     {
-          return FlansMod.proxy.getServerGui(ID, player, world, x, y, z);
-     }
+	 public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
+	 {
+		  return FlansMod.proxy.getServerGui(ID, player, world, x, y, z);
+	 }
 
 	 @Override
      public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)

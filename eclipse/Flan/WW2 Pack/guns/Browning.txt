@@ -1,17 +1,16 @@
-Name Browning
+Name Browning .30Cal
 ShortName browning
 //The ammo this gun uses (shortName)
 Ammo browningAmmo
 Icon Browning
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23631
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 1
 //Damage in half hearts
-Damage 2
+Damage 4
 //The higher this value, the more the bullets spread
 Accuracy 6
 //Time in ticks between rounds
@@ -33,7 +32,7 @@ Deployable True
 //Place the compiled model class in the models folder
 DeployedModel ww2.Browning
 //Place the texture .png in the skins folder
-DeployedTexture Browning
+DeployedTexture SkinBrowning
 //The length from the bipod to the trigger of the gun. Deployables only.
 StandBackDistance 1.0
 //Degrees above and below level that the gun can work within. 90 degrees is vertical

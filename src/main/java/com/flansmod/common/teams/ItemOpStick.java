@@ -19,7 +19,7 @@ public class ItemOpStick extends Item implements IFlanItem
 {
 	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
 	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
-	
+
 	public ItemOpStick()
 	{
 		super();
@@ -27,11 +27,11 @@ public class ItemOpStick extends Item implements IFlanItem
 		setHasSubtypes(true);
 	}
 		
-    @Override
+	@Override
 	public boolean shouldRotateAroundWhenRendering()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 	
 	@Override
 	public boolean isFull3D()
@@ -66,7 +66,7 @@ public class ItemOpStick extends Item implements IFlanItem
 			if(map == base.getMap())
 				currentMapID = i;
 			i++;
-		}	    		
+		}
 		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getName(), maps, currentMapID, base.getDefaultOwnerID()), player);
 
 	}
@@ -143,52 +143,52 @@ public class ItemOpStick extends Item implements IFlanItem
 		int damage = player.inventory.getCurrentItem().getItemDamage(); 
 		TeamsManager teamsManager = TeamsManager.getInstance();
 		switch(damage)
-    	{
-	    	case 0 : //Stick of Ownership
-	    	{
-	    		//Do nothing. Ownership is a property of bases.
-	    		break;
-	    	}
-	    	case 1 : //Stick of Connecting
-	    	{
-	    		if(player.fishEntity == null)
-	    		{
-	    			EntityConnectingLine hook = new EntityConnectingLine(world, player, object);
-	    			world.spawnEntityInWorld(hook);
-	    		}
-	    		else
-	    		{
-	    			if(player.fishEntity instanceof EntityConnectingLine)
-	    			{
-	    				EntityConnectingLine line = (EntityConnectingLine)player.fishEntity;
-	    				if(line.connectedTo instanceof ITeamBase)
-	    				{
-	    					ITeamBase base = (ITeamBase)line.connectedTo;
-	    					object.setBase(base);
-	    					base.addObject(object);
-	    					//line.setDead();
-	    					//player.fishEntity = null;
-	    					TeamsManager.messagePlayer(player, "Successfully connected.");
-	    				}
-	    				else
-	    				{
-	    					TeamsManager.messagePlayer(player, "Cannot connect objects to objects.");
-	    				}
-	    			}
-	    		}
-	    		break;
-	    	}
-	    	case 2 : //Stick of Mapping
-	    	{
-	    		//Again, this is a property of bases. Objects will follow their parent base in regards to which map they are a part of
-	    		break;
-	    	}
-	    	case 3 : //Stick of Destruction
-	    	{
-	    		object.destroy();
-	    		break;
-	    	}
-    	}
+		{
+			case 0 : //Stick of Ownership
+			{
+				//Do nothing. Ownership is a property of bases.
+				break;
+			}
+			case 1 : //Stick of Connecting
+			{
+				if(player.fishEntity == null)
+				{
+					EntityConnectingLine hook = new EntityConnectingLine(world, player, object);
+					world.spawnEntityInWorld(hook);
+				}
+				else
+				{
+					if(player.fishEntity instanceof EntityConnectingLine)
+					{
+						EntityConnectingLine line = (EntityConnectingLine)player.fishEntity;
+						if(line.connectedTo instanceof ITeamBase)
+						{
+							ITeamBase base = (ITeamBase)line.connectedTo;
+							object.setBase(base);
+							base.addObject(object);
+							//line.setDead();
+							//player.fishEntity = null;
+							TeamsManager.messagePlayer(player, "Successfully connected.");
+						}
+						else
+						{
+							TeamsManager.messagePlayer(player, "Cannot connect objects to objects.");
+						}
+					}
+				}
+				break;
+			}
+			case 2 : //Stick of Mapping
+			{
+				//Again, this is a property of bases. Objects will follow their parent base in regards to which map they are a part of
+				break;
+			}
+			case 3 : //Stick of Destruction
+			{
+				object.destroy();
+				break;
+			}
+		}
 	}
 	
 	@Override

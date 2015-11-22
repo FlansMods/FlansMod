@@ -2,9 +2,6 @@ package com.flansmod.common.teams;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
-
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
@@ -25,13 +22,15 @@ public class ArmourType extends InfoType
 	/** The name for the armour texture. Texture path/name is assets/flansmod/armor/<armourTextureName>_1.png or _2 for legs */
 	public String armourTextureName;
 	/** Modifiers for various player stats */
-	public float moveSpeedModifier = 1F, knockbackModifier = 0.2F;
+	public float moveSpeedModifier = 1F, knockbackModifier = 0.2F, jumpModifier = 1F;
 	/** If true, then the player gets a night vision buff every couple of seconds */
 	public boolean nightVision = false;
 	/** The overlay to display when using this helmet. Textures are pulled from the scopes directory */
 	public String overlay = null;
 	/** If true, then smoke effects from grenades will have no effect on players wearing this */
 	public boolean smokeProtection = false;
+	/** If ture, the player will not receive fall damage */
+	public boolean negateFallDamage = false;
 	
 	@SideOnly(Side.CLIENT)
 	public ModelCustomArmour model;
@@ -69,11 +68,15 @@ public class ArmourType extends InfoType
 				defence = Double.parseDouble(split[1]);		
 			if(split[0].equals("MoveSpeedModifier") || split[0].equals("Slowness"))
 				moveSpeedModifier = Float.parseFloat(split[1]);
+			if(split[0].equals("JumpModifier"))
+				jumpModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
 				knockbackModifier = Float.parseFloat(split[1]);
 			
 			if(split[0].equals("NightVision"))
 				nightVision = Boolean.parseBoolean(split[1]);
+			if(split[0].equals("NegateFallDamage"))
+				negateFallDamage = Boolean.parseBoolean(split[1]);
 			if(split[0].equals("Overlay"))
 				overlay = split[1];
 			

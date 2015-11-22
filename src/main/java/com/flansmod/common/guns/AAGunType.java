@@ -162,15 +162,10 @@ public class AAGunType extends InfoType
 		return ammo.contains(type);
 	}
 
-	public boolean isAmmo(ItemStack stack)
-	{
+	public boolean isAmmo(ItemStack stack) {
 		if (stack == null)
 			return false;
-		if (stack.getItem() instanceof ItemBullet)
-		{
-			return isAmmo(((ItemBullet) stack.getItem()).type);
-		}
-		return false;
+		return stack.getItem() instanceof ItemBullet && isAmmo(((ItemBullet) stack.getItem()).type);
 	}
 
 	public static AAGunType getAAGun(String s)
@@ -187,5 +182,11 @@ public class AAGunType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
+	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		//Do not add AA guns to dungeon chests. That would be so op.
 	}
 }

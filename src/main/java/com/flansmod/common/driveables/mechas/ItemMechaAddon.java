@@ -32,17 +32,16 @@ public class ItemMechaAddon extends Item implements IFlanItem
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(list, type.description.split("_"));
+			Collections.addAll(list, type.description.split("_"));
 		}
 	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
     }
-    
     
 	@Override
 	public InfoType getInfoType() 

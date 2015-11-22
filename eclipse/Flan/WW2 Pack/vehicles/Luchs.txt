@@ -1,0 +1,74 @@
+//Naming
+Name Luchs
+ShortName PanzerIIL
+//Visuals
+Icon Luchs
+Model ww2.Luchs
+Texture SkinLuchs
+RotateWheels True
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.75
+MaxNegativeThrottle 0.65
+//Steering modifiers
+TurnLeftSpeed 0.55
+TurnRightSpeed 0.55
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -25 -10 -18
+WheelPosition 1 -25 -10 18
+WheelPosition 2 25 -10 18
+WheelPosition 3 25 -10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 10
+ShellSlots 1
+//Driver and passenger positions
+Driver 0 25 0 -360 360 -2 4
+RotatedDriverOffset -7 0 -4
+Passengers 0
+BarrelPosition 5 25 0
+//Secondary gun
+AddGun 8 20 0 turret mg42
+AllowAllAmmo False
+AddAmmo 20mmAmmo
+AddAmmo TankSmokeShell
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 12
+//Sounds
+StartSound TankIdle
+StartSoundLength 20
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Flak1Shoot
+ShootSoundSecondary MG42Shoot
+TurretRotationSpeed 0.03
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 lighttankTurret 1 vehicleSeat
+AddRecipeParts core 1 lighttankBody
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 8 gray
+//Health and collision
+SetupPart core 8720 -46 -3 -16 93 23 33
+SetupPart turret 8520 -21 20 -20 40 12 40
+SetupPart rightTrack 6000 -39 -10 -27 85 20 10
+SetupPart leftTrack 6000 -39 -10 17 85 20 10
+BulletDetection 7
+ModelScale 1.1
+Description German Light Tank

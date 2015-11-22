@@ -3,10 +3,10 @@
 // This file is for Flan's Flying Mod Version 3.0.x+
 
 // Model Checklist
-//    Model: 
-//    - Check Left/Right    [ ]  (Left = + / Right = -)
-//    - Code Cleaned        [ ]
-//    - Coverted to Version [ ]
+//	Model:
+//	- Check Left/Right	[ ]  (Left = + / Right = -)
+//	- Code Cleaned		[ ]
+//	- Coverted to Version [ ]
 
 package com.flansmod.client.model.mw;
 
@@ -99,5 +99,7 @@ public class ModelPanzerfaust3 extends ModelGun
 		flipAll();
 		translateAll(0F, 0F, 3F);
 		thirdPersonOffset = new Vector3f(0F, -0.05F, -0.2F);
+		
+		itemFrameOffset = new Vector3f(8F / 16F, 0F / 16F, 0F);
 	}
 }

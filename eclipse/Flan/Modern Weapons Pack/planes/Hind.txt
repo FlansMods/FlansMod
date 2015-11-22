@@ -89,12 +89,9 @@ AddRecipeParts tail 1 metalTail 1 passengerBay 1 metalPropeller
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 10 yellow
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
-SetupPart core 400 -94 -9 -18 215 67 36
-SetupPart tail 100 -242 32 -10 148 26 20
-SetupPart leftWing 50 -39 2 -83 25 33 65
-SetupPart rightWing 50 -39 2 18 25 33 65
-SetupPart coreWheel 100 69 -27 -5 12 18 11
-SetupPart leftWingWheel 100 -33 -30 -34 14 26 17
-SetupPart rightWingWheel 100 -33 -30 19 14 26 17
-SetupPart blades 100 -30 68 -30 60 2 60
+SetupPart core 3000 -94 -9 -18 215 67 36
+SetupPart tail 2000 -242 32 -10 148 26 20
+SetupPart leftWing 1000 -39 2 -83 25 33 65
+SetupPart rightWing 1000 -39 2 18 25 33 65
+SetupPart blades 1000 -30 68 -30 60 2 60
 BulletDetection 10

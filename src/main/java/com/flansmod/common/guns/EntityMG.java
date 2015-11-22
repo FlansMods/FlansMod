@@ -181,7 +181,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, type.bulletSpread, type.damage, ammo.getItemDamage(), type));
+			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), (direction * 90F + rotationYaw), rotationPitch, gunner, bullet.bulletSpread * type.bulletSpread, type.damage, ammo.getItemDamage(), type));
 			if (soundDelay <= 0)
 			{
 				soundDelay = type.shootSoundLength;
@@ -236,7 +236,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)
 				{
-					worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, (EntityLivingBase) player, type.bulletSpread, type.damage, type.bulletSpeed, false, ammo.getItemDamage(), type));
+					worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, (EntityLivingBase) player, bullet.bulletSpread * type.bulletSpread, type.damage, type.bulletSpeed, false, ammo.getItemDamage(), type));
 				}
 				if (soundDelay <= 0)
 				{
@@ -425,9 +425,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
-    }
+	}
 }

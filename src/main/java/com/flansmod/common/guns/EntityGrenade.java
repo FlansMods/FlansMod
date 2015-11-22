@@ -24,21 +24,21 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
@@ -412,7 +412,16 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						int z = MathHelper.floor_double(k + posZ);
 						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.air && rand.nextBoolean())
 						{
-							worldObj.setBlockState(new BlockPos(x, y, z), new BlockState(Blocks.fire).getBaseState());
+							/*
+							 if(!worldObj.getBlockState(new BlockPos(x + 1, y, z)).getBlock(). || !worldObj.isAirBlock(new BlockPos(x - 1, y, z)) 
+							 
+							|| !worldObj.isAirBlock(new BlockPos(x, y + 1, z)) || !worldObj.isAirBlock(new BlockPos(x, y - 1, z))
+							|| !worldObj.isAirBlock(new BlockPos(x, y, z + 1)) || !worldObj.isAirBlock(new BlockPos(x, y, z - 1))) 
+							*/
+							{
+								worldObj.setBlockState(new BlockPos(x, y, z), Blocks.fire.getDefaultState(), 2);
+								worldObj.markBlockForUpdate(new BlockPos(x, y, z));
+							}
 						}
 					}
 				}
@@ -521,10 +530,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 	
 	@Override
 	public boolean canBeCollidedWith()
@@ -544,8 +553,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(type.healAmount > 0 && player.getHealth() < player.getMaxHealth())
 			{
 				player.heal(type.healAmount);
-	        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
-	        	used = true;
+				FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(player.posX, player.posY, player.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 50F));
+				used = true;
 			}
 			//Handle potion effects
 			for(PotionEffect effect : type.potionEffects)

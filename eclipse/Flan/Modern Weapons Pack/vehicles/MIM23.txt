@@ -44,6 +44,7 @@ ShootPointPrimary 0 32 -12 turret
 ShootPointPrimary 0 44 0 turret
 ShootPointPrimary 0 32 12 turret
 TurretOrigin 0 32 0
+TurretRotationSpeed 0.06
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 0
@@ -78,3 +79,4 @@ SetupPart turret 400 -16 10 -16 32 24 32
 SetupPart leftTrack 200 -24 -8 -16 48 12 8
 SetupPart rightTrack 200 -24 -8 8 48 12 8
 BulletDetection 7
+Description Russian AA Rocket Emplacement

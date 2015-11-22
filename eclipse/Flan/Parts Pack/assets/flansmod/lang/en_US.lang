@@ -1,5 +1,6 @@
 item.smallBomb.name=Small Bomb
-item.shell.name=Tank Shell
+item.shell.name=AP Tank Shell
+item.HEshell.name=HE Tank Shell
 item.napalm.name=Napalm
 item.largeBomb.name=Large Bomb
 item.metalPropeller.name=Metal Propeller
@@ -37,3 +38,8 @@ item.helicopterBlade.name=Helicopter Blade
 item.helicopterSkid.name=Helicopter Skid
 item.advancedMetalCockpit.name=Advanced Metal Cockpit
 item.advancedTankBody.name=Advanced Tank Body
+item.redstoneCoil.name=Redstone Coil
+item.denseRedstoneCoil.name=Dense Redstone Coil
+item.smallElectricEngine.name=Small Electric Engine
+item.largeElectricEngine.name=Large Electric Engine
+item.lightningEngine.name=Lightning Engine

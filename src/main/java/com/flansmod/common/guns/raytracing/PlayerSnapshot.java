@@ -46,20 +46,20 @@ public class PlayerSnapshot
 		
 		//Calculate rotation of arms using modified code from ModelBiped
 		float yHead = (p.rotationYawHead - p.renderYawOffset) / (180F / (float)Math.PI);
-        float xHead = p.rotationPitch / (180F / (float)Math.PI);
+		float xHead = p.rotationPitch / (180F / (float)Math.PI);
 		
-        float zRight = 0.0F;
-        float zLeft = 0.0F;
-        float yRight = -0.1F + yHead - ((float)Math.PI / 2F);
-        float yLeft = 0.1F + yHead + 0.4F - ((float)Math.PI / 2F);
-        float xRight = -((float)Math.PI / 2F) + xHead;
-        float xLeft = -((float)Math.PI / 2F) + xHead;
-        
-        zRight += MathHelper.cos(p.ticksExisted * 0.09F) * 0.05F + 0.05F;
-        zLeft -= MathHelper.cos(p.ticksExisted * 0.09F) * 0.05F + 0.05F;
-        xRight += MathHelper.sin(p.ticksExisted * 0.067F) * 0.05F;
-        xLeft -= MathHelper.sin(p.ticksExisted * 0.067F) * 0.05F;
-        		
+		float zRight = 0.0F;
+		float zLeft = 0.0F;
+		float yRight = -0.1F + yHead - ((float)Math.PI / 2F);
+		float yLeft = 0.1F + yHead + 0.4F - ((float)Math.PI / 2F);
+		float xRight = -((float)Math.PI / 2F) + xHead;
+		float xLeft = -((float)Math.PI / 2F) + xHead;
+
+		zRight += MathHelper.cos(p.ticksExisted * 0.09F) * 0.05F + 0.05F;
+		zLeft -= MathHelper.cos(p.ticksExisted * 0.09F) * 0.05F + 0.05F;
+		xRight += MathHelper.sin(p.ticksExisted * 0.067F) * 0.05F;
+		xLeft -= MathHelper.sin(p.ticksExisted * 0.067F) * 0.05F;
+
 		RotatedAxes leftArmAxes = (new RotatedAxes()).rotateGlobalPitchInRads(xLeft).rotateGlobalYawInRads((float)Math.PI + yLeft).rotateGlobalRollInRads(-zLeft);
 		RotatedAxes rightArmAxes = (new RotatedAxes()).rotateGlobalPitchInRads(xRight).rotateGlobalYawInRads((float)Math.PI + yRight).rotateGlobalRollInRads(-zRight);
 		

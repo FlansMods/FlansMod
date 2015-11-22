@@ -46,3 +46,10 @@ NumGenericAttachmentSlots 1
 //Modifiers
 MoveSpeedModifier 0.8
 KnockbackModifier 0
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob GL1_Blackwood GL1_Blackwood black 2
+Paintjob GL1_Birch GL1_Birch white 1 yellow 1
+//Description - note the ammo type
+Description Ammo Type : Grenade

@@ -63,7 +63,7 @@ public class ItemFlagpole extends Item implements IFlanItem
 					world.spawnEntityInWorld(new EntityFlagpole(world, pos));
 				}		            
 			}
-        }
+		}
 		return itemstack;
 	}
 	

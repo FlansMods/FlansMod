@@ -11,15 +11,15 @@ import net.minecraft.entity.Entity;
 
 public class ModelArrow extends ModelBase
 {
-    public ModelRenderer bulletModel;
+	public ModelRenderer bulletModel;
 
-    public ModelArrow()
-    {
+	public ModelArrow()
+	{
 		bulletModel = new ModelRenderer(this, 0, 0);
 		bulletModel.addBox(-0.5F, -1F, -0.5F, 1, 2, 1);
-    }
+	}
 
-    @Override
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
 	    Tessellator tessellator = Tessellator.getInstance();
@@ -67,9 +67,9 @@ public class ModelArrow extends ModelBase
         }
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 
-    }
+	}
 
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-    {
-    }
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
+	{
+	}
 }

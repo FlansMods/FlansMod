@@ -10,8 +10,9 @@ public class ModelGun extends ModelBase
 	//Shapebox template. For quick copy pasting
 	//, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 	
-	//These first 4 models are static with no animation
+	//These first 6 models are static with no animation
 	public ModelRendererTurbo[] gunModel = new ModelRendererTurbo[0];
+	public ModelRendererTurbo[] backpackModel = new ModelRendererTurbo[0]; //For flamethrowers and such like. Rendered on the player's back
 	//These models appear when no attachment exists
 	public ModelRendererTurbo[] defaultBarrelModel = new ModelRendererTurbo[0];
 	public ModelRendererTurbo[] defaultScopeModel = new ModelRendererTurbo[0];
@@ -80,6 +81,9 @@ public class ModelGun extends ModelBase
 	
 	/** This offsets the render position for third person */
 	public Vector3f thirdPersonOffset = new Vector3f();
+	
+	/** This offsets the render position for item frames */
+	public Vector3f itemFrameOffset = new Vector3f();
 	
 	public void renderGun(float f)
 	{
@@ -184,6 +188,10 @@ public class ModelGun extends ModelBase
 		translate(minigunBarrelModel, x, y, z);
 		translate(revolverBarrelModel, x, y, z);
 		translate(breakActionModel, x, y, z);
+		translateAttachment(barrelAttachPoint, x, y, z);
+               translateAttachment(scopeAttachPoint, x, y, z);
+               translateAttachment(gripAttachPoint, x, y, z);
+               translateAttachment(stockAttachPoint, x, y, z);
 	}
 	
 	protected void translate(ModelRendererTurbo[] model, float x, float y, float z)
@@ -195,6 +203,13 @@ public class ModelGun extends ModelBase
 			mod.rotationPointZ += z;
 		}
 	}
+	
+	protected void translateAttachment(Vector3f vector, float x , float y, float z)
+       {
+           vector.x -= x / 16F;
+           vector.y -= y / 16F;
+           vector.z -= z / 16F;
+       }
 
 
 }

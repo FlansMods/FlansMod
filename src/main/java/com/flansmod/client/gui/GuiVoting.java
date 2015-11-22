@@ -42,11 +42,11 @@ public class GuiVoting extends GuiScreen
 	
 	
 	@Override
-    protected void actionPerformed(GuiButton button)
-    {
+	protected void actionPerformed(GuiButton button)
+	{
 		myVote = button.id + 1;
 		FlansMod.getPacketHandler().sendToServer(new PacketVoteCast(myVote));
-    }		
+	}
 	
 	@Override
 	public void drawScreen(int i, int j, float f)

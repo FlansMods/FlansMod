@@ -1,0 +1,12 @@
+Name Exoskeleton Chest Piece
+ShortName exoskeletonBody
+Icon ExoskeletonChest
+Colour 255 255 255
+Type Chest
+Model mw.ExoskeletonBody
+Defence 0.2
+ArmourTexture Exoskeleton
+MoveSpeedModifier 1.0
+KnockbackModifier 0.1
+JumpModifier 2.5
+ModelScale 0.25

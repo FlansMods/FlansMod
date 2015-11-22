@@ -1,0 +1,18 @@
+Name Large Electric Engine
+ShortName largeElectricEngine
+Icon LargeElectricEngine
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Engine
+EngineSpeed 1.6
+FuelConsumption 1.8
+UseRF True
+RFDrawRate 2000
+WorksWith vehicles planes
+StackSize 4
+RecipeOutput 1
+Recipe R redstoneCoil I blockIron
+RRR
+RIR
+RRR

@@ -38,3 +38,8 @@ juggernautHelmetBrown cloth.12 5 ingotIron 12 fiberglass 12 diamond 2
 juggernautBodyBrown cloth.12 8 ingotIron 32 fiberglass 32 leather 16
 juggernautPantsBrown cloth.12 7 ingotIron 18 fiberglass 18 leather 8
 juggernautBootsBrown cloth.12 4 ingotIron 8 fiberglass 8 string 8
+AddArmour exoskeleton Exoskeleton Suit
+exoskeletonHelmet ingotIron 12 fiberglass 12 leather 10 denseRedstoneCoil 1
+exoskeletonBody basicCPU 1 ingotIron 22 fiberglass 32 leather 5 denseRedstoneCoil 1
+exoskeletonLegs ingotIron 18 fiberglass 28 leather 4 denseRedstoneCoil 1
+exoskeletonBoots ingotIron 10 fiberglass 18 leather 5 denseRedstoneCoil 1

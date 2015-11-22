@@ -12,8 +12,8 @@ MaxStackSize 1
 //The number of rounds each item has. Limited to 32000.
 RoundsPerItem 1
 //The damage multiplier caused by the bullet on hitting an entity
-DamageVsLiving 40
-DamageVsVehicles 500
+DamageVsLiving 8000
+DamageVsVehicles 8000
 //Size of explosion caused
 Explosion 4
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating

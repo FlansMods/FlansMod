@@ -1,0 +1,5 @@
+Name Gun Rack
+ShortName flanGunRack
+Icon GunRack
+Texture GunRack
+Model apocalypse.GunRack

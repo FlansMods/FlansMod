@@ -38,24 +38,28 @@ BarrelPosition 0 20 0
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 110
+AddAmmo shell
+AddAmmo HEshell
 //Sounds
-StartSound Engine
-StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSound MG42Shoot
-ShellSound TankShell
+StartSound
+StartSoundLength 0
+EngineSound
+EngineSoundLength 0
+ShootSoundPrimary Tank3Shoot
+TurretRotationSpeed 0.03
+DamageModifierPrimary 30
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 2 aaBarrel 1 vehicleSeat
-AddRecipeParts leftTrack 1 largeWheel
-AddRecipeParts rightTrack 1 largeWheel
+AddRecipeParts core 1 tankBarrel 1 gunShield
+AddRecipeParts frontLeftWheel 1 largeWheel
+AddRecipeParts frontRightWheel 1 largeWheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 10 gray
+AddDye 5 green
 //Health and collision
-SetupPart core 500 -40 -8 -18 60 24 36
-SetupPart leftTrack 200 4 -8 -22 12 12 4
-SetupPart rightTrack 200 4 -8 18 12 12 4
+SetupPart core 1500 -40 -8 -18 60 24 36
+SetupPart leftTrack 1200 4 -8 -22 12 12 4
+SetupPart rightTrack 1200 4 -8 18 12 12 4
 BulletDetection 7
+Description American Anti-Tank Gun

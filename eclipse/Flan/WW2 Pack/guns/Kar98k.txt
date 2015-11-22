@@ -5,7 +5,6 @@ Ammo kar98kAmmo
 Icon kar98k
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23561
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 60
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -25,5 +24,11 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Kar98k
-Texture Kar98k
-ModelScale 0.7
+Texture SkinKar98k
+ModelScale 0.6
+AllowAttachments ZF4Scope
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false
+Paintjob kar98k_Acacia kar98k_Acacia orange 2

@@ -1,4 +1,5 @@
 //Naming
+Name Proto Titan
 ShortName ProtoTitan
 //Visuals
 Icon ProtoTitan
@@ -12,7 +13,7 @@ Passengers 0
 //Offset of driver from the point of rotation
 RotatedDriverOffset 0 0 0
 //Speed Modifier, 1 is player speed
-MoveSpeed 1.6
+MoveSpeed 1.4
 //YOffset
 YOffset 0
 //Fuel Tank Size
@@ -20,7 +21,7 @@ FuelTankSize 10000
 //Inventory Slots
 CargoSlots 24
 //How quickly the legs react to a change in direction
-RotateSpeed 25
+RotateSpeed 15
 //Will it squash puny mobs?
 SquashMobs true
 //Step Height (Integer) and Jump Height (Float)

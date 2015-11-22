@@ -44,7 +44,7 @@ public class ItemMecha extends Item implements IFlanItem
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
 		String engineName = tags.getString("Engine");
@@ -75,7 +75,7 @@ public class ItemMecha extends Item implements IFlanItem
 		return stack.getTagCompound();
 	}
 	
-    @Override
+	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {
     	//Raytracing
@@ -104,21 +104,21 @@ public class ItemMecha extends Item implements IFlanItem
 			{	
 				itemstack.stackSize--;
 			}
-        }
-        return itemstack;
-    }
+		}
+		return itemstack;
+	}
 	
-    public DriveableData getData(ItemStack itemstack, World world)
-    {
+	public DriveableData getData(ItemStack itemstack, World world)
+	{
 		return new DriveableData(getTagCompound(itemstack, world));
-    }
+	}
    
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
+	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
+	{
+		return type.colour;
+	}
 	
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list)

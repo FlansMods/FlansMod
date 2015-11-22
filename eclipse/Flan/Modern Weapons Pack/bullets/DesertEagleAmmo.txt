@@ -3,7 +3,6 @@ ShortName desertEagleAmmo
 Model Bullet
 //Colour of icon and model
 Colour 255 255 255
-ItemID 23846
 Icon DesertEagleAmmo
 //How affected by gravity the bullet is
 FallSpeed 0.25
@@ -29,3 +28,5 @@ HitSound bullet
 //Each object penetrated detracts from the bullet's power and so the total damage it does should be constant
 Penetration 2.0
 SmokeTrail False
+//Description - note the ammo type
+Description Ammo Type : Heavy Pistol

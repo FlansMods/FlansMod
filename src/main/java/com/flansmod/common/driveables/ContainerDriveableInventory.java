@@ -10,17 +10,17 @@ import net.minecraft.world.World;
 public class ContainerDriveableInventory extends Container
 {
 	public InventoryPlayer inventory;
-    public World world;
+	public World world;
 	public EntityDriveable plane;
 	public int numItems;
 	public int screen;
 	public int maxScroll;
 	public int scroll;
 	
-    public ContainerDriveableInventory(InventoryPlayer inventoryplayer, World worldy, EntityDriveable entPlane, int i)
-    {
+	public ContainerDriveableInventory(InventoryPlayer inventoryplayer, World worldy, EntityDriveable entPlane, int i)
+	{
 		inventory = inventoryplayer;
-        world = worldy;
+		world = worldy;
 		plane = entPlane;
 		screen = i;
 		//Find the number of items in the inventory
@@ -94,20 +94,20 @@ public class ContainerDriveableInventory extends Container
 		}
 		
 		//Main inventory slots
-        for(int row = 0; row < 3; row++)
-        {
-            for(int col = 0; col < 9; col++)
-            {
-            	addSlotToContainer(new Slot(inventoryplayer, col + row * 9 + 9, 8 + col * 18, 98 + row * 18));
-            }
+		for(int row = 0; row < 3; row++)
+		{
+			for(int col = 0; col < 9; col++)
+			{
+				addSlotToContainer(new Slot(inventoryplayer, col + row * 9 + 9, 8 + col * 18, 98 + row * 18));
+			}
 
-        }
+		}
 		//Quickbar slots
-        for(int col = 0; col < 9; col++)
-        {
-        	addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 156));
-        }
-    }
+		for(int col = 0; col < 9; col++)
+		{
+			addSlotToContainer(new Slot(inventoryplayer, col, 8 + col * 18, 156));
+		}
+	}
 	
 	public void updateScroll(int scrololol)
 	{
@@ -148,53 +148,53 @@ public class ContainerDriveableInventory extends Container
 	}
 
 	@Override
-    public boolean canInteractWith(EntityPlayer entityplayer)
-    {
+	public boolean canInteractWith(EntityPlayer entityplayer)
+	{
 		return true;
-    }
+	}
 	
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
-    {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+	{
 		ItemStack stack = null;
-        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		Slot currentSlot = (Slot)inventorySlots.get(slotID);
 
-        if(currentSlot != null && currentSlot.getHasStack())
-        {
-            ItemStack slotStack = currentSlot.getStack();
-            stack = slotStack.copy();
-            
-            if(slotID >= numItems)
-            {
-            	if(!mergeItemStack(slotStack, 0, numItems, false))
-            	{
-            		return null;
-            	}
-            }
-            else {
-            	if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
-            	{
-            		return null;
-            	}
-            }
-            
-            if (slotStack.stackSize == 0)
-            {
-                currentSlot.putStack(null);
-            }
-            else
-            {
-                currentSlot.onSlotChanged();
-            }
+		if(currentSlot != null && currentSlot.getHasStack())
+		{
+			ItemStack slotStack = currentSlot.getStack();
+			stack = slotStack.copy();
 
-            if (slotStack.stackSize == stack.stackSize)
-            {
-                return null;
-            }
+			if(slotID >= numItems)
+			{
+				if(!mergeItemStack(slotStack, 0, numItems, false))
+				{
+					return null;
+				}
+			}
+			else {
+				if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
+				{
+					return null;
+				}
+			}
 
-            currentSlot.onPickupFromSlot(player, slotStack);
-        }
+			if (slotStack.stackSize == 0)
+			{
+				currentSlot.putStack(null);
+			}
+			else
+			{
+				currentSlot.onSlotChanged();
+			}
 
-        return stack;
-    }
+			if (slotStack.stackSize == stack.stackSize)
+			{
+				return null;
+			}
+
+			currentSlot.onPickupFromSlot(player, slotStack);
+		}
+
+		return stack;
+	}
 }

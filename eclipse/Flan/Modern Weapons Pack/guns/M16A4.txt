@@ -2,11 +2,15 @@ Name M16A4
 ShortName m16a4
 //The ammo this gun uses (shortName)
 Ammo m16a4Ammo
+Ammo acrAmmo
+Ammo mtarAmmo
+Ammo g36Ammo
+Ammo augAmmo
+Ammo m4CarbineAmmo
 Ammo betaCMag
 Icon M16A4
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23811
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
@@ -35,7 +39,7 @@ Texture M16A4
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
 AllowBarrelAttachments true
 AllowScopeAttachments true
 AllowStockAttachments false
@@ -45,3 +49,7 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M16A4_Orange M16A4_Orange orange 1 white 1
+Paintjob M16A4_Green M16A4_Green green 2
+Paintjob M16A4_Howl M16A4_Howl orange 1 red 2
+//Description - note the ammo type
+Description Ammo Type : Light Assault

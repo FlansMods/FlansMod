@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=0":    { "model": "flansmod:teamsSpawner_items" },
+        "type=1":     { "model": "flansmod:teamsSpawner_players" },
+        "type=2":     { "model": "flansmod:teamsSpawner_vehicles" }
+    }
+}

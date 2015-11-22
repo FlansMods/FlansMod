@@ -1,0 +1,80 @@
+//Naming
+Name S-100 Schnellboot
+ShortName S100
+//Visuals
+Icon S100
+Model ww2.S100
+Texture SkinS100
+//Third Person Camera Distance
+CameraDistance 25
+//Throttle
+MaxThrottle 0.45
+MaxNegativeThrottle 0.25
+//Steering modifiers
+TurnLeftSpeed 0.25
+TurnRightSpeed 0.25
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -150 10 -18
+WheelPosition 1 -150 10 18
+WheelPosition 2 150 10 18
+WheelPosition 3 150 10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank false
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 10
+ShellSlots 2
+BarrelPosition 250 0 -20
+BarrelPosition 250 0 20
+//Driver and passenger positions
+Driver 120 47 -8 0 0 0 0
+RotatedDriverOffset 0 0 0
+Passengers 3
+Passenger 1 -22 36 -1 core -360 360 0 25 Flak38 PassengerGun1
+Passenger 2 -195 35 0 core -360 360 -2 89 Flak42 PassengerGun2
+Passenger 3 250 32 0 core -360 360 -2 55 Flak38 PassengerGun3
+GunOrigin 1 -22 30 0
+GunOrigin 1 -22 30 4
+GunOrigin 2 -195 25 1
+GunOrigin 2 -195 25 1
+GunOrigin 3 250 30 0
+//Secondary gun
+AllowAllAmmo False
+AddAmmo Torpedo
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 70
+//Sounds
+StartSound ptboatidle
+StartSoundLength 10
+EngineSound ptboatmove
+EngineSoundLength 10
+ShootSoundPrimary Tank4Shoot
+ShootSoundSecondary BrenShoot
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 boatBody 4 vehicleSeat
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 20 gray 
+AddDye 5 red
+//Health and collision
+SetupPart core 8000 -247 -25 -42 561 86 84
+BulletDetection 7
+ModelScale 1
+Boat
+PlaceableOnLand False
+PlaceableOnWater True
+FloatOnWater True
+WheelStepHeight 1
+Buoyancy 0.08
+Description German Torpedo PT Boat

@@ -1,12 +1,14 @@
 package com.flansmod.common.guns;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -145,5 +147,14 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		if(type.remote && thrower instanceof EntityPlayer)
 			PlayerHandler.getPlayerData((EntityPlayer)thrower).remoteExplosives.add(grenade);
 		return grenade;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
+	{
+		if(type.description != null)
+		{
+			Collections.addAll(list, type.description.split("_"));
+		}
 	}
 }

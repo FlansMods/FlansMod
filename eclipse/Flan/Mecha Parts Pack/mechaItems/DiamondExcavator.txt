@@ -5,7 +5,6 @@ Model titan.Excavator
 Texture DiamondExcavator
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
-ItemID 23431
 RecipeOutput 1
 Recipe S shovelDiamond D diamond R redstone
  S 

@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ContainerMechaInventory extends Container 
 {
 	public InventoryPlayer inventory;
-    public World world;
+	public World world;
 	public EntityMecha mecha;
 	public int numItems;
 	public int maxScroll;
@@ -60,27 +60,27 @@ public class ContainerMechaInventory extends Container
 
 		
 		//Main inventory slots
-        for(int row = 0; row < 3; row++)
-        {
-            for(int col = 0; col < 9; col++)
-            {
-            	addSlotToContainer(new Slot(inventory, col + row * 9 + 9, 182 + col * 18, 98 + row * 18));
-            }
+		for(int row = 0; row < 3; row++)
+		{
+			for(int col = 0; col < 9; col++)
+			{
+				addSlotToContainer(new Slot(inventory, col + row * 9 + 9, 182 + col * 18, 98 + row * 18));
+			}
 
-        }
+		}
 		//Quickbar slots
-        for(int col = 0; col < 9; col++)
-        {
-        	addSlotToContainer(new Slot(inventory, col, 182 + col * 18, 156));
-        }
+		for(int col = 0; col < 9; col++)
+		{
+			addSlotToContainer(new Slot(inventory, col, 182 + col * 18, 156));
+		}
 	}
 	
 	@Override
-    public void onContainerClosed(EntityPlayer par1EntityPlayer)
-    {
-    	super.onContainerClosed(par1EntityPlayer);
-    	mecha.couldNotFindFuel = false;
-    }
+	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+	{
+		super.onContainerClosed(par1EntityPlayer);
+		mecha.couldNotFindFuel = false;
+	}
 
 	public void updateScroll(int scrololol)
 	{
@@ -105,53 +105,53 @@ public class ContainerMechaInventory extends Container
 	}
 	
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
-    {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
+	{
 		ItemStack stack = null;
-        Slot currentSlot = (Slot)inventorySlots.get(slotID);
+		Slot currentSlot = (Slot)inventorySlots.get(slotID);
 
-        if(currentSlot != null && currentSlot.getHasStack())
-        {
-            ItemStack slotStack = currentSlot.getStack();
-            stack = slotStack.copy();
-         
-            ///if(stack.getItem() instanceof ItemMechaAddon)
-           // {
-            	//((ItemMechaAddon)stack.getItem()).type;
-            //}
-            
-            if(slotID >= numItems)
-            {
-            	if(!mergeItemStack(slotStack, 0, numItems, false))
-            	{
-            		return null;
-            	}
-            }
-            else {
-            	if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
-            	{
-            		return null;
-            	}
-            }
-            
-            if (slotStack.stackSize == 0)
-            {
-                currentSlot.putStack(null);
-            }
-            else
-            {
-                currentSlot.onSlotChanged();
-            }
+		if(currentSlot != null && currentSlot.getHasStack())
+		{
+			ItemStack slotStack = currentSlot.getStack();
+			stack = slotStack.copy();
 
-            if (slotStack.stackSize == stack.stackSize)
-            {
-                return null;
-            }
+			///if(stack.getItem() instanceof ItemMechaAddon)
+		   // {
+				//((ItemMechaAddon)stack.getItem()).type;
+			//}
 
-            currentSlot.onPickupFromSlot(player, slotStack);
-        }
+			if(slotID >= numItems)
+			{
+				if(!mergeItemStack(slotStack, 0, numItems, false))
+				{
+					return null;
+				}
+			}
+			else {
+				if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
+				{
+					return null;
+				}
+			}
 
-        return stack;
-    }
+			if (slotStack.stackSize == 0)
+			{
+				currentSlot.putStack(null);
+			}
+			else
+			{
+				currentSlot.onSlotChanged();
+			}
+
+			if (slotStack.stackSize == stack.stackSize)
+			{
+				return null;
+			}
+
+			currentSlot.onPickupFromSlot(player, slotStack);
+		}
+
+		return stack;
+	}
 
 }

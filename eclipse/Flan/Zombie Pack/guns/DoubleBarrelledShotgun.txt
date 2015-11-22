@@ -1,6 +1,12 @@
 Name Double Barrelled Shotgun
 ShortName doubleBarrelledShotgun
 //The ammo this gun uses (shortName)
+Ammo w1200Ammo
+Ammo w1200IncendiaryAmmo
+Ammo r870Ammo
+Ammo m1014Ammo
+Ammo spasAmmo
+Ammo m1887Ammo
 Ammo 12gaugeShell
 Ammo 12gaugeShellIncendiary
 Icon DoubleBarrelledShotgun
@@ -11,11 +17,11 @@ ReloadTime 52
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 12
 //Damage in half hearts
-Damage 6
+Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 30
+Accuracy 75
 //Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 6
+NumBullets 1
 //For guns in which the magazine is integrated
 LoadIntoGun 2
 //Time in ticks between rounds
@@ -49,3 +55,5 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 //Paintjob FlareGun_Red FlareGun_Red red 1
+//Description - note the ammo type
+Description Ammo Type : Shotgun

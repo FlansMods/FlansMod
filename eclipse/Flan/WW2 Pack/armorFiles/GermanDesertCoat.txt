@@ -1,6 +1,5 @@
 Name German WW2 Desert Coat
 ShortName germanDesertCoat
-ItemID 23578
 Icon GermanDesertCoat
 Colour 255 255 255
 Type Body

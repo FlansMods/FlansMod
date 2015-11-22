@@ -25,7 +25,7 @@ public class ItemAAGun extends Item implements IFlanItem
 {
     public static final ArrayList<String> names = new ArrayList<String>();
 	public AAGunType type;
-    
+
 	public ItemAAGun(AAGunType type1)
 	{
 		maxStackSize = 1;
@@ -35,7 +35,7 @@ public class ItemAAGun extends Item implements IFlanItem
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
-    @Override
+	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
     	//Raytracing
@@ -70,11 +70,11 @@ public class ItemAAGun extends Item implements IFlanItem
 		return itemstack;
 	}
 	
-    public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
-    {
-    	Entity entity = new EntityAAGun(world, type, x, y, z, null);
-    	if(!world.isRemote)
-        {
+	public Entity spawnAAGun(World world, double x, double y, double z, ItemStack stack)
+	{
+		Entity entity = new EntityAAGun(world, type, x, y, z, null);
+		if(!world.isRemote)
+		{
 			world.spawnEntityInWorld(entity);
         }
     	return entity;
@@ -86,6 +86,7 @@ public class ItemAAGun extends Item implements IFlanItem
     {
     	return type.colour;
     }
+
 	
 	@Override
 	public InfoType getInfoType() 

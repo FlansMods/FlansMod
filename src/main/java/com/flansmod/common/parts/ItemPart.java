@@ -22,7 +22,7 @@ public class ItemPart extends Item implements IFlanItem
 		super();
 		type = type1;
 		setMaxStackSize(type.stackSize);
-		if (type.category == 9)
+		if (type.category == EnumPartCategory.FUEL)
 		{
 			setMaxDamage(type.fuel);
 			setHasSubtypes(true);
@@ -36,13 +36,13 @@ public class ItemPart extends Item implements IFlanItem
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
-		if(type.category == 9)
+		if(type.category == EnumPartCategory.FUEL)
 		{
 			par3List.add("Fuel Stored: " + (type.fuel - par1ItemStack.getItemDamage()) + " / " + type.fuel);
 		}
 	}
 
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {

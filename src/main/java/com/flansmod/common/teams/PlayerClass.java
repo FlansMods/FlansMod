@@ -93,7 +93,7 @@ public class PlayerClass extends InfoType
 	@Override
 	protected void postRead(TypeFile file) 
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		onWorldLoad(null);
 	}
 	

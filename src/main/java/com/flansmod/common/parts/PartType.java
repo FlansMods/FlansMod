@@ -13,7 +13,7 @@ import com.flansmod.common.types.TypeFile;
 
 public class PartType extends InfoType {
 	/** Category (TODO : Replace with Enum) */
-	public int category;
+	public EnumPartCategory category;
 	/** Max stack size of item */
 	public int stackSize;
 	/** (Engine) Multiplier applied to the thrust of the driveable */
@@ -24,24 +24,41 @@ public class PartType extends InfoType {
 	public int fuel = 0;
 	/** The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot */
 	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
+	/** Let's just say you probably don't want to use this to power a mecha... */
+	public boolean isAIChip = false;
+	/** If set to false, then this engine will definitely not be the default for creatively spawned vehicles */
+	public boolean canBeDefaultEngine = true;
 	
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
+	
+	//------- RedstoneFlux -------
+	/** If true, then this engine will draw from RedstoneFlux power source items such as power cubes. Otherwise it will draw from Flan's Mod fuel items */
+	public boolean useRFPower = false;
+	/** The power draw rate for RF (per tick) */
+	public int RFDrawRate = 1;
+	//-----------------------------
 
 	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
 	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
 	/** The list of all PartTypes */
 	public static List<PartType> parts = new ArrayList<PartType>();
-
+	/** Hash map sorted */
+	public static HashMap<EnumPartCategory, ArrayList<PartType>> partsByCategory = new HashMap<EnumPartCategory, ArrayList<PartType>>();
+	static
+	{
+		for(EnumPartCategory cat : EnumPartCategory.values())
+			partsByCategory.put(cat, new ArrayList<PartType>());
+	}
+	
 	public PartType(TypeFile file) {
 		super(file);
 		parts.add(this);
 	}
 
 	@Override
-	public void read(TypeFile file) 
+	public void postRead(TypeFile file) 
 	{
-		super.read(file);
-		if (category == 2)
+		if(category == EnumPartCategory.ENGINE && !useRFPower && canBeDefaultEngine)
 		{
 			for(EnumType type : worksWith)
 			{
@@ -55,6 +72,7 @@ public class PartType extends InfoType {
 				else defaultEngines.put(type, this);
 			}
 		}
+		partsByCategory.get(category).add(this);
 	}
 
 	@Override
@@ -63,18 +81,18 @@ public class PartType extends InfoType {
 		super.read(split, file);
 		try 
 		{
-			if (split[0].equals("Category"))
+			if(split[0].equals("Category"))
 				category = getCategory(split[1]);
-			if (split[0].equals("StackSize"))
+			else if(split[0].equals("StackSize"))
 				stackSize = Integer.parseInt(split[1]);
-			if (split[0].equals("EngineSpeed"))
+			else if(split[0].equals("EngineSpeed"))
 				engineSpeed = Float.parseFloat(split[1]);
-			if (split[0].equals("FuelConsumption"))
+			else if(split[0].equals("FuelConsumption"))
 				fuelConsumption = Float.parseFloat(split[1]);
-			if (split[0].equals("Fuel"))
+			else if(split[0].equals("Fuel"))
 				fuel = Integer.parseInt(split[1]);
 			//Recipe
-			if(split[0].equals("PartBoxRecipe"))
+			else if(split[0].equals("PartBoxRecipe"))
 			{
 				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
 				for(int i = 0; i < (split.length - 2) / 2; i++)
@@ -87,7 +105,7 @@ public class PartType extends InfoType {
 				}
 				partBoxRecipe.addAll(Arrays.asList(stacks));
 			}
-			if(split[0].equals("WorksWith"))
+			else if(split[0].equals("WorksWith"))
 			{
 				worksWith = new ArrayList<EnumType>();
 				for(int i = 0; i < split.length - 1; i++)
@@ -95,6 +113,18 @@ public class PartType extends InfoType {
 					worksWith.add(EnumType.get(split[i + 1]));
 				}
 			}
+			
+			//------- RedstoneFlux -------
+			else if(split[0].equals("UseRF") || split[0].equals("UseRFPower"))
+				useRFPower = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("RFDrawRate"))
+				RFDrawRate = Integer.parseInt(split[1]);
+			//-----------------------------
+			
+			else if(split[0].equals("IsAIChip"))
+				isAIChip = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("CanBeDefaultEngine"))
+				canBeDefaultEngine = Boolean.parseBoolean(split[1]);
 		} 
 		catch (Exception e) 
 		{
@@ -116,29 +146,29 @@ public class PartType extends InfoType {
 		return null;
 	}
 
-	private int getCategory(String s) {
+	private EnumPartCategory getCategory(String s) {
 		if (s.equals("Cockpit"))
-			return 0;
+			return EnumPartCategory.COCKPIT;
 		if (s.equals("Wing"))
-			return 1;
+			return EnumPartCategory.WING;
 		if (s.equals("Engine"))
-			return 2;
+			return EnumPartCategory.ENGINE;
 		if (s.equals("Propeller"))
-			return 3;
+			return EnumPartCategory.PROPELLER;
 		if (s.equals("Bay"))
-			return 4;
+			return EnumPartCategory.BAY;
 		if (s.equals("Tail"))
-			return 5;
+			return EnumPartCategory.TAIL;
 		if (s.equals("Wheel"))
-			return 6;
+			return EnumPartCategory.WHEEL;
 		if (s.equals("Chassis"))
-			return 7;
+			return EnumPartCategory.CHASSIS;
 		if (s.equals("Turret"))
-			return 8;
+			return EnumPartCategory.TURRET;
 		if (s.equals("Fuel"))
-			return 9;
+			return EnumPartCategory.FUEL;
 		if (s.equals("Misc"))
-			return 10;
-		return 10;
+			return EnumPartCategory.MISC;
+		return EnumPartCategory.MISC;
 	}
 }
