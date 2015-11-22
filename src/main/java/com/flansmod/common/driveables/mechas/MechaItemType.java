@@ -2,9 +2,9 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.common.FlansMod;

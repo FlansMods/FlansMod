@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
@@ -100,9 +100,8 @@ public class PacketDriveableControl extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		EntityDriveable driveable = null;
-		for(int i = 0; i < playerEntity.worldObj.loadedEntityList.size(); i++)
+		for(Object obj : playerEntity.worldObj.loadedEntityList)
 		{
-			Object obj = playerEntity.worldObj.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;

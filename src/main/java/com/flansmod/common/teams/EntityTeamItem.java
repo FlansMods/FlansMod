@@ -9,10 +9,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.common.PlayerHandler;
 
@@ -21,11 +21,10 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	public TileEntitySpawner spawner;
 	public double angle;
 	public int xCoord, yCoord, zCoord;
-	private int age;
 	
 	public EntityTeamItem(TileEntitySpawner te, int i) 
 	{
-		super(te.getWorld(), te.getPos().getX() + 0.5F, te.getPos().getY() + 0.5F, te.getPos().getZ() + 0.5F, te.stacksToSpawn.get(i).copy());
+		super(te.getWorldObj(), te.xCoord + 0.5F, te.yCoord + 0.5F, te.zCoord + 0.5F, te.stacksToSpawn.get(i).copy());
 		te.itemEntities.add(this);
 		angle = i * Math.PI * 2 / te.stacksToSpawn.size();
         motionX = motionY = motionZ = 0D;
@@ -39,7 +38,7 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 	}
 	
 	@Override
-	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
 	{
 		
 	}
@@ -121,9 +120,9 @@ public class EntityTeamItem extends EntityItem implements IEntityAdditionalSpawn
 		}
 		else
 		{
-			data.writeInt(spawner.getPos().getX());
-			data.writeInt(spawner.getPos().getY());
-			data.writeInt(spawner.getPos().getZ());
+			data.writeInt(spawner.xCoord);
+			data.writeInt(spawner.yCoord);
+			data.writeInt(spawner.zCoord);
 		}
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();

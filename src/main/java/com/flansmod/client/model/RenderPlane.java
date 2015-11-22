@@ -3,9 +3,7 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -21,16 +19,13 @@ import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
-import com.flansmod.common.guns.GrenadeType;
-import com.flansmod.common.guns.ItemGrenade;
 
 public class RenderPlane extends Render implements IItemRenderer 
 {	
-	public RenderPlane(RenderManager renderManager) 
-	{
-		super(renderManager);
-		shadowSize = 0.5F;
-	}
+    public RenderPlane()
+    {
+        shadowSize = 0.5F;
+    }
 
     public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
     {
@@ -93,22 +88,22 @@ public class RenderPlane extends Render implements IItemRenderer
 				
 				GL11.glColor4f(1F, entityPlane.isPartIntact(part.type) ? 1F : 0F, 0F, 0.3F);
 				
-				renderOffsetAABB(new AxisAlignedBB(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)), 0, 0, 0);
+				renderAABB(AxisAlignedBB.getBoundingBox(part.box.x, part.box.y, part.box.z, (part.box.x + part.box.w), (part.box.y + part.box.h), (part.box.z + part.box.d)));
 			}
 			GL11.glColor4f(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
 			{				
-				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
+				renderAABB(AxisAlignedBB.getBoundingBox(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F));
 			}
 			
 			//Render shoot points
 			GL11.glColor4f(1F, 0F, 1F, 0.3F);
 			for(DriveablePosition point : type.shootPointsPrimary)			
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
 			for(DriveablePosition point : type.shootPointsSecondary)			
-				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
+				renderAABB(AxisAlignedBB.getBoundingBox(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F));
 			
 			//GL11.glColor4f(0F, 0F, 0F, 0.3F);	
 			//if(type.bombPosition != null)
@@ -164,34 +159,27 @@ public class RenderPlane extends Render implements IItemRenderer
 				float scale = 0.5F;
 				switch(type)
 				{
-				case INVENTORY:
-				{
-					GL11.glRotatef(180F, 0F, 1F, 0F);
-					scale = 1.0F;
-					break;
-				}
 				case ENTITY:
 				{
 					scale = 1.5F;
-					//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+					GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
 					break;
 				}
 				case EQUIPPED:
 				{
-					GL11.glRotatef(0F, 0F, 0F, 1F);
-					GL11.glRotatef(270F, 1F, 0F, 0F);
-					GL11.glRotatef(270F, 0F, 1F, 0F);
-					GL11.glTranslatef(0F, 0.25F, 0F);
-					scale = 0.5F;
+					GL11.glRotatef(15F, 0F, 0F, 1F);
+					GL11.glRotatef(15F, 1F, 0F, 0F);
+					GL11.glRotatef(90F, 0F, 1F, 0F);
+					GL11.glTranslatef(0F, 0.2F, 0.4F);
+					scale = 1F;
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					//GL11.glRotatef(25F, 0F, 0F, 1F); 
-					GL11.glRotatef(45F, 0F, 1F, 0F);
-					GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
+					GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.15F, 0.45F, -0.6F);
 					GL11.glRotatef(180F, 0F, 1F, 0F);
-					scale = 1F;
 					break;
 				}
 				default : break;

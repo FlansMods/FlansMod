@@ -17,7 +17,8 @@ public class MovingSoundDriveable extends MovingSound
 	    super(sound);
 	    this.driveable = driveable;
 	    repeat = true;
-	    repeatDelay = 0;
+	    //Repeat delay?
+	    field_147665_h = 0;
 	}
 	
 	/**

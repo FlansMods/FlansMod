@@ -1,31 +1,24 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.CraftingInstance;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockArmourBox extends Block implements ITextureHandler
+public class BlockArmourBox extends Block 
 {
 	public ArmourBoxType type;
 	
@@ -34,7 +27,7 @@ public class BlockArmourBox extends Block implements ITextureHandler
 		super(Material.wood);
 		type = t;
 
-		setUnlocalizedName(type.shortName);
+		setBlockName(type.shortName);
 		setHardness(2F);
 	    setResistance(4F);
 	    GameRegistry.registerBlock(this, "armorBox." + type.shortName);
@@ -64,44 +57,40 @@ public class BlockArmourBox extends Block implements ITextureHandler
 			crafting.craft(inventory.player);
 		}
 	}
+	
+	@SideOnly(value = Side.CLIENT)
+	@Override
+	public IIcon getIcon(int side, int metadata)
+	{		
+		if (type == null)
+			return null;
+		
+		if (side == 1)
+		{
+			return type.top;
+		}
+		if (side == 0)
+		{
+			return type.bottom;
+		}
+		return type.side;
+	}
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister register)
+    {
+		type.top = register.registerIcon("FlansMod:" + type.topTexturePath);
+		type.side = register.registerIcon("FlansMod:" + type.sideTexturePath);
+		type.bottom = register.registerIcon("FlansMod:" + type.bottomTexturePath);
+    }
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9)
 	{
 		if(entityplayer.isSneaking())
 			return false;
-		entityplayer.openGui(FlansMod.INSTANCE, 11, world, pos.getX(), pos.getY(), pos.getZ());
+		entityplayer.openGui(FlansMod.INSTANCE, 11, world, i, j, k);
 		return true;
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public int getRenderType() 
-    {
-        return 100;
-    }
-	
-	@SideOnly(Side.CLIENT)
-    private TextureLoader textureLoader;
-	
-	@Override
-	public void loadTextures(TextureLoader loader) 
-	{
-        this.textureLoader = loader;
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.topTexturePath));
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.sideTexturePath));
-        loader.registerTexture(FlansModResourceHandler.getBlockTexture(type.bottomTexturePath));
-	}
-
-	@Override
-	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
-	{
-		ResourceLocation res = FlansModResourceHandler.getBlockTexture(type.sideTexturePath);
-		switch(facing)
-		{
-		case UP:   res = FlansModResourceHandler.getBlockTexture(type.topTexturePath); break;
-		case DOWN: res = FlansModResourceHandler.getBlockTexture(type.bottomTexturePath); break;
-		default:
-		}
-		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
 	}
 }

@@ -3,9 +3,9 @@ package com.flansmod.common.tools;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -13,10 +13,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -25,11 +25,9 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.types.IFlanItem;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class ItemTool extends ItemFood implements IFlanItem
+public class ItemTool extends ItemFood 
 {
 	public ToolType type;
 
@@ -65,6 +63,13 @@ public class ItemTool extends ItemFood implements IFlanItem
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
+    }
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override
@@ -124,7 +129,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
 	        double length = -5D;
-	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
 	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        
 	        if(world.isRemote && FlansMod.DEBUG)
@@ -174,21 +179,20 @@ public class ItemTool extends ItemFood implements IFlanItem
 		        EntityLivingBase hitLiving = entityplayer;
 		        
 				//Iterate over entities within range of the ray
-				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
+				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
 						Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
 						Math.max(posVec.xCoord, lookVec.xCoord), Math.max(posVec.yCoord, lookVec.yCoord), Math.max(posVec.zCoord, lookVec.zCoord)));
-				for (int l = 0; l < list.size(); l++)
-				{
-					if(!(list.get(l) instanceof EntityLivingBase))
+				for (Object aList : list) {
+					if (!(aList instanceof EntityLivingBase))
 						continue;
-					EntityLivingBase checkEntity = (EntityLivingBase)list.get(l);
+					EntityLivingBase checkEntity = (EntityLivingBase) aList;
 					//Don't check the player using it
-					if(checkEntity == entityplayer)
+					if (checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
-					MovingObjectPosition hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
+					MovingObjectPosition hit = checkEntity.boundingBox.calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
-					if(hit != null)
+					if (hit != null)
 						hitLiving = checkEntity;
 				}
 		        //Now heal whatever it was we just decided to heal
@@ -217,11 +221,5 @@ public class ItemTool extends ItemFood implements IFlanItem
 	public String toString()
 	{
 		return type == null ? getUnlocalizedName() : type.name;
-	}
-
-	@Override
-	public InfoType getInfoType() 
-	{
-		return type;
 	}
 }

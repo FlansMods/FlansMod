@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.common.FlansMod;
@@ -43,6 +42,8 @@ public class AttachmentType extends InfoType implements IScope
 	public float bulletSpeedMultiplier = 1F;
 	/** This modifies the reload time, which is then rounded down to the nearest tick */
 	public float reloadTimeMultiplier = 1F;
+	/** If set to anything other than null, then this attachment will override the weapon's default firing mode */
+	public EnumFireMode modeOverride = null;
 	
 	//Scope variables (These variables only come into play for scope attachments)
 	/** The zoomLevel of this scope */
@@ -78,44 +79,46 @@ public class AttachmentType extends InfoType implements IScope
 		{
 			if(split[0].equals("AttachmentType"))
 				type = EnumAttachmentType.get(split[1]);
-			if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
+			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAttachment.class);
-			if(split[0].equals("ModelScale"))
+			else if(split[0].equals("ModelScale"))
 				modelScale = Float.parseFloat(split[1]);
-			if(split[0].equals("Texture"))
+			else if(split[0].equals("Texture"))
 				texture = split[1];
 			
-			if(split[0].equals("Silencer"))
+			else if(split[0].equals("Silencer"))
 				silencer = Boolean.parseBoolean(split[1].toLowerCase());
 			
 			//Flashlight settings
-			if(split[0].equals("Flashlight"))
+			else if(split[0].equals("Flashlight"))
 				flashlight = Boolean.parseBoolean(split[1].toLowerCase());
-			if(split[0].equals("FlashlightRange"))
+			else if(split[0].equals("FlashlightRange"))
 				flashlightRange = Float.parseFloat(split[1]);
-			if(split[0].equals("FlashlightStrength"))
+			else if(split[0].equals("FlashlightStrength"))
 				flashlightStrength = Integer.parseInt(split[1]);
-			
+			//Mode override
+			else if(split[0].equals("ModeOverride"))
+				modeOverride = EnumFireMode.getFireMode(split[1]);
 			
 			//Multipliers
-			if(split[0].equals("MeleeDamageMultiplier"))
+			else if(split[0].equals("MeleeDamageMultiplier"))
 				meleeDamageMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("DamageMultiplier"))
+			else if(split[0].equals("DamageMultiplier"))
 				damageMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("SpreadMultiplier"))
+			else if(split[0].equals("SpreadMultiplier"))
 				spreadMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("RecoilMultiplier"))
+			else if(split[0].equals("RecoilMultiplier"))
 				recoilMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("BulletSpeedMultiplier"))
+			else if(split[0].equals("BulletSpeedMultiplier"))
 				bulletSpeedMultiplier = Float.parseFloat(split[1]);
-			if(split[0].equals("ReloadTimeMultiplier"))
+			else if(split[0].equals("ReloadTimeMultiplier"))
 				reloadTimeMultiplier = Float.parseFloat(split[1]);
 			//Scope Variables
-			if(split[0].equals("ZoomLevel"))
+			else if(split[0].equals("ZoomLevel"))
 				zoomLevel = Float.parseFloat(split[1]);
-			if(split[0].equals("FOVZoomLevel"))
+			else if(split[0].equals("FOVZoomLevel"))
 				FOVZoomLevel = Float.parseFloat(split[1]);
-			if (split[0].equals("ZoomOverlay"))
+			else if (split[0].equals("ZoomOverlay"))
 			{
 				hasScopeOverlay = true;
 				if (split[1].equals("None"))

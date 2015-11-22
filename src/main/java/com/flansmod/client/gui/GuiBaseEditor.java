@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class GuiBaseEditor extends GuiScreen 
@@ -42,7 +41,7 @@ public class GuiBaseEditor extends GuiScreen
 		this.buttonList.clear();
 		//Setup the text entry field
 		Keyboard.enableRepeatEvents(true);
-		nameEntryField = new GuiTextField(0, this.fontRendererObj, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRendererObj.FONT_HEIGHT);
+		nameEntryField = new GuiTextField(this.fontRendererObj, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRendererObj.FONT_HEIGHT);
 		nameEntryField.setMaxStringLength(60);
 		nameEntryField.setEnableBackgroundDrawing(true);
 		nameEntryField.setVisible(true);
@@ -78,7 +77,7 @@ public class GuiBaseEditor extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -139,22 +138,14 @@ public class GuiBaseEditor extends GuiScreen
 	@Override
     protected void mouseClicked(int i, int j, int k)
     {
-		try
-		{
-			super.mouseClicked(i, j, k);
-		}
-		catch(IOException e) {}
+		super.mouseClicked(i, j, k);
 		nameEntryField.mouseClicked(i, j, k);
     }
 	
 	@Override
     protected void keyTyped(char c, int i)
     {
-		try
-		{
-			super.keyTyped(c, i);	
-		}
-		catch(IOException e) {}
+		super.keyTyped(c, i);			
 		nameEntryField.textboxKeyTyped(c, i);
     }
 	

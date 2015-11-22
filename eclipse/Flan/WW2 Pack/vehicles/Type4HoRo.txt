@@ -9,11 +9,11 @@ Texture HoRo
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.8
-MaxNegativeThrottle 0.4
+MaxThrottle 0.85
+MaxNegativeThrottle 0.5
 //Steering modifiers
-TurnLeftSpeed 1.4
-TurnRightSpeed 1.4
+TurnLeftSpeed 0.5
+TurnRightSpeed 0.5
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -36,7 +36,7 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 3 5 15 -1.5 1.5 -2 15
 RotatedDriverOffset 13 0 -8
-Passengers 1
+Passengers 0
 Passenger 1 10 28 0 turret -360 360 -15 60 type99 Type-99
 GunOrigin 1 10 24 0
 RotatedPassengerOffset 1 0 0 0
@@ -44,14 +44,14 @@ BarrelPosition 0 34 0
 //Secondary gun
 AddGun 8 34 8 turret type99
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 2
-ShellDelay 200
+ShootDelay 1
+ShellDelay 150
 //Sounds
-StartSound Engine
+StartSound TankIdle
 StartSoundLength 20
-EngineSound Engine
-EngineSoundLength 20
-ShootSoundPrimary TankShell
+EngineSound TankMove
+EngineSoundLength 75
+ShootSoundPrimary Tank2Shoot
 ShootSoundSecondary BrenShoot
 //Recipe
 //Each section of the plane may have many parts

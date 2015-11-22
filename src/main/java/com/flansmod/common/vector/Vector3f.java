@@ -84,7 +84,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 
 	public Vec3 toVec3()
 	{
-		return new Vec3(x, y, z);
+		return Vec3.createVectorHelper(x, y, z);
 	}
 
 	/* (non-Javadoc)

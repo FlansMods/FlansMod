@@ -13,9 +13,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
@@ -279,7 +277,7 @@ public class CommonProxy
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-		driveableStack.setTagCompound(tags);
+		driveableStack.stackTagCompound = tags;
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropPlayerItemWithRandomChoice(driveableStack, false);
 	}

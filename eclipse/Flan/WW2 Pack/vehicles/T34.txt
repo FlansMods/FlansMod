@@ -1,0 +1,70 @@
+//Naming
+Name T-34
+ShortName T34
+ItemID 89898
+//Visuals
+Icon T34
+Model ww2.T34
+Texture T34
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.75
+MaxNegativeThrottle 0.6
+//Steering modifiers
+TurnLeftSpeed 0.55
+TurnRightSpeed 0.55
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -32 -8 -18
+WheelPosition 1 -32 -8 18
+WheelPosition 2 32 -8 18
+WheelPosition 3 32 -8 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 20
+ShellSlots 5
+//Driver and passenger positions
+Driver 0 28 0 -360 360 -6 17
+RotatedDriverOffset -5 0 -2
+Passengers 0
+BarrelPosition 0 30 0
+//Secondary gun
+AddGun 8 34 8 turret dp28
+AllowAllAmmo False
+AddAmmo shell
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 60
+//Sounds
+StartSound TankIdle
+StartSoundLength 20
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank1Shoot
+ShootSoundSecondary DP28Shoot
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 tankTurret 1 vehicleSeat
+AddRecipeParts core 1 tankBody 1 vehicleSeat
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 green
+//Health and collision
+SetupPart core 500 -73 -8 -18 115 31 36
+SetupPart turret 400 -21 24 -19 42 17 42
+SetupPart leftTrack 250 -73 -10 -27 109 19 8
+SetupPart rightTrack 250 -73 -10 18 109 19 8
+BulletDetection 7

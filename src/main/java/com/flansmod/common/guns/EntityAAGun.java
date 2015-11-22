@@ -15,11 +15,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -68,8 +68,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public static final float targetAcquireInterval = 10;
 	
 	public int ticksSinceUsed = 0;
-	
-	private float yOffset;
 
 	public EntityAAGun(World world)
 	{
@@ -86,7 +84,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		this(world);
 		placer = p;
-		placerName = p.getName();
+		placerName = p.getCommandSenderName();
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -100,11 +98,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		setEntityBoundingBox(AxisAlignedBB.fromBounds(d - f, (d1 - yOffset) + height, d2 - f, d + f, (d1 - yOffset) + height + f1, d2 + f));
+		boundingBox.setBounds(d - f, (d1 - yOffset) + ySize, d2 - f, d + f, (d1 - yOffset) + ySize + f1, d2 + f);
 	}
 	
 	@Override
-    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
+    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
     {
 		sPosX = d;
 		sPosY = d1;
@@ -142,7 +140,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
 	{
-		return entity.getEntityBoundingBox();
+		return entity.boundingBox;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox()
+	{
+		return boundingBox;
 	}
 
 	@Override
@@ -199,7 +203,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double newY = y * cosPitch - z * sinPitch;
 		double newZ = -x * sinYaw + (y * sinPitch + z * cosPitch) * cosYaw;
 
-		return new Vec3(newX, newY, newZ);
+		return Vec3.createVectorHelper(newX, newY, newZ);
 	}
 
 	@Override
@@ -404,7 +408,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return null;
 		if(placer == null && placerName != null)
 			placer = worldObj.getPlayerEntityByName(placerName);
-		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
+		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
 			
@@ -415,7 +419,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer || candidateEntity.getName().equals(placerName))
+						if(candidateEntity == placer || candidateEntity.getCommandSenderName().equals(placerName))
 							continue;
 						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
@@ -500,7 +504,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if (ammo[i] != null)
 				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
-		nbttagcompound.setString("Placer", placer.getName());
+		nbttagcompound.setString("Placer", placer.getCommandSenderName());
 	}
 
 	@Override
@@ -516,6 +520,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			ammo[i] = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("Ammo " + i));
 		}
 		placerName = nbttagcompound.getString("Placer");
+	}
+
+	@Override
+	public float getShadowSize()
+	{
+		return 0.0F;
 	}
 
 	@Override

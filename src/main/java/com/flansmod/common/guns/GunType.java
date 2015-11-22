@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
@@ -20,7 +19,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
-import com.flansmod.common.vector.Vector3i;
 
 public class GunType extends InfoType implements IScope
 {
@@ -48,10 +46,12 @@ public class GunType extends InfoType implements IScope
 	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
 	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
 	public int numAmmoItemsInGun = 1;
-	/** The firing mode of the gun. Currently semi auto or full auto. Burst coming soon maybe */
+	/** The firing mode of the gun. One of semi-auto, full-auto, minigun or burst */
 	public EnumFireMode mode = EnumFireMode.FULLAUTO;
 	/** The number of bullets to fire per burst in burst mode */
 	public int numBurstRounds = 3;
+	/** The required speed for minigun mode guns to start firing */
+	public float minigunStartSpeed = 15F;
 	/** Whether this gun can be used underwater */
 	public boolean canShootUnderwater = true;
 	/** The amount of knockback to impact upon the player per shot */
@@ -222,6 +222,8 @@ public class GunType extends InfoType implements IScope
 				dropItemOnShoot = split[1];
 			else if(split[0].equals("NumBurstRounds"))
 				numBurstRounds = Integer.parseInt(split[1]);
+			else if(split[0].equals("MinigunStartSpeed"))
+				minigunStartSpeed = Float.parseFloat(split[1]);
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))
@@ -417,9 +419,9 @@ public class GunType extends InfoType implements IScope
 	private int getDyeDamageValue(String dyeName)
 	{
 		int damage = -1;
-		for(int i = 0; i < EnumDyeColor.values().length; i++)
+		for(int i = 0; i < ItemDye.field_150923_a.length; i++)
 		{
-			if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(dyeName))
+			if(ItemDye.field_150923_a[i].equals(dyeName))
 				damage = i;
 		}
 		if(damage == -1)
@@ -492,7 +494,7 @@ public class GunType extends InfoType implements IScope
 	{
 		checkForTags(gun);
 		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
-		NBTTagCompound attachmentTags = gun.getTagCompound().getCompoundTag("attachments");
+		NBTTagCompound attachmentTags = gun.stackTagCompound.getCompoundTag("attachments");
 		NBTTagList genericsList = attachmentTags.getTagList("generics", (byte)10); //TODO : Check this 10 is correct
 		for(int i = 0; i < numGenericAttachmentSlots; i++)
 		{
@@ -530,14 +532,14 @@ public class GunType extends InfoType implements IScope
 	public AttachmentType getAttachment(ItemStack gun, String name)
 	{
 		checkForTags(gun);
-		return AttachmentType.getFromNBT(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
+		return AttachmentType.getFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Generalised attachment ItemStack getter method */
 	public ItemStack getAttachmentItemStack(ItemStack gun, String name)
 	{
 		checkForTags(gun);
-		return ItemStack.loadItemStackFromNBT(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
+		return ItemStack.loadItemStackFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Method to check for null tags and assign default empty tags in that case */
@@ -546,10 +548,10 @@ public class GunType extends InfoType implements IScope
 		//If the gun has no tags, give it some
 		if(!gun.hasTagCompound())
 		{
-			gun.setTagCompound(new NBTTagCompound());
+			gun.stackTagCompound = new NBTTagCompound();
 		}
 		//If the gun has no attachment tags, give it some
-		if(!gun.getTagCompound().hasKey("attachments"))
+		if(!gun.stackTagCompound.hasKey("attachments"))
 		{
 			NBTTagCompound attachmentTags = new NBTTagCompound();
 			for(int i = 0; i < numGenericAttachmentSlots; i++)
@@ -559,7 +561,7 @@ public class GunType extends InfoType implements IScope
 			attachmentTags.setTag("stock", new NBTTagCompound());
 			attachmentTags.setTag("grip", new NBTTagCompound());
 			
-			gun.getTagCompound().setTag("attachments", attachmentTags);
+			gun.stackTagCompound.setTag("attachments", attachmentTags);
 		}
 	}
 	
@@ -627,6 +629,17 @@ public class GunType extends InfoType implements IScope
 			stackReloadTime *= attachment.reloadTimeMultiplier;
 		}
 		return stackReloadTime;
+	}
+	
+	/** Get the firing mode of a specific gun, taking into account attachments */
+	public EnumFireMode getFireMode(ItemStack stack)
+	{
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			if(attachment.modeOverride != null)
+				return attachment.modeOverride;
+		}
+		return mode;
 	}
 
 	/** Static String to GunType method */

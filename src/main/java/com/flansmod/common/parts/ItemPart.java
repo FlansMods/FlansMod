@@ -2,12 +2,13 @@ package com.flansmod.common.parts;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
@@ -28,7 +29,7 @@ public class ItemPart extends Item implements IFlanItem
 			setHasSubtypes(true);
 		}
 		type.item = this;
-		setUnlocalizedName("FlansMod:" + type.iconPath);
+		setTextureName("FlansMod:" + type.iconPath);
 		setCreativeTab(FlansMod.tabFlanParts);
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
@@ -47,6 +48,13 @@ public class ItemPart extends Item implements IFlanItem
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override

@@ -9,23 +9,19 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.FMLModContainer;
-import net.minecraftforge.fml.common.MetadataCollection;
-import net.minecraftforge.fml.common.discovery.ContainerType;
-import net.minecraftforge.fml.common.discovery.ModCandidate;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLModContainer;
+import cpw.mods.fml.common.MetadataCollection;
+import cpw.mods.fml.common.discovery.ContainerType;
+import cpw.mods.fml.common.discovery.ModCandidate;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -54,10 +50,6 @@ import com.flansmod.client.model.RenderNull;
 import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.RenderBlock;
-import com.flansmod.client.renderhack.RenderRegistry;
-import com.flansmod.client.renderhack.RenderSpawner;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
@@ -103,48 +95,37 @@ public class ClientProxy extends CommonProxy
 	
 	/** The file locations of the content packs, used for loading */
 	public List<File> contentPacks;
-	
-	private FlansModClient flansModClient;
 
 	@Override
 	public void load()
 	{
-		flansModClient = new FlansModClient();
-		flansModClient.load();
+		new FlansModClient().load();
 		gunRenderer = new RenderGun();
-		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
-		planeRenderer = new RenderPlane(Minecraft.getMinecraft().getRenderManager());
-		vehicleRenderer = new RenderVehicle(Minecraft.getMinecraft().getRenderManager());
-		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
+		grenadeRenderer = new RenderGrenade();
+		planeRenderer = new RenderPlane();
+		vehicleRenderer = new RenderVehicle();
+		mechaRenderer = new RenderMecha();
 		
 		//Register custom item renderers
 		for(GunType gunType : GunType.guns.values())
-			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);		
+			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);
+		
 		for(GrenadeType grenadeType : GrenadeType.grenades)
-			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);		
+			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);
+		
 		for(PlaneType planeType : PlaneType.types)
-			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);		
+			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);
+		
 		for(VehicleType vehicleType : VehicleType.types)
-			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
+			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);
+		
 		for(MechaType mechaType : MechaType.types)
 			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
-		
-        RenderRegistry.registerBlockHandler(new RenderBlock(FlansMod.workbench.getRenderType()));
-        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.workbench);
-        
-		for(GunBoxType gunBoxType : GunBoxType.gunBoxMap.values())
-			RenderRegistry.registerTextureHandler((ITextureHandler)gunBoxType.block);
-		for(ArmourBoxType armourBoxType : ArmourBoxType.boxes.values())
-			RenderRegistry.registerTextureHandler((ITextureHandler)armourBoxType.block);
-		
-        RenderRegistry.registerBlockHandler(new RenderSpawner(FlansMod.spawner.getRenderType()));
-        RenderRegistry.registerTextureHandler((ITextureHandler)FlansMod.spawner);
-		
 		
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		new TickHandlerClient();
 	}
-		
+	
 	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */
 	@Override
 	public void forceReload()
@@ -192,23 +173,21 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers()
 	{		
-		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull(rm));		
-		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha(rm));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade());
+		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane());
+		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle());
+		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull());		
+		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG());
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha());
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}
@@ -264,13 +243,13 @@ public class ClientProxy extends CommonProxy
 		case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
 		case 1: return new GuiDriveableRepair(player);
 		case 2: return new GuiGunModTable(player.inventory, world);
-		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
+		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlock(x, y, z)).type);
 		case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
 		case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
 		case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
 		case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
 		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
-		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
+		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlock(x, y, z)).type);
 		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
 		}
 		return null;

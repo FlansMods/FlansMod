@@ -1,0 +1,11 @@
+Name Exoskeleton Legs
+ShortName exoskeletonLegs
+Icon ExoskeletonLegs
+Colour 255 255 255
+Type Legs
+Model mw.ExoskeletonLegs
+Defence 0.2
+ArmourTexture Exoskeleton
+MoveSpeedModifier 2.0
+KnockbackModifier 0.1
+ModelScale 0.25

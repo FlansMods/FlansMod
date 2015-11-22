@@ -7,12 +7,12 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.IIcon;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
@@ -24,6 +24,12 @@ public class GunBoxType extends InfoType
 	public String topTexturePath;
 	public String sideTexturePath;
 	public String bottomTexturePath;
+	@SideOnly(Side.CLIENT)
+	public IIcon top;
+	@SideOnly(Side.CLIENT)
+	public IIcon side;
+	@SideOnly(Side.CLIENT)
+	public IIcon bottom;
 	public int numGuns;
 	public int nextGun = -1;
 	/** */

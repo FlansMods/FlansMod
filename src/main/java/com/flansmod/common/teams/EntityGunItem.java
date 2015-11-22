@@ -8,17 +8,15 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
@@ -28,8 +26,6 @@ import com.flansmod.common.guns.ShootableType;
 public class EntityGunItem extends EntityItem {
 	
 	public List<ItemStack> ammoStacks;
-	
-	private int age;
 	
 	public EntityGunItem(World w)
 	{
@@ -92,7 +88,7 @@ public class EntityGunItem extends EntityItem {
         prevPosY = posY;
         prevPosZ = posZ;
         motionY -= 0.03999999910593033D;
-        pushOutOfBlocks(posX, (getBoundingBox().minY + getBoundingBox().maxY) / 2.0D, posZ); //PushOutOfBlocks
+        func_145771_j(posX, (boundingBox.minY + boundingBox.maxY) / 2.0D, posZ); //PushOutOfBlocks
         moveEntity(motionX, motionY, motionZ);
 
         float var2 = 0.98F;
@@ -100,7 +96,7 @@ public class EntityGunItem extends EntityItem {
         if (onGround)
         {
             var2 = 0.58800006F;
-            Block block = worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getBoundingBox().minY) - 1, MathHelper.floor_double(posZ))).getBlock();
+            Block block = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ));
 
             if (block != null)
             {

@@ -10,15 +10,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import net.minecraftforge.fml.relauncher.Side;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
@@ -37,12 +37,12 @@ public class PlayerHandler
 	}
 
 	@SubscribeEvent
-	public void onEntityHurt(LivingHurtEvent event) 
+	public void onEntityHurt(LivingAttackEvent event)
 	{
 		EntityLivingBase entity = event.entityLiving;
-		if(event instanceof LivingHurtEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
+		if(event instanceof LivingAttackEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
 		{
-			event.ammount = 0;
+			event.setCanceled(true);
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class PlayerHandler
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+		return getPlayerData(player.getCommandSenderName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
 	}
 	
 	public static PlayerData getPlayerData(String username)
@@ -94,7 +94,7 @@ public class PlayerHandler
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getName(), side);
+		return getPlayerData(player.getCommandSenderName(), side);
 	}
 	
 	public static PlayerData getPlayerData(String username, Side side)
@@ -118,7 +118,7 @@ public class PlayerHandler
 		if(event instanceof PlayerLoggedInEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getName();
+			String username = player.getCommandSenderName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
 			if(clientsToRemoveAfterThisRound.contains(username))
@@ -127,7 +127,7 @@ public class PlayerHandler
 		else if(event instanceof PlayerLoggedOutEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getName();
+			String username = player.getCommandSenderName();
 			if(TeamsManager.getInstance().currentRound == null)
 				serverSideData.remove(username);
 			else clientsToRemoveAfterThisRound.add(username);
@@ -135,7 +135,7 @@ public class PlayerHandler
 		else if(event instanceof PlayerRespawnEvent)
 		{
 			EntityPlayer player = event.player;
-			String username = player.getName();
+			String username = player.getCommandSenderName();
 			if(!serverSideData.containsKey(username))
 				serverSideData.put(username, new PlayerData(username));
 		}

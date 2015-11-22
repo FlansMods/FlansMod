@@ -9,8 +9,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -26,20 +26,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -49,11 +47,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.guns.raytracing.BlockHit;
 import com.flansmod.common.guns.raytracing.BulletHit;
-import com.flansmod.common.guns.raytracing.DriveableHit;
 import com.flansmod.common.guns.raytracing.EntityHit;
 import com.flansmod.common.guns.raytracing.EnumHitboxType;
 import com.flansmod.common.guns.raytracing.PlayerBulletHit;
@@ -67,7 +62,6 @@ import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
-import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
@@ -81,6 +75,8 @@ public class ItemGun extends Item implements IFlanItem
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
 	public int soundDelay;
+	
+	public HashMap<String, IIcon> icons = new HashMap<String, IIcon>();
 
 	public ItemGun(GunType gun)
 	{
@@ -105,22 +101,22 @@ public class ItemGun extends Item implements IFlanItem
 		//If the gun has no tags, give it some
 		if(!gun.hasTagCompound())
 		{
-			gun.setTagCompound(new NBTTagCompound());
+			gun.stackTagCompound = new NBTTagCompound();
 			return null;
 		}
 		//If the gun has no ammo tags, give it some
-		if(!gun.getTagCompound().hasKey("ammo"))
+		if(!gun.stackTagCompound.hasKey("ammo"))
 		{
 			NBTTagList ammoTagsList = new NBTTagList();
 			for(int i = 0; i < type.numAmmoItemsInGun; i++)
 			{
 				ammoTagsList.appendTag(new NBTTagCompound());
 			}
-			gun.getTagCompound().setTag("ammo", ammoTagsList);
+			gun.stackTagCompound.setTag("ammo", ammoTagsList);
 			return null;
 		}
 		//Take the list of ammo tags
-		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
+		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo", Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
 		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		return ItemStack.loadItemStackFromNBT(ammoTags);
@@ -132,20 +128,20 @@ public class ItemGun extends Item implements IFlanItem
 		//If the gun has no tags, give it some
 		if(!gun.hasTagCompound())
 		{
-			gun.setTagCompound(new NBTTagCompound());
+			gun.stackTagCompound = new NBTTagCompound();
 		}
 		//If the gun has no ammo tags, give it some
-		if(!gun.getTagCompound().hasKey("ammo"))
+		if(!gun.stackTagCompound.hasKey("ammo"))
 		{
 			NBTTagList ammoTagsList = new NBTTagList();
 			for(int i = 0; i < type.numAmmoItemsInGun; i++)
 			{
 				ammoTagsList.appendTag(new NBTTagCompound());
 			}
-			gun.getTagCompound().setTag("ammo", ammoTagsList);
+			gun.stackTagCompound.setTag("ammo", ammoTagsList);
 		}
 		//Take the list of ammo tags
-		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
+		NBTTagList ammoTagsList = gun.stackTagCompound.getTagList("ammo", Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
 		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
 		//Represent empty slots by nulltypes
@@ -251,7 +247,7 @@ public class ItemGun extends Item implements IFlanItem
 							if(offHandGunType.usableByPlayers)
 							{
 								//If we are using a burst mode gun, and there is burst left to be done, try to do it
-								if(offHandGunType.mode == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
+								if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
 								{
 									if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
 										player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
@@ -265,11 +261,11 @@ public class ItemGun extends Item implements IFlanItem
 										if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
 											player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
 									}
-									if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
+									if((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && !leftMouseHeld && lastLeftMouseHeld) //Full auto. Send released mouse packet
 									{
 										FlansMod.getPacketHandler().sendToServer(new PacketGunFire(true, false));
 									}
-									if((offHandGunType.mode == EnumFireMode.FULLAUTO || offHandGunType.mode == EnumFireMode.MINIGUN) && leftMouseHeld)
+									if((offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO || offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN) && leftMouseHeld)
 									{
 										if(clientSideShoot(player, offHandGunStack, offHandGunType, true))
 											player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, null);
@@ -285,7 +281,7 @@ public class ItemGun extends Item implements IFlanItem
 				//If we are using a burst mode gun, and there is burst left to be done, try to do it
 				if(type.usableByPlayers)
 				{
-					if(type.mode == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
+					if(type.getFireMode(itemstack) == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
 					{
 						if(clientSideShoot(player, itemstack, type, false))
 							player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
@@ -299,11 +295,11 @@ public class ItemGun extends Item implements IFlanItem
 							if(clientSideShoot(player, itemstack, type, false))
 								player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
 						}
-						if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
+						if((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && !rightMouseHeld && lastRightMouseHeld) //Full auto. Send released mouse packet
 						{
 							FlansMod.getPacketHandler().sendToServer(new PacketGunFire(false, false));
 						}
-						if((type.mode == EnumFireMode.FULLAUTO || type.mode == EnumFireMode.MINIGUN) && rightMouseHeld)
+						if((type.getFireMode(itemstack) == EnumFireMode.FULLAUTO || type.getFireMode(itemstack) == EnumFireMode.MINIGUN) && rightMouseHeld)
 						{
 							if(clientSideShoot(player, itemstack, type, false))
 								player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
@@ -392,7 +388,7 @@ public class ItemGun extends Item implements IFlanItem
 					return true;
 
 			}
-			if(gunType.mode == EnumFireMode.BURST)
+			if(gunType.getFireMode(stack) == EnumFireMode.BURST)
 			{
 				if(left)
 				{
@@ -434,26 +430,26 @@ public class ItemGun extends Item implements IFlanItem
 			}
 			
 			//Right hand gun
-			if(type.mode == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
+			if(type.getFireMode(itemstack) == EnumFireMode.BURST && data.burstRoundsRemainingRight > 0)
 			{
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 			}
 			if(data.isShootingRight)
 			{
 				//Shoot burst and full auto weapons
-				if(type.mode == EnumFireMode.FULLAUTO)
+				if(type.getFireMode(itemstack) == EnumFireMode.FULLAUTO)
 				{
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 				}
 				//Play looping sounds for minigun
 				if(type.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingRight)
 				{
-					data.loopedSoundDelay = type.loopedSoundLength;
+					data.loopedSoundDelay = data.shouldPlayWarmupSound ? type.warmupSoundLength : type.loopedSoundLength;
 					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? type.warmupSound : type.loopedSound, false);
 					data.shouldPlayWarmupSound = false;
 				}
 				//Minigun is sufficiently fast to shoot
-				if(type.mode == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
+				if(type.getFireMode(itemstack) == EnumFireMode.MINIGUN && data.minigunSpeed > type.minigunStartSpeed)
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(itemstack, type, world, player, false));
 			}
 			else
@@ -473,26 +469,26 @@ public class ItemGun extends Item implements IFlanItem
 				{
 					GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
 					
-					if(offHandGunType.mode == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
+					if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && data.burstRoundsRemainingLeft > 0)
 					{
 						player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 					}
 					if(data.isShootingLeft)
 					{
 						//Shoot full auto weapons
-						if(offHandGunType.mode == EnumFireMode.FULLAUTO)
+						if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.FULLAUTO)
 						{
 							player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 						}
 						//Play looping sounds for minigun
 						if(offHandGunType.useLoopingSounds && data.loopedSoundDelay <= 0 && data.minigunSpeed > 0.1F && !data.reloadingLeft)
 						{
-							data.loopedSoundDelay = offHandGunType.loopedSoundLength;
+							data.loopedSoundDelay = data.shouldPlayWarmupSound ? offHandGunType.warmupSoundLength : offHandGunType.loopedSoundLength;
 							PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, data.shouldPlayWarmupSound ? offHandGunType.warmupSound : offHandGunType.loopedSound, false);
 							data.shouldPlayWarmupSound = false;
 						}
 						//Minigun is sufficiently fast to shoot
-						if(offHandGunType.mode == EnumFireMode.MINIGUN && data.minigunSpeed > 15F)
+						if(offHandGunType.getFireMode(offHandGunStack) == EnumFireMode.MINIGUN && data.minigunSpeed > offHandGunType.minigunStartSpeed)
 							player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, offHandGunType, world, player, true));
 					}
 					else
@@ -604,7 +600,7 @@ public class ItemGun extends Item implements IFlanItem
 								//If we couldn't get a snapshot, use normal entity hitbox calculations
 								if(otherData == null || shouldDoNormalHitDetect)
 								{
-									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.getEntityBoundingBox().calculateIntercept(nextPosInWorldCoords.toVec3(), new Vec3(0F, 0F, 0F)) : player.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.boundingBox.calculateIntercept(nextPosInWorldCoords.toVec3(), Vec3.createVectorHelper(0F, 0F, 0F)) : player.boundingBox.calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
 										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);
@@ -627,7 +623,7 @@ public class ItemGun extends Item implements IFlanItem
 								Entity entity = (Entity)obj;
 								if(entity != player && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun))
 								{
-									MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									MovingObjectPosition mop = entity.boundingBox.calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
 										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);
@@ -732,12 +728,12 @@ public class ItemGun extends Item implements IFlanItem
 				ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
 				GunType gunType = ((ItemGun)offHandGunStack.getItem()).type;
 				data.isShootingLeft = isShooting;
-				if(gunType.mode == EnumFireMode.SEMIAUTO && isShooting)
+				if(gunType.getFireMode(offHandGunStack) == EnumFireMode.SEMIAUTO && isShooting)
 				{
 					data.isShootingLeft = false;
 					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
 				}
-				if(gunType.mode == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingLeft == 0)
+				if(gunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingLeft == 0)
 				{
 					data.isShootingLeft = false;
 					data.burstRoundsRemainingLeft = gunType.numBurstRounds;
@@ -747,12 +743,12 @@ public class ItemGun extends Item implements IFlanItem
 			else
 			{
 				data.isShootingRight = isShooting;
-				if(type.mode == EnumFireMode.SEMIAUTO && isShooting)
+				if(type.getFireMode(stack) == EnumFireMode.SEMIAUTO && isShooting)
 				{
 					data.isShootingRight = false;
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
 				}
-				if(type.mode == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingRight == 0)
+				if(type.getFireMode(stack) == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingRight == 0)
 				{
 					data.isShootingRight = false;
 					data.burstRoundsRemainingRight = type.numBurstRounds;
@@ -825,7 +821,7 @@ public class ItemGun extends Item implements IFlanItem
 				//Update the stack in the gun
 				setBulletItemStack(gunStack, bulletStack, bulletID);
 				
-				if(gunType.mode == EnumFireMode.BURST)
+				if(gunType.getFireMode(gunStack) == EnumFireMode.BURST)
 				{
 					if(left && data.burstRoundsRemainingLeft > 0)
 						data.burstRoundsRemainingLeft--;
@@ -981,26 +977,26 @@ public class ItemGun extends Item implements IFlanItem
 	        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
 	        double length = 5D;
-	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
 	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        MovingObjectPosition look = world.rayTraceBlocks(posVec, lookVec, true);
 	        
 	        //Result check
 			if (look != null && look.typeOfHit == MovingObjectType.BLOCK)
 			{
-				if (look.sideHit == EnumFacing.UP)
+				if (look.sideHit == 1)
 				{
 					int playerDir = MathHelper.floor_double(((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-					int i = look.getBlockPos().getX();
-					int j = look.getBlockPos().getY();
-					int k = look.getBlockPos().getZ();
+					int i = look.blockX;
+					int j = look.blockY;
+					int k = look.blockZ;
 					if (!world.isRemote)
 					{
-						if (world.getBlockState(new BlockPos(i, j, k)).getBlock() == Blocks.snow)
+						if (world.getBlock(i, j, k) == Blocks.snow)
 						{
 							j--;
 						}
-						if (isSolid(world, i, j, k) && (world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.air || world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.snow) && (world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.air) && (world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.air || world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.snow))
+						if (isSolid(world, i, j, k) && (world.getBlock(i, j + 1, k) == Blocks.air || world.getBlock(i, j + 1, k) == Blocks.snow) && (world.getBlock(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == Blocks.air) && (world.getBlock(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == Blocks.air || world.getBlock(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0)) == Blocks.snow))
 						{
 							for (EntityMG mg : EntityMG.mgs)
 							{
@@ -1027,12 +1023,9 @@ public class ItemGun extends Item implements IFlanItem
 		return itemstack;
 	}
 
-	private boolean isSolid(World world, int i, int j, int k)
-	{
-		Block block = world.getBlockState(new BlockPos(i, j, k)).getBlock();
-		if (block == null)
-			return false;
-		return block.getMaterial().isSolid() && block.isOpaqueCube();
+	private boolean isSolid(World world, int i, int j, int k) {
+		Block block = world.getBlock(i, j, k);
+		return block != null && block.getMaterial().isSolid() && block.isOpaqueCube();
 	}
 	
 	//Stop damage being done to entities when scoping etc.
@@ -1073,13 +1066,13 @@ public class ItemGun extends Item implements IFlanItem
 	}
 	
 	@Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
+    public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, EntityPlayer player)
     {
         return true;
     }
 
 	@Override
-    public boolean canHarvestBlock(Block p_150897_1_)
+    public boolean func_150897_b(Block p_150897_1_)
     {
         return false;
     }
@@ -1103,10 +1096,35 @@ public class ItemGun extends Item implements IFlanItem
     	GunType type = ((ItemGun)item).type;
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Paint", type.defaultPaintjob.iconName);
-    	gunStack.setTagCompound(tags);
+    	gunStack.stackTagCompound = tags;
         list.add(gunStack);
     }
-	    
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+        itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	for(Paintjob paintjob : type.paintjobs)
+    	{
+    		icons.put(paintjob.iconName, icon.registerIcon("FlansMod:" + paintjob.iconName));
+    		//itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
+    	}
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconIndex(ItemStack stack)
+    {
+    	//For backwards compatibility, give old guns the default paint job
+    	if(stack.stackTagCompound == null)
+    		stack.stackTagCompound = new NBTTagCompound();
+    	if(!stack.stackTagCompound.hasKey("Paint"))
+    		stack.stackTagCompound.setString("Paint", type.defaultPaintjob.iconName);
+
+        return icons.get(stack.stackTagCompound.getString("Paint"));
+    }
+    
     @Override
     public int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
@@ -1116,17 +1134,17 @@ public class ItemGun extends Item implements IFlanItem
     @Override
     public EnumAction getItemUseAction(ItemStack par1ItemStack)
     {
-        return EnumAction.BOW;
+        return EnumAction.bow;
     }
     
     @Override
     public Multimap getAttributeModifiers(ItemStack stack)
     {
        	Multimap map = super.getAttributeModifiers(stack);
-       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "KnockbackResist", type.knockbackModifier, 0));
-       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
+       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "KnockbackResist", type.knockbackModifier, 0));
+       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
         if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
-        	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", type.meleeDamage, 0));
+        	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", type.meleeDamage, 0));
        	return map;
     }
 
@@ -1135,10 +1153,4 @@ public class ItemGun extends Item implements IFlanItem
 	{
 		return type;
 	}
-	
-	@Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
-    {
-        return slotChanged;
-    }
 }

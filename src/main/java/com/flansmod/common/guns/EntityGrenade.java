@@ -5,7 +5,6 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
@@ -16,29 +15,22 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
-import com.flansmod.common.network.PacketMGMount;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
@@ -141,7 +133,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			//Send flak packet to spawn particles
 			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(posX, posY, posZ, 50, type.smokeParticleType), posX, posY, posZ, 30, dimension);
 			//
-			List list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
+			List list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox.expand(type.smokeRadius, type.smokeRadius, type.smokeRadius));
 			for(Object obj : list)
 			{
 				EntityLivingBase entity = ((EntityLivingBase)obj);
@@ -180,7 +172,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(type.livingProximityTrigger > 0 || type.driveableProximityTrigger > 0)
 			{
 				float checkRadius = Math.max(type.livingProximityTrigger, type.driveableProximityTrigger);
-				List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(checkRadius, checkRadius, checkRadius));
+				List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(checkRadius, checkRadius, checkRadius));
 				for(Object obj : list)
 				{
 					if(obj == thrower && ticksExisted < 10)
@@ -210,7 +202,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		}
 
 		//If the block we were stuck to is gone, unstick
-		if(stuck && worldObj.isAirBlock(new BlockPos(stuckToX, stuckToY, stuckToZ)))
+		if(stuck && worldObj.isAirBlock(stuckToX, stuckToY, stuckToZ))
 			stuck = false;
 		
 		//Physics and motion (Don't move if stuck)
@@ -232,7 +224,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
 			{
 				//Get the blockID and block material
-				Block block = worldObj.getBlockState(hit.getBlockPos()).getBlock();
+				Block block = worldObj.getBlock(hit.blockX, hit.blockY, hit.blockZ);
 				Material mat = block.getMaterial();
 				
 				//If this grenade detonates on impact, do so
@@ -242,8 +234,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				//If we hit glass and can break it, do so
 				else if(type.breaksGlass && mat == Material.glass && TeamsManager.canBreakGlass)
 				{
-					worldObj.setBlockToAir(hit.getBlockPos());
-					FlansMod.proxy.playBlockBreakSound(hit.getBlockPos().getX(), hit.getBlockPos().getY(), hit.getBlockPos().getZ(), block);
+					worldObj.setBlockToAir(hit.blockX, hit.blockY, hit.blockZ);
+					FlansMod.proxy.playBlockBreakSound(hit.blockX, hit.blockY, hit.blockZ, block);
 				}
 				
 				//If this grenade does not penetrate blocks, hit the block instead
@@ -257,13 +249,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					Vector3f postHitMotVec = Vector3f.sub(motVec, preHitMotVec, null);
 					
 					//Reflect postHitMotVec based on side hit
-					EnumFacing sideHit = hit.sideHit;
+					int sideHit = hit.sideHit;
 					switch(sideHit)
 					{
-					case UP : case DOWN : postHitMotVec.setY(-postHitMotVec.getY()); break;
-					case EAST : case WEST : postHitMotVec.setX(-postHitMotVec.getX()); break;
-					case NORTH : case SOUTH : postHitMotVec.setZ(-postHitMotVec.getZ()); break;
-					//TODO : Check the compass directions are correct
+					case 0 : case 1 : postHitMotVec.setY(-postHitMotVec.getY()); break;
+					case 4 : case 5 : postHitMotVec.setX(-postHitMotVec.getX()); break;
+					case 2 : case 3 : postHitMotVec.setZ(-postHitMotVec.getZ()); break;
 					}
 					
 					//Calculate the time interval spent post reflection
@@ -309,19 +300,19 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-						case DOWN : axes.setAngles(yaw, 180F, 0F); break;
-						case UP : axes.setAngles(yaw, 0F, 0F); break;
-						case NORTH : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case SOUTH : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case WEST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case EAST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 0 : axes.setAngles(yaw, 180F, 0F); break;
+						case 1 : axes.setAngles(yaw, 0F, 0F); break;
+						case 2 : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 3 : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 4 : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 5 : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
 						}
-						
+
 						//Set the stuck flag on
 						stuck = true;
-						stuckToX = hit.getBlockPos().getX();
-						stuckToY = hit.getBlockPos().getY();
-						stuckToZ = hit.getBlockPos().getZ();
+						stuckToX = hit.blockX;
+						stuckToY = hit.blockY;
+						stuckToZ = hit.blockZ;
 					}
 				}
 			}
@@ -349,7 +340,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(type.damageVsLiving > 0 && !stuck)
 		{
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
-			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox());
+			List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
 			for(Object obj : list)
 			{
 				if(obj == thrower && ticksExisted < 10 || motVec.lengthSquared() < 0.01D)
@@ -393,9 +384,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
 	        if((thrower instanceof EntityPlayer))
-	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
-	        else 
-	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
@@ -410,9 +400,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						int x = MathHelper.floor_double(i + posX);
 						int y = MathHelper.floor_double(j + posY);
 						int z = MathHelper.floor_double(k + posZ);
-						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.air && rand.nextBoolean())
+						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlock(x, y, z) == Blocks.air && rand.nextBoolean())
 						{
-							worldObj.setBlockState(new BlockPos(x, y, z), new BlockState(Blocks.fire).getBaseState());
+							worldObj.setBlock(x, y, z, Blocks.fire, 0, 3);
 						}
 					}
 				}
@@ -420,14 +410,11 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		}
 		
 		//Make explosion particles
-		if(worldObj.isRemote)
+		for(int i = 0; i < type.explodeParticles; i++)
 		{
-			for(int i = 0; i < type.explodeParticles; i++)
-			{
-				worldObj.spawnParticle(FlansModClient.getParticleType(type.explodeParticleType), posX, posY, posZ, rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian());
-			}
+			worldObj.spawnParticle(type.explodeParticleType, posX, posY, posZ, rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian());
 		}
-			
+		
 		//Drop item upon detonation, after explosions and whatnot
 		if(!worldObj.isRemote && type.dropItemOnDetonate != null)
 		{
@@ -455,7 +442,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
 	{
 		
 	}
@@ -492,7 +479,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 			tags.setString("Type", type.shortName);
 			if(thrower != null)
-				tags.setString("Thrower", thrower.getName());
+				tags.setString("Thrower", thrower.getCommandSenderName());
 			tags.setFloat("RotationYaw", axes.getYaw());
 			tags.setFloat("RotationPitch", axes.getPitch());
 		}

@@ -71,15 +71,15 @@ public class ModelBiplane extends ModelPlane
         byte width = 20;
         byte boatDepth = 4;
         bodyModel[0].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
-        bodyModel[0].setPosition(0.0F, 0 + boatDepth, 0.0F);
+        bodyModel[0].setPosition(0.0F, boatDepth, 0.0F);
         bodyModel[1].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[1].setPosition(-length / 2 + 1, 0 + boatDepth, 0.0F);
+        bodyModel[1].setPosition(-length / 2 + 1, boatDepth, 0.0F);
         bodyModel[2].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[2].setPosition(length / 2 - 1, 0 + boatDepth, 0.0F);
+        bodyModel[2].setPosition(length / 2 - 1, boatDepth, 0.0F);
         bodyModel[3].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[3].setPosition(0.0F, 0 + boatDepth, -width / 2 + 1);
+        bodyModel[3].setPosition(0.0F, boatDepth, -width / 2 + 1);
         bodyModel[4].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[4].setPosition(0.0F, 0 + boatDepth, width / 2 - 1);
+        bodyModel[4].setPosition(0.0F, boatDepth, width / 2 - 1);
 		bodyModel[5].addBox(0F, 0F , 0F, 4, 4, 4, 0.0F);		//Propeller Centre
 		bodyModel[5].setPosition(-15F, -2F, -2F);
 

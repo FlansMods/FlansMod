@@ -2,7 +2,6 @@ package com.flansmod.client.model.zombie;
 
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.vector.Vector3f;
 
 public class ModelCombatKnife extends ModelGun 
 {

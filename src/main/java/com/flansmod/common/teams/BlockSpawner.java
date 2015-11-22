@@ -5,11 +5,7 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,30 +14,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.renderhack.ITextureHandler;
-import com.flansmod.client.renderhack.TextureLoader;
 import com.flansmod.common.FlansMod;
 
-public class BlockSpawner extends BlockContainer implements ITextureHandler
+public class BlockSpawner extends BlockContainer 
 {
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	public static boolean colouredPass = false;
+	
+	public IIcon[][] icons;
 	
 	public BlockSpawner(Material material) 
 	{
 		super(material);
 		setCreativeTab(FlansMod.tabFlanTeams);
-		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
 	}
 
     @Override
@@ -55,22 +47,18 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
     	}
     }
     
-    @SideOnly(Side.CLIENT)
-    public int getRenderType() 
+    @Override
+    public IIcon getIcon(int i, int j)
     {
-        return 101;
+    	if(j > 2)
+    		j = 2;
+    	return icons[colouredPass ? 1 : 0][j];
     }
     
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         return null;
-    }
-    
-    @Override
-    public boolean isFullCube()
-    {
-        return false;
     }
     
     @Override
@@ -80,18 +68,36 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
     }
     
     @Override
-    public boolean canPlaceBlockAt(World par1World, BlockPos pos)
+    public boolean renderAsNormalBlock()
     {
-        return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
+        return false;
+    }
+
+    @Override
+    public boolean getBlocksMovement(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
+    {
+        return true;
     }
     
     @Override
-    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
+    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
     {
+        return par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) || BlockFence.func_149825_a(par1World.getBlock(par2, par3 - 1, par4));
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    {
+        if (!par1World.isRemote)
+        {
+            if (par1World.getBlockMetadata(par2, par3, par4) != 1)
+            {
+            }
+        }
+    }
+    
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess access, int i, int j, int k)
     {
     	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.03125F, 1.0F);
     }
@@ -118,13 +124,13 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
 	}
 	
 	@Override
-	public int colorMultiplier(IBlockAccess access, BlockPos pos, int renderPass)
-	{		
+	public int colorMultiplier(IBlockAccess access, int x, int y, int z)
+	{
 		if(!colouredPass)
 			return 0xffffff;
 		try
 		{
-			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(pos);
+			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(x, y, z);
             int spawnerTeamID = spawner.getTeamID();
             Team spawnerTeam = FlansModClient.getTeam(spawnerTeamID);
             
@@ -151,7 +157,7 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
 	}
 	
     @Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
     {
     	if(world.isRemote)
     		return true;
@@ -159,9 +165,9 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
     	*/
-    	if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile()))
+    	if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
     	{
-    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(pos);
+    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(x, y, z);
     		ItemStack item = player.getCurrentEquippedItem();
     		if(item == null || item.getItem() == null)
     		{
@@ -181,63 +187,17 @@ public class BlockSpawner extends BlockContainer implements ITextureHandler
         return true;
     }
     
-    @Override
-    protected BlockState createBlockState()
-    {
-        return new BlockState(this, new IProperty[] {TYPE});
-    }
     
     @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
-    }
-    
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-    
-    @Override
-    public int damageDropped(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-
     @SideOnly(Side.CLIENT)
-    private TextureLoader textureLoader;
-    
-	public static ResourceLocation item1 = new ResourceLocation("flansmod", "blocks/spawner_item_1");
-	public static ResourceLocation item2 = new ResourceLocation("flansmod", "blocks/spawner_item_2");
-	public static ResourceLocation player1 = new ResourceLocation("flansmod", "blocks/spawner_player_1");
-	public static ResourceLocation player2 = new ResourceLocation("flansmod", "blocks/spawner_player_2");
-	public static ResourceLocation vehicle1 = new ResourceLocation("flansmod", "blocks/spawner_vehicle_1");
-	public static ResourceLocation vehicle2 = new ResourceLocation("flansmod", "blocks/spawner_vehicle_2");
-    
-	@Override
-	public void loadTextures(TextureLoader loader) 
-	{
-        this.textureLoader = loader;
-        loader.registerTexture(item1);
-        loader.registerTexture(item2);
-        loader.registerTexture(player1);
-        loader.registerTexture(player2);
-        loader.registerTexture(vehicle1);
-        loader.registerTexture(vehicle2);
-	}
-
-	@Override
-	public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) 
-	{
-		ResourceLocation res = item1;
-		switch(((Integer)state.getValue(TYPE)).intValue()) 
-		{ 
-		case 0: res = colouredPass ? item2 : item1; break; 
-		case 1: res = colouredPass ? player2 : player1; break; 
-		case 2: res = colouredPass ? vehicle2 : vehicle1; break; 
-		}
-
-		return textureLoader.getTextureMap().getAtlasSprite(res.toString());
-	}
+    public void registerBlockIcons(IIconRegister register)
+    {
+    	icons = new IIcon[2][3];
+    	for(int i = 0; i < 2; i++)
+    	{
+    		icons[i][0] = register.registerIcon("FlansMod:" + "spawner_item_" + (i + 1));
+    		icons[i][1] = register.registerIcon("FlansMod:" + "spawner_player_" + (i + 1));
+    		icons[i][2] = register.registerIcon("FlansMod:" + "spawner_vehicle_" + (i + 1));
+    	}
+    }
 }

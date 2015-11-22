@@ -3,6 +3,7 @@ package com.flansmod.client;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -13,9 +14,10 @@ import net.minecraft.world.World;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.BlockSpawner;
 
-public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer 
-{
-	/*
+public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer {
+
+	private RenderBlocks blockRenderer;
+	
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y,
 			double z, float f) 
@@ -57,12 +59,10 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
 		BlockSpawner.colouredPass = false;
 		
 	}
-	*/
 
-	@Override
-	public void renderTileEntityAt(TileEntity p_180535_1_, double posX,
-			double posZ, double p_180535_6_, float p_180535_8_, int p_180535_9_) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+	public void func_147496_a(World par1World)
+    {
+        blockRenderer = new RenderBlocks(par1World);
+    }
 }

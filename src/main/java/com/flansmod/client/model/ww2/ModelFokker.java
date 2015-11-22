@@ -51,19 +51,19 @@ public class ModelFokker extends ModelPlane
         byte width = 20;
         byte boatDepth = 4;
         bodyModel[0].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
-        bodyModel[0].setPosition(0.0F, 0 + boatDepth, 0.0F);
+        bodyModel[0].setPosition(0.0F, boatDepth, 0.0F);
 		
         bodyModel[1].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[1].setPosition(-length / 2 + 1, 0 + boatDepth - 4, 0.0F);
+        bodyModel[1].setPosition(-length / 2 + 1, boatDepth - 4, 0.0F);
 
         bodyModel[2].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[2].setPosition(length / 2 - 1, 0 + boatDepth - 4, 0.0F);
+        bodyModel[2].setPosition(length / 2 - 1, boatDepth - 4, 0.0F);
 
         bodyModel[3].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[3].setPosition(0.0F, 0 + boatDepth - 4, -width / 2 + 1);
+        bodyModel[3].setPosition(0.0F, boatDepth - 4, -width / 2 + 1);
 
         bodyModel[4].addBox(-length / 2 + 2, -sidePieceHeight - 1, -1F, length - 4, sidePieceHeight, 2, 0.0F);
-        bodyModel[4].setPosition(0.0F, 0 + boatDepth - 4, width / 2 - 1);
+        bodyModel[4].setPosition(0.0F, boatDepth - 4, width / 2 - 1);
 		
 	    bodyModel[0].rotateAngleX = 1.570796F;
         bodyModel[1].rotateAngleY = 4.712389F;
@@ -72,7 +72,7 @@ public class ModelFokker extends ModelPlane
 		
 		bodyModel[5].addBox(-length / 2, -width / 2 + 2, -3F, length, width - 4, 4, 0.0F);
 		bodyModel[5].rotateAngleX = 1.570796F;
-        bodyModel[5].setPosition(0.0F, 0 + boatDepth - 4, 0.0F);
+        bodyModel[5].setPosition(0.0F, boatDepth - 4, 0.0F);
 
 		//Front wheels with struts
 		bodyWheelModel = new ModelRendererTurbo[4];

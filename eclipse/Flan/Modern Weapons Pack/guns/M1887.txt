@@ -47,3 +47,4 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M1887_Black M1887_Black black 2
 Paintjob M1887_Jungle M1887_Jungle green 1 brown 1
+Paintjob M1887_Birch M1887_Birch white 1 yellow 1

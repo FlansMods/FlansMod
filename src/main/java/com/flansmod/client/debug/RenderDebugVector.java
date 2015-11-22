@@ -3,19 +3,12 @@ package com.flansmod.client.debug;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
 
-public class RenderDebugVector extends Render 
-{
-
-	public RenderDebugVector(RenderManager renderManager) 
-	{
-		super(renderManager);
-	}
+public class RenderDebugVector extends Render {
 
 	@Override
 	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 

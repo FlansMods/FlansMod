@@ -42,7 +42,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(5, new Byte((byte)0));
+		dataWatcher.addObject(2, (byte) 0);
 	}
 	
 	@Override
@@ -60,9 +60,9 @@ public class EntityFlag extends Entity implements ITeamObject {
 			if(ridingEntity instanceof EntityPlayerMP)
 			{
 				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
-				Team team = PlayerHandler.getPlayerData(player.getName()).team;
+				Team team = PlayerHandler.getPlayerData(player.getCommandSenderName()).team;
 				TeamsManager.getInstance();
-				TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
+				TeamsManager.messageAll("\u00a7f" + player.getCommandSenderName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
 			mountEntity(null);
 			
@@ -142,7 +142,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		dataWatcher.updateObject(5, (byte)newTeamID);
+		dataWatcher.updateObject(2, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
@@ -194,7 +194,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 
 	public int getTeamID()
 	{
-		return dataWatcher.getWatchableObjectByte(5);
+		return dataWatcher.getWatchableObjectByte(2);
 	}
 		
 	@Override

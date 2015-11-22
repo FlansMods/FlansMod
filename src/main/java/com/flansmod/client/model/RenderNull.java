@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
@@ -15,11 +14,10 @@ public class RenderNull extends Render
 {
 	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
 
-	public RenderNull(RenderManager renderManager) 
-	{
-		super(renderManager);
-		shadowSize = 0.5F;
-	}
+    public RenderNull()
+    {
+        shadowSize = 0.5F;
+    }
 
     public void func_157_a(Entity entity, double d, double d1, double d2, 
             float f, float f1)
@@ -40,7 +38,7 @@ public class RenderNull extends Render
 			//GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			GL11.glScalef(-1F, 1F, -1F);
-			renderOffsetAABB(new AxisAlignedBB(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), 0, 0, 0);
+			renderAABB(AxisAlignedBB.getBoundingBox(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F));
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_BLEND);

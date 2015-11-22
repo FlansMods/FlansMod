@@ -68,7 +68,7 @@ public class GametypeZombies extends Gametype
 		if(teamsManager.currentRound.teams[0].members.size() > 0)
 		{
 			EntityPlayer zombifiedPlayer = teamsManager.getPlayer(teamsManager.currentRound.teams[0].members.get(rand.nextInt(teamsManager.currentRound.teams[0].members.size())));
-			teamsManager.messageAll("\u00a74" + zombifiedPlayer.getName() + "\u00a7c was infected with the \u00a74zombie plague\u00a7c!");
+			teamsManager.messageAll("\u00a74" + zombifiedPlayer.getCommandSenderName() + "\u00a7c was infected with the \u00a74zombie plague\u00a7c!");
 			zombifiedPlayer.attackEntityFrom(DamageSource.generic, 1000000000F);
 		}
 	}
@@ -101,11 +101,8 @@ public class GametypeZombies extends Gametype
 	}
 
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) 
-	{ 
-		if(attackerTeam == victimTeam)
-			return friendlyFire;
-		return true;
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+		return attackerTeam != victimTeam || friendlyFire;
 	}
 
 	@Override
@@ -194,14 +191,11 @@ public class GametypeZombies extends Gametype
 		if(data.newTeam == Team.spectators)
 		{
 			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(1);
-			for(int j = 0; j < bases.size(); j++)
-			{
-				ITeamBase base = bases.get(j);
-				if(base.getMap() != teamsManager.currentRound.map)
+			for (ITeamBase base : bases) {
+				if (base.getMap() != teamsManager.currentRound.map)
 					continue;
-				for(int i = 0; i < base.getObjects().size(); i++)
-				{
-					if(base.getObjects().get(i).isSpawnPoint())
+				for (int i = 0; i < base.getObjects().size(); i++) {
+					if (base.getObjects().get(i).isSpawnPoint())
 						validSpawnPoints.add(base.getObjects().get(i));
 				}
 			}
@@ -211,14 +205,11 @@ public class GametypeZombies extends Gametype
 			for(int k = 2; k < 4; k++)
 			{
 				ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
-				for(int j = 0; j < bases.size(); j++)
-				{
-					ITeamBase base = bases.get(j);
-					if(base.getMap() != teamsManager.currentRound.map)
+				for (ITeamBase base : bases) {
+					if (base.getMap() != teamsManager.currentRound.map)
 						continue;
-					for(int i = 0; i < base.getObjects().size(); i++)
-					{
-						if(base.getObjects().get(i).isSpawnPoint())
+					for (int i = 0; i < base.getObjects().size(); i++) {
+						if (base.getObjects().get(i).isSpawnPoint())
 							validSpawnPoints.add(base.getObjects().get(i));
 					}
 				}
@@ -227,7 +218,7 @@ public class GametypeZombies extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -38,48 +37,29 @@ import net.minecraft.client.particle.EntitySnowShovelFX;
 import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.particle.EntitySplashFX;
 import net.minecraft.client.particle.EntitySuspendFX;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
-import net.minecraft.client.renderer.tileentity.RenderItemFrame;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
-import com.flansmod.client.renderhack.FlansModRendererDispatcher;
-import com.flansmod.client.renderhack.RenderItemOld;
-import com.flansmod.client.renderhack.RenderRegistry;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -88,7 +68,6 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
-import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.InfoType;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
@@ -146,31 +125,6 @@ public class FlansModClient extends FlansMod
 	{		
 		log("Loading Flan's mod client side.");
 		MinecraftForge.EVENT_BUS.register(this);
-		Minecraft mc = Minecraft.getMinecraft();
-
-        // Prerequisite
-        ModelManager modelManager = ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, mc, "aL", "field_175617_aL", "modelManager");
-        RenderManager renderManager = mc.getRenderManager();
-        IReloadableResourceManager resourceManager = ((IReloadableResourceManager) mc.getResourceManager());
-
-        // Render Item Hook
-        RenderItem item = new RenderItemOld(mc.getTextureManager(), modelManager);
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, item, "X", "field_175621_X", "renderItem");
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, new ItemRenderer(mc), "Y", "field_175620_Y", "itemRenderer");
-        renderManager.entityRenderMap.remove(EntityItem.class);
-        renderManager.entityRenderMap.put(EntityItem.class, new RenderEntityItem(renderManager, item));
-        renderManager.entityRenderMap.remove(EntityItemFrame.class);
-        renderManager.entityRenderMap.put(EntityItemFrame.class, new RenderItemFrame(renderManager, item));
-        mc.entityRenderer = new EntityRenderer(mc, resourceManager);
-
-        // Render Block Dispatcher Hook
-        BlockRendererDispatcher rendererDispatcher = new FlansModRendererDispatcher(modelManager.getBlockModelShapes(), mc.gameSettings);
-        ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, rendererDispatcher, "aM", "field_175618_aM", "blockRenderDispatcher");
-
-        // Register Reload Listeners
-        resourceManager.registerReloadListener(rendererDispatcher);
-        resourceManager.registerReloadListener(item);
-        resourceManager.registerReloadListener(mc.entityRenderer);
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
@@ -204,7 +158,7 @@ public class FlansModClient extends FlansMod
 				
 		//Render!
 		GL11.glPushMatrix();
-		renderer.getPlayerModel().bipedLeftArm.postRender(0.0625F);
+		renderer.modelBipedMain.bipedLeftArm.postRender(0.0625F);
         GL11.glTranslatef(-0.0625F, 0.4375F, 0.0625F);
 
         float f2 = 1F;
@@ -251,8 +205,8 @@ public class FlansModClient extends FlansMod
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		
 		if(event.entity instanceof EntityPlayer && teamInfo != null && teamInfo.gametype != null && !"No Gametype".equals(teamInfo.gametype))
 		{
-			PlayerScoreData rendering = teamInfo.getPlayerScoreData(event.entity.getName());
-			PlayerScoreData thePlayer = teamInfo.getPlayerScoreData(minecraft.thePlayer.getName());
+			PlayerScoreData rendering = teamInfo.getPlayerScoreData(event.entity.getCommandSenderName());
+			PlayerScoreData thePlayer = teamInfo.getPlayerScoreData(minecraft.thePlayer.getCommandSenderName());
 			
 			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
 			Team thePlayerTeam = thePlayer == null ? Team.spectators : thePlayer.team.team;
@@ -265,7 +219,7 @@ public class FlansModClient extends FlansMod
 			if(data.skin != null)
 			{
 				ResourceLocation skin = rendering == null || rendering.playerClass == null ? null : FlansModResourceHandler.getTexture(rendering.playerClass);
-				//((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
+				((AbstractClientPlayer)event.entityPlayer).func_152121_a(Type.SKIN, skin == null ? data.skin : skin);
 			}
 			
 			//Spectators see all
@@ -298,16 +252,6 @@ public class FlansModClient extends FlansMod
 	public static int shootTime(boolean left)
 	{
 		return left ? shootTimeLeft : shootTimeRight;
-	}
-	
-	@SubscribeEvent
-	public void cameraSetup(CameraSetup event)
-	{
-		if(minecraft.thePlayer.ridingEntity instanceof IControllable)
-		{
-			IControllable cont = (IControllable)minecraft.thePlayer.ridingEntity;
-			event.roll = cont.getPrevPlayerRoll() + (cont.getPlayerRoll() - cont.getPrevPlayerRoll()) * (float)event.renderPartialTicks;
-		}
 	}
 
 	public static void tick()
@@ -396,18 +340,37 @@ public class FlansModClient extends FlansMod
 		
 		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
 		{
-			inPlane = true;	
+			inPlane = true;
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getPlayerRoll(), "camRoll", "R", "field_78495_O");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
-			}		
+			}			
+			if(minecraft.thePlayer.ridingEntity instanceof IControllable)
+			{
+				try
+				{
+					ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "E", "field_78490_B");
+				} catch (Exception e)
+				{
+					log("I forgot to update obfuscated reflection D:");
+					throw new RuntimeException(e);
+				}		
+			}
 		}
 		else if(inPlane)
 		{
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 0F, "camRoll", "R", "field_78495_O");
+			} catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}			
 			try
 			{
 				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "E", "field_78490_B");
@@ -433,9 +396,16 @@ public class FlansModClient extends FlansMod
 			float FOVZoomLevel = actualZoomProgress * lastFOVZoomLevel + (1 - actualZoomProgress);
 			if(Math.abs(zoomLevel - 1F) < 0.01F)
 				zoomLevel = 1.0D;
-			
-			float zoomToApply = Math.max(FOVZoomLevel, (float)zoomLevel);
-			minecraft.gameSettings.fovSetting = (((originalFOV * 40 + 70) / zoomToApply) - 70) / 40;
+			try
+			{
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, zoomLevel, "cameraZoom", "af", "field_78503_V");
+				minecraft.gameSettings.fovSetting = (((originalFOV * 40 + 70) / FOVZoomLevel) - 70) / 40;
+			} 
+			catch (Exception e)
+			{
+				log("I forgot to update obfuscated reflection D:");
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	
@@ -500,54 +470,8 @@ public class FlansModClient extends FlansMod
 		else return teamInfo.getTeam(spawnerTeamID);
 	}
 
-	public static boolean isCurrentMap(String map) 
-	{
-		if(teamInfo == null || teamInfo.mapShortName == null)
-			return false;
-		else return teamInfo.mapShortName.equals(map);
-	}
-	
-	public static EnumParticleTypes getParticleType(String s)
-	{
-		if(s.equals("hugeexplosion")) 		return EnumParticleTypes.EXPLOSION_HUGE;
-		else if(s.equals("largeexplode"))	return EnumParticleTypes.EXPLOSION_LARGE;
-		else if(s.equals("explode"))		return EnumParticleTypes.EXPLOSION_NORMAL;
-		else if(s.equals("fireworksSpark"))	return EnumParticleTypes.FIREWORKS_SPARK;
-		else if(s.equals("bubble"))			return EnumParticleTypes.WATER_BUBBLE;
-		else if(s.equals("splash"))			return EnumParticleTypes.WATER_SPLASH;
-		else if(s.equals("wake"))			return EnumParticleTypes.WATER_WAKE;
-		else if(s.equals("drop"))			return EnumParticleTypes.WATER_DROP;
-		else if(s.equals("suspended"))		return EnumParticleTypes.SUSPENDED;
-		else if(s.equals("depthsuspend"))	return EnumParticleTypes.SUSPENDED_DEPTH;
-		else if(s.equals("townaura"))		return EnumParticleTypes.TOWN_AURA;
-		else if(s.equals("crit"))			return EnumParticleTypes.CRIT;
-		else if(s.equals("magicCrit"))		return EnumParticleTypes.CRIT_MAGIC;
-		else if(s.equals("smoke"))			return EnumParticleTypes.SMOKE_NORMAL;
-		else if(s.equals("largesmoke"))		return EnumParticleTypes.SMOKE_LARGE;
-		else if(s.equals("spell"))			return EnumParticleTypes.SPELL;
-		else if(s.equals("instantSpell"))	return EnumParticleTypes.SPELL_INSTANT;
-		else if(s.equals("mobSpell"))		return EnumParticleTypes.SPELL_MOB;
-		else if(s.equals("mobSpellAmbient"))return EnumParticleTypes.SPELL_MOB_AMBIENT;
-		else if(s.equals("witchMagic"))		return EnumParticleTypes.SPELL_WITCH;
-		else if(s.equals("dripWater"))		return EnumParticleTypes.DRIP_WATER;
-		else if(s.equals("dripLava"))		return EnumParticleTypes.DRIP_LAVA;
-		else if(s.equals("angryVillager"))	return EnumParticleTypes.VILLAGER_ANGRY;
-		else if(s.equals("happyVillager"))	return EnumParticleTypes.VILLAGER_HAPPY;
-		else if(s.equals("note"))			return EnumParticleTypes.NOTE;
-		else if(s.equals("portal"))			return EnumParticleTypes.PORTAL;
-		else if(s.equals("enchantmenttable"))return EnumParticleTypes.ENCHANTMENT_TABLE;
-		else if(s.equals("flame"))			return EnumParticleTypes.FLAME;
-		else if(s.equals("lava"))			return EnumParticleTypes.LAVA;
-		else if(s.equals("footstep"))		return EnumParticleTypes.FOOTSTEP;
-		else if(s.equals("cloud"))			return EnumParticleTypes.CLOUD;
-		else if(s.equals("reddust"))		return EnumParticleTypes.REDSTONE;
-		else if(s.equals("snowballpoof"))	return EnumParticleTypes.SNOWBALL;
-		else if(s.equals("snowshovel"))		return EnumParticleTypes.SNOW_SHOVEL;
-		else if(s.equals("slime"))			return EnumParticleTypes.SLIME;
-		else if(s.equals("heart"))			return EnumParticleTypes.HEART;
-		else if(s.equals("barrier"))		return EnumParticleTypes.BARRIER;
-		
-		return EnumParticleTypes.WATER_BUBBLE;
+	public static boolean isCurrentMap(String map) {
+		return !(teamInfo == null || teamInfo.mapShortName == null) && teamInfo.mapShortName.equals(map);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -555,79 +479,154 @@ public class FlansModClient extends FlansMod
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		//return mc.renderGlobal.doSpawnParticle(s, x, y, z, 0.01D, 0.01D, 0.01D);
-		
-        int particleID = 0;
-        int[] data = new int[0];
-              
-		if(s.equals("hugeexplosion")) 		particleID = EnumParticleTypes.EXPLOSION_HUGE.getParticleID();
-		else if(s.equals("largeexplode"))	particleID = EnumParticleTypes.EXPLOSION_LARGE.getParticleID();
-		else if(s.equals("explode"))		particleID = EnumParticleTypes.EXPLOSION_NORMAL.getParticleID();
-		else if(s.equals("fireworksSpark"))	particleID = EnumParticleTypes.FIREWORKS_SPARK.getParticleID();
-		else if(s.equals("bubble"))			particleID = EnumParticleTypes.WATER_BUBBLE.getParticleID();
-		else if(s.equals("splash"))			particleID = EnumParticleTypes.WATER_SPLASH.getParticleID();
-		else if(s.equals("wake"))			particleID = EnumParticleTypes.WATER_WAKE.getParticleID();
-		else if(s.equals("drop"))			particleID = EnumParticleTypes.WATER_DROP.getParticleID();
-		else if(s.equals("suspended"))		particleID = EnumParticleTypes.SUSPENDED.getParticleID();
-		else if(s.equals("depthsuspend"))	particleID = EnumParticleTypes.SUSPENDED_DEPTH.getParticleID();
-		else if(s.equals("townaura"))		particleID = EnumParticleTypes.TOWN_AURA.getParticleID();
-		else if(s.equals("crit"))			particleID = EnumParticleTypes.CRIT.getParticleID();
-		else if(s.equals("magicCrit"))		particleID = EnumParticleTypes.CRIT_MAGIC.getParticleID();
-		else if(s.equals("smoke"))			particleID = EnumParticleTypes.SMOKE_NORMAL.getParticleID();
-		else if(s.equals("largesmoke"))		particleID = EnumParticleTypes.SMOKE_LARGE.getParticleID();
-		else if(s.equals("spell"))			particleID = EnumParticleTypes.SPELL.getParticleID();
-		else if(s.equals("instantSpell"))	particleID = EnumParticleTypes.SPELL_INSTANT.getParticleID();
-		else if(s.equals("mobSpell"))		particleID = EnumParticleTypes.SPELL_MOB.getParticleID();
-		else if(s.equals("mobSpellAmbient"))particleID = EnumParticleTypes.SPELL_MOB_AMBIENT.getParticleID();
-		else if(s.equals("witchMagic"))		particleID = EnumParticleTypes.SPELL_WITCH.getParticleID();
-		else if(s.equals("dripWater"))		particleID = EnumParticleTypes.DRIP_WATER.getParticleID();
-		else if(s.equals("dripLava"))		particleID = EnumParticleTypes.DRIP_LAVA.getParticleID();
-		else if(s.equals("angryVillager"))	particleID = EnumParticleTypes.VILLAGER_ANGRY.getParticleID();
-		else if(s.equals("happyVillager"))	particleID = EnumParticleTypes.VILLAGER_HAPPY.getParticleID();
-		else if(s.equals("note"))			particleID = EnumParticleTypes.NOTE.getParticleID();
-		else if(s.equals("portal"))			particleID = EnumParticleTypes.PORTAL.getParticleID();
-		else if(s.equals("enchantmenttable"))particleID = EnumParticleTypes.ENCHANTMENT_TABLE.getParticleID();
-		else if(s.equals("flame"))			particleID = EnumParticleTypes.FLAME.getParticleID();
-		else if(s.equals("lava"))			particleID = EnumParticleTypes.LAVA.getParticleID();
-		else if(s.equals("footstep"))		particleID = EnumParticleTypes.FOOTSTEP.getParticleID();
-		else if(s.equals("cloud"))			particleID = EnumParticleTypes.CLOUD.getParticleID();
-		else if(s.equals("reddust"))		particleID = EnumParticleTypes.REDSTONE.getParticleID();
-		else if(s.equals("snowballpoof"))	particleID = EnumParticleTypes.SNOWBALL.getParticleID();
-		else if(s.equals("snowshovel"))		particleID = EnumParticleTypes.SNOW_SHOVEL.getParticleID();
-		else if(s.equals("slime"))			particleID = EnumParticleTypes.SLIME.getParticleID();
-		else if(s.equals("heart"))			particleID = EnumParticleTypes.HEART.getParticleID();
-		else if(s.equals("barrier"))		particleID = EnumParticleTypes.BARRIER.getParticleID();
-        else if(s.contains("_"))
+		EntityFX fx = null;
+		if(s.equals("hugeexplosion"))
+			fx = new EntityHugeExplodeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("largeexplode"))
+			fx = new EntityLargeExplodeFX(mc.renderEngine, w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("fireworksSpark"))
+			fx = new EntityFireworkSparkFX(w, x, y, z, 0D, 0D, 0D, mc.effectRenderer);
+		else if(s.equals("bubble"))
+			fx = new EntityBubbleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("suspended"))
+			fx = new EntitySuspendFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("depthsuspend"))
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("townaura"))
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("crit"))
+			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("magicCrit"))
+		{
+			fx = new EntityCritFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setRBGColorF(fx.getRedColorF() * 0.3F, fx.getGreenColorF() * 0.8F, fx.getBlueColorF());
+            fx.nextTextureIndexX();
+		}
+		else if(s.equals("smoke"))
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("mobSpell"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setRBGColorF(0F, 0F, 0F);
+		}
+		else if(s.equals("mobSpellAmbient"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+            fx.setAlphaF(0.15F);
+            fx.setRBGColorF(0F, 0F, 0F);
+		}
+		else if(s.equals("spell"))
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("instantSpell"))
+		{
+			fx = new EntitySpellParticleFX(w, x, y, z, 0D, 0D, 0D);
+			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
+		}
+		else if(s.equals("witchMagic"))
+		{
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D);
+			((EntitySpellParticleFX)fx).setBaseSpellTextureIndex(144);
+            float f = w.rand.nextFloat() * 0.5F + 0.35F;
+            fx.setRBGColorF(1.0F * f, 0.0F * f, 1.0F * f);
+		}
+		else if(s.equals("note"))
+			fx = new EntityNoteFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("portal"))
+			fx = new EntityPortalFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("enchantmenttable"))
+			fx = new EntityEnchantmentTableParticleFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("explode"))
+			fx = new EntityExplodeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("flame"))
+			fx = new EntityFlameFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("lava"))
+			fx = new EntityLavaFX(w, x, y, z);
+		else if(s.equals("footstep"))
+			fx = new EntityFootStepFX(mc.renderEngine, w, x, y, z);
+		else if(s.equals("splash"))
+			fx = new EntitySplashFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("wake"))
+			fx = new EntityFishWakeFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("largesmoke"))
+			fx = new EntitySmokeFX(w, x, y, z, 0D, 0D, 0D, 2.5F);
+		else if(s.equals("cloud"))
+			fx = new EntityCloudFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("reddust"))
+			fx = new EntityReddustFX(w, x, y, z, 0F, 0F, 0F);
+		else if(s.equals("snowballpoof"))
+			fx = new EntityBreakingFX(w, x, y, z, Items.snowball);
+		else if(s.equals("dripWater"))
+			fx = new EntityDropParticleFX(w, x, y, z, Material.water);
+		else if(s.equals("dripLava"))
+			fx = new EntityDropParticleFX(w, x, y, z, Material.lava);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("slime"))
+			fx = new EntityBreakingFX(w, x, y, z, Items.slime_ball);
+		else if(s.equals("heart"))
+			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("angryVillager"))
+		{
+			fx = new EntityHeartFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setParticleTextureIndex(81);
+			fx.setRBGColorF(1.0F, 1.0F, 1.0F);
+		}
+		else if(s.equals("happyVillager"))
+		{
+			fx = new EntityAuraFX(w, x, y, z, 0D, 0D, 0D);
+			fx.setParticleTextureIndex(82);
+            fx.setRBGColorF(1.0F, 1.0F, 1.0F);
+		}
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+		else if(s.equals("snowshovel"))
+			fx = new EntitySnowShovelFX(w, x, y, z, 0D, 0D, 0D);
+
+        else
         {
             int k;
-            String[] split = s.split("_", 3);
-            
-            
+            String[] astring;
 
-            if(split[0].equals("iconcrack"))
+            if (s.startsWith("iconcrack_"))
             {
-                data = new int[] { Item.getIdFromItem(InfoType.getRecipeElement(split[1],0).getItem()) };
-                particleID = EnumParticleTypes.ITEM_CRACK.getParticleID();
+                astring = s.split("_", 3);
+                int j = Integer.parseInt(astring[1]);
+
+                if (astring.length > 2)
+                {
+                    k = Integer.parseInt(astring[2]);
+                    fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), k);
+                }
+                else fx = new EntityBreakingFX(w, x, y, z, 0D, 0D, 0D, Item.getItemById(j), 0);
             }
             else
             {
-            	data = new int[] { Block.getIdFromBlock(Block.getBlockFromItem(InfoType.getRecipeElement(split[1],0).getItem())) };
+                Block block;
 
-                if(split[0].equals("blockcrack"))
+                if (s.startsWith("blockcrack_"))
                 {
-                	 particleID = EnumParticleTypes.BLOCK_CRACK.getParticleID();
+                    astring = s.split("_", 3);
+                    block = Block.getBlockById(Integer.parseInt(astring[1]));
+                    k = Integer.parseInt(astring[2]);
+                    fx = (new EntityDiggingFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
                 }
-                else if(split[0].equals("blockdust"))
+                else if (s.startsWith("blockdust_"))
                 {
-                	 particleID = EnumParticleTypes.BLOCK_DUST.getParticleID();
+                    astring = s.split("_", 3);
+                    block = Block.getBlockById(Integer.parseInt(astring[1]));
+                    k = Integer.parseInt(astring[2]);
+                    fx = (new EntityBlockDustFX(w, x, y, z, 0D, 0D, 0D, block, k)).applyRenderColor(k);
                 }
             }
         }
-
-        
-        EntityFX fx = mc.effectRenderer.spawnEffectParticle(particleID, x, y, z, 0D, 0D, 0D, data);
-        
+		
 		if(mc.gameSettings.fancyGraphics)
 			fx.renderDistanceWeight = 200D;
+		
+        if(fx != null)
+            mc.effectRenderer.addEffect(fx);
 		return fx;
 	}
 
@@ -656,14 +655,4 @@ public class FlansModClient extends FlansMod
 		}
 		return animations;
 	}
-	
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void onTextureStitch(TextureStitchEvent.Pre event)
-    {
-        if (event.map == Minecraft.getMinecraft().getTextureMapBlocks())
-        {
-            RenderRegistry.instance().injectTexture(event.map);
-        }
-    }
 }

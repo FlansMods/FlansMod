@@ -37,7 +37,7 @@ public class Shape2D
 		PositionTransformVertex[] vertsBottom = new PositionTransformVertex[coords.size()];
 		TexturedPolygon[] poly = new TexturedPolygon[coords.size() + 2];
 		
-		Vec3 extrudeVector = new Vec3(0, 0, depth);
+		Vec3 extrudeVector = Vec3.createVectorHelper(0, 0, depth);
 
 		setVectorRotations(extrudeVector, rotX, rotY, rotZ);
 		
@@ -54,7 +54,7 @@ public class Shape2D
 			float texU2 = ((shapeTextureWidth * 2 - curCoord.uCoord + u) / textureWidth);
 			float texV = ((curCoord.vCoord + v) / textureHeight);
 			
-			Vec3 vecCoord = new Vec3(curCoord.xCoord, curCoord.yCoord, 0);
+			Vec3 vecCoord = Vec3.createVectorHelper(curCoord.xCoord, curCoord.yCoord, 0);
 			
 			setVectorRotations(vecCoord, rotX, rotY, rotZ);
 									
@@ -140,7 +140,9 @@ public class Shape2D
 		yVec = zy;
 		zVec = yz;
 		
-		vector = new Vec3(xVec, yVec, zVec);
+        vector.xCoord = xVec;
+        vector.yCoord = yVec;
+        vector.zCoord = zVec;
 	}
 	
 	public ArrayList<Coord2D> coords;

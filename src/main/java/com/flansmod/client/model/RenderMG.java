@@ -3,7 +3,6 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
@@ -12,11 +11,11 @@ import com.flansmod.common.guns.EntityMG;
 
 public class RenderMG extends Render
 {
-	public RenderMG(RenderManager renderManager) 
-	{
-		super(renderManager);
-		shadowSize = 0.5F;
-	}
+
+    public RenderMG()
+    {
+        shadowSize = 0.5F;
+    }
 
     public void render(EntityMG mg, double d, double d1, double d2, float f, float f1)
     {

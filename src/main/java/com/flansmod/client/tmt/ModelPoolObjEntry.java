@@ -31,7 +31,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 			
 			while((s = in.readLine()) != null)
 			{
-				if(s.indexOf("#") > -1)
+				if(s.contains("#"))
 				{
 					s = s.substring(0, s.indexOf("#"));
 				}
@@ -122,7 +122,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 						s1 = s;
 						if(ind > -1)
 							s1 = s.substring(0, ind);
-						if(s1.indexOf("/") > -1)
+						if(s1.contains("/"))
 						{
 							String[] f = s1.split("/");
 							vInt = Integer.parseInt(f[0]) - 1;
@@ -160,7 +160,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 								curNormals = new float[] {0, 0, 0};
 						}
 						
-						iNormal.add(new Vec3(curNormals[0], curNormals[1], curNormals[2]));
+						iNormal.add(Vec3.createVectorHelper(curNormals[0], curNormals[1], curNormals[2]));
 
 						normal[0]+= curNormals[0];
 						normal[1]+= curNormals[1];

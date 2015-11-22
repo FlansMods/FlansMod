@@ -3,7 +3,7 @@ package com.flansmod.client.model;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -24,7 +24,7 @@ import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.Side;
 
 public class RenderGun implements IItemRenderer
 {
@@ -55,7 +55,10 @@ public class RenderGun implements IItemRenderer
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
-			return;	
+			return;
+		
+		RenderBlocks renderBlocks = (RenderBlocks)data[0];
+		
 		
 		GunType gunType = ((ItemGun)item.getItem()).type;
 		if(gunType == null)
@@ -67,7 +70,7 @@ public class RenderGun implements IItemRenderer
 
 		//Render main hand gun
 		{
-			GunAnimations animations = (type == ItemRenderType.ENTITY || type == ItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
+			GunAnimations animations = type == ItemRenderType.ENTITY ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
 			renderGun(type, item, gunType, animations, false, data);
 		}
 		
@@ -135,14 +138,9 @@ public class RenderGun implements IItemRenderer
 			{
 				case ENTITY :
 				{
-					//EntityItem entity = (EntityItem)data[1];
-					//GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
-					break;
-				}
-				case INVENTORY :
-				{
-
-					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
+					EntityItem entity = (EntityItem)data[1];
+					GL11.glRotatef(entity.age + (entity.age == 0 ? 0 : smoothing), 0F, 1F, 0F);
+					GL11.glTranslatef(-0.2F + model.itemFrameOffset.x, 0.2F + model.itemFrameOffset.y, 0.1F + model.itemFrameOffset.z);
 					break;
 				}
 				case EQUIPPED:
@@ -156,9 +154,9 @@ public class RenderGun implements IItemRenderer
 					}
 					else
 					{
-						GL11.glRotatef(90F, 0F, 0F, 1F);
-						GL11.glRotatef(-90F, 1F, 0F, 0F);
-						GL11.glTranslatef(0.25F, 0F, 0F);
+						GL11.glRotatef(35F, 0F, 0F, 1F);
+						GL11.glRotatef(-5F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.75F, -0.22F, -0.08F);
 						GL11.glScalef(1F, 1F, -1F);
 					}
 					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
@@ -184,17 +182,18 @@ public class RenderGun implements IItemRenderer
 					
 					if(offHand)
 					{
-						GL11.glRotatef(45F, 0F, 1F, 0F);
-						GL11.glTranslatef(-1F, 0.675F, -1.8F);
+						GL11.glTranslatef(0F, 0.03F, -0.76F);
+						GL11.glRotatef(23F, 0F, 0F, 1F); 
+						GL11.glRotatef(-4F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.15F, 0.2F, -0.6F);
 					}
 					else
 					{
-						GL11.glRotatef(45F, 0F, 1F, 0F);
-						GL11.glRotatef(0F - 5F * adsSwitch, 0F, 0F, 1F); 
-						
-						GL11.glTranslatef(-1F, 0.675F + 0.180F * adsSwitch, -1F - 0.395F * adsSwitch);
+						GL11.glRotatef(25F - 5F * adsSwitch, 0F, 0F, 1F); 
+						GL11.glRotatef(-5F, 0F, 1F, 0F);
+						GL11.glTranslatef(0.15F, 0.2F + 0.175F * adsSwitch, -0.6F - 0.405F * adsSwitch);
 						if(gunType.hasScopeOverlay)
-							GL11.glTranslatef(-0.7F * adsSwitch, -0.12F * adsSwitch, -0.05F * adsSwitch);
+							GL11.glTranslatef(-0.3F * adsSwitch, 0F, 0F);
 						GL11.glRotatef(4.5F * adsSwitch, 0F, 0F, 1F);
 						GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
 					}
@@ -336,7 +335,7 @@ public class RenderGun implements IItemRenderer
 		}
 				
 		//Load texture
-		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.stackTagCompound.getString("Paint"))));
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);

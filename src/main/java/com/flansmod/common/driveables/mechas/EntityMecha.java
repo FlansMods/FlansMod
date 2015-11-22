@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,19 +17,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.gui.GuiDriveableController;
@@ -54,7 +51,6 @@ import com.flansmod.common.network.PacketDriveableGUI;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketMechaControl;
 import com.flansmod.common.network.PacketPlaySound;
-import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
@@ -84,14 +80,10 @@ public class EntityMecha extends EntityDriveable
     
     /** Gun animations */
     public GunAnimations leftAnimations = new GunAnimations(), rightAnimations = new GunAnimations();
+	boolean couldNotFindFuel;
     
-    /** The ID of the slot that we are pulling fuel from. -1 means we have not found one */
-    private int foundFuel = -1;
-    /** True if we need fuel but could not find any in the inventory. Reset when the inventory updated */
-    public boolean couldNotFindFuel = false;
 
-    public float yOffset;
-    
+
 	public EntityMecha(World world) 
 	{
 		super(world);
@@ -159,12 +151,6 @@ public class EntityMecha extends EntityDriveable
 		prevLegsYaw = legAxes.getYaw();
 
 		inventory.readFromNBT(ByteBufUtils.readTag(data));
-	}
-	
-	@Override
-	public double getYOffset()
-	{
-		return yOffset;
 	}
 
 	@Override
@@ -335,10 +321,9 @@ public class EntityMecha extends EntityDriveable
 				//MovingObjectPosition hit = ((EntityLivingBase)seats[0].riddenByEntity).rayTrace(reach, 1F);
 				if(hit != null && hit.typeOfHit == MovingObjectType.BLOCK)
 				{
-					BlockPos pos = hit.getBlockPos();
-					if(breakingBlock == null || breakingBlock.x != pos.getX() || breakingBlock.y != pos.getY() || breakingBlock.z != pos.getZ())
+					if(breakingBlock == null || breakingBlock.x != hit.blockX || breakingBlock.y != hit.blockY || breakingBlock.z != hit.blockZ)
 						breakingProgress = 0F;
-					breakingBlock = new Vector3i(pos.getX(), pos.getY(), pos.getZ());
+					breakingBlock = new Vector3i(hit.blockX, hit.blockY, hit.blockZ);
 				}
 			}
 			
@@ -447,7 +432,7 @@ public class EntityMecha extends EntityDriveable
 	}
 	
 	@Override
-    public void fall(float f, float l)
+    protected void fall(float f)
     {
 		attackEntityFrom(DamageSource.fall, f);
     }
@@ -465,8 +450,11 @@ public class EntityMecha extends EntityDriveable
         	boolean takeFallDamage = type.takeFallDamage && !stopFallDamage();
         	boolean damageBlocksFromFalling = type.damageBlocksFromFalling || breakBlocksUponFalling();
         	
-        	float damageToInflict = takeFallDamage ? i * type.fallDamageMultiplier * vulnerability() : 0;
-        	float blockDamageFromFalling = damageBlocksFromFalling ? i * type.blockDamageFromFalling / 10F : 0;
+        	byte wouldBeNegativeDamage;
+        	if(((i * type.fallDamageMultiplier * vulnerability())-2)<0){wouldBeNegativeDamage=0;} else {wouldBeNegativeDamage=1;};
+        	
+        	float damageToInflict = takeFallDamage ? i * ((type.fallDamageMultiplier * vulnerability())) * wouldBeNegativeDamage : 0;
+        	float blockDamageFromFalling = damageBlocksFromFalling ? i * (type.blockDamageFromFalling) / 10F : 0;
         	        	
         	driveableData.parts.get(EnumDriveablePart.hips).attack(damageToInflict, false);
         	checkParts();
@@ -480,10 +468,9 @@ public class EntityMecha extends EntityDriveable
         else if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack mechaStack = new ItemStack(type.item, 1, 0);
-			NBTTagCompound tags = new NBTTagCompound();
-			mechaStack.setTagCompound(tags); 
-			driveableData.writeToNBT(tags);
-			inventory.writeToNBT(tags);
+			mechaStack.stackTagCompound = new NBTTagCompound();
+			driveableData.writeToNBT(mechaStack.stackTagCompound);
+			inventory.writeToNBT(mechaStack.stackTagCompound);
 			entityDropItem(mechaStack, 0.5F);
 	 		setDead();
 		}
@@ -533,7 +520,7 @@ public class EntityMecha extends EntityDriveable
 			{
 				DriveablePart thisPart = data.parts.get(part);
 				boolean hasCreativePlayer = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-				if(thisPart != null && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
+				if(thisPart != null && thisPart.health != 0 && thisPart.health < thisPart.maxHealth && (hasCreativePlayer || data.fuelInTank >= 10F))
 				{
 					thisPart.health += 1;
 					if(!hasCreativePlayer)
@@ -555,7 +542,7 @@ public class EntityMecha extends EntityDriveable
 						int x = MathHelper.floor_double(i + posX);
 						int y = MathHelper.floor_double(j + posY);
 						int z = MathHelper.floor_double(k + posZ);
-						if(i * i + j * j + k * k < sqDistance && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == (Blocks.diamond_ore))
+						if(i * i + j * j + k * k < sqDistance && worldObj.getBlock(x, y, z) == (Blocks.diamond_ore))
 						{
 							sqDistance = i * i + j * j + k * k;
 						}
@@ -732,24 +719,21 @@ public class EntityMecha extends EntityDriveable
 					legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
 				}
 				
-				Vector3f motion = legAxes.getXAxis();
-				
-				motion.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F)*(intent.lengthSquared()));
+				intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F));
 				
 				boolean canThrustCreatively = seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
-	
+
 				if((canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption) && isPartIntact(EnumDriveablePart.hips))
 				{
-					if(onGround || jumpDelay != 0)
+					if(!onGround && shouldFly() && (canThrustCreatively || data.fuelInTank > 10F*jetPack + data.engine.fuelConsumption))
 					{
-			    	//Move!
-					Vector3f.add(actualMotion, motion, actualMotion);
+						intent.scale(jetPack);
+						if(!canThrustCreatively)
+							data.fuelInTank -= 10F*jetPack;
 					}
-					else if(!onGround && shouldFly())
-					{
-						Vector3f flyMotion = new Vector3f(intent.x, 0F, intent.z);
-						Vector3f.add(actualMotion, flyMotion, actualMotion);
-					}
+					
+					//Move!
+					Vector3f.add(actualMotion, intent, actualMotion);
 
 					//If we can't thrust creatively, we must thrust using fuel. Nom.
 					if(!canThrustCreatively)
@@ -770,8 +754,8 @@ public class EntityMecha extends EntityDriveable
 				if(breakingBlock != null)
 				{
 					//Get block and material
-					IBlockState state = worldObj.getBlockState(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-					Block blockHit = state.getBlock();
+					Block blockHit = worldObj.getBlock(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+					int metadata = worldObj.getBlockMetadata(breakingBlock.x, breakingBlock.y, breakingBlock.z);
 					Material material = blockHit.getMaterial();
 					
 					//Get the itemstacks in each hand
@@ -793,7 +777,7 @@ public class EntityMecha extends EntityDriveable
 					else
 					{
 						//Get the block hardness
-						float blockHardness = blockHit.getBlockHardness(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+						float blockHardness = blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 						
 						//Calculate the mine speed
 						float mineSpeed = 1F;
@@ -825,7 +809,7 @@ public class EntityMecha extends EntityDriveable
 							mineSpeed = 9001F;
 						else
 						{
-							mineSpeed /= blockHit.getBlockHardness(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
+							mineSpeed /= blockHit.getBlockHardness(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z);
 						}
 						
 						//Add block digging overlay
@@ -837,8 +821,8 @@ public class EntityMecha extends EntityDriveable
 							boolean cancelled = false;
 							if(entity instanceof EntityPlayerMP)
 							{
-								int eventOutcome = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)entity, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z));
-								cancelled = eventOutcome == -1;
+								BlockEvent.BreakEvent event = ForgeHooks.onBlockBreakEvent(worldObj, ((EntityPlayerMP)entity).capabilities.isCreativeMode ? GameType.CREATIVE : ((EntityPlayerMP)entity).capabilities.allowEdit ? GameType.SURVIVAL : GameType.ADVENTURE, (EntityPlayerMP)seats[0].riddenByEntity, breakingBlock.x, breakingBlock.y, breakingBlock.z);
+								cancelled = event.isCanceled();
 							}
 					        if(!cancelled)
 					        {
@@ -849,10 +833,11 @@ public class EntityMecha extends EntityDriveable
 								boolean vacuumItems = vacuumItems();
 								if(vacuumItems)
 								{
-									for(ItemStack stack : blockHit.getDrops(worldObj, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), state, 0))
+									for(ItemStack stack : blockHit.getDrops(worldObj, breakingBlock.x, breakingBlock.y, breakingBlock.z, metadata, 0))
 									{
 										//Check for iron regarding refining
-										if(refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore && (((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode || data.fuelInTank >= 5F))
+										boolean fuelCheck = (data.fuelInTank >= 5F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).field_150939_a == Blocks.iron_ore)
 										{
 											stack = (new ItemStack(Items.iron_ingot, 1, 0));
 											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
@@ -860,34 +845,55 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Check for waste to be compacted
-										if(wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).block == Blocks.cobblestone || ((ItemBlock)stack.getItem()).block == Blocks.dirt || ((ItemBlock)stack.getItem()).block == Blocks.sand))
+										fuelCheck = (data.fuelInTank >= 0.1F || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && wasteCompact() && stack.getItem() instanceof ItemBlock && (((ItemBlock)stack.getItem()).field_150939_a == Blocks.cobblestone || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.dirt || ((ItemBlock)stack.getItem()).field_150939_a == Blocks.sand))
+										{
 											stack.stackSize = 0;
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 0.1F;
+										}
 										
 										//Check for item multipliers
-										if(stack.getItem() == Items.diamond)
+										fuelCheck = (data.fuelInTank >= 3F*diamondMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.diamond)
 										{
 											float multiplier = diamondMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 3F*diamondMultiplier();
 										}
-										if(stack.getItem() == Items.redstone)
+										fuelCheck = (data.fuelInTank >= 2F*redstoneMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.redstone)
 										{
 											float multiplier = redstoneMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*redstoneMultiplier();
 										}
-										if(stack.getItem() == Items.coal)
+										fuelCheck = (data.fuelInTank >= 2F*coalMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.coal)
 										{
 											float multiplier = coalMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*coalMultiplier();
 										}
-										if(stack.getItem() == Items.emerald)
+										fuelCheck = (data.fuelInTank >= 2F*emeraldMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										if(fuelCheck && stack.getItem() == Items.emerald)
 										{
 											float multiplier = emeraldMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*emeraldMultiplier();
 										}
-										if((stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block == Blocks.iron_ore) || stack.getItem() == Items.iron_ingot)
+										fuelCheck = (data.fuelInTank >= 2F*ironMultiplier() || ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
+										//check for refineIron OTHERWISE NICE DUPE. think about it and you will get why
+										if(fuelCheck && (stack.getItem() == Items.iron_ingot) && refineIron())
 										{
 											float multiplier = ironMultiplier();
 											stack.stackSize *= MathHelper.floor_float(multiplier) + (rand.nextFloat() < tailFloat(multiplier) ? 1 : 0);
+											if (!((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode)
+												data.fuelInTank -= 2F*ironMultiplier();
 										}
 										
 										//Check for auto coal consumption
@@ -906,7 +912,7 @@ public class EntityMecha extends EntityDriveable
 									}
 								}
 								//Destroy block
-								worldObj.destroyBlock(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), atLeastOneEffectiveTool && !vacuumItems);
+								worldObj.func_147480_a(breakingBlock.x, breakingBlock.y, breakingBlock.z, atLeastOneEffectiveTool && !vacuumItems);
 					        }
 						}
 					}
@@ -917,82 +923,6 @@ public class EntityMecha extends EntityDriveable
 		moveEntity(actualMotion.x, actualMotion.y, actualMotion.z);
 		//FlansMod.log("" + fallDistance);
     	setPosition(posX, posY, posZ);
-		
-		//Fuel Handling
-		if(!couldNotFindFuel)
-		{
-			ItemStack fuelStack = foundFuel == -1 ? null : driveableData.getStackInSlot(foundFuel);
-			
-			//If the fuel item has stack size <= 0, delete it
-			if(fuelStack != null && fuelStack.stackSize <= 0)
-			{
-				driveableData.setInventorySlotContents(foundFuel, null);
-				fuelStack = null;
-			}
-			
-			//Find the next fuelling slot
-			if(fuelStack == null || !(fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9))
-			{
-				foundFuel = -1;
-				couldNotFindFuel = true;
-				for(int i = driveableData.getCargoInventoryStart(); i < driveableData.getCargoInventoryStart() + type.numCargoSlots; i++)
-				{
-					ItemStack tempStack = driveableData.getStackInSlot(i);
-					if(tempStack != null && tempStack.getItem() instanceof ItemPart && ((ItemPart)tempStack.getItem()).type.category == 9)
-					{
-						foundFuel = i;
-						fuelStack = tempStack;
-						couldNotFindFuel = false;
-						break;
-					}
-				}
-			}
-			
-			//Work out if we are fuelling (from a Flan's Mod fuel item)
-			fuelling = foundFuel != -1 && fuelStack != null && data.fuelInTank < type.fuelTankSize && fuelStack.stackSize > 0 && fuelStack.getItem() instanceof ItemPart && ((ItemPart)fuelStack.getItem()).type.category == 9;
-			
-			//If we are fuelling
-			if(fuelling)
-			{
-				int damage = fuelStack.getItemDamage();
-				//Consume 10 points of fuel (1 damage)
-				fuelStack.setItemDamage(damage + 1);
-				//Put 10 points of fuel 
-				data.fuelInTank += 10;
-				//If we have finished this fuel item
-				if(damage >= fuelStack.getMaxDamage())
-				{
-					//Reset the damage to 0
-					fuelStack.setItemDamage(0);
-					//Consume one item
-					fuelStack.stackSize--;
-					//If we consumed the last one, destroy the stack
-					if(fuelStack.stackSize <= 0)
-						data.fuel = null;
-				}	
-			}
-			
-			//Check inventory slots for buildcraft buckets and if found, take fuel from them
-			if(FlansMod.hooks.BuildCraftLoaded && !fuelling)
-			{
-				for(int i = data.getCargoInventoryStart(); i < data.numCargo + type.numCargoSlots; i++)
-				{
-					ItemStack stack = data.getStackInSlot(i);
-					if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 5000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 5000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-					else if(stack != null && stack.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 10000 <= type.fuelTankSize)
-					{
-						data.fuelInTank += 10000;
-						data.setInventorySlotContents(i, new ItemStack(Items.bucket));
-						couldNotFindFuel = false;
-					}
-				}
-			}
-		}
 		
 		//Calculate movement on the client and then send position, rotation etc to the server
 		if(thePlayerIsDrivingThis)

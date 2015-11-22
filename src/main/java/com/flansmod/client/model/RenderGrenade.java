@@ -5,24 +5,20 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;
-import com.flansmod.common.guns.ItemGun;
 
 public class RenderGrenade extends Render implements IItemRenderer 
 {
-	public RenderGrenade(RenderManager renderManager) 
+	public RenderGrenade()
 	{
-		super(renderManager);
 		shadowSize = 0.5F;
 	}
 
@@ -103,18 +99,18 @@ public class RenderGrenade extends Render implements IItemRenderer
 				{
 				case EQUIPPED:
 				{
-					//GL11.glRotatef(35F, 0F, 0F, 1F);
-					//GL11.glRotatef(-5F, 0F, 1F, 0F);
-					//GL11.glTranslatef(0.75F, -0.22F, -0.08F);
-					//GL11.glTranslatef(0F, 0.25F, 0F);
+					GL11.glRotatef(35F, 0F, 0F, 1F);
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.75F, -0.22F, -0.08F);
+					GL11.glTranslatef(0F, 0.25F, 0F);
 					break;
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					//GL11.glRotatef(25F, 0F, 0F, 1F); 
-					//GL11.glRotatef(-5F, 0F, 1F, 0F);
-					//GL11.glTranslatef(0.15F, 0.2F, -0.6F);
-					GL11.glTranslatef(-1.25F, 0.8F, 0.1F);
+					GL11.glRotatef(25F, 0F, 0F, 1F); 
+					GL11.glRotatef(-5F, 0F, 1F, 0F);
+					GL11.glTranslatef(0.15F, 0.2F, -0.6F);
+					GL11.glTranslatef(0F, 0.25F, 0F);
 					break;
 				}
 				default : break;

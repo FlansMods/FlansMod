@@ -7,8 +7,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.PlayerData;
@@ -156,26 +156,21 @@ public class PacketTeamInfo extends PacketBase
     			
     			Collections.sort(playerNames, new Team.ComparatorScore());
         		data.writeInt(playerNames.size());
-        		for(int j = 0; j < playerNames.size(); j++)
-        		{
-        			String username = playerNames.get(j);
-        			PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
-        			writeUTF(data, username);
-        			if(playerData == null)
-        			{
-        				data.writeInt(0);
-        				data.writeInt(0);
-        				data.writeInt(0);
-        				writeUTF(data, "");
-        			}
-        			else
-        			{
-	        			data.writeInt(playerData.score);
-	        			data.writeInt(playerData.kills);
-	        			data.writeInt(playerData.deaths);
-	        			writeUTF(data, playerData.playerClass.shortName);
-        			}
-        		}
+				for (String username : playerNames) {
+					PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
+					writeUTF(data, username);
+					if (playerData == null) {
+						data.writeInt(0);
+						data.writeInt(0);
+						data.writeInt(0);
+						writeUTF(data, "");
+					} else {
+						data.writeInt(playerData.score);
+						data.writeInt(playerData.kills);
+						data.writeInt(playerData.deaths);
+						writeUTF(data, playerData.playerClass.shortName);
+					}
+				}
 	        	
     		}
     	}
@@ -286,9 +281,8 @@ public class PacketTeamInfo extends PacketBase
 	{
 		if(timeLeft == 0)
 			return true;
-		for(int i = 0; i < teamData.length; i++)
-		{
-			if(teamData[i].score == scoreLimit)
+		for (TeamData aTeamData : teamData) {
+			if (aTeamData.score == scoreLimit)
 				return true;
 		}
 		return false;
@@ -296,10 +290,9 @@ public class PacketTeamInfo extends PacketBase
 	
 	public Team getWinner()
 	{
-		for(int i = 0; i < teamData.length; i++)
-		{
-			if(teamData[i].winner)
-				return teamData[i].team;
+		for (TeamData aTeamData : teamData) {
+			if (aTeamData.winner)
+				return aTeamData.team;
 		}
 		return null;
 	}

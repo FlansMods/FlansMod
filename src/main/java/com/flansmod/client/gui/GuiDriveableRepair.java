@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -33,13 +32,12 @@ public class GuiDriveableRepair extends GuiScreen
 	private ArrayList<DriveablePart> partsToDraw = new ArrayList<DriveablePart>();
 	
 	/** Item renderer */
-	private static RenderItem itemRenderer;
+	private static RenderItem itemRenderer = new RenderItem();
 	/** Gui origin */
 	private int guiOriginX, guiOriginY;
 	
 	public GuiDriveableRepair(EntityPlayer player)
 	{
-		super();
 		driver = player;
 		driving = ((EntitySeat)player.ridingEntity).driveable;
     	for(DriveablePart part : driving.getDriveableData().parts.values())
@@ -51,7 +49,6 @@ public class GuiDriveableRepair extends GuiScreen
     			partsToDraw.add(part);  				
     		}
     	}
-    	
 	}
 	
     @Override
@@ -62,7 +59,6 @@ public class GuiDriveableRepair extends GuiScreen
     	{
     		buttonList.add(new GuiButton(i, 0, 0, 55, 20, "Repair"));
     	}
-    	itemRenderer = mc.getRenderItem();
 	}
     
 	@Override
@@ -200,7 +196,7 @@ public class GuiDriveableRepair extends GuiScreen
     }	
     
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException
+	protected void mouseClicked(int i, int j, int k)
     {
         super.mouseClicked(i, j, k);
 		int m = i - guiOriginX;
@@ -220,8 +216,8 @@ public class GuiDriveableRepair extends GuiScreen
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 		GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}

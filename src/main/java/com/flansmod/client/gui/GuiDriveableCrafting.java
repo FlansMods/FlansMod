@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
@@ -14,7 +13,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
+
+import cpw.mods.fml.client.FMLClientHandler;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
@@ -38,7 +38,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	/** The crafting table co-ordinates */
 	private int x, y, z;
 	/** Item renderer */
-	private static RenderItem itemRenderer;
+	private static RenderItem itemRenderer = new RenderItem();
 	/** Gui origin */
 	private int guiOriginX, guiOriginY;
 	/** Blueprint scroller, static to save position upon exiting crafting window */
@@ -56,7 +56,6 @@ public class GuiDriveableCrafting extends GuiScreen
 	{
 		inventory = playerinventory;
 		mc = FMLClientHandler.instance().getClient();
-		itemRenderer = mc.getRenderItem();
 		world = w;
 		x = i;
 		y = j;
@@ -298,8 +297,8 @@ public class GuiDriveableCrafting extends GuiScreen
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 		GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
@@ -314,7 +313,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	}
 	
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException
+	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);
 		int x = i - guiOriginX;

@@ -25,5 +25,10 @@ Scope None
 Deployable False
 DeployedModel None
 Model ww2.Kar98k
-Texture Kar98k
-ModelScale 0.7
+Texture SkinKar98k
+ModelScale 0.6
+AllowAttachments ZF4Scope
+AllowBarrelAttachments false
+AllowScopeAttachments true
+AllowStockAttachments false
+AllowGripAttachments false

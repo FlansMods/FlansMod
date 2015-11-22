@@ -1,19 +1,20 @@
 package com.flansmod.common.tools;
 
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData
 {
@@ -67,14 +68,14 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		
 		moveEntity(motionX, motionY, motionZ);
 		
-		if(onGround || worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock().getMaterial() == Material.water)
+		if(onGround || worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial() == Material.water)
 		{
 			setDead();
 		}
 	}
 	
 	@Override
-	public void fall(float par1, float k)
+	protected void fall(float par1)
     {
 		//Ignore fall damage
     }

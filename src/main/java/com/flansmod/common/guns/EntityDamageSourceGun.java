@@ -28,17 +28,17 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 	}
 
 	@Override
-	public IChatComponent getDeathMessage(EntityLivingBase living)
+	public IChatComponent func_151519_b(EntityLivingBase living)
     {
 		if(!(living instanceof EntityPlayer) || shooter == null || PlayerHandler.getPlayerData(shooter) == null)
 		{
-			return super.getDeathMessage(living);
+			return super.func_151519_b(living);
 		}
 		EntityPlayer player = (EntityPlayer)living;
     	Team killedTeam = PlayerHandler.getPlayerData(player).team;
     	Team killerTeam = PlayerHandler.getPlayerData(shooter).team;
     	
-    	FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(headshot, weapon, (killedTeam == null ? "f" : killedTeam.textColour) + player.getName(),  (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getName()), living.dimension);
+    	FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(headshot, weapon, (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName(),  (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName()), living.dimension);
     	
         return new ChatComponentText("#flansmod");//flanDeath." + weapon.shortName + "." + (killedTeam == null ? "f" : killedTeam.textColour) + player.getCommandSenderName() + "." + (killerTeam == null ? "f" : killerTeam.textColour) + shooter.getCommandSenderName());
     }

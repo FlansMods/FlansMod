@@ -136,11 +136,8 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) 
-	{ 
-		if(attackerTeam == victimTeam)
-			return friendlyFire;
-		return true;
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+		return attackerTeam != victimTeam || friendlyFire;
 	}
 	
 	@Override
@@ -206,14 +203,11 @@ public class GametypeTDM extends Gametype
 			return null;
 		
 		ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
-		for(int j = 0; j < bases.size(); j++)
-		{
-			ITeamBase base = bases.get(j);
-			if(base.getMap() != teamsManager.currentRound.map)
+		for (ITeamBase base : bases) {
+			if (base.getMap() != teamsManager.currentRound.map)
 				continue;
-			for(int i = 0; i < base.getObjects().size(); i++)
-			{
-				if(base.getObjects().get(i).isSpawnPoint())
+			for (int i = 0; i < base.getObjects().size(); i++) {
+				if (base.getObjects().get(i).isSpawnPoint())
 					validSpawnPoints.add(base.getObjects().get(i));
 			}
 		}
@@ -221,7 +215,7 @@ public class GametypeTDM extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

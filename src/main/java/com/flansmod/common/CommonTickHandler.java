@@ -1,8 +1,8 @@
 package com.flansmod.common;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 import com.flansmod.common.teams.TeamsManager;
 
@@ -37,8 +37,6 @@ public class CommonTickHandler
 		{
 		case START :
 		{
-			//Handle all packets received since last tick
-			FlansMod.getPacketHandler().handleServerPackets();
 			break;
 		}
 		case END :

@@ -26,6 +26,13 @@ public class PartType extends InfoType {
 	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
 	
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
+	
+	//------- RedstoneFlux -------
+	/** If true, then this engine will draw from RedstoneFlux power source items such as power cubes. Otherwise it will draw from Flan's Mod fuel items */
+	public boolean useRFPower = false;
+	/** The power draw rate for RF (per tick) */
+	public int RFDrawRate = 1;
+	//-----------------------------
 
 	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
 	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
@@ -38,10 +45,9 @@ public class PartType extends InfoType {
 	}
 
 	@Override
-	public void read(TypeFile file) 
+	public void postRead(TypeFile file) 
 	{
-		super.read(file);
-		if (category == 2)
+		if(category == 2 && !useRFPower)
 		{
 			for(EnumType type : worksWith)
 			{
@@ -63,18 +69,18 @@ public class PartType extends InfoType {
 		super.read(split, file);
 		try 
 		{
-			if (split[0].equals("Category"))
+			if(split[0].equals("Category"))
 				category = getCategory(split[1]);
-			if (split[0].equals("StackSize"))
+			else if(split[0].equals("StackSize"))
 				stackSize = Integer.parseInt(split[1]);
-			if (split[0].equals("EngineSpeed"))
+			else if(split[0].equals("EngineSpeed"))
 				engineSpeed = Float.parseFloat(split[1]);
-			if (split[0].equals("FuelConsumption"))
+			else if(split[0].equals("FuelConsumption"))
 				fuelConsumption = Float.parseFloat(split[1]);
-			if (split[0].equals("Fuel"))
+			else if(split[0].equals("Fuel"))
 				fuel = Integer.parseInt(split[1]);
 			//Recipe
-			if(split[0].equals("PartBoxRecipe"))
+			else if(split[0].equals("PartBoxRecipe"))
 			{
 				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
 				for(int i = 0; i < (split.length - 2) / 2; i++)
@@ -87,7 +93,7 @@ public class PartType extends InfoType {
 				}
 				partBoxRecipe.addAll(Arrays.asList(stacks));
 			}
-			if(split[0].equals("WorksWith"))
+			else if(split[0].equals("WorksWith"))
 			{
 				worksWith = new ArrayList<EnumType>();
 				for(int i = 0; i < split.length - 1; i++)
@@ -95,6 +101,13 @@ public class PartType extends InfoType {
 					worksWith.add(EnumType.get(split[i + 1]));
 				}
 			}
+			
+			//------- RedstoneFlux -------
+			else if(split[0].equals("UseRF") || split[0].equals("UseRFPower"))
+				useRFPower = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("RFDrawRate"))
+				RFDrawRate = Integer.parseInt(split[1]);
+			//-----------------------------
 		} 
 		catch (Exception e) 
 		{

@@ -1,7 +1,7 @@
 package com.flansmod.api;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +34,6 @@ public interface IControllable
 	
 	/** @return The player's view roll */
 	public float getPlayerRoll();
-	public float getPrevPlayerRoll();
 	
 	/** @return The player's 3rd person view distance */
 	public float getCameraDistance();

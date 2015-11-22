@@ -47,25 +47,21 @@ public class ModelMG extends ModelBase
 	
 	public void flipAll()
 	{
-		for(int i = 0; i < bipodModel.length; i++)
-		{
-			bipodModel[i].doMirror(false, true, true);
-			bipodModel[i].setRotationPoint(bipodModel[i].rotationPointX, - bipodModel[i].rotationPointY, - bipodModel[i].rotationPointZ);
+		for (ModelRendererTurbo aBipodModel : bipodModel) {
+			aBipodModel.doMirror(false, true, true);
+			aBipodModel.setRotationPoint(aBipodModel.rotationPointX, -aBipodModel.rotationPointY, -aBipodModel.rotationPointZ);
 		}
-		for(int i = 0; i < gunModel.length; i++)
-		{
-			gunModel[i].doMirror(false, true, true);
-			gunModel[i].setRotationPoint(gunModel[i].rotationPointX, - gunModel[i].rotationPointY, - gunModel[i].rotationPointZ);
+		for (ModelRendererTurbo aGunModel : gunModel) {
+			aGunModel.doMirror(false, true, true);
+			aGunModel.setRotationPoint(aGunModel.rotationPointX, -aGunModel.rotationPointY, -aGunModel.rotationPointZ);
 		}
-		for(int i = 0; i < ammoModel.length; i++)
-		{
-			ammoModel[i].doMirror(false, true, true);
-			ammoModel[i].setRotationPoint(ammoModel[i].rotationPointX, - ammoModel[i].rotationPointY, - ammoModel[i].rotationPointZ);
+		for (ModelRendererTurbo anAmmoModel : ammoModel) {
+			anAmmoModel.doMirror(false, true, true);
+			anAmmoModel.setRotationPoint(anAmmoModel.rotationPointX, -anAmmoModel.rotationPointY, -anAmmoModel.rotationPointZ);
 		}
-		for(int i = 0; i < ammoBoxModel.length; i++)
-		{
-			ammoBoxModel[i].doMirror(false, true, true);
-			ammoBoxModel[i].setRotationPoint(ammoBoxModel[i].rotationPointX, - ammoBoxModel[i].rotationPointY, - ammoBoxModel[i].rotationPointZ);
+		for (ModelRendererTurbo anAmmoBoxModel : ammoBoxModel) {
+			anAmmoBoxModel.doMirror(false, true, true);
+			anAmmoBoxModel.setRotationPoint(anAmmoBoxModel.rotationPointX, -anAmmoBoxModel.rotationPointY, -anAmmoBoxModel.rotationPointZ);
 		}
 	}	
 }

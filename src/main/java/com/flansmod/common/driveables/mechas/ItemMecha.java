@@ -3,20 +3,20 @@ package com.flansmod.common.driveables.mechas;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableData;
@@ -59,20 +59,16 @@ public class ItemMecha extends Item implements IFlanItem
 	{
 		return true;
 	}
-	
+
 	private NBTTagCompound getTagCompound(ItemStack stack, World world)
 	{
-		if(stack.getTagCompound() == null)
+		if(stack.stackTagCompound == null)
 		{
-			if(stack.getTagCompound() == null)
-			{
-				NBTTagCompound tags = new NBTTagCompound();
-				stack.setTagCompound(tags);
-				tags.setString("Type", type.shortName);
-				tags.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
-			}
+			stack.stackTagCompound = new NBTTagCompound();
+			stack.stackTagCompound.setString("Type", type.shortName);
+			stack.stackTagCompound.setString("Engine", PartType.defaultEngines.get(EnumType.mecha).shortName);
 		}
-		return stack.getTagCompound();
+		return stack.stackTagCompound;
 	}
 	
     @Override
@@ -84,7 +80,7 @@ public class ItemMecha extends Item implements IFlanItem
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
         Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
         MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
         
@@ -95,10 +91,12 @@ public class ItemMecha extends Item implements IFlanItem
         }
         if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
         {
-        	BlockPos pos = movingobjectposition.getBlockPos();
+            int i = movingobjectposition.blockX;
+            int j = movingobjectposition.blockY;
+            int k = movingobjectposition.blockZ;
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityMecha(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 1.5F + type.yOffset, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
+				world.spawnEntityInWorld(new EntityMecha(world, (double)i + 0.5F, (double)j + 1.5F + type.yOffset, (double)k + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
@@ -133,8 +131,15 @@ public class ItemMecha extends Item implements IFlanItem
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-    	mechaStack.setTagCompound(tags);
+    	mechaStack.stackTagCompound = tags;
         list.add(mechaStack);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
 	@Override

@@ -99,5 +99,7 @@ public class ModelPanzerfaust3 extends ModelGun
 		flipAll();
 		translateAll(0F, 0F, 3F);
 		thirdPersonOffset = new Vector3f(0F, -0.05F, -0.2F);
+		
+		itemFrameOffset = new Vector3f(8F / 16F, 0F / 16F, 0F);
 	}
 }

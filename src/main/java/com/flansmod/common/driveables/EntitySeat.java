@@ -16,18 +16,16 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
-import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.network.PacketDriveableKey;
@@ -47,6 +45,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	private int seatID;
 	public EntityDriveable driveable;
 	
+	@SideOnly(Side.CLIENT)
 	public float playerRoll, prevPlayerRoll;
 	
 	public Seat seatInfo;
@@ -102,7 +101,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i)
 	{
 		//setPosition(x, y, z);
 	}
@@ -183,7 +182,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		prevPlayerYaw = playerYaw;
 		prevPlayerPitch = playerPitch;
-		prevPlayerRoll = playerRoll;
 
 		//Get the position of this seat on the driveable axes
 		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
@@ -207,8 +205,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(riddenByEntity != null)
 		{
 	    	DriveableType type = driveable.getDriveableType();
-			Vec3 yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0, riddenByEntity.getEyeHeight() * 3 / 4, 0)).toVec3().subtract(0, riddenByEntity.getEyeHeight(), 0);
-			//driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
+			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
 			
 			playerPosX = posX + yOffset.xCoord;
 			playerPosY = posY + yOffset.yCoord;
@@ -243,12 +240,26 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			//If the entity is a player, roll its view accordingly
 			if(worldObj.isRemote)
 			{
+				prevPlayerRoll = playerRoll;
 				playerRoll = -globalLookAxes.getRoll();
 			}		
 		}
 	}
 	
-
+	@Override
+    public void updateRiderPosition()
+    {
+		if(riddenByEntity instanceof EntityPlayer)
+		{
+			riddenByEntity.rotationYaw = playerYaw;
+			riddenByEntity.rotationPitch = playerPitch;
+			riddenByEntity.prevRotationYaw = prevPlayerYaw;
+			riddenByEntity.prevRotationPitch = prevPlayerPitch;
+		}
+		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
+		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
+		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
+    }
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -268,6 +279,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
     {
     }
 	
+	@Override
+    public float getShadowSize()
+    {
+        return 4.0F;
+    }
+
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
@@ -478,7 +495,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				return true;
 			}
 			double checkRange = 10;
-			List nearbyMobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange, posY + checkRange, posZ + checkRange));
+			List nearbyMobs = worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(posX - checkRange, posY - checkRange, posZ - checkRange, posX + checkRange, posY + checkRange, posZ + checkRange));
 			for(Object obj : nearbyMobs)
 			{
 				EntityLiving entity = (EntityLiving)obj;
@@ -518,23 +535,25 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		super.setDead();
 	}
 	
-	
+	/**
 	@Override
     public void updateRiderPosition()
     {
-		if(riddenByEntity instanceof EntityPlayer)
-		{
-			riddenByEntity.rotationYaw = playerYaw;
-			riddenByEntity.rotationPitch = playerPitch;
-			riddenByEntity.prevRotationYaw = prevPlayerYaw;
-			riddenByEntity.prevRotationPitch = prevPlayerPitch;
-		}
-		riddenByEntity.lastTickPosX = riddenByEntity.prevPosX = prevPlayerPosX;
-		riddenByEntity.lastTickPosY = riddenByEntity.prevPosY = prevPlayerPosY;
-		riddenByEntity.lastTickPosZ = riddenByEntity.prevPosZ = prevPlayerPosZ;
-		
-		//riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
+		if(riddenByEntity == null || (worldObj.isRemote && !foundDriveable))
+        {
+            return;
+        } else
+        {
+        	DriveableType type = driveable.getDriveableType();
+			Vec3 yOffset = driveable.rotate(0, riddenByEntity.getYOffset(), 0).toVec3();
+        
+            
+
+			return;
+        }
     }
+	**/
+	
 	
 	@Override
     public ItemStack getPickedResult(MovingObjectPosition target)
@@ -547,13 +566,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getPlayerRoll() 
 	{
-		return playerRoll;	
-	}	
-	
-	@Override
-	public float getPrevPlayerRoll() 
-	{
-		return prevPlayerRoll;
+		for(; playerRoll - prevPlayerRoll > 180F; playerRoll -= 360F) ;
+		for(; playerRoll - prevPlayerRoll < -180F; playerRoll += 360F) ;
+		return playerRoll;
 	}
 	
 	@Override
@@ -563,11 +578,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	}
 	
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float f)
-	{
-		if(worldObj.isRemote && !foundDriveable)
-			return false;
-		return driveable.attackEntityFrom(source, f);
+	public boolean attackEntityFrom(DamageSource source, float f) {
+		return !(worldObj.isRemote && !foundDriveable) && driveable.attackEntityFrom(source, f);
 	}
 
 	@Override

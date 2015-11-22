@@ -13,15 +13,8 @@ public class FlansModResourceHandler
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
-	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
-	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();	
-	private static HashMap<String, ResourceLocation> blockMap = new HashMap<String, ResourceLocation>();
-	
-	public static ResourceLocation flag = new ResourceLocation("flansmod", "textures/items/flagpole.png");
-	public static ResourceLocation[] opStick = new ResourceLocation[] { new ResourceLocation("flansmod", "textures/items/opStick_ownership.png"),
-		new ResourceLocation("flansmod", "textures/items/opStick_connecting.png"), new ResourceLocation("flansmod", "textures/items/opStick_mapping.png"), 
-		new ResourceLocation("flansmod", "textures/items/opStick_destruction.png")  };
+	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();
 	
 	public static ResourceLocation getIcon(InfoType infoType)
 	{
@@ -91,28 +84,6 @@ public class FlansModResourceHandler
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + paintjob.textureName + ".png");
 		paintjobMap.put(paintjob, resLoc);
-		return resLoc;
-	}
-
-	public static ResourceLocation getBlockTexture(String texturePath) 
-	{
-		if(blockMap.containsKey(texturePath))
-		{
-			return blockMap.get(texturePath);
-		}
-		ResourceLocation resLoc = new ResourceLocation("flansmod", "blocks/" + texturePath);
-		blockMap.put(texturePath, resLoc);
-		return resLoc;
-	}
-
-	public static ResourceLocation getIcon(GunType gunType, Paintjob paintjob) 
-	{
-		if(paintjobIconMap.containsKey(paintjob))
-		{
-			return paintjobIconMap.get(paintjob);
-		}
-		ResourceLocation resLoc = new ResourceLocation("flansmod", "textures/items/" + paintjob.iconName + ".png");
-		paintjobIconMap.put(paintjob, resLoc);
 		return resLoc;
 	}
 }

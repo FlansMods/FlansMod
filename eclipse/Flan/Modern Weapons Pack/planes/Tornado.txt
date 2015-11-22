@@ -1,5 +1,5 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
-Name Tornado F3
+Name Panavia Tornado GR4
 ShortName tornado
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Tornado
@@ -99,6 +99,7 @@ SetupPart coreWheel 100 7 -10 -3 10 20 6
 SetupPart leftWingWheel 100 -83 -10 -18 10 26 6
 SetupPart rightWingWheel 100 -83 -10 12 10 26 6
 BulletDetection 10
+HasWing True
 
 
 //RightWing

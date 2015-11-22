@@ -3,7 +3,6 @@ package com.flansmod.common.driveables;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -17,13 +16,12 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketVehicleControl;
-import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class EntityVehicle extends EntityDriveable implements IExplodeable
@@ -407,7 +405,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 			}
 			
-			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getEntityBoundingBox()))
+			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.boundingBox))
 			{
 				wheel.motionY += type.buoyancy;
 			}
@@ -448,74 +446,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			if(type.tank)
 			{
 				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) + (float)Math.PI / 2F;
-				//yaw = averageAngles((float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX),(float)Math.atan2(wheels[1].posZ - wheels[0].posZ, wheels[1].posX - wheels[0].posX));
 			}
 			
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
 		
 		checkForCollisions();
-		
-		/*
-		Vec3 zAxis2 = subtract(wheelVectors[1], wheelVectors[0]).normalize();
-		Vec3 xAxis = subtract(wheelVectors[3], wheelVectors[0]).normalize();
-		Vec3 yAxis = crossProduct(zAxis2, xAxis);
-		Matrix4f rotationMatrix = new Matrix4f();
-		rotationMatrix.m00 = (float)xAxis.xCoord;
-		rotationMatrix.m10 = (float)xAxis.yCoord;
-		rotationMatrix.m20 = (float)xAxis.zCoord;
-		rotationMatrix.m01 = (float)yAxis.xCoord;
-		rotationMatrix.m11 = (float)yAxis.yCoord;
-		rotationMatrix.m21 = (float)yAxis.zCoord;
-		rotationMatrix.m02 = (float)zAxis2.xCoord;
-		rotationMatrix.m12 = (float)zAxis2.yCoord;
-		rotationMatrix.m22 = (float)zAxis2.zCoord;
-		axes = new RotatedAxes(rotationMatrix);
-*/
-		
-		//Fuel Handling
-		
-		//If the fuel item has stack size <= 0, delete it
-		if(data.fuel != null && data.fuel.stackSize <= 0)
-			data.fuel = null;
-		
-		//Work out if we are fuelling (from a Flan's Mod fuel item)
-		fuelling = data.fuel != null && data.fuelInTank < type.fuelTankSize && data.fuel.stackSize > 0 && data.fuel.getItem() instanceof ItemPart && ((ItemPart)data.fuel.getItem()).type.category == 9;
-		
-		//If we are fuelling
-		if(fuelling)
-		{
-			int damage = data.fuel.getItemDamage();
-			//Consume 10 points of fuel (1 damage)
-			data.fuel.setItemDamage(damage + 1);
-			//Put 10 points of fuel 
-			data.fuelInTank += 10;
-			//If we have finished this fuel item
-			if(damage >= data.fuel.getMaxDamage())
-			{
-				//Reset the damage to 0
-				data.fuel.setItemDamage(0);
-				//Consume one item
-				data.fuel.stackSize--;
-				//If we consumed the last one, destroy the stack
-				if(data.fuel.stackSize <= 0)
-					data.fuel = null;
-			}	
-		}
-		//Check fuel slot for builcraft buckets and if found, take fuel from them
-		if(FlansMod.hooks.BuildCraftLoaded && !fuelling && data.fuel != null && data.fuel.stackSize > 0)
-		{
-			if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftOilBucket) && data.fuelInTank + 500 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 5000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-			else if(data.fuel.isItemEqual(FlansMod.hooks.BuildCraftFuelBucket) && data.fuelInTank + 1000 <= type.fuelTankSize)
-			{
-				data.fuelInTank += 10000;
-				data.fuel = new ItemStack(Items.bucket);
-			}
-		}
 
 		//Sounds
 		//Starting sound
@@ -574,12 +510,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
     
 	private Vec3 subtract(Vec3 a, Vec3 b)
 	{
-		return new Vec3(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
+		return Vec3.createVectorHelper(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
 	}
 	
 	private Vec3 crossProduct(Vec3 a, Vec3 b)
 	{
-        return new Vec3(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
+        return Vec3.createVectorHelper(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
 	}
 	    
     @Override
@@ -599,9 +535,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.item, 1, 0);
-			NBTTagCompound tags = new NBTTagCompound();
-			vehicleStack.setTagCompound(tags);
-			driveableData.writeToNBT(tags);
+			vehicleStack.stackTagCompound = new NBTTagCompound();
+			driveableData.writeToNBT(vehicleStack.stackTagCompound);
 			entityDropItem(vehicleStack, 0.5F);
 	 		setDead();
 		}

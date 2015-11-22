@@ -1,0 +1,99 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name AH-64D Apache
+ShortName ApacheAH64
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon ApacheAH64
+Model mw.ApacheAH64
+Texture AH64Apache
+//Third Person Camera Distance
+CameraDistance 17.5
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 0.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Heli
+//Throttle
+MaxThrottle 3.5
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 2
+TurnRightSpeed 2
+//Pitch modifiers
+LookUpSpeed 2
+LookDownSpeed 2
+//Roll modifiers
+RollLeftSpeed 2
+RollRightSpeed 2
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 2.5
+//Wheels (Fake wheels imitating skids)
+NumWheels 3
+WheelPosition 0 48 -10 -27
+WheelPosition 1 48 -10 27
+WheelPosition 2 -211 12 0
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+HeliPropeller 0 54 0 0 core Thruster
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Gun
+Secondary Missile
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 5
+ShootDelaySecondary 20
+//Whether to alternate or fire all together
+AlternatePrimary True
+AlternateSecondary True
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointSecondary 45 22 55 rightWing
+ShootPointSecondary 45 22 -55 rightWing
+ShootPointPrimary 45 22 37 rightWing Hydra70
+ShootPointPrimary 45 22 -37 rightWing Hydra70
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 8
+AllowAllAmmo False
+AddAmmo Hellfire
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 5000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 54 32 0
+Passengers 1
+Passenger 1 83 24 0 core -360 360 -90 5 m60 Gunner
+GunOrigin 1 73 6 0 
+
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound HelicopterStart
+StartSoundLength 100
+PropSound Helicopter1
+PropSoundLength 93
+ShootSoundPrimary RPGShoot
+ShootSoundSecondary RocketFire2
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 advancedMetalCockpit
+AddRecipeParts skids 3 wheel
+AddRecipeParts blades 4 helicopterBlade
+AddRecipeParts rightWing 1 blockRedstone 1 blockIron
+AddRecipeParts leftWing 1 blockRedstone 1 blockIron
+AddRecipeParts tail 1 metalTail 1 metalPropeller
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 green
+AddDye 2 black
+// Health
+SetupPart core 500 -88 16 -25 210 48 50
+SetupPart tail 300 -197 16 -12 108 30 24
+SetupPart leftWing 200 0 8 -63 44 34 38
+SetupPart rightWing 200 0 8 25 44 34 38
+BulletDetection 8
+HasGear True
+ModelScale 1
+

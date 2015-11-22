@@ -7,7 +7,6 @@ import java.util.Random;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
@@ -18,21 +17,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -78,9 +73,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public Entity lockedOnTo;
 	
 	public float penetratingPower;
-	
-	private float yOffset;
-	
 
 	public EntityBullet(World world)
 	{
@@ -105,7 +97,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	/** Method called by ItemGun for creating bullets from a hand held weapon */
 	public EntityBullet(World world, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, boolean shot, InfoType shotFrom)
 	{
-		this(world, new Vec3(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw, shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
+		this(world, Vec3.createVectorHelper(shooter.posX, shooter.posY + shooter.getEyeHeight(), shooter.posZ), shooter.rotationYaw, shooter.rotationPitch, shooter, spread, gunDamage, type1, speed, shotFrom);
 		shotgun = shot;
 	}
 
@@ -156,16 +148,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	protected void entityInit()
 	{
 	}
-	
-	@Override
-	public AxisAlignedBB getBoundingBox()
-	{
-		return getEntityBoundingBox();
-	}
 
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed)
 	{
-		spread /= 5F;
 		float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
 		d /= f2;
 		d1 /= f2;
@@ -317,7 +302,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				//If we couldn't get a snapshot, use normal entity hitbox calculations
 				if(data == null || shouldDoNormalHitDetect)
 				{
-					MovingObjectPosition mop = player.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
+					MovingObjectPosition mop = player.boundingBox.calculateIntercept(origin.toVec3(), Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)
 					{
 						Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - posX, mop.hitVec.yCoord - posY, mop.hitVec.zCoord - posZ);
@@ -338,9 +323,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			else
 			{
 				Entity entity = (Entity)obj;
-				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade) && entity.getEntityBoundingBox() != null)
+				if(entity != this && entity != owner && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun || entity instanceof EntityGrenade))
 				{
-					MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(origin.toVec3(), new Vec3(posX + motionX, posY + motionY, posZ + motionZ));
+					MovingObjectPosition mop = entity.boundingBox.calculateIntercept(origin.toVec3(), Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ));
 					if(mop != null)
 					{
 						Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - posX, mop.hitVec.yCoord - posY, mop.hitVec.zCoord - posZ);
@@ -361,11 +346,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 		
 		//Ray trace the bullet by comparing its next position to its current position
-		Vec3 posVec = new Vec3(posX, posY, posZ);
-		Vec3 nextPosVec = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
-		MovingObjectPosition hit = worldObj.rayTraceBlocks(posVec, nextPosVec, false, true, true);
+		Vec3 posVec = Vec3.createVectorHelper(posX, posY, posZ);
+		Vec3 nextPosVec = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
+		MovingObjectPosition hit = worldObj.func_147447_a(posVec, nextPosVec, false, true, true);
 		
-		posVec = new Vec3(posX, posY, posZ);
+		posVec = Vec3.createVectorHelper(posX, posY, posZ);
 		
 		if(hit != null)
 		{
@@ -433,19 +418,21 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					BlockHit blockHit = (BlockHit)bulletHit;
 					MovingObjectPosition raytraceResult = blockHit.raytraceResult;
 					//If the hit wasn't an entity hit, then it must've been a block hit
-					BlockPos pos = raytraceResult.getBlockPos();
+					int xTile = raytraceResult.blockX;
+					int yTile = raytraceResult.blockY;
+					int zTile = raytraceResult.blockZ;
 					if(FlansMod.DEBUG)
 						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, new Vector3f(raytraceResult.hitVec.xCoord, raytraceResult.hitVec.yCoord, raytraceResult.hitVec.zCoord), 1000, 0F, 1F, 0F));
 
-					Block block = worldObj.getBlockState(pos).getBlock();
+					Block block = worldObj.getBlock(xTile, yTile, zTile);
 					Material mat = block.getMaterial();
 					//If the bullet breaks glass, and can do so according to FlansMod, do so.
 					if(type.breaksGlass && mat == Material.glass)
 					{
 						if(TeamsManager.canBreakGlass)
                         {
-                            worldObj.setBlockToAir(pos);
-                            FlansMod.proxy.playBlockBreakSound(pos.getX(), pos.getY(), pos.getZ(), block);
+                            worldObj.setBlockToAir(xTile, yTile, zTile);
+                            FlansMod.proxy.playBlockBreakSound(xTile, yTile, zTile, block);
                         }
 					}
 					
@@ -528,7 +515,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			for(int i = 0; i < 4; i++)
 			{
 				float bubbleMotion = 0.25F;
-				worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * bubbleMotion, posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
+				worldObj.spawnParticle("bubble", posX - motionX * bubbleMotion, posY - motionY * bubbleMotion, posZ - motionZ * bubbleMotion, motionX, motionY, motionZ);
 			}
 			drag = 0.8F;
 		}
@@ -575,7 +562,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 		
 		//Particles 
-		if (type.trailParticles && worldObj.isRemote)
+		if (type.trailParticles && worldObj.isRemote && ticksInAir > 1)
 		{
 			spawnParticles();
 		}
@@ -591,9 +578,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		double dX = (posX - prevPosX) / 10;
 		double dY = (posY - prevPosY) / 10;
 		double dZ = (posZ - prevPosZ) / 10;
+		
+		float spread = 0.1F;
 		for (int i = 0; i < 10; i++)
 		{
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread, prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
 			//worldObj.spawnEntityInWorld(particle);
@@ -607,27 +596,20 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		else return (new EntityDamageSourceIndirect(type.shortName, this, owner)).setProjectile();
 	}
 
-	private boolean isPartOfOwner(Entity entity)
-	{
-		if(owner == null)
+	private boolean isPartOfOwner(Entity entity) {
+		if (owner == null)
 			return false;
 		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
 			return true;
-		if (owner instanceof EntityPlayer)
-		{
-			if(PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
+		if (owner instanceof EntityPlayer) {
+			if (PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER) == null)
 				return false;
-			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer)owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
-			if (mg != null && mg == entity)
-			{
+			EntityMG mg = PlayerHandler.getPlayerData((EntityPlayer) owner, worldObj.isRemote ? Side.CLIENT : Side.SERVER).mountingGun;
+			if (mg != null && mg == entity) {
 				return true;
 			}
 		}
-		if(owner.ridingEntity instanceof EntitySeat)
-		{
-			return ((EntitySeat)owner.ridingEntity).driveable == null || ((EntitySeat)owner.ridingEntity).driveable.isPartOfThis(entity);
-		}
-		return false;
+		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null || ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
 	}
 
 	@Override
@@ -640,10 +622,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
-	        //if(owner instanceof EntityPlayer)
-	        //	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
-	        //else 
-			worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        if(owner instanceof EntityPlayer)
+	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, firedFrom, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
+	        else worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions);
 		}
 		if(type.fireRadius > 0)
 		{
@@ -653,9 +634,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				{
 					for(int j = -1; j < 1; j++)
 					{
-						if (worldObj.getBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k))).getBlock().getMaterial() == Material.air)
+						if (worldObj.getBlock((int)(posX + i), (int)(posY + j), (int)(posZ + k)).getMaterial() == Material.air)
 						{
-							worldObj.setBlockState(new BlockPos((int)(posX + i), (int)(posY + j), (int)(posZ + k)), new BlockState(Blocks.fire).getBaseState());
+							worldObj.setBlock((int)(posX + i), (int)(posY + j), (int)(posZ + k), Blocks.fire);
 						}
 					}
 				}
@@ -686,7 +667,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (owner == null)
 			tag.setString("owner", "null");
 		else
-			tag.setString("owner", owner.getName());
+			tag.setString("owner", owner.getCommandSenderName());
 	}
 
 	@Override
@@ -699,7 +680,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			type = BulletType.getBullet(typeString);
 		
 		if (ownerName != null && !ownerName.equals("null"))
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerByUsername(ownerName);
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(ownerName);
+	}
+
+	@Override
+	public float getShadowSize()
+	{
+		return type.hitBoxSize;
 	}
 		
 	public int getBrightnessForRender(float par1)
@@ -713,11 +700,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			int i = MathHelper.floor_double(this.posX);
 			int j = MathHelper.floor_double(this.posZ);
 			
-			if(!worldObj.isAirBlock(new BlockPos(i, 0, j)))
+			if (this.worldObj.blockExists(i, 0, j))
 			{
-				double d0 = (getBoundingBox().maxY - getBoundingBox().minY) * 0.66D;
+				double d0 = (this.boundingBox.maxY - this.boundingBox.minY) * 0.66D;
 				int k = MathHelper.floor_double(this.posY - (double)this.yOffset + d0);
-				return this.worldObj.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
+				return this.worldObj.getLightBrightnessForSkyBlocks(i, k, j, 0);
 			}
 			else
 			{
@@ -737,7 +724,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (owner == null)
 			ByteBufUtils.writeUTF8String(data, "null");
 		else
-			ByteBufUtils.writeUTF8String(data, owner.getName());
+			ByteBufUtils.writeUTF8String(data, owner.getCommandSenderName());
 	}
 
 	@Override
@@ -756,11 +743,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			String name = ByteBufUtils.readUTF8String(data);
 			for(Object obj : worldObj.loadedEntityList)
 			{
-				if(obj != null && ((Entity)obj).getName().equals(name))
-				{
+				if(((Entity)obj).getCommandSenderName().equals(name))
 					owner = (EntityPlayer)obj;
-					break;
-				}
 			}
 		}
 		catch(Exception e)

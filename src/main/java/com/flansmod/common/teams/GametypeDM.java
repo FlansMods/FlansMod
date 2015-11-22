@@ -128,14 +128,11 @@ public class GametypeDM extends Gametype
 		if(data.newTeam == Team.spectators)
 		{
 			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
-			for(int j = 0; j < bases.size(); j++)
-			{
-				ITeamBase base = bases.get(j);
-				if(base.getMap() != teamsManager.currentRound.map)
+			for (ITeamBase base : bases) {
+				if (base.getMap() != teamsManager.currentRound.map)
 					continue;
-				for(int i = 0; i < base.getObjects().size(); i++)
-				{
-					if(base.getObjects().get(i).isSpawnPoint())
+				for (int i = 0; i < base.getObjects().size(); i++) {
+					if (base.getObjects().get(i).isSpawnPoint())
 						validSpawnPoints.add(base.getObjects().get(i));
 				}
 			}
@@ -145,14 +142,11 @@ public class GametypeDM extends Gametype
 			for(int k = 2; k < 4; k++)
 			{
 				ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
-				for(int j = 0; j < bases.size(); j++)
-				{
-					ITeamBase base = bases.get(j);
-					if(base.getMap() != teamsManager.currentRound.map)
+				for (ITeamBase base : bases) {
+					if (base.getMap() != teamsManager.currentRound.map)
 						continue;
-					for(int i = 0; i < base.getObjects().size(); i++)
-					{
-						if(base.getObjects().get(i).isSpawnPoint())
+					for (int i = 0; i < base.getObjects().size(); i++) {
+						if (base.getObjects().get(i).isSpawnPoint())
 							validSpawnPoints.add(base.getObjects().get(i));
 					}
 				}
@@ -161,7 +155,7 @@ public class GametypeDM extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return Vec3.createVectorHelper(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

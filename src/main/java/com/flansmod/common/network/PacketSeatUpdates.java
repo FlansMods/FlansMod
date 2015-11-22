@@ -7,8 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -73,9 +73,8 @@ public class PacketSeatUpdates extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityDriveable driveable = null;
-		for(int i = 0; i < clientPlayer.worldObj.loadedEntityList.size(); i++)
+		for(Object obj : clientPlayer.worldObj.loadedEntityList)
 		{
-			Object obj = clientPlayer.worldObj.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;

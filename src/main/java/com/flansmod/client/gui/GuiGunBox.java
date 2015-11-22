@@ -1,7 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -15,7 +13,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLClientHandler;
 
 import com.flansmod.common.guns.boxes.GunBoxType;
 
@@ -24,7 +22,7 @@ public class GuiGunBox extends GuiScreen
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/weaponBox.png");
 	private InventoryPlayer inventory;
 	private Minecraft mc;
-	private static RenderItem itemRenderer;
+	private static RenderItem itemRenderer = new RenderItem();
 	private GunBoxType type;
 	private int page;
 	private int guiOriginX;
@@ -45,12 +43,6 @@ public class GuiGunBox extends GuiScreen
 		super.updateScreen();
 		scroll++;
 	}
-	
-	@Override
-	public void initGui()
-	{
-		itemRenderer = mc.getRenderItem();
-	}
 
 	@Override
 	public void drawScreen(int i, int j, float f)
@@ -58,7 +50,7 @@ public class GuiGunBox extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -180,14 +172,14 @@ public class GuiGunBox extends GuiScreen
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
-		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
 		GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) throws IOException
+	protected void mouseClicked(int i, int j, int k)
 	{
 		super.mouseClicked(i, j, k);
 		int m = i - guiOriginX;

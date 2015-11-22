@@ -1,0 +1,13 @@
+Name Dense Redstone Coil
+ShortName denseRedstoneCoil
+Icon DenseRedstoneCoil
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+//Categories are Cockpit, Wing, Engine, Propeller, Bay, Tail, Wheel, Chassis, Turret, Misc
+Category Misc
+StackSize 64
+RecipeOutput 1
+Recipe R redstoneCoil B blockRedstone
+RRR
+RBR
+RRR

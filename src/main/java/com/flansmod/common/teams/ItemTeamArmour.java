@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -17,9 +18,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
@@ -33,7 +34,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	
 	public ItemTeamArmour(ArmourType t)
 	{
-		super(ItemArmor.ArmorMaterial.LEATHER, 0, t.type);
+		super(ItemArmor.ArmorMaterial.CLOTH, 0, t.type);
 		type = t;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanTeams);
@@ -76,10 +77,14 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		{
             Collections.addAll(lines, type.description.split("_"));
 		}
+		if(Math.abs(type.jumpModifier - 1F) > 0.01F)
+			lines.add("\u00a73+" + (int)((type.jumpModifier - 1F) * 100F) + "% Jump Height");
 		if(type.smokeProtection)
 			lines.add("\u00a72+Smoke Protection");
 		if(type.nightVision)
 			lines.add("\u00a72+Night Vision");
+		if(type.negateFallDamage)
+			lines.add("\u00a72+Negates Fall Damage");
 	}
 	
     @Override
@@ -87,6 +92,20 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
+    }
+    
+    @Override
+	@SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses()
+    {
+        return false;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister icon) 
+    {
+    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
     }
     
     @Override
@@ -116,5 +135,9 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
     {
 		if(type.nightVision && FlansMod.ticker % 25 == 0)
 			player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 250));
+		if(type.jumpModifier > 1.01F && FlansMod.ticker % 25 == 0)
+			player.addPotionEffect(new PotionEffect(Potion.jump.id, 250, (int)((type.jumpModifier - 1F) * 2F), true));
+		if(type.negateFallDamage)
+			player.fallDistance = 0F;
     }
 }

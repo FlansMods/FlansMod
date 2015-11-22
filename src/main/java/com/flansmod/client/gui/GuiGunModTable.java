@@ -1,6 +1,5 @@
 package com.flansmod.client.gui;
 
-import java.io.IOException;
 import java.util.Random;
 
 import org.lwjgl.input.Mouse;
@@ -106,7 +105,10 @@ public class GuiGunModTable extends GuiContainer
         		for(int y = 0; y < 4; y++)
         		{
         			if(x + y * 2 < gunType.numGenericAttachmentSlots)
+        			{
         				inventorySlots.getSlot(5 + x + y * 2).yDisplayPosition = 83 + 18 * y;
+        				drawTexturedModalRect(xOrigin + 9 + 18 * x, yOrigin + 82 + 18 * y, 178, 54, 18, 18);
+        			}
         		}
         	}
         	
@@ -121,10 +123,22 @@ public class GuiGunModTable extends GuiContainer
             		if(2 * y + x >= numPaintjobs)
             			continue;
             		
+            		drawTexturedModalRect(xOrigin + 131 + 18 * x, yOrigin + 82 + 18 * y, 178, 54, 18, 18);
+            	}
+            }
+        	
+            for(int y = 0; y < numRows; y++)
+            {
+            	for(int x = 0; x < 2; x++)
+            	{
+            		//If this row has only one paintjob, don't try and render the second one
+            		if(2 * y + x >= numPaintjobs)
+            			continue;
+            		
             		Paintjob paintjob = gunType.paintjobs.get(2 * y + x);
             		ItemStack stack = gunStack.copy();
-            		stack.getTagCompound().setString("Paint", paintjob.iconName);
-            		itemRender.renderItemIntoGUI(stack, xOrigin + 132 + x * 18, yOrigin + 83 + y * 18);
+            		stack.stackTagCompound.setString("Paint", paintjob.iconName);
+            		itemRender.renderItemIntoGUI(this.fontRendererObj, mc.getTextureManager(), stack, xOrigin + 132 + x * 18, yOrigin + 83 + y * 18);
             	}
             }
         }
@@ -180,15 +194,15 @@ public class GuiGunModTable extends GuiContainer
 	        	
 	        	for(int s = 0; s < numDyes; s++)
 	        	{
-	        		itemRender.renderItemIntoGUI(hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3);
-	        		itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3, null);
+	        		itemRender.renderItemIntoGUI(this.fontRendererObj, mc.getTextureManager(), hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3);
+	        		itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, mc.getTextureManager(), hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3);
 	        	}
         	}
         }
 	}
 	
 	@Override
-    public void handleMouseInput() throws IOException
+    public void handleMouseInput()
 	{
 		super.handleMouseInput();
 		
@@ -216,7 +230,7 @@ public class GuiGunModTable extends GuiContainer
             		
             		Paintjob paintjob = gunType.paintjobs.get(2 * j + i);
             		ItemStack stack = gunStack.copy();
-            		stack.getTagCompound().setString("Paint", paintjob.iconName);
+            		stack.stackTagCompound.setString("Paint", paintjob.iconName);
             		int slotX = 131 + i * 18;
             		int slotY = 82 + j * 18;
             		if(mouseXInGUI >= slotX && mouseXInGUI < slotX + 18 && mouseYInGUI >= slotY && mouseYInGUI < slotY + 18)
@@ -227,7 +241,7 @@ public class GuiGunModTable extends GuiContainer
 	}
 	
 	@Override
-    protected void mouseClicked(int x, int y, int button) throws IOException
+    protected void mouseClicked(int x, int y, int button)
     {
 		super.mouseClicked(x, y, button);
 		if(button != 0)

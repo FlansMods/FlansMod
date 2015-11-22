@@ -84,7 +84,7 @@ public class Matrix3f
 			for(int sm = 0; sm < 3; sm++) retVec[i] += row[sm]*column[sm];
     	}
     	
-    	return new Vec3(retVec[0], retVec[1], retVec[2]);
+    	return Vec3.createVectorHelper(retVec[0], retVec[1], retVec[2]);
     }
     
     public static Matrix3f multMatrix(Matrix3f m1, Matrix3f m2)

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import com.flansmod.client.model.ModelAAGun;
 import com.flansmod.common.FlansMod;
@@ -162,15 +162,10 @@ public class AAGunType extends InfoType
 		return ammo.contains(type);
 	}
 
-	public boolean isAmmo(ItemStack stack)
-	{
+	public boolean isAmmo(ItemStack stack) {
 		if (stack == null)
 			return false;
-		if (stack.getItem() instanceof ItemBullet)
-		{
-			return isAmmo(((ItemBullet) stack.getItem()).type);
-		}
-		return false;
+		return stack.getItem() instanceof ItemBullet && isAmmo(((ItemBullet) stack.getItem()).type);
 	}
 
 	public static AAGunType getAAGun(String s)

@@ -3,7 +3,6 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -11,7 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
@@ -20,10 +18,8 @@ import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.guns.ItemAAGun;
 
-public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdatePlayerListBox
+public class TileEntitySpawner extends TileEntity implements ITeamObject
 {
-	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
-	
 	//Server side
 	public int spawnDelay = 1200;
 	public List<ItemStack> stacksToSpawn = new ArrayList<ItemStack>();
@@ -54,18 +50,18 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
         NBTTagCompound tags = new NBTTagCompound();
         tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
         tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
-        return new S35PacketUpdateTileEntity(pos, 1, tags);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tags);
     }
     
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
     {
-    	teamID = packet.getNbtCompound().getByte("TeamID");
-    	map = packet.getNbtCompound().getString("Map");
+    	teamID = packet.func_148857_g().getByte("TeamID");
+    	map = packet.func_148857_g().getString("Map");
     }
     
-	@Override
-	public void update()
+    @Override
+    public void updateEntity()
     {
     	if(worldObj.isRemote)
     		return;
@@ -80,12 +76,12 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 				newBase.addObject(this);
 			}
 		}
-		if(worldObj.getBlockState(pos).getBlock() != FlansMod.spawner)
+		if(worldObj.getBlock(xCoord, yCoord, zCoord) != FlansMod.spawner)
 		{
 			destroy();
 			return;
 		}
-		if(((Integer)worldObj.getBlockState(pos).getValue(TYPE)).intValue() == 1)
+		if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
 			return;
 		for(int i = itemEntities.size() - 1; i >= 0; i--)
 		{
@@ -101,7 +97,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 			currentDelay = spawnDelay;
 			for(int i = 0; i < stacksToSpawn.size(); i++)
 			{
-				if(((Integer)worldObj.getBlockState(pos).getValue(TYPE)).intValue() == 2)
+				if(worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 2)
 				{
 					if(spawnedEntity != null && !spawnedEntity.isDead)
 					{
@@ -110,15 +106,15 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 					ItemStack stack = stacksToSpawn.get(i);
 					if(stack != null && stack.getItem() instanceof ItemPlane)
 					{
-						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(worldObj, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
+						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, stack);
 					}					
 					if(stack != null && stack.getItem() instanceof ItemVehicle)
 					{
-						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(worldObj, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
+						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, stack);
 					}
 					if(stack != null && stack.getItem() instanceof ItemAAGun)
 					{
-						spawnedEntity = ((ItemAAGun)stack.getItem()).spawnAAGun(worldObj, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, stack);
+						spawnedEntity = ((ItemAAGun)stack.getItem()).spawnAAGun(worldObj, xCoord + 0.5F, yCoord, zCoord + 0.5F, stack);
 					}
 				}
 				else
@@ -136,7 +132,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 		super.writeToNBT(nbt);
 		nbt.setInteger("delay", spawnDelay);
 		nbt.setInteger("Base", baseID);
-		nbt.setInteger("dim", worldObj.provider.getDimensionId());
+		nbt.setInteger("dim", worldObj.provider.dimensionId);
 		nbt.setInteger("numStacks", stacksToSpawn.size());
 		for(int i = 0; i < stacksToSpawn.size(); i++)
 		{
@@ -179,7 +175,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.getDimensionId());
+		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 
 	@Override
@@ -194,7 +190,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 		base = b;
 		if(b != null)
 			baseID = b.getBaseID();
-		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.getDimensionId());
+		FlansMod.packetHandler.sendToDimension(getDescriptionPacket(), worldObj == null ? dimension : worldObj.provider.dimensionId);
 	}
 
 	@Override
@@ -206,31 +202,31 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	@Override
 	public void destroy() 
 	{
-		worldObj.setBlockState(pos, Blocks.air.getDefaultState());
+		worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air);
 	}
 
 	@Override
 	public double getPosX() 
 	{
-		return pos.getX() + 0.5F;
+		return xCoord + 0.5F;
 	}
 
 	@Override
 	public double getPosY() 
 	{
-		return pos.getY() + 0.5F;
+		return yCoord + 0.5F;
 	}
 
 	@Override
 	public double getPosZ() 
 	{
-		return pos.getZ() + 0.5F;
+		return zCoord + 0.5F;
 	}
 	
 	@Override
 	public boolean isSpawnPoint()
 	{
-		int metadata = ((Integer)worldObj.getBlockState(pos).getValue(TYPE)).intValue();
+		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		return metadata == 1;
 	}
 	/*

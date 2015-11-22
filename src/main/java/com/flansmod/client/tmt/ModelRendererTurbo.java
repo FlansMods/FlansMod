@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TexturedQuad;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -147,11 +145,10 @@ public class ModelRendererTurbo extends ModelRenderer
 			float yMin = -1;
 			float xMax = 0;
 			float yMax = 0;
-			
-			for(int i = 0; i < verts.length; i++)
-			{
-				float xPos = verts[i].texturePositionX;
-				float yPos = verts[i].texturePositionY;
+
+			for (PositionTextureVertex vert : verts) {
+				float xPos = vert.texturePositionX;
+				float yPos = vert.texturePositionY;
 				xMax = Math.max(xMax, xPos);
 				xMin = (xMin < -1 ? xPos : Math.min(xMin, xPos));
 				yMax = Math.max(yMax, yPos);
@@ -195,11 +192,10 @@ public class ModelRendererTurbo extends ModelRenderer
 			float yMin = -1;
 			float xMax = 0;
 			float yMax = 0;
-			
-			for(int i = 0; i < verts.length; i++)
-			{
-				float xPos = verts[i].texturePositionX;
-				float yPos = verts[i].texturePositionY;
+
+			for (PositionTextureVertex vert : verts) {
+				float xPos = vert.texturePositionX;
+				float yPos = vert.texturePositionY;
 				xMax = Math.max(xMax, xPos);
 				xMin = (xMin < -1 ? xPos : Math.min(xMin, xPos));
 				yMax = Math.max(yMax, yPos);
@@ -314,9 +310,8 @@ public class ModelRendererTurbo extends ModelRenderer
 		qParam[2]*qParam[5], qParam[2], 1F, qParam[5]);
 		if(mirror ^ flip)
 		{
-			for(int l = 0; l < poly.length; l++)
-			{
-				poly[l].flipFace();
+			for (TexturedPolygon aPoly : poly) {
+				aPoly.flipFace();
 			}
 
 		}
@@ -1802,9 +1797,8 @@ public class ModelRendererTurbo extends ModelRenderer
 		TexturedPolygon[] poly = Arrays.copyOf(entry.faces, entry.faces.length);
 		if(flip)
 		{
-			for(int l = 0; l < faces.length; l++)
-			{
-				faces[l].flipFace();
+			for (TexturedPolygon face : faces) {
+				face.flipFace();
 			}
 		}
 		
@@ -1846,15 +1840,15 @@ public class ModelRendererTurbo extends ModelRenderer
 	 */
 	public void doMirror(boolean x, boolean y, boolean z)
 	{
-		for(int i = 0; i < faces.length; i++)
-		{
-			PositionTextureVertex[] verts = faces[i].vertexPositions;
-			for(int j = 0; j < verts.length; j++)
-			{
-				verts[j].vector3D = new Vec3(verts[j].vector3D.xCoord * (x ? -1 : 1), verts[j].vector3D.yCoord * (y ? -1 : 1), verts[j].vector3D.zCoord * (z ? -1 : 1));	
+		for (TexturedPolygon face : faces) {
+			PositionTextureVertex[] verts = face.vertexPositions;
+			for (int j = 0; j < verts.length; j++) {
+				verts[j].vector3D.xCoord *= (x ? -1 : 1);
+				verts[j].vector3D.yCoord *= (y ? -1 : 1);
+				verts[j].vector3D.zCoord *= (z ? -1 : 1);
 			}
-			if(x^y^z)
-				faces[i].flipFace();
+			if (x ^ y ^ z)
+				face.flipFace();
 		}
 	}
 	
@@ -2102,9 +2096,8 @@ public class ModelRendererTurbo extends ModelRenderer
 			callDisplayList();
 			if(childModels != null)
 			{
-				for(int i = 0; i < childModels.size(); i++)
-				{
-					((ModelRenderer)childModels.get(i)).render(worldScale);
+				for (Object childModel : childModels) {
+					((ModelRenderer) childModel).render(worldScale);
 				}
 
 			}
@@ -2116,9 +2109,8 @@ public class ModelRendererTurbo extends ModelRenderer
 			callDisplayList();
 			if(childModels != null)
 			{
-				for(int i = 0; i < childModels.size(); i++)
-				{
-					((ModelRenderer)childModels.get(i)).render(worldScale);
+				for (Object childModel : childModels) {
+					((ModelRenderer) childModel).render(worldScale);
 				}
 
 			}
@@ -2128,9 +2120,8 @@ public class ModelRendererTurbo extends ModelRenderer
 			callDisplayList();
 			if(childModels != null)
 			{
-				for(int i = 0; i < childModels.size(); i++)
-				{
-					((ModelRenderer)childModels.get(i)).render(worldScale);
+				for (Object childModel : childModels) {
+					((ModelRenderer) childModel).render(worldScale);
 				}
 
 			}
@@ -2213,7 +2204,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			GL11.glCallList(displayList);
 		else
 		{
-			TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
+			TextureManager renderEngine = RenderManager.instance.renderEngine;
 			
 			Collection<TextureGroup> textures = textureGroup.values();
 			
@@ -2263,9 +2254,8 @@ public class ModelRendererTurbo extends ModelRenderer
 		displayList = GLAllocation.generateDisplayLists(1);
 		GL11.glNewList(displayList, GL11.GL_COMPILE);
 		TmtTessellator tessellator = TmtTessellator.instance;
-		for(int i = 0; i < faces.length; i++)
-		{
-			faces[i].draw(tessellator, worldScale);
+		for (TexturedPolygon face : faces) {
+			face.draw(tessellator, worldScale);
 		}
 
 		GL11.glEndList();

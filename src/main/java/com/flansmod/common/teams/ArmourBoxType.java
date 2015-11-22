@@ -4,21 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 
-import com.flansmod.client.renderhack.ITextureHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class ArmourBoxType extends InfoType
+public class ArmourBoxType extends InfoType 
 {
 	//Textures
 	public String topTexturePath;
 	public String sideTexturePath;
 	public String bottomTexturePath;
+	@SideOnly(Side.CLIENT)
+	public IIcon top;
+	@SideOnly(Side.CLIENT)
+	public IIcon side;
+	@SideOnly(Side.CLIENT)
+	public IIcon bottom;
 	
 	public BlockArmourBox block;
 	

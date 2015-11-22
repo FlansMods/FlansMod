@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import com.flansmod.client.gui.GuiTeamSelect;
 import com.flansmod.common.FlansMod;
@@ -73,18 +73,16 @@ public class PacketTeamSelect extends PacketBase
 			if(classChoicesPacket)
 			{
 		    	data.writeByte(playerClasses.length);
-		    	for(int i = 0; i < playerClasses.length; i++)
-		    	{
-		    		writeUTF(data, playerClasses[i].shortName);
-		    	}
+				for (PlayerClass playerClass : playerClasses) {
+					writeUTF(data, playerClass.shortName);
+				}
 			}
 			else
 			{
 		    	data.writeByte(teams.length);
-		    	for(int i = 0; i < teams.length; i++)
-		    	{
-		    		writeUTF(data, teams[i] == null ? "null" : teams[i].shortName);
-		    	}
+				for (Team team : teams) {
+					writeUTF(data, team == null ? "null" : team.shortName);
+				}
 			}
 		}
 	}
