@@ -72,3 +72,4 @@ AddGun mwRiotShield 12 fiberglass 12 thinGlass 16 ingotIron
 AddGun Hydra70Ammo 19 iron 19 gunpowder
 AddGun Hellfire 2 iron 4 fiberglass 4 gunpowder 2 redstone
 AddGun TRIGAT 2 iron 4 fiberglass 5 gunpowder 1 redstone
+AddGun AMGMaverick 5 iron 2 fiberglass 5 gunpowder 1 redstone
