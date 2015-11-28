@@ -76,5 +76,5 @@ SetupPart backRightWheel 1500 -20 -10 14 8 8 2
 SetupPart frontLeftWheel 1500 12 -10 -16 8 8 2
 SetupPart frontRightWheel 1500 12 -10 14 8 8 2
 BulletDetection 5
-Description American Jeep
+Description British Willy's Jeep
 ModelScale 0.95

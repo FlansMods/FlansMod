@@ -1,5 +1,5 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
-Name P-51 Mustang
+Name P-51D Mustang
 ShortName Mustang
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon Mustang
@@ -94,6 +94,7 @@ AddRecipeParts tailWheel 1 wheel
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 AddDye 6 lightBlue
 AddDye 2 yellow
+AddDye 4 silver
 // ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
 SetupPart core 1000 -14 8 -10 56 39 20
 SetupPart nose 1000 42 15 -10 56 24 20

@@ -1,5 +1,5 @@
 //Naming
-Name Tiger
+Name Tiger H1
 ShortName Tiger
 //Visuals
 Icon Tiger
