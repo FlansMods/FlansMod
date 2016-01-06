@@ -87,6 +87,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	
 	private float yOffset;
 	
+	/** For explosion offset purposes to fix explosion inside of the hit block*/
+	private int sideHit=1;
+	
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
 	
@@ -476,6 +479,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				if(penetratingPower <= 0F || (type.explodeOnImpact && ticksInAir > 1))
 				{
 					setPosition(posX + motionX * bulletHit.intersectTime, posY + motionY * bulletHit.intersectTime, posZ + motionZ * bulletHit.intersectTime);
+					sideHit=hit.sideHit;
 					setDead();
 					break;
 				}
@@ -665,6 +669,25 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
+		switch (sideHit)
+			{
+			case 0 : {
+				//hit from below
+				posY = posY-0.0001;
+				break;
+			}
+			
+			case 2 : {
+				//hit north facing side
+				posZ = posZ-0.0001;
+				break;
+			}
+			
+			case 4 : {
+				//hit west facing side
+				posX = posX-0.0001;
+				break;
+			}
 	        if((owner instanceof EntityPlayer))
 	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.flak > 0, type.explosionBreaksBlocks);
 	        else 

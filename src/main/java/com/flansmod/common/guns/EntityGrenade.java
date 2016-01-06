@@ -69,6 +69,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public boolean detonated = false;
 	/** For deployable bags */
 	public int numUsesRemaining = 0;
+	/** For sticky grenades proper explosion*/
+	private int sideHit=1;
 	
 	public EntityGrenade(World w) 
 	{
@@ -257,12 +259,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					Vector3f postHitMotVec = Vector3f.sub(motVec, preHitMotVec, null);
 					
 					//Reflect postHitMotVec based on side hit
-					EnumFacing sideHit = hit.sideHit;
+					sideHit = hit.sideHit;
 					switch(sideHit)
 					{
-					case UP : case DOWN : postHitMotVec.setY(-postHitMotVec.getY()); break;
-					case EAST : case WEST : postHitMotVec.setX(-postHitMotVec.getX()); break;
-					case NORTH : case SOUTH : postHitMotVec.setZ(-postHitMotVec.getZ()); break;
+					case 0 : case 1 : postHitMotVec.setY(-postHitMotVec.getY()); break;
+					case 4 : case 5 : postHitMotVec.setX(-postHitMotVec.getX()); break;
+					case 2 : case 3 : postHitMotVec.setZ(-postHitMotVec.getZ()); break;
 					//TODO : Check the compass directions are correct
 					}
 					
@@ -309,12 +311,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-						case DOWN : axes.setAngles(yaw, 180F, 0F); break;
-						case UP : axes.setAngles(yaw, 0F, 0F); break;
-						case NORTH : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case SOUTH : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case WEST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case EAST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 0 : axes.setAngles(yaw, 180F, 0F); break;
+						case 1 : axes.setAngles(yaw, 0F, 0F); break;
+						case 2 : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 3 : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 4 : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case 5 : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
 						}
 						
 						//Set the stuck flag on
@@ -393,6 +395,31 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
 	        if((thrower instanceof EntityPlayer))
+	        	//check the side the sticky grenade hit, depending on the side offset the explosion by a minimum to prevent explosion being created inside the block that the grenade is stuck to
+	        	//ignore if it is not sticky
+	        	if(type.sticky)
+	        	{
+	        	switch (sideHit)
+				{
+				case 0 : {
+					//hit from below
+					posY = posY-0.0001;
+					break;
+				}
+				
+				case 2 : {
+					//hit north facing side
+					posZ = posZ-0.0001;
+					break;
+				}
+				
+				case 4 : {
+					//hit west facing side
+					posX = posX-0.0001;
+					break;
+				}
+				}
+	        	}
 	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
 	        else 
 	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
