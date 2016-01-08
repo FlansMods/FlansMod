@@ -33,6 +33,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.ExplosionEvent;
 
 public class FlansModExplosion extends Explosion 
 {
@@ -207,12 +208,13 @@ public class FlansModExplosion extends Explosion
 
         if (this.isSmoking&&breaksBlocks)
         {
-            worldObj.createExplosion(detonator, x, y, z, radius, true);
+            this.world.createExplosion(detonator, x, y, z, radius, true);
         }
         
         else if (this.isSmoking)
         {
-            entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
+        	Explosion expl=new Explosion(world, explosive, x, y, z, radius, true, true);
+        	expl.doExplosionA();
         }
 
         if (this.isFlaming)
