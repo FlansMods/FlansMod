@@ -311,12 +311,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-						case UP : axes.setAngles(yaw, 180F, 0F); break;
-						case DOWN : axes.setAngles(yaw, 0F, 0F); break;
+						case DOWN : axes.setAngles(yaw, 180F, 0F); break;
+						case UP : axes.setAngles(yaw, 0F, 0F); break;
 						case NORTH : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
 						case SOUTH : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case EAST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case WEST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case WEST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+						case EAST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
 						}
 						
 						//Set the stuck flag on
