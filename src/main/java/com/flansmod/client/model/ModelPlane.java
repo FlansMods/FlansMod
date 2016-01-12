@@ -17,11 +17,11 @@ public class ModelPlane extends ModelDriveable
 	//Shapebox template for copy paste
 	//, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
 	
-    public ModelRendererTurbo noseModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo leftWingModel[] = new ModelRendererTurbo[0];	
-    public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo topWingModel[] = new ModelRendererTurbo[0];
-    public ModelRendererTurbo bayModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo noseModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo leftWingModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo topWingModel[] = new ModelRendererTurbo[0];
+	public ModelRendererTurbo bayModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailModel[] = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo propellerModels[][] = new ModelRendererTurbo[0][0]; //Propeller array [numProps][prop blades]
 	public ModelRendererTurbo yawFlapModel[] = new ModelRendererTurbo[0];
@@ -99,9 +99,9 @@ public class ModelPlane extends ModelDriveable
 		renderPart(hudModel);
 	}
 	
-    public void render(float f5, EntityPlane plane, float f)
-    {
-    	PlaneType type = plane.getPlaneType();
+	public void render(float f5, EntityPlane plane, float f)
+	{
+		PlaneType type = plane.getPlaneType();
 		//Rotating the propeller
 		float angle = plane.propAngle;
 		for(Propeller propeller : plane.getPlaneType().propellers)
@@ -230,7 +230,7 @@ public class ModelPlane extends ModelDriveable
 		}
 		if(plane.isPartIntact(EnumDriveablePart.rightWingWheel))
 		{
-	        //Gear
+			//Gear
 			for (ModelRendererTurbo aRightWingWheelModel : rightWingWheelModel) {
 				if (plane.varGear)
 					aRightWingWheelModel.render(f5);
@@ -277,59 +277,59 @@ public class ModelPlane extends ModelDriveable
 				aTopWingModel.render(f5);
 			}
 		}
-        //Render guns
-        for(EntitySeat seat : plane.seats)
-        {
-        	//If the seat has a gun model attached
-        	if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && plane.isPartIntact(seat.seatInfo.part))
-        	{
-        		float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
-        		float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;  
-        		
-        		//Iterate over the parts of that model
-        		ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
-        		//Yaw only parts
-    			for(ModelRendererTurbo gunModelPart : gunModel[0])
-    			{
-    				//Yaw and render
-        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
-        			gunModelPart.render(f5);
-    			}
-        		//Yaw and pitch, no recoil parts
-    			for(ModelRendererTurbo gunModelPart : gunModel[1])
-    			{
-    				//Yaw, pitch and render
-        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
-        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
-        			gunModelPart.render(f5);
-    			}
-        		//Yaw, pitch and recoil parts
-    			for(ModelRendererTurbo gunModelPart : gunModel[2])
-    			{
-    				//Yaw, pitch, recoil and render
-        			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
-        			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
-        			gunModelPart.render(f5);
-    			}
-    			if(gunModel.length > 3)
-    			{
-    				//Minigun barrel part
-    				float minigunSpeed = seat.getMinigunSpeed();
-        			for(ModelRendererTurbo gunModelPart : gunModel[3])
-        			{
-        				//Yaw, pitch, recoil and render
-            			gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
-            			gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
-            			gunModelPart.rotateAngleX = seat.minigunAngle * 0.5F;
-            			gunModelPart.render(f5);
-        			}
-    			}
-        	}
-        }
-    }
-    
+		//Render guns
+		for(EntitySeat seat : plane.seats)
+		{
+			//If the seat has a gun model attached
+			if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && plane.isPartIntact(seat.seatInfo.part))
+			{
+				float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
+				float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;
 
-    /** Renders helicopter rotor number i. */
+				//Iterate over the parts of that model
+				ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
+				//Yaw only parts
+				for(ModelRendererTurbo gunModelPart : gunModel[0])
+				{
+					//Yaw and render
+					gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+					gunModelPart.render(f5);
+				}
+				//Yaw and pitch, no recoil parts
+				for(ModelRendererTurbo gunModelPart : gunModel[1])
+				{
+					//Yaw, pitch and render
+					gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+					gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+					gunModelPart.render(f5);
+				}
+				//Yaw, pitch and recoil parts
+				for(ModelRendererTurbo gunModelPart : gunModel[2])
+				{
+					//Yaw, pitch, recoil and render
+					gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+					gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+					gunModelPart.render(f5);
+				}
+				if(gunModel.length > 3)
+				{
+					//Minigun barrel part
+					float minigunSpeed = seat.getMinigunSpeed();
+					for(ModelRendererTurbo gunModelPart : gunModel[3])
+					{
+						//Yaw, pitch, recoil and render
+						gunModelPart.rotateAngleY = (180F - yaw) * 3.14159265F / 180F;
+						gunModelPart.rotateAngleZ = -pitch * 3.14159265F / 180F;
+						gunModelPart.rotateAngleX = seat.minigunAngle * 0.5F;
+						gunModelPart.render(f5);
+					}
+				}
+			}
+		}
+	}
+
+
+	/** Renders helicopter rotor number i. */
 	public void renderRotor(EntityPlane plane, float f5, int i) 
 	{
 		PlaneType type = plane.getPlaneType();
@@ -342,7 +342,7 @@ public class ModelPlane extends ModelDriveable
 			}
 		}
 	}
-    
+
 	/** Renders helicopter tail rotor number i. */
 	public void renderTailRotor(EntityPlane plane, float f5, int i) 
 	{

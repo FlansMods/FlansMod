@@ -1,8 +1,0 @@
-Name Russian Spetsnaz Bodyarmour
-ShortName spetsnazBody
-ItemID 23882
-Icon SpetsnazBody
-Colour 255 255 255
-Type Chest
-Defence 0.1
-ArmourTexture Spetsnaz

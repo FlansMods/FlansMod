@@ -3,13 +3,14 @@
 build/
 bin/
 out/
+run/*
 
 # IDEs
 .classpath
 .project
 .settings/
+eclipse/
 .idea/
-eclipse/*
 *.iml
 *.ipr
 *.iws
@@ -19,4 +20,4 @@ Thumbs.db
 .DS_Store
 
 # Flan's Mod
-!eclipse/Flan/
+!run/Flan/

@@ -2,10 +2,10 @@ package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
+import com.flansmod.client.ClientRenderHooks;
 import com.flansmod.client.TickHandlerClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
@@ -57,7 +57,7 @@ public class PacketKillMessage extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		TickHandlerClient.addKillMessage(headshot, killedBy, killerName, killedName);
+		ClientRenderHooks.addKillMessage(headshot, killedBy, killerName, killedName);
 	}
 
 }

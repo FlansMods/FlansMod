@@ -14,10 +14,10 @@ public class ItemBlockManyNames extends ItemBlock {
 	}
 	
 	@Override
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        return super.getUnlocalizedName() + "." + stack.getItemDamage();
-    }
+	public String getUnlocalizedName(ItemStack stack)
+	{
+		return super.getUnlocalizedName() + "." + stack.getItemDamage();
+	}
 	
 	@Override
 	public int getMetadata(int par1) 
@@ -25,9 +25,9 @@ public class ItemBlockManyNames extends ItemBlock {
 		return par1;
 	}
 	
-    @Override
-    public CreativeTabs[] getCreativeTabs()
-    {
-        return new CreativeTabs[]{ FlansMod.tabFlanDriveables, FlansMod.tabFlanGuns, FlansMod.tabFlanTeams, FlansMod.tabFlanParts };
-    }
+	@Override
+	public CreativeTabs[] getCreativeTabs()
+	{
+		return new CreativeTabs[]{ FlansMod.tabFlanDriveables, FlansMod.tabFlanGuns, FlansMod.tabFlanTeams, FlansMod.tabFlanParts };
+	}
 }

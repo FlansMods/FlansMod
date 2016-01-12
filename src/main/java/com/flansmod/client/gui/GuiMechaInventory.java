@@ -1,10 +1,14 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +27,7 @@ public class GuiMechaInventory extends GuiContainer
 	private static final RenderMecha mechaRenderer;
 	static
 	{
-		mechaRenderer = new RenderMecha();
-		mechaRenderer.setRenderManager(RenderManager.instance);
+		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
 	}
 	
 	public ContainerMechaInventory container;
@@ -37,9 +40,9 @@ public class GuiMechaInventory extends GuiContainer
 	private int anim = 0;
 	private long lastTime;
 	
-    public GuiMechaInventory(InventoryPlayer inventoryplayer, World world1, EntityMecha entMecha)
-    {
-        super(new ContainerMechaInventory(inventoryplayer, world1, entMecha));
+	public GuiMechaInventory(InventoryPlayer inventoryplayer, World world1, EntityMecha entMecha)
+	{
+		super(new ContainerMechaInventory(inventoryplayer, world1, entMecha));
 		mecha = entMecha;
 		inventory = inventoryplayer;
 		world = world1;
@@ -48,33 +51,33 @@ public class GuiMechaInventory extends GuiContainer
 		xSize = 350;
 		maxScroll = container.maxScroll;
 		numItems = container.numItems;
-    }
-    
-    @Override
-    public void drawScreen(int i, int j, float f)
-    {
-    	super.drawScreen(i, j, f);
+	}
+
+	@Override
+	public void drawScreen(int i, int j, float f)
+	{
+		super.drawScreen(i, j, f);
 
 		
-    }
-    
-    @Override
-    protected void drawGuiContainerForegroundLayer(int x, int y)
-    {
-        fontRendererObj.drawString(mecha.getMechaType().name, 9, 9, 0x404040);
-        fontRendererObj.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
-    }
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int x, int y)
+	{
+		fontRendererObj.drawString(mecha.getMechaType().name, 9, 9, 0x404040);
+		fontRendererObj.drawString("Inventory", 181, (ySize - 96) + 2, 0x404040);
+	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
 	{
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        
-        mc.renderEngine.bindTexture(texture);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2;
-        drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
+		mc.renderEngine.bindTexture(texture);
+
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		int numRows = ((numItems + 7) / 8);
 		for(int row = 0; row < (numRows > 3 ? 3 : numRows); row++)
 		{
@@ -99,7 +102,7 @@ public class GuiMechaInventory extends GuiContainer
 		if(fuelInTank > 0)
 			drawTexturedModalRect(width / 2 - 18, height / 2 + 45 - (int)((94 * fuelInTank) / fuelTankSize), 350, 20, 15, (int)((94 * fuelInTank) / fuelTankSize));
 		
-        MechaType type = mecha.getMechaType();
+		MechaType type = mecha.getMechaType();
 		//Render rotating mecha model
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -123,16 +126,17 @@ public class GuiMechaInventory extends GuiContainer
     {
         float f = 1F / 512F;
         float f1 = 1F / 256F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)(par1), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-        tessellator.addVertexWithUV((double)(par1 + par5), (double)(par2), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4) * f1));
-        tessellator.addVertexWithUV((double)(par1), (double)(par2), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4) * f1));
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.startDrawingQuads();
+        worldrenderer.addVertexWithUV((double)(par1), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4 + par6) * f1));
+        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
+        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4) * f1));
+        worldrenderer.addVertexWithUV((double)(par1), (double)(par2), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4) * f1));
         tessellator.draw();
     }
 
-    @Override
+	@Override
 	public void initGui()
 	{
 		super.initGui();
@@ -140,21 +144,21 @@ public class GuiMechaInventory extends GuiContainer
 		buttonList.add(new GuiButton(1, width / 2 - 68, height / 2 + 63, 68, 20, "Repair"));
 	}
 	
-    @Override
-    protected void actionPerformed(GuiButton button)
-    {
-    	if(button.id == 0)
-    	{
-    		inventory.player.openGui(FlansMod.INSTANCE, 6, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
-    	}
-    	if(button.id == 1)
-    	{
-			inventory.player.openGui(FlansMod.INSTANCE, 1, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
-    	}
-    }
-    
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void actionPerformed(GuiButton button)
+	{
+		if(button.id == 0)
+		{
+			inventory.player.openGui(FlansMod.INSTANCE, 6, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
+		}
+		if(button.id == 1)
+		{
+			inventory.player.openGui(FlansMod.INSTANCE, 1, world, mecha.chunkCoordX, mecha.chunkCoordY, mecha.chunkCoordZ);
+		}
+	}
+
+	@Override
+	protected void mouseClicked(int i, int j, int k) throws IOException
 	{
 		super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;

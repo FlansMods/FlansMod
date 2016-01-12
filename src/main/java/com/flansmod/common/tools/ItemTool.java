@@ -3,7 +3,6 @@ package com.flansmod.common.tools;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -13,10 +12,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
@@ -25,16 +24,18 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketFlak;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-public class ItemTool extends ItemFood 
+public class ItemTool extends ItemFood implements IFlanItem
 {
 	public ToolType type;
 
-    public ItemTool(ToolType t)
-    {
-    	super(t.foodness, false);
-        maxStackSize = 1;
+	public ItemTool(ToolType t)
+	{
+		super(t.foodness, false);
+		maxStackSize = 1;
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
@@ -47,34 +48,27 @@ public class ItemTool extends ItemFood
 				setCreativeTab(FlansMod.tabFlanDriveables);
 		}
 		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
-    }
-    
+	}
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
 	{
 		if(type.description != null)
 		{
-            Collections.addAll(lines, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-    
-    @Override
+
+	@Override
 	@SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
     {
     	return type.colour;
     }
-	
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister icon) 
-    {
-    	itemIcon = icon.registerIcon("FlansMod:" + type.iconPath);
-    }
-    
+
 	@Override
-    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-    {
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	{
 		if(type.foodness > 0)
 			super.onItemRightClick(itemstack, world, entityplayer);
 		
@@ -128,8 +122,8 @@ public class ItemTool extends ItemFood
 	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
 	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
-	        double length = -5D;
-	        Vec3 posVec = Vec3.createVectorHelper(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.yOffset, entityplayer.posZ);        
+	        double length = 5D;
+	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
 	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
 	        
 	        if(world.isRemote && FlansMod.DEBUG)
@@ -171,15 +165,15 @@ public class ItemTool extends ItemFood
 						}
 					}
 				}
-	        }
+			}
 	
-	        if(!world.isRemote && type.healPlayers)
-	        {
-	        	//By default, heal the player
-		        EntityLivingBase hitLiving = entityplayer;
-		        
+			if(!world.isRemote && type.healPlayers)
+			{
+				//By default, heal the player
+				EntityLivingBase hitLiving = entityplayer;
+
 				//Iterate over entities within range of the ray
-				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
+				List list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
 						Math.min(posVec.xCoord, lookVec.xCoord), Math.min(posVec.yCoord, lookVec.yCoord), Math.min(posVec.zCoord, lookVec.zCoord), 
 						Math.max(posVec.xCoord, lookVec.xCoord), Math.max(posVec.yCoord, lookVec.yCoord), Math.max(posVec.zCoord, lookVec.zCoord)));
 				for (Object aList : list) {
@@ -190,36 +184,42 @@ public class ItemTool extends ItemFood
 					if (checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
-					MovingObjectPosition hit = checkEntity.boundingBox.calculateIntercept(posVec, lookVec);
+					MovingObjectPosition hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
 					if (hit != null)
 						hitLiving = checkEntity;
 				}
-		        //Now heal whatever it was we just decided to heal
-		        if(hitLiving != null)
-		        {        		
-		        	//If its finished, don't use it
-		        	if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
-		        		return itemstack;
-		        	
-		        	hitLiving.heal(type.healAmount);
-		        	FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
-		        	
+				//Now heal whatever it was we just decided to heal
+				if(hitLiving != null)
+				{
+					//If its finished, don't use it
+					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
+						return itemstack;
+
+					hitLiving.heal(type.healAmount);
+					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
+
 					//If not in creative and the tool should decay, damage it
 					if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
 						itemstack.setItemDamage(itemstack.getItemDamage() + 1);
 					//If the tool is damagable and is destroyed upon being used up, then destroy it
 					if(type.toolLife > 0 && type.destroyOnEmpty && itemstack.getItemDamage() >= itemstack.getMaxDamage())
 						itemstack.stackSize--;
-		        }
-	        }
+				}
+			}
 		}
-        return itemstack;
-    }
+		return itemstack;
+	}
 	
 	@Override
 	public String toString()
 	{
 		return type == null ? getUnlocalizedName() : type.name;
+	}
+
+	@Override
+	public InfoType getInfoType() 
+	{
+		return type;
 	}
 }

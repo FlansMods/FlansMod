@@ -38,6 +38,7 @@ public class CreativeTabFlan extends CreativeTabs
 			case 2 : return FlansMod.partItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 5) : new ItemStack(FlansMod.partItems.get(icon % FlansMod.partItems.size()));
 			case 3 : return FlansMod.armourItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 11) : new ItemStack(FlansMod.armourItems.get(icon % FlansMod.armourItems.size()));
 			case 4 : return FlansMod.mechaItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 10) : new ItemStack(FlansMod.mechaItems.get(icon % FlansMod.mechaItems.size()));
+			case 5 : return new ItemStack(Blocks.sand, 1, 1);
 		}
 		return new ItemStack(FlansMod.workbench);
 	}

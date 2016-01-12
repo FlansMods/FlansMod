@@ -6,8 +6,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 
 import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 
@@ -35,12 +37,12 @@ public class DriveableData implements IInventory
 	}
 
 	public void readFromNBT(NBTTagCompound tag)
-    {
+	{
 		if(tag == null)
 			return;
-    	if(!tag.hasKey("Type"))
-    		return;
-    	
+		if(!tag.hasKey("Type"))
+			return;
+
 		type = tag.getString("Type");
 		DriveableType dType = DriveableType.getDriveable(type);
 		numBombs = dType.numBombSlots;
@@ -74,10 +76,10 @@ public class DriveableData implements IInventory
 		{
 			part.readFromNBT(tag);
 		}
-    }
+	}
 
-    public void writeToNBT(NBTTagCompound tag)
-    {
+	public void writeToNBT(NBTTagCompound tag)
+	{
 		tag.setString("Type", type);
 		tag.setString("Engine", engine.shortName);
 		for(int i = 0; i < ammo.length; i++)
@@ -107,7 +109,7 @@ public class DriveableData implements IInventory
 		{
 			part.writeToNBT(tag);
 		}
-    }
+	}
 	
 	@Override
 	public int getSizeInventory() 
@@ -115,7 +117,7 @@ public class DriveableData implements IInventory
 		return getFuelSlot() + 1; 
 	}
 
-    @Override
+	@Override
 	public ItemStack getStackInSlot(int i) 
 	{ 
 		//Find the correct inventory
@@ -143,7 +145,7 @@ public class DriveableData implements IInventory
 		return inv[i];
 	}
 
-    @Override
+	@Override
 	public ItemStack decrStackSize(int i, int j) 
 	{
 		//Find the correct inventory
@@ -174,33 +176,33 @@ public class DriveableData implements IInventory
 		}
 		//Decrease the stack size
 		if(inv[i] != null)
-        {
-            if(inv[i].stackSize <= j)
-            {
-                ItemStack itemstack = inv[i];
-                inv[i] = null;
-                return itemstack;
-            }
-            ItemStack itemstack1 = inv[i].splitStack(j);
-            if(inv[i].stackSize <= 0)
-            {
-                inv[i] = null;
-            }
-            return itemstack1;
-        } else
-        {
-            return null;
-        }
+		{
+			if(inv[i].stackSize <= j)
+			{
+				ItemStack itemstack = inv[i];
+				inv[i] = null;
+				return itemstack;
+			}
+			ItemStack itemstack1 = inv[i].splitStack(j);
+			if(inv[i].stackSize <= 0)
+			{
+				inv[i] = null;
+			}
+			return itemstack1;
+		} else
+		{
+			return null;
+		}
 		
 	}
 
-    @Override
+	@Override
 	public ItemStack getStackInSlotOnClosing(int i) 
 	{ 
 		return getStackInSlot(i);	
 	}
 
-    @Override
+	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) 
 	{ 
 		//Find the correct inventory
@@ -230,31 +232,19 @@ public class DriveableData implements IInventory
 	}
 
     @Override
-	public String getInventoryName() 
-	{ 
-		return "Flan's Secret Data"; 
-	}
-
-    @Override
 	public int getInventoryStackLimit() 
 	{ 
 		return 64; 
 	}
 
-    @Override
+	@Override
 	public void markDirty() {}
 
-    @Override
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) 
 	{ 
 		return true; 
 	}
-
-    @Override
-	public void openInventory() {}
-
-    @Override
-	public void closeInventory() {}
 	
 	public int getAmmoInventoryStart()
 	{
@@ -282,12 +272,6 @@ public class DriveableData implements IInventory
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() 
-	{
-		return false;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) 
 	{
 		if(i < getBombInventoryStart() && itemstack != null && itemstack.getItem() instanceof ItemBullet) //Ammo
@@ -306,11 +290,63 @@ public class DriveableData implements IInventory
 		{
 			return true;
 		}
-		if(i == getFuelSlot() && itemstack != null && itemstack.getItem() instanceof ItemPart && ((ItemPart)itemstack.getItem()).type.category == 9) //Fuel
+		if(i == getFuelSlot() && itemstack != null && itemstack.getItem() instanceof ItemPart && ((ItemPart)itemstack.getItem()).type.category == EnumPartCategory.FUEL) //Fuel
 		{
 			return true;
 		}
 
 		return false;
+	}
+
+	@Override
+	public String getName() 
+	{
+		return "Flan's Secret Data"; 
+	}
+
+	@Override
+	public boolean hasCustomName() 
+	{
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() 
+	{
+		return null;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) 
+	{
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) 
+	{
+	}
+
+	@Override
+	public int getField(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,0 +1,174 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name P-51 Mustang
+ShortName Mustang
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon Mustang
+Model ww2.Mustang
+Texture SkinP51
+//Third Person Camera Distance
+CameraDistance 10.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 15.0
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Plane
+//Throttle
+MaxThrottle 4.8
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 1.6
+TurnRightSpeed 1.6
+//Pitch modifiers
+LookUpSpeed 1.2
+LookDownSpeed 0.8
+//Roll modifiers
+RollLeftSpeed 1.2
+RollRightSpeed 1.2
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Wheels
+NumWheels 3
+WheelPosition 0 33 -8 -36
+WheelPosition 1 33 -8 36
+WheelPosition 2 -69 18 0
+WheelSpringStrength 0.125
+//Propeller Positions
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 54 2 0 nose metalPropeller
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Gun
+Secondary Bomb
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 3
+ShootDelaySecondary 80
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary 44 19 40 rightWing 50Cal
+ShootPointPrimary 43 20 44 rightWing 50Cal
+ShootPointPrimary 43 20 48 rightWing 50Cal
+ShootPointPrimary 43 19 -40 leftWing 50Cal
+ShootPointPrimary 42 20 -44 leftWing 50Cal
+ShootPointPrimary 42 20 -49 leftWing 50Cal
+ShootPointSecondary -30 -12 0
+AlternatePrimary True
+AlternateSecondary False
+DamageModifierPrimary 25
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 1
+MissileSlots 0
+AllowAllAmmo False
+AddAmmo largeBomb
+AddAmmo smallBomb
+AddAmmo napalm
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 4000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 9 23 0
+Passengers 0
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound propStart
+StartSoundLength 20
+PropSound propSound
+PropSoundLength 30
+ShootSoundPrimary 50CalShoot
+ShootSoundSecondary bomb
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 metalCockpit
+AddRecipeParts coreWheel 2 wheel
+AddRecipeParts nose 1 metalNose
+AddRecipeParts rightWing 1 metalWingSmall
+AddRecipeParts leftWing 1 metalWingSmall
+AddRecipeParts bay 1 bombBay
+AddRecipeParts tail 1 metalTail
+AddRecipeParts tailWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 6 lightBlue
+AddDye 2 yellow
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+SetupPart core 1000 -14 8 -10 56 39 20
+SetupPart nose 1000 42 15 -10 56 24 20
+SetupPart tail 500 -95 19 -10 80 46 20
+SetupPart rightWing 500 -10 19 10 57 6 119
+SetupPart leftWing 500 -10 20 -130 57 6 120
+BulletDetection 10
+//Collision points for breaking wings etc. upon crashing
+CollisionPoint 49 40 10 core
+CollisionPoint 49 40 -10 core
+CollisionPoint 49 16 -10 core
+CollisionPoint 49 16 10 core
+CollisionPoint -69 24 10 core
+CollisionPoint -69 24 -10 core
+CollisionPoint -69 41 -10 core
+CollisionPoint -69 41 10 core
+CollisionPoint -14 46 10 core
+CollisionPoint -14 46 -10 core
+CollisionPoint -14 17 -10 core
+CollisionPoint -14 17 10 core
+CollisionPoint -6 21 -11 leftWing
+CollisionPoint -6 18 -11 leftWing
+CollisionPoint -3 20 -32 leftWing
+CollisionPoint -3 23 -32 leftWing
+CollisionPoint 17 33 -129 leftWing
+CollisionPoint 18 29 -129 leftWing
+CollisionPoint 38 29 -129 leftWing
+CollisionPoint 38 34 -129 leftWing
+CollisionPoint 47 25 -32 leftWing
+CollisionPoint 47 22 -32 leftWing
+CollisionPoint 48 18 -11 leftWing
+CollisionPoint 48 23 -11 leftWing
+CollisionPoint -6 21 11 rightWing
+CollisionPoint -6 18 11 rightWing
+CollisionPoint -3 20 32 rightWing
+CollisionPoint -3 23 32 rightWing
+CollisionPoint 17 33 129 rightWing
+CollisionPoint 18 29 129 rightWing
+CollisionPoint 38 29 129 rightWing
+CollisionPoint 38 34 129 rightWing
+CollisionPoint 47 25 32 rightWing
+CollisionPoint 47 22 32 rightWing
+CollisionPoint 48 18 11 rightWing
+CollisionPoint 48 23 11 rightWing
+CollisionPoint -70 41 10 tail
+CollisionPoint -70 41 -10 tail
+CollisionPoint -70 24 -10 tail
+CollisionPoint -70 24 10 tail
+CollisionPoint -109 30 2 tail
+CollisionPoint -109 30 -2 tail
+CollisionPoint -115 64 -1 tail
+CollisionPoint -115 64 1 tail
+CollisionPoint -109 65 1 tail
+CollisionPoint -109 65 -1 tail
+CollisionPoint -100 62 -1 tail
+CollisionPoint -100 62 1 tail
+CollisionPoint -87 38 1 tail
+CollisionPoint -87 38 -1 tail
+CollisionPoint -96 23 1 tailWheel
+CollisionPoint -96 23 -1 tailWheel
+CollisionPoint -91 23 1 tailWheel
+CollisionPoint -91 23 -1 tailWheel
+CollisionPoint -91 21 -1 tailWheel
+CollisionPoint -91 21 1 tailWheel
+CollisionPoint -96 21 1 tailWheel
+CollisionPoint -96 21 -1 tailWheel
+CollisionPoint 50 40 10 nose
+CollisionPoint 50 40 -10 nose
+CollisionPoint 50 17 -10 nose
+CollisionPoint 50 17 10 nose
+CollisionPoint 70 17 10 nose
+CollisionPoint 71 17 -10 nose
+CollisionPoint 71 39 -10 nose
+CollisionPoint 71 39 10 nose
+CollisionPoint 95 31 1 nose
+CollisionPoint 95 31 -1 nose
+CollisionPoint 95 29 -1 nose
+CollisionPoint 95 29 1 nose

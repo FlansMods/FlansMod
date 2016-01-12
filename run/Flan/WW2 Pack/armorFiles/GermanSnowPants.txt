@@ -1,0 +1,7 @@
+Name German WW2 Snow Trousers
+ShortName germanSnowPants
+Icon GermanSnowPants
+Colour 255 255 255
+Type Pants
+Defence 0.1
+ArmourTexture GermanSnow

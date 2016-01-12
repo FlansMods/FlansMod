@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
@@ -57,22 +57,22 @@ public class PacketDriveableControl extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	data.writeInt(entityId);
-    	data.writeDouble(posX);
-    	data.writeDouble(posY);
-    	data.writeDouble(posZ);
-    	data.writeFloat(yaw);
-    	data.writeFloat(pitch);
-    	data.writeFloat(roll);
-    	data.writeDouble(motX);
-    	data.writeDouble(motY);
-    	data.writeDouble(motZ);
-    	data.writeFloat(avelx);
-    	data.writeFloat(avely);
-    	data.writeFloat(avelz);
-    	data.writeFloat(throttle);
-    	data.writeFloat(fuelInTank);
-    	data.writeFloat(steeringYaw);
+		data.writeInt(entityId);
+		data.writeDouble(posX);
+		data.writeDouble(posY);
+		data.writeDouble(posZ);
+		data.writeFloat(yaw);
+		data.writeFloat(pitch);
+		data.writeFloat(roll);
+		data.writeDouble(motX);
+		data.writeDouble(motY);
+		data.writeDouble(motZ);
+		data.writeFloat(avelx);
+		data.writeFloat(avely);
+		data.writeFloat(avelz);
+		data.writeFloat(throttle);
+		data.writeFloat(fuelInTank);
+		data.writeFloat(steeringYaw);
 	}
 
 	@Override
@@ -100,8 +100,9 @@ public class PacketDriveableControl extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		EntityDriveable driveable = null;
-		for(Object obj : playerEntity.worldObj.loadedEntityList)
+		for(int i = 0; i < playerEntity.worldObj.loadedEntityList.size(); i++)
 		{
+			Object obj = playerEntity.worldObj.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;

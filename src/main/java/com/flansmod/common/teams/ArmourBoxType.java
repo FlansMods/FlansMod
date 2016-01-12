@@ -4,28 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.boxes.BoxType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ArmourBoxType extends InfoType 
-{
-	//Textures
-	public String topTexturePath;
-	public String sideTexturePath;
-	public String bottomTexturePath;
-	@SideOnly(Side.CLIENT)
-	public IIcon top;
-	@SideOnly(Side.CLIENT)
-	public IIcon side;
-	@SideOnly(Side.CLIENT)
-	public IIcon bottom;
-	
+public class ArmourBoxType extends BoxType
+{	
 	public BlockArmourBox block;
 	
 	public ArrayList<ArmourBoxEntry> pages = new ArrayList<ArmourBoxEntry>();
@@ -41,7 +30,7 @@ public class ArmourBoxType extends InfoType
 	@Override
 	public void postRead(TypeFile file)
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		boxes.put(shortName, this);
 	}
 	
@@ -50,14 +39,7 @@ public class ArmourBoxType extends InfoType
 	{
 		super.read(split, file);
 		try
-		{	
-			if (split[0].equals("TopTexture"))
-				topTexturePath = split[1];
-			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = split[1];
-			if (split[0].equals("SideTexture"))
-				sideTexturePath = split[1];
-			
+		{				
 			if(split[0].toLowerCase().equals("addarmour") || split[0].toLowerCase().equals("addarmor"))
 			{
 				String name = split[2];

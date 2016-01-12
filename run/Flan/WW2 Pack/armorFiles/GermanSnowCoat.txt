@@ -1,0 +1,7 @@
+Name German WW2 Snow Coat
+ShortName germanSnowCoat
+Icon GermanSnowCoat
+Colour 255 255 255
+Type Body
+Defence 0.1
+ArmourTexture GermanSnow

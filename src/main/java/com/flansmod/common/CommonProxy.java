@@ -13,7 +13,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
@@ -25,12 +27,15 @@ import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.ContainerMechaInventory;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.ContainerGunModTable;
+import com.flansmod.common.guns.boxes.ContainerGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
+import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.types.EnumType;
+import com.flansmod.common.types.InfoType;
 
 public class CommonProxy
 {
@@ -52,6 +57,11 @@ public class CommonProxy
 		}
 		FlansMod.log("Loaded content pack list server side.");
 		return contentPacks;
+	}
+	
+	public void addMissingJSONs(List<InfoType> types)
+	{
+		
 	}
 	
 	/** A ton of client only methods follow */
@@ -98,11 +108,7 @@ public class CommonProxy
 		return false;
 	}
 	
-	public void buyGun(GunBoxType type, int gun)
-	{
-	}
-
-	public void buyAmmo(GunBoxType box, int ammo, int type)
+	public void buyGun(GunBoxType type, InfoType gun)
 	{
 	}
 	
@@ -122,7 +128,7 @@ public class CommonProxy
 		case 2: return new ContainerGunModTable(player.inventory, world);
 		case 3: return new ContainerDriveableMenu(player.inventory, world);
 		case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.ridingEntity).driveable);
-		case 5 : return null; //Gun box. No server side
+		case 5: return new ContainerGunBox(player.inventory);
 		//Plane inventory screens
 		case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
 		case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
@@ -208,7 +214,7 @@ public class CommonProxy
 			{
 				PartType partType = ((ItemPart)stackInSlot.getItem()).type;
 				//Check its an engine
-				if(partType.category == 2 && partType.worksWith.contains(EnumType.getFromObject(type)))
+				if(partType.category == EnumPartCategory.ENGINE && partType.worksWith.contains(EnumType.getFromObject(type)))
 				{
 					//If we already have engines of this type, add these ones to the stack
 					if(engines.containsKey(partType))
@@ -277,7 +283,7 @@ public class CommonProxy
     		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
-		driveableStack.stackTagCompound = tags;
+		driveableStack.setTagCompound(tags);
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropPlayerItemWithRandomChoice(driveableStack, false);
 	}

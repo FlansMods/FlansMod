@@ -1,0 +1,17 @@
+﻿item.diamondCircularSaw.name=Diamantkreissäge
+item.diamondExcavator.name=Diamantschaufel
+item.diamondDrill.name=Diamantbohrer
+item.ironCircularSaw.name=Eisenkreissäge
+item.ironExcavator.name=Eisenschaufel
+item.ironDrill.name=Eisenbohrer
+item.advCPU.name=Fortgeschrittene CPU
+item.advHydraulics.name=Fortschrittliche Hydraulik
+item.basicCPU.name=Grundlegende CPU
+item.canister.name=Kanister
+item.hydraulics.name=Hydraulik
+item.mediumDiamondArm.name=Mittelgroßer Diamantarm
+item.mediumDiamondBody.name=Mittelgroßer Diamantkörper
+item.mediumDiamondLeg.name=Mittelgroßes Diamantbein
+item.smallIronLeg.name=Kleines Eisenbein
+item.smallIronArm.name=Kleiner Eisenarm
+item.smallIronBody.name=Kleiner Eisenkörper

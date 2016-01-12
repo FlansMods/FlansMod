@@ -25,6 +25,7 @@ public class BulletType extends ShootableType
 	public EnumWeaponType weaponType = EnumWeaponType.NONE;
 
 	public String hitSound;
+	public float hitSoundRange = 50;
 	
 	public boolean hasLight = false;
 	public float penetratingPower = 1F;
@@ -61,7 +62,12 @@ public class BulletType extends ShootableType
 				setEntitiesOnFire = Boolean.parseBoolean(split[1]);
 
 			else if(split[0].equals("HitSound"))
-				hitSound = split[1];
+			{
+ 				hitSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "sound", split[1]);
+			}
+			else if(split[0].equals("HitSoundRange"))
+				hitSoundRange = Float.parseFloat(split[1]);
 			else if(split[0].equals("Penetrates"))
 				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 1F : 0.25F);
 			else if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))

@@ -1,0 +1,31 @@
+Name Flak42
+ShortName Flak42
+//The ammo this gun uses (shortName)
+Ammo 37mmAmmo
+Icon Flak42
+//Colour in Red, Green, Blue, each going up to 255.
+Colour 255 255 255
+ItemID 7475
+//Reload time in ticks, 1/20ths of a second
+ReloadTime 200
+//The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
+Recoil 1
+//Damage in half hearts
+Damage 15
+//The higher this value, the more the bullets spread
+Accuracy 3
+//Time in ticks between rounds
+ShootDelay 25
+ShootSound Flak1Shoot
+//The length of the sound. 0 for a single shot sound. Other values are for looping sounds
+SoundLength 0
+DistortSound False
+ReloadSound BARReload
+Mode FullAuto
+Scope None
+Deployable false
+BulletSpeed 10.0
+add these lines: usableByMechas false
+UsableByMechas false
+UsableByPlayers false
+usableByPlayers false

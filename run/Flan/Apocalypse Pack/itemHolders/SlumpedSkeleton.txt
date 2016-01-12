@@ -1,0 +1,5 @@
+Name Slumped Skeleton
+ShortName flanSkeleton2
+Icon SlumpedSkeleton
+Texture SlumpedSkeleton
+Model apocalypse.SlumpedSkeleton

@@ -1,0 +1,7 @@
+Name German WW2 Forest Trousers
+ShortName germanForestPants
+Icon GermanForestPants
+Colour 255 255 255
+Type Pants
+Defence 0.1
+ArmourTexture GermanForest

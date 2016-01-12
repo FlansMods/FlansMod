@@ -1,0 +1,16 @@
+itemGroup.tabFlan0=Flan's Mod Armas
+itemGroup.tabFlan1=Flan's Mod Vehículos
+itemGroup.tabFlan2=Flan's Mod Regiones
+itemGroup.tabFlan3=Flan's Mod Cosas del equipo
+itemGroup.tabFlan4=Flan's Mod Mechas                       
+tile.flansWorkbench.0.name=Mesa para craftear un vehículo
+tile.flansWorkbench.1.name=Mesa para editar el arma
+tile.flansWorkbench.2.name=Mesa para craftear la region
+item.opStick.0.name=Palo de Propiedad
+item.opStick.1.name=Palo de Conexión
+item.opStick.2.name=Palo de Cartografía
+item.opStick.3.name=Palo de Destrucción
+item.flagpole.name=Asta de bandera
+tile.teamsSpawner.0.name=Spawner de item
+tile.teamsSpawner.1.name=Spawner de jugador
+tile.teamsSpawner.2.name=Spawner de vehículo

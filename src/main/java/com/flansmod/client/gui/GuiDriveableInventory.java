@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -29,9 +31,9 @@ public class GuiDriveableInventory extends GuiContainer
 	public EntityDriveable driveable;
 	public int screen; //0 = Guns, 1 = Bombs, 2 = Cargo
 	
-    public GuiDriveableInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
-    {
-        super(new ContainerDriveableInventory(inventoryplayer, world1, entPlane, i));
+	public GuiDriveableInventory(InventoryPlayer inventoryplayer, World world1, EntityDriveable entPlane, int i)
+	{
+		super(new ContainerDriveableInventory(inventoryplayer, world1, entPlane, i));
 		driveable = entPlane;
 		inventory = inventoryplayer;
 		world = world1;
@@ -40,20 +42,20 @@ public class GuiDriveableInventory extends GuiContainer
 		screen = i;
 		maxScroll = container.maxScroll;
 		numItems = container.numItems;
-    }
+	}
 	
-    @Override
+	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y)
-    {
+	{
 		String title = " - Guns";
 		if(screen == 1) title = " - " + driveable.getBombInventoryName();
 		if(screen == 2) title = " - Cargo";
 		if(screen == 3) title = " - " + driveable.getMissileInventoryName();
-        fontRendererObj.drawString(driveable.getDriveableType().name + title, 6, 6, 0x404040);
-        fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+		fontRendererObj.drawString(driveable.getDriveableType().name + title, 6, 6, 0x404040);
+		fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
-        GL11.glColor3f(1.0F, 1.0F, 1.0F);
+		GL11.glColor3f(1.0F, 1.0F, 1.0F);
 		if(screen == 0)
 		{
 			int slotsDone = 0;
@@ -88,16 +90,17 @@ public class GuiDriveableInventory extends GuiContainer
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-    }
+		RenderHelper.disableStandardItemLighting();
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+	}
 	
 	private void drawStack(ItemStack itemstack, int i, int j)
     {
-		itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
+		itemRender.renderItemIntoGUI(itemstack, i, j);
+		itemRender.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
     }
+
 	
 	private static String getGunSlotName(int i)
 	{
@@ -115,16 +118,16 @@ public class GuiDriveableInventory extends GuiContainer
 		return "Not a Gun";
 	}
 
-    @Override
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i1, int j1)
-    {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	{
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        mc.renderEngine.bindTexture(texture);
-        
-        int j = (width - xSize) / 2;
-        int k = (height - ySize) / 2;
-        drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
+		mc.renderEngine.bindTexture(texture);
+
+		int j = (width - xSize) / 2;
+		int k = (height - ySize) / 2;
+		drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		switch(screen)
 		{
 			case 0 : 
@@ -151,10 +154,10 @@ public class GuiDriveableInventory extends GuiContainer
 			drawTexturedModalRect(j + 161, k + 41, 176, 18, 10, 10);
 		if(scroll == maxScroll)
 			drawTexturedModalRect(j + 161, k + 53, 176, 28, 10, 10);
-    }
+	}
 	
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
     {
         super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;
@@ -179,7 +182,7 @@ public class GuiDriveableInventory extends GuiContainer
 			else
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, driveable));
 		}
-    }
+	}
 	
 	@Override
 	public boolean doesGuiPauseGame()

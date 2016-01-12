@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import com.flansmod.client.model.ModelAAGun;
 import com.flansmod.common.FlansMod;
@@ -182,5 +182,11 @@ public class AAGunType extends InfoType
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
+	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		//Do not add AA guns to dungeon chests. That would be so op.
 	}
 }

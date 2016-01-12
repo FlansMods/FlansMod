@@ -1,0 +1,79 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name Flakvierling 20mm AA Gun
+ShortName flakvierling
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon Flakvierling
+Model ww2.Flakvierling
+Texture SkinFlakvierling
+//Third Person Camera Distance
+CameraDistance 7.5
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Throttle
+MaxThrottle 0
+MaxNegativeThrottle 0
+//Steering modifiers
+TurnLeftSpeed 0
+TurnRightSpeed 0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -26 -8 0
+WheelPosition 1 -26 -8 0
+WheelPosition 2 20 -8 18
+WheelPosition 3 20 -8 -18
+WheelSpringStrength 0.5
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Shell
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 4
+ShootDelaySecondary 0
+//Whether to alternate or fire all together
+AlternatePrimary True
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointPrimary 48 6 4 turret
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 1
+AllowAllAmmo False
+AddAmmo flakvierlingAmmo
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 0
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Driver 0 -1 0 -360 360 0 89
+RotatedDriverOffset -20 0 0
+Passengers 0
+BarrelPosition 30 10 5
+BarrelPosition 30 5 5
+BarrelPosition 30 10 -5
+BarrelPosition 30 5 -5
+// ------------------------------------------------------- Sounds -------------------------------------------------------
+StartSound None
+StartSoundLength 0
+EngineSound None
+EngineSoundLength 0
+ShootSoundPrimary AAfire
+TurretRotationSpeed 0.06
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 4 aaBarrel 9 ingotIron
+AddRecipeParts core 1 blockIron 1 vehicleSeat
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 5 gray
+//Health and collision
+SetupPart core 2000 -41 -10 -26 75 35 52
+BulletDetection 7
+ModelScale 1.5
+Description German AA Gun
