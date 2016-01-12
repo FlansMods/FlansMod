@@ -9,7 +9,7 @@ out/
 .project
 .settings/
 .idea/
-eclipse/*
+run/*
 *.iml
 *.ipr
 *.iws
@@ -19,4 +19,4 @@ Thumbs.db
 .DS_Store
 
 # Flan's Mod
-!eclipse/Flan/
+!run/Flan/
