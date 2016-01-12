@@ -3,13 +3,14 @@
 build/
 bin/
 out/
+run/*
 
 # IDEs
 .classpath
 .project
 .settings/
+eclipse/
 .idea/
-run/*
 *.iml
 *.ipr
 *.iws
