@@ -33,6 +33,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.ExplosionEvent;
 
 public class FlansModExplosion extends Explosion 
 {
@@ -191,13 +192,8 @@ public class FlansModExplosion extends Explosion
     /** Second part of the explosion (sound, particles, drop spawn) */
     public void doExplosionB(boolean p_77279_1_)
     {
-        this.world.playSoundEffect(this.x, this.y, this.z, "random.explode", 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
 
-        if (this.isSmoking)
-        {
-            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D, new int[0]);
-        }
-        else
+        if (!this.isSmoking)
         {
             this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D, new int[0]);
         }
@@ -207,12 +203,14 @@ public class FlansModExplosion extends Explosion
 
         if (this.isSmoking&&breaksBlocks)
         {
-            worldObj.createExplosion(detonator, x, y, z, radius, true);
+            this.world.createExplosion(detonator, x, y, z, radius, true);
         }
         
         else if (this.isSmoking)
         {
-            entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
+        	Explosion expl=new Explosion(world, explosive, x, y, z, radius, true, true);
+        	expl.doExplosionA();
+        	this.world.playSoundEffect(this.x, this.y, this.z, "random.explode", 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
         }
 
         if (this.isFlaming)

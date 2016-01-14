@@ -23,6 +23,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -86,6 +87,9 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	public float penetratingPower;
 	
 	private float yOffset;
+	
+	/** For explosion offset purposes to fix explosion inside of the hit block*/
+	private EnumFacing sideHit;
 	
 	@SideOnly(Side.CLIENT)
 	private boolean playedFlybySound;
@@ -380,11 +384,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		Vec3 posVec = new Vec3(posX, posY, posZ);
 		Vec3 nextPosVec = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
 		MovingObjectPosition hit = worldObj.rayTraceBlocks(posVec, nextPosVec, false, true, true);
-		
 		posVec = new Vec3(posX, posY, posZ);
 		
 		if(hit != null)
 		{
+			sideHit = hit.sideHit;
 			//Calculate the lambda value of the intercept
 			Vec3 hitVec = posVec.subtract(hit.hitVec);
 			float lambda = 1;
@@ -665,6 +669,45 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			return;
 		if(type.explosionRadius > 0)
 		{
+			if(sideHit!=null)
+			switch (sideHit)
+			{
+			case DOWN : {
+				//hit from below
+				posY = posY-0.0001;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY-1.0;
+				break;
+			}
+			
+			case NORTH : {
+				//hit north facing side
+				posZ = posZ-0.0001;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ-1.0;
+				break;
+			}
+			
+			case WEST : {
+				//hit west facing side
+				posX = posX-0.0001;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX-1.0;
+				break;
+			}
+			case UP : {
+				//hit from above
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY+1.0;
+				break;
+			}
+			case SOUTH : {
+				//hit south facing side
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX+1.0;
+				break;
+			}
+			case EAST : {
+				//hit east facing side
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ+1.0;
+				break;
+			}
+			}
 	        if((owner instanceof EntityPlayer))
 	        	new FlansModExplosion(worldObj, this, (EntityPlayer)owner, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.flak > 0, type.explosionBreaksBlocks);
 	        else 
