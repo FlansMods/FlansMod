@@ -69,6 +69,8 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public boolean detonated = false;
 	/** For deployable bags */
 	public int numUsesRemaining = 0;
+	/** For sticky grenades proper explosion*/
+	private EnumFacing sideHit;
 	
 	public EntityGrenade(World w) 
 	{
@@ -257,7 +259,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					Vector3f postHitMotVec = Vector3f.sub(motVec, preHitMotVec, null);
 					
 					//Reflect postHitMotVec based on side hit
-					EnumFacing sideHit = hit.sideHit;
+					sideHit = hit.sideHit;
 					switch(sideHit)
 					{
 					case UP : case DOWN : postHitMotVec.setY(-postHitMotVec.getY()); break;
@@ -393,7 +395,52 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(!worldObj.isRemote && type.explosionRadius > 0.1F)
 		{
 	        if((thrower instanceof EntityPlayer))
+	        {
+	        	//check the side the sticky grenade hit, depending on the side offset the explosion by a minimum to prevent explosion being created inside the block that the grenade is stuck to
+	        	//ignore if it is not sticky
+	        	if(type.sticky&&sideHit!=null)
+	        	{
+	        	switch (sideHit)
+				{
+				case DOWN : {
+					//hit from below
+					posY = posY-0.0001;
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY-1.0;
+					break;
+				}
+				
+				case NORTH : {
+					//hit north facing side
+					posZ = posZ-0.0001;
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ-1.0;
+					break;
+				}
+				
+				case WEST : {
+					//hit west facing side
+					posX = posX-0.0001;
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX-1.0;
+					break;
+				}
+				case UP : {
+					//hit from above
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY+1.0;
+					break;
+				}
+				case SOUTH : {
+					//hit south facing side
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX+1.0;
+					break;
+				}
+				case EAST : {
+					//hit east facing side
+		        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ+1.0;
+					break;
+				}
+				}
+	        	}
 	        	new FlansModExplosion(worldObj, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
+		}
 	        else 
 	        	worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
