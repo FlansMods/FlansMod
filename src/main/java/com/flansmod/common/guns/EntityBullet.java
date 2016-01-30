@@ -675,36 +675,61 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			case DOWN : {
 				//hit from below
 				posY = posY-0.0001;
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY-1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY-0.6;
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: Down");
 				break;
 			}
 			
 			case NORTH : {
 				//hit north facing side
 				posZ = posZ-0.0001;
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ-1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ-0.6;
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: North");
 				break;
 			}
 			
 			case WEST : {
 				//hit west facing side
 				posX = posX-0.0001;
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX-1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX-0.6;
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: West");
 				break;
 			}
 			case UP : {
 				//hit from above
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY+1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posY = posY+1.6;
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: Up");
 				break;
 			}
 			case SOUTH : {
 				//hit south facing side
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX+1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posX = posX+1.6;
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: south");
 				break;
 			}
 			case EAST : {
 				//hit east facing side
-	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ+1.0;
+	        	if(!worldObj.getBlockState(new BlockPos(posX, posY, posZ)).getBlock().isSolidFullCube())posZ = posZ+1.6;
+	        	else System.err.println("Shit's fucked, yo");
+	        	System.err.println(posX +" Pos X");
+	        	System.err.println(posY +" Pos Y");
+	        	System.err.println(posZ +" Pos Z");
+	        	System.err.println("Side hit: East");
 				break;
 			}
 			}
