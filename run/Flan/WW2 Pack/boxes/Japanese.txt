@@ -13,8 +13,6 @@ III
 //The names of the items / blocks are those in the code, with some exceptions such as ingotIron (ingotingotIron) and gunpowder (sulphur)
 //And with parts from this mod, they are the shortName of the item
 //Guns cannot yet have multiple ammo types in the same slot. For now, just list them under two seperate guns that are the same
-//NumGuns must come before all the addGun lines and must be correct.
-NumGuns 8
 SetPage Page 1
 AddGun type38 10 ingotIron 10 log
 AddAmmo type38Ammo 2 ingotIron 1 gunpowder

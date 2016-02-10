@@ -49,8 +49,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 30 8 5 nose MG42
-ShootPointPrimary 30 8 -5 nose MG42
+ShootPointPrimary 30 8 5 nose mg42
+ShootPointPrimary 30 8 -5 nose mg42
 DamageModifierPrimary 50
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 8
