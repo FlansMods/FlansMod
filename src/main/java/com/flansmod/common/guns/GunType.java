@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
@@ -24,7 +25,7 @@ public class GunType extends InfoType implements IScope
 {
 	//Gun Behaviour Variables
 	/** The list of bullet types that can be used in this gun */
-	public List<ShootableType> ammo = new ArrayList<ShootableType>();
+	public List<ShootableType> ammo = new ArrayList<ShootableType>(), nonExplosiveAmmo = new ArrayList<ShootableType>();
 	/** Whether the player can press the reload key (default R) to reload this gun */
 	public boolean canForceReload = true;
 	/** The time (in ticks) it takes to reload this gun */
@@ -73,6 +74,15 @@ public class GunType extends InfoType implements IScope
 	public ArrayList<Vector3f> meleeDamagePoints = new ArrayList<Vector3f>();
 	/** Set these to make guns only usable by a certain type of entity */
 	public boolean usableByPlayers = true, usableByMechas = true;
+	
+	//Information
+	//Show any variables into the GUI when hovering over items.
+	/** If false, then attachments wil not be listed in item GUI */
+	public boolean showAttachments = true;
+	/** Show statistics */
+	public boolean showDamage = false, showRecoil = false, showSpread = false;
+	/** Show reload time in seconds */
+	public boolean showReloadTime = false;
 	
 	//Shields
 	//A shield is actually a gun without any shoot functionality (similar to knives or binoculars)
@@ -169,6 +179,9 @@ public class GunType extends InfoType implements IScope
 	public float moveSpeedModifier = 1F;
 	/** Gives knockback resistance to the player */
 	public float knockbackModifier = 0F;
+	
+	/** Assigns IDs to paintjobs */
+	private int nextPaintjobID = 1;
 
 	public GunType(TypeFile file)
 	{
@@ -178,16 +191,19 @@ public class GunType extends InfoType implements IScope
 	@Override
 	public void postRead(TypeFile file)
 	{
+		super.postRead(file);
 		gunList.add(this);
 		guns.put(shortName, this);
 		
 		//After all lines have been read, set up the default paintjob
-		defaultPaintjob = new Paintjob(iconPath, texture, new ItemStack[0]);
+		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first
 		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
 		newPaintjobList.add(defaultPaintjob);
 		newPaintjobList.addAll(paintjobs);
 		paintjobs = newPaintjobList;
+		
+		totalDungeonChance += dungeonChance * (paintjobs.size() - 1);
 	}
 	
 	@Override
@@ -224,6 +240,18 @@ public class GunType extends InfoType implements IScope
 				numBurstRounds = Integer.parseInt(split[1]);
 			else if(split[0].equals("MinigunStartSpeed"))
 				minigunStartSpeed = Float.parseFloat(split[1]);
+				
+			//Information
+			else if(split[0].equals("ShowAttachments"))
+				showAttachments = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowDamage"))
+				showDamage = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowRecoil"))
+				showRecoil = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowAccuracy"))
+				showSpread = Boolean.parseBoolean(split[1]);
+			else if(split[0].equals("ShowReloadTime"))
+				showReloadTime = Boolean.parseBoolean(split[1]);
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))
@@ -329,7 +357,12 @@ public class GunType extends InfoType implements IScope
 			{
 				ShootableType type = ShootableType.getShootableType(split[1]);
 				if(type != null)
+				{
 					ammo.add(type);
+					if(type.explosionRadius <= 0F)
+						nonExplosiveAmmo.add(type);
+				}
+				else FlansMod.log("Could not find " + split[1] + " when reading ammo types for " + shortName);
 			}
 			else if(split[0].equals("NumAmmoSlots") || split[0].equals("NumAmmoItemsInGun") || split[0].equals("LoadIntoGun"))
 				numAmmoItemsInGun = Integer.parseInt(split[1]);
@@ -394,7 +427,13 @@ public class GunType extends InfoType implements IScope
 				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
 				for(int i = 0; i < (split.length - 3) / 2; i++)
 					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
-				paintjobs.add(new Paintjob(split[1], split[2], dyeStacks));
+				if(split[1].contains("_"))
+				{
+					String[] splat = split[1].split("_");
+					if(splat[0].equals(iconPath))
+						split[1] = splat[1];
+				}
+				paintjobs.add(new Paintjob(nextPaintjobID++, split[1], split[2], dyeStacks));
 			}
 			
 			//Shield settings
@@ -419,9 +458,9 @@ public class GunType extends InfoType implements IScope
 	private int getDyeDamageValue(String dyeName)
 	{
 		int damage = -1;
-		for(int i = 0; i < ItemDye.field_150923_a.length; i++)
+		for(int i = 0; i < EnumDyeColor.values().length; i++)
 		{
-			if(ItemDye.field_150923_a[i].equals(dyeName))
+			if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(dyeName))
 				damage = i;
 		}
 		if(damage == -1)
@@ -494,7 +533,7 @@ public class GunType extends InfoType implements IScope
 	{
 		checkForTags(gun);
 		ArrayList<AttachmentType> attachments = new ArrayList<AttachmentType>();
-		NBTTagCompound attachmentTags = gun.stackTagCompound.getCompoundTag("attachments");
+		NBTTagCompound attachmentTags = gun.getTagCompound().getCompoundTag("attachments");
 		NBTTagList genericsList = attachmentTags.getTagList("generics", (byte)10); //TODO : Check this 10 is correct
 		for(int i = 0; i < numGenericAttachmentSlots; i++)
 		{
@@ -532,14 +571,14 @@ public class GunType extends InfoType implements IScope
 	public AttachmentType getAttachment(ItemStack gun, String name)
 	{
 		checkForTags(gun);
-		return AttachmentType.getFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
+		return AttachmentType.getFromNBT(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Generalised attachment ItemStack getter method */
 	public ItemStack getAttachmentItemStack(ItemStack gun, String name)
 	{
 		checkForTags(gun);
-		return ItemStack.loadItemStackFromNBT(gun.stackTagCompound.getCompoundTag("attachments").getCompoundTag(name));	
+		return ItemStack.loadItemStackFromNBT(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Method to check for null tags and assign default empty tags in that case */
@@ -548,10 +587,10 @@ public class GunType extends InfoType implements IScope
 		//If the gun has no tags, give it some
 		if(!gun.hasTagCompound())
 		{
-			gun.stackTagCompound = new NBTTagCompound();
+			gun.setTagCompound(new NBTTagCompound());
 		}
 		//If the gun has no attachment tags, give it some
-		if(!gun.stackTagCompound.hasKey("attachments"))
+		if(!gun.getTagCompound().hasKey("attachments"))
 		{
 			NBTTagCompound attachmentTags = new NBTTagCompound();
 			for(int i = 0; i < numGenericAttachmentSlots; i++)
@@ -561,7 +600,7 @@ public class GunType extends InfoType implements IScope
 			attachmentTags.setTag("stock", new NBTTagCompound());
 			attachmentTags.setTag("grip", new NBTTagCompound());
 			
-			gun.stackTagCompound.setTag("attachments", attachmentTags);
+			gun.getTagCompound().setTag("attachments", attachmentTags);
 		}
 	}
 	
@@ -656,5 +695,25 @@ public class GunType extends InfoType implements IScope
 				return paintjob;
 		}
 		return defaultPaintjob;
+	}
+	
+	public Paintjob getPaintjob(int i)
+	{
+		return paintjobs.get(i);
+	}
+	
+	@Override
+	public void addDungeonLoot() 
+	{
+		if(dungeonChance > 0)
+			for(int i = 0; i < paintjobs.size(); i++)
+			{
+				ItemStack stack = new ItemStack(this.item);
+				NBTTagCompound tags = new NBTTagCompound();
+				tags.setString("Paint", paintjobs.get(i).iconName);
+				stack.setTagCompound(tags);
+				
+				addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
+			}
 	}
 }

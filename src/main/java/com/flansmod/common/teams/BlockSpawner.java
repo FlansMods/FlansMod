@@ -5,7 +5,11 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,26 +18,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 
-public class BlockSpawner extends BlockContainer 
+public class BlockSpawner extends BlockContainer
 {
+	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	public static boolean colouredPass = false;
-	
-	public IIcon[][] icons;
 	
 	public BlockSpawner(Material material) 
 	{
 		super(material);
 		setCreativeTab(FlansMod.tabFlanTeams);
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
 	}
 
     @Override
@@ -48,17 +54,15 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
-    public IIcon getIcon(int i, int j)
+    public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
     {
-    	if(j > 2)
-    		j = 2;
-    	return icons[colouredPass ? 1 : 0][j];
+        return null;
     }
     
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    public boolean isFullCube()
     {
-        return null;
+        return false;
     }
     
     @Override
@@ -68,54 +72,27 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
-    public boolean renderAsNormalBlock()
+    public boolean canPlaceBlockAt(World par1World, BlockPos pos)
     {
-        return false;
-    }
-
-    @Override
-    public boolean getBlocksMovement(IBlockAccess par1IBlockAccess, int par2, int par3, int par4)
-    {
-        return true;
+        return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
     }
     
     @Override
-    public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4)
+    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
     {
-        return par1World.doesBlockHaveSolidTopSurface(par1World, par2, par3 - 1, par4) || BlockFence.func_149825_a(par1World.getBlock(par2, par3 - 1, par4));
     }
     
     @Override
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-    {
-        if (!par1World.isRemote)
-        {
-            if (par1World.getBlockMetadata(par2, par3, par4) != 1)
-            {
-            }
-        }
-    }
-    
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, int i, int j, int k)
+    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
     {
     	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.03125F, 1.0F);
     }
-    
-    @Override
-    public void setBlockBoundsForItemRender()
-    {
-        float var1 = 0.5F;
-        float var2 = 0.015625F;
-        float var3 = 0.5F;
-        this.setBlockBounds(0.0F, 0.5F - var2, 0.0F, 1F, 0.5F + var2, 1F);
-    }
 
 	@Override
-    public int getMobilityFlag()
-    {
-        return 1;
-    }
+	public int getMobilityFlag()
+	{
+		return 1;
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i)
@@ -124,13 +101,13 @@ public class BlockSpawner extends BlockContainer
 	}
 	
 	@Override
-	public int colorMultiplier(IBlockAccess access, int x, int y, int z)
-	{
+	public int colorMultiplier(IBlockAccess access, BlockPos pos, int renderPass)
+	{		
 		if(!colouredPass)
 			return 0xffffff;
 		try
 		{
-			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(x, y, z);
+			TileEntitySpawner spawner = (TileEntitySpawner)access.getTileEntity(pos);
             int spawnerTeamID = spawner.getTeamID();
             Team spawnerTeam = FlansModClient.getTeam(spawnerTeamID);
             
@@ -157,7 +134,7 @@ public class BlockSpawner extends BlockContainer
 	}
 	
     @Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
     {
     	if(world.isRemote)
     		return true;
@@ -165,9 +142,9 @@ public class BlockSpawner extends BlockContainer
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
     	*/
-    	if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile()))
+    	if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile()))
     	{
-    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(x, y, z);
+    		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(pos);
     		ItemStack item = player.getCurrentEquippedItem();
     		if(item == null || item.getItem() == null)
     		{
@@ -187,17 +164,29 @@ public class BlockSpawner extends BlockContainer
         return true;
     }
     
+    @Override
+    protected BlockState createBlockState()
+    {
+        return new BlockState(this, new IProperty[] {TYPE});
+    }
     
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
+    public IBlockState getStateFromMeta(int meta)
     {
-    	icons = new IIcon[2][3];
-    	for(int i = 0; i < 2; i++)
-    	{
-    		icons[i][0] = register.registerIcon("FlansMod:" + "spawner_item_" + (i + 1));
-    		icons[i][1] = register.registerIcon("FlansMod:" + "spawner_player_" + (i + 1));
-    		icons[i][2] = register.registerIcon("FlansMod:" + "spawner_vehicle_" + (i + 1));
-    	}
+        return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
     }
+    
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return ((Integer)state.getValue(TYPE)).intValue();
+    }
+    
+    @Override
+    public int damageDropped(IBlockState state)
+    {
+        return ((Integer)state.getValue(TYPE)).intValue();
+    }
+
+
 }

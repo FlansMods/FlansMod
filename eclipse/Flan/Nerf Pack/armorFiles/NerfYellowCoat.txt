@@ -1,8 +1,0 @@
-Name Yellow Nerf Vest
-ShortName nerfYellowVest
-ItemID 23994
-Icon NerfYellowVest
-Colour 255 255 255
-Type Body
-Defence 0.1
-ArmourTexture NerfYellow

@@ -32,7 +32,7 @@ public class InventoryGunModTable extends InventoryBasic
 		if(gunStack != lastGunStack)
 		{
 			busy = true;
-			NBTTagCompound attachmentTags = gunStack.stackTagCompound.getCompoundTag("attachments");
+			NBTTagCompound attachmentTags = gunStack.getTagCompound().getCompoundTag("attachments");
 			setInventorySlotContents(1, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("barrel"))); 
 			setInventorySlotContents(2, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("scope"))); 
 			setInventorySlotContents(3, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("stock"))); 
@@ -48,17 +48,17 @@ public class InventoryGunModTable extends InventoryBasic
 			//Create a new NBT tag compound for our gun item
 			NBTTagCompound gunTags = new NBTTagCompound();
 			//Copy the ammo and paintjob from the old stack
-			gunTags.setTag("ammo", getStackInSlot(0).stackTagCompound.getTag("ammo"));
-			if(getStackInSlot(0).stackTagCompound.getTag("Paint") != null)
-				gunTags.setTag("Paint", getStackInSlot(0).stackTagCompound.getTag("Paint"));
+			gunTags.setTag("ammo", getStackInSlot(0).getTagCompound().getTag("ammo"));
+			if(getStackInSlot(0).getTagCompound().getTag("Paint") != null)
+				gunTags.setTag("Paint", getStackInSlot(0).getTagCompound().getTag("Paint"));
 			
 			//Add each attachment from the inventory to our gun stack
-	    	NBTTagCompound attachmentTags = new NBTTagCompound();
+			NBTTagCompound attachmentTags = new NBTTagCompound();
 	
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(1), "barrel");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(2), "scope");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(3), "stock");
-	       	writeAttachmentTags(attachmentTags, getStackInSlot(4), "grip");
+		   	writeAttachmentTags(attachmentTags, getStackInSlot(1), "barrel");
+		   	writeAttachmentTags(attachmentTags, getStackInSlot(2), "scope");
+		   	writeAttachmentTags(attachmentTags, getStackInSlot(3), "stock");
+		   	writeAttachmentTags(attachmentTags, getStackInSlot(4), "grip");
 	
 	       	//Change all the attachments that we are looking at, but copy in the old ones
 	       	for(int i = 0; i < gunType.numGenericAttachmentSlots; i++)
@@ -67,12 +67,12 @@ public class InventoryGunModTable extends InventoryBasic
 	       		{
 	       			writeAttachmentTags(attachmentTags, getStackInSlot(i - genericScroll * 4 + 5), "generic_" + i);
 	       		}
-	       		else attachmentTags.setTag("generic_" + i, getStackInSlot(0).stackTagCompound.getTag("generic_" + i));
+	       		else attachmentTags.setTag("generic_" + i, getStackInSlot(0).getTagCompound().getTag("generic_" + i));
 	       	}
 	       	
 	       	//Set the tags to be these new tags
 	       	gunTags.setTag("attachments", attachmentTags);
-	       	gunStack.stackTagCompound = gunTags;
+	       	gunStack.setTagCompound(gunTags);
 		}
 		
 		lastGunStack = gunStack;
@@ -83,7 +83,7 @@ public class InventoryGunModTable extends InventoryBasic
 		NBTTagCompound tags = new NBTTagCompound();
 		if(attachmentStack != null)
 			attachmentStack.writeToNBT(tags);
-        attachmentTags.setTag(attachmentName, tags);
+		attachmentTags.setTag(attachmentName, tags);
 	}
 
 	@Override

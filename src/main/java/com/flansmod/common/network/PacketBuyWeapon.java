@@ -2,52 +2,47 @@ package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.GunBoxType;
+import com.flansmod.common.types.InfoType;
 
 public class PacketBuyWeapon extends PacketBase
 {
 	public String boxShortName;
-	public int purchaseType; //0 = Gun, 1 = Ammo, 2 = AltAmmo
-	public int weaponID;
+	private String typeShortName;
 	
 	public PacketBuyWeapon() {}
 	
-	public PacketBuyWeapon(GunBoxType box, int type, int wepID)
+	public PacketBuyWeapon(GunBoxType box, InfoType type)
 	{
 		boxShortName = box.shortName;
-		purchaseType = type;
-		weaponID = wepID;
+		typeShortName = type.shortName;
 	}
 		
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-    	writeUTF(data, boxShortName);
-    	data.writeInt(purchaseType);
-    	data.writeInt(weaponID);
+		writeUTF(data, boxShortName);
+		writeUTF(data, typeShortName);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
 		boxShortName = readUTF(data);
-		purchaseType = data.readInt();
-		weaponID = data.readInt();
+		typeShortName = readUTF(data);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		GunBoxType box = GunBoxType.getBox(boxShortName);
-		box.block.purchaseItem(purchaseType, weaponID, playerEntity.inventory, box);
+		box.block.buyGun(InfoType.getType(typeShortName), playerEntity.inventory, box);
 	}
 
 	@Override

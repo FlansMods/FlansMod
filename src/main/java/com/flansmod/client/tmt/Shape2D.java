@@ -17,7 +17,7 @@ public class Shape2D
 	{
 		coords = new ArrayList<Coord2D>();
 
-        Collections.addAll(coords, coordArray);
+		Collections.addAll(coords, coordArray);
 	}
 	
 	public Shape2D(ArrayList<Coord2D> coordList)
@@ -37,9 +37,9 @@ public class Shape2D
 		PositionTransformVertex[] vertsBottom = new PositionTransformVertex[coords.size()];
 		TexturedPolygon[] poly = new TexturedPolygon[coords.size() + 2];
 		
-		Vec3 extrudeVector = Vec3.createVectorHelper(0, 0, depth);
+		Vec3 extrudeVector = new Vec3(0, 0, depth);
 
-		setVectorRotations(extrudeVector, rotX, rotY, rotZ);
+		extrudeVector = setVectorRotations(extrudeVector, rotX, rotY, rotZ);
 		
 		if(faceLengths != null && faceLengths.length < coords.size())
 			faceLengths = null;
@@ -54,9 +54,9 @@ public class Shape2D
 			float texU2 = ((shapeTextureWidth * 2 - curCoord.uCoord + u) / textureWidth);
 			float texV = ((curCoord.vCoord + v) / textureHeight);
 			
-			Vec3 vecCoord = Vec3.createVectorHelper(curCoord.xCoord, curCoord.yCoord, 0);
+			Vec3 vecCoord = new Vec3(curCoord.xCoord, curCoord.yCoord, 0);
 			
-			setVectorRotations(vecCoord, rotX, rotY, rotZ);
+			vecCoord = setVectorRotations(vecCoord, rotX, rotY, rotZ);
 									
 			verts[idx] = new PositionTransformVertex(
 													x + (float)vecCoord.xCoord,
@@ -107,26 +107,32 @@ public class Shape2D
 			currentLengthPosition -= currentLength;
 		}
 		
-		return new Shape3D(verts, poly);
+		Shape3D shape3D = new Shape3D(verts, poly);
+		for(TexturedPolygon face : shape3D.faces)
+		{
+			face.setInvertNormal(true);
+		}
+		
+		return shape3D;
 	}
 	
-	protected void setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)
+	protected Vec3 setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)
 	{
 		float x = xRot;
 		float y = yRot;
 		float z = zRot;
-        float xC = MathHelper.cos(x);
-        float xS = MathHelper.sin(x);
-        float yC = MathHelper.cos(y);
-        float yS = MathHelper.sin(y);
-        float zC = MathHelper.cos(z);
-        float zS = MathHelper.sin(z);
-        
-        double xVec = vector.xCoord;
-        double yVec = vector.yCoord;
-        double zVec = vector.zCoord;
-        
-        // rotation around x
+		float xC = MathHelper.cos(x);
+		float xS = MathHelper.sin(x);
+		float yC = MathHelper.cos(y);
+		float yS = MathHelper.sin(y);
+		float zC = MathHelper.cos(z);
+		float zS = MathHelper.sin(z);
+
+		double xVec = vector.xCoord;
+		double yVec = vector.yCoord;
+		double zVec = vector.zCoord;
+
+		// rotation around x
 		double xy = xC*yVec - xS*zVec;
 		double xz = xC*zVec + xS*yVec;
 		// rotation around y
@@ -140,9 +146,7 @@ public class Shape2D
 		yVec = zy;
 		zVec = yz;
 		
-        vector.xCoord = xVec;
-        vector.yCoord = yVec;
-        vector.zCoord = zVec;
+		return new Vec3(xVec, yVec, zVec);
 	}
 	
 	public ArrayList<Coord2D> coords;

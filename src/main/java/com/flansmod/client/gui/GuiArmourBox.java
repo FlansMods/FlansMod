@@ -1,12 +1,14 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,7 +25,7 @@ public class GuiArmourBox extends GuiScreen
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/armourBox.png");
 	private InventoryPlayer inventory;
 	private Minecraft mc;
-	private static RenderItem itemRenderer = new RenderItem();
+	private static RenderItem itemRenderer;
 	private ArmourBoxType type;
 	private int page;
 	private int guiOriginX;
@@ -34,6 +36,7 @@ public class GuiArmourBox extends GuiScreen
 	{
 		inventory = playerinventory;
 		mc = FMLClientHandler.instance().getClient();
+		itemRenderer = mc.getRenderItem();
 		this.type = type;
 		page = 0;
 	}
@@ -51,7 +54,7 @@ public class GuiArmourBox extends GuiScreen
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRenderer;
+		FontRenderer fontrenderer = mc.fontRendererObj;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -144,16 +147,21 @@ public class GuiArmourBox extends GuiScreen
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+		itemRenderer.renderItemIntoGUI(itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 	}
 	
 	@Override
 	protected void mouseClicked(int i, int j, int k)
 	{
-		super.mouseClicked(i, j, k);
+		try
+		{
+			super.mouseClicked(i, j, k);
+		}
+		catch(IOException e)
+		{
+			
+		}
 		int m = i - guiOriginX;
 		int n = j - guiOriginY;
 		if (k == 0 || k == 1)

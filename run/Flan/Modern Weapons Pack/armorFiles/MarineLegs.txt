@@ -1,0 +1,7 @@
+Name U.S. Marine Trousers
+ShortName marinePants
+Icon MarinePants
+Colour 255 255 255
+Type Legs
+Defence 0.1
+ArmourTexture Marine

@@ -5,8 +5,8 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelZero extends ModelPlane
 {
-    public ModelZero()
-    {
+	public ModelZero()
+	{
 		int textureX = 512; //The x-size of the texture
 		int textureY = 512;	//The y-size of the texture
 		//Initializing Model
@@ -270,7 +270,7 @@ public class ModelZero extends ModelPlane
 		rightWingModel[4].rotateAngleX = 0.06981317F;
 
 		
-        //Left wing
+		//Left wing
 		leftWingModel = new ModelRendererTurbo[5];
 		leftWingModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // LW.LeftWingMain
 		leftWingModel[1] = new ModelRendererTurbo(this,  390,  0, textureX, textureY); // LW.LeftWingBackCenter
@@ -305,17 +305,17 @@ public class ModelZero extends ModelPlane
 
 		//Propellers
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
-        propellerModels[0][0] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
-        propellerModels[0][1] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 1
-        propellerModels[0][2] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 2		
-        propellerModels[0][0].addBox(0F, 0F, -1F, 1, 18, 2, 0F);		//Propeller Blades
-        propellerModels[0][1].addBox(0F, 0F, -1F, 1, 18, 2, 0F);		//They will all be the same
-        propellerModels[0][2].addBox(0F, 0F, -1F, 1, 18, 2, 0F);		
-        propellerModels[0][0].setRotationPoint(-53F, -15F, 0F);	//Set the position of the propeller
-        propellerModels[0][1].setRotationPoint(-53F, -15F, 0F);	
-        propellerModels[0][2].setRotationPoint(-53F, -15F, 0F);	
+		propellerModels[0][0] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
+		propellerModels[0][1] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 1
+		propellerModels[0][2] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 2
+		propellerModels[0][0].addBox(0F, 0F, -1F, 1, 18, 2, 0F);		//Propeller Blades
+		propellerModels[0][1].addBox(0F, 0F, -1F, 1, 18, 2, 0F);		//They will all be the same
+		propellerModels[0][2].addBox(0F, 0F, -1F, 1, 18, 2, 0F);
+		propellerModels[0][0].setRotationPoint(-53F, -15F, 0F);	//Set the position of the propeller
+		propellerModels[0][1].setRotationPoint(-53F, -15F, 0F);
+		propellerModels[0][2].setRotationPoint(-53F, -15F, 0F);
 		
-        yawFlapModel = new ModelRendererTurbo[4];
+		yawFlapModel = new ModelRendererTurbo[4];
 		yawFlapModel[0] = new ModelRendererTurbo(this,  420,  420, textureX, textureY); // YF.JoyStick
 		yawFlapModel[1] = new ModelRendererTurbo(this,  410,  420, textureX, textureY); // YF.JoyStickGrip
 		yawFlapModel[2] = new ModelRendererTurbo(this,  200,  480, textureX, textureY); // YF.TailYawFlap
@@ -417,6 +417,6 @@ public class ModelZero extends ModelPlane
 
 		flipAll(); //Call this function to flip everything in X and Y. For correcting old models.
 		translateAll(4, -12, 0);
-    }
+	}
 }		
  

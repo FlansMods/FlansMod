@@ -111,7 +111,7 @@ public class Bone
 		neutralAngles = new Angle3D(x, y, z);
 		relativeAngles = new Angle3D(0, 0, 0);
 		absoluteAngles = new Angle3D(0, 0, 0);
-		positionVector = Vec3.createVectorHelper(0, 0, 0);
+		positionVector = new Vec3(0, 0, 0);
 		length = l;
 		childNodes = new ArrayList<Bone>();
 		models = new ArrayList<ModelRenderer>();
@@ -120,7 +120,7 @@ public class Bone
 		offsetX = 0;
 		offsetY = 0;
 		offsetZ = 0;
-		positionVector = Vec3.createVectorHelper(0, 0, 0);
+		positionVector = new Vec3(0, 0, 0);
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public class Bone
 		offsetY = y;
 		offsetZ = z;
 		resetOffset(true);
-		return Vec3.createVectorHelper(x, y, z);
+		return new Vec3(x, y, z);
 	}
 	
 	/**
@@ -222,11 +222,9 @@ public class Bone
 	{
 		if(parentNode != null)
 		{
-			positionVector = Vec3.createVectorHelper(0, 0, parentNode.length);
+			positionVector = new Vec3(0, 0, parentNode.length);
 			parentNode.setVectorRotations(positionVector);
-			positionVector.xCoord += parentNode.positionVector.xCoord;
-			positionVector.yCoord += parentNode.positionVector.yCoord;
-			positionVector.zCoord += parentNode.positionVector.zCoord;			
+			positionVector = positionVector.add(parentNode.positionVector);		
 		}
 		if(doRecursive && !childNodes.isEmpty())
 		{
@@ -377,7 +375,7 @@ public class Bone
 	 */
 	public Vec3 getPosition()
 	{
-		return Vec3.createVectorHelper(positionVector.xCoord, positionVector.yCoord, positionVector.zCoord);
+		return new Vec3(positionVector.xCoord, positionVector.yCoord, positionVector.zCoord);
 	}
 	
 	protected void addChildBone(Bone bone)
@@ -447,18 +445,18 @@ public class Bone
 		float x = xRot;
 		float y = yRot;
 		float z = zRot;
-        float xC = MathHelper.cos(x);
-        float xS = MathHelper.sin(x);
-        float yC = MathHelper.cos(y);
-        float yS = MathHelper.sin(y);
-        float zC = MathHelper.cos(z);
-        float zS = MathHelper.sin(z);
-        
-        double xVec = vector.xCoord;
-        double yVec = vector.yCoord;
-        double zVec = vector.zCoord;
-        
-        // rotation around x
+		float xC = MathHelper.cos(x);
+		float xS = MathHelper.sin(x);
+		float yC = MathHelper.cos(y);
+		float yS = MathHelper.sin(y);
+		float zC = MathHelper.cos(z);
+		float zS = MathHelper.sin(z);
+
+		double xVec = vector.xCoord;
+		double yVec = vector.yCoord;
+		double zVec = vector.zCoord;
+
+		// rotation around x
 		double xy = xC*yVec - xS*zVec;
 		double xz = xC*zVec + xS*yVec;
 		// rotation around y
@@ -472,22 +470,18 @@ public class Bone
 		yVec = zy;
 		zVec = yz;
 		
-        vector.xCoord = xVec;
-        vector.yCoord = yVec;
-        vector.zCoord = zVec;
+		vector = new Vec3(xVec, yVec, zVec);
 	}
 
 	protected void addVector(Vec3 destVec, Vec3 srcVec)
 	{
-		destVec.xCoord += srcVec.xCoord;
-		destVec.yCoord += srcVec.yCoord;
-		destVec.zCoord += srcVec.zCoord;		
+		destVec = destVec.add(srcVec);	
 	}
 
 	protected void setVectors()
 	{
-		Vec3 tempVec = Vec3.createVectorHelper(0, 0, length);
-		positionVector = Vec3.createVectorHelper(offsetX, offsetY, offsetZ);
+		Vec3 tempVec = new Vec3(0, 0, length);
+		positionVector = new Vec3(offsetX, offsetY, offsetZ);
 		addVector(tempVec, positionVector);
 		setVectorRotations(tempVec);
 		for (Bone childNode : childNodes) {
@@ -498,7 +492,7 @@ public class Bone
 	protected void setVectors(Vec3 vector)
 	{
 		positionVector = vector;
-		Vec3 tempVec = Vec3.createVectorHelper(0, 0, length);
+		Vec3 tempVec = new Vec3(0, 0, length);
 		setVectorRotations(tempVec);
 		addVector(tempVec, vector);
 		for (Bone childNode : childNodes) {

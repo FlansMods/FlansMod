@@ -1,5 +1,6 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -32,12 +33,13 @@ public class GuiDriveableRepair extends GuiScreen
 	private ArrayList<DriveablePart> partsToDraw = new ArrayList<DriveablePart>();
 	
 	/** Item renderer */
-	private static RenderItem itemRenderer = new RenderItem();
+	private static RenderItem itemRenderer;
 	/** Gui origin */
 	private int guiOriginX, guiOriginY;
 	
 	public GuiDriveableRepair(EntityPlayer player)
 	{
+		super();
 		driver = player;
 		driving = ((EntitySeat)player.ridingEntity).driveable;
     	for(DriveablePart part : driving.getDriveableData().parts.values())
@@ -48,10 +50,10 @@ public class GuiDriveableRepair extends GuiScreen
     			//Add it to the list of parts to draw
     			partsToDraw.add(part);  				
     		}
-    	}
+    	}	
 	}
 	
-    @Override
+	@Override
 	public void initGui()
 	{
 		super.initGui();
@@ -59,43 +61,44 @@ public class GuiDriveableRepair extends GuiScreen
     	{
     		buttonList.add(new GuiButton(i, 0, 0, 55, 20, "Repair"));
     	}
+    	itemRenderer = mc.getRenderItem();
 	}
-    
+
 	@Override
 	protected void actionPerformed(GuiButton button)
-    {
+	{
 		FlansMod.proxy.repairDriveable(driver, driving, partsToDraw.get(button.id));
-    }
-    
-    private void updateButtons()
-    {
-    	int y = 43;
-    	for(int i = 0; i < partsToDraw.size(); i++)
-    	{
-    		DriveablePart part = partsToDraw.get(i);
-    		GuiButton button = (GuiButton)buttonList.get(i);
-    		button.xPosition = guiOriginX + 9;
-    		button.yPosition = part.health <= 0 ? guiOriginY + y : -1000;
-    		y += part.health <= 0 ? 40 : 20;
-    	}
-    }
-    
-    @Override
-    public void drawScreen(int i, int j, float f)
-    {
-    	int guiWidth = 202;
-    	//Work out the guiHeight by adding what is necessary for each part
-    	int guiHeight = 31;
-    	for(DriveablePart part : partsToDraw)
-    	{
+	}
+
+	private void updateButtons()
+	{
+		int y = 43;
+		for(int i = 0; i < partsToDraw.size(); i++)
+		{
+			DriveablePart part = partsToDraw.get(i);
+			GuiButton button = (GuiButton)buttonList.get(i);
+			button.xPosition = guiOriginX + 9;
+			button.yPosition = part.health <= 0 ? guiOriginY + y : -1000;
+			y += part.health <= 0 ? 40 : 20;
+		}
+	}
+
+	@Override
+	public void drawScreen(int i, int j, float f)
+	{
+		int guiWidth = 202;
+		//Work out the guiHeight by adding what is necessary for each part
+		int guiHeight = 31;
+		for(DriveablePart part : partsToDraw)
+		{
 			//Add to the GUI height depending on whether we need a repair button or not
-			guiHeight += part.health <= 0 ? 40 : 20;    				
-    	}
-    	//Update the buttons
-    	updateButtons();
-    	
-    	//Standard GUI render stuff
-    	ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+			guiHeight += part.health <= 0 ? 40 : 20;
+		}
+		//Update the buttons
+		updateButtons();
+
+		//Standard GUI render stuff
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
@@ -193,10 +196,10 @@ public class GuiDriveableRepair extends GuiScreen
 			y += broken ? 40 : 20;
 		}
 		super.drawScreen(i, j, f);
-    }	
-    
+	}
+
 	@Override
-	protected void mouseClicked(int i, int j, int k)
+	protected void mouseClicked(int i, int j, int k) throws IOException
     {
         super.mouseClicked(i, j, k);
 		int m = i - guiOriginX;
@@ -210,18 +213,16 @@ public class GuiDriveableRepair extends GuiScreen
 			else
 			 mc.displayGuiScreen(new GuiDriveableMenu(driver.inventory, driver.worldObj, driving));
 	}
-    
+
 	/** Item stack renderering method */
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
 		if(itemstack == null || itemstack.getItem() == null)
 			return;
-		itemRenderer.renderItemIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, itemstack, i, j);
-		GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+		itemRenderer.renderItemIntoGUI(itemstack, i, j);
+		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
 	}
-        
+
 	@Override
 	public boolean doesGuiPauseGame()
 	{

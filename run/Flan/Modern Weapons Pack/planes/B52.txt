@@ -1,0 +1,110 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name B-52
+ShortName B52
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon B52
+Model mw.B52
+Texture SkinB52
+//Third Person Camera Distance
+CameraDistance 50.0
+//Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
+RestingPitch 0.0
+HasGear True
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
+Mode Plane
+//Throttle
+MaxThrottle 5.5
+MaxNegativeThrottle 0.0
+//Yaw modifiers
+TurnLeftSpeed 1.5
+TurnRightSpeed 1.5
+//Pitch modifiers
+LookUpSpeed 1.5
+LookDownSpeed 1.5
+//Roll modifiers
+RollLeftSpeed 1
+RollRightSpeed 1
+//Drag 1.0 is standard. Modify to make the plane / heli more or less sluggish
+Drag 1.0
+//Lift
+//Lift 2.5
+//Wheels
+NumWheels 3
+WheelPosition 0 -98 -10 -28
+WheelPosition 1 -98 -10 27
+WheelPosition 2 220 -10 0
+WheelSpringStrength 0.125
+//Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
+Propeller 0 29 -41 21 core metalPropeller
+Propeller 1 29 -41 -21 core metalPropeller
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Secondary Bomb
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 50
+ShootDelaySecondary 50
+//Whether to alternate or fire all together
+AlternatePrimary False
+AlternateSecondary True
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+ShootPointSecondary 0 16 10 core 0
+ShootPointSecondary -47 16 10 core 0
+ShootPointSecondary 78 16 10 core 0
+ShootPointSecondary 155 16 10 core 0
+ShootPointSecondary 207 16 10 core 0
+ShootPointSecondary 0 16 -10 core 0
+ShootPointSecondary -47 16 -10 core 0
+ShootPointSecondary 78 16 -10 core 0
+ShootPointSecondary 155 16 -10 core 0
+ShootPointSecondary 207 16 -10 core 0
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 4
+MissileSlots 0
+AllowAllAmmo False
+AddAmmo largeBomb
+AddAmmo smallBomb
+AddAmmo napalm
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 6000
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Pilot 412 69 -13
+Passengers 5
+Passenger 1 412 69 13 core
+Passenger 2 385 34 16 core
+Passenger 3 385 34 -16 core
+Passenger 4 309 60 9 core
+Passenger 5 309 60 -9 core
+// ------------------------------------------------------ Sounds ------------------------------------------------------
+StartSound JetIdle
+StartSoundLength 140
+PropSound JetEngine2
+PropSoundLength 47
+ShootSoundPrimary bomb
+ShootSoundSecondary bomb
+// ------------------------------------------------------ Recipe ------------------------------------------------------
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 advancedMetalCockpit
+AddRecipeParts coreWheel 4 largeWheel
+AddRecipeParts nose 1 metalNose
+AddRecipeParts rightWing 2 metalWingSection
+AddRecipeParts leftWing 2 metalWingSection
+AddRecipeParts tail 1 metalTail
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 15 silver
+AddDye 15 gray
+// ------------------------------------------------------ Health and hitboxes ------------------------------------------------------
+BulletDetection 10
+SetupPart leftWing 5000 -39 21 7 81 5 106
+SetupPart rightWing 5000 -40 22 -112 82 5 105
+SetupPart nose 6000 28 18 -10 56 24 20
+SetupPart core 7000 -5 19 -11 33 23 21
+SetupPart tail 5000 -94 18 -46 89 55 94
+HasGear True
+ModelScale 1

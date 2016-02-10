@@ -93,7 +93,7 @@ public class PlayerClass extends InfoType
 	@Override
 	protected void postRead(TypeFile file) 
 	{
-    	super.postRead(file);
+		super.postRead(file);
 		onWorldLoad(null);
 	}
 	
@@ -173,7 +173,7 @@ public class PlayerClass extends InfoType
 			    		}
 			    	}
 			    	tags.setTag("attachments", attachmentTags);
-			    	stack.stackTagCompound = tags;
+			    	stack.setTagCompound(tags);
 				}
 				startingItems.add(stack);
 			}

@@ -1,0 +1,79 @@
+// ------------------------------------------------------ Naming ------------------------------------------------------
+Name Bofors 40mm AA Gun
+ShortName bofors
+// ------------------------------------------------------ Visuals ------------------------------------------------------
+Icon Bofors
+Model ww2.Bofors
+Texture SkinBofors
+//Third Person Camera Distance
+CameraDistance 7.5
+// ------------------------------------------------------ Movement ------------------------------------------------------
+//Throttle
+MaxThrottle 0
+MaxNegativeThrottle 0
+//Steering modifiers
+TurnLeftSpeed 0
+TurnRightSpeed 0
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -20 -10 -12
+WheelPosition 1 -20 -10 12
+WheelPosition 2 20 -10 12
+WheelPosition 3 20 -10 -12
+WheelSpringStrength 0.5
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+// ------------------------------------------------------ Weaponry ------------------------------------------------------
+//Weapon types. Options are Missile, Bomb, Gun, Shell, None
+Primary Shell
+Secondary None
+//Time between shots in 1/20ths of seconds
+ShootDelayPrimary 20
+ShootDelaySecondary 0
+//Whether to alternate or fire all together
+AlternatePrimary True
+AlternateSecondary False
+//Firing modes. One of SemiAuto, FullAuto or Minigun
+ModePrimary FullAuto
+ModeSecondary FullAuto
+//Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
+// ------------------------------------------------------ Inventory ------------------------------------------------------
+CargoSlots 0
+BombSlots 0
+MissileSlots 1
+AllowAllAmmo False
+AddAmmo boforsAmmo
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 0
+// ------------------------------------------------------ Passengers ------------------------------------------------------
+Driver 0 1 0 -360 360 0 89
+RotatedDriverOffset -3 0 12
+Passengers 0
+BarrelPosition 14 14 0
+// ------------------------------------------------------- Sounds -------------------------------------------------------
+StartSound None
+StartSoundLength 0
+EngineSound None
+EngineSoundLength 0
+ShootSoundPrimary AAfire
+TurretRotationSpeed 0.03
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 aaBarrel
+AddRecipeParts core 1 blockIron 2 vehicleSeat
+AddRecipeParts frontLeftWheel 1 wheel
+AddRecipeParts frontRightWheel 1 wheel
+AddRecipeParts backLeftWheel 1 wheel
+AddRecipeParts backRightWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 4 green
+//Health and collision
+SetupPart core 2000 -41 -10 -26 75 35 52
+BulletDetection 7
+ModelScale 1.1
+Description British AA Gun

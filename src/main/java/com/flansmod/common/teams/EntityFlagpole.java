@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -63,18 +64,23 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		this(world, x + 0.5D, y, z + 0.5D);
 	}
 		
-    @Override
+    public EntityFlagpole(World world, BlockPos pos) 
+    {
+		this(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+	}
+
+	@Override
 	public AxisAlignedBB getBoundingBox()
-    {
-    	return null;
-        //return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
-    }
-    
-    @Override
+	{
+		return null;
+		//return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
+	}
+
+	@Override
 	public boolean canBeCollidedWith()
-    {
-        return true;
-    }
+	{
+		return true;
+	}
 
 	@Override
 	protected void entityInit() 
@@ -254,25 +260,25 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
-    public boolean interactFirst(EntityPlayer player) //interact
-    {
+	public boolean interactFirst(EntityPlayer player) //interact
+	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		if(!worldObj.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemOpStick)))
 			ItemOpStick.openBaseEditGUI(this, (EntityPlayerMP)player);
 		
-    	/* TODO : Check the generalised code in TeamsManager works
-    	if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
-    		TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
-    		*/
-        return false;
-    }
+		/* TODO : Check the generalised code in TeamsManager works
+		if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)
+			TeamsManager.getInstance().currentGametype.baseClickedByPlayer(this, (EntityPlayerMP)player);
+			*/
+		return false;
+	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;
-    }
+	}
 
 	@Override
 	public void setBaseID(int i) 
@@ -347,8 +353,8 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}*/
 	
 	@Override
-    public boolean isBurning()
-    {
-    	return false;
-    }
+	public boolean isBurning()
+	{
+		return false;
+	}
 }

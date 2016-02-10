@@ -34,6 +34,8 @@ package com.flansmod.common.vector;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
+import com.flansmod.common.FlansMod;
+
 import net.minecraft.util.Vec3;
 
 /**
@@ -56,6 +58,23 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	 */
 	public Vector3f() {
 		super();
+	}
+	
+	public Vector3f(String input, String typeName)
+	{
+		//Input should be of the form [float,float,float]
+		String noBrackets = input.substring(1, input.length() - 1);
+		String[] split = noBrackets.split(",");
+		if(split.length == 3)
+		{
+			x = Float.parseFloat(split[0]);
+			y = Float.parseFloat(split[1]);
+			z = Float.parseFloat(split[2]);
+		}
+		else
+		{
+			FlansMod.log("Invalid vector input in " + typeName + "!");
+		}
 	}
 
 	/**
@@ -84,7 +103,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 
 	public Vec3 toVec3()
 	{
-		return Vec3.createVectorHelper(x, y, z);
+		return new Vec3(x, y, z);
 	}
 
 	/* (non-Javadoc)
@@ -314,7 +333,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	@Override
 	public String toString() {
 
-        return "Vector3f[" + x + ", " + y + ", " + z + ']';
+		return "Vector3f[" + x + ", " + y + ", " + z + ']';
 	}
 
 	/**

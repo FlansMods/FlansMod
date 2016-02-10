@@ -1,32 +1,34 @@
 package com.flansmod.common.network;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 
@@ -44,6 +46,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	private LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
 	//Whether or not Flan's Mod has initialised yet. Once true, no more packets may be registered.
 	private boolean modInitialised = false;
+	
+	/** Store received packets in these queues and have the main Minecraft threads use these */
+	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
+	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
 	
 	/** Registers a packet with the handler */
 	public boolean registerPacket(Class<? extends PacketBase> cl)
@@ -86,7 +92,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		//Get the packet class to encode our packet
 		msg.encodeInto(ctx, encodedData);
 		//Convert our packet into a Forge packet to get it through the Netty system
-		FMLProxyPacket proxyPacket = new FMLProxyPacket(encodedData.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+		FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(encodedData.copy()), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 		//Add our packet to the outgoing packet queue
 		out.add(proxyPacket);
 	}
@@ -112,15 +118,41 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		{
 		case CLIENT : 
 		{
-			packet.handleClientSide(getClientPlayer());
+			receivedPacketsClient.offer(packet);
+			//packet.handleClientSide(getClientPlayer());
 			break;
 		}
 		case SERVER :
 		{
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			packet.handleServerSide(((NetHandlerPlayServer)netHandler).playerEntity);
+			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
+			if(!receivedPacketsServer.containsKey(player.getName()))
+				receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
+			receivedPacketsServer.get(player.getName()).offer(packet);
+			//packet.handleServerSide();
 			break;
 		}
+		}
+	}
+	
+	public void handleClientPackets()
+	{
+		for(PacketBase packet = receivedPacketsClient.poll(); packet != null; packet = receivedPacketsClient.poll())
+		{
+			packet.handleClientSide(getClientPlayer());
+		}
+	}
+	
+	public void handleServerPackets()
+	{
+		for(String playerName : receivedPacketsServer.keySet())
+		{
+			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
+			EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(playerName); 
+			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
+			{
+				packet.handleServerSide(player);
+			}
 		}
 	}
 	
@@ -160,6 +192,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketVehicleControl.class);
 		registerPacket(PacketVoteCast.class);
 		registerPacket(PacketVoting.class);
+		registerPacket(PacketRequestDebug.class);
 	}
 
 	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 

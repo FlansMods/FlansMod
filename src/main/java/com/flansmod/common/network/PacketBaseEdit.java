@@ -5,8 +5,8 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ITeamBase;
 import com.flansmod.common.teams.TeamsManager;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.Minecraft;
@@ -82,7 +82,7 @@ public class PacketBaseEdit extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		//Do another op check
-		if(!MinecraftServer.getServer().getConfigurationManager().func_152596_g(playerEntity.getGameProfile()))
+		if(!MinecraftServer.getServer().getConfigurationManager().canSendCommands(playerEntity.getGameProfile()))
 			return;
 		
 		//Find the base and change its attributes (or destroy it)
@@ -98,7 +98,7 @@ public class PacketBaseEdit extends PacketBase
 			base.setMapFirstTime(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
 		base.setName(baseName);
 		
-		FlansMod.log(playerEntity.getCommandSenderName() + " modified attributes of base " + baseID);
+		FlansMod.log(playerEntity.getName() + " modified attributes of base " + baseID);
 	}
 
 	@Override

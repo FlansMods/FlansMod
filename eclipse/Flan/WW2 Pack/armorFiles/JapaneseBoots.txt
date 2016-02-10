@@ -1,8 +1,0 @@
-Name Japanese WW2 Boots
-ShortName japaneseBoots
-ItemID 23664
-Icon JapaneseBoots
-Colour 255 255 255
-Type Boots
-Defence 0.1
-ArmourTexture Japanese

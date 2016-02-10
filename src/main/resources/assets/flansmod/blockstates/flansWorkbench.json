@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "type=0":    { "model": "flansmod:flansWorkbench_guns" },
+        "type=1":     { "model": "flansmod:flansWorkbench_vehicles" },
+        "type=2":     { "model": "flansmod:flansWorkbench_parts" }
+    }
+}

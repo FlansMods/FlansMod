@@ -1,5 +1,7 @@
 package com.flansmod.client.gui;
 
+import java.io.IOException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -29,19 +31,19 @@ public class GuiDriveableController extends GuiScreen
 	public void initGui()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
 	}
 	
 	@Override
 	public void onGuiClosed()
-    {
+	{
 		mc.mouseHelper.ungrabMouseCursor();
-		mc.renderViewEntity = mc.thePlayer;
+		mc.setRenderViewEntity(mc.thePlayer);
     }
 	
 	@Override
-    public void handleMouseInput()
-    {
+	public void handleMouseInput()
+	{
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.thePlayer)
 		{
@@ -79,14 +81,14 @@ public class GuiDriveableController extends GuiScreen
 			rightMouseHeld = false;
 			plane.updateKeyHeldState(8, false);
 		}
-    }
+	}
 	
 	@Override
 	protected void keyTyped(char c, int i)
-    {
+	{
 		if(i == 1)
 		{
-            mc.displayGuiScreen(null);
+			mc.displayGuiScreen(null);
 			mc.displayInGameMenu();		
 		}
 		if(i == 59)
@@ -101,8 +103,8 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
 			if(mc.gameSettings.thirdPersonView == 1)
-				mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
-			else mc.renderViewEntity = mc.thePlayer;
+				mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
+			else mc.setRenderViewEntity(mc.thePlayer);
 		}
 		if(i == 66)
 		{
@@ -132,19 +134,19 @@ public class GuiDriveableController extends GuiScreen
 		{
 			FlansModClient.reloadModels(false);
 		}
-    }
+	}
 	
 	@Override
 	public void updateScreen()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.renderViewEntity = (plane.getCamera() == null ? mc.thePlayer : plane.getCamera());
-		else mc.renderViewEntity = mc.thePlayer;
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
+		else mc.setRenderViewEntity(mc.thePlayer);
 	}
 	
-    @Override
+	@Override
 	public void handleInput()
-    {
+	{
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
 		if(player != mc.thePlayer)
 		{
@@ -156,13 +158,14 @@ public class GuiDriveableController extends GuiScreen
 			mc.mouseHelper.grabMouseCursor();
 		}
 		handleMouseInput();
-        for(; Keyboard.next(); handleKeyboardInput()) { }
+
+        for(; Keyboard.next(); ) {try {handleKeyboardInput();} catch(IOException e){} }
         
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();
 		
 		plane.onMouseMoved(l, m);
-        
+
 		if(plane != null && !plane.isDead() && plane.getControllingEntity() != null && plane.getControllingEntity() instanceof EntityPlayer)
 		{
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindForward.getKeyCode()))//KeyInputHandler.accelerateKey.getKeyCode()))
@@ -237,19 +240,19 @@ public class GuiDriveableController extends GuiScreen
 		}
 		else
 		{
-            mc.displayGuiScreen(null);
-        }
-    }
+			mc.displayGuiScreen(null);
+		}
+	}
 	   
 	@Override
 	public void drawBackground(int i)
-    {
+	{
 		//Plane gauges overlay
-    }
+	}
 
-    @Override
+	@Override
 	public boolean doesGuiPauseGame()
-    {
-        return false;
-    }
+	{
+		return false;
+	}
 }

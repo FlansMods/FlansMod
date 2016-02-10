@@ -167,15 +167,15 @@ public class ModelG43 extends ModelGun
 
 		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
 		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
-		scopeAttachPoint = new Vector3f(3F / 16F, 8F / 16F, 0F / 16F);
+		scopeAttachPoint = new Vector3f(5F / 16F, 8F / 16F, 0F / 16F);
 		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
 
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;
 
 
-		translateAll(0F, -4F, 0F);
-
+		translateAll(0F, -4F, 0.05F);
+		thirdPersonOffset = new Vector3f(0F, -0.13F, 0.01F);
 
 		flipAll();
 	}

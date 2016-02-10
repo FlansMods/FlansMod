@@ -15,11 +15,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -68,6 +68,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public static final float targetAcquireInterval = 10;
 	
 	public int ticksSinceUsed = 0;
+	
+	private float yOffset;
 
 	public EntityAAGun(World world)
 	{
@@ -84,7 +86,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		this(world);
 		placer = p;
-		placerName = p.getCommandSenderName();
+		placerName = p.getName();
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -98,11 +100,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		posZ = d2;
 		float f = width / 2.0F;
 		float f1 = height;
-		boundingBox.setBounds(d - f, (d1 - yOffset) + ySize, d2 - f, d + f, (d1 - yOffset) + ySize + f1, d2 + f);
+		setEntityBoundingBox(AxisAlignedBB.fromBounds(d - f, (d1 - yOffset) + height, d2 - f, d + f, (d1 - yOffset) + height + f1, d2 + f));
 	}
 	
 	@Override
-    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i)
+    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
     {
 		sPosX = d;
 		sPosY = d1;
@@ -110,7 +112,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		sYaw = f;
 		sPitch = f1;
 		sUpdateTime = i;
-    }
+	}
 
 	public void initType()
 	{
@@ -125,7 +127,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void onCollideWithPlayer(EntityPlayer par1EntityPlayer) 
+	public void onCollideWithPlayer(EntityPlayer par1EntityPlayer)
 	{
 		
 	}
@@ -140,13 +142,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
 	{
-		return entity.boundingBox;
-	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox()
-	{
-		return boundingBox;
+		return entity.getEntityBoundingBox();
 	}
 
 	@Override
@@ -203,7 +199,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double newY = y * cosPitch - z * sinPitch;
 		double newZ = -x * sinYaw + (y * sinPitch + z * cosPitch) * cosYaw;
 
-		return Vec3.createVectorHelper(newX, newY, newZ);
+		return new Vec3(newX, newY, newZ);
 	}
 
 	@Override
@@ -408,7 +404,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return null;
 		if(placer == null && placerName != null)
 			placer = worldObj.getPlayerEntityByName(placerName);
-		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(type.targetRange, type.targetRange, type.targetRange)))
+		for(Object obj : worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
 			
@@ -419,7 +415,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer || candidateEntity.getCommandSenderName().equals(placerName))
+						if(candidateEntity == placer || candidateEntity.getName().equals(placerName))
 							continue;
 						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
@@ -490,7 +486,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		double z2 = -x * sinYaw + z * cosYaw;
 
 		riddenByEntity.setPosition(posX + x2, posY + y, posZ + z2);
-    }
+	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
@@ -504,7 +500,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if (ammo[i] != null)
 				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
 		}
-		nbttagcompound.setString("Placer", placer.getCommandSenderName());
+		nbttagcompound.setString("Placer", placer.getName());
 	}
 
 	@Override
@@ -520,12 +516,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			ammo[i] = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("Ammo " + i));
 		}
 		placerName = nbttagcompound.getString("Placer");
-	}
-
-	@Override
-	public float getShadowSize()
-	{
-		return 0.0F;
 	}
 
 	@Override
@@ -602,15 +592,15 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public boolean canRiderInteract()
-    {
-        return false;
-    }
+	public boolean canRiderInteract()
+	{
+		return false;
+	}
 	
 	@Override
-    public ItemStack getPickedResult(MovingObjectPosition target)
-    {
+	public ItemStack getPickedResult(MovingObjectPosition target)
+	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
-    }
+	}
 }

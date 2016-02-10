@@ -3,10 +3,10 @@
 // This file is for Flan's Flying Mod Version 3.0.x+
 
 // Model Checklist
-//    Model: 
-//    - Check Left/Right    [ ]  (Left = + / Right = -)
-//    - Code Cleaned        [ ]
-//    - Coverted to Version [ ]
+//	Model:
+//	- Check Left/Right	[ ]  (Left = + / Right = -)
+//	- Code Cleaned		[ ]
+//	- Coverted to Version [ ]
 
 package com.flansmod.client.model.ww2;
 
@@ -237,15 +237,15 @@ public class ModelGothaGV extends ModelPlane
 
 // Propeller
 		propellerModels = new ModelRendererTurbo[1][3]; //1 propeller in 3 parts
-        propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
-        propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
-        propellerModels[0][2] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 2		
-        propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
-        propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
-        propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		
-        propellerModels[0][0].setRotationPoint(-54, -2, 0);	//Set the position of the propeller
-        propellerModels[0][1].setRotationPoint(-54, -2, 0);	
-        propellerModels[0][2].setRotationPoint(-54, -2, 0);	
+		propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
+		propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
+		propellerModels[0][2] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 2
+		propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
+		propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
+		propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);
+		propellerModels[0][0].setRotationPoint(-54, -2, 0);	//Set the position of the propeller
+		propellerModels[0][1].setRotationPoint(-54, -2, 0);
+		propellerModels[0][2].setRotationPoint(-54, -2, 0);
 		
 		
 

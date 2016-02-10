@@ -3,10 +3,10 @@
 // This file is for Flan's Flying Mod Version 3.0.x+
 
 // Model Checklist
-//    Model: 
-//    - Check Left/Right    [ ]  (Left = + / Right = -)
-//    - Code Cleaned        [ ]
-//    - Coverted to Version [ ]
+//	Model:
+//	- Check Left/Right	[ ]  (Left = + / Right = -)
+//	- Code Cleaned		[ ]
+//	- Coverted to Version [ ]
 
 package com.flansmod.client.model.mw;
 
@@ -414,9 +414,9 @@ public class ModelTornado extends ModelPlane
 
 		// Propeller
 				propellerModels = new ModelRendererTurbo[1][1];
-		        propellerModels[0][0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY);
-		        propellerModels[0][0].addBox(0F, 0F, 0F, 10, 2, 2, 0F);
-		        propellerModels[0][0].setRotationPoint(65F, -23F, -1F);
+				propellerModels[0][0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY);
+				propellerModels[0][0].addBox(0F, 0F, 0F, 10, 2, 2, 0F);
+				propellerModels[0][0].setRotationPoint(65F, -23F, -1F);
 				
 				
 				flipAll();
