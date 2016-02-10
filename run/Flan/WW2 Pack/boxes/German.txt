@@ -27,11 +27,11 @@ AddAmmo lugerAmmo 2 ingotIron 1 gunpowder
 SetPage Page 2
 AddGun mp40 10 ingotIron
 AddAmmo mp40Ammo 3 ingotIron 1 gunpowder
-AddGun STG44 20 ingotIron 4 log
-AddAmmo STG44Ammo 4 ingotIron 1 gunpowder
-AddGun MG42 25 ingotIron 5 log
-AddAmmo MG42Ammo50 5 ingotIron 4 gunpowder
-AddAltAmmo MG42Ammo250 20 ingotIron 20 gunpowder
+AddGun mp44 20 ingotIron 4 log
+AddAmmo mp44Ammo 4 ingotIron 1 gunpowder
+AddGun mg42 25 ingotIron 5 log
+AddAmmo mg42Ammo50 5 ingotIron 4 gunpowder
+AddAltAmmo mg42Ammo250 20 ingotIron 20 gunpowder
 AddGun MG151 28 ingotIron
 AddAmmo MG151Ammo 4 ingotIron 8 gunpowder
 AddGun stielhandgranate 2 ingotIron 2 gunpowder
