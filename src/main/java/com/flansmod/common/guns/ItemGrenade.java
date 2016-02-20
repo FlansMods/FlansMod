@@ -109,7 +109,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	@Override
 	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
 			float pitch, double motionX, double motionY, double motionZ,
-			EntityLivingBase shooter, float gunDamage, int itemDamage,
+			EntityLivingBase shooter, float gunDamage,
 			InfoType shotFrom) {
 		// TODO Auto-generated method stub
 		return null;
@@ -118,7 +118,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	@Override
 	public EntityShootable getEntity(World worldObj, Vector3f origin,
 			Vector3f direction, EntityLivingBase thrower, float spread,
-			float damage, float speed, int itemDamage, InfoType shotFrom) 
+			float damage, float speed, InfoType shotFrom) 
 	{
 		return getGrenade(worldObj, thrower);
 	}
@@ -126,7 +126,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	@Override
 	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
 			float pitch, EntityLivingBase shooter, float spread, float damage,
-			int itemDamage, InfoType shotFrom) {
+			InfoType shotFrom) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -134,7 +134,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	@Override
 	public EntityShootable getEntity(World worldObj, EntityLivingBase player,
 			float bulletSpread, float damage, float bulletSpeed, boolean b,
-			int itemDamage, InfoType shotFrom) 
+			InfoType shotFrom) 
 	{
 		return getGrenade(worldObj, player);
 	}
@@ -156,5 +156,18 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		{
 			Collections.addAll(list, type.description.split("_"));
 		}
+	}
+	
+	public void Shoot(World world,
+			Vector3f origin,
+			Vector3f direction,
+			float damageModifier,
+			float spreadModifier,
+			float speedModifier,
+			InfoType shotFrom,
+			EntityLivingBase shooter)
+	{
+		EntityGrenade grenade = getGrenade(world, shooter);
+		world.spawnEntityInWorld(grenade);
 	}
 }

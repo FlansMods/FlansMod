@@ -280,7 +280,7 @@ public class WorldGenResearchLab extends WorldGenFlan
     	for(int k = 0; k < 2; k++)
     	{
     		ItemStack randomGun = FlansModApocalypse.getLootGenerator().getRandomLoadedGun(rand, false);
-    		GunType gunType = ((ItemGun)randomGun.getItem()).type;
+    		GunType gunType = ((ItemGun)randomGun.getItem()).GetType();
     		tags.setTag(k == 1 ? EnumMechaSlotType.rightTool.toString() : EnumMechaSlotType.leftTool.toString(), randomGun.writeToNBT(new NBTTagCompound()));
     		if(gunType.nonExplosiveAmmo.size() > 0)
     		{

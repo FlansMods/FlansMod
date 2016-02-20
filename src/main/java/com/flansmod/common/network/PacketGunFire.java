@@ -43,11 +43,7 @@ public class PacketGunFire extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		ItemStack currentItem = playerEntity.inventory.getCurrentItem();
-		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemGun)
-		{
-			((ItemGun)currentItem.getItem()).onMouseHeld(currentItem, playerEntity.worldObj, playerEntity, left, held);
-		}
+		FlansMod.log("Depreceated message!");
 	}
 
 	@Override

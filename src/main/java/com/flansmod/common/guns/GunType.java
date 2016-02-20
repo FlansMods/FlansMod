@@ -38,12 +38,12 @@ public class GunType extends InfoType implements IScope
 	public float damage = 0;
 	/** The damage inflicted upon punching someone with this gun */
 	public float meleeDamage = 1;
-	/** The speed of bullets upon leaving this gun */
-	public float bulletSpeed = 5.0F;
+	/** The speed of bullets upon leaving this gun. 0.0f means instant. */
+	public float bulletSpeed = 0.0f;
 	/** The number of bullet entities created by each shot */
 	public int numBullets = 1;
 	/** The delay between shots in ticks (1/20ths of seconds) */
-	public int shootDelay = 0;
+	public float shootDelay = 1.0f;
 	/** Number of ammo items that the gun may hold. Most guns will hold one magazine.
 	 * Some may hold more, such as Nerf pistols, revolvers or shotguns */
 	public int numAmmoItemsInGun = 1;
@@ -170,7 +170,7 @@ public class GunType extends InfoType implements IScope
 	public Paintjob defaultPaintjob;
 	
 	/** The static hashmap of all guns by shortName */
-	public static HashMap<String, GunType> guns = new HashMap<String, GunType>();
+	public static HashMap<Integer, GunType> guns = new HashMap<Integer, GunType>();
 	/** The static list of all guns */
 	public static ArrayList<GunType> gunList = new ArrayList<GunType>();
 	
@@ -193,7 +193,7 @@ public class GunType extends InfoType implements IScope
 	{
 		super.postRead(file);
 		gunList.add(this);
-		guns.put(shortName, this);
+		guns.put(shortName.hashCode(), this);
 		
 		//After all lines have been read, set up the default paintjob
 		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
@@ -255,7 +255,7 @@ public class GunType extends InfoType implements IScope
 			
 			//Sounds
 			else if(split[0].equals("ShootDelay"))
-				shootDelay = Integer.parseInt(split[1]);
+				shootDelay = Float.parseFloat(split[1]);
 			else if(split[0].equals("SoundLength"))
 				shootSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("DistortSound"))
@@ -367,7 +367,13 @@ public class GunType extends InfoType implements IScope
 			else if(split[0].equals("NumAmmoSlots") || split[0].equals("NumAmmoItemsInGun") || split[0].equals("LoadIntoGun"))
 				numAmmoItemsInGun = Integer.parseInt(split[1]);
 			else if(split[0].equals("BulletSpeed"))
-				bulletSpeed = Float.parseFloat(split[1]);
+			{
+				if(split[1].toLowerCase().equals("instant"))
+				{
+					bulletSpeed = 0.0f;
+				}
+				else bulletSpeed = Float.parseFloat(split[1]);
+			}
 			else if(split[0].equals("CanShootUnderwater"))
 				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("OneHanded"))
@@ -684,7 +690,12 @@ public class GunType extends InfoType implements IScope
 	/** Static String to GunType method */
 	public static GunType getGun(String s)
 	{
-		return guns.get(s);
+		return guns.get(s.hashCode());
+	}
+	
+	public static GunType getGun(int hash)
+	{
+		return guns.get(hash);
 	}
 	
 	public Paintjob getPaintjob(String s)

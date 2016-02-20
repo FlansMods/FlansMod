@@ -73,7 +73,8 @@ public class TickHandlerClient
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemGun)
 		{
-			if(((ItemGun)player.getCurrentEquippedItem().getItem()).type.oneHanded && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.dwheel) > 0)
+			if(((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded && 
+					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.dwheel) > 0)
 				event.setCanceled(true);
 		}
 	}
@@ -136,7 +137,7 @@ public class TickHandlerClient
 				ItemStack currentHeldItem = player.getCurrentEquippedItem();
 				if(currentHeldItem != null && currentHeldItem.getItem() instanceof ItemGun)
 				{
-					GunType type = ((ItemGun)currentHeldItem.getItem()).type;
+					GunType type = ((ItemGun)currentHeldItem.getItem()).GetType();
 					AttachmentType grip = type.getGrip(currentHeldItem);
 					if(grip != null && grip.flashlight)
 					{

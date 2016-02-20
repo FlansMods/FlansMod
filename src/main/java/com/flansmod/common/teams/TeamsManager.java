@@ -687,7 +687,7 @@ public class TeamsManager
 						boolean alreadyAdded = false;
 						for(EntityItem check : dropsToThrow)
 						{
-							if(((ItemGun)stack.getItem()).type == ((ItemGun)check.getEntityItem().getItem()).type)
+							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)check.getEntityItem().getItem()).GetType())
 								alreadyAdded = true;
 						}
 						if(!alreadyAdded)
@@ -703,7 +703,7 @@ public class TeamsManager
 		for(EntityItem entity : dropsToThrow)
 		{
 			EntityGunItem gunEntity = (EntityGunItem)entity;
-			GunType gunType = ((ItemGun)gunEntity.getEntityItem().getItem()).type;
+			GunType gunType = ((ItemGun)gunEntity.getEntityItem().getItem()).GetType();
 			for(EntityItem ammoEntity : event.drops)
 			{
 				ItemStack ammoItemstack = ammoEntity.getEntityItem();
@@ -1062,13 +1062,14 @@ public class TeamsManager
 			//Load up as many guns as possible
 		}
 		
+		// TODO : RELOAD
 		//Preload each gun
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).reload(stack, ((ItemGun)stack.getItem()).type, player.worldObj, player, true, false);
+				//((ItemGun)stack.getItem()).reload(stack, ((ItemGun)stack.getItem()).GetType(), player.worldObj, player, true, false);
 			}
 		}
 	}
@@ -1184,7 +1185,7 @@ public class TeamsManager
 		}
 		
 		//Reset all infotypes. Specifically, send this to player classes so that they may create itemstacks from strings regarding attachments for guns
-		for(InfoType type : InfoType.infoTypes)
+		for(InfoType type : InfoType.infoTypes.values())
 			type.onWorldLoad(world);
 	}
 	

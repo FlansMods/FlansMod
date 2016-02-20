@@ -231,7 +231,7 @@ public class FlansMod
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new CommonGuiHandler());		
 		
 		// Recipes
-		for (InfoType type : InfoType.infoTypes)
+		for (InfoType type : InfoType.infoTypes.values())
 		{
 			type.addRecipe();
 			type.addDungeonLoot();

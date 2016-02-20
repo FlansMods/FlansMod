@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +17,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.network.PacketReload;
 import com.flansmod.common.network.PacketRequestDebug;
 
@@ -98,10 +104,38 @@ public class KeyInputHandler
 			mc.displayGuiScreen(new GuiTeamScores());
 			return;
 		}
-		if(reloadKey.isPressed() && FlansModClient.shootTime(false) <= 0)
+		// TODO : Reload
+		if(reloadKey.isPressed())
 		{
-			FlansMod.getPacketHandler().sendToServer(new PacketReload(false));
-			return;
+			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+			ItemStack stack = player.getCurrentEquippedItem();
+			
+			if(data.shootTimeRight <= 0.0f)
+			{
+				if(stack != null && stack.getItem() instanceof ItemGun)
+				{
+					ItemGun item = (ItemGun)stack.getItem();
+					GunType type = item.GetType();
+					
+					if(item.CanReload(stack, player.inventory))
+					{
+						FlansMod.getPacketHandler().sendToServer(new PacketReload(false, true));
+	
+						//Set player shoot delay to be the reload delay
+						//Set both gun delays to avoid reloading two guns at once
+						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
+						
+						GunAnimations animations = FlansModClient.getGunAnimations(player, false);
+		
+						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
+						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
+						animations.doReload(type.reloadTime, pumpDelay, pumpTime);
+						
+						data.reloadingRight = true;
+						data.burstRoundsRemainingRight = 0;
+					}
+				}
+			}
 		}
 		if(debugKey.isPressed())
 		{

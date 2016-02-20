@@ -100,7 +100,7 @@ public class ClientRenderHooks
 	{
 		if(event.item.getItem() instanceof ItemGun)
 		{
-			GunType type = ((ItemGun)event.item.getItem()).type;
+			GunType type = ((ItemGun)event.item.getItem()).GetType();
 			if(type.model != null)
 			{
 				event.setCanceled(true);
@@ -124,14 +124,14 @@ public class ClientRenderHooks
 	public void renderHeldItem(RenderHandEvent event)
 	{
 		EntityPlayer player = mc.thePlayer;
-		if(itemToRender != null && itemToRender.getItem() instanceof ItemGun && ((ItemGun)itemToRender.getItem()).type.model != null)
+		if(itemToRender != null && itemToRender.getItem() instanceof ItemGun && ((ItemGun)itemToRender.getItem()).GetType().model != null)
 		{
 			//Cancel the hand render event so that we can do our own.
 			event.setCanceled(true);
 		
 			//Render the gun in hand
 			ItemStack stack = itemToRender;
-			GunType type = ((ItemGun)stack.getItem()).type;
+			GunType type = ((ItemGun)stack.getItem()).GetType();
 			float partialTicks = event.partialTicks;
 			int pass = event.renderPass;
 			EntityRenderer renderer = mc.entityRenderer;
@@ -374,7 +374,7 @@ public class ClientRenderHooks
 		{
 			ModelBiped biped = (ModelBiped)mainModel;
 			ItemStack stack = entity.getEquipmentInSlot(0);
-			GunType type = ((ItemGun)stack.getItem()).type;
+			GunType type = ((ItemGun)stack.getItem()).GetType();
 			if(type.model == null)
 				return;
 			ModelGun gunModel = type.model;
@@ -488,7 +488,7 @@ public class ClientRenderHooks
 						
 				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 				{
-					GunType gunType = ((ItemGun)gunStack.getItem()).type;
+					GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 							
 					//Render!
 					GlStateManager.pushMatrix();			
@@ -660,7 +660,7 @@ public class ClientRenderHooks
 			PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
 			double zLevel = 0D;
 			
-			if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).type.oneHanded)
+			if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).GetType().oneHanded)
 			{
 				for(int n = 0; n < 9; n++)
 				{
@@ -694,7 +694,7 @@ public class ClientRenderHooks
 				if(stack != null && stack.getItem() instanceof ItemGun)
 				{
 					ItemGun gunItem = (ItemGun)stack.getItem();
-					GunType gunType = gunItem.type;
+					GunType gunType = gunItem.GetType();
 					int x = 0;
 					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 					{
@@ -722,7 +722,7 @@ public class ClientRenderHooks
 						ItemStack offHandStack = mc.thePlayer.inventory.getStackInSlot(data.offHandGunSlot - 1);
 						if(offHandStack != null && offHandStack.getItem() instanceof ItemGun)
 						{
-							GunType offHandGunType = ((ItemGun)offHandStack.getItem()).type;
+							GunType offHandGunType = ((ItemGun)offHandStack.getItem()).GetType();
 							x = 0;
 							for(int n = 0; n < offHandGunType.numAmmoItemsInGun; n++)
 							{

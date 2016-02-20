@@ -64,6 +64,7 @@ import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.tileentity.RenderItemFrame;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -118,10 +119,7 @@ public class FlansModClient extends FlansMod
 	public static boolean controlModeMouse = true;
 	/** A delayer on the mouse control switch */
 	public static int controlModeSwitchTimer = 20;
-	
-	/** The delay between shots / reloading */
-	public static int shootTimeLeft, shootTimeRight;
-	
+		
 	//Recoil variables
 	/** The recoil applied to the player view by shooting */
 	public static float playerRecoil;
@@ -170,11 +168,6 @@ public class FlansModClient extends FlansMod
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
 
-	public static int shootTime(boolean left)
-	{
-		return left ? shootTimeLeft : shootTimeRight;
-	}
-
 	public static void tick()
 	{
 		if (minecraft.thePlayer == null || minecraft.theWorld == null)
@@ -197,10 +190,6 @@ public class FlansModClient extends FlansMod
 		}
 		
 		// Guns
-		if (shootTimeLeft > 0)
-			shootTimeLeft--;
-		if (shootTimeRight > 0)
-			shootTimeRight--;
 		if(scopeTime > 0)
 			scopeTime--;
 		if (playerRecoil > 0)
@@ -241,14 +230,23 @@ public class FlansModClient extends FlansMod
 		ItemStack itemstackInHand = minecraft.thePlayer.inventory.getCurrentItem();
 		if (itemstackInHand != null)
 			itemInHand = itemstackInHand.getItem();
-		if (currentScope != null && (itemInHand == null || !(itemInHand instanceof ItemGun && ((ItemGun)itemInHand).type.getCurrentScope(itemstackInHand) == currentScope)))
+		if (currentScope != null)
 		{
-			currentScope = null;
-			minecraft.gameSettings.fovSetting = originalFOV;
-			minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
-			minecraft.gameSettings.thirdPersonView = originalThirdPerson;
+			GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
+			
+			// If we've opened a GUI page, or we switched weapons, close the current scope
+			if(FMLClientHandler.instance().getClient().currentScreen != null 
+			|| itemInHand == null 
+			|| !(itemInHand instanceof ItemGun)
+			|| ((ItemGun)itemInHand).GetType().getCurrentScope(itemstackInHand) != currentScope)
+			{
+				currentScope = null;
+				minecraft.gameSettings.fovSetting = originalFOV;
+				minecraft.gameSettings.mouseSensitivity = originalMouseSensitivity;
+				minecraft.gameSettings.thirdPersonView = originalThirdPerson;
+			}
 		}
-		
+
 		//Calculate new zoom variables
 		lastZoomProgress = zoomProgress;
 		if(currentScope == null)
@@ -286,6 +284,34 @@ public class FlansModClient extends FlansMod
 		}
 		if (controlModeSwitchTimer > 0)
 			controlModeSwitchTimer--;
+	}
+	
+	public static void SetScope(IScope scope)
+	{
+		GameSettings gameSettings = FMLClientHandler.instance().getClient().gameSettings;
+		
+		if(scopeTime <= 0 && FMLClientHandler.instance().getClient().currentScreen == null)
+		{
+			if(currentScope == null)
+			{
+				currentScope = scope;
+				lastZoomLevel = scope.getZoomFactor();
+				lastFOVZoomLevel = scope.getFOVFactor();
+				float f = originalMouseSensitivity = gameSettings.mouseSensitivity;
+				gameSettings.mouseSensitivity = f / (float) Math.sqrt(scope.getZoomFactor());
+				originalThirdPerson = gameSettings.thirdPersonView;
+				gameSettings.thirdPersonView = 0;
+				originalFOV = gameSettings.fovSetting;
+			}
+			else
+			{
+				currentScope = null;
+				gameSettings.mouseSensitivity = originalMouseSensitivity;
+				gameSettings.thirdPersonView = originalThirdPerson;
+				gameSettings.fovSetting = originalFOV;
+			}
+			scopeTime = 10;
+		}
 	}
 	
 	public static void renderTick(float smoothing)
@@ -348,7 +374,7 @@ public class FlansModClient extends FlansMod
 	
 	public static void reloadModels(boolean reloadSkins)
 	{
-		for(InfoType type : InfoType.infoTypes)
+		for(InfoType type : InfoType.infoTypes.values())
 		{
 			type.reloadModel();
 		}

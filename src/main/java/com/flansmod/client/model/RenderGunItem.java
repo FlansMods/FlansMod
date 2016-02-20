@@ -28,7 +28,7 @@ public class RenderGunItem extends RenderEntityItem
     {
         ItemStack stack = entity.getEntityItem();
         
-        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).type.model != null)
+        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
         {
         	GlStateManager.pushMatrix();
         	GlStateManager.translate(x, y + 0.25D, z);

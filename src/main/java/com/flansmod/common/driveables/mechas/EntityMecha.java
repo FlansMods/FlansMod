@@ -72,7 +72,7 @@ public class EntityMecha extends EntityDriveable
 	public MechaInventory inventory;
 	public float legSwing = 0;
 	/** Used for shooting guns */
-	public int shootDelayLeft = 0, shootDelayRight = 0;
+	public float shootDelayLeft = 0, shootDelayRight = 0;
 	/** Used for gun sounds */
 	public int soundDelayLeft = 0, soundDelayRight = 0;
 	/** The coords of the blocks being destroyed */
@@ -349,10 +349,10 @@ public class EntityMecha extends EntityDriveable
 			else if(heldItem instanceof ItemGun)
 			{
 				ItemGun gunItem = (ItemGun)heldItem;
-				GunType gunType = gunItem.type;
+				GunType gunType = gunItem.GetType();
 				
 				//Get the correct shoot delay
-				int delay = left ? shootDelayLeft : shootDelayRight;
+				float delay = left ? shootDelayLeft : shootDelayRight;
 				
 				//If we can shoot
 				if(delay <= 0)
@@ -373,7 +373,8 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative()), false);
+						// TODO : RELOAD
+						//gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative()), false);
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
@@ -431,7 +432,14 @@ public class EntityMecha extends EntityDriveable
 				
 		if(!worldObj.isRemote)
 			for (int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
-				worldObj.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, bulletOrigin, armVector, (EntityLivingBase)(seats[0].riddenByEntity), gunType.getSpread(stack) / 2F, gunType.getDamage(stack), gunType.getBulletSpeed(stack),bulletStack.getItemDamage(), mechaType));
+				worldObj.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, 
+						bulletOrigin, 
+						armVector, 
+						(EntityLivingBase)(seats[0].riddenByEntity), 
+						gunType.getSpread(stack) / 2F, 
+						gunType.getDamage(stack), 
+						gunType.getBulletSpeed(stack),
+						mechaType));
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;

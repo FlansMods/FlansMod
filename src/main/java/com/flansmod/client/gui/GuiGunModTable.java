@@ -54,7 +54,7 @@ public class GuiGunModTable extends GuiContainer
 			ItemStack tempStack = gunStack.copy();
 			if(hoveringOver != null)
 				tempStack.setItemDamage(hoveringOver.ID);
-			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 			if(gunType.model != null)
 			{
 				GL11.glPushMatrix();
@@ -97,7 +97,7 @@ public class GuiGunModTable extends GuiContainer
         ItemStack gunStack = inventorySlots.getSlot(0).getStack();
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
         {
-        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
+        	GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
         	if(gunType.allowBarrelAttachments)
         	{
         		drawTexturedModalRect(xOrigin + 51, yOrigin + 107, 176, 122, 22, 22);
@@ -244,7 +244,7 @@ public class GuiGunModTable extends GuiContainer
 		ItemStack gunStack = inventorySlots.getSlot(0).getStack();
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
         {
-        	GunType gunType = ((ItemGun)gunStack.getItem()).type;
+        	GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
         	int numPaintjobs = gunType.paintjobs.size();
         	int numRows = numPaintjobs / 2 + 1;
         	

@@ -38,7 +38,9 @@ public class RenderGun implements IItemRenderer
 		switch(type)
 		{
 		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null && item.getItem() instanceof ItemGun && ((ItemGun)item.getItem()).type.model != null;
+		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null 
+				&& item.getItem() instanceof ItemGun 
+				&& ((ItemGun)item.getItem()).GetType().model != null;
 		default : break;
 		}
 		return false;
@@ -57,7 +59,7 @@ public class RenderGun implements IItemRenderer
 		if(!(item.getItem() instanceof ItemGun))
 			return;	
 		
-		GunType gunType = ((ItemGun)item.getItem()).type;
+		GunType gunType = ((ItemGun)item.getItem()).GetType();
 		if(gunType == null)
 			return;
 		
@@ -90,7 +92,7 @@ public class RenderGun implements IItemRenderer
 					ItemStack offHandItem = player.inventory.getStackInSlot(playerData.offHandGunSlot - 1);
 					if(offHandItem == null || !(offHandItem.getItem() instanceof ItemGun))
 						return;
-					GunType offHandGunType = ((ItemGun)offHandItem.getItem()).type;
+					GunType offHandGunType = ((ItemGun)offHandItem.getItem()).GetType();
 					if(!offHandGunType.oneHanded)
 						return;
 					
@@ -110,7 +112,7 @@ public class RenderGun implements IItemRenderer
 			animations = new GunAnimations();
 			FlansModClient.gunAnimationsLeft.put(player, animations);
 		}
-		GunType offHandGunType = ((ItemGun)offHandItemStack.getItem()).type;
+		GunType offHandGunType = ((ItemGun)offHandItemStack.getItem()).GetType();
 		if(!offHandGunType.oneHanded)
 			return;
 		

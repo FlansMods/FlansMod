@@ -80,7 +80,7 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 		        GlStateManager.rotate(model.itemRotation.z, 0F, 0F, 1F);
 		        GlStateManager.rotate(model.itemRotation.y, 0F, 1F, 0F);
 		       
-		        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).type.model != null)
+		        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
 		        {
 		        	ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, stack);		        			
 		        }

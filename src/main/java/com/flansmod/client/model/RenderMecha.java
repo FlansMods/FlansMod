@@ -392,9 +392,9 @@ public class RenderMecha extends Render implements IItemRenderer
 				toolType.model.renderSaw(mecha, dT, (leftHand && mecha.leftMouseHeld) || (!leftHand && mecha.rightMouseHeld));
 			}
 		}
-		else if(item instanceof ItemGun && ((ItemGun)item).type.model != null)
+		else if(item instanceof ItemGun && ((ItemGun)item).GetType().model != null)
 		{
-			GunType gunType = ((ItemGun)item).type;
+			GunType gunType = ((ItemGun)item).GetType();
 			ModelGun model = gunType.model;
 			
 			GL11.glRotatef(-90F, 0F, 0F, 1F);

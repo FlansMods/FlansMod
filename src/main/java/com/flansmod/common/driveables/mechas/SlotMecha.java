@@ -25,7 +25,7 @@ public class SlotMecha extends Slot
 
 		EnumMechaItemType itemType = null;
 		Item item = stack.getItem();
-		if(item instanceof ItemGun && ((ItemGun)item).type.usableByMechas)
+		if(item instanceof ItemGun && ((ItemGun)item).GetType().usableByMechas)
 			itemType = EnumMechaItemType.tool;
 		else if(item instanceof ItemMechaAddon)
 			itemType = ((ItemMechaAddon)item).type.type;

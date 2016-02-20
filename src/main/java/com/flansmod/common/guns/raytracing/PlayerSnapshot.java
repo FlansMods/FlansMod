@@ -76,7 +76,7 @@ public class PlayerSnapshot
 		ItemStack playerRightHandStack = player.getCurrentEquippedItem();
 		if(playerRightHandStack != null && playerRightHandStack.getItem() instanceof ItemGun)
 		{
-			GunType gunType = ((ItemGun)playerRightHandStack.getItem()).type;
+			GunType gunType = ((ItemGun)playerRightHandStack.getItem()).GetType();
 			if(gunType.shield)
 			{
 				hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(rightArmAxes), new Vector3f(originXRight, 1.3F, originZRight), new Vector3f(gunType.shieldOrigin.y, -1.05F + gunType.shieldOrigin.x, -1F / 16F + gunType.shieldOrigin.z), new Vector3f(gunType.shieldDimensions.y, gunType.shieldDimensions.x, gunType.shieldDimensions.z), EnumHitboxType.RIGHTITEM));	
@@ -94,7 +94,7 @@ public class PlayerSnapshot
 				
 				if(leftHandStack != null && leftHandStack.getItem() instanceof ItemGun)
 				{
-					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).type;
+					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).GetType();
 					if(leftGunType.shield)
 					{
 						hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(leftArmAxes), new Vector3f(originXLeft, 1.3F, originZLeft), new Vector3f(leftGunType.shieldOrigin.y, -1.05F + leftGunType.shieldOrigin.x, -1F / 16F + leftGunType.shieldOrigin.z), new Vector3f(leftGunType.shieldDimensions.y, leftGunType.shieldDimensions.x, leftGunType.shieldDimensions.z), EnumHitboxType.LEFTITEM));	

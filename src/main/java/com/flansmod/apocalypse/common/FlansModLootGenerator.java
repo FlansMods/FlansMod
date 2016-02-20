@@ -111,7 +111,7 @@ public class FlansModLootGenerator
 	{
 		ItemStack stack = getRandomUnloadedGun(rand);
 		
-		GunType gunType = ((ItemGun)stack.getItem()).type;
+		GunType gunType = ((ItemGun)stack.getItem()).GetType();
 		List<ShootableType> ammoList = explosivesAllowed ? gunType.ammo : gunType.nonExplosiveAmmo;
 		if(ammoList.size() > 0)
 		{
@@ -168,7 +168,7 @@ public class FlansModLootGenerator
 		//Add 1~5 random ammo
 		for(int i = 0; i < numAmmo; i++)
 		{
-			ShootableType type = ShootableType.shootables.get(new ArrayList<String>(ShootableType.shootables.keySet()).get(rand.nextInt(ShootableType.shootables.size())));
+			ShootableType type = ShootableType.shootables.get(new ArrayList<Integer>(ShootableType.shootables.keySet()).get(rand.nextInt(ShootableType.shootables.size())));
 			if(type != null && type.dungeonChance != 0)
 				chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), new ItemStack(type.item, 1 + (type.maxStackSize > 1 && rand.nextBoolean() ? 1 : 0)));
 		}

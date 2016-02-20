@@ -64,6 +64,8 @@ import com.flansmod.common.CommonProxy;
 import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.ItemHolderType;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
@@ -122,7 +124,7 @@ public class ClientProxy extends CommonProxy
 		flansModClient.load();
 		
 		//Register a null vanilla renderer to avoid error messages spamming chat - doesn't work.
-		for(InfoType type : InfoType.infoTypes)
+		for(InfoType type : InfoType.infoTypes.values())
 		{
 			if(type != null && type.item != null)
 			{
@@ -375,14 +377,16 @@ public class ClientProxy extends CommonProxy
 	public void buyGun(GunBoxType type, InfoType gun)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyWeapon(type, gun));
-		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
+		PlayerData data = PlayerHandler.getPlayerData(Minecraft.getMinecraft().thePlayer);
+		data.shootTimeLeft = data.shootTimeRight = 10;
 	}
 	
 	@Override
 	public void buyArmour(String shortName, int piece, ArmourBoxType box)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketBuyArmour(box.shortName, shortName, piece));
-		FlansModClient.shootTimeLeft = FlansModClient.shootTimeRight = 10;
+		PlayerData data = PlayerHandler.getPlayerData(Minecraft.getMinecraft().thePlayer);
+		data.shootTimeLeft = data.shootTimeRight = 10;
 	}
 	
 	@Override
@@ -443,9 +447,9 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	@Override
-	public void addMissingJSONs(List<InfoType> types)
+	public void addMissingJSONs(HashMap<Integer, InfoType> types)
 	{
-		for(InfoType type : types)
+		for(InfoType type : types.values())
 		{
 			try
 			{

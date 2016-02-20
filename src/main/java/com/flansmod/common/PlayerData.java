@@ -41,16 +41,10 @@ public class PlayerData
 	public ItemStack offHandGunStack;
 	/** The MG this player is using */
 	public EntityMG mountingGun;
-	/** Tickers to stop shooting too fast */
-	public int shootTimeRight, shootTimeLeft;
 	/** Stops player shooting immediately after swapping weapons */
 	public int shootClickDelay;
-	/** True if this player is shooting */
-	public boolean isShootingRight, isShootingLeft;
 	/** The speed of the minigun the player is using */
 	public float minigunSpeed = 0F;
-	/** Reloading booleans */
-	public boolean reloadingRight, reloadingLeft;
 	/** When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates */
 	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
 	/** Sound delay parameters */
@@ -59,8 +53,22 @@ public class PlayerData
 	public boolean shouldPlayCooldownSound, shouldPlayWarmupSound;
 	/** Melee weapon custom hit simulation */
 	public int meleeProgress, meleeLength;
+	
+	/** Tickers to stop shooting too fast */
+	public float shootTimeRight, shootTimeLeft;
+	/** True if this player is shooting */
+	public boolean isShootingRight, isShootingLeft;
+	/** Reloading booleans */
+	public boolean reloadingRight, reloadingLeft;
 	/** When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired */
 	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
+	
+	// Handed getters and setters
+	public float GetShootTime(boolean bOffHand) { return bOffHand ? shootTimeLeft : shootTimeRight; }
+	public void SetShootTime(boolean bOffHand, float set) { if(bOffHand) shootTimeLeft = set; else shootTimeRight = set; }
+
+	public int GetBurstRoundsRemaining(boolean bOffHand) { return bOffHand ? burstRoundsRemainingLeft : burstRoundsRemainingRight; }
+	public void SetBurstRoundsRemaining(boolean bOffHand, int set) { if(bOffHand) burstRoundsRemainingLeft = set; else burstRoundsRemainingRight = set; }
 	
 	public Vector3f[] lastMeleePositions;
 	
@@ -129,7 +137,10 @@ public class PlayerData
 	
 	public void clientTick(EntityPlayer player)
 	{
-		if(player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemGun) || ((ItemGun)player.getCurrentEquippedItem().getItem()).type.oneHanded || player.getCurrentEquippedItem() == offHandGunStack)
+		if(player.getCurrentEquippedItem() == null 
+				|| !(player.getCurrentEquippedItem().getItem() instanceof ItemGun) 
+				|| ((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded 
+				|| player.getCurrentEquippedItem() == offHandGunStack)
 		{
 			//offHandGunSlot = 0;
 			offHandGunStack = null;
@@ -175,7 +186,7 @@ public class PlayerData
 		if(stackInSlot.getItem() instanceof ItemGun)
 		{
 			ItemGun item = ((ItemGun)stackInSlot.getItem());
-			if(item.type.oneHanded)
+			if(item.GetType().oneHanded)
 				return true;
 		}
 		return false;

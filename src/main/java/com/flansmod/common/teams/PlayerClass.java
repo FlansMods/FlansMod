@@ -121,7 +121,7 @@ public class PlayerClass extends InfoType
 					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(itemNames[0]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(itemNames[0]))))
 						matchingItem = item;
 				}
-				for(InfoType type : InfoType.infoTypes)
+				for(InfoType type : InfoType.infoTypes.values())
 				{
 					if(type.shortName.equals(itemNames[0]) && type.item != null)
 						matchingItem = type.item;
@@ -142,7 +142,7 @@ public class PlayerClass extends InfoType
 				ItemStack stack = new ItemStack(matchingItem, amount, damage);
 				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
 				{
-					GunType gunType = ((ItemGun)matchingItem).type;
+					GunType gunType = ((ItemGun)matchingItem).GetType();
 			    	NBTTagCompound tags = new NBTTagCompound();
 			    	NBTTagCompound attachmentTags = new NBTTagCompound();
 			    	int genericID = 0;

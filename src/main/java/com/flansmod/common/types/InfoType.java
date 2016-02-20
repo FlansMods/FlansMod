@@ -1,6 +1,7 @@
 package com.flansmod.common.types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ import com.flansmod.common.FlansMod;
 public class InfoType
 {
 	/** infoTypes */
-	public static List<InfoType> infoTypes = new ArrayList<InfoType>();
+	public static HashMap<Integer, InfoType> infoTypes = new HashMap<Integer, InfoType>();
 
 	public String contentPack;
 	public Item item;
@@ -57,7 +58,6 @@ public class InfoType
 	public InfoType(TypeFile file)
 	{
 		contentPack = file.contentPack;
-		infoTypes.add(this);
 	}
 	
 	public void read(TypeFile file)
@@ -77,6 +77,7 @@ public class InfoType
 			read(split, file);
 		}
 		postRead(file);
+		infoTypes.put(shortName.hashCode(), this);
 		totalDungeonChance += dungeonChance;
 	}
 	
@@ -314,7 +315,7 @@ public class InfoType
 				return new ItemStack(item, amount, damage);
 			}
 		}
-		for(InfoType type : infoTypes)
+		for(InfoType type : infoTypes.values())
 		{
 			if(type.shortName.equals(s))
 				return new ItemStack(type.item, amount, damage);
@@ -337,14 +338,20 @@ public class InfoType
 		
 	}
 	
+	@Override
+	public int hashCode()
+	{
+		return shortName.hashCode();
+	}
+	
 	public static InfoType getType(String s)
 	{
-		for(InfoType type : infoTypes)
-		{
-			if(type.shortName.equals(s))
-				return type;
-		}
-		return null;
+		return infoTypes.get(s.hashCode());
+	}
+	
+	public static InfoType getType(int hash)
+	{
+		return infoTypes.get(hash);
 	}
 
 	public void onWorldLoad(World world) 

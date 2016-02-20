@@ -70,7 +70,7 @@ public class ShootableType extends InfoType
 	public String detonateSound = "";
 	
 	/** The static list of all shootable types */
-	public static HashMap<String, ShootableType> shootables = new HashMap<String, ShootableType>();
+	public static HashMap<Integer, ShootableType> shootables = new HashMap<Integer, ShootableType>();
 	
 	public ShootableType(TypeFile file) 
 	{
@@ -80,7 +80,7 @@ public class ShootableType extends InfoType
 	@Override
 	public void postRead(TypeFile file)
 	{
-		shootables.put(shortName, this);
+		shootables.put(shortName.hashCode(), this);
 	}
 	
 	@Override
@@ -162,6 +162,11 @@ public class ShootableType extends InfoType
 
 	public static ShootableType getShootableType(String string) 
 	{
-		return shootables.get(string);
+		return shootables.get(string.hashCode());
+	}
+	
+	public static ShootableType getShootableType(int hash) 
+	{
+		return shootables.get(hash);
 	}
 }

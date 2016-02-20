@@ -36,6 +36,7 @@ import java.nio.FloatBuffer;
 
 import com.flansmod.common.FlansMod;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.util.Vec3;
 
 /**
@@ -385,5 +386,17 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 	@Override
 	public float getZ() {
 		return z;
+	}
+
+	public void writeToBuffer(ByteBuf data) 
+	{
+		data.writeFloat(x);
+		data.writeFloat(y);
+		data.writeFloat(z);
+	}
+	
+	public static Vector3f readFromBuffer(ByteBuf data)
+	{
+		return new Vector3f(data.readFloat(), data.readFloat(), data.readFloat());
 	}
 }

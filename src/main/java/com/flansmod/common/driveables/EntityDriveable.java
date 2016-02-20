@@ -499,7 +499,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				if(gunType.isAmmo(bullet))
 				{
 					//Spawn a new bullet item
-					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, bullet.bulletSpread * gunType.bulletSpread / 2, gunType.damage, 10.0F,bulletItemStack.getItemDamage(), type));
+					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, 
+							Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null),
+							lookVector,
+							(EntityLivingBase)seats[0].riddenByEntity,
+							bullet.bulletSpread * gunType.bulletSpread / 2,
+							gunType.damage,
+							10.0F,
+							type));
+					
 					//Play the shoot sound
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
 					//Get the bullet item damage and increment it
@@ -551,7 +559,17 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
 						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, new Vec3(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), axes.getYaw(), axes.getPitch(), motionX, motionY, motionZ, (EntityLivingBase)seats[0].riddenByEntity, damageMultiplier, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, 
+								new Vec3(posX + gunVec.x, posY + gunVec.y, posZ + gunVec.z), 
+								axes.getYaw(), 
+								axes.getPitch(),
+								motionX, 
+								motionY, 
+								motionZ, 
+								(EntityLivingBase)seats[0].riddenByEntity, 
+								damageMultiplier, 
+								type);
+						
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
@@ -596,7 +614,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 
 						ItemStack bulletStack = driveableData.getStackInSlot(slot);
 						ItemBullet bulletItem = (ItemBullet)bulletStack.getItem();
-						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), lookVector, (EntityLivingBase)seats[0].riddenByEntity, spread, damageMultiplier, shellSpeed, driveableData.getStackInSlot(slot).getItemDamage(), type);
+						EntityShootable bulletEntity = bulletItem.getEntity(worldObj, 
+								Vector3f.add(new Vector3f(posX, posY, posZ), gunVec, null), 
+								lookVector, 
+								(EntityLivingBase)seats[0].riddenByEntity, 
+								spread, 
+								damageMultiplier, 
+								shellSpeed, 
+								type);
+						
 						worldObj.spawnEntityInWorld(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)

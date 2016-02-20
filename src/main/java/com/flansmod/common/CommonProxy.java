@@ -59,7 +59,7 @@ public class CommonProxy
 		return contentPacks;
 	}
 	
-	public void addMissingJSONs(List<InfoType> types)
+	public void addMissingJSONs(HashMap<Integer, InfoType> types)
 	{
 		
 	}

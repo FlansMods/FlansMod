@@ -170,7 +170,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if(stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun)
 					{
-						GunType type = ((ItemGun)stack.getItem()).type;
+						GunType type = ((ItemGun)stack.getItem()).GetType();
 						for(int j = ammoStacks.size() - 1; j >= 0; j--)
 						{
 							ItemStack ammoStack = ammoStacks.get(j);
@@ -206,7 +206,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 			ItemStack currentItem = player.getCurrentEquippedItem();
 			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
 			{
-				GunType gunType = ((ItemGun)currentItem.getItem()).type;
+				GunType gunType = ((ItemGun)currentItem.getItem()).GetType();
 				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
 				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 				{

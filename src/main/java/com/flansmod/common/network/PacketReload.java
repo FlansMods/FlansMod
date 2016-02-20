@@ -22,25 +22,29 @@ import com.flansmod.common.guns.ShootableType;
 //When the server receives one, it is interpreted as a forced reload
 public class PacketReload extends PacketBase 
 {
-	public boolean left;
+	public boolean isOffHand;
+	public boolean isForced;
 	
 	public PacketReload() {}
 	
-	public PacketReload(boolean l) 
+	public PacketReload(boolean isOffHand, boolean isForced) 
 	{
-		left = l;
+		this.isOffHand = isOffHand;
+		this.isForced = isForced;
 	}
 		
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		data.writeBoolean(left);
+		data.writeBoolean(isOffHand);
+		data.writeBoolean(isForced);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		left = data.readBoolean();
+		isOffHand = data.readBoolean();
+		isForced = data.readBoolean();
 	}
 
 	@Override
@@ -48,22 +52,23 @@ public class PacketReload extends PacketBase
 	{
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
 		ItemStack stack = playerEntity.getCurrentEquippedItem();
-		if(left && data.offHandGunSlot != 0)
+		int slot = playerEntity.inventory.currentItem;
+		if(isOffHand && data.offHandGunSlot != 0)
 		{
 			stack = playerEntity.inventory.getStackInSlot(data.offHandGunSlot - 1);
+			slot = data.offHandGunSlot - 1;
 		}
 		if(data != null && stack != null && stack.getItem() instanceof ItemGun)
 		{
-			GunType type = ((ItemGun)stack.getItem()).type;
-			if(((ItemGun)stack.getItem()).reload(stack, type, playerEntity.worldObj, playerEntity, true, left))
+			GunType type = ((ItemGun)stack.getItem()).GetType();
+			
+			if(((ItemGun)stack.getItem()).Reload(stack, slot, playerEntity.worldObj, playerEntity, playerEntity.inventory, isOffHand, data.offHandGunSlot != 0, isForced, playerEntity.capabilities.isCreativeMode))
 			{
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;
-				if(left)
+				if(isOffHand)
 					data.reloadingLeft = true;
 				else data.reloadingRight = true;
-				//Send reload packet to induce reload effects client side
-				FlansMod.getPacketHandler().sendTo(new PacketReload(left), playerEntity);
 				//Play reload sound
 				if(type.reloadSound != null)
 					PacketPlaySound.sendSoundPacket(playerEntity.posX, playerEntity.posY, playerEntity.posZ, FlansMod.soundRange, playerEntity.dimension, type.reloadSound, false);
@@ -75,71 +80,6 @@ public class PacketReload extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		ItemStack stack = clientPlayer.getCurrentEquippedItem();
-		PlayerData data = PlayerHandler.getPlayerData(clientPlayer, Side.CLIENT);
-		if(left)
-			stack = clientPlayer.inventory.getStackInSlot(data.offHandGunSlot - 1);
-		if(stack != null && stack.getItem() instanceof ItemGun)
-		{
-			GunType type = ((ItemGun)stack.getItem()).type;
-			if(left)
-				FlansModClient.shootTimeLeft = type.reloadTime;
-			else FlansModClient.shootTimeRight = type.reloadTime;
-
-			//Apply animations
-			GunAnimations animations = null;
-			if(left)
-			{
-				if(FlansModClient.gunAnimationsLeft.containsKey(clientPlayer))
-					animations = FlansModClient.gunAnimationsLeft.get(clientPlayer);
-				else 
-				{
-					animations = new GunAnimations();
-					FlansModClient.gunAnimationsLeft.put(clientPlayer, animations);
-				}
-			}
-			else
-			{
-				if(FlansModClient.gunAnimationsRight.containsKey(clientPlayer))
-					animations = FlansModClient.gunAnimationsRight.get(clientPlayer);
-				else 
-				{
-					animations = new GunAnimations();
-					FlansModClient.gunAnimationsRight.put(clientPlayer, animations);
-				}
-			}
-			int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
-			int pumpTime = type.model == null ? 1 : type.model.pumpTime;
-			animations.doReload(type.reloadTime, pumpDelay, pumpTime);
-
-			//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
-			int bestSlot = -1;
-			int bulletsInBestSlot = 0;
-			for (int j = 0; j < clientPlayer.inventory.getSizeInventory(); j++)
-			{
-				ItemStack item = clientPlayer.inventory.getStackInSlot(j);
-				if (item != null && item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
-				{
-					int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
-					if(bulletsInThisSlot > bulletsInBestSlot)
-					{
-						bestSlot = j;
-						bulletsInBestSlot = bulletsInThisSlot;
-					}
-				}
-			}
-			//If there was a valid non-empty magazine / bullet item somewhere in the inventory, take one to put in the gun
-			if(bestSlot != -1)
-			{
-				ItemStack newBulletStack = clientPlayer.inventory.getStackInSlot(bestSlot);
-				ShootableType newBulletType = ((ItemShootable)newBulletStack.getItem()).type;
-				//Remove the magazine from the inventory
-				if(!clientPlayer.capabilities.isCreativeMode)
-					newBulletStack.stackSize--;
-				if(newBulletStack.stackSize <= 0)
-					newBulletStack = null;
-				clientPlayer.inventory.setInventorySlotContents(bestSlot, newBulletStack);
-			}
-		}
+		FlansMod.log("Recieved reload packet on client!");
 	}
 }

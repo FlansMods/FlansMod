@@ -187,7 +187,7 @@ public class PlayerHitbox
 			ItemStack currentStack = player.getCurrentEquippedItem();
 			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
 			{
-				GunType gunType = ((ItemGun)currentStack.getItem()).type;
+				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
 				//TODO : Shield damage
 				return penetratingPower - gunType.shieldDamageAbsorption;
 			}
@@ -205,7 +205,7 @@ public class PlayerHitbox
 				
 				if(leftHandStack != null && leftHandStack.getItem() instanceof ItemGun)
 				{
-					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).type;
+					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).GetType();
 					//TODO : Shield damage
 					return penetratingPower - leftGunType.shieldDamageAbsorption;
 				}

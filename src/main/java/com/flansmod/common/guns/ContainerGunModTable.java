@@ -120,7 +120,7 @@ public class ContainerGunModTable extends Container
 		ItemStack gunStack = inventory.getStackInSlot(0);
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
-			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 			clickPaintjob(gunType.getPaintjob(i));
 		}
 	}
@@ -130,7 +130,7 @@ public class ContainerGunModTable extends Container
 		ItemStack gunStack = inventory.getStackInSlot(0);
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
-			GunType gunType = ((ItemGun)gunStack.getItem()).type;
+			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
 
 			int numDyes = paintjob.dyesNeeded.length;
 

@@ -55,7 +55,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	/** For smooth renderering */
 	public RotatedAxes prevLooking;
 	/** Delay ticker for shooting guns */
-	public int gunDelay;
+	public float gunDelay;
 	/** Minigun speed */
 	public float minigunSpeed;
 	/** Minigun angle for render */
@@ -429,7 +429,15 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 							//Calculate the origin of the bullets
 							Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, (float)player.getMountedYOffset(), 0F));						
 							//Spawn a new bullet item
-							worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), shootVec, (EntityLivingBase)riddenByEntity, bullet.bulletSpread * gun.bulletSpread, gun.damage, gun.bulletSpeed, bulletItemStack.getItemDamage(), driveable.getDriveableType()));
+							worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, 
+									Vector3f.add(yOffset, new Vector3f(gunOrigin.x, gunOrigin.y, gunOrigin.z), null), 
+									shootVec, 
+									(EntityLivingBase)riddenByEntity, 
+									bullet.bulletSpread * gun.bulletSpread, 
+									gun.damage, 
+									gun.bulletSpeed, 
+									driveable.getDriveableType()));
+							
 							//Play the shoot sound
 							if(soundDelay <= 0)
 							{

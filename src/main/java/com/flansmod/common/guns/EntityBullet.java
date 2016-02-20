@@ -118,12 +118,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		shotgun = shot;
 	}
 
-	/** Machinegun / AAGun bullet constructor */
-	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, InfoType shotFrom)
-	{
-		this(world, origin, yaw, pitch, shooter, spread, gunDamage, type1, 3.0F, shotFrom);
-	}
-
 	/** More generalised bullet constructor */
 	public EntityBullet(World world, Vec3 origin, float yaw, float pitch, EntityLivingBase shooter, float spread, float gunDamage, BulletType type1, float speed, InfoType shotFrom)
 	{
