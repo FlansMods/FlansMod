@@ -173,6 +173,7 @@ public class FlansModExplosion extends Explosion
                         d9 /= d13;
                         double d14 = (double)this.world.getBlockDensity(vec3, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
+                        entity.attackEntityFrom(new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
                         double d11 = EnchantmentProtection.func_92092_a(entity, d10);
                         entity.motionX += d5 * d11;
                         entity.motionY += d7 * d11;
@@ -205,14 +206,46 @@ public class FlansModExplosion extends Explosion
         Iterator iterator;
         BlockPos blockpos;
 
-        if (this.isSmoking&&breaksBlocks)
+        if (isSmoking)
         {
-            worldObj.createExplosion(detonator, x, y, z, radius, true);
-        }
-        
-        else if (this.isSmoking)
-        {
-            entity.attackEntityFrom(player == null || type == null ? DamageSource.setExplosionSource(this) : new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
+        	iterator = this.affectedBlockPositions.iterator();
+
+            while (iterator.hasNext())
+            {
+                blockpos = (BlockPos)iterator.next();
+                Block block = this.world.getBlockState(blockpos).getBlock();
+
+                if (p_77279_1_)
+                {
+                    double d0 = (double)((float)blockpos.getX() + this.world.rand.nextFloat());
+                    double d1 = (double)((float)blockpos.getY() + this.world.rand.nextFloat());
+                    double d2 = (double)((float)blockpos.getZ() + this.world.rand.nextFloat());
+                    double d3 = d0 - this.x;
+                    double d4 = d1 - this.y;
+                    double d5 = d2 - this.z;
+                    double d6 = (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+                    d3 /= d6;
+                    d4 /= d6;
+                    d5 /= d6;
+                    double d7 = 0.5D / (d6 / (double)this.radius + 0.1D);
+                    d7 *= (double)(this.world.rand.nextFloat() * this.world.rand.nextFloat() + 0.3F);
+                    d3 *= d7;
+                    d4 *= d7;
+                    d5 *= d7;
+                    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.x * 1.0D) / 2.0D, (d1 + this.y * 1.0D) / 2.0D, (d2 + this.z * 1.0D) / 2.0D, d3, d4, d5, new int[0]);
+                    this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+                }
+
+                if (block.getMaterial() != Material.air)
+                {
+                    if (block.canDropFromExplosion(this))
+                    {
+                        block.dropBlockAsItemWithChance(this.world, blockpos, this.world.getBlockState(blockpos), 1.0F / this.radius, 0);
+                    }
+
+                    block.onBlockExploded(this.world, blockpos, this);
+                }
+            }
         }
 
         if (this.isFlaming)
