@@ -35,4 +35,5 @@ AddGun PIAT 24 ingotIron
 AddAmmo PIATAmmo 5 ingotIron 3 gunpowder
 AddGun boforsAmmo 1 ingotIron 2 gunpowder
 AddGun millsBomb 2 ingotIron 2 gunpowder
-AddGun British2pdrAPShell 3 ingotIron 3 gunpowder
+AddGun 2Pdr 9 ingotIron
+AddAmmo British2pdrAPShell 3 ingotIron 3 gunpowder

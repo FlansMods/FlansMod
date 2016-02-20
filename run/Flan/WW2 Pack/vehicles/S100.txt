@@ -35,7 +35,7 @@ ShellSlots 2
 BarrelPosition 250 0 -20
 BarrelPosition 250 0 20
 //Driver and passenger positions
-Driver 120 47 -8 0 0 0 0
+Driver 120 47 -8 -360 360 -10 45
 RotatedDriverOffset 0 0 0
 Passengers 3
 Passenger 1 -22 36 -1 core -360 360 0 25 Flak38 PassengerGun1
