@@ -2,8 +2,9 @@ package com.flansmod.common.driveables;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
-import com.flansmod.common.guns.raytracing.DriveableHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.vector.Vector3f;
 
 public class DriveablePart 
@@ -163,17 +164,14 @@ public class DriveablePart
 	}
 	
 	/** Called when the bullet decided that it hit this driveable part */
-	public void hitByBullet(EntityBullet bullet)
+	public void hitByBullet(BulletType type, float damage)
 	{
 		//Perform damage code
-		if(bullet != null)
+		health -= damage * type.damageVsDriveable;
+		if(type.setEntitiesOnFire)
 		{
-			health -= bullet.damage * bullet.type.damageVsDriveable;
-			if(bullet.type.setEntitiesOnFire)
-			{
-				fireTime = 20;
-				onFire = true;
-			}
+			fireTime = 20;
+			onFire = true;
 		}
 	}
 	

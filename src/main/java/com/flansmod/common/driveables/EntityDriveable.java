@@ -44,6 +44,7 @@ import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
@@ -52,8 +53,8 @@ import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.guns.raytracing.BulletHit;
-import com.flansmod.common.guns.raytracing.DriveableHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
 import com.flansmod.common.network.PacketPlaySound;
@@ -1204,10 +1205,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	/** Called if the bullet actually hit the part returned by the raytrace 
 	 * @param penetratingPower */
-	public float bulletHit(EntityBullet bullet, DriveableHit hit, float penetratingPower)
+	public float bulletHit(BulletType bulletType, float damage, DriveableHit hit, float penetratingPower)
 	{
 		DriveablePart part = getDriveableData().parts.get(hit.part);
-		part.hitByBullet(bullet);
+		part.hitByBullet(bulletType, damage);
 		
 		//This is server side bsns
 		if(!worldObj.isRemote)

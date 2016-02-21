@@ -36,6 +36,8 @@ public class BulletType extends ShootableType
 	/** Lock on force that pulls the bullet towards its prey */
 	public float lockOnForce = 1F;
 	
+	public String trailTexture = "defaultBulletTrail";
+	
 	public ArrayList<PotionEffect> hitEffects = new ArrayList<PotionEffect>();
 	
 	/** The static bullets list */
@@ -81,6 +83,9 @@ public class BulletType extends ShootableType
 				weaponType = EnumWeaponType.MISSILE;
 			else if(split[0].equals("WeaponType"))
 				weaponType = EnumWeaponType.valueOf(split[1].toUpperCase());
+			
+			else if(split[0].equals("TrailTexture"))
+				trailTexture = split[1];
 
 			else if(split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());

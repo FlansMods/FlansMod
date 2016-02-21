@@ -38,6 +38,8 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -51,6 +53,7 @@ import org.lwjgl.util.glu.Project;
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.model.ModelGun;
+import com.flansmod.client.model.RenderGun;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -357,12 +360,20 @@ public class ClientRenderHooks
             itemToRender = itemstack;
             equippedItemSlot = entityplayersp.inventory.currentItem;
         }
+        
+        RenderGun.UpdateAllTrails();
     }
     
     public static void updateRenderTick(float dT)
     {
     	partialTicks = dT;
     }
+
+	@SubscribeEvent
+	public void renderWorld(RenderWorldLastEvent event)
+	{
+		RenderGun.RenderAllTrails(partialTicks);
+	}
     
 	@SubscribeEvent
 	public void renderThirdPersonWeapons(RenderLivingEvent.Post event)

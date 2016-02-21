@@ -254,7 +254,7 @@ public class TickHandlerClient
 				entity.onMouseMoved(mouse.deltaX, mouse.deltaY);
 			}
 		}
-		
+			
 		FlansModClient.renderTick(smoothing);
 		ClientRenderHooks.updateRenderTick(smoothing);
 	}

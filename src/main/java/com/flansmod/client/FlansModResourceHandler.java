@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.minecraft.util.ResourceLocation;
 
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
@@ -12,6 +13,7 @@ public class FlansModResourceHandler
 {
 	private static HashMap<InfoType, ResourceLocation> iconMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<InfoType, ResourceLocation> textureMap = new HashMap<InfoType, ResourceLocation>();
+	private static HashMap<InfoType, ResourceLocation> trailTextureMap = new HashMap<InfoType, ResourceLocation>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
@@ -113,6 +115,17 @@ public class FlansModResourceHandler
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", "textures/items/" + paintjob.iconName + ".png");
 		paintjobIconMap.put(paintjob, resLoc);
+		return resLoc;
+	}
+	
+	public static ResourceLocation getTrailTexture(BulletType bulletType) 
+	{
+		if(trailTextureMap.containsKey(bulletType))
+		{
+			return trailTextureMap.get(bulletType);
+		}
+		ResourceLocation resLoc = new ResourceLocation("flansmod", "skins/" + bulletType.trailTexture + ".png");
+		trailTextureMap.put(bulletType, resLoc);
 		return resLoc;
 	}
 }

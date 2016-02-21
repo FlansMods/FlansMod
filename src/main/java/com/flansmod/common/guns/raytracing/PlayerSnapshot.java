@@ -8,6 +8,8 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -131,5 +133,17 @@ public class PlayerSnapshot
 		{
 			hitbox.renderHitbox(player.worldObj, pos);
 		}
+	}
+	
+	public PlayerHitbox GetHitbox(EnumHitboxType type)
+	{
+		for(PlayerHitbox hitbox : hitboxes)
+		{
+			if(hitbox.type == type)
+			{
+				return hitbox;
+			}
+		}
+		return null;
 	}
 }

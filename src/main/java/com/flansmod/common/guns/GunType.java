@@ -373,6 +373,11 @@ public class GunType extends InfoType implements IScope
 					bulletSpeed = 0.0f;
 				}
 				else bulletSpeed = Float.parseFloat(split[1]);
+				
+				if(bulletSpeed > 3.0f)
+				{
+					bulletSpeed = 0.0f;
+				}
 			}
 			else if(split[0].equals("CanShootUnderwater"))
 				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());

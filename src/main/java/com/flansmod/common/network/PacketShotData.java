@@ -6,6 +6,7 @@ import java.util.List;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemGun;
@@ -13,6 +14,8 @@ import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.guns.ShotData;
 import com.flansmod.common.guns.ShotData.InstantShotData;
 import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
@@ -35,6 +38,12 @@ public class PacketShotData extends PacketBase
 	public PacketShotData(List<ShotData> shotData)
 	{
 		this.shotData = shotData;
+	}
+
+	public PacketShotData(ShotData shotData) 
+	{
+		this.shotData = new ArrayList<ShotData>();
+		this.shotData.add(shotData);
 	}
 
 	@Override
@@ -61,8 +70,9 @@ public class PacketShotData extends PacketBase
 				data.writeByte(1);
 				data.writeInt(currentCast.shooterID);
 				currentCast.origin.writeToBuffer(data);
-				data.writeInt(currentCast.victimID);
-				currentCast.hit.writeToBuffer(data);
+				FlansModRaytracer.WriteToBuffer(currentCast.hitData, data);
+				currentCast.hitPos.writeToBuffer(data);
+				data.writeFloat(currentCast.damage);
 			}			
 		}
 	}
@@ -94,10 +104,11 @@ public class PacketShotData extends PacketBase
 				{
 					int shooterID = data.readInt();
 					Vector3f origin = Vector3f.readFromBuffer(data);
-					int victimID = data.readInt();
+					BulletHit hitData = FlansModRaytracer.ReadFromBuffer(data);
 					Vector3f hit = Vector3f.readFromBuffer(data);
+					float damage = data.readFloat();
 					
-					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, victimID, hit));
+					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage));
 					break;
 				}
 				default:
@@ -127,6 +138,26 @@ public class PacketShotData extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Received gun button packet on client. Skipping.");
+		for(ShotData entry : shotData)
+		{
+			if(entry instanceof InstantShotData)
+			{
+				InstantShotData instantData = ((InstantShotData)entry);
+				if(entry.shotFrom instanceof GunType)
+				{
+					ItemGun gunItem = (ItemGun)entry.shotFrom.getItem();
+					
+					gunItem.DoInstantShot(clientPlayer.worldObj, 
+							FlansModRaytracer.GetEntityByID(instantData.shooterID), 
+							instantData.shotFrom, (BulletType)instantData.shotType, 
+							instantData.origin, instantData.hitPos, 
+							instantData.hitData, instantData.damage);
+				}
+			}
+			else
+			{
+				FlansMod.log("Only expect instant shot types on client side.");
+			}
+		}
 	}
 }

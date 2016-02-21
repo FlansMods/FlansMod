@@ -1,5 +1,6 @@
 package com.flansmod.common.guns.raytracing;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -11,10 +12,13 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -139,15 +143,15 @@ public class PlayerHitbox
 		return null;
 	}
 
-	public float hitByBullet(EntityBullet bullet, float penetratingPower) 
+	public float hitByBullet(DamageSource source, Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower) 
 	{
-		if(bullet.type.setEntitiesOnFire)
+		if(bulletType.setEntitiesOnFire)
 			player.setFire(20);
-		for(PotionEffect effect : bullet.type.hitEffects)
+		for(PotionEffect effect : bulletType.hitEffects)
 		{
 			player.addPotionEffect(new PotionEffect(effect));
 		}
-		float damageModifier = bullet.type.penetratingPower < 0.1F ? penetratingPower / bullet.type.penetratingPower : 1;
+		float damageModifier = bulletType.penetratingPower < 0.1F ? penetratingPower / bulletType.penetratingPower : 1;
 		switch(type)
 		{
 		case BODY : break;
@@ -163,9 +167,10 @@ public class PlayerHitbox
 		case BODY :  case HEAD :  case LEFTARM :  case RIGHTARM : 
 		{
 			//Calculate the hit damage
-			float hitDamage = bullet.damage * bullet.type.damageVsLiving * damageModifier;
+			float hitDamage = damage * bulletType.damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = bullet.owner == null ? DamageSource.generic : bullet.getBulletDamage(type == EnumHitboxType.HEAD);
+			DamageSource damagesource = damageOwner == null ? DamageSource.generic 
+					: EntityBullet.GetBulletDamage(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
 
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
 			if(!player.worldObj.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)

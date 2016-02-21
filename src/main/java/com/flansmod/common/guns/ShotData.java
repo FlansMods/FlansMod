@@ -1,5 +1,6 @@
 package com.flansmod.common.guns;
 
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
@@ -40,25 +41,28 @@ public class ShotData
 	
 	public static class InstantShotData extends ShotData
 	{		
-		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f origin, int victimID, Vector3f hit)
+		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f origin, BulletHit hitData, Vector3f hit, float damage)
 		{
 			super(slot, shotFrom, shotType);
 			this.shooterID = shooterID;
 			this.origin = origin;
-			this.victimID = victimID;
-			this.hit = hit;
+			this.hitData = hitData;
+			this.hitPos = hit;
+			this.damage = damage;
 		}
 		
-		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, Entity shooter, Vector3f origin, Entity victim, Vector3f hit)
+		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, Entity shooter, Vector3f origin, BulletHit hitData, Vector3f hit, float damage)
 		{
-			this(slot, shotFrom, shotType, shooter.getEntityId(), origin, victim.getEntityId(), hit);
+			this(slot, shotFrom, shotType, shooter.getEntityId(), origin, hitData, hit, damage);
 		}
 		
 		public int shooterID;
 		public Vector3f origin;
 		
 		// Can be null for environment hits etc
-		public int victimID; 
-		public Vector3f hit;
+		public BulletHit hitData; 
+		public Vector3f hitPos;
+		
+		public float damage;
 	}
 }

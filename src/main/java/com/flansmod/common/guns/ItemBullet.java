@@ -86,20 +86,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	{
 		return new EntityBullet(worldObj, player, bulletSpread, damage, this.type, bulletSpeed, isShotgun, shotFrom);
 	}
-	
-	public void Shoot(World world,
-			Vector3f origin,
-			Vector3f direction,
-			float damageModifier,
-			float speedModifier,
-			InfoType shotFrom,
-			EntityPlayer shooter)
-	{
-		// If we are instant, do a raytrace
 		
-		// Otherwise, make an entity
-	}
-	
 	@Override
 	public InfoType getInfoType() 
 	{

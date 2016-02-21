@@ -1,15 +1,24 @@
 package com.flansmod.client.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModClient;
@@ -17,6 +26,7 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.AttachmentType;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.IScope;
@@ -31,6 +41,129 @@ public class RenderGun implements IItemRenderer
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
+	
+	private static ArrayList<InstantShotTrail> trails = new ArrayList<InstantShotTrail>();
+
+	public static class InstantShotTrail
+	{
+		private Vector3f origin;
+		private Vector3f hitPos;
+		private float width;
+		private float length;
+		private float distanceToTarget;
+		private float bulletSpeed;
+		private int ticksExisted;
+		
+		private ResourceLocation texture;
+		
+		public InstantShotTrail(Vector3f origin, Vector3f hitPos, BulletType type)
+		{
+			this.ticksExisted = 0;
+			this.bulletSpeed = 10.0f;
+			this.origin = origin;
+			this.hitPos = hitPos;
+			this.width = 0.025f; // type.trailWidth
+			this.length = 5.0f;
+			this.texture = FlansModResourceHandler.getTrailTexture(type);
+			
+	        Vector3f dPos = Vector3f.sub(hitPos, origin, null);
+	        this.distanceToTarget = dPos.length();
+		}
+		
+		// Return true if this needs deleting
+		public boolean Update()
+		{
+			ticksExisted++;
+			return ticksExisted * bulletSpeed >= distanceToTarget - length;
+		}
+		
+		public void Render(float partialTicks)
+		{
+			renderEngine.bindTexture(texture);
+			
+	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	        
+	        GlStateManager.pushMatrix();
+
+	        //Get the camera frustrum for clipping
+	        Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
+	        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * partialTicks;
+	        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * partialTicks;
+	        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * partialTicks;
+	        	        
+	        GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
+	        
+	        float parametric = ((float)ticksExisted + partialTicks) * bulletSpeed;
+	        
+	        Vector3f dPos = Vector3f.sub(hitPos, origin, null);
+	        dPos.normalise();
+	        
+	        float startParametric = parametric - length * 0.5f;
+	        Vector3f startPos = new Vector3f(origin.x + dPos.x * startParametric,  origin.y + dPos.y * startParametric, origin.z + dPos.z * startParametric);
+	        float endParametric = parametric + length * 0.5f;
+	        Vector3f endPos = new Vector3f(origin.x + dPos.x * endParametric,  origin.y + dPos.y * endParametric, origin.z + dPos.z * endParametric);
+	        
+	        Tessellator tessellator = Tessellator.getInstance();
+	        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+
+	        
+	        
+
+	        
+	        dPos.normalise();
+	        
+	        EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
+	        Vector3f vectorToPlayer = new Vector3f(thePlayer.posX - hitPos.x, thePlayer.posY - hitPos.y, thePlayer.posZ - hitPos.z);
+	        
+	        vectorToPlayer.normalise();
+	        
+	        Vector3f trailTangent = Vector3f.cross(dPos, vectorToPlayer, null);
+	        trailTangent.normalise();
+	        trailTangent.scale(-width * 0.5f);
+	        
+	        Vector3f normal = Vector3f.cross(trailTangent, dPos, null);
+	        normal.normalise();
+	        
+	        //if(Vector3f.angle(Vector3f.cross(trailTangent, normal, null), new Vector3f(thePlayer.getLookVec())) < Math.PI * 0.875f)
+    		{        
+		        GlStateManager.enableRescaleNormal();
+		        GL11.glNormal3f(normal.x, normal.y, normal.z);
+		        
+		        worldrenderer.startDrawingQuads();
+		        worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);
+		        worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
+		        worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
+		        worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
+		        tessellator.draw();
+		        	
+		        GlStateManager.disableRescaleNormal();
+    		}
+	        
+	        
+	        
+	        GlStateManager.popMatrix();
+		}
+	}
+	
+	public static void AddTrail(InstantShotTrail trail) { trails.add(trail); }
+	public static void RenderAllTrails(float partialTicks) 
+	{
+		for(InstantShotTrail trail : trails)
+		{
+			trail.Render(partialTicks);
+		}
+	}
+	
+	public static void UpdateAllTrails()
+	{
+		for(int i = trails.size() - 1; i >= 0; i--)
+		{
+			if(trails.get(i).Update())
+			{
+				trails.remove(i);
+			}
+		}
+	}
 	
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
