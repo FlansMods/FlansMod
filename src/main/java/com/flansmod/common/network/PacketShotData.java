@@ -73,6 +73,7 @@ public class PacketShotData extends PacketBase
 				FlansModRaytracer.WriteToBuffer(currentCast.hitData, data);
 				currentCast.hitPos.writeToBuffer(data);
 				data.writeFloat(currentCast.damage);
+				data.writeBoolean(currentCast.isExtraBullet);
 			}			
 		}
 	}
@@ -107,8 +108,9 @@ public class PacketShotData extends PacketBase
 					BulletHit hitData = FlansModRaytracer.ReadFromBuffer(data);
 					Vector3f hit = Vector3f.readFromBuffer(data);
 					float damage = data.readFloat();
+					boolean isExtraBullet = data.readBoolean();
 					
-					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage));
+					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage, isExtraBullet));
 					break;
 				}
 				default:

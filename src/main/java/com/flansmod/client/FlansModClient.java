@@ -156,6 +156,8 @@ public class FlansModClient extends FlansMod
 	/** When a round ends, the teams score GUI is locked for this length of time */
 	public static int teamsScoreGUILock = 0;	
 	
+	public static int hitMarkerTime = 0;
+	
 	private static ClientRenderHooks renderHooks;
 	
 	public void load()
@@ -194,6 +196,8 @@ public class FlansModClient extends FlansMod
 			scopeTime--;
 		if (playerRecoil > 0)
 			playerRecoil *= 0.8F;
+		if(hitMarkerTime > 0)
+			hitMarkerTime--;
 		minecraft.thePlayer.rotationPitch -= playerRecoil;
 		antiRecoil += playerRecoil;
 
@@ -545,5 +549,10 @@ public class FlansModClient extends FlansMod
 			}
 		}
 		return animations;
+	}
+	
+	public static void AddHitMarker()
+	{
+		hitMarkerTime = 20;
 	}
 }

@@ -14,6 +14,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -250,7 +251,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			FlansMod.log("Tried to fire grenade instantly");
 			return true;
 		}
-		if(world == null || origin == null || hit == null || shooter == null || shotFrom == null || shootableType == null || bulletHit == null)
+		if(world == null || origin == null || hit == null || shooter == null || shotFrom == null || shootableType == null)
 		{
 			FlansMod.log("Something was null");
 			return true;
@@ -281,22 +282,25 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		{
 			EntityHit entityHit = (EntityHit)bulletHit;
 			
-			if(entityHit.entity.attackEntityFrom(source, damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
+			if(entityHit.entity != null)
 			{
-				EntityLivingBase living = (EntityLivingBase)entityHit.entity;
-				for(PotionEffect effect : bulletType.hitEffects)
+				if(entityHit.entity.attackEntityFrom(source, damage * bulletType.damageVsLiving) && entityHit.entity instanceof EntityLivingBase)
 				{
-					living.addPotionEffect(new PotionEffect(effect));
+					EntityLivingBase living = (EntityLivingBase)entityHit.entity;
+					for(PotionEffect effect : bulletType.hitEffects)
+					{
+						living.addPotionEffect(new PotionEffect(effect));
+					}
+					//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
+					living.arrowHitTimer++;
+					living.hurtResistantTime = living.maxHurtResistantTime / 2;
 				}
-				//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
-				living.arrowHitTimer++;
-				living.hurtResistantTime = living.maxHurtResistantTime / 2;
+				if(bulletType.setEntitiesOnFire)
+					entityHit.entity.setFire(20);
+				penetratingPower -= 1F;
+				if(FlansMod.DEBUG)
+					world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
 			}
-			if(bulletType.setEntitiesOnFire)
-				entityHit.entity.setFire(20);
-			penetratingPower -= 1F;
-			if(FlansMod.DEBUG)
-				world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
 		}
 		else if(bulletHit instanceof BlockHit)
 		{
@@ -367,25 +371,27 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		Vector3f origin = new Vector3f(posX, posY, posZ);
 		Vector3f motion = new Vector3f(motionX, motionY, motionZ);
 
-		List<BulletHit> hits = FlansModRaytracer.Raytrace(worldObj, owner, ticksInAir > 20, this, origin, motion,
-				pingOfShooter);
-
-		// We hit something
-		if (!hits.isEmpty()) {
-
-			for (BulletHit bulletHit : hits) 
+		if(!worldObj.isRemote)
+		{
+			List<BulletHit> hits = FlansModRaytracer.Raytrace(worldObj, owner, ticksInAir > 20, this, origin, motion,
+					pingOfShooter);
+	
+			// We hit something
+			if (!hits.isEmpty()) 
 			{
-				Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime, 
-						origin.y + motion.y * bulletHit.intersectTime, 
-						origin.z + motion.z * bulletHit.intersectTime);
-				
-				if(EntityBullet.OnHit(worldObj, origin, hitPos, owner, firedFrom, type, this, damage, bulletHit))
+				for (BulletHit bulletHit : hits) 
 				{
-					setDead();
-					break;
+					Vector3f hitPos = new Vector3f(origin.x + motion.x * bulletHit.intersectTime, 
+							origin.y + motion.y * bulletHit.intersectTime, 
+							origin.z + motion.z * bulletHit.intersectTime);
+					
+					if(EntityBullet.OnHit(worldObj, origin, hitPos, owner, firedFrom, type, this, damage, bulletHit))
+					{
+						setDead();
+						break;
+					}
 				}
 			}
-
 		}
 
 		// Movement dampening variables
@@ -519,50 +525,73 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	}
 
 	@Override
-	public void setDead() {
+	public void setDead() 
+	{
 		if (isDead)
 			return;
 		super.setDead();
-		if (worldObj.isRemote)
+		
+		OnDetonate(worldObj, new Vector3f(posX, posY, posZ), owner, this, firedFrom, type);
+	}
+	
+	public static void OnDetonate(World world, Vector3f detonatePos, Entity owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
+	{
+		if (world.isRemote)
 			return;
-		if (type.explosionRadius > 0) {
+		if (bulletType.explosionRadius > 0) 
+		{
 			if ((owner instanceof EntityPlayer))
-				new FlansModExplosion(worldObj, this, (EntityPlayer) owner, type, posX, posY, posZ,
-						type.explosionRadius, type.fireRadius > 0, type.flak > 0, type.explosionBreaksBlocks);
+			{
+				new FlansModExplosion(world, bullet, (EntityPlayer) owner, bulletType, 
+						detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
+			}
 			else
-				worldObj.createExplosion(this, posX, posY, posZ, type.explosionRadius,
-						TeamsManager.explosions && type.explosionBreaksBlocks);
+			{
+				world.createExplosion(bullet, detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, TeamsManager.explosions && bulletType.explosionBreaksBlocks);
+			}
 		}
-		if (type.fireRadius > 0) {
-			for (float i = -type.fireRadius; i < type.fireRadius; i++) {
-				for (float k = -type.fireRadius; k < type.fireRadius; k++) {
-					for (int j = -1; j < 1; j++) {
-						if (worldObj.getBlockState(new BlockPos((int) (posX + i), (int) (posY + j), (int) (posZ + k)))
-								.getBlock().getMaterial() == Material.air) {
-							worldObj.setBlockState(new BlockPos((int) (posX + i), (int) (posY + j), (int) (posZ + k)),
-									Blocks.fire.getDefaultState(), 2);
+		if (bulletType.fireRadius > 0) 
+		{
+			for (float i = -bulletType.fireRadius; i < bulletType.fireRadius; i++) 
+			{
+				for (float k = -bulletType.fireRadius; k < bulletType.fireRadius; k++) 
+				{
+					for (int j = -1; j < 1; j++) 
+					{
+						if (world.getBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k))).getBlock().getMaterial() == Material.air) 
+						{
+							world.setBlockState(new BlockPos((int) (detonatePos.x + i), (int) (detonatePos.y + j), (int) (detonatePos.z + k)), Blocks.fire.getDefaultState(), 2);
 						}
 					}
 				}
 			}
 		}
 		// Send flak packet
-		if (type.flak > 0)
-			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(posX, posY, posZ, type.flak, type.flakParticles),
-					posX, posY, posZ, 200, dimension);
+		if (bulletType.flak > 0 && owner != null)
+		{
+			FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(detonatePos.x, detonatePos.y, detonatePos.z, bulletType.flak, bulletType.flakParticles), detonatePos.x, detonatePos.y, detonatePos.z, 200, owner.dimension);
+		}
 		// Drop item on hitting if bullet requires it
-		if (type.dropItemOnHit != null) {
-			String itemName = type.dropItemOnHit;
+		if (bulletType.dropItemOnHit != null) 
+		{
+			String itemName = bulletType.dropItemOnHit;
 			int damage = 0;
-			if (itemName.contains(".")) {
+			if (itemName.contains(".")) 
+			{
 				damage = Integer.parseInt(itemName.split("\\.")[1]);
 				itemName = itemName.split("\\.")[0];
 			}
 			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
-			entityDropItem(dropStack, 1.0F);
+			
+			if (dropStack != null && dropStack.stackSize != 0 && dropStack.getItem() != null)
+		    {
+		        EntityItem entityitem = new EntityItem(world, detonatePos.x, detonatePos.y, detonatePos.z, dropStack);
+		        entityitem.setDefaultPickupDelay();
+		        world.spawnEntityInWorld(entityitem);
+		    }
 		}
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		tag.setString("type", type.shortName);

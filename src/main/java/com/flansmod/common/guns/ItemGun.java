@@ -24,8 +24,11 @@ import com.flansmod.common.guns.raytracing.EnumHitboxType;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.PlayerHitbox;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.BlockHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.EntityHit;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
@@ -41,7 +44,9 @@ import com.flansmod.common.vector.Vector3f;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -60,9 +65,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3i;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -374,25 +381,33 @@ public class ItemGun extends Item implements IFlanItem
 					// Instant bullets. Do a raytrace
 					if(type.bulletSpeed == 0.0f)
 					{
-						Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
-						Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
-						rayTraceDirection.scale(500.0f);
-						
-						List<BulletHit> hits = FlansModRaytracer.Raytrace(world, player, false, null, rayTraceOrigin, rayTraceDirection, 0);
-						Entity victim = null;
-						Vector3f hitPos = Vector3f.add(rayTraceOrigin, rayTraceDirection, null);
-						BulletHit firstHit = null;
-						if(!hits.isEmpty())
+						for(int i = 0; i < type.numBullets * shootableType.numBullets; i++)
 						{
-							firstHit = hits.get(0);
-							hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)rayTraceDirection.scale(firstHit.intersectTime), null);
-							victim = firstHit.GetEntity();
+							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
+							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
+							
+							rayTraceDirection.x += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
+							rayTraceDirection.y += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
+							rayTraceDirection.z += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
+							
+							rayTraceDirection.scale(500.0f);
+							
+							List<BulletHit> hits = FlansModRaytracer.Raytrace(world, player, false, null, rayTraceOrigin, rayTraceDirection, 0);
+							Entity victim = null;
+							Vector3f hitPos = Vector3f.add(rayTraceOrigin, rayTraceDirection, null);
+							BulletHit firstHit = null;
+							if(!hits.isEmpty())
+							{
+								firstHit = hits.get(0);
+								hitPos = Vector3f.add(rayTraceOrigin, (Vector3f)rayTraceDirection.scale(firstHit.intersectTime), null);
+								victim = firstHit.GetEntity();
+							}
+							
+							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player);
+	
+							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1);
+							shotsFired.add(shotData);
 						}
-						
-						Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player);
-
-						ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack));
-						shotsFired.add(shotData);
 					}
 					// Else, spawn an entity
 					else
@@ -464,6 +479,9 @@ public class ItemGun extends Item implements IFlanItem
 			return;
 		}
 		
+		
+		boolean isExtraBullet = shotData instanceof InstantShotData ? ((InstantShotData)shotData).isExtraBullet : false;
+
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
 		ItemStack bulletStack = null;
@@ -487,36 +505,39 @@ public class ItemGun extends Item implements IFlanItem
 		{
 			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 			
-			// Play a sound if the previous sound has finished
-			if (soundDelay <= 0 && type.shootSound != null)
+			if(!isExtraBullet)
 			{
-				AttachmentType barrel = type.getBarrel(gunstack);
-				boolean silenced = barrel != null && barrel.silencer;
-				//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
-				PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
-				soundDelay = type.shootSoundLength;
+				// Play a sound if the previous sound has finished
+				if (soundDelay <= 0 && type.shootSound != null)
+				{
+					AttachmentType barrel = type.getBarrel(gunstack);
+					boolean silenced = barrel != null && barrel.silencer;
+					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
+					soundDelay = type.shootSoundLength;
+				}
+				
+				// Drop item on shooting if bullet requires it
+				if(bullet.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
+					dropItem(world, player, bullet.dropItemOnShoot);
+				// Drop item on shooting if gun requires it
+				if(type.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
+					dropItem(world, player, type.dropItemOnShoot);
+				
+				if(type.knockback > 0)
+				{
+					//TODO : Apply knockback		
+				}	
+				
+				//Damage the bullet item
+				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
+				
+				//Update the stack in the gun
+				setBulletItemStack(gunstack, bulletStack, bulletID);
+				
+				if(type.consumeGunUponUse)
+					player.inventory.setInventorySlotContents(gunSlot, null);
 			}
-			
-			// Drop item on shooting if bullet requires it
-			if(bullet.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
-				dropItem(world, player, bullet.dropItemOnShoot);
-			// Drop item on shooting if gun requires it
-			if(type.dropItemOnShoot != null)// && !entityplayer.capabilities.isCreativeMode)
-				dropItem(world, player, type.dropItemOnShoot);
-			
-			if(type.knockback > 0)
-			{
-				//TODO : Apply knockback		
-			}	
-			
-			//Damage the bullet item
-			bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
-			
-			//Update the stack in the gun
-			setBulletItemStack(gunstack, bulletStack, bulletID);
-			
-			if(type.consumeGunUponUse)
-				player.inventory.setInventorySlotContents(gunSlot, null);
 			
 			// Spawn an entity, classic style
 			if(shotData instanceof SpawnEntityShotData)
@@ -565,7 +586,10 @@ public class ItemGun extends Item implements IFlanItem
 	
 	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage)
 	{
-		EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData);
+		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
+		{
+			EntityBullet.OnDetonate(world, hit, shooter, null, shotFrom, shotType);
+		}
 		
 		if(world.isRemote)
 		{
@@ -575,6 +599,44 @@ public class ItemGun extends Item implements IFlanItem
 			}
 			
 			RenderGun.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
+			
+			if(hitData instanceof BlockHit)
+			{
+				BlockHit blockHit = (BlockHit)hitData;
+				
+				BlockPos blockPos = blockHit.raytraceResult.getBlockPos();
+				IBlockState blockState = world.getBlockState(blockHit.raytraceResult.getBlockPos());
+				
+				Vec3i normal = blockHit.raytraceResult.sideHit.getDirectionVec();
+				
+				if(blockState != null)
+				{
+					for(int i = 0; i < 2; i++)
+					{
+		                EntityFX fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+		                		EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f, 
+		                		Block.getIdFromBlock(blockState.getBlock()));
+		                
+		                double scale = world.rand.nextGaussian() * 0.1d + 0.5d;
+		                
+		                fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+		                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+		                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+		                
+	             		if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
+	             			fx.renderDistanceWeight = 100D;
+					}
+				}
+			}
+			
+			if(shooter == Minecraft.getMinecraft().thePlayer)
+			{
+				if(hitData instanceof EntityHit || hitData instanceof PlayerBulletHit || hitData instanceof DriveableHit)
+				{
+					// Add a hit marker
+					FlansModClient.AddHitMarker();
+				}
+			}
 		}
 		else
 		{

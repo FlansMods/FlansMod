@@ -70,6 +70,7 @@ import com.flansmod.common.types.InfoType;
 public class ClientRenderHooks 
 {
 	public static final ResourceLocation offHand = new ResourceLocation("flansmod","gui/offHand.png");
+	public static final ResourceLocation hitMarker = new ResourceLocation("flansmod", "gui/hitMarker.png");
 	private Minecraft mc;
 	private float fovModifierHandPrev, fovModifierHand;
 	private float equippedProgress, prevEquippedProgress;
@@ -660,6 +661,38 @@ public class ClientRenderHooks
 				GL11.glEnable(3008 /* GL_ALPHA_TEST */);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
+		}
+		
+		if(event.isCancelable() && event.type == ElementType.CROSSHAIRS)
+		{
+			if(FlansModClient.hitMarkerTime > 0)
+			{
+				//Off-hand weapon graphics
+				mc.renderEngine.bindTexture(hitMarker);
+				
+				GlStateManager.enableAlpha();
+				GlStateManager.enableBlend();
+				GlStateManager.color(1.0f, 1.0f, 1.0f, Math.max(((float)FlansModClient.hitMarkerTime - 10.0f + partialTicks) / 10.0f, 0.0f));
+
+				
+				ItemStack currentStack = mc.thePlayer.inventory.getCurrentItem();
+				PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
+				double zLevel = 0D;
+				
+				tessellator.getWorldRenderer().startDrawingQuads();
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 + 5d, zLevel, 0D / 16D, 9D / 16D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 + 5d, zLevel, 9D / 16D, 9D / 16D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 - 4d, zLevel, 9D / 16D, 0D / 16D);
+				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
+				tessellator.draw();
+				
+
+				GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+				GlStateManager.disableAlpha();
+				GlStateManager.disableBlend();
+			}
+			
+
 		}
 				
 		if(event.isCancelable() && event.type == ElementType.HOTBAR)
