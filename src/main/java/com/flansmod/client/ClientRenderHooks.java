@@ -305,6 +305,8 @@ public class ClientRenderHooks
     
     public void update()
     {    	
+    	RenderGun.UpdateAllTrails();
+    	
         float fovModifier = 1.0F;
 
         //Update the FOV Modifier
@@ -361,8 +363,6 @@ public class ClientRenderHooks
             itemToRender = itemstack;
             equippedItemSlot = entityplayersp.inventory.currentItem;
         }
-        
-        RenderGun.UpdateAllTrails();
         
 		//Render debug boxes for player snapshots
         PlayerData data = PlayerHandler.getPlayerData(entityplayersp);

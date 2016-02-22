@@ -89,6 +89,11 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		prevPosX = posX = blockX + 0.5f;
+		prevPosY = posY = blockY;
+		prevPosZ = posZ = blockZ + 0.5f;
+		
 		ticksSinceUsed++;
 		if(TeamsManager.mgLife > 0 && ticksSinceUsed > TeamsManager.mgLife * 20)
 		{

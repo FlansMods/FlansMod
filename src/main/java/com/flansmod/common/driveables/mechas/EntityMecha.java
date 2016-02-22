@@ -373,8 +373,8 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						// TODO : RELOAD
-						//gunItem.reload(heldStack, gunType, worldObj, this, driveableData, (infiniteAmmo() || creative()), false);
+						 gunItem.Reload(heldStack, (left ? EnumMechaSlotType.leftTool : EnumMechaSlotType.rightTool).ordinal(),
+								 worldObj, this, driveableData, left, true, true, (infiniteAmmo() || creative()));
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)
@@ -432,14 +432,21 @@ public class EntityMecha extends EntityDriveable
 				
 		if(!worldObj.isRemote)
 			for (int k = 0; k < gunType.numBullets * bulletType.numBullets; k++)
+			{
+				
+				// TODO: Do mechas properly. No hacks
+				float speed = gunType.getBulletSpeed(stack);
+				if(speed <= 0.0f)
+					speed = 5.0f;
 				worldObj.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, 
 						bulletOrigin, 
 						armVector, 
 						(EntityLivingBase)(seats[0].riddenByEntity), 
 						gunType.getSpread(stack) / 2F, 
 						gunType.getDamage(stack), 
-						gunType.getBulletSpeed(stack),
+						speed,
 						mechaType));
+			}
 		
 		if(left)
 			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;

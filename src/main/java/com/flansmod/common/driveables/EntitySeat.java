@@ -147,21 +147,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			{
 				looking = new RotatedAxes();
 			}
-			//DEBUG : Spawn particles along axes
-			
-			Vector3f xAxis = driveable.axes.findLocalAxesGlobally(looking).getXAxis();
-			Vector3f yAxis = driveable.axes.findLocalAxesGlobally(looking).getYAxis();
-			Vector3f zAxis = driveable.axes.findLocalAxesGlobally(looking).getZAxis();
-			Vector3f yOffset = driveable.axes.findLocalVectorGlobally(new Vector3f(0F, riddenByEntity == null ? 0F : (float)riddenByEntity.getYOffset(), 0F));
-			for(int i = 0; i < 10; i++)
-			{
-				//worldObj.spawnParticle("enchantmenttable", 	posX + xAxis.x * i * 0.3D + yOffset.x, posY + xAxis.y * i * 0.3D + yOffset.y, posZ + xAxis.z * i * 0.3D + yOffset.z, 0, 0, 0);
-				//worldObj.spawnParticle("smoke", 			posX + yAxis.x * i * 0.3D + yOffset.x, posY + yAxis.y * i * 0.3D + yOffset.y, posZ + yAxis.z * i * 0.3D + yOffset.z, 0, 0, 0);
-				//worldObj.spawnParticle("reddust", 			posX + zAxis.x * i * 0.3D + yOffset.x, posY + zAxis.y * i * 0.3D + yOffset.y, posZ + zAxis.z * i * 0.3D + yOffset.z, 0, 0, 0);
-			}
 		}
-		
-		
+
 		if(riddenByEntity instanceof EntityPlayer && shooting)
 			pressKey(9, (EntityPlayer)riddenByEntity);
 		
@@ -435,7 +422,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 									(EntityLivingBase)riddenByEntity, 
 									bullet.bulletSpread * gun.bulletSpread, 
 									gun.damage, 
-									gun.bulletSpeed, 
+									gun.bulletSpeed <= 0.0f ? 5.0f : gun.bulletSpeed, // TODO : Fix nasty hack 
 									driveable.getDriveableType()));
 							
 							//Play the shoot sound

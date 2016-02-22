@@ -9,7 +9,7 @@ FallSpeed 0.25
 //The maximum stack size
 MaxStackSize 1
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 500
+RoundsPerItem 1500
 //The damage multiplier caused by the bullet on hitting an entity
 Damage 1
 //Size of explosion caused

@@ -23,6 +23,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.AttachmentType;
@@ -62,8 +63,8 @@ public class RenderGun implements IItemRenderer
 			this.bulletSpeed = 10.0f;
 			this.origin = origin;
 			this.hitPos = hitPos;
-			this.width = 0.025f; // type.trailWidth
-			this.length = 5.0f;
+			this.width = 0.05f; // type.trailWidth
+			this.length = 10.0f;
 			this.texture = FlansModResourceHandler.getTrailTexture(type);
 			
 	        Vector3f dPos = Vector3f.sub(hitPos, origin, null);
@@ -74,7 +75,7 @@ public class RenderGun implements IItemRenderer
 		public boolean Update()
 		{
 			ticksExisted++;
-			return ticksExisted * bulletSpeed >= distanceToTarget - length;
+			return (ticksExisted) * bulletSpeed >= distanceToTarget - length;
 		}
 		
 		public void Render(float partialTicks)
@@ -93,7 +94,7 @@ public class RenderGun implements IItemRenderer
 	        	        
 	        GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
 	        
-	        float parametric = ((float)ticksExisted + partialTicks) * bulletSpeed;
+	        float parametric = ((float)(ticksExisted) + partialTicks) * bulletSpeed;
 	        
 	        Vector3f dPos = Vector3f.sub(hitPos, origin, null);
 	        dPos.normalise();
@@ -106,10 +107,6 @@ public class RenderGun implements IItemRenderer
 	        Tessellator tessellator = Tessellator.getInstance();
 	        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-	        
-	        
-
-	        
 	        dPos.normalise();
 	        
 	        EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
@@ -123,23 +120,18 @@ public class RenderGun implements IItemRenderer
 	        
 	        Vector3f normal = Vector3f.cross(trailTangent, dPos, null);
 	        normal.normalise();
+	           
+	        GlStateManager.enableRescaleNormal();
+	        GL11.glNormal3f(normal.x, normal.y, normal.z);
 	        
-	        //if(Vector3f.angle(Vector3f.cross(trailTangent, normal, null), new Vector3f(thePlayer.getLookVec())) < Math.PI * 0.875f)
-    		{        
-		        GlStateManager.enableRescaleNormal();
-		        GL11.glNormal3f(normal.x, normal.y, normal.z);
-		        
-		        worldrenderer.startDrawingQuads();
-		        worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);
-		        worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
-		        worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
-		        worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
-		        tessellator.draw();
-		        	
-		        GlStateManager.disableRescaleNormal();
-    		}
-	        
-	        
+	        worldrenderer.startDrawingQuads();
+	        worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);
+	        worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
+	        worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
+	        worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
+	        tessellator.draw();
+	        	
+	        GlStateManager.disableRescaleNormal();
 	        
 	        GlStateManager.popMatrix();
 		}

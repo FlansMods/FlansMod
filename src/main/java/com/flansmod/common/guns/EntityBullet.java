@@ -671,6 +671,15 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	@Override
 	public boolean isBurning() {
+		
 		return false;
 	}
+	
+	@Override
+	public boolean canBePushed()
+	{
+		return false;
+	}
+
+	
 }

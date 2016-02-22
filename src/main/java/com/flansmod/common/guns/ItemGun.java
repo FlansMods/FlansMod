@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.GunAnimations;
@@ -46,6 +47,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
@@ -313,12 +315,16 @@ public class ItemGun extends Item implements IFlanItem
 					{
 						shouldShootThisTick = true;
 					}
+					else needsToReload = false;
 					break;
 				}
 				case MINIGUN:
 				{
 					if(needsToReload)
+					{
+						needsToReload = GetMouseHeld(isOffHand);
 						break;
+					}
 					data.minigunSpeed += 2.0f;
 					data.minigunSpeed *= 0.9f;
 					// TODO : Re-add looping sounds
@@ -329,14 +335,19 @@ public class ItemGun extends Item implements IFlanItem
 				case FULLAUTO:
 				{
 					shouldShootThisTick = GetMouseHeld(isOffHand);
+					if(!shouldShootThisTick)
+					{
+						needsToReload = false;
+					}
 					break;
 				}
 				default:
+					needsToReload = false;
 					break;
 			}
 			
 			// Do reload if we pressed fire.
-			if(needsToReload && shouldShootThisTick)
+			if(needsToReload)
 			{
 				if(Reload(gunstack, gunSlot, world, player, player.inventory, isOffHand, hasOffHand, false, player.capabilities.isCreativeMode))
 				{
@@ -518,17 +529,7 @@ public class ItemGun extends Item implements IFlanItem
 			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 			
 			if(!isExtraBullet)
-			{
-				// Play a sound if the previous sound has finished
-				if (soundDelay <= 0 && type.shootSound != null)
-				{
-					AttachmentType barrel = type.getBarrel(gunstack);
-					boolean silenced = barrel != null && barrel.silencer;
-					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
-					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
-					soundDelay = type.shootSoundLength;
-				}
-				
+			{				
 				// Drop item on shooting if bullet requires it
 				if(bullet.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
 					dropItem(world, player, bullet.dropItemOnShoot);
@@ -554,6 +555,16 @@ public class ItemGun extends Item implements IFlanItem
 			// Spawn an entity, classic style
 			if(shotData instanceof SpawnEntityShotData)
 			{
+				// Play a sound if the previous sound has finished
+				if (soundDelay <= 0 && type.shootSound != null)
+				{
+					AttachmentType barrel = type.getBarrel(gunstack);
+					boolean silenced = barrel != null && barrel.silencer;
+					//world.playSoundAtEntity(entityplayer, type.shootSound, 10F, type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F);
+					PacketPlaySound.sendSoundPacket(player.posX, player.posY, player.posZ, FlansMod.soundRange, player.dimension, type.shootSound, type.distortSound, silenced);
+					soundDelay = type.shootSoundLength;
+				}
+				
 				//Shoot
 				// Spawn the bullet entities
 				for (int k = 0; k < type.numBullets * bullet.numBullets; k++)
@@ -605,6 +616,21 @@ public class ItemGun extends Item implements IFlanItem
 		
 		if(world.isRemote)
 		{
+			// Play a sound if the previous sound has finished
+			if (soundDelay <= 0 && type.shootSound != null)
+			{
+				//AttachmentType barrel = type.getBarrel(gunstack);
+				boolean silenced = false;//barrel != null && barrel.silencer;
+				
+				FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+						new PositionedSoundRecord(FlansModResourceHandler.getSound(type.shootSound), 
+								silenced ? 5F : 10F, 
+								(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), 
+								(float)shooter.posX, (float)shooter.posY, (float)shooter.posZ));
+
+				soundDelay = type.shootSoundLength;
+			}
+			
 			if(FlansMod.DEBUG)
 			{
 				world.spawnEntityInWorld(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));

@@ -117,11 +117,7 @@ public class PlayerData
 		
 		if(shootClickDelay > 0)
 			shootClickDelay--;
-		
-		//Handle minigun speed
-		if(isShootingRight && !reloadingRight)
-			minigunSpeed += 2F; 
-		minigunSpeed *= 0.9F;
+
 		if(loopedSoundDelay > 0)
 		{
 			loopedSoundDelay--;

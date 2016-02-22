@@ -17,9 +17,9 @@ Damage 2
 //The higher this value, the more the bullets spread
 Accuracy 4
 //Time in ticks between rounds
-ShootDelay 1
+ShootDelay 0.3
 //Number of bullet entities to create, useful for shotguns, defaults to 1
-NumBullets 3
+NumBullets 1
 //Spin sound plays the whole time the player holds the shoot button, on loop. Warmup plays first, and cooldown plays when they stop firing
 WarmupSound MinigunWarmup
 SpinSound MinigunSpin
