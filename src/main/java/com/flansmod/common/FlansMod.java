@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -339,6 +340,17 @@ public class FlansMod
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 		if(eventArgs.modID.equals(MODID))
 			syncConfig();
+	}
+	
+	@SubscribeEvent
+	public void onBlockBreak(BlockEvent.BreakEvent event)
+	{
+		if(event.getPlayer() != null
+				&& event.getPlayer().getCurrentEquippedItem() != null
+				&& event.getPlayer().getCurrentEquippedItem().getItem() instanceof ItemGun)
+		{
+			event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent

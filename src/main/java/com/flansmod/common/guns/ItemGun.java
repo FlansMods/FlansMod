@@ -84,6 +84,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemGun extends Item implements IFlanItem
 {
 	private static final int CLIENT_TO_SERVER_UPDATE_INTERVAL = 1;
+	private static final int SERVER_TO_CLIENT_UPDATE_INTERVAL = 2;
 	
 	private GunType type;
 	
@@ -325,11 +326,25 @@ public class ItemGun extends Item implements IFlanItem
 						needsToReload = GetMouseHeld(isOffHand);
 						break;
 					}
-					data.minigunSpeed += 2.0f;
-					data.minigunSpeed *= 0.9f;
-					// TODO : Re-add looping sounds
-					if(data.minigunSpeed < type.minigunStartSpeed)
-						break;
+					if(GetMouseHeld(isOffHand))
+					{
+						data.minigunSpeed += 2.0f;
+						data.minigunSpeed *= 0.9f;
+						// TODO : Re-add looping sounds
+						if(data.minigunSpeed < type.minigunStartSpeed)
+						{
+							if(type.useLoopingSounds)
+							{
+								data.shouldPlayWarmupSound = true;
+							}
+							break;
+						}
+					}
+					else if(data.minigunSpeed > 0.0f)
+					{
+						data.shouldPlayCooldownSound = true;
+					}
+						
 					//else fallthrough to full auto
 				}
 				case FULLAUTO:
@@ -598,11 +613,8 @@ public class ItemGun extends Item implements IFlanItem
 					
 					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack));
 					
-					
-					// TODO : Queue for outbound packets too
-					FlansMod.getPacketHandler().sendToAllAround(new PacketShotData(shotData), new TargetPoint(player.dimension, targetPoint.x, targetPoint.y, targetPoint.z, radius) );
+					shotsFired.add(shotData);
 				}
-				
 			}
 		}
 	}
@@ -703,6 +715,12 @@ public class ItemGun extends Item implements IFlanItem
 				(new PacketSelectOffHandGun(0)).handleServerSide(player);
 			}
 			return;
+		}
+		
+		if(!shotsFired.isEmpty() && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
+		{
+			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFired), player.dimension );
+			shotsFired.clear();
 		}
 	}
 	
@@ -837,58 +855,7 @@ public class ItemGun extends Item implements IFlanItem
 	}
 	
 	// TODO : All this bunk
-	
-	/*
-	// NO IDEA
-	public void onMouseHeld(ItemStack stack, World world, EntityPlayerMP player, boolean left, boolean isShooting)
-	{
-		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(data != null && data.shootClickDelay == 0)
-		{
-			//Drivers can't shoot
-			if(player.ridingEntity instanceof EntitySeat && ((EntitySeat)player.ridingEntity).seatInfo.id == 0)
-				return;
-			if(left && data.offHandGunSlot != 0)
-			{
-				ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-				GunType gunType = ((ItemGun)offHandGunStack.getItem()).type;
-				data.isShootingLeft = isShooting;
-				if(gunType.getFireMode(offHandGunStack) == EnumFireMode.SEMIAUTO && isShooting)
-				{
-					data.isShootingLeft = false;
-					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
-				}
-				if(gunType.getFireMode(offHandGunStack) == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingLeft == 0)
-				{
-					data.isShootingLeft = false;
-					data.burstRoundsRemainingLeft = gunType.numBurstRounds;
-					player.inventory.setInventorySlotContents(data.offHandGunSlot - 1, tryToShoot(offHandGunStack, gunType, world, player, true));
-				}
-			}
-			else
-			{
-				data.isShootingRight = isShooting;
-				if(type.getFireMode(stack) == EnumFireMode.SEMIAUTO && isShooting)
-				{
-					data.isShootingRight = false;
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
-				}
-				if(type.getFireMode(stack) == EnumFireMode.BURST && isShooting && data.burstRoundsRemainingRight == 0)
-				{
-					data.isShootingRight = false;
-					data.burstRoundsRemainingRight = type.numBurstRounds;
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, tryToShoot(stack, type, world, player, false));
-				}
-			}
-			//Play the warmup sound for miniguns immediately
-			if(type.useLoopingSounds && isShooting)
-			{
-				data.shouldPlayWarmupSound = true;
-			}
-		}
-	}
-	*/
-	
+		
 	/* Melee MESS
 	 * 	@Override
 	public void onUpdate(ItemStack itemstack, World world, Entity pEnt, int i, boolean flag)
@@ -1322,5 +1289,12 @@ public class ItemGun extends Item implements IFlanItem
     //{
     //    return getUnlocalizedName();//stack.getTagCompound().getString("Paint");
     //}
+	
+	@Override
+    public boolean canItemEditBlocks()
+    {
+        return false;
+    }
+	
     
 }
