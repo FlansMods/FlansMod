@@ -100,7 +100,7 @@ public class ItemGun extends Item implements IFlanItem
 	private static boolean GetMouseHeld(boolean isOffHand) { return isOffHand ? leftMouseHeld : rightMouseHeld; }
 	private static boolean GetLastMouseHeld(boolean isOffHand) { return isOffHand ? lastLeftMouseHeld : lastRightMouseHeld; }
 	
-	private static List<ShotData> shotsFired = new ArrayList<ShotData>();
+	private static List<ShotData> shotsFiredClient = new ArrayList<ShotData>(), shotsFiredServer = new ArrayList<ShotData>();
 	
 	public ItemGun(GunType type)
 	{
@@ -412,9 +412,11 @@ public class ItemGun extends Item implements IFlanItem
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							
-							rayTraceDirection.x += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
-							rayTraceDirection.y += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
-							rayTraceDirection.z += (float)world.rand.nextGaussian() * 0.005f * type.getSpread(gunstack);
+							float spread = 0.005f * type.getSpread(gunstack) * shootableType.bulletSpread;
+							
+							rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
+							rayTraceDirection.y += (float)world.rand.nextGaussian() * spread;
+							rayTraceDirection.z += (float)world.rand.nextGaussian() * spread;
 							
 							rayTraceDirection.scale(500.0f);
 							
@@ -437,16 +439,16 @@ public class ItemGun extends Item implements IFlanItem
 							}
 	
 							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1);
-							shotsFired.add(shotData);
+							shotsFiredClient.add(shotData);
 						}
 					}
 					// Else, spawn an entity
 					else
 					{
 						ShotData shotData = new SpawnEntityShotData(gunSlot, type, shootableType, player, new Vector3f(player.getLookVec()));
-						shotsFired.add(shotData);
+						shotsFiredClient.add(shotData);
 					}
-					
+
 					// Now do client side things
 					GunAnimations animations = FlansModClient.getGunAnimations(player, isOffHand);
 					
@@ -481,10 +483,10 @@ public class ItemGun extends Item implements IFlanItem
 			}
 			
 			// Now send shooting data to the server
-			if(player.ticksExisted % CLIENT_TO_SERVER_UPDATE_INTERVAL == 0)
+			if(!shotsFiredClient.isEmpty() && player.ticksExisted % CLIENT_TO_SERVER_UPDATE_INTERVAL == 0)
 			{
-				FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotsFired));
-				shotsFired.clear();
+				FlansMod.getPacketHandler().sendToServer(new PacketShotData(shotsFiredClient));
+				shotsFiredClient.clear();
 			}
 			
 			// Check for scoping in / out
@@ -613,7 +615,7 @@ public class ItemGun extends Item implements IFlanItem
 					
 					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack));
 					
-					shotsFired.add(shotData);
+					shotsFiredServer.add(shotData);
 				}
 			}
 		}
@@ -717,10 +719,10 @@ public class ItemGun extends Item implements IFlanItem
 			return;
 		}
 		
-		if(!shotsFired.isEmpty() && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
+		if(!shotsFiredServer.isEmpty() && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
 		{
-			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFired), player.dimension );
-			shotsFired.clear();
+			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension );
+			shotsFiredServer.clear();
 		}
 	}
 	
