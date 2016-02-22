@@ -363,6 +363,14 @@ public class ClientRenderHooks
         }
         
         RenderGun.UpdateAllTrails();
+        
+		//Render debug boxes for player snapshots
+        PlayerData data = PlayerHandler.getPlayerData(entityplayersp);
+		if(FlansMod.DEBUG && data != null)
+		{
+			if(data.snapshots[0] != null)
+				data.snapshots[0].renderSnapshot();
+		}
     }
     
     public static void updateRenderTick(float dT)
@@ -539,13 +547,6 @@ public class ClientRenderHooks
 	public void renderPlayer(RenderPlayerEvent.Pre event)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
-		
-		//Render debug boxes for player snapshots
-		if(FlansMod.DEBUG && data != null)
-		{
-			if(data.snapshots[0] != null)
-				data.snapshots[0].renderSnapshot();
-		}
 					
 		RendererLivingEntity.NAME_TAG_RANGE = 64F;
 		RendererLivingEntity.NAME_TAG_RANGE_SNEAK = 32F;		

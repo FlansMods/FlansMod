@@ -9,6 +9,7 @@ import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EnumDriveablePart;
+import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GunType;
@@ -163,16 +164,21 @@ public class FlansModRaytracer
 		return hits;
 	}
 	
-	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player)
+	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, boolean isOffHand)
 	{
-		ItemStack itemstack = player.getCurrentEquippedItem();
+		PlayerSnapshot snapshot = new PlayerSnapshot(player);
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		
+		ItemStack itemstack = (isOffHand && data != null && data.offHandGunSlot != 0 ) 
+				? player.inventory.getStackInSlot(data.offHandGunSlot - 1)
+				: player.getCurrentEquippedItem();
+		
 		if(itemstack != null && itemstack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)itemstack.getItem()).GetType();
-			if(gunType.model != null)
-			{
-				// TODO
-			}
+			AttachmentType barrelType = gunType.getBarrel(itemstack);
+			
+			return Vector3f.add(new Vector3f(player.posX, player.posY, player.posZ), snapshot.GetMuzzleLocation(gunType, barrelType, isOffHand), null);
 		}
 		
 		return new Vector3f(player.getPositionEyes(0.0f));

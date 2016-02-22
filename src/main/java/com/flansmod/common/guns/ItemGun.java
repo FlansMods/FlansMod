@@ -403,7 +403,12 @@ public class ItemGun extends Item implements IFlanItem
 								victim = firstHit.GetEntity();
 							}
 							
-							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player);
+							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, isOffHand);
+							
+							if(FlansMod.DEBUG)
+							{
+								world.spawnEntityInWorld(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+							}
 	
 							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1);
 							shotsFired.add(shotData);
@@ -440,6 +445,13 @@ public class ItemGun extends Item implements IFlanItem
 				}
 				
 				data.SetShootTime(isOffHand, shootTime);
+			}
+			
+			Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, isOffHand);
+			
+			if(FlansMod.DEBUG)
+			{
+				world.spawnEntityInWorld(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 			}
 			
 			// Now send shooting data to the server

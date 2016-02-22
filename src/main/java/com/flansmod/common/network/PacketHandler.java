@@ -173,7 +173,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketDriveableKey.class);	
 		registerPacket(PacketDriveableKeyHeld.class);	
 		registerPacket(PacketFlak.class);	
-		registerPacket(PacketGunFire.class);	
+		//registerPacket(PacketGunFire.class);	
 		registerPacket(PacketGunPaint.class);
 		registerPacket(PacketKillMessage.class);
 		registerPacket(PacketMechaControl.class);	
