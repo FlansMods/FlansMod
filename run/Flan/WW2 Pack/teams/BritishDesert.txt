@@ -1,5 +1,5 @@
 Name British
-ShortName britishDesert
+ShortName britishDesertTeam
 //TextColour can be one of Black, Blue, Green, Aqua, Red, Purple, Orange, LGrey, Grey, LBlue, LGreen, LAqua, Red, Pink, Yellow, White
 //This is used for player names and such
 TextColour Blue

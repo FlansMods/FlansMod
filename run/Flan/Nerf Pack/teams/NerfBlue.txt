@@ -10,6 +10,6 @@ Hat none
 Chest nerfBlueVest
 Legs nerfBlueKnees
 Shoes none
-AddClass nerfRetaliator
-AddClass nerfRampage
-AddClass nerfStryfe
+AddClass nerfRetaliatorClass
+AddClass nerfRampageClass
+AddClass nerfStryfeClass

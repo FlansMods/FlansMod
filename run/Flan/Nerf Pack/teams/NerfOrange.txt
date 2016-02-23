@@ -10,8 +10,8 @@ Hat none
 Chest nerfOrangeVest
 Legs nerfOrangeKnees
 Shoes none
-AddClass nerfLongshot
-AddClass nerfRecon
-AddClass nerfRaider
-AddClass nerfStampede
-AddClass nerfVulcan
+AddClass nerfLongshotClass
+AddClass nerfReconClass
+AddClass nerfRaiderClass
+AddClass nerfStampedeClass
+AddClass nerfVulcanClass

@@ -1,5 +1,5 @@
 Name Assault
-ShortName nerfPyragon
+ShortName nerfPyragonClass
 AddItem nerfPyragon
 AddItem nerfMaverick
 AddItem 40DiscDrum

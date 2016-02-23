@@ -1,5 +1,5 @@
 Name Assault
-ShortName nerfRampage
+ShortName nerfRampageClass
 AddItem nerfRampage
 AddItem nerfStrongarm
 AddItem 25DartEliteDrum

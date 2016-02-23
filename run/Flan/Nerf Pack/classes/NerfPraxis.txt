@@ -1,5 +1,5 @@
 Name Scout
-ShortName nerfPraxis
+ShortName nerfPraxisClass
 AddItem nerfPraxis
 AddItem nerfMaverick
 AddItem 10DiscClip 3

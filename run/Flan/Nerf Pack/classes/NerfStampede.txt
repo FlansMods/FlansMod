@@ -1,5 +1,5 @@
 Name Heavy Assault
-ShortName nerfStampede
+ShortName nerfStampedeClass
 AddItem nerfStampede
 AddItem nerfMaverick
 AddItem 18DartClip 2

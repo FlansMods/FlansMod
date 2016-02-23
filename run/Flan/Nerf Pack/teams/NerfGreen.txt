@@ -10,8 +10,8 @@ Hat none
 Chest nerfGreenVest
 Legs nerfGreenKnees
 Shoes none
-AddClass nerfPraxis
-AddClass nerfNitron
-AddClass nerfPyragon
+AddClass nerfPraxisClass
+AddClass nerfNitronClass
+AddClass nerfPyragonClass
 
 

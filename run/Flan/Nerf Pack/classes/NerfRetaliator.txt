@@ -1,5 +1,5 @@
 Name Scout
-ShortName nerfRetaliator
+ShortName nerfRetaliatorClass
 AddItem nerfRetaliator
 AddItem nerfStrongarm
 AddItem 18DartEliteClip

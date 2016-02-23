@@ -1,5 +1,5 @@
 Name Light Assault
-ShortName nerfRaider
+ShortName nerfRaiderClass
 AddItem nerfRaider
 AddItem nerfMaverick
 AddItem 35DartDrum

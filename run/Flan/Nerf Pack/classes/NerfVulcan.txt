@@ -1,5 +1,5 @@
 Name Support
-ShortName nerfVulcan
+ShortName nerfVulcanClass
 AddItem nerfVulcan
 AddItem nerfMaverick
 AddItem 25DartBelt 2

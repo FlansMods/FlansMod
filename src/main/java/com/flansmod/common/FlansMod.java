@@ -582,4 +582,12 @@ public class FlansMod
 	{
 		System.out.println("[Flan's Mod] " + string);
 	}
+
+	public static void Assert(boolean b, String string)
+	{
+		if(!b)
+		{
+			log(string);
+		}
+	}
 }

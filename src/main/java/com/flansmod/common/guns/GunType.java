@@ -163,12 +163,6 @@ public class GunType extends InfoType implements IScope
 	/** The number of generic attachment slots there are on this gun */
 	public int numGenericAttachmentSlots = 0;
 	
-	//Paintjobs
-	/** The list of all available paintjobs for this gun */
-	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
-	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
-	public Paintjob defaultPaintjob;
-	
 	/** The static hashmap of all guns by shortName */
 	public static HashMap<Integer, GunType> guns = new HashMap<Integer, GunType>();
 	/** The static list of all guns */
@@ -179,9 +173,7 @@ public class GunType extends InfoType implements IScope
 	public float moveSpeedModifier = 1F;
 	/** Gives knockback resistance to the player */
 	public float knockbackModifier = 0F;
-	
-	/** Assigns IDs to paintjobs */
-	private int nextPaintjobID = 1;
+
 
 	public GunType(TypeFile file)
 	{
@@ -194,16 +186,6 @@ public class GunType extends InfoType implements IScope
 		super.postRead(file);
 		gunList.add(this);
 		guns.put(shortName.hashCode(), this);
-		
-		//After all lines have been read, set up the default paintjob
-		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
-		//Move to a new list to ensure that the default paintjob is always first
-		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
-		newPaintjobList.add(defaultPaintjob);
-		newPaintjobList.addAll(paintjobs);
-		paintjobs = newPaintjobList;
-		
-		totalDungeonChance += dungeonChance * (paintjobs.size() - 1);
 	}
 	
 	@Override
@@ -432,21 +414,6 @@ public class GunType extends InfoType implements IScope
 			else if(split[0].equals("NumGenericAttachmentSlots"))
 				numGenericAttachmentSlots = Integer.parseInt(split[1]);
 			
-			//Paintjobs
-			else if(split[0].toLowerCase().equals("paintjob"))
-			{
-				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
-				for(int i = 0; i < (split.length - 3) / 2; i++)
-					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
-				if(split[1].contains("_"))
-				{
-					String[] splat = split[1].split("_");
-					if(splat[0].equals(iconPath))
-						split[1] = splat[1];
-				}
-				paintjobs.add(new Paintjob(nextPaintjobID++, split[1], split[2], dyeStacks));
-			}
-			
 			//Shield settings
 			else if(split[0].toLowerCase().equals("shield"))
 			{
@@ -461,23 +428,6 @@ public class GunType extends InfoType implements IScope
 			System.out.println("Reading gun file failed.");
 			e.printStackTrace();
 		}
-		
-		
-	}
-	
-	/** Return a dye damage value from a string name */
-	private int getDyeDamageValue(String dyeName)
-	{
-		int damage = -1;
-		for(int i = 0; i < EnumDyeColor.values().length; i++)
-		{
-			if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(dyeName))
-				damage = i;
-		}
-		if(damage == -1)
-			FlansMod.log("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
-		
-		return damage;
 	}
 	
 	public boolean isAmmo(ShootableType type)
@@ -703,33 +653,5 @@ public class GunType extends InfoType implements IScope
 		return guns.get(hash);
 	}
 	
-	public Paintjob getPaintjob(String s)
-	{
-		for(Paintjob paintjob : paintjobs)
-		{
-			if(paintjob.iconName.equals(s))
-				return paintjob;
-		}
-		return defaultPaintjob;
-	}
-	
-	public Paintjob getPaintjob(int i)
-	{
-		return paintjobs.get(i);
-	}
-	
-	@Override
-	public void addDungeonLoot() 
-	{
-		if(dungeonChance > 0)
-			for(int i = 0; i < paintjobs.size(); i++)
-			{
-				ItemStack stack = new ItemStack(this.item);
-				NBTTagCompound tags = new NBTTagCompound();
-				tags.setString("Paint", paintjobs.get(i).iconName);
-				stack.setTagCompound(tags);
-				
-				addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
-			}
-	}
+
 }

@@ -1,5 +1,5 @@
 Name Support
-ShortName nerfNitron
+ShortName nerfNitronClass
 AddItem nerfNitron
 AddItem nerfMaverick
 AddItem 20DiscClip 2
