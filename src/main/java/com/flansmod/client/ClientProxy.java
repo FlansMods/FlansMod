@@ -21,6 +21,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -172,9 +173,11 @@ public class ClientProxy extends CommonProxy
 
 		
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
-		
-		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
-		new TickHandlerClient();
+				
+        // Create one event handler for the client and register it with MC Forge and FML
+		ClientEventHandler eventHandler = new ClientEventHandler();
+		FMLCommonHandler.instance().bus().register(eventHandler);
+		MinecraftForge.EVENT_BUS.register(eventHandler);
 	}
 		
 	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */

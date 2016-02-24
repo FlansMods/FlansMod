@@ -279,6 +279,10 @@ public class GuiGunBox extends GuiContainer
 	
 	private void renderPanelForeground(GunBoxEntry entry, int x, int y)
 	{
+		if(entry == null)
+		{
+			return;
+		}
 		FontRenderer fr = mc.fontRendererObj;
 		
 		fr.drawString(entry.type.name, x + 5, y + 5, 0x00000000);

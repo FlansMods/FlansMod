@@ -8,6 +8,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -83,9 +84,8 @@ public class KeyInputHandler
 		
 		mc = Minecraft.getMinecraft();
 	}
-	
-	@SubscribeEvent
-	public void onKeyInput(KeyInputEvent event)
+
+	public void CheckKeyInput(KeyInputEvent event)
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;
@@ -104,7 +104,6 @@ public class KeyInputHandler
 			mc.displayGuiScreen(new GuiTeamScores());
 			return;
 		}
-		// TODO : Reload
 		if(reloadKey.isPressed())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);

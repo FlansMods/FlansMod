@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.flansmod.client.ClientRenderHooks;
-import com.flansmod.client.TickHandlerClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 

@@ -77,7 +77,7 @@ public class ClientRenderHooks
 	private float equippedProgress, prevEquippedProgress;
 	private ItemStack itemToRender;
 	private int equippedItemSlot;
-	private static float partialTicks;
+	private float partialTicks;
 	
 	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
@@ -86,21 +86,8 @@ public class ClientRenderHooks
 	{
 		mc = Minecraft.getMinecraft();
 	}
-	
-	public static void gameTick()
-	{
-		for(int i = 0; i < killMessages.size(); i++)
-		{
-			killMessages.get(i).timer--;
-			if(killMessages.get(i).timer == 0)
-			{
-				killMessages.remove(i);
-			}
-		}
-	}
-	
+		
 	/** Render guns in 3D in item frames */
-	@SubscribeEvent
 	public void renderItemFrame(RenderItemInFrameEvent event)
 	{
 		if(event.item.getItem() instanceof ItemGun)
@@ -125,7 +112,6 @@ public class ClientRenderHooks
 	}
 	
 	/** When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too. */
-	@SubscribeEvent
 	public void renderHeldItem(RenderHandEvent event)
 	{
 		EntityPlayer player = mc.thePlayer;
@@ -305,13 +291,19 @@ public class ClientRenderHooks
     }
     
     public void update()
-    {    	
-    	InstantBulletRenderer.UpdateAllTrails();
-    	
-        float fovModifier = 1.0F;
+    {    	    	
+		for(int i = 0; i < killMessages.size(); i++)
+		{
+			killMessages.get(i).timer--;
+			if(killMessages.get(i).timer == 0)
+			{
+				killMessages.remove(i);
+			}
+		}
 
         //Update the FOV Modifier
-        if (this.mc.getRenderViewEntity() instanceof AbstractClientPlayer)
+		float fovModifier = 1.0F;
+        if (mc.getRenderViewEntity() instanceof AbstractClientPlayer)
         {
             AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer)this.mc.getRenderViewEntity();
             fovModifier = abstractclientplayer.getFovModifier();
@@ -328,64 +320,60 @@ public class ClientRenderHooks
         //And update the itemToRender, for item switching
         
         prevEquippedProgress = equippedProgress;
-        EntityPlayerSP entityplayersp = mc.thePlayer;
-        ItemStack itemstack = entityplayersp.inventory.getCurrentItem();
-        boolean flag = false;
+        EntityPlayerSP thePlayer = mc.thePlayer;
+        if(thePlayer != null)
+        {
+	        ItemStack itemstack = thePlayer.inventory.getCurrentItem();
+	        boolean equippedGun = false;
+	
+	        if(itemToRender != null && itemstack != null)
+	        {
+	            if (!itemToRender.getIsItemStackEqual(itemstack))
+	            {
+	                if (!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != thePlayer.inventory.currentItem))
+	                {
+	                    itemToRender = itemstack;
+	                    equippedItemSlot = thePlayer.inventory.currentItem;
+	                    return;
+	                }
+	                equippedGun = true;
+	            }
+	        }
+	        else if(itemToRender == null && itemstack == null)
+	        {
+	        	equippedGun = false;
+	        }
+	        else
+	        {
+	        	equippedGun = true;
+	        }
 
-        if(itemToRender != null && itemstack != null)
-        {
-            if (!itemToRender.getIsItemStackEqual(itemstack))
-            {
-                if (!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != entityplayersp.inventory.currentItem))
-                {
-                    itemToRender = itemstack;
-                    equippedItemSlot = entityplayersp.inventory.currentItem;
-                    return;
-                }
-                flag = true;
-            }
+	        float maxChange = 0.4F;
+	        float targetProgress = equippedGun ? 0.0F : 1.0F;
+	        float difference = MathHelper.clamp_float(targetProgress - equippedProgress, -maxChange, maxChange);
+	        equippedProgress += difference;
+	
+	        if(equippedProgress < 0.1F)
+	        {
+	            itemToRender = itemstack;
+	            equippedItemSlot = thePlayer.inventory.currentItem;
+	        }
+	        
+			//Render debug boxes for player snapshots
+	        PlayerData data = PlayerHandler.getPlayerData(thePlayer);
+			if(FlansMod.DEBUG && data != null)
+			{
+				if(data.snapshots[0] != null)
+					data.snapshots[0].renderSnapshot();
+			}
         }
-        else if(itemToRender == null && itemstack == null)
-        {
-            flag = false;
-        }
-        else
-        {
-            flag = true;
-        }
-
-        float f = 0.4F;
-        float f1 = flag ? 0.0F : 1.0F;
-        float f2 = MathHelper.clamp_float(f1 - equippedProgress, -f, f);
-        equippedProgress += f2;
-
-        if(equippedProgress < 0.1F)
-        {
-            itemToRender = itemstack;
-            equippedItemSlot = entityplayersp.inventory.currentItem;
-        }
-        
-		//Render debug boxes for player snapshots
-        PlayerData data = PlayerHandler.getPlayerData(entityplayersp);
-		if(FlansMod.DEBUG && data != null)
-		{
-			if(data.snapshots[0] != null)
-				data.snapshots[0].renderSnapshot();
-		}
     }
     
-    public static void updateRenderTick(float dT)
+    public void SetPartialTick(float dT)
     {
     	partialTicks = dT;
     }
-
-	@SubscribeEvent
-	public void renderWorld(RenderWorldLastEvent event)
-	{
-		InstantBulletRenderer.RenderAllTrails(partialTicks);
-	}
     
-	@SubscribeEvent
 	public void renderThirdPersonWeapons(RenderLivingEvent.Post event)
 	{
 		ModelBase mainModel = event.renderer.getMainModel();
@@ -544,7 +532,6 @@ public class ClientRenderHooks
 	}
 
 	//Handle player hiding / name tag removal for teams
-	@SubscribeEvent
 	public void renderPlayer(RenderPlayerEvent.Pre event)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer, Side.CLIENT);
@@ -595,7 +582,6 @@ public class ClientRenderHooks
 		}
 	}
 	
-	@SubscribeEvent
 	public void cameraSetup(CameraSetup event)
 	{
 		if(mc.thePlayer.ridingEntity instanceof IControllable)
@@ -605,8 +591,7 @@ public class ClientRenderHooks
 		}
 	}
 	
-	@SubscribeEvent
-	public void eventHandler(RenderGameOverlayEvent event)
+	public void ModifyHUD(RenderGameOverlayEvent event)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		
