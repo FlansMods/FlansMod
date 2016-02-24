@@ -12,8 +12,9 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.GunAnimations;
+import com.flansmod.client.model.InstantBulletRenderer;
+import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
 import com.flansmod.client.model.RenderGun;
-import com.flansmod.client.model.RenderGun.InstantShotTrail;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -650,7 +651,7 @@ public class ItemGun extends Item implements IFlanItem
 				world.spawnEntityInWorld(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));
 			}
 			
-			RenderGun.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
+			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
 			
 			if(hitData instanceof BlockHit)
 			{

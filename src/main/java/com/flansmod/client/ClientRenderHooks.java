@@ -52,6 +52,7 @@ import org.lwjgl.util.glu.Project;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.RenderGun;
 import com.flansmod.common.FlansMod;
@@ -305,7 +306,7 @@ public class ClientRenderHooks
     
     public void update()
     {    	
-    	RenderGun.UpdateAllTrails();
+    	InstantBulletRenderer.UpdateAllTrails();
     	
         float fovModifier = 1.0F;
 
@@ -381,7 +382,7 @@ public class ClientRenderHooks
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
-		RenderGun.RenderAllTrails(partialTicks);
+		InstantBulletRenderer.RenderAllTrails(partialTicks);
 	}
     
 	@SubscribeEvent
