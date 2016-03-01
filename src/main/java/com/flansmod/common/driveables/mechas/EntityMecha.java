@@ -678,6 +678,7 @@ public class EntityMecha extends EntityDriveable
 				float yaw = seats[0].looking.getYaw() - seats[0].prevLooking.getYaw();
 				axes.rotateGlobalYaw(yaw);
 				seats[0].looking.rotateGlobalYaw(-yaw);
+				seats[0].playerLooking.rotateGlobalYaw(-yaw);
 			}
 		}
 		
