@@ -373,8 +373,7 @@ public class EntityMecha extends EntityDriveable
 					//If no bullet stack was found, reload
 					if(bulletStack == null)
 					{
-						 gunItem.Reload(heldStack, (left ? EnumMechaSlotType.leftTool : EnumMechaSlotType.rightTool).ordinal(),
-								 worldObj, this, driveableData, left, true, true, (infiniteAmmo() || creative()));
+						 gunItem.Reload(heldStack, worldObj, this, driveableData, left, true, true, (infiniteAmmo() || creative()));
 					}
 					//A bullet stack was found, so try shooting with it
 					else if(bulletStack.getItem() instanceof ItemBullet)

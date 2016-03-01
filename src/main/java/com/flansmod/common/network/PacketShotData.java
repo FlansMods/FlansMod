@@ -126,12 +126,22 @@ public class PacketShotData extends PacketBase
 		
 		for(ShotData entry : shotData)
 		{
-			ItemStack gunStack = player.inventory.getStackInSlot(entry.slot);
-			if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+			if(entry.slot == -1)
 			{
-				ItemGun gunItem = (ItemGun)gunStack.getItem();
-				boolean isOffHand = (data.offHandGunSlot + 1 == entry.slot);
-				gunItem.ServerHandleShotData(gunStack, entry.slot, player.worldObj, player, isOffHand, entry);
+				if(entry.shotFrom instanceof GunType)
+				{
+					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.worldObj, player, false, entry);
+				}
+			}
+			else
+			{
+				ItemStack gunStack = player.inventory.getStackInSlot(entry.slot);
+				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+				{
+					ItemGun gunItem = (ItemGun)gunStack.getItem();
+					boolean isOffHand = (data.offHandGunSlot + 1 == entry.slot);
+					gunItem.ServerHandleShotData(gunStack, entry.slot, player.worldObj, player, isOffHand, entry);
+				}
 			}
 		}
 	}

@@ -365,7 +365,7 @@ public class ItemGun extends Item implements IFlanItem
 			// Do reload if we pressed fire.
 			if(needsToReload)
 			{
-				if(Reload(gunstack, gunSlot, world, player, player.inventory, isOffHand, hasOffHand, false, player.capabilities.isCreativeMode))
+				if(Reload(gunstack, world, player, player.inventory, isOffHand, hasOffHand, false, player.capabilities.isCreativeMode))
 				{
 					//Set player shoot delay to be the reload delay
 					//Set both gun delays to avoid reloading two guns at once
@@ -566,7 +566,7 @@ public class ItemGun extends Item implements IFlanItem
 				//Update the stack in the gun
 				setBulletItemStack(gunstack, bulletStack, bulletID);
 				
-				if(type.consumeGunUponUse)
+				if(type.consumeGunUponUse && gunSlot != -1)
 					player.inventory.setInventorySlotContents(gunSlot, null);
 			}
 			
@@ -777,7 +777,7 @@ public class ItemGun extends Item implements IFlanItem
 		else onUpdateServer(itemstack, gunSlot, world, entity, isOffHand, hasOffHand);		
 	}
 	
-	public boolean Reload(ItemStack gunstack, int gunSlot, World world, Entity entity, IInventory inventory, boolean isOffHand, boolean hasOffHand, boolean forceReload, boolean isCreative)
+	public boolean Reload(ItemStack gunstack, World world, Entity entity, IInventory inventory, boolean isOffHand, boolean hasOffHand, boolean forceReload, boolean isCreative)
 	{
 		//Deployable guns cannot be reloaded in the inventory
 		if(type.deployable)

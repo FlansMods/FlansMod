@@ -62,7 +62,7 @@ public class PacketReload extends PacketBase
 		{
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			
-			if(((ItemGun)stack.getItem()).Reload(stack, slot, playerEntity.worldObj, playerEntity, playerEntity.inventory, isOffHand, data.offHandGunSlot != 0, isForced, playerEntity.capabilities.isCreativeMode))
+			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.worldObj, playerEntity, playerEntity.inventory, isOffHand, data.offHandGunSlot != 0, isForced, playerEntity.capabilities.isCreativeMode))
 			{
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;

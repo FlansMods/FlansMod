@@ -40,6 +40,7 @@ import com.flansmod.api.IControllable;
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.EntityCamera;
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
@@ -51,8 +52,13 @@ import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.InventoryHelper;
 import com.flansmod.common.guns.ItemBullet;
+import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.guns.ShotData;
+import com.flansmod.common.guns.ShotData.InstantShotData;
+import com.flansmod.common.guns.ShotData.SpawnEntityShotData;
+import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
@@ -94,7 +100,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public boolean leftMouseHeld = false, rightMouseHeld = false;
 	
 	/** Shoot delay variables */
-	public int shootDelayPrimary, shootDelaySecondary;
+	public float shootDelayPrimary, shootDelaySecondary;
 	/** Minigun speed variables */
 	public float minigunSpeedPrimary, minigunSpeedSecondary;
 	/** Current gun variables for alternating weapons. */
@@ -454,7 +460,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		if(seats[0] == null && !(seats[0].riddenByEntity instanceof EntityLivingBase))
 			return;
 		//Check shoot delay
-		if(getShootDelay(secondary) <= 0)
+		while(getShootDelay(secondary) <= 0.0f)
 		{
 			//We can shoot, so grab the available shoot points and the weaponType
 			ArrayList<DriveablePosition> shootPoints = type.shootPoints(secondary);
@@ -480,6 +486,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode;
 	}
 	
+	private EntityPlayer GetDriver()
+	{
+		if(seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer)
+			return ((EntityPlayer)seats[0].riddenByEntity);
+		else return null;
+	}
+	
 	private void shootEach(DriveableType type, DriveablePosition shootPoint, int currentGun, boolean secondary, EnumWeaponType weaponType)
 	{
 		//Rotate the gun vector to global axes
@@ -492,50 +505,58 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			PilotGun pilotGun = (PilotGun)shootPoint;
 			//Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
-			ItemStack bulletItemStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
-			//Check that neither is null and that the bullet item is actually a bullet
-			if(gunType != null && bulletItemStack != null && bulletItemStack.getItem() instanceof ItemShootable && TeamsManager.bulletsEnabled)
+			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
+			EntityPlayer driver = GetDriver();
+			
+			// For each 
+			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
+			ShootableType shootableType = shootableItem.type;
+			
+			float spread = 0.005f * gunType.bulletSpread * shootableType.bulletSpread;
+			
+			lookVector.x += (float)worldObj.rand.nextGaussian() * spread;
+			lookVector.y += (float)worldObj.rand.nextGaussian() * spread;
+			lookVector.z += (float)worldObj.rand.nextGaussian() * spread;
+			
+			lookVector.scale(500.0f);
+			
+			// Instant bullets. Do a raytrace
+			if(gunType.bulletSpeed == 0.0f)
 			{
-				ShootableType bullet = ((ItemShootable)bulletItemStack.getItem()).type;
-				if(gunType.isAmmo(bullet))
-				{
-					//Spawn a new bullet item
-					worldObj.spawnEntityInWorld(((ItemShootable)bulletItemStack.getItem()).getEntity(worldObj, 
-							Vector3f.add(gunVec, new Vector3f((float)posX, (float)posY, (float)posZ), null),
-							lookVector,
-							(EntityLivingBase)seats[0].riddenByEntity,
-							bullet.bulletSpread * gunType.bulletSpread / 2,
-							gunType.damage,
-							10.0F,
-							type));
-					
-					//Play the shoot sound
-					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);
-					//Get the bullet item damage and increment it
-					int damage = bulletItemStack.getItemDamage();
-					bulletItemStack.setItemDamage(damage + 1);	
-					//If the bullet item is completely damaged (empty)
-					if(damage + 1 == bulletItemStack.getMaxDamage())
+				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
+				{					
+					List<BulletHit> hits = FlansModRaytracer.Raytrace(worldObj, driver, false, null, gunVec, lookVector, 0);
+					Entity victim = null;
+					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
+					BulletHit firstHit = null;
+					if(!hits.isEmpty())
 					{
-						//Set the damage to 0 and consume one ammo item (unless in creative)
-						bulletItemStack.setItemDamage(0);
-						if(!driverIsCreative())
-						{
-							bulletItemStack.stackSize--;
-							if(bulletItemStack.stackSize <= 0)
-								bulletItemStack = null;
-							driveableData.setInventorySlotContents(getDriveableType().numPassengerGunners + currentGun, bulletItemStack);
-						}
+						firstHit = hits.get(0);
+						hitPos = Vector3f.add(gunVec, (Vector3f)lookVector.scale(firstHit.intersectTime), null);
+						victim = firstHit.GetEntity();
 					}
-					//Reset the shoot delay
-					setShootDelay(type.shootDelay(secondary), secondary);
+					
+					if(FlansMod.DEBUG)
+					{
+						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, gunVec, 100, 1.0f, 1.0f, 1.0f));
+					}
+
+					ShotData shotData = new InstantShotData(-1, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1);
+					((ItemGun)gunType.item).ServerHandleShotData(null, -1, worldObj, this, false, shotData);
 				}
 			}
+			// Else, spawn an entity
+			else
+			{
+				ShotData shotData = new SpawnEntityShotData(-1, type, shootableType, driver, lookVector);
+				((ItemGun)gunType.item).ServerHandleShotData(null, -1, worldObj, this, false, shotData);
+			}
+			
+			//Reset the shoot delay
+			setShootDelay(type.shootDelay(secondary), secondary);
 		}
 		else //One of the other modes
 		{
-			
-			
 			switch(weaponType)
 			{		
 			case BOMB :
@@ -1389,7 +1410,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	// Getters and setters for dual fields
 	//-------------------------------------
 	
-	public int getShootDelay(boolean secondary)
+	public float getShootDelay(boolean secondary)
 	{
 		return secondary ? shootDelaySecondary : shootDelayPrimary;
 	}
@@ -1404,11 +1425,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return secondary ? currentGunSecondary : currentGunPrimary;
 	}
 	
-	public void setShootDelay(int i, boolean secondary)
+	public void setShootDelay(float f, boolean secondary)
 	{
 		if(secondary)
-			shootDelaySecondary = i;
-		else shootDelayPrimary = i;
+			shootDelaySecondary = f;
+		else shootDelayPrimary = f;
 	}
 	
 	public void setMinigunSpeed(float f, boolean secondary)
