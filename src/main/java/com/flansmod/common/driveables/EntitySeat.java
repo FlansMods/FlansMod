@@ -49,7 +49,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	public Seat seatInfo;
 	public boolean driver;
-	
+	public RotatedAxes playerLooking;
+	public RotatedAxes prevPlayerLooking;
 	/** A set of axes used to calculate where the player is looking, x axis is the direction of looking, y is up */
 	public RotatedAxes looking;
 	/** For smooth renderering */
@@ -63,6 +64,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	/** Sound delay ticker for looping sounds */
 	public int soundDelay;
+	public int yawSoundDelay = 0;
+	public int pitchSoundDelay = 0;
+	
+	public boolean playYawSound = false;
+	public boolean playPitchSound = false;
 	
 	
 	private double playerPosX, playerPosY, playerPosZ;
@@ -81,6 +87,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		setSize(1F, 1F);
 		prevLooking = new RotatedAxes();
 		looking = new RotatedAxes();
+		playerLooking = new RotatedAxes();
+		prevPlayerLooking = new RotatedAxes();
 	}
 		
 	/** Server side seat constructor */
@@ -137,8 +145,32 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//Update sound delay ticker
 		if(soundDelay > 0)
 			soundDelay--;
+		if(yawSoundDelay > 0)
+			yawSoundDelay--;
+		if(pitchSoundDelay > 0)
+			pitchSoundDelay--;
 		
 		//updatePosition();
+		
+		if (playYawSound == true && yawSoundDelay == 0 && seatInfo.traverseSounds == true)
+		{
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.yawSound, false);
+			yawSoundDelay = seatInfo.yawSoundLength;
+		}
+		
+		if (playPitchSound == true && pitchSoundDelay == 0 && seatInfo.traverseSounds == true)
+		{
+			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, seatInfo.pitchSound, false);
+			pitchSoundDelay = seatInfo.pitchSoundLength;
+		}
+		
+		//Reset traverse sounds if player exits the vehicle
+		if(riddenByEntity != Minecraft.getMinecraft().thePlayer){
+			playYawSound = false;
+			playPitchSound = false;
+			yawSoundDelay = 0;
+			pitchSoundDelay = 0;
+		}
 		
 		//If on the client
 		if(worldObj.isRemote)
@@ -146,6 +178,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			if(driver && riddenByEntity == Minecraft.getMinecraft().thePlayer && FlansModClient.controlModeMouse && driveable.hasMouseControlMode())
 			{
 				looking = new RotatedAxes();
+				playerLooking = new RotatedAxes();
 			}
 		}
 
@@ -207,7 +240,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
 
 			//Calculate the local look axes globally
-			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(looking);
+			RotatedAxes globalLookAxes = driveable.axes.findLocalAxesGlobally(playerLooking);
 			//Set the player's rotation based on this
 			playerYaw = -90F + globalLookAxes.getYaw();
 			playerPitch = globalLookAxes.getPitch();
@@ -285,6 +318,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		
 		prevLooking = looking.clone();
+		prevPlayerLooking = playerLooking.clone();
 				
 		//Driver seat should pass input to driveable
 		if(driver)
@@ -295,18 +329,84 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
-			if(seatInfo.id == 0)
-				lookSpeed = 4F / driveable.getDriveableType().turretRotationSpeed;
+			
+			
+			
+			//Angle stuff for the player
 			
 			//Calculate the new pitch and consider pitch limiters
-			float newPitch = looking.getPitch() - deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
-			if(newPitch > -seatInfo.minPitch)
-				newPitch = -seatInfo.minPitch;
-			if(newPitch < -seatInfo.maxPitch)
-				newPitch = -seatInfo.maxPitch;
+			float newPlayerPitch = playerLooking.getPitch() - deltaY / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+			if(newPlayerPitch > -seatInfo.minPitch)
+				newPlayerPitch = -seatInfo.minPitch;
+			if(newPlayerPitch < -seatInfo.maxPitch)
+				newPlayerPitch = -seatInfo.maxPitch;
 			
 			//Calculate new yaw and consider yaw limiters
-			float newYaw = looking.getYaw() + deltaX / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+			float newPlayerYaw = playerLooking.getYaw() + deltaX / lookSpeed * Minecraft.getMinecraft().gameSettings.mouseSensitivity;
+			//Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
+			float otherNewPlayerYaw = newPlayerYaw - 360F; 
+			if(newPlayerYaw < 0)
+				otherNewPlayerYaw = newPlayerYaw + 360F;
+			if((newPlayerYaw >= seatInfo.minYaw && newPlayerYaw <= seatInfo.maxYaw) || (otherNewPlayerYaw >= seatInfo.minYaw && otherNewPlayerYaw <= seatInfo.maxYaw))
+			{
+				//All is well
+			}
+			else
+			{
+				float newPlayerYawDistFromRange = Math.min(Math.abs(newPlayerYaw - seatInfo.minYaw), Math.abs(newPlayerYaw - seatInfo.maxYaw));
+				float otherPlayerNewYawDistFromRange = Math.min(Math.abs(otherNewPlayerYaw - seatInfo.minYaw), Math.abs(otherNewPlayerYaw - seatInfo.maxYaw));
+				//If the newYaw is closer to the range than the otherNewYaw, move newYaw into the range
+				if(newPlayerYawDistFromRange <= otherPlayerNewYawDistFromRange)
+				{
+					if(newPlayerYaw > seatInfo.maxYaw)
+						newPlayerYaw = seatInfo.maxYaw;
+					if(newPlayerYaw < seatInfo.minYaw)
+						newPlayerYaw = seatInfo.minYaw;
+				}
+				//Else, the otherNewYaw is closer, so move it in
+				else
+				{
+					if(otherNewPlayerYaw > seatInfo.maxYaw)
+						otherNewPlayerYaw = seatInfo.maxYaw;
+					if(otherNewPlayerYaw < seatInfo.minYaw)
+						otherNewPlayerYaw = seatInfo.minYaw;
+					//Then match up the newYaw with the otherNewYaw
+					if(newPlayerYaw < 0)
+						newPlayerYaw = otherNewPlayerYaw - 360F;
+					else newPlayerYaw = otherNewPlayerYaw + 360F;
+				}
+			}
+			//Now set the new angles
+			playerLooking.setAngles(newPlayerYaw, newPlayerPitch, 0F);
+			
+			
+			//Move the seat accordingly
+			
+			
+			//Consider new Yaw and Yaw limiters
+			float targetX = playerLooking.getYaw();
+			
+			float yawToMove = (targetX - looking.getYaw());
+			for(; yawToMove > 180F; yawToMove -= 360F) {}
+			for(; yawToMove <= -180F; yawToMove += 360F) {}
+			
+			float signDeltaX = 0;
+			if(yawToMove > (seatInfo.aimingSpeed.x/2) && seatInfo.legacyAiming == false){
+				signDeltaX = 1;
+			} else if(yawToMove < -(seatInfo.aimingSpeed.x/2) && seatInfo.legacyAiming == false){
+				signDeltaX = -1;
+			} else{
+				signDeltaX = 0;
+			}
+
+			//Calculate new yaw and consider yaw limiters
+			float newYaw = 0f;
+			
+			if(seatInfo.legacyAiming == true || (signDeltaX == 0 && deltaX == 0)){
+				newYaw = playerLooking.getYaw();
+			} else {
+				newYaw = looking.getYaw() + signDeltaX*seatInfo.aimingSpeed.x;
+			}
 			//Since the yaw limiters go from -360 to 360, we need to find a pair of yaw values and check them both
 			float otherNewYaw = newYaw - 360F; 
 			if(newYaw < 0)
@@ -340,10 +440,58 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					else newYaw = otherNewYaw + 360F;
 				}
 			}
+			
+			//Calculate the new pitch and consider pitch limiters
+			float targetY = playerLooking.getPitch();
+			
+			float pitchToMove = (targetY - looking.getPitch());
+			for(; pitchToMove > 180F; pitchToMove -= 360F) {}
+			for(; pitchToMove <= -180F; pitchToMove += 360F) {}
+			
+			float signDeltaY = 0;
+			if(pitchToMove > (seatInfo.aimingSpeed.y/2) && seatInfo.legacyAiming == false){
+				signDeltaY = 1;
+			} else if(pitchToMove < -(seatInfo.aimingSpeed.y/2) && seatInfo.legacyAiming == false){
+				signDeltaY = -1;
+			} else {
+				signDeltaY = 0;
+			} 
+
+			float newPitch = 0f;
+			
+			if(seatInfo.legacyAiming == true || (signDeltaY == 0 && deltaY == 0)){
+				newPitch = playerLooking.getPitch();
+			} else  if (seatInfo.yawBeforePitch == false){
+				newPitch = looking.getPitch() + signDeltaY*seatInfo.aimingSpeed.y;
+			} else if (seatInfo.yawBeforePitch == true && signDeltaX == 0){
+				newPitch = looking.getPitch() + signDeltaY*seatInfo.aimingSpeed.y;
+			} else if (seatInfo.yawBeforePitch == true && signDeltaX != 0){
+				newPitch = looking.getPitch();
+			}
+			
+			if(newPitch > -seatInfo.minPitch)
+				newPitch = -seatInfo.minPitch;
+			if(newPitch < -seatInfo.maxPitch)
+				newPitch = -seatInfo.maxPitch;
+			
 			//Now set the new angles
 			looking.setAngles(newYaw, newPitch, 0F);
 			
 			FlansMod.getPacketHandler().sendToServer(new PacketSeatUpdates(this));
+			
+			if(signDeltaX != 0 && seatInfo.traverseSounds == true){
+				playYawSound = true;
+			} else {
+				playYawSound = false;
+			}
+			
+			if(signDeltaY != 0 && seatInfo.yawBeforePitch == false){
+				playPitchSound = true;
+			} else if (signDeltaY != 0 && seatInfo.yawBeforePitch == true && signDeltaX == 0){
+				playPitchSound = true;
+			} else {
+				playPitchSound = false;
+			}
 		}
 	}
 	

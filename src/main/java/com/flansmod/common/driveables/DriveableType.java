@@ -105,7 +105,8 @@ public abstract class DriveableType extends InfoType
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
 	/** */
-	public float turretRotationSpeed = 1F;
+	public float turretRotationSpeed = 2.5F;
+	
 	
 	/** Collision points for block based collisions */
 	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<DriveablePosition>();
@@ -411,10 +412,37 @@ public abstract class DriveableType extends InfoType
 			{
 				seats[0].rotatedOffset = new Vector3f(Integer.parseInt(split[1]) / 16F, Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F);
 			}
+			else if(split[0].equals("DriverAimSpeed"))
+			{
+				seats[0].aimingSpeed = new Vector3f(Float.parseFloat(split[1]), Float.parseFloat(split[2]), Float.parseFloat(split[3]));
+			}
 			else if(split[0].equals("RotatedPassengerOffset"))
 			{
 				seats[Integer.parseInt(split[1])].rotatedOffset = new Vector3f(Integer.parseInt(split[2]) / 16F, Integer.parseInt(split[3]) / 16F, Integer.parseInt(split[4]) / 16F);
 			}
+			else if(split[0].equals("PassengerAimSpeed"))
+			{
+				seats[Integer.parseInt(split[1])].rotatedOffset = new Vector3f(Float.parseFloat(split[2]), Float.parseFloat(split[3]), Float.parseFloat(split[4]));
+			}
+			else if(split[0].equals("DriverLegacyAiming")){
+				seats[0].legacyAiming = Boolean.parseBoolean(split[1]);
+			}
+			else if(split[0].equals("PassengerLegacyAiming")){
+				seats[Integer.parseInt(split[1])].legacyAiming = Boolean.parseBoolean(split[2]);
+			}
+			else if(split[0].equals("DriverYawBeforePitch")){
+				seats[0].yawBeforePitch = Boolean.parseBoolean(split[1]);
+			}
+			else if(split[0].equals("PassengerYawBeforePitch")){
+				seats[Integer.parseInt(split[1])].yawBeforePitch = Boolean.parseBoolean(split[2]);
+			}
+			else if(split[0].equals("DriverTraverseSounds")){
+				seats[0].traverseSounds = Boolean.parseBoolean(split[1]);
+			}
+			else if(split[0].equals("PassengerTraverseSounds")){
+				seats[Integer.parseInt(split[1])].traverseSounds = Boolean.parseBoolean(split[2]);
+			}
+			
 			
 			//Passengers / Gunner Seats
 			else if(split[0].equals("Passenger"))
@@ -442,6 +470,14 @@ public abstract class DriveableType extends InfoType
 				startSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("EngineSoundLength"))
 				engineSoundLength = Integer.parseInt(split[1]);
+			else if(split[0].equals("YawSoundLength"))
+				seats[0].yawSoundLength = Integer.parseInt(split[1]);
+			else if(split[0].equals("PitchSoundLength"))
+				seats[0].pitchSoundLength = Integer.parseInt(split[1]);
+			else if(split[0].equals("PassengerYawSoundLength"))
+				seats[Integer.parseInt(split[1])].yawSoundLength = Integer.parseInt(split[2]);
+			else if(split[0].equals("PassengerPitchSoundLength"))
+				seats[Integer.parseInt(split[1])].pitchSoundLength = Integer.parseInt(split[2]);
 			else if(split[0].equals("StartSound"))
 			{
 				startSound = split[1];
@@ -450,6 +486,26 @@ public abstract class DriveableType extends InfoType
 			else if(split[0].equals("EngineSound"))
 			{
 				engineSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+			}
+			else if(split[0].equals("YawSound"))
+			{
+				seats[0].yawSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+			}
+			else if(split[0].equals("PitchSound"))
+			{
+				seats[0].pitchSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+			}
+			else if(split[0].equals("PassengerYawSound"))
+			{
+				seats[Integer.parseInt(split[1])].yawSound = split[2];
+				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
+			}
+			else if(split[0].equals("PassengerPitchSound"))
+			{
+				seats[Integer.parseInt(split[1])].pitchSound = split[2];
 				FlansMod.proxy.loadSound(contentPack, "driveables", split[1]);
 			}
 			else if(split[0].equals("ShootMainSound") || split[0].equals("ShootSoundPrimary") || split[0].equals("ShellSound") || split[0].equals("BombSound"))

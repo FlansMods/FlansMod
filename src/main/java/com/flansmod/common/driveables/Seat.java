@@ -24,8 +24,22 @@ public class Seat
 	public int gunnerID;
 	/** For turret mounted seats on tanks, the seat will be positioned differently according to this offset and the yaw of the turret */
 	public Vector3f rotatedOffset = new Vector3f();
+	/** Yaw/Pitch rotation speeds (Yaw/Pitch/z) where Z is ignored*/
+	public Vector3f aimingSpeed = new Vector3f(1f, 1f, 0f);
 	/** Where the bullets come from */
 	public Vector3f gunOrigin = new Vector3f();
+	/** Legacy aiming mode*/
+	public boolean legacyAiming = false;
+	/** Traverse Yaw before pitching */
+	public boolean yawBeforePitch = false;
+	
+	/**Does the turret have traverse sounds?*/
+	public boolean traverseSounds = false;
+	
+	public String yawSound;
+	public int yawSoundLength;
+	public String pitchSound;
+	public int pitchSoundLength;
 	
 	/** Type file constructor. Line from type file should be of one of the following forms
 	 * Passenger ID x y z
