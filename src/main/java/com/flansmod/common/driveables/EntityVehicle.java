@@ -448,16 +448,26 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F); 
 			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F); 
+			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F); 
+			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F); 
 			
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
 			float dz = frontAxleCentre.z - backAxleCentre.z;
+			float drx = leftSideCentre.x - rightSideCentre.x;
+			float dry = leftSideCentre.y - rightSideCentre.y;
+			float drz = leftSideCentre.z - rightSideCentre.z;
+			
 			
 			float dxz = (float)Math.sqrt(dx * dx + dz * dz);
+			float drxz = (float)Math.sqrt(drx * drx + drz * drz);
 			
 			float yaw = (float)Math.atan2(dz, dx);
 			float pitch = -(float)Math.atan2(dy, dxz);
-			float roll = 0;
+			float roll = 0F;
+			if(type.canRoll){
+				roll = -(float)Math.atan2(dry, drxz);
+			}
 			
 			if(type.tank)
 			{
