@@ -32,6 +32,8 @@ public class Seat
 	public boolean legacyAiming = false;
 	/** Traverse Yaw before pitching */
 	public boolean yawBeforePitch = false;
+	/** Pitches gun at the last second */
+	public boolean latePitch = true;
 	
 	/**Does the turret have traverse sounds?*/
 	public boolean traverseSounds = false;
