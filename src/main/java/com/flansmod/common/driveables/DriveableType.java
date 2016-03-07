@@ -104,6 +104,8 @@ public abstract class DriveableType extends InfoType
 	public float wheelSpringStrength = 0.5F;
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
+	/** Whether or not the vehicle rolls */
+	public boolean canRoll = false;
 	/** */
 	public float turretRotationSpeed = 2.5F;
 	
@@ -134,6 +136,9 @@ public abstract class DriveableType extends InfoType
 	public int startSoundLength;
 	public String engineSound;
 	public int engineSoundLength;
+	
+	/**Track animation frames */
+	public int animFrames = 2;
 
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
@@ -210,6 +215,8 @@ public abstract class DriveableType extends InfoType
 				collisionPoints.add(new DriveablePosition(split));
 			if(split[0].equals("TurretRotationSpeed"))
 				turretRotationSpeed = Float.parseFloat(split[1]);
+			else if(split[0].equals("CanRoll"))
+				canRoll = Boolean.parseBoolean(split[1]);
 			//Boats
 			else if(split[0].equals("PlaceableOnLand"))
 				placeableOnLand = Boolean.parseBoolean(split[1]);
@@ -285,6 +292,8 @@ public abstract class DriveableType extends InfoType
 				numMissileSlots = Integer.parseInt(split[1]);
 			else if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);
+			else if(split[0].equals("TrackFrames"))
+				animFrames = Integer.parseInt(split[1])-1;
 			
 			else if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
@@ -422,7 +431,7 @@ public abstract class DriveableType extends InfoType
 			}
 			else if(split[0].equals("PassengerAimSpeed"))
 			{
-				seats[Integer.parseInt(split[1])].rotatedOffset = new Vector3f(Float.parseFloat(split[2]), Float.parseFloat(split[3]), Float.parseFloat(split[4]));
+				seats[Integer.parseInt(split[1])].aimingSpeed = new Vector3f(Float.parseFloat(split[2]), Float.parseFloat(split[3]), Float.parseFloat(split[4]));
 			}
 			else if(split[0].equals("DriverLegacyAiming")){
 				seats[0].legacyAiming = Boolean.parseBoolean(split[1]);
@@ -435,6 +444,12 @@ public abstract class DriveableType extends InfoType
 			}
 			else if(split[0].equals("PassengerYawBeforePitch")){
 				seats[Integer.parseInt(split[1])].yawBeforePitch = Boolean.parseBoolean(split[2]);
+			}
+			else if(split[0].equals("DriverLatePitch")){
+				seats[0].latePitch = Boolean.parseBoolean(split[1]);
+			}
+			else if(split[0].equals("PassengerLatePitch")){
+				seats[Integer.parseInt(split[1])].latePitch = Boolean.parseBoolean(split[2]);
 			}
 			else if(split[0].equals("DriverTraverseSounds")){
 				seats[0].traverseSounds = Boolean.parseBoolean(split[1]);
@@ -530,6 +545,11 @@ public abstract class DriveableType extends InfoType
 				emitter.origin = new Vector3f(split[3], shortName);
 				emitter.extents = new Vector3f(split[4], shortName);
 				emitter.velocity = new Vector3f(split[5], shortName);
+				emitter.minThrottle = Float.parseFloat(split[6]);
+				emitter.maxThrottle = Float.parseFloat(split[7]);
+				emitter.minHealth = Float.parseFloat(split[8]);
+				emitter.maxHealth = Float.parseFloat(split[9]);
+				emitter.part = split[10];
 				//Scale from model coords to world coords
 				emitter.origin.scale(1.0f / 16.0f);
 				emitter.extents.scale(1.0f / 16.0f);
@@ -662,5 +682,15 @@ public abstract class DriveableType extends InfoType
 		public Vector3f extents;
 		/** The velocity of the particle */
 		public Vector3f velocity;
+		/** Lower throttle bound */
+		public float minThrottle;
+		/** Upper throttle bound */
+		public float maxThrottle;
+		/** Model part the emitter is bound to */
+		public String part;
+		/** Minimum health for the emitter to work */
+		public float minHealth;
+		/** Maximum health for the emitter to work */
+		public float maxHealth;
 	}
 }
