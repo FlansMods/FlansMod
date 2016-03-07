@@ -361,6 +361,16 @@
 		"sounds" : [ "flansmod:MinigunShoot" ]
 		},
 
+	"TurretTraverse1": {
+		"category" : "player",
+		"sounds" : [ "flansmod:TurretTraverse1" ]
+	},
+
+	"TurretTraverse2": {
+		"category" : "player",
+		"sounds" : [ "flansmod:TurretTraverse2" ]
+	},
+
 	"JetIdle": {
 		"category" : "player",
 		"sounds" : [ "flansmod:JetIdle" ]
