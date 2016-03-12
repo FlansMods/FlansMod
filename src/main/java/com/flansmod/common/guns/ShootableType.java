@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ShootableType extends InfoType 
+public abstract class ShootableType extends InfoType 
 {
 	//Aesthetics
 	/** The model to render for this grenade in the world */
@@ -168,5 +168,16 @@ public class ShootableType extends InfoType
 	public static ShootableType getShootableType(int hash) 
 	{
 		return shootables.get(hash);
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
 	}
 }

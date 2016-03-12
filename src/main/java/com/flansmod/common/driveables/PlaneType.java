@@ -99,19 +99,19 @@ public class PlaneType extends DriveableType
 			{
 				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
 				propellers.add(propeller);
-				recipe.add(new ItemStack(propeller.itemType.item));
+				driveableRecipe.add(new ItemStack(propeller.itemType.item));
 			}
 			if(split[0].equals("HeliPropeller"))
 			{
 				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
 				heliPropellers.add(propeller);
-				recipe.add(new ItemStack(propeller.itemType.item));
+				driveableRecipe.add(new ItemStack(propeller.itemType.item));
 			}
 			if(split[0].equals("HeliTailPropeller"))
 			{
 				Propeller propeller = new Propeller(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), EnumDriveablePart.getPart(split[5]), PartType.getPart(split[6]));
 				heliTailPropellers.add(propeller);
-				recipe.add(new ItemStack(propeller.itemType.item));
+				driveableRecipe.add(new ItemStack(propeller.itemType.item));
 			}
 
 			//Sound

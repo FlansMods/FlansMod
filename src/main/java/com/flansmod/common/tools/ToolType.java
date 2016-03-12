@@ -116,4 +116,15 @@ public class ToolType extends InfoType
 	{
 		return tools.get(shortName);
 	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{		
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return null;
+	}
 }

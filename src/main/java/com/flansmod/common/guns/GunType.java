@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -18,10 +19,11 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.ModelMG;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
-public class GunType extends InfoType implements IScope
+public class GunType extends PaintableType implements IScope
 {
 	//Gun Behaviour Variables
 	/** The list of bullet types that can be used in this gun */
@@ -652,6 +654,21 @@ public class GunType extends InfoType implements IScope
 	{
 		return guns.get(hash);
 	}
-	
 
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
+	}
+	
+	@Override
+	public float GetRecommendedScale()
+	{
+		return 60.0f;
+	}
 }

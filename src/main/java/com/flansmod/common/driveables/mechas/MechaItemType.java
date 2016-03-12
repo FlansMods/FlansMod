@@ -2,6 +2,7 @@ package com.flansmod.common.driveables.mechas;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -155,6 +156,22 @@ public class MechaItemType extends InfoType
 	{
 		if(modelString != null)
 			model = FlansMod.proxy.loadModel(modelString, shortName, ModelMechaTool.class);
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
 	}
 
 }

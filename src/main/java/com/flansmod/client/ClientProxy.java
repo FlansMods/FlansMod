@@ -47,6 +47,7 @@ import com.flansmod.client.gui.GuiDriveableRepair;
 import com.flansmod.client.gui.GuiGunBox;
 import com.flansmod.client.gui.GuiGunModTable;
 import com.flansmod.client.gui.GuiMechaInventory;
+import com.flansmod.client.gui.GuiPaintjobTable;
 import com.flansmod.client.model.RenderAAGun;
 import com.flansmod.client.model.RenderBullet;
 import com.flansmod.client.model.RenderFlag;
@@ -93,6 +94,7 @@ import com.flansmod.common.network.PacketBuyArmour;
 import com.flansmod.common.network.PacketBuyWeapon;
 import com.flansmod.common.network.PacketCraftDriveable;
 import com.flansmod.common.network.PacketRepairDriveable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.EntityFlag;
@@ -101,6 +103,7 @@ import com.flansmod.common.teams.TileEntitySpawner;
 import com.flansmod.common.tools.EntityParachute;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
 public class ClientProxy extends CommonProxy
 {
@@ -129,9 +132,9 @@ public class ClientProxy extends CommonProxy
 		{
 			if(type != null && type.item != null)
 			{
-				if(type instanceof GunType)
+				if(type instanceof PaintableType)
 				{
-					for(Paintjob paintjob : ((GunType)type).paintjobs)
+					for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 					{
 						ModelBakery.addVariantName(type.item, new String[] {"flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName))});
 						Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
@@ -152,6 +155,9 @@ public class ClientProxy extends CommonProxy
 		ModelBakery.addVariantName(Item.getItemFromBlock(FlansMod.spawner), new String[] {"flansmod:teamsSpawner_items", "flansmod:teamsSpawner_players", "flansmod:teamsSpawner_vehicles"});
 
 		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.rainbowPaintcan, 0, new ModelResourceLocation("flansmod:rainbowPaintcan", "inventory"));
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
+		ModelBakery.addVariantName(Item.getItemFromBlock(FlansMod.paintjobTable), new String[] {"flansmod:paintjobTable"});
 		
 		gunRenderer = new RenderGun();
 		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
@@ -308,6 +314,7 @@ public class ClientProxy extends CommonProxy
 		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
 		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
+		case 13: return new GuiPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
@@ -481,9 +488,9 @@ public class ClientProxy extends CommonProxy
 								"\", \"east\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"south\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"west\": \"flansmod:blocks/" + box.sideTexturePath + "\" } } ");
 						createJSONFile(new File(blockstatesDir, type.shortName + ".json"), "{ \"variants\": { \"normal\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");
 					}
-					else if(typeToCheckFor == EnumType.gun)
+					else if(type instanceof PaintableType)
 					{
-						for(Paintjob paintjob : ((GunType)type).paintjobs)
+						for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 						{
 							createJSONFile(new File(itemModelsDir, type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");							
 						}

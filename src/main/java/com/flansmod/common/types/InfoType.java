@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -46,14 +47,6 @@ public class InfoType
 	/** If this is set to false, then this item cannot be dropped */
 	public boolean canDrop = true;
 	
-	//Paintjobs
-	/** The list of all available paintjobs for this gun */
-	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
-	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
-	public Paintjob defaultPaintjob;	
-	/** Assigns IDs to paintjobs */
-	private int nextPaintjobID = 1;
-	
 	/** The probability that this item will appear in a dungeon chest. 
 	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
 	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
@@ -86,19 +79,9 @@ public class InfoType
 			read(split, file);
 		}
 		postRead(file);
-		//After all lines have been read, set up the default paintjob
-		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
-		//Move to a new list to ensure that the default paintjob is always first
-		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
-		newPaintjobList.add(defaultPaintjob);
-		newPaintjobList.addAll(paintjobs);
-		paintjobs = newPaintjobList;
-		if(infoTypes.containsKey(shortName.hashCode()))
-		{
-			FlansMod.Assert(false, "Duplicate info type name " + shortName);
-		}
+
 		infoTypes.put(shortName.hashCode(), this);
-		totalDungeonChance += dungeonChance * paintjobs.size();
+		totalDungeonChance += dungeonChance;
 	}
 	
 	/** Method for performing actions prior to reading the type file */
@@ -106,6 +89,8 @@ public class InfoType
 	
 	/** Method for performing actions after reading the type file */
 	protected void postRead(TypeFile file) {}
+	
+	public ModelBase GetModel() { return null; }
 
 	/** Pack reader */
 	protected void read(String[] split, TypeFile file)
@@ -184,20 +169,6 @@ public class InfoType
 			}
 			else if(split[0].equals("CanDrop"))
 				canDrop = Boolean.parseBoolean(split[1]);
-			//Paintjobs
-			else if(split[0].toLowerCase().equals("paintjob"))
-			{
-				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
-				for(int i = 0; i < (split.length - 3) / 2; i++)
-					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
-				if(split[1].contains("_"))
-				{
-					String[] splat = split[1].split("_");
-					if(splat[0].equals(iconPath))
-						split[1] = splat[1];
-				}
-				paintjobs.add(new Paintjob(nextPaintjobID++, split[1], split[2], dyeStacks));
-			}
 		} catch (Exception e)
 		{
 			FlansMod.log("Reading file failed : " + shortName);
@@ -322,7 +293,7 @@ public class InfoType
 	}
 	
 	/** Return a dye damage value from a string name */
-	private int getDyeDamageValue(String dyeName)
+	protected int getDyeDamageValue(String dyeName)
 	{
 		int damage = -1;
 		for(int i = 0; i < EnumDyeColor.values().length; i++)
@@ -432,21 +403,6 @@ public class InfoType
 		return new PotionEffect(potionID, duration, amplifier, false, false);
 	}
 	
-	public Paintjob getPaintjob(String s)
-	{
-		for(Paintjob paintjob : paintjobs)
-		{
-			if(paintjob.iconName.equals(s))
-				return paintjob;
-		}
-		return defaultPaintjob;
-	}
-	
-	public Paintjob getPaintjob(int i)
-	{
-		return paintjobs.get(i);
-	}
-	
 	public static Material getMaterial(String mat)
 	{
 		return Material.ground;
@@ -456,15 +412,8 @@ public class InfoType
 	{
 		if(dungeonChance > 0)
 		{
-			for(int i = 0; i < paintjobs.size(); i++)
-			{
-				ItemStack stack = new ItemStack(this.item);
-				NBTTagCompound tags = new NBTTagCompound();
-				tags.setString("Paint", paintjobs.get(i).iconName);
-				stack.setTagCompound(tags);
-				
-				addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
-			}
+			ItemStack stack = new ItemStack(this.item);
+			addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
 		}
 	}
 	

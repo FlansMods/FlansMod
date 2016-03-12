@@ -26,3 +26,7 @@ Recipe W cloth F fiberglass
 FFF
 WWW
 FFF
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob Silencer_Loud Silencer_Loud yellow 1

@@ -14,3 +14,5 @@ item.flagpole.name=Flagpole
 tile.teamsSpawner.0.name=Item Spawner
 tile.teamsSpawner.1.name=Player Spawner
 tile.teamsSpawner.2.name=Vehicle Spawner
+item.rainbowPaintcan.name=Rainbow Paint Can (for Custom Paintjobs)
+block.paintjobTable.name=Paintjob Table

@@ -3,6 +3,7 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -188,5 +189,21 @@ public class AAGunType extends InfoType
 	public void addDungeonLoot() 
 	{
 		//Do not add AA guns to dungeon chests. That would be so op.
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
 	}
 }

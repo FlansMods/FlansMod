@@ -7,6 +7,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -111,5 +112,21 @@ public class ArmourType extends InfoType
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelCustomArmour.class);
 		if(model != null)
 			model.type = this;
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
 	}
 }

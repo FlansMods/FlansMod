@@ -21,6 +21,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
@@ -78,6 +79,8 @@ import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketHandler;
+import com.flansmod.common.paintjob.BlockPaintjobTable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.ArmourBoxType;
@@ -158,6 +161,10 @@ public class FlansMod
 	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
+	
+	/** Custom paintjob item */
+	public static Item rainbowPaintcan;
+	public static BlockPaintjobTable paintjobTable;
 
 	/** The mod pre-initialiser method */
 	@EventHandler
@@ -203,7 +210,12 @@ public class FlansMod
 		spawner = (BlockSpawner)(new BlockSpawner(Material.iron).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
 		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
-				
+		
+		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
+		GameRegistry.registerItem(rainbowPaintcan, "rainbowPaintcan", MODID);
+		paintjobTable = new BlockPaintjobTable();
+		GameRegistry.registerBlock(paintjobTable, "paintjobTable");
+		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, MODID);
 		
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
 		

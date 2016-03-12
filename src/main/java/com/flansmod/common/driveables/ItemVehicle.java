@@ -30,9 +30,11 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
-public class ItemVehicle extends ItemMapBase implements IFlanItem
+public class ItemVehicle extends ItemMapBase implements IPaintableItem
 {
 	public VehicleType type;
 	
@@ -155,7 +157,7 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 	
 	public DriveableData getData(ItemStack itemstack, World world)
 	{
-		return new DriveableData(getTagCompound(itemstack, world));
+		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
 	}
 	
 	@Override
@@ -185,6 +187,12 @@ public class ItemVehicle extends ItemMapBase implements IFlanItem
 	
 	@Override
 	public InfoType getInfoType() 
+	{
+		return type;
+	}
+
+	@Override
+	public PaintableType GetPaintableType()
 	{
 		return type;
 	}

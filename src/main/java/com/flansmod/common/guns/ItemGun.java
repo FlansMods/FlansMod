@@ -41,7 +41,9 @@ import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 import com.google.common.collect.Multimap;
 
@@ -49,6 +51,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
@@ -82,7 +85,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemGun extends Item implements IFlanItem
+public class ItemGun extends Item implements IPaintableItem
 {
 	private static final int CLIENT_TO_SERVER_UPDATE_INTERVAL = 1;
 	private static final int SERVER_TO_CLIENT_UPDATE_INTERVAL = 2;
@@ -90,6 +93,10 @@ public class ItemGun extends Item implements IFlanItem
 	private GunType type;
 	
 	public GunType GetType() { return type; }
+	@Override
+	public InfoType getInfoType() { return type; }
+	@Override
+	public PaintableType GetPaintableType() { return type; }
 	
 	private int soundDelay = 0;
 	
@@ -1229,6 +1236,8 @@ public class ItemGun extends Item implements IFlanItem
 		return true;
 	}
 	
+	// ----------------- Paintjobs -----------------
+	
     @Override
     public void getSubItems(Item item, CreativeTabs tabs, List list)
     {
@@ -1248,6 +1257,8 @@ public class ItemGun extends Item implements IFlanItem
     	gunStack.setTagCompound(tags);
         list.add(gunStack);
     }
+    
+    // ---------------------------------------------
 	
     @Override
     public int getMaxItemUseDuration(ItemStack par1ItemStack)
@@ -1273,12 +1284,6 @@ public class ItemGun extends Item implements IFlanItem
         	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", type.meleeDamage, 0));
        	return map;
     }
-
-	@Override
-	public InfoType getInfoType() 
-	{
-		return type;
-	}
 	
 	@Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
@@ -1298,6 +1303,4 @@ public class ItemGun extends Item implements IFlanItem
     {
         return false;
     }
-	
-    
 }

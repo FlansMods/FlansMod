@@ -550,7 +550,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
 		{
-			ItemStack vehicleStack = new ItemStack(type.item, 1, 0);
+			ItemStack vehicleStack = new ItemStack(type.item, 1, driveableData.paintjobID);
 			NBTTagCompound tags = new NBTTagCompound();
 			vehicleStack.setTagCompound(tags);
 			driveableData.writeToNBT(tags);

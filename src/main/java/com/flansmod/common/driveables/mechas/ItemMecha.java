@@ -24,9 +24,11 @@ import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
-public class ItemMecha extends Item implements IFlanItem
+public class ItemMecha extends Item implements IPaintableItem
 {
 	public MechaType type;
 
@@ -110,7 +112,7 @@ public class ItemMecha extends Item implements IFlanItem
 	
 	public DriveableData getData(ItemStack itemstack, World world)
 	{
-		return new DriveableData(getTagCompound(itemstack, world));
+		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
 	}
    
 	@Override
@@ -139,6 +141,12 @@ public class ItemMecha extends Item implements IFlanItem
     
 	@Override
 	public InfoType getInfoType() 
+	{
+		return type;
+	}
+
+	@Override
+	public PaintableType GetPaintableType()
 	{
 		return type;
 	}

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
@@ -22,10 +23,11 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
 
-public abstract class DriveableType extends InfoType
+public abstract class DriveableType extends PaintableType
 {
 	@SideOnly(value = Side.CLIENT)
 	/** The plane model */
@@ -37,7 +39,7 @@ public abstract class DriveableType extends InfoType
 	/** Recipe parts associated to each driveable part */
 	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<EnumDriveablePart, ItemStack[]>();
 	/** Recipe parts as one complete list */
-	public ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
+	public ArrayList<ItemStack> driveableRecipe = new ArrayList<ItemStack>();
 	
 	//Ammo
 	/** If true, then all ammo is accepted. Default is true to minimise backwards compatibility issues */
@@ -183,6 +185,12 @@ public abstract class DriveableType extends InfoType
 			}
 		}
 		types.add(this);
+	}
+	
+	@Override
+	public void postRead(TypeFile file)
+	{
+		super.postRead(file);
 	}
 	
 	@Override
@@ -339,7 +347,7 @@ public abstract class DriveableType extends InfoType
 				PilotGun pilotGun = (PilotGun)getShootPoint(split);
 				shootPointsSecondary.add(pilotGun);
 				pilotGuns.add(pilotGun);
-				recipe.add(new ItemStack(pilotGun.type.item));
+				driveableRecipe.add(new ItemStack(pilotGun.type.item));
 			}
 			else if(split[0].equals("BombPosition"))
 			{
@@ -368,7 +376,7 @@ public abstract class DriveableType extends InfoType
 					String itemName = damaged ? split[2 * i + 3].split("\\.")[0] : split[2 * i + 3];
 					int damage = damaged ? Integer.parseInt(split[2 * i + 3].split("\\.")[1]) : 0;
 					stacks[i] = getRecipeElement(itemName, amount, damage, shortName);
-					recipe.add(stacks[i]);
+					driveableRecipe.add(stacks[i]);
 				}
 				partwiseRecipe.put(part, stacks);
 			}
@@ -388,7 +396,7 @@ public abstract class DriveableType extends InfoType
 					FlansMod.log("Failed to find dye colour : " + split[2] + " while adding " + file.name);
 					return;
 				}
-				recipe.add(new ItemStack(Items.dye, amount, damage));
+				driveableRecipe.add(new ItemStack(Items.dye, amount, damage));
 			}
 			
 			
@@ -452,7 +460,7 @@ public abstract class DriveableType extends InfoType
 				if(seat.gunType != null)
 				{
 					seat.gunnerID = numPassengerGunners++;
-					recipe.add(new ItemStack(seat.gunType.item));
+					driveableRecipe.add(new ItemStack(seat.gunType.item));
 				}
 			}
 			else if(split[0].equals("GunOrigin"))
@@ -662,5 +670,17 @@ public abstract class DriveableType extends InfoType
 		public Vector3f extents;
 		/** The velocity of the particle */
 		public Vector3f velocity;
+	}
+	
+	@Override
+	public ModelBase GetModel()
+	{
+		return model;
+	}
+	
+	@Override
+	public float GetRecommendedScale()
+	{
+		return 100.0f / cameraDistance;
 	}
 }

@@ -73,8 +73,6 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, new RenderTeleporter(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, new RenderMecha(Minecraft.getMinecraft().getRenderManager()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, new RenderNukeDrop(Minecraft.getMinecraft().getRenderManager()));
-		
-		FlansMod.getPacketHandler().registerPacket(PacketApocalypseCountdown.class);
 	}
 	
 	private void registerVanillaItemModel(Item... items)

@@ -28,3 +28,7 @@ Recipe R yellowDust F fiberglass G thinGlass
 FFF
 GRG
 FFF
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob ACOGSight_GreenDot ACOGSight_GreenDot lime 1

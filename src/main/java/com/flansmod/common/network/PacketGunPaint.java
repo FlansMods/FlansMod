@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.flansmod.common.guns.ContainerGunModTable;
+import com.flansmod.common.paintjob.ContainerPaintjobTable;
 
 public class PacketGunPaint extends PacketBase 
 {
@@ -37,8 +38,16 @@ public class PacketGunPaint extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		ContainerGunModTable gunModTable = ((ContainerGunModTable)playerEntity.openContainer);
-		gunModTable.clickPaintjob(paintjobID);
+		if(playerEntity.openContainer instanceof ContainerGunModTable)
+		{
+			ContainerGunModTable gunModTable = ((ContainerGunModTable)playerEntity.openContainer);
+			gunModTable.clickPaintjob(paintjobID);
+		}
+		else if(playerEntity.openContainer instanceof ContainerPaintjobTable)
+		{
+			ContainerPaintjobTable paintjobTable = ((ContainerPaintjobTable)playerEntity.openContainer);
+			paintjobTable.clickPaintjob(paintjobID);
+		}
 	}
 
 	@Override

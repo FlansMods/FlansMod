@@ -78,3 +78,7 @@ SetupPart backLeftWheel 100 -46 -10 16 21 21 7
 BulletDetection 5
 Description US Marines Jeep
 ModelScale 1
+//Paintjob Settings
+//Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob Humvee_Test SkinHumvee_Test magenta 10

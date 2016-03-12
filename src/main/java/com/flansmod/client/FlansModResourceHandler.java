@@ -8,6 +8,7 @@ import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
 public class FlansModResourceHandler 
 {
@@ -107,7 +108,7 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 
-	public static ResourceLocation getIcon(GunType gunType, Paintjob paintjob) 
+	public static ResourceLocation getIcon(PaintableType paintableType, Paintjob paintjob) 
 	{
 		if(paintjobIconMap.containsKey(paintjob))
 		{

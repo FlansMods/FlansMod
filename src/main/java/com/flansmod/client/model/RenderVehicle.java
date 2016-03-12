@@ -25,11 +25,14 @@ import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveablePosition;
+import com.flansmod.common.driveables.DriveableType;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.driveables.VehicleType;
+import com.flansmod.common.guns.Paintjob;
 
 public class RenderVehicle extends Render implements IItemRenderer
 {
@@ -165,7 +168,9 @@ public class RenderVehicle extends Render implements IItemRenderer
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
-		return FlansModResourceHandler.getTexture(((EntityVehicle)entity).getVehicleType());
+		DriveableType type = ((EntityDriveable)entity).getDriveableType();
+		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
+		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 	
 	@Override

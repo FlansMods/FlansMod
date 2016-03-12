@@ -30,6 +30,8 @@ import com.flansmod.common.guns.ContainerGunModTable;
 import com.flansmod.common.guns.boxes.ContainerGunBox;
 import com.flansmod.common.guns.boxes.GunBoxType;
 import com.flansmod.common.network.PacketBreakSound;
+import com.flansmod.common.paintjob.ContainerPaintjobTable;
+import com.flansmod.common.paintjob.TileEntityPaintjobTable;
 import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
@@ -137,6 +139,7 @@ public class CommonProxy
 		case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
 		case 11 : return null; //Armour box. No server side
 		case 12 : return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
+		case 13: return new ContainerPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
@@ -156,7 +159,7 @@ public class CommonProxy
 		//This becomes false if some recipe element is not found on the player
 		boolean canCraft = true;
 		//Iterate over rows then columns
-		for(ItemStack recipeStack : type.recipe)
+		for(ItemStack recipeStack : type.driveableRecipe)
 		{
 			//The total amount of items found that match this recipe stack
 			int totalAmountFound = 0;

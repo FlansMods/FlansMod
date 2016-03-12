@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -232,5 +233,21 @@ public class Team extends InfoType
 			return dataB.score - dataA.score;
 		}
 		
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return null;
 	}
 }

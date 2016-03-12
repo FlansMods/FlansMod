@@ -195,10 +195,10 @@ public class GuiDriveableCrafting extends GuiScreen
 					//Work out what recipe item this is
 					int recipeItemNumber = recipeScroll * 4 + r * 4 + c;
 					//If this is actually a valid recipe item
-					if(recipeItemNumber < selectedType.recipe.size())
+					if(recipeItemNumber < selectedType.driveableRecipe.size())
 					{
 						//Get the itemstack required by the recipe
-						ItemStack recipeStack = selectedType.recipe.get(recipeItemNumber);
+						ItemStack recipeStack = selectedType.driveableRecipe.get(recipeItemNumber);
 						//The total amount of items found that match this recipe stack
 						int totalAmountFound = 0;
 						//Iterate over the temporary inventory
@@ -370,7 +370,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			if(x >= 83 && x <= 93 && y >= 177 && y <= 187)
 			{
 				DriveableType selectedType = DriveableType.types.get(selectedBlueprint);
-				if(selectedType != null && recipeScroll * 4 + 12 < selectedType.recipe.size())
+				if(selectedType != null && recipeScroll * 4 + 12 < selectedType.driveableRecipe.size())
 					recipeScroll++;
 			}
 		}

@@ -42,12 +42,6 @@ public class VehicleType extends DriveableType
 		super.preRead(file);
 		wheelPositions = new DriveablePosition[4];
 	}
-
-	@Override
-	protected void postRead(TypeFile file)
-	{
-		super.postRead(file);
-	}
 	
 	@Override
 	protected void read(String[] split, TypeFile file)

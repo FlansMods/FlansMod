@@ -4,7 +4,9 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class BoxType extends InfoType 
+import net.minecraft.client.model.ModelBase;
+
+public abstract class BoxType extends InfoType 
 {
 	public String topTexturePath;
 	public String sideTexturePath;
@@ -32,5 +34,21 @@ public class BoxType extends InfoType
 			FlansMod.log("Reading box file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	protected void postRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
+		return null;
 	}
 }

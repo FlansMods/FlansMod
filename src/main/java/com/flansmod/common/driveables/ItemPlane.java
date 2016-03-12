@@ -28,9 +28,11 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
-public class ItemPlane extends Item implements IFlanItem
+public class ItemPlane extends Item implements IPaintableItem
 {
 	public PlaneType type;
 	
@@ -160,7 +162,7 @@ public class ItemPlane extends Item implements IFlanItem
 	
 	public DriveableData getPlaneData(ItemStack itemstack, World world)
 	{
-		return new DriveableData(getTagCompound(itemstack, world));
+		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
 	}
 		
 	@Override
@@ -190,6 +192,12 @@ public class ItemPlane extends Item implements IFlanItem
 	
 	@Override
 	public InfoType getInfoType() 
+	{
+		return type;
+	}
+
+	@Override
+	public PaintableType GetPaintableType()
 	{
 		return type;
 	}

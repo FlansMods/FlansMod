@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -93,7 +94,6 @@ public class PlayerClass extends InfoType
 	@Override
 	protected void postRead(TypeFile file) 
 	{
-		super.postRead(file);
 		onWorldLoad(null);
 	}
 	
@@ -191,6 +191,17 @@ public class PlayerClass extends InfoType
 			if(playerClass.shortName.equals(s))
 				return playerClass;
 		}
+		return null;
+	}
+
+	@Override
+	protected void preRead(TypeFile file)
+	{
+	}
+
+	@Override
+	public ModelBase GetModel()
+	{
 		return null;
 	}
 }
