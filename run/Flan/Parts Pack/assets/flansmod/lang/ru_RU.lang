@@ -1,5 +1,6 @@
 item.smallBomb.name=Маленькая бомба
-item.shell.name=Танковый снаряд
+item.shell.name=Бронебойный танковый снаряд
+item.HEshell.name=Осколочно-фугасный танковый снаряд
 item.napalm.name=Напалм
 item.largeBomb.name=Большая бомба
 item.metalPropeller.name=Металлический винт
