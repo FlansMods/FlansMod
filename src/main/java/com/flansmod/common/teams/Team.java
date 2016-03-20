@@ -9,6 +9,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -246,6 +248,7 @@ public class Team extends InfoType
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return null;

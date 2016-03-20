@@ -197,6 +197,7 @@ public class AttachmentType extends PaintableType implements IScope
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return model;

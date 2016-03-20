@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -34,6 +35,7 @@ import com.flansmod.common.guns.IScope;
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,7 +45,8 @@ public class RenderGun implements IItemRenderer
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
-
+	public static boolean bindTextures = true;
+	
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
 	{
@@ -356,7 +359,17 @@ public class RenderGun implements IItemRenderer
 				
 		//Load texture
 		//renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
-		renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getItemDamage())));
+		if(bindTextures)
+		{
+			if(PaintableType.HasCustomPaintjob(item))
+			{
+				renderEngine.bindTexture(PaintableType.GetCustomPaintjobSkinResource(item));
+			}
+			else
+			{
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getItemDamage())));
+			}
+		}
 		
 		if(scopeAttachment != null)
 			GL11.glTranslatef(0F, -scopeAttachment.model.renderOffset / 16F, 0F);

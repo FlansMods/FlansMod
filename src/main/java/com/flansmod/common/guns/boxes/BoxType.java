@@ -5,6 +5,8 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BoxType extends InfoType 
 {
@@ -47,6 +49,7 @@ public abstract class BoxType extends InfoType
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return null;

@@ -673,6 +673,7 @@ public abstract class DriveableType extends PaintableType
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return model;

@@ -20,6 +20,8 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
@@ -90,6 +92,7 @@ public class InfoType
 	/** Method for performing actions after reading the type file */
 	protected void postRead(TypeFile file) {}
 	
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel() { return null; }
 
 	/** Pack reader */

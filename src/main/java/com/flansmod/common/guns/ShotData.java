@@ -14,6 +14,7 @@ public class ShotData
 	public InfoType shotFrom;
 	public ShootableType shotType;
 	
+	
 	public ShotData(int slot, InfoType shotFrom, ShootableType shotType)
 	{
 		this.slot = slot;

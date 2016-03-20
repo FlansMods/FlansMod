@@ -1,8 +1,14 @@
 package com.flansmod.client.gui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -10,6 +16,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -63,6 +70,18 @@ public class GuiPaintjobTable extends GuiContainer
 	private static int[][] paletteColours = new int[paletteSizeX][paletteSizeY];
 	private static int[] baseColours = new int[] { 0x000000, 0xffffff, 0xff0000, 0xff5500, 0xffaa00, 0xffff00, 0xaaff00, 0x55ff00, 0x00ff00, 0x00ff55, 0x00ffaa, 0x00ffff, 0x00aaff, 0x0055ff, 0x0000ff, 0x5500ff, 0xaa00ff, 0xff00ff };
 	private static int currentColour;
+	
+	private static int flatTextureWindowX = 300, flatTextureWindowY = 100;
+	private static boolean movingFlatTextureWindow = false;
+	
+	
+	
+	//private static final int BYTES_PER_PIXEL = 4;
+	//private static int textureID = -1;
+	//private static BufferedImage currentTexture;
+	
+	private static DynamicTexture dynamicTexture;
+	private static int dynamicTextureX, dynamicTextureY;
 	
 	static { ResetPalette(); }
 	
@@ -146,6 +165,12 @@ public class GuiPaintjobTable extends GuiContainer
         	inventorySlots.getSlot(i).xDisplayPosition += dPos;
         }
         
+        if(movingFlatTextureWindow)
+        {
+        	flatTextureWindowX = Mouse.getEventX() * this.width / this.mc.displayWidth  - guiLeft;
+        	flatTextureWindowY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - guiTop;	
+        }
+        
         prevMainPageX = xPos;
 	}
 	
@@ -154,6 +179,9 @@ public class GuiPaintjobTable extends GuiContainer
 	
 	private int GetCustomPageX() { return (int)(500.0f * (1.0f - customModeTransitionTimer)); }
 	private int GetCustomPageY() { return 0; }
+	
+	private int GetFlatTextureWindowX() { return GetCustomPageX() + flatTextureWindowX; }
+	private int GetFlatTextureWindowY() { return GetCustomPageY() + flatTextureWindowY; }
 	
 	private Vector3f GetRenderOrigin()
 	{
@@ -168,11 +196,22 @@ public class GuiPaintjobTable extends GuiContainer
         // Render main screen
         if(customModeTransitionTimer <= 0.999f)
         {
-            int xOrigin = ((width - xSize) / 2)  + GetMainPageX();
-            int yOrigin = ((height - ySize) / 2) + GetMainPageY();
+            //int xOrigin = ((width - xSize) / 2)  + GetMainPageX();
+            //int yOrigin = ((height - ySize) / 2) + GetMainPageY();
             
     		fontRendererObj.drawString("Inventory", GetMainPageX() + 8, GetMainPageY() + (ySize - 94) + 2, 0x404040);
     		fontRendererObj.drawString("Paintjob Table", GetMainPageX() + 8, GetMainPageY() + 6, 0x404040);
+        }
+        
+        // Render custom screen
+        if(customModeTransitionTimer >= 0.001f)
+        {
+            int xOrigin = ((width - xSize) / 2)  + GetCustomPageX() - 32;
+            int yOrigin = ((height - ySize) / 2) + GetCustomPageY();
+            
+    		fontRendererObj.drawString("Confirm", xOrigin - 7, yOrigin + 169, 0x000000);
+    		fontRendererObj.drawString("Cancel", xOrigin - 6, yOrigin + 186, 0x000000);
+    		fontRendererObj.drawString("Inventory", xOrigin - 12, yOrigin + 203, 0x000000);
         }
 
         Vector3f renderOrigin = GetRenderOrigin();
@@ -212,12 +251,26 @@ public class GuiPaintjobTable extends GuiContainer
 		        
 		        Paintjob paintjob = paintableType.paintjobs.get(tempStack.getItemDamage());
 
+		        if(inCustomMode)
+		        {
+		        	bindWorkingTexture();
+		        }
+		        
 				switch(eType)
 				{
-					case gun: ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack); break;
+					case gun: 
+					{
+				        if(inCustomMode)
+				        	RenderGun.bindTextures = false;
+				        
+						ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack);
+						RenderGun.bindTextures = true;
+						break;
+					}
 					case attachment: 
 					{
-						mc.renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+						if(!inCustomMode)
+							mc.renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
 						((ModelAttachment)paintableType.GetModel()).renderAttachment(0.0625f);
 						break;
 					}
@@ -225,7 +278,8 @@ public class GuiPaintjobTable extends GuiContainer
 					case vehicle:
 					case mecha:
 					{
-						mc.renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+						if(!inCustomMode)
+							mc.renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
 						((ModelDriveable)paintableType.GetModel()).render((DriveableType)paintableType);
 						break;
 					}
@@ -245,7 +299,7 @@ public class GuiPaintjobTable extends GuiContainer
 		GlStateManager.disableDepth();
 		
         mc.renderEngine.bindTexture(texture);
-        
+
         int textureX = 512;
         int textureY = 256;
         
@@ -318,7 +372,7 @@ public class GuiPaintjobTable extends GuiContainer
     	        	//If we have only one, use the double ended slot 
     	        	if(numDyes == 1)
     	        	{
-    	        		drawModalRectWithCustomSizedTexture(originX, originY, (haveDyes[0] ? 279 : 256), 46, 22, 22, textureX, textureY);
+    	        		drawModalRectWithCustomSizedTexture(originX, originY, (haveDyes[0] ? 379 : 356), 0, 22, 22, textureX, textureY);
     	        	}
     	        	else
     	        	{
@@ -403,12 +457,136 @@ public class GuiPaintjobTable extends GuiContainer
             drawModalRectWithCustomSizedTexture(xOrigin + 212 + (int)(red * componentBarLength), yOrigin + 207, 317, 21, 3, 12, textureX, textureY);
             drawModalRectWithCustomSizedTexture(xOrigin + 212 + (int)(green * componentBarLength), yOrigin + 219, 317, 21, 3, 12, textureX, textureY);
             drawModalRectWithCustomSizedTexture(xOrigin + 212 + (int)(blue * componentBarLength), yOrigin + 231, 317, 21, 3, 12, textureX, textureY);
-                       
+                  
+            for(int n = 0; n < 3; n++)
+            {
+            	drawModalRectWithCustomSizedTexture(xOrigin + 290, yOrigin + 200 + 17 * n, 401, 0, 78, 16, textureX, textureY);
+            }
+                    
+            
+            int xFlatOrigin = GetFlatTextureWindowX();
+            int yFlatOrigin = GetFlatTextureWindowY();
+            
+            if(dynamicTextureX == dynamicTextureY || true)// Default to this case. Just lose some texture
+            {
+               	drawModalRectWithCustomSizedTexture(xFlatOrigin, yFlatOrigin, 242, 54, 64 + 7, 152, textureX, textureY);
+               	drawModalRectWithCustomSizedTexture(xFlatOrigin + 64 + 7, yFlatOrigin, 242 + 270 - 64 - 7, 54, 64 + 7, 152, textureX, textureY);
+                
+                bindWorkingTexture();
+                
+                drawModalRectWithCustomSizedTexture(xFlatOrigin + 7, yFlatOrigin + 17, 0, 0, 128, 128, dynamicTextureX, dynamicTextureY);
+            }
+            //else if(dynamicTextureX == 2 * dynamicTextureY) 
+            //{
+            //	drawModalRectWithCustomSizedTexture(xFlatOrigin, yFlatOrigin, 242, 54, 270, 152, textureX, textureY);
+            //
+            //	bindWorkingTexture();
+            //
+            //	drawModalRectWithCustomSizedTexture(xFlatOrigin + 7, yFlatOrigin + 17, 0, 0, 256, 128, dynamicTextureX, dynamicTextureY);
+            //}
         }
         
-
-
 		GlStateManager.enableDepth();
+	}
+	
+	public static void copyImageToTexture()
+	{
+		dynamicTexture.updateDynamicTexture();
+	}
+	   
+	public void bindWorkingTexture()
+	{
+		mc.getTextureManager().bindTexture(mc.getTextureManager().getDynamicTextureLocation("customPaintjob", dynamicTexture));
+	}
+	
+	private void SetCustomMode(boolean active)
+	{
+		if(active)
+		{
+			if(dynamicTexture == null)
+			{
+				copyTextureFromGunToCustomTexture();
+			}
+		}
+		else
+		{
+			
+		}
+		inCustomMode = active;
+	}
+	
+	private void copyTextureFromGunToCustomTexture()
+	{
+		ItemStack gunStack = inventorySlots.getSlot(0).getStack();
+        if(gunStack != null && gunStack.getItem() instanceof IPaintableItem)
+        {
+        	PaintableType paintableType = ((IPaintableItem)gunStack.getItem()).GetPaintableType();
+        	
+        	Paintjob paintjob = paintableType.getPaintjob(gunStack.getItemDamage());
+
+        	try
+        	{
+        		String imageLocation = "Flan/" + paintableType.contentPack + "/assets/flansmod/skins/" + paintjob.textureName + ".png";
+        		BufferedImage bufferedImage = ImageIO.read(new File(imageLocation));
+        		dynamicTexture = new DynamicTexture(bufferedImage);
+        		dynamicTextureX = bufferedImage.getWidth();
+        		dynamicTextureY = bufferedImage.getHeight();
+        	}
+        	catch(IOException e)
+        	{
+        		e.printStackTrace();
+        	}
+        	
+        	copyImageToTexture();
+        }
+	}
+	
+	@Override
+	public void handleInput() throws IOException
+	{
+		super.handleInput();
+		
+		if(inCustomMode)
+		{
+			mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+			mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;	
+
+			int mouseXInGUI = mouseX - guiLeft;
+			int mouseYInGUI = mouseY - guiTop;
+			
+            int flatTexOriginX = GetFlatTextureWindowX();
+            int flatTexOriginY = GetFlatTextureWindowY();
+            
+			if(Mouse.isButtonDown(0))
+			{
+	        	int pixelX = mouseXInGUI + 64 - (flatTexOriginX + 7) - 4;
+	        	int pixelY = mouseYInGUI - (flatTexOriginY + 17) + 5;
+	        	
+	        	if(pixelX >= 0 && pixelX < 128 && pixelY >= 0 && pixelY < 128)
+	        	{
+	        		for(int i = -2; i < 2; i++)
+	        		{
+	        			for(int j = -2; j < 2; j++)
+	        			{
+	        				if((i == -2 || i == 2) && (j == -2 || j == 2))
+	        				{
+	        					continue;
+	        				}
+	        				int px = Math.min(Math.max(0, pixelX + i), dynamicTextureX - 1);
+	        				int py = Math.min(Math.max(0, pixelY + j), dynamicTextureY - 1);
+	        				
+	    	        		dynamicTexture.getTextureData()[px + py * dynamicTextureX] = 0xff000000 + currentColour;
+	    	        		copyImageToTexture();
+	        			}
+	        		}
+	        	}
+			}
+			
+			if(mouseXInGUI >= flatTexOriginX - 64 + 7 && mouseXInGUI <= flatTexOriginX + 64 + 14 && mouseYInGUI >= flatTexOriginY - 4 && mouseYInGUI <= flatTexOriginY + 6)
+        	{
+        		movingFlatTextureWindow = Mouse.isButtonDown(0);
+        	}
+		}
 	}
 	
 	@Override
@@ -418,7 +596,7 @@ public class GuiPaintjobTable extends GuiContainer
 		
 		if(Mouse.getEventButton() == 2 && Mouse.getEventButtonState())
 		{
-			inCustomMode = !inCustomMode;
+			SetCustomMode(!inCustomMode);
 		}
 		
 		mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;

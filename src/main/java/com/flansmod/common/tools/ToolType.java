@@ -123,6 +123,7 @@ public class ToolType extends InfoType
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return null;

@@ -169,6 +169,7 @@ public class MechaItemType extends InfoType
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return model;

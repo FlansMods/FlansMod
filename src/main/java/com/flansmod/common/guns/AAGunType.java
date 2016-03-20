@@ -6,6 +6,8 @@ import java.util.List;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.model.ModelAAGun;
 import com.flansmod.common.FlansMod;
@@ -202,6 +204,7 @@ public class AAGunType extends InfoType
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return model;

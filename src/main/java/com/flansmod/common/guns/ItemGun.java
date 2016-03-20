@@ -629,6 +629,16 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
+	private void PlayShotSound(World world, boolean silenced, float x, float y, float z)
+	{
+		FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+				new PositionedSoundRecord(FlansModResourceHandler.getSound(type.shootSound), 
+						silenced ? 5F : 10F, 
+						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), 
+						x, y, z));
+	}
+	
 	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage)
 	{
 		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
@@ -644,11 +654,7 @@ public class ItemGun extends Item implements IPaintableItem
 				//AttachmentType barrel = type.getBarrel(gunstack);
 				boolean silenced = false;//barrel != null && barrel.silencer;
 				
-				FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-						new PositionedSoundRecord(FlansModResourceHandler.getSound(type.shootSound), 
-								silenced ? 5F : 10F, 
-								(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), 
-								(float)shooter.posX, (float)shooter.posY, (float)shooter.posZ));
+				PlayShotSound(world, silenced, (float)shooter.posX, (float)shooter.posY, (float)shooter.posZ);
 
 				soundDelay = type.shootSoundLength;
 			}
@@ -689,12 +695,15 @@ public class ItemGun extends Item implements IPaintableItem
 				}
 			}
 			
-			if(shooter == Minecraft.getMinecraft().thePlayer)
+			if(world.isRemote)
 			{
-				if(hitData instanceof EntityHit || hitData instanceof PlayerBulletHit || hitData instanceof DriveableHit)
+				if(shooter == Minecraft.getMinecraft().thePlayer)
 				{
-					// Add a hit marker
-					FlansModClient.AddHitMarker();
+					if(hitData instanceof EntityHit || hitData instanceof PlayerBulletHit || hitData instanceof DriveableHit)
+					{
+						// Add a hit marker
+						FlansModClient.AddHitMarker();
+					}
 				}
 			}
 		}
@@ -727,7 +736,7 @@ public class ItemGun extends Item implements IPaintableItem
 			return;
 		}
 		
-		if(!shotsFiredServer.isEmpty() && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
+		if(!shotsFiredServer.isEmpty())// && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
 		{
 			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension );
 			shotsFiredServer.clear();
@@ -1254,6 +1263,22 @@ public class ItemGun extends Item implements IPaintableItem
     {
     	ItemStack gunStack = new ItemStack(item, 1, paintjob.ID);
     	NBTTagCompound tags = new NBTTagCompound();
+    	
+    	/*
+    	NBTTagCompound customPaintTags = new NBTTagCompound();
+    	
+    	customPaintTags.setInteger("Hash", type.hashCode());
+    	customPaintTags.setByteArray("Skin", new byte[] { (byte) 0x40, (byte) 0x00, (byte) 0xff, (byte) 0xff, (byte) 0x61, (byte) 0x74 });
+    	customPaintTags.setInteger("SkinWidth", 2);
+    	customPaintTags.setInteger("SkinHeight", 1);
+    	
+    	customPaintTags.setByteArray("Icon", new byte[] { (byte) 0xff, (byte) 0x00, (byte) 0xff });
+    	customPaintTags.setInteger("IconWidth", 1);
+    	customPaintTags.setInteger("IconHeight", 1);
+    	
+    	tags.setTag("CustomPaint", customPaintTags);
+    	*/
+    	
     	gunStack.setTagCompound(tags);
         list.add(gunStack);
     }

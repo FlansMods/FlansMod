@@ -7,6 +7,8 @@ import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
@@ -179,6 +181,7 @@ public class PartType extends InfoType {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()
 	{
 		return null;

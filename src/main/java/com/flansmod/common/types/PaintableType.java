@@ -2,12 +2,14 @@ package com.flansmod.common.types;
 
 import java.util.ArrayList;
 
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class PaintableType extends InfoType
 {
@@ -106,5 +108,47 @@ public abstract class PaintableType extends InfoType
 	public float GetRecommendedScale()
 	{
 		return 50.0f;
+	}
+	
+	public static boolean HasCustomPaintjob(ItemStack stack)
+	{
+		if(stack == null)
+		{
+			return false;
+		}
+		
+		if(stack.getItem() instanceof IPaintableItem)
+		{
+			return stack.getTagCompound().hasKey("CustomPaint");
+		}
+		return false;
+	}
+	
+	public static ResourceLocation GetCustomPaintjobSkinResource(ItemStack stack)
+	{
+		NBTTagCompound tags = stack.getTagCompound().getCompoundTag("CustomPaint");
+		int customPaintHash = tags.getInteger("Hash");
+		
+		if(!FlansModResourceHandler.HasResourceForHash(customPaintHash))
+		{
+			FlansModResourceHandler.CreateSkinResourceFromByteArray(tags.getByteArray("Skin"), tags.getInteger("SkinWidth"), tags.getInteger("SkinHeight"), customPaintHash);
+			FlansModResourceHandler.CreateIconResourceFromByteArray(tags.getByteArray("Icon"), tags.getInteger("IconWidth"), tags.getInteger("IconHeight"), customPaintHash);
+		}
+		
+		return FlansModResourceHandler.GetSkinResourceFromHash(customPaintHash);
+	}
+	
+	public static ResourceLocation GetCustomPaintjobIconResource(ItemStack stack)
+	{
+		NBTTagCompound tags = stack.getTagCompound().getCompoundTag("CustomPaint");
+		int customPaintHash = tags.getInteger("Hash");
+		
+		if(!FlansModResourceHandler.HasResourceForHash(customPaintHash))
+		{
+			FlansModResourceHandler.CreateSkinResourceFromByteArray(tags.getByteArray("Skin"), tags.getInteger("SkinWidth"), tags.getInteger("SkinHeight"), customPaintHash);
+			FlansModResourceHandler.CreateIconResourceFromByteArray(tags.getByteArray("Icon"), tags.getInteger("IconWidth"), tags.getInteger("IconHeight"), customPaintHash);
+		}
+		
+		return FlansModResourceHandler.GetIconResourceFromHash(customPaintHash);
 	}
 }
