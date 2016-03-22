@@ -93,7 +93,10 @@ public class EntityGunItem extends EntityItemCustomRender {
         prevPosY = posY;
         prevPosZ = posZ;
         motionY -= 0.03999999910593033D;
-        pushOutOfBlocks(posX, (getBoundingBox().minY + getBoundingBox().maxY) / 2.0D, posZ); //PushOutOfBlocks
+        if(getBoundingBox() != null)
+        {
+        	pushOutOfBlocks(posX, (getBoundingBox().minY + getBoundingBox().maxY) / 2.0D, posZ); //PushOutOfBlocks
+        }
         moveEntity(motionX, motionY, motionZ);
 
         float var2 = 0.98F;

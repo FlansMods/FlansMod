@@ -72,6 +72,12 @@ public class BlockSpawner extends BlockContainer
     }
     
     @Override
+    public int getRenderType()
+    {
+        return 3;
+    }
+    
+    @Override
     public boolean canPlaceBlockAt(World par1World, BlockPos pos)
     {
         return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
@@ -85,7 +91,7 @@ public class BlockSpawner extends BlockContainer
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
     {
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.03125F, 1.0F);
+    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
     }
 
 	@Override

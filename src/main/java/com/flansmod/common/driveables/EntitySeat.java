@@ -164,8 +164,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			pitchSoundDelay = seatInfo.pitchSoundLength;
 		}
 		
+		boolean isThePlayer = riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)riddenByEntity);
+		
 		//Reset traverse sounds if player exits the vehicle
-		if(riddenByEntity != Minecraft.getMinecraft().thePlayer){
+		
+		if(isThePlayer)
+		{
 			playYawSound = false;
 			playPitchSound = false;
 			yawSoundDelay = 0;
@@ -175,7 +179,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//If on the client
 		if(worldObj.isRemote)
 		{
-			if(driver && riddenByEntity == Minecraft.getMinecraft().thePlayer && FlansModClient.controlModeMouse && driveable.hasMouseControlMode())
+			if(driver && isThePlayer && FlansMod.proxy.mouseControlEnabled() && driveable.hasMouseControlMode())
 			{
 				looking = new RotatedAxes();
 				playerLooking = new RotatedAxes();

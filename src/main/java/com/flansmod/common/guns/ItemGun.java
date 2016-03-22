@@ -596,7 +596,7 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					// Actually shoot the bullet
 					((ItemShootable)bulletStack.getItem()).Shoot(world, 
-							new Vector3f(player.getPositionEyes(1.0f)), 
+							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ), 
 							new Vector3f(player.getLookVec()), 
 							type.getDamage(gunstack), 
 							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunstack) * bullet.bulletSpread,

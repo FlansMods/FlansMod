@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/generated",
 	"textures": {
-		"layer0": "flansmod:items/opstick"
+		"layer0": "flansmod:items/opstick_Ownership"
 	},
 	"display": {
 		"thirdperson": {
