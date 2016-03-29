@@ -8,11 +8,11 @@ Texture Leopard2A6
 //Third Person Camera Distance
 CameraDistance 11.5
 //Throttle
-MaxThrottle 0.8
-MaxNegativeThrottle 1.0
+MaxThrottle 0.6
+MaxNegativeThrottle 0.4
 //Steering modifiers
-TurnLeftSpeed 0.5
-TurnRightSpeed 0.5
+TurnLeftSpeed 0.3
+TurnRightSpeed 0.3
 //Drag
 Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
@@ -33,7 +33,7 @@ FuelTankSize 2000
 CargoSlots 0
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 30 0 -360 360 -9 20
+Driver 0 28 0 -360 360 -9 20
 RotatedDriverOffset -6 0 -11
 //Turret rotation stuff
 DriverAimSpeed 2 2 0
@@ -54,6 +54,9 @@ AddGun 52 28 -2 turret m60
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 70
+AllowAllAmmo false
+AddAmmo shell		
+AddAmmo HEshell
 //Sounds
 StartSound ChallengerIdle
 StartSoundLength 40
@@ -61,16 +64,18 @@ EngineSound ChallengerRun
 EngineSoundLength 40
 ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
+DammageModifierPrimary 100
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 tankTurret
-AddRecipeParts core 1 advancedTankBody 1 vehicleSeat
+AddRecipeParts turret 1 heavytankTurret 2 vehicleSeat
+AddRecipeParts core 1 advancedTankBody
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 10 gray
+AddDye 4 gray
+AddDye 5 green
 //Health and collision
 SetupPart core 23500 -78 -1 -36 149 22 72
 SetupPart leftTrack 10000 -68 -11 -32 133 21 11
@@ -79,6 +84,7 @@ SetupPart turret 21500 -60 21 -29 112 14 58
 BulletDetection 7
 ModelScale 0.77
 RotateWheels true
+Description German Main Battle Tank
 TrackFrames 3
 //Basic emission
 AddEmitter smoke 1 [-71,10,-16] [1,1,1] [-0.5,0,0] -1 1 0 1 core
