@@ -588,6 +588,7 @@ public void cameraSetup(CameraSetup event)
 		{
 			IControllable cont = (IControllable)mc.thePlayer.ridingEntity;
 			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
+			//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
 			if(((EntitySeat)mc.thePlayer.ridingEntity).driveable != null){
 			EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
 			
