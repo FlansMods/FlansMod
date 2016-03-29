@@ -138,7 +138,7 @@ public abstract class DriveableType extends InfoType
 	public int engineSoundLength;
 	
 	/**Track animation frames */
-	public int animFrames = 2;
+	public int animFrames = 0;
 
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
