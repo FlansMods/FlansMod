@@ -514,9 +514,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
-		
+				
 				int animSpeed = 4;
-		
+		//Change animation speed based on our current throttle
 		if((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33)){
 			animSpeed = 3;
 		} else if((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66)){
@@ -544,12 +544,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
                 	animFrame --;
         		}
         }
-	
+	//Cycle the animation frame, but only if we have anything to cycle
+	if(type.animFrames != 0){
         if(animFrame > type.animFrames){
         	animFrame = 0;
         } if(animFrame < 0){
         	animFrame = type.animFrames;
         }
+	}
 	}
 
 	private float averageAngles(float a, float b)
