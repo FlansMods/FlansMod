@@ -2,6 +2,7 @@ package com.flansmod.common.driveables;
 
 import java.util.List;
 
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -388,6 +389,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			
 			//Consider new Yaw and Yaw limiters
+			
+
 			float targetX = playerLooking.getYaw();
 			
 			float yawToMove = (targetX - looking.getYaw());
@@ -463,13 +466,29 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 
 			float newPitch = 0f;
 			
+			
+			//Pitches the gun at the last possible moment in order to reach target pitch at the same time as target yaw.
+			float minYawToMove = 0f;
+			
+			float currentYawToMove = 0f;
+			
+			if(seatInfo.latePitch){
+			minYawToMove = ((float)Math.sqrt((pitchToMove / seatInfo.aimingSpeed.y)*(pitchToMove / seatInfo.aimingSpeed.y)))*seatInfo.aimingSpeed.x;
+			} else {
+			minYawToMove = 360f;
+			}
+			
+			currentYawToMove = (float)Math.sqrt((yawToMove)*(yawToMove));
+			
 			if(seatInfo.legacyAiming == true || (signDeltaY == 0 && deltaY == 0)){
 				newPitch = playerLooking.getPitch();
-			} else  if (seatInfo.yawBeforePitch == false){
+			} else  if (seatInfo.yawBeforePitch == false && currentYawToMove < minYawToMove){
 				newPitch = looking.getPitch() + signDeltaY*seatInfo.aimingSpeed.y;
 			} else if (seatInfo.yawBeforePitch == true && signDeltaX == 0){
 				newPitch = looking.getPitch() + signDeltaY*seatInfo.aimingSpeed.y;
 			} else if (seatInfo.yawBeforePitch == true && signDeltaX != 0){
+				newPitch = looking.getPitch();
+			} else {
 				newPitch = looking.getPitch();
 			}
 			
@@ -489,7 +508,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 				playYawSound = false;
 			}
 			
-			if(signDeltaY != 0 && seatInfo.yawBeforePitch == false){
+			if(signDeltaY != 0 && seatInfo.yawBeforePitch == false && currentYawToMove < minYawToMove){
 				playPitchSound = true;
 			} else if (signDeltaY != 0 && seatInfo.yawBeforePitch == true && signDeltaX == 0){
 				playPitchSound = true;

@@ -582,12 +582,22 @@ public class ClientRenderHooks
 		}
 	}
 	
-	public void cameraSetup(CameraSetup event)
+public void cameraSetup(CameraSetup event)
 	{
 		if(mc.thePlayer.ridingEntity instanceof IControllable)
 		{
 			IControllable cont = (IControllable)mc.thePlayer.ridingEntity;
-			event.roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
+			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
+			//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
+			if(((EntitySeat)mc.thePlayer.ridingEntity).driveable != null){
+			EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+			
+			if(ent.getDriveableType().canRoll){
+				roll = 0F;
+			}
+			}
+			
+			event.roll = roll;
 		}
 	}
 	

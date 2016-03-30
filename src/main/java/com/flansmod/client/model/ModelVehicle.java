@@ -26,6 +26,9 @@ public class ModelVehicle extends ModelDriveable
 	public ModelRendererTurbo rightTrackWheelModels[] = new ModelRendererTurbo[0];	//These go with the tracks but rotate
 	public ModelRendererTurbo leftTrackWheelModels[] = new ModelRendererTurbo[0];
 	
+	public ModelRendererTurbo leftAnimTrackModel[][] = new ModelRendererTurbo[0][0];  //Unlimited frame track animations
+	public ModelRendererTurbo rightAnimTrackModel[][] = new ModelRendererTurbo[0][0];
+	
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];	
 	public ModelRendererTurbo trailerModel[] = new ModelRendererTurbo[0];
@@ -33,6 +36,9 @@ public class ModelVehicle extends ModelDriveable
 	
 	public ModelRendererTurbo drillHeadModel[] = new ModelRendererTurbo[0]; 		//Drill head. Rotates around
 	public Vector3f drillHeadOrigin = new Vector3f();								//this point
+	
+	public int animFrame = 0;
+
 	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
@@ -60,12 +66,18 @@ public class ModelVehicle extends ModelDriveable
 		renderPart(drillHeadModel);
 		for(ModelRendererTurbo[] mods : ammoModel)
 			renderPart(mods);
+		//This might cause all animation frames to render simultaneously in the crafting box... but it doesn't crash. Which is a plus I guess?
+		for(ModelRendererTurbo[] latm : leftAnimTrackModel)
+			renderPart(latm);
+		for(ModelRendererTurbo[] ratm : rightAnimTrackModel)
+			renderPart(ratm);
 		renderPart(steeringWheelModel);
 	}
 	
 	public void render(float f5, EntityVehicle vehicle, float f)
 	{
 		boolean rotateWheels = vehicle.getVehicleType().rotateWheels;
+		animFrame = vehicle.animFrame;
 
 		//Rendering the body
 		if(vehicle.isPartIntact(EnumDriveablePart.core))
@@ -143,6 +155,17 @@ public class ModelVehicle extends ModelDriveable
 				leftTrackWheelModel.rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 				leftTrackWheelModel.render(f5, oldRotateOrder);
 			}
+			
+			for(int i = 0; i < leftAnimTrackModel.length; i++)
+			{
+				if(i == animFrame)
+				{
+					for (ModelRendererTurbo aLeftAnimTrackModel : leftAnimTrackModel[i]) {
+						aLeftAnimTrackModel.render(f5, oldRotateOrder);
+					}
+				}
+			}
+
 		}
 
 		if(vehicle.isPartIntact(EnumDriveablePart.rightTrack))
@@ -153,6 +176,16 @@ public class ModelVehicle extends ModelDriveable
 			for (ModelRendererTurbo rightTrackWheelModel : rightTrackWheelModels) {
 				rightTrackWheelModel.rotateAngleZ = rotateWheels ? -vehicle.wheelsAngle : 0;
 				rightTrackWheelModel.render(f5, oldRotateOrder);
+			}
+			
+			for(int i = 0; i < rightAnimTrackModel.length; i++)
+			{
+				if(i == animFrame)
+				{
+					for (ModelRendererTurbo aRightAnimTrackModel : rightAnimTrackModel[i]) {
+						aRightAnimTrackModel.render(f5, oldRotateOrder);
+					}
+				}
 			}
 		}
 
@@ -306,7 +339,12 @@ public class ModelVehicle extends ModelDriveable
 		flip(frontWheelModel);
 		flip(backWheelModel);
 		flip(drillHeadModel);
+		for(ModelRendererTurbo[] latm : leftAnimTrackModel)
+			flip(latm);
+		for(ModelRendererTurbo[] ratm : rightAnimTrackModel)
+			flip(ratm);
 	}	
+
 	
 	@Override
 	public void translateAll(float x, float y, float z)
@@ -329,5 +367,9 @@ public class ModelVehicle extends ModelDriveable
 		translate(frontWheelModel, x, y, z);
 		translate(backWheelModel, x, y, z);
 		translate(drillHeadModel, x, y, z);
+		for(ModelRendererTurbo[] latm : leftAnimTrackModel)
+			translate(latm, x, y, z);
+		for(ModelRendererTurbo[] ratm : rightAnimTrackModel)
+			translate(ratm, x, y, z);
 	}
 }

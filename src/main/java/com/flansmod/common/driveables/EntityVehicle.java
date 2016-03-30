@@ -448,16 +448,26 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F); 
 			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F); 
+			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F); 
+			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F); 
 			
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
 			float dz = frontAxleCentre.z - backAxleCentre.z;
+			float drx = leftSideCentre.x - rightSideCentre.x;
+			float dry = leftSideCentre.y - rightSideCentre.y;
+			float drz = leftSideCentre.z - rightSideCentre.z;
+			
 			
 			float dxz = (float)Math.sqrt(dx * dx + dz * dz);
+			float drxz = (float)Math.sqrt(drx * drx + drz * drz);
 			
 			float yaw = (float)Math.atan2(dz, dx);
 			float pitch = -(float)Math.atan2(dy, dxz);
-			float roll = 0;
+			float roll = 0F;
+			if(type.canRoll){
+				roll = -(float)Math.atan2(dry, drxz);
+			}
 			
 			if(type.tank)
 			{
@@ -504,6 +514,44 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
+				
+				int animSpeed = 4;
+		//Change animation speed based on our current throttle
+		if((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33)){
+			animSpeed = 3;
+		} else if((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66)){
+			animSpeed = 2;
+		} else if((throttle > 0.66 && throttle <= 0.9) || (throttle < -0.66 && throttle >= -0.9)){
+			animSpeed = 1;
+		} else if((throttle > 0.9 && throttle <= 1) || (throttle < -0.9 && throttle >= -1)){
+			animSpeed = 0;
+		}
+		
+    	if(throttle > 0.05){
+    		animCount --;
+        } else if (throttle < -0.05){
+        	animCount ++;
+        }
+        	
+        if(animCount <= 0){
+        	animCount = animSpeed;
+        	animFrame ++;
+        }
+
+        if(throttle < 0){
+        		if(animCount >= animSpeed){
+        			animCount = 0;
+                	animFrame --;
+        		}
+        }
+	//Cycle the animation frame, but only if we have anything to cycle
+	if(type.animFrames != 0){
+        if(animFrame > type.animFrames){
+        	animFrame = 0;
+        } if(animFrame < 0){
+        	animFrame = type.animFrames;
+        }
+	}
 	}
 
 	private float averageAngles(float a, float b)

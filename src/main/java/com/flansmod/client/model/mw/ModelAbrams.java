@@ -1797,102 +1797,291 @@ public class ModelAbrams extends ModelVehicle //Same as Filename
 
 		rightTrackWheelModels[89].addShapeBox(-6F, -6F, 0F, 12, 4, 8, 0F, -4F, 0F, 0F, -4F, 0F, 0F, -4F, 0F, 0F, -4F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 332
 		rightTrackWheelModels[89].setRotationPoint(-63F, -9F, -32F);
-
-
-		leftTrackModel = new ModelRendererTurbo[9];
-		leftTrackModel[0] = new ModelRendererTurbo(this, 0, 3152, textureX, textureY); // Box 433
-		leftTrackModel[1] = new ModelRendererTurbo(this, 0, 3168, textureX, textureY); // Box 434
-		leftTrackModel[2] = new ModelRendererTurbo(this, 0, 3185, textureX, textureY); // Box 435
-		leftTrackModel[3] = new ModelRendererTurbo(this, 0, 3203, textureX, textureY); // Box 436
-		leftTrackModel[4] = new ModelRendererTurbo(this, 0, 3226, textureX, textureY); // Box 437
-		leftTrackModel[5] = new ModelRendererTurbo(this, 0, 3243, textureX, textureY); // Box 438
-		leftTrackModel[6] = new ModelRendererTurbo(this, 0, 3261, textureX, textureY); // Box 439
-		leftTrackModel[7] = new ModelRendererTurbo(this, 0, 3278, textureX, textureY); // Box 440
-		leftTrackModel[8] = new ModelRendererTurbo(this, 0, 3295, textureX, textureY); // Box 453
-
-		leftTrackModel[0].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 433
-		leftTrackModel[0].setRotationPoint(60F, -17F, 21F);
-		leftTrackModel[0].rotateAngleZ = -0.73303829F;
-
-		leftTrackModel[1].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 434
-		leftTrackModel[1].setRotationPoint(65.2F, -12.32F, 21F);
-		leftTrackModel[1].rotateAngleZ = -1.57079633F;
-
-		leftTrackModel[2].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 435
-		leftTrackModel[2].setRotationPoint(65.2F, -7.32F, 21F);
-		leftTrackModel[2].rotateAngleZ = -2.46091425F;
-
-		leftTrackModel[3].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 436
-		leftTrackModel[3].setRotationPoint(44.2F, 9.68F, 21F);
-		leftTrackModel[3].rotateAngleZ = -3.14159265F;
-
-		leftTrackModel[4].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 437
-		leftTrackModel[4].setRotationPoint(-51.8F, 9.68F, 21F);
-		leftTrackModel[4].rotateAngleZ = -3.87463094F;
-
-		leftTrackModel[5].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 438
-		leftTrackModel[5].setRotationPoint(-69.6F, -6.32F, 21F);
-		leftTrackModel[5].rotateAngleZ = -4.71238898F;
-
-		leftTrackModel[6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 439
-		leftTrackModel[6].setRotationPoint(-69.6F, -11.32F, 21F);
-		leftTrackModel[6].rotateAngleZ = -5.44542727F;
-
-		leftTrackModel[7].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 440
-		leftTrackModel[7].setRotationPoint(-67F, -14.32F, 21F);
-		leftTrackModel[7].rotateAngleZ = -6.28318531F;
-
-		leftTrackModel[8].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 453
-		leftTrackModel[8].setRotationPoint(56F, -17F, 21F);
-
-
-		rightTrackModel = new ModelRendererTurbo[9];
-		rightTrackModel[0] = new ModelRendererTurbo(this, 0, 3295, textureX, textureY); // Box 423
-		rightTrackModel[1] = new ModelRendererTurbo(this, 0, 3152, textureX, textureY); // Box 425
-		rightTrackModel[2] = new ModelRendererTurbo(this, 0, 3168, textureX, textureY); // Box 426
-		rightTrackModel[3] = new ModelRendererTurbo(this, 0, 3185, textureX, textureY); // Box 427
-		rightTrackModel[4] = new ModelRendererTurbo(this, 0, 3203, textureX, textureY); // Box 428
-		rightTrackModel[5] = new ModelRendererTurbo(this, 0, 3226, textureX, textureY); // Box 429
-		rightTrackModel[6] = new ModelRendererTurbo(this, 0, 3243, textureX, textureY); // Box 430
-		rightTrackModel[7] = new ModelRendererTurbo(this, 0, 3261, textureX, textureY); // Box 431
-		rightTrackModel[8] = new ModelRendererTurbo(this, 0, 3278, textureX, textureY); // Box 432
-
-		rightTrackModel[0].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 423
-		rightTrackModel[0].setRotationPoint(56F, -17F, -34F);
-
-		rightTrackModel[1].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 425
-		rightTrackModel[1].setRotationPoint(60F, -17F, -34F);
-		rightTrackModel[1].rotateAngleZ = -0.73303829F;
-
-		rightTrackModel[2].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 426
-		rightTrackModel[2].setRotationPoint(65.2F, -12.32F, -34F);
-		rightTrackModel[2].rotateAngleZ = -1.57079633F;
-
-		rightTrackModel[3].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 427
-		rightTrackModel[3].setRotationPoint(65.2F, -7.32F, -34F);
-		rightTrackModel[3].rotateAngleZ = -2.46091425F;
-
-		rightTrackModel[4].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 428
-		rightTrackModel[4].setRotationPoint(44.2F, 9.68F, -34F);
-		rightTrackModel[4].rotateAngleZ = -3.14159265F;
-
-		rightTrackModel[5].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 429
-		rightTrackModel[5].setRotationPoint(-51.8F, 9.68F, -34F);
-		rightTrackModel[5].rotateAngleZ = -3.87463094F;
-
-		rightTrackModel[6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 430
-		rightTrackModel[6].setRotationPoint(-69.6F, -6.32F, -34F);
-		rightTrackModel[6].rotateAngleZ = -4.71238898F;
-
-		rightTrackModel[7].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 431
-		rightTrackModel[7].setRotationPoint(-69.6F, -11.32F, -34F);
-		rightTrackModel[7].rotateAngleZ = -5.44542727F;
-
-		rightTrackModel[8].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 432
-		rightTrackModel[8].setRotationPoint(-67F, -14.32F, -34F);
-		rightTrackModel[8].rotateAngleZ = -6.28318531F;
-
 		
+		
+		leftAnimTrackModel = new ModelRendererTurbo[3][];
+		rightAnimTrackModel = new ModelRendererTurbo[3][];
+
+
+		leftAnimTrackModel[0] = new ModelRendererTurbo[9];
+		leftAnimTrackModel[0][0] = new ModelRendererTurbo(this, 0, 3152, textureX, textureY); // Import Box433
+		leftAnimTrackModel[0][1] = new ModelRendererTurbo(this, 0, 3168, textureX, textureY); // Import Box434
+		leftAnimTrackModel[0][2] = new ModelRendererTurbo(this, 0, 3185, textureX, textureY); // Import Box435
+		leftAnimTrackModel[0][3] = new ModelRendererTurbo(this, 0, 3203, textureX, textureY); // Import Box436
+		leftAnimTrackModel[0][4] = new ModelRendererTurbo(this, 0, 3226, textureX, textureY); // Import Box437
+		leftAnimTrackModel[0][5] = new ModelRendererTurbo(this, 0, 3243, textureX, textureY); // Import Box438
+		leftAnimTrackModel[0][6] = new ModelRendererTurbo(this, 0, 3261, textureX, textureY); // Import Box439
+		leftAnimTrackModel[0][7] = new ModelRendererTurbo(this, 0, 3278, textureX, textureY); // Import Box440
+		leftAnimTrackModel[0][8] = new ModelRendererTurbo(this, 0, 3295, textureX, textureY); // Import Box453
+
+		leftAnimTrackModel[0][0].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box433
+		leftAnimTrackModel[0][0].setRotationPoint(60F, -17F, 21F);
+		leftAnimTrackModel[0][0].rotateAngleZ = -0.73303829F;
+
+		leftAnimTrackModel[0][1].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box434
+		leftAnimTrackModel[0][1].setRotationPoint(65.2F, -12.32F, 21F);
+		leftAnimTrackModel[0][1].rotateAngleZ = -1.57079633F;
+
+		leftAnimTrackModel[0][2].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box435
+		leftAnimTrackModel[0][2].setRotationPoint(65.2F, -7.32F, 21F);
+		leftAnimTrackModel[0][2].rotateAngleZ = -2.46091425F;
+
+		leftAnimTrackModel[0][3].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box436
+		leftAnimTrackModel[0][3].setRotationPoint(44.2F, 9.68F, 21F);
+		leftAnimTrackModel[0][3].rotateAngleZ = -3.14159265F;
+
+		leftAnimTrackModel[0][4].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box437
+		leftAnimTrackModel[0][4].setRotationPoint(-51.8F, 9.68F, 21F);
+		leftAnimTrackModel[0][4].rotateAngleZ = -3.87463094F;
+
+		leftAnimTrackModel[0][5].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box438
+		leftAnimTrackModel[0][5].setRotationPoint(-69.6F, -6.32F, 21F);
+		leftAnimTrackModel[0][5].rotateAngleZ = -4.71238898F;
+
+		leftAnimTrackModel[0][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box439
+		leftAnimTrackModel[0][6].setRotationPoint(-69.6F, -11.32F, 21F);
+		leftAnimTrackModel[0][6].rotateAngleZ = -5.44542727F;
+
+		leftAnimTrackModel[0][7].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box440
+		leftAnimTrackModel[0][7].setRotationPoint(-67F, -14.32F, 21F);
+		leftAnimTrackModel[0][7].rotateAngleZ = -6.28318531F;
+
+		leftAnimTrackModel[0][8].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box453
+		leftAnimTrackModel[0][8].setRotationPoint(56F, -17F, 21F);
+
+
+		rightAnimTrackModel[0] = new ModelRendererTurbo[9];
+		rightAnimTrackModel[0][0] = new ModelRendererTurbo(this, 0, 3295, textureX, textureY); // Import Box423
+		rightAnimTrackModel[0][1] = new ModelRendererTurbo(this, 0, 3152, textureX, textureY); // Import Box425
+		rightAnimTrackModel[0][2] = new ModelRendererTurbo(this, 0, 3168, textureX, textureY); // Import Box426
+		rightAnimTrackModel[0][3] = new ModelRendererTurbo(this, 0, 3185, textureX, textureY); // Import Box427
+		rightAnimTrackModel[0][4] = new ModelRendererTurbo(this, 0, 3203, textureX, textureY); // Import Box428
+		rightAnimTrackModel[0][5] = new ModelRendererTurbo(this, 0, 3226, textureX, textureY); // Import Box429
+		rightAnimTrackModel[0][6] = new ModelRendererTurbo(this, 0, 3243, textureX, textureY); // Import Box430
+		rightAnimTrackModel[0][7] = new ModelRendererTurbo(this, 0, 3261, textureX, textureY); // Import Box431
+		rightAnimTrackModel[0][8] = new ModelRendererTurbo(this, 0, 3278, textureX, textureY); // Import Box432
+
+		rightAnimTrackModel[0][0].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box423
+		rightAnimTrackModel[0][0].setRotationPoint(56F, -17F, -34F);
+
+		rightAnimTrackModel[0][1].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box425
+		rightAnimTrackModel[0][1].setRotationPoint(60F, -17F, -34F);
+		rightAnimTrackModel[0][1].rotateAngleZ = -0.73303829F;
+
+		rightAnimTrackModel[0][2].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box426
+		rightAnimTrackModel[0][2].setRotationPoint(65.2F, -12.32F, -34F);
+		rightAnimTrackModel[0][2].rotateAngleZ = -1.57079633F;
+
+		rightAnimTrackModel[0][3].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box427
+		rightAnimTrackModel[0][3].setRotationPoint(65.2F, -7.32F, -34F);
+		rightAnimTrackModel[0][3].rotateAngleZ = -2.46091425F;
+
+		rightAnimTrackModel[0][4].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box428
+		rightAnimTrackModel[0][4].setRotationPoint(44.2F, 9.68F, -34F);
+		rightAnimTrackModel[0][4].rotateAngleZ = -3.14159265F;
+
+		rightAnimTrackModel[0][5].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box429
+		rightAnimTrackModel[0][5].setRotationPoint(-51.8F, 9.68F, -34F);
+		rightAnimTrackModel[0][5].rotateAngleZ = -3.87463094F;
+
+		rightAnimTrackModel[0][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box430
+		rightAnimTrackModel[0][6].setRotationPoint(-69.6F, -6.32F, -34F);
+		rightAnimTrackModel[0][6].rotateAngleZ = -4.71238898F;
+
+		rightAnimTrackModel[0][7].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box431
+		rightAnimTrackModel[0][7].setRotationPoint(-69.6F, -11.32F, -34F);
+		rightAnimTrackModel[0][7].rotateAngleZ = -5.44542727F;
+
+		rightAnimTrackModel[0][8].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box432
+		rightAnimTrackModel[0][8].setRotationPoint(-67F, -14.32F, -34F);
+		rightAnimTrackModel[0][8].rotateAngleZ = -6.28318531F;
+
+		leftAnimTrackModel[1] = new ModelRendererTurbo[9];
+		leftAnimTrackModel[1][0] = new ModelRendererTurbo(this, 300, 3152, textureX, textureY); // Import Box433
+		leftAnimTrackModel[1][1] = new ModelRendererTurbo(this, 300, 3168, textureX, textureY); // Import Box434
+		leftAnimTrackModel[1][2] = new ModelRendererTurbo(this, 300, 3185, textureX, textureY); // Import Box435
+		leftAnimTrackModel[1][3] = new ModelRendererTurbo(this, 300, 3203, textureX, textureY); // Import Box436
+		leftAnimTrackModel[1][4] = new ModelRendererTurbo(this, 300, 3226, textureX, textureY); // Import Box437
+		leftAnimTrackModel[1][5] = new ModelRendererTurbo(this, 300, 3243, textureX, textureY); // Import Box438
+		leftAnimTrackModel[1][6] = new ModelRendererTurbo(this, 300, 3261, textureX, textureY); // Import Box439
+		leftAnimTrackModel[1][7] = new ModelRendererTurbo(this, 300, 3278, textureX, textureY); // Import Box440
+		leftAnimTrackModel[1][8] = new ModelRendererTurbo(this, 300, 3295, textureX, textureY); // Import Box453
+
+		leftAnimTrackModel[1][0].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box433
+		leftAnimTrackModel[1][0].setRotationPoint(60F, -17F, 21F);
+		leftAnimTrackModel[1][0].rotateAngleZ = -0.73303829F;
+
+		leftAnimTrackModel[1][1].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box434
+		leftAnimTrackModel[1][1].setRotationPoint(65.2F, -12.32F, 21F);
+		leftAnimTrackModel[1][1].rotateAngleZ = -1.57079633F;
+
+		leftAnimTrackModel[1][2].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box435
+		leftAnimTrackModel[1][2].setRotationPoint(65.2F, -7.32F, 21F);
+		leftAnimTrackModel[1][2].rotateAngleZ = -2.46091425F;
+
+		leftAnimTrackModel[1][3].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box436
+		leftAnimTrackModel[1][3].setRotationPoint(44.2F, 9.68F, 21F);
+		leftAnimTrackModel[1][3].rotateAngleZ = -3.14159265F;
+
+		leftAnimTrackModel[1][4].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box437
+		leftAnimTrackModel[1][4].setRotationPoint(-51.8F, 9.68F, 21F);
+		leftAnimTrackModel[1][4].rotateAngleZ = -3.87463094F;
+
+		leftAnimTrackModel[1][5].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box438
+		leftAnimTrackModel[1][5].setRotationPoint(-69.6F, -6.32F, 21F);
+		leftAnimTrackModel[1][5].rotateAngleZ = -4.71238898F;
+
+		leftAnimTrackModel[1][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box439
+		leftAnimTrackModel[1][6].setRotationPoint(-69.6F, -11.32F, 21F);
+		leftAnimTrackModel[1][6].rotateAngleZ = -5.44542727F;
+
+		leftAnimTrackModel[1][7].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box440
+		leftAnimTrackModel[1][7].setRotationPoint(-67F, -14.32F, 21F);
+		leftAnimTrackModel[1][7].rotateAngleZ = -6.28318531F;
+
+		leftAnimTrackModel[1][8].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box453
+		leftAnimTrackModel[1][8].setRotationPoint(56F, -17F, 21F);
+
+
+		rightAnimTrackModel[1] = new ModelRendererTurbo[9];
+		rightAnimTrackModel[1][0] = new ModelRendererTurbo(this, 300, 3295, textureX, textureY); // Import Box423
+		rightAnimTrackModel[1][1] = new ModelRendererTurbo(this, 300, 3152, textureX, textureY); // Import Box425
+		rightAnimTrackModel[1][2] = new ModelRendererTurbo(this, 300, 3168, textureX, textureY); // Import Box426
+		rightAnimTrackModel[1][3] = new ModelRendererTurbo(this, 300, 3185, textureX, textureY); // Import Box427
+		rightAnimTrackModel[1][4] = new ModelRendererTurbo(this, 300, 3203, textureX, textureY); // Import Box428
+		rightAnimTrackModel[1][5] = new ModelRendererTurbo(this, 300, 3226, textureX, textureY); // Import Box429
+		rightAnimTrackModel[1][6] = new ModelRendererTurbo(this, 300, 3243, textureX, textureY); // Import Box430
+		rightAnimTrackModel[1][7] = new ModelRendererTurbo(this, 300, 3261, textureX, textureY); // Import Box431
+		rightAnimTrackModel[1][8] = new ModelRendererTurbo(this, 300, 3278, textureX, textureY); // Import Box432
+
+		rightAnimTrackModel[1][0].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box423
+		rightAnimTrackModel[1][0].setRotationPoint(56F, -17F, -34F);
+
+		rightAnimTrackModel[1][1].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box425
+		rightAnimTrackModel[1][1].setRotationPoint(60F, -17F, -34F);
+		rightAnimTrackModel[1][1].rotateAngleZ = -0.73303829F;
+
+		rightAnimTrackModel[1][2].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box426
+		rightAnimTrackModel[1][2].setRotationPoint(65.2F, -12.32F, -34F);
+		rightAnimTrackModel[1][2].rotateAngleZ = -1.57079633F;
+
+		rightAnimTrackModel[1][3].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box427
+		rightAnimTrackModel[1][3].setRotationPoint(65.2F, -7.32F, -34F);
+		rightAnimTrackModel[1][3].rotateAngleZ = -2.46091425F;
+
+		rightAnimTrackModel[1][4].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box428
+		rightAnimTrackModel[1][4].setRotationPoint(44.2F, 9.68F, -34F);
+		rightAnimTrackModel[1][4].rotateAngleZ = -3.14159265F;
+
+		rightAnimTrackModel[1][5].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box429
+		rightAnimTrackModel[1][5].setRotationPoint(-51.8F, 9.68F, -34F);
+		rightAnimTrackModel[1][5].rotateAngleZ = -3.87463094F;
+
+		rightAnimTrackModel[1][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box430
+		rightAnimTrackModel[1][6].setRotationPoint(-69.6F, -6.32F, -34F);
+		rightAnimTrackModel[1][6].rotateAngleZ = -4.71238898F;
+
+		rightAnimTrackModel[1][7].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box431
+		rightAnimTrackModel[1][7].setRotationPoint(-69.6F, -11.32F, -34F);
+		rightAnimTrackModel[1][7].rotateAngleZ = -5.44542727F;
+
+		rightAnimTrackModel[1][8].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box432
+		rightAnimTrackModel[1][8].setRotationPoint(-67F, -14.32F, -34F);
+		rightAnimTrackModel[1][8].rotateAngleZ = -6.28318531F;
+
+		leftAnimTrackModel[2] = new ModelRendererTurbo[9];
+		leftAnimTrackModel[2][0] = new ModelRendererTurbo(this, 600, 3152, textureX, textureY); // Import Box433
+		leftAnimTrackModel[2][1] = new ModelRendererTurbo(this, 600, 3168, textureX, textureY); // Import Box434
+		leftAnimTrackModel[2][2] = new ModelRendererTurbo(this, 600, 3185, textureX, textureY); // Import Box435
+		leftAnimTrackModel[2][3] = new ModelRendererTurbo(this, 600, 3203, textureX, textureY); // Import Box436
+		leftAnimTrackModel[2][4] = new ModelRendererTurbo(this, 600, 3226, textureX, textureY); // Import Box437
+		leftAnimTrackModel[2][5] = new ModelRendererTurbo(this, 600, 3243, textureX, textureY); // Import Box438
+		leftAnimTrackModel[2][6] = new ModelRendererTurbo(this, 600, 3261, textureX, textureY); // Import Box439
+		leftAnimTrackModel[2][7] = new ModelRendererTurbo(this, 600, 3278, textureX, textureY); // Import Box440
+		leftAnimTrackModel[2][8] = new ModelRendererTurbo(this, 600, 3295, textureX, textureY); // Import Box453
+
+		leftAnimTrackModel[2][0].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box433
+		leftAnimTrackModel[2][0].setRotationPoint(60F, -17F, 21F);
+		leftAnimTrackModel[2][0].rotateAngleZ = -0.73303829F;
+
+		leftAnimTrackModel[2][1].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box434
+		leftAnimTrackModel[2][1].setRotationPoint(65.2F, -12.32F, 21F);
+		leftAnimTrackModel[2][1].rotateAngleZ = -1.57079633F;
+
+		leftAnimTrackModel[2][2].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box435
+		leftAnimTrackModel[2][2].setRotationPoint(65.2F, -7.32F, 21F);
+		leftAnimTrackModel[2][2].rotateAngleZ = -2.46091425F;
+
+		leftAnimTrackModel[2][3].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box436
+		leftAnimTrackModel[2][3].setRotationPoint(44.2F, 9.68F, 21F);
+		leftAnimTrackModel[2][3].rotateAngleZ = -3.14159265F;
+
+		leftAnimTrackModel[2][4].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box437
+		leftAnimTrackModel[2][4].setRotationPoint(-51.8F, 9.68F, 21F);
+		leftAnimTrackModel[2][4].rotateAngleZ = -3.87463094F;
+
+		leftAnimTrackModel[2][5].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box438
+		leftAnimTrackModel[2][5].setRotationPoint(-69.6F, -6.32F, 21F);
+		leftAnimTrackModel[2][5].rotateAngleZ = -4.71238898F;
+
+		leftAnimTrackModel[2][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box439
+		leftAnimTrackModel[2][6].setRotationPoint(-69.6F, -11.32F, 21F);
+		leftAnimTrackModel[2][6].rotateAngleZ = -5.44542727F;
+
+		leftAnimTrackModel[2][7].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box440
+		leftAnimTrackModel[2][7].setRotationPoint(-67F, -14.32F, 21F);
+		leftAnimTrackModel[2][7].rotateAngleZ = -6.28318531F;
+
+		leftAnimTrackModel[2][8].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box453
+		leftAnimTrackModel[2][8].setRotationPoint(56F, -17F, 21F);
+
+
+		rightAnimTrackModel[2] = new ModelRendererTurbo[9];
+		rightAnimTrackModel[2][0] = new ModelRendererTurbo(this, 600, 3295, textureX, textureY); // Import Box423
+		rightAnimTrackModel[2][1] = new ModelRendererTurbo(this, 600, 3152, textureX, textureY); // Import Box425
+		rightAnimTrackModel[2][2] = new ModelRendererTurbo(this, 600, 3168, textureX, textureY); // Import Box426
+		rightAnimTrackModel[2][3] = new ModelRendererTurbo(this, 600, 3185, textureX, textureY); // Import Box427
+		rightAnimTrackModel[2][4] = new ModelRendererTurbo(this, 600, 3203, textureX, textureY); // Import Box428
+		rightAnimTrackModel[2][5] = new ModelRendererTurbo(this, 600, 3226, textureX, textureY); // Import Box429
+		rightAnimTrackModel[2][6] = new ModelRendererTurbo(this, 600, 3243, textureX, textureY); // Import Box430
+		rightAnimTrackModel[2][7] = new ModelRendererTurbo(this, 600, 3261, textureX, textureY); // Import Box431
+		rightAnimTrackModel[2][8] = new ModelRendererTurbo(this, 600, 3278, textureX, textureY); // Import Box432
+
+		rightAnimTrackModel[2][0].addShapeBox(0F, 0F, 0F, 4, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box423
+		rightAnimTrackModel[2][0].setRotationPoint(56F, -17F, -34F);
+
+		rightAnimTrackModel[2][1].addShapeBox(0F, 0F, 0F, 7, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box425
+		rightAnimTrackModel[2][1].setRotationPoint(60F, -17F, -34F);
+		rightAnimTrackModel[2][1].rotateAngleZ = -0.73303829F;
+
+		rightAnimTrackModel[2][2].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box426
+		rightAnimTrackModel[2][2].setRotationPoint(65.2F, -12.32F, -34F);
+		rightAnimTrackModel[2][2].rotateAngleZ = -1.57079633F;
+
+		rightAnimTrackModel[2][3].addShapeBox(0F, 0F, 0F, 27, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box427
+		rightAnimTrackModel[2][3].setRotationPoint(65.2F, -7.32F, -34F);
+		rightAnimTrackModel[2][3].rotateAngleZ = -2.46091425F;
+
+		rightAnimTrackModel[2][4].addShapeBox(0F, 0F, 0F, 96, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box428
+		rightAnimTrackModel[2][4].setRotationPoint(44.2F, 9.68F, -34F);
+		rightAnimTrackModel[2][4].rotateAngleZ = -3.14159265F;
+
+		rightAnimTrackModel[2][5].addShapeBox(0F, 0F, 0F, 24, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box429
+		rightAnimTrackModel[2][5].setRotationPoint(-51.8F, 9.68F, -34F);
+		rightAnimTrackModel[2][5].rotateAngleZ = -3.87463094F;
+
+		rightAnimTrackModel[2][6].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box430
+		rightAnimTrackModel[2][6].setRotationPoint(-69.6F, -6.32F, -34F);
+		rightAnimTrackModel[2][6].rotateAngleZ = -4.71238898F;
+
+		rightAnimTrackModel[2][7].addShapeBox(0F, 0F, 0F, 5, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box431
+		rightAnimTrackModel[2][7].setRotationPoint(-69.6F, -11.32F, -34F);
+		rightAnimTrackModel[2][7].rotateAngleZ = -5.44542727F;
+
+		rightAnimTrackModel[2][8].addShapeBox(0F, 0F, 0F, 122, 1, 13, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Import Box432
+		rightAnimTrackModel[2][8].setRotationPoint(-67F, -14.32F, -34F);
+		rightAnimTrackModel[2][8].rotateAngleZ = -6.28318531F;
+
 		
 		//Copy This part into your model
 		

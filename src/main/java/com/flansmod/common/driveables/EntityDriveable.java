@@ -121,6 +121,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	private int[] emitterTimers;
 	
+	public int animCount = 0;
+	public int animFrame = 0;
+	
 	public EntityDriveable(World world)
 	{
 		super(world);
@@ -830,15 +833,43 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         {
         	ParticleEmitter emitter = type.emitters.get(i);
         	emitterTimers[i]--;
+        	boolean canEmit = false;
+    		DriveablePart part = getDriveableData().parts.get(EnumDriveablePart.getPart(emitter.part));
+			float healthPercentage = (float)part.health / (float)part.maxHealth;
+    		if(isPartIntact(EnumDriveablePart.getPart(emitter.part)) && healthPercentage >= emitter.minHealth && healthPercentage <= emitter.maxHealth){
+    			canEmit = true;
+    		} else {
+    			canEmit = false;
+    		}
         	if(emitterTimers[i] <= 0)
-        	{
-        		//Emit!
-        		Vector3f pos = axes.findLocalVectorGlobally(
-        							new Vector3f(emitter.origin.x + rand.nextFloat() * emitter.extents.x - emitter.extents.x * 0.5f, 
-        										 emitter.origin.y + rand.nextFloat() * emitter.extents.y - emitter.extents.y * 0.5f, 
-        										 emitter.origin.z + rand.nextFloat() * emitter.extents.z - emitter.extents.z * 0.5f));
+        	{     		
+        		if(throttle >= emitter.minThrottle && throttle <= emitter.maxThrottle && canEmit){
+        		//Emit!       		
+        		Vector3f velocity = new Vector3f(0,0,0);;   
+        		Vector3f pos = new Vector3f(0,0,0);
+        		if(seats != null && seats[0] != null){
+        		if(EnumDriveablePart.getPart(emitter.part) != EnumDriveablePart.turret && EnumDriveablePart.getPart(emitter.part) != EnumDriveablePart.head){
+        			Vector3f localPosition = new Vector3f(emitter.origin.x + rand.nextFloat() * emitter.extents.x - emitter.extents.x * 0.5f, 
+							 emitter.origin.y + rand.nextFloat() * emitter.extents.y - emitter.extents.y * 0.5f, 
+							 emitter.origin.z + rand.nextFloat() * emitter.extents.z - emitter.extents.z * 0.5f);
+        			
+        		pos = axes.findLocalVectorGlobally(localPosition);
+        		velocity = axes.findLocalVectorGlobally(emitter.velocity);   
+        		} else if(EnumDriveablePart.getPart(emitter.part) == EnumDriveablePart.turret || EnumDriveablePart.getPart(emitter.part) != EnumDriveablePart.head){
+        			
+        			Vector3f localPosition2 = new Vector3f(emitter.origin.x + rand.nextFloat() * emitter.extents.x - emitter.extents.x * 0.5f, 
+							 emitter.origin.y + rand.nextFloat() * emitter.extents.y - emitter.extents.y * 0.5f, 
+							 emitter.origin.z + rand.nextFloat() * emitter.extents.z - emitter.extents.z * 0.5f);
+        			
+        		RotatedAxes yawOnlyLooking = new RotatedAxes(seats[0].looking.getYaw() + axes.getYaw(), axes.getPitch(), axes.getRoll());
+
+        		pos = yawOnlyLooking.findLocalVectorGlobally(localPosition2);
+        		velocity = yawOnlyLooking.findLocalVectorGlobally(emitter.velocity);  
+        		}
         		worldObj.spawnParticle(emitter.effectType, 
-        				posX + pos.x, posY + pos.y, posZ + pos.z, emitter.velocity.x, emitter.velocity.y, emitter.velocity.z);
+        				posX + pos.x, posY + pos.y, posZ + pos.z, velocity.x, velocity.y, velocity.z);
+        		}
+        		}
         		emitterTimers[i] = emitter.emitRate;
         	}
         }

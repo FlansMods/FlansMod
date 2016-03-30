@@ -35,19 +35,28 @@ ShellSlots 5
 //Driver and passenger positions
 Driver 0 28 0 -360 360 -9 20
 RotatedDriverOffset -6 0 -11
+//Turret rotation stuff
+DriverAimSpeed 2 2 0
+DriverYawBeforePitch false
+DriverTraverseSounds true
+YawSound TurretTraverse1
+YawSoundLength 21
+PitchSound TurretTraverse2
+PitchSoundLength 20
 Passengers 1
 Passenger 1 0 20 0 turret -360 360 -15 40 m60 MG3
 RotatedPassengerOffset 1 -10 0 13
-GunOrigin 1 0 25 15
-AllowAllAmmo false
-AddAmmo shell
-AddAmmo HEshell
+GunOrigin 1 -5 47 -15
+PassengerLegacyAiming 1 true
 BarrelPosition 101 26 1 
 //Secondary gun
 AddGun 52 28 -2 turret m60
 //Delays are in ticks or 1/20ths of seconds
 ShootDelay 1
 ShellDelay 70
+AllowAllAmmo false
+AddAmmo shell		
+AddAmmo HEshell
 //Sounds
 StartSound ChallengerIdle
 StartSoundLength 40
@@ -55,8 +64,7 @@ EngineSound ChallengerRun
 EngineSoundLength 40
 ShootSoundPrimary 90mm
 ShootSoundSecondary M60Shoot
-TurretRotationSpeed 0.06
-DamageModifierPrimary 100
+DammageModifierPrimary 100
 //Recipe
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
@@ -75,6 +83,41 @@ SetupPart rightTrack 10000 -68 -11 21 133 21 11
 SetupPart turret 21500 -60 21 -29 112 14 58
 BulletDetection 7
 ModelScale 0.77
-
 RotateWheels true
 Description German Main Battle Tank
+TrackFrames 3
+//Basic emission
+AddEmitter smoke 1 [-71,10,-16] [1,1,1] [-0.5,0,0] -1 1 0 1 core
+AddEmitter smoke 1 [-71,10,16] [1,1,1] [-0.5,0,0] -1 1 0 1 core
+//Damage
+AddEmitter smoke 2 [-62,24,-10] [7,1,7] [0,0.5,0] -1 1 0 0.75 core
+AddEmitter smoke 2 [-62,24,10] [7,1,7] [0,0.5,0] -1 1 0 0.75 core
+AddEmitter smoke 2 [-27,30,-26] [3,3,1] [0,0.5,-0.5] -1 1 0 0.75 turret
+AddEmitter largesmoke 3 [-62,24,-10] [7,1,7] [0,1,0] -1 1 0 0.5 core
+AddEmitter largesmoke 3 [-62,24,10] [7,1,7] [0,1,0] -1 1 0 0.5 core
+AddEmitter largesmoke 2 [-27,30,-26] [3,3,1] [0,0.5,-0.5] -1 1 0 0.5 turret
+AddEmitter largesmoke 1 [-62,24,-10] [7,1,7] [0,1.5,0] -1 1 0 0.25 core
+AddEmitter largesmoke 1 [-62,24,10] [7,1,7] [0,1.5,0] -1 1 0 0.25 core
+AddEmitter flame 1 [-62,24,-10] [5,1,5] [0,1,0] -1 1 0 0.25 core
+AddEmitter flame 1 [-62,24,10] [5,1,5] [0,1,0] -1 1 0 0.25 core
+AddEmitter largesmoke 1 [-27,30,-26] [3,3,1] [0,1,-1] -1 1 0 0.5 turret
+//Stage 1
+AddEmitter explode 3 [-71,10,-16] [1,1,1] [-0.5,0,0] 0.05 0.33 0 1 core
+AddEmitter explode 3 [-71,10,16] [1,1,1] [-0.5,0,0] 0.05 0.33 0 1 core
+//Stage 1 shift
+AddEmitter explode 1 [-71,10,-16] [1,1,1] [-3,0,0] 0.05 0.07 0 1 core
+AddEmitter explode 1 [-71,10,16] [1,1,1] [-3,0,0] 0.05 0.07 0 1 core
+//Stage 2
+AddEmitter explode 2 [-71,10,-16] [1,1,1] [-1,0,0] 0.33 0.66 0 1 core
+AddEmitter explode 2 [-71,10,16] [1,1,1] [-1,0,0] 0.33 0.66 0 1 core
+//Stage 2 shift
+AddEmitter explode 1 [-71,10,-16] [1,1,1] [-3,0,0] 0.33 0.35 0 1 core
+AddEmitter explode 1 [-71,10,16] [1,1,1] [-3,0,0] 0.33 0.35 0 1 core
+//Stage 3
+AddEmitter explode 2 [-71,10,-16] [1,1,1] [-1.5,0,0] 0.66 2 0 1 core
+AddEmitter explode 2 [-71,10,16] [1,1,1] [-1.5,0,0] 0.66 2 0 1 core
+AddEmitter largesmoke 2 [-71,10,-16] [1,1,1] [-1.5,0,0] 0.66 2 0 1 core
+AddEmitter largesmoke 2 [-71,10,16] [1,1,1] [-1.5,0,0] 0.66 2 0 1 core
+//Stage 3 shift
+AddEmitter explode 1 [-71,10,-16] [1,1,1] [-3,0,0] 0.66 0.67 0 1 core
+AddEmitter explode 1 [-71,10,16] [1,1,1] [-3,0,0] 0.66 0.67 0 1 core
