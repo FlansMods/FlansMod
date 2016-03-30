@@ -14,3 +14,5 @@ item.flagpole.name=Флагшток
 tile.teamsSpawner.0.name=Спаунер предметов
 tile.teamsSpawner.1.name=Спаунер игроков
 tile.teamsSpawner.2.name=Спаунер техники
+item.rainbowPaintcan.name=Ведёрко с разноцветной краской (для кастомной покраски)
+block.paintjobTable.name=Окрасочный стол
