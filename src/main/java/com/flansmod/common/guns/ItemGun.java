@@ -666,6 +666,11 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
 			
+			if(hitData instanceof EntityHit){
+	       		world.spawnParticle(EnumParticleTypes.REDSTONE, hit.x, hit.y, hit.z, 255,0,0);
+
+			}
+			
 			if(hitData instanceof BlockHit)
 			{
 				BlockHit blockHit = (BlockHit)hitData;
@@ -674,6 +679,9 @@ public class ItemGun extends Item implements IPaintableItem
 				IBlockState blockState = world.getBlockState(blockHit.raytraceResult.getBlockPos());
 				
 				Vec3i normal = blockHit.raytraceResult.sideHit.getDirectionVec();
+				
+        		world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, hit.x, hit.y, hit.z, 0,0,0);
+
 				
 				if(blockState != null)
 				{
