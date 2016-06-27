@@ -285,7 +285,20 @@ public class GuiGunBox extends GuiContainer
 		}
 		FontRenderer fr = mc.fontRendererObj;
 		
-		fr.drawString(entry.type.name, x + 5, y + 5, 0x00000000);
+		String bufferLine = "";
+		String bufferLine2 = "";
+		String bufferArray[] = entry.type.name.split(" ");
+
+		for (int i = 0; i < bufferArray.length; i++)
+		{
+			if ((bufferLine.length() + bufferArray[i].length()) <= 16)
+				bufferLine += bufferArray[i] + " ";
+			else
+				bufferLine2 += bufferArray[i] + " ";
+		}
+
+		fr.drawString(bufferLine, x + 5, y + 5, 0x00000000);
+		fr.drawString(bufferLine2, x + 5, y + 15, 0x00000000);
 		
 		fr.drawString("Cost", x + 5, y + 35, 0x00000000);
 		
