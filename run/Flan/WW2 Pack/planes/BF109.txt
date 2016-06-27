@@ -49,8 +49,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 69 39 6 nose MG42
-ShootPointPrimary 69 39 -6 nose MG42
+ShootPointPrimary 69 39 6 nose mg42
+ShootPointPrimary 69 39 -6 nose mg42
 ShootPointPrimary 94 30 0 nose MG151
 AlternatePrimary True
 AlternateSecondary False
