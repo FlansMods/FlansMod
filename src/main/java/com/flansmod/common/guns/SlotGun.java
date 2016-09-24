@@ -20,7 +20,7 @@ public class SlotGun extends Slot
 	{
 		switch(slotID)
 		{
-		case 0 : return stack == null || (stack.getItem() instanceof ItemGun && !((ItemGun)stack.getItem()).GetType().deployable);
+		case 0 : return stack == null || (stack.getItem() instanceof ItemGun && !((ItemGun)stack.getItem()).GetType().deployable && stack.getTagCompound() != null);
 		case 1 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.barrel);
 		case 2 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.sights);
 		case 3 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.stock);
