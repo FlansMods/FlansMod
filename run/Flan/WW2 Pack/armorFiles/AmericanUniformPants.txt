@@ -4,14 +4,14 @@
 
 //---Standard-------------------------------------
 // Naming
-Name GermanHelmet
-ShortName GermanHelmet
+Name AmericanUniformPants
+ShortName AmericanUniformPants
 ItemID Your ID
 
 
 // Visuals
 ModelScale 1
-Icon GermanHelmet
+Icon AmericanNPants
 
 
 // Recipe
@@ -23,12 +23,12 @@ Icon GermanHelmet
 
 //---Armor----------------------------------------
 //Type
-Type Helmet
+Type Pants
 
 
 //Visuals
-Model ww2.GermanHelmet
-ArmorTexture GSupport
+Model ww2.AmericanPants
+ArmorTexture AAssault
 
 
 //Armor Settings

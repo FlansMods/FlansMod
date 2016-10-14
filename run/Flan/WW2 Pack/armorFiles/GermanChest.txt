@@ -4,14 +4,14 @@
 
 //---Standard-------------------------------------
 // Naming
-Name GermanHelmet
-ShortName GermanHelmet
+Name GermanChest
+ShortName GermanChest
 ItemID Your ID
 
 
 // Visuals
 ModelScale 1
-Icon GermanHelmet
+Icon GermanCoat
 
 
 // Recipe
@@ -23,12 +23,12 @@ Icon GermanHelmet
 
 //---Armor----------------------------------------
 //Type
-Type Helmet
+Type Body
 
 
 //Visuals
-Model ww2.GermanHelmet
-ArmorTexture GSupport
+Model ww2.GermanChest
+ArmorTexture GEngineer
 
 
 //Armor Settings

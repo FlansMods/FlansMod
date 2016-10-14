@@ -1,18 +1,18 @@
 //Naming
-Name Tiger
-ShortName Tiger
+Name Tiger II
+ShortName TigerII
 //Visuals
-Icon Tiger
-Model ww2.Tiger
-Texture SkinTiger
+Icon TigerII
+Model ww2.TigerII
+Texture SkinTigerII
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.45
-MaxNegativeThrottle 0.35
+MaxThrottle 0.35
+MaxNegativeThrottle 0.2
 //Steering modifiers
-TurnLeftSpeed 0.3
-TurnRightSpeed 0.3
+TurnLeftSpeed 0.25
+TurnRightSpeed 0.25
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
@@ -33,8 +33,8 @@ FuelTankSize 2000
 CargoSlots 20
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 39 0 -360 360 -8 15
-RotatedDriverOffset -6 0 -14
+Driver 0 34 0 -360 360 -8 15
+RotatedDriverOffset -4 0 -8
 Passengers 0
 //GunOrigin 1 0 0 10
 BarrelPosition 0 34 0
@@ -63,33 +63,42 @@ AddRecipeParts core 1 heavytankBody
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-AddDye 15 gray
+AddDye 18 gray
 
 //Health and collision
 SetupPart core 13500 -55 -1 -23 120 27 46
 SetupPart turret 13300 -30 26 -30 60 18 60
-SetupPart leftTrack 8000 -60 -10 -37 120 22 14
-SetupPart rightTrack 8000 -60 -10 23 120 22 14
+SetupPart leftTrack 8000 -65 -10 -37 120 22 14
+SetupPart rightTrack 8000 -65 -10 23 120 22 14
 
 BulletDetection 5
 
 //Size Multiplier; scales up the model
-ModelScale 1.2
-Description German Heavy Tank
 BulletDetection 5
 
 //Size Multiplier; scales up the model
-ModelScale 1.2
+ModelScale 1.1
 Description German Heavy Tank
+
+//Turret traverse sounds
+
+//Enables traverse sounds for driver turret
+DriverTraverseSounds true
+
+PitchSound TurretTraverse1
+PitchSoundLength 61
+
+YawSound TurretTraverse2
+YawSoundLength 38
 
 CanRoll true
 
 //Smoke effects
 
 //Basic emission
-AddEmitter smoke 1 [-60,25,7] [1,1,1] [0,0.5,0] -1 1 0 1 core
+AddEmitter smoke 1 [-65,25,7] [1,1,1] [0,0.5,0] -1 1 0 1 core
 
-AddEmitter smoke 1 [-60,25,-7] [1,1,1] [0,0.5,0] -1 1 0 1 core
+AddEmitter smoke 1 [-65,25,-7] [1,1,1] [0,0.5,0] -1 1 0 1 core
 
 
 //Damage
@@ -114,54 +123,54 @@ AddEmitter largesmoke 1 [5,43,14] [3,1,3] [0,1,0] -1 1 0 0.5 turret
 
 //1st gear change
 
-AddEmitter largesmoke 1 [-60,25,7] [1,1,1] [0,1.5,0] 0.02 0.07 0 1 core
+AddEmitter largesmoke 1 [-65,25,7] [1,1,1] [0,1.5,0] 0.02 0.07 0 1 core
 
-AddEmitter largesmoke 1 [-60,25,-7] [1,1,1] [0,1.5,0] 0.02 0.07 0 1 core
+AddEmitter largesmoke 1 [-65,25,-7] [1,1,1] [0,1.5,0] 0.02 0.07 0 1 core
 
 //1st gear
 
-AddEmitter explode 1 [-60,25,7] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
+AddEmitter explode 1 [-65,25,7] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
 
-AddEmitter explode 1 [-60,25,-7] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
+AddEmitter explode 1 [-65,25,-7] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
 
 //2nd gear change
 
-AddEmitter largesmoke 1 [-60,25,7] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
+AddEmitter largesmoke 1 [-65,25,7] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
 
-AddEmitter largesmoke 1 [-60,25,-7] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
+AddEmitter largesmoke 1 [-65,25,-7] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
 
 //2nd gear
 
-AddEmitter explode 1 [-60,25,7] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
+AddEmitter explode 1 [-65,25,7] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
 
-AddEmitter explode 1 [-60,25,-7] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
+AddEmitter explode 1 [-65,25,-7] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
 
 
 //3rd gear change
 
-AddEmitter largesmoke 1 [-60,25,7] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
+AddEmitter largesmoke 1 [-65,25,7] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
 
-AddEmitter largesmoke 1 [-60,25,-7] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
+AddEmitter largesmoke 1 [-65,25,-7] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
 
-AddEmitter flame 1 [-60,25,7] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
+AddEmitter flame 1 [-65,25,7] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
 
-AddEmitter flame 1 [-60,25,-7] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
+AddEmitter flame 1 [-65,25,-7] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
 
 //3rd gear
-AddEmitter explode 1 [-60,25,7] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
+AddEmitter explode 1 [-65,25,7] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
 
-AddEmitter explode 1 [-60,25,-7] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
+AddEmitter explode 1 [-65,25,-7] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
 
-AddEmitter largesmoke 3 [-60,25,7] [1,1,1] [0,0.5,0] 0.8 2 0 1 core
+AddEmitter largesmoke 3 [-65,25,7] [1,1,1] [0,0.5,0] 0.8 2 0 1 core
 
-AddEmitter largesmoke 3 [-60,25,-7] [1,1,1] [0,0.5,0] 0.8 2 0 1 core
+AddEmitter largesmoke 3 [-65,25,-7] [1,1,1] [0,0.5,0] 0.8 2 0 1 core
 
 //4th gear change
 
-AddEmitter largesmoke 1 [-60,25,7] [1,1,1] [0,5,0] 0.7 0.75 0 1 core
+AddEmitter largesmoke 1 [-65,25,7] [1,1,1] [0,5,0] 0.7 0.75 0 1 core
 
-AddEmitter largesmoke 1 [-60,25,-7] [1,1,1] [0,5,0] 0.7 0.77 0 1 core
+AddEmitter largesmoke 1 [-65,25,-7] [1,1,1] [0,5,0] 0.7 0.77 0 1 core
 
-AddEmitter flame 1 [-60,25,7] [1,1,1] [0,5,0] 0.7 0.73 0 1 core
+AddEmitter flame 1 [-65,25,7] [1,1,1] [0,5,0] 0.7 0.73 0 1 core
 
-AddEmitter flame 1 [-60,25,-7] [1,1,1] [0,5,0] 0.7 0.73 0 1 core
+AddEmitter flame 1 [-65,25,-7] [1,1,1] [0,5,0] 0.7 0.73 0 1 core

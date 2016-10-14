@@ -4,14 +4,14 @@
 
 //---Standard-------------------------------------
 // Naming
-Name GermanHelmet
-ShortName GermanHelmet
+Name GermanBoots
+ShortName GermanUniformBoots
 ItemID Your ID
 
 
 // Visuals
 ModelScale 1
-Icon GermanHelmet
+Icon GermanBoots
 
 
 // Recipe
@@ -23,12 +23,12 @@ Icon GermanHelmet
 
 //---Armor----------------------------------------
 //Type
-Type Helmet
+Type Boots
 
 
 //Visuals
-Model ww2.GermanHelmet
-ArmorTexture GSupport
+Model ww2.GermanBoots
+ArmorTexture GEngineer
 
 
 //Armor Settings

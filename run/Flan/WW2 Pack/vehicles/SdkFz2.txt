@@ -1,0 +1,99 @@
+//Naming
+Name SdkFz.2
+ShortName SdkFz2
+//Visuals
+Icon SdkFz2
+Model ww2.SdkFz2
+Texture SkinSdkFz2
+RotateWheels true
+//Third Person Camera Distance
+CameraDistance 5.0
+//Throttle
+MaxThrottle 0.5
+MaxNegativeThrottle 0.4
+//Steering modifiers
+TurnLeftSpeed 0.45
+TurnRightSpeed 0.45
+//Drag
+Drag 1.0
+//Mass (In tons)
+Mass 1.0
+//Moment of Inertia (in crazy units. Just fiddle with this until you find something nice)
+MomentOfInertia 10.0
+//More bounciness means the vehicle will bounce more upon going up slopes, but fall through the ground less
+Bounciness 0.3
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -28 -10 -14
+WheelPosition 1 -28 -10 14
+WheelPosition 2 24 -10 14
+WheelPosition 3 24 -10 -14
+WheelSpringStrength 0.5
+//If true, then all wheels will apply drive forces
+FourWheelDrive false
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 1000
+//Inventory Slots
+CargoSlots 36
+ShellSlots 0
+//Driver and passenger positions
+Driver -11 8 0
+RotatedDriverOffset 0 0 0
+Passengers 1
+Passenger 1 -29 6 0 core 140 220 -10 45 mg42 PassengerGun1
+GunOrigin 1 -45 0 0
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 999
+ShellDelay 999
+//Sounds
+StartSound jeepidle
+StartSoundLength 7
+EngineSound jeepmove
+EngineSoundLength 61
+ShootSound bullet
+ShellSound shell
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts core 1 smallChassis 3 vehicleSeat
+AddRecipeParts frontLeftWheel 1 wheel
+AddRecipeParts frontRightWheel 1 wheel
+AddRecipeParts backLeftWheel 1 wheel
+AddRecipeParts backRightWheel 1 wheel
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 5 gray
+//Health and collision
+SetupPart core 3000 -46 -10 -13 72 29 27
+BulletDetection 5
+Description German light half-track gun tractor
+PassengerLegacyAiming 1 true
+
+
+
+//Turret traverse speeds, yaw/pitch/z (z is unused, set to 0)
+DriverAimSpeed 3.0f 3.0f 0f
+
+//Set to true to adjust turret yaw before pitch
+DriverYawBeforePitch false
+
+
+//1st gear
+
+AddEmitter explode 1 [-40,-4,0] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
+
+//2nd gear
+
+AddEmitter explode 1 [-40,-4,0] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
+
+//3rd gear
+AddEmitter explode 1 [-40,-4,0] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
+
+AddEmitter largesmoke 3 [-40,-4,0] [1,1,1] [0,0.5,0] 0.8 2 0 1 core
+
+//4th gear change
+
+AddEmitter largesmoke 1 [-40,-4,0] [1,1,1] [0,5,0] 0.7 0.75 0 1 core

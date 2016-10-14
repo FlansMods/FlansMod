@@ -4,7 +4,8 @@ ShortName Sherman
 //Visuals
 Icon Sherman
 Model ww2.Sherman
-Texture SkinSherman
+Texture SkinE8Sherman
+RotateWheels true
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
@@ -33,25 +34,25 @@ FuelTankSize 2000
 CargoSlots 20
 ShellSlots 5
 //Driver and passenger positions
-Driver 0 36 0 -360 360 -10 25
-RotatedDriverOffset -6 0 7
+Driver 0 32 0 -360 360 -10 25
+RotatedDriverOffset -12 0 8
 Passengers 0
 //Secondary gun
-AddGun 8 34 8 turret browning
-BarrelPosition 25 34 0
+AddGun 8 30 -8 turret browning
+BarrelPosition 55 30 0
 AddAmmo shell
 AddAmmo HEshell
+AllowAllAmmo false
 //Delays are in ticks or 1/20ths of seconds
-ShootDelay 1
-ShellDelay 100
+ShootDelay 2
+ShellDelay 110
 //Sounds
 StartSound TankIdle
 StartSoundLength 20
 EngineSound TankMove
 EngineSoundLength 60
-ShootSoundPrimary Tank3Shoot
+ShootSoundPrimary 75mmGun
 ShootSoundSecondary BrowningShoot
-TurretRotationSpeed 0.075
 DamageModifierPrimary 44
 //Recipe
 //Each section of the plane may have many parts
@@ -69,5 +70,72 @@ SetupPart turret 10520 -25 25 -25 50 18 50
 SetupPart leftTrack 8000 -61 -10 -28 112 17 13
 SetupPart rightTrack 8000 -61 -10 15 112 17 13
 BulletDetection 7
-ModelScale 1.1
+ModelScale 1.15
 Description American Medium Tank
+AddEmitter explode 8 [-60,12,-8] [5,5,5] [0,1,0]
+AddEmitter explode 8 [-60,12,8] [5,5,5] [0,1,0]
+
+
+
+//Turret traverse speeds, yaw/pitch/z (z is unused, set to 0)
+DriverAimSpeed 1.0f 0.8f 0f
+
+//Set to true to adjust turret yaw before pitch
+DriverYawBeforePitch false
+
+//Turret traverse sounds
+
+//Enables traverse sounds for driver turret
+DriverTraverseSounds true
+
+PitchSound TurretTraverse1
+PitchSoundLength 61
+
+YawSound TurretTraverse2
+YawSoundLength 38
+
+
+
+
+
+//1st gear change
+
+AddEmitter largesmoke 1 [-53,5,5] [1,1,1] [0,0,0] 0.02 0.07 0 1 core
+AddEmitter largesmoke 1 [-53,5,-5] [1,1,1] [0,0,0] 0.02 0.07 0 1 core
+
+//1st gear
+
+AddEmitter explode 1 [-53,5,5] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
+AddEmitter explode 1 [-53,5,-5] [1,1,1] [0,0.2,0] 0.05 0.2 0 1 core
+
+//2nd gear change
+
+AddEmitter largesmoke 1 [-53,5,5] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
+AddEmitter largesmoke 1 [-53,5,-5] [1,1,1] [0,3,0] 0.2 0.25 0 1 core
+
+//2nd gear
+
+AddEmitter explode 1 [-53,5,5] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
+AddEmitter explode 1 [-53,5,-5] [1,1,1] [0,0.7,0] 0.2 0.5 0 1 core
+
+//3rd gear change
+
+AddEmitter largesmoke 1 [-53,5,5] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
+AddEmitter largesmoke 1 [-53,5,-5] [1,1,1] [0,4,0] 0.5 0.52 0 1 core
+
+AddEmitter flame 1 [-53,5,5] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
+AddEmitter flame 1 [-53,5,-5] [1,1,1] [0,2,0] 0.5 0.51 0 1 core
+
+//3rd gear
+AddEmitter explode 1 [-53,5,5] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
+AddEmitter explode 1 [-53,5,-5] [1,1,1] [0,0.7,0] 0.5 2 0 1 core
+AddEmitter largesmoke 3 [-53,5,5] [1,1,1] [0,0,0] 0.8 2 0 1 core
+AddEmitter largesmoke 3 [-53,5,-5] [1,1,1] [0,0,0] 0.8 2 0 1 core
+
+//4th gear change
+
+AddEmitter largesmoke 1 [-53,5,5] [1,1,1] [0,5,0] 0.7 0.75 0 1 core
+AddEmitter largesmoke 1 [-53,5,-5] [1,1,1] [0,5,0] 0.7 0.75 0 1 core
+
+AddEmitter flame 1 [-53,5,5] [1,1,1] [0,5,0] 0.7 0.73 0 1 core
+AddEmitter flame 1 [-53,5,-5] [1,1,1] [0,5,0] 0.7 0.73 0 1 core
