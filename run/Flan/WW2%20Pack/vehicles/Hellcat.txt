@@ -1,0 +1,87 @@
+//Naming
+Name M18 Hellcat
+ShortName Hellcat
+//Visuals
+Icon Hellcat
+Model ww2.Hellcat
+Texture SkinHellcat
+RotateWheels True
+//Third Person Camera Distance
+CameraDistance 7.5
+//Throttle
+MaxThrottle 0.8
+MaxNegativeThrottle 0.65
+//Steering modifiers
+TurnLeftSpeed 0.25
+TurnRightSpeed 0.25
+//For calculating whether wheels are on the ground or not for driving
+WheelRadius 1.0
+//Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
+WheelPosition 0 -32 -10 -18
+WheelPosition 1 -32 -10 18
+WheelPosition 2 32 -10 18
+WheelPosition 3 32 -10 -18
+WheelSpringStrength 0.5
+//Bouncy bouncy
+Bounciness 0.3
+//If true, then all wheels will apply drive forces
+FourWheelDrive true
+//Tank mode activate
+Tank true
+//Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
+FuelTankSize 2000
+//Inventory Slots
+CargoSlots 20
+ShellSlots 5
+//Driver and passenger positions
+Driver 0 16 0 -360 360 -10 20
+RotatedDriverOffset 7 0 -8
+//Secondary gun
+Passengers 1
+Passenger 1 0 26 0 turret -360 360 -10 20 50Cal PassengerGun1
+RotatedPassengerOffset 1 -9 0 -11
+GunOrigin 1 6 18 -11
+BarrelPosition 75 28 0
+AddAmmo shell
+AddAmmo HEshell
+//Delays are in ticks or 1/20ths of seconds
+ShootDelay 1
+ShellDelay 100
+//Sounds
+StartSound TankIdle
+StartSoundLength 20
+EngineSound TankMove
+EngineSoundLength 60
+ShootSoundPrimary Tank3Shoot
+ShootSoundSecondary BrowningShoot
+TurretRotationSpeed 0.025
+DamageModifierPrimary 44
+//Recipe
+//Each section of the plane may have many parts
+//The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
+//rightWing, nose, turret, coreWheel, core
+AddRecipeParts turret 1 mediumtankTurret 2 vehicleSeat
+AddRecipeParts core 1 mediumtankBody
+AddRecipeParts leftTrack 1 catTrack
+AddRecipeParts rightTrack 1 catTrack
+//Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+AddDye 10 green
+//Health and collision
+SetupPart core 9550 -61 -3 -15 114 28 30
+SetupPart turret 8550 -25 25 -25 50 18 50
+SetupPart leftTrack 7000 -61 -10 -28 112 17 13
+SetupPart rightTrack 7000 -61 -10 15 112 17 13
+BulletDetection 7
+ModelScale 1
+Description American Tank Destroyer
+PassengerLegacyAiming 1 true
+//Turret traverse sounds
+
+//Enables traverse sounds for driver turret
+DriverTraverseSounds true
+
+PitchSound TurretTraverse1
+PitchSoundLength 61
+
+YawSound TurretTraverse2
+YawSoundLength 38
