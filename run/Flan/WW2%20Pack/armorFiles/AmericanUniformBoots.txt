@@ -1,0 +1,40 @@
+//---Standard Armor Config for Flans Mod----------
+//Created by Minecraft-SMP Toolbox 2.2.0.0
+
+
+//---Standard-------------------------------------
+// Naming
+Name AmericanUniformBoots
+ShortName AmericanUniformBoots
+ItemID Your ID
+
+
+// Visuals
+ModelScale 1
+Icon AmericanNBoots
+
+
+// Recipe
+
+
+//Misc
+
+//------------------------------------------------
+
+//---Armor----------------------------------------
+//Type
+Type Boots
+
+
+//Visuals
+Model ww2.AmericanBoots
+ArmorTexture AAssault
+
+
+//Armor Settings
+
+
+//Helmet Settings
+SmokeProtection false
+
+//------------------------------------------------
