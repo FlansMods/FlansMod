@@ -58,30 +58,29 @@ public class AAGunType extends InfoType
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAAGun.class);
 			}
-			if (split[0].equals("Texture"))
-			{
-				texture = split[1];
-			}
-			if (split[0].equals("Damage"))
-			{
-				damage = Integer.parseInt(split[1]);
-			}
-			if (split[0].equals("ReloadTime"))
-			{
-				reloadTime = Integer.parseInt(split[1]);
-			}
-			if (split[0].equals("Recoil"))
-			{
-				recoil = Integer.parseInt(split[1]);
-			}
-			if (split[0].equals("Accuracy"))
-			{
-				accuracy = Integer.parseInt(split[1]);
-			}
-			if (split[0].equals("ShootDelay"))
-			{
-				shootDelay = Integer.parseInt(split[1]);
-			}
+
+			texture = ReadSingleString(split, "Texture", texture);
+			damage = ReadInt(split, "Damage", damage);
+			reloadTime = ReadInt(split, "ReloadTime", reloadTime);
+			recoil = ReadInt(split, "Recoil", recoil);
+			accuracy = ReadInt(split, "Accuracy", accuracy);
+			shootDelay = ReadInt(split, "ShootDelay", shootDelay);
+			fireAlternately = ReadBoolean(split, "FireAlternately", fireAlternately);
+			health = ReadInt(split, "Health", health);
+			topViewLimit = ReadFloat(split, "TopViewLimit", topViewLimit);
+			bottomViewLimit = ReadFloat(split, "BottomViewLimit", bottomViewLimit);
+			targetMobs = ReadBoolean(split, "TargetMobs", targetMobs);
+			targetPlayers = ReadBoolean(split, "TargetPlayers", targetPlayers);
+			targetVehicles = ReadBoolean(split, "TargetVehicles", targetVehicles);
+			targetPlanes = ReadBoolean(split, "TargetPlanes", targetPlanes);
+			targetMechas = ReadBoolean(split, "TargetMechas", targetMechas);
+			shareAmmo = ReadBoolean(split, "ShareAmmo", shareAmmo);
+			targetRange = ReadFloat(split, "TargetRange", targetRange);
+			bottomViewLimit = ReadFloat(split, "BottomViewLimit", bottomViewLimit);
+			
+			if(split[0].equals("TargetDriveables"))
+				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);
+
 			if (split[0].equals("ShootSound"))
 			{
 				shootSound = split[1];
@@ -91,10 +90,6 @@ public class AAGunType extends InfoType
 			{
 				reloadSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "aaguns", split[1]);
-			}
-			if (split[0].equals("FireAlternately"))
-			{
-				fireAlternately = split[1].equals("True");
 			}
 			if (split[0].equals("NumBarrels"))
 			{
@@ -114,14 +109,6 @@ public class AAGunType extends InfoType
 			{
 				health = Integer.parseInt(split[1]);
 			}
-			if (split[0].equals("TopViewLimit"))
-			{
-				topViewLimit = Float.parseFloat(split[1]);
-			}
-			if (split[0].equals("BottomViewLimit"))
-			{
-				bottomViewLimit = Float.parseFloat(split[1]);
-			}
 			if (split[0].equals("Ammo"))
 			{
 				BulletType type = BulletType.getBullet(split[1]);
@@ -136,25 +123,8 @@ public class AAGunType extends InfoType
 				gunnerY = Integer.parseInt(split[2]);
 				gunnerZ = Integer.parseInt(split[3]);
 			}
-			if(split[0].equals("TargetMobs"))
-				targetMobs = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("TargetPlayers"))
-				targetPlayers = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("TargetVehicles"))
-				targetVehicles = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("TargetPlanes"))
-				targetPlanes = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("TargetMechas"))
-				targetMechas = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("TargetDriveables"))
-				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("ShareAmmo"))
-				shareAmmo = Boolean.parseBoolean(split[1]);
-			if (split[0].equals("TargetRange"))
-			{
-				targetRange = Float.parseFloat(split[1]);
-			}
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			FlansMod.log("" + e);
 		}

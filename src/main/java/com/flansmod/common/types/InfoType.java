@@ -100,47 +100,31 @@ public class InfoType
 	{
 		try
 		{
-			if(split[0].equals("Model"))
-				modelString = split[1];
-			else if(split[0].equals("ModelScale"))
-				modelScale = Float.parseFloat(split[1]);
-			else if (split[0].equals("Name"))
-			{
-				name = split[1];
-				for (int i = 0; i < split.length - 2; i++)
-				{
-					name = name + " " + split[i + 2];
-				}
-			}
-			else if (split[0].equals("Description"))
-			{
-				description = split[1];
-				for (int i = 0; i < split.length - 2; i++)
-				{
-					description = description + " " + split[i + 2];
-				}
-			}
-			else if (split[0].equals("ShortName"))
-			{
-				shortName = split[1];
-			}
-			else if (split[0].equals("Colour") || split[0].equals("Color"))
+			// Standard line reads
+			shortName = ReadSingleString(split, "ShortName", shortName);
+			name = ReadAndConcatenateMultipleStrings(split, "Name", name);
+			description = ReadAndConcatenateMultipleStrings(split, "Description", description);
+			
+			modelString = ReadSingleString(split, "Model", modelString);
+			modelScale = ReadFloat(split, "ModelScale", modelScale);
+			
+			iconPath = ReadSingleString(split, "Icon", iconPath);
+
+			dungeonChance = ReadInt(split, "DungeonProbability", dungeonChance);
+			dungeonChance = ReadInt(split, "DungeonLootChance", dungeonChance);
+			
+			recipeOutput = ReadInt(split, "RecipeOutput", recipeOutput);
+			
+			smeltableFrom = ReadSingleString(split, "SmeltableFrom", smeltableFrom);
+			canDrop = ReadBoolean(split, "CanDrop", canDrop);
+
+			// More complicated line reads
+			if (split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
 			}
-			else if (split[0].equals("Icon"))
-			{
-				iconPath = split[1];
-			}
-			else if (split[0].equals("DungeonProbabilty") || split[0].equals("DungeonLootChance"))
-			{
-				dungeonChance = Integer.parseInt(split[1]);
-			}
-			else if (split[0].equals("RecipeOutput"))
-			{
-				recipeOutput = Integer.parseInt(split[1]);
-			}
-			else if (split[0].equals("Recipe"))
+			
+			if (split[0].equals("Recipe"))
 			{
 				recipe = new Object[split.length + 2];
 				for (int i = 0; i < 3; i++)
@@ -166,17 +150,138 @@ public class InfoType
 				recipeLine = split;
 				shapeless = true;
 			}
-			else if (split[0].equals("SmeltableFrom"))
-			{
-				smeltableFrom = split[1];
-			}
-			else if(split[0].equals("CanDrop"))
-				canDrop = Boolean.parseBoolean(split[1]);
-		} catch (Exception e)
+		} 
+		catch (Exception e)
 		{
 			FlansMod.log("Reading file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	
+	/** -------------------------------------------------------------------------------------------------------- */
+	/** HELPER FUNCTIONS FOR READING. Should give better debug output                                            */
+	/** -------------------------------------------------------------------------------------------------------- */
+	protected boolean KeyMatches(String[] split, String key)
+	{
+		return split != null && split.length > 1 && key != null && split[0].toLowerCase().equals(key.toLowerCase());
+	}
+	
+	protected int ReadInt(String[] split, String key, int currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length == 2)
+			{
+				try
+				{
+					currentValue = Integer.parseInt(split[1]);
+				}
+				catch (Exception e)
+				{
+					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an integer");
+				}
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <integer value>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	protected float ReadFloat(String[] split, String key, float currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length == 2)
+			{
+				try
+				{
+					currentValue = Float.parseFloat(split[1]);
+				}
+				catch (Exception e)
+				{
+					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an float");
+				}
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <float value>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	protected String ReadSingleString(String[] split, String key, String currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length == 2)
+			{
+				currentValue = split[1];
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <singleWord>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	protected String ReadAndConcatenateMultipleStrings(String[] split, String key, String currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length > 2)
+			{
+				currentValue = split[1];
+				for (int i = 0; i < split.length - 2; i++)
+				{
+					currentValue = currentValue + " " + split[i + 2];
+				}
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <long string>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	protected boolean ReadBoolean(String[] split, String key, boolean currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length == 2)
+			{
+				try
+				{
+					currentValue = Boolean.parseBoolean(split[1]);
+				}
+				catch (Exception e)
+				{
+					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an boolean");
+				}
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <true/false>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	/** -------------------------------------------------------------------------------------------------------- */
+	/**                                                                                                          */
+	/** -------------------------------------------------------------------------------------------------------- */
+	
+	protected static void LogError(String shortName, String s)
+	{
+		FlansMod.log("[Problem in " + shortName + ".txt]" + s);
 	}
 	
 	@Override
