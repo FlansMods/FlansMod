@@ -72,8 +72,8 @@ SetupPart rightTrack 8000 -61 -10 15 112 17 13
 BulletDetection 7
 ModelScale 1.15
 Description American Medium Tank
-AddEmitter explode 8 [-60,12,-8] [5,5,5] [0,1,0]
-AddEmitter explode 8 [-60,12,8] [5,5,5] [0,1,0]
+AddEmitter explode 8 [-60,12,-8] [5,5,5] [0,1,0] 0.33 0.66 0 1 core
+AddEmitter explode 8 [-60,12,8] [5,5,5] [0,1,0] 0.33 0.66 0 1 core
 
 
 

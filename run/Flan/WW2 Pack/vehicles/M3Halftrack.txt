@@ -45,7 +45,7 @@ Passenger 4 -7 28 8 core -55 55 -10 45 50Cal PassengerGun4
 Passenger 5 -49 18 -7 core 140 220 -10 45 browning PassengerGun5
 GunOrigin 4 5 19 8
 GunOrigin 5 -54 13 -7
-RotatedPassengerOffset 0 0 0
+RotatedPassengerOffset 0 0 0 0
 BarrelPosition 0 0 0
 //Secondary gun
 AllowAllAmmo False

@@ -98,19 +98,15 @@ AddEmitter largesmoke 1 [-50,53,0] [1,5,5] [0,1,0] -2 2 0 0.5 turret
 AddEmitter largesmoke 1 [-58,25,14] [5,1,5] [0,3,0] -2 2 0 0.25 core
 AddEmitter flame 1 [-58,25,14] [5,1,5] [0,1,0] -2 2 0 0.25 core
 //Stage 1
-AddEmitter explode 3 [-80,19,0] [1,5,5] [-0.5,0,0] 0.05 0.33 0 1
-core
+AddEmitter explode 3 [-80,19,0] [1,5,5] [-0.5,0,0] 0.05 0.33 0 1 core
 //Stage 1 shift
-AddEmitter explode 1 [-80,19,0] [1,5,5] [-3,0,0] 0.05 0.07 0 1
-core
+AddEmitter explode 1 [-80,19,0] [1,5,5] [-3,0,0] 0.05 0.07 0 1 core
 //Stage 2
 AddEmitter explode 2 [-80,19,0] [1,5,5] [-1,0,0] 0.33 0.66 0 1 core
 //Stage 2 shift
 AddEmitter explode 1 [-80,19,0] [1,5,5] [-3,0,0] 0.33 0.35 0 1 core
 //Stage 3
 AddEmitter explode 2 [-80,19,0] [1,5,5] [-1.5,0,0] 0.66 2 0 1 core
-AddEmitter largesmoke 2 [-80,19,0] [1,5,5] [-1.5,0,0] 0.66 2 0 1
-core
+AddEmitter largesmoke 2 [-80,19,0] [1,5,5] [-1.5,0,0] 0.66 2 0 1 core
 //Stage 3 shift
-AddEmitter explode 1 [-80,19,0] [1,5,5] [-3,0,0] 0.66 0.67 0 1
-core
+AddEmitter explode 1 [-80,19,0] [1,5,5] [-3,0,0] 0.66 0.67 0 1 core

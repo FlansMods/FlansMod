@@ -38,9 +38,6 @@ ShellSlots 0
 Driver 0 12 0 -360 360 -5 70
 RotatedDriverOffset -10 0 4
 Passengers 0
-GunOrigin 1 -3 14 0
-GunOrigin 2 -58 16 0
-RotatedPassengerOffset 0 0 0
 BarrelPosition 0 0 0
 //Secondary gun
 AllowAllAmmo False

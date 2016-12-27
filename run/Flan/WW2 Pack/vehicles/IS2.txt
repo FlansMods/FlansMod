@@ -78,6 +78,6 @@ BulletDetection 5
 //Size Multiplier; scales up the model
 ModelScale 1.3
 Description Soviet Heavy Tank
-AddEmitter explode 8 [-60,30,-8] [5,5,5] [0,1,0]
-AddEmitter explode 8 [-60,30,8] [5,5,5] [0,1,0]
-AddEmitter blockcrack_dirt 8 [-60,30,8] [5,5,5] [0,1,0]
+AddEmitter explode 8 [-60,30,-8] [5,5,5] [0,1,0] 0.33 0.66 0 1 core
+AddEmitter explode 8 [-60,30,8] [5,5,5] [0,1,0] 0.33 0.66 0 1 core
+AddEmitter blockcrack_dirt 8 [-60,30,8] [5,5,5] [0,1,0] 0.33 0.66 0 1 core
