@@ -1,24 +1,35 @@
-Name FN SCAR
-ShortName fnscar
+Name Sawn-off "Executioner" Shotgun
+ShortName executioner
 //The ammo this gun uses (shortName)
-Ammo fnscarAmmo
-Ammo l86Ammo
-Icon FNSCAR
+Ammo w1200Ammo
+Ammo w1200IncendiaryAmmo
+Ammo r870Ammo
+Ammo m1014Ammo
+Ammo spasAmmo
+Ammo m1887Ammo
+Ammo 12gaugeShell
+Ammo 12gaugeShellIncendiary
+Icon Executioner
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 40
+ReloadTime 52
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
-Recoil 3
+Recoil 20
 //Damage in half hearts
-Damage 8
+Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 3
+Accuracy 75
+//Number of bullet entities to create, useful for shotguns, defaults to 1
+NumBullets 1
+//For guns in which the magazine is integrated
+LoadIntoGun 2
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound FNSCARShoot
-ReloadSound MP44Reload
-Mode FullAuto
+ShootSound W1200Shoot
+ReloadSound W1200Reload
+Mode SemiAuto
+OneHanded True
 //Bullet speed, default 3.0
 BulletSpeed 10.0
 //Default scope settings. Usually for aiming down sights. In which case, use FOVZoomLevel, not ZoomLevel
@@ -29,22 +40,21 @@ FOVZoomLevel 1.25
 Deployable False
 DeployedModel None
 //Model settings
-Model mw.FNSCAR
-Texture FNSCAR
+Model mw.Executioner
+Texture Executioner
 //Attachment Settings
-AllowAllAttachments false
+AllowAllAttachments true
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight flanMWSingleFire flanMWBurstFire flanMWAutoFire
-AllowBarrelAttachments true
-AllowScopeAttachments true
+//AllowAttachments
+AllowBarrelAttachments false
+AllowScopeAttachments false
 AllowStockAttachments false
-AllowGripAttachments true
+AllowGripAttachments false
 NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-Paintjob FNSCAR_Green FNSCAR_Green green 1 lime 1
-Paintjob FNSCAR_TwoTone FNSCAR_TwoTone brown 1 black 1
-Paintjob FNSCAR_RedWhite FNSCAR_RedWhite red 1 white 1
+Paintjob Executioner_Chaos Executioner_Chaos black 1 orange 1
+Paintjob Executioner_Order Executioner_Order white 1 lightBlue 1
 //Description - note the ammo type
-Description Ammo Type : Heavy Assault
+Description Ammo Type : Shotgun

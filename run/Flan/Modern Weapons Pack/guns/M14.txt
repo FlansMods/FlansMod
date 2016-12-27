@@ -47,5 +47,6 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M14_Purple M14_Purple purple 2
 Paintjob M14_Red M14_Red red 2
+Paintjob M14_RoyalGreen M14_RoyalGreen lime 2
 //Description - note the ammo type
 Description Ammo Type : Light Rifle

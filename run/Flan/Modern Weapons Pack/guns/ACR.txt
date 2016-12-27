@@ -49,5 +49,7 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob ACR_Red ACR_Red red 2
+Paintjob ACR_Aquatic ACR_Aquatic cyan 2
+Paintjob ACR_RoyalGreen ACR_RoyalGreen lime 2
 //Description - note the ammo type
 Description Ammo Type : Light Assault

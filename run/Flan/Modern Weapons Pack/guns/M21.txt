@@ -46,5 +46,6 @@ NumGenericAttachmentSlots 2
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M21_Red M21_Red red 2
 Paintjob M21_Jungle M21_Jungle green 2
+Paintjob M21_RoyalGreen M21_RoyalGreen lime 2
 //Description - note the ammo type
 Description Ammo Type : Heavy Rifle
