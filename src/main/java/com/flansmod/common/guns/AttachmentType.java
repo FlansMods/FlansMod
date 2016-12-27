@@ -84,10 +84,6 @@ public class AttachmentType extends PaintableType implements IScope
 				type = EnumAttachmentType.get(split[1]);
 			else if(FMLCommonHandler.instance().getSide().isClient() && (split[0].equals("Model")))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAttachment.class);
-			else if(split[0].equals("ModelScale"))
-				modelScale = Float.parseFloat(split[1]);
-			else if(split[0].equals("Texture"))
-				texture = split[1];
 			
 			else if(split[0].equals("Silencer"))
 				silencer = Boolean.parseBoolean(split[1].toLowerCase());

@@ -206,10 +206,7 @@ public abstract class DriveableType extends PaintableType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelDriveable.class);
-			
-			else if(split[0].equals("Texture"))
-				texture = split[1];
-			
+						
 			//Movement Variables
 			else if(split[0].equals("MaxThrottle"))
 				maxThrottle = Float.parseFloat(split[1]);

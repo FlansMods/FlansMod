@@ -25,13 +25,11 @@ public abstract class BoxType extends InfoType
 		super.read(split, file);
 		try
 		{		
-			if (split[0].equals("TopTexture"))
-				topTexturePath = split[1];
-			if (split[0].equals("BottomTexture"))
-				bottomTexturePath = split[1];
-			if (split[0].equals("SideTexture"))
-				sideTexturePath = split[1];
-		} catch (Exception e)
+			topTexturePath = Read(split, "TopTexture", topTexturePath);
+			bottomTexturePath = Read(split, "BottomTexture", bottomTexturePath);
+			sideTexturePath = Read(split, "SideTexture", sideTexturePath);
+		} 
+		catch (Exception e)
 		{
 			FlansMod.log("Reading box file failed : " + shortName);
 			e.printStackTrace();

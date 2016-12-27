@@ -92,8 +92,6 @@ public abstract class ShootableType extends InfoType
 			//Model and Texture
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-			else if(split[0].equals("Texture"))
-				texture = split[1];
 			
 			//Item Stuff
 			else if(split[0].equals("StackSize") || split[0].equals("MaxStackSize"))

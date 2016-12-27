@@ -57,26 +57,25 @@ public class AAGunType extends InfoType
 			if (FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAAGun.class);
-			}
+			} 
 
-			texture = ReadSingleString(split, "Texture", texture);
-			damage = ReadInt(split, "Damage", damage);
-			reloadTime = ReadInt(split, "ReloadTime", reloadTime);
-			recoil = ReadInt(split, "Recoil", recoil);
-			accuracy = ReadInt(split, "Accuracy", accuracy);
-			shootDelay = ReadInt(split, "ShootDelay", shootDelay);
-			fireAlternately = ReadBoolean(split, "FireAlternately", fireAlternately);
-			health = ReadInt(split, "Health", health);
-			topViewLimit = ReadFloat(split, "TopViewLimit", topViewLimit);
-			bottomViewLimit = ReadFloat(split, "BottomViewLimit", bottomViewLimit);
-			targetMobs = ReadBoolean(split, "TargetMobs", targetMobs);
-			targetPlayers = ReadBoolean(split, "TargetPlayers", targetPlayers);
-			targetVehicles = ReadBoolean(split, "TargetVehicles", targetVehicles);
-			targetPlanes = ReadBoolean(split, "TargetPlanes", targetPlanes);
-			targetMechas = ReadBoolean(split, "TargetMechas", targetMechas);
-			shareAmmo = ReadBoolean(split, "ShareAmmo", shareAmmo);
-			targetRange = ReadFloat(split, "TargetRange", targetRange);
-			bottomViewLimit = ReadFloat(split, "BottomViewLimit", bottomViewLimit);
+			damage = Read(split, "Damage", damage);
+			reloadTime = Read(split, "ReloadTime", reloadTime);
+			recoil = Read(split, "Recoil", recoil);
+			accuracy = Read(split, "Accuracy", accuracy);
+			shootDelay = Read(split, "ShootDelay", shootDelay);
+			fireAlternately = Read(split, "FireAlternately", fireAlternately);
+			health = Read(split, "Health", health);
+			topViewLimit = Read(split, "TopViewLimit", topViewLimit);
+			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
+			targetMobs = Read(split, "TargetMobs", targetMobs);
+			targetPlayers = Read(split, "TargetPlayers", targetPlayers);
+			targetVehicles = Read(split, "TargetVehicles", targetVehicles);
+			targetPlanes = Read(split, "TargetPlanes", targetPlanes);
+			targetMechas = Read(split, "TargetMechas", targetMechas);
+			shareAmmo = Read(split, "ShareAmmo", shareAmmo);
+			targetRange = Read(split, "TargetRange", targetRange);
+			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
 			
 			if(split[0].equals("TargetDriveables"))
 				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);

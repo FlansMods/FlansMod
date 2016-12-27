@@ -196,55 +196,41 @@ public class GunType extends PaintableType implements IScope
 		super.read(split, file);
 		try
 		{
-			if(split[0].equals("Damage"))
-				damage = Float.parseFloat(split[1]);
-			else if(split[0].equals("MeleeDamage"))
+			damage = Read(split, "Damage", damage);
+			canForceReload = Read(split, "CanForceReload", canForceReload);
+			reloadTime = Read(split, "ReloadTime", reloadTime);
+			recoil = Read(split, "Recoil", recoil);
+			knockback = Read(split, "Knockback", knockback);
+			bulletSpread = Read(split, "Accuracy", bulletSpread);
+			bulletSpread = Read(split, "Spread", bulletSpread);
+			numBullets = Read(split, "NumBullets", numBullets);
+			consumeGunUponUse = Read(split, "ConsumeGunOnUse", consumeGunUponUse);
+			dropItemOnShoot = Read(split, "DropItemOnShoot", dropItemOnShoot);
+			numBurstRounds = Read(split, "NumBurstRounds", numBurstRounds);
+			minigunStartSpeed = Read(split, "MinigunStartSpeed", minigunStartSpeed);
+			if(split[0].equals("MeleeDamage"))
 			{
 				meleeDamage = Float.parseFloat(split[1]);
 				if(meleeDamage > 0F)
 					secondaryFunction = EnumSecondaryFunction.MELEE;
 			}
-			else if(split[0].equals("CanForceReload"))
-				canForceReload = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("ReloadTime"))
-				reloadTime = Integer.parseInt(split[1]);
-			else if(split[0].equals("Recoil"))
-				recoil = Integer.parseInt(split[1]);
-			else if(split[0].equals("Knockback"))
-				knockback = Float.parseFloat(split[1]);
-			else if(split[0].equals("Accuracy") || split[0].equals("Spread"))
-				bulletSpread = Float.parseFloat(split[1]);
-			else if(split[0].equals("NumBullets"))
-				numBullets = Integer.parseInt(split[1]);
-			else if(split[0].equals("ConsumeGunOnUse"))
-				consumeGunUponUse = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("DropItemOnShoot"))
-				dropItemOnShoot = split[1];
-			else if(split[0].equals("NumBurstRounds"))
-				numBurstRounds = Integer.parseInt(split[1]);
-			else if(split[0].equals("MinigunStartSpeed"))
-				minigunStartSpeed = Float.parseFloat(split[1]);
-				
-			//Information
-			else if(split[0].equals("ShowAttachments"))
-				showAttachments = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("ShowDamage"))
-				showDamage = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("ShowRecoil"))
-				showRecoil = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("ShowAccuracy"))
-				showSpread = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("ShowReloadTime"))
-				showReloadTime = Boolean.parseBoolean(split[1]);
 			
+			//Information
+			showAttachments = Read(split, "ShowAttachments", showAttachments);
+			showDamage = Read(split, "ShowDamage", showDamage);
+			showRecoil = Read(split, "ShowRecoil", showRecoil);
+			showSpread = Read(split, "ShowAccuracy", showSpread);
+			showReloadTime = Read(split, "ShowReloadTime", showReloadTime);
+
 			//Sounds
-			else if(split[0].equals("ShootDelay"))
-				shootDelay = Float.parseFloat(split[1]);
-			else if(split[0].equals("SoundLength"))
-				shootSoundLength = Integer.parseInt(split[1]);
-			else if(split[0].equals("DistortSound"))
-				distortSound = split[1].equals("True");
-			else if(split[0].equals("ShootSound"))
+			shootDelay = Read(split, "ShootDelay", shootDelay);
+			shootSoundLength = Read(split, "SoundLength", shootSoundLength);
+			distortSound = Read(split, "DistortSound", distortSound);
+			idleSoundLength = Read(split, "IdleSoundLength", idleSoundLength);
+			warmupSoundLength = Read(split, "WarmupSoundLength", warmupSoundLength);
+			loopedSoundLength = Read(split, "LoopedSoundLength", loopedSoundLength);
+			loopedSoundLength = Read(split, "SpinSoundLength", loopedSoundLength);
+			if(split[0].equals("ShootSound"))
 			{
 				shootSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
@@ -259,8 +245,6 @@ public class GunType extends PaintableType implements IScope
 				idleSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
-			else if(split[0].equals("IdleSoundLength"))
-				idleSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("MeleeSound"))
 			{
 				meleeSound = split[1];
@@ -273,16 +257,12 @@ public class GunType extends PaintableType implements IScope
 				warmupSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
-			else if(split[0].equals("WarmupSoundLength"))
-				warmupSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("LoopedSound") || split[0].equals("SpinSound"))
 			{
 				loopedSound = split[1];
 				useLoopingSounds = true;
 				FlansMod.proxy.loadSound(contentPack, "guns", split[1]);
 			}
-			else if(split[0].equals("LoopedSoundLength") || split[0].equals("SpinSoundLength"))
-				loopedSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("CooldownSound"))
 			{
 				cooldownSound = split[1];
@@ -321,23 +301,22 @@ public class GunType extends PaintableType implements IScope
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelGun.class);
 			}
-			else if(split[0].equals("ModelScale"))
-				modelScale = Float.parseFloat(split[1]);
-			else if(split[0].equals("Texture"))
-				texture = split[1];
-			else if(split[0].equals("DeployedTexture"))
-				deployableTexture = split[1];
-			else if(split[0].equals("StandBackDistance"))
-				standBackDist = Float.parseFloat(split[1]);
-			else if(split[0].equals("TopViewLimit"))
-				topViewLimit = -Float.parseFloat(split[1]);
-			else if(split[0].equals("BottomViewLimit"))
-				bottomViewLimit = Float.parseFloat(split[1]);
-			else if(split[0].equals("SideViewLimit"))
-				sideViewLimit = Float.parseFloat(split[1]);
-			else if(split[0].equals("PivotHeight"))
-				pivotHeight = Float.parseFloat(split[1]);
-			else if(split[0].equals("Ammo"))
+			
+			deployableTexture = Read(split, "DeployedTexture", deployableTexture);
+			standBackDist = Read(split, "StandBackDistance", standBackDist);
+			topViewLimit = Read(split, "TopViewLimit", topViewLimit);
+			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
+			sideViewLimit = Read(split, "SideViewLimit", sideViewLimit);
+			pivotHeight = Read(split, "PivotHeight", pivotHeight);
+			numAmmoItemsInGun = Read(split, "NumAmmoSlots", numAmmoItemsInGun);
+			numAmmoItemsInGun = Read(split, "NumAmmoItemsInGun", numAmmoItemsInGun);
+			numAmmoItemsInGun = Read(split, "LoadIntoGun", numAmmoItemsInGun);
+			canShootUnderwater = Read(split, "CanShootUnderwater", canShootUnderwater);
+			oneHanded = Read(split, "OneHanded", oneHanded);
+			usableByPlayers = Read(split, "UsableByPlayers", usableByPlayers);
+			usableByMechas = Read(split, "UsableByMechas", usableByMechas);
+
+			if(split[0].equals("Ammo"))
 			{
 				ShootableType type = ShootableType.getShootableType(split[1]);
 				if(type != null)
@@ -348,8 +327,6 @@ public class GunType extends PaintableType implements IScope
 				}
 				else FlansMod.log("Could not find " + split[1] + " when reading ammo types for " + shortName);
 			}
-			else if(split[0].equals("NumAmmoSlots") || split[0].equals("NumAmmoItemsInGun") || split[0].equals("LoadIntoGun"))
-				numAmmoItemsInGun = Integer.parseInt(split[1]);
 			else if(split[0].equals("BulletSpeed"))
 			{
 				if(split[1].toLowerCase().equals("instant"))
@@ -363,23 +340,16 @@ public class GunType extends PaintableType implements IScope
 					bulletSpeed = 0.0f;
 				}
 			}
-			else if(split[0].equals("CanShootUnderwater"))
-				canShootUnderwater = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("OneHanded"))
-				oneHanded = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("SecondaryFunction"))
 				secondaryFunction = EnumSecondaryFunction.get(split[1]);
-			else if(split[0].equals("UsableByPlayers"))
-				usableByPlayers = Boolean.parseBoolean(split[1]);
-			else if(split[0].equals("UsableByMechas"))
-				usableByMechas = Boolean.parseBoolean(split[1]);
 			
 			//Custom Melee Stuff
 			else if(split[0].equals("UseCustomMelee") && Boolean.parseBoolean(split[1]))
 				secondaryFunction = EnumSecondaryFunction.CUSTOM_MELEE;
-			else if(split[0].equals("MeleeTime"))
-				meleeTime = Integer.parseInt(split[1]);
-			else if(split[0].equals("AddNode"))
+			
+			meleeTime = Read(split, "MeleeTime", meleeTime);
+			
+			if(split[0].equals("AddNode"))
 			{
 				meleePath.add(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F));
 				meleePathAngles.add(new Vector3f(Float.parseFloat(split[4]), Float.parseFloat(split[5]), Float.parseFloat(split[6])));
@@ -390,34 +360,29 @@ public class GunType extends PaintableType implements IScope
 			}
 			
 			//Player modifiers
-			else if(split[0].equals("MoveSpeedModifier") || split[0].equals("Slowness"))
-				moveSpeedModifier = Float.parseFloat(split[1]);
-			else if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
-				knockbackModifier = Float.parseFloat(split[1]);
-			
+			moveSpeedModifier = Read(split, "MoveSpeedModifier", moveSpeedModifier);
+			moveSpeedModifier = Read(split, "Slowness", moveSpeedModifier);
+			knockbackModifier = Read(split, "KnockbackReduction", knockbackModifier);
+			knockbackModifier = Read(split, "KnockbackModifier", knockbackModifier);
+						
 			//Attachment settings
-			else if(split[0].equals("AllowAllAttachments"))
-				allowAllAttachments = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("AllowAttachments"))
+			allowAllAttachments = Read(split, "AllowAllAttachments", allowAllAttachments);
+			if(split[0].equals("AllowAttachments"))
 			{
 				for(int i = 1; i < split.length; i++)
 				{
 					allowedAttachments.add(AttachmentType.getAttachment(split[i]));
 				}
 			}
-			else if(split[0].equals("AllowBarrelAttachments"))
-				allowBarrelAttachments = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("AllowScopeAttachments"))
-				allowScopeAttachments = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("AllowStockAttachments"))
-				allowStockAttachments = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("AllowGripAttachments"))
-				allowGripAttachments = Boolean.parseBoolean(split[1].toLowerCase());
-			else if(split[0].equals("NumGenericAttachmentSlots"))
-				numGenericAttachmentSlots = Integer.parseInt(split[1]);
+			
+			allowBarrelAttachments = Read(split, "AllowBarrelAttachments", allowBarrelAttachments);
+			allowScopeAttachments = Read(split, "AllowScopeAttachments", allowScopeAttachments);
+			allowStockAttachments = Read(split, "AllowStockAttachments", allowStockAttachments);
+			allowGripAttachments = Read(split, "AllowGripAttachments", allowGripAttachments);
+			numGenericAttachmentSlots = Read(split, "NumGenericAttachmentSlots", numGenericAttachmentSlots);
 			
 			//Shield settings
-			else if(split[0].toLowerCase().equals("shield"))
+			if(split[0].toLowerCase().equals("shield"))
 			{
 				shield = true;
 				shieldDamageAbsorption = Float.parseFloat(split[1]);

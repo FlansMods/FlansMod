@@ -47,9 +47,6 @@ public class ItemHolderType extends InfoType
 		{		
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelItemHolder.class);
-			
-			else if(split[0].equals("Texture"))
-				texture = split[1];
 		}
 		catch (Exception e)
 		{

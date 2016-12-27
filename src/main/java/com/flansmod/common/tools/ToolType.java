@@ -62,8 +62,6 @@ public class ToolType extends InfoType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelBase.class);
-			else if(split[0].equals("Texture"))
-				texture = split[1];
 			else if(split[0].equals("Parachute"))
 				parachute = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("ExplosiveRemote"))

@@ -65,31 +65,21 @@ public class ArmourType extends InfoType
 					type = 3;
 			}			
 			
-			if(split[0].equals("DamageReduction") || split[0].equals("Defence"))
-				defence = Double.parseDouble(split[1]);		
-			if(split[0].equals("MoveSpeedModifier") || split[0].equals("Slowness"))
-				moveSpeedModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("JumpModifier"))
-				jumpModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("KnockbackReduction") || split[0].equals("KnockbackModifier"))
-				knockbackModifier = Float.parseFloat(split[1]);
-			
-			if(split[0].equals("NightVision"))
-				nightVision = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("NegateFallDamage"))
-				negateFallDamage = Boolean.parseBoolean(split[1]);
-			if(split[0].equals("Overlay"))
-				overlay = split[1];
-			
-			if(split[0].equals("SmokeProtection"))
-				smokeProtection = Boolean.parseBoolean(split[1]);
-
-				
-			if(split[0].equals("ArmourTexture") || split[0].equals("ArmorTexture"))
-			{
-				armourTextureName = split[1];
-			}
-		} catch (Exception e)
+			defence = Read(split, "DamageReduction", defence);
+			defence = Read(split, "Defence", defence);
+			moveSpeedModifier = Read(split, "MoveSpeedModifier", moveSpeedModifier);
+			moveSpeedModifier = Read(split, "Slowness", moveSpeedModifier);
+			jumpModifier = Read(split, "JumpModifier", jumpModifier);
+			knockbackModifier = Read(split, "KnockbackReduction", knockbackModifier);
+			knockbackModifier = Read(split, "KnockbackModifier", knockbackModifier);
+			nightVision = Read(split, "NightVision", nightVision);
+			negateFallDamage = Read(split, "NegateFallDamage", negateFallDamage);
+			overlay = Read(split, "Overlay", overlay);
+			smokeProtection = Read(split, "SmokeProtection", smokeProtection);
+			armourTextureName = Read(split, "ArmourTexture", armourTextureName);
+			armourTextureName = Read(split, "ArmorTexture", armourTextureName);
+		} 
+		catch (Exception e)
 		{
 			System.out.println("Reading armour file failed.");
 			e.printStackTrace();

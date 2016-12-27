@@ -101,22 +101,23 @@ public class InfoType
 		try
 		{
 			// Standard line reads
-			shortName = ReadSingleString(split, "ShortName", shortName);
+			shortName = Read(split, "ShortName", shortName);
 			name = ReadAndConcatenateMultipleStrings(split, "Name", name);
 			description = ReadAndConcatenateMultipleStrings(split, "Description", description);
 			
-			modelString = ReadSingleString(split, "Model", modelString);
-			modelScale = ReadFloat(split, "ModelScale", modelScale);
+			modelString = Read(split, "Model", modelString);
+			modelScale = Read(split, "ModelScale", modelScale);
+			texture = Read(split, "Texture", texture);
 			
-			iconPath = ReadSingleString(split, "Icon", iconPath);
+			iconPath = Read(split, "Icon", iconPath);
 
-			dungeonChance = ReadInt(split, "DungeonProbability", dungeonChance);
-			dungeonChance = ReadInt(split, "DungeonLootChance", dungeonChance);
+			dungeonChance = Read(split, "DungeonProbability", dungeonChance);
+			dungeonChance = Read(split, "DungeonLootChance", dungeonChance);
 			
-			recipeOutput = ReadInt(split, "RecipeOutput", recipeOutput);
+			recipeOutput = Read(split, "RecipeOutput", recipeOutput);
 			
-			smeltableFrom = ReadSingleString(split, "SmeltableFrom", smeltableFrom);
-			canDrop = ReadBoolean(split, "CanDrop", canDrop);
+			smeltableFrom = Read(split, "SmeltableFrom", smeltableFrom);
+			canDrop = Read(split, "CanDrop", canDrop);
 
 			// More complicated line reads
 			if (split[0].equals("Colour") || split[0].equals("Color"))
@@ -166,7 +167,7 @@ public class InfoType
 		return split != null && split.length > 1 && key != null && split[0].toLowerCase().equals(key.toLowerCase());
 	}
 	
-	protected int ReadInt(String[] split, String key, int currentValue)
+	protected int Read(String[] split, String key, int currentValue)
 	{
 		if(KeyMatches(split, key))
 		{
@@ -178,19 +179,19 @@ public class InfoType
 				}
 				catch (Exception e)
 				{
-					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an integer");
+					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an integer");
 				}
 			}
 			else
 			{
-				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <integer value>\"");
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <integer value>\"");
 			}
 		}
 		
 		return currentValue;
 	}
 	
-	protected float ReadFloat(String[] split, String key, float currentValue)
+	protected float Read(String[] split, String key, float currentValue)
 	{
 		if(KeyMatches(split, key))
 		{
@@ -202,19 +203,43 @@ public class InfoType
 				}
 				catch (Exception e)
 				{
-					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an float");
+					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an float");
 				}
 			}
 			else
 			{
-				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <float value>\"");
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <float value>\"");
 			}
 		}
 		
 		return currentValue;
 	}
 	
-	protected String ReadSingleString(String[] split, String key, String currentValue)
+	protected double Read(String[] split, String key, double currentValue)
+	{
+		if(KeyMatches(split, key))
+		{
+			if(split.length == 2)
+			{
+				try
+				{
+					currentValue = Double.parseDouble(split[1]);
+				}
+				catch (Exception e)
+				{
+					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an float");
+				}
+			}
+			else
+			{
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <float value>\"");
+			}
+		}
+		
+		return currentValue;
+	}
+	
+	protected String Read(String[] split, String key, String currentValue)
 	{
 		if(KeyMatches(split, key))
 		{
@@ -224,7 +249,7 @@ public class InfoType
 			}
 			else
 			{
-				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <singleWord>\"");
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <singleWord>\"");
 			}
 		}
 		
@@ -235,7 +260,7 @@ public class InfoType
 	{
 		if(KeyMatches(split, key))
 		{
-			if(split.length > 2)
+			if(split.length > 1)
 			{
 				currentValue = split[1];
 				for (int i = 0; i < split.length - 2; i++)
@@ -245,14 +270,14 @@ public class InfoType
 			}
 			else
 			{
-				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <long string>\"");
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <long string>\"");
 			}
 		}
 		
 		return currentValue;
 	}
 	
-	protected boolean ReadBoolean(String[] split, String key, boolean currentValue)
+	protected boolean Read(String[] split, String key, boolean currentValue)
 	{
 		if(KeyMatches(split, key))
 		{
@@ -264,12 +289,12 @@ public class InfoType
 				}
 				catch (Exception e)
 				{
-					InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Passed in value is not an boolean");
+					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an boolean");
 				}
 			}
 			else
 			{
-				InfoType.LogError(shortName, "Incorrect format for " + shortName + ". Should be \"" + shortName + " <true/false>\"");
+				InfoType.LogError(shortName, "Incorrect format for " + key + ". Should be \"" + key + " <true/false>\"");
 			}
 		}
 		

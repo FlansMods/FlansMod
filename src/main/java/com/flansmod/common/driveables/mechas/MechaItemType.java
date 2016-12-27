@@ -70,8 +70,6 @@ public class MechaItemType extends InfoType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelMechaTool.class);
-			if(split[0].equals("Texture"))
-				texture = split[1];
 			if(split[0].equals("Type"))
 				type = EnumMechaItemType.getToolType(split[1]);
 			if(split[0].equals("ToolType"))
