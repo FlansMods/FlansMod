@@ -73,9 +73,9 @@ public class ModelExecutioner extends ModelGun //Same as Filename
 
 
 
-		translateAll(0F, 0F, 0F);
+		//translateAll(0F, 0F, 0F);
 
 
-		flipAll();
+		//flipAll();
 	}
 }

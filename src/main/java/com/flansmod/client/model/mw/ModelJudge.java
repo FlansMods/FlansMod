@@ -77,9 +77,9 @@ public class ModelJudge extends ModelGun //Same as Filename
 
 
 
-		translateAll(0F, 1F, 5F);
+		//translateAll(0F, 1F, 5F);
 
 
-		flipAll();
+		//flipAll();
 	}
 }
