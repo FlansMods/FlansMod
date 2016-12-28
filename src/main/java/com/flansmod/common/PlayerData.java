@@ -223,4 +223,14 @@ public class PlayerData
 		}
 	}
 	
+	public void WriteToFile()
+	{
+		
+	}
+	
+	public void ReadFromFile()
+	{
+		
+	}
+	
 }

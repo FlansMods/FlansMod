@@ -120,8 +120,12 @@ public class PlayerHandler
 		{
 			EntityPlayer player = event.player;
 			String username = player.getName();
+			
+			PlayerData data = new PlayerData(username);
+			data.ReadFromFile();
+			
 			if(!serverSideData.containsKey(username))
-				serverSideData.put(username, new PlayerData(username));
+				serverSideData.put(username, data);
 			if(clientsToRemoveAfterThisRound.contains(username))
 				clientsToRemoveAfterThisRound.remove(username);
 		}
@@ -129,9 +133,13 @@ public class PlayerHandler
 		{
 			EntityPlayer player = event.player;
 			String username = player.getName();
+			
+			clientsToRemoveAfterThisRound.add(username);
+			
 			if(TeamsManager.getInstance().currentRound == null)
-				serverSideData.remove(username);
-			else clientsToRemoveAfterThisRound.add(username);
+			{
+				roundEnded();
+			}
 		}
 		else if(event instanceof PlayerRespawnEvent)
 		{
@@ -147,6 +155,11 @@ public class PlayerHandler
 	{
 		for(String username : clientsToRemoveAfterThisRound)
 		{
+			PlayerData data = serverSideData.get(username);
+			if(data != null)
+			{
+				data.WriteToFile();
+			}
 			serverSideData.remove(username);
 		}
 	}

@@ -45,64 +45,6 @@ public class GametypeTDM extends Gametype
 	@Override
 	public void tick() 
 	{
-		/*
-		if(autoBalance && time % autoBalanceInterval == autoBalanceInterval - 200 && needAutobalance())
-		{
-			TeamsManager.messageAll("\u00a7fAutobalancing teams...");
-		}
-		if(autoBalance && time % autoBalanceInterval == 0 && needAutobalance())
-		{
-			autobalance();
-		}
-		*/
-	}
-	
-	public boolean needAutobalance()
-	{
-		/*
-		if(teamsManager.currentRound == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
-			return false;
-		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
-		int membersTeamB = teamsManager.currentRound.teams[1].members.size();
-		if(Math.abs(membersTeamA - membersTeamB) > 1)
-			return true;
-			*/
-		return false;
-	}
-	
-	public void autobalance()
-	{
-		/*
-		if(teamsManager.currentRound.teams == null || teamsManager.currentRound.teams[0] == null || teamsManager.currentRound.teams[1] == null)
-			return;
-		int membersTeamA = teamsManager.currentRound.teams[0].members.size();
-		int membersTeamB = teamsManager.currentRound.teams[1].members.size();
-		if(membersTeamA - membersTeamB > 1)
-		{
-			for(int i = 0; i < (membersTeamA - membersTeamB) / 2; i++)
-			{
-				//My goodness this is convoluted...
-				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[1].addPlayer(teamsManager.currentRound.teams[0].removeWorstPlayer()));
-				if(!player.isDead)
-				{
-					teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[1].name);
-					teamsManager.sendClassMenuToPlayer(player);
-				}
-			}
-		}
-		if(membersTeamB - membersTeamA > 1)
-		{
-			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
-			{
-				EntityPlayerMP player = getPlayer(teamsManager.currentRound.teams[0].addPlayer(teamsManager.currentRound.teams[1].removeWorstPlayer()));
-				if(!player.isDead)
-				{
-					teamsManager.messagePlayer(player, "You have been moved to " + teamsManager.currentRound.teams[0].name);
-					teamsManager.sendClassMenuToPlayer(player);
-				}
-			}
-		}
-		*/
 	}
 
 	@Override

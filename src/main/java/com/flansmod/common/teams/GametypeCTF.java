@@ -45,45 +45,6 @@ public class GametypeCTF extends Gametype
 		
 	}
 	
-	/*
-	public boolean needAutobalance()
-	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return false;
-		int membersTeamA = teamsManager.teams[0].members.size();
-		int membersTeamB = teamsManager.teams[1].members.size();
-		if(Math.abs(membersTeamA - membersTeamB) > 1)
-			return true;
-		return false;
-	}
-	
-	public void autobalance()
-	{
-		if(teamsManager.teams == null || teamsManager.teams[0] == null || teamsManager.teams[1] == null)
-			return;
-		int membersTeamA = teamsManager.teams[0].members.size();
-		int membersTeamB = teamsManager.teams[1].members.size();
-		if(membersTeamA - membersTeamB > 1)
-		{
-			for(int i = 0; i < (membersTeamA - membersTeamB) / 2; i++)
-			{
-				//My goodness this is convoluted...
-				sendClassMenuToPlayer(getPlayer(teamsManager.teams[1].addPlayer(teamsManager.teams[0].removeWorstPlayer())));
-			}
-		}
-		if(membersTeamB - membersTeamA > 1)
-		{
-			for(int i = 0; i < (membersTeamB - membersTeamA) / 2; i++)
-			{
-				sendClassMenuToPlayer(getPlayer(teamsManager.teams[0].addPlayer(teamsManager.teams[1].removeWorstPlayer())));
-			}
-		}
-	}
-	 */
-	
-
-
-
 	@Override
 	public void playerQuit(EntityPlayerMP player) 
 	{
