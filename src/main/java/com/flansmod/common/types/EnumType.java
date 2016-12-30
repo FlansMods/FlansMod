@@ -35,6 +35,7 @@ import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
 import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.ItemTeamArmour;
+import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.tools.ItemTool;
@@ -42,7 +43,10 @@ import com.flansmod.common.tools.ToolType;
 
 public enum EnumType 
 {
-	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"), aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), team("teams"), itemHolder("itemHolders");
+	part("parts"), bullet("bullets"), attachment("attachments"), grenade("grenades"), gun("guns"), 
+	aa("aaguns"), vehicle("vehicles"), plane("planes"), mechaItem("mechaItems"), mecha("mechas"), 
+	tool("tools"), armour("armorFiles"), armourBox("armorBoxes"), box("boxes"), playerClass("classes"), 
+	team("teams"), itemHolder("itemHolders"), loadout("loadouts");
 	
 	public String folderName;
 	
@@ -82,6 +86,7 @@ public enum EnumType
 		case box :			return GunBoxType.class;
 		case part :			return PartType.class;
 		case itemHolder:	return ItemHolderType.class;
+		case loadout:		return LoadoutPool.class;
 		default : 		return InfoType.class;
 		}
 	}
@@ -105,6 +110,7 @@ public enum EnumType
 		if(o instanceof GunBoxType  		|| o instanceof BlockGunBox) 									return box;
 		if(o instanceof PartType  			|| o instanceof ItemPart) 										return part;
 		if(o instanceof ItemHolderType  	|| o instanceof TileEntityItemHolder) 							return itemHolder;
+		if(o instanceof LoadoutPool)																		return loadout;
 		return null;
 	}
 }

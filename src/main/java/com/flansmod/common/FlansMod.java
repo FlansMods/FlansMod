@@ -24,6 +24,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.config.Configuration;
@@ -99,6 +100,7 @@ import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.teams.TileEntitySpawner;
 import com.flansmod.common.tools.EntityParachute;
 import com.flansmod.common.tools.ItemTool;
@@ -146,7 +148,7 @@ public class FlansMod
 	//Handlers
 	public static final PacketHandler packetHandler = new PacketHandler();
 	public static final PlayerHandler playerHandler = new PlayerHandler();
-	public static final TeamsManager teamsManager = new TeamsManager();
+	public static final TeamsManager teamsManager = new TeamsManagerRanked();
 	public static final CommonTickHandler tickHandler = new CommonTickHandler();
 	public static FlansHooks hooks = new FlansHooks();
 	
@@ -556,6 +558,7 @@ public class FlansMod
 					case playerClass : 	break;
 					case team : 		break;
 					case itemHolder:	new BlockItemHolder((ItemHolderType)infoType); break;
+					case loadout:		break;
 					default : log("Unrecognised type for " + infoType.shortName); break;
 					}
 				}
@@ -601,5 +604,48 @@ public class FlansMod
 		{
 			log(string);
 		}
+	}
+	
+	public static EnumParticleTypes getParticleType(String s)
+	{
+		if(s.equals("hugeexplosion")) 		return EnumParticleTypes.EXPLOSION_HUGE;
+		else if(s.equals("largeexplode"))	return EnumParticleTypes.EXPLOSION_LARGE;
+		else if(s.equals("explode"))		return EnumParticleTypes.EXPLOSION_NORMAL;
+		else if(s.equals("fireworksSpark"))	return EnumParticleTypes.FIREWORKS_SPARK;
+		else if(s.equals("bubble"))			return EnumParticleTypes.WATER_BUBBLE;
+		else if(s.equals("splash"))			return EnumParticleTypes.WATER_SPLASH;
+		else if(s.equals("wake"))			return EnumParticleTypes.WATER_WAKE;
+		else if(s.equals("drop"))			return EnumParticleTypes.WATER_DROP;
+		else if(s.equals("suspended"))		return EnumParticleTypes.SUSPENDED;
+		else if(s.equals("depthsuspend"))	return EnumParticleTypes.SUSPENDED_DEPTH;
+		else if(s.equals("townaura"))		return EnumParticleTypes.TOWN_AURA;
+		else if(s.equals("crit"))			return EnumParticleTypes.CRIT;
+		else if(s.equals("magicCrit"))		return EnumParticleTypes.CRIT_MAGIC;
+		else if(s.equals("smoke"))			return EnumParticleTypes.SMOKE_NORMAL;
+		else if(s.equals("largesmoke"))		return EnumParticleTypes.SMOKE_LARGE;
+		else if(s.equals("spell"))			return EnumParticleTypes.SPELL;
+		else if(s.equals("instantSpell"))	return EnumParticleTypes.SPELL_INSTANT;
+		else if(s.equals("mobSpell"))		return EnumParticleTypes.SPELL_MOB;
+		else if(s.equals("mobSpellAmbient"))return EnumParticleTypes.SPELL_MOB_AMBIENT;
+		else if(s.equals("witchMagic"))		return EnumParticleTypes.SPELL_WITCH;
+		else if(s.equals("dripWater"))		return EnumParticleTypes.DRIP_WATER;
+		else if(s.equals("dripLava"))		return EnumParticleTypes.DRIP_LAVA;
+		else if(s.equals("angryVillager"))	return EnumParticleTypes.VILLAGER_ANGRY;
+		else if(s.equals("happyVillager"))	return EnumParticleTypes.VILLAGER_HAPPY;
+		else if(s.equals("note"))			return EnumParticleTypes.NOTE;
+		else if(s.equals("portal"))			return EnumParticleTypes.PORTAL;
+		else if(s.equals("enchantmenttable"))return EnumParticleTypes.ENCHANTMENT_TABLE;
+		else if(s.equals("flame"))			return EnumParticleTypes.FLAME;
+		else if(s.equals("lava"))			return EnumParticleTypes.LAVA;
+		else if(s.equals("footstep"))		return EnumParticleTypes.FOOTSTEP;
+		else if(s.equals("cloud"))			return EnumParticleTypes.CLOUD;
+		else if(s.equals("reddust"))		return EnumParticleTypes.REDSTONE;
+		else if(s.equals("snowballpoof"))	return EnumParticleTypes.SNOWBALL;
+		else if(s.equals("snowshovel"))		return EnumParticleTypes.SNOW_SHOVEL;
+		else if(s.equals("slime"))			return EnumParticleTypes.SLIME;
+		else if(s.equals("heart"))			return EnumParticleTypes.HEART;
+		else if(s.equals("barrier"))		return EnumParticleTypes.BARRIER;
+		
+		return EnumParticleTypes.WATER_BUBBLE;
 	}
 }

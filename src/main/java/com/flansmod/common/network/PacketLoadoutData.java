@@ -1,0 +1,83 @@
+package com.flansmod.common.network;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.teams.LoadoutPool;
+import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.teams.Team;
+import com.flansmod.common.teams.TeamsManagerRanked;
+
+public class PacketLoadoutData extends PacketBase
+{
+	public Team[] teamsAvailable = new Team[0];
+	public PlayerRankData myRankData = new PlayerRankData();
+	public LoadoutPool currentPool = null;
+	
+	public PacketLoadoutData()
+	{
+		
+	}
+	
+	@Override
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	{
+		data.writeInt(teamsAvailable.length);
+		for(int i = 0; i < teamsAvailable.length; i++)
+		{
+			data.writeInt(teamsAvailable[i] == null ? 0 : teamsAvailable[i].shortName.hashCode());
+		}
+		
+		myRankData.writeToBuf(data);
+
+		data.writeInt(currentPool == null ? 0 : currentPool.shortName.hashCode());
+	}
+
+	@Override
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	{
+		int numTeams = data.readInt();
+		teamsAvailable = new Team[numTeams];
+		for(int i = 0; i < teamsAvailable.length; i++)
+		{
+			teamsAvailable[i] = Team.getTeam(data.readInt());
+		}
+		
+		myRankData.readFromBuf(data);
+		
+		currentPool = LoadoutPool.GetPool(data.readInt());
+	}
+
+	@Override
+	public void handleServerSide(EntityPlayerMP playerEntity) 
+	{
+		PlayerRankData rankData = TeamsManagerRanked.rankData.get(playerEntity.getUniqueID());
+		if(rankData == null)
+		{
+			rankData = new PlayerRankData();
+			TeamsManagerRanked.rankData.put(playerEntity.getUniqueID(), rankData);
+		}
+		
+		// Client to server. The only bit they are authoritative on is their loadouts. But they still need to be checked for cheating.
+		// TODO: Verify loadout is valid
+		rankData.loadouts = myRankData.loadouts;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void handleClientSide(EntityPlayer clientPlayer) 
+	{
+		ClientTeamsData.theRankData = myRankData;
+		ClientTeamsData.currentPool = currentPool;
+		GuiTeamSelect.teamChoices = teamsAvailable;
+		TeamsManagerRanked.OpenLandingPage();
+	}
+}

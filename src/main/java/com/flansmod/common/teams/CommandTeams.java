@@ -691,6 +691,27 @@ public class CommandTeams extends CommandBase
 			else sender.addChatMessage(new ChatComponentText("Variable " + split[1] + " did not exist in gametype " + TeamsManager.getInstance().currentRound.gametype.shortName));
 			return;
 		}
+		if(split[0].toLowerCase().equals("setloadoutpool"))
+		{
+			LoadoutPool pool = LoadoutPool.GetPool(split[1]);
+			if(pool != null)
+			{
+				TeamsManagerRanked.GetInstance().currentPool = pool;
+				sender.addChatMessage(new ChatComponentText("Loadout pool set to " + split[1]));	
+			}
+			else
+			{
+				sender.addChatMessage(new ChatComponentText("No such loadout pool"));	
+			} 
+				
+			return;
+		}
+		if(split[0].toLowerCase().equals("go"))
+		{
+			TeamsManagerRanked.GetInstance().currentPool = LoadoutPool.GetPool("modernLoadout");
+			teamsManager.start();
+		}
+		
 		sender.addChatMessage(new ChatComponentText(split[0] + " is not a valid teams command. Try /teams help"));
 	}
 	

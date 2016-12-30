@@ -13,6 +13,7 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
 import com.flansmod.common.network.PacketSelectOffHandGun;
+import com.flansmod.common.teams.IPlayerClass;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
@@ -86,9 +87,9 @@ public class PlayerData
 	/** The team this player will switch to upon respawning */
 	public Team newTeam;
 	/** The class the player is currently using */
-	public PlayerClass playerClass;
+	public IPlayerClass playerClass;
 	/** The class the player will switch to upon respawning */
-	public PlayerClass newPlayerClass;
+	public IPlayerClass newPlayerClass;
 	/** Keeps the player out of having to rechose their team each round */
 	public boolean builder;
 	/** Save the player's skin here, to replace after having done a swap for a certain class override */
@@ -143,7 +144,7 @@ public class PlayerData
 		}
 	}
 
-	public PlayerClass getPlayerClass()
+	public IPlayerClass getPlayerClass()
 	{
 		if(playerClass != newPlayerClass)
 			playerClass = newPlayerClass;

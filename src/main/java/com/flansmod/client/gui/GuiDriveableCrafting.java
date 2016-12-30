@@ -332,8 +332,6 @@ public class GuiDriveableCrafting extends GuiScreen
 		int y = j - guiOriginY;
 		if (k == 0 || k == 1)
 		{
-			
-			FlansMod.log(x + " " + y);
 			//Driveable buttons
 			for(int m = 0; m < 2; m++)
 			{

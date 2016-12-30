@@ -44,7 +44,7 @@ public class PacketRoundFinished extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansModClient.teamsScoreGUILock = showScoresFor;
+		//FlansModClient.teamsScoreGUILock = showScoresFor;
 	}
 
 }

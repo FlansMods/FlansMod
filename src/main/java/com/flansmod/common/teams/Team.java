@@ -164,6 +164,16 @@ public class Team extends InfoType
 		return null;
 	}
 	
+	public static Team getTeam(int iHash)
+	{
+		for(Team team : teams)
+		{
+			if(team.shortName.hashCode() == iHash)
+				return team;
+		}
+		return null;
+	}
+	
 	/*
 	//Called both by ops and the gametype
 	public void addBase(ITeamBase base)

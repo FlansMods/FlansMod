@@ -30,7 +30,7 @@ public abstract class PaintableType extends InfoType
 	public void postRead(TypeFile file)
 	{
 		//After all lines have been read, set up the default paintjob
-		defaultPaintjob = new Paintjob(0, "", texture, new ItemStack[0]);
+		defaultPaintjob = new Paintjob(this, 0, "", texture, new ItemStack[0]);
 		//Move to a new list to ensure that the default paintjob is always first
 		ArrayList<Paintjob> newPaintjobList = new ArrayList<Paintjob>();
 		newPaintjobList.add(defaultPaintjob);
@@ -63,7 +63,7 @@ public abstract class PaintableType extends InfoType
 					if(splat[0].equals(iconPath))
 						split[1] = splat[1];
 				}
-				paintjobs.add(new Paintjob(nextPaintjobID++, split[1], split[2], dyeStacks));
+				paintjobs.add(new Paintjob(this, nextPaintjobID++, split[1], split[2], dyeStacks));
 			}
 		} 
 		catch (Exception e)

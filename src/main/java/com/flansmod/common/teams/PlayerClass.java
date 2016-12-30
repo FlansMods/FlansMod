@@ -19,7 +19,7 @@ import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class PlayerClass extends InfoType
+public class PlayerClass extends InfoType implements IPlayerClass
 {
 	public static List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
@@ -29,6 +29,23 @@ public class PlayerClass extends InfoType
 	
 	/** Override armour. If this is set, then it will override the team armour */
 	public ItemStack hat, chest, legs, shoes;
+	
+	@Override
+	public List<ItemStack> GetStartingItems() { return startingItems; }
+	@Override
+	public boolean GetHorse() { return horse; }
+	@Override
+	public ItemStack GetHat() { return hat; }
+	@Override
+	public ItemStack GetChest() { return chest; }
+	@Override
+	public ItemStack GetLegs() { return legs; }
+	@Override
+	public ItemStack GetShoes() { return shoes; }
+	@Override
+	public String GetName() { return name; }
+	@Override
+	public String GetShortName() { return name; }
 	
 	public PlayerClass(TypeFile file)
 	{

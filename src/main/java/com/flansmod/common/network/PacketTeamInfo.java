@@ -134,7 +134,7 @@ public class PacketTeamInfo extends PacketBase
 								data.writeInt(playerData.zombieScore);
 								data.writeInt(playerData.kills);
 								data.writeInt(playerData.deaths);
-								writeUTF(data, playerData.playerClass.shortName);
+								writeUTF(data, playerData.playerClass.GetShortName());
 							}
 						}
 					}
@@ -168,7 +168,7 @@ public class PacketTeamInfo extends PacketBase
 						data.writeInt(playerData.score);
 						data.writeInt(playerData.kills);
 						data.writeInt(playerData.deaths);
-						writeUTF(data, playerData.playerClass.shortName);
+						writeUTF(data, playerData.playerClass.GetShortName());
 					}
 				}
 

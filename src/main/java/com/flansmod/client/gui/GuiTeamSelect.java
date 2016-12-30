@@ -8,13 +8,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.teams.TeamsManager;
 
 public class GuiTeamSelect extends GuiScreen 
 {
@@ -90,6 +90,7 @@ public class GuiTeamSelect extends GuiScreen
 	{
 		//TODO : Draw the inventory BG and slots for the class menu
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		drawDefaultBackground();
 		mc.renderEngine.bindTexture(texture);
 		drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2, 0, 0, 256, 22);
 		drawTexturedModalRect(width / 2 - 128, height / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
@@ -126,10 +127,15 @@ public class GuiTeamSelect extends GuiScreen
 	protected void actionPerformed(GuiButton button)
 	{
 		if(classMenu)
+		{
 			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(classChoices[button.id].shortName, true));
+			Minecraft.getMinecraft().displayGuiScreen(null);
+		}
 		else
-			FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(teamChoices[button.id] == null ? "null" : teamChoices[button.id].shortName, false));
-		Minecraft.getMinecraft().displayGuiScreen(null);
+		{
+			TeamsManager.getInstance().SelectTeam(teamChoices[button.id]);
+
+		}
 	}
 	
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)

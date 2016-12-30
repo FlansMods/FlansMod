@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -260,16 +261,21 @@ public class TeamsManager
 			
 			if(roundEnded)
 			{
-				//The round has ended on a timer, so display the scoreboard summary
-				roundTimeLeft = 0;
-				interRoundTimeLeft = voting ? (votingTime + scoreDisplayTime) : scoreDisplayTime;
-				displayScoreboardGUI();
-				currentRound.gametype.roundEnd();
-				PlayerHandler.roundEnded();
+				OnRoundEnded();
 			}
 		}	
 	}
 	
+	protected void OnRoundEnded() 
+	{
+		//The round has ended on a timer, so display the scoreboard summary
+		roundTimeLeft = 0;
+		interRoundTimeLeft = voting ? (votingTime + scoreDisplayTime) : scoreDisplayTime;
+		displayScoreboardGUI();
+		currentRound.gametype.roundEnd();
+		PlayerHandler.roundEnded();
+	}
+
 	public boolean needAutobalance()
 	{
 		if(!autoBalance() || currentRound == null || currentRound.teams.length != 2)
@@ -458,7 +464,7 @@ public class TeamsManager
 		nextRound = null;
 	}
 	
-	private void startRound()
+	public void startRound()
 	{
 		currentRound.gametype.roundStart();
 		roundTimeLeft = currentRound.timeLimit * 60 * 20;
@@ -590,8 +596,19 @@ public class TeamsManager
 		if(currentRound != null)
 		{
 			currentRound.gametype.entityKilled(event.entity, event.source);
-			if(event.entity instanceof EntityPlayerMP)
-				currentRound.gametype.playerKilled((EntityPlayerMP)event.entity, event.source);
+		}
+		
+		if(event.entity instanceof EntityPlayerMP)
+		{
+			OnPlayerKilled((EntityPlayerMP)event.entity, event.source);
+		}
+	}
+	
+	public void OnPlayerKilled(EntityPlayerMP player, DamageSource source)
+	{
+		if(currentRound != null)
+		{
+			currentRound.gametype.playerKilled(player, source);
 		}
 	}
 	
@@ -975,10 +992,10 @@ public class TeamsManager
 		if(!enabled || currentRound == null)
 			return;
 		
-		PlayerData data = PlayerHandler.getPlayerData(player);
-		
 		//Get player class requested
 		PlayerClass playerClass = PlayerClass.getClass(className);
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		
 		//Validate class
 		if(!data.newTeam.classes.contains(playerClass))
 		{
@@ -988,13 +1005,26 @@ public class TeamsManager
 			return;
 		}
 		
+		playerSelectedClass(player, playerClass);
+	}
+	
+	public void playerSelectedClass(EntityPlayerMP player, IPlayerClass playerClass)
+	{
+		if(playerClass == null)
+		{
+			FlansMod.log("Error in class selection");
+			return;
+		}
+		
+		PlayerData data = PlayerHandler.getPlayerData(player);
+		
 		//Check cases
 		//1 : Player switched class only
-		if(data.team == data.newTeam && data.playerClass != playerClass)
+		if(data.team == data.newTeam && data.playerClass != null && !data.playerClass.GetShortName().equals(playerClass.GetShortName()))
 		{
 			currentRound.gametype.playerChoseNewClass(player, playerClass);
 			data.newPlayerClass = playerClass;
-			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.name + " class"));
+			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.GetName() + " class"));
 		}
 		//2 : Player switched team
 		else if(data.team != null && data.team != data.newTeam)
@@ -1025,7 +1055,7 @@ public class TeamsManager
 	public void resetInventory(EntityPlayer player)
 	{
 		Team team = PlayerHandler.getPlayerData(player).team;
-		PlayerClass playerClass = PlayerHandler.getPlayerData(player).getPlayerClass();
+		IPlayerClass playerClass = PlayerHandler.getPlayerData(player).getPlayerClass();
 
 		if(team == null)
 			return;
@@ -1047,16 +1077,16 @@ public class TeamsManager
 			return;
 		
 		//Override with class armour
-		if(playerClass.hat != null)
-			player.inventory.armorInventory[3] = playerClass.hat.copy();
-		if(playerClass.chest != null)
-			player.inventory.armorInventory[2] = playerClass.chest.copy();
-		if(playerClass.legs != null)
-			player.inventory.armorInventory[1] = playerClass.legs.copy();
-		if(playerClass.shoes != null)
-			player.inventory.armorInventory[0] = playerClass.shoes.copy();	
+		if(playerClass.GetHat() != null)
+			player.inventory.armorInventory[3] = playerClass.GetHat().copy();
+		if(playerClass.GetChest() != null)
+			player.inventory.armorInventory[2] = playerClass.GetChest().copy();
+		if(playerClass.GetLegs() != null)
+			player.inventory.armorInventory[1] = playerClass.GetLegs().copy();
+		if(playerClass.GetShoes() != null)
+			player.inventory.armorInventory[0] = playerClass.GetShoes().copy();	
 		
-		for(ItemStack stack : playerClass.startingItems)
+		for(ItemStack stack : playerClass.GetStartingItems())
 		{
 			player.inventory.addItemStackToInventory(stack.copy());
 			//Load up as many guns as possible
@@ -1131,47 +1161,8 @@ public class TeamsManager
 		try
 		{
 			NBTTagCompound tags = CompressedStreamTools.read(new DataInputStream(new FileInputStream(file)));
-			nextBaseID = tags.getInteger("NextBaseID");
-			//Read maps
-			for(int i = 0; i < tags.getInteger("NumberOfMaps"); i++)
-			{
-				TeamsMap map = new TeamsMap(world, tags.getCompoundTag("Map_" + i));
-				maps.put(map.shortName, map);
-			}
 			
-			int dimension = 0; //TODO : FIX THIS
-			if(maps.size() == 0)
-			{
-				maps.put("default" + dimension, new TeamsMap(world, "default" + dimension, "Default " + world.getWorldInfo().getWorldName()));
-			}
-
-			//Read the rounds list		
-			for(int i = 0; i < tags.getInteger("RoundsSize"); i++)
-			{
-				TeamsRound round = new TeamsRound(tags.getCompoundTag("Round_" + i));
-				rounds.add(round);
-			}
-
-			//Read variables
-			enabled = tags.getBoolean("Enabled");
-			voting = tags.getBoolean("Voting");
-			votingTime = tags.getInteger("VotingTime");
-			scoreDisplayTime = tags.getInteger("ScoreTime");
-			bombsEnabled = tags.getBoolean("Bombs");
-			bulletsEnabled = tags.getBoolean("Bullets");
-			explosions = tags.getBoolean("Explosions");
-			forceAdventureMode = tags.getBoolean("ForceAdventure");
-			canBreakGuns = tags.getBoolean("CanBreakGuns");
-			canBreakGlass = tags.getBoolean("CanBreakGlass");
-			armourDrops = tags.getBoolean("ArmourDrops");
-			weaponDrops = tags.getInteger("WeaponDrops");
-			vehiclesNeedFuel = tags.getBoolean("NeedFuel");
-			mgLife = tags.getInteger("MGLife");
-			aaLife = tags.getInteger("AALife");
-			vehicleLife = tags.getInteger("VehicleLife");
-			mechaLove = tags.getInteger("MechaLove");
-			planeLife = tags.getInteger("PlaneLife");
-			driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
+			ReadFromNBT(tags, world);
 			
 			//Start the rotation
 			if(enabled && rounds.size() > 0)
@@ -1196,66 +1187,8 @@ public class TeamsManager
 		try
 		{
 			NBTTagCompound tags = new NBTTagCompound();
-			tags.setInteger("NextBaseID", nextBaseID);
-			//Changed name so that it does not try to read old maps
-			tags.setInteger("NumberOfMaps", maps.size());
-			//Write the maps to memory
-			if(maps != null)
-			{
-				int i = 0;
-				for(TeamsMap map : maps.values())
-				{
-					NBTTagCompound mapTags = new NBTTagCompound();
-					map.writeToNBT(mapTags);
-					tags.setTag("Map_" + i, mapTags);
-					i++;
-				}
-			}
-			//Write the rounds list to memory
-			if(rounds != null)
-			{
-				tags.setInteger("RoundsSize", rounds.size());
-				for(int i = 0; i < rounds.size(); i++)
-				{
-					TeamsRound entry = rounds.get(i);
-					if(entry != null)
-					{
-						NBTTagCompound roundTags = new NBTTagCompound();
-						entry.writeToNBT(roundTags);
-						tags.setTag("Round_" + i, roundTags);
-					}
-				}
-			}
-			else tags.setInteger("RoundsSize", 0);
-			//Write the current round to memory
-			if(currentRound != null)
-				tags.setInteger("CurrentRound", rounds.indexOf(currentRound));
-			//Save gametype settings to memory
-			for(Gametype gametype : Gametype.gametypes.values())
-			{
-				gametype.saveToNBT(tags);
-			}
-
-			//Save variables
-			tags.setBoolean("Enabled", enabled);
-			tags.setBoolean("Voting", voting);
-			tags.setInteger("VotingTime", votingTime);
-			tags.setInteger("ScoreTime", scoreDisplayTime);
-			tags.setBoolean("Bombs", bombsEnabled);
-			tags.setBoolean("Bullets", bulletsEnabled);
-			tags.setBoolean("Explosions", explosions);
-			tags.setBoolean("ForceAdventure", forceAdventureMode);
-			tags.setBoolean("CanBreakGuns", canBreakGuns);
-			tags.setBoolean("CanBreakGlass", canBreakGlass);
-			tags.setBoolean("ArmourDrops", armourDrops);
-			tags.setInteger("WeaponDrops", weaponDrops);
-			tags.setBoolean("NeedFuel", vehiclesNeedFuel);
-			tags.setInteger("MGLife", mgLife);
-			tags.setInteger("AALife", aaLife);
-			tags.setInteger("VehicleLife", vehicleLife);
-			tags.setInteger("MechaLove", mechaLove);
-			tags.setInteger("PlaneLife", planeLife);
-			tags.setBoolean("BreakBlocks", driveablesBreakBlocks);
+			
+			WriteToNBT(tags);
 			
 			CompressedStreamTools.write(tags, new DataOutputStream(new FileOutputStream(file)));
 		}
@@ -1264,6 +1197,115 @@ public class TeamsManager
 			FlansMod.log("Failed to save to teams.dat");
 			e.printStackTrace();
 		}
+	}
+	
+	protected void ReadFromNBT(NBTTagCompound tags, World world)
+	{
+		nextBaseID = tags.getInteger("NextBaseID");
+		//Read maps
+		for(int i = 0; i < tags.getInteger("NumberOfMaps"); i++)
+		{
+			TeamsMap map = new TeamsMap(world, tags.getCompoundTag("Map_" + i));
+			maps.put(map.shortName, map);
+		}
+		
+		int dimension = 0; //TODO : FIX THIS
+		if(maps.size() == 0)
+		{
+			maps.put("default" + dimension, new TeamsMap(world, "default" + dimension, "Default " + world.getWorldInfo().getWorldName()));
+		}
+
+		//Read the rounds list		
+		for(int i = 0; i < tags.getInteger("RoundsSize"); i++)
+		{
+			TeamsRound round = new TeamsRound(tags.getCompoundTag("Round_" + i));
+			rounds.add(round);
+		}
+
+		//Read variables
+		enabled = tags.getBoolean("Enabled");
+		voting = tags.getBoolean("Voting");
+		votingTime = tags.getInteger("VotingTime");
+		scoreDisplayTime = tags.getInteger("ScoreTime");
+		bombsEnabled = tags.getBoolean("Bombs");
+		bulletsEnabled = tags.getBoolean("Bullets");
+		explosions = tags.getBoolean("Explosions");
+		forceAdventureMode = tags.getBoolean("ForceAdventure");
+		canBreakGuns = tags.getBoolean("CanBreakGuns");
+		canBreakGlass = tags.getBoolean("CanBreakGlass");
+		armourDrops = tags.getBoolean("ArmourDrops");
+		weaponDrops = tags.getInteger("WeaponDrops");
+		vehiclesNeedFuel = tags.getBoolean("NeedFuel");
+		mgLife = tags.getInteger("MGLife");
+		aaLife = tags.getInteger("AALife");
+		vehicleLife = tags.getInteger("VehicleLife");
+		mechaLove = tags.getInteger("MechaLove");
+		planeLife = tags.getInteger("PlaneLife");
+		driveablesBreakBlocks = tags.getBoolean("BreakBlocks");
+	}
+	
+	protected void WriteToNBT(NBTTagCompound tags)
+	{
+		tags.setInteger("NextBaseID", nextBaseID);
+		//Changed name so that it does not try to read old maps
+		tags.setInteger("NumberOfMaps", maps.size());
+		//Write the maps to memory
+		if(maps != null)
+		{
+			int i = 0;
+			for(TeamsMap map : maps.values())
+			{
+				NBTTagCompound mapTags = new NBTTagCompound();
+				map.writeToNBT(mapTags);
+				tags.setTag("Map_" + i, mapTags);
+				i++;
+			}
+		}
+		//Write the rounds list to memory
+		if(rounds != null)
+		{
+			tags.setInteger("RoundsSize", rounds.size());
+			for(int i = 0; i < rounds.size(); i++)
+			{
+				TeamsRound entry = rounds.get(i);
+				if(entry != null)
+				{
+					NBTTagCompound roundTags = new NBTTagCompound();
+					entry.writeToNBT(roundTags);
+					tags.setTag("Round_" + i, roundTags);
+				}
+			}
+		}
+		else tags.setInteger("RoundsSize", 0);
+		//Write the current round to memory
+		if(currentRound != null)
+			tags.setInteger("CurrentRound", rounds.indexOf(currentRound));
+		//Save gametype settings to memory
+		for(Gametype gametype : Gametype.gametypes.values())
+		{
+			gametype.saveToNBT(tags);
+		}
+
+		//Save variables
+		tags.setBoolean("Enabled", enabled);
+		tags.setBoolean("Voting", voting);
+		tags.setInteger("VotingTime", votingTime);
+		tags.setInteger("ScoreTime", scoreDisplayTime);
+		tags.setBoolean("Bombs", bombsEnabled);
+		tags.setBoolean("Bullets", bulletsEnabled);
+		tags.setBoolean("Explosions", explosions);
+		tags.setBoolean("ForceAdventure", forceAdventureMode);
+		tags.setBoolean("CanBreakGuns", canBreakGuns);
+		tags.setBoolean("CanBreakGlass", canBreakGlass);
+		tags.setBoolean("ArmourDrops", armourDrops);
+		tags.setInteger("WeaponDrops", weaponDrops);
+		tags.setBoolean("NeedFuel", vehiclesNeedFuel);
+		tags.setInteger("MGLife", mgLife);
+		tags.setInteger("AALife", aaLife);
+		tags.setInteger("VehicleLife", vehicleLife);
+		tags.setInteger("MechaLove", mechaLove);
+		tags.setInteger("PlaneLife", planeLife);
+		tags.setBoolean("BreakBlocks", driveablesBreakBlocks);
 	}
 	
 	private boolean checkFileExists(File file)
@@ -1377,5 +1419,11 @@ public class TeamsManager
 				return map;
 		}
 		return null;
+	}
+
+	public void SelectTeam(Team team) 
+	{
+		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
+		Minecraft.getMinecraft().displayGuiScreen(null);
 	}
 }

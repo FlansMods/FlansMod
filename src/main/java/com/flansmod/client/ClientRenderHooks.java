@@ -818,6 +818,12 @@ public void cameraSetup(CameraSetup event)
 				//If we are in a two team gametype, draw the team scores at the top of the screen
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
 				{
+					if(teamInfo.teamData == null || teamInfo.teamData[0].team == null || teamInfo.teamData[1].team == null)
+					{
+						FlansMod.Assert(false, "Failure in team data overlay");
+						return;
+					}
+					
 					//Draw team 1 colour bit
 					int colour = teamInfo.teamData[0].team.teamColour;	
 					GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);

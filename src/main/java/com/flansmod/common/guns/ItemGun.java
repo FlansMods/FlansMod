@@ -649,7 +649,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(world.isRemote)
 		{
 			// Play a sound if the previous sound has finished
-			if (soundDelay <= 0 && type.shootSound != null)
+			if (soundDelay <= 0 && type.shootSound != null && shooter != null)
 			{
 				//AttachmentType barrel = type.getBarrel(gunstack);
 				boolean silenced = false;//barrel != null && barrel.silencer;

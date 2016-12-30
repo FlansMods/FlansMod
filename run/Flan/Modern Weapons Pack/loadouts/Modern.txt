@@ -1,0 +1,76 @@
+//Naming
+Name Modern Loadout
+ShortName modernLoadout
+MaxLevel 20
+// The levels at which new loadout slots unlock
+SlotUnlockLevels 0 0 5 10 20
+// Rifles
+AddPrimary ak47 0
+AddPrimary m16a4 3
+AddPrimary g3 8
+AddPrimary g36 10
+AddPrimary fnscar 13
+AddPrimary m14 16
+AddPrimary acr 19
+// Shotguns
+AddPrimary m1014 2
+AddPrimary w1200 6
+AddSecondary judge 9
+AddPrimary r870 11
+AddSecondary executioner 15
+//AddPrimary aa12 17
+// Pistols
+AddSecondary m9 0
+AddSecondary makarov 4
+AddSecondary jury 9
+AddSecondary glock 14
+AddSecondary desertEagle 20
+// SMGs
+AddSecondary ak74 0
+AddSecondary p90 7
+AddSecondary bizon 12
+AddSecondary mp5 16
+// LMGs
+AddPrimary rpd 0
+AddPrimary l86 5
+AddPrimary m249 14
+AddPrimary minigun 20
+// Extras
+AddSpecial m67 0
+AddSpecial medicBag 3
+AddSpecial molotov 6
+AddSpecial ammoBag 11
+AddSpecial claymore 17
+// Explosives
+AddPrimary rpg 0
+AddPrimary gl1 8
+AddPrimary gl6 19
+// Snipers
+AddPrimary r700 1
+AddPrimary dragunov 5
+AddPrimary m40a3 10
+AddPrimary m21 13
+AddPrimary barrett 18
+// Modifications
+AddPrimary flanMWSilencer 1
+AddPrimary flanMWForegrip 2
+AddPrimary flanMWRedDot 4
+AddPrimary flanMWBurstFire 7
+AddPrimary flanMWACOG 10
+AddPrimary flanMWAutoFire 12
+AddPrimary flanMWLongBarrel 15
+AddPrimary flanMWSingleFire 18
+AddSecondary flanMWSilencer 1
+AddSecondary flanMWForegrip 2
+AddSecondary flanMWRedDot 4
+AddSecondary flanMWBurstFire 7
+AddSecondary flanMWACOG 10
+AddSecondary flanMWAutoFire 12
+AddSecondary flanMWLongBarrel 15
+AddSecondary flanMWSingleFire 18
+// Default loadouts
+DefaultLoadout 1 ak47 m9
+DefaultLoadout 2 rpd ak74
+DefaultLoadout 3 dragunov makarov
+DefaultLoadout 4 g36 judge
+DefaultLoadout 5 minigun desertEagle
