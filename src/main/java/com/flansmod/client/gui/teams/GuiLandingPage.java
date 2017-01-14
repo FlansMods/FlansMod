@@ -107,9 +107,18 @@ public class GuiLandingPage extends GuiTeamsBase
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
 		
-		float XPProgress = data.currentXP / pool.XPPerLevel[data.currentLevel + 1];
+		int XPForNextLevel = pool.GetXPForLevel(data.currentLevel + 1);
+		float XPProgress = 0.0f;
+		if(XPForNextLevel > 0)
+		{
+			XPProgress = (float)data.currentXP / (float)XPForNextLevel;
+		}
+		else
+		{
+			XPProgress = 1.0f;
+		}
 		
-		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 164, 259, 164, (int)(92 * XPProgress), 16, textureX, textureY);
+		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 164, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
 		
 		// Draw text
 		drawCenteredString(fontRendererObj, "Welcome to the Official Modern Server", guiOriginX + 128, guiOriginY + 12, 0xffffff);

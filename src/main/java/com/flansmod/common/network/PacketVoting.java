@@ -82,9 +82,10 @@ public class PacketVoting extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		if(!(Minecraft.getMinecraft().currentScreen instanceof GuiVoting))
-			Minecraft.getMinecraft().displayGuiScreen(new GuiVoting(this));
-		else GuiVoting.packet = this;
+		FlansMod.Assert(false, "Depreceated packet!");
+		//if(!(Minecraft.getMinecraft().currentScreen instanceof GuiVoting))
+		//	Minecraft.getMinecraft().displayGuiScreen(new GuiVoting(this));
+		//else GuiVoting.packet = this;
 	}
 
 	public class ClientTeamsRound

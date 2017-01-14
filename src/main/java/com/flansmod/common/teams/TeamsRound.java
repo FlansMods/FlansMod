@@ -42,6 +42,11 @@ public class TeamsRound implements Comparable<TeamsRound>
 		for(int i = 0; i < teams.length; i++)
 		{
 			teams[i] = Team.getTeam(tags.getString("Team_" + i));
+			if(teams[i] == null)
+			{
+				teams[i] = Team.teams.get(0);
+			}
+			
 		}
 		
 		popularity = tags.getFloat("Pop");

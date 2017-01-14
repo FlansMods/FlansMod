@@ -27,13 +27,13 @@ public abstract class PacketBase
 	public abstract void handleClientSide(EntityPlayer clientPlayer);
 	
 	/** Util method for quickly writing strings */
-	public void writeUTF(ByteBuf data, String s)
+	public static void writeUTF(ByteBuf data, String s)
 	{
 		ByteBufUtils.writeUTF8String(data, s);
 	}
 	
 	/** Util method for quickly reading strings */
-	public String readUTF(ByteBuf data)
+	public static String readUTF(ByteBuf data)
 	{
 		return ByteBufUtils.readUTF8String(data);
 	}

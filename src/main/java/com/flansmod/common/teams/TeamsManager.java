@@ -89,6 +89,8 @@ public class TeamsManager
 	public static int scoreDisplayTime = 200;
 	/** The number of ticks for which to display the voting box, if enabled */
 	public static int votingTime = 200;
+	/** The number of ticks for which to display the rank update page */
+	public static int rankUpdateTime = 200;
 	
 	/** The current round in play. This class replaces the old set of 3 fields "currentGametype", "currentMap" and "teams" */
 	public TeamsRound currentRound;
@@ -270,7 +272,8 @@ public class TeamsManager
 	{
 		//The round has ended on a timer, so display the scoreboard summary
 		roundTimeLeft = 0;
-		interRoundTimeLeft = voting ? (votingTime + scoreDisplayTime) : scoreDisplayTime;
+		interRoundTimeLeft = scoreDisplayTime + rankUpdateTime;
+		if(voting) interRoundTimeLeft += votingTime;
 		displayScoreboardGUI();
 		currentRound.gametype.roundEnd();
 		PlayerHandler.roundEnded();
@@ -327,23 +330,26 @@ public class TeamsManager
 	
 	public void displayScoreboardGUI()
 	{
+		/*
 		for(EntityPlayer player : getPlayers())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(!data.builder)
 				sendPacketToPlayer(new PacketRoundFinished(scoreDisplayTime), (EntityPlayerMP)player);
 		}
+		*/
 	}
 	
 	public void displayVotingGUI()
 	{
-		
+		/*
 		for(EntityPlayer player : getPlayers())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(!data.builder)
 				sendPacketToPlayer(new PacketVoting(this), (EntityPlayerMP)player);
 		}
+		*/
 	}
 	
 	public void pickVoteOptions()
@@ -1227,6 +1233,7 @@ public class TeamsManager
 		voting = tags.getBoolean("Voting");
 		votingTime = tags.getInteger("VotingTime");
 		scoreDisplayTime = tags.getInteger("ScoreTime");
+		rankUpdateTime = tags.getInteger("RankUpdateTime");
 		bombsEnabled = tags.getBoolean("Bombs");
 		bulletsEnabled = tags.getBoolean("Bullets");
 		explosions = tags.getBoolean("Explosions");
@@ -1291,6 +1298,7 @@ public class TeamsManager
 		tags.setBoolean("Voting", voting);
 		tags.setInteger("VotingTime", votingTime);
 		tags.setInteger("ScoreTime", scoreDisplayTime);
+		tags.setInteger("RankUpdateTime", rankUpdateTime);
 		tags.setBoolean("Bombs", bombsEnabled);
 		tags.setBoolean("Bullets", bulletsEnabled);
 		tags.setBoolean("Explosions", explosions);

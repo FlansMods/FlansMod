@@ -204,6 +204,26 @@ public class GuiEditLoadout extends GuiTeamsBase
 				for(int n = 0; n < NON_WEAPON_COMPONENT_NAMES.length; n++)
 				{
 					drawCenteredString(fontRendererObj, NON_WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+					ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
+					switch(n)
+					{
+						case 0: // Main item
+						{
+							ItemStack copy = stack == null ? null : stack.copy();
+							if(copy != null) copy.setItemDamage(0);
+							drawSlotInventory(copy, guiOriginX + 172, guiOriginY + 35 + 22 * n);
+							break;
+						}
+						case 1: // Paint
+						{
+							drawSlotInventory(stack, guiOriginX + 172, guiOriginY + 35 + 22 * n);
+							break;
+						}
+						default:
+						{
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -428,6 +448,17 @@ public class GuiEditLoadout extends GuiTeamsBase
 		
 	}
 	
+	public class LoadoutComparator implements Comparator<LoadoutEntry>
+	{
+		@Override
+		public int compare(LoadoutEntry a, LoadoutEntry b) 
+		{
+			if(a.unlockLevel < b.unlockLevel) return -1;
+			if(a.unlockLevel > b.unlockLevel) return 1;
+			return 0;
+		}
+	}
+	
 	public void RecalculateAvailableEntries()
 	{
 		availableComponents.clear();
@@ -502,17 +533,6 @@ public class GuiEditLoadout extends GuiTeamsBase
 					unlockedEntries.add(copy);
 				else
 					lockedEntries.add(copy);
-			}
-		}
-		
-		class LoadoutComparator implements Comparator<LoadoutEntry>
-		{
-			@Override
-			public int compare(LoadoutEntry a, LoadoutEntry b) 
-			{
-				if(a.unlockLevel < b.unlockLevel) return -1;
-				if(a.unlockLevel > b.unlockLevel) return 1;
-				return 0;
 			}
 		}
 		

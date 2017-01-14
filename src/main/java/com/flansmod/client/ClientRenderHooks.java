@@ -816,9 +816,10 @@ public void cameraSetup(CameraSetup event)
 				tessellator.draw();
 				
 				//If we are in a two team gametype, draw the team scores at the top of the screen
+				
 				if(teamInfo.numTeams == 2 && teamInfo.sortedByTeam)
 				{
-					if(teamInfo.teamData == null || teamInfo.teamData[0].team == null || teamInfo.teamData[1].team == null)
+					if(teamInfo.teamData == null || teamInfo.teamData[0] == null || teamInfo.teamData[0].team == null || teamInfo.teamData[1] == null || teamInfo.teamData[1].team == null)
 					{
 						FlansMod.Assert(false, "Failure in team data overlay");
 						return;
@@ -858,6 +859,7 @@ public void cameraSetup(CameraSetup event)
 					}
 				}
 				
+				
 				mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
 				mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
 				mc.fontRendererObj.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRendererObj.getStringWidth(teamInfo.map + ""), 9, 0x000000);
@@ -877,11 +879,12 @@ public void cameraSetup(CameraSetup event)
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				String playerUsername = FlansModClient.minecraft.thePlayer.getName();
 				
-				if(teamInfo.getPlayerScoreData(playerUsername) != null)
+				PlayerScoreData data = teamInfo.getPlayerScoreData(playerUsername);
+				if(data != null)
 				{
-					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).score + "", i / 2 - 7, 1, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).kills + "", i / 2 - 7, 9, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.getPlayerScoreData(playerUsername).deaths + "", i / 2 - 7, 17, 0x000000);
+					mc.fontRendererObj.drawString(data.score + "", i / 2 - 7, 1, 0x000000);
+					mc.fontRendererObj.drawString(data.kills + "", i / 2 - 7, 9, 0x000000);
+					mc.fontRendererObj.drawString(data.deaths + "", i / 2 - 7, 17, 0x000000);
 				}
 			}
 			for(int n = 0; n < killMessages.size(); n++)

@@ -2,6 +2,7 @@ package com.flansmod.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketVoteCast;
 import com.flansmod.common.network.PacketVoting;
@@ -15,14 +16,12 @@ import net.minecraft.util.ResourceLocation;
 public class GuiVoting extends GuiScreen 
 {
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/vote.png");
-	public static PacketVoting packet;
 	public static int myVote = 0;
 	private int guiHeight;
 	
-	public GuiVoting(PacketVoting packet)
+	public GuiVoting()
 	{
 		myVote = 0;
-		this.packet = packet;
 	}
 	
 	@Override
@@ -31,10 +30,10 @@ public class GuiVoting extends GuiScreen
 		super.initGui();
 		this.buttonList.clear();
 		
-		guiHeight = 29 + packet.clientOptions.length * 24;
+		guiHeight = 29 + ClientTeamsData.roundFinishedData.votingOptions.length * 24;
 		
 		//Add buttons
-		for(int i = 0; i < packet.clientOptions.length; i++)
+		for(int i = 0; i < ClientTeamsData.roundFinishedData.votingOptions.length; i++)
 		{
 			buttonList.add(new GuiButton(i, width / 2 + 128 - 50, height / 2 - guiHeight / 2 + 24 + 24 * i, 40, 20, "Vote"));
 		}
@@ -68,19 +67,19 @@ public class GuiVoting extends GuiScreen
 		
 		
 		drawTexturedModalRect(m, n, 0, 0, 256, 22);
-		for(int p = 0; p < packet.clientOptions.length; p++)
+		for(int p = 0; p < ClientTeamsData.roundFinishedData.votingOptions.length; p++)
 			drawTexturedModalRect(m, n + 22 + 24 * p, 0, 23, 256, 24);
 		drawTexturedModalRect(m, l / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		
 		drawString(fontRendererObj, "Vote for the Next Round", m + 8, n + 8, 0xffffff);
-		drawString(fontRendererObj, (packet.timeLeft / 20) + "", m + 256 - 20, n + 8, 0xffffff);
+		drawString(fontRendererObj, (ClientTeamsData.timeLeftTotal / 20) + "", m + 256 - 20, n + 8, 0xffffff);
 		
-		for(int p = 0; p < packet.clientOptions.length; p++)
+		for(int p = 0; p < ClientTeamsData.roundFinishedData.votingOptions.length; p++)
 		{
-			drawString(fontRendererObj, packet.clientOptions[p].mapName, m + 10, n + 25 + 24 * p, 0xffffff);
-			drawString(fontRendererObj, packet.clientOptions[p].gametype + " : \u00a7" + packet.clientOptions[p].teamNames[0] + ", \u00a7" + packet.clientOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
+			drawString(fontRendererObj, ClientTeamsData.roundFinishedData.votingOptions[p].mapName, m + 10, n + 25 + 24 * p, 0xffffff);
+			drawString(fontRendererObj, ClientTeamsData.roundFinishedData.votingOptions[p].gametype + " : \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[0] + ", \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
 			
-			drawCenteredString(fontRendererObj, (myVote == p + 1 ? "\u00a72" : "") + packet.numVotes[p], m + 196, n + 31 + 24 * p, 0xffffff);
+			drawCenteredString(fontRendererObj, (myVote == p + 1 ? "\u00a72" : "") + ClientTeamsData.roundFinishedData.votingOptions[p].numVotes, m + 196, n + 31 + 24 * p, 0xffffff);
 		}
 		
 		super.drawScreen(i, j, f);

@@ -5,18 +5,21 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.flansmod.client.gui.GuiDriveableMenu;
+import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.GuiTeamSelect;
 import com.flansmod.client.gui.teams.EnumLoadoutSlot;
 import com.flansmod.client.gui.teams.GuiChooseLoadout;
 import com.flansmod.client.gui.teams.GuiEditLoadout;
 import com.flansmod.client.gui.teams.GuiLandingPage;
+import com.flansmod.client.gui.teams.GuiMissionResults;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketLoadoutData;
-import com.flansmod.common.network.PacketRankUpdate;
+import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.teams.RoundFinishedData.VotingOption;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +43,8 @@ public class TeamsManagerRanked extends TeamsManager
 	
 	public LoadoutPool currentPool;
 	
+	public RoundFinishedData roundFinishedTemplateData = new RoundFinishedData();
+		
 	public static TeamsManagerRanked GetInstance()
 	{
 		return (TeamsManagerRanked)TeamsManager.instance;
@@ -53,6 +58,11 @@ public class TeamsManagerRanked extends TeamsManager
 	@Override
 	public void startRound()
 	{
+		for(EntityPlayer player : getPlayers())
+		{		
+			ProcessRankData((EntityPlayerMP)player);
+		}
+		
 		super.startRound();
 
 		for(EntityPlayer player : getPlayers())
@@ -60,6 +70,14 @@ public class TeamsManagerRanked extends TeamsManager
 			sendLoadoutData((EntityPlayerMP)player);
 		}
 	}
+	
+	@Override
+	public void tick()
+	{
+		super.tick();
+	}
+	
+
 	
 	public void sendLoadoutData(EntityPlayerMP player)
 	{
@@ -125,14 +143,28 @@ public class TeamsManagerRanked extends TeamsManager
 	}
 	
 	@Override
-	public void OnPlayerKilled(EntityPlayerMP player, DamageSource source)
+	public void OnPlayerKilled(EntityPlayerMP victim, DamageSource source)
 	{
-		super.OnPlayerKilled(player, source);
+		super.OnPlayerKilled(victim, source);
+		
+		PlayerData victimData = PlayerHandler.getPlayerData(victim);
 		
 		if(source.getSourceOfDamage() instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP attacker = ((EntityPlayerMP)source.getSourceOfDamage());
-			AwardXP(attacker, currentPool.XPForKill);
+			PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
+			if(attackerData != null && attackerData.team != null)
+			{
+				// Make sure players are on opposing teams
+				if(attackerData.team != victimData.team)
+				{
+					AwardXP(attacker, currentPool.XPForKill);
+					AwardXP(victim, currentPool.XPForDeath);
+				}
+				
+			}
+			
+			
 		}
 		
 	}
@@ -149,22 +181,66 @@ public class TeamsManagerRanked extends TeamsManager
 	@Override
 	protected void OnRoundEnded()
 	{
+		pickVoteOptions();
+		
+		UpdateRoundFinishedTemplate();
+		
 		for(EntityPlayer player : getPlayers())
-		{
-			SendRankDataToPlayer((EntityPlayerMP)player);
+		{			
+			SendRoundFinishedDataToPlayer((EntityPlayerMP)player);
 		}
 		
 		super.OnRoundEnded();
 	}
 	
+	private void UpdateRoundFinishedTemplate()
+	{
+		roundFinishedTemplateData.votingTime = votingTime;
+		roundFinishedTemplateData.scoresTime = scoreDisplayTime;
+		roundFinishedTemplateData.rankUpdateTime = rankUpdateTime;
+		
+		roundFinishedTemplateData.votingEnabled = voting; 
+		if(voting)
+		{
+			roundFinishedTemplateData.FillVoteOptions(voteOptions);
+		}
+	}
+	
+	private void SendRoundFinishedDataToPlayer(EntityPlayerMP player)
+	{
+		RoundFinishedData finishedData = new RoundFinishedData(roundFinishedTemplateData);
+		PlayerRankData data = rankData.get(player.getUniqueID());
+		
+		int resultantXP = data.pendingXP + data.currentXP;
+		int resultantLevel = data.currentLevel;
+		
+		int XPForNextLevel = currentPool.GetXPForLevel(resultantLevel + 1);
+		while(XPForNextLevel > 0 && resultantXP >= XPForNextLevel)
+		{
+			resultantXP -= XPForNextLevel;
+			resultantLevel++;
+			
+			XPForNextLevel = currentPool.GetXPForLevel(resultantLevel + 1);
+		}
+		
+		finishedData.pendingXP = data.pendingXP;
+		finishedData.resultantXP = resultantXP;
+		finishedData.resultantLevel = resultantLevel;
+		
+		FlansMod.getPacketHandler().sendTo(new PacketRoundFinished(finishedData), player);
+	}
+	
+		
 	private void SendRankDataToPlayer(EntityPlayerMP player)
 	{
+		/*
+		FlansMod.log("Sending rank data to " + player.getDisplayNameString());
 		PacketRankUpdate packet = new PacketRankUpdate();
 		PlayerRankData data = rankData.get(player.getUniqueID());
 		if(data != null)
 		{
 			packet.pendingXP = data.pendingXP;
-			int resultantXP = data.pendingXP;
+			int resultantXP = data.pendingXP + data.currentXP;
 			int resultantLevel = data.currentLevel;
 			while(resultantXP >= currentPool.XPPerLevel[resultantLevel + 1])
 			{
@@ -174,12 +250,43 @@ public class TeamsManagerRanked extends TeamsManager
 			
 			packet.resultantXP = resultantXP;
 			packet.resultantLevel = resultantLevel;
+			packet.showScoresFor = scoreDisplayTime + (voting ? votingTime : 0);
 			
 			FlansMod.getPacketHandler().sendTo(packet, player);
 			
 			data.pendingXP = 0;
 			data.currentLevel = resultantLevel;
 			data.currentXP = resultantXP;
+		}
+		else
+		{
+			FlansMod.Assert(false, "Failed to send rank data");
+		}
+		*/
+	}
+	
+	private void ProcessRankData(EntityPlayerMP player)
+	{
+		PlayerRankData data = rankData.get(player.getUniqueID());
+		if(data != null)
+		{
+			int resultantXP = data.pendingXP + data.currentXP;
+			int resultantLevel = data.currentLevel;
+			
+			int XPForNextLevel = currentPool.GetXPForLevel(resultantLevel + 1);
+			while(XPForNextLevel > 0 && resultantXP >= XPForNextLevel)
+			{
+				resultantXP -= XPForNextLevel;
+				resultantLevel++;
+				
+				XPForNextLevel = currentPool.GetXPForLevel(resultantLevel + 1);
+			}
+			
+			data.pendingXP = 0;
+			data.currentLevel = resultantLevel;
+			data.currentXP = resultantXP;
+			data.currentKillstreak = 0;
+			data.bestKillstreak = 0;
 		}
 	}
 	
@@ -231,7 +338,10 @@ public class TeamsManagerRanked extends TeamsManager
 	{
 		super.WriteToNBT(tags);
 		
-		tags.setInteger("pool", currentPool.shortName.hashCode());
+		if(currentPool != null)
+		{
+			tags.setInteger("pool", currentPool.shortName.hashCode());
+		}
 		
 		NBTTagList ranks = new NBTTagList();
 		for(Map.Entry<UUID, PlayerRankData> entry : rankData.entrySet())

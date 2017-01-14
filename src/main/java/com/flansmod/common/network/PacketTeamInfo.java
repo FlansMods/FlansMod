@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.PlayerClass;
@@ -19,17 +20,17 @@ import com.flansmod.common.teams.TeamsManager;
 
 public class PacketTeamInfo extends PacketBase 
 {			
-	public static String mapShortName;
-	public static String map;
-	public static String gametype;
-	public static boolean showZombieScore;
-	public static int numTeams;
-	public static TeamData[] teamData;
-	public static boolean sortedByTeam;
-	public static int timeLeft;
-	public static int scoreLimit;
+	public String mapShortName;
+	public String map;
+	public String gametype;
+	public boolean showZombieScore;
+	public int numTeams;
+	public TeamData[] teamData;
+	public boolean sortedByTeam;
+	public int timeLeft;
+	public int scoreLimit;
 	
-	public static int numLines;
+	public int numLines;
 	
 	public static class TeamData
 	{
@@ -181,6 +182,8 @@ public class PacketTeamInfo extends PacketBase
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+		try
+		{
 		TeamsManager.canBreakGlass = data.readBoolean();
 		TeamsManager.vehiclesNeedFuel = data.readBoolean();
 		TeamsManager.driveablesBreakBlocks = data.readBoolean();
@@ -251,7 +254,13 @@ public class PacketTeamInfo extends PacketBase
 				}
 			}
 		}
-
+		}
+		catch(Exception e)
+		{
+			FlansMod.Assert(false, "Messed up in teams packet");
+			e.printStackTrace();
+			teamData = new TeamData[] { new TeamData() };
+		}
 	}
 
 	@Override
@@ -273,7 +282,7 @@ public class PacketTeamInfo extends PacketBase
 		{
 		case 0 : return null;
 		case 1 : return Team.spectators;
-		default : return teamData.length > spawnerTeamID - 2 ? teamData[spawnerTeamID - 2].team : null;
+		default : return teamData.length > spawnerTeamID - 2 && teamData[spawnerTeamID - 2] != null ? teamData[spawnerTeamID - 2].team : null;
 		}
 	}
 	

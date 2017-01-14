@@ -2,6 +2,12 @@
 Name Modern Loadout
 ShortName modernLoadout
 MaxLevel 20
+XPForKill 10
+XPForDeath 5
+// This scales with the length of the streak. e.g. 4 kills with a streak bonus of 10 gets you 40 points. 
+XPForKillstreakBonus 10
+// 0.375 x^2 + 2.625 x, x from 1 to 30
+XPPerLevel 30 60 110 160 220 290 360 450 540 630 740 850 970 1100 1230 1380 1530 1680 1850 2000 2200 2390 2580 2790 3000 3210 3440 3670 3910 4160
 // The levels at which new loadout slots unlock
 SlotUnlockLevels 0 0 5 10 20
 // Rifles
@@ -37,9 +43,9 @@ AddPrimary m249 14
 AddPrimary minigun 20
 // Extras
 AddSpecial m67 0
-AddSpecial medicBag 3
-AddSpecial molotov 6
-AddSpecial ammoBag 11
+AddSpecial mwMedicBag 3
+AddSpecial molotovCocktail 6
+AddSpecial mwAmmoBag 11
 AddSpecial claymore 17
 // Explosives
 AddPrimary rpg 0
@@ -69,8 +75,8 @@ AddSecondary flanMWAutoFire 12
 AddSecondary flanMWLongBarrel 15
 AddSecondary flanMWSingleFire 18
 // Default loadouts
-DefaultLoadout 1 ak47 m9
-DefaultLoadout 2 rpd ak74
-DefaultLoadout 3 dragunov makarov
-DefaultLoadout 4 g36 judge
-DefaultLoadout 5 minigun desertEagle
+DefaultLoadout 1 ak47 m9 m67
+DefaultLoadout 2 rpd ak74 m67
+DefaultLoadout 3 dragunov makarov mwMedicBag
+DefaultLoadout 4 g36 judge molotovCocktail
+DefaultLoadout 5 minigun desertEagle mwAmmoBag

@@ -64,7 +64,10 @@ public class CommonTickHandler
 		}
 		case END :
 		{
-			TeamsManager.getInstance().tick();
+			if(TeamsManager.getInstance() != null)
+			{
+				TeamsManager.getInstance().tick();
+			}
 			FlansMod.playerHandler.serverTick();
 			FlansMod.ticker++;
 			break;

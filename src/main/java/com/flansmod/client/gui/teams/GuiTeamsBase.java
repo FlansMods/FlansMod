@@ -74,6 +74,9 @@ public class GuiTeamsBase extends GuiScreen
 				
 				drawSlotInventory(loadout.slots[0], i + 6, j + 54);
 				drawSlotInventory(loadout.slots[1], i + 24, j + 54);
+				drawSlotInventory(loadout.slots[2], i + 6, j + 72);
+				drawSlotInventory(loadout.slots[3], i + 24, j + 72);
+				drawSlotInventory(loadout.slots[4], i + 6, j + 90);
 			}
 		}
 		else

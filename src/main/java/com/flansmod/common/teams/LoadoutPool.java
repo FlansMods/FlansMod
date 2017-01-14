@@ -35,7 +35,7 @@ public class LoadoutPool extends InfoType
 	
 	public int maxLevel = 20;
 	public int[] XPPerLevel;
-	public int XPForKill = 10;
+	public int XPForKill = 10, XPForDeath = 5, XPForKillstreakBonus = 10;
 	public ArrayList<LoadoutEntryInfoType>[] unlocks;
 	public PlayerLoadout[] defaultLoadouts = new PlayerLoadout[5];
 	
@@ -64,6 +64,8 @@ public class LoadoutPool extends InfoType
 		super.read(split, file);
 		
 		XPForKill = Read(split, "XPForKill", XPForKill);
+		XPForDeath = Read(split, "XPForDeath", XPForDeath);
+		XPForKillstreakBonus = Read(split, "XPForKillstreakBonus", XPForKillstreakBonus);
 		
 		if (KeyMatches(split, "MaxLevel"))
 		{
@@ -71,7 +73,7 @@ public class LoadoutPool extends InfoType
 			XPPerLevel = new int[maxLevel];
 			for(int i = 0; i < maxLevel; i++)
 			{
-				XPPerLevel[i] = 1000 * i;
+				XPPerLevel[i] = 10 * i;
 			}
 		}
 		else if(KeyMatches(split, "XPPerLevel"))
@@ -84,37 +86,20 @@ public class LoadoutPool extends InfoType
 				}
 			}
 		}
-		else if(KeyMatches(split, "AddPrimary"))
+		else if(ParseLoadoutEntry("AddPrimary", EnumLoadoutSlot.primary, split))
 		{
-			LoadoutEntryInfoType entry = new LoadoutEntryInfoType();
-			
-			entry.type = InfoType.getType(split[1]);
-			entry.unlockLevel = Integer.parseInt(split[2]);
-			
-			if(entry.type != null)
-			{ 
-				unlocks[EnumLoadoutSlot.primary.ordinal()].add(entry);
-			}
-			else
-			{
-				FlansMod.log("Entry with no InfoType: " + split[1]);
-			}
 		}
-		else if(KeyMatches(split, "AddSecondary"))
+		else if(ParseLoadoutEntry("AddSecondary", EnumLoadoutSlot.secondary, split))
 		{
-			LoadoutEntryInfoType entry = new LoadoutEntryInfoType();
-			
-			entry.type = InfoType.getType(split[1]);
-			entry.unlockLevel = Integer.parseInt(split[2]);
-			
-			if(entry.type != null)
-			{ 
-				unlocks[EnumLoadoutSlot.secondary.ordinal()].add(entry);
-			}
-			else
-			{
-				FlansMod.log("Entry with no InfoType: " + split[1]);
-			}
+		}
+		else if(ParseLoadoutEntry("AddSpecial", EnumLoadoutSlot.special, split))
+		{
+		}		
+		else if(ParseLoadoutEntry("AddMelee", EnumLoadoutSlot.melee, split))
+		{
+		}		
+		else if(ParseLoadoutEntry("AddArmour", EnumLoadoutSlot.armour, split))
+		{
 		}
 		else if(KeyMatches(split, "SlotUnlockLevels"))
 		{
@@ -135,6 +120,39 @@ public class LoadoutPool extends InfoType
 				}
 			}
 		}
+	}
+	
+	private boolean ParseLoadoutEntry(String keyword, EnumLoadoutSlot slot, String[] split)
+	{
+		if(KeyMatches(split, keyword))
+		{
+			LoadoutEntryInfoType entry = new LoadoutEntryInfoType();
+			
+			entry.type = InfoType.getType(split[1]);
+			entry.unlockLevel = Integer.parseInt(split[2]);
+			
+			if(entry.type != null)
+			{ 
+				unlocks[slot.ordinal()].add(entry);
+			}
+			else
+			{
+				FlansMod.log("Entry with no InfoType: " + split[1]);
+			}
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public int GetXPForLevel(int level)
+	{
+		if(level >= 0 && level < maxLevel)
+		{
+			return XPPerLevel[level];
+		}
+		
+		return -1;
 	}
 	
 	public static LoadoutPool GetPool(String s)

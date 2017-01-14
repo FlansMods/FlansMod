@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -652,6 +653,17 @@ public class CommandTeams extends CommandBase
 			sender.addChatMessage(new ChatComponentText("Score summary menu will appear for " + TeamsManager.scoreDisplayTime / 20 + " seconds"));
 			return;
 		}
+		if(split[0].equals("rankUpdateTime"))
+		{
+			if(split.length != 2)
+			{
+				sender.addChatMessage(new ChatComponentText("Incorrect Usage : Should be /teams " + split[0] + " <time>"));	
+				return;
+			}
+			TeamsManager.rankUpdateTime = Integer.parseInt(split[1]) * 20;
+			sender.addChatMessage(new ChatComponentText("Rank update menu will appear for " + TeamsManager.rankUpdateTime / 20 + " seconds"));
+			return;
+		}
 		if(split[0].equals("votingTime"))
 		{
 			if(split.length != 2)
@@ -710,6 +722,16 @@ public class CommandTeams extends CommandBase
 		{
 			TeamsManagerRanked.GetInstance().currentPool = LoadoutPool.GetPool("modernLoadout");
 			teamsManager.start();
+			return;
+		}
+		if(split[0].toLowerCase().equals("xp"))
+		{
+			sender.addChatMessage(new ChatComponentText("Awarded " + Integer.parseInt(split[1]) + " XP"));	
+			for(EntityPlayer player : TeamsManager.getPlayers())
+			{
+				TeamsManagerRanked.AwardXP((EntityPlayerMP)player, Integer.parseInt(split[1]));
+			}
+			return;
 		}
 		
 		sender.addChatMessage(new ChatComponentText(split[0] + " is not a valid teams command. Try /teams help"));

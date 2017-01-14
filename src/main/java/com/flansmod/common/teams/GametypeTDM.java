@@ -215,6 +215,6 @@ public class GametypeTDM extends Gametype
 	@Override
 	public boolean teamHasWon(Team team) 
 	{
-		return teamsManager.currentRound != null && team.score == teamsManager.currentRound.scoreLimit;
+		return teamsManager.currentRound != null && team != null && team.score == teamsManager.currentRound.scoreLimit;
 	}
 }

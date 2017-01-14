@@ -105,10 +105,15 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		targetXP = data.currentXP + data.pendingXP;
 		targetRank = data.currentLevel;
-		while(targetXP > pool.XPPerLevel[targetRank + 1])
+		
+		
+		int XPForNextLevel = pool.GetXPForLevel(targetRank + 1);
+		while(XPForNextLevel > 0 && targetXP >= XPForNextLevel)
 		{
-			targetXP -= pool.XPPerLevel[targetRank + 1];
+			targetXP -= XPForNextLevel;
 			targetRank++;
+			
+			XPForNextLevel = pool.GetXPForLevel(targetRank + 1);
 		}
 		
 		hasLevelledUp = false;
@@ -175,9 +180,9 @@ public class GuiMissionResults extends GuiTeamsBase
 				int currentTarget = targetXP;
 				if(targetRank > displayRank)
 				{
-					currentTarget = pool.XPPerLevel[displayRank + 1];
+					currentTarget = pool.GetXPForLevel(displayRank + 1);
 				}
-				displayXP = MathHelper.floor_float(lastXP + ((float)(currentTarget - lastXP) * (float)timeInState / (float)stateTimes[state.ordinal()]));
+				displayXP = MathHelper.floor_float(lastXP + ((float)(currentTarget - lastXP) * (float)(timeInState - 1) / (float)stateTimes[state.ordinal()]));
 				
 				if(timeInState > stateTimes[state.ordinal()])
 				{
@@ -325,7 +330,16 @@ public class GuiMissionResults extends GuiTeamsBase
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
 		
-		float XPProgress = (float)displayXP / (float)pool.XPPerLevel[displayRank + 1];
+		int XPForNextLevel = pool.GetXPForLevel(displayRank + 1);
+		float XPProgress = 0.0f;
+		if(XPForNextLevel > 0)
+		{
+			XPProgress = (float)displayXP / (float)XPForNextLevel;
+		}
+		else
+		{
+			XPProgress = 1.0f;
+		}
 		XPProgress = MathHelper.clamp_float(XPProgress, 0.0f, 1.0f);
 		
 		drawModalRectWithCustomSizedTexture(guiOriginX + 7, guiOriginY + 109, 259, 109, (int)(242 * XPProgress), 10, textureX, textureY);
@@ -335,7 +349,14 @@ public class GuiMissionResults extends GuiTeamsBase
 			drawModalRectWithCustomSizedTexture(guiOriginX + 5, guiOriginY + 120, 266, 120, 246, 38, textureX, textureY);
 		}
 		
-		drawCenteredString(fontRendererObj, displayXP + " / " + pool.XPPerLevel[displayRank + 1], guiOriginX + 128, guiOriginY + 110, 0xffffff);
+		if(XPForNextLevel > 0)
+		{
+			drawCenteredString(fontRendererObj, displayXP + " / " + XPForNextLevel, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+		}
+		else
+		{
+			drawCenteredString(fontRendererObj, "" + displayXP, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+		}
 		
 		// Draw text
 		

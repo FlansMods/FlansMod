@@ -253,7 +253,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 		if(world == null || origin == null || hit == null || shooter == null || shotFrom == null || shootableType == null)
 		{
-			FlansMod.log("Something was null");
+			//FlansMod.log("Something was null");
 			return true;
 		}
 		
@@ -499,10 +499,10 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	public static DamageSource GetBulletDamage(InfoType firedFrom, BulletType type, Entity owner, boolean headshot) {
 		if (owner instanceof EntityPlayer)
-			return (new EntityDamageSourceGun(type.shortName, null, (EntityPlayer) owner, firedFrom, headshot))
+			return (new EntityDamageSourceGun(type.shortName, owner, (EntityPlayer) owner, firedFrom, headshot))
 					.setProjectile();
 		else
-			return (new EntityDamageSourceIndirect(type.shortName, null, owner)).setProjectile();
+			return (new EntityDamageSourceIndirect(type.shortName, owner, owner)).setProjectile();
 	}
 
 	private boolean isPartOfOwner(Entity entity) {

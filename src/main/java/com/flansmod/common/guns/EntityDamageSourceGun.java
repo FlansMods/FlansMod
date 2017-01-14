@@ -26,6 +26,12 @@ public class EntityDamageSourceGun extends EntityDamageSourceIndirect {
 		shooter = player;
 		headshot = head;
 	}
+	
+	@Override 
+	public Entity getSourceOfDamage()
+	{
+		return shooter;
+	}
 
 	@Override
 	public IChatComponent getDeathMessage(EntityLivingBase living)

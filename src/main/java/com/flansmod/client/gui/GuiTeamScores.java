@@ -8,6 +8,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.Team;
 
@@ -35,7 +36,6 @@ public class GuiTeamScores extends GuiScreen
 	
 	public void renderTwoTeamGUI(PacketTeamInfo teamInfo)
 	{
-		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
@@ -83,6 +83,9 @@ public class GuiTeamScores extends GuiScreen
 			{
 				drawString(fontRendererObj, winners.name + " Won!", m + 10, n + 20, 0xffffff);
 			}
+			
+			drawString(fontRendererObj, (ClientTeamsData.timeLeftInStage / 20) + "", m + 312 - 22, n + 20, 0xffffff);
+
 		}
 		else
 		{
@@ -99,6 +102,8 @@ public class GuiTeamScores extends GuiScreen
 			fontRendererObj.drawString("\u00a7" + teamInfo.teamData[i].team.textColour + teamInfo.teamData[i].score, m + 133 + 151 * i, n + 39, 0xffffff);
 			for(int j = 0; j < teamInfo.teamData[i].numPlayers; j++)
 			{
+				if(teamInfo.teamData[i].playerData[j] == null)
+					continue;
 				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 151 * i, n + 67 + 9 * j, 0xffffff);
 				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 67 + 9 * j, 0xffffff);
 				drawCenteredString(fontRendererObj, "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 67 + 9 * j, 0xffffff);

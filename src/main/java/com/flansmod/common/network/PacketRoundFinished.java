@@ -1,6 +1,8 @@
 package com.flansmod.common.network;
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.common.teams.RoundFinishedData;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,27 +13,27 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketRoundFinished extends PacketBase 
 {
-	public int showScoresFor;
+	public RoundFinishedData roundFinishedData = new RoundFinishedData();
 	
 	public PacketRoundFinished()
 	{
 	}
 	
-	public PacketRoundFinished(int i)
+	public PacketRoundFinished(RoundFinishedData data)
 	{
-		showScoresFor = i;
+		roundFinishedData = data;
 	}
 	
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		data.writeInt(showScoresFor);
+		roundFinishedData.WriteInitialData(data);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
-		showScoresFor = data.readInt();
+		roundFinishedData.ReadInitialData(data);
 	}
 
 	@Override
@@ -44,7 +46,8 @@ public class PacketRoundFinished extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		//FlansModClient.teamsScoreGUILock = showScoresFor;
+		ClientTeamsData.SetRoundFinishedData(roundFinishedData);
+		ClientTeamsData.StartTimers();
 	}
 
 }

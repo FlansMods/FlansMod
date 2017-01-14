@@ -12,6 +12,9 @@ public class PlayerRankData
 	public int currentXP = 0;
 	public int currentLevel = 0;
 	
+	public int currentKillstreak = 0;
+	public int bestKillstreak = 0;
+	
 	public PlayerLoadout[] loadouts = new PlayerLoadout[5];
 	
 	public PlayerRankData()
@@ -71,5 +74,19 @@ public class PlayerRankData
 	public void AddXP(int amount) 
 	{
 		pendingXP += amount;
+	}
+	
+	public void AddToKillstreak()
+	{
+		currentKillstreak++;
+		if(currentKillstreak > bestKillstreak)
+		{
+			bestKillstreak = currentKillstreak;
+		}
+	}
+	
+	public void ResetKillstreak()
+	{
+		currentKillstreak = 0;
 	}
 }

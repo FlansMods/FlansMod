@@ -99,6 +99,7 @@ import com.flansmod.client.gui.GuiDriveableController;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.teams.GuiMissionResults;
 import com.flansmod.client.model.GunAnimations;
+import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -162,8 +163,6 @@ public class FlansModClient extends FlansMod
 	
 	/** Packet containing teams mod information from the server */
 	public static PacketTeamInfo teamInfo;
-	/** When a round ends, the teams score GUI is locked for this length of time */
-	public static int teamsScoreGUILock = 0;	
 	
 	public static int hitMarkerTime = 0;
 		
@@ -189,13 +188,7 @@ public class FlansModClient extends FlansMod
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
 		
-		//Teams GUI lock at end of rounds
-		if(teamsScoreGUILock > 0)
-		{
-			teamsScoreGUILock--;
-			if(minecraft.currentScreen == null)
-				minecraft.displayGuiScreen(new GuiTeamScores());
-		}
+		ClientTeamsData.Tick();
 		
 		// Guns
 		if(scopeTime > 0)
