@@ -11,36 +11,36 @@ XPPerLevel 30 60 110 160 220 290 360 450 540 630 740 850 970 1100 1230 1380 1530
 // The levels at which new loadout slots unlock
 SlotUnlockLevels 0 0 5 10 20
 // Rifles
-AddPrimary ak47 0
-AddPrimary m16a4 3
-AddPrimary g3 8
-AddPrimary g36 10
-AddPrimary fnscar 13
-AddPrimary m14 16
-AddPrimary acr 19
+AddPrimary ak47 0 ak47Ammo 4
+AddPrimary m16a4 3 m16a4Ammo 4
+AddPrimary g3 8 g3Ammo 3
+AddPrimary g36 10 g36Ammo 4
+AddPrimary fnscar 13 fnscarAmmo 4
+AddPrimary m14 16 m14Ammo 3
+AddPrimary acr 19 acrAmmo 4
 // Shotguns
-AddPrimary m1014 2
-AddPrimary w1200 6
+AddPrimary m1014 2 w1200Ammo 24
+AddPrimary w1200 6 w1200Ammo 21
 AddSecondary judge 9
-AddPrimary r870 11
+AddPrimary r870 11 w1200Ammo 25
 AddSecondary executioner 15
 //AddPrimary aa12 17
 // Pistols
-AddSecondary m9 0
-AddSecondary makarov 4
+AddSecondary m9 0 m9Ammo 4
+AddSecondary makarov 4 makarovAmmo 4
 AddSecondary jury 9
-AddSecondary glock 14
-AddSecondary desertEagle 20
+AddSecondary glock 14 glockAmmo 3
+AddSecondary desertEagle 20 desertEagleAmmo 4
 // SMGs
-AddSecondary ak74 0
-AddSecondary p90 7
-AddSecondary bizon 12
-AddSecondary mp5 16
+AddSecondary ak74 0 ak74Ammo 4
+AddSecondary p90 7 p90Ammo 3
+AddSecondary bizon 12 bizonAmmo 3
+AddSecondary mp5 16 mp5Ammo 4
 // LMGs
-AddPrimary rpd 0
-AddPrimary l86 5
-AddPrimary m249 14
-AddPrimary minigun 20
+AddPrimary rpd 0 rpdAmmo 2
+AddPrimary l86 5 l86Ammo 2
+AddPrimary m249 14 m249Ammo 2
+AddPrimary minigun 20 minigunAmmo 1
 // Extras
 AddSpecial m67 0
 AddSpecial mwMedicBag 3
@@ -48,15 +48,15 @@ AddSpecial molotovCocktail 6
 AddSpecial mwAmmoBag 11
 AddSpecial claymore 17
 // Explosives
-AddPrimary rpg 0
-AddPrimary gl1 8
-AddPrimary gl6 19
+AddPrimary rpg 0 rpgAmmo 3
+AddPrimary gl1 8 grenadeLauncherAmmo 4
+AddPrimary gl6 19 grenadeLauncherBouncyAmmo 6
 // Snipers
-AddPrimary r700 1
-AddPrimary dragunov 5
-AddPrimary m40a3 10
-AddPrimary m21 13
-AddPrimary barrett 18
+AddPrimary r700 1 r700Ammo 20
+AddPrimary dragunov 5 dragunovAmmo 3
+AddPrimary m40a3 10 r700Ammo 25
+AddPrimary m21 13 m21Ammo 3
+AddPrimary barrett 18 barrettAmmo 3
 // Modifications
 AddPrimary flanMWSilencer 1
 AddPrimary flanMWForegrip 2

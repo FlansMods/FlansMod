@@ -31,6 +31,8 @@ public class LoadoutPool extends InfoType
 	public static class LoadoutEntryInfoType extends LoadoutEntry
 	{
 		public InfoType type = null;
+		
+		public ArrayList<ItemStack> extraItems = new ArrayList<ItemStack>(2);
 	}
 	
 	public int maxLevel = 20;
@@ -130,6 +132,20 @@ public class LoadoutPool extends InfoType
 			
 			entry.type = InfoType.getType(split[1]);
 			entry.unlockLevel = Integer.parseInt(split[2]);
+			int numAdditionalItems = (split.length - 3) / 2;
+			for(int i = 0; i < numAdditionalItems; i++)
+			{
+				ItemStack stack = getNonRecipeElement(split[2 * i + 3]);
+				if(stack == null)
+				{
+					FlansMod.Assert(false, "Recipe item stack null");
+				}
+				else
+				{
+					stack.stackSize = Integer.parseInt(split[2 * i + 4]);
+					entry.extraItems.add(stack);
+				}
+			}
 			
 			if(entry.type != null)
 			{ 
@@ -173,6 +189,21 @@ public class LoadoutPool extends InfoType
 			if(pool.shortName.hashCode() == iHash)
 			{
 				return pool;
+			}
+		}
+		return null;
+	}
+
+	public LoadoutEntryInfoType GetLoadoutEntryForInfoType(int loadoutSlot, InfoType infoType) 
+	{
+		for(LoadoutEntry entry : unlocks[loadoutSlot])
+		{
+			if(entry instanceof LoadoutEntryInfoType)
+			{
+				if(((LoadoutEntryInfoType) entry).type == infoType)
+				{
+					return (LoadoutEntryInfoType) entry;
+				}
 			}
 		}
 		return null;

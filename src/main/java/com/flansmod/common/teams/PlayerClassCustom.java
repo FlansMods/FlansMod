@@ -7,6 +7,8 @@ import com.flansmod.client.gui.teams.EnumLoadoutSlot;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ShootableType;
+import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
+import com.flansmod.common.types.IFlanItem;
 
 import net.minecraft.item.ItemStack;
 
@@ -27,13 +29,16 @@ public class PlayerClassCustom implements IPlayerClass
 			if(stack != null)
 			{
 				startingItems.add(stack);
-				if(stack.getItem() instanceof ItemGun)
+				
+				if(stack.getItem() instanceof IFlanItem)
 				{
-					GunType type = ((ItemGun)stack.getItem()).GetType();
-					if(type.ammo.size() > 0)
+					LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
+					if(loadoutEntry != null)
 					{
-						ShootableType ammoType = type.ammo.get(0);
-						startingItems.add(new ItemStack(ammoType.getItem(), ammoType.maxStackSize));
+						for(ItemStack extraStack : loadoutEntry.extraItems)						
+						{
+							startingItems.add(extraStack);
+						}
 					}
 				}
 			}

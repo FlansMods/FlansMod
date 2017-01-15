@@ -1098,14 +1098,13 @@ public class TeamsManager
 			//Load up as many guns as possible
 		}
 		
-		// TODO : RELOAD
 		//Preload each gun
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				//((ItemGun)stack.getItem()).reload(stack, ((ItemGun)stack.getItem()).GetType(), player.worldObj, player, true, false);
+				((ItemGun)stack.getItem()).Reload(stack, player.worldObj, player, player.inventory, false, false, true, false);
 			}
 		}
 	}

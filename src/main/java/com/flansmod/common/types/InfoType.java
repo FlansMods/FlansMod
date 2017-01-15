@@ -398,12 +398,7 @@ public class InfoType
 				for (int i = 0; i < (recipeLine.length - 1) / 2; i++)
 				{
 					recipe[i * 2 + rows] = recipeLine[i * 2 + 1].charAt(0);
-					// Split ID with . and if it contains a second part, use it
-					// as damage value.
-					if (recipeLine[i * 2 + 2].contains("."))
-						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2].split("\\.")[0], Integer.valueOf(recipeLine[i * 2 + 2].split("\\.")[1]));
-					else
-						recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2], 32767);
+					recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2]);
 				}
 				GameRegistry.addRecipe(new ItemStack(item, recipeOutput), recipe);
 			} else
@@ -411,10 +406,7 @@ public class InfoType
 				recipe = new Object[recipeLine.length - 1];
 				for (int i = 0; i < (recipeLine.length - 1); i++)
 				{
-					if (recipeLine[i + 1].contains("."))
-						recipe[i] = getRecipeElement(recipeLine[i + 1].split("\\.")[0], Integer.valueOf(recipeLine[i + 1].split("\\.")[1]));
-					else
-						recipe[i] = getRecipeElement(recipeLine[i + 1], 32767);
+					recipe[i] = getRecipeElement(recipeLine[i + 1]);
 				}
 				GameRegistry.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
 			}
@@ -445,6 +437,25 @@ public class InfoType
 		return item;
 	}
 	
+	public static ItemStack getNonRecipeElement(String str)
+	{					
+		// Split ID with . and if it contains a second part, use it
+		// as damage value.
+		if (str.contains("."))
+			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
+		else
+			return getRecipeElement(str, 0);
+	}
+	
+	public static ItemStack getRecipeElement(String str)
+	{					
+		// Split ID with . and if it contains a second part, use it
+		// as damage value.
+		if (str.contains("."))
+			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
+		else
+			return getRecipeElement(str, 32767);
+	}
 	
 	public static ItemStack getRecipeElement(String s, int damage)
 	{

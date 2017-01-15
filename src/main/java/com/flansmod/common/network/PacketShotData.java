@@ -163,7 +163,8 @@ public class PacketShotData extends PacketBase
 							FlansModRaytracer.GetEntityByID(instantData.shooterID), 
 							instantData.shotFrom, (BulletType)instantData.shotType, 
 							instantData.origin, instantData.hitPos, 
-							instantData.hitData, instantData.damage);
+							instantData.hitData, instantData.damage,
+							instantData.isExtraBullet);
 				}
 			}
 			else
