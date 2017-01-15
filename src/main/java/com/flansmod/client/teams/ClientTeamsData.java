@@ -144,4 +144,20 @@ public class ClientTeamsData
 		timeLeftTotal = roundFinishedData.scoresTime + roundFinishedData.rankUpdateTime + roundFinishedData.votingTime;
 		SwitchTo(RoundFinishedStage.SCORES);
 	}
+
+	public static void UpdateNumVotes(RoundFinishedData data) 
+	{
+		for(int i = 0; i < data.votingOptions.length; i++)
+		{
+			if(i < roundFinishedData.votingOptions.length)
+			{
+				roundFinishedData.votingOptions[i].numVotes = data.votingOptions[i].numVotes;
+			}
+			else
+			{
+				FlansMod.Assert(false, "Voting options mismatch");
+			}
+		}
+		
+	}
 }

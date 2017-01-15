@@ -19,6 +19,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketLoadoutData;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamSelect;
+import com.flansmod.common.network.PacketVoting;
 import com.flansmod.common.teams.RoundFinishedData.VotingOption;
 
 import net.minecraft.client.Minecraft;
@@ -75,9 +76,28 @@ public class TeamsManagerRanked extends TeamsManager
 	public void tick()
 	{
 		super.tick();
+		
+		if(interRoundTimeLeft > 0 && time % 10 == 0
+			&& roundFinishedTemplateData.votingOptions != null && roundFinishedTemplateData.votingOptions.length > 0)
+		{
+			for(int i = 0; i < roundFinishedTemplateData.votingOptions.length; i++)
+			{
+				roundFinishedTemplateData.votingOptions[i].numVotes = 0;
+			}
+			for(EntityPlayer player : getPlayers())
+			{
+				PlayerData data = PlayerHandler.getPlayerData(player);
+				if(!data.builder && data.vote < roundFinishedTemplateData.votingOptions.length)
+					roundFinishedTemplateData.votingOptions[data.vote].numVotes++;
+			}
+			for(EntityPlayer player : getPlayers())
+			{
+				PlayerData data = PlayerHandler.getPlayerData(player);
+				if(!data.builder)
+					sendPacketToPlayer(new PacketVoting(roundFinishedTemplateData), (EntityPlayerMP)player);
+			}
+		}
 	}
-	
-
 	
 	public void sendLoadoutData(EntityPlayerMP player)
 	{

@@ -616,10 +616,10 @@ public class ItemGun extends Item implements IPaintableItem
 				// else
 				{
 					// Take a point halfway along. Then make the radius encapsulate both ends and then some
-					Vector3f targetPoint = Vector3f.add(instantData.origin, instantData.hitPos, null);
-					targetPoint.scale(0.5f);
-					float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
-					radius += 50.0f;
+					//Vector3f targetPoint = Vector3f.add(instantData.origin, instantData.hitPos, null);
+					//targetPoint.scale(0.5f);
+					//float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
+					//radius += 50.0f;
 					
 					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet);
 					

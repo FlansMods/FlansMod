@@ -292,8 +292,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 						living.addPotionEffect(new PotionEffect(effect));
 					}
 					//If the attack was allowed, we should remove their immortality cooldown so we can shoot them again. Without this, any rapid fire gun become useless
-					living.arrowHitTimer++;
-					living.hurtResistantTime = living.maxHurtResistantTime / 2;
+					living.hurtResistantTime = 0;
 				}
 				if(bulletType.setEntitiesOnFire)
 					entityHit.entity.setFire(20);

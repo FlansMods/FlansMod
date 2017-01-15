@@ -2,7 +2,6 @@ package com.flansmod.common.teams;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.network.PacketBase;
-import com.flansmod.common.network.PacketVoting.ClientTeamsRound;
 
 import io.netty.buffer.ByteBuf;
 

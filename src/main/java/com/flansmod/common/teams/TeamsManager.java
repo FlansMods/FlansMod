@@ -104,7 +104,7 @@ public class TeamsManager
 	public ArrayList<ITeamBase> bases;
 	public ArrayList<ITeamObject> objects;
 	
-	private long time;
+	protected long time;
 	
 	/** A downwards counter that times the round (in ticks) */
 	public int roundTimeLeft;
@@ -342,14 +342,6 @@ public class TeamsManager
 	
 	public void displayVotingGUI()
 	{
-		/*
-		for(EntityPlayer player : getPlayers())
-		{
-			PlayerData data = PlayerHandler.getPlayerData(player);
-			if(!data.builder)
-				sendPacketToPlayer(new PacketVoting(this), (EntityPlayerMP)player);
-		}
-		*/
 	}
 	
 	public void pickVoteOptions()
