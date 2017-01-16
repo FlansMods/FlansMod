@@ -54,5 +54,6 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob R870_Birch R870_Birch white 1 yellow 1
+Paintjob R870_Redwood R870_Redwood red 1 brown 1
 //Description - note the ammo type
 Description Ammo Type : Shotgun

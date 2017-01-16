@@ -558,6 +558,7 @@ public class FlansMod
 					case playerClass : 	break;
 					case team : 		break;
 					case itemHolder:	new BlockItemHolder((ItemHolderType)infoType); break;
+					case rewardBox:		break;
 					case loadout:		break;
 					default : log("Unrecognised type for " + infoType.shortName); break;
 					}

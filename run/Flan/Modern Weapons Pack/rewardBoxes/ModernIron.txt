@@ -1,0 +1,11 @@
+//Naming
+Name Iron Reward Crate
+ShortName modernIron
+// Commons
+AddPaintjob legendary ak47 AK47_Birch
+// Uncommons
+AddPaintjob common ak47 AK47_JungleCamo
+// Rares
+AddPaintjob rare ak47 AK47_CaseHardened
+// Legendaries
+AddPaintjob uncommon ak47 AK47_Redline

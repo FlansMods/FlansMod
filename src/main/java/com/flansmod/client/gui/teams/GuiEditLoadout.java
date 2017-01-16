@@ -22,6 +22,7 @@ import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryPaintjob;
 import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.types.EnumPaintjobRarity;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
@@ -269,10 +270,33 @@ public class GuiEditLoadout extends GuiTeamsBase
 					else if(entry instanceof LoadoutEntryPaintjob)
 					{
 						Paintjob paintjob = ((LoadoutEntryPaintjob)entry).paintjob;
+						if(paintjob.rarity != EnumPaintjobRarity.UNKNOWN)
+						{
+							mc.renderEngine.bindTexture(texture);
+							int x = 0, y = 71;
+							switch( paintjob.rarity )
+							{
+								case COMMON: x = 331; break;
+								case UNCOMMON: x = 349; break;
+								case RARE: x = 367; break;
+								case LEGENDARY:
+								{
+									x = 385;
+									break;
+								}
+								default: break;							
+							}
+							if(x > 0)
+							{
+								drawModalRectWithCustomSizedTexture(guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18, x, y, 16, 16, textureX, textureY);
+							}
+						}
+						
+						
 						drawSlotInventory(new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 					}
 										
-					if(!entry.available)
+					if(false)//!entry.available)
 					{
 						mc.renderEngine.bindTexture(texture);
 						GlStateManager.pushMatrix();

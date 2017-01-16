@@ -228,26 +228,30 @@ public class GuiPaintjobTable extends GuiContainer
 			{
 				GL11.glPushMatrix();
 				GL11.glColor4f(1F, 1F, 1F, 1F);
+				
+				//GlStateManager.loadIdentity();
 
+				// Setup lighting
 		        GlStateManager.disableLighting();
 		        GlStateManager.pushMatrix();
-		        
 		        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
 		        RenderHelper.enableStandardItemLighting();
 		        GlStateManager.popMatrix();
 		        GlStateManager.enableRescaleNormal();
 		        
+		        //GL11.glTranslatef(10f, 10f, -10f);
+		        //GL11.glScalef(100f, 100f, 100f);
 				GL11.glTranslatef(renderOrigin.x, renderOrigin.y, renderOrigin.z);
 
-				GL11.glRotatef(160, 1F, 0F, 0F);
-				GL11.glRotatef(20, 0F, 1F, 0F);
+				GL11.glRotatef(180, 1F, 0F, 0F);
+				//GL11.glRotatef(20, 0F, 1F, 0F);
 				float scale = paintableType.GetRecommendedScale();
 				GL11.glScalef(-scale, scale, scale);
 				
 				float dYaw = (modelAxes.getYaw() - prevModelAxes.getYaw());
 				while(dYaw > 180.0f) dYaw -= 360.0f;
 				while(dYaw < -180.0f) dYaw += 360.0f;
-		        GlStateManager.rotate(prevModelAxes.getYaw() + dYaw * RenderGun.smoothing, 0.0F, 1.0F, 0.0F);
+		        //GlStateManager.rotate(prevModelAxes.getYaw() + dYaw * RenderGun.smoothing, 0.0F, 1.0F, 0.0F);
 		        
 		        Paintjob paintjob = paintableType.paintjobs.get(tempStack.getItemDamage());
 

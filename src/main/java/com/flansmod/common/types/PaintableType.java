@@ -1,6 +1,7 @@
 package com.flansmod.common.types;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
@@ -21,11 +22,15 @@ public abstract class PaintableType extends InfoType
 	/** Assigns IDs to paintjobs */
 	private int nextPaintjobID = 1;
 	
+	private static HashMap<Integer, PaintableType> paintableTypes = new HashMap<Integer, PaintableType>();
+	public static PaintableType GetPaintableType(int iHash) { return paintableTypes.get(iHash); }
+	public static PaintableType GetPaintableType(String name) { return paintableTypes.get(name.hashCode()); }
+	
 	public PaintableType(TypeFile file)
 	{
 		super(file);
 	}
-
+	
 	@Override
 	public void postRead(TypeFile file)
 	{
@@ -43,6 +48,8 @@ public abstract class PaintableType extends InfoType
 		
 		// Add all custom paintjobs to dungeon loot. Equal chance for each
 		totalDungeonChance += dungeonChance * (paintjobs.size() - 1);
+		
+		paintableTypes.put(shortName.hashCode(), this);
 	}
 	
 	/** Pack reader */
@@ -77,9 +84,16 @@ public abstract class PaintableType extends InfoType
 	{
 		for(Paintjob paintjob : paintjobs)
 		{
-			if(paintjob.iconName.equals(s))
+			if(paintjob.textureName.equals(s))
 				return paintjob;
+			
+			if(paintjob.iconName.equals(s))
+			{
+				FlansMod.Assert(false, "Not sure this should be the right way to find a paintjob");
+				return paintjob;
+			}
 		}
+		FlansMod.Assert(false, "Could not find paintjob " + s);
 		return defaultPaintjob;
 	}
 	
