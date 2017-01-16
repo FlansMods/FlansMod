@@ -48,5 +48,6 @@ NumGenericAttachmentSlots 1
 Paintjob M14_Purple M14_Purple purple 2
 Paintjob M14_Red M14_Red red 2
 Paintjob M14_RoyalGreen M14_RoyalGreen lime 2
+Paintjob M14_CluckCluck M14_CluckCluck brown 2 yellow 1
 //Description - note the ammo type
 Description Ammo Type : Light Rifle

@@ -52,5 +52,6 @@ Paintjob ACR_Red ACR_Red red 2
 Paintjob ACR_Aquatic ACR_Aquatic cyan 2
 Paintjob ACR_RoyalGreen ACR_RoyalGreen lime 2
 Paintjob ACR_Electric ACR_Electric white 1 blue 1
+Paintjob ACR_QuackQuack ACR_QuackQuack orange 1 green 1 white 1
 //Description - note the ammo type
 Description Ammo Type : Light Assault
