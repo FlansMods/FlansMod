@@ -50,5 +50,7 @@ NumGenericAttachmentSlots 1
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob RPD_Birch RPD_Birch white 1 yellow 1
+Paintjob RPD_Gross RPD_Gross yellow 1 brown 1
+Paintjob RPD_Static RPD_Static magenta 1 purple 1 white 1
 //Description - note the ammo type
 Description Ammo Type : AK

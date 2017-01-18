@@ -64,7 +64,7 @@ public class GuiTeamsBase extends GuiScreen
 		
 		if(data.currentLevel >= pool.slotUnlockLevels[n])	
 		{
-			drawModalRectWithCustomSizedTexture(i, j, 7 + 49 * n, 28, 46, 129, textureX, textureY);
+			drawModalRectWithCustomSizedTexture(i, j, 7 + 49 * n, 28, 46, 111, textureX, textureY);
 			
 			PlayerLoadout loadout = data.loadouts[n];
 			if(loadout != null)
@@ -76,13 +76,12 @@ public class GuiTeamsBase extends GuiScreen
 				drawSlotInventory(loadout.slots[1], i + 24, j + 54);
 				drawSlotInventory(loadout.slots[2], i + 6, j + 72);
 				drawSlotInventory(loadout.slots[3], i + 24, j + 72);
-				drawSlotInventory(loadout.slots[4], i + 6, j + 90);
 			}
 		}
 		else
 		{
 			
-			drawModalRectWithCustomSizedTexture(i, j, 259, 28, 46, 129, textureX, textureY);
+			drawModalRectWithCustomSizedTexture(i, j, 259, 28, 46, 111, textureX, textureY);
 			drawCenteredString(fontRendererObj, "Unlocks", i + 23, j + 23, 0xffffff);
 			drawCenteredString(fontRendererObj, "at " + pool.slotUnlockLevels[n], i + 23, j + 40, 0xffffff);
 		}

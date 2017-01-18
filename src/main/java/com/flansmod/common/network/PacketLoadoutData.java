@@ -78,6 +78,6 @@ public class PacketLoadoutData extends PacketBase
 		ClientTeamsData.theRankData = myRankData;
 		ClientTeamsData.currentPool = currentPool;
 		GuiTeamSelect.teamChoices = teamsAvailable;
-		TeamsManagerRanked.OpenLandingPage();
+		ClientTeamsData.OpenLandingPage();
 	}
 }

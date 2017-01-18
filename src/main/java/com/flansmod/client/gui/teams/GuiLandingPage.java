@@ -7,6 +7,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.teams.RewardBox;
 import com.flansmod.common.teams.TeamsManagerRanked;
 
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,7 @@ public class GuiLandingPage extends GuiTeamsBase
 	/** The background image */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/LandingPage.png");
 	
-	private static final int WIDTH = 256, HEIGHT = 209;
+	private static final int WIDTH = 256, HEIGHT = 215;
 	
 	public GuiLandingPage()
 	{
@@ -55,11 +56,20 @@ public class GuiLandingPage extends GuiTeamsBase
 			if(data.currentLevel >= pool.slotUnlockLevels[i])
 			{
 				buttonList.add(
-				 new GuiButton(i, width / 2 - WIDTH / 2 + 12 + 49 * i, height / 2 - HEIGHT / 2 + 135, 36, 20, "Edit"));
+				 new GuiButton(i, width / 2 - WIDTH / 2 + 12 + 49 * i, height / 2 - HEIGHT / 2 + 117, 36, 20, "Edit"));
 			}
 		}
 		
 		buttonList.add(new GuiButton(5, width / 2 - WIDTH / 2 + 202, height / 2 - HEIGHT / 2 + 162, 47, 20, "Play >>"));
+		
+		for(int i = 0; i < 3; i++)
+		{
+			int numBoxes = data.GetNumOfUnopenedBoxes(pool.rewardBoxes[i]);
+			
+			GuiButton button = new GuiButton(6 + i, width / 2 - WIDTH / 2 + 11 + 63 * i, height / 2 - HEIGHT / 2 + 187, 59, 20, "Open");
+			button.enabled = numBoxes > 0;
+			buttonList.add(button);
+		}
 	}
 	
 	@Override
@@ -67,13 +77,18 @@ public class GuiLandingPage extends GuiTeamsBase
 	{
 		if (button.id >= 0 && button.id < 5)
 		{
-			TeamsManagerRanked.OpenEditLoadoutPage(button.id);
+			ClientTeamsData.OpenEditLoadoutPage(button.id);
 		}
 		
 		if(button.id == 5)
 		{
 			//Play - go to team select
-			TeamsManagerRanked.OpenTeamSelectPage();
+			ClientTeamsData.OpenTeamSelectPage();
+		}
+		
+		if(button.id >= 6 && button.id < 6 + 3)
+		{
+			ClientTeamsData.OpenRewardBox(button.id - 6);
 		}
 	}
 		
@@ -118,16 +133,16 @@ public class GuiLandingPage extends GuiTeamsBase
 			XPProgress = 1.0f;
 		}
 		
-		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 164, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
+		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 146, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
 		
 		// Draw text
 		drawCenteredString(fontRendererObj, "Welcome to the Official Modern Server", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
-		drawString(fontRendererObj, mc.thePlayer.getName(), guiOriginX + 30, guiOriginY + 168, 0xffffff);
-		drawCenteredString(fontRendererObj, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 168, 0xffffff);
+		drawString(fontRendererObj, mc.thePlayer.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
+		drawCenteredString(fontRendererObj, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
 		
 		// Draw rank icon
-		DrawRankIcon(data.currentLevel, 0, 9, 164, false);
+		DrawRankIcon(data.currentLevel, 0, 9, 146, false);
 		
 		// Draw loadout panels
 		for(int n = 0; n < 5; n++)
@@ -135,6 +150,19 @@ public class GuiLandingPage extends GuiTeamsBase
 			DrawLoadoutPanel(pool, data, guiOriginX + 7 + 49 * n, guiOriginY + 28, n);
 		}
 		
+		// Draw reward box panels
+		for(int n = 0; n < 3; n++)
+		{
+			DrawRewardBoxPanel(pool, data, guiOriginX + 7 + 63 * n, guiOriginY + 166, n);
+		}
+		
 		super.drawScreen(i, j, f);
 	}	
+	
+	private void DrawRewardBoxPanel(LoadoutPool pool, PlayerRankData data, int x, int y, int index)
+	{
+		RewardBox box = pool.rewardBoxes[index];
+		drawSlotInventory(new ItemStack(box.getItem()), x + 3, y + 3);
+		drawCenteredString(fontRendererObj, "x" + data.GetNumOfUnopenedBoxes(box), x + 30, y + 5, 0xffffff);
+	}
 }

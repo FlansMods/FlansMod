@@ -89,12 +89,12 @@ public class GuiEditLoadout extends GuiTeamsBase
 		{
 			// Send data to server
 			TeamsManagerRanked.ConfirmLoadoutChanges();
-			TeamsManagerRanked.OpenLandingPage();
+			ClientTeamsData.OpenLandingPage();
 		}
 		else if(button.id == 1) // Cancel
 		{
 			ClientTeamsData.theRankData.loadouts[selectedLoadout] = previousLoadout.copy();
-			TeamsManagerRanked.OpenLandingPage();
+			ClientTeamsData.OpenLandingPage();
 		}
 	}
 	
@@ -296,7 +296,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 						drawSlotInventory(new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 					}
 										
-					if(false)//!entry.available)
+					if(!entry.available)
 					{
 						mc.renderEngine.bindTexture(texture);
 						GlStateManager.pushMatrix();
@@ -503,8 +503,15 @@ public class GuiEditLoadout extends GuiTeamsBase
 				{
 					LoadoutEntryPaintjob entry = new LoadoutEntryPaintjob();
 					entry.unlockLevel = 0;
-					entry.available = i == 0; // TODO : Paintjob unlocking
 					entry.paintjob = type.paintjobs.get(i);
+					if(i == 0)
+					{
+						entry.available = true;
+					}
+					else
+					{
+						entry.available = TeamsManagerRanked.LocalPlayerOwnsUnlock(entry.paintjob.hashCode());
+					}
 					
 					if(entry.available)
 						unlockedEntries.add(entry);

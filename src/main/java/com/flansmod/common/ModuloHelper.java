@@ -1,4 +1,4 @@
-package com.flansmod.apocalypse.common.world.buildings;
+package com.flansmod.common;
 
 public class ModuloHelper 
 {

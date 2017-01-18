@@ -1,6 +1,7 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
@@ -16,9 +17,17 @@ public class RewardBox extends InfoType
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
 	
+	private static HashMap<Integer, RewardBox> boxes = new HashMap<Integer, RewardBox>();
+	
 	public RewardBox(TypeFile file) 
 	{
 		super(file);
+	}
+	
+	@Override
+	protected void postRead(TypeFile file)
+	{
+		boxes.put(hashCode(), this);
 	}
 
 	@Override
@@ -41,6 +50,8 @@ public class RewardBox extends InfoType
 				return;
 			}
 			paintjob.rarity = GetRarity(split[1]);
+			
+			paintjobs.add(paintjob);
 		}
 	}
 	
@@ -52,5 +63,21 @@ public class RewardBox extends InfoType
 		if(split.toLowerCase().equals("legendary")) return EnumPaintjobRarity.LEGENDARY;
 		FlansMod.Assert(false, "Unknown rarity entered for reward box");
 		return EnumPaintjobRarity.UNKNOWN;
+	}
+	
+	public int GetReward(PlayerRankData data) 
+	{
+		int iPick = FlansMod.Pick(paintjobs.size());
+		return paintjobs.get(iPick).hashCode();
+	}
+
+	public static RewardBox GetRewardBox(int boxHash) 
+	{
+		return boxes.get(boxHash);
+	}
+
+	public static RewardBox GetRewardBox(String string) 
+	{
+		return GetRewardBox(string.hashCode());
 	}
 }

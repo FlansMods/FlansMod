@@ -36,14 +36,36 @@ public class ModelMinigun extends ModelGun
 		
 		minigunBarrelModel = new ModelRendererTurbo[12];
 		
-		//Barrels
-		for(int i = 0; i < 6; i++)
-		{
-			minigunBarrelModel[i] = new ModelRendererTurbo(this, 0, 16 + 2 * i, textureX, textureY);
-			minigunBarrelModel[i].addBox(12F, 1F, -0.5F, 28, 1, 1);
-			minigunBarrelModel[i].rotateAngleX = i * (float)Math.PI / 3F;
-			minigunBarrelModel[i].setRotationPoint(0F, -1F, 0F);
-		}
+		//Barrels		
+		minigunBarrelModel[0] = new ModelRendererTurbo(this, 0, 16, textureX, textureY);
+		minigunBarrelModel[0].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[0].rotateAngleX = 0.0F;
+		minigunBarrelModel[0].setRotationPoint(0F, -1F, 0F);
+		
+		minigunBarrelModel[1] = new ModelRendererTurbo(this, 0, 18, textureX, textureY);
+		minigunBarrelModel[1].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[1].rotateAngleX = 1.047F;
+		minigunBarrelModel[1].setRotationPoint(0F, -1F, 0F);
+		
+		minigunBarrelModel[2] = new ModelRendererTurbo(this, 0, 20, textureX, textureY);
+		minigunBarrelModel[2].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[2].rotateAngleX = 2.094F;
+		minigunBarrelModel[2].setRotationPoint(0F, -1F, 0F);
+		
+		minigunBarrelModel[3] = new ModelRendererTurbo(this, 0, 22, textureX, textureY);
+		minigunBarrelModel[3].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[3].rotateAngleX = 3.146F;
+		minigunBarrelModel[3].setRotationPoint(0F, -1F, 0F);
+		
+		minigunBarrelModel[4] = new ModelRendererTurbo(this, 0, 24, textureX, textureY);
+		minigunBarrelModel[4].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[4].rotateAngleX = 4.189F;
+		minigunBarrelModel[4].setRotationPoint(0F, -1F, 0F);
+		
+		minigunBarrelModel[5] = new ModelRendererTurbo(this, 0, 26, textureX, textureY);
+		minigunBarrelModel[5].addBox(12F, 1F, -0.5F, 28, 1, 1);
+		minigunBarrelModel[5].rotateAngleX = 5.236F;
+		minigunBarrelModel[5].setRotationPoint(0F, -1F, 0F);
 		
 		minigunBarrelModel[6] = new ModelRendererTurbo(this, 0, 28, textureX, textureY);
 		minigunBarrelModel[6].addShapeBox(8F, 0F, -3F, 4, 3, 6, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -0.5F, -1.5F, /* 5 */ 0F, -0.5F, -1.5F, /* 6 */ 0F, -0.5F, -1.5F, /* 7 */ 0F, -0.5F, -1.5F);

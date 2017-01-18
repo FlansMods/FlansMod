@@ -46,6 +46,7 @@ NumGenericAttachmentSlots 2
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
-Paintjob M40A3_Ice M40A3_Ice lightBlue 1
+Paintjob M40A3_Ice M40A3_Ice lightBlue 2
+Paintjob M40A3_Static M40A3_Static magenta 1 purple 1 white 1
 //Description - note the ammo type
 Description Ammo Type : Sniper

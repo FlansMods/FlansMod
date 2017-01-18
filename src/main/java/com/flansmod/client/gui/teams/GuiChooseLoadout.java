@@ -70,7 +70,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		if(button.id == 5)
 		{
 			//Go back to team select
-			TeamsManagerRanked.OpenTeamSelectPage();
+			ClientTeamsData.OpenTeamSelectPage();
 		}
 	}
 		

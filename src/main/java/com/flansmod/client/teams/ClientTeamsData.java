@@ -7,11 +7,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.gui.GuiTeamSelect;
 import com.flansmod.client.gui.GuiVoting;
+import com.flansmod.client.gui.teams.GuiEditLoadout;
+import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.gui.teams.GuiMissionResults;
+import com.flansmod.client.gui.teams.GuiOpenRewardBox;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.network.PacketOpenRewardBox;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.teams.RewardBoxInstance;
 import com.flansmod.common.teams.RoundFinishedData;
 import com.flansmod.common.teams.TeamsManagerRanked;
 
@@ -159,5 +166,60 @@ public class ClientTeamsData
 			}
 		}
 		
+	}
+
+	public static void UnlockReward(int boxHash, int unlockHash) 
+	{
+		Paintjob paintjob = Paintjob.GetPaintjob(unlockHash);
+		if(paintjob == null)
+		{
+			FlansMod.Assert(false, "Null paintjob unlock!");
+			return;
+		}
+		
+		boolean found = false;
+		for(RewardBoxInstance instance : theRankData.rewardBoxData)
+		{
+			if(!instance.opened
+			&& instance.unlockHash == 0
+			&& instance.boxHash == boxHash)
+			{
+				found = true;
+				instance.opened = true;
+				instance.unlockHash = unlockHash;
+			}
+		}
+		
+		if(!found)
+		{
+			FlansMod.Assert(false, "Never had this reward box!");
+			return;
+		}
+		
+		if(Minecraft.getMinecraft().currentScreen instanceof GuiOpenRewardBox)
+		{
+			((GuiOpenRewardBox)Minecraft.getMinecraft().currentScreen).SetTarget(paintjob);
+		}
+	}
+	
+	public static void OpenLandingPage()
+	{
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiLandingPage());
+	}
+	
+	public static void OpenEditLoadoutPage(int loadout)
+	{
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiEditLoadout(loadout));
+	}
+
+	public static void OpenTeamSelectPage()
+	{
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiTeamSelect());
+	}
+	
+	public static void OpenRewardBox(int i) 
+	{
+		FlansMod.getPacketHandler().sendToServer(new PacketOpenRewardBox(currentPool.rewardBoxes[i]));
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiOpenRewardBox(currentPool.rewardBoxes[i]));
 	}
 }

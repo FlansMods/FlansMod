@@ -1,6 +1,13 @@
 package com.flansmod.common.teams;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
+
+import com.flansmod.common.FlansMod;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import io.netty.buffer.ByteBuf;
 
 public class PlayerRankData 
@@ -14,6 +21,8 @@ public class PlayerRankData
 	
 	public int currentKillstreak = 0;
 	public int bestKillstreak = 0;
+	
+	public ArrayList<RewardBoxInstance> rewardBoxData = new ArrayList<RewardBoxInstance>(); 
 	
 	public PlayerLoadout[] loadouts = new PlayerLoadout[5];
 	
@@ -34,6 +43,22 @@ public class PlayerRankData
 		{
 			loadouts[i].writeToBuf(data);
 		}
+		
+		data.writeInt(rewardBoxData.size());
+		for(RewardBoxInstance inst : rewardBoxData)
+		{
+			data.writeInt(inst.boxHash);
+			
+			if(!inst.Verify())
+			{
+				data.writeInt(0);
+				FlansMod.Assert(false, "Invalid unlock data");
+			}
+			else
+			{
+				data.writeInt(inst.unlockHash);
+			}
+		}
 	}
 
 	public void readFromBuf(ByteBuf data) 
@@ -45,6 +70,13 @@ public class PlayerRankData
 		{
 			loadouts[i].readFromBuf(data);
 		}
+		
+		rewardBoxData.clear();
+		int numRewardBoxes = data.readInt();
+		for(int i = 0; i < numRewardBoxes; i++)
+		{
+			rewardBoxData.add(RewardBoxInstance.CreateClientRewardBoxInstance(data.readInt(), data.readInt()));
+		}
 	}
 
 	public void readFromNBT(NBTTagCompound tags) 
@@ -55,6 +87,21 @@ public class PlayerRankData
 		for(int i = 0; i < 5; i++)
 		{
 			loadouts[i].readFromNBT(tags.getCompoundTag("Slot_" + i));
+		}
+		
+		NBTTagList rewardTags = tags.getTagList("rewardBoxes", 10); // 10 = CompoundTag
+		if(rewardTags != null)
+		{
+			for(int i = 0; i < rewardTags.tagCount(); i++)
+			{
+				NBTTagCompound rewardInstanceTags = rewardTags.getCompoundTagAt(i);
+				
+				int type = rewardInstanceTags.getInteger("type");
+				int boxHash = rewardInstanceTags.getInteger("boxHash");
+				int unlockHash = rewardInstanceTags.getInteger("unlockHash");
+				
+				rewardBoxData.add(RewardBoxInstance.CreateRewardBoxInstanceFromNBT(boxHash, unlockHash, type));
+			}
 		}
 	}
 
@@ -69,6 +116,18 @@ public class PlayerRankData
 			loadouts[i].writeToNBT(slotTags);
 			tags.setTag("Slot_" + i, slotTags);
 		}
+		
+		NBTTagList rewardTags = new NBTTagList();
+		for(RewardBoxInstance instance : rewardBoxData)
+		{
+			NBTTagCompound rewardInstanceTags = new NBTTagCompound();
+			rewardInstanceTags.setInteger("type", instance.origin.ordinal());
+			rewardInstanceTags.setInteger("boxHash", instance.boxHash);
+			rewardInstanceTags.setInteger("unlockHash", instance.unlockHash);
+			rewardTags.appendTag(rewardInstanceTags);
+		}
+		
+		tags.setTag("rewardBoxes", rewardTags);
 	}
 
 	public void AddXP(int amount) 
@@ -88,5 +147,31 @@ public class PlayerRankData
 	public void ResetKillstreak()
 	{
 		currentKillstreak = 0;
+	}
+
+	public boolean OwnsUnlock(int unlockHash) 
+	{
+		for(RewardBoxInstance instance : rewardBoxData)
+		{
+			if(instance.opened && instance.unlockHash == unlockHash)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public int GetNumOfUnopenedBoxes(RewardBox box) 
+	{
+		int num = 0;
+		for(RewardBoxInstance instance : rewardBoxData)
+		{
+			if(!instance.opened && instance.boxHash == box.hashCode())
+			{
+				num++;
+			}
+		}
+		return num;
 	}
 }

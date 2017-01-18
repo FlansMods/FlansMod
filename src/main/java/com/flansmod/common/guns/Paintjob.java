@@ -1,5 +1,8 @@
 package com.flansmod.common.guns;
 
+import java.util.HashMap;
+
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.EnumPaintjobRarity;
 import com.flansmod.common.types.PaintableType;
 
@@ -7,6 +10,8 @@ import net.minecraft.item.ItemStack;
 
 public class Paintjob 
 {
+	private static HashMap<Integer, Paintjob> paintjobs = new HashMap<Integer, Paintjob>();
+	
 	public PaintableType parent;
 	public String iconName;
 	public String textureName;
@@ -22,5 +27,18 @@ public class Paintjob
 		this.textureName = textureName;
 		this.dyesNeeded = dyesNeeded;
 		this.rarity = EnumPaintjobRarity.UNKNOWN;
+		
+		paintjobs.put(hashCode(), this);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return parent.hashCode() ^ ID;
+	}
+	
+	public static Paintjob GetPaintjob(int hash)
+	{
+		return paintjobs.get(hash);
 	}
 }

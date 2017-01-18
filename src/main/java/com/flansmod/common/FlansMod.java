@@ -11,9 +11,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import org.lwjgl.Sys;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
@@ -167,6 +170,9 @@ public class FlansMod
 	/** Custom paintjob item */
 	public static Item rainbowPaintcan;
 	public static BlockPaintjobTable paintjobTable;
+	
+	private static Random rewardsRandom = new Random();
+	public static int Pick(int numItems) { return rewardsRandom.nextInt(numItems); }
 
 	/** The mod pre-initialiser method */
 	@EventHandler
@@ -257,6 +263,17 @@ public class FlansMod
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.gunpowder), charcoal, charcoal, charcoal, new ItemStack(Items.glowstone_dust));
 		}
 		log("Loaded recipes.");
+		
+		// Really randomise the rewards generator
+		rewardsRandom = new Random();
+		rewardsRandom.setSeed(Sys.getTime() ^ 0x5AB49DE08DE3B1DFl);
+		for(int i = 0; i < 10; i++)
+		{
+			for(int j = 0; j < rewardsRandom.nextInt(10); j++)
+			{
+				rewardsRandom.nextGaussian();
+			}
+		}
 		
 		//Register teams mod entities
 		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());

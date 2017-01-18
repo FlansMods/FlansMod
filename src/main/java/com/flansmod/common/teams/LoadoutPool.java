@@ -40,6 +40,7 @@ public class LoadoutPool extends InfoType
 	public int XPForKill = 10, XPForDeath = 5, XPForKillstreakBonus = 10;
 	public ArrayList<LoadoutEntryInfoType>[] unlocks;
 	public PlayerLoadout[] defaultLoadouts = new PlayerLoadout[5];
+	public RewardBox[] rewardBoxes = new RewardBox[3];
 	
 	public int[] slotUnlockLevels = new int[] { 0, 0, 5, 10, 20 };
 	
@@ -121,6 +122,20 @@ public class LoadoutPool extends InfoType
 					defaultLoadouts[index].slots[i] = new ItemStack(InfoType.getType(split[2 + i]).getItem());
 				}
 			}
+		}
+		else if(KeyMatches(split, "AddRewardBox"))
+		{
+			boolean slotAvailable = false;
+			for(int i = 0; i < 3; i++)
+			{
+				if(rewardBoxes[i] == null)
+				{
+					rewardBoxes[i] = RewardBox.GetRewardBox(split[1]);
+					slotAvailable = true;
+					break;
+				}
+			}
+			FlansMod.Assert(slotAvailable, "Trying to insert more than 3 reward box types. No support for this yet");
 		}
 	}
 	

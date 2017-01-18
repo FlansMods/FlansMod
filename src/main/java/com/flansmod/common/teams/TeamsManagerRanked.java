@@ -17,6 +17,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketLoadoutData;
+import com.flansmod.common.network.PacketOpenRewardBox;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.network.PacketVoting;
@@ -394,24 +395,6 @@ public class TeamsManagerRanked extends TeamsManager
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void OpenLandingPage()
-	{
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiLandingPage());
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void OpenEditLoadoutPage(int loadout)
-	{
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiEditLoadout(loadout));
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static void OpenTeamSelectPage()
-	{
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiTeamSelect());
-	}
-	
-	@SideOnly(Side.CLIENT)
 	public static void ConfirmLoadoutChanges() 
 	{
 		PacketLoadoutData packet = new PacketLoadoutData();
@@ -438,7 +421,33 @@ public class TeamsManagerRanked extends TeamsManager
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
 		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiChooseLoadout());
 	}
+
+	@SideOnly(Side.CLIENT)
+	public static boolean LocalPlayerOwnsUnlock(int unlockHash)
+	{
+		return ClientTeamsData.theRankData.OwnsUnlock(unlockHash);
+	}
 	
+	public static boolean PlayerOwnsUnlock(int hashCode, UUID uuid)
+	{
+		return false;
+	}
 
-
+	public static void OpenRewardBox(EntityPlayerMP player, RewardBox box) 
+	{
+		PlayerRankData data = rankData.get(player.getUniqueID());
+		for(RewardBoxInstance instance : data.rewardBoxData)
+		{
+			if(!instance.opened 
+			&& instance.boxHash == box.hashCode()
+			&& instance.unlockHash == 0)
+			{
+				int unlockHash = instance.OpenBox(data);
+				FlansMod.getPacketHandler().sendTo(new PacketOpenRewardBox(box.hashCode(), unlockHash), player);
+				return;
+			}
+		}
+		
+		FlansMod.Assert(false, "Player " + player.getDisplayNameString() + " tried to open box they don't have");
+	}
 }
