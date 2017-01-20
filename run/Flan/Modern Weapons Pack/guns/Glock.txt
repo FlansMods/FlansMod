@@ -52,5 +52,6 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob Glock_Fade Glock_Fade yellow 1 purple 1 magenta 1
 Paintjob Glock_Venom Glock_Venom lime 2
+Paintjob Glock_Cottonmouth Glock_Cottonmouth red 1 yellow 1
 //Description - note the ammo type
 Description Ammo Type : SMG

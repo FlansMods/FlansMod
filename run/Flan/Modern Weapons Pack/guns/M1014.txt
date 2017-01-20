@@ -56,5 +56,6 @@ NumGenericAttachmentSlots 1
 Paintjob M1014_White M1014_White white 2
 Paintjob M1014_Yellow M1014_Yellow yellow 2
 Paintjob M1014_RedWhite M1014_RedWhite red 1 white 1
+Paintjob M1014_Giraffe M1014_Giraffe orange 1 yellow 1
 //Description - note the ammo type
 Description Ammo Type : Shotgun

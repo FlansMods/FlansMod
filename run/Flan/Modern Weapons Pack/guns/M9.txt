@@ -52,5 +52,6 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M9_Sand M9_Sand yellow 1
 Paintjob M9_Venom M9_Venom lime 1
+Paintjob M9_Midnight M9_Midnight blue 1 yellow 1
 //Description - note the ammo type
 Description Ammo Type : Pistol
