@@ -199,6 +199,16 @@ public class TeamsManagerRanked extends TeamsManager
 		}
 	}
 	
+	public static void ResetRank(EntityPlayerMP player) 
+	{
+		PlayerRankData data = rankData.get(player.getUniqueID());
+		if(data != null)
+		{
+			data.currentLevel = 0;
+			data.currentXP = 0;
+		}
+	}
+	
 	@Override
 	protected void OnRoundEnded()
 	{
@@ -299,6 +309,7 @@ public class TeamsManagerRanked extends TeamsManager
 			{
 				resultantXP -= XPForNextLevel;
 				resultantLevel++;
+				GiveRewardsForLevelUp(resultantLevel, player);
 				
 				XPForNextLevel = currentPool.GetXPForLevel(resultantLevel + 1);
 			}
@@ -308,6 +319,16 @@ public class TeamsManagerRanked extends TeamsManager
 			data.currentXP = resultantXP;
 			data.currentKillstreak = 0;
 			data.bestKillstreak = 0;
+		}
+	}
+	
+	private void GiveRewardsForLevelUp(int level, EntityPlayerMP player)
+	{
+		for(RewardBox box : currentPool.rewardsPerLevel[level - 1])
+		{
+			RewardBoxInstance instance = RewardBoxInstance.CreateLevelUpReward(box, player);
+			PlayerRankData data = TeamsManagerRanked.GetRankData(player);
+			data.AddRewardBoxInstance(instance);
 		}
 	}
 	
@@ -449,5 +470,10 @@ public class TeamsManagerRanked extends TeamsManager
 		}
 		
 		FlansMod.Assert(false, "Player " + player.getDisplayNameString() + " tried to open box they don't have");
+	}
+
+	public static PlayerRankData GetRankData(EntityPlayer player) 
+	{
+		return GetInstance().rankData.get(player.getUniqueID());
 	}
 }

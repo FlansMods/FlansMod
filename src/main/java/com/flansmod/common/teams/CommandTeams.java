@@ -727,9 +727,32 @@ public class CommandTeams extends CommandBase
 		if(split[0].toLowerCase().equals("xp"))
 		{
 			sender.addChatMessage(new ChatComponentText("Awarded " + Integer.parseInt(split[1]) + " XP"));	
+			TeamsManagerRanked.AwardXP((EntityPlayerMP)sender, Integer.parseInt(split[1]));
+			return;
+		}
+		if(split[0].toLowerCase().equals("resetrank"))
+		{
+			sender.addChatMessage(new ChatComponentText("Reset your rank"));	
+			TeamsManagerRanked.ResetRank((EntityPlayerMP)sender);
+			return;
+		}
+		if(split[0].toLowerCase().equals("giverewardbox"))
+		{
+			String name = split[1];
+			RewardBox box = RewardBox.GetRewardBox(split[2]);
+			if(box == null)
+			{
+				sender.addChatMessage(new ChatComponentText("Invalid box"));	
+				return;
+			}
 			for(EntityPlayer player : TeamsManager.getPlayers())
 			{
-				TeamsManagerRanked.AwardXP((EntityPlayerMP)player, Integer.parseInt(split[1]));
+				if(player.getName().equals(name))
+				{
+					RewardBoxInstance instance = RewardBoxInstance.CreateCheatReward(box, player);
+					PlayerRankData data = TeamsManagerRanked.GetRankData(player);
+					data.AddRewardBoxInstance(instance);
+				}
 			}
 			return;
 		}

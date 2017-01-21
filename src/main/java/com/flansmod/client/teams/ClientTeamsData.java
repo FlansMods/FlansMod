@@ -187,6 +187,7 @@ public class ClientTeamsData
 				found = true;
 				instance.opened = true;
 				instance.unlockHash = unlockHash;
+				break;
 			}
 		}
 		
@@ -221,5 +222,10 @@ public class ClientTeamsData
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketOpenRewardBox(currentPool.rewardBoxes[i]));
 		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiOpenRewardBox(currentPool.rewardBoxes[i]));
+	}
+
+	public static void AddRewardBox(int boxHash) 
+	{
+		theRankData.AddRewardBoxInstance(RewardBoxInstance.CreateClientRewardBoxInstance(boxHash, 0));
 	}
 }

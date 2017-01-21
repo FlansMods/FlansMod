@@ -16,8 +16,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import org.lwjgl.Sys;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.entity.item.EntityItem;
@@ -99,8 +97,10 @@ import com.flansmod.common.teams.EntityGunItem;
 import com.flansmod.common.teams.EntityTeamItem;
 import com.flansmod.common.teams.ItemFlagpole;
 import com.flansmod.common.teams.ItemOpStick;
+import com.flansmod.common.teams.ItemRewardBox;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
+import com.flansmod.common.teams.RewardBox;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.teams.TeamsManagerRanked;
@@ -266,7 +266,7 @@ public class FlansMod
 		
 		// Really randomise the rewards generator
 		rewardsRandom = new Random();
-		rewardsRandom.setSeed(Sys.getTime() ^ 0x5AB49DE08DE3B1DFl);
+		rewardsRandom.setSeed(System.currentTimeMillis() ^ 0x5AB49DE08DE3B1DFl);
 		for(int i = 0; i < 10; i++)
 		{
 			for(int j = 0; j < rewardsRandom.nextInt(10); j++)
@@ -575,7 +575,7 @@ public class FlansMod
 					case playerClass : 	break;
 					case team : 		break;
 					case itemHolder:	new BlockItemHolder((ItemHolderType)infoType); break;
-					case rewardBox:		break;
+					case rewardBox:		new ItemRewardBox((RewardBox)infoType).setUnlocalizedName(infoType.shortName); break;
 					case loadout:		break;
 					default : log("Unrecognised type for " + infoType.shortName); break;
 					}

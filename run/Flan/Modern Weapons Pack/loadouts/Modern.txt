@@ -80,3 +80,48 @@ DefaultLoadout 2 rpd ak74 m67
 DefaultLoadout 3 dragunov makarov mwMedicBag
 DefaultLoadout 4 g36 judge molotovCocktail
 DefaultLoadout 5 minigun desertEagle mwAmmoBag
+// Reward boxes
+AddRewardBox modernGreen
+AddRewardBox modernRed
+AddRewardBox modernBlue
+// Awarding
+// Alternate red green blue, with 2 per level, expect on level 10, where there are 3 other unlocks
+AddReward modernRed 1
+AddReward modernGreen 1
+AddReward modernBlue 2
+AddReward modernRed 2
+AddReward modernGreen 3
+AddReward modernBlue 3
+AddReward modernRed 4
+AddReward modernGreen 4
+AddReward modernBlue 5
+AddReward modernRed 5
+AddReward modernGreen 6
+AddReward modernBlue 6
+AddReward modernRed 7
+AddReward modernGreen 7
+AddReward modernBlue 8
+AddReward modernRed 8
+AddReward modernGreen 9
+AddReward modernBlue 9
+AddReward modernRed 10
+AddReward modernGreen 11
+AddReward modernBlue 11
+AddReward modernRed 12
+AddReward modernGreen 12
+AddReward modernBlue 13
+AddReward modernRed 13
+AddReward modernGreen 14
+AddReward modernBlue 14
+AddReward modernRed 15
+AddReward modernGreen 15
+AddReward modernBlue 16
+AddReward modernRed 16
+AddReward modernGreen 17
+AddReward modernBlue 17
+AddReward modernRed 18
+AddReward modernGreen 18
+AddReward modernBlue 19
+AddReward modernRed 19
+AddReward modernGreen 20
+AddReward modernBlue 20

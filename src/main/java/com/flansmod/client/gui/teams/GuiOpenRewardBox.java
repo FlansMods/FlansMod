@@ -1,6 +1,7 @@
 package com.flansmod.client.gui.teams;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,7 +13,9 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +34,8 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/OpenCrates.png");	
 	private static final int WIDTH = 196, HEIGHT = 200;
 	private static final int WAITING_FOR_SERVER = -1;
-	private static int spinTime = 40, slowdownTime = 40;
+	private static int spinTime = 20, slowdownTime = 180;
+	private static Random gunScrambler = new Random();
 	private float spinSpeed = 0.555555555f;
 	
 	private ArrayList<Paintjob> options = new ArrayList<Paintjob>(); 
@@ -39,6 +43,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private EnumPageState state = EnumPageState.SPINNING;
 	private int timeLeftInState = spinTime;
 	private float spinner = 0.0f;
+	private GuiButton doneButton;
 	
 	public void SetTarget(Paintjob paint)
 	{
@@ -52,6 +57,31 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		}
 		FlansMod.Assert(false, "Could not find paintjob we just unlocked!");
 	}
+	
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		int w = scaledresolution.getScaledWidth();
+		int h = scaledresolution.getScaledHeight();
+		guiOriginX = w / 2 - WIDTH / 2;
+		guiOriginY = h / 2 - HEIGHT / 2;
+						
+		doneButton = new GuiButton(0, width / 2 - 20, guiOriginY + 170, 40, 20, "Done");
+		doneButton.enabled = false;
+		buttonList.add(doneButton);
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button)
+	{
+		if (button.id == 0)
+		{
+			ClientTeamsData.OpenLandingPage();	
+		}
+	}
 
 	public GuiOpenRewardBox(RewardBox rewardBox)
 	{
@@ -59,12 +89,23 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		state = EnumPageState.SPINNING;
 		timeLeftInState = spinTime;
 		target = WAITING_FOR_SERVER;
-		spinSpeed = InitialVelocity();
+		
+		ArrayList<Paintjob> temp = new ArrayList<Paintjob>();
 		
 		for(Paintjob paintjob : rewardBox.paintjobs)
 		{
-			options.add(paintjob);
+			temp.add(paintjob);
 		}
+		
+		int size = rewardBox.paintjobs.size();
+		for(int i = 0; i < size; i++)
+		{
+			int random = gunScrambler.nextInt(size - i);
+			options.add(temp.get(random));
+			temp.remove(random);
+		}
+		
+		spinSpeed = InitialVelocity();
 	}
 	
 	@Override 
@@ -83,6 +124,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				if(timeLeftInState <= 0 && target != WAITING_FOR_SERVER)
 				{
 					SwitchToState(EnumPageState.READY_TO_SLOW_DOWN);
+					timeLeftInState = slowdownTime;
 				}
 				break;
 			}
@@ -94,6 +136,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				{
 					// We're here (ish). Fix the position and then spin round one last time, slowing down as we go.
 					spinner = target;
+					timeLeftInState = slowdownTime;
 					SwitchToState(EnumPageState.SLOWING_DOWN);
 				}
 				break;
@@ -101,12 +144,19 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 			case SLOWING_DOWN:
 			{
 				spinSpeed += Acceleration();
-				SimulateSpinner();
+				if(spinSpeed <= 0.0f)
+				{
+					spinSpeed = 0.0f;
+					SwitchToState(EnumPageState.STOPPED);
+				}
+				int timeInState = slowdownTime - timeLeftInState;
+				spinner = target + timeInState * InitialVelocity() + 0.5f * Acceleration() * timeInState * timeInState;
 				break;
 			}
 			case STOPPED:
 			{
 				spinner = target;
+				doneButton.enabled = true;
 				break;
 			}
 
@@ -161,12 +211,12 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
 				
+		int pixelOffset = ModuloHelper.modulo(MathHelper.floor_float(spinner * 18.0f), 18) - 18;
+		
+		drawModalRectWithCustomSizedTexture(guiOriginX + 9, guiOriginY + 101, 239 + pixelOffset + 10, 101, 180, 18, textureX, textureY);
+		
 		// Draw text
-		drawCenteredString(fontRendererObj, "Opening a Crate", guiOriginX + 98, guiOriginY + 12, 0xffffff);
-		
-		int pixelOffset = ModuloHelper.modulo(MathHelper.floor_float(spinner * 18.0f), 18);
-		
-		drawModalRectWithCustomSizedTexture(guiOriginX + 9, guiOriginY + 101, 239 + pixelOffset, 101, 162, 18, textureX, textureY);
+		drawCenteredString(fontRendererObj, "Reward Box", guiOriginX + 98, guiOriginY + 12, 0xffffff);
 		
 		for(int n = 0; n < 10; n++)
 		{
@@ -174,11 +224,32 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 			Paintjob paintjob = options.get(ModuloHelper.modulo(index, options.size()));
 			
 			ItemStack stack = new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID);
-			drawSlotInventory(stack, guiOriginX + 18 - 18 + pixelOffset, guiOriginY + 102 - 18);
+			drawSlotInventory(stack, guiOriginX + 18 - 18 - pixelOffset + 18 * n, guiOriginY + 102);
+		}
+		
+		for(int n = 0; n < 10; n++)
+		{
+			int index = MathHelper.floor_float(spinner) - 4 + n;
+			Paintjob paintjob = options.get(ModuloHelper.modulo(index, options.size()));
+			
+			DrawRarityBackground(paintjob.rarity, guiOriginX + 18 - 18 - pixelOffset + 18 * n, guiOriginY + 102);
 		}
 		
 		mc.renderEngine.bindTexture(texture);
-		drawModalRectWithCustomSizedTexture(guiOriginX + 12, guiOriginY + 93, 12, 93, 172, 34, textureX, textureY);
+		GlStateManager.disableDepth();
+		drawModalRectWithCustomSizedTexture(guiOriginX + 0, guiOriginY + 93, 0, 93, 196, 34, textureX, textureY);
+		GlStateManager.enableDepth();
+		
+		int currentIndex = MathHelper.floor_float(spinner) % options.size();
+		ItemStack gunStack = new ItemStack(options.get(currentIndex).parent.item, 1, options.get(currentIndex).ID);
+		DrawGun(gunStack, guiOriginX + 98, guiOriginY + 65, 60.0f);
+		
+		if(state == EnumPageState.STOPPED)
+		{
+			drawCenteredString(fontRendererObj, "New paintjob unlocked!", guiOriginX + 98, guiOriginY + 130, 0xffffff);
+			drawCenteredString(fontRendererObj, options.get(target).parent.name, guiOriginX + 98, guiOriginY + 142, 0xffffff);
+			drawCenteredString(fontRendererObj, "\"" + options.get(target).iconName + "\"", guiOriginX + 98, guiOriginY + 154, 0xffffff);
+		}
 		
 		super.drawScreen(i, j, f);
 	}	

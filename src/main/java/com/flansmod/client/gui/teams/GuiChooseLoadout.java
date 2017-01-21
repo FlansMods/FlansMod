@@ -51,11 +51,11 @@ public class GuiChooseLoadout extends GuiTeamsBase
 			if(data.currentLevel >= pool.slotUnlockLevels[i])
 			{
 				buttonList.add(
-				 new GuiButton(i, width / 2 -128 + 12 + 49 * i, height / 2 - 99 + 135, 36, 20, "Select"));
+				 new GuiButton(i, width / 2 -128 + 12 + 49 * i, height / 2 - 99 + 117, 36, 20, "Select"));
 			}
 		}
 		
-		buttonList.add(new GuiButton(5, width / 2 - 128 + 7, height / 2 - 99 + 167, 88, 20, "<< Change Team"));
+		buttonList.add(new GuiButton(5, width / 2 - 128 + 7, height / 2 - 99 + 144, 88, 20, "<< Change Team"));
 	}
 	
 	@Override
@@ -102,13 +102,11 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		}
 		
 		//Draw the background
-		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, 256, 198, textureX, textureY);
-		drawModalRectWithCustomSizedTexture(guiOriginX + 7, guiOriginY + 162, 7, 179, 193, 15, textureX, textureY);
+		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, 256, 143, textureX, textureY);
+		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY + 143, 256, 180, 256, 76, textureX, textureY);
 				
 		// Draw text
 		drawCenteredString(fontRendererObj, "Choose a loadout", guiOriginX + 128, guiOriginY + 12, 0xffffff);
-		
-		drawString(fontRendererObj, mc.thePlayer.getName(), guiOriginX + 249 - fontRendererObj.getStringWidth(mc.thePlayer.getName()), guiOriginY + 165, 0xffffff);
 		
 		// Draw loadout panels
 		for(int n = 0; n < 5; n++)

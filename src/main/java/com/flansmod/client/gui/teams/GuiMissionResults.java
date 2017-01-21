@@ -14,6 +14,7 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.teams.RewardBox;
 import com.flansmod.common.teams.TeamsManagerRanked;
 
 import net.minecraft.client.gui.GuiButton;
@@ -69,6 +70,12 @@ public class GuiMissionResults extends GuiTeamsBase
 		0
 	};
 	
+	private static class MissionResultsUnlock
+	{
+		public boolean isWeapon = true;
+		public LoadoutEntryInfoType loadoutEntry = null;
+		public RewardBox rewardBox = null;
+	}
 	
 	private int timeInState = 0;
 	
@@ -81,7 +88,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	
 	private EnumResultsState state = EnumResultsState.IDLE;
 	
-	private LoadoutEntryInfoType[] unlocks = new LoadoutEntryInfoType[4];
+	private MissionResultsUnlock[] unlocks = new MissionResultsUnlock[4];
 	
 	public GuiMissionResults()
 	{
@@ -269,17 +276,28 @@ public class GuiMissionResults extends GuiTeamsBase
 						boolean conflict = false;
 						for(int i = 0; i < index; i++)
 						{
-							if(unlocks[i].type.shortName.equals(entry.type.shortName))
+							if(unlocks[i].isWeapon && unlocks[i].loadoutEntry != null &&
+								unlocks[i].loadoutEntry.type.shortName.equals(entry.type.shortName))
 								conflict = true;
 						}
 						if(conflict) continue;
 						
 						if(entry.unlockLevel == displayRank)
 						{
-							unlocks[index] = entry;
+							unlocks[index] = new MissionResultsUnlock();
+							unlocks[index].isWeapon = true;
+							unlocks[index].loadoutEntry = entry;
 							index++;
 						}
 					}
+				}
+				
+				for(RewardBox box : pool.rewardsPerLevel[displayRank - 1])
+				{
+					unlocks[index] = new MissionResultsUnlock();
+					unlocks[index].isWeapon = false;
+					unlocks[index].rewardBox = box;
+					index++;
 				}
 				
 				break;
@@ -419,22 +437,29 @@ public class GuiMissionResults extends GuiTeamsBase
 		super.drawScreen(i, j, f);
 	}	
 	
-	private void DrawUnlock(LoadoutEntryInfoType entry, int i, int j)
+	private void DrawUnlock(MissionResultsUnlock entry, int i, int j)
 	{
 		if(entry == null) return;
-			
-		drawCenteredString(fontRendererObj, "New item unlocked", i + 58, j + 2, 0xffffff);
-		
-		drawCenteredString(fontRendererObj, entry.type.name, i + 58, j + 31, 0xffffff);
-		
-		if(entry.type instanceof GunType)
+					
+		if(entry.isWeapon)
 		{
-			DrawGun(new ItemStack(entry.type.getItem()), i + 50, j + 24, 25.0f);
+			drawCenteredString(fontRendererObj, "New item unlocked", i + 58, j + 2, 0xffffff);
+			drawCenteredString(fontRendererObj, entry.loadoutEntry.type.name, i + 58, j + 31, 0xffffff);
+			
+			if(entry.loadoutEntry.type instanceof GunType)
+			{
+				DrawGun(new ItemStack(entry.loadoutEntry.type.getItem()), i + 50, j + 24, 25.0f);
+			}
+			else
+			{
+				drawSlotInventory(new ItemStack(entry.loadoutEntry.type.getItem()), i + 49, j + 12);
+			}
 		}
 		else
 		{
-			drawSlotInventory(new ItemStack(entry.type.getItem()), i + 49, j + 12);
+			drawCenteredString(fontRendererObj, "Reward obtained", i + 58, j + 2, 0xffffff);
+			drawCenteredString(fontRendererObj, entry.rewardBox.name, i + 58, j + 31, 0xffffff);
+			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);			
 		}
-		
 	}
 }

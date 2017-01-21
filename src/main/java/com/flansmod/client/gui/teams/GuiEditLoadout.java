@@ -23,6 +23,7 @@ import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryPaintjob;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.types.EnumPaintjobRarity;
+import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
@@ -156,9 +157,15 @@ public class GuiEditLoadout extends GuiTeamsBase
 			{
 				for(int n = 0; n < WEAPON_COMPONENT_NAMES.length; n++)
 				{
-					drawCenteredString(fontRendererObj, WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
-					
 					ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
+					InfoType type = (stack != null && stack.getItem() instanceof IFlanItem) ? ((IFlanItem)stack.getItem()).getInfoType() : null;
+					int numUnlocks = type != null ? data.GetNumUnlocksForType(type) : 0; 
+					if(n == 1 && type != null && numUnlocks > 0)
+					{
+						drawCenteredString(fontRendererObj, WEAPON_COMPONENT_NAMES[n] + " (" + numUnlocks + ")", guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+					}
+					else drawCenteredString(fontRendererObj, WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+					
 					switch(n)
 					{
 						case 0: // Main item
@@ -270,28 +277,8 @@ public class GuiEditLoadout extends GuiTeamsBase
 					else if(entry instanceof LoadoutEntryPaintjob)
 					{
 						Paintjob paintjob = ((LoadoutEntryPaintjob)entry).paintjob;
-						if(paintjob.rarity != EnumPaintjobRarity.UNKNOWN)
-						{
-							mc.renderEngine.bindTexture(texture);
-							int x = 0, y = 71;
-							switch( paintjob.rarity )
-							{
-								case COMMON: x = 331; break;
-								case UNCOMMON: x = 349; break;
-								case RARE: x = 367; break;
-								case LEGENDARY:
-								{
-									x = 385;
-									break;
-								}
-								default: break;							
-							}
-							if(x > 0)
-							{
-								drawModalRectWithCustomSizedTexture(guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18, x, y, 16, 16, textureX, textureY);
-							}
-						}
 						
+						DrawRarityBackground(paintjob.rarity, guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);						
 						
 						drawSlotInventory(new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 					}
@@ -479,6 +466,13 @@ public class GuiEditLoadout extends GuiTeamsBase
 		{
 			if(a.unlockLevel < b.unlockLevel) return -1;
 			if(a.unlockLevel > b.unlockLevel) return 1;
+			
+			if(a instanceof LoadoutEntryPaintjob && b instanceof LoadoutEntryPaintjob)
+			{
+				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() < ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal()) return -1;
+				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() > ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal()) return 1;
+			}
+			
 			return 0;
 		}
 	}
@@ -567,6 +561,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 			}
 		}
 		
+		unlockedEntries.sort(new LoadoutComparator());
 		lockedEntries.sort(new LoadoutComparator());
 		
 		availableComponents.addAll(unlockedEntries);

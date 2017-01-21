@@ -66,7 +66,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		{
 			int numBoxes = data.GetNumOfUnopenedBoxes(pool.rewardBoxes[i]);
 			
-			GuiButton button = new GuiButton(6 + i, width / 2 - WIDTH / 2 + 11 + 63 * i, height / 2 - HEIGHT / 2 + 187, 59, 20, "Open");
+			GuiButton button = new GuiButton(6 + i, width / 2 - WIDTH / 2 + 9 + 65 * i, height / 2 - HEIGHT / 2 + 187, 59, 20, "Open");
 			button.enabled = numBoxes > 0;
 			buttonList.add(button);
 		}
@@ -153,7 +153,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		// Draw reward box panels
 		for(int n = 0; n < 3; n++)
 		{
-			DrawRewardBoxPanel(pool, data, guiOriginX + 7 + 63 * n, guiOriginY + 166, n);
+			DrawRewardBoxPanel(pool, data, guiOriginX + 7 + 65 * n, guiOriginY + 166, n);
 		}
 		
 		super.drawScreen(i, j, f);
@@ -163,6 +163,6 @@ public class GuiLandingPage extends GuiTeamsBase
 	{
 		RewardBox box = pool.rewardBoxes[index];
 		drawSlotInventory(new ItemStack(box.getItem()), x + 3, y + 3);
-		drawCenteredString(fontRendererObj, "x" + data.GetNumOfUnopenedBoxes(box), x + 30, y + 5, 0xffffff);
+		drawCenteredString(fontRendererObj, "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
 	}
 }

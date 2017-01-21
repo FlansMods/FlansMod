@@ -1,5 +1,7 @@
 package com.flansmod.client.gui.teams;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.client.ClientProxy;
@@ -8,6 +10,7 @@ import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
+import com.flansmod.common.types.EnumPaintjobRarity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,6 +19,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -52,6 +56,7 @@ public class GuiTeamsBase extends GuiScreen
 	
 	private static final ResourceLocation loudoutBoxes = new ResourceLocation("flansmod", "gui/LandingPage.png");
 	private static final ResourceLocation ranks = new ResourceLocation("flansmod", "gui/Ranks.png");
+	private static final ResourceLocation loadoutEditor = new ResourceLocation("flansmod", "gui/LoadoutEditor.png");
 	
 	protected void DrawLoadoutPanel(LoadoutPool pool, PlayerRankData data, int i, int j, int n)
 	{
@@ -59,8 +64,6 @@ public class GuiTeamsBase extends GuiScreen
 		
 		int textureX = 512;
 		int textureY = 256;
-		
-		mc.renderEngine.bindTexture(loudoutBoxes);
 		
 		if(data.currentLevel >= pool.slotUnlockLevels[n])	
 		{
@@ -87,6 +90,34 @@ public class GuiTeamsBase extends GuiScreen
 		}
 		
 		drawCenteredString(fontRendererObj, "Slot " + (n + 1), i + 23, j + 5, 0xffffff);
+	}
+	
+	protected void DrawRarityBackground(EnumPaintjobRarity rarity, int i, int j)
+	{
+		mc.renderEngine.bindTexture(loadoutEditor);
+		int textureX = 512;
+		int textureY = 256;
+		
+		if(rarity != EnumPaintjobRarity.UNKNOWN)
+		{
+			int x = 0, y = 71;
+			switch( rarity )
+			{
+				case COMMON: x = 331; break;
+				case UNCOMMON: x = 349; break;
+				case RARE: x = 367; break;
+				case LEGENDARY:
+				{
+					x = 385;
+					break;
+				}
+				default: break;							
+			}
+			if(x > 0)
+			{
+				drawModalRectWithCustomSizedTexture(i, j, x, y, 16, 16, textureX, textureY);
+			}
+		}
 	}
 	
 	protected void DrawGun(ItemStack stack, int x, int y, float scale)
@@ -148,4 +179,10 @@ public class GuiTeamsBase extends GuiScreen
 	{
 		return false;
 	}
+	
+	@Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException
+    {
+       // Prevent "Escape" from closing this menu
+    }
 }

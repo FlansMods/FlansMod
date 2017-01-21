@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.types.PaintableType;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -173,5 +175,29 @@ public class PlayerRankData
 			}
 		}
 		return num;
+	}
+
+	public void AddRewardBoxInstance(RewardBoxInstance instance) 
+	{
+		rewardBoxData.add(instance);
+	}
+
+	public int GetNumUnlocksForType(InfoType type) 
+	{
+		int n = 0;
+		if(type instanceof PaintableType)
+		{
+			for(RewardBoxInstance instance : rewardBoxData)
+			{
+				for(int i = 0; i < ((PaintableType) type).paintjobs.size(); i++)
+				{
+					if(instance.unlockHash == ((PaintableType) type).paintjobs.get(i).hashCode())
+					{
+						n++;
+					}
+				}
+			}
+		}
+		return n;
 	}
 }

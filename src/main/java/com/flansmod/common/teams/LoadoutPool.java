@@ -41,6 +41,7 @@ public class LoadoutPool extends InfoType
 	public ArrayList<LoadoutEntryInfoType>[] unlocks;
 	public PlayerLoadout[] defaultLoadouts = new PlayerLoadout[5];
 	public RewardBox[] rewardBoxes = new RewardBox[3];
+	public ArrayList<RewardBox>[] rewardsPerLevel;
 	
 	public int[] slotUnlockLevels = new int[] { 0, 0, 5, 10, 20 };
 	
@@ -74,9 +75,11 @@ public class LoadoutPool extends InfoType
 		{
 			maxLevel = Integer.parseInt(split[1]);
 			XPPerLevel = new int[maxLevel];
+			rewardsPerLevel = new ArrayList[maxLevel];
 			for(int i = 0; i < maxLevel; i++)
 			{
 				XPPerLevel[i] = 10 * i;
+				rewardsPerLevel[i] = new ArrayList<RewardBox>();
 			}
 		}
 		else if(KeyMatches(split, "XPPerLevel"))
@@ -137,6 +140,24 @@ public class LoadoutPool extends InfoType
 			}
 			FlansMod.Assert(slotAvailable, "Trying to insert more than 3 reward box types. No support for this yet");
 		}
+		else if(KeyMatches(split, "AddReward"))
+		{
+			RewardBox box = RewardBox.GetRewardBox(split[1]);
+			boolean found = false;
+			for(int i = 0; i < 3; i++)
+			{
+				if(box == rewardBoxes[i])
+					found = true;
+			}
+			if(!found)
+			{
+				FlansMod.Assert(false, "Trying to give player reward box invalid for this loadout pool");
+			}
+			else
+			{
+				rewardsPerLevel[Integer.parseInt(split[2]) - 1].add(box);
+			}
+		}
 	}
 	
 	private boolean ParseLoadoutEntry(String keyword, EnumLoadoutSlot slot, String[] split)
@@ -178,9 +199,9 @@ public class LoadoutPool extends InfoType
 	
 	public int GetXPForLevel(int level)
 	{
-		if(level >= 0 && level < maxLevel)
+		if(level > 0 && level <= maxLevel)
 		{
-			return XPPerLevel[level];
+			return XPPerLevel[level - 1];
 		}
 		
 		return -1;
