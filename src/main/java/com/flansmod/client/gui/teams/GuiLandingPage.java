@@ -48,6 +48,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		if(data == null || pool == null)
 		{
 			FlansMod.log("Problem in landing page!");
+			mc.displayGuiScreen(null);
 			return;
 		}
 		
@@ -116,6 +117,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		if(data == null || pool == null)
 		{
 			FlansMod.log("Problem in landing page!");
+			mc.displayGuiScreen(null);
 			return;
 		}
 		

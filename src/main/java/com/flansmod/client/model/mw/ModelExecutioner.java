@@ -71,11 +71,8 @@ public class ModelExecutioner extends ModelGun //Same as Filename
 		breakActionModel[2].addShapeBox(2F, 4F, 0F, 6, 1, 1, 0F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F, 0F, 0F, -0.05F); // Box 0
 		breakActionModel[2].setRotationPoint(0F, 0F, 0F);
 
-
-
-		//translateAll(0F, 0F, 0F);
-
-
-		//flipAll();
+		animationType = EnumAnimationType.BREAK_ACTION;
+		breakAngle = 60F;
+		barrelBreakPoint = new Vector3f(3F / 16F, 2F / 16F, 0F);
 	}
 }

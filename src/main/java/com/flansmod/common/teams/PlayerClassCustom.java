@@ -17,6 +17,7 @@ public class PlayerClassCustom implements IPlayerClass
 	public int index;
 	public PlayerLoadout loadout;
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
+	public ItemStack chest = null;
 	
 	public PlayerClassCustom(int i, PlayerLoadout playerLoadout) 
 	{
@@ -28,16 +29,24 @@ public class PlayerClassCustom implements IPlayerClass
 			ItemStack stack = playerLoadout.slots[n];
 			if(stack != null)
 			{
-				startingItems.add(stack);
-				
-				if(stack.getItem() instanceof IFlanItem)
+				// For now, just support chest slot overrides
+				if(n == EnumLoadoutSlot.armour.ordinal())
 				{
-					LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
-					if(loadoutEntry != null)
+					chest = stack;
+				}
+				else
+				{
+					startingItems.add(stack);
+					
+					if(stack.getItem() instanceof IFlanItem)
 					{
-						for(ItemStack extraStack : loadoutEntry.extraItems)						
+						LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
+						if(loadoutEntry != null)
 						{
-							startingItems.add(extraStack);
+							for(ItemStack extraStack : loadoutEntry.extraItems)						
+							{
+								startingItems.add(extraStack);
+							}
 						}
 					}
 				}
@@ -66,7 +75,7 @@ public class PlayerClassCustom implements IPlayerClass
 	@Override
 	public ItemStack GetChest() 
 	{
-		return null;
+		return chest;
 	}
 
 	@Override

@@ -91,11 +91,14 @@ public class ModelJury extends ModelGun //Same as Filename
 		revolverBarrelModel[0].addShapeBox(0F, 0F, 0F, 2, 1, 1, 0F, 0F, 0.5F, 0.25F, 0F, 0.5F, 0.25F, 0F, 0.5F, 0.25F, 0F, 0.5F, 0.25F, 0F, 0F, 0.25F, 0F, 0F, 0.25F, 0F, 0F, 0.25F, 0F, 0F, 0.25F); // Import ImportImport
 		revolverBarrelModel[0].setRotationPoint(2F, 2.75F, -0.5F);
 
-
-
-		//translateAll(0F, 1F, 5F);
-
-
-		//flipAll();
+		barrelAttachPoint = new Vector3f(9.5F / 16F, 2.5F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(5F / 16F, 4.25F / 16F, 0F);
+		
+		animationType = EnumAnimationType.REVOLVER;
+		revolverFlipAngle = -25.0f;
+		tiltGunTime = 0.1F;
+		unloadClipTime = 0.3F;
+		loadClipTime = 0.5F;
+		untiltGunTime = 0.1F;
 	}
 }

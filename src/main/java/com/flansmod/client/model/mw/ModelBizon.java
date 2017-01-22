@@ -33,7 +33,7 @@ public class ModelBizon extends ModelGun
 		scopeAttachPoint = new Vector3f(7.5F / 16F, 5F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(10F / 16F, 2F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(14F / 16F, 4F / 16F, 0F);
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];

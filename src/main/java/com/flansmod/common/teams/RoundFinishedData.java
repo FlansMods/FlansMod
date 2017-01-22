@@ -132,8 +132,8 @@ public class RoundFinishedData
 		{
 			votingOptions[i] = new VotingOption(rounds[i].gametype.name,
 							rounds[i].map.name,
-							rounds[i].teams[0].name,
-							rounds[i].teams[1].name);
+							"\u00a7" + rounds[i].teams[0].textColour + rounds[i].teams[0].shortName,
+							"\u00a7" + rounds[i].teams[1].textColour + rounds[i].teams[1].shortName);
 		}
 	}
 }

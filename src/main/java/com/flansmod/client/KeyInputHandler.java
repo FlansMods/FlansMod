@@ -15,9 +15,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.GuiTeamSelect;
+import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -96,7 +98,7 @@ public class KeyInputHandler
 		//Handle universal keys
 		if(teamsMenuKey.isPressed())
 		{
-			mc.displayGuiScreen(new GuiTeamSelect());
+			mc.displayGuiScreen(new GuiLandingPage());
 			return;
 		}
 		if(teamsScoresKey.isPressed())

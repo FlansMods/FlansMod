@@ -2,6 +2,7 @@ Name Colt Python
 ShortName coltPython
 //The ammo this gun uses (shortName)
 Ammo 357Magnum
+Ammo juryAmmo
 Icon ColtPython
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

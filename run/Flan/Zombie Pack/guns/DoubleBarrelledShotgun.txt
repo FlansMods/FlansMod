@@ -19,7 +19,7 @@ Recoil 12
 //Damage in half hearts
 Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 75
+Accuracy 24
 //Number of bullet entities to create, useful for shotguns, defaults to 1
 NumBullets 1
 //For guns in which the magazine is integrated

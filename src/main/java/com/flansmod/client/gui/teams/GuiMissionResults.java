@@ -377,7 +377,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		}
 		
 		// Draw text
-		
+		drawString(fontRendererObj, (ClientTeamsData.timeLeftInStage / 20) + "", guiOriginX + 12, guiOriginY + 12, 0xffffff);
 		drawCenteredString(fontRendererObj, "ROUND OVER", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.LEVEL_UP.ordinal() && state.ordinal() <= EnumResultsState.REVEAL_UNLOCK4.ordinal())

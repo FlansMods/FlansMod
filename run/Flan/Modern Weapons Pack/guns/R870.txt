@@ -23,7 +23,7 @@ Damage 1
 //For guns in which the magazine is integrated
 LoadIntoGun 7
 //The higher this value, the more the bullets spread
-Accuracy 20
+Accuracy 10
 //Time in ticks between rounds
 ShootDelay 15
 ShootSound R870Shoot

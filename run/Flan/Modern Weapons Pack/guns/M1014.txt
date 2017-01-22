@@ -23,7 +23,7 @@ LoadIntoGun 4
 //Damage in half hearts
 Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 20
+Accuracy 12
 //Time in ticks between rounds
 ShootDelay 18
 ShootSound M1014Shoot

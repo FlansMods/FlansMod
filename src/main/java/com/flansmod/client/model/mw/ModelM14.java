@@ -58,7 +58,7 @@ public class ModelM14 extends ModelGun
 		gunModel[7].setRotationPoint(9F, -3.2F, -1.2F);		
 		
 		//Scope
-		scopeAttachPoint = new Vector3f(0F / 16F, 6.25F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(0F / 16F, 12.5F / 16F, 0F);
 		
 		defaultScopeModel = new ModelRendererTurbo[1];
 		
@@ -80,7 +80,7 @@ public class ModelM14 extends ModelGun
 		stockAttachPoint = new Vector3f(1F / 16F, 4F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(25F / 16F, 5.25F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(25F / 16F, 11.5F / 16F, 0F);
 		
 		//Grip
 		gripAttachPoint = new Vector3f(10F / 16F, 3F / 16F, 0F);

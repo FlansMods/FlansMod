@@ -74,12 +74,21 @@ AddSecondary flanMWACOG 10
 AddSecondary flanMWAutoFire 12
 AddSecondary flanMWLongBarrel 15
 AddSecondary flanMWSingleFire 18
+// Melee
+AddMelee mwKnife 0
+// Armour
+AddArmour blackSweater 0
+AddArmour bulldozerBody 0
+AddArmour juggernautBodyBrown 0
+AddArmour juggernautBody 0
+AddArmour SWATBody 0
+AddArmour bodyArmour 0
 // Default loadouts
-DefaultLoadout 1 ak47 m9 m67
-DefaultLoadout 2 rpd ak74 m67
-DefaultLoadout 3 dragunov makarov mwMedicBag
-DefaultLoadout 4 g36 judge molotovCocktail
-DefaultLoadout 5 minigun desertEagle mwAmmoBag
+DefaultLoadout 1 ak47 m9 m67 mwKnife
+DefaultLoadout 2 rpd ak74 m67 mwKnife
+DefaultLoadout 3 dragunov makarov mwMedicBag mwKnife
+DefaultLoadout 4 g36 judge molotovCocktail mwKnife
+DefaultLoadout 5 minigun desertEagle mwAmmoBag mwKnife
 // Reward boxes
 AddRewardBox modernGreen
 AddRewardBox modernRed

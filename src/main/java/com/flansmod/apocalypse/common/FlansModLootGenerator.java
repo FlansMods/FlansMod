@@ -304,11 +304,11 @@ public class FlansModLootGenerator
 	{
 		switch(EnumType.getFromObject(type))
 		{
-		case vehicle: return vehicleEngines.size() > 0 ? vehicleEngines.get(rand.nextInt(vehicleEngines.size())) : null;
-		case plane: return planeEngines.size() > 0 ? planeEngines.get(rand.nextInt(planeEngines.size())) : null;
-		case mecha: return mechaEngines.size() > 0 ? mechaEngines.get(rand.nextInt(mechaEngines.size())) : null;
+			case vehicle: return vehicleEngines.size() > 0 ? vehicleEngines.get(rand.nextInt(vehicleEngines.size())) : null;
+			case plane: return planeEngines.size() > 0 ? planeEngines.get(rand.nextInt(planeEngines.size())) : null;
+			case mecha: return mechaEngines.size() > 0 ? mechaEngines.get(rand.nextInt(mechaEngines.size())) : null;
+			default: return null;
 		}
-		return null;
 	}
 
 	public PlaneType getRandomPlane(Random rand) 

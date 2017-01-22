@@ -151,8 +151,6 @@ public class GunType extends PaintableType implements IScope
 	/** For guns with 3D models */
 	@SideOnly(Side.CLIENT)
 	public ModelGun model;
-	/** For making detailed models and scaling down */
-	public float modelScale = 1F;
 	
 	//Attachment settings
 	/** If this is true, then all attachments are allowed. Otherwise the list is checked */

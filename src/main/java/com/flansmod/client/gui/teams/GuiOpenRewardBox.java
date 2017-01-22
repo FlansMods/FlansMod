@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.ModuloHelper;
@@ -13,12 +14,14 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class GuiOpenRewardBox extends GuiTeamsBase 
 {
@@ -34,7 +37,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/OpenCrates.png");	
 	private static final int WIDTH = 196, HEIGHT = 200;
 	private static final int WAITING_FOR_SERVER = -1;
-	private static int spinTime = 20, slowdownTime = 180;
+	private static int spinTime = 30, slowdownTime = 130;
 	private static Random gunScrambler = new Random();
 	private float spinSpeed = 0.555555555f;
 	
@@ -144,14 +147,24 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 			case SLOWING_DOWN:
 			{
 				spinSpeed += Acceleration();
-				if(spinSpeed <= 0.0f)
+				if(spinSpeed <= -Acceleration())
 				{
 					spinSpeed = 0.0f;
 					SwitchToState(EnumPageState.STOPPED);
 				}
 				int timeInState = slowdownTime - timeLeftInState;
+				int preIndex = MathHelper.floor_float(spinner) % options.size();
 				spinner = target + timeInState * InitialVelocity() + 0.5f * Acceleration() * timeInState * timeInState;
+				int postIndex = MathHelper.floor_float(spinner) % options.size();
+				
+				if(preIndex != postIndex)
+				{
+					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+							new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 10F, 1.0f, 
+									(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
+				}
 				break;
+				
 			}
 			case STOPPED:
 			{
@@ -167,7 +180,17 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	
 	private void SimulateSpinner()
 	{
+		int preIndex = MathHelper.floor_float(spinner) % options.size();
 		spinner += spinSpeed;
+		int postIndex = MathHelper.floor_float(spinner) % options.size();
+		
+		if(preIndex != postIndex)
+		{
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+					new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 10F, 1.0f, 
+							(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
+		}
+		
 		if(spinner > options.size())
 		{
 			spinner -= options.size();

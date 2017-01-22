@@ -74,12 +74,15 @@ public class ModelJudge extends ModelGun //Same as Filename
 
 		revolverBarrelModel[0].addBox(2.5F, 1.5F, -1F, 4, 2, 2, 0F); // Import Import
 		revolverBarrelModel[0].setRotationPoint(0F, 0F, 0F);
-
-
-
-		//translateAll(0F, 1F, 5F);
-
-
-		//flipAll();
+		
+		gripAttachPoint = new Vector3f(5F / 16F, 1F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(5F / 16F, 4F / 16F, 0F);
+		
+		animationType = EnumAnimationType.REVOLVER;
+		revolverFlipAngle = -40.0f;
+		tiltGunTime = 0.2F;
+		unloadClipTime = 0.2F;
+		loadClipTime = 0.4F;
+		untiltGunTime = 0.2F;
 	}
 }

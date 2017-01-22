@@ -13,7 +13,7 @@ Icon Judge
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 126
+ReloadTime 90
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 10
 //Number of bullet entities to create, useful for shotguns, defaults to 1
@@ -23,11 +23,11 @@ Damage 1
 //For guns in which the magazine is integrated
 LoadIntoGun 5
 //The higher this value, the more the bullets spread
-Accuracy 25
+Accuracy 18
 //Time in ticks between rounds
 ShootDelay 6
 ShootSound R870Shoot
-ReloadSound W1200Reload
+ReloadSound JudgeReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 7.0
@@ -44,7 +44,7 @@ Texture Judge
 //Attachment Settings
 AllowAllAttachments false
 //List here all the attachments allowed on this gun by shortName and separated by spaces
-AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWForegrip flanMWFlashlight
+AllowAttachments flanMWRedDot flanMWACOG flanMW4xScope flanMWFlashlight
 AllowBarrelAttachments false
 AllowScopeAttachments true
 AllowStockAttachments false

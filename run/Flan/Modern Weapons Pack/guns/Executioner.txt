@@ -1,4 +1,4 @@
-Name Sawn-off "Executioner" Shotgun
+Name Executioner Shotgun
 ShortName executioner
 //The ammo this gun uses (shortName)
 Ammo w1200Ammo
@@ -19,15 +19,15 @@ Recoil 20
 //Damage in half hearts
 Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 75
+Accuracy 20
 //Number of bullet entities to create, useful for shotguns, defaults to 1
 NumBullets 1
 //For guns in which the magazine is integrated
 LoadIntoGun 2
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound W1200Shoot
-ReloadSound W1200Reload
+ShootSound ExecutionerShoot
+ReloadSound ExecutionerReload
 Mode SemiAuto
 OneHanded True
 //Bullet speed, default 3.0

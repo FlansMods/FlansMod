@@ -4,6 +4,11 @@
 		"sounds" : [ "flansmod:bullet1", "flansmod:bullet2", "flansmod:bullet3", "flansmod:bullet4" ]
 	},
 	
+	"UnlockNotch": {
+		"category" : "player",
+		"sounds" : [ "flansmod:UnlockNotch" ]
+	},
+	
 	"bulletFlyby": {
 		"category" : "player",
 		"sounds" : [ "flansmod:bulletair1", "flansmod:bulletair2", "flansmod:bulletair3", "flansmod:bulletair4", "flansmod:bulletair5", "flansmod:bulletair6", "flansmod:bulletair7" ]

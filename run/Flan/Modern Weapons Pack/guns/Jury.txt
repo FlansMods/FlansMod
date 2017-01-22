@@ -1,7 +1,8 @@
-Name Mateba "Jury" Autorevolver
+Name Jury Autorevolver
 ShortName jury
 //The ammo this gun uses (shortName)
 Ammo 357Magnum
+Ammo juryAmmo
 Icon Jury
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -17,8 +18,8 @@ LoadIntoGun 6
 Accuracy 4
 //Time in ticks between rounds
 ShootDelay 2
-ShootSound ColtPythonShoot
-ReloadSound ColtPythonReload
+ShootSound JuryShoot
+ReloadSound JuryReload
 Mode SemiAuto
 OneHanded True
 //Bullet speed, default 3.0

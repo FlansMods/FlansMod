@@ -116,7 +116,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 	}
 	
 	@Override
-	public float getFluidHeightAverage(float[] height)
+	public float getFluidHeightAverage(float... height)
 	{
 		float total = 0;
 		int count = 0;

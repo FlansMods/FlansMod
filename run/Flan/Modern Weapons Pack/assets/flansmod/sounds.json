@@ -370,7 +370,35 @@
 		"category" : "player",
 		"sounds" : [ "flansmod:TurretTraverse2" ]
 	},
+	
+	"JudgeReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JudgeReload" ]
+	},
 
+		
+	"JuryReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JuryReload" ]
+	},
+
+		
+	"JuryShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:JuryShoot" ]
+	},
+
+	"ExecutionerShoot": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ExecutionerShoot" ]
+	},
+
+	"ExecutionerReload": {
+		"category" : "player",
+		"sounds" : [ "flansmod:ExecutionerReload" ]
+	},
+
+	
 	"JetIdle": {
 		"category" : "player",
 		"sounds" : [ "flansmod:JetIdle" ]

@@ -38,10 +38,10 @@ public class ModelR700 extends ModelGun
 		defaultScopeModel[4] = new ModelRendererTurbo(this, 12, 13, textureX, textureY);
 		defaultScopeModel[4].addBox(3F, 2.5F, -0.5F, 1, 2, 1);
 		
-		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(3F / 16F, 7.5F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(17F / 16F, 4.5F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(17F / 16F, 7.0F / 16F, 0F);
 		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];

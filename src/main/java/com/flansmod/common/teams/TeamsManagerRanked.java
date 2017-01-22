@@ -182,12 +182,8 @@ public class TeamsManagerRanked extends TeamsManager
 					AwardXP(attacker, currentPool.XPForKill);
 					AwardXP(victim, currentPool.XPForDeath);
 				}
-				
 			}
-			
-			
 		}
-		
 	}
 	
 	public static void AwardXP(EntityPlayerMP player, int amount)

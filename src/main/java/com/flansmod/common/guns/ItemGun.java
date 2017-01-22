@@ -420,7 +420,7 @@ public class ItemGun extends Item implements IPaintableItem
 							Vector3f rayTraceOrigin = new Vector3f(player.getPositionEyes(0.0f));
 							Vector3f rayTraceDirection = new Vector3f(player.getLookVec());
 							
-							float spread = 0.005f * type.getSpread(gunstack) * shootableType.bulletSpread;
+							float spread = 0.0025f * type.getSpread(gunstack) * shootableType.bulletSpread;
 							
 							rayTraceDirection.x += (float)world.rand.nextGaussian() * spread;
 							rayTraceDirection.y += (float)world.rand.nextGaussian() * spread;

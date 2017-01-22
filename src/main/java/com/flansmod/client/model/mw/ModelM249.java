@@ -103,7 +103,7 @@ public class ModelM249 extends ModelGun
 		barrelAttachPoint = new Vector3f(18F / 16F, 4F / 16F, 0F);
 		
 		//Grip
-		gripAttachPoint = new Vector3f(8F / 16F, 0.5F / 16F, 0F);
+		gripAttachPoint = new Vector3f(6F / 16F, -1.5F / 16F, 0F);
 		
 		defaultGripModel = new ModelRendererTurbo[4];
 		

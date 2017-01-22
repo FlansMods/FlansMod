@@ -50,21 +50,23 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 	        
 	        switch(EnumFacing.HORIZONTALS[holder.getBlockMetadata()])
 	        {
-			case NORTH:
-				GlStateManager.translate(-1F, 0F, 0F);
-				GlStateManager.rotate(0F, 0F, 1F, 0F);
-				break;
-			case EAST:
-				GlStateManager.translate(-1F, 0F, 1F);
-				GlStateManager.rotate(90F, 0F, 1F, 0F);
-				break;
-			case SOUTH:
-				GlStateManager.translate(0F, 0F, 1F);
-				GlStateManager.rotate(180F, 0F, 1F, 0F);
-				break;
-			case WEST:
-				GlStateManager.rotate(270F, 0F, 1F, 0F);
-				break;  
+				case NORTH:
+					GlStateManager.translate(-1F, 0F, 0F);
+					GlStateManager.rotate(0F, 0F, 1F, 0F);
+					break;
+				case EAST:
+					GlStateManager.translate(-1F, 0F, 1F);
+					GlStateManager.rotate(90F, 0F, 1F, 0F);
+					break;
+				case SOUTH:
+					GlStateManager.translate(0F, 0F, 1F);
+					GlStateManager.rotate(180F, 0F, 1F, 0F);
+					break;
+				case WEST:
+					GlStateManager.rotate(270F, 0F, 1F, 0F);
+					break;  
+				default:
+					break;
 	        }
 	        
 	        model.render();

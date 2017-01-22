@@ -44,7 +44,7 @@ public class ModelM40A3 extends ModelGun
 		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
 		
 		//Barrel		
-		barrelAttachPoint = new Vector3f(17F / 16F, 4.5F / 16F, 0F);
+		barrelAttachPoint = new Vector3f(17F / 16F, 7.0F / 16F, 0F);
 		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
