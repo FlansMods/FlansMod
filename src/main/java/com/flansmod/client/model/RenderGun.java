@@ -359,6 +359,7 @@ public class RenderGun implements IItemRenderer
 				
 		//Load texture
 		//renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
+		Paintjob paintjob = type.getPaintjob(item.getItemDamage());
 		if(bindTextures)
 		{
 			if(PaintableType.HasCustomPaintjob(item))
@@ -367,7 +368,7 @@ public class RenderGun implements IItemRenderer
 			}
 			else
 			{
-				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getItemDamage())));
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
 			}
 		}
 		
@@ -638,8 +639,8 @@ public class RenderGun implements IItemRenderer
 		{
 			GL11.glPushMatrix();
 			{
-				Paintjob paintjob = scopeAttachment.getPaintjob(scopeItemStack.getItemDamage());
-				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+				Paintjob scopepaintjob = scopeAttachment.getPaintjob(scopeItemStack.getItemDamage());
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(scopepaintjob));
 				if(model.scopeIsOnBreakAction)
 				{
 					GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
@@ -664,8 +665,8 @@ public class RenderGun implements IItemRenderer
 		{
 			GL11.glPushMatrix();
 			{
-				Paintjob paintjob = gripAttachment.getPaintjob(gripItemStack.getItemDamage());
-				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+				Paintjob grippaintjob = gripAttachment.getPaintjob(gripItemStack.getItemDamage());
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(grippaintjob));
 				GL11.glTranslatef(model.gripAttachPoint.x * type.modelScale, model.gripAttachPoint.y * type.modelScale, model.gripAttachPoint.z * type.modelScale);
 				if(model.gripIsOnPump)
 					GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
@@ -683,8 +684,8 @@ public class RenderGun implements IItemRenderer
 		{
 			GL11.glPushMatrix();
 			{
-				Paintjob paintjob = barrelAttachment.getPaintjob(barrelItemStack.getItemDamage());
-				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+				Paintjob barrelpaintjob = barrelAttachment.getPaintjob(barrelItemStack.getItemDamage());
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(barrelpaintjob));
 				GL11.glTranslatef(model.barrelAttachPoint.x * type.modelScale, model.barrelAttachPoint.y * type.modelScale, model.barrelAttachPoint.z * type.modelScale);
 				GL11.glScalef(barrelAttachment.modelScale, barrelAttachment.modelScale, barrelAttachment.modelScale);
 				ModelAttachment barrelModel = barrelAttachment.model;
@@ -700,8 +701,8 @@ public class RenderGun implements IItemRenderer
 		{
 			GL11.glPushMatrix();
 			{
-				Paintjob paintjob = stockAttachment.getPaintjob(stockItemStack.getItemDamage());
-				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(paintjob));
+				Paintjob stockpaintjob = stockAttachment.getPaintjob(stockItemStack.getItemDamage());
+				renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(stockpaintjob));
 				GL11.glTranslatef(model.stockAttachPoint.x * type.modelScale, model.stockAttachPoint.y * type.modelScale, model.stockAttachPoint.z * type.modelScale);
 				GL11.glScalef(stockAttachment.modelScale, stockAttachment.modelScale, stockAttachment.modelScale);
 				ModelAttachment stockModel = stockAttachment.model;

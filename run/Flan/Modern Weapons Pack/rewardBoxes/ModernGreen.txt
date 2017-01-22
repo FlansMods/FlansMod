@@ -37,3 +37,4 @@ AddPaintjob uncommon m21 M21_RoyalGreen
 AddPaintjob rare m14 M14_CluckCluck
 AddPaintjob rare dragunov Dragunov_Rainbow 
 // Legendaries
+AddPaintjob legendary desertEagle DesertEagle_Messenger

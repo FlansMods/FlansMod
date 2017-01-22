@@ -48,5 +48,6 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob M249_White M249_White white 2 red 1
 Paintjob M249_Hazard M249_Hazard white 1 orange 1 black 1
+Paintjob M249_Platypus M249_Platypus brown 2 orange 1
 //Description - note the ammo type
 Description Ammo Type : Belt-Fed

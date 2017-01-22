@@ -34,7 +34,7 @@ AddPaintjob uncommon minigun Minigun_Murica
 AddPaintjob uncommon gl1 GL1_Static
 AddPaintjob uncommon m40a3 M40A3_Static
 AddPaintjob uncommon dragunov Dragunov_RibbitRibbit
+AddPaintjob uncommon m249 M249_Platypus
 // Rares
-AddPaintjob rare minigun Minigun_Rainbow
-AddPaintjob rare dragunov Dragunov_Rainbow 
+AddPaintjob rare desertEagle DesertEagle_Gold
 // Legendaries
