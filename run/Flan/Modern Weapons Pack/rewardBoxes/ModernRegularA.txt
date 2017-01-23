@@ -1,9 +1,9 @@
 //Naming
-Name Red Present
-ShortName modernRed
-Icon RewardBox_Modern_Red
+Name Alpha Paint Box
+ShortName modernRegularA
+Icon RewardBox_Modern_Regular
 // Weighting
-RarityWeight common 1.0
+RarityWeight common 1.5
 RarityWeight uncommon 1.0
 RarityWeight rare 0.5
 RarityWeight legendary 0.25
@@ -11,36 +11,55 @@ RarityWeight legendary 0.25
 AddPaintjob common ak47 AK47_Birch
 AddPaintjob common m16a4 M16A4_Howl
 AddPaintjob common acr ACR_Red
+AddPaintjob common acr ACR_Aquatic
 AddPaintjob common fnscar FNSCAR_TwoTone
+AddPaintjob common g36 G36_Prismarine
+AddPaintjob common g3 G3_Blue
 AddPaintjob common m14 M14_Red
 AddPaintjob common m1014 M1014_White
+AddPaintjob common w1200 W1200_Blue
 AddPaintjob common r870 R870_Redwood
 AddPaintjob common judge Judge_Black
 AddPaintjob common m9 M9_Sand
+AddPaintjob common jury Jury_Thunderbolt
+AddPaintjob common glock Glock_Fade
 AddPaintjob common makarov Makarov_Brown
 AddPaintjob common desertEagle DesertEagle_Neon
+AddPaintjob common p90 P90_Aqua
 AddPaintjob common bizon Bizon_Orange
 AddPaintjob common rpd RPD_Birch
 AddPaintjob common l86 L86_Red
 AddPaintjob common m249 M249_Hazard
 AddPaintjob common minigun Minigun_Candy
+AddPaintjob common gl1 GL1_Blackwood
 AddPaintjob common gl6 GL6_Red
 AddPaintjob common r700 R700_Red
 AddPaintjob common dragunov Dragunov_Grey
 AddPaintjob common m21 M21_Red
+AddPaintjob common m40a3 M40A3_Ice
 AddPaintjob common barrett Barrett_Hazard
 // Uncommons
 AddPaintjob uncommon ak47 AK47_Redline
 AddPaintjob uncommon m16a4 M16A4_Orange
-AddPaintjob uncommon fnscar FNSCAR_RedWhite
-AddPaintjob uncommon m1014 M1014_RedWhite
+AddPaintjob uncommon acr ACR_Electric
+AddPaintjob uncommon r700 R700_Markings
 AddPaintjob uncommon glock Glock_Cottonmouth
 AddPaintjob uncommon makarov Makarov_Cobra
 AddPaintjob uncommon desertEagle DesertEagle_CoralSnake
-AddPaintjob uncommon p90 P90_Purple
+AddPaintjob uncommon fnscar FNSCAR_RedWhite
+AddPaintjob uncommon m1014 M1014_RedWhite
 AddPaintjob uncommon bizon Bizon_RedWhite
+AddPaintjob uncommon w1200 W1200_Purple
+AddPaintjob uncommon p90 P90_Purple
 AddPaintjob uncommon barrett Barrett_Purple
+AddPaintjob uncommon executioner Executioner_Order
+AddPaintjob uncommon judge Judge_Order
+AddPaintjob uncommon jury Jury_Order
+AddPaintjob uncommon rpd RPD_Static
+AddPaintjob uncommon gl1 GL1_Static
+AddPaintjob uncommon m40a3 M40A3_Static
 // Rares
 AddPaintjob rare acr ACR_QuackQuack
 AddPaintjob rare minigun Minigun_Rainbow
+AddPaintjob rare desertEagle DesertEagle_Gold
 // Legendaries

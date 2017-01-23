@@ -1,0 +1,51 @@
+//Naming
+Name Premium Paint Box
+ShortName modernPremium
+Icon RewardBox_Modern_Premium
+// Weighting
+RarityWeight common 0.0
+RarityWeight uncommon 1.0
+RarityWeight rare 1.0
+RarityWeight legendary 0.25
+// Uncommons
+AddPaintjob uncommon ak47 AK47_Redline
+AddPaintjob uncommon m16a4 M16A4_Orange
+AddPaintjob uncommon fnscar FNSCAR_RedWhite
+AddPaintjob uncommon m1014 M1014_RedWhite
+AddPaintjob uncommon glock Glock_Cottonmouth
+AddPaintjob uncommon makarov Makarov_Cobra
+AddPaintjob uncommon desertEagle DesertEagle_CoralSnake
+AddPaintjob uncommon p90 P90_Purple
+AddPaintjob uncommon bizon Bizon_RedWhite
+AddPaintjob uncommon barrett Barrett_Purple
+AddPaintjob uncommon acr ACR_Electric
+AddPaintjob uncommon m1014 M1014_Giraffe
+AddPaintjob uncommon judge Judge_Order
+AddPaintjob uncommon w1200 W1200_Zebra
+AddPaintjob uncommon executioner Executioner_Order
+AddPaintjob uncommon jury Jury_Order
+AddPaintjob uncommon rpd RPD_Static
+AddPaintjob uncommon minigun Minigun_Murica
+AddPaintjob uncommon gl1 GL1_Static
+AddPaintjob uncommon m40a3 M40A3_Static
+AddPaintjob uncommon dragunov Dragunov_RibbitRibbit
+AddPaintjob uncommon m249 M249_Platypus
+AddPaintjob uncommon acr ACR_RoyalGreen
+AddPaintjob uncommon fnscar FNSCAR_VroomVroom
+AddPaintjob uncommon m14 M14_RoyalGreen
+AddPaintjob uncommon r870 R870_VroomVroom
+AddPaintjob uncommon judge Judge_Chaos
+AddPaintjob uncommon executioner Executioner_Chaos
+AddPaintjob uncommon m9 M9_Venom
+AddPaintjob uncommon jury Jury_Chaos
+AddPaintjob uncommon glock Glock_Venom
+AddPaintjob uncommon desertEagle DesertEagle_Venom
+AddPaintjob uncommon m21 M21_RoyalGreen
+// Rares
+AddPaintjob rare acr ACR_QuackQuack
+AddPaintjob rare minigun Minigun_Rainbow
+AddPaintjob rare m14 M14_CluckCluck
+AddPaintjob rare dragunov Dragunov_Rainbow 
+AddPaintjob rare desertEagle DesertEagle_Gold
+// Legendaries
+AddPaintjob legendary desertEagle DesertEagle_Messenger

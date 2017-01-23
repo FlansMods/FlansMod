@@ -172,7 +172,7 @@ public class FlansMod
 	public static BlockPaintjobTable paintjobTable;
 	
 	private static Random rewardsRandom = new Random();
-	public static int Pick(int numItems) { return rewardsRandom.nextInt(numItems); }
+	public static float Pick(float totalWeight) { return rewardsRandom.nextFloat() * totalWeight; }
 
 	/** The mod pre-initialiser method */
 	@EventHandler

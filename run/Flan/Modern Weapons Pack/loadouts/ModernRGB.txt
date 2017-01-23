@@ -1,6 +1,6 @@
 //Naming
 Name Modern Loadout
-ShortName modernLoadout
+ShortName modernLoadoutRGB
 MaxLevel 20
 XPForKill 10
 XPForDeath 5
@@ -90,47 +90,47 @@ DefaultLoadout 3 dragunov makarov mwMedicBag mwKnife
 DefaultLoadout 4 g36 judge molotovCocktail mwKnife
 DefaultLoadout 5 minigun desertEagle mwAmmoBag mwKnife
 // Reward boxes
-AddRewardBox modernRegularA
-AddRewardBox modernRegularB
-AddRewardBox modernPremium
+AddRewardBox modernGreen
+AddRewardBox modernRed
+AddRewardBox modernBlue
 // Awarding
-// Alternate AB, with 2 per level, expect on level 10, where there are 3 other unlocks
-AddReward modernRegularA 1
-AddReward modernRegularB 1
-AddReward modernRegularA 2
-AddReward modernRegularB 2
-AddReward modernRegularA 3
-AddReward modernPremium 3
-AddReward modernRegularB 4
-AddReward modernRegularA 4
-AddReward modernRegularB 5
-AddReward modernRegularA 5
-AddReward modernRegularB 6
-AddReward modernPremium 6
-AddReward modernRegularA 7
-AddReward modernRegularB 7
-AddReward modernRegularA 8
-AddReward modernRegularB 8
-AddReward modernRegularA 9
-AddReward modernRegularB 9
-AddReward modernPremium 10
-AddReward modernRegularA 11
-AddReward modernRegularB 11
-AddReward modernRegularA 12
-AddReward modernRegularB 12
-AddReward modernRegularA 13
-AddReward modernPremium 13
-AddReward modernRegularB 14
-AddReward modernRegularA 14
-AddReward modernRegularB 15
-AddReward modernRegularA 15
-AddReward modernRegularB 16
-AddReward modernPremium 16
-AddReward modernRegularA 17
-AddReward modernRegularB 17
-AddReward modernRegularA 18
-AddReward modernRegularB 18
-AddReward modernRegularA 19
-AddReward modernRegularB 19
-AddReward modernPremium 20
-AddReward modernPremium 20
+// Alternate red green blue, with 2 per level, expect on level 10, where there are 3 other unlocks
+AddReward modernRed 1
+AddReward modernGreen 1
+AddReward modernBlue 2
+AddReward modernRed 2
+AddReward modernGreen 3
+AddReward modernBlue 3
+AddReward modernRed 4
+AddReward modernGreen 4
+AddReward modernBlue 5
+AddReward modernRed 5
+AddReward modernGreen 6
+AddReward modernBlue 6
+AddReward modernRed 7
+AddReward modernGreen 7
+AddReward modernBlue 8
+AddReward modernRed 8
+AddReward modernGreen 9
+AddReward modernBlue 9
+AddReward modernRed 10
+AddReward modernGreen 11
+AddReward modernBlue 11
+AddReward modernRed 12
+AddReward modernGreen 12
+AddReward modernBlue 13
+AddReward modernRed 13
+AddReward modernGreen 14
+AddReward modernBlue 14
+AddReward modernRed 15
+AddReward modernGreen 15
+AddReward modernBlue 16
+AddReward modernRed 16
+AddReward modernGreen 17
+AddReward modernBlue 17
+AddReward modernRed 18
+AddReward modernGreen 18
+AddReward modernBlue 19
+AddReward modernRed 19
+AddReward modernGreen 20
+AddReward modernBlue 20

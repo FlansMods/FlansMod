@@ -1040,13 +1040,20 @@ public class TeamsManager
 		//3 : Player has only just joined
 		else if(data.team == null)
 		{
-			messageAll(player.getName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
-			currentRound.gametype.playerEnteredTheGame(player, data.newTeam, playerClass);
-			data.newTeam.addPlayer(player);
-			data.team = data.newTeam;
-			data.newPlayerClass = playerClass;
-			currentRound.gametype.playerChoseNewClass(player, playerClass);
-			respawnPlayer(player, true);
+			if(data.newTeam == null)
+			{
+				FlansMod.Assert(false, "NULL TEAM");
+			}
+			else
+			{
+				messageAll(player.getName() + " joined \u00a7" + data.newTeam.textColour + data.newTeam.name);
+				currentRound.gametype.playerEnteredTheGame(player, data.newTeam, playerClass);
+				data.newTeam.addPlayer(player);
+				data.team = data.newTeam;
+				data.newPlayerClass = playerClass;
+				currentRound.gametype.playerChoseNewClass(player, playerClass);
+				respawnPlayer(player, true);
+			}
 		}
 	}
 		

@@ -1,9 +1,9 @@
 //Naming
-Name Green Present
-ShortName modernGreen
-Icon RewardBox_Modern_Green
+Name Beta Paint Box
+ShortName modernRegularB
+Icon RewardBox_Modern_Deluxe
 // Weighting
-RarityWeight common 1.0
+RarityWeight common 1.5
 RarityWeight uncommon 1.0
 RarityWeight rare 0.5
 RarityWeight legendary 0.25
@@ -13,31 +13,43 @@ AddPaintjob common m16a4 M16A4_Green
 AddPaintjob common g36 G36_Devgru
 AddPaintjob common g3 G3_Quartz
 AddPaintjob common fnscar FNSCAR_Green
+AddPaintjob common m14 M14_Purple
 AddPaintjob common m1014 M1014_Yellow
 AddPaintjob common r870 R870_Birch
 AddPaintjob common judge Judge_Silver
+AddPaintjob common m9 M9_Midnight
 AddPaintjob common jury Jury_Lightning
+AddPaintjob common ak74 AK74_Blue
+AddPaintjob common bizon Bizon_Blue
 AddPaintjob common p90 P90_Obsidian
 AddPaintjob common rpd RPD_Gross
 AddPaintjob common l86 L86_Green
+AddPaintjob common m249 M249_White
 AddPaintjob common minigun Minigun_Harvester
 AddPaintjob common gl1 GL1_Birch
 AddPaintjob common gl6 GL6_Lurid
-AddPaintjob common r700 R700_Markings
+AddPaintjob common r700 R700_Blue
 AddPaintjob common dragunov Dragunov_Birch
 AddPaintjob common m21 M21_Jungle
+AddPaintjob common barrett Barrett_WhiteLine
 // Uncommons
-AddPaintjob uncommon acr ACR_RoyalGreen
+AddPaintjob uncommon minigun Minigun_Murica
+AddPaintjob uncommon ak47 AK47_CaseHardened
 AddPaintjob uncommon fnscar FNSCAR_VroomVroom
-AddPaintjob uncommon m14 M14_RoyalGreen
 AddPaintjob uncommon r870 R870_VroomVroom
+AddPaintjob uncommon acr ACR_RoyalGreen
+AddPaintjob uncommon m14 M14_RoyalGreen
+AddPaintjob uncommon m21 M21_RoyalGreen
 AddPaintjob uncommon judge Judge_Chaos
 AddPaintjob uncommon executioner Executioner_Chaos
-AddPaintjob uncommon m9 M9_Venom
 AddPaintjob uncommon jury Jury_Chaos
+AddPaintjob uncommon m9 M9_Venom
 AddPaintjob uncommon glock Glock_Venom
 AddPaintjob uncommon desertEagle DesertEagle_Venom
-AddPaintjob uncommon m21 M21_RoyalGreen
+AddPaintjob uncommon m1014 M1014_Giraffe
+AddPaintjob uncommon w1200 W1200_Zebra
+AddPaintjob uncommon dragunov Dragunov_RibbitRibbit
+AddPaintjob uncommon m249 M249_Platypus
 // Rares
 AddPaintjob rare m14 M14_CluckCluck
 AddPaintjob rare dragunov Dragunov_Rainbow 

@@ -16,6 +16,7 @@ public class RewardBox extends InfoType
 	// To anyone planning to add to this file in future, remember that the Minecraft EULA forbids monetization of any non-cosmetic additions
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
+	public float[] weightPerRarity = new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
 	
 	private static HashMap<Integer, RewardBox> boxes = new HashMap<Integer, RewardBox>();
 	
@@ -53,6 +54,12 @@ public class RewardBox extends InfoType
 			
 			paintjobs.add(paintjob);
 		}
+		else if(KeyMatches(split, "RarityWeight"))
+		{
+			EnumPaintjobRarity rarity = GetRarity(split[1]);
+			float weight = Float.parseFloat(split[2]);
+			weightPerRarity[rarity.ordinal()] = weight;
+		}
 	}
 	
 	private EnumPaintjobRarity GetRarity(String split)
@@ -67,8 +74,23 @@ public class RewardBox extends InfoType
 	
 	public int GetReward(PlayerRankData data) 
 	{
-		int iPick = FlansMod.Pick(paintjobs.size());
-		return paintjobs.get(iPick).hashCode();
+		float totalWeight = 0.0f;
+		for(int i = 0; i < paintjobs.size(); i++)
+		{
+			totalWeight += weightPerRarity[paintjobs.get(i).rarity.ordinal()];
+		}
+		float pick = FlansMod.Pick(totalWeight);
+		for(int i = 0; i < paintjobs.size(); i++)
+		{
+			pick -= weightPerRarity[paintjobs.get(i).rarity.ordinal()];
+			if(pick <= 0.0f)
+			{
+				return paintjobs.get(i).hashCode();
+			}
+		}
+		
+		FlansMod.Assert(false, "How did we not pick something?");
+		return 0;
 	}
 
 	public static RewardBox GetRewardBox(int boxHash) 

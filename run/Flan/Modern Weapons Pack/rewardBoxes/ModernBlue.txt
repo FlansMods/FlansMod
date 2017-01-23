@@ -2,6 +2,11 @@
 Name Blue Present
 ShortName modernBlue
 Icon RewardBox_Modern_Blue
+// Weighting
+RarityWeight common 1.0
+RarityWeight uncommon 1.0
+RarityWeight rare 0.5
+RarityWeight legendary 0.25
 // Commons
 AddPaintjob common ak47 AK47_CaseHardened
 AddPaintjob common acr ACR_Aquatic

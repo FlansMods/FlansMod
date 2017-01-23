@@ -34,6 +34,8 @@ package com.flansmod.common.vector;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
+import com.flansmod.common.FlansMod;
+
 /**
  *
  * Base class for vectors.
@@ -86,11 +88,16 @@ public abstract class Vector implements Serializable, ReadableVector {
 	 */
 	public final Vector normalise() {
 		float len = length();
-		if (len != 0.0f) {
+		if (len != 0.0f) 
+		{
 			float l = 1.0f / len;
 			return scale(l);
-		} else
-			throw new IllegalStateException("Zero length vector");
+		}
+		else
+		{
+			FlansMod.Assert(false, "ZERO LENGTH VECTOR");
+			return this;
+		}
 	}
 
 
