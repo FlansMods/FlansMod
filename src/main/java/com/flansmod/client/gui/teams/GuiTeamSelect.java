@@ -1,4 +1,4 @@
-package com.flansmod.client.gui;
+package com.flansmod.client.gui.teams;
 
 import org.lwjgl.opengl.GL11;
 

@@ -96,8 +96,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.GuiDriveableController;
-import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.gui.teams.GuiMissionResults;
+import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;

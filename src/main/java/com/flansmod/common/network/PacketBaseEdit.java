@@ -1,6 +1,6 @@
 package com.flansmod.common.network;
 
-import com.flansmod.client.gui.GuiBaseEditor;
+import com.flansmod.client.gui.teams.GuiBaseEditor;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ITeamBase;
 import com.flansmod.common.teams.TeamsManager;

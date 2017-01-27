@@ -183,6 +183,14 @@ public class GuiTeamsBase extends GuiScreen
 	@Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-       // Prevent "Escape" from closing this menu
+		if(AllowEscape())
+		{
+			super.keyTyped(typedChar, keyCode);
+		}
     }
+	
+	protected boolean AllowEscape()
+	{
+		return false;
+	}
 }

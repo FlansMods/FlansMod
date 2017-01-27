@@ -51,7 +51,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.Project;
 
 import com.flansmod.api.IControllable;
-import com.flansmod.client.gui.GuiTeamScores;
+import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.RenderGun;

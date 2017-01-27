@@ -1,6 +1,6 @@
 package com.flansmod.common.network;
 
-import com.flansmod.client.gui.GuiVoting;
+import com.flansmod.client.gui.teams.GuiVoting;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;

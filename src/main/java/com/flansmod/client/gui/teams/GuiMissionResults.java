@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.gui.GuiTeamScores;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;

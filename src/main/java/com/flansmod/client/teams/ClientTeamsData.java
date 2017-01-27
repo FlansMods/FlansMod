@@ -6,13 +6,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.flansmod.client.gui.GuiTeamScores;
-import com.flansmod.client.gui.GuiTeamSelect;
-import com.flansmod.client.gui.GuiVoting;
 import com.flansmod.client.gui.teams.GuiEditLoadout;
 import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.gui.teams.GuiMissionResults;
 import com.flansmod.client.gui.teams.GuiOpenRewardBox;
+import com.flansmod.client.gui.teams.GuiTeamScores;
+import com.flansmod.client.gui.teams.GuiTeamSelect;
+import com.flansmod.client.gui.teams.GuiVoting;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.network.PacketOpenRewardBox;

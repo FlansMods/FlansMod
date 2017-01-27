@@ -15,8 +15,10 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.PlayerClass;
+import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
+import com.flansmod.common.teams.TeamsManagerRanked;
 
 public class PacketTeamInfo extends PacketBase 
 {			
@@ -43,6 +45,7 @@ public class PacketTeamInfo extends PacketBase
 	
 	public static class PlayerScoreData
 	{
+		public int level;
 		public String username;
 		public int score;
 		public int kills;
@@ -122,6 +125,16 @@ public class PacketTeamInfo extends PacketBase
 							String username = team.members.get(j);
 							PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
 							writeUTF(data, username);
+							PlayerRankData rankData = TeamsManagerRanked.GetRankData(TeamsManager.getPlayer(username));
+							if(rankData == null)
+							{
+								data.writeInt(0);
+							}
+							else
+							{
+								data.writeInt(rankData.currentLevel);
+							}
+							
 							if(playerData == null)
 							{
 								data.writeInt(0);
@@ -160,12 +173,23 @@ public class PacketTeamInfo extends PacketBase
 				for (String username : playerNames) {
 					PlayerData playerData = PlayerHandler.getPlayerData(username, Side.SERVER);
 					writeUTF(data, username);
-					if (playerData == null) {
+					PlayerRankData rankData = TeamsManagerRanked.GetRankData(TeamsManager.getPlayer(username));
+					if(rankData == null)
+					{
+						data.writeInt(0);
+					}
+					else
+					{
+						data.writeInt(rankData.currentLevel);
+					}
+					if (playerData == null) 
+					{
 						data.writeInt(0);
 						data.writeInt(0);
 						data.writeInt(0);
 						writeUTF(data, "");
-					} else {
+					} else 
+					{
 						data.writeInt(playerData.score);
 						data.writeInt(playerData.kills);
 						data.writeInt(playerData.deaths);
@@ -225,6 +249,7 @@ public class PacketTeamInfo extends PacketBase
 						teamData[i].playerData[j] = new PlayerScoreData();
 						teamData[i].playerData[j].team = teamData[i];
 						teamData[i].playerData[j].username = readUTF(data);
+						teamData[i].playerData[j].level = data.readInt();
 						teamData[i].playerData[j].score = data.readInt();
 						teamData[i].playerData[j].zombieScore = data.readInt();
 						teamData[i].playerData[j].kills = data.readInt();
@@ -247,6 +272,7 @@ public class PacketTeamInfo extends PacketBase
 					teamData[0].playerData[j] = new PlayerScoreData();
 					teamData[0].playerData[j].team = teamData[0];
 					teamData[0].playerData[j].username = readUTF(data);
+					teamData[0].playerData[j].level = data.readInt();
 					teamData[0].playerData[j].score = data.readInt();
 					teamData[0].playerData[j].kills = data.readInt();
 					teamData[0].playerData[j].deaths = data.readInt();

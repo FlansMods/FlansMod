@@ -1,10 +1,11 @@
-package com.flansmod.client.gui;
+package com.flansmod.client.gui.teams;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.FlansModClient;
@@ -12,7 +13,7 @@ import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.Team;
 
-public class GuiTeamScores extends GuiScreen 
+public class GuiTeamScores extends GuiTeamsBase
 {
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teamsScores.png");
 	public static final ResourceLocation texture2 = new ResourceLocation("flansmod", "gui/teamsScores2.png");
@@ -20,6 +21,8 @@ public class GuiTeamScores extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
+		super.drawScreen(i, j, f);
+		
 		PacketTeamInfo teamInfo = FlansModClient.teamInfo;
 		if(teamInfo == null || teamInfo.gametype == null || teamInfo.gametype.equals("") || teamInfo.teamData == null || teamInfo.teamData.length < 1)
 		{
@@ -54,9 +57,9 @@ public class GuiTeamScores extends GuiScreen
 		//func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
 		
 		drawModalRectWithCustomSizedTexture(m, n, 100, 0, 312, 66, 512, 256);
-		for(int p = 0; p < teamInfo.numLines; p++)
-			drawModalRectWithCustomSizedTexture(m, n + 66 + 9 * p, 100, 71, 312, 9, 512, 256);
-		drawModalRectWithCustomSizedTexture(m, n + 66 + teamInfo.numLines * 9, 100, 168, 312, 12, 512, 256);
+		for(int p = 0; p < teamInfo.numLines - 1; p++)
+			drawModalRectWithCustomSizedTexture(m, n + 66 + 16 * p, 100, 71, 312, 16, 512, 256);
+		drawModalRectWithCustomSizedTexture(m, n + 63 + (teamInfo.numLines - 1) * 16, 100, 168, 312, 12, 512, 256);
 		
 		if(teamInfo.showZombieScore)
 		{
@@ -104,10 +107,12 @@ public class GuiTeamScores extends GuiScreen
 			{
 				if(teamInfo.teamData[i].playerData[j] == null)
 					continue;
-				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 12 + 151 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 67 + 9 * j, 0xffffff);
-				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 67 + 9 * j, 0xffffff);
+				GlStateManager.color(1.0f, 1.0f, 1.0f);
+				DrawRankIcon(teamInfo.teamData[i].playerData[j].level, 0, m + 10 + 151 * i, n + 65 + 16 * j, false);
+				drawString(fontRendererObj, teamInfo.teamData[i].playerData[j].username, m + 30 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].score, m + 111 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + (teamInfo.showZombieScore ? teamInfo.teamData[i].playerData[j].zombieScore : teamInfo.teamData[i].playerData[j].kills), m + 127 + 151 * i, n + 68 + 16 * j, 0xffffff);
+				drawCenteredString(fontRendererObj, "" + teamInfo.teamData[i].playerData[j].deaths, m + 143 + 151 * i, n + 68 + 16 * j, 0xffffff);
 			}
 		}
 		
@@ -219,5 +224,11 @@ public class GuiTeamScores extends GuiScreen
 	public boolean doesGuiPauseGame()
 	{
 		return false;
+	}
+	
+	@Override
+	protected boolean AllowEscape()
+	{
+		return true;
 	}
 }

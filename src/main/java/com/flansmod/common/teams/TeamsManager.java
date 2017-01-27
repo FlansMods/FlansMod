@@ -1372,7 +1372,7 @@ public class TeamsManager
 		objects.add(obj);
 	}
 	
-	public EntityPlayerMP getPlayer(String username)
+	public static EntityPlayerMP getPlayer(String username)
 	{
 		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
 	}
