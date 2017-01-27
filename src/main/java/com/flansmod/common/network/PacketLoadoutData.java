@@ -71,7 +71,15 @@ public class PacketLoadoutData extends PacketBase
 		
 		// Client to server. The only bit they are authoritative on is their loadouts. But they still need to be checked for cheating.
 		// TODO: Verify loadout is valid
-		rankData.loadouts = myRankData.loadouts;
+		myRankData.currentLevel = rankData.currentLevel;
+		if(myRankData.VerifyLoadouts())
+		{
+			rankData.loadouts = myRankData.loadouts;
+		}
+		else
+		{
+			FlansMod.Assert(false, "PLAYER " + playerEntity.getDisplayNameString() + " GAVE INCORRECT LOADOUT.");
+		}
 	}
 
 	@Override

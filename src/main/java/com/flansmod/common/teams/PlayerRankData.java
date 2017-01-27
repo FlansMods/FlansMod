@@ -200,4 +200,17 @@ public class PlayerRankData
 		}
 		return n;
 	}
+
+	public boolean VerifyLoadouts() 
+	{
+		for(int i = 0; i < 5; i++)
+		{
+			if(!loadouts[i].Verify(currentLevel, rewardBoxData))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
