@@ -713,10 +713,27 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				if(shooter == Minecraft.getMinecraft().thePlayer)
 				{
-					if(hitData instanceof EntityHit || hitData instanceof PlayerBulletHit || hitData instanceof DriveableHit)
+					if(hitData instanceof EntityHit || hitData instanceof DriveableHit)
 					{
 						// Add a hit marker
 						FlansModClient.AddHitMarker();
+					}
+					else if(hitData instanceof PlayerBulletHit)
+					{
+						// Check teams
+						if(FlansModClient.teamInfo != null)
+						{
+							Team shooterTeam = FlansModClient.teamInfo.getTeam((EntityPlayer)shooter);
+							Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit) hitData).hitbox.player);
+							if(shooterTeam == null || shooterTeam != victimTeam)
+							{
+								FlansModClient.AddHitMarker();
+							}
+						}
+						else // No teams mod, just add marker
+						{
+							FlansModClient.AddHitMarker();
+						}
 					}
 				}
 			}

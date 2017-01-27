@@ -312,6 +312,21 @@ public class PacketTeamInfo extends PacketBase
 		}
 	}
 	
+	public Team getTeam(EntityPlayer player)
+	{
+		for(int i = 0; i < teamData.length; i++)
+		{
+			for(int j = 0; j < teamData[i].playerData.length; j++)
+			{
+				if(teamData[i].playerData[j].username.equals(player.getDisplayNameString()))
+				{
+					return teamData[i].team;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public boolean roundOver()
 	{
 		if(timeLeft == 0)
