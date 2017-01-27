@@ -49,7 +49,7 @@ NumGenericAttachmentSlots 1
 Paintjob DesertEagle_Neon DesertEagle_Neon magenta 2
 Paintjob DesertEagle_Venom DesertEagle_Venom lime 2
 Paintjob DesertEagle_CoralSnake DesertEagle_CoralSnake red 1 yellow 1
-Paintjob GoldDesertEagle DesertEagle_Gold yellow 8 gray 1
+Paintjob DesertEagle_Gold DesertEagle_Gold yellow 8 gray 1
 Paintjob DesertEagle_Messenger DesertEagle_Messenger orange 32 yellow 16 gray 16
 //Description - note the ammo type
 Description Ammo Type : Heavy Pistol
