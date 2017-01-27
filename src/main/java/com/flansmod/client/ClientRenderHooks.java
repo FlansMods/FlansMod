@@ -62,10 +62,12 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 
 public class ClientRenderHooks 
@@ -932,7 +934,7 @@ public void cameraSetup(CameraSetup event)
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
-			drawSlotInventory(mc.fontRendererObj, new ItemStack(killMessage.weapon.item), i - mc.fontRendererObj.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+			drawSlotInventory(mc.fontRendererObj, new ItemStack(killMessage.weapon.item, 1, killMessage.paint), i - mc.fontRendererObj.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
 		RenderHelper.disableStandardItemLighting();
@@ -992,13 +994,28 @@ public void cameraSetup(CameraSetup event)
 			weapon = infoType;
 			line = 0;
 			timer = 200;
+			
+			// Get the player and see if they're still holding the gun they used to kill this player. From that we can work out the paintjob
+			for(Object o : Minecraft.getMinecraft().theWorld.playerEntities)
+			{
+				if(((EntityPlayer)o).getDisplayNameString().equals(killerName))
+				{
+					ItemStack stack = ((EntityPlayer)o).getCurrentEquippedItem();
+					if(stack != null && stack.getItem() instanceof IPaintableItem)
+					{
+						paint = stack.getItemDamage();
+						break;
+					}
+				}
+			}
 		}
 		
-		public String killerName;
-		public String killedName;
-		public InfoType weapon;
-		public int timer;
-		public int line;
-		public boolean headshot;
+		public String killerName = "";
+		public String killedName = "";
+		public InfoType weapon = null;
+		public int paint = 0;
+		public int timer = 0;
+		public int line = 0;
+		public boolean headshot = false;
 	}
 }
