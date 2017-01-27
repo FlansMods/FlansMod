@@ -83,7 +83,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	private int targetRank, targetXP;
 	
 	private int lastXP;
-	private boolean hasLevelledUp = false;
+	private boolean hasLevelledUp = false, hasDoneFinalLevelUp = false;
 	
 	private EnumResultsState state = EnumResultsState.IDLE;
 	
@@ -303,7 +303,10 @@ public class GuiMissionResults extends GuiTeamsBase
 			}
 			case REVEAL_UNLOCK4:
 			{
-				
+				if(displayRank == targetRank)
+				{
+					hasDoneFinalLevelUp = true;
+				}
 				break;
 			}
 			default: break;
@@ -419,7 +422,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		}
 		
 
-		boolean hasDoneFinalLevel = displayRank == targetRank && hasLevelledUp;
+		boolean hasDoneFinalLevel = hasDoneFinalLevelUp;
 		
 		if(state.ordinal() >= EnumResultsState.REVEAL_UNLOCK1.ordinal() || hasDoneFinalLevel)
 			DrawUnlock(unlocks[0], guiOriginX + 8, guiOriginY + 160);
