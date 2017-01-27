@@ -674,6 +674,9 @@ public class ItemGun extends Item implements IPaintableItem
 				IBlockState blockState = world.getBlockState(blockHit.raytraceResult.getBlockPos());
 				
 				Vec3i normal = blockHit.raytraceResult.sideHit.getDirectionVec();
+				Vector3f bulletDir = Vector3f.sub(hit, origin, null);
+				bulletDir.normalise();
+				bulletDir.scale(0.5f);
 				
 				if(blockState != null)
 				{
@@ -689,10 +692,21 @@ public class ItemGun extends Item implements IPaintableItem
 		                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
 		                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 		                
+		                fx.motionX += bulletDir.x;
+		                fx.motionY += bulletDir.y;
+		                fx.motionZ += bulletDir.z;
+		                
 	             		if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
 	             			fx.renderDistanceWeight = 100D;
 					}
 				}
+				
+				
+				EntityFX fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f);
+				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
+                fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 			}
 			
 			if(world.isRemote)
