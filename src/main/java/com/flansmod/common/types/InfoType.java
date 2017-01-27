@@ -43,7 +43,7 @@ public class InfoType
 	public String name;
 	public String shortName;
 	public String texture;
-	public String modelString;
+	public String modelString = null;
 	public String description;
 	public float modelScale = 1F;
 	/** If this is set to false, then this item cannot be dropped */

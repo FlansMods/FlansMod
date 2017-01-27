@@ -496,7 +496,7 @@ public class ClientProxy extends CommonProxy
 								"\", \"east\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"south\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"west\": \"flansmod:blocks/" + box.sideTexturePath + "\" } } ");
 						createJSONFile(new File(blockstatesDir, type.shortName + ".json"), "{ \"variants\": { \"normal\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");
 					}
-					else if(type instanceof PaintableType)
+					else if(type instanceof PaintableType && type.GetModel() != null)
 					{
 						for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 						{
@@ -516,7 +516,7 @@ public class ClientProxy extends CommonProxy
 					//Create the item JSON for normal items
 					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)
 					{
-						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");
+						createJSONFile(new File(itemModelsDir, type.shortName + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -35 ], \"translation\": [ 0, 1.25, -2.5 ], \"scale\": [ 0.85, 0.85, 0.85 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");
 					}
 				}
 			}
