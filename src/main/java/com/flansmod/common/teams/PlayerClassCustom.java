@@ -37,17 +37,22 @@ public class PlayerClassCustom implements IPlayerClass
 				else
 				{
 					startingItems.add(stack);
-					
-					if(stack.getItem() instanceof IFlanItem)
+				}
+			}
+		}
+		
+		// Add extra items after all main items are done
+		for(int n = 0; n < EnumLoadoutSlot.values().length; n++)
+		{
+			ItemStack stack = playerLoadout.slots[n];
+			if(stack != null && stack.getItem() instanceof IFlanItem)
+			{
+				LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
+				if(loadoutEntry != null)
+				{
+					for(ItemStack extraStack : loadoutEntry.extraItems)						
 					{
-						LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
-						if(loadoutEntry != null)
-						{
-							for(ItemStack extraStack : loadoutEntry.extraItems)						
-							{
-								startingItems.add(extraStack);
-							}
-						}
+						startingItems.add(extraStack);
 					}
 				}
 			}
