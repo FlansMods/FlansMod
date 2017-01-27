@@ -130,6 +130,8 @@ public class PlayerLoadout
 	
 	private boolean VerifyType(InfoType target, ArrayList<LoadoutEntryInfoType> list, int currentLevel)
 	{
+		if(target == null) return true;
+		
 		for(LoadoutEntryInfoType entry : list)
 		{
 			if(entry.type == target)
@@ -137,12 +139,14 @@ public class PlayerLoadout
 				return entry.unlockLevel <= currentLevel;
 			}
 		}
-		FlansMod.Assert(false, "Player put invalid item in slot");
+		FlansMod.Assert(false, "Player put invalid item in slot " + target.shortName);
 		return false;
 	}
 	
 	private boolean VerifyPaint(Paintjob paint, ArrayList<RewardBoxInstance> rewardBoxData)
 	{
+		if(paint.ID == 0) return true;
+		
 		for(RewardBoxInstance box : rewardBoxData)
 		{
 			if(box.unlockHash == paint.hashCode())

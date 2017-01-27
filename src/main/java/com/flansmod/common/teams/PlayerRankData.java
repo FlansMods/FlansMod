@@ -205,9 +205,13 @@ public class PlayerRankData
 	{
 		for(int i = 0; i < 5; i++)
 		{
-			if(!loadouts[i].Verify(currentLevel, rewardBoxData))
+			LoadoutPool pool = TeamsManagerRanked.GetInstance().currentPool;
+			if(pool != null && currentLevel >= pool.slotUnlockLevels[i])
 			{
-				return false;
+				if(!loadouts[i].Verify(currentLevel, rewardBoxData))
+				{
+					return false;
+				}
 			}
 		}
 

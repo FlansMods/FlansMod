@@ -8,10 +8,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.gui.teams.EnumLoadoutSlot;
 import com.flansmod.client.gui.teams.GuiTeamSelect;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.LoadoutPool;
+import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManagerRanked;
@@ -79,6 +81,20 @@ public class PacketLoadoutData extends PacketBase
 		else
 		{
 			FlansMod.Assert(false, "PLAYER " + playerEntity.getDisplayNameString() + " GAVE INCORRECT LOADOUT.");
+			LoadoutPool pool = TeamsManagerRanked.GetInstance().currentPool;
+			if(pool != null)
+			{
+				for(int i = 0; i < 5; i++)
+				{
+					for(int j = 0; j < EnumLoadoutSlot.values().length; j++)
+					{
+						if(pool.defaultLoadouts[i].slots[j] != null)
+						{
+							rankData.loadouts[i].slots[j] = pool.defaultLoadouts[i].slots[j].copy();
+						}
+					}
+				}
+			}
 		}
 	}
 
