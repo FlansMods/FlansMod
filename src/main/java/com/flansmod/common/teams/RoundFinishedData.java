@@ -103,14 +103,11 @@ public class RoundFinishedData
 	public void ReadNumVotesUpdate(ByteBuf data) 
 	{
 		int numOptions = data.readByte();
-		if(numOptions != votingOptions.length)
-		{
-			FlansMod.Assert(false, "Incorrect number of voting options");
-			return;
-		}
+		votingOptions = new VotingOption[numOptions];
 		
 		for(int i = 0; i < numOptions; i++)
 		{
+			votingOptions[i] = new VotingOption("", "", "", "");
 			votingOptions[i].numVotes = data.readInt();
 		}
 	}	
@@ -132,8 +129,8 @@ public class RoundFinishedData
 		{
 			votingOptions[i] = new VotingOption(rounds[i].gametype.name,
 							rounds[i].map.name,
-							"\u00a7" + rounds[i].teams[0].textColour + rounds[i].teams[0].shortName,
-							"\u00a7" + rounds[i].teams[1].textColour + rounds[i].teams[1].shortName);
+							rounds[i].teams[0].textColour + rounds[i].teams[0].shortName,
+							rounds[i].teams[1].textColour + rounds[i].teams[1].shortName);
 		}
 	}
 }

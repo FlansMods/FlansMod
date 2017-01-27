@@ -88,8 +88,8 @@ public class TeamsManagerRanked extends TeamsManager
 			for(EntityPlayer player : getPlayers())
 			{
 				PlayerData data = PlayerHandler.getPlayerData(player);
-				if(!data.builder && data.vote < roundFinishedTemplateData.votingOptions.length)
-					roundFinishedTemplateData.votingOptions[data.vote].numVotes++;
+				if(!data.builder && data.vote != 0 && data.vote - 1 < roundFinishedTemplateData.votingOptions.length)
+					roundFinishedTemplateData.votingOptions[data.vote - 1].numVotes++;
 			}
 			for(EntityPlayer player : getPlayers())
 			{
