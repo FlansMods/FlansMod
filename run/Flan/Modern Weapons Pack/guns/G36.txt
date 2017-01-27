@@ -18,7 +18,7 @@ Recoil 2
 //Damage in half hearts
 Damage 5
 //The higher this value, the more the bullets spread
-Accuracy 1
+Accuracy 6
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound G36Shoot

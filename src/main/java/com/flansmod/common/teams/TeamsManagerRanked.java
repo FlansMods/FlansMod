@@ -69,7 +69,11 @@ public class TeamsManagerRanked extends TeamsManager
 
 		for(EntityPlayer player : getPlayers())
 		{
-			sendLoadoutData((EntityPlayerMP)player);
+			PlayerData data = PlayerHandler.getPlayerData(player);
+			if(data != null && !data.builder)
+			{
+				sendLoadoutData((EntityPlayerMP)player);
+			}
 		}
 	}
 	
@@ -236,6 +240,12 @@ public class TeamsManagerRanked extends TeamsManager
 	
 	private void SendRoundFinishedDataToPlayer(EntityPlayerMP player)
 	{
+		PlayerData pData = PlayerHandler.getPlayerData(player);
+		if(pData != null && pData.builder)
+		{
+			return;
+		}
+		
 		RoundFinishedData finishedData = new RoundFinishedData(roundFinishedTemplateData);
 		PlayerRankData data = rankData.get(player.getUniqueID());
 		
@@ -437,7 +447,14 @@ public class TeamsManagerRanked extends TeamsManager
 	public void SelectTeam(Team team) 
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiChooseLoadout());
+		if(team == null)
+		{
+			FMLClientHandler.instance().getClient().displayGuiScreen(null);
+		}
+		else
+		{
+			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiChooseLoadout());
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

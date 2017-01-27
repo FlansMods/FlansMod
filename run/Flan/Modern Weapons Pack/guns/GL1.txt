@@ -15,7 +15,7 @@ Recoil 14
 //Damage in half hearts
 Damage 1
 //The higher this value, the more the bullets spread
-Accuracy 20
+Accuracy 15
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound GrenadeLauncherShoot

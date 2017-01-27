@@ -3,6 +3,7 @@ ShortName barrett
 //The ammo this gun uses (shortName)
 Ammo barrettAmmo
 Ammo barrettExplosiveAmmo
+Ammo barrettCompactAmmo
 Icon Barrett
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -11,9 +12,9 @@ ReloadTime 40
 //The amount of gun recoil, all relative : Sten = 1, Mp40 = 3, Kar98kSniper = 20
 Recoil 22
 //Damage in half hearts
-Damage 25
+Damage 40
 //The higher this value, the more the bullets spread
-Accuracy 3
+Accuracy 1
 //Time in ticks between rounds
 ShootDelay 12
 ShootSound BarrettShoot

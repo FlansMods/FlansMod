@@ -3,6 +3,7 @@ ShortName minigun
 //The ammo this gun uses (shortName)
 Ammo minigunAmmo
 Ammo minigunExplosiveAmmo
+Ammo minigunPortableAmmo
 Icon Minigun
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
@@ -15,7 +16,7 @@ Knockback 0.5
 //Damage in half hearts
 Damage 2
 //The higher this value, the more the bullets spread
-Accuracy 4
+Accuracy 20
 //Time in ticks between rounds
 ShootDelay 0.3
 //Number of bullet entities to create, useful for shotguns, defaults to 1

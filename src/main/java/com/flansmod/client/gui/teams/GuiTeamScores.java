@@ -87,7 +87,7 @@ public class GuiTeamScores extends GuiTeamsBase
 				drawString(fontRendererObj, winners.name + " Won!", m + 10, n + 20, 0xffffff);
 			}
 			
-			drawString(fontRendererObj, (ClientTeamsData.timeLeftInStage / 20) + "", m + 312 - 22, n + 20, 0xffffff);
+			drawString(fontRendererObj, Math.max(ClientTeamsData.timeLeftInStage / 20, 0) + "", m + 312 - 22, n + 20, 0xffffff);
 
 		}
 		else

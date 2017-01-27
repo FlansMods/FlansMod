@@ -17,9 +17,9 @@ Recoil 1
 //Number of bullet entities to create, useful for shotguns, defaults to 1
 NumBullets 1
 //Damage in half hearts
-Damage 7
+Damage 4
 //The higher this value, the more the bullets spread
-Accuracy 8
+Accuracy 1
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound MakarovShoot

@@ -213,3 +213,5 @@ item.judge.name=Judge Shotgun
 item.jury.name=Jury Autorevolver
 item.juryAmmo.name=Jury Magnum Round
 item.executioner.name=Executioner Shotgun
+item.barrettCompactAmmo.name=Barrett .50 Cal Compact Ammo
+item.minigunPortableAmmo.name=Minigun Portable Ammo
