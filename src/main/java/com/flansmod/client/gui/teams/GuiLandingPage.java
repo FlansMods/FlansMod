@@ -138,7 +138,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 146, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
 		
 		// Draw text
-		drawCenteredString(fontRendererObj, "Welcome to the Official Modern Server", guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawCenteredString(fontRendererObj, ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
 		drawString(fontRendererObj, mc.thePlayer.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
 		drawCenteredString(fontRendererObj, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);

@@ -115,6 +115,7 @@ public class TeamsManagerRanked extends TeamsManager
 		data.teamsAvailable = allAvailableTeams;
 		data.currentPool = currentPool;
 		data.myRankData = rankData.get(player.getUniqueID());
+		data.motd = motd;
 		
 		FlansMod.getPacketHandler().sendTo(data, player);
 	}

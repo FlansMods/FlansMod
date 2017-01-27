@@ -18,6 +18,7 @@ import com.flansmod.common.teams.TeamsManagerRanked;
 
 public class PacketLoadoutData extends PacketBase
 {
+	public String motd = "";
 	public Team[] teamsAvailable = new Team[0];
 	public PlayerRankData myRankData = new PlayerRankData();
 	public LoadoutPool currentPool = null;
@@ -30,6 +31,7 @@ public class PacketLoadoutData extends PacketBase
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+		writeUTF(data, motd);
 		data.writeInt(teamsAvailable.length);
 		for(int i = 0; i < teamsAvailable.length; i++)
 		{
@@ -44,6 +46,7 @@ public class PacketLoadoutData extends PacketBase
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
 	{
+		motd = readUTF(data);
 		int numTeams = data.readInt();
 		teamsAvailable = new Team[numTeams];
 		for(int i = 0; i < teamsAvailable.length; i++)
@@ -75,6 +78,7 @@ public class PacketLoadoutData extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
+		ClientTeamsData.motd = motd;		
 		ClientTeamsData.theRankData = myRankData;
 		ClientTeamsData.currentPool = currentPool;
 		GuiTeamSelect.teamChoices = teamsAvailable;

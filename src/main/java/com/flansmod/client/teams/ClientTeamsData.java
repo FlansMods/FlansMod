@@ -41,6 +41,7 @@ public class ClientTeamsData
 	public static int timeLeftInStage = 0;
 	public static int timeLeftTotal = 0;
 	public static RoundFinishedStage stage = RoundFinishedStage.NOT_FINISHED;
+	public static String motd = "";
 	
 	public static void Tick()
 	{

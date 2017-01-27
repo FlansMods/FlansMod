@@ -119,6 +119,8 @@ public class TeamsManager
 	public static boolean autoBalance;
 	/** Time between autobalance attempts */
 	public static int autoBalanceInterval;
+	/** The current message of the day. Displays at the top of the landing page */
+	public String motd = "Welcome to the Teams server";
 	
 	//Disused. Delete when done
 	//public Gametype currentGametype;

@@ -91,6 +91,21 @@ public class CommandTeams extends CommandBase
 			TeamsManager.messageAll("Flan's Mod switching to arena mode presets");
 			return;
 		}
+		if(split[0].equals("motd"))
+		{
+			teamsManager.motd = "";
+			for(int i = 0; i < split.length - 1; i++)
+			{
+				teamsManager.motd += split[i + 1];
+				if(i != split.length - 2)
+				{
+					teamsManager.motd += " ";
+				}
+			}
+			sender.addChatMessage(new ChatComponentText("Server message of the day is now:"));
+			sender.addChatMessage(new ChatComponentText(teamsManager.motd));
+			return;
+		}
 		if(split[0].equals("listGametypes"))
 		{
 			sender.addChatMessage(new ChatComponentText("\u00a72Showing all avaliable gametypes"));
