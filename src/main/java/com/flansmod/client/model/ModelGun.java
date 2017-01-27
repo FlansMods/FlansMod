@@ -90,6 +90,11 @@ public class ModelGun extends ModelBase
 		render(gunModel, f);
 	}
 	
+	public void renderCustom(float f, GunAnimations anims)
+	{
+		
+	}
+	
 	public void renderSlide(float f)
 	{
 		render(slideModel, f);
@@ -142,7 +147,7 @@ public class ModelGun extends ModelBase
 
 
 	/** For renderering models simply */
-	private void render(ModelRendererTurbo[] models, float f)
+	protected void render(ModelRendererTurbo[] models, float f)
 	{
 		for(ModelRendererTurbo model : models)
 			if(model != null)

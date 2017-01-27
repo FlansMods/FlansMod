@@ -771,6 +771,20 @@ public class CommandTeams extends CommandBase
 			}
 			return;
 		}
+		if(split[0].toLowerCase().equals("xpmultiplier"))
+		{
+			float target = Float.parseFloat(split[1]);
+			if(target < 0.5f || target > 2.0f)
+			{
+				sender.addChatMessage(new ChatComponentText("Not going to allow that for now. Keep it within 0.5 to 2.0"));
+			}
+			else
+			{
+				sender.addChatMessage(new ChatComponentText("XP multiplier is now " + target));
+				TeamsManagerRanked.GetInstance().XPMultiplier = target;
+			}
+			return;
+		}
 		
 		sender.addChatMessage(new ChatComponentText(split[0] + " is not a valid teams command. Try /teams help"));
 	}

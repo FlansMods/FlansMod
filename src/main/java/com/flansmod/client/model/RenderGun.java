@@ -381,6 +381,7 @@ public class RenderGun implements IItemRenderer
 			GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 
 			model.renderGun(f);
+			model.renderCustom(f, animations);
 			if(scopeAttachment == null && !model.scopeIsOnSlide && !model.scopeIsOnBreakAction)
 				model.renderDefaultScope(f);
 			if(barrelAttachment == null)

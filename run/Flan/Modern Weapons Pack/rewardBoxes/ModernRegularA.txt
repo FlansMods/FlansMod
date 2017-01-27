@@ -63,3 +63,4 @@ AddPaintjob rare acr ACR_QuackQuack
 AddPaintjob rare minigun Minigun_Rainbow
 AddPaintjob rare desertEagle DesertEagle_Gold
 // Legendaries
+AddPaintjob legendary minigun Minigun_Steampunk

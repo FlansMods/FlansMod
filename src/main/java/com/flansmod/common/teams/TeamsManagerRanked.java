@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -44,6 +45,8 @@ public class TeamsManagerRanked extends TeamsManager
 	public static HashMap<UUID, PlayerRankData> rankData = new HashMap<UUID, PlayerRankData>();
 	
 	public LoadoutPool currentPool;
+	
+	public float XPMultiplier = 1.0f;
 	
 	public RoundFinishedData roundFinishedTemplateData = new RoundFinishedData();
 		
@@ -184,8 +187,8 @@ public class TeamsManagerRanked extends TeamsManager
 				// Make sure players are on opposing teams
 				if(attackerData.team != victimData.team)
 				{
-					AwardXP(attacker, currentPool.XPForKill);
-					AwardXP(victim, currentPool.XPForDeath);
+					AwardXP(attacker, MathHelper.floor_float(currentPool.XPForKill * XPMultiplier));
+					AwardXP(victim, MathHelper.floor_float(currentPool.XPForDeath * XPMultiplier));
 				}
 			}
 		}

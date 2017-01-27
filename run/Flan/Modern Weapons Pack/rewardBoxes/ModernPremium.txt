@@ -49,3 +49,4 @@ AddPaintjob rare dragunov Dragunov_Rainbow
 AddPaintjob rare desertEagle DesertEagle_Gold
 // Legendaries
 AddPaintjob legendary desertEagle DesertEagle_Messenger
+AddPaintjob legendary minigun Minigun_Steampunk
