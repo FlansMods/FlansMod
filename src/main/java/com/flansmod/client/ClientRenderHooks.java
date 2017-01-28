@@ -476,7 +476,7 @@ public class ClientRenderHooks
 		        
 		        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
 	
-		        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.theWorld, mc.thePlayer);
+		        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.theWorld, entity);
 		        GlStateManager.popMatrix();
 	        }
 	        
