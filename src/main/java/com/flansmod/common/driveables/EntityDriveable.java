@@ -544,7 +544,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, gunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
 
-					ShotData shotData = new InstantShotData(-1, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1);
+					ShotData shotData = new InstantShotData(-1, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
 					((ItemGun)gunType.item).ServerHandleShotData(null, -1, worldObj, this, false, shotData);
 				}
 			}

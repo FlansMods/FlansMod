@@ -74,6 +74,7 @@ public class PacketShotData extends PacketBase
 				currentCast.hitPos.writeToBuffer(data);
 				data.writeFloat(currentCast.damage);
 				data.writeBoolean(currentCast.isExtraBullet);
+				data.writeBoolean(currentCast.silenced);
 			}			
 		}
 	}
@@ -109,8 +110,9 @@ public class PacketShotData extends PacketBase
 					Vector3f hit = Vector3f.readFromBuffer(data);
 					float damage = data.readFloat();
 					boolean isExtraBullet = data.readBoolean();
+					boolean silenced = data.readBoolean();
 					
-					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage, isExtraBullet));
+					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage, isExtraBullet, silenced));
 					break;
 				}
 				default:
@@ -164,7 +166,8 @@ public class PacketShotData extends PacketBase
 							instantData.shotFrom, (BulletType)instantData.shotType, 
 							instantData.origin, instantData.hitPos, 
 							instantData.hitData, instantData.damage,
-							instantData.isExtraBullet);
+							instantData.isExtraBullet,
+							instantData.silenced);
 				}
 			}
 			else

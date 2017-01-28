@@ -42,7 +42,7 @@ public class ShotData
 	
 	public static class InstantShotData extends ShotData
 	{		
-		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f origin, BulletHit hitData, Vector3f hit, float damage, boolean isExtraBullet)
+		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f origin, BulletHit hitData, Vector3f hit, float damage, boolean isExtraBullet, boolean silenced)
 		{
 			super(slot, shotFrom, shotType);
 			this.shooterID = shooterID;
@@ -51,11 +51,12 @@ public class ShotData
 			this.hitPos = hit;
 			this.damage = damage;
 			this.isExtraBullet = isExtraBullet;
+			this.silenced = silenced;
 		}
 		
-		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, Entity shooter, Vector3f origin, BulletHit hitData, Vector3f hit, float damage, boolean isExtraBullet)
+		public InstantShotData(int slot, InfoType shotFrom, ShootableType shotType, Entity shooter, Vector3f origin, BulletHit hitData, Vector3f hit, float damage, boolean isExtraBullet, boolean silenced)
 		{
-			this(slot, shotFrom, shotType, shooter.getEntityId(), origin, hitData, hit, damage, isExtraBullet);
+			this(slot, shotFrom, shotType, shooter.getEntityId(), origin, hitData, hit, damage, isExtraBullet, silenced);
 		}
 		
 		public int shooterID;
@@ -67,5 +68,6 @@ public class ShotData
 		
 		public float damage;
 		public boolean isExtraBullet; // For shotgun extra bullets that shouldn't consume ammo
+		public boolean silenced;
 	}
 }

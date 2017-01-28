@@ -445,8 +445,9 @@ public class ItemGun extends Item implements IPaintableItem
 							{
 								world.spawnEntityInWorld(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 							}
-	
-							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1);
+							
+							boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
+							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1, silenced);
 							shotsFiredClient.add(shotData);
 						}
 					}
@@ -620,8 +621,10 @@ public class ItemGun extends Item implements IPaintableItem
 					//targetPoint.scale(0.5f);
 					//float radius = Vector3f.sub(instantData.origin, instantData.hitPos, null).length();
 					//radius += 50.0f;
+					AttachmentType barrel = type.getBarrel(gunstack);
+					boolean silenced = barrel != null && barrel.silencer;
 					
-					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet);
+					DoInstantShot(world, player, type, (BulletType)bullet, instantData.origin, instantData.hitPos, instantData.hitData, type.getDamage(gunstack), isExtraBullet, silenced);
 					
 					shotsFiredServer.add(shotData);
 				}
@@ -639,7 +642,7 @@ public class ItemGun extends Item implements IPaintableItem
 						x, y, z));
 	}
 	
-	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet)
+	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
 	{
 		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
 		{
@@ -650,10 +653,7 @@ public class ItemGun extends Item implements IPaintableItem
 		{
 			// Play a sound if the previous sound has finished
 			if (!isExtraBullet && soundDelay <= 0 && type.shootSound != null && shooter != null)
-			{
-				//AttachmentType barrel = type.getBarrel(gunstack);
-				boolean silenced = false;//barrel != null && barrel.silencer;
-				
+			{				
 				PlayShotSound(world, silenced, (float)shooter.posX, (float)shooter.posY, (float)shooter.posZ);
 
 				soundDelay = type.shootSoundLength;
