@@ -14,7 +14,9 @@ import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumAttachmentType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
+import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.TeamsManagerRanked;
@@ -248,10 +250,36 @@ public class GuiEditLoadout extends GuiTeamsBase
 			drawCenteredString(fontRendererObj, name, guiOriginX + 262, guiOriginY + 18, 0xffffff);
 			
 			DrawGun(stack, guiOriginX + 254, guiOriginY + 48, 40f);
+						
+			drawCenteredString(fontRendererObj, "Damage", guiOriginX + 234, guiOriginY + 60, 0xffffff);
+			drawCenteredString(fontRendererObj, "Accuracy", guiOriginX + 234, guiOriginY + 70, 0xffffff);
+			drawCenteredString(fontRendererObj, "Ammo", guiOriginX + 234, guiOriginY + 80, 0xffffff);
 			
-			drawCenteredString(fontRendererObj, "Damage", guiOriginX + 234, guiOriginY + 59, 0xffffff);
-			drawCenteredString(fontRendererObj, "Accuracy", guiOriginX + 234, guiOriginY + 69, 0xffffff);
-			drawCenteredString(fontRendererObj, "Recoil", guiOriginX + 234, guiOriginY + 79, 0xffffff);
+			if(stack != null && stack.getItem() instanceof ItemGun)
+			{
+				GunType type = ((ItemGun)stack.getItem()).GetType();
+				
+				LoadoutEntryInfoType entry = pool.GetLoadoutEntryForInfoType(selectedSlot.ordinal(), type);
+				
+				ShootableType mainAmmo = null;
+				int numClips = 1;
+				for(ItemStack extra : entry.extraItems)
+				{
+					if(extra != null && extra.getItem() instanceof ItemShootable)
+					{
+						mainAmmo = ((ItemShootable)extra.getItem()).type;
+						numClips = extra.stackSize;
+						break;
+					}
+				}
+				
+				if(mainAmmo != null)
+				{
+					drawCenteredString(fontRendererObj, String.format("%.0f", type.damage * mainAmmo.damageVsLiving * mainAmmo.numBullets), guiOriginX + 290, guiOriginY + 60, 0xffffff);
+					drawCenteredString(fontRendererObj, String.format("%.0f", (50.0f - type.bulletSpread) * 2.0f), guiOriginX + 290, guiOriginY + 70, 0xffffff);
+					drawCenteredString(fontRendererObj, String.format("%d", mainAmmo.roundsPerItem * numClips), guiOriginX + 290, guiOriginY + 80, 0xffffff);
+				}
+			}
 		}
 		
 		// Draw selector panel

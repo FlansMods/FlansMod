@@ -2,6 +2,7 @@ package com.flansmod.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -226,8 +227,71 @@ public class RenderGun implements IItemRenderer
 						GL11.glRotatef(meleeAngles.y + (nextMeleeAngles.y - meleeAngles.y) * smoothing, 0F, 1F, 0F);
 						GL11.glRotatef(meleeAngles.z + (nextMeleeAngles.z - meleeAngles.z) * smoothing, 0F, 0F, 1F);
 						GL11.glRotatef(meleeAngles.x + (nextMeleeAngles.x - meleeAngles.x) * smoothing, 1F, 0F, 0F);
-
 					}
+					
+					// Look at gun stuff
+					float interp = animations.lookAtTimer + smoothing;
+					interp /= animations.lookAtTimes[animations.lookAt.ordinal()];
+					
+					final Vector3f idlePos = new Vector3f(0.0f, 0.0f, 0.0f);			
+					final Vector3f look1Pos = new Vector3f(0.25f, 0.25f, 0.0f);
+					final Vector3f look2Pos = new Vector3f(0.25f, 0.25f, -0.5f);
+					final Vector3f idleAngles = new Vector3f(0.0f, 0.0f, 0.0f);
+					final Vector3f look1Angles = new Vector3f(0.0f, 70.0f, 0.0f);
+					final Vector3f look2Angles = new Vector3f(0.0f, -60.0f, 60.0f);
+					Vector3f startPos, endPos, startAngles, endAngles;
+					
+					switch(animations.lookAt)
+					{
+						default:
+						case NONE:
+							startPos = endPos = idlePos;
+							startAngles = endAngles = idleAngles;
+							break;
+						case LOOK1:
+							startPos = endPos = look1Pos;
+							startAngles = endAngles = look1Angles;
+							break;
+						case LOOK2:
+							startPos = endPos = look2Pos;
+							startAngles = endAngles = look2Angles;
+							break;
+						case TILT1:
+							startPos = idlePos;
+							startAngles = idleAngles;
+							endPos = look1Pos;
+							endAngles = look1Angles;
+							break;
+						case TILT2:
+							startPos = look1Pos;
+							startAngles = look1Angles;
+							endPos = look2Pos;
+							endAngles = look2Angles;
+							break;
+						case UNTILT:
+							startPos = look2Pos;
+							startAngles = look2Angles;
+							endPos = idlePos;
+							endAngles = idleAngles;
+							break;
+					}
+					
+					GL11.glRotatef(startAngles.y + (endAngles.y - startAngles.y) * interp, 0f, 1f, 0f); 
+					GL11.glRotatef(startAngles.z + (endAngles.z - startAngles.z) * interp, 0f, 0f, 1f); 
+					GL11.glTranslatef(startPos.x + (endPos.x - startPos.x) * interp,
+							startPos.y + (endPos.y - startPos.y) * interp,
+							startPos.z + (endPos.z - startPos.z) * interp);
+					
+					
+					//GL11.glRotatef(70f, 0f, 1f, 0f);
+					//GL11.glTranslatef(0.25f, 0.25f, 0f);
+					
+					//GL11.glRotatef(-60f, 0f, 1f, 0f);
+					//GL11.glRotatef(60f, 0f, 0f, 1f);
+					//GL11.glTranslatef(0.25f, 0.25f, -0.5f);
+					
+					GL11.glRotatef(-animations.recoilAngle * (float)Math.sqrt(gunType.recoil) * 1.5f, 0F, 0F, 1F);
+					GL11.glTranslatef(animations.recoilOffset.x, animations.recoilOffset.y, animations.recoilOffset.z);
 					
 					if(model.spinningCocking)
 					{

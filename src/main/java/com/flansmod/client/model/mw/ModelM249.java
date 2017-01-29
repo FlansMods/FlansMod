@@ -76,7 +76,7 @@ public class ModelM249 extends ModelGun
 		gunModel[7].setRotationPoint(5.1F, 5.1F, -0.5F);	
 		
 		//Scope
-		scopeAttachPoint = new Vector3f(2F / 16F, 3.333F / 16F, 0F);
+		scopeAttachPoint = new Vector3f(2F / 16F, 1F / 16F, 0F);
 
 		//defaultStock
 		defaultStockModel = new ModelRendererTurbo[4];

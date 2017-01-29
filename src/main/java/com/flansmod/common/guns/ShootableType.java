@@ -122,6 +122,10 @@ public abstract class ShootableType extends InfoType
 				damageVsLiving = Integer.parseInt(split[1]);
 			else if(split[0].equals("DamageVsVehicles"))
 				damageVsDriveable = Integer.parseInt(split[1]);
+			else if(split[0].equals("Damage"))
+			{
+				damageVsLiving = damageVsDriveable = Integer.parseInt(split[1]);
+			}
 			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
 			

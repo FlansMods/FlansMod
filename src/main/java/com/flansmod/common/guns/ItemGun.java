@@ -13,6 +13,7 @@ import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.InstantBulletRenderer;
+import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
 import com.flansmod.client.model.RenderGun;
 import com.flansmod.common.FlansMod;
@@ -401,6 +402,8 @@ public class ItemGun extends Item implements IPaintableItem
 			// Fire!
 			else if(shouldShootThisTick)
 			{
+				GunAnimations animations = FlansModClient.getGunAnimations(player, isOffHand);
+				animations.lookAt = LookAtState.NONE;
 				float shootTime = data.GetShootTime(isOffHand);
 									
 				// For each 
@@ -458,13 +461,12 @@ public class ItemGun extends Item implements IPaintableItem
 						shotsFiredClient.add(shotData);
 					}
 
-					// Now do client side things
-					GunAnimations animations = FlansModClient.getGunAnimations(player, isOffHand);
-					
+					// Now do client side things					
 					int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 					int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 					animations.doShoot(pumpDelay, pumpTime);
 					FlansModClient.playerRecoil += type.getRecoil(gunstack);
+					animations.recoil += type.getRecoil(gunstack);
 					if(type.consumeGunUponUse)
 						player.inventory.setInventorySlotContents(gunSlot, null);
 					

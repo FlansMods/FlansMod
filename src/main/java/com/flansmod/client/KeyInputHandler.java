@@ -21,6 +21,7 @@ import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.gui.teams.GuiTeamSelect;
 import com.flansmod.client.model.GunAnimations;
+import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -51,6 +52,7 @@ public class KeyInputHandler
 	public static KeyBinding gearKey = new KeyBinding("Gear Up / Down Key", Keyboard.KEY_L, "Flan's Mod");
 	public static KeyBinding doorKey = new KeyBinding("Door Open / Close Key", Keyboard.KEY_K, "Flan's Mod");
 	public static KeyBinding modeKey = new KeyBinding("Mode Switch Key", Keyboard.KEY_J, "Flan's Mod");
+	public static KeyBinding lookAtGunKey = new KeyBinding("Look at Gun", Keyboard.KEY_DELETE, "Flan's Mod");
 	//public static KeyBinding trimKey = new KeyBinding("Trim Key", Keyboard.KEY_O, "Flan's Mod");
 	public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
 	public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
@@ -79,6 +81,7 @@ public class KeyInputHandler
 		ClientRegistry.registerKeyBinding(gearKey);
 		ClientRegistry.registerKeyBinding(doorKey);
 		ClientRegistry.registerKeyBinding(modeKey);
+		ClientRegistry.registerKeyBinding(lookAtGunKey);
 		//ClientRegistry.registerKeyBinding(trimKey);
 		ClientRegistry.registerKeyBinding(debugKey);
 		ClientRegistry.registerKeyBinding(reloadModelsKey);
@@ -137,6 +140,11 @@ public class KeyInputHandler
 					}
 				}
 			}
+		}
+		if(lookAtGunKey.isPressed())
+		{
+			FlansModClient.getGunAnimations(mc.thePlayer, false).lookAt = LookAtState.TILT1;
+			FlansModClient.getGunAnimations(mc.thePlayer, true).lookAt = LookAtState.TILT1;
 		}
 		if(debugKey.isPressed())
 		{
