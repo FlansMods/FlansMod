@@ -198,8 +198,8 @@ public class ModelMinigun extends ModelGun
 		
 		// Custom extra minigun spinner on the side for the Steampunk skin
 		spinnerModel = new ModelRendererTurbo[8];
-		spinnerModel[0] = new ModelRendererTurbo(this, 0, 28, textureX, textureY); // Box 6
-		spinnerModel[1] = new ModelRendererTurbo(this, 20, 28, textureX, textureY); // Box 7
+		spinnerModel[0] = new ModelRendererTurbo(this, 18, 55, textureX, textureY); // Box 6
+		spinnerModel[1] = new ModelRendererTurbo(this, 44, 28, textureX, textureY); // Box 7
 		spinnerModel[2] = new ModelRendererTurbo(this, 34, 28, textureX, textureY); // Box 8
 		spinnerModel[3] = new ModelRendererTurbo(this, 20, 28, textureX, textureY); // Box 9
 		spinnerModel[4] = new ModelRendererTurbo(this, 14, 28, textureX, textureY); // Box 10
