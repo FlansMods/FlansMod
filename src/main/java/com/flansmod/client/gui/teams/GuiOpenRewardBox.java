@@ -14,6 +14,7 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
@@ -38,6 +39,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private static final int WIDTH = 196, HEIGHT = 200;
 	private static final int WAITING_FOR_SERVER = -1;
 	private static int spinTime = 30, slowdownTime = 130;
+	private static long timeOfLastSound = 0;
 	private static Random gunScrambler = new Random();
 	private float spinSpeed = 0.555555555f;
 	
@@ -150,6 +152,9 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				if(spinSpeed <= -Acceleration())
 				{
 					spinSpeed = 0.0f;
+					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+							new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 1.0F, 2.0f, 
+									(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
 					SwitchToState(EnumPageState.STOPPED);
 				}
 				int timeInState = slowdownTime - timeLeftInState;
@@ -157,12 +162,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				spinner = target + timeInState * InitialVelocity() + 0.5f * Acceleration() * timeInState * timeInState;
 				int postIndex = MathHelper.floor_float(spinner) % options.size();
 				
-				if(preIndex != postIndex)
-				{
-					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-							new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 10F, 1.0f, 
-									(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
-				}
+	
 				break;
 				
 			}
@@ -184,13 +184,6 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		spinner += spinSpeed;
 		int postIndex = MathHelper.floor_float(spinner) % options.size();
 		
-		if(preIndex != postIndex)
-		{
-			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-					new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 10F, 1.0f, 
-							(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
-		}
-		
 		if(spinner > options.size())
 		{
 			spinner -= options.size();
@@ -207,6 +200,18 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
+		int preIndex = MathHelper.floor_float(spinner) % options.size();
+		int postIndex = MathHelper.floor_float(spinner + spinSpeed * f) % options.size();
+
+		if(preIndex != postIndex && Minecraft.getSystemTime() - timeOfLastSound >= 80)
+		{
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+					new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 0.5F, 1.0f, 
+							(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
+			timeOfLastSound = Minecraft.getSystemTime();
+		}
+		
+		
 		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();

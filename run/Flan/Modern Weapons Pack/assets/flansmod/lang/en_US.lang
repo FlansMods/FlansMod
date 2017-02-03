@@ -215,3 +215,5 @@ item.juryAmmo.name=Jury Magnum Round
 item.executioner.name=Executioner Shotgun
 item.barrettCompactAmmo.name=Barrett .50 Cal Compact Ammo
 item.minigunPortableAmmo.name=Minigun Portable Ammo
+item.aa12.name=AA-12
+item.aa12Ammo.name=AA-12 Ammo

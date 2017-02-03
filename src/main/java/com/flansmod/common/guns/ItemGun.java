@@ -410,9 +410,13 @@ public class ItemGun extends Item implements IPaintableItem
 				while(shootTime <= 0.0f)
 				{
 					// Add the delay for this shot and shoot it!
-					shootTime += type.shootDelay;
+					shootTime += type.GetShootDelay(gunstack);
 					
 					ItemStack shootableStack = getBestNonEmptyShootableStack(gunstack);
+					if(shootableStack == null)
+					{
+						continue;
+					}
 					ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 					ShootableType shootableType = shootableItem.type;
 					// Instant bullets. Do a raytrace

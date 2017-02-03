@@ -187,7 +187,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				switch(type.mode)
 				{
 				case FULLAUTO: case MINIGUN :
-					shootDelay = type.shootDelay; 
+					shootDelay = type.GetShootDelay(stack); 
 					break;
 				case SEMIAUTO:
 					shootDelay = 2 * type.shootDelay;
@@ -309,7 +309,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			if(gunType.dropItemOnShoot != null)
 				item.dropItem(world, this, gunType.dropItemOnShoot);
 		}
-		shootDelay = gunType.shootDelay;
+		shootDelay = gunType.GetShootDelay(stack);
 	}
 	
 	@Override

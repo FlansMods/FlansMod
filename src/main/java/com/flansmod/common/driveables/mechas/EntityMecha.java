@@ -448,8 +448,8 @@ public class EntityMecha extends EntityDriveable
 			}
 		
 		if(left)
-			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
-		else shootDelayRight = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.shootDelay, 5) : gunType.shootDelay;
+			shootDelayLeft = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.GetShootDelay(stack), 5) : gunType.GetShootDelay(stack);
+		else shootDelayRight = gunType.mode == EnumFireMode.SEMIAUTO ? Math.max(gunType.GetShootDelay(stack), 5) : gunType.GetShootDelay(stack);
 		
 		if(bulletType.dropItemOnShoot != null && !creative)
 			ItemGun.dropItem(worldObj, this, bulletType.dropItemOnShoot);

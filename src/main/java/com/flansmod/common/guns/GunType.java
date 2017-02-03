@@ -606,6 +606,16 @@ public class GunType extends PaintableType implements IScope
 		}
 		return mode;
 	}
+	
+	public float GetShootDelay(ItemStack stack)
+	{
+		for(AttachmentType attachment : getCurrentAttachments(stack))
+		{
+			if(attachment.modeOverride == EnumFireMode.BURST)
+				return Math.max(shootDelay, 3);
+		}
+		return shootDelay;
+	}
 
 	/** Static String to GunType method */
 	public static GunType getGun(String s)
