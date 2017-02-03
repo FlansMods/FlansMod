@@ -47,6 +47,7 @@ AddSpecial mwMedicBag 3
 AddSpecial molotovCocktail 6
 AddSpecial mwAmmoBag 11
 AddSpecial claymore 17
+AddSpecial c4Remote 19 c4 4
 // Explosives
 AddPrimary rpg 0 rpgAmmo 3
 AddPrimary gl1 8 grenadeLauncherAmmo 2

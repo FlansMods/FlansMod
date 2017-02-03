@@ -42,5 +42,7 @@ NumGenericAttachmentSlots 1
 //Paintjob Settings
 //Format is "Paintjob iconName textureName requiredDyeAmount requiredDyeColour" Multiple colours may be listed in order, seperated by a space
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
+Paintjob AA12_Undergrowth AA12_Undergrowth yellow 2 green 2
+Paintjob AA12_Magma AA12_Magma black 1 yellow 1 orange 1 red 1
 //Description - note the ammo type
 Description Ammo Type : Clip-Fed Shotgun

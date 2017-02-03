@@ -32,6 +32,7 @@ AddPaintjob common r700 R700_Blue
 AddPaintjob common dragunov Dragunov_Birch
 AddPaintjob common m21 M21_Jungle
 AddPaintjob common barrett Barrett_WhiteLine
+AddPaintjob common aa12 AA12_Magma
 // Uncommons
 AddPaintjob uncommon minigun Minigun_Murica
 AddPaintjob uncommon ak47 AK47_CaseHardened

@@ -38,6 +38,7 @@ AddPaintjob common dragunov Dragunov_Grey
 AddPaintjob common m21 M21_Red
 AddPaintjob common m40a3 M40A3_Ice
 AddPaintjob common barrett Barrett_Hazard
+AddPaintjob common aa12 AA12_Undergrowth
 // Uncommons
 AddPaintjob uncommon ak47 AK47_Redline
 AddPaintjob uncommon m16a4 M16A4_Orange
