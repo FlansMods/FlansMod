@@ -608,7 +608,8 @@ public void cameraSetup(CameraSetup event)
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		//Remove crosshairs if looking down the sights of a gun
-		if(event.type == ElementType.CROSSHAIRS && FlansModClient.currentScope != null)
+		if(event.type == ElementType.CROSSHAIRS && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemGun)
+			// && FlansModClient.currentScope != null)
 		{
 			event.setCanceled(true);
 			return;

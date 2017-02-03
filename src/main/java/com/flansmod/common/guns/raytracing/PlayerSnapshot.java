@@ -159,7 +159,7 @@ public class PlayerSnapshot
 					gunType.model.barrelAttachPoint.z,
 					-gunType.model.barrelAttachPoint.x,
 					gunType.model.barrelAttachPoint.y);
-			//Vector3f.add(muzzlePos, barrelAttach, muzzlePos);
+			Vector3f.add(muzzlePos, barrelAttach, muzzlePos);
 		}
 		
 		muzzlePos = hitbox.axes.findLocalVectorGlobally(muzzlePos);
