@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 public interface ITeamBase 
 {
 	//Return the base name
-	public String getName();
+	public String getBaseName();
 	//Set the name of this base
-	public void setName(String newName);
+	public void setBaseName(String newName);
 	
 	//Sets the ID of this base for syncing and saving
 	public void setBaseID(int i);

@@ -170,13 +170,13 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 
 	@Override
-	public String getName() 
+	public String getBaseName() 
 	{
 		return name;
 	}
 
 	@Override
-	public void setName(String newName) 
+	public void setBaseName(String newName) 
 	{
 		name = newName;
 	}

@@ -96,7 +96,7 @@ public class PacketBaseEdit extends PacketBase
 		base.setOwnerID(teamID);
 		if(mapID != -1)
 			base.setMapFirstTime(TeamsManager.getInstance().getMapFromFullName(maps[mapID]));
-		base.setName(baseName);
+		base.setBaseName(baseName);
 		
 		FlansMod.log(playerEntity.getName() + " modified attributes of base " + baseID);
 	}

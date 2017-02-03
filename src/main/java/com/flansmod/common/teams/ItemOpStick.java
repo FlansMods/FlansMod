@@ -67,7 +67,7 @@ public class ItemOpStick extends Item implements IFlanItem
 				currentMapID = i;
 			i++;
 		}
-		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getName(), maps, currentMapID, base.getDefaultOwnerID()), player);
+		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getBaseName(), maps, currentMapID, base.getDefaultOwnerID()), player);
 
 	}
 	

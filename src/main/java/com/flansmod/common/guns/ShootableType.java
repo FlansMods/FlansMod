@@ -45,7 +45,7 @@ public abstract class ShootableType extends InfoType
 	
 	//Damage to hit entities
 	/** Amount of damage to impart upon various entities */
-	public int damageVsLiving = 1, damageVsDriveable = 1;
+	public float damageVsLiving = 1, damageVsDriveable = 1;
 	/** Whether this grenade will break glass when thrown against it */
 	public boolean breaksGlass = false;
 	
@@ -119,12 +119,12 @@ public abstract class ShootableType extends InfoType
 			
 			//Hit stuff
 			else if(split[0].equals("HitEntityDamage") || split[0].equals("DamageVsLiving") || split[0].equals("DamageVsPlayer"))
-				damageVsLiving = Integer.parseInt(split[1]);
+				damageVsLiving = Float.parseFloat(split[1]);
 			else if(split[0].equals("DamageVsVehicles"))
-				damageVsDriveable = Integer.parseInt(split[1]);
+				damageVsDriveable = Float.parseFloat(split[1]);
 			else if(split[0].equals("Damage"))
 			{
-				damageVsLiving = damageVsDriveable = Integer.parseInt(split[1]);
+				damageVsLiving = damageVsDriveable = Float.parseFloat(split[1]);
 			}
 			else if(split[0].equals("BreaksGlass"))
 				breaksGlass = Boolean.parseBoolean(split[1].toLowerCase());
@@ -157,7 +157,7 @@ public abstract class ShootableType extends InfoType
 		} 
 		catch (Exception e)
 		{
-			System.out.println("Reading grenade file failed.");
+			FlansMod.log("Reading grenade file failed: " + shortName);
 			e.printStackTrace();
 		}
 	}

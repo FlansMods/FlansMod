@@ -28,10 +28,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -316,6 +318,7 @@ public class FlansMod
 
 		//Config
 		FMLCommonHandler.instance().bus().register(INSTANCE);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		//Starting the EventListener
 		new PlayerDeathEventListener();
 		log("Loading complete.");
@@ -418,6 +421,15 @@ public class FlansMod
 		}
 		
 		tickHandler.onEntitySpawn(event);
+	}
+
+	@SubscribeEvent
+	public void onAttackEntity(AttackEntityEvent event)
+	{
+		if(event.entity instanceof EntityGunItem)
+		{
+			event.setCanceled(true);
+		}
 	}
 	
 	/** Reads type files from all content packs */
