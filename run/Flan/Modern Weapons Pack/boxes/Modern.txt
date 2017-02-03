@@ -24,7 +24,7 @@ AddGun r700 10 ingotIron 8 log 4 glass
 AddAmmo r700Ammo 1 ingotIron 1 gunpowder
 AddAltAmmo m40a3Ammo 1 ingotIron 3 gunpowder
 //Rifles
-SetPage Rifles
+SetPage Rifles 1
 AddGun m14 10 ingotIron 10 fiberglass
 AddAmmo m14Ammo 2 ingotIron 3 gunpowder
 AddGun g3 22 ingotIron
@@ -98,4 +98,8 @@ AddGun makarov 8 ingotIron
 AddAmmo makarovAmmo 2 ingotIron 1 gunpowder
 AddGun glock 9 ingotIron
 AddAmmo glockAmmo 4 ingotIron 3 gunpowder
+AddGun jury 10 ingotIron
+AddAmmo juryAmmo 1 ingotIron 1 gunpowder
+//Misc
+SetPage Misc
 AddGun m67 4 fiberglass 2 gunpowder

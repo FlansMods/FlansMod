@@ -24,7 +24,7 @@ AddPrimary w1200 6 w1200Ammo 28
 AddSecondary judge 9 w1200Ammo 15
 AddPrimary r870 11 r870Ammo 21
 AddSecondary executioner 15 w1200Ammo 8
-//AddPrimary aa12 17
+AddPrimary aa12 17 aa12Ammo 2
 // Pistols
 AddSecondary m9 0 m9Ammo 2
 AddSecondary makarov 4 makarovAmmo 4
@@ -49,8 +49,8 @@ AddSpecial mwAmmoBag 11
 AddSpecial claymore 17
 // Explosives
 AddPrimary rpg 0 rpgAmmo 3
-AddPrimary gl1 8 grenadeLauncherAmmo 6
-AddPrimary gl6 19 grenadeLauncherBouncyAmmo 6
+AddPrimary gl1 8 grenadeLauncherAmmo 2
+//AddPrimary gl6 19 grenadeLauncherBouncyAmmo 6
 // Snipers
 AddPrimary r700 1 r700Ammo 24
 AddPrimary dragunov 5 dragunovAmmo 5

@@ -32,7 +32,7 @@ AddPaintjob common l86 L86_Red
 AddPaintjob common m249 M249_Hazard
 AddPaintjob common minigun Minigun_Candy
 AddPaintjob common gl1 GL1_Blackwood
-AddPaintjob common gl6 GL6_Red
+//AddPaintjob common gl6 GL6_Red
 AddPaintjob common r700 R700_Red
 AddPaintjob common dragunov Dragunov_Grey
 AddPaintjob common m21 M21_Red

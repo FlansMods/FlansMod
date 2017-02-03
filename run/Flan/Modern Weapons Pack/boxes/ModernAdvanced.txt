@@ -39,7 +39,25 @@ SetPage SMGs
 AddGun MP7 14 ingotIron
 AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
 AddGun FMG 5 ingotIron 8 fiberglass
+AddAmmo MP7Ammo 4 ingotIron 4 gunpowder
 AddGun HK416 12 ingotIron 8 fiberglass
+AddAmmo m16a4Ammo 6 ingotIron 5 gunpowder
+AddAltAmmo betaCMag 8 fiberglass 10 gunpowder
+SetPage Shotguns
+AddGun judge 8 ingotIron 4 fiberglass
+AddAmmo w1200Ammo 1 fiberglass 1 gunpowder
+AddAltAmmo m1014Ammo 1 ingotIron 1 fiberglass 1 gunpowder
+AddAltAmmo w1200IncendiaryAmmo 1 fiberglass 1 gunpowder 2 blazePowder
+AddAltAmmo r870Ammo 1 ingotIron 1 fiberglass 1 gunpowder
+AddAltAmmo spasAmmo 1 fiberglass 4 gunpowder
+AddGun executioner 10 ingotIron 6 log
+AddAmmo w1200Ammo 1 fiberglass 1 gunpowder
+AddAltAmmo m1014Ammo 1 ingotIron 1 fiberglass 1 gunpowder
+AddAltAmmo w1200IncendiaryAmmo 1 fiberglass 1 gunpowder 2 blazePowder
+AddAltAmmo r870Ammo 1 ingotIron 1 fiberglass 1 gunpowder
+AddAltAmmo m1887Ammo 1 ingotIron 1 fiberglass 1 gunpowder 1 spiderEye
+AddGun aa12 12 ingotIron 12 fiberglass
+AddAmmo aa12Ammo 6 ingotIron 6 fiberglass 8 gunpowder
 SetPage Specials
 AddGun minigun 32 ingotIron 16 fiberglass 16 redstone
 AddAmmo minigunAmmo 8 ingotIron 32 gunpowder

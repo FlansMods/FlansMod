@@ -45,7 +45,7 @@ NumGenericAttachmentSlots 1
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"
 Paintjob FNSCAR_Green FNSCAR_Green green 1 lime 1
 Paintjob FNSCAR_TwoTone FNSCAR_TwoTone brown 1 black 1
-Paintjob FNSCAR_RedWhite FNSCAR_RedWhite red 1 white 1
+Paintjob FNSCAR_Newspaper FNSCAR_Newspaper red 1 white 1
 Paintjob FNSCAR_VroomVroom FNSCAR_VroomVroom red 1 yellow 1
 //Description - note the ammo type
 Description Ammo Type : Heavy Assault

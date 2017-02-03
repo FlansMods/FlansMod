@@ -27,7 +27,7 @@ AddPaintjob common l86 L86_Green
 AddPaintjob common m249 M249_White
 AddPaintjob common minigun Minigun_Harvester
 AddPaintjob common gl1 GL1_Birch
-AddPaintjob common gl6 GL6_Lurid
+//AddPaintjob common gl6 GL6_Lurid
 AddPaintjob common r700 R700_Blue
 AddPaintjob common dragunov Dragunov_Birch
 AddPaintjob common m21 M21_Jungle
