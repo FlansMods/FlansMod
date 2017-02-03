@@ -84,10 +84,10 @@ public class RewardBoxInstance
 		return new RewardBoxInstance(EnumRewardOrigin.PURCHASE, box);
 	}
 	
-	public static RewardBoxInstance CreateCheatReward(RewardBox box, EntityPlayer player)
+	public static RewardBoxInstance CreateCheatReward(RewardBox box, String username)
 	{
 		FlansMod.log("---------------------------------------------------------------------------");
-		FlansMod.log("REWARD BOX CREATED VIA OP CHEAT FOR USER: " + player.getDisplayNameString());
+		FlansMod.log("REWARD BOX CREATED VIA OP CHEAT FOR USER: " + username);
 		FlansMod.log("---------------------------------------------------------------------------");
 		return new RewardBoxInstance(EnumRewardOrigin.OP_CHEAT, box);
 	}

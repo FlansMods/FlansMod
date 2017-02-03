@@ -11,6 +11,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.flansmod.common.FlansMod;
+import com.mojang.authlib.GameProfile;
 
 public class CommandTeams extends CommandBase 
 {
@@ -760,12 +761,14 @@ public class CommandTeams extends CommandBase
 				sender.addChatMessage(new ChatComponentText("Invalid box"));	
 				return;
 			}
-			for(EntityPlayer player : TeamsManager.getPlayers())
+			
+			GameProfile profile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(name);
+			if(profile != null)
 			{
-				if(player.getName().equals(name))
+				RewardBoxInstance instance = RewardBoxInstance.CreateCheatReward(box, name);
+				PlayerRankData data = TeamsManagerRanked.GetRankData(profile.getId());
+				if(data != null)
 				{
-					RewardBoxInstance instance = RewardBoxInstance.CreateCheatReward(box, player);
-					PlayerRankData data = TeamsManagerRanked.GetRankData(player);
 					data.AddRewardBoxInstance(instance);
 				}
 			}

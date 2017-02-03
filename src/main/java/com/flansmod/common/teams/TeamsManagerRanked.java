@@ -498,4 +498,9 @@ public class TeamsManagerRanked extends TeamsManager
 	{
 		return GetInstance().rankData.get(player.getUniqueID());
 	}
+
+	public static PlayerRankData GetRankData(UUID id) 
+	{
+		return GetInstance().rankData.get(id);
+	}
 }
