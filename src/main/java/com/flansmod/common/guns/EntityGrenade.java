@@ -464,7 +464,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int i, boolean b)
 	{
 		
 	}

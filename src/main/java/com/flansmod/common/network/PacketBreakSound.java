@@ -59,7 +59,7 @@ public class PacketBreakSound extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		Block block = Block.getBlockById(blockID);
-    	FMLClientHandler.instance().getClient().effectRenderer.func_180533_a(new BlockPos(x, y, z), block.getDefaultState());
+    	FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(new BlockPos(x, y, z), block.getDefaultState());
     	FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(block.stepSound.getBreakSound()), x + 0.5F, y + 0.5F, z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F));
 	}
 }

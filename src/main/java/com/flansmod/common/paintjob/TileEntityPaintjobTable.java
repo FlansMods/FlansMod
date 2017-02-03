@@ -17,11 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 
-public class TileEntityPaintjobTable extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityPaintjobTable extends TileEntity implements IInventory, ITickable
 {
 	// Stack 0 is InfoType being painted. Stack 1 is paint cans
 	private ItemStack inventoryStacks[] = new ItemStack[2];
@@ -69,14 +69,6 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 			}
 		} 
 		return null; 
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) 
-	{ 
-		ItemStack returnStack = getStackInSlot(index);
-		setInventorySlotContents(index, null);
-		return returnStack; 
 	}
 
 	@Override
@@ -175,5 +167,11 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	public ItemStack getPaintCans()
 	{
 		return inventoryStacks[1];
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) 
+	{
+		return null;
 	}
 }

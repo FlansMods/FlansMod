@@ -130,7 +130,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	{
 		super.initGui();
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - WIDTH / 2;
@@ -323,7 +323,7 @@ public class GuiMissionResults extends GuiTeamsBase
 			return;
 		}
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();

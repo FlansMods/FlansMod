@@ -43,7 +43,7 @@ public class EntityDebugDot extends Entity
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getEntityBoundingBox()
 	{
 		return null;
 	}

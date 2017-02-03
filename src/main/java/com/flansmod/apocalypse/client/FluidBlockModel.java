@@ -12,9 +12,11 @@ import javax.vecmath.Vector3f;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.util.EnumFacing;
@@ -59,13 +61,7 @@ public class FluidBlockModel implements ISmartBlockModel
 	{
 		return false;
 	}
-	
-	@Override
-	public TextureAtlasSprite getTexture()
-	{
-		return null;
-	}
-	
+		
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms()
 	{
@@ -100,14 +96,19 @@ public class FluidBlockModel implements ISmartBlockModel
 	
 	private SimpleBakedModel buildModel(BlockSulphuricAcid block, List<Float> param)
 	{
+		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
+		// TODO : 1.8.9 mess
+		TextureAtlasSprite still = textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidStill");
+		TextureAtlasSprite flowing = textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidFlowing");
+
 		List<List<BakedQuad>> faceQuads = new ArrayList<List<BakedQuad>>();
 		for(int i = 0; i < 6; i++)
 		{
 			if(i == EnumFacing.DOWN.ordinal())
-				faceQuads.add(Arrays.asList(createQuad(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(1, 0, 1), new Vector3f(0, 0, 1), block.getFluid().getStillIcon(), EnumFacing.DOWN)));
+				faceQuads.add(Arrays.asList(createQuad(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(1, 0, 1), new Vector3f(0, 0, 1), still, EnumFacing.DOWN)));
 			else if(i == EnumFacing.UP.ordinal())
 			{
-				TextureAtlasSprite sprite = param.get(4) < -999F ? block.getFluid().getStillIcon() : block.getFluid().getFlowingIcon();
+				TextureAtlasSprite sprite = param.get(4) < -999F ? still : flowing;
 				BakedQuad quad1 = createQuad(new Vector3f(0, param.get(2), 0), new Vector3f(0, param.get(1), 1),
 						new Vector3f(1, param.get(0), 1), new Vector3f(1, param.get(3), 0), sprite, EnumFacing.UP, param.get(4));
 				BakedQuad quad2 = createQuad(new Vector3f(0, param.get(2) - RENDER_OFFSET, 0), new Vector3f(1, param.get(3) - RENDER_OFFSET, 0),
@@ -124,19 +125,20 @@ public class FluidBlockModel implements ISmartBlockModel
 				
 				if(facing.getAxis() == EnumFacing.Axis.X)
 				{
-					BakedQuad quad1 = createQuad(new Vector3f(p, 0, p), new Vector3f(p, 0, 1-p), new Vector3f(p, height1, 1-p), new Vector3f(p, height2, p), block.getFluid().getFlowingIcon(), facing);
-					BakedQuad quad2 = createQuad(new Vector3f(p - offset, 0, p), new Vector3f(p - offset, height2, p), new Vector3f(p - offset, height1, 1-p), new Vector3f(p - offset, 0, 1-p), block.getFluid().getFlowingIcon(), facing.getOpposite());
+					BakedQuad quad1 = createQuad(new Vector3f(p, 0, p), new Vector3f(p, 0, 1-p), new Vector3f(p, height1, 1-p), new Vector3f(p, height2, p), flowing, facing);
+					BakedQuad quad2 = createQuad(new Vector3f(p - offset, 0, p), new Vector3f(p - offset, height2, p), new Vector3f(p - offset, height1, 1-p), new Vector3f(p - offset, 0, 1-p), flowing, facing.getOpposite());
 					faceQuads.add(Arrays.asList(quad1, quad2));
 				} else
 				{
-					BakedQuad quad1 = createQuad(new Vector3f(1-p, 0, p), new Vector3f(p, 0, p), new Vector3f(p, height1, p), new Vector3f(1-p, height2, p), block.getFluid().getFlowingIcon(), facing);
-					BakedQuad quad2 = createQuad(new Vector3f(1-p, 0, p - offset), new Vector3f(1-p, height2, p - offset), new Vector3f(p, height1, p - offset), new Vector3f(p, 0, p - offset), block.getFluid().getFlowingIcon(), facing.getOpposite());
+					BakedQuad quad1 = createQuad(new Vector3f(1-p, 0, p), new Vector3f(p, 0, p), new Vector3f(p, height1, p), new Vector3f(1-p, height2, p), flowing, facing);
+					BakedQuad quad2 = createQuad(new Vector3f(1-p, 0, p - offset), new Vector3f(1-p, height2, p - offset), new Vector3f(p, height1, p - offset), new Vector3f(p, 0, p - offset), flowing, facing.getOpposite());
 					faceQuads.add(Arrays.asList(quad1, quad2));
+					
 				}
 			}
 		}
 		
-		return new SimpleBakedModel(Collections.emptyList(), faceQuads, false, false, block.getFluid().getStillIcon(), null);
+		return new SimpleBakedModel(new ArrayList<BakedQuad>(), faceQuads, false, false, still, ItemCameraTransforms.DEFAULT);
 	}
 	
 	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f vec3, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing)
@@ -201,5 +203,11 @@ public class FluidBlockModel implements ISmartBlockModel
 		if(facing == EnumFacing.WEST || facing == EnumFacing.EAST)
 			return -6710887;
 		else return -1;
+	}
+
+	@Override
+	public TextureAtlasSprite getParticleTexture() 
+	{
+		return null;
 	}
 }

@@ -98,7 +98,7 @@ public class GuiDriveableRepair extends GuiScreen
 		updateButtons();
 
 		//Standard GUI render stuff
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();

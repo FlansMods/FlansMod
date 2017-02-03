@@ -17,10 +17,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.model.RenderGun.GunRenderType;
 import com.flansmod.client.model.apocalypse.ModelGroundSkeleton;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.ItemHolderType;
@@ -84,9 +84,9 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 		       
 		        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
 		        {
-		        	ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, stack);		        			
+		        	ClientProxy.gunRenderer.renderItem(GunRenderType.ENTITY, stack);		        			
 		        }
-		        else Minecraft.getMinecraft().getRenderItem().renderItemModel(stack);
+		        else Minecraft.getMinecraft().getRenderItem().renderItem(stack, TransformType.GROUND);
 			}
 	        
 	        GlStateManager.popMatrix();

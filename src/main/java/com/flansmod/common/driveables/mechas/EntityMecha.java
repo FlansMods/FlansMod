@@ -943,7 +943,7 @@ public class EntityMecha extends EntityDriveable
 										}
 										
 										//Add the itemstack to mecha inventory
-										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getBoolean("doTileDrops"))
 										{
 											worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
 										}

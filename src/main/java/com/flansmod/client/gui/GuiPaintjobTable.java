@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.FlansModResourceHandler;
@@ -32,6 +31,7 @@ import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderGun.GunRenderType;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType;
@@ -267,7 +267,7 @@ public class GuiPaintjobTable extends GuiContainer
 				        if(inCustomMode)
 				        	RenderGun.bindTextures = false;
 				        
-						ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack);
+						ClientProxy.gunRenderer.renderItem(GunRenderType.ENTITY, tempStack);
 						RenderGun.bindTextures = true;
 						break;
 					}

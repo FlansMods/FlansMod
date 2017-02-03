@@ -19,13 +19,13 @@ public class CommandTeams extends CommandBase
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
 
 	@Override
-	public String getName() 
+	public String getCommandName() 
 	{
 		return "teams";
 	}
 	
 	@Override
-	public void execute(ICommandSender sender, String[] split) throws CommandException 
+	public void processCommand(ICommandSender sender, String[] split) throws CommandException 
 	{
 		if(teamsManager == null)
 		{

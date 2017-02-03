@@ -301,7 +301,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Church func_175854_a(StructureAbandonedVillagePieces.Start p_175854_0_, List p_175854_1_, Random p_175854_2_, int p_175854_3_, int p_175854_4_, int p_175854_5_, EnumFacing p_175854_6_, int p_175854_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175854_3_, p_175854_4_, p_175854_5_, 0, 0, 0, 5, 12, 9, p_175854_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175854_3_, p_175854_4_, p_175854_5_, 0, 0, 0, 5, 12, 9, p_175854_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175854_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Church(p_175854_0_, p_175854_7_, p_175854_2_, structureboundingbox, p_175854_6_) : null;
             }
 
@@ -323,63 +323,63 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 12 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 3, 3, 7, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 5, 1, 3, 9, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 0, 3, 0, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 0, 3, 10, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 1, 0, 10, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 1, 1, 4, 10, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 4, 0, 4, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 0, 4, 4, 4, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 8, 3, 4, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 5, 4, 3, 10, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 5, 5, 3, 5, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 9, 0, 4, 9, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 0, 4, 4, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 0, 11, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 11, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 2, 11, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 2, 11, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 1, 1, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 1, 1, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 2, 1, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 3, 1, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 3, 1, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 3, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 3, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 6, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 7, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 6, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 7, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 6, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 7, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 6, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 7, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 3, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 3, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 3, 8, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 1, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 1, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 3, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 1)), 1, 2, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 0)), 3, 2, 7, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 3, 3, 7, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 5, 1, 3, 9, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 0, 3, 0, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 0, 3, 10, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 1, 0, 10, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 1, 1, 4, 10, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 4, 0, 4, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 0, 4, 4, 4, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 8, 3, 4, 8, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 5, 4, 3, 10, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 5, 5, 3, 5, 7, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 9, 0, 4, 9, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 0, 4, 4, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 0, 11, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 11, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 2, 11, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 2, 11, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 1, 1, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 1, 1, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 2, 1, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 3, 1, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 3, 1, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 3, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 3, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 6, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 7, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 6, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 7, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 6, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 7, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 6, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 7, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 3, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 3, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 3, 8, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 1, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 1, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 3, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 1)), 1, 2, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 0)), 3, 2, 7, p_74875_3_);
                 int i = this.getMetadataWithOffset(Blocks.ladder, 4);
                 int j;
 
                 for (j = 1; j <= 9; ++j)
                 {
                 	if(rand.nextBoolean())
-                		this.func_175811_a(worldIn, Blocks.ladder.getStateFromMeta(i), 3, j, 3, p_74875_3_);
+                		this.setBlockState(worldIn, Blocks.ladder.getStateFromMeta(i), 3, j, 3, p_74875_3_);
                 }
 
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
 
-                if (this.func_175807_a(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                if (this.getBlockStateFromPos(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                 {
-                    this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
                 }
 
                 for (j = 0; j < 9; ++j)
@@ -387,7 +387,7 @@ public class StructureAbandonedVillagePieces
                     for (int k = 0; k < 5; ++k)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, k, 12, j, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), k, -1, j, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), k, -1, j, p_74875_3_);
                     }
                 }
                 
@@ -478,7 +478,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Field1 func_175851_a(StructureAbandonedVillagePieces.Start p_175851_0_, List p_175851_1_, Random p_175851_2_, int p_175851_3_, int p_175851_4_, int p_175851_5_, EnumFacing p_175851_6_, int p_175851_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175851_3_, p_175851_4_, p_175851_5_, 0, 0, 0, 13, 4, 9, p_175851_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175851_3_, p_175851_4_, p_175851_5_, 0, 0, 0, 13, 4, 9, p_175851_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175851_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Field1(p_175851_0_, p_175851_7_, p_175851_2_, structureboundingbox, p_175851_6_) : null;
             }
 
@@ -500,18 +500,18 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 4 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 0, 12, 4, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 0, 1, 5, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 7, 0, 1, 8, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 10, 0, 1, 11, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 0, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 6, 0, 0, 6, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 12, 0, 0, 12, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 0, 11, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 8, 11, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                //this.func_175804_a(worldIn, p_74875_3_, 3, 0, 1, 3, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
-                //this.func_175804_a(worldIn, p_74875_3_, 9, 0, 1, 9, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 0, 12, 4, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 0, 1, 5, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 7, 0, 1, 8, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 10, 0, 1, 11, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 0, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 6, 0, 0, 6, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 12, 0, 0, 12, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 0, 11, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 8, 11, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                //this.fillWithBlocks(worldIn, p_74875_3_, 3, 0, 1, 3, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
+                //this.fillWithBlocks(worldIn, p_74875_3_, 9, 0, 1, 9, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
                 int i;
 
                 for (i = 1; i <= 7; ++i)
@@ -520,7 +520,7 @@ public class StructureAbandonedVillagePieces
                 	{
                 		int row = p_74875_2_.nextInt(11) + 1;
                 		if(row != 3 && row != 6 && row != 9)
-                			this.func_175811_a(worldIn, this.cropTypeD.getStateFromMeta(MathHelper.getRandomIntegerInRange(p_74875_2_, 2, 7)), row, 1, i, p_74875_3_);
+                			this.setBlockState(worldIn, this.cropTypeD.getStateFromMeta(MathHelper.getRandomIntegerInRange(p_74875_2_, 2, 7)), row, 1, i, p_74875_3_);
                 	}
                 }
 
@@ -529,7 +529,7 @@ public class StructureAbandonedVillagePieces
                     for (int j = 0; j < 13; ++j)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j, 4, i, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.dirt.getDefaultState(), j, -1, i, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.dirt.getDefaultState(), j, -1, i, p_74875_3_);
                     }
                 }
 
@@ -591,7 +591,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Field2 func_175852_a(StructureAbandonedVillagePieces.Start p_175852_0_, List p_175852_1_, Random p_175852_2_, int p_175852_3_, int p_175852_4_, int p_175852_5_, EnumFacing p_175852_6_, int p_175852_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175852_3_, p_175852_4_, p_175852_5_, 0, 0, 0, 7, 4, 9, p_175852_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175852_3_, p_175852_4_, p_175852_5_, 0, 0, 0, 7, 4, 9, p_175852_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175852_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Field2(p_175852_0_, p_175852_7_, p_175852_2_, structureboundingbox, p_175852_6_) : null;
             }
 
@@ -613,14 +613,14 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 4 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 0, 6, 4, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 0, 1, 5, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 0, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 6, 0, 0, 6, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 0, 5, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 8, 5, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                //this.func_175804_a(worldIn, p_74875_3_, 3, 0, 1, 3, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 0, 6, 4, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 0, 1, 5, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 0, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 6, 0, 0, 6, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 0, 5, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 8, 5, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                //this.fillWithBlocks(worldIn, p_74875_3_, 3, 0, 1, 3, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
                 int i;
 
                 for (i = 1; i <= 7; ++i)
@@ -629,7 +629,7 @@ public class StructureAbandonedVillagePieces
                 	{
                 		int row = p_74875_2_.nextInt(5) + 1;
                 		if(row != 3)
-                			this.func_175811_a(worldIn, this.cropTypeA.getStateFromMeta(MathHelper.getRandomIntegerInRange(p_74875_2_, 2, 7)), row, 1, i, p_74875_3_);
+                			this.setBlockState(worldIn, this.cropTypeA.getStateFromMeta(MathHelper.getRandomIntegerInRange(p_74875_2_, 2, 7)), row, 1, i, p_74875_3_);
                 	}
                 }
 
@@ -638,7 +638,7 @@ public class StructureAbandonedVillagePieces
                     for (int j = 0; j < 7; ++j)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j, 4, i, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.dirt.getDefaultState(), j, -1, i, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.dirt.getDefaultState(), j, -1, i, p_74875_3_);
                     }
                 }
 
@@ -661,7 +661,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Hall func_175857_a(StructureAbandonedVillagePieces.Start p_175857_0_, List p_175857_1_, Random p_175857_2_, int p_175857_3_, int p_175857_4_, int p_175857_5_, EnumFacing p_175857_6_, int p_175857_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175857_3_, p_175857_4_, p_175857_5_, 0, 0, 0, 9, 7, 11, p_175857_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175857_3_, p_175857_4_, p_175857_5_, 0, 0, 0, 9, 7, 11, p_175857_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175857_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Hall(p_175857_0_, p_175857_7_, p_175857_2_, structureboundingbox, p_175857_6_) : null;
             }
 
@@ -683,27 +683,27 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 7 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 7, 4, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 1, 6, 8, 4, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 0, 6, 8, 0, 10, Blocks.dirt.getDefaultState(), Blocks.dirt.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 6, 0, 6, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 1, 6, 2, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 1, 6, 8, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 3, 1, 10, 7, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 7, 0, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 0, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 0, 0, 8, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 0, 7, 1, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 5, 7, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 0, 7, 3, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 5, 7, 3, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 1, 8, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 4, 8, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 5, 2, 8, 5, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 0, 4, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 0, 4, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 4, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 4, 3, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 7, 4, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 1, 6, 8, 4, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 0, 6, 8, 0, 10, Blocks.dirt.getDefaultState(), Blocks.dirt.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 6, 0, 6, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 1, 6, 2, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 1, 6, 8, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 3, 1, 10, 7, 1, 10, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 7, 0, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 0, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 0, 0, 8, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 0, 7, 1, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 5, 7, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 0, 7, 3, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 5, 7, 3, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 1, 8, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 4, 8, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 5, 2, 8, 5, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 0, 4, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 0, 4, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 4, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 4, 3, p_74875_3_);
                 int i = this.getMetadataWithOffset(Blocks.oak_stairs, 3);
                 int j = this.getMetadataWithOffset(Blocks.oak_stairs, 2);
                 int k;
@@ -713,52 +713,52 @@ public class StructureAbandonedVillagePieces
                 {
                     for (l = 0; l <= 8; ++l)
                     {
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 4 + k, k, p_74875_3_);
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 4 + k, 5 - k, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 4 + k, k, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 4 + k, 5 - k, p_74875_3_);
                     }
                 }
 
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 0, 2, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 0, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 3, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 5, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 6, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 2, 1, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.wooden_pressure_plate.getDefaultState(), 2, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 1, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 3)), 2, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 1)), 1, 1, 3, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 5, 0, 1, 7, 0, 3, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.double_stone_slab.getDefaultState(), 6, 1, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.double_stone_slab.getDefaultState(), 6, 1, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 2, 3, 1, p_74875_3_);
-                this.func_175810_a(worldIn, p_74875_3_, p_74875_2_, 2, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 0, 2, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 0, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 3, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 5, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 6, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 2, 1, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.wooden_pressure_plate.getDefaultState(), 2, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 1, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 3)), 2, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 1)), 1, 1, 3, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 5, 0, 1, 7, 0, 3, Blocks.double_stone_slab.getDefaultState(), Blocks.double_stone_slab.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.double_stone_slab.getDefaultState(), 6, 1, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.double_stone_slab.getDefaultState(), 6, 1, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 2, 3, 1, p_74875_3_);
+                this.placeDoorCurrentPosition(worldIn, p_74875_3_, p_74875_2_, 2, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
 
-                if (this.func_175807_a(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                if (this.getBlockStateFromPos(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                 {
-                    this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
                 }
 
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 6, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 6, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.getOpposite()), 6, 3, 4, p_74875_3_);
-                this.func_175810_a(worldIn, p_74875_3_, p_74875_2_, 6, 1, 5, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 6, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 6, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.getOpposite()), 6, 3, 4, p_74875_3_);
+                this.placeDoorCurrentPosition(worldIn, p_74875_3_, p_74875_2_, 6, 1, 5, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
 
                 for (k = 0; k < 5; ++k)
                 {
                     for (l = 0; l < 9; ++l)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, l, 7, k, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), l, -1, k, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), l, -1, k, p_74875_3_);
                     }
                 }
 
@@ -788,7 +788,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Library func_175850_a(StructureAbandonedVillagePieces.Start p_175850_0_, List p_175850_1_, Random p_175850_2_, int p_175850_3_, int p_175850_4_, int p_175850_5_, EnumFacing p_175850_6_, int p_175850_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175850_3_, p_175850_4_, p_175850_5_, 0, 0, 0, 9, 9, 6, p_175850_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175850_3_, p_175850_4_, p_175850_5_, 0, 0, 0, 9, 9, 6, p_175850_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175850_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Library(p_175850_0_, p_175850_7_, p_175850_2_, structureboundingbox, p_175850_6_) : null;
             }
 
@@ -822,11 +822,11 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 9 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 7, 5, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 8, 0, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 5, 0, 8, 5, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 6, 1, 8, 6, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 7, 2, 8, 7, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 7, 5, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 8, 0, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 5, 0, 8, 5, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 6, 1, 8, 6, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 7, 2, 8, 7, 3, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
                 int i = this.getMetadataWithOffset(Blocks.oak_stairs, 3);
                 int j = this.getMetadataWithOffset(Blocks.oak_stairs, 2);
                 int k;
@@ -836,54 +836,54 @@ public class StructureAbandonedVillagePieces
                 {
                     for (l = 0; l <= 8; ++l)
                     {
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 6 + k, k, p_74875_3_);
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 6 + k, 5 - k, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 6 + k, k, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 6 + k, 5 - k, p_74875_3_);
                     }
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 0, 0, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 5, 8, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 1, 0, 8, 1, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 1, 0, 7, 1, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 2, 0, 0, 4, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 2, 5, 0, 4, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 2, 5, 8, 4, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 2, 0, 8, 4, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 2, 1, 0, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 5, 7, 4, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 2, 1, 8, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 0, 7, 4, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 4, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 5, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 6, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 4, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 5, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 6, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 0, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 0, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 0, 3, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 0, 3, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 8, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 8, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 8, 3, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 8, 3, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 2, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 3, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 5, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 6, 2, 5, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 4, 1, 7, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 4, 4, 7, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 3, 4, 2, 3, 4, Blocks.bookshelf.getDefaultState(), Blocks.bookshelf.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 7, 1, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 0, 0, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 5, 8, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 1, 0, 8, 1, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 1, 0, 7, 1, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 2, 0, 0, 4, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 2, 5, 0, 4, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 2, 5, 8, 4, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 2, 0, 8, 4, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 2, 1, 0, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 5, 7, 4, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 2, 1, 8, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 0, 7, 4, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 4, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 5, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 6, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 4, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 5, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 6, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 0, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 0, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 0, 3, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 0, 3, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 8, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 8, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 8, 3, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 8, 3, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 2, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 3, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 5, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 6, 2, 5, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 4, 1, 7, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 4, 4, 7, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 3, 4, 2, 3, 4, Blocks.bookshelf.getDefaultState(), Blocks.bookshelf.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 7, 1, 4, p_74875_3_);
                 
                 //Flan's Mod Bits : Crafting tables
-                this.func_175811_a(worldIn, FlansModApocalypse.getLootGenerator().getRandomWeaponBox(p_74875_2_).getDefaultState(), 1, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, FlansMod.workbench.getStateFromMeta(p_74875_2_.nextInt(2)), 7, 1, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.crafting_table.getDefaultState(), 7, 1, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 3, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, FlansModApocalypse.getLootGenerator().getRandomWeaponBox(p_74875_2_).getDefaultState(), 1, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, FlansMod.workbench.getStateFromMeta(p_74875_2_.nextInt(2)), 7, 1, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.crafting_table.getDefaultState(), 7, 1, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 3, 1, 4, p_74875_3_);
                 
 
-                if(!hasMadeChest && p_74875_3_.func_175898_b(new BlockPos(this.getXWithOffset(2, 4), this.getYWithOffset(1), this.getZWithOffset(2, 4))))
+                if(!hasMadeChest && p_74875_3_.isVecInside(new BlockPos(this.getXWithOffset(2, 4), this.getYWithOffset(1), this.getZWithOffset(2, 4))))
                 {
                 	hasMadeChest = true;
                 	
@@ -904,13 +904,13 @@ public class StructureAbandonedVillagePieces
 	                FlansModApocalypse.getLootGenerator().addRandomLoot((TileEntityItemHolder)worldIn.getTileEntity(skeletonPos), p_74875_2_, false);
                 }
                 
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 1, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 1, 2, 0, p_74875_3_);
-                this.func_175810_a(worldIn, p_74875_3_, p_74875_2_, 1, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 1, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 1, 2, 0, p_74875_3_);
+                this.placeDoorCurrentPosition(worldIn, p_74875_3_, p_74875_2_, 1, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
 
-                if (this.func_175807_a(worldIn, 1, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, 1, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                if (this.getBlockStateFromPos(worldIn, 1, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, 1, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                 {
-                    this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 1, 0, -1, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 1, 0, -1, p_74875_3_);
                 }
 
                 for (l = 0; l < 6; ++l)
@@ -918,7 +918,7 @@ public class StructureAbandonedVillagePieces
                     for (int i1 = 0; i1 < 9; ++i1)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, i1, 9, l, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), i1, -1, l, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), i1, -1, l, p_74875_3_);
                     }
                 }
 
@@ -950,7 +950,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.Blacksmith func_175855_a(StructureAbandonedVillagePieces.Start p_175855_0_, List p_175855_1_, Random p_175855_2_, int p_175855_3_, int p_175855_4_, int p_175855_5_, EnumFacing p_175855_6_, int p_175855_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175855_3_, p_175855_4_, p_175855_5_, 0, 0, 0, 10, 6, 7, p_175855_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175855_3_, p_175855_4_, p_175855_5_, 0, 0, 0, 10, 6, 7, p_175855_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175855_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.Blacksmith(p_175855_0_, p_175855_7_, p_175855_2_, structureboundingbox, p_175855_6_) : null;
             }
 
@@ -990,59 +990,59 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 6 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 0, 9, 4, 6, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 9, 0, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 0, 9, 4, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 5, 0, 9, 5, 6, Blocks.stone_slab.getDefaultState(), Blocks.stone_slab.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 5, 1, 8, 5, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 0, 9, 4, 6, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 9, 0, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 0, 9, 4, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 5, 0, 9, 5, 6, Blocks.stone_slab.getDefaultState(), Blocks.stone_slab.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 5, 1, 8, 5, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
                 //Front wall
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 0, 2, 3, 0, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 0, 1, 1, 0, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 0, 2, 3, 0, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 0, 1, 1, 0, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
                 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 0, 0, 4, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 3, 1, 0, 3, 4, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 6, 0, 4, 6, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 3, 3, 1, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 3, 1, 2, 3, 3, 2, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 1, 3, 5, 3, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 0, 0, 4, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 3, 1, 0, 3, 4, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 6, 0, 4, 6, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 3, 3, 1, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 3, 1, 2, 3, 3, 2, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 1, 3, 5, 3, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
                 //Broken side wall
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 1, 0, 3, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 3, 0, 1, 5, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 2, 5, 0, 2, 5, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 1, 0, 3, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 3, 0, 1, 5, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 2, 5, 0, 2, 5, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
                 //Broken back wall
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 6, 5, 3, 6, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 6, 5, 1, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 6, 3, 2, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 3, 6, 1, 3, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 6, 5, 3, 6, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 6, 5, 1, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 6, 3, 2, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 3, 6, 1, 3, 6, Blocks.planks.getDefaultState(), Blocks.air.getDefaultState(), false);
                 //
-                this.func_175804_a(worldIn, p_74875_3_, 5, 1, 0, 5, 3, 0, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 9, 1, 0, 9, 3, 0, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 6, 1, 4, 9, 4, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 7, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.iron_bars.getDefaultState(), 9, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.iron_bars.getDefaultState(), 9, 2, 4, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 7, 2, 4, 8, 2, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 6, 1, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.furnace.getDefaultState(), 6, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.furnace.getDefaultState(), 6, 3, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.double_stone_slab.getDefaultState(), 8, 1, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 4, 2, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 2, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.wooden_pressure_plate.getDefaultState(), 2, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 1, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 3)), 2, 1, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 1)), 1, 1, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 5, 1, 0, 5, 3, 0, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 9, 1, 0, 9, 3, 0, Blocks.oak_fence.getDefaultState(), Blocks.oak_fence.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 6, 1, 4, 9, 4, 6, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 7, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.iron_bars.getDefaultState(), 9, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.iron_bars.getDefaultState(), 9, 2, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 7, 2, 4, 8, 2, 5, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 6, 1, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.furnace.getDefaultState(), 6, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.furnace.getDefaultState(), 6, 3, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.double_stone_slab.getDefaultState(), 8, 1, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 4, 2, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 2, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.wooden_pressure_plate.getDefaultState(), 2, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 1, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 3)), 2, 1, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.oak_stairs, 1)), 1, 1, 4, p_74875_3_);
 
-                if (!this.hasMadeChest && p_74875_3_.func_175898_b(new BlockPos(this.getXWithOffset(5, 5), this.getYWithOffset(1), this.getZWithOffset(5, 5))))
+                if (!this.hasMadeChest && p_74875_3_.isVecInside(new BlockPos(this.getXWithOffset(5, 5), this.getYWithOffset(1), this.getZWithOffset(5, 5))))
                 {
                     this.hasMadeChest = true;                    
                     BlockPos blockpos = new BlockPos(this.getXWithOffset(5, 5), this.getYWithOffset(1), this.getZWithOffset(5, 5));
                     
-                    if (p_74875_3_.func_175898_b(blockpos) && worldIn.getBlockState(blockpos).getBlock() != Blocks.chest)
+                    if (p_74875_3_.isVecInside(blockpos) && worldIn.getBlockState(blockpos).getBlock() != Blocks.chest)
                     {
                         IBlockState iblockstate = Blocks.chest.getDefaultState();
                         worldIn.setBlockState(blockpos, Blocks.chest.correctFacing(worldIn, blockpos, iblockstate), 2);
@@ -1060,9 +1060,9 @@ public class StructureAbandonedVillagePieces
 
                 for (i = 6; i <= 8; ++i)
                 {
-                    if (this.func_175807_a(worldIn, i, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, i, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                    if (this.getBlockStateFromPos(worldIn, i, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, i, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                     {
-                        this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), i, 0, -1, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), i, 0, -1, p_74875_3_);
                     }
                 }
 
@@ -1071,7 +1071,7 @@ public class StructureAbandonedVillagePieces
                     for (int j = 0; j < 10; ++j)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j, 6, i, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
                     }
                 }
                 
@@ -1111,7 +1111,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.House3 func_175849_a(StructureAbandonedVillagePieces.Start p_175849_0_, List p_175849_1_, Random p_175849_2_, int p_175849_3_, int p_175849_4_, int p_175849_5_, EnumFacing p_175849_6_, int p_175849_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175849_3_, p_175849_4_, p_175849_5_, 0, 0, 0, 9, 7, 12, p_175849_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175849_3_, p_175849_4_, p_175849_5_, 0, 0, 0, 9, 7, 12, p_175849_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175849_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.House3(p_175849_0_, p_175849_7_, p_175849_2_, structureboundingbox, p_175849_6_) : null;
             }
 
@@ -1133,26 +1133,26 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 7 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 7, 4, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 1, 6, 8, 4, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 0, 5, 8, 0, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 7, 0, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 0, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 8, 0, 0, 8, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 0, 7, 2, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 5, 2, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 2, 0, 6, 2, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 3, 0, 10, 7, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 0, 7, 3, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 2, 5, 2, 3, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 1, 8, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 4, 4, 3, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 5, 2, 8, 5, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 0, 4, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 0, 4, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 4, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 4, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 4, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 7, 4, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 1, 6, 8, 4, 10, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 0, 5, 8, 0, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 7, 0, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 0, 3, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 8, 0, 0, 8, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 0, 7, 2, 0, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 5, 2, 1, 5, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 2, 0, 6, 2, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 3, 0, 10, 7, 3, 10, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 0, 7, 3, 0, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 2, 5, 2, 3, 5, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 1, 8, 4, 1, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 4, 4, 3, 4, 4, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 5, 2, 8, 5, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 0, 4, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 0, 4, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 4, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 4, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 4, 4, p_74875_3_);
                 int i = this.getMetadataWithOffset(Blocks.oak_stairs, 3);
                 int j = this.getMetadataWithOffset(Blocks.oak_stairs, 2);
                 int k;
@@ -1162,80 +1162,80 @@ public class StructureAbandonedVillagePieces
                 {
                     for (l = 0; l <= 8; ++l)
                     {
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 4 + k, k, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(i), l, 4 + k, k, p_74875_3_);
 
                         if ((k > -1 || l <= 1) && (k > 0 || l <= 3) && (k > 1 || l <= 4 || l >= 6))
                         {
-                            this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 4 + k, 5 - k, p_74875_3_);
+                            this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(j), l, 4 + k, 5 - k, p_74875_3_);
                         }
                     }
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 3, 4, 5, 3, 4, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 7, 4, 2, 7, 4, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 5, 4, 4, 5, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 6, 5, 4, 6, 5, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 5, 6, 3, 5, 6, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 3, 4, 5, 3, 4, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 7, 4, 2, 7, 4, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 5, 4, 4, 5, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 6, 5, 4, 6, 5, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 5, 6, 3, 5, 6, 10, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
                 k = this.getMetadataWithOffset(Blocks.oak_stairs, 0);
                 int i1;
 
                 for (l = 4; l >= 1; --l)
                 {
-                    this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), l, 2 + l, 7 - l, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.planks.getDefaultState(), l, 2 + l, 7 - l, p_74875_3_);
 
                     for (i1 = 8 - l; i1 <= 10; ++i1)
                     {
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(k), l, 2 + l, i1, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(k), l, 2 + l, i1, p_74875_3_);
                     }
                 }
 
                 l = this.getMetadataWithOffset(Blocks.oak_stairs, 1);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 6, 6, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 7, 5, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(l), 6, 6, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 6, 6, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 7, 5, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(l), 6, 6, 4, p_74875_3_);
                 int j1;
 
                 for (i1 = 6; i1 <= 8; ++i1)
                 {
                     for (j1 = 5; j1 <= 10; ++j1)
                     {
-                        this.func_175811_a(worldIn, Blocks.oak_stairs.getStateFromMeta(l), i1, 12 - i1, j1, p_74875_3_);
+                        this.setBlockState(worldIn, Blocks.oak_stairs.getStateFromMeta(l), i1, 12 - i1, j1, p_74875_3_);
                     }
                 }
 
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 0, 2, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 0, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 0, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 4, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 5, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 6, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 8, 2, 5, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 8, 2, 8, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 8, 2, 9, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 2, 2, 6, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 7, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 8, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 2, 2, 9, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 4, 4, 10, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 5, 4, 10, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 6, 4, 10, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.planks.getDefaultState(), 5, 5, 10, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 2, 3, 1, p_74875_3_);
-                this.func_175810_a(worldIn, p_74875_3_, p_74875_2_, 2, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, -1, 3, 2, -1, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 0, 2, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 0, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 0, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 4, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 5, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 6, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 8, 2, 5, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 8, 2, 8, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 8, 2, 9, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 2, 2, 6, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 7, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 8, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 2, 2, 9, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 4, 4, 10, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 5, 4, 10, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 6, 4, 10, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.planks.getDefaultState(), 5, 5, 10, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 2, 3, 1, p_74875_3_);
+                this.placeDoorCurrentPosition(worldIn, p_74875_3_, p_74875_2_, 2, 1, 0, EnumFacing.getHorizontal(this.getMetadataWithOffset(Blocks.oak_door, 1)));
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, -1, 3, 2, -1, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
 
-                if (this.func_175807_a(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                if (this.getBlockStateFromPos(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                 {
-                    this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
                 }
 
                 for (i1 = 0; i1 < 5; ++i1)
@@ -1243,7 +1243,7 @@ public class StructureAbandonedVillagePieces
                     for (j1 = 0; j1 < 9; ++j1)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j1, 7, i1, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), j1, -1, i1, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), j1, -1, i1, p_74875_3_);
                     }
                 }
 
@@ -1252,7 +1252,7 @@ public class StructureAbandonedVillagePieces
                     for (j1 = 2; j1 < 9; ++j1)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j1, 7, i1, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), j1, -1, i1, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), j1, -1, i1, p_74875_3_);
                     }
                 }
 
@@ -1296,7 +1296,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.House4Garden func_175858_a(StructureAbandonedVillagePieces.Start p_175858_0_, List p_175858_1_, Random p_175858_2_, int p_175858_3_, int p_175858_4_, int p_175858_5_, EnumFacing p_175858_6_, int p_175858_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175858_3_, p_175858_4_, p_175858_5_, 0, 0, 0, 5, 6, 5, p_175858_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175858_3_, p_175858_4_, p_175858_5_, 0, 0, 0, 5, 6, 5, p_175858_6_);
                 return StructureComponent.findIntersecting(p_175858_1_, structureboundingbox) != null ? null : new StructureAbandonedVillagePieces.House4Garden(p_175858_0_, p_175858_7_, p_175858_2_, structureboundingbox, p_175858_6_);
             }
 
@@ -1318,32 +1318,32 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 6 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 4, 0, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 4, 0, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
                 
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 0, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 0, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 0, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 1, 4, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.cobblestone.getDefaultState(), 4, 2, 4, p_74875_3_);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 1, 1, 0, 1, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 4, 1, 1, 4, 1, 2, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 0, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 0, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 0, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 1, 4, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.cobblestone.getDefaultState(), 4, 2, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 1, 1, 0, 1, 3, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 4, 1, 1, 4, 1, 2, Blocks.planks.getDefaultState(), Blocks.planks.getDefaultState(), false);
 
-                if (this.func_175807_a(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.func_175807_a(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
+                if (this.getBlockStateFromPos(worldIn, 2, 0, -1, p_74875_3_).getBlock().getMaterial() == Material.air && this.getBlockStateFromPos(worldIn, 2, -1, -1, p_74875_3_).getBlock().getMaterial() != Material.air)
                 {
-                    this.func_175811_a(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
+                    this.setBlockState(worldIn, Blocks.stone_stairs.getStateFromMeta(this.getMetadataWithOffset(Blocks.stone_stairs, 3)), 2, 0, -1, p_74875_3_);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 3, 3, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 3, 3, 3, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
 
                 for (int i = 0; i < 5; ++i)
                 {
                     for (int j = 0; j < 5; ++j)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j, 6, i, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
                     }
                 }
 
@@ -1457,7 +1457,7 @@ public class StructureAbandonedVillagePieces
             {
                 for (int l = 7 * MathHelper.getRandomIntegerInRange(p_175848_2_, 3, 5); l >= 7; l -= 7)
                 {
-                    StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 3, 3, l, p_175848_6_);
+                    StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175848_3_, p_175848_4_, p_175848_5_, 0, 0, 0, 3, 3, l, p_175848_6_);
 
                     if (StructureComponent.findIntersecting(p_175848_1_, structureboundingbox) == null)
                     {
@@ -1483,7 +1483,7 @@ public class StructureAbandonedVillagePieces
                     {
                         BlockPos blockpos = new BlockPos(i, 64, j);
 
-                        if (p_74875_3_.func_175898_b(blockpos))
+                        if (p_74875_3_.isVecInside(blockpos))
                         {
                             blockpos = worldIn.getTopSolidOrLiquidBlock(blockpos).down();
                             worldIn.setBlockState(blockpos, iblockstate, 2);
@@ -1561,7 +1561,7 @@ public class StructureAbandonedVillagePieces
                 this.worldChunkMngr = p_i2104_1_;
                 this.structureVillageWeightedPieceList = p_i2104_6_;
                 this.terrainType = p_i2104_7_;
-                BiomeGenBase biomegenbase = p_i2104_1_.func_180300_a(new BlockPos(p_i2104_4_, 0, p_i2104_5_), BiomeGenBase.field_180279_ad);
+                BiomeGenBase biomegenbase = p_i2104_1_.getBiomeGenerator(new BlockPos(p_i2104_4_, 0, p_i2104_5_), BiomeGenBase.field_180279_ad);
                 this.inDesert = biomegenbase == BiomeGenBase.desert || biomegenbase == BiomeGenBase.desertHills;
                 this.biome = biomegenbase;
                 this.func_175846_a(this.inDesert);
@@ -1633,7 +1633,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureBoundingBox func_175856_a(StructureAbandonedVillagePieces.Start p_175856_0_, List p_175856_1_, Random p_175856_2_, int p_175856_3_, int p_175856_4_, int p_175856_5_, EnumFacing p_175856_6_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175856_3_, p_175856_4_, p_175856_5_, 0, 0, 0, 3, 4, 2, p_175856_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175856_3_, p_175856_4_, p_175856_5_, 0, 0, 0, 3, 4, 2, p_175856_6_);
                 return StructureComponent.findIntersecting(p_175856_1_, structureboundingbox) != null ? null : structureboundingbox;
             }
 
@@ -1655,16 +1655,16 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 4 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 2, 3, 1, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 1, 0, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 1, 1, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 1, 2, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.wool.getStateFromMeta(EnumDyeColor.WHITE.getDyeDamage()), 1, 3, 0, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 2, 3, 1, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 1, 0, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 1, 1, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 1, 2, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.wool.getStateFromMeta(EnumDyeColor.WHITE.getDyeDamage()), 1, 3, 0, p_74875_3_);
                 boolean flag = this.coordBaseMode == EnumFacing.EAST || this.coordBaseMode == EnumFacing.NORTH;
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), flag ? 2 : 0, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 1, 3, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), flag ? 0 : 2, 3, 0, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.getOpposite()), 1, 3, -1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateY()), flag ? 2 : 0, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode), 1, 3, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.rotateYCCW()), flag ? 0 : 2, 3, 0, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.torch.getDefaultState().withProperty(BlockTorch.FACING, this.coordBaseMode.getOpposite()), 1, 3, -1, p_74875_3_);
                 return true;
             }
         }
@@ -1772,7 +1772,7 @@ public class StructureAbandonedVillagePieces
                     {
                         BlockPos blockpos = new BlockPos(l, 64, k);
 
-                        if (p_74889_2_.func_175898_b(blockpos))
+                        if (p_74889_2_.isVecInside(blockpos))
                         {
                             i += Math.max(worldIn.getTopSolidOrLiquidBlock(blockpos).getY(), worldIn.provider.getAverageGroundLevel());
                             ++j;
@@ -1850,23 +1850,23 @@ public class StructureAbandonedVillagePieces
                 return p_175847_1_;
             }
 
-            protected void func_175811_a(World worldIn, IBlockState p_175811_2_, int p_175811_3_, int p_175811_4_, int p_175811_5_, StructureBoundingBox p_175811_6_)
+            protected void setBlockState(World worldIn, IBlockState p_175811_2_, int p_175811_3_, int p_175811_4_, int p_175811_5_, StructureBoundingBox p_175811_6_)
             {
                 IBlockState iblockstate1 = this.func_175847_a(p_175811_2_);
-                super.func_175811_a(worldIn, iblockstate1, p_175811_3_, p_175811_4_, p_175811_5_, p_175811_6_);
+                super.setBlockState(worldIn, iblockstate1, p_175811_3_, p_175811_4_, p_175811_5_, p_175811_6_);
             }
 
-            protected void func_175804_a(World worldIn, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IBlockState outerBlock, IBlockState innerBlock, boolean doNotReplaceAir)
+            protected void fillWithBlocks(World worldIn, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IBlockState outerBlock, IBlockState innerBlock, boolean doNotReplaceAir)
             {
                 IBlockState outerBlock2 = this.func_175847_a(outerBlock);
                 IBlockState innerBlock2 = this.func_175847_a(innerBlock);
-                super.func_175804_a(worldIn, box, minX, minY, minZ, maxX, maxY, maxZ, outerBlock2, innerBlock2, doNotReplaceAir);
+                super.fillWithBlocks(worldIn, box, minX, minY, minZ, maxX, maxY, maxZ, outerBlock2, innerBlock2, doNotReplaceAir);
             }
 
-            protected void func_175808_b(World worldIn, IBlockState p_175808_2_, int p_175808_3_, int p_175808_4_, int p_175808_5_, StructureBoundingBox p_175808_6_)
+            protected void replaceAirAndLiquidDownwards(World worldIn, IBlockState p_175808_2_, int p_175808_3_, int p_175808_4_, int p_175808_5_, StructureBoundingBox p_175808_6_)
             {
                 IBlockState iblockstate1 = this.func_175847_a(p_175808_2_);
-                super.func_175808_b(worldIn, iblockstate1, p_175808_3_, p_175808_4_, p_175808_5_, p_175808_6_);
+                super.replaceAirAndLiquidDownwards(worldIn, iblockstate1, p_175808_3_, p_175808_4_, p_175808_5_, p_175808_6_);
             }
 
             protected void func_175846_a(boolean p_175846_1_)
@@ -1945,16 +1945,16 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 3, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 4, 12, 4, Blocks.cobblestone.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.flowing_water.getDefaultState(), 2, 1, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 12, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 3, 12, 2, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 2, 12, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.air.getDefaultState(), 3, 12, 3, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 1, 13, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 4, 13, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 4, 14, 1, p_74875_3_);
-                this.func_175811_a(worldIn, Blocks.oak_fence.getDefaultState(), 4, 13, 4, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 4, 12, 4, Blocks.cobblestone.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.flowing_water.getDefaultState(), 2, 1, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 12, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 3, 12, 2, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 2, 12, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.air.getDefaultState(), 3, 12, 3, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 1, 13, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 4, 13, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 4, 14, 1, p_74875_3_);
+                this.setBlockState(worldIn, Blocks.oak_fence.getDefaultState(), 4, 13, 4, p_74875_3_);
 
                 for (int i = 0; i <= 5; ++i)
                 {
@@ -1962,7 +1962,7 @@ public class StructureAbandonedVillagePieces
                     {
                         if (j == 0 || j == 5 || i == 0 || i == 5)
                         {
-                            this.func_175811_a(worldIn, Blocks.gravel.getDefaultState(), j, 11, i, p_74875_3_);
+                            this.setBlockState(worldIn, Blocks.gravel.getDefaultState(), j, 11, i, p_74875_3_);
                             this.clearCurrentPositionBlocksUpwards(worldIn, j, 12, i, p_74875_3_);
                         }
                     }
@@ -2011,7 +2011,7 @@ public class StructureAbandonedVillagePieces
 
             public static StructureAbandonedVillagePieces.WoodHut func_175853_a(StructureAbandonedVillagePieces.Start p_175853_0_, List p_175853_1_, Random p_175853_2_, int p_175853_3_, int p_175853_4_, int p_175853_5_, EnumFacing p_175853_6_, int p_175853_7_)
             {
-                StructureBoundingBox structureboundingbox = StructureBoundingBox.func_175897_a(p_175853_3_, p_175853_4_, p_175853_5_, 0, 0, 0, 4, 6, 5, p_175853_6_);
+                StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175853_3_, p_175853_4_, p_175853_5_, 0, 0, 0, 4, 6, 5, p_175853_6_);
                 return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175853_1_, structureboundingbox) == null ? new StructureAbandonedVillagePieces.WoodHut(p_175853_0_, p_175853_7_, p_175853_2_, structureboundingbox, p_175853_6_) : null;
             }
 
@@ -2033,17 +2033,17 @@ public class StructureAbandonedVillagePieces
                     this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 6 - 1, 0);
                 }
 
-                this.func_175804_a(worldIn, p_74875_3_, 1, 1, 1, 3, 5, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 0, 0, 0, 3, 0, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
-                this.func_175804_a(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 3, Blocks.dirt.getDefaultState(), Blocks.dirt.getDefaultState(), false);
-                this.func_175811_a(worldIn, Blocks.log.getDefaultState(), 1, 1, 0, p_74875_3_);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 1, 1, 3, 5, 4, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 0, 0, 0, 3, 0, 4, Blocks.cobblestone.getDefaultState(), Blocks.cobblestone.getDefaultState(), false);
+                this.fillWithBlocks(worldIn, p_74875_3_, 1, 0, 1, 2, 0, 3, Blocks.dirt.getDefaultState(), Blocks.dirt.getDefaultState(), false);
+                this.setBlockState(worldIn, Blocks.log.getDefaultState(), 1, 1, 0, p_74875_3_);
                 
                 for (int i = 0; i < 5; ++i)
                 {
                     for (int j = 0; j < 4; ++j)
                     {
                         this.clearCurrentPositionBlocksUpwards(worldIn, j, 6, i, p_74875_3_);
-                        this.func_175808_b(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
+                        this.replaceAirAndLiquidDownwards(worldIn, Blocks.cobblestone.getDefaultState(), j, -1, i, p_74875_3_);
                     }
                 }
                 this.spawnVillagers(worldIn, p_74875_3_, 1, 1, 2, 1);

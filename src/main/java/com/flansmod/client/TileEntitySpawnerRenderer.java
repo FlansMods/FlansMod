@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -70,46 +71,46 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
 	private void RenderBox(Tessellator t, WorldRenderer wr, double x0, double x1, double y0, double y1, double z0, double z1)
 	{
 		// Top
-		wr.startDrawingQuads();
-        wr.addVertex(x0, y1, z0);
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x1, y1, z1);
-        wr.addVertex(x1, y1, z0);
+		wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x0, y1, z0);
+        wr.pos(x0, y1, z1);
+        wr.pos(x1, y1, z1);
+        wr.pos(x1, y1, z0);
         t.draw();
         // Bottom
-        wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x1, y0, z0);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x0, y0, z1);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x0, y0, z0);
+        wr.pos(x1, y0, z0);
+        wr.pos(x1, y0, z1);
+        wr.pos(x0, y0, z1);
         t.draw();
         // Left
-        wr.startDrawingQuads();
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x0, y0, z1);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x1, y1, z1);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x0, y1, z1);
+        wr.pos(x0, y0, z1);
+        wr.pos(x1, y0, z1);
+        wr.pos(x1, y1, z1);
         t.draw();
         // Right
-        wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x0, y1, z0);
-        wr.addVertex(x1, y1, z0);
-        wr.addVertex(x1, y0, z0);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x0, y0, z0);
+        wr.pos(x0, y1, z0);
+        wr.pos(x1, y1, z0);
+        wr.pos(x1, y0, z0);
         t.draw();
         // Front
-        wr.startDrawingQuads();
-        wr.addVertex(x1, y1, z0);
-        wr.addVertex(x1, y1, z1);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x1, y0, z0);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x1, y1, z0);
+        wr.pos(x1, y1, z1);
+        wr.pos(x1, y0, z1);
+        wr.pos(x1, y0, z0);
         t.draw();
         // Front
-        wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x0, y0, z1);
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x0, y1, z0);
+        wr.begin(7, DefaultVertexFormats.POSITION_TEX);
+        wr.pos(x0, y0, z0);
+        wr.pos(x0, y0, z1);
+        wr.pos(x0, y1, z1);
+        wr.pos(x0, y1, z0);
         t.draw();
 	}
 }

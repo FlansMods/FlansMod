@@ -68,11 +68,11 @@ public class BiomeDecoratorApocalypse extends BiomeDecorator
 
             if (s != null)
             {
-                this.chunkProviderSettings = ChunkProviderSettings.Factory.func_177865_a(s).func_177864_b();
+                this.chunkProviderSettings = ChunkProviderSettings.Factory.jsonToFactory(s).func_177864_b();
             }
             else
             {
-                this.chunkProviderSettings = ChunkProviderSettings.Factory.func_177865_a("").func_177864_b();
+                this.chunkProviderSettings = ChunkProviderSettings.Factory.jsonToFactory("").func_177864_b();
             }
 
             this.randomGenerator = p_180292_2_;

@@ -134,7 +134,7 @@ public abstract class Gametype
 		return MinecraftServer.getServer().getAllUsernames();
 	}
 	
-	public static List<EntityPlayer> getPlayers()
+	public static List<EntityPlayerMP> getPlayers()
 	{
 		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 	}

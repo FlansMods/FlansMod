@@ -185,16 +185,16 @@ public class MapGenAbandonedVillage extends MapGenStructure
         }
 		
 		@Override
-		public void func_143022_a(NBTTagCompound tags)
+		public void writeToNBT(NBTTagCompound tags)
 		{
-            super.func_143022_a(tags);
+            super.writeToNBT(tags);
             tags.setBoolean("Valid", this.hasMoreThanTwoComponents);
         }
 		
 		@Override
-        public void func_143017_b(NBTTagCompound tags)
+        public void readFromNBT(NBTTagCompound tags)
         {
-            super.func_143017_b(tags);
+            super.readFromNBT(tags);
             this.hasMoreThanTwoComponents = tags.getBoolean("Valid");
         }
 	}

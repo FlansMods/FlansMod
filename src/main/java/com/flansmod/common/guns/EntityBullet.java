@@ -174,11 +174,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	protected void entityInit() {
 	}
 
-	@Override
-	public AxisAlignedBB getBoundingBox() {
-		return getEntityBoundingBox();
-	}
-
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed) {
 		spread /= 5F;
 		float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
@@ -621,7 +616,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			int j = MathHelper.floor_double(this.posZ);
 
 			if (!worldObj.isAirBlock(new BlockPos(i, 0, j))) {
-				double d0 = (getBoundingBox().maxY - getBoundingBox().minY) * 0.66D;
+				double d0 = (getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * 0.66D;
 				int k = MathHelper.floor_double(this.posY - (double) this.yOffset + d0);
 				return this.worldObj.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
 			} else {

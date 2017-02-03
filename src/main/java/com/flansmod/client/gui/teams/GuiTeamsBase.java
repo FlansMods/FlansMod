@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.client.ClientProxy;
+import com.flansmod.client.model.RenderGun.GunRenderType;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.teams.LoadoutPool;
@@ -22,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 public class GuiTeamsBase extends GuiScreen 
 {
@@ -145,7 +145,7 @@ public class GuiTeamsBase extends GuiScreen
 				GL11.glRotatef(10, 0F, 1F, 0F);
 				GL11.glScalef(-scale, scale, scale);
 				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
-				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, stack);
+				ClientProxy.gunRenderer.renderItem(GunRenderType.ENTITY, stack);
 				
 				RenderHelper.disableStandardItemLighting();
 				

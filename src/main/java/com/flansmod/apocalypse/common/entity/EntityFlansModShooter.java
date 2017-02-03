@@ -97,13 +97,13 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
     }
 	
 	@Override
-	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData data)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData data)
     {
-        data = super.func_180482_a(difficulty, data);
+        data = super.onInitialSpawn(difficulty, data);
 
         this.tasks.addTask(4, this.aiArrowAttack);
-        this.func_180481_a(difficulty);
-        this.func_180483_b(difficulty);
+        this.setEquipmentBasedOnDifficulty(difficulty);
+        this.setEnchantmentBasedOnDifficulty(difficulty);
 
         this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * difficulty.getClampedAdditionalDifficulty());
 

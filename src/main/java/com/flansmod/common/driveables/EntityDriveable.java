@@ -354,7 +354,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	@Override
-    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
+    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i, boolean b)
     {
 		if(ticksExisted > 1)
 			return;
@@ -767,7 +767,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	  							for(int i = 0; i < stacks.size(); i++)
 	  							{
 	  								ItemStack stack = stacks.get(i);
-	  								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative()) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+	  								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative()) && !worldObj.isRemote && worldObj.getGameRules().getBoolean("doTileDrops"))
 	  								{
 	  									worldObj.spawnEntityInWorld(new EntityItem(worldObj, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
 	  								}

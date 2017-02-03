@@ -1403,7 +1403,7 @@ public class TeamsManager
 		FlansMod.getPacketHandler().sendTo(packet, player);
 	}
 	
-	public static List<EntityPlayer> getPlayers()
+	public static List<EntityPlayerMP> getPlayers()
 	{
 		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 	}

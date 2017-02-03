@@ -39,7 +39,7 @@ public class GuiTeamScores extends GuiTeamsBase
 	
 	public void renderTwoTeamGUI(PacketTeamInfo teamInfo)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRendererObj;
@@ -159,7 +159,7 @@ public class GuiTeamScores extends GuiTeamsBase
 	public void renderDMGUI(PacketTeamInfo teamInfo)
 	{
 		long newTime = mc.theWorld.getWorldInfo().getWorldTime();
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
 		FontRenderer fontrenderer = mc.fontRendererObj;

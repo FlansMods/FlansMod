@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +33,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderItemInFrameEvent;
@@ -55,6 +55,7 @@ import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderGun.GunRenderType;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -107,7 +108,7 @@ public class ClientRenderHooks
 				float scale = 0.75F;
 				GlStateManager.scale(scale, scale, scale);
 				GlStateManager.translate(0.15F, -0.15F, 0F);
-				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, event.item);
+				ClientProxy.gunRenderer.renderItem(GunRenderType.ENTITY, event.item);
 				GlStateManager.popMatrix();
 			}
 		}
@@ -221,7 +222,7 @@ public class ClientRenderHooks
         GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.scale(0.4F, 0.4F, 0.4F);
 
-        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.theWorld, mc.thePlayer);
+        ClientProxy.gunRenderer.renderItem(GunRenderType.EQUIPPED_FIRST_PERSON, stack, mc.theWorld, mc.thePlayer);
 
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
@@ -476,7 +477,7 @@ public class ClientRenderHooks
 		        
 		        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
 	
-		        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.theWorld, entity);
+		        ClientProxy.gunRenderer.renderItem(GunRenderType.EQUIPPED, stack, mc.theWorld, entity);
 		        GlStateManager.popMatrix();
 	        }
 	        
@@ -608,14 +609,14 @@ public void cameraSetup(CameraSetup event)
 		Minecraft mc = Minecraft.getMinecraft();
 		
 		//Remove crosshairs if looking down the sights of a gun
-		if(event.type == ElementType.CROSSHAIRS && mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemGun)
-			// && FlansModClient.currentScope != null)
+		if(event.type == ElementType.CROSSHAIRS //&& mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemGun)
+			 && FlansModClient.currentScope != null)
 		{
 			event.setCanceled(true);
 			return;
 		}
 		
-		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 					
@@ -674,11 +675,11 @@ public void cameraSetup(CameraSetup event)
 
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
 
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+			tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+			tessellator.getWorldRenderer().pos(i / 2 - 2 * j, j, -90D)   .tex(0.0D, 1.0D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 2 * j, j, -90D)   .tex(1.0D, 1.0D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 2 * j, 0.0D, -90D).tex(1.0D, 0.0D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 - 2 * j, 0.0D, -90D).tex(0.0D, 0.0D).endVertex();
 			tessellator.draw();
 			GL11.glDepthMask(true);
 			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -703,11 +704,11 @@ public void cameraSetup(CameraSetup event)
 			PlayerData data = PlayerHandler.getPlayerData(mc.thePlayer, Side.CLIENT);
 			double zLevel = 0D;
 			
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 + 5d, zLevel, 0D / 16D, 9D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 + 5d, zLevel, 9D / 16D, 9D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 - 4d, zLevel, 9D / 16D, 0D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
+			tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+			tessellator.getWorldRenderer().pos(i / 2 - 4d, j / 2 + 5d, zLevel).tex(0D / 16D, 9D / 16D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 5d, j / 2 + 5d, zLevel).tex(9D / 16D, 9D / 16D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 5d, j / 2 - 4d, zLevel).tex(9D / 16D, 0D / 16D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 - 4d, j / 2 - 4d, zLevel).tex(0D / 16D, 0D / 16D).endVertex();
 			tessellator.draw();
 			
 
@@ -732,20 +733,20 @@ public void cameraSetup(CameraSetup event)
 			{
 				if(data.offHandGunSlot == n + 1)
 				{
-					tessellator.getWorldRenderer().startDrawingQuads();
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 32D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 32D / 64D, 0D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
+					tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+					tessellator.getWorldRenderer().pos(i / 2 - 88 + 20 * n, j - 3, zLevel).tex(16D / 64D, 16D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 72 + 20 * n, j - 3, zLevel).tex(32D / 64D, 16D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 72 + 20 * n, j - 19, zLevel).tex(32D / 64D, 0D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 88 + 20 * n, j - 19, zLevel).tex(16D / 64D, 0D / 32D).endVertex();
 					tessellator.draw();
 				}
 				else if(data.isValidOffHandWeapon(mc.thePlayer, n + 1))
 				{					
-					tessellator.getWorldRenderer().startDrawingQuads();
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 0D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 0D / 64D, 0D / 32D);
+					tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+					tessellator.getWorldRenderer().pos(i / 2 - 88 + 20 * n, j - 3, zLevel).tex(0D / 64D, 16D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 72 + 20 * n, j - 3, zLevel).tex(16D / 64D, 16D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 72 + 20 * n, j - 19, zLevel).tex(16D / 64D, 0D / 32D).endVertex();
+			        tessellator.getWorldRenderer().pos(i / 2 - 88 + 20 * n, j - 19, zLevel).tex(0D / 64D, 0D / 32D).endVertex();
 					tessellator.draw();
 				}
 			}
@@ -836,12 +837,12 @@ public void cameraSetup(CameraSetup event)
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
 			mc.renderEngine.bindTexture(GuiTeamScores.texture);
-							
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
+			
+			tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+			tessellator.getWorldRenderer().pos(i / 2 - 43, 27, -90D).tex(85D / 256D, 27D / 256D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 43, 27, -90D).tex(171D / 256D, 27D / 256D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 + 43, 0D, -90D).tex(171D / 256D, 0D / 256D).endVertex();
+	        tessellator.getWorldRenderer().pos(i / 2 - 43, 0D, -90D).tex(85D / 256D, 0D / 256D).endVertex();
 			tessellator.draw();
 			
 			//If we are in a two team gametype, draw the team scores at the top of the screen
@@ -857,20 +858,20 @@ public void cameraSetup(CameraSetup event)
 				//Draw team 1 colour bit
 				int colour = teamInfo.teamData[0].team.teamColour;	
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-				tessellator.getWorldRenderer().startDrawingQuads();
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
+				tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+				tessellator.getWorldRenderer().pos(i / 2 - 43, 27, -90D).tex(0D / 256D, 125D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 - 19, 27, -90D).tex(24D / 256D, 125D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 - 19, 0D, -90D).tex(24D / 256D, 98D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 - 43, 0D, -90D).tex(0D / 256D, 98D / 256D).endVertex();
 				tessellator.draw();
 				//Draw team 2 colour bit
 				colour = teamInfo.teamData[1].team.teamColour;	
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-				tessellator.getWorldRenderer().startDrawingQuads();
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
+				tessellator.getWorldRenderer().begin(7, DefaultVertexFormats.POSITION_TEX);
+				tessellator.getWorldRenderer().pos(i / 2 + 19, 27, -90D).tex(62D / 256D, 125D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 + 43, 27, -90D).tex(86D / 256D, 125D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 + 43, 0D, -90D).tex(86D / 256D, 98D / 256D).endVertex();
+		        tessellator.getWorldRenderer().pos(i / 2 + 19, 0D, -90D).tex(62D / 256D, 98D / 256D).endVertex(); 
 				tessellator.draw();
 				
 				GL11.glDepthMask(true);

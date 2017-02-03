@@ -15,7 +15,7 @@ public class ApocalypseModelManager
 {
 	public static void registerVariants()
 	{
-		ModelLoader.setCustomStateMapper(FlansModApocalypse.blockSulphuricAcid, (new StateMap.Builder()).addPropertiesToIgnore(BlockFluidBase.LEVEL).build());
+		ModelLoader.setCustomStateMapper(FlansModApocalypse.blockSulphuricAcid, (new StateMap.Builder()).ignore(BlockFluidBase.LEVEL).build());
 	}
 	
 	@SubscribeEvent
@@ -24,6 +24,7 @@ public class ApocalypseModelManager
 		event.modelRegistry.putObject(new ModelResourceLocation("flansmodapocalypse:blockSulphuricAcid", "normal"), new FluidBlockModel());
 		
 		TextureMap textureMap = Minecraft.getMinecraft().getTextureMapBlocks();
-		FlansModApocalypse.sulphuricAcid.setIcons(textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidStill"), textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidFlowing"));
+		// TODO : 1.8.9 mess
+		//FlansModApocalypse.sulphuricAcid.setIcons(textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidStill"), textureMap.getAtlasSprite("flansmodapocalypse:blocks/SulphuricAcidFlowing"));
 	}
 }

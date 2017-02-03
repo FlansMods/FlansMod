@@ -10,6 +10,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -128,11 +129,11 @@ public class GuiMechaInventory extends GuiContainer
         float f1 = 1F / 256F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.startDrawingQuads();
-        worldrenderer.addVertexWithUV((double)(par1), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4 + par6) * f1));
-        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1));
-        worldrenderer.addVertexWithUV((double)(par1 + par5), (double)(par2), (double)this.zLevel, (double)((float)(par3 + par5) * f), (double)((float)(par4) * f1));
-        worldrenderer.addVertexWithUV((double)(par1), (double)(par2), (double)this.zLevel, (double)((float)(par3) * f), (double)((float)(par4) * f1));
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos((double)(par1), (double)(par2 + par6), (double)this.zLevel)			.tex((double)((float)(par3) * f), 		 (double)((float)(par4 + par6) * f1)).endVertex();
+        worldrenderer.pos((double)(par1 + par5), (double)(par2 + par6), (double)this.zLevel)	.tex((double)((float)(par3 + par5) * f), (double)((float)(par4 + par6) * f1)).endVertex();
+        worldrenderer.pos((double)(par1 + par5), (double)(par2), (double)this.zLevel)			.tex((double)((float)(par3 + par5) * f), (double)((float)(par4) * f1)).endVertex();
+        worldrenderer.pos((double)(par1), (double)(par2), (double)this.zLevel)					.tex((double)((float)(par3) * f), 		 (double)((float)(par4) * f1)).endVertex();
         tessellator.draw();
     }
 

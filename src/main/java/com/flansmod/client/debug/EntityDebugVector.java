@@ -46,7 +46,7 @@ public class EntityDebugVector extends Entity
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getEntityBoundingBox()
 	{
 		return null;
 	}

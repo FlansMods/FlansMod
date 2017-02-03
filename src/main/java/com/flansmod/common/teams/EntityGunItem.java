@@ -70,7 +70,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox() {
+	public AxisAlignedBB getEntityBoundingBox() {
 		return null;
 	}
 

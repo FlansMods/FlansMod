@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.model.RenderGun.GunRenderType;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;
 
-public class RenderGrenade extends Render implements IItemRenderer 
+public class RenderGrenade extends Render
 {
 	public RenderGrenade(RenderManager renderManager) 
 	{
@@ -71,25 +71,8 @@ public class RenderGrenade extends Render implements IItemRenderer
 		return texture;
 	}
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
-	{
-		switch(type)
-		{
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON : return item != null && item.getItem() instanceof ItemGrenade && ((ItemGrenade)item.getItem()).type.model != null;
-		default : break;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
-	{
-		return false;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	// TODO : 1.8 MESS
+	public void renderItem(GunRenderType type, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemGrenade)

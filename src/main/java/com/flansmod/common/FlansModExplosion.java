@@ -78,7 +78,7 @@ public class FlansModExplosion extends Explosion
 	        this.doExplosionA();
 	        this.doExplosionB(true);
 	        for(Object obj : world.playerEntities)
-	        	FlansMod.getPacketHandler().sendTo(new S27PacketExplosion(x, y, z, radius, func_180343_e(), (Vec3)func_77277_b().get((EntityPlayer)obj)), (EntityPlayerMP)obj);
+	        	FlansMod.getPacketHandler().sendTo(new S27PacketExplosion(x, y, z, radius, getAffectedBlockPositions(), (Vec3)getPlayerKnockbackMap().get((EntityPlayer)obj)), (EntityPlayerMP)obj);
         }
 	}
 
@@ -124,7 +124,7 @@ public class FlansModExplosion extends Explosion
 	                                f -= (f2 + 0.3F) * 0.3F;
 	                            }
 	
-	                            if (f > 0.0F && (explosive == null || explosive.func_174816_a(this, world, blockpos, iblockstate, f)))
+	                            if (f > 0.0F && (explosive == null || explosive.verifyExplosion(this, world, blockpos, iblockstate, f)))
 	                            {
 	                                hashset.add(blockpos);
 	                            }
@@ -155,7 +155,7 @@ public class FlansModExplosion extends Explosion
         {
             Entity entity = (Entity)list.get(l1);
 
-            if (!entity.func_180427_aV())
+            if (!entity.isImmuneToExplosions())
             {
                 double d12 = entity.getDistance(x, y, z) / (double)f3;
 
@@ -265,7 +265,7 @@ public class FlansModExplosion extends Explosion
     }
 	
 	@Override
-    public Map func_77277_b()
+    public Map getPlayerKnockbackMap()
     {
         return this.playerMap;
     }
@@ -286,7 +286,7 @@ public class FlansModExplosion extends Explosion
     }
 
 	@Override
-    public List func_180343_e()
+    public List getAffectedBlockPositions()
     {
         return this.affectedBlockPositions;
     }

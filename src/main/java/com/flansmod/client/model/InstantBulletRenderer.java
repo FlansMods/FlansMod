@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -129,11 +130,11 @@ public class InstantBulletRenderer
 	        GlStateManager.enableRescaleNormal();
 	        GL11.glNormal3f(normal.x, normal.y, normal.z);
 	        
-	        worldrenderer.startDrawingQuads();
-	        worldrenderer.addVertexWithUV(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z, 0.0f, 0.0f);
-	        worldrenderer.addVertexWithUV(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z, 0.0f, 1.0f);
-	        worldrenderer.addVertexWithUV(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z, 1.0f, 1.0f);
-	        worldrenderer.addVertexWithUV(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z, 1.0f, 0.0f);
+	        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+	        worldrenderer.pos(startPos.x + trailTangent.x, startPos.y + trailTangent.y, startPos.z + trailTangent.z).tex(0.0f, 0.0f).endVertex();
+	        worldrenderer.pos(startPos.x - trailTangent.x, startPos.y - trailTangent.y, startPos.z - trailTangent.z).tex(0.0f, 1.0f).endVertex();
+	        worldrenderer.pos(endPos.x - trailTangent.x, endPos.y - trailTangent.y, endPos.z - trailTangent.z).tex(1.0f, 1.0f).endVertex();
+	        worldrenderer.pos(endPos.x + trailTangent.x, endPos.y + trailTangent.y, endPos.z + trailTangent.z).tex(1.0f, 0.0f).endVertex();
 	        tessellator.draw();
 	        	
 	        GlStateManager.disableRescaleNormal();

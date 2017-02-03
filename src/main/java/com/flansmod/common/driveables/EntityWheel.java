@@ -162,7 +162,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void func_180426_a(double d, double d1, double d2, float f, float f1, int i, boolean b)
+    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i, boolean b)
     {
     }
 	

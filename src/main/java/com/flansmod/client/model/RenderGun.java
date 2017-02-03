@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
@@ -41,15 +40,23 @@ import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
 
-public class RenderGun implements IItemRenderer
+public class RenderGun
 {
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
 	public static boolean bindTextures = true;
 	
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
+	public enum GunRenderType
+	{
+		ENTITY,
+		EQUIPPED_FIRST_PERSON,
+		EQUIPPED,
+		INVENTORY,
+	}
+	
+	// TODO : 1.8 MESS
+	public boolean handleRenderType(ItemStack item, GunRenderType type) 
 	{
 		switch(type)
 		{
@@ -62,14 +69,7 @@ public class RenderGun implements IItemRenderer
 		return false;
 	}
 
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
-	{
-		return false;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(GunRenderType type, ItemStack item, Object... data) 
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
@@ -85,12 +85,12 @@ public class RenderGun implements IItemRenderer
 
 		//Render main hand gun
 		{
-			GunAnimations animations = (type == ItemRenderType.ENTITY || type == ItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
+			GunAnimations animations = (type == GunRenderType.ENTITY || type == GunRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
 			renderGun(type, item, gunType, animations, false, data);
 		}
 		
 		//Render off-hand gun
-		if(gunType.oneHanded && type == ItemRenderType.EQUIPPED_FIRST_PERSON)
+		if(gunType.oneHanded && type == GunRenderType.EQUIPPED_FIRST_PERSON)
 		{
 			EntityLivingBase entity = (EntityLivingBase)data[1];
 			if(entity instanceof EntityPlayer)
@@ -132,10 +132,10 @@ public class RenderGun implements IItemRenderer
 		if(!offHandGunType.oneHanded)
 			return;
 		
-		renderGun(ItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
+		renderGun(GunRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
 	}
 		
-	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
+	private void renderGun(GunRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
 	{
 		//The model scale
 		float f = 1F / 16F;

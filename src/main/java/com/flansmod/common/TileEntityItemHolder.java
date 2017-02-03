@@ -17,11 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 
-public class TileEntityItemHolder extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityItemHolder extends TileEntity implements IInventory, ITickable
 {
 	private ItemStack stack;
 	public ItemHolderType type;
@@ -53,9 +53,6 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) { if(getStack() != null) { getStack().stackSize -= count; if(getStack().stackSize <= 0) setStack(null); } return getStack(); }
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) { return getStackInSlot(index); }
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) { this.setStack(stack); }
@@ -136,5 +133,11 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public void setStack(ItemStack stack) 
 	{
 		this.stack = stack;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

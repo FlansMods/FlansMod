@@ -207,12 +207,6 @@ public class DriveableData implements IInventory
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) 
-	{ 
-		return getStackInSlot(i);	
-	}
-
-	@Override
 	public void setInventorySlotContents(int i, ItemStack stack) 
 	{ 
 		//Find the correct inventory
@@ -358,5 +352,11 @@ public class DriveableData implements IInventory
 	public void clear() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

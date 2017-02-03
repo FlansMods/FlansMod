@@ -166,7 +166,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
             this.mineshaftGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
         }
 */
-        this.villageGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+        this.villageGenerator.generate(this, this.worldObj, x, z, chunkprimer);
         
         //this.generateEntities(x, z);
 /*
@@ -231,7 +231,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         }
 	*/
 
-        flag = this.villageGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+        flag = this.villageGenerator.generateStructure(this.worldObj, this.rand, chunkcoordintpair);
         
         
 /*
@@ -463,7 +463,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	}
 
 	@Override
-	public List func_177458_a(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) 
+	public List getPossibleCreatures(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) 
 	{
         BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(p_177458_2_);
 

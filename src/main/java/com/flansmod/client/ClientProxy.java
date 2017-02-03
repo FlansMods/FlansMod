@@ -174,16 +174,16 @@ public class ClientProxy extends CommonProxy
 		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
 		
 		//Register custom item renderers
-		for(GunType gunType : GunType.guns.values())
-			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);		
-		for(GrenadeType grenadeType : GrenadeType.grenades)
-			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);		
-		for(PlaneType planeType : PlaneType.types)
-			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);		
-		for(VehicleType vehicleType : VehicleType.types)
-			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
-		for(MechaType mechaType : MechaType.types)
-			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
+		//for(GunType gunType : GunType.guns.values())
+		//	MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);		
+		//for(GrenadeType grenadeType : GrenadeType.grenades)
+		//	MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);		
+		//for(PlaneType planeType : PlaneType.types)
+		//	MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);		
+		//for(VehicleType vehicleType : VehicleType.types)
+		//	MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
+		//for(MechaType mechaType : MechaType.types)
+		//	MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
 
 		
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
