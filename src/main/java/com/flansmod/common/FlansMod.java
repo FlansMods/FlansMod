@@ -123,12 +123,7 @@ public class FlansMod
 	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
-	public static int generalConfigInteger = 32;
-	public static String generalConfigString = "Hello!";
-	public static boolean addGunpowderRecipe = true;
-	public static int teamsConfigInteger = 32;
-	public static String teamsConfigString = "Hello!";
-	public static boolean teamsConfigBoolean = false;
+
 	@SidedProxy(clientSide = "com.flansmod.client.ClientProxy", serverSide = "com.flansmod.common.CommonProxy")
 	public static CommonProxy proxy;
 	//A standardised ticker for all bits of the mod to call upon if they need one
@@ -140,6 +135,8 @@ public class FlansMod
 	public static final int numPlayerSnapshots = 20;
 	public static boolean isApocalypseLoaded = false;
 	public static boolean addAllPaintjobsToCreative = false;
+	public static boolean addGunpowderRecipe = true;
+	public static boolean shootOnRightClick = false;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -599,11 +596,10 @@ public class FlansMod
 		return INSTANCE.packetHandler;
 	}
 
-	public static void syncConfig() {
-		//generalConfigInteger = configFile.getInt("Config Integer", Configuration.CATEGORY_GENERAL, generalConfigInteger, 0, Integer.MAX_VALUE, "An Integer!");
-		//generalConfigString = configFile.getString("Config String", Configuration.CATEGORY_GENERAL, generalConfigString, "A String!");
+	public static void syncConfig() 
+	{
 		addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
-
+		shootOnRightClick = configFile.getBoolean("ShootOnRightClick", Configuration.CATEGORY_GENERAL, shootOnRightClick, "If true, then shoot will be on right click");
 		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
 
 		if(configFile.hasChanged())

@@ -656,7 +656,7 @@ public class TeamsManager
 	{
 		if(!enabled)
 			return;
-		if(event.action == Action.LEFT_CLICK_BLOCK && !event.entityPlayer.capabilities.allowEdit && !event.entityPlayer.capabilities.isCreativeMode)
+		if(event.action == Action.LEFT_CLICK_BLOCK && event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemGun)
 		{
 			event.setCanceled(true);
 			return;	

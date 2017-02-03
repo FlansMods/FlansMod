@@ -106,8 +106,18 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
 	
-	private static boolean GetMouseHeld(boolean isOffHand) { return isOffHand ? leftMouseHeld : rightMouseHeld; }
-	private static boolean GetLastMouseHeld(boolean isOffHand) { return isOffHand ? lastLeftMouseHeld : lastRightMouseHeld; }
+	private static boolean GetMouseHeld(boolean isOffHand) 
+	{ 
+		if(FlansMod.shootOnRightClick)
+			return isOffHand ? leftMouseHeld : rightMouseHeld; 
+		else return isOffHand ? rightMouseHeld : leftMouseHeld;
+	}
+	private static boolean GetLastMouseHeld(boolean isOffHand) 
+	{ 
+		if(FlansMod.shootOnRightClick)
+			return isOffHand ? lastLeftMouseHeld : lastRightMouseHeld; 
+		else return isOffHand ? lastRightMouseHeld : lastLeftMouseHeld;
+	}
 	
 	private static List<ShotData> shotsFiredClient = new ArrayList<ShotData>(), shotsFiredServer = new ArrayList<ShotData>();
 	
@@ -506,7 +516,7 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			// Check for scoping in / out
 			IScope currentScope = type.getCurrentScope(gunstack);
-			if(!isOffHand && !hasOffHand && leftMouseHeld && !lastLeftMouseHeld
+			if(!isOffHand && !hasOffHand && GetMouseHeld(true) && !GetLastMouseHeld(true)
 					&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM) )
 			{
 				FlansModClient.SetScope(currentScope);
