@@ -19,6 +19,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.guns.ItemAAGun;
+import com.google.common.collect.ImmutableMap;
 
 public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdatePlayerListBox
 {
@@ -230,8 +231,13 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 	@Override
 	public boolean isSpawnPoint()
 	{
-		int metadata = ((Integer)worldObj.getBlockState(pos).getValue(TYPE)).intValue();
-		return metadata == 1;
+		if(worldObj.getBlockState(pos).getProperties().containsKey(TYPE))
+		{
+			int metadata = ((Integer)worldObj.getBlockState(pos).getValue(TYPE)).intValue();
+			return metadata == 1;
+		}
+		FlansMod.Assert(false, "Spawn point has no property");
+		return false;
 	}
 	/*
 	

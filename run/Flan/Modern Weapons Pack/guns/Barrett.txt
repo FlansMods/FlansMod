@@ -47,5 +47,6 @@ NumGenericAttachmentSlots 2
 Paintjob Barrett_Hazard Barrett_Hazard yellow 2
 Paintjob Barrett_WhiteLine Barrett_WhiteLine black 2 white 1
 Paintjob Barrett_Periwinkle Barrett_Periwinkle purple 2
+Paintjob Barrett_Pulse Barrett_Pulse lightBlue 12 white 12 black 12
 //Description - note the ammo type
 Description Ammo Type : .50 Cal

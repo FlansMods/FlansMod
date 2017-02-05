@@ -10,9 +10,9 @@ public class ModelBarrett extends ModelGun
 	public ModelBarrett()
 	{
 		int textureX = 64;
-		int textureY = 16;
+		int textureY = 32;
 		
-		gunModel = new ModelRendererTurbo[3];
+		gunModel = new ModelRendererTurbo[13];
 		
 		//Main Barrel
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
@@ -25,6 +25,48 @@ public class ModelBarrett extends ModelGun
 		gunModel[2] = new ModelRendererTurbo(this, 0, 4, textureX, textureY);
 		gunModel[2].addBox(-1F, -2F, -1F, 3, 4, 2);
 		
+		gunModel[3] = new ModelRendererTurbo(this, 32, 20, textureX, textureY); // Box 0
+		gunModel[4] = new ModelRendererTurbo(this, 8, 19, textureX, textureY); // Box 1
+		gunModel[5] = new ModelRendererTurbo(this, 8, 19, textureX, textureY); // Box 2
+		gunModel[6] = new ModelRendererTurbo(this, 0, 19, textureX, textureY); // Box 3
+		gunModel[7] = new ModelRendererTurbo(this, 0, 19, textureX, textureY); // Box 4
+		gunModel[8] = new ModelRendererTurbo(this, 0, 19, textureX, textureY); // Box 5
+		gunModel[9] = new ModelRendererTurbo(this, 44, 16, textureX, textureY); // Box 6
+		gunModel[10] = new ModelRendererTurbo(this, 16, 14, textureX, textureY); // Box 9
+		gunModel[11] = new ModelRendererTurbo(this, 16, 14, textureX, textureY); // Box 13
+		gunModel[12] = new ModelRendererTurbo(this, 24, 16, textureX, textureY); // Box 15
+		
+		gunModel[3].addBox(12F, 1F, -1F, 6, 3, 2, 0F); // Box 0
+		gunModel[3].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[4].addBox(8F, -0.5F, -1.5F, 1, 5, 3, 0F); // Box 1
+		gunModel[4].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[5].addBox(10F, -0.5F, -1.5F, 1, 5, 3, 0F); // Box 2
+		gunModel[5].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[6].addBox(12F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 3
+		gunModel[6].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[7].addBox(14F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 4
+		gunModel[7].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[8].addBox(16F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 5
+		gunModel[8].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[9].addShapeBox(6F, 0F, -1F, 6, 2, 2, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, 0F); // Box 6
+		gunModel[9].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[10].addBox(6F, 1.5F, -1.5F, 1, 3, 3, 0F); // Box 9
+		gunModel[10].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[11].addBox(-2F, 1.5F, -1.5F, 1, 3, 3, 0F); // Box 13
+		gunModel[11].setRotationPoint(0F, 0F, 0F);
+
+		gunModel[12].addBox(-1F, 2.5F, -1.5F, 7, 1, 3, 0F); // Box 15
+		gunModel[12].setRotationPoint(0F, 0F, 0F);
+
+		
 		//Bolt
 		slideModel = new ModelRendererTurbo[2];
 		
@@ -35,7 +77,7 @@ public class ModelBarrett extends ModelGun
 		slideModel[1].addTrapezoid(3F, 2.5F, 0.5F, 1, 1, 2, 0F, -0.5F, ModelRendererTurbo.MR_FRONT);
 		
 		//Scope
-		defaultScopeModel = new ModelRendererTurbo[3];
+		defaultScopeModel = new ModelRendererTurbo[4];
 		
 		defaultScopeModel[0] = new ModelRendererTurbo(this, 0, 10, textureX, textureY);
 		defaultScopeModel[0].addTrapezoid(-1F, 4.25F, -1F, 4, 2, 2, 0F, -0.5F, ModelRendererTurbo.MR_LEFT);
@@ -45,6 +87,10 @@ public class ModelBarrett extends ModelGun
 		
 		defaultScopeModel[2] = new ModelRendererTurbo(this, 10, 7, textureX, textureY);
 		defaultScopeModel[2].addBox(1.5F, 3.5F, -0.5F, 3, 2, 1);
+		
+		defaultScopeModel[3] = new ModelRendererTurbo(this, 16, 20, textureX, textureY); // Box 16
+		defaultScopeModel[3].addBox(0.5F, 3.5F, -1.5F, 5, 3, 3, 0F); // Box 16
+		defaultScopeModel[3].setRotationPoint(0F, 0F, 0F);
 		
 		scopeAttachPoint = new Vector3f(3F / 16F, 6F / 16F, 0F);
 		

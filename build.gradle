@@ -12,7 +12,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "5.2"
+version = "5.3"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
@@ -20,7 +20,7 @@ minecraft {
     version = "1.8-11.14.4.1577"
     runDir = "run"
 
-    replace "@ALLOWED_VERSION@", "[5.2,5.3)"
+    replace "@ALLOWED_VERSION@", "[5.3,5.4)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 	

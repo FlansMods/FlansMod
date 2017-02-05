@@ -35,7 +35,9 @@ DeployedModel None
 Model mw.Jury
 Texture Jury
 //Attachment Settings
-AllowAllAttachments true
+AllowAllAttachments false
+//List here all the attachments allowed on this gun by shortName and separated by spaces
+AllowAttachments flanMWSilencer flanMWLongBarrel flanMWRedDot flanMWACOG flanMW4xScope flanMWSingleFire flanMWBurstFire flanMWAutoFire
 //List here all the attachments allowed on this gun by shortName and separated by spaces
 //AllowAttachments
 AllowBarrelAttachments true

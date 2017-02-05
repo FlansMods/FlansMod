@@ -10,14 +10,14 @@ RarityWeight legendary 0.25
 // Uncommons
 AddPaintjob uncommon ak47 AK47_Redline
 AddPaintjob uncommon m16a4 M16A4_Orange
-AddPaintjob uncommon fnscar FNSCAR_RedWhite
-AddPaintjob uncommon m1014 M1014_RedWhite
+AddPaintjob uncommon fnscar FNSCAR_Newspaper
+AddPaintjob uncommon m1014 M1014_Newspaper
 AddPaintjob uncommon glock Glock_Cottonmouth
 AddPaintjob uncommon makarov Makarov_Cobra
 AddPaintjob uncommon desertEagle DesertEagle_CoralSnake
-AddPaintjob uncommon p90 P90_Purple
-AddPaintjob uncommon bizon Bizon_RedWhite
-AddPaintjob uncommon barrett Barrett_Purple
+AddPaintjob uncommon p90 P90_Periwinkle
+AddPaintjob uncommon bizon Bizon_Newspaper
+AddPaintjob uncommon barrett Barrett_Periwinkle
 AddPaintjob uncommon acr ACR_Electric
 AddPaintjob uncommon m1014 M1014_Giraffe
 AddPaintjob uncommon judge Judge_Order
@@ -41,6 +41,7 @@ AddPaintjob uncommon jury Jury_Chaos
 AddPaintjob uncommon glock Glock_Venom
 AddPaintjob uncommon desertEagle DesertEagle_Venom
 AddPaintjob uncommon m21 M21_RoyalGreen
+AddPaintjob uncommon w1200 W1200_Periwinkle
 // Rares
 AddPaintjob rare acr ACR_QuackQuack
 AddPaintjob rare minigun Minigun_Rainbow
@@ -50,3 +51,4 @@ AddPaintjob rare desertEagle DesertEagle_Gold
 // Legendaries
 AddPaintjob legendary desertEagle DesertEagle_Messenger
 AddPaintjob legendary minigun Minigun_Steampunk
+AddPaintjob legendary barrett Barrett_Pulse

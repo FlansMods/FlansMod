@@ -149,7 +149,7 @@ public class GametypeTDM extends Gametype
 			if (base.getMap() != teamsManager.currentRound.map)
 				continue;
 			for (int i = 0; i < base.getObjects().size(); i++) {
-				if (base.getObjects().get(i).isSpawnPoint())
+				if (base.getObjects().get(i) != null && base.getObjects().get(i).isSpawnPoint())
 					validSpawnPoints.add(base.getObjects().get(i));
 			}
 		}

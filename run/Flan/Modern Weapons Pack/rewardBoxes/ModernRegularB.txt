@@ -1,5 +1,5 @@
 //Naming
-Name Beta Paint Box
+Name Bravo Paint Box
 ShortName modernRegularB
 Icon RewardBox_Modern_Deluxe
 // Weighting

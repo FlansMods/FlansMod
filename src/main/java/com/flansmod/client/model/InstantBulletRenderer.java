@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.vector.Vector3f;
 
@@ -70,6 +71,11 @@ public class InstantBulletRenderer
 			
 	        Vector3f dPos = Vector3f.sub(hitPos, origin, null);
 	        this.distanceToTarget = dPos.length();
+	        
+	        if(Math.abs(distanceToTarget) > 300.0f)
+	        {
+	        	distanceToTarget = 300.0f;
+	        }
 		}
 		
 		// Return true if this needs deleting

@@ -78,12 +78,12 @@ AddSecondary flanMWSingleFire 18
 // Melee
 AddMelee mwKnife 0
 // Armour
-AddArmour blackSweater 0
-AddArmour bulldozerBody 0
-AddArmour juggernautBodyBrown 0
-AddArmour juggernautBody 0
-AddArmour SWATBody 0
-AddArmour bodyArmour 0
+//AddArmour blackSweater 0
+//AddArmour bulldozerBody 0
+//AddArmour juggernautBodyBrown 0
+//AddArmour juggernautBody 0
+//AddArmour SWATBody 0
+//AddArmour bodyArmour 0
 // Default loadouts
 DefaultLoadout 1 ak47 m9 m67 mwKnife
 DefaultLoadout 2 rpd ak74 m67 mwKnife
