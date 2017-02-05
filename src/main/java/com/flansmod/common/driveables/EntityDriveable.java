@@ -121,8 +121,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	private int[] emitterTimers;
 	
-	public int animCount = 0;
-	public int animFrame = 0;
+	public int animCountLeft = 0;
+	public int animFrameLeft = 0;
+	public int animCountRight = 0;
+	public int animFrameRight = 0;
 	
 	public EntityDriveable(World world)
 	{
