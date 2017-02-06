@@ -1,80 +1,78 @@
 //Naming
 Name Modern Loadout
 ShortName modernLoadout
-MaxLevel 20
+MaxLevel 30
 XPForKill 10
 XPForDeath 5
 // This scales with the length of the streak. e.g. 4 kills with a streak bonus of 10 gets you 40 points. 
 XPForKillstreakBonus 10
 // 0.375 x^2 + 2.625 x, x from 1 to 30
-XPPerLevel 30 60 110 160 220 290 360 450 540 630 740 850 970 1100 1230 1380 1530 1680 1850 2000 2200 2390 2580 2790 3000 3210 3440 3670 3910 4160
+XPPerLevel 30 60 110 160 220 290 360 450 540 630 740 850 970 1100 1230 1380 1530 1680 1850 2000 2200 2390 2580 2790 3000 3210 3440 3670 3910 4160 5000
 // The levels at which new loadout slots unlock
 SlotUnlockLevels 0 0 5 10 20
 // Rifles
 AddPrimary ak47 0 ak47Ammo 5
 AddPrimary m16a4 3 m16a4Ammo 6
-AddPrimary g3 8 g3Ammo 4
-AddPrimary g36 10 g36Ammo 4
-AddPrimary fnscar 13 fnscarAmmo 6
-AddPrimary m14 16 m14Ammo 3
-AddPrimary acr 19 acrAmmo 3
+AddPrimary g3 10 g3Ammo 4
+AddPrimary g36 14 g36Ammo 4
+AddPrimary fnscar 18 fnscarAmmo 6
+AddPrimary m14 24 m14Ammo 3
+AddPrimary acr 28 acrAmmo 3
 // Shotguns
-AddPrimary m1014 2 w1200Ammo 20
-AddPrimary w1200 6 w1200Ammo 28
-AddSecondary judge 9 w1200Ammo 15
-AddPrimary r870 11 r870Ammo 21
-AddSecondary executioner 15 w1200Ammo 8
-AddPrimary aa12 17 aa12Ammo 2
+AddPrimary m1014 0 w1200Ammo 20
+AddPrimary w1200 8 w1200Ammo 28
+AddSecondary judge 11 w1200Ammo 15
+AddPrimary r870 15 r870Ammo 21
+AddSecondary executioner 21 w1200Ammo 8
+AddPrimary aa12 25 aa12Ammo 2
 // Pistols
 AddSecondary m9 0 m9Ammo 2
 AddSecondary makarov 4 makarovAmmo 4
-AddSecondary jury 9 juryAmmo 12
-AddSecondary glock 14 glockAmmo 3
-AddSecondary desertEagle 20 desertEagleAmmo 2
+AddSecondary jury 12 juryAmmo 12
+AddSecondary glock 19 glockAmmo 3
+AddSecondary desertEagle 29 desertEagleAmmo 2
 // SMGs
 AddSecondary ak74 0 ak74Ammo 3
 AddSecondary p90 7 p90Ammo 3
-AddSecondary bizon 12 bizonAmmo 2
-AddSecondary mp5 16 mp5Ammo 2
+AddSecondary bizon 16 bizonAmmo 2
+AddSecondary mp5 22 mp5Ammo 2
 // LMGs
 AddPrimary rpd 0 rpdAmmo 3
-AddPrimary l86 5 l86Ammo 2
-AddPrimary m249 14 m249Ammo 2
-AddPrimary minigun 20 minigunPortableAmmo 1
+AddPrimary l86 6 l86Ammo 2
+AddPrimary m249 20 m249Ammo 2
+AddPrimary minigun 30 minigunPortableAmmo 1
 // Extras
 AddSpecial m67 0
-AddSpecial mwMedicBag 3
-AddSpecial molotovCocktail 6
-AddSpecial mwAmmoBag 11
-AddSpecial claymore 17
-AddSpecial c4Remote 19 c4 4
+AddSpecial mwMedKit 2
+AddSpecial claymore 23
+AddSpecial c4Remote 27 c4 4
 // Explosives
 AddPrimary rpg 0 rpgAmmo 3
-AddPrimary gl1 8 grenadeLauncherAmmo 2
+AddPrimary gl1 9 grenadeLauncherAmmo 2
 //AddPrimary gl6 19 grenadeLauncherBouncyAmmo 6
 // Snipers
 AddPrimary r700 1 r700Ammo 24
 AddPrimary dragunov 5 dragunovAmmo 5
-AddPrimary m40a3 10 r700Ammo 20
-AddPrimary m21 13 m21Ammo 4
-AddPrimary barrett 18 barrettCompactAmmo 3
+AddPrimary m40a3 13 r700Ammo 20
+AddPrimary m21 17 m21Ammo 4
+AddPrimary barrett 26 barrettCompactAmmo 3
 // Modifications
 AddPrimary flanMWSilencer 1
-AddPrimary flanMWForegrip 2
-AddPrimary flanMWRedDot 4
-AddPrimary flanMWBurstFire 7
-AddPrimary flanMWACOG 10
-AddPrimary flanMWAutoFire 12
-AddPrimary flanMWLongBarrel 15
-AddPrimary flanMWSingleFire 18
+AddPrimary flanMWForegrip 5
+AddPrimary flanMWRedDot 9
+AddPrimary flanMWBurstFire 13
+AddPrimary flanMWACOG 17
+AddPrimary flanMWAutoFire 21
+AddPrimary flanMWLongBarrel 25
+AddPrimary flanMWSingleFire 29
 AddSecondary flanMWSilencer 1
-AddSecondary flanMWForegrip 2
-AddSecondary flanMWRedDot 4
-AddSecondary flanMWBurstFire 7
-AddSecondary flanMWACOG 10
-AddSecondary flanMWAutoFire 12
-AddSecondary flanMWLongBarrel 15
-AddSecondary flanMWSingleFire 18
+AddSecondary flanMWForegrip 5
+AddSecondary flanMWRedDot 9
+AddSecondary flanMWBurstFire 13
+AddSecondary flanMWACOG 17
+AddSecondary flanMWAutoFire 21
+AddSecondary flanMWLongBarrel 25
+AddSecondary flanMWSingleFire 29
 // Melee
 AddMelee mwKnife 0
 // Armour
@@ -87,9 +85,9 @@ AddMelee mwKnife 0
 // Default loadouts
 DefaultLoadout 1 ak47 m9 m67 mwKnife
 DefaultLoadout 2 rpd ak74 m67 mwKnife
-DefaultLoadout 3 dragunov makarov mwMedicBag mwKnife
-DefaultLoadout 4 g36 judge molotovCocktail mwKnife
-DefaultLoadout 5 minigun desertEagle mwAmmoBag mwKnife
+DefaultLoadout 3 dragunov makarov mwMedicKit mwKnife
+DefaultLoadout 4 g3 p90 mwMedicKit mwKnife
+DefaultLoadout 5 r870 glock m67 mwKnife
 // Reward boxes
 AddRewardBox modernRegularA
 AddRewardBox modernRegularB
@@ -97,41 +95,32 @@ AddRewardBox modernPremium
 // Awarding
 // Alternate AB, with 2 per level, expect on level 10, where there are 3 other unlocks
 AddReward modernRegularA 1
-AddReward modernRegularB 1
-AddReward modernRegularA 2
 AddReward modernRegularB 2
 AddReward modernRegularA 3
-AddReward modernPremium 3
 AddReward modernRegularB 4
-AddReward modernRegularA 4
-AddReward modernRegularB 5
-AddReward modernRegularA 5
-AddReward modernRegularB 6
-AddReward modernPremium 6
-AddReward modernRegularA 7
+AddReward modernPremium 5
+AddReward modernRegularA 6
 AddReward modernRegularB 7
 AddReward modernRegularA 8
-AddReward modernRegularB 8
-AddReward modernRegularA 9
 AddReward modernRegularB 9
 AddReward modernPremium 10
 AddReward modernRegularA 11
-AddReward modernRegularB 11
-AddReward modernRegularA 12
 AddReward modernRegularB 12
 AddReward modernRegularA 13
-AddReward modernPremium 13
 AddReward modernRegularB 14
-AddReward modernRegularA 14
-AddReward modernRegularB 15
-AddReward modernRegularA 15
-AddReward modernRegularB 16
-AddReward modernPremium 16
-AddReward modernRegularA 17
+AddReward modernPremium 15
+AddReward modernRegularA 16
 AddReward modernRegularB 17
 AddReward modernRegularA 18
-AddReward modernRegularB 18
-AddReward modernRegularA 19
 AddReward modernRegularB 19
 AddReward modernPremium 20
-AddReward modernPremium 20
+AddReward modernRegularA 21
+AddReward modernRegularB 22
+AddReward modernRegularA 23
+AddReward modernRegularB 24
+AddReward modernPremium 25
+AddReward modernRegularA 26
+AddReward modernRegularB 27
+AddReward modernRegularA 28
+AddReward modernRegularB 29
+AddReward modernPremium 30

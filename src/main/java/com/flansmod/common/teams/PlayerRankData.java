@@ -166,6 +166,10 @@ public class PlayerRankData
 
 	public int GetNumOfUnopenedBoxes(RewardBox box) 
 	{
+		if(box == null)
+		{
+			return 0;
+		}
 		int num = 0;
 		for(RewardBoxInstance instance : rewardBoxData)
 		{

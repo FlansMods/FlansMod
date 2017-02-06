@@ -106,9 +106,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void onUpdate()
 	{
 		super.onUpdate();
-		
+				
 		//Quiet despawning
-		if(type.despawnTime > 0 && ticksExisted > type.despawnTime)
+		if(type == null || (type.despawnTime > 0 && ticksExisted > type.despawnTime))
 		{
 			detonated = true;
 			setDead();

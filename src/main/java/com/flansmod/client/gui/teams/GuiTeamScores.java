@@ -56,10 +56,10 @@ public class GuiTeamScores extends GuiTeamsBase
 		//Like draw texturedModalRect, but with custom image size
 		//func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
 		
-		drawModalRectWithCustomSizedTexture(m, n, 100, 0, 312, 66, 512, 256);
-		for(int p = 0; p < teamInfo.numLines - 1; p++)
-			drawModalRectWithCustomSizedTexture(m, n + 66 + 16 * p, 100, 71, 312, 16, 512, 256);
-		drawModalRectWithCustomSizedTexture(m, n + 63 + (teamInfo.numLines - 1) * 16, 100, 168, 312, 12, 512, 256);
+		drawModalRectWithCustomSizedTexture(m, n, 100, 0, 312, 65, 512, 256);
+		for(int p = 0; p < teamInfo.numLines; p++)
+			drawModalRectWithCustomSizedTexture(m, n + 65 + 16 * p, 100, 65, 312, 16, 512, 256);
+		drawModalRectWithCustomSizedTexture(m, n + 65 + (teamInfo.numLines) * 16, 100, 170, 312, 10, 512, 256);
 		
 		if(teamInfo.showZombieScore)
 		{

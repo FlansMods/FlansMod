@@ -92,6 +92,8 @@ public class PacketLoadoutData extends PacketBase
 						{
 							rankData.loadouts[i].slots[j] = pool.defaultLoadouts[i].slots[j].copy();
 						}
+						else
+							rankData.loadouts[i].slots[j] = null;
 					}
 				}
 			}

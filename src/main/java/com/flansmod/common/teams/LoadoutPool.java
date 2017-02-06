@@ -122,7 +122,12 @@ public class LoadoutPool extends InfoType
 			{
 				if(2 + i < split.length)
 				{
-					defaultLoadouts[index].slots[i] = new ItemStack(InfoType.getType(split[2 + i]).getItem());
+					InfoType type = InfoType.getType(split[2 + i]);
+					if(type == null)
+					{
+						FlansMod.Assert(false, "Invalid info type in loadout: " + split[2 + i]);
+					}
+					else defaultLoadouts[index].slots[i] = new ItemStack(type.getItem());
 				}
 			}
 		}

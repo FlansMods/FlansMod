@@ -158,7 +158,7 @@ public class PlayerHitbox
 		switch(type)
 		{
 		case BODY : break;
-		case HEAD : damageModifier *= 2F; break;
+		case HEAD : damageModifier *= 1.6F; break;
 		case LEFTARM : damageModifier *= 0.6F; break;
 		case RIGHTARM : damageModifier *= 0.6F; break;
 		case LEFTITEM : break;

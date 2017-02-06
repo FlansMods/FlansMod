@@ -220,8 +220,8 @@ public class TeamsManager
 				}
 				else
 				{
-					if(interRoundTimeLeft == votingTime)
-						pickVoteOptions();
+					//if(interRoundTimeLeft == votingTime)
+					//	pickVoteOptions();
 					if(interRoundTimeLeft <= votingTime)
 					{
 						if(voteOptions == null)

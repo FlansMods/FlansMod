@@ -227,7 +227,8 @@ public class PacketTeamInfo extends PacketBase
 			sortedByTeam = data.readBoolean();
 			if(sortedByTeam)
 			{
-				numLines = numTeams = data.readInt();
+				numTeams = data.readInt();
+				numLines = 1;
 				if(numTeams == 0)
 					return;
 				teamData = new TeamData[numTeams];
