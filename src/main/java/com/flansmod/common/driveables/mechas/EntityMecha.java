@@ -330,7 +330,8 @@ public class EntityMecha extends EntityDriveable
 		
 				Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
 				
-				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
+				if(FlansMod.DEBUG && worldObj.isRemote)
+					worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
 				
 				Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
 				

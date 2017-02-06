@@ -155,6 +155,10 @@ public class ClientTeamsData
 
 	public static void UpdateNumVotes(RoundFinishedData data) 
 	{
+		if(roundFinishedData == null || roundFinishedData.votingOptions == null)
+		{
+			return;
+		}
 		for(int i = 0; i < data.votingOptions.length; i++)
 		{
 			if(i < roundFinishedData.votingOptions.length)

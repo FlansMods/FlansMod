@@ -511,6 +511,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
 			EntityPlayer driver = GetDriver();
 			
+			if(shootableStack == null)
+				return;
+			
 			// For each 
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
 			ShootableType shootableType = shootableItem.type;
@@ -539,7 +542,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						victim = firstHit.GetEntity();
 					}
 					
-					if(FlansMod.DEBUG)
+					if(FlansMod.DEBUG && worldObj.isRemote)
 					{
 						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, gunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
