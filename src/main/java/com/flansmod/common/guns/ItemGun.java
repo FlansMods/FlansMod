@@ -309,7 +309,7 @@ public class ItemGun extends Item implements IPaintableItem
 		{				
 			//Cycle selection
 			int dWheel = Mouse.getDWheel();
-			if(Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && dWheel != 0)
+			if(mc.gameSettings.keyBindSneak.isPressed() && dWheel != 0)
 			{
 				data.cycleOffHandItem(player, dWheel);
 			}
