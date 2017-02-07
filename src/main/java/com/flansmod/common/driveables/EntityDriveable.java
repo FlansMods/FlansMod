@@ -121,8 +121,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	private int[] emitterTimers;
 	
-	public int animCount = 0;
-	public int animFrame = 0;
+	public int animCountLeft = 0;
+	public int animFrameLeft = 0;
+	public int animCountRight = 0;
+	public int animFrameRight = 0;
 	
 	public EntityDriveable(World world)
 	{
@@ -704,6 +706,40 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		return axes.getXAxis();
 	}
+	
+	public void correctWheelPos()
+	{
+		if(this.ticksExisted % (10*20) == 0)
+		{
+			for(EntityWheel wheel : wheels)
+			{
+				if(wheel == null)	continue;
+
+				Vector3f target = axes.findLocalVectorGlobally(getDriveableType().wheelPositions[wheel.ID].position);
+				target.x += posX;
+				target.y += posY;
+				target.z += posZ;
+
+				int tf = 1;
+				int cf = 1;
+				int range = 5;
+
+				if(MathHelper.abs(target.x - (float)wheel.posX) > range)
+				{
+					wheel.posX = (target.x*tf + (float)wheel.posX*cf) / (tf+cf);
+				}
+				if(MathHelper.abs(target.y - (float)wheel.posY) > range)
+				{
+					wheel.posY = (target.y*tf + (float)wheel.posY*cf) / (tf+cf);
+				}
+				if(MathHelper.abs(target.z - (float)wheel.posZ) > range)
+				{
+					wheel.posZ = (target.z*tf + (float)wheel.posZ*cf) / (tf+cf);
+				}
+			}
+		}
+	}
+
 		
 	@Override
     public void onUpdate()

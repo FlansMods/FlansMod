@@ -682,6 +682,11 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
 			
+			if(hitData instanceof EntityHit){
+	       		world.spawnParticle(EnumParticleTypes.REDSTONE, hit.x, hit.y, hit.z, 255,0,0);
+
+			}
+			
 			if(hitData instanceof BlockHit)
 			{
 				BlockHit blockHit = (BlockHit)hitData;
@@ -693,6 +698,9 @@ public class ItemGun extends Item implements IPaintableItem
 				Vector3f bulletDir = Vector3f.sub(hit, origin, null);
 				bulletDir.normalise();
 				bulletDir.scale(0.5f);
+				
+        		world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, hit.x, hit.y, hit.z, 0,0,0);
+
 				
 				if(blockState != null)
 				{

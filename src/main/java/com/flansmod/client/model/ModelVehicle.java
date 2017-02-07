@@ -37,7 +37,9 @@ public class ModelVehicle extends ModelDriveable
 	public ModelRendererTurbo drillHeadModel[] = new ModelRendererTurbo[0]; 		//Drill head. Rotates around
 	public Vector3f drillHeadOrigin = new Vector3f();								//this point
 	
-	public int animFrame = 0;
+	public float animFrameLeft = 0;
+	public float animFrameRight = 0;
+
 
 	
 	@Override
@@ -77,7 +79,9 @@ public class ModelVehicle extends ModelDriveable
 	public void render(float f5, EntityVehicle vehicle, float f)
 	{
 		boolean rotateWheels = vehicle.getVehicleType().rotateWheels;
-		animFrame = vehicle.animFrame;
+		animFrameLeft = vehicle.animFrameLeft;
+		animFrameRight = vehicle.animFrameRight;
+
 
 		//Rendering the body
 		if(vehicle.isPartIntact(EnumDriveablePart.core))
@@ -158,7 +162,7 @@ public class ModelVehicle extends ModelDriveable
 			
 			for(int i = 0; i < leftAnimTrackModel.length; i++)
 			{
-				if(i == animFrame)
+				if(i == animFrameLeft)
 				{
 					for (ModelRendererTurbo aLeftAnimTrackModel : leftAnimTrackModel[i]) {
 						aLeftAnimTrackModel.render(f5, oldRotateOrder);
@@ -180,7 +184,7 @@ public class ModelVehicle extends ModelDriveable
 			
 			for(int i = 0; i < rightAnimTrackModel.length; i++)
 			{
-				if(i == animFrame)
+				if(i == animFrameRight)
 				{
 					for (ModelRendererTurbo aRightAnimTrackModel : rightAnimTrackModel[i]) {
 						aRightAnimTrackModel.render(f5, oldRotateOrder);

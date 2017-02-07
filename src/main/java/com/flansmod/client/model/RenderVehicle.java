@@ -267,6 +267,8 @@ public class RenderVehicle extends Render implements IItemRenderer
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
         
+        
+        
         RenderHelper.enableStandardItemLighting();
         
         GL11.glTranslatef(-(float)x, -(float)y, -(float)z);

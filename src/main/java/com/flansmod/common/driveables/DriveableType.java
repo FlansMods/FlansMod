@@ -107,7 +107,7 @@ public abstract class DriveableType extends PaintableType
 	/** The wheel radius for onGround checks */
 	public float wheelStepHeight = 1.0F;
 	/** Whether or not the vehicle rolls */
-	public boolean canRoll = false;
+	public boolean canRoll = true;
 	/** */
 	public float turretRotationSpeed = 2.5F;
 	
@@ -121,6 +121,8 @@ public abstract class DriveableType extends PaintableType
 	//Boat Stuff
 	/** If true, then the vehicles wheels float on water */
 	public boolean floatOnWater = false;
+	/** Vertical offset for the floating position for each wheel */
+	public float floatOffset = 0;
 	/** Defines where you can place this vehicle */
 	public boolean placeableOnLand = true, placeableOnWater = false;
 	/** The upwards force to apply to the vehicle per wheel when on water */
@@ -238,6 +240,9 @@ public abstract class DriveableType extends PaintableType
 			}
 			else if(split[0].equals("Buoyancy"))
 				buoyancy = Float.parseFloat(split[1]);
+			else if(split[0].equals("FloatOffset"))
+				floatOffset = Float.parseFloat(split[1]);
+
 
 			//Wheels
 			else if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))

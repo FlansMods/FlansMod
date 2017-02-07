@@ -127,7 +127,7 @@ public class InstantBulletRenderer
 	        
 	        Vector3f trailTangent = Vector3f.cross(dPos, vectorToPlayer, null);
 	        trailTangent.normalise();
-	        trailTangent.scale(-width * 0.5f);
+	        trailTangent.scale(-width*0.5F);
 	        
 	        Vector3f normal = Vector3f.cross(trailTangent, dPos, null);
 	        normal.normalise();
