@@ -15,10 +15,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -186,7 +186,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
+			worldObj.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
 					new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
 					(direction * 90F + rotationYaw), 
 					rotationPitch, 
@@ -249,7 +249,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				shootDelay = type.shootDelay;
 				if (!worldObj.isRemote)
 				{
-					worldObj.spawnEntityInWorld(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
+					worldObj.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
 							(EntityLivingBase) player, 
 							bullet.bulletSpread * type.bulletSpread, 
 							type.damage, 
@@ -366,7 +366,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if(TeamsManager.weaponDrops == 2)
 			{
 				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
-				worldObj.spawnEntityInWorld(gunEntity);
+				worldObj.spawnEntity(gunEntity);
 			}
 			else if(TeamsManager.weaponDrops == 1)
 			{

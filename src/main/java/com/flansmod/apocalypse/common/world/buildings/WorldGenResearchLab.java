@@ -29,7 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -293,7 +293,7 @@ public class WorldGenResearchLab extends WorldGenFlan
     		}
     	}
     	EntityAIMecha entity = new EntityAIMecha(world, x + 0.5D, y, z + 0.5D, type, new DriveableData(tags), tags);
-        world.spawnEntityInWorld(entity);
+        world.spawnEntity(entity);
 	}
 	
 	private void generateServerPower(World world, Random rand, int x, int y, int z) 

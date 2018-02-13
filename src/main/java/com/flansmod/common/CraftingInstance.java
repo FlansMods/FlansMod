@@ -42,10 +42,10 @@ public class CraftingInstance
 				ItemStack stack = inventory.getStackInSlot(j);
 				if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
 				{
-					numMatchingStuff += stack.stackSize;
+					numMatchingStuff += stack.getCount();
 				}
 			}
-			if (numMatchingStuff < check.stackSize)
+			if (numMatchingStuff < check.getCount())
 			{
 				craftingSuccessful = false;
 			}
@@ -60,19 +60,19 @@ public class CraftingInstance
 		
 		for(ItemStack remove : requiredStacks)
 		{
-			int amountLeft = remove.stackSize;
+			int amountLeft = remove.getCount();
 			for (int j = 0; j < inventory.getSizeInventory(); j++)
 			{
 				ItemStack stack = inventory.getStackInSlot(j);
 				if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
 				{
-					amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
+					amountLeft -= inventory.decrStackSize(j, amountLeft).getCount();
 				}
 			}
 		}
 		
 		for(ItemStack stack : outputStacks)
 			if(!player.inventory.addItemStackToInventory(stack))
-				player.dropPlayerItemWithRandomChoice(stack, false);
+				player.dropItem(stack, false);
 	}
 }

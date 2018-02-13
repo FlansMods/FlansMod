@@ -1,6 +1,6 @@
 package com.flansmod.client.tmt;
 
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class PositionTextureVertex extends net.minecraft.client.model.PositionTextureVertex
 {

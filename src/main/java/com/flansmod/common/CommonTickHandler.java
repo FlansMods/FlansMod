@@ -57,7 +57,7 @@ public class CommonTickHandler
 			while(replacementItemEntities.size() > 0)
 			{
 				EntityItemCustomRender entity = replacementItemEntities.remove();
-				entity.worldObj.spawnEntityInWorld(entity);
+				entity.world.spawnEntity(entity);
 			}
 
 			break;
@@ -79,20 +79,15 @@ public class CommonTickHandler
 	public void onEntitySpawn(EntityJoinWorldEvent event) 
 	{
 		//Replace gun items with custom render gun items
-		if(event.entity instanceof EntityItem && !(event.entity instanceof EntityItemCustomRender))
+		if(event.getEntity() instanceof EntityItem && !(event.getEntity() instanceof EntityItemCustomRender))
 		{
-			ItemStack stack = getEntityItem((EntityItem)event.entity);
+			ItemStack stack = ((EntityItem)event.getEntity()).getItem();
 			if(stack != null && stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().modelString != null)
 			{
-				//event.world.spawnEntityInWorld(new EntityItemCustomRender((EntityItem)event.entity));
-				replacementItemEntities.add(new EntityItemCustomRender((EntityItem)event.entity));
+				//event.world.spawnEntity(new EntityItemCustomRender((EntityItem)event.entity));
+				replacementItemEntities.add(new EntityItemCustomRender((EntityItem)event.getEntity()));
 				event.setCanceled(true);
 			}
 		}			
 	}
-	
-    public ItemStack getEntityItem(EntityItem entity)
-    {
-        return entity.getDataWatcher().getWatchableObjectItemStack(10);
-    }
 }

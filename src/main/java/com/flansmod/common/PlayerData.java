@@ -104,7 +104,7 @@ public class PlayerData
 	
 	public void tick(EntityPlayer player)
 	{
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 			clientTick(player);
 		if(shootTimeRight > 0)
 			shootTimeRight--;
@@ -134,10 +134,10 @@ public class PlayerData
 	
 	public void clientTick(EntityPlayer player)
 	{
-		if(player.getCurrentEquippedItem() == null 
-				|| !(player.getCurrentEquippedItem().getItem() instanceof ItemGun) 
-				|| ((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded 
-				|| player.getCurrentEquippedItem() == offHandGunStack)
+		if(player.getHeldItemMainhand() == null 
+				|| !(player.getHeldItemMainhand().getItem() instanceof ItemGun) 
+				|| ((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded 
+				|| player.getHeldItemMainhand() == offHandGunStack)
 		{
 			//offHandGunSlot = 0;
 			offHandGunStack = null;

@@ -132,7 +132,7 @@ public class PacketShotData extends PacketBase
 			{
 				if(entry.shotFrom instanceof GunType)
 				{
-					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.worldObj, player, false, entry);
+					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.world, player, false, entry);
 				}
 			}
 			else
@@ -142,7 +142,7 @@ public class PacketShotData extends PacketBase
 				{
 					ItemGun gunItem = (ItemGun)gunStack.getItem();
 					boolean isOffHand = (data.offHandGunSlot + 1 == entry.slot);
-					gunItem.ServerHandleShotData(gunStack, entry.slot, player.worldObj, player, isOffHand, entry);
+					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, isOffHand, entry);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ public class PacketShotData extends PacketBase
 				{
 					ItemGun gunItem = (ItemGun)entry.shotFrom.getItem();
 					
-					gunItem.DoInstantShot(clientPlayer.worldObj, 
+					gunItem.DoInstantShot(clientPlayer.world, 
 							FlansModRaytracer.GetEntityByID(instantData.shooterID), 
 							instantData.shotFrom, (BulletType)instantData.shotType, 
 							instantData.origin, instantData.hitPos, 

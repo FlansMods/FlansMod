@@ -3,7 +3,7 @@ package com.flansmod.apocalypse.common.entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class EntityAIGoSomewhere extends EntityAIBase 
 {

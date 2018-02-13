@@ -69,13 +69,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.util.Vec3i;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
@@ -226,7 +226,7 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				if (look.sideHit == EnumFacing.UP)
 				{
-					int playerDir = MathHelper.floor_double(((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+					int playerDir = MathHelper.floor(((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 					int i = look.getBlockPos().getX();
 					int j = look.getBlockPos().getY();
 					int k = look.getBlockPos().getZ();
@@ -250,7 +250,7 @@ public class ItemGun extends Item implements IPaintableItem
 								{
 									mg.ammo = getBulletItemStack(itemstack, 0);
 								}
-								world.spawnEntityInWorld(mg);
+								world.spawnEntity(mg);
 								
 							}
 							if (!entityplayer.capabilities.isCreativeMode)
@@ -460,7 +460,7 @@ public class ItemGun extends Item implements IPaintableItem
 							
 							if(FlansMod.DEBUG)
 							{
-								world.spawnEntityInWorld(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+								world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 							}
 							
 							boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
@@ -504,7 +504,7 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			if(FlansMod.DEBUG)
 			{
-				world.spawnEntityInWorld(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
+				world.spawnEntity(new EntityDebugDot(world, gunOrigin, 100, 1.0f, 1.0f, 1.0f));
 			}
 			
 			// Now send shooting data to the server
@@ -677,7 +677,7 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			if(FlansMod.DEBUG)
 			{
-				world.spawnEntityInWorld(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));
+				world.spawnEntity(new EntityDebugVector(world, origin, Vector3f.sub(hit, origin, null), 100, 0.5f, 0.5f, 1.0f));
 			}
 			
 			InstantBulletRenderer.AddTrail(new InstantShotTrail(origin, hit, (BulletType)shotType));
@@ -966,8 +966,8 @@ public class ItemGun extends Item implements IPaintableItem
 					
 					Vector3f dPos = data.lastMeleePositions[k] == null ? new Vector3f() : Vector3f.sub(nextPosInWorldCoords, data.lastMeleePositions[k], null);
 					
-					if(player.worldObj.isRemote && FlansMod.DEBUG)
-						player.worldObj.spawnEntityInWorld(new EntityDebugVector(player.worldObj, data.lastMeleePositions[k], dPos, 200, 1F, 0F, 0F));
+					if(player.world.isRemote && FlansMod.DEBUG)
+						player.world.spawnEntity(new EntityDebugVector(player.world, data.lastMeleePositions[k], dPos, 200, 1F, 0F, 0F));
 					
 					//Do the raytrace
 					{
@@ -1094,7 +1094,7 @@ public class ItemGun extends Item implements IPaintableItem
 									}
 									
 									if(FlansMod.DEBUG)
-										world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * playerHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * playerHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * playerHit.intersectTime), 1000, 1F, 0F, 0F));
+										world.spawnEntity(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * playerHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * playerHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * playerHit.intersectTime), 1000, 1F, 0F, 0F));
 								}
 								else if(bulletHit instanceof EntityHit)
 								{
@@ -1108,7 +1108,7 @@ public class ItemGun extends Item implements IPaintableItem
 									}
 									
 									if(FlansMod.DEBUG)
-										world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * entityHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * entityHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * entityHit.intersectTime), 1000, 1F, 0F, 0F));
+										world.spawnEntity(new EntityDebugDot(world, new Vector3f(data.lastMeleePositions[k].x + dPos.x * entityHit.intersectTime, data.lastMeleePositions[k].y + dPos.y * entityHit.intersectTime, data.lastMeleePositions[k].z + dPos.z * entityHit.intersectTime), 1000, 1F, 0F, 0F));
 								}
 							}	
 						}
@@ -1253,7 +1253,7 @@ public class ItemGun extends Item implements IPaintableItem
 		if(type.secondaryFunction == EnumSecondaryFunction.CUSTOM_MELEE)
 		{
 			//Do animation
-			if(entityLiving.worldObj.isRemote)
+			if(entityLiving.world.isRemote)
 			{
 				GunAnimations animations = FlansModClient.getGunAnimations(entityLiving, false);
 				animations.doMelee(type.meleeTime);

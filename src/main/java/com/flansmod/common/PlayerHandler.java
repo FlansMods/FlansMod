@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
@@ -40,8 +41,8 @@ public class PlayerHandler
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event)
 	{
-		EntityLivingBase entity = event.entityLiving;
-		if(event instanceof LivingAttackEvent && (entity.ridingEntity instanceof EntityDriveable || entity.ridingEntity instanceof EntitySeat))
+		EntityLivingBase entity = event.getEntityLiving();
+		if(event instanceof LivingAttackEvent && (entity.getRidingEntity() instanceof EntityDriveable || entity.getRidingEntity() instanceof EntitySeat))
 		{
 			event.setCanceled(true);
 		}
@@ -50,7 +51,7 @@ public class PlayerHandler
 	@SubscribeEvent
 	public void onEntityKilled(LivingDeathEvent event) 
 	{
-		EntityLivingBase entity = event.entityLiving;
+		EntityLivingBase entity = event.getEntityLiving();
 		if(entity instanceof EntityPlayer)
 		{
 			getPlayerData((EntityPlayer)entity).playerKilled();
@@ -59,7 +60,7 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
-		for(WorldServer world : MinecraftServer.getServer().worldServers)
+		for(WorldServer world : FMLServerHandler.instance().getServer().worlds)
 		{
 			for(Object player : world.playerEntities)
 			{
@@ -70,9 +71,9 @@ public class PlayerHandler
 	
 	public void clientTick()
 	{
-		if(Minecraft.getMinecraft().theWorld != null)
+		if(Minecraft.getMinecraft().world != null)
 		{
-			for(Object player : Minecraft.getMinecraft().theWorld.playerEntities)
+			for(Object player : Minecraft.getMinecraft().world.playerEntities)
 			{
 				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
 			}	
@@ -83,7 +84,7 @@ public class PlayerHandler
 	{
 		if(player == null)
 			return null;
-		return getPlayerData(player.getName(), player.worldObj.isRemote ? Side.CLIENT : Side.SERVER);
+		return getPlayerData(player.getName(), player.world.isRemote ? Side.CLIENT : Side.SERVER);
 	}
 	
 	public static PlayerData getPlayerData(String username)

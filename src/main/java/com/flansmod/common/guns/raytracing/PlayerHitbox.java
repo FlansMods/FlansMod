@@ -56,7 +56,7 @@ public class PlayerHitbox
 	{
 		
 		//Vector3f boxOrigin = new Vector3f(pos.x + rP.x, pos.y + rP.y, pos.z + rP.z);
-		//world.spawnEntityInWorld(new EntityDebugAABB(world, boxOrigin, d, 2, 1F, 1F, 0F, axes.getYaw(), axes.getPitch(), axes.getRoll(), o));
+		//world.spawnEntity(new EntityDebugAABB(world, boxOrigin, d, 2, 1F, 1F, 0F, axes.getYaw(), axes.getPitch(), axes.getRoll(), o));
 		if(type != EnumHitboxType.RIGHTARM)
 			return;
 		for(int i = 0; i < 3; i++)
@@ -66,7 +66,7 @@ public class PlayerHitbox
 					Vector3f point = new Vector3f(o.x + d.x * i / 2, o.y + d.y * j / 2, o.z + d.z * k / 2);
 					point = axes.findLocalVectorGlobally(point);
 					if(FlansMod.DEBUG && world.isRemote)
-						world.spawnEntityInWorld(new EntityDebugDot(world, new Vector3f(pos.x + rP.x + point.x, pos.y + rP.y + point.y, pos.z + rP.z + point.z), 1, 0F, 1F, 0F));
+						world.spawnEntity(new EntityDebugDot(world, new Vector3f(pos.x + rP.x + point.x, pos.y + rP.y + point.y, pos.z + rP.z + point.z), 1, 0F, 1F, 0F));
 				}
 		
 	}
@@ -177,7 +177,7 @@ public class PlayerHitbox
 					: EntityBullet.GetBulletDamage(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
 
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
-			if(!player.worldObj.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)
+			if(!player.world.isRemote && hitDamage == 0 && TeamsManager.getInstance().currentRound != null)
 				TeamsManager.getInstance().currentRound.gametype.playerAttacked((EntityPlayerMP)player, damagesource);
 			
 			//Attack the entity!
@@ -208,7 +208,7 @@ public class PlayerHitbox
 			if(data.offHandGunSlot != 0)
 			{
 				ItemStack leftHandStack = null;
-				if(player.worldObj.isRemote && !FlansMod.proxy.isThePlayer(player))
+				if(player.world.isRemote && !FlansMod.proxy.isThePlayer(player))
 					leftHandStack = data.offHandGunStack;
 				else leftHandStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
 				

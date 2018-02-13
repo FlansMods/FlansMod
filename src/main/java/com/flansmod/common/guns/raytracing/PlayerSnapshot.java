@@ -91,7 +91,7 @@ public class PlayerSnapshot
 			{
 				ItemStack leftHandStack = null;
 				//Client side other players
-				if(player.worldObj.isRemote && !FlansMod.proxy.isThePlayer(player))
+				if(player.world.isRemote && !FlansMod.proxy.isThePlayer(player))
 					leftHandStack = data.offHandGunStack;
 				else leftHandStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
 				
@@ -132,7 +132,7 @@ public class PlayerSnapshot
 	{
 		for(PlayerHitbox hitbox : hitboxes)
 		{
-			hitbox.renderHitbox(player.worldObj, pos);
+			hitbox.renderHitbox(player.world, pos);
 		}
 	}
 	

@@ -51,7 +51,7 @@ public class PacketSeatUpdates extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		EntityDriveable driveable = null;
-		for(Object obj : playerEntity.worldObj.loadedEntityList)
+		for(Object obj : playerEntity.world.loadedEntityList)
 		{
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
@@ -73,9 +73,9 @@ public class PacketSeatUpdates extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityDriveable driveable = null;
-		for(int i = 0; i < clientPlayer.worldObj.loadedEntityList.size(); i++)
+		for(int i = 0; i < clientPlayer.world.loadedEntityList.size(); i++)
 		{
-			Object obj = clientPlayer.worldObj.loadedEntityList.get(i);
+			Object obj = clientPlayer.world.loadedEntityList.get(i);
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{
 				driveable = (EntityDriveable)obj;

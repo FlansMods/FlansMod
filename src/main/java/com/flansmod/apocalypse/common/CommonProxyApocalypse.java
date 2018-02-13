@@ -37,7 +37,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -117,15 +117,15 @@ public class CommonProxyApocalypse
 					
 					//Wiggle the apocalypse mecha
 					apocalypseMecha.seats[0].prevLooking = apocalypseMecha.seats[0].looking.clone();
-					apocalypseMecha.seats[0].looking.rotateGlobalYaw(apocalypseMecha.worldObj.rand.nextFloat() * 10F);
-					apocalypseMecha.seats[0].looking.rotateGlobalPitch((float)apocalypseMecha.worldObj.rand.nextGaussian() * 3F);
+					apocalypseMecha.seats[0].looking.rotateGlobalYaw(apocalypseMecha.world.rand.nextFloat() * 10F);
+					apocalypseMecha.seats[0].looking.rotateGlobalPitch((float)apocalypseMecha.world.rand.nextGaussian() * 3F);
 					
 					//Drop nukes
 					if(getApocalypseCountdown() % 20 == 0)
 					{
-						World world = apocalypseMecha.worldObj;
+						World world = apocalypseMecha.world;
 						float range = 150F;
-						world.spawnEntityInWorld(new EntityNukeDrop(world, apocalypseMecha.posX + world.rand.nextGaussian() * range, 256, apocalypseMecha.posZ + world.rand.nextGaussian() * range));
+						world.spawnEntity(new EntityNukeDrop(world, apocalypseMecha.posX + world.rand.nextGaussian() * range, 256, apocalypseMecha.posZ + world.rand.nextGaussian() * range));
 					}
 					
 					//Start the apocalypse
@@ -137,14 +137,14 @@ public class CommonProxyApocalypse
 						switch(FlansModApocalypse.OPTION)
 						{
 						case DIM:
-							for(int i = 0; i < placer.worldObj.playerEntities.size(); i++)
-								if(((Entity)placer.worldObj.playerEntities.get(i)).dimension == 0)
-									sendPlayerToApocalypse((EntityPlayer)placer.worldObj.playerEntities.get(i));
+							for(int i = 0; i < placer.world.playerEntities.size(); i++)
+								if(((Entity)placer.world.playerEntities.get(i)).dimension == 0)
+									sendPlayerToApocalypse((EntityPlayer)placer.world.playerEntities.get(i));
 							break;
 						case DIM_OPT_IN:
 							break;
 						case NEARBY:
-							for(Object player : placer.worldObj.playerEntities)
+							for(Object player : placer.world.playerEntities)
 								if(((Entity)player).dimension == 0 && ((Entity)player).getDistanceToEntity(placer) < 50)
 									sendPlayerToApocalypse((EntityPlayer)player);
 							break;
@@ -159,13 +159,13 @@ public class CommonProxyApocalypse
 				}
 			}
 			
-			WorldServer world = MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID);
+			WorldServer world = FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID);
 			if(world != null)
 			{
 				for(int i = 0; i < world.playerEntities.size(); i++)
 				{
 					EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
-					//MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID)));
+					//FMLServerHandler.instance().getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID)));
 
 					if(world.rand.nextInt(5000) == 0)
 					{
@@ -192,7 +192,7 @@ public class CommonProxyApocalypse
 						EntityFlyByPlane plane = new EntityFlyByPlane(world, player.posX + dX, 120, player.posZ + dZ, type, data);
 
 						plane.throttle = 1F;
-						world.spawnEntityInWorld(plane);
+						world.spawnEntity(plane);
 						
 						float yaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
 						plane.seats[0].looking.setAngles(yaw, 0F, 0F);
@@ -202,7 +202,7 @@ public class CommonProxyApocalypse
 						
 						Entity pilot = new EntitySkeleton(world);
 						pilot.setPosition(plane.posX, plane.posY, plane.posZ);
-						world.spawnEntityInWorld(pilot);
+						world.spawnEntity(pilot);
 						
 						pilot.mountEntity(plane.seats[0]);
 					}
@@ -217,7 +217,7 @@ public class CommonProxyApocalypse
 						EntitySurvivor survivor = new EntitySurvivor(world);
 						survivor.setPosition(player.posX + dX, world.getTopSolidOrLiquidBlock(new BlockPos(player.posX + dX, 0, player.posZ + dZ)).getY() + 1D, player.posZ + dZ);
 						
-						world.spawnEntityInWorld(survivor);
+						world.spawnEntity(survivor);
 					}
 				}
 			}
@@ -227,8 +227,8 @@ public class CommonProxyApocalypse
 	private void sendPlayerToApocalypse(EntityPlayer player)
 	{
 		//Make a copy of the player to hold their inventory and hang around until they get back
-		EntityFakePlayer fakePlayer = new EntityFakePlayer(player.worldObj, player);
-		player.worldObj.spawnEntityInWorld(fakePlayer);
+		EntityFakePlayer fakePlayer = new EntityFakePlayer(player.world, player);
+		player.world.spawnEntity(fakePlayer);
 		
 		player.inventory.clear();
 		
@@ -236,8 +236,8 @@ public class CommonProxyApocalypse
 		player.timeUntilPortal = 10;
 		data.entryPoints.put(player.getPersistentID(), new BlockPos(apocalypseMecha.posX, apocalypseMecha.posY, apocalypseMecha.posZ));
 		BlockPos exitPoint = new BlockPos(apocalypseMecha.posX, 128, apocalypseMecha.posZ);
-		for(; MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
-		MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
+		for(; FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
+		FMLServerHandler.instance().getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
 		
 		giveStarterKit(player);
 	}
@@ -288,9 +288,9 @@ public class CommonProxyApocalypse
 			if(pos != null)
 			{
 				EnumSet enumset = EnumSet.noneOf(S08PacketPlayerPosLook.EnumFlags.class);
-				float angle = event.player.worldObj.rand.nextFloat() * 2F * 3.14159F;
+				float angle = event.player.world.rand.nextFloat() * 2F * 3.14159F;
 				pos = pos.add((int)(Math.cos(angle) * FlansModApocalypse.SPAWN_RADIUS), 128 - pos.getY(), (int)(Math.sin(angle) * FlansModApocalypse.SPAWN_RADIUS));
-				for(; event.player.worldObj.isAirBlock(pos); pos = pos.down())
+				for(; event.player.world.isAirBlock(pos); pos = pos.down())
 				{
 					
 				}

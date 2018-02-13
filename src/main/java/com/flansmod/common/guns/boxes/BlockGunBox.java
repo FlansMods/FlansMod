@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
@@ -104,7 +104,7 @@ public class BlockGunBox extends Block
 				if (!inventory.addItemStackToInventory(gunStack))
 				{
 					// Drop gun on floor
-					inventory.player.dropPlayerItemWithRandomChoice(gunStack, false);
+					inventory.player.dropItem(gunStack, false);
 				}
 			} else
 			{
@@ -115,7 +115,7 @@ public class BlockGunBox extends Block
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float par7, float par8, float par9)
 	{
 		if(player.isSneaking())
 			return false;

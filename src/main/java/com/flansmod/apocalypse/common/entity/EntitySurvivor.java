@@ -86,7 +86,7 @@ public class EntitySurvivor extends EntityFlansModShooter
     	{
     		if(ammoStacks[i] != null)
     		{
-    			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, ammoStacks[i]));
+    			worldObj.spawnEntity(new EntityItem(worldObj, posX, posY, posZ, ammoStacks[i]));
     		}
     	}
     	
@@ -107,7 +107,7 @@ public class EntitySurvivor extends EntityFlansModShooter
     	
     	if(rand.nextBoolean())
     	{
-    		worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, FlansModApocalypse.getLootGenerator().getSurvivorJournal(rand)));
+    		worldObj.spawnEntity(new EntityItem(worldObj, posX, posY, posZ, FlansModApocalypse.getLootGenerator().getSurvivorJournal(rand)));
     	}
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -366,7 +366,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 								type.barrelY[currentBarrel] / 16D, 
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY, posZ);
 						
-						worldObj.spawnEntityInWorld(((ItemBullet)ammo[j].getItem()).getEntity(worldObj, 
+						worldObj.spawnEntity(((ItemBullet)ammo[j].getItem()).getEntity(worldObj, 
 								origin, gunYaw + 90F, gunPitch, player, type.accuracy, type.damage, type));
 						
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
@@ -393,7 +393,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 								type.barrelY[currentBarrel] / 16D, 
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).addVector(posX, posY + 1.5F, posZ);
 						
-						worldObj.spawnEntityInWorld(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(worldObj, 
+						worldObj.spawnEntity(((ItemBullet)ammo[ammoSlot].getItem()).getEntity(worldObj, 
 								origin, gunYaw + 90F, gunPitch, placer, type.accuracy, type.damage, type));
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
 					}

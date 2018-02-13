@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -43,7 +43,7 @@ public class EntityTeleporter extends Entity
 		
 		if(lowerLeftCornerPowerCube == null)
 		{
-			lowerLeftCornerPowerCube = new BlockPos(MathHelper.floor_double(posX - 1.5D), MathHelper.floor_double(posY + 0.5D), MathHelper.floor_double(posZ - 1.5D));
+			lowerLeftCornerPowerCube = new BlockPos(MathHelper.floor(posX - 1.5D), MathHelper.floor(posY + 0.5D), MathHelper.floor(posZ - 1.5D));
 		}
 
 		if(!worldObj.isRemote)
@@ -53,7 +53,7 @@ public class EntityTeleporter extends Entity
 					{
 						setDead();
 						//if(targetTeleporter != null)
-						//	MinecraftServer.getServer().worldServerForDimension(otherDimension(this.dimension)).
+						//	FMLServerHandler.instance().getServer().worldServerForDimension(otherDimension(this.dimension)).
 					}
 		
 		for(int i = 0; i < 10; i++)
@@ -86,11 +86,11 @@ public class EntityTeleporter extends Entity
 				//Switch between overworld and apocalypse
 				if(worldObj.provider.getDimensionId() == 0)
 				{
-					MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(FlansModApocalypse.dimensionID), this.targetTeleporter));
+					FMLServerHandler.instance().getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID), this.targetTeleporter));
 				}
 				else
 				{
-					MinecraftServer.getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(MinecraftServer.getServer().worldServerForDimension(0), this.targetTeleporter));
+					FMLServerHandler.instance().getServer().getConfigurationManager().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLServerHandler.instance().getServer().worldServerForDimension(0), this.targetTeleporter));
 				}
 			}
 		}
@@ -102,7 +102,7 @@ public class EntityTeleporter extends Entity
 		BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
 
 		//Find a valid place to enter the world
-		World overworld = MinecraftServer.getServer().worldServerForDimension(0);
+		World overworld = FMLServerHandler.instance().getServer().worldServerForDimension(0);
 		
 		if(entryPoint == null)
 			entryPoint = overworld.getSpawnPoint();
@@ -165,7 +165,7 @@ public class EntityTeleporter extends Entity
 		}
 		EntityTeleporter teleporter = new EntityTeleporter(world, pos);
 		teleporter.targetTeleporter = new BlockPos(lowerLeftCornerPowerCube);
-		world.spawnEntityInWorld(teleporter);
+		world.spawnEntity(teleporter);
 		
 		return true;
 	}

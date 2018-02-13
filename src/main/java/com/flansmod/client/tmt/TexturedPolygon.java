@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class TexturedPolygon
 {

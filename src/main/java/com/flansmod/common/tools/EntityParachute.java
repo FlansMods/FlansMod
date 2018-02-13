@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -38,7 +38,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		super.onUpdate();
 		
-		if(!worldObj.isRemote && (riddenByEntity == null || riddenByEntity.ridingEntity != this))
+		if(!worldObj.isRemote && (riddenByEntity == null || riddenByEntity.getRidingEntity() != this))
 		{
 			setDead();
 		}
@@ -67,7 +67,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		
 		moveEntity(motionX, motionY, motionZ);
 		
-		if(onGround || worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock().getMaterial() == Material.water)
+		if(onGround || worldObj.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock().getMaterial() == Material.water)
 		{
 			setDead();
 		}

@@ -54,7 +54,7 @@ public class PacketOffHandGunInfo extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		Entity entity = clientPlayer.worldObj.getEntityByID(entityID);
+		Entity entity = clientPlayer.world.getEntityByID(entityID);
 		if(entity instanceof EntityPlayer && entity != clientPlayer)
 		{
 			PlayerData data = PlayerHandler.getPlayerData((EntityPlayer) entity, Side.CLIENT);

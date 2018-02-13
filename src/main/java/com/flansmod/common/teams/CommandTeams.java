@@ -762,7 +762,7 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			
-			GameProfile profile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(name);
+			GameProfile profile = FMLServerHandler.instance().getServer().getPlayerProfileCache().getGameProfileForUsername(name);
 			if(profile != null)
 			{
 				RewardBoxInstance instance = RewardBoxInstance.CreateCheatReward(box, name);
@@ -861,7 +861,7 @@ public class CommandTeams extends CommandBase
 
 	public EntityPlayerMP getPlayer(String name)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(name);
+		return FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(name);
 	}
 
 	@Override

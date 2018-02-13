@@ -33,7 +33,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -147,47 +147,47 @@ public class ChunkProviderApocalypse implements IChunkProvider
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
-        this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+        this.biomesForGeneration = this.world.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.func_180517_a(x, z, chunkprimer, this.biomesForGeneration);
 
         /*
         if (this.settings.useCaves)
         {
-            this.caveGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.caveGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
 
         if (this.settings.useRavines)
         {
-            this.ravineGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.ravineGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
 
         if (this.settings.useMineShafts && this.mapFeaturesEnabled)
         {
-            this.mineshaftGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.mineshaftGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
 */
-        this.villageGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+        this.villageGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         
         //this.generateEntities(x, z);
 /*
         if (this.settings.useStrongholds && this.mapFeaturesEnabled)
         {
-            this.strongholdGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.strongholdGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
 
         if (this.settings.useTemples && this.mapFeaturesEnabled)
         {
-            this.scatteredFeatureGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.scatteredFeatureGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
 
         if (this.settings.useMonuments && this.mapFeaturesEnabled)
         {
-            this.oceanMonumentGenerator.func_175792_a(this, this.worldObj, x, z, chunkprimer);
+            this.oceanMonumentGenerator.func_175792_a(this, this.world, x, z, chunkprimer);
         }
         */
         
 
-        Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
+        Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
 
         for (int k = 0; k < abyte.length; ++k)
@@ -214,11 +214,11 @@ public class ChunkProviderApocalypse implements IChunkProvider
         int k = p_73153_2_ * 16;
         int l = p_73153_3_ * 16;
         BlockPos blockpos = new BlockPos(k, 0, l);
-        BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(blockpos.add(16, 0, 16));
-        this.rand.setSeed(this.worldObj.getSeed());
+        BiomeGenBase biomegenbase = this.world.getBiomeGenForCoords(blockpos.add(16, 0, 16));
+        this.rand.setSeed(this.world.getSeed());
         long i1 = this.rand.nextLong() / 2L * 2L + 1L;
         long j1 = this.rand.nextLong() / 2L * 2L + 1L;
-        this.rand.setSeed((long)p_73153_2_ * i1 + (long)p_73153_3_ * j1 ^ this.worldObj.getSeed());
+        this.rand.setSeed((long)p_73153_2_ * i1 + (long)p_73153_3_ * j1 ^ this.world.getSeed());
         boolean flag = false;
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(p_73153_2_, p_73153_3_);
 
@@ -227,27 +227,27 @@ public class ChunkProviderApocalypse implements IChunkProvider
         /*
         if (this.settings.useMineShafts && this.mapFeaturesEnabled)
         {
-            this.mineshaftGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+            this.mineshaftGenerator.func_175794_a(this.world, this.rand, chunkcoordintpair);
         }
 	*/
 
-        flag = this.villageGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+        flag = this.villageGenerator.func_175794_a(this.world, this.rand, chunkcoordintpair);
         
         
 /*
         if (this.settings.useStrongholds && this.mapFeaturesEnabled)
         {
-            this.strongholdGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+            this.strongholdGenerator.func_175794_a(this.world, this.rand, chunkcoordintpair);
         }
 
         if (this.settings.useTemples && this.mapFeaturesEnabled)
         {
-            this.scatteredFeatureGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+            this.scatteredFeatureGenerator.func_175794_a(this.world, this.rand, chunkcoordintpair);
         }
 
         if (this.settings.useMonuments && this.mapFeaturesEnabled)
         {
-            this.oceanMonumentGenerator.func_175794_a(this.worldObj, this.rand, chunkcoordintpair);
+            this.oceanMonumentGenerator.func_175794_a(this.world, this.rand, chunkcoordintpair);
         }
 */
         int k1;
@@ -290,7 +290,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 
             if (l1 < 63 || this.rand.nextInt(this.settings.lavaLakeChance / 8) == 0)
             {
-                (new WorldGenLakes(Blocks.lava)).generate(this.worldObj, this.rand, blockpos.add(k1, l1, i2));
+                (new WorldGenLakes(Blocks.lava)).generate(this.world, this.rand, blockpos.add(k1, l1, i2));
             }
         }
 
@@ -302,17 +302,17 @@ public class ChunkProviderApocalypse implements IChunkProvider
                 l1 = this.rand.nextInt(16) + 8;
                 i2 = this.rand.nextInt(256);
                 int j2 = this.rand.nextInt(16) + 8;
-                (new WorldGenDungeons()).generate(this.worldObj, this.rand, blockpos.add(l1, i2, j2));
+                (new WorldGenDungeons()).generate(this.world, this.rand, blockpos.add(l1, i2, j2));
             }
         }
 		*/
         
-        biomegenbase.decorate(this.worldObj, this.rand, new BlockPos(k, 0, l));
+        biomegenbase.decorate(this.world, this.rand, new BlockPos(k, 0, l));
         
         this.generateEntities(chunkcoordintpair);
         if (TerrainGen.populate(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag, ANIMALS))
         {
-        SpawnerAnimals.performWorldGenSpawning(this.worldObj, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
+        SpawnerAnimals.performWorldGenSpawning(this.world, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
         //this.generateEntities(chunkcoordintpair);
         }
         blockpos = blockpos.add(8, 0, 8);
@@ -321,10 +321,10 @@ public class ChunkProviderApocalypse implements IChunkProvider
         
         int xOrigin = ModuloHelper.divide(p_73153_2_, 4);
         
-        this.rand.setSeed(this.worldObj.getSeed());
+        this.rand.setSeed(this.world.getSeed());
         i1 = this.rand.nextLong() / 2L * 2L + 1L;
         j1 = this.rand.nextLong() / 2L * 2L + 1L;
-        this.rand.setSeed((long)xOrigin * i1 + (long)p_73153_3_ * j1 ^ this.worldObj.getSeed());
+        this.rand.setSeed((long)xOrigin * i1 + (long)p_73153_3_ * j1 ^ this.world.getSeed());
         
         if(rand.nextInt(FlansModApocalypse.AIRPORT_RARITY) == 0)
         {
@@ -342,10 +342,10 @@ public class ChunkProviderApocalypse implements IChunkProvider
         xOrigin = ModuloHelper.divide(p_73153_2_, 3);
         int zOrigin = ModuloHelper.divide(p_73153_3_, 3);
         
-        this.rand.setSeed(this.worldObj.getSeed());
+        this.rand.setSeed(this.world.getSeed());
         i1 = this.rand.nextLong() / 2L * 2L + 1L;
         j1 = this.rand.nextLong() / 2L * 2L + 1L;
-        this.rand.setSeed((long)xOrigin * i1 + (long)zOrigin * j1 ^ this.worldObj.getSeed());
+        this.rand.setSeed((long)xOrigin * i1 + (long)zOrigin * j1 ^ this.world.getSeed());
         
         if(rand.nextInt(FlansModApocalypse.LAB_RARITY) == 0)
         {
@@ -362,10 +362,10 @@ public class ChunkProviderApocalypse implements IChunkProvider
         	if(canSpawn)
         	{
         		//Reset random seed
-                this.rand.setSeed(this.worldObj.getSeed());
+                this.rand.setSeed(this.world.getSeed());
                 i1 = this.rand.nextLong() / 2L * 2L + 1L;
                 j1 = this.rand.nextLong() / 2L * 2L + 1L;
-                this.rand.setSeed((long)p_73153_2_ * i1 + (long)p_73153_3_ * j1 ^ this.worldObj.getSeed());
+                this.rand.setSeed((long)p_73153_2_ * i1 + (long)p_73153_3_ * j1 ^ this.world.getSeed());
         		researchLabGenerator.generate(worldObj, rand, new BlockPos(p_73153_2_ * 16, 0, p_73153_3_ * 16));
         	}
         }
@@ -393,7 +393,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
             
             survivor.setLocationAndAngles(x, surface.getY() + 1, z, 0.0F, 0.0F);
             //survivor.func_180482_a(world.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData)null);
-            worldObj.spawnEntityInWorld(survivor);
+            worldObj.spawnEntity(survivor);
         }
         
         if(rand.nextInt(FlansModApocalypse.VEHICLE_RARITY) == 0)
@@ -426,7 +426,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         		entity.driveableData.fuel = new ItemStack(FlansModApocalypse.getLootGenerator().getRandomFuel(rand).item, 1);
         	entity.setRotation(rand.nextInt(360), 0, 0);
         	
-            worldObj.spawnEntityInWorld(entity);
+            worldObj.spawnEntity(entity);
         }
 
     }
@@ -465,7 +465,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	@Override
 	public List func_177458_a(EnumCreatureType p_177458_1_, BlockPos p_177458_2_) 
 	{
-        BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(p_177458_2_);
+        BiomeGenBase biomegenbase = this.world.getBiomeGenForCoords(p_177458_2_);
 
         /*
         if (this.mapFeaturesEnabled)
@@ -475,7 +475,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
                 return this.scatteredFeatureGenerator.getScatteredFeatureSpawnList();
             }
 
-            if (p_177458_1_ == EnumCreatureType.MONSTER && this.settings.useMonuments && this.oceanMonumentGenerator.func_175796_a(this.worldObj, p_177458_2_))
+            if (p_177458_1_ == EnumCreatureType.MONSTER && this.settings.useMonuments && this.oceanMonumentGenerator.func_175796_a(this.world, p_177458_2_))
             {
                 return this.oceanMonumentGenerator.func_175799_b();
             }
@@ -509,7 +509,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 
     public void setBlocksInChunk(int p_180518_1_, int p_180518_2_, ChunkPrimer p_180518_3_)
     {
-        this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
+        this.biomesForGeneration = this.world.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
         this.generateNoisemap(p_180518_1_ * 4, 0, p_180518_2_ * 4);
         
         //subChunkX and subChunkZ split it into 4 separate subchunks of size 4. subChunkY then splits it into 32 of size 8
@@ -583,7 +583,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
     
     public void func_180517_a(int p_180517_1_, int p_180517_2_, ChunkPrimer p_180517_3_, BiomeGenBase[] p_180517_4_)
     {
-        ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_180517_1_, p_180517_2_, p_180517_3_, this.worldObj);
+        ChunkProviderEvent.ReplaceBiomeBlocks event = new ChunkProviderEvent.ReplaceBiomeBlocks(this, p_180517_1_, p_180517_2_, p_180517_3_, this.world);
         MinecraftForge.EVENT_BUS.post(event);
         if (event.getResult() == Result.DENY) return;
 
@@ -595,7 +595,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
             for (int l = 0; l < 16; ++l)
             {
                 BiomeGenBase biomegenbase = p_180517_4_[l + k * 16];
-                biomegenbase.genTerrainBlocks(this.worldObj, this.rand, p_180517_3_, p_180517_1_ * 16 + k, p_180517_2_ * 16 + l, this.stoneNoise[l + k * 16]);
+                biomegenbase.genTerrainBlocks(this.world, this.rand, p_180517_3_, p_180517_1_ * 16 + k, p_180517_2_ * 16 + l, this.stoneNoise[l + k * 16]);
             }
         }
     }
@@ -729,7 +729,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         /*
         if (this.settings.useMonuments && this.mapFeaturesEnabled && p_177460_2_.getInhabitedTime() < 3600L)
         {
-            flag |= this.oceanMonumentGenerator.func_175794_a(this.worldObj, this.rand, new ChunkCoordIntPair(p_177460_3_, p_177460_4_));
+            flag |= this.oceanMonumentGenerator.func_175794_a(this.world, this.rand, new ChunkCoordIntPair(p_177460_3_, p_177460_4_));
         }
 */
         return flag;

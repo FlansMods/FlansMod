@@ -21,8 +21,8 @@ public class CreativeTabFlan extends CreativeTabs
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		// TODO Auto-generated method stub
+	public ItemStack getTabIconItem() 
+	{
 		return null;
 	}
 	
@@ -33,12 +33,12 @@ public class CreativeTabFlan extends CreativeTabs
 		icon = FlansMod.ticker / 20;
 		switch(type)
 		{
-			case 0 : return GunType.gunList.size() == 0 ? new ItemStack(Blocks.wool, 1, 4) : new ItemStack(GunType.gunList.get(icon % GunType.gunList.size()).item);
-			case 1 : return DriveableType.types.size() == 0 ? new ItemStack(Blocks.wool, 1, 14) : new ItemStack(DriveableType.types.get(icon % DriveableType.types.size()).item);
-			case 2 : return FlansMod.partItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 5) : new ItemStack(FlansMod.partItems.get(icon % FlansMod.partItems.size()));
-			case 3 : return FlansMod.armourItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 11) : new ItemStack(FlansMod.armourItems.get(icon % FlansMod.armourItems.size()));
-			case 4 : return FlansMod.mechaItems.size() == 0 ? new ItemStack(Blocks.wool, 1, 10) : new ItemStack(FlansMod.mechaItems.get(icon % FlansMod.mechaItems.size()));
-			case 5 : return new ItemStack(Blocks.sand, 1, 1);
+			case 0 : return GunType.gunList.size() == 0 ? new ItemStack(Blocks.WOOL, 1, 4) : new ItemStack(GunType.gunList.get(icon % GunType.gunList.size()).item);
+			case 1 : return DriveableType.types.size() == 0 ? new ItemStack(Blocks.WOOL, 1, 14) : new ItemStack(DriveableType.types.get(icon % DriveableType.types.size()).item);
+			case 2 : return FlansMod.partItems.size() == 0 ? new ItemStack(Blocks.WOOL, 1, 5) : new ItemStack(FlansMod.partItems.get(icon % FlansMod.partItems.size()));
+			case 3 : return FlansMod.armourItems.size() == 0 ? new ItemStack(Blocks.WOOL, 1, 11) : new ItemStack(FlansMod.armourItems.get(icon % FlansMod.armourItems.size()));
+			case 4 : return FlansMod.mechaItems.size() == 0 ? new ItemStack(Blocks.WOOL, 1, 10) : new ItemStack(FlansMod.mechaItems.get(icon % FlansMod.mechaItems.size()));
+			case 5 : return new ItemStack(Blocks.SAND, 1, 1);
 		}
 		return new ItemStack(FlansMod.workbench);
 	}

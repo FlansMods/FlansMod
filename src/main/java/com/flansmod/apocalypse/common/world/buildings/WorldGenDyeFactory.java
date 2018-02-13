@@ -10,7 +10,7 @@ import net.minecraft.block.BlockLog;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class WorldGenDyeFactory extends WorldGenFlan 
@@ -104,7 +104,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 			EntityArmorStand stand = new EntityArmorStand(world, x + 4.5D, y, z + 11.5D + k * 2D);
 			stand.rotationYaw = 90F;
 			FlansModApocalypse.getLootGenerator().dressMeUp(stand, rand);
-			world.spawnEntityInWorld(stand);
+			world.spawnEntity(stand);
 		}
 		
 		//Build vats

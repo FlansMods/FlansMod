@@ -73,7 +73,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
@@ -182,8 +182,8 @@ public class FlansModClient extends FlansMod
 		if (minecraft.thePlayer == null || minecraft.theWorld == null)
 			return;
 		
-		if(minecraft.thePlayer.ridingEntity instanceof IControllable && minecraft.currentScreen == null)
-			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.ridingEntity));
+		if(minecraft.thePlayer.getRidingEntity() instanceof IControllable && minecraft.currentScreen == null)
+			minecraft.displayGuiScreen(new GuiDriveableController((IControllable)minecraft.thePlayer.getRidingEntity()));
 		
 		if(teamInfo != null && teamInfo.timeLeft > 0)
 			teamInfo.timeLeft--;
@@ -261,12 +261,12 @@ public class FlansModClient extends FlansMod
 			zoomProgress = 1F - (1F - zoomProgress) * 0.66F; 
 		}
 		
-		if (minecraft.thePlayer.ridingEntity instanceof IControllable)
+		if (minecraft.thePlayer.getRidingEntity() instanceof IControllable)
 		{
 			inPlane = true;	
 			try
 			{
-				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.ridingEntity).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
+				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.thePlayer.getRidingEntity()).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
 			} catch (Exception e)
 			{
 				log("I forgot to update obfuscated reflection D:");
@@ -357,7 +357,7 @@ public class FlansModClient extends FlansMod
 		if (controlModeSwitchTimer > 0)
 			return false;
 		controlModeMouse = !controlModeMouse;
-		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.ridingEntity) : null);
+		FMLClientHandler.instance().getClient().displayGuiScreen(controlModeMouse ? new GuiDriveableController((IControllable)FMLClientHandler.instance().getClient().thePlayer.getRidingEntity()) : null);
 		controlModeSwitchTimer = 40;
 		return true;
 	}
@@ -566,9 +566,9 @@ public class FlansModClient extends FlansMod
 					EntityBullet bullet = (EntityBullet)obj;
 					if(!bullet.isDead && bullet.type.hasLight)
 					{
-						int x = MathHelper.floor_double(bullet.posX);
-						int y = MathHelper.floor_double(bullet.posY);
-						int z = MathHelper.floor_double(bullet.posZ);
+						int x = MathHelper.floor(bullet.posX);
+						int y = MathHelper.floor(bullet.posY);
+						int z = MathHelper.floor(bullet.posZ);
 						blockLightOverrides.add(new Vector3i(x, y, z));
 						mc.theWorld.setLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z), 15);
 						mc.theWorld.getLightFromNeighborsFor(EnumSkyBlock.BLOCK, new BlockPos(x, y + 1, z));
@@ -582,9 +582,9 @@ public class FlansModClient extends FlansMod
 				else if(obj instanceof EntityMecha)
 				{
 					EntityMecha mecha = (EntityMecha)obj;
-					int x = MathHelper.floor_double(mecha.posX);
-					int y = MathHelper.floor_double(mecha.posY);
-					int z = MathHelper.floor_double(mecha.posZ);
+					int x = MathHelper.floor(mecha.posX);
+					int y = MathHelper.floor(mecha.posY);
+					int z = MathHelper.floor(mecha.posZ);
 					if(mecha.lightLevel() > 0)
 					{
 						blockLightOverrides.add(new Vector3i(x, y, z));

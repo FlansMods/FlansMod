@@ -45,9 +45,9 @@ public class PacketMGFire extends PacketBase
 		{
 			mg.mouseHeld(held);
 		}
-		else if(playerEntity.ridingEntity instanceof EntityAAGun)
+		else if(playerEntity.getRidingEntity() instanceof EntityAAGun)
 		{
-			((EntityAAGun)playerEntity.ridingEntity).setMouseHeld(held);
+			((EntityAAGun)playerEntity.getRidingEntity()).setMouseHeld(held);
 		}
 	}
 

@@ -58,7 +58,7 @@ public class ContainerGunModTable extends Container
 	public void onContainerClosed(EntityPlayer player)
 	{
 		if(inventory.getStackInSlot(0) != null)
-			player.dropPlayerItemWithRandomChoice(inventory.getStackInSlot(0), false);
+			player.dropItem(inventory.getStackInSlot(0), false);
 	}
 		
 	@Override

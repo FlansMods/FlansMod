@@ -29,7 +29,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -410,9 +410,9 @@ public class ClientRenderHooks
 	        
 	        //System.out.println(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
 	        
-	        if (entity.isRiding() && entity.ridingEntity instanceof EntityLivingBase)
+	        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
 	        {
-	            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.ridingEntity;
+	            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
 	            f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
 	            f4 = f3 - f2;
 	            f5 = MathHelper.wrapAngleTo180_float(f4);
@@ -586,13 +586,13 @@ public class ClientRenderHooks
 	
 public void cameraSetup(CameraSetup event)
 	{
-		if(mc.thePlayer.ridingEntity instanceof IControllable)
+		if(mc.thePlayer.getRidingEntity() instanceof IControllable)
 		{
-			IControllable cont = (IControllable)mc.thePlayer.ridingEntity;
+			IControllable cont = (IControllable)mc.thePlayer.getRidingEntity();
 			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.renderPartialTicks);
 			//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
-			if(((EntitySeat)mc.thePlayer.ridingEntity).driveable != null){
-			EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+			if(((EntitySeat)mc.thePlayer.getRidingEntity()).driveable != null){
+			EntityDriveable ent = ((EntitySeat)mc.thePlayer.getRidingEntity()).driveable;
 			
 			if(ent.getDriveableType().canRoll){
 				roll = 0F;
@@ -944,9 +944,9 @@ public void cameraSetup(CameraSetup event)
 	private void RenderVehicleDebug()
 	{
 		//DEBUG vehicles
-		if(mc.thePlayer.ridingEntity instanceof EntitySeat)
+		if(mc.thePlayer.getRidingEntity() instanceof EntitySeat)
 		{
-			EntityDriveable ent = ((EntitySeat)mc.thePlayer.ridingEntity).driveable;
+			EntityDriveable ent = ((EntitySeat)mc.thePlayer.getRidingEntity()).driveable;
 			
 			double dX = ent.posX - ent.prevPosX;
 			double dY = ent.posY - ent.prevPosY;

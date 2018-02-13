@@ -17,7 +17,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -307,7 +307,7 @@ public class ClientProxy extends CommonProxy
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		//Null riding entity, don't open GUI in this case
-		if(((ID >= 6 && ID <= 10) || ID == 12) && player.ridingEntity == null) return null;
+		if(((ID >= 6 && ID <= 10) || ID == 12) && player.getRidingEntity() == null) return null;
 		
 		switch(ID) 
 		{
@@ -315,13 +315,13 @@ public class ClientProxy extends CommonProxy
 		case 1: return new GuiDriveableRepair(player);
 		case 2: return new GuiGunModTable(player.inventory, world);
 		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
-		case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 0);
-		case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 1);
-		case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable);
-		case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 2);
-		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.ridingEntity).driveable);
+		case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 0);
+		case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 1);
+		case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable);
+		case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 2);
+		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.getRidingEntity()).driveable);
 		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
-		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.ridingEntity).driveable, 3);
+		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 3);
 		case 13: return new GuiPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
@@ -412,7 +412,7 @@ public class ClientProxy extends CommonProxy
 	{
 		//Craft it this side (so the inventory updates immediately) and then send a packet to the server so that it is crafted that side too
 		super.craftDriveable(player, type);
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 			FlansMod.getPacketHandler().sendToServer(new PacketCraftDriveable(type.shortName));
 	}
 	
@@ -421,7 +421,7 @@ public class ClientProxy extends CommonProxy
 	{
 		//Repair it this side (so the inventory updates immediately) and then send a packet to the server so that it is repaired that side too
 		super.repairDriveable(driver, driving, part);
-		if(driver.worldObj.isRemote)
+		if(driver.world.isRemote)
 			FlansMod.getPacketHandler().sendToServer(new PacketRepairDriveable(part.type));
 	}
 	

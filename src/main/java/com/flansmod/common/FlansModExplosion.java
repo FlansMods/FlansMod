@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.flansmod.common.guns.EntityDamageSourceGun;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.teams.TeamsManager;
@@ -24,13 +26,16 @@ import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.network.play.server.S27PacketExplosion;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.network.play.server.SPacketExplosion;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -44,7 +49,7 @@ public class FlansModExplosion extends Explosion
 	private Entity explosive;
 	private EntityPlayer detonator;
 	private List affectedBlockPositions;
-    private final Vec3 position;
+    private final Vec3d position;
     /** whether or not the explosion sets fire to blocks around it */
     private final boolean isFlaming;
     /** whether or not this explosion spawns smoke particles */
@@ -71,14 +76,15 @@ public class FlansModExplosion extends Explosion
         this.isFlaming = flaming;
         this.isSmoking = true;
         this.breaksBlocks = breaksBlocks && TeamsManager.explosions;
-        this.position = new Vec3(x, y, z);
+        this.position = new Vec3d(x, y, z);
         
         if (!net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, this))
         {
 	        this.doExplosionA();
 	        this.doExplosionB(true);
-	        for(Object obj : world.playerEntities)
-	        	FlansMod.getPacketHandler().sendTo(new S27PacketExplosion(x, y, z, radius, func_180343_e(), (Vec3)func_77277_b().get((EntityPlayer)obj)), (EntityPlayerMP)obj);
+	        
+	        for(EntityPlayer obj : world.playerEntities)
+	        	FlansMod.getPacketHandler().sendTo(new SPacketExplosion(x, y, z, radius, affectedBlockPositions, (Vec3d)getPlayerKnockbackMap().get(obj)), (EntityPlayerMP)obj);
         }
 	}
 
@@ -118,13 +124,13 @@ public class FlansModExplosion extends Explosion
 	                            BlockPos blockpos = new BlockPos(d4, d6, d8);
 	                            IBlockState iblockstate = world.getBlockState(blockpos);
 	
-	                            if (iblockstate.getBlock().getMaterial() != Material.air)
+	                            if (iblockstate.getMaterial() != Material.AIR)
 	                            {
 	                                float f2 = explosive != null ? explosive.getExplosionResistance(this, world, blockpos, iblockstate) : iblockstate.getBlock().getExplosionResistance(world, blockpos, (Entity)null, this);
 	                                f -= (f2 + 0.3F) * 0.3F;
 	                            }
 	
-	                            if (f > 0.0F && (explosive == null || explosive.func_174816_a(this, world, blockpos, iblockstate, f)))
+	                            if (f > 0.0F && (explosive == null || explosive.canExplosionDestroyBlock(this, world, blockpos, iblockstate, f)))
 	                            {
 	                                hashset.add(blockpos);
 	                            }
@@ -141,21 +147,21 @@ public class FlansModExplosion extends Explosion
         
         this.affectedBlockPositions.addAll(hashset);
         float f3 = this.radius * 2.0F;
-        j = MathHelper.floor_double(this.x - (double)f3 - 1.0D);
-        k = MathHelper.floor_double(this.x + (double)f3 + 1.0D);
-        int j1 = MathHelper.floor_double(this.y - (double)f3 - 1.0D);
-        int l = MathHelper.floor_double(this.y + (double)f3 + 1.0D);
-        int k1 = MathHelper.floor_double(this.z - (double)f3 - 1.0D);
-        int i1 = MathHelper.floor_double(this.z + (double)f3 + 1.0D);
+        j = MathHelper.floor(this.x - (double)f3 - 1.0D);
+        k = MathHelper.floor(this.x + (double)f3 + 1.0D);
+        int j1 = MathHelper.floor(this.y - (double)f3 - 1.0D);
+        int l = MathHelper.floor(this.y + (double)f3 + 1.0D);
+        int k1 = MathHelper.floor(this.z - (double)f3 - 1.0D);
+        int i1 = MathHelper.floor(this.z + (double)f3 + 1.0D);
         List list = this.world.getEntitiesWithinAABBExcludingEntity(explosive, new AxisAlignedBB((double)j, (double)j1, (double)k1, (double)k, (double)l, (double)i1));
         net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
-        Vec3 vec3 = new Vec3(x, y, z);
+        Vec3d vec3 = new Vec3d(x, y, z);
 
         for (int l1 = 0; l1 < list.size(); ++l1)
         {
             Entity entity = (Entity)list.get(l1);
 
-            if (!entity.func_180427_aV())
+            if (!entity.isImmuneToExplosions())
             {
                 double d12 = entity.getDistance(x, y, z) / (double)f3;
 
@@ -164,7 +170,7 @@ public class FlansModExplosion extends Explosion
                     double d5 = entity.posX - x;
                     double d7 = entity.posY + (double)entity.getEyeHeight() - y;
                     double d9 = entity.posZ - z;
-                    double d13 = (double)MathHelper.sqrt_double(d5 * d5 + d7 * d7 + d9 * d9);
+                    double d13 = (double)MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
 
                     if (d13 != 0.0D)
                     {
@@ -174,14 +180,14 @@ public class FlansModExplosion extends Explosion
                         double d14 = (double)this.world.getBlockDensity(vec3, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
                         entity.attackEntityFrom(new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
-                        double d11 = EnchantmentProtection.func_92092_a(entity, d10);
+                        double d11 = entity instanceof EntityLivingBase ? EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10) : 0.0d;
                         entity.motionX += d5 * d11;
                         entity.motionY += d7 * d11;
                         entity.motionZ += d9 * d11;
 
                         if (entity instanceof EntityPlayer)
                         {
-                            this.playerMap.put((EntityPlayer)entity, new Vec3(d5 * d10, d7 * d10, d9 * d10));
+                            this.playerMap.put((EntityPlayer)entity, new Vec3d(d5 * d10, d7 * d10, d9 * d10));
                         }
                     }
                 }
@@ -192,8 +198,8 @@ public class FlansModExplosion extends Explosion
     /** Second part of the explosion (sound, particles, drop spawn) */
     public void doExplosionB(boolean p_77279_1_)
     {
-        this.world.playSoundEffect(this.x, this.y, this.z, "random.explode", 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
-
+        this.world.playSound((EntityPlayer)null, this.x, this.y, this.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
+        
         if (this.isSmoking)
         {
             this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D, new int[0]);
@@ -213,7 +219,8 @@ public class FlansModExplosion extends Explosion
             while (iterator.hasNext())
             {
                 blockpos = (BlockPos)iterator.next();
-                Block block = this.world.getBlockState(blockpos).getBlock();
+                IBlockState state = world.getBlockState(blockpos);
+                Block block = state.getBlock();
 
                 if (p_77279_1_)
                 {
@@ -223,7 +230,7 @@ public class FlansModExplosion extends Explosion
                     double d3 = d0 - this.x;
                     double d4 = d1 - this.y;
                     double d5 = d2 - this.z;
-                    double d6 = (double)MathHelper.sqrt_double(d3 * d3 + d4 * d4 + d5 * d5);
+                    double d6 = (double)MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
                     d3 /= d6;
                     d4 /= d6;
                     d5 /= d6;
@@ -236,7 +243,7 @@ public class FlansModExplosion extends Explosion
                     this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
                 }
 
-                if (block.getMaterial() != Material.air)
+                if (state.getMaterial() != Material.AIR)
                 {
                     if (block.canDropFromExplosion(this))
                     {
@@ -256,16 +263,16 @@ public class FlansModExplosion extends Explosion
             {
                 blockpos = (BlockPos)iterator.next();
 
-                if (this.world.getBlockState(blockpos).getBlock().getMaterial() == Material.air && this.world.getBlockState(blockpos.down()).getBlock().isFullBlock() && this.explosionRNG.nextInt(3) == 0)
+                if (this.world.getBlockState(blockpos).getMaterial() == Material.AIR && this.world.getBlockState(blockpos.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0)
                 {
-                    this.world.setBlockState(blockpos, Blocks.fire.getDefaultState());
+                    this.world.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
                 }
             }
         }
     }
 	
 	@Override
-    public Map func_77277_b()
+    public Map getPlayerKnockbackMap()
     {
         return this.playerMap;
     }
@@ -280,17 +287,17 @@ public class FlansModExplosion extends Explosion
     }
 
 	@Override
-    public void func_180342_d()
+    public void clearAffectedBlockPositions()
     {
         this.affectedBlockPositions.clear();
     }
 
 	@Override
-    public List func_180343_e()
+    public List getAffectedBlockPositions()
     {
         return this.affectedBlockPositions;
     }
 
 	@Override
-    public Vec3 getPosition(){ return this.position; }
+    public Vec3d getPosition(){ return this.position; }
 }

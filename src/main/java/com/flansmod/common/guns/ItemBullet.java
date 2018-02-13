@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -96,6 +96,6 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 	@Override
 	public void Shoot(World world, Vector3f origin, Vector3f direction, float damageModifier, float spreadModifier, float speedModifier, InfoType shotFrom, EntityLivingBase shooter) 
 	{
-		world.spawnEntityInWorld(getEntity(world, shooter, spreadModifier, damageModifier, speedModifier, false, shotFrom));
+		world.spawnEntity(getEntity(world, shooter, spreadModifier, damageModifier, speedModifier, false, shotFrom));
 	}
 }

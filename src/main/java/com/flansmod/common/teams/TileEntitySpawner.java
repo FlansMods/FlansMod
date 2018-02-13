@@ -125,7 +125,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, IUpdat
 				else
 				{
 					EntityTeamItem itemEntity = new EntityTeamItem(this, i);
-					worldObj.spawnEntityInWorld(itemEntity);
+					worldObj.spawnEntity(itemEntity);
 				}
 			}
 		}

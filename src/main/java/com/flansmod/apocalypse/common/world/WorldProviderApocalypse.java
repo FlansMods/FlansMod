@@ -3,9 +3,9 @@ package com.flansmod.apocalypse.common.world;
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -21,7 +21,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
 	public void registerWorldChunkManager()
 	{
-		this.worldChunkMgr = new WorldChunkManagerApocalypse(this.worldObj);
+		this.worldChunkMgr = new WorldChunkManagerApocalypse(this.world);
 		dimensionId = FlansModApocalypse.dimensionID;
 		hasNoSky = false;
 	}
@@ -53,7 +53,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
     public boolean canCoordinateBeSpawn(int x, int z)
     {
-        return this.worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.sand;
+        return this.world.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.sand;
     }
 	
     /**

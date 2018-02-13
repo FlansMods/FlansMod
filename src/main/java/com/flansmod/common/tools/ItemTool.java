@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -78,7 +78,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 			if(!world.isRemote)
 			{
 				EntityParachute parachute = new EntityParachute(world, type, entityplayer);
-				world.spawnEntityInWorld(parachute);
+				world.spawnEntity(parachute);
 				entityplayer.mountEntity(parachute);
 			}
 			
@@ -128,7 +128,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 	        
 	        if(world.isRemote && FlansMod.DEBUG)
 	        {
-	        	world.spawnEntityInWorld(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
+	        	world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
 	        }
 	        
 	        if(type.healDriveables)

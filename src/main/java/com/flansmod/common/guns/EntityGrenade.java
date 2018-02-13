@@ -16,7 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
@@ -128,7 +128,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					EntityFX particle = FlansModClient.getParticle(type.trailParticleType, worldObj, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
 					if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 						particle.renderDistanceWeight = 100D;
-					//worldObj.spawnEntityInWorld(particle);
+					//worldObj.spawnEntity(particle);
 				}
 			}
 			
@@ -407,9 +407,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				{
 					for(float k = -type.fireRadius; k < type.fireRadius; k++)
 					{
-						int x = MathHelper.floor_double(i + posX);
-						int y = MathHelper.floor_double(j + posY);
-						int z = MathHelper.floor_double(k + posZ);
+						int x = MathHelper.floor(i + posX);
+						int y = MathHelper.floor(j + posY);
+						int z = MathHelper.floor(k + posZ);
 						if(i * i + j * j + k * k <= type.fireRadius * type.fireRadius && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.air && rand.nextBoolean())
 						{
 							/*

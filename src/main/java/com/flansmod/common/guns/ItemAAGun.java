@@ -6,12 +6,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +60,7 @@ public class ItemAAGun extends Item implements IFlanItem
 			int k = movingobjectposition.getBlockPos().getZ();
 			if (!world.isRemote && world.isSideSolid(movingobjectposition.getBlockPos(), EnumFacing.UP))
 			{
-				world.spawnEntityInWorld(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F, entityplayer));
+				world.spawnEntity(new EntityAAGun(world, type, (double) i + 0.5F, (double) j + 1F, (double) k + 0.5F, entityplayer));
 			}
 			if (!entityplayer.capabilities.isCreativeMode)
 			{
@@ -75,7 +75,7 @@ public class ItemAAGun extends Item implements IFlanItem
 		Entity entity = new EntityAAGun(world, type, x, y, z, null);
 		if(!world.isRemote)
 		{
-			world.spawnEntityInWorld(entity);
+			world.spawnEntity(entity);
         }
     	return entity;
     }

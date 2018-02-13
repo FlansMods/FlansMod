@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -54,7 +54,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		setPosition(x, y, z);		
 		flag = new EntityFlag(worldObj, this);
 		objects.add(flag);
-		worldObj.spawnEntityInWorld(flag);
+		worldObj.spawnEntity(flag);
 		if(teamsManager.maps.size() > 0)
 			map = teamsManager.maps.values().iterator().next();
 	}	
@@ -99,8 +99,8 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	
 		//flag = new EntityFlag(worldObj, this);
 		//objects.add(flag);
-		//worldObj.spawnEntityInWorld(flag);
-		//worldObj.spawnEntityInWorld(new EntityFlag(worldObj, this));
+		//worldObj.spawnEntity(flag);
+		//worldObj.spawnEntity(new EntityFlag(worldObj, this));
 	}
 
 	@Override
@@ -243,7 +243,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 				objects.add(flag);
 			}
 			if(!flag.addedToChunk)
-				worldObj.spawnEntityInWorld(flag);
+				worldObj.spawnEntity(flag);
 			if(flag.isHome)
 				flag.setPosition(posX, posY + 2F, posZ);
 		}
@@ -332,7 +332,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public List<ChunkCoordIntPair> getLoadArea() 
 	{
 		List<ChunkCoordIntPair> loadArea = new LinkedList<ChunkCoordIntPair>();
-		Chunk centerChunk = worldObj.getChunkFromBlockCoords(MathHelper.floor_double(posX), MathHelper.floor_double(posZ));
+		Chunk centerChunk = worldObj.getChunkFromBlockCoords(MathHelper.floor(posX), MathHelper.floor(posZ));
 		loadArea.add(new ChunkCoordIntPair(centerChunk.xPosition, centerChunk.zPosition));
 		return loadArea;
 	}

@@ -74,7 +74,7 @@ public class PacketDriveableDamage extends PacketBase
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
 		EntityDriveable driveable = null;
-		for(Object obj : clientPlayer.worldObj.loadedEntityList)
+		for(Object obj : clientPlayer.world.loadedEntityList)
 		{
 			if(obj instanceof EntityDriveable && ((Entity)obj).getEntityId() == entityId)
 			{

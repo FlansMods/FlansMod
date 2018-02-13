@@ -13,7 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -116,7 +116,7 @@ public abstract class Gametype
 	
 	public EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
+		return FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(username);
 	}
 	
 	public static PlayerData getPlayerData(EntityPlayerMP player)
@@ -131,12 +131,12 @@ public abstract class Gametype
 		
 	public static String[] getPlayerNames()
 	{
-		return MinecraftServer.getServer().getAllUsernames();
+		return FMLServerHandler.instance().getServer().getAllUsernames();
 	}
 	
 	public static List<EntityPlayer> getPlayers()
 	{
-		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		return FMLServerHandler.instance().getServer().getConfigurationManager().playerEntityList;
 	}
 						
 	public static void givePoints(EntityPlayerMP player, int points)

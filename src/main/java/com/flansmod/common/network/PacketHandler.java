@@ -165,7 +165,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		for(String playerName : receivedPacketsServer.keySet())
 		{
 			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
-			EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(playerName); 
+			EntityPlayerMP player = FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(playerName); 
 			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
 			{
 				packet.handleServerSide(player);
@@ -288,7 +288,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/** Send a packet to all players */
 	public void sendToAll(Packet packet)
 	{
-		MinecraftServer.getServer().getConfigurationManager().sendPacketToAllPlayers(packet);
+		FMLServerHandler.instance().getServer().getConfigurationManager().sendPacketToAllPlayers(packet);
 	}
 
 	/** Send a packet to a player */
@@ -300,13 +300,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/** Send a packet to all around a point */
 	public void sendToAllAround(Packet packet, NetworkRegistry.TargetPoint point)
 	{
-		MinecraftServer.getServer().getConfigurationManager().sendToAllNear(point.x, point.y, point.z, point.range, point.dimension, packet);
+		FMLServerHandler.instance().getServer().getConfigurationManager().sendToAllNear(point.x, point.y, point.z, point.range, point.dimension, packet);
 	}
 	
 	/** Send a packet to all in a dimension */
 	public void sendToDimension(Packet packet, int dimensionID)
 	{
-		MinecraftServer.getServer().getConfigurationManager().sendPacketToAllPlayersInDimension(packet, dimensionID);
+		FMLServerHandler.instance().getServer().getConfigurationManager().sendPacketToAllPlayersInDimension(packet, dimensionID);
 	}
 	
 	/** Send a packet to the server */

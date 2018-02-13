@@ -27,9 +27,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -44,7 +45,7 @@ public class BlockItemHolder extends BlockContainer
 	
 	public BlockItemHolder(ItemHolderType type) 
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		this.type = type;
 		setCreativeTab(FlansMod.tabFlanParts);
 		setHardness(2F);
@@ -68,11 +69,11 @@ public class BlockItemHolder extends BlockContainer
 	   return false;
 	}
 		
-	@Override
-	public boolean isOpaqueCube()
-	{
-	    return false;
-	}
+	@Override	
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+        return false;
+    }
 	
 	@Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
@@ -82,28 +83,20 @@ public class BlockItemHolder extends BlockContainer
     }
 	
 	@Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        if (!facing.getAxis().isHorizontal())
-        {
-            facing = EnumFacing.NORTH;
-        }
-
-        return this.getDefaultState().withProperty(FACING, facing.getOpposite());
-    }
-	
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
     }
-
+	
+	@Override
     public int getMetaFromState(IBlockState state)
     {
         byte b0 = 0;
         int i = b0 | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
         return i;
     }
-
+	
+	@Override
     protected BlockState createBlockState()
     {
         return new BlockState(this, new IProperty[] {FACING});
@@ -117,7 +110,7 @@ public class BlockItemHolder extends BlockContainer
 	}
 	
 	@Override
-    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
+    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
     }
     
@@ -149,7 +142,7 @@ public class BlockItemHolder extends BlockContainer
 	}
 		
     @Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float par7, float par8, float par9)
     {
     	if(world.isRemote)
     	{
@@ -158,7 +151,7 @@ public class BlockItemHolder extends BlockContainer
     	}
 
     	TileEntityItemHolder holder = (TileEntityItemHolder)world.getTileEntity(pos);
-    	ItemStack item = player.getCurrentEquippedItem();
+    	ItemStack item = player.getHeldItemMainhand();
     	
     	if(holder.getStackInSlot(0) == null)
     	{
@@ -167,12 +160,12 @@ public class BlockItemHolder extends BlockContainer
     	}
     	else
     	{
-    		world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), holder.getStackInSlot(0)));
+    		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), holder.getStackInSlot(0)));
     		holder.setInventorySlotContents(0, null);
     		FlansMod.playerHandler.getPlayerData(player, Side.SERVER).shootTimeLeft = FlansMod.playerHandler.getPlayerData(player, Side.SERVER).shootTimeRight = 10;
     	}
     	
-    	world.markBlockForUpdate(pos);
+    	world.scheduleUpdate(pos, this, 0);
 
         return true;
     }

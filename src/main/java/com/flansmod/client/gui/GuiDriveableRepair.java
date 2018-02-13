@@ -41,7 +41,7 @@ public class GuiDriveableRepair extends GuiScreen
 	{
 		super();
 		driver = player;
-		driving = ((EntitySeat)player.ridingEntity).driveable;
+		driving = ((EntitySeat)player.getRidingEntity()).driveable;
     	for(DriveablePart part : driving.getDriveableData().parts.values())
     	{
     		//Check to see if the part is actually damageable
@@ -208,10 +208,10 @@ public class GuiDriveableRepair extends GuiScreen
 			if(driving instanceof EntityMecha)
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketDriveableGUI(4));
-				(driver).openGui(FlansMod.INSTANCE, 10, driver.worldObj, driving.chunkCoordX, driving.chunkCoordY, driving.chunkCoordZ);
+				(driver).openGui(FlansMod.INSTANCE, 10, driver.world, driving.chunkCoordX, driving.chunkCoordY, driving.chunkCoordZ);
 			}
 			else
-			 mc.displayGuiScreen(new GuiDriveableMenu(driver.inventory, driver.worldObj, driving));
+			 mc.displayGuiScreen(new GuiDriveableMenu(driver.inventory, driver.world, driving));
 	}
 
 	/** Item stack renderering method */

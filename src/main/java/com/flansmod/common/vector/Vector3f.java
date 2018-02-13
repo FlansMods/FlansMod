@@ -37,7 +37,7 @@ import java.nio.FloatBuffer;
 import com.flansmod.common.FlansMod;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 /**
  *

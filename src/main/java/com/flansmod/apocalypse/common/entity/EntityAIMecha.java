@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 
 import com.flansmod.client.debug.EntityDebugVector;
@@ -105,7 +105,7 @@ public class EntityAIMecha extends EntityMecha
 			
 			if(worldObj.isRemote)
 			{
-				//worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(rightArmOrigin), new Vector3f(dX, dY, dZ), 2));
+				//worldObj.spawnEntity(new EntityDebugVector(worldObj, new Vector3f(rightArmOrigin), new Vector3f(dX, dY, dZ), 2));
 			}
 			{
 				double blockHitX = hit == null ? 0 : hit.hitVec.xCoord - rightArmOrigin.xCoord; 

@@ -16,12 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
-public class TileEntityItemHolder extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityItemHolder extends TileEntity implements IInventory
 {
 	private ItemStack stack;
 	public ItemHolderType type;
@@ -43,7 +42,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public boolean hasCustomName() { return false; }
 
 	@Override
-	public IChatComponent getDisplayName() { return null; }
+	public ITextComponent getDisplayName() { return null; }
 
 	@Override
 	public int getSizeInventory() { return 1; }
@@ -52,10 +51,16 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public ItemStack getStackInSlot(int index) { return getStack(); }
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) { if(getStack() != null) { getStack().stackSize -= count; if(getStack().stackSize <= 0) setStack(null); } return getStack(); }
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int index) { return getStackInSlot(index); }
+	public ItemStack decrStackSize(int index, int count) 
+	{ 
+		if(getStack() != null) 
+		{ 
+			getStack().setCount(getStack().getCount() - count); 
+			if(getStack().getCount() <= 0) 
+				setStack(null); 
+		} 
+		return getStack(); 
+	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) { this.setStack(stack); }
@@ -64,7 +69,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public int getInventoryStackLimit() { return 64; }
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) { return true; }
+	public boolean isUsableByPlayer(EntityPlayer player) { return true; }
 
 	@Override
 	public void openInventory(EntityPlayer player) { }
@@ -88,7 +93,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public void clear() { }
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 
@@ -97,6 +102,8 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 			getStack().writeToNBT(stackNBT);
 		nbt.setTag("stack", stackNBT);		
 		nbt.setString("type", type.shortName);
+		
+		return nbt;
 	}
 	
 	@Override
@@ -104,26 +111,20 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	{
 		super.readFromNBT(nbt);
 
-		setStack(ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack")));
+		setStack(new ItemStack(nbt.getCompoundTag("stack")));
 		type = ItemHolderType.getItemHolder(nbt.getString("type"));
-	}
-
-	@Override
-	public void update() 
-	{
-
 	}
 	
 	@Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
+        return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
     }
 	
 	@Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.S35PacketUpdateTileEntity packet)
+    public void onDataPacket(net.minecraft.network.NetworkManager net, SPacketUpdateTileEntity packet)
     {
 		readFromNBT(packet.getNbtCompound());
     }
@@ -136,5 +137,19 @@ public class TileEntityItemHolder extends TileEntity implements IInventory, IUpd
 	public void setStack(ItemStack stack) 
 	{
 		this.stack = stack;
+	}
+
+	@Override
+	public boolean isEmpty() 
+	{
+		return stack == null || stack.getCount() == 0;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) 
+	{
+		ItemStack temp = stack;
+		stack = null;
+		return temp;
 	}
 }

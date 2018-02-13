@@ -48,7 +48,7 @@ public class PacketAAGunAngles extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		Entity entity = clientPlayer.worldObj.getEntityByID(entityID);
+		Entity entity = clientPlayer.world.getEntityByID(entityID);
 		if(entity instanceof EntityAAGun)
 		{
 			EntityAAGun aa = (EntityAAGun)entity;

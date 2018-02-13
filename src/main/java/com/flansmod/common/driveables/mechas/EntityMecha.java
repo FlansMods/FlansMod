@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -331,7 +331,7 @@ public class EntityMecha extends EntityDriveable
 				Vector3f lookVector = axes.findLocalVectorGlobally(seats[0].looking.findLocalVectorGlobally(new Vector3f(reach, 0F, 0F)));
 				
 				if(FlansMod.DEBUG && worldObj.isRemote)
-					worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
+					worldObj.spawnEntity(new EntityDebugVector(worldObj, lookOrigin, lookVector, 20));
 				
 				Vector3f lookTarget = Vector3f.add(lookVector, lookOrigin, null);
 				
@@ -438,7 +438,7 @@ public class EntityMecha extends EntityDriveable
 				float speed = gunType.getBulletSpeed(stack);
 				if(speed <= 0.0f)
 					speed = 5.0f;
-				worldObj.spawnEntityInWorld(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, 
+				worldObj.spawnEntity(((ItemShootable)bulletStack.getItem()).getEntity(worldObj, 
 						bulletOrigin, 
 						armVector, 
 						(EntityLivingBase)(seats[0].riddenByEntity), 
@@ -574,9 +574,9 @@ public class EntityMecha extends EntityDriveable
 				{
 					for(float k = -30; k <= 30; k++)
 					{
-						int x = MathHelper.floor_double(i + posX);
-						int y = MathHelper.floor_double(j + posY);
-						int z = MathHelper.floor_double(k + posZ);
+						int x = MathHelper.floor(i + posX);
+						int y = MathHelper.floor(j + posY);
+						int z = MathHelper.floor(k + posZ);
 						if(i * i + j * j + k * k < sqDistance && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() == (Blocks.diamond_ore))
 						{
 							sqDistance = i * i + j * j + k * k;
@@ -946,7 +946,7 @@ public class EntityMecha extends EntityDriveable
 										//Add the itemstack to mecha inventory
 										if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 										{
-											worldObj.spawnEntityInWorld(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
+											worldObj.spawnEntity(new EntityItem(worldObj, breakingBlock.x + 0.5F, breakingBlock.y + 0.5F, breakingBlock.z + 0.5F, stack));
 										}
 									}
 								}
@@ -1268,7 +1268,7 @@ public class EntityMecha extends EntityDriveable
 			for(int i = 0; i < inventory.getSizeInventory(); i++)
 			{
 				if(inventory.getStackInSlot(i) != null)
-					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, inventory.getStackInSlot(i)));
+					worldObj.spawnEntity(new EntityItem(worldObj, posX + midpoint.x, posY + midpoint.y, posZ + midpoint.z, inventory.getStackInSlot(i)));
 			}
 		}
 	}

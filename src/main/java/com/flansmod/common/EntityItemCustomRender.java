@@ -8,7 +8,7 @@ public class EntityItemCustomRender extends EntityItem
 {
 	public EntityItemCustomRender(EntityItem entity) 
 	{
-		super(entity.worldObj, entity.posX, entity.posY, entity.posZ, entity.getEntityItem());
+		super(entity.world, entity.posX, entity.posY, entity.posZ, entity.getItem());
 		this.motionX = entity.motionX;
 		this.motionY = entity.motionY;
 		this.motionZ = entity.motionZ;

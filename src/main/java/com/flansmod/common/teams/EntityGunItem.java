@@ -8,7 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -36,7 +36,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 	}
 
 	public EntityGunItem(EntityItem entity) {
-		super(entity.worldObj, entity.posX, entity.posY, entity.posZ, entity
+		super(entity.world, entity.posX, entity.posY, entity.posZ, entity
 				.getEntityItem().copy());
 		setSize(1F, 1F);
 		ammoStacks = new ArrayList<ItemStack>();
@@ -101,9 +101,9 @@ public class EntityGunItem extends EntityItemCustomRender {
 		if (onGround) {
 			var2 = 0.58800006F;
 			Block block = worldObj.getBlockState(
-					new BlockPos(MathHelper.floor_double(posX), MathHelper
+					new BlockPos(MathHelper.floor(posX), MathHelper
 							.floor_double(getEntityBoundingBox().minY) - 1,
-							MathHelper.floor_double(posZ))).getBlock();
+							MathHelper.floor(posZ))).getBlock();
 
 			if (block != null) {
 				var2 = block.slipperiness * 0.98F;
@@ -213,7 +213,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 				}
 				EntityGunItem newGunItem = new EntityGunItem(worldObj, posX,
 						posY, posZ, currentItem.copy(), newAmmoStacks);
-				worldObj.spawnEntityInWorld(newGunItem);
+				worldObj.spawnEntity(newGunItem);
 				player.inventory.setInventorySlotContents(
 						player.inventory.currentItem, getEntityItem());
 				for (ItemStack stack : ammoStacks) {

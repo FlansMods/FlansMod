@@ -100,7 +100,7 @@ public class ItemOpStick extends Item implements IFlanItem
 		    		if(player.fishEntity == null)
 		    		{
 		    			EntityConnectingLine hook = new EntityConnectingLine(world, player, base);
-		    			world.spawnEntityInWorld(hook);
+		    			world.spawnEntity(hook);
 		    		}
 		    		else
 		    		{
@@ -154,7 +154,7 @@ public class ItemOpStick extends Item implements IFlanItem
 				if(player.fishEntity == null)
 				{
 					EntityConnectingLine hook = new EntityConnectingLine(world, player, object);
-					world.spawnEntityInWorld(hook);
+					world.spawnEntity(hook);
 				}
 				else
 				{

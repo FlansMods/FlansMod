@@ -24,10 +24,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -372,7 +372,7 @@ public class FlansModRaytracer
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			for(World world : MinecraftServer.getServer().worldServers)
+			for(World world : FMLServerHandler.instance().getServer().worldServers)
 			{
 				Entity entity = world.getEntityByID(id);
 				if(entity != null)

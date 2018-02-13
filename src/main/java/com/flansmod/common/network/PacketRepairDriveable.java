@@ -41,7 +41,7 @@ public class PacketRepairDriveable extends PacketBase
 	{
 		EnumDriveablePart part = EnumDriveablePart.getPart(shortName);   
 		//Try to repair the driveable
-		FlansMod.proxy.repairDriveable(playerEntity, ((EntitySeat)playerEntity.ridingEntity).driveable, ((EntitySeat)playerEntity.ridingEntity).driveable.getDriveableData().parts.get(part));
+		FlansMod.proxy.repairDriveable(playerEntity, ((EntitySeat)playerEntity.getRidingEntity()).driveable, ((EntitySeat)playerEntity.getRidingEntity()).driveable.getDriveableData().parts.get(part));
 	}
 
 	@Override

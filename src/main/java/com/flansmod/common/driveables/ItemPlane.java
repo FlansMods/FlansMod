@@ -14,11 +14,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -99,7 +99,7 @@ public class ItemPlane extends Item implements IPaintableItem
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
 	{
-		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
+		NBTTagCompound tags = getTagCompound(stack, player.world);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
 		if(part != null)
@@ -134,7 +134,7 @@ public class ItemPlane extends Item implements IPaintableItem
 	            {
 	            	DriveableData data = getPlaneData(itemstack, world);
 	            	if(data != null)
-	            		world.spawnEntityInWorld(new EntityPlane(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 2.5F, (double)pos.getZ() + 0.5F, entityplayer, type, data));
+	            		world.spawnEntity(new EntityPlane(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 2.5F, (double)pos.getZ() + 0.5F, entityplayer, type, data));
 	            }
 				if(!entityplayer.capabilities.isCreativeMode)
 				{	
@@ -153,7 +153,7 @@ public class ItemPlane extends Item implements IPaintableItem
 			Entity entity = new EntityPlane(world, x, y, z, type, data);
 			if(!world.isRemote)
 			{
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 			}
 			return entity;
 		}

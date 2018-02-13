@@ -18,13 +18,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraftforge.common.ForgeHooks;
@@ -151,7 +151,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(!clientSide)
 			{
 				seats[i] = new EntitySeat(worldObj, this, i);
-				worldObj.spawnEntityInWorld(seats[i]);
+				worldObj.spawnEntity(seats[i]);
 			}
 		}
 		wheels = new EntityWheel[type.wheelPositions.length];
@@ -160,7 +160,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(!clientSide)
 			{
 				wheels[i] = new EntityWheel(worldObj, this, i);
-				worldObj.spawnEntityInWorld(wheels[i]);
+				worldObj.spawnEntity(wheels[i]);
 			}
 		}
 		stepHeight = type.wheelStepHeight;
@@ -253,7 +253,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		
 		camera = new EntityCamera(worldObj, this);
-		worldObj.spawnEntityInWorld(camera);
+		worldObj.spawnEntity(camera);
 	}
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
@@ -544,7 +544,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					
 					if(FlansMod.DEBUG && worldObj.isRemote)
 					{
-						worldObj.spawnEntityInWorld(new EntityDebugDot(worldObj, gunVec, 100, 1.0f, 1.0f, 1.0f));
+						worldObj.spawnEntity(new EntityDebugDot(worldObj, gunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
 
 					ShotData shotData = new InstantShotData(-1, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
@@ -598,7 +598,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								damageMultiplier, 
 								type);
 						
-						worldObj.spawnEntityInWorld(bulletEntity);
+						worldObj.spawnEntity(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
@@ -651,7 +651,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								shellSpeed, 
 								type);
 						
-						worldObj.spawnEntityInWorld(bulletEntity);
+						worldObj.spawnEntity(bulletEntity);
 						
 						if(type.shootSound(secondary) != null)
 							PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound(secondary), false);					
@@ -719,7 +719,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		if(seats[i] == null || !seats[i].addedToChunk)
         		{
         			seats[i] = new EntitySeat(worldObj, this, i);
-    				worldObj.spawnEntityInWorld(seats[i]);
+    				worldObj.spawnEntity(seats[i]);
         		}
         	}
         	for(int i = 0; i < type.wheelPositions.length; i++)
@@ -727,7 +727,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		if(wheels[i] == null || !wheels[i].addedToChunk)
         		{
         			wheels[i] = new EntityWheel(worldObj, this, i);
-    				worldObj.spawnEntityInWorld(wheels[i]);
+    				worldObj.spawnEntity(wheels[i]);
         		}
         	}
         }
@@ -772,7 +772,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	  								ItemStack stack = stacks.get(i);
 	  								if(!InventoryHelper.addItemStackToInventory(driveableData, stack, driverIsCreative()) && !worldObj.isRemote && worldObj.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 	  								{
-	  									worldObj.spawnEntityInWorld(new EntityItem(worldObj, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
+	  									worldObj.spawnEntity(new EntityItem(worldObj, blockX + 0.5F, blockY + 0.5F, blockZ + 0.5F, stack));
 	  								}
 	  							}
 	  							//Destroy block
@@ -816,7 +816,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        		//Also water blocks
 	        		//Get the centre point of the part
 	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x + part.box.w / 2F, part.box.y + part.box.h / 2F, part.box.z + part.box.d / 2F));
-	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z))).getBlock().getMaterial() == Material.water)
+	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor(posX + pos.x), MathHelper.floor(posY + pos.y), MathHelper.floor(posZ + pos.z))).getBlock().getMaterial() == Material.water)
 	        		{
 	        			part.onFire = false;
 	        		}
@@ -824,7 +824,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	        	else
 	        	{
 	        		Vector3f pos = axes.findLocalVectorGlobally(new Vector3f(part.box.x / 16F + part.box.w / 32F, part.box.y / 16F + part.box.h / 32F, part.box.z / 16F + part.box.d / 32F));
-	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX + pos.x), MathHelper.floor_double(posY + pos.y), MathHelper.floor_double(posZ + pos.z))).getBlock().getMaterial() == Material.lava)
+	        		if(worldObj.getBlockState(new BlockPos(MathHelper.floor(posX + pos.x), MathHelper.floor(posY + pos.y), MathHelper.floor(posZ + pos.z))).getBlock().getMaterial() == Material.lava)
 	        		{
 	        			part.onFire = true;
 	        		}
@@ -1020,7 +1020,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			
 			if(FlansMod.DEBUG && worldObj.isRemote)
 			{
-				worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(lastPos), Vector3f.sub(currentRelPos, lastRelPos, null), 10, 1F, 0F, 0F));
+				worldObj.spawnEntity(new EntityDebugVector(worldObj, new Vector3f(lastPos), Vector3f.sub(currentRelPos, lastRelPos, null), 10, 1F, 0F, 0F));
 			}
 			
 			MovingObjectPosition hit = worldObj.rayTraceBlocks(lastPos, currentPos, crashInWater);
@@ -1358,7 +1358,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				//Drop each itemstack 
 				for(ItemStack stack : drops)
 				{
-					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + pos.x, posY + pos.y, posZ + pos.z, stack.copy()));
+					worldObj.spawnEntity(new EntityItem(worldObj, posX + pos.x, posY + pos.y, posZ + pos.z, stack.copy()));
 				}
 			}
 			dropItemsOnPartDeath(pos, part);
@@ -1371,7 +1371,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					ItemStack stack = getDriveableData().getStackInSlot(i);
 					if(stack != null)
 					{
-						worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), stack));
+						worldObj.spawnEntity(new EntityItem(worldObj, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), stack));
 					}
 				}
 			}

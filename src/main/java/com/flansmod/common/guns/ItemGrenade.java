@@ -10,7 +10,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -69,7 +69,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 			EntityGrenade grenade = new EntityGrenade(world, type, player);
 			//Spawn the entity server side
 			if(!world.isRemote)
-				world.spawnEntityInWorld(grenade);
+				world.spawnEntity(grenade);
 			//If this can be remotely detonated, add it to the players detonate list
 			if(type.remote)
 				data.remoteExplosives.add(grenade);
@@ -87,7 +87,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 					itemName = itemName.split("\\.")[0];
 				}
 				ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
-				world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
+				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
 			}
 		}
 		return stack;
@@ -168,6 +168,6 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 			EntityLivingBase shooter)
 	{
 		EntityGrenade grenade = getGrenade(world, shooter);
-		world.spawnEntityInWorld(grenade);
+		world.spawnEntity(grenade);
 	}
 }

@@ -65,7 +65,7 @@ public class PacketFlak extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		World world = clientPlayer.worldObj;
+		World world = clientPlayer.world;
 		for (int i = 0; i < numParticles; i++)
 		{
 			EntityFX obj = FlansModClient.getParticle(particleType, world, x + rand.nextGaussian(), y + rand.nextGaussian(), z + rand.nextGaussian());

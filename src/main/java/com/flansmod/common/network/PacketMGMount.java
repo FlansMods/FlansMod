@@ -53,8 +53,8 @@ public class PacketMGMount extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		EntityPlayer player = (EntityPlayer)clientPlayer.worldObj.getEntityByID(playerEntityId);
-		EntityMG mg = (EntityMG)clientPlayer.worldObj.getEntityByID(mgEntityId);
+		EntityPlayer player = (EntityPlayer)clientPlayer.world.getEntityByID(playerEntityId);
+		EntityMG mg = (EntityMG)clientPlayer.world.getEntityByID(mgEntityId);
 		if(mg != null && player != null)
 			mg.mountGun(player, mounting);
 	}

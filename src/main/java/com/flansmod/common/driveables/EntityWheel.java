@@ -103,7 +103,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			return;
 		
 		if(!addedToChunk)
-			worldObj.spawnEntityInWorld(this);
+			worldObj.spawnEntity(this);
 		/*
 		//Update angles
 		rotationYaw = vehicle.rotationYaw;

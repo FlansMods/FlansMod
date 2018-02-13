@@ -1,7 +1,7 @@
 package com.flansmod.common.vector;
 
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class Matrix3f 
 {

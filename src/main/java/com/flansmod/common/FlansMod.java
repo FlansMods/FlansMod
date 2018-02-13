@@ -22,6 +22,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -258,7 +259,7 @@ public class FlansMod
 		}
 		if(addGunpowderRecipe)
 		{
-			ItemStack charcoal = new ItemStack(Items.coal, 1, 1);
+			ItemStack charcoal = new ItemStack(Items.COAL, 1, 1);
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.gunpowder), charcoal, charcoal, charcoal, new ItemStack(Items.glowstone_dust));
 		}
 		log("Loaded recipes.");
@@ -336,19 +337,19 @@ public class FlansMod
 	@SubscribeEvent
 	public void playerDrops(PlayerDropsEvent event)
 	{
-		for(int i = event.drops.size() - 1; i >= 0; i--)
+		for(int i = event.getDrops().size() - 1; i >= 0; i--)
 		{
-			EntityItem ent = event.drops.get(i);
-			InfoType type = InfoType.getType(ent.getEntityItem());
+			EntityItem ent = event.getDrops().get(i);
+			InfoType type = InfoType.getType(ent.getItem());
 			if(type != null && !type.canDrop)
-				event.drops.remove(i);
+				event.getDrops().remove(i);
 		}
 	}
 	
 	@SubscribeEvent
 	public void playerDrops(ItemTossEvent event)
 	{
-		InfoType type = InfoType.getType(event.entityItem.getEntityItem());
+		InfoType type = InfoType.getType(event.getEntityItem().getItem());
 		if(type != null && !type.canDrop)
 			event.setCanceled(true);
 	}
@@ -363,7 +364,7 @@ public class FlansMod
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if(eventArgs.modID.equals(MODID))
+		if(eventArgs.getModID().equals(MODID))
 			syncConfig();
 	}
 	
@@ -371,8 +372,8 @@ public class FlansMod
 	public void onBlockBreak(BlockEvent.BreakEvent event)
 	{
 		if(event.getPlayer() != null
-				&& event.getPlayer().getCurrentEquippedItem() != null
-				&& event.getPlayer().getCurrentEquippedItem().getItem() instanceof ItemGun)
+				&& event.getPlayer().getHeldItemMainhand() != null
+				&& event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			event.setCanceled(true);
 		}
@@ -381,41 +382,41 @@ public class FlansMod
 	@SubscribeEvent
 	public void onLivingSpecialSpawn(EntityJoinWorldEvent event)
 	{
-		double chance = event.world.rand.nextDouble();
+		double chance = event.getWorld().rand.nextDouble();
 
-		if(chance < armourSpawnRate && event.entity instanceof EntityZombie || event.entity instanceof EntitySkeleton)
+		if(chance < armourSpawnRate && event.getEntity() instanceof EntityZombie || event.getEntity() instanceof EntitySkeleton)
 		{
-			if(event.world.rand.nextBoolean() && ArmourType.armours.size() > 0)
+			if(event.getWorld().rand.nextBoolean() && ArmourType.armours.size() > 0)
 			{
 				//Give a completely random piece of armour
-				ArmourType armour = ArmourType.armours.get(event.world.rand.nextInt(ArmourType.armours.size()));
+				ArmourType armour = ArmourType.armours.get(event.getWorld().rand.nextInt(ArmourType.armours.size()));
 				if(armour != null && armour.type != 2)
-					event.entity.setCurrentItemOrArmor(armour.type + 1, new ItemStack(armour.item));
+					event.getEntity().setItemStackToSlot(EntityEquipmentSlot.values()[armour.type + 1], new ItemStack(armour.item));
 			}
 			else if(Team.teams.size() > 0)
 			{
 				//Give a random set of armour
-				Team team = Team.teams.get(event.world.rand.nextInt(Team.teams.size()));
+				Team team = Team.teams.get(event.getWorld().rand.nextInt(Team.teams.size()));
 				if(team.hat != null)
-					event.entity.setCurrentItemOrArmor(1, team.hat.copy());
+					event.getEntity().setItemStackToSlot(EntityEquipmentSlot.HEAD, team.hat.copy());
 				if(team.chest != null)
-					event.entity.setCurrentItemOrArmor(2, team.chest.copy());
+					event.getEntity().setItemStackToSlot(EntityEquipmentSlot.CHEST, team.chest.copy());
 				if(team.legs != null)
-					event.entity.setCurrentItemOrArmor(3, team.legs.copy());
+					event.getEntity().setItemStackToSlot(EntityEquipmentSlot.LEGS, team.legs.copy());
 				if(team.shoes != null)
-					event.entity.setCurrentItemOrArmor(4, team.shoes.copy());
+					event.getEntity().setItemStackToSlot(EntityEquipmentSlot.FEET, team.shoes.copy());
 				
 				if(team.classes.size() > 0)
 				{
-					PlayerClass playerClass = team.classes.get(event.world.rand.nextInt(team.classes.size()));
+					PlayerClass playerClass = team.classes.get(event.getWorld().rand.nextInt(team.classes.size()));
 					if(playerClass.hat != null)
-						event.entity.setCurrentItemOrArmor(1, playerClass.hat.copy());
+						event.getEntity().setItemStackToSlot(EntityEquipmentSlot.HEAD, playerClass.hat.copy());
 					if(playerClass.chest != null)
-						event.entity.setCurrentItemOrArmor(2, playerClass.chest.copy());
+						event.getEntity().setItemStackToSlot(EntityEquipmentSlot.CHEST, playerClass.chest.copy());
 					if(playerClass.legs != null)
-						event.entity.setCurrentItemOrArmor(3, playerClass.legs.copy());
+						event.getEntity().setItemStackToSlot(EntityEquipmentSlot.LEGS, playerClass.legs.copy());
 					if(playerClass.shoes != null)
-						event.entity.setCurrentItemOrArmor(4, playerClass.shoes.copy());
+						event.getEntity().setItemStackToSlot(EntityEquipmentSlot.FEET, playerClass.shoes.copy());
 				}
 			}
 		}
@@ -426,7 +427,7 @@ public class FlansMod
 	@SubscribeEvent
 	public void onAttackEntity(AttackEntityEvent event)
 	{
-		if(event.entity instanceof EntityGunItem)
+		if(event.getEntity() instanceof EntityGunItem)
 		{
 			event.setCanceled(true);
 		}

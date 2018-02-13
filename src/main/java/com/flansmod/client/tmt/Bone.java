@@ -6,7 +6,7 @@ import java.util.Map;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 /**
  * The Bone class makes it possible to create skeletons, which should help you out in

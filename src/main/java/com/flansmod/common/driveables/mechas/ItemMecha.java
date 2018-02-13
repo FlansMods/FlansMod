@@ -8,11 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,7 +48,7 @@ public class ItemMecha extends Item implements IPaintableItem
 		{
 			Collections.addAll(lines, type.description.split("_"));
 		}
-		NBTTagCompound tags = getTagCompound(stack, player.worldObj);
+		NBTTagCompound tags = getTagCompound(stack, player.world);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
 		if(part != null)
@@ -100,7 +100,7 @@ public class ItemMecha extends Item implements IPaintableItem
         	BlockPos pos = movingobjectposition.getBlockPos();
             if(!world.isRemote)
             {
-				world.spawnEntityInWorld(new EntityMecha(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 1.5F + type.yOffset, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
+				world.spawnEntity(new EntityMecha(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 1.5F + type.yOffset, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	

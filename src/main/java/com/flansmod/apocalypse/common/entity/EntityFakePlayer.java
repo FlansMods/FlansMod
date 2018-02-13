@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -42,7 +42,7 @@ public class EntityFakePlayer extends EntityFlansModShooter
 			for(int j = 0; j < inventory.getSizeInventory(); j++)
 			{
 				if(inventory.getStackInSlot(j) != null)
-					worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, inventory.getStackInSlot(j)));
+					worldObj.spawnEntity(new EntityItem(worldObj, posX, posY, posZ, inventory.getStackInSlot(j)));
 			}
 		}
 	}

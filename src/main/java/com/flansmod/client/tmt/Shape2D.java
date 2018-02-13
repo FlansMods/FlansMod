@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class Shape2D
 {

@@ -23,13 +23,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.chunk.Chunk;
@@ -199,7 +199,7 @@ public class TeamsManager
 		for(ITeamObject object : objects)
 			object.tick();
 		if(overrideHunger && currentRound != null)
-			for(World world : MinecraftServer.getServer().worldServers)
+			for(World world : FMLServerHandler.instance().getServer().worldServers)
 				for(Object player : world.playerEntities)
 					((EntityPlayer)player).getFoodStats().addStats(20, 10F);
 		
@@ -507,7 +507,7 @@ public class TeamsManager
 	public void onPlayerInteract(EntityInteractEvent event)
 	{
 		if(event.entityPlayer.inventory.getCurrentItem() != null && event.entityPlayer.inventory.getCurrentItem().getItem() instanceof ItemOpStick)
-			((ItemOpStick)event.entityPlayer.inventory.getCurrentItem().getItem()).clickedEntity(event.entityPlayer.worldObj, event.entityPlayer, event.target);
+			((ItemOpStick)event.entityPlayer.inventory.getCurrentItem().getItem()).clickedEntity(event.entityPlayer.world, event.entityPlayer, event.target);
 	}	
 	
 	/** Stop damage being taken when it shouldn't 
@@ -631,16 +631,16 @@ public class TeamsManager
 	{
 		if(!enabled)
 			return;
-		if(event.entityPlayer.worldObj.isRemote)
+		if(event.entityPlayer.world.isRemote)
 			return;
 
 		ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
 		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 		{
 			//if(event.target instanceof ITeamObject)
-			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
+			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
 			//if(event.target instanceof ITeamBase)
-			//	((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
+			//	((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
 		}
 		else if(currentRound != null)
 		{
@@ -662,18 +662,18 @@ public class TeamsManager
 			return;	
 		}
 		
-		if(event.entityPlayer.worldObj.isRemote)
+		if(event.entityPlayer.world.isRemote)
 			return;
-		TileEntity te = event.entityPlayer.worldObj.getTileEntity(event.pos);
+		TileEntity te = event.entityPlayer.world.getTileEntity(event.pos);
 		if(te != null)
 		{
 			ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
 			if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 			{
 				if(te instanceof ITeamObject)
-					((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamObject)te);
+					((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamObject)te);
 				if(te instanceof ITeamBase)
-					((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.worldObj, (EntityPlayerMP)event.entityPlayer, (ITeamBase)te);
+					((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamBase)te);
 			}
 			else if(currentRound != null)
 			{
@@ -709,7 +709,7 @@ public class TeamsManager
 						}
 						if(!alreadyAdded)
 						{
-							event.entityPlayer.worldObj.spawnEntityInWorld(gunEntity);
+							event.entityPlayer.world.spawnEntity(gunEntity);
 							dropsToThrow.add(gunEntity);
 						}
 					}
@@ -805,7 +805,7 @@ public class TeamsManager
 	
 	public void respawnPlayer(EntityPlayer player, boolean firstSpawn)
 	{
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 			return;
 		
 		if(!enabled || currentRound == null)
@@ -854,7 +854,7 @@ public class TeamsManager
 
 		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(player);
 		if(spawnPoint != null)
-			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor_double(spawnPoint.xCoord), MathHelper.floor_double(spawnPoint.yCoord) + 1, MathHelper.floor_double(spawnPoint.zCoord)), 0);
+			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.xCoord), MathHelper.floor(spawnPoint.yCoord) + 1, MathHelper.floor(spawnPoint.zCoord)), 0);
 		else
 			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.newTeam == null ? "null" : data.newTeam.name));
 	}
@@ -884,7 +884,7 @@ public class TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp = MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLServerHandler.instance().getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -907,7 +907,7 @@ public class TeamsManager
 	
 	public boolean playerIsOp(EntityPlayer player)
 	{ 
-		return MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
+		return FMLServerHandler.instance().getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
 	}
 	
 	public boolean autoBalance() {
@@ -1105,7 +1105,7 @@ public class TeamsManager
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).Reload(stack, player.worldObj, player, player.inventory, false, false, true, false);
+				((ItemGun)stack.getItem()).Reload(stack, player.world, player, player.inventory, false, false, true, false);
 			}
 		}
 	}
@@ -1376,7 +1376,7 @@ public class TeamsManager
 	
 	public static EntityPlayerMP getPlayer(String username)
 	{
-		return MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
+		return FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(username);
 	}
 	
 	public static void log(String s)
@@ -1392,7 +1392,7 @@ public class TeamsManager
 	public static void messageAll(String s)
 	{
 		FlansMod.log("Teams Announcement : " + s);
-		for(EntityPlayerMP player : (List<EntityPlayerMP>)MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+		for(EntityPlayerMP player : (List<EntityPlayerMP>)FMLServerHandler.instance().getServer().getConfigurationManager().playerEntityList)
 		{
 			player.addChatComponentMessage(new ChatComponentText(s));
 		}
@@ -1405,7 +1405,7 @@ public class TeamsManager
 	
 	public static List<EntityPlayer> getPlayers()
 	{
-		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		return FMLServerHandler.instance().getServer().getConfigurationManager().playerEntityList;
 	}
 
 	/** Returns the team associated with the given ID */

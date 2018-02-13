@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 import com.flansmod.common.PlayerData;
 
@@ -148,7 +148,7 @@ public class GametypeCTF extends Gametype
 					if(playerTeam == flagTeam)
 					{
 						//They found it on the floor and are returning it
-						if(flag.ridingEntity == null && !flag.isHome)
+						if(flag.getRidingEntity() == null && !flag.isHome)
 						{
 							flag.reset();
 							playerData.score += 2;
@@ -175,12 +175,12 @@ public class GametypeCTF extends Gametype
 					//If the player is clicking the other team flag
 					else
 					{
-						if(flag.ridingEntity == player)
+						if(flag.getRidingEntity() == player)
 						{
 							flag.mountEntity(null);
 							TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 						}
-						else if(flag.ridingEntity == null)
+						else if(flag.getRidingEntity() == null)
 						{
 							if(flag.isHome)
 								playerData.score += 3;

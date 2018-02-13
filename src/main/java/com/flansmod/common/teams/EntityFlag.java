@@ -68,7 +68,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 			
 		}
 		if(!addedToChunk)
-			worldObj.spawnEntityInWorld(this);
+			worldObj.spawnEntity(this);
 		
 		if(timeUntilReturn > 0)
 		{

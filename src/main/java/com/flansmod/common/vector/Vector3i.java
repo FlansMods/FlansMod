@@ -2,7 +2,7 @@ package com.flansmod.common.vector;
 
 import java.nio.FloatBuffer;
 
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 
 public class Vector3i extends Vector 
 {

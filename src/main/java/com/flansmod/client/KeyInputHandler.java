@@ -96,7 +96,7 @@ public class KeyInputHandler
 			return;
 		
 		EntityPlayer player = mc.thePlayer;
-		Entity ridingEntity = player.ridingEntity;
+		Entity ridingEntity = player.getRidingEntity();
 		
 		//Handle universal keys
 		if(teamsMenuKey.isPressed())

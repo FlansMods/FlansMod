@@ -22,13 +22,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -181,7 +181,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 	public void setArrowHeading(double d, double d1, double d2, float spread, float speed) {
 		spread /= 5F;
-		float f2 = MathHelper.sqrt_double(d * d + d1 * d1 + d2 * d2);
+		float f2 = MathHelper.sqrt(d * d + d1 * d1 + d2 * d2);
 		d /= f2;
 		d1 /= f2;
 		d2 /= f2;
@@ -194,7 +194,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		motionX = d;
 		motionY = d1;
 		motionZ = d2;
-		float f3 = MathHelper.sqrt_double(d * d + d2 * d2);
+		float f3 = MathHelper.sqrt(d * d + d2 * d2);
 		prevRotationYaw = rotationYaw = (float) ((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
 		prevRotationPitch = rotationPitch = (float) ((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
 
@@ -236,7 +236,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		motionY = d1;
 		motionZ = d2;
 		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
-			float f = MathHelper.sqrt_double(d * d + d2 * d2);
+			float f = MathHelper.sqrt(d * d + d2 * d2);
 			prevRotationYaw = rotationYaw = (float) ((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
 			prevRotationPitch = rotationPitch = (float) ((Math.atan2(d1, f) * 180D) / 3.1415927410125732D);
 			setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
@@ -268,7 +268,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			DriveableHit driveableHit = (DriveableHit)bulletHit;
 			penetratingPower = driveableHit.driveable.bulletHit(bulletType, damage, driveableHit, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
+				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 0F, 1F));
 
 		}
 		else if(bulletHit instanceof PlayerBulletHit)
@@ -276,7 +276,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			PlayerBulletHit playerHit = (PlayerBulletHit)bulletHit;
 			penetratingPower = playerHit.hitbox.hitByBullet(source, shooter, shotFrom, bulletType, damage, penetratingPower);
 			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
+				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 0F, 0F));
 		}
 		else if(bulletHit instanceof EntityHit)
 		{
@@ -298,7 +298,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					entityHit.entity.setFire(20);
 				penetratingPower -= 1F;
 				if(FlansMod.DEBUG && world.isRemote)
-					world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
+					world.spawnEntity(new EntityDebugDot(world, hit, 1000, 1F, 1F, 0F));
 			}
 		}
 		else if(bulletHit instanceof BlockHit)
@@ -308,7 +308,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			//If the hit wasn't an entity hit, then it must've been a block hit
 			BlockPos pos = raytraceResult.getBlockPos();
 			if(FlansMod.DEBUG && world.isRemote)
-				world.spawnEntityInWorld(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
+				world.spawnEntity(new EntityDebugDot(world, hit, 1000, 0F, 1F, 0F));
 
 			Block block = world.getBlockState(pos).getBlock();
 			Material mat = block.getMaterial();
@@ -348,7 +348,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		super.onUpdate();
 
 		if(FlansMod.DEBUG && worldObj.isRemote)
-			worldObj.spawnEntityInWorld(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ),
+			worldObj.spawnEntity(new EntityDebugVector(worldObj, new Vector3f(posX, posY, posZ),
 					new Vector3f(motionX, motionY, motionZ), 20));
 
 		// Check the fuse to see if the bullet should explode
@@ -434,7 +434,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		setPosition(posX, posY, posZ);
 
 		// Recalculate the angles from the new motion
-		float motionXZ = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+		float motionXZ = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 		rotationYaw = (float) ((Math.atan2(motionX, motionZ) * 180D) / 3.1415927410125732D);
 		rotationPitch = (float) ((Math.atan2(motionY, motionXZ) * 180D) / 3.1415927410125732D);
 		// Reset the range of the angles
@@ -484,7 +484,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 					prevPosZ + dZ * i + rand.nextGaussian() * spread);
 			if (particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
 				particle.renderDistanceWeight = 100D;
-			// worldObj.spawnEntityInWorld(particle);
+			// worldObj.spawnEntity(particle);
 		}
 	}
 
@@ -507,7 +507,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private boolean isPartOfOwner(Entity entity) {
 		if (owner == null)
 			return false;
-		if (entity == owner || entity == owner.riddenByEntity || entity == owner.ridingEntity)
+		if (entity == owner || entity == owner.riddenByEntity || entity == owner.getRidingEntity())
 			return true;
 		if (owner instanceof EntityPlayer) {
 			if (PlayerHandler.getPlayerData((EntityPlayer) owner,
@@ -519,8 +519,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				return true;
 			}
 		}
-		return owner.ridingEntity instanceof EntitySeat && (((EntitySeat) owner.ridingEntity).driveable == null
-				|| ((EntitySeat) owner.ridingEntity).driveable.isPartOfThis(entity));
+		return owner.getRidingEntity() instanceof EntitySeat && (((EntitySeat) owner.getRidingEntity()).driveable == null
+				|| ((EntitySeat) owner.getRidingEntity()).driveable.isPartOfThis(entity));
 	}
 
 	@Override
@@ -586,7 +586,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		    {
 		        EntityItem entityitem = new EntityItem(world, detonatePos.x, detonatePos.y, detonatePos.z, dropStack);
 		        entityitem.setDefaultPickupDelay();
-		        world.spawnEntityInWorld(entityitem);
+		        world.spawnEntity(entityitem);
 		    }
 		}
 	}
@@ -619,13 +619,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		if (type.hasLight) {
 			return 15728880;
 		} else {
-			int i = MathHelper.floor_double(this.posX);
-			int j = MathHelper.floor_double(this.posZ);
+			int i = MathHelper.floor(this.posX);
+			int j = MathHelper.floor(this.posZ);
 
 			if (!worldObj.isAirBlock(new BlockPos(i, 0, j))) {
 				double d0 = (getBoundingBox().maxY - getBoundingBox().minY) * 0.66D;
-				int k = MathHelper.floor_double(this.posY - (double) this.yOffset + d0);
-				return this.worldObj.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
+				int k = MathHelper.floor(this.posY - (double) this.yOffset + d0);
+				return this.world.getLightFromNeighborsFor(EnumSkyBlock.SKY, new BlockPos(i, k, j));
 			} else {
 				return 0;
 			}

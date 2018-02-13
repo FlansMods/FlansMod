@@ -82,7 +82,7 @@ public class PacketBaseEdit extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		//Do another op check
-		if(!MinecraftServer.getServer().getConfigurationManager().canSendCommands(playerEntity.getGameProfile()))
+		if(!FMLServerHandler.instance().getServer().getConfigurationManager().canSendCommands(playerEntity.getGameProfile()))
 			return;
 		
 		//Find the base and change its attributes (or destroy it)
