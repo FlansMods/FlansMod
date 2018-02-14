@@ -20,7 +20,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -154,7 +154,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 					spinSpeed = 0.0f;
 					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
 							new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 1.0F, 2.0f, 
-									(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
+									(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 					SwitchToState(EnumPageState.STOPPED);
 				}
 				int timeInState = slowdownTime - timeLeftInState;
@@ -207,7 +207,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		{
 			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
 					new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 0.5F, 1.0f, 
-							(float)mc.thePlayer.posX, (float)mc.thePlayer.posY, (float)mc.thePlayer.posZ));
+							(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 			timeOfLastSound = Minecraft.getSystemTime();
 		}
 		

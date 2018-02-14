@@ -1,7 +1,7 @@
 package com.flansmod.client.tmt;
 
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * The PositionTransformGroup class adds a class which allows for vertex transformations.
@@ -32,17 +32,17 @@ public class TransformGroupBone extends TransformGroup
 		return returnAngle;
 	}
 	
-	public Vec3 getBaseVector()
+	public Vec3d getBaseVector()
 	{
-		return new Vec3(baseVector.xCoord, baseVector.yCoord, baseVector.zCoord);
+		return new Vec3d(baseVector.x, baseVector.y, baseVector.z);
 	}
 	
-	public Vec3 getTransformVector()
+	public Vec3d getTransformVector()
 	{
 		return baseVector.subtract(attachedBone.getPosition());
 	}
 	
-	public Vec3 getCurrentVector()
+	public Vec3d getCurrentVector()
 	{
 		return attachedBone.getPosition();
 	}
@@ -61,9 +61,9 @@ public class TransformGroupBone extends TransformGroup
 	}
 	
 	@Override
-	public Vec3 doTransformation(PositionTransformVertex vertex)
+	public Vec3d doTransformation(PositionTransformVertex vertex)
 	{
-		Vec3 vector = new Vec3(vertex.neutralVector.xCoord, vertex.neutralVector.yCoord, vertex.neutralVector.zCoord);
+		Vec3d vector = new Vec3d(vertex.neutralVector.x, vertex.neutralVector.y, vertex.neutralVector.z);
 		vector = getBaseVector().subtract(vector);
 		Angle3D angle = getTransformAngle();
 		setVectorRotations(vector, angle.angleX, angle.angleY, angle.angleZ);
@@ -71,7 +71,7 @@ public class TransformGroupBone extends TransformGroup
 		return vector;
 	}
 	
-	protected void setVectorRotations(Vec3 vector, float xRot, float yRot, float zRot)
+	protected void setVectorRotations(Vec3d vector, float xRot, float yRot, float zRot)
 	{
 		float x = xRot;
 		float y = yRot;
@@ -83,9 +83,9 @@ public class TransformGroupBone extends TransformGroup
 		float zC = MathHelper.cos(z);
 		float zS = MathHelper.sin(z);
 
-		double xVec = vector.xCoord;
-		double yVec = vector.yCoord;
-		double zVec = vector.zCoord;
+		double xVec = vector.x;
+		double yVec = vector.y;
+		double zVec = vector.z;
 
 		// rotation around x
 		double xy = xC*yVec - xS*zVec;
@@ -101,11 +101,11 @@ public class TransformGroupBone extends TransformGroup
 		yVec = zy;
 		zVec = yz;
 		
-		vector = new Vec3(xVec, yVec, zVec);
+		vector = new Vec3d(xVec, yVec, zVec);
 	}
 	
 	protected Angle3D baseAngles;
-	protected Vec3 baseVector;
+	protected Vec3d baseVector;
 	protected Bone attachedBone;
 	protected double weight;
 }

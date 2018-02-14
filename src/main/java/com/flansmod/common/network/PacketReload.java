@@ -51,7 +51,7 @@ public class PacketReload extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
-		ItemStack stack = playerEntity.getCurrentEquippedItem();
+		ItemStack stack = playerEntity.getHeldItemMainhand();
 		int slot = playerEntity.inventory.currentItem;
 		if(isOffHand && data.offHandGunSlot != 0)
 		{

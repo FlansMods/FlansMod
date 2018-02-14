@@ -504,7 +504,7 @@ public class GunType extends PaintableType implements IScope
 	public ItemStack getAttachmentItemStack(ItemStack gun, String name)
 	{
 		checkForTags(gun);
-		return ItemStack.loadItemStackFromNBT(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
+		return new ItemStack(gun.getTagCompound().getCompoundTag("attachments").getCompoundTag(name));	
 	}
 	
 	/** Method to check for null tags and assign default empty tags in that case */

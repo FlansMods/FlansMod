@@ -16,8 +16,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandHandler;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -25,12 +27,18 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -49,9 +57,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.driveables.EntityPlane;
@@ -208,25 +218,16 @@ public class FlansMod
 		
 		//Set up mod blocks and items
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setUnlocalizedName("flansWorkbench"));
-		GameRegistry.registerBlock(workbench, ItemBlockManyNames.class, "flansWorkbench");
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 0), "BBB", "III", "III", 'B', Items.bowl, 'I', Items.iron_ingot );
-		GameRegistry.addRecipe(new ItemStack(workbench, 1, 1), "ICI", "III", 'C', Items.cauldron, 'I', Items.iron_ingot );
 		opStick = new ItemOpStick();
-		GameRegistry.registerItem(opStick, "opStick", MODID);
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
-		GameRegistry.registerItem(flag, "flagpole", MODID);
-		spawner = (BlockSpawner)(new BlockSpawner(Material.iron).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
-		GameRegistry.registerBlock(spawner, ItemBlockManyNames.class, "teamsSpawner");
-		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
-		
+		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
 		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
-		GameRegistry.registerItem(rainbowPaintcan, "rainbowPaintcan", MODID);
 		paintjobTable = new BlockPaintjobTable();
-		GameRegistry.registerBlock(paintjobTable, "paintjobTable");
-		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, MODID);
 		
+		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
+		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, "paintjobTable");
 		GameRegistry.registerTileEntity(TileEntityItemHolder.class, "itemHolder");
-		
+
 		//Read content packs
 		readContentPacks(event);
 
@@ -241,8 +242,7 @@ public class FlansMod
 	public void init(FMLInitializationEvent event)
 	{
 		log("Initialising Flan's Mod.");
-		
-		
+
 		//Do proxy loading
 		proxy.load();
 		proxy.registerRenderers();
@@ -250,19 +250,6 @@ public class FlansMod
 		//Initialising handlers
 		packetHandler.initialise();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new CommonGuiHandler());		
-		
-		// Recipes
-		for (InfoType type : InfoType.infoTypes.values())
-		{
-			type.addRecipe();
-			type.addDungeonLoot();
-		}
-		if(addGunpowderRecipe)
-		{
-			ItemStack charcoal = new ItemStack(Items.COAL, 1, 1);
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.gunpowder), charcoal, charcoal, charcoal, new ItemStack(Items.glowstone_dust));
-		}
-		log("Loaded recipes.");
 		
 		// Really randomise the rewards generator
 		rewardsRandom = new Random();
@@ -275,7 +262,88 @@ public class FlansMod
 			}
 		}
 		
+		//Register the chunk loader 
+		//TODO : Re-do chunk loading
+		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
+
+		//Config
+		FMLCommonHandler.instance().bus().register(INSTANCE);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		//Starting the EventListener
+		new PlayerDeathEventListener();
+		log("Loading complete.");
+	}
+	
+	@EventHandler
+	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
+	{		
+		// Recipes
+		for (InfoType type : InfoType.infoTypes.values())
+		{
+			type.addRecipe(event.getRegistry());
+			type.addDungeonLoot();
+		}
+		if(addGunpowderRecipe)
+		{
+			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.GLOWSTONE_DUST, 1, 1)));
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
+			
+			event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients));
+		}
+		
+		// Add the two workbench recipes
+		{
+			// ICI C = Cauldron
+			// III I = Iron ingot
+			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
+			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.CAULDRON)));
+			for(int i = 0; i < 4; i++)
+				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
+
+			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 2, ingredients, new ItemStack(workbench, 1, 1)));
+		}
+		{
+			// BBB B = Bowl
+			// III I = Iron ingot
+			// III
+			NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+			for(int i = 0; i < 3; i++)
+				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.BOWL)));
+			for(int i = 0; i < 6; i++)
+				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
+
+			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 3, ingredients, new ItemStack(workbench, 1, 0)));
+		}
+		
+		log("Loaded recipes.");
+	}
+	
+	@EventHandler
+	public void registerItems(RegistryEvent.Register<Item> event)
+	{
+		event.getRegistry().register(rainbowPaintcan); //, "rainbowPaintcan", MODID);
+		event.getRegistry().register(opStick); //, "opStick", MODID);
+		event.getRegistry().register(flag); //, "flagpole", MODID);
+	}
+	
+	@EventHandler
+	public void registerBlocks(RegistryEvent.Register<Block> event)
+	{
+		event.getRegistry().register(workbench);//, ItemBlockManyNames.class, "flansWorkbench");
+		event.getRegistry().register(spawner); // ItemBlockManyNames.class, "teamsSpawner");
+		event.getRegistry().register(paintjobTable); //, "paintjobTable");
+	}
+	
+	@EventHandler
+	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
+	{
 		//Register teams mod entities
+		/*
+		 * TODO: [1.12] Find out where the update intervals have ended up.
 		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
@@ -312,17 +380,22 @@ public class FlansMod
 		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
-		
-		//Register the chunk loader 
-		//TODO : Re-do chunk loading
-		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
-
-		//Config
-		FMLCommonHandler.instance().bus().register(INSTANCE);
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
-		//Starting the EventListener
-		new PlayerDeathEventListener();
-		log("Loading complete.");
+		*/
+		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole"));
+		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag"));
+		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem"));
+		event.getRegistry().register(new EntityEntry(EntityGunItem.class, "GunItem"));
+		event.getRegistry().register(new EntityEntry(EntityItemCustomRender.class, "CustomItem"));
+		event.getRegistry().register(new EntityEntry(EntityPlane.class, "Plane"));
+		event.getRegistry().register(new EntityEntry(EntityVehicle.class, "Vehicle"));
+		event.getRegistry().register(new EntityEntry(EntitySeat.class, "Seat"));
+		event.getRegistry().register(new EntityEntry(EntityWheel.class, "Wheel"));
+		event.getRegistry().register(new EntityEntry(EntityParachute.class, "Parachute"));
+		event.getRegistry().register(new EntityEntry(EntityMecha.class, "Mecha"));
+		event.getRegistry().register(new EntityEntry(EntityBullet.class, "Bullet"));
+		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade"));
+		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG"));
+		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun"));
 	}
 	
 	/** The mod post-initialisation method */

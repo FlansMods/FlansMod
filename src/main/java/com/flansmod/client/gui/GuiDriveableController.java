@@ -31,21 +31,21 @@ public class GuiDriveableController extends GuiScreen
 	public void initGui()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
 	}
 	
 	@Override
 	public void onGuiClosed()
 	{
 		mc.mouseHelper.ungrabMouseCursor();
-		mc.setRenderViewEntity(mc.thePlayer);
+		mc.setRenderViewEntity(mc.player);
     }
 	
 	@Override
 	public void handleMouseInput()
 	{
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
-		if(player != mc.thePlayer)
+		if(player != mc.player)
 		{
 			mc.displayGuiScreen(null);
 			return;
@@ -103,8 +103,8 @@ public class GuiDriveableController extends GuiScreen
 		{
 			mc.gameSettings.thirdPersonView = (mc.gameSettings.thirdPersonView + 1) % 3;
 			if(mc.gameSettings.thirdPersonView == 1)
-				mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
-			else mc.setRenderViewEntity(mc.thePlayer);
+				mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
+			else mc.setRenderViewEntity(mc.player);
 		}
 		if(i == 66)
 		{
@@ -112,11 +112,11 @@ public class GuiDriveableController extends GuiScreen
 		}
 		if(i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
-			mc.displayGuiScreen(new GuiInventory(mc.thePlayer));
+			mc.displayGuiScreen(new GuiInventory(mc.player));
 		}
 		if(i == mc.gameSettings.keyBindDrop.getKeyCode())
 		{
-			//mc.thePlayer.dropCurrentItem();
+			//mc.player.dropCurrentItem();
 		}
 		if(i == mc.gameSettings.keyBindChat.getKeyCode())
 		{
@@ -140,15 +140,15 @@ public class GuiDriveableController extends GuiScreen
 	public void updateScreen()
 	{
 		if(mc.gameSettings.thirdPersonView == 1)
-			mc.setRenderViewEntity((plane.getCamera() == null ? mc.thePlayer : plane.getCamera()));
-		else mc.setRenderViewEntity(mc.thePlayer);
+			mc.setRenderViewEntity((plane.getCamera() == null ? mc.player : plane.getCamera()));
+		else mc.setRenderViewEntity(mc.player);
 	}
 	
 	@Override
 	public void handleInput()
 	{
 		EntityPlayer player = (EntityPlayer)plane.getControllingEntity();
-		if(player != mc.thePlayer)
+		if(player != mc.player)
 		{
 			mc.displayGuiScreen(null);
 			return;

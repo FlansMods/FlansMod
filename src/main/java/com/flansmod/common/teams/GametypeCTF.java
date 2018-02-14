@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.PlayerData;
 
@@ -98,10 +98,12 @@ public class GametypeCTF extends Gametype
 		}
 		getPlayerData(player).deaths++;
 		
-		if(player.riddenByEntity instanceof EntityFlag)
+		if(player.getPassengers().get(0) instanceof EntityFlag)
 		{
-			Team flagTeam = teamsManager.getTeam(((EntityFlag)player.riddenByEntity).getBase().getOwnerID());
-			player.riddenByEntity.mountEntity(null);
+			EntityFlag flag = (EntityFlag)player.getPassengers().get(0);
+			
+			Team flagTeam = teamsManager.getTeam(flag.getBase().getOwnerID());
+			flag.mountEntity(null);
 			TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 		}
 	}
@@ -157,10 +159,10 @@ public class GametypeCTF extends Gametype
 						
 						//TODO : Move to be a proximity thing?
 						//They have another flag in hand
-						else if(player.riddenByEntity instanceof EntityFlag)
+						else if(player.getPassengers().get(0) instanceof EntityFlag)
 						{
 							//Get the other flag and its team
-							EntityFlag otherFlag = (EntityFlag)player.riddenByEntity;
+							EntityFlag otherFlag = (EntityFlag)player.getPassengers().get(0);
 							Team otherFlagTeam = teamsManager.getTeam(otherFlag.getBase().getOwnerID());
 							
 							if(otherFlagTeam != null && otherFlagTeam != Team.spectators && otherFlagTeam != flagTeam && flag.isHome)
@@ -196,7 +198,7 @@ public class GametypeCTF extends Gametype
 	}
 
 	@Override
-	public Vec3 getSpawnPoint(EntityPlayerMP player) 
+	public Vec3d getSpawnPoint(EntityPlayerMP player) 
 	{
 		if(teamsManager.currentRound == null)
 			return null;
@@ -218,7 +220,7 @@ public class GametypeCTF extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return new Vec3d(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

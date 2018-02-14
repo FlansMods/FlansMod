@@ -16,12 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
 
-public class TileEntityPaintjobTable extends TileEntity implements IInventory, IUpdatePlayerListBox
+public class TileEntityPaintjobTable extends TileEntity implements IInventory, ITickable
 {
 	// Stack 0 is InfoType being painted. Stack 1 is paint cans
 	private ItemStack inventoryStacks[] = new ItemStack[2];
@@ -39,9 +39,6 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	public boolean hasCustomName() { return false; }
 
 	@Override
-	public IChatComponent getDisplayName() { return null; }
-
-	@Override
 	public int getSizeInventory() { return 2; }
 
 	@Override
@@ -55,7 +52,7 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	{ 
 		if(getStackInSlot(index) != null) 
 		{ 
-			if(count >= getStackInSlot(index).stackSize)
+			if(count >= getStackInSlot(index).getCount())
 			{
 				ItemStack returnStack = getStackInSlot(index);
 				setInventorySlotContents(index, null);
@@ -72,14 +69,6 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int index) 
-	{ 
-		ItemStack returnStack = getStackInSlot(index);
-		setInventorySlotContents(index, null);
-		return returnStack; 
-	}
-
-	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) 
 	{ 
 		inventoryStacks[index] = stack;
@@ -87,9 +76,6 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 
 	@Override
 	public int getInventoryStackLimit() { return 64; }
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) { return true; }
 
 	@Override
 	public void openInventory(EntityPlayer player) { }
@@ -119,7 +105,7 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
 		
@@ -130,6 +116,8 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 				getStackInSlot(i).writeToNBT(stackNBT);
 			nbt.setTag("stack_" + i, stackNBT);
 		}
+		
+		return nbt;
 	}
 	
 	@Override
@@ -139,7 +127,7 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 
 		for(int i = 0; i < inventoryStacks.length; i++)
 		{
-			setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("stack_" + i)));
+			setInventorySlotContents(i, new ItemStack(nbt.getCompoundTag("stack_" + i)));
 		}
 	}
 
@@ -149,15 +137,15 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	}
 	
 	@Override
-    public Packet getDescriptionPacket()
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
+        return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
     }
 	
 	@Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.S35PacketUpdateTileEntity packet)
+    public void onDataPacket(net.minecraft.network.NetworkManager net, SPacketUpdateTileEntity packet)
     {
 		readFromNBT(packet.getNbtCompound());
     }
@@ -175,5 +163,29 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	public ItemStack getPaintCans()
 	{
 		return inventoryStacks[1];
+	}
+	
+
+	@Override
+	public ITextComponent getDisplayName() { return null; }
+
+	@Override
+	public boolean isEmpty() 
+	{
+		return inventoryStacks[0] == null || inventoryStacks[0].isEmpty();
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) 
+	{
+		ItemStack stack = inventoryStacks[index];
+		inventoryStacks[index] = null;
+		return stack;
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) 
+	{
+		return true;
 	}
 }

@@ -83,7 +83,7 @@ public class ContainerPaintjobTable extends Container
 				}
 			}
 
-			if (slotStack.stackSize == 0)
+			if (slotStack.getCount() == 0)
 			{
 				currentSlot.putStack(null);
 			}
@@ -92,12 +92,12 @@ public class ContainerPaintjobTable extends Container
 				currentSlot.onSlotChanged();
 			}
 
-			if (slotStack.stackSize == stack.stackSize)
+			if (slotStack.getCount() == stack.getCount())
 			{
 				return null;
 			}
 
-			currentSlot.onPickupFromSlot(player, slotStack);
+			currentSlot.onTake(player, slotStack);
 		}
 
 		return stack;
@@ -132,13 +132,13 @@ public class ContainerPaintjobTable extends Container
 				//Calculate which dyes we have in our inventory
 				for(int n = 0; n < numDyes; n++)
 				{
-					int amountNeeded = paintjob.dyesNeeded[n].stackSize;
+					int amountNeeded = paintjob.dyesNeeded[n].getCount();
 					for(int s = 0; s < playerInv.getSizeInventory(); s++)
 					{
 						ItemStack stack = playerInv.getStackInSlot(s);
-						if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 						{
-							amountNeeded -= stack.stackSize;
+							amountNeeded -= stack.getCount();
 						}
 					}
 					//We don't have enough of this dye
@@ -148,16 +148,16 @@ public class ContainerPaintjobTable extends Container
 	    	
 	        	for(int n = 0; n < numDyes; n++)
 	        	{
-	        		int amountNeeded = paintjob.dyesNeeded[n].stackSize;
+	        		int amountNeeded = paintjob.dyesNeeded[n].getCount();
 	        		for(int s = 0; s < playerInv.getSizeInventory(); s++)
 	        		{
 	        			if(amountNeeded <= 0)
 	        				continue;
 	        			ItemStack stack = playerInv.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
 	        			{
 	        				ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
-	        				amountNeeded -= consumed.stackSize;
+	        				amountNeeded -= consumed.getCount();
 	        			}
 	        		}
 	        	}

@@ -8,19 +8,19 @@ import net.minecraft.world.World;
 public class EntityConnectingLine extends EntityFishHook {
 	
 	public Object connectedTo;
+	public EntityPlayer player;
 
-	public EntityConnectingLine(World world) 
+	public EntityConnectingLine(World world, EntityPlayer player) 
 	{
-		super(world);
+		super(world, player);
+		this.player = player;
 	}
 
 	public EntityConnectingLine(World world, EntityPlayer player, ITeamBase base)
     {
-        super(world);
+        this(world, player);
         caughtEntity = this;
         ignoreFrustumCheck = true;
-        angler = player;
-        angler.fishEntity = this;
         setSize(0.25F, 0.25F);
         setPosition(base.getPosX(), base.getPosY(), base.getPosZ());
         motionX = 0;
@@ -31,11 +31,9 @@ public class EntityConnectingLine extends EntityFishHook {
 	   
 	public EntityConnectingLine(World world, EntityPlayer player, ITeamObject object)
     {
-        super(world);
+        this(world, player);
         caughtEntity = this; 
         ignoreFrustumCheck = true;
-        angler = player;
-        angler.fishEntity = this;
         setSize(0.25F, 0.25F);
         setPosition(object.getPosX(), object.getPosY(), object.getPosZ());
         motionX = 0;
@@ -47,11 +45,11 @@ public class EntityConnectingLine extends EntityFishHook {
     @Override
 	public void onUpdate()
     {          
-    	ItemStack currentItemstack = angler.inventory.getCurrentItem();
+    	ItemStack currentItemstack = player.inventory.getCurrentItem();
     	if(currentItemstack == null || !(currentItemstack.getItem() instanceof ItemOpStick) || currentItemstack.getItemDamage() != 1)
     	{
     		setDead();
-    		angler.fishEntity = null;
+    		player.fishEntity = null;
     	}
     }
 

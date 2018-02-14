@@ -95,7 +95,7 @@ public class KeyInputHandler
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
 			return;
 		
-		EntityPlayer player = mc.thePlayer;
+		EntityPlayer player = mc.player;
 		Entity ridingEntity = player.getRidingEntity();
 		
 		//Handle universal keys
@@ -112,7 +112,7 @@ public class KeyInputHandler
 		if(reloadKey.isPressed())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
-			ItemStack stack = player.getCurrentEquippedItem();
+			ItemStack stack = player.getHeldItemMainhand();
 			
 			if(data.shootTimeRight <= 0.0f)
 			{
@@ -143,8 +143,8 @@ public class KeyInputHandler
 		}
 		if(lookAtGunKey.isPressed())
 		{
-			FlansModClient.getGunAnimations(mc.thePlayer, false).lookAt = LookAtState.TILT1;
-			FlansModClient.getGunAnimations(mc.thePlayer, true).lookAt = LookAtState.TILT1;
+			FlansModClient.getGunAnimations(mc.player, false).lookAt = LookAtState.TILT1;
+			FlansModClient.getGunAnimations(mc.player, true).lookAt = LookAtState.TILT1;
 		}
 		if(debugKey.isPressed())
 		{

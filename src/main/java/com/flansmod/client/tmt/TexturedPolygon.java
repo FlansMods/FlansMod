@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 public class TexturedPolygon
 {
@@ -13,7 +13,7 @@ public class TexturedPolygon
 		this.invertNormal = false;
 		this.vertexPositions = apositionTexturevertex;
 		this.nVertices = apositionTexturevertex.length;
-		this.iNormals = new ArrayList<Vec3>();
+		this.iNormals = new ArrayList<Vec3d>();
 		this.normals = new float[0];
 	}
 	
@@ -50,7 +50,7 @@ public class TexturedPolygon
 		this.vertexPositions = var1;
 	}
 	
-	public void setNormals(ArrayList<Vec3> vec)
+	public void setNormals(ArrayList<Vec3d> vec)
 	{
 		iNormals = vec;
 	}
@@ -79,16 +79,16 @@ public class TexturedPolygon
 			} else
 			if(vertexPositions.length >= 3)
 			{
-				Vec3 Vec3 = vertexPositions[1].vector3D.subtract(vertexPositions[0].vector3D);
-				Vec3 Vec31 = vertexPositions[1].vector3D.subtract(vertexPositions[2].vector3D);
-				Vec3 Vec32 = Vec31.crossProduct(Vec3).normalize();
+				Vec3d Vec3d = vertexPositions[1].vector3D.subtract(vertexPositions[0].vector3D);
+				Vec3d Vec31 = vertexPositions[1].vector3D.subtract(vertexPositions[2].vector3D);
+				Vec3d Vec32 = Vec31.crossProduct(Vec3d).normalize();
 		
 				if(invertNormal)
 				{
-					tessellator.setNormal(-(float)Vec32.xCoord, -(float)Vec32.yCoord, -(float)Vec32.zCoord);
+					tessellator.setNormal(-(float)Vec32.x, -(float)Vec32.y, -(float)Vec32.z);
 				} else
 				{
-					tessellator.setNormal((float)Vec32.xCoord, (float)Vec32.yCoord, (float)Vec32.zCoord);
+					tessellator.setNormal((float)Vec32.x, (float)Vec32.y, (float)Vec32.z);
 				}
 			}
 			else
@@ -105,14 +105,14 @@ public class TexturedPolygon
 			{
 				if(invertNormal)
 				{
-					tessellator.setNormal(-(float)iNormals.get(i).xCoord, -(float)iNormals.get(i).yCoord, -(float)iNormals.get(i).zCoord);
+					tessellator.setNormal(-(float)iNormals.get(i).x, -(float)iNormals.get(i).y, -(float)iNormals.get(i).z);
 				}
 				else
 				{
-					tessellator.setNormal((float)iNormals.get(i).xCoord, (float)iNormals.get(i).yCoord, (float)iNormals.get(i).zCoord);
+					tessellator.setNormal((float)iNormals.get(i).x, (float)iNormals.get(i).y, (float)iNormals.get(i).z);
 				}
 			}
-			tessellator.addVertexWithUVW((float)positionTexturevertex.vector3D.xCoord * f, (float)positionTexturevertex.vector3D.yCoord * f, (float)positionTexturevertex.vector3D.zCoord * f, positionTexturevertex.texturePositionX, positionTexturevertex.texturePositionY, positionTexturevertex.texturePositionW);
+			tessellator.addVertexWithUVW((float)positionTexturevertex.vector3D.x * f, (float)positionTexturevertex.vector3D.y * f, (float)positionTexturevertex.vector3D.z * f, positionTexturevertex.texturePositionX, positionTexturevertex.texturePositionY, positionTexturevertex.texturePositionW);
 		}
 
 		tessellator.draw();
@@ -122,5 +122,5 @@ public class TexturedPolygon
 	public int nVertices;
 	private boolean invertNormal;
 	private float[] normals;
-	private ArrayList<Vec3> iNormals;
+	private ArrayList<Vec3d> iNormals;
 }

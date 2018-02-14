@@ -5,10 +5,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.TextComponentString;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import com.flansmod.api.IExplodeable;
@@ -110,15 +110,15 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	}
 			
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer)
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand)
 	{
 		if(isDead)
 			return false;
-		if(worldObj.isRemote)
+		if(world.isRemote)
 			return false;
 		
 		//If they are using a repair tool, don't put them in
-		ItemStack currentItem = entityplayer.getCurrentEquippedItem();
+		ItemStack currentItem = entityplayer.getHeldItemMainhand();
 		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
 		
@@ -144,7 +144,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
 		VehicleType type = getVehicleType();
 		//Send keys which require server side updates to the server
-		if(worldObj.isRemote && (key == 6 || key == 8 || key == 9))
+		if(world.isRemote && (key == 6 || key == 8 || key == 9))
 		{
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
 			return true;
@@ -198,9 +198,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 			case 7 : //Inventory
 			{
-				if(worldObj.isRemote)
+				if(world.isRemote)
 				{
-					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].riddenByEntity, worldObj, this);
+					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].riddenByEntity, world, this);
 				}
 				return true;
 			}
@@ -231,7 +231,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				{
 					varDoor = !varDoor;
 					if(type.hasDoor)
-						player.addChatMessage(new ChatComponentText("Doors " + (varDoor ? "open" : "closed")));
+						player.sendMessage(new TextComponentString("Doors " + (varDoor ? "open" : "closed")));
 					toggleTimer = 10;
 					FlansMod.getPacketHandler().sendToServer(new PacketVehicleControl(this));
 				}
@@ -275,13 +275,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = worldObj.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
+		boolean thePlayerIsDrivingThis = world.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
 
 		//Despawning
 		ticksSinceUsed++;
-		if(!worldObj.isRemote && seats[0].riddenByEntity != null)
+		if(!world.isRemote && seats[0].riddenByEntity != null)
 			ticksSinceUsed = 0;
-		if(!worldObj.isRemote && TeamsManager.vehicleLife > 0 && ticksSinceUsed > TeamsManager.vehicleLife * 20)
+		if(!world.isRemote && TeamsManager.vehicleLife > 0 && ticksSinceUsed > TeamsManager.vehicleLife * 20)
 		{
 			setDead();
 		}
@@ -314,7 +314,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			wheelsYaw = -20;
 		
 		//Player is not driving this. Update its position from server update packets 
-		if(worldObj.isRemote && !thePlayerIsDrivingThis)
+		if(world.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
 			if (serverPositionTransitionTicker > 0)
@@ -342,7 +342,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		for(EntityWheel wheel : wheels)
 		{
-			if(wheel != null && worldObj != null)
+			if(wheel != null && world != null)
 			{
 				wheel.prevPosX = wheel.posX;
 				wheel.prevPosY = wheel.posY;
@@ -421,7 +421,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 			}
 			
-			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getEntityBoundingBox()))
+			if(type.floatOnWater && world.isAnyLiquid(wheel.getEntityBoundingBox()))
 			{
 				wheel.motionY += type.buoyancy;
 			}
@@ -510,7 +510,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//If this is the server, send position updates to everyone, having received them from the driver
-		if(!worldObj.isRemote && ticksExisted % 5 == 0)
+		if(!world.isRemote && ticksExisted % 5 == 0)
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
@@ -572,14 +572,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		return avg;
 	}
 
-	private Vec3 subtract(Vec3 a, Vec3 b)
+	private Vec3d subtract(Vec3d a, Vec3d b)
 	{
-		return new Vec3(a.xCoord - b.xCoord, a.yCoord - b.yCoord, a.zCoord - b.zCoord);
+		return new Vec3d(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 	
-	private Vec3 crossProduct(Vec3 a, Vec3 b)
+	private Vec3d crossProduct(Vec3d a, Vec3d b)
 	{
-        return new Vec3(a.yCoord * b.zCoord - a.zCoord * b.yCoord, a.zCoord * b.xCoord - a.xCoord * b.zCoord, a.xCoord * b.yCoord - a.yCoord * b.xCoord);
+        return new Vec3d(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 	}
 
 	@Override
@@ -591,7 +591,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
-		if(worldObj.isRemote || isDead)
+		if(world.isRemote || isDead)
 			return true;
 
 		VehicleType type = getVehicleType();

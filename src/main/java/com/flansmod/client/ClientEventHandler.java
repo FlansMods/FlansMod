@@ -76,7 +76,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void chatMessage(ClientChatReceivedEvent event)
 	{
-		if(event.message.getUnformattedText().equals("#flansmod"))
+		if(event.getMessage().getUnformattedText().equals("#flansmod"))
 		{
 			event.setCanceled(true);
 		}
@@ -85,11 +85,11 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void CheckForOffHandWeaponSwitch(MouseEvent event)
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemGun)
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
-			if(((ItemGun)player.getCurrentEquippedItem().getItem()).GetType().oneHanded && 
-					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.dwheel) > 0)
+			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded && 
+					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}
 	}
@@ -103,7 +103,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
-		InstantBulletRenderer.RenderAllTrails(event.partialTicks);
+		InstantBulletRenderer.RenderAllTrails(event.getPartialTicks());
 	}
 	
 	// ----------------------------------------

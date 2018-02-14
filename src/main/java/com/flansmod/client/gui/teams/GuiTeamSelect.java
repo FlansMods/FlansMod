@@ -155,7 +155,7 @@ public class GuiTeamSelect extends GuiScreen
 	{
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
-			mc.thePlayer.closeScreen();
+			mc.player.closeScreen();
 			if(classMenu)
 			{
 				if(classChoices != null && classChoices.length > 0)

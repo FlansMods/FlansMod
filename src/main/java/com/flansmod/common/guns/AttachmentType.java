@@ -140,13 +140,15 @@ public class AttachmentType extends PaintableType implements IScope {
 	}
 
 	/** To be overriden by subtypes for model reloading */
-	public void reloadModel() {
+	public void reloadModel() 
+	{
 		model = FlansMod.proxy.loadModel(modelString, shortName,
 				ModelAttachment.class);
 	}
 
-	public static AttachmentType getFromNBT(NBTTagCompound tags) {
-		ItemStack stack = ItemStack.loadItemStackFromNBT(tags);
+	public static AttachmentType getFromNBT(NBTTagCompound tags) 
+	{
+		ItemStack stack = new ItemStack(tags);
 		if (stack != null && stack.getItem() instanceof ItemAttachment)
 			return ((ItemAttachment) stack.getItem()).type;
 		return null;

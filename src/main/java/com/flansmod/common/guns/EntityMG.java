@@ -17,8 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -99,9 +99,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			setDead();
 		}
-		if (worldObj.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.air)
+		if (world.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.AIR)
 		{
-			if(!worldObj.isRemote)
+			if(!world.isRemote)
 			{
 				setDead();
 			}
@@ -167,12 +167,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.reloadSound, false);
 			}
 		}
-		if (worldObj.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().thePlayer && type.mode == EnumFireMode.FULLAUTO)
+		if (world.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().player && type.mode == EnumFireMode.FULLAUTO)
 		{
 			//Send a packet!
 			checkForShooting();
 		}
-		if(!worldObj.isRemote && isShooting)
+		if(!world.isRemote && isShooting)
 		{
 			if(gunner == null || gunner.isDead)
 				isShooting = false;
@@ -186,8 +186,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if (gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			worldObj.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
-					new Vec3(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
+			world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world, 
+					new Vec3d(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
 					(direction * 90F + rotationYaw), 
 					rotationPitch, 
 					gunner, 
@@ -247,9 +247,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (gunner != null && !gunner.capabilities.isCreativeMode)
 					ammo.damageItem(1, (EntityLiving) player);
 				shootDelay = type.shootDelay;
-				if (!worldObj.isRemote)
+				if (!world.isRemote)
 				{
-					worldObj.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(worldObj, 
+					world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world, 
 							(EntityLivingBase) player, 
 							bullet.bulletSpread * type.bulletSpread, 
 							type.damage, 
@@ -260,7 +260,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (soundDelay <= 0)
 				{
 					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
-					//worldObj.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
+					//world.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
 
 					soundDelay = type.shootSoundLength;
@@ -285,7 +285,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			return true;
 		}
-		if (!worldObj.isRemote)
+		if (!world.isRemote)
 		{
 			//If this is the player currently using this MG, dismount
 			if(gunner == player)
@@ -317,7 +317,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 					ammo = player.inventory.getStackInSlot(slot);
 					player.inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
-					worldObj.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+					world.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
 			
@@ -329,7 +329,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(player == null)
 			return;
-		Side side = worldObj.isRemote ? Side.CLIENT : Side.SERVER;
+		Side side = world.isRemote ? Side.CLIENT : Side.SERVER;
 		if(PlayerHandler.getPlayerData(player, side) == null)
 			return;
 		if(mounting)
@@ -361,12 +361,12 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public void setDead()
 	{
 		// Drop gun
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			if(TeamsManager.weaponDrops == 2)
 			{
-				EntityGunItem gunEntity = new EntityGunItem(worldObj, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
-				worldObj.spawnEntity(gunEntity);
+				EntityGunItem gunEntity = new EntityGunItem(world, posX, posY, posZ, new ItemStack(type.getItem()), Arrays.asList(ammo));
+				world.spawnEntity(gunEntity);
 			}
 			else if(TeamsManager.weaponDrops == 1)
 			{
@@ -404,7 +404,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		blockY = nbttagcompound.getInteger("BlockY");
 		blockZ = nbttagcompound.getInteger("BlockZ");
 		direction = nbttagcompound.getByte("Dir");
-		ammo = ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("Ammo"));
+		ammo = new ItemStack(nbttagcompound.getCompoundTag("Ammo"));
 	}
 
 	@Override
@@ -444,7 +444,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;

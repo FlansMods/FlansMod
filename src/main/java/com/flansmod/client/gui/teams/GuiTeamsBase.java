@@ -38,7 +38,7 @@ public class GuiTeamsBase extends GuiScreen
 	{
 		super();
 		mc = Minecraft.getMinecraft();
-		player = mc.thePlayer;
+		player = mc.player;
 		itemRenderer = mc.getRenderItem();
 	}
 	

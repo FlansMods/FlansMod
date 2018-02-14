@@ -113,7 +113,7 @@ public class FlansModApocalypse
 		sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.rock).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setCreativeTab(tabApocalypse);
+		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setCreativeTab(tabApocalypse);
 		GameRegistry.registerBlock(blockLabStone, "labStone");
 		
 		//Power Cube

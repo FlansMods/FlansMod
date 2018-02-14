@@ -134,7 +134,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 				int amount = 1;
 				int damage = 0;
 				String[] itemNames = split[1].split("\\+");
-				for(Object object : Item.itemRegistry)
+				for(Object object : Item.REGISTRY)
 				{
 					Item item = (Item)object;
 					if(item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals(itemNames[0]) || (item.getUnlocalizedName().split("\\.").length > 1 && item.getUnlocalizedName().split("\\.")[1].equals(itemNames[0]))))

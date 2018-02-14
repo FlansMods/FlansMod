@@ -17,9 +17,9 @@ import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -836,9 +836,9 @@ public class ModelRendererTurbo extends ModelRenderer
 	 */
 	public void addBox(float x, float y, float z, float w, float h, float d)
 	{
-		int rw = MathHelper.ceiling_float_int(w);
-		int rh = MathHelper.ceiling_float_int(h);
-		int rd = MathHelper.ceiling_float_int(d);
+		int rw = MathHelper.ceil(w);
+		int rh = MathHelper.ceil(h);
+		int rd = MathHelper.ceil(d);
 		w -= rw;
 		h -= rh;
 		d -= rd;
@@ -1847,7 +1847,7 @@ public class ModelRendererTurbo extends ModelRenderer
 			PositionTextureVertex[] verts = faces[i].vertexPositions;
 			for(int j = 0; j < verts.length; j++)
 			{
-				verts[j].vector3D = new Vec3(verts[j].vector3D.xCoord * (x ? -1 : 1), verts[j].vector3D.yCoord * (y ? -1 : 1), verts[j].vector3D.zCoord * (z ? -1 : 1));	
+				verts[j].vector3D = new Vec3d(verts[j].vector3D.x * (x ? -1 : 1), verts[j].vector3D.y * (y ? -1 : 1), verts[j].vector3D.z * (z ? -1 : 1));	
 
 			}
 			if (x ^ y ^ z)

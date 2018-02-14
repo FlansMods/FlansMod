@@ -7,10 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
@@ -81,7 +81,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 				|| !(getEntityItem().getItem() instanceof ItemGun))
 			setDead();
 
-		if (!worldObj.isRemote && ammoStacks == null)
+		if (!world.isRemote && ammoStacks == null)
 			setDead();
 
 		prevPosX = posX;
@@ -100,7 +100,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 
 		if (onGround) {
 			var2 = 0.58800006F;
-			Block block = worldObj.getBlockState(
+			Block block = world.getBlockState(
 					new BlockPos(MathHelper.floor(posX), MathHelper
 							.floor_double(getEntityBoundingBox().minY) - 1,
 							MathHelper.floor(posZ))).getBlock();
@@ -122,11 +122,11 @@ public class EntityGunItem extends EntityItemCustomRender {
 
 		ItemStack item = getDataWatcher().getWatchableObjectItemStack(10);
 
-		if (!worldObj.isRemote && age >= lifespan) {
+		if (!world.isRemote && age >= lifespan) {
 			if (item != null) {
 				ItemExpireEvent event = new ItemExpireEvent(this,
 						(item.getItem() == null ? 6000 : item.getItem()
-								.getEntityLifespan(item, worldObj)));
+								.getEntityLifespan(item, world)));
 				if (MinecraftForge.EVENT_BUS.post(event)) {
 					lifespan += event.extraLife;
 				} else {
@@ -142,7 +142,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 		}
 
 		// Temporary fire glitch fix
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			extinguish();
 	}
 
@@ -153,7 +153,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (ammoStacks != null && ammoStacks.size() > 0) {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
@@ -190,12 +190,12 @@ public class EntityGunItem extends EntityItemCustomRender {
 	@Override
 	public boolean interactFirst(EntityPlayer player) // interact
 	{
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			return true;
 		EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
 		TeamsManager.getInstance().playerLoot(event);
 		if (!event.isCanceled()) {
-			ItemStack currentItem = player.getCurrentEquippedItem();
+			ItemStack currentItem = player.getHeldItemMainhand();
 			if (currentItem != null && currentItem.getItem() instanceof ItemGun) {
 				GunType gunType = ((ItemGun) currentItem.getItem()).GetType();
 				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
@@ -211,9 +211,9 @@ public class EntityGunItem extends EntityItemCustomRender {
 						}
 					}
 				}
-				EntityGunItem newGunItem = new EntityGunItem(worldObj, posX,
+				EntityGunItem newGunItem = new EntityGunItem(world, posX,
 						posY, posZ, currentItem.copy(), newAmmoStacks);
-				worldObj.spawnEntity(newGunItem);
+				world.spawnEntity(newGunItem);
 				player.inventory.setInventorySlotContents(
 						player.inventory.currentItem, getEntityItem());
 				for (ItemStack stack : ammoStacks) {

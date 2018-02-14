@@ -17,38 +17,40 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -199,7 +201,7 @@ public class TeamsManager
 		for(ITeamObject object : objects)
 			object.tick();
 		if(overrideHunger && currentRound != null)
-			for(World world : FMLServerHandler.instance().getServer().worldServers)
+			for(World world : FMLServerHandler.instance().getServer().worlds)
 				for(Object player : world.playerEntities)
 					((EntityPlayer)player).getFoodStats().addStats(20, 10F);
 		
@@ -504,10 +506,10 @@ public class TeamsManager
 	}
 			
 	@SubscribeEvent
-	public void onPlayerInteract(EntityInteractEvent event)
+	public void onPlayerInteract(EntityInteract event)
 	{
-		if(event.entityPlayer.inventory.getCurrentItem() != null && event.entityPlayer.inventory.getCurrentItem().getItem() instanceof ItemOpStick)
-			((ItemOpStick)event.entityPlayer.inventory.getCurrentItem().getItem()).clickedEntity(event.entityPlayer.world, event.entityPlayer, event.target);
+		if(event.getEntityPlayer().inventory.getCurrentItem() != null && event.getEntityPlayer().inventory.getCurrentItem().getItem() instanceof ItemOpStick)
+			((ItemOpStick)event.getEntityPlayer().inventory.getCurrentItem().getItem()).clickedEntity(event.getEntityPlayer().world, event.getEntityPlayer(), event.getTarget());
 	}	
 	
 	/** Stop damage being taken when it shouldn't 
@@ -530,21 +532,21 @@ public class TeamsManager
 	{
 		if(!enabled || currentRound == null)
 			return;
-		if(event.entity instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP player = (EntityPlayerMP)event.entity;
+			EntityPlayerMP player = (EntityPlayerMP)event.getEntity();
 			PlayerData data = PlayerHandler.getPlayerData(player);
-			DamageSource source = event.source;
+			DamageSource source = event.getSource();
 			
-			if(data.team == Team.spectators && source != DamageSource.generic)
+			if(data.team == Team.spectators && source != DamageSource.GENERIC)
 			{
 				event.setCanceled(true);
 				return;
 			}
 			
-			if(source instanceof EntityDamageSource && source.getEntity() instanceof EntityPlayerMP)
+			if(source instanceof EntityDamageSource && source.getImmediateSource() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP attacker = ((EntityPlayerMP) source.getEntity());
+				EntityPlayerMP attacker = ((EntityPlayerMP) source.getImmediateSource());
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
 				if(attackerData == null)
@@ -595,12 +597,12 @@ public class TeamsManager
 			return;
 		if(currentRound != null)
 		{
-			currentRound.gametype.entityKilled(event.entity, event.source);
+			currentRound.gametype.entityKilled(event.getEntity(), event.getSource());
 		}
 		
-		if(event.entity instanceof EntityPlayerMP)
+		if(event.getEntity() instanceof EntityPlayerMP)
 		{
-			OnPlayerKilled((EntityPlayerMP)event.entity, event.source);
+			OnPlayerKilled((EntityPlayerMP)event.getEntity(), event.getSource());
 		}
 	}
 	
@@ -616,38 +618,38 @@ public class TeamsManager
 	@SubscribeEvent
 	public void entityJoinedWorld(EntityJoinWorldEvent event)
 	{
-		if(event.entity instanceof ITeamBase)
+		if(event.getEntity() instanceof ITeamBase)
 		{
-			registerBase((ITeamBase)event.entity);
+			registerBase((ITeamBase)event.getEntity());
 		}
-		if(event.entity instanceof ITeamObject)
+		if(event.getEntity() instanceof ITeamObject)
 		{
-			objects.add((ITeamObject)event.entity);
+			objects.add((ITeamObject)event.getEntity());
 		}	
 	}
 	
 	@SubscribeEvent
-	public void playerUseEntity(EntityInteractEvent event)
+	public void playerUseEntity(EntityInteract event)
 	{
 		if(!enabled)
 			return;
-		if(event.entityPlayer.world.isRemote)
+		if(event.getEntityPlayer().world.isRemote)
 			return;
 
-		ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
+		ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
 		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 		{
 			//if(event.target instanceof ITeamObject)
-			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamObject)event.target);
+			//	((ItemOpStick)currentItem.getItem()).clickedObject(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamObject)event.target);
 			//if(event.target instanceof ITeamBase)
-			//	((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamBase)event.target);
+			//	((ItemOpStick)currentItem.getItem()).clickedBase(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamBase)event.target);
 		}
 		else if(currentRound != null)
 		{
-			if(event.target instanceof ITeamObject)
-				currentRound.gametype.objectClickedByPlayer((ITeamObject)event.target, (EntityPlayerMP)event.entityPlayer);
-			if(event.target instanceof ITeamBase)
-				currentRound.gametype.baseClickedByPlayer((ITeamBase)event.target, (EntityPlayerMP)event.entityPlayer);
+			if(event.getTarget() instanceof ITeamObject)
+				currentRound.gametype.objectClickedByPlayer((ITeamObject)event.getTarget(), (EntityPlayerMP)event.getEntityPlayer());
+			if(event.getTarget() instanceof ITeamBase)
+				currentRound.gametype.baseClickedByPlayer((ITeamBase)event.getTarget(), (EntityPlayerMP)event.getEntityPlayer());
 		}
 	}
 	
@@ -656,31 +658,31 @@ public class TeamsManager
 	{
 		if(!enabled)
 			return;
-		if(event.action == Action.LEFT_CLICK_BLOCK && event.entityPlayer.getCurrentEquippedItem() != null && event.entityPlayer.getCurrentEquippedItem().getItem() instanceof ItemGun)
+		if(event.getHand() == EnumHand.MAIN_HAND && event.getEntityPlayer().getHeldItemMainhand() != null && event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			event.setCanceled(true);
 			return;	
 		}
 		
-		if(event.entityPlayer.world.isRemote)
+		if(event.getEntityPlayer().world.isRemote)
 			return;
-		TileEntity te = event.entityPlayer.world.getTileEntity(event.pos);
+		TileEntity te = event.getEntityPlayer().world.getTileEntity(event.getPos());
 		if(te != null)
 		{
-			ItemStack currentItem = event.entityPlayer.getCurrentEquippedItem();
+			ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
 			if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 			{
 				if(te instanceof ITeamObject)
-					((ItemOpStick)currentItem.getItem()).clickedObject(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamObject)te);
+					((ItemOpStick)currentItem.getItem()).clickedObject(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamObject)te);
 				if(te instanceof ITeamBase)
-					((ItemOpStick)currentItem.getItem()).clickedBase(event.entityPlayer.world, (EntityPlayerMP)event.entityPlayer, (ITeamBase)te);
+					((ItemOpStick)currentItem.getItem()).clickedBase(event.getEntityPlayer().world, (EntityPlayerMP)event.getEntityPlayer(), (ITeamBase)te);
 			}
 			else if(currentRound != null)
 			{
 				if(te instanceof ITeamObject)
-					currentRound.gametype.objectClickedByPlayer((ITeamObject)te, (EntityPlayerMP)event.entityPlayer);
+					currentRound.gametype.objectClickedByPlayer((ITeamObject)te, (EntityPlayerMP)event.getEntityPlayer());
 				if(te instanceof ITeamBase)
-					currentRound.gametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.entityPlayer);
+					currentRound.gametype.baseClickedByPlayer((ITeamBase)te, (EntityPlayerMP)event.getEntityPlayer());
 			}
 		}
 	}
@@ -692,24 +694,24 @@ public class TeamsManager
 		//First collect together guns and ammo if smart drops are enabled
 		if(weaponDrops == 2)
 		{
-			for(EntityItem entity : event.drops)
+			for(EntityItem entity : event.getDrops())
 			{
-				ItemStack stack = entity.getEntityItem();
+				ItemStack stack = entity.getItem();
 				if(stack != null && stack.getItem() != null)
 				{
 					if(stack.getItem() instanceof ItemGun)
 					{	
 						EntityGunItem gunEntity = new EntityGunItem(entity);
-						stack.stackSize = 0;
+						stack.setCount(0);
 						boolean alreadyAdded = false;
 						for(EntityItem check : dropsToThrow)
 						{
-							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)check.getEntityItem().getItem()).GetType())
+							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)check.getItem().getItem()).GetType())
 								alreadyAdded = true;
 						}
 						if(!alreadyAdded)
 						{
-							event.entityPlayer.world.spawnEntity(gunEntity);
+							event.getEntityPlayer().world.spawnEntity(gunEntity);
 							dropsToThrow.add(gunEntity);
 						}
 					}
@@ -720,26 +722,26 @@ public class TeamsManager
 		for(EntityItem entity : dropsToThrow)
 		{
 			EntityGunItem gunEntity = (EntityGunItem)entity;
-			GunType gunType = ((ItemGun)gunEntity.getEntityItem().getItem()).GetType();
-			for(EntityItem ammoEntity : event.drops)
+			GunType gunType = ((ItemGun)gunEntity.getItem().getItem()).GetType();
+			for(EntityItem ammoEntity : event.getDrops())
 			{
-				ItemStack ammoItemstack = ammoEntity.getEntityItem();
+				ItemStack ammoItemstack = ammoEntity.getItem();
 				if(ammoItemstack != null && ammoItemstack.getItem() instanceof ItemShootable)
 				{
 					ShootableType bulletType = ((ItemShootable)ammoItemstack.getItem()).type;
 					if(gunType.isAmmo(bulletType))
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());
-						ammoItemstack.stackSize = 0;
+						ammoItemstack.setCount(0);
 					}	
 				}
 			}
 		}
 		//Now check the remaining items to see if they should be dropped
-		for(EntityItem entity : event.drops)
+		for(EntityItem entity : event.getDrops())
 		{
-			ItemStack stack = entity.getEntityItem();
-			if(stack != null && stack.getItem() != null && stack.stackSize > 0)
+			ItemStack stack = entity.getItem();
+			if(stack != null && stack.getItem() != null && stack.getCount() > 0)
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
 				{
@@ -753,7 +755,7 @@ public class TeamsManager
 				}
 			}
 		}
-		event.drops.removeAll(dropsToThrow);
+		event.getDrops().removeAll(dropsToThrow);
 
 	}
 	
@@ -761,13 +763,13 @@ public class TeamsManager
 	@SubscribeEvent
 	public void playerLoot(EntityItemPickupEvent event)
 	{
-		if(event.entity instanceof EntityPlayer)
+		if(event.getEntity() instanceof EntityPlayer)
 		{
-			ItemStack itemStack = event.item.getEntityItem();
-			PlayerData data = PlayerHandler.getPlayerData(event.entityPlayer);
+			ItemStack itemStack = event.getItem().getItem();
+			PlayerData data = PlayerHandler.getPlayerData(event.getEntityPlayer());
 			if(enabled && currentRound != null && data != null)
 			{
-				if(data.team == Team.spectators || !currentRound.gametype.playerCanLoot(itemStack, InfoType.getType(itemStack), event.entityPlayer, data.team))
+				if(data.team == Team.spectators || !currentRound.gametype.playerCanLoot(itemStack, InfoType.getType(itemStack), event.getEntityPlayer(), data.team))
 					event.setCanceled(true);
 			}
 		}
@@ -820,13 +822,13 @@ public class TeamsManager
 		//On the first spawn, we don't kill the player, we simply move them over, so do a /tp like command
 		if(firstSpawn)
 		{
-			Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(playerMP);
+			Vec3d spawnPoint = currentRound.gametype.getSpawnPoint(playerMP);
 			if(spawnPoint != null)
 			{
-				//player.setPositionAndUpdate(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord);
-				playerMP.mountEntity((Entity)null);
-				EnumSet enumset = EnumSet.noneOf(S08PacketPlayerPosLook.EnumFlags.class);
-				playerMP.playerNetServerHandler.setPlayerLocation(spawnPoint.xCoord, spawnPoint.yCoord, spawnPoint.zCoord, 0F, 0F, enumset);
+				//player.setPositionAndUpdate(spawnPoint.x, spawnPoint.y, spawnPoint.z);
+				playerMP.startRiding((Entity)null);
+				EnumSet enumset = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
+				playerMP.connection.setPlayerLocation(spawnPoint.x, spawnPoint.y, spawnPoint.z, 0F, 0F, enumset);
 				//playerMP.setRotationYawHead(f);
 			}
 		}
@@ -852,9 +854,9 @@ public class TeamsManager
 		
 		PlayerData data = PlayerHandler.getPlayerData(player);
 
-		Vec3 spawnPoint = currentRound.gametype.getSpawnPoint(player);
+		Vec3d spawnPoint = currentRound.gametype.getSpawnPoint(player);
 		if(spawnPoint != null)
-			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.xCoord), MathHelper.floor(spawnPoint.yCoord) + 1, MathHelper.floor(spawnPoint.zCoord)), 0);
+			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.x), MathHelper.floor(spawnPoint.y) + 1, MathHelper.floor(spawnPoint.z)), 0);
 		else
 			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.newTeam == null ? "null" : data.newTeam.name));
 	}
@@ -864,8 +866,7 @@ public class TeamsManager
 	{
 		if(playerIsOp(player) && PlayerHandler.getPlayerData(player).builder)
 			return;
-		player.inventory.armorInventory = new ItemStack[4];
-		player.inventory.mainInventory = new ItemStack[36];
+		player.inventory.clear();
 		player.heal(9001);
 		if(forceAdventureMode)
 			player.setGameType(GameType.ADVENTURE);
@@ -884,7 +885,7 @@ public class TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp = FMLServerHandler.instance().getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -907,7 +908,7 @@ public class TeamsManager
 	
 	public boolean playerIsOp(EntityPlayer player)
 	{ 
-		return FMLServerHandler.instance().getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
+		return FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(player.getGameProfile());
 	}
 	
 	public boolean autoBalance() {
@@ -952,7 +953,7 @@ public class TeamsManager
 		//Default to spectator
 		if(!isValid)
 		{
-			player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + " for it is invalid. Please try again"));
+			player.sendMessage(new TextComponentString("You may not join " + selectedTeam.name + " for it is invalid. Please try again"));
 			FlansMod.log(player.getName() + " tried to spawn on an invalid team : " + selectedTeam.name);
 			selectedTeam = Team.spectators;
 		}
@@ -964,8 +965,7 @@ public class TeamsManager
 			if(data.team != null)
 				data.team.removePlayer(player);
 			data.newTeam = data.team = Team.spectators;
-			player.inventory.armorInventory = new ItemStack[4];
-			player.inventory.mainInventory = new ItemStack[36];
+			player.inventory.clear();
 			data.team.addPlayer(player);
 			player.heal(9001);
 			respawnPlayer(player, true);
@@ -976,7 +976,7 @@ public class TeamsManager
 			Team otherTeam = currentRound.getOtherTeam(selectedTeam);
 			if(autoBalance() && selectedTeam.members.size() > otherTeam.members.size() + 1)
 			{
-				player.addChatMessage(new ChatComponentText("You may not join " + selectedTeam.name + " due to imbalance. Please try again"));
+				player.sendMessage(new TextComponentString("You may not join " + selectedTeam.name + " due to imbalance. Please try again"));
 				sendTeamsMenuToPlayer(player);
 				return;
 			}
@@ -999,7 +999,7 @@ public class TeamsManager
 		//Validate class
 		if(!data.newTeam.classes.contains(playerClass))
 		{
-			player.addChatMessage(new ChatComponentText("You may not select " + playerClass.name + ". Please try again"));
+			player.sendMessage(new TextComponentString("You may not select " + playerClass.name + ". Please try again"));
 			FlansMod.log(player.getName() + " tried to pick an invalid class : " + playerClass.name);
 			//sendClassMenuToPlayer(player);
 			return;
@@ -1024,7 +1024,7 @@ public class TeamsManager
 		{
 			currentRound.gametype.playerChoseNewClass(player, playerClass);
 			data.newPlayerClass = playerClass;
-			player.addChatMessage(new ChatComponentText("You will respawn with the " + playerClass.GetName() + " class"));
+			player.sendMessage(new TextComponentString("You will respawn with the " + playerClass.GetName() + " class"));
 		}
 		//2 : Player switched team
 		else if(data.team != null && data.team != data.newTeam)
@@ -1032,7 +1032,7 @@ public class TeamsManager
 			messageAll(player.getName() + " switched to \u00a7" + data.newTeam.textColour + data.newTeam.name);
 			currentRound.gametype.playerDefected(player, data.team, data.newTeam);
 			setPlayersNextSpawnpoint(player);
-			player.attackEntityFrom(DamageSource.generic, 10000F);
+			player.attackEntityFrom(DamageSource.GENERIC, 10000F);
 			if(data.team != null)
 				data.team.removePlayer(player);
 			data.newTeam.addPlayer(player);
@@ -1067,31 +1067,30 @@ public class TeamsManager
 		if(team == null)
 			return;
 		
-		player.inventory.armorInventory = new ItemStack[4];
-		player.inventory.mainInventory = new ItemStack[36];
+		player.inventory.clear();
 		
 		//Set team armour
 		if(team.hat != null)
-			player.inventory.armorInventory[3] = team.hat.copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.HEAD, team.hat.copy());
 		if(team.chest != null)
-			player.inventory.armorInventory[2] = team.chest.copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.CHEST, team.chest.copy());
 		if(team.legs != null)
-			player.inventory.armorInventory[1] = team.legs.copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.LEGS, team.legs.copy());
 		if(team.shoes != null)
-			player.inventory.armorInventory[0] = team.shoes.copy();		
+			player.setItemStackToSlot(EntityEquipmentSlot.FEET, team.shoes.copy());	
 		
 		if(playerClass == null)
 			return;
 		
 		//Override with class armour
 		if(playerClass.GetHat() != null)
-			player.inventory.armorInventory[3] = playerClass.GetHat().copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.HEAD, playerClass.GetHat().copy());
 		if(playerClass.GetChest() != null)
-			player.inventory.armorInventory[2] = playerClass.GetChest().copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.CHEST, playerClass.GetChest().copy());
 		if(playerClass.GetLegs() != null)
-			player.inventory.armorInventory[1] = playerClass.GetLegs().copy();
+			player.setItemStackToSlot(EntityEquipmentSlot.LEGS, playerClass.GetLegs().copy());
 		if(playerClass.GetShoes() != null)
-			player.inventory.armorInventory[0] = playerClass.GetShoes().copy();	
+			player.setItemStackToSlot(EntityEquipmentSlot.FEET, playerClass.GetShoes().copy());	
 		
 		for(ItemStack stack : playerClass.GetStartingItems())
 		{
@@ -1143,16 +1142,16 @@ public class TeamsManager
 	@SubscribeEvent
 	public void worldData(WorldEvent event)
 	{
-		if(event.world.isRemote)
+		if(event.getWorld().isRemote)
 			return;
 		if(event instanceof WorldEvent.Load)
 		{
-			loadPerWorldData(event, event.world);
-			savePerWorldData(event, event.world);
+			loadPerWorldData(event, event.getWorld());
+			savePerWorldData(event, event.getWorld());
 		}
 		if(event instanceof WorldEvent.Save)
 		{
-			savePerWorldData(event, event.world);
+			savePerWorldData(event, event.getWorld());
 		}
 	}
 	
@@ -1161,7 +1160,7 @@ public class TeamsManager
 		//Reset the teams manager before loading a new world
 		reset();
 		//Read the teams dat file
-		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionType().getName() + ".dat");
 		if(!checkFileExists(file))
 			return;
 		try
@@ -1188,7 +1187,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionName() + ".dat");
+		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimension() + ".dat");
 		checkFileExists(file);
 		try
 		{
@@ -1376,7 +1375,7 @@ public class TeamsManager
 	
 	public static EntityPlayerMP getPlayer(String username)
 	{
-		return FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(username);
+		return FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUsername(username);
 	}
 	
 	public static void log(String s)
@@ -1386,15 +1385,15 @@ public class TeamsManager
 	
 	public static void messagePlayer(EntityPlayerMP player, String s)
 	{
-		player.addChatComponentMessage(new ChatComponentText(s));
+		player.sendMessage(new TextComponentString(s));
 	}
 	
 	public static void messageAll(String s)
 	{
 		FlansMod.log("Teams Announcement : " + s);
-		for(EntityPlayerMP player : (List<EntityPlayerMP>)FMLServerHandler.instance().getServer().getConfigurationManager().playerEntityList)
+		for(EntityPlayerMP player : getPlayers())
 		{
-			player.addChatComponentMessage(new ChatComponentText(s));
+			player.sendMessage(new TextComponentString(s));
 		}
 	}
 	
@@ -1403,9 +1402,9 @@ public class TeamsManager
 		FlansMod.getPacketHandler().sendTo(packet, player);
 	}
 	
-	public static List<EntityPlayer> getPlayers()
+	public static List<EntityPlayerMP> getPlayers()
 	{
-		return FMLServerHandler.instance().getServer().getConfigurationManager().playerEntityList;
+		return FMLServerHandler.instance().getServer().getPlayerList().getPlayers();
 	}
 
 	/** Returns the team associated with the given ID */

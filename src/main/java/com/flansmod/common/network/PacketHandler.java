@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.FlansMod;
 
@@ -136,7 +137,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				case SERVER :
 				{
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-					EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
+					EntityPlayer player = ((NetHandlerPlayServer)netHandler).player;
 					if(!receivedPacketsServer.containsKey(player.getName()))
 						receivedPacketsServer.put(player.getName(), new ConcurrentLinkedQueue<PacketBase>());
 					receivedPacketsServer.get(player.getName()).offer(packet);
@@ -165,7 +166,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		for(String playerName : receivedPacketsServer.keySet())
 		{
 			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
-			EntityPlayerMP player = FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerByUsername(playerName); 
+			EntityPlayerMP player = FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUsername(playerName); 
 			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
 			{
 				packet.handleServerSide(player);
@@ -242,7 +243,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	@SideOnly(Side.CLIENT)
 	private EntityPlayer getClientPlayer() 
 	{
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 	
 	/** Send a packet to all players */
@@ -288,31 +289,31 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/** Send a packet to all players */
 	public void sendToAll(Packet packet)
 	{
-		FMLServerHandler.instance().getServer().getConfigurationManager().sendPacketToAllPlayers(packet);
+		FMLServerHandler.instance().getServer().getPlayerList().sendPacketToAllPlayers(packet);
 	}
 
 	/** Send a packet to a player */
 	public void sendTo(Packet packet, EntityPlayerMP player)
 	{
-		player.playerNetServerHandler.sendPacket(packet);
+		player.connection.sendPacket(packet);
 	}	
 	
 	/** Send a packet to all around a point */
 	public void sendToAllAround(Packet packet, NetworkRegistry.TargetPoint point)
 	{
-		FMLServerHandler.instance().getServer().getConfigurationManager().sendToAllNear(point.x, point.y, point.z, point.range, point.dimension, packet);
+		FMLServerHandler.instance().getServer().getPlayerList().sendToAllNearExcept(null, point.x, point.y, point.z, point.range, point.dimension, packet);
 	}
 	
 	/** Send a packet to all in a dimension */
 	public void sendToDimension(Packet packet, int dimensionID)
 	{
-		FMLServerHandler.instance().getServer().getConfigurationManager().sendPacketToAllPlayersInDimension(packet, dimensionID);
+		FMLServerHandler.instance().getServer().getPlayerList().sendPacketToAllPlayersInDimension(packet, dimensionID);
 	}
 	
 	/** Send a packet to the server */
 	public void sendToServer(Packet packet)
 	{
-		Minecraft.getMinecraft().thePlayer.sendQueue.addToSendQueue(packet);
+		Minecraft.getMinecraft().player.connection.sendPacket(packet);
 	}
 
 	/** Send a packet to all around a point without having to create one's own TargetPoint */

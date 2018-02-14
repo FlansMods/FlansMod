@@ -13,7 +13,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -29,10 +28,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -44,7 +43,7 @@ public class BlockPaintjobTable extends BlockContainer
 {	
 	public BlockPaintjobTable() 
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 		setHardness(2F);
 		setResistance(4F);
 	    setUnlocalizedName("paintjobTable");
@@ -54,7 +53,7 @@ public class BlockPaintjobTable extends BlockContainer
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-	    return world.doesBlockHaveSolidTopSurface(world, pos.add(0, -1, 0));
+	    return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
 	}
 	
 	@Override
@@ -62,13 +61,7 @@ public class BlockPaintjobTable extends BlockContainer
 	{
 		return new TileEntityPaintjobTable();
 	}
-	
-	@Override
-    public int getRenderType()
-    {
-        return 3;
-    }
-		
+			
     @Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float par7, float par8, float par9)
     {

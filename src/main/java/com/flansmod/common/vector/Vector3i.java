@@ -2,7 +2,7 @@ package com.flansmod.common.vector;
 
 import java.nio.FloatBuffer;
 
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 public class Vector3i extends Vector 
 {
@@ -20,9 +20,9 @@ public class Vector3i extends Vector
 		set(x, y, z);
 	}
 	
-	public Vector3i(Vec3 vec)
+	public Vector3i(Vec3d vec)
 	{
-		this((int)vec.xCoord, (int)vec.yCoord, (int)vec.zCoord);
+		this((int)vec.x, (int)vec.y, (int)vec.z);
 	}
 	
 	public Vector3i(double x, double y, double z) 
@@ -35,9 +35,9 @@ public class Vector3i extends Vector
 		this(v.x, v.y, v.z);
 	}
 
-	public Vec3 toVec3()
+	public Vec3d toVec3()
 	{
-		return new Vec3(x, y, z);
+		return new Vec3d(x, y, z);
 	}
 
 	public void set(int x, int y, int z) 

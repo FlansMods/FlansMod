@@ -1,9 +1,9 @@
 package com.flansmod.client.tmt;
 
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 public abstract class TransformGroup
 {
 	public abstract double getWeight();
-	public abstract Vec3 doTransformation(PositionTransformVertex vertex);
+	public abstract Vec3d doTransformation(PositionTransformVertex vertex);
 }

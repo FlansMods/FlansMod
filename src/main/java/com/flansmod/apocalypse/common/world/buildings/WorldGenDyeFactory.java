@@ -55,7 +55,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		
 		//Build walls
 		fillArea(world, x, y, z, x + 6, y + 1, z + 16, Blocks.cobblestone.getDefaultState());
-		fillArea(world, x, y + 1, z, x + 6, y + 5, z + 16, Blocks.planks.getDefaultState());
+		fillArea(world, x, y + 1, z, x + 6, y + 5, z + 16, Blocks.PLANKS.getDefaultState());
 		//Horizontal logs
 		fillArea(world, x, y + 4, z, x + 6, y + 5, z + 1, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
 		fillArea(world, x, y + 4, z + 15, x + 6, y + 5, z + 16, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
@@ -66,9 +66,9 @@ public class WorldGenDyeFactory extends WorldGenFlan
 			for(int k = 0; k < 16; k += 5)
 				fillArea(world, x + i, y + 1, z + k, x + i + 1, y + 6, z + k + 1, Blocks.log.getDefaultState());
 		//Hollow out
-		fillArea(world, x + 1, y, z + 1, x + 5, y + 4, z + 15, Blocks.air.getDefaultState());
+		fillArea(world, x + 1, y, z + 1, x + 5, y + 4, z + 15, Blocks.AIR.getDefaultState());
 		//Open door
-		fillArea(world, x + 5, y, z + 6, x + 6, y + 4, z + 10, Blocks.air.getDefaultState());
+		fillArea(world, x + 5, y, z + 6, x + 6, y + 4, z + 10, Blocks.AIR.getDefaultState());
 		
 		//Add tables (two random, one gun modification and one vehicle crafting)
 		world.setBlockState(new BlockPos(x + 1, y, z + 6), FlansModApocalypse.getLootGenerator().getRandomWeaponBox(rand).getDefaultState());
@@ -79,13 +79,13 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		//Build chest racks
 		for(int i = 1; i < 6; i += 3)
 			for(int k = 1; k < 6; k += 3)
-				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.oak_fence.getDefaultState());
+				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.OAK_FENCE.getDefaultState());
 		
 		for(int j = 0; j < 3; j += 2)
 		{
-			fillArea(world, x + 1, y + j, z + 2, x + 2, y + j + 1, z + 4, Blocks.chest.getDefaultState());
-			fillArea(world, x + 4, y + j, z + 2, x + 5, y + j + 1, z + 4, Blocks.chest.getDefaultState());
-			fillArea(world, x + 2, y + j, z + 1, x + 4, y + j + 1, z + 2, Blocks.chest.getDefaultState());
+			fillArea(world, x + 1, y + j, z + 2, x + 2, y + j + 1, z + 4, Blocks.CHEST.getDefaultState());
+			fillArea(world, x + 4, y + j, z + 2, x + 5, y + j + 1, z + 4, Blocks.CHEST.getDefaultState());
+			fillArea(world, x + 2, y + j, z + 1, x + 4, y + j + 1, z + 2, Blocks.CHEST.getDefaultState());
 			
 			fillChest(world, rand, x + 1, y + j, z + 2);
 			fillChest(world, rand, x + 1, y + j, z + 3);
@@ -96,7 +96,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		}
 		
 		//Build sewing table
-		fillArea(world, x + 1, y, z + 11, x + 2, y + 1, z + 15, Blocks.crafting_table.getDefaultState());
+		fillArea(world, x + 1, y, z + 11, x + 2, y + 1, z + 15, Blocks.CRAFTING_TABLE.getDefaultState());
 		fillArea(world, x + 1, y, z + 12, x + 2, y + 1, z + 14, Blocks.wooden_slab.getStateFromMeta(8));
 		
 		for(int k = 0; k < 2; k++)
@@ -126,15 +126,15 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		
 		//Create square tank
 		fillArea(world, x, y, z, x + 4, y + 1, z + 4, Blocks.cobblestone.getDefaultState());
-		fillArea(world, x, y + 1, z, x + 4, y + (tall ? 3 : 2), z + 4, Blocks.planks.getDefaultState());
+		fillArea(world, x, y + 1, z, x + 4, y + (tall ? 3 : 2), z + 4, Blocks.PLANKS.getDefaultState());
 		
 		//Cut out corners
 		for(int i = 0; i < 4; i += 3)
 			for(int k = 0; k < 4; k += 3)
-				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.air.getDefaultState());
+				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.AIR.getDefaultState());
 		
 		//Fill tank with wool
-		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.air.getDefaultState());	
-		fillArea(world, x + 1, y, z + 1, x + 3, y + (tall ? 2 : 1), z + 3, Blocks.wool.getStateFromMeta(rand.nextInt(16)));	
+		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.AIR.getDefaultState());	
+		fillArea(world, x + 1, y, z + 1, x + 3, y + (tall ? 2 : 1), z + 3, Blocks.WOOL.getStateFromMeta(rand.nextInt(16)));	
 	}
 }

@@ -3,14 +3,19 @@ package com.flansmod.common.guns;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,10 +42,10 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-    public Multimap getAttributeModifiers(ItemStack stack)
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
-        Multimap multimap = super.getAttributeModifiers(stack);
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", type.meleeDamage, 0));
+        Multimap multimap = super.getAttributeModifiers(slot, stack);
+        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
         return multimap;
     }
 	
@@ -57,8 +62,10 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
 	{
+		ItemStack stack = player.getHeldItem(hand);
+		
 		PlayerData data = PlayerHandler.getPlayerData(player, world.isRemote ? Side.CLIENT : Side.SERVER);
 		//If can throw grenade
 		if(type.canThrow && data != null && data.shootTimeRight <= 0 && data.shootTimeLeft <= 0)
@@ -75,7 +82,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 				data.remoteExplosives.add(grenade);
 			//Consume an item
 			if(!player.capabilities.isCreativeMode)
-				stack.stackSize--;
+				stack.setCount(stack.getCount() - 1);
 			//Drop an item upon throwing if necessary
 			if(type.dropItemOnThrow != null)
 			{
@@ -89,17 +96,11 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 				ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
 				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, dropStack));
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
-		return stack;
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
 	}
 	
-	@Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
-    
 	@Override
 	public InfoType getInfoType() 
 	{
@@ -107,7 +108,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 
 	@Override
-	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
 			float pitch, double motionX, double motionY, double motionZ,
 			EntityLivingBase shooter, float gunDamage,
 			InfoType shotFrom) {
@@ -116,15 +117,15 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 
 	@Override
-	public EntityShootable getEntity(World worldObj, Vector3f origin,
+	public EntityShootable getEntity(World world, Vector3f origin,
 			Vector3f direction, EntityLivingBase thrower, float spread,
 			float damage, float speed, InfoType shotFrom) 
 	{
-		return getGrenade(worldObj, thrower);
+		return getGrenade(world, thrower);
 	}
 
 	@Override
-	public EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
 			float pitch, EntityLivingBase shooter, float spread, float damage,
 			InfoType shotFrom) {
 		// TODO Auto-generated method stub
@@ -132,11 +133,11 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 
 	@Override
-	public EntityShootable getEntity(World worldObj, EntityLivingBase player,
+	public EntityShootable getEntity(World world, EntityLivingBase player,
 			float bulletSpread, float damage, float bulletSpeed, boolean b,
 			InfoType shotFrom) 
 	{
-		return getGrenade(worldObj, player);
+		return getGrenade(world, player);
 	}
 	
 	public EntityGrenade getGrenade(World world, EntityLivingBase thrower)
@@ -150,11 +151,11 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b)
+	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
-			Collections.addAll(list, type.description.split("_"));
+			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
 	

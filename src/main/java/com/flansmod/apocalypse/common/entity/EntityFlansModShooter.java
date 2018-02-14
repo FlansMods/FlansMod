@@ -158,7 +158,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				//If no bullet stack was found, reload
 				if(bulletStack == null)
 				{
-					if(reload(stack, type, worldObj, this, false, false))
+					if(reload(stack, type, world, this, false, false))
 					{
 						//Set player shoot delay to be the reload delay
 						//Set both gun delays to avoid reloading two guns at once
@@ -175,7 +175,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				else if(bulletStack.getItem() instanceof ItemShootable)
 				{
 					//Shoot
-					shoot(stack, type, worldObj, bulletStack, this, false, entity);
+					shoot(stack, type, world, bulletStack, this, false, entity);
 					//Damage the bullet item
 					damage = bulletStack.getItemDamage() + 1;
 					bulletStack.setItemDamage(damage);
@@ -293,7 +293,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				Vector3f direction = new Vector3f(target.posX - posX, (target.posY + target.getEyeHeight()) - (posY + getEyeHeight()), target.posZ - posZ).normalise(null);
 				Vector3f.add(direction, new Vector3f(rand.nextFloat() * direction.x * inaccuracy, rand.nextFloat() * direction.y * inaccuracy, rand.nextFloat() * direction.z * inaccuracy), direction);
 				ItemShootable shootableItem = (ItemShootable)bulletStack.getItem();
-				shootableItem.Shoot(worldObj,
+				shootableItem.Shoot(world,
 						origin,
 						direction,
 						gunType.getDamage(stack),

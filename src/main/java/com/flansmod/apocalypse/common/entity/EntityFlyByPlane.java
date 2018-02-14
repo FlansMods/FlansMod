@@ -24,8 +24,8 @@ public class EntityFlyByPlane extends EntityPlane
 
 		//float lookAheadDist = 20F;
 		
-		//float targetHeight = getBiomeHeight(worldObj.getBiomeGenForCoords(new BlockPos((int)(posX + motionX * lookAheadDist), (int)(posY + motionY * lookAheadDist), (int)(posZ + motionZ * lookAheadDist))));
-		//float currentTargetHeight = getBiomeHeight(worldObj.getBiomeGenForCoords(new BlockPos((int)(posX), (int)(posY), (int)(posZ))));
+		//float targetHeight = getBiomeHeight(world.getBiomeGenForCoords(new BlockPos((int)(posX + motionX * lookAheadDist), (int)(posY + motionY * lookAheadDist), (int)(posZ + motionZ * lookAheadDist))));
+		//float currentTargetHeight = getBiomeHeight(world.getBiomeGenForCoords(new BlockPos((int)(posX), (int)(posY), (int)(posZ))));
 		
 
 		//flapsPitchLeft = flapsPitchRight += (Math.max(currentTargetHeight, targetHeight) - (float)posY) * 0.1F;

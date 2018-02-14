@@ -33,13 +33,13 @@ public class InventoryGunModTable extends InventoryBasic
 		{
 			busy = true;
 			NBTTagCompound attachmentTags = gunStack.getTagCompound().getCompoundTag("attachments");
-			setInventorySlotContents(1, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("barrel"))); 
-			setInventorySlotContents(2, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("scope"))); 
-			setInventorySlotContents(3, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("stock"))); 
-			setInventorySlotContents(4, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("grip")));
+			setInventorySlotContents(1, new ItemStack(attachmentTags.getCompoundTag("barrel"))); 
+			setInventorySlotContents(2, new ItemStack(attachmentTags.getCompoundTag("scope"))); 
+			setInventorySlotContents(3, new ItemStack(attachmentTags.getCompoundTag("stock"))); 
+			setInventorySlotContents(4, new ItemStack(attachmentTags.getCompoundTag("grip")));
 			genericScroll = 0;
 			for(int i = 0; i < Math.min(gunType.numGenericAttachmentSlots, 8); i++)
-				setInventorySlotContents(5 + i, ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("generic_" + i)));
+				setInventorySlotContents(5 + i, new ItemStack(attachmentTags.getCompoundTag("generic_" + i)));
 			busy = false;
 		}
 		//Else we changed an attachment

@@ -3,7 +3,7 @@ package com.flansmod.apocalypse.common.entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityAIGoSomewhere extends EntityAIBase 
 {
@@ -32,17 +32,17 @@ public class EntityAIGoSomewhere extends EntityAIBase
     public boolean shouldExecute()
     {
         {
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntityCreature, 5, 4, new Vec3(theEntityCreature.posX + directionX, theEntityCreature.posY, theEntityCreature.posZ + directionZ));
+            Vec3d Vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntityCreature, 5, 4, new Vec3d(theEntityCreature.posX + directionX, theEntityCreature.posY, theEntityCreature.posZ + directionZ));
 
-            if (vec3 == null)
+            if (Vec3d == null)
             {
                 return false;
             }
             else
             {
-                this.randPosX = vec3.xCoord;
-                this.randPosY = vec3.yCoord;
-                this.randPosZ = vec3.zCoord;
+                this.randPosX = Vec3d.x;
+                this.randPosY = Vec3d.y;
+                this.randPosZ = Vec3d.z;
                 return true;
             }
         }

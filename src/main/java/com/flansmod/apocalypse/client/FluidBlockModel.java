@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -139,12 +139,12 @@ public class FluidBlockModel implements ISmartBlockModel
 		return new SimpleBakedModel(Collections.emptyList(), faceQuads, false, false, block.getFluid().getStillIcon(), null);
 	}
 	
-	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f vec3, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing)
+	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f Vec3d, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing)
 	{
-		return createQuad(vec1, vec2, vec3, vec4, sprite, facing, -1000F);
+		return createQuad(vec1, vec2, Vec3d, vec4, sprite, facing, -1000F);
 	}
 	
-	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f vec3, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing, float flowDir)
+	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f Vec3d, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing, float flowDir)
 	{
 		int[] data = new int[28];
 		int shade = getShade(facing);
@@ -156,7 +156,7 @@ public class FluidBlockModel implements ISmartBlockModel
 			zFlow = MathHelper.cos(flowDir) * 0.25F;
 		}
 		
-		Vector3f[] vectors = {vec1, vec2, vec3, vec4};
+		Vector3f[] vectors = {vec1, vec2, Vec3d, vec4};
 		for(int i = 0; i < 4; i++)
 		{
 			Vector3f vec = vectors[i];

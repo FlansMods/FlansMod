@@ -55,7 +55,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 		
 		int xScaled = xAdjusted / distance;
 		int zScaled = zAdjusted / distance;
-		Random rand = worldObj.setRandomSeed(xScaled, zScaled, 10387312);
+		Random rand = world.setRandomSeed(xScaled, zScaled, 10387312);
 		//De-scale. Get co-ordinates of the corner of this village-spawning-area
 		xScaled *= distance;
 		zScaled *= distance;
@@ -63,7 +63,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 		xScaled += rand.nextInt(distance - something);
 		zScaled += rand.nextInt(distance - something);
 		
-		if(xAdjusted == xScaled && zAdjusted == zScaled && worldObj.getWorldChunkManager().areBiomesViable(xAdjusted * 16 + 8, zAdjusted * 16 + 8, 0, villageSpawnBiomes))
+		if(xAdjusted == xScaled && zAdjusted == zScaled && world.getWorldChunkManager().areBiomesViable(xAdjusted * 16 + 8, zAdjusted * 16 + 8, 0, villageSpawnBiomes))
 		{
 			return true;
 		}
@@ -75,7 +75,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 	@Override
 	protected StructureStart getStructureStart(int x, int z) 
 	{
-		return new Start(worldObj, rand, x, z, terrainType);
+		return new Start(world, rand, x, z, terrainType);
 	}
 
 	public static class Start extends StructureStart
@@ -168,7 +168,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 	            				BlockPos pos = new BlockPos(i, j, k);
 	            				if(world.getBlockState(pos) != Blocks.oak_door)
 	            					if(dX * dX + dY * dY + dZ * dZ + rand.nextFloat() < holeRadius)
-	            						world.setBlockState(pos, Blocks.air.getDefaultState(), 2);
+	            						world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 	            			}
 	            		}
 	            	}

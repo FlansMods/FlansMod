@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import com.flansmod.common.guns.ItemBullet;
 import com.flansmod.common.parts.EnumPartCategory;
@@ -64,18 +64,18 @@ public class DriveableData implements IInventory
 		missiles = new ItemStack[numMissiles];
 		cargo = new ItemStack[numCargo];
 		for(int i = 0; i < numGuns; i++)
-			ammo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Ammo " + i));
+			ammo[i] = new ItemStack(tag.getCompoundTag("Ammo " + i));
 		
 		for(int i = 0; i < numBombs; i++)
-			bombs[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Bombs " + i));
+			bombs[i] = new ItemStack(tag.getCompoundTag("Bombs " + i));
 
 		for(int i = 0; i < numMissiles; i++)
-			missiles[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Missiles " + i));
+			missiles[i] = new ItemStack(tag.getCompoundTag("Missiles " + i));
 
  		for(int i = 0; i < numCargo; i++)
-			cargo[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Cargo " + i));
+			cargo[i] = new ItemStack(tag.getCompoundTag("Cargo " + i));
 
-		fuel = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Fuel"));
+		fuel = new ItemStack(tag.getCompoundTag("Fuel"));
 		fuelInTank = tag.getInteger("FuelInTank");
 		for(EnumDriveablePart part : EnumDriveablePart.values())
 		{
@@ -187,14 +187,14 @@ public class DriveableData implements IInventory
 		//Decrease the stack size
 		if(inv[i] != null)
 		{
-			if(inv[i].stackSize <= j)
+			if(inv[i].getCount() <= j)
 			{
 				ItemStack itemstack = inv[i];
 				inv[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = inv[i].splitStack(j);
-			if(inv[i].stackSize <= 0)
+			if(inv[i].getCount() <= 0)
 			{
 				inv[i] = null;
 			}
@@ -204,12 +204,6 @@ public class DriveableData implements IInventory
 			return null;
 		}
 		
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int i) 
-	{ 
-		return getStackInSlot(i);	
 	}
 
 	@Override
@@ -251,7 +245,7 @@ public class DriveableData implements IInventory
 	public void markDirty() {}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) 
+	public boolean isUsableByPlayer(EntityPlayer player) 
 	{ 
 		return true; 
 	}
@@ -321,7 +315,7 @@ public class DriveableData implements IInventory
 	}
 
 	@Override
-	public IChatComponent getDisplayName() 
+	public ITextComponent getDisplayName() 
 	{
 		return null;
 	}
@@ -359,4 +353,17 @@ public class DriveableData implements IInventory
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

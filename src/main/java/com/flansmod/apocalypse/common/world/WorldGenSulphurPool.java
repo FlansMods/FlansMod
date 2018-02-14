@@ -83,7 +83,7 @@ public class WorldGenSulphurPool extends WorldGenerator
 
                         if (flag)
                         {
-                            Material material = world.getBlockState(pos.add(j, k, k1)).getBlock().getMaterial();
+                            Material material = world.getBlockState(pos.add(j, k, k1)).getMaterial();
 
                             if (k >= 4 && material.isLiquid())
                             {
@@ -107,7 +107,7 @@ public class WorldGenSulphurPool extends WorldGenerator
                     {
                         if (aboolean[(j * 16 + k1) * 8 + k])
                         {
-                            world.setBlockState(pos.add(j, k, k1), k >= 4 ? Blocks.air.getDefaultState() : this.block.getDefaultState(), 2);
+                            world.setBlockState(pos.add(j, k, k1), k >= 4 ? Blocks.AIR.getDefaultState() : this.block.getDefaultState(), 2);
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class WorldGenSulphurPool extends WorldGenerator
                         {
                             flag = !aboolean[(j * 16 + k1) * 8 + k] && (j < 15 && aboolean[((j + 1) * 16 + k1) * 8 + k] || j > 0 && aboolean[((j - 1) * 16 + k1) * 8 + k] || k1 < 15 && aboolean[(j * 16 + k1 + 1) * 8 + k] || k1 > 0 && aboolean[(j * 16 + (k1 - 1)) * 8 + k] || k < 7 && aboolean[(j * 16 + k1) * 8 + k + 1] || k > 0 && aboolean[(j * 16 + k1) * 8 + (k - 1)]);
 
-                            if (flag && (k < 4 || rand.nextInt(2) != 0) && world.getBlockState(pos.add(j, k, k1)).getBlock().getMaterial().isSolid())
+                            if (flag && (k < 4 || rand.nextInt(2) != 0) && world.getBlockState(pos.add(j, k, k1)).getMaterial().isSolid())
                             {
                                 world.setBlockState(pos.add(j, k, k1), FlansModApocalypse.blockSulphur.getDefaultState(), 2);
                             }

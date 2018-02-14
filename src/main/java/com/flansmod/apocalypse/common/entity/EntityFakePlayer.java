@@ -37,12 +37,12 @@ public class EntityFakePlayer extends EntityFlansModShooter
 	@Override
     protected void dropFewItems(boolean b, int i)
 	{
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			for(int j = 0; j < inventory.getSizeInventory(); j++)
 			{
 				if(inventory.getStackInSlot(j) != null)
-					worldObj.spawnEntity(new EntityItem(worldObj, posX, posY, posZ, inventory.getStackInSlot(j)));
+					world.spawnEntity(new EntityItem(world, posX, posY, posZ, inventory.getStackInSlot(j)));
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class EntityFakePlayer extends EntityFlansModShooter
 		inventory = new InventoryBasic("FakePlayer", true, 40);
 		for(int i = 0; i < 40; i++)
 		{
-			inventory.setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(tags.getCompoundTag("S" + i)));
+			inventory.setInventorySlotContents(i, new ItemStack(tags.getCompoundTag("S" + i)));
 		}	
 	}
 

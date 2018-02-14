@@ -5,23 +5,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.Paintjob;
@@ -35,8 +41,8 @@ public class InfoType
 	public Item item;
 	public int colour = 0xffffff;
 	public String iconPath;
-	public Object[] recipe;
 	public String[] recipeLine;
+	public char[][] recipeGrid;
 	public int recipeOutput = 1;
 	public boolean shapeless;
 	public String smeltableFrom = null;
@@ -127,7 +133,6 @@ public class InfoType
 			
 			if (split[0].equals("Recipe"))
 			{
-				recipe = new Object[split.length + 2];
 				for (int i = 0; i < 3; i++)
 				{
 					String line = null;
@@ -141,7 +146,14 @@ public class InfoType
 						i--;
 						continue;
 					}
-					recipe[i] = line;
+					
+					if(line.length() > 3)
+						FlansMod.log("Looks like a bad recipe in " + shortName + ". Double check whether '" + line + "' is supposed to be part of the recipe");
+					
+					for(int j = 0; j < 3; j++)
+					{
+						recipeGrid[i][j] = j < line.length() ? line.charAt(j) : ' ';
+					}
 				}
 				recipeLine = split;
 				shapeless = false;
@@ -314,14 +326,25 @@ public class InfoType
 	{
 		return super.getClass().getSimpleName() + ": " + shortName;
 	}
-
-	public void addRecipe()
+	
+	public void registerItem(IForgeRegistry<Item> registry)
 	{
-		this.addRecipe(getItem());
+		if(item != null)
+			registry.register(item);
+	}
+	
+	public void registerBlock(IForgeRegistry<Block> registry)
+	{
+		
+	}
+
+	public void addRecipe(IForgeRegistry<IRecipe> registry)
+	{
+		this.addRecipe(registry, getItem());
 	}
 
 	/** Reimported from old code */
-	public void addRecipe(Item par1Item)
+	public void addRecipe(IForgeRegistry<IRecipe> registry, Item par1Item)
 	{
 		if (smeltableFrom != null)
 		{
@@ -333,84 +356,72 @@ public class InfoType
 		{
 			if (!shapeless)
 			{
-				// Fix oversized recipes
-				int rows = 3;
-				// First column
-				if (((String) recipe[0]).charAt(0) == ' ' && ((String) recipe[1]).charAt(0) == ' ' && ((String) recipe[2]).charAt(0) == ' ')
+				// Find the smallest bounding grid
+				int minX = 3, minY = 3, maxX = -1, maxY = -1;
+				
+				for(int i = 0; i < 3; i++)
 				{
-					for (int i = 0; i < 3; i++)
-						recipe[i] = ((String) recipe[i]).substring(1);
-					// New first column
-					if (((String) recipe[0]).charAt(0) == ' ' && ((String) recipe[1]).charAt(0) == ' ' && ((String) recipe[2]).charAt(0) == ' ')
+					for(int j = 0; j < 3; j++)
 					{
-						for (int i = 0; i < 3; i++)
-							recipe[i] = ((String) recipe[i]).substring(1);
+						if(recipeGrid[i][j] != ' ')
+						{
+							// This is a valid element. Adjust bounds accordingly
+							if(i < minX)
+								minX = i;
+							if(i > maxX)
+								maxX = i;
+							if(j < minY)
+								minY = j;
+							if(j > maxY)
+								maxY = j;
+						}
 					}
 				}
-				// Last column
-				int last = ((String) recipe[0]).length() - 1;
-				if (((String) recipe[0]).charAt(last) == ' ' && ((String) recipe[1]).charAt(last) == ' ' && ((String) recipe[2]).charAt(last) == ' ')
+				
+				if((minX == 3 && maxX == -1) || (minY == 3 && maxY == -1))
 				{
-					for (int i = 0; i < 3; i++)
-						recipe[i] = ((String) recipe[i]).substring(0, last);
-					// New last column
-					last--;
-					if (((String) recipe[0]).charAt(last) == ' ' && ((String) recipe[1]).charAt(last) == ' ' && ((String) recipe[2]).charAt(last) == ' ')
+					FlansMod.log("Invalid recipe grid in " + shortName);
+					return;
+				}
+				
+				int width = maxX - minX + 1;
+				int height = maxY - minY + 1;
+				
+				// Make a menu of ingredients from the main recipe line
+				HashMap<Character, ItemStack> menu = new HashMap<Character, ItemStack>();
+				for(int i = 0; i < (recipeLine.length - 1) / 2; i++)
+				{
+					char c = recipeLine[i * 2 + 1].charAt(0);
+					ItemStack stack = getRecipeElement(recipeLine[i * 2 + 2]);
+					
+					menu.put(Character.valueOf(c), stack);
+				}
+				
+				// Now pick off the menu and fill out the list
+				NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+				for(int i = 0; i < width; i++)
+				{
+					for(int j = 0; j < height; j++)
 					{
-						for (int i = 0; i < 3; i++)
-							recipe[i] = ((String) recipe[i]).substring(0, 0);
+						char c = recipeGrid[minX + i][minY + j];
+						ingredients.add(Ingredient.fromStacks(menu.get(Character.valueOf(c)).copy()));
 					}
 				}
-				// Top row
-				if (recipe[0].equals(" ") || recipe[0].equals("  ") || recipe[0].equals("   "))
-				{
-					Object[] newRecipe = new Object[recipe.length - 1];
-					newRecipe[0] = recipe[1];
-					newRecipe[1] = recipe[2];
-					recipe = newRecipe;
-					rows--;
-					// Next top row
-					if (recipe[0].equals(" ") || recipe[0].equals("  ") || recipe[0].equals("   "))
-					{
-						Object[] newRecipe1 = new Object[recipe.length - 1];
-						newRecipe1[0] = recipe[1];
-						recipe = newRecipe1;
-						rows--;
-					}
-				}
-				// Bottom row
-				if (recipe[rows - 1].equals(" ") || recipe[rows - 1].equals("  ") || recipe[rows - 1].equals("   "))
-				{
-					Object[] newRecipe = new Object[recipe.length - 1];
-					newRecipe[0] = recipe[0];
-					newRecipe[1] = recipe[1];
-					recipe = newRecipe;
-					rows--;
-					// Next bottom row
-					if (recipe[rows - 1].equals(" ") || recipe[rows - 1].equals("  ") || recipe[rows - 1].equals("   "))
-					{
-						Object[] newRecipe1 = new Object[recipe.length - 1];
-						newRecipe1[0] = recipe[0];
-						recipe = newRecipe1;
-						rows--;
-					}
-				}
-				for (int i = 0; i < (recipeLine.length - 1) / 2; i++)
-				{
-					recipe[i * 2 + rows] = recipeLine[i * 2 + 1].charAt(0);
-					recipe[i * 2 + rows + 1] = getRecipeElement(recipeLine[i * 2 + 2]);
-				}
-				GameRegistry.addRecipe(new ItemStack(item, recipeOutput), recipe);
-			} else
-			{
-				recipe = new Object[recipeLine.length - 1];
+				// And finally hand all that over to the registry
+				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)));
+			} 
+			else
+			{				
+				NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
 				for (int i = 0; i < (recipeLine.length - 1); i++)
 				{
-					recipe[i] = getRecipeElement(recipeLine[i + 1]);
+					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
 				}
-				GameRegistry.addShapelessRecipe(new ItemStack(item, recipeOutput), recipe);
+
+				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients));
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			FlansMod.log("Failed to add recipe for : " + shortName);
 			e.printStackTrace();
@@ -471,15 +482,14 @@ public class InfoType
 	{
 		if (s.equals("doorIron"))
 		{
-			return new ItemStack(Items.iron_door, amount);
+			return new ItemStack(Items.IRON_DOOR, amount);
 		}
 		if (s.equals("clayItem"))
 		{
-			return new ItemStack(Items.clay_ball, amount);
+			return new ItemStack(Items.CLAY_BALL, amount);
 		}
-		for(Object object : Item.itemRegistry)
+		for(Item item : Item.REGISTRY)
 		{
-			Item item = (Item)object;
 			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
 			{
 				return new ItemStack(item, amount, damage);
@@ -492,11 +502,11 @@ public class InfoType
 		}
 		if (s.equals("gunpowder"))
 		{
-			return new ItemStack(Items.gunpowder, amount);
+			return new ItemStack(Items.GUNPOWDER, amount);
 		}
 		if (s.equals("iron"))
 		{
-			return new ItemStack(Items.iron_ingot, amount);
+			return new ItemStack(Items.IRON_INGOT, amount);
 		}
 		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
 		return null;
@@ -544,12 +554,12 @@ public class InfoType
 		int potionID = Integer.parseInt(split[1]);
 		int duration = Integer.parseInt(split[2]);
 		int amplifier = Integer.parseInt(split[3]);
-		return new PotionEffect(potionID, duration, amplifier, false, false);
+		return new PotionEffect(Potion.getPotionById(potionID), duration, amplifier, false, false);
 	}
 	
 	public static Material getMaterial(String mat)
 	{
-		return Material.ground;
+		return Material.GROUND;
 	}
 
 	public void addDungeonLoot() 
@@ -565,7 +575,7 @@ public class InfoType
 	{
 		if(rawChance >= 1 || random.nextFloat() < rawChance)
 		{
-			int chance = MathHelper.ceiling_float_int(rawChance);
+			int chance = MathHelper.ceil(rawChance);
 			switch(random.nextInt(10))
 			{
 			case 0 : ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;

@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -33,16 +35,15 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	
 	public ItemTeamArmour(ArmourType t)
 	{
-		super(ItemArmor.ArmorMaterial.LEATHER, 0, t.type);
+		super(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.values()[5 - t.type]);
 		type = t;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanTeams);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
-	
+
 	public ItemTeamArmour(ItemArmor.ArmorMaterial armorMaterial, int renderIndex, int armourType) 
 	{
-		super(armorMaterial, renderIndex, armourType);
+		super(armorMaterial, renderIndex,  EntityEquipmentSlot.values()[5 - armourType]);
 	}
 
 	@Override
@@ -63,6 +64,8 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		//Do nothing to the armour. It should not break as that would leave the player's team ambiguous
 	}
 
+	// TODO: [1.12] Where do dis go?
+	/*
 	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String s) 
 	{
@@ -70,7 +73,16 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
+    @SideOnly(Side.CLIENT)
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
+    {
+        return type.model;
+    }
+	
+	*/
+	
+	@Override
+	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
@@ -86,28 +98,18 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 			lines.add("\u00a72+Negates Fall Damage");
 	}
 	
+    protected static final UUID KNOCKBACK_RESIST_MODIFIER = UUID.fromString("77777777-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("99999999-4180-4865-B01B-BCCE9785ACA3");
+    
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-	{
-		return type.colour;
-	}
-    
-    @Override
-    public Multimap getAttributeModifiers(ItemStack stack)
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
-       	Multimap map = super.getAttributeModifiers(stack);
-       	map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
-       	map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1F, 2));
-       	return map;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
-    {
-        return type.model;
-    }
+        Multimap multimap = super.getAttributeModifiers(slot, stack);
+        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
+        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+        return multimap;
+    }   
+
     
 	@Override
 	public InfoType getInfoType() 

@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,13 +37,12 @@ public class BlockGunBox extends Block
 	
 	public BlockGunBox(GunBoxType t)
 	{
-		super(Material.wood);
+		super(Material.WOOD);
 		setHardness(2F);
 		setResistance(4F);
 		type = t;
 
 	    setUnlocalizedName(type.shortName);
-	    GameRegistry.registerBlock(this, type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 		type.block = this;
 		type.item = Item.getItemFromBlock(this);
@@ -63,10 +63,10 @@ public class BlockGunBox extends Block
 					ItemStack stack = inventory.getStackInSlot(j);
 					if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
 					{
-						numMatchingStuff += stack.stackSize;
+						numMatchingStuff += stack.getCount();
 					}
 				}
-				if (numMatchingStuff < check.stackSize)
+				if (numMatchingStuff < check.getCount())
 				{
 					canBuy = false;
 				}
@@ -75,13 +75,13 @@ public class BlockGunBox extends Block
 			{
 				for (ItemStack remove : entry.requiredParts)
 				{
-					int amountLeft = remove.stackSize;
+					int amountLeft = remove.getCount();
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
 						if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
 						{
-							amountLeft -= inventory.decrStackSize(j, amountLeft).stackSize;
+							amountLeft -= inventory.decrStackSize(j, amountLeft).getCount();
 						}
 					}
 				}

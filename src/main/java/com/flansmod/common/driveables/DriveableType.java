@@ -260,31 +260,31 @@ public abstract class DriveableType extends PaintableType
 			{
 				if(split[1].equals("Axe"))
 				{
-					materialsHarvested.add(Material.wood);
-					materialsHarvested.add(Material.plants);
-					materialsHarvested.add(Material.vine);
+					materialsHarvested.add(Material.WOOD);
+					materialsHarvested.add(Material.PLANTS);
+					materialsHarvested.add(Material.VINE);
 				}
 				else if(split[1].equals("Pickaxe") || split[1].equals("Drill"))
 				{
-					materialsHarvested.add(Material.iron);
-					materialsHarvested.add(Material.anvil);
-					materialsHarvested.add(Material.rock);
+					materialsHarvested.add(Material.IRON);
+					materialsHarvested.add(Material.ANVIL);
+					materialsHarvested.add(Material.ROCK);
 				}
 				else if(split[1].equals("Spade") || split[1].equals("Shovel") || split[1].equals("Excavator"))
 				{
-					materialsHarvested.add(Material.ground);
-					materialsHarvested.add(Material.grass);
-					materialsHarvested.add(Material.sand);
-					materialsHarvested.add(Material.snow);
-					materialsHarvested.add(Material.clay);
+					materialsHarvested.add(Material.GROUND);
+					materialsHarvested.add(Material.GRASS);
+					materialsHarvested.add(Material.SAND);
+					materialsHarvested.add(Material.SNOW);
+					materialsHarvested.add(Material.CLAY);
 				}				
 				else if(split[1].equals("Hoe") || split[1].equals("Combine"))
 				{
-					materialsHarvested.add(Material.plants);
-					materialsHarvested.add(Material.leaves);
-					materialsHarvested.add(Material.vine);
-					materialsHarvested.add(Material.cactus);
-					materialsHarvested.add(Material.gourd);
+					materialsHarvested.add(Material.PLANTS);
+					materialsHarvested.add(Material.LEAVES);
+					materialsHarvested.add(Material.VINE);
+					materialsHarvested.add(Material.CACTUS);
+					materialsHarvested.add(Material.GOURD);
 				}
 			}
 			
@@ -402,7 +402,7 @@ public abstract class DriveableType extends PaintableType
 					FlansMod.log("Failed to find dye colour : " + split[2] + " while adding " + file.name);
 					return;
 				}
-				driveableRecipe.add(new ItemStack(Items.dye, amount, damage));
+				driveableRecipe.add(new ItemStack(Items.DYE, amount, damage));
 			}
 			
 			

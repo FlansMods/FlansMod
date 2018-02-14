@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.FlansMod;
@@ -12,6 +13,7 @@ import com.flansmod.common.types.TypeFile;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class ArmourBoxType extends BoxType
 {	
@@ -81,6 +83,12 @@ public class ArmourBoxType extends BoxType
 			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void registerBlock(IForgeRegistry<Block> registry)
+	{
+		registry.register(block);
 	}
 
 	/** Each instance of this class refers to one page full of recipes, that is, one full set of armour */

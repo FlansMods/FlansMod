@@ -8,9 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
@@ -52,9 +52,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		this(world);
 		setPosition(x, y, z);		
-		flag = new EntityFlag(worldObj, this);
+		flag = new EntityFlag(world, this);
 		objects.add(flag);
-		worldObj.spawnEntity(flag);
+		world.spawnEntity(flag);
 		if(teamsManager.maps.size() > 0)
 			map = teamsManager.maps.values().iterator().next();
 	}	
@@ -97,10 +97,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		name = tags.getString("Name");
 		setMap(map);
 	
-		//flag = new EntityFlag(worldObj, this);
+		//flag = new EntityFlag(world, this);
 		//objects.add(flag);
-		//worldObj.spawnEntity(flag);
-		//worldObj.spawnEntity(new EntityFlag(worldObj, this));
+		//world.spawnEntity(flag);
+		//world.spawnEntity(new EntityFlag(world, this));
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public World getWorld()
 	{
-		return worldObj;
+		return world;
 	}
 	
 	@Override
@@ -235,21 +235,21 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		super.onUpdate();
 		
-		if(!worldObj.isRemote)
+		if(!world.isRemote)
 		{
 			if(flag == null)
 			{
-				flag = new EntityFlag(worldObj, this);
+				flag = new EntityFlag(world, this);
 				objects.add(flag);
 			}
 			if(!flag.addedToChunk)
-				worldObj.spawnEntity(flag);
+				world.spawnEntity(flag);
 			if(flag.isHome)
 				flag.setPosition(posX, posY + 2F, posZ);
 		}
 		
 		//Temporary fire glitch fix
-		if(worldObj.isRemote)
+		if(world.isRemote)
 			extinguish();
 	}
 		
@@ -263,7 +263,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public boolean interactFirst(EntityPlayer player) //interact
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
-		if(!worldObj.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getCurrentEquippedItem() == null || !(player.getCurrentEquippedItem().getItem() instanceof ItemOpStick)))
+		if(!world.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getHeldItemMainhand() == null || !(player.getHeldItemMainhand().getItem() instanceof ItemOpStick)))
 			ItemOpStick.openBaseEditGUI(this, (EntityPlayerMP)player);
 		
 		/* TODO : Check the generalised code in TeamsManager works
@@ -274,7 +274,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;
@@ -324,7 +324,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		chunkTicket = ticket;
 		for (ChunkCoordIntPair coord : getLoadArea()) {
-			FlansMod.log(String.format("Force loading chunk %s in %s",coord, worldObj.provider.getClass()));
+			FlansMod.log(String.format("Force loading chunk %s in %s",coord, world.provider.getClass()));
 			ForgeChunkManager.forceChunk(ticket, coord);
 		}
 	}
@@ -332,18 +332,18 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public List<ChunkCoordIntPair> getLoadArea() 
 	{
 		List<ChunkCoordIntPair> loadArea = new LinkedList<ChunkCoordIntPair>();
-		Chunk centerChunk = worldObj.getChunkFromBlockCoords(MathHelper.floor(posX), MathHelper.floor(posZ));
+		Chunk centerChunk = world.getChunkFromBlockCoords(MathHelper.floor(posX), MathHelper.floor(posZ));
 		loadArea.add(new ChunkCoordIntPair(centerChunk.xPosition, centerChunk.zPosition));
 		return loadArea;
 	}
 	
 	public void updateChunkLoading()
 	{
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			return;
 		if (uninitialized && chunkTicket == null) 
 		{
-			chunkTicket = ForgeChunkManager.requestTicket(FlansMod.INSTANCE, worldObj, Type.NORMAL);
+			chunkTicket = ForgeChunkManager.requestTicket(FlansMod.INSTANCE, world, Type.NORMAL);
 			if (chunkTicket != null) 
 			{
 				forceChunkLoading(chunkTicket);

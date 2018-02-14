@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.flansmod.common.FlansMod;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -56,7 +56,7 @@ public class TeamsMap
 	{
 		addBase(base);
 		//Add the chunk this base is in to our chunk loading ticket
-		ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
+		ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkPos((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
 		FlansMod.log("Added chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " to chunk loading ticket for base " + name );
 	}
 	
@@ -69,7 +69,7 @@ public class TeamsMap
 		}
 		bases.remove(base);
 		//Remove the chunk from the chunk loading ticket
-		ForgeChunkManager.unforceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
+		ForgeChunkManager.unforceChunk(chunkLoadingTicket, new ChunkPos((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
 		FlansMod.log("Removed chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " from chunk loading ticket for base " + name );
 	}
 	
@@ -81,7 +81,7 @@ public class TeamsMap
 	{
 		//Add the chunk this object is in to our chunk loading ticket
 		if(object.forceChunkLoading())
-			ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkCoordIntPair((int)object.getPosX() >> 4, (int)object.getPosZ() >> 4));
+			ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkPos((int)object.getPosX() >> 4, (int)object.getPosZ() >> 4));
 	}
 	
 	public TeamsMap(World world, NBTTagCompound tags)
@@ -104,9 +104,9 @@ public class TeamsMap
 	//for this map are handed to this method and this method loads the required chunks
 	public void forceChunkLoading(Ticket ticket) 
 	{
-		for (ChunkCoordIntPair coord : ticket.getChunkList()) 
+		for (ChunkPos coord : ticket.getChunkList()) 
 		{
-			FlansMod.log("Loading chunk at " + coord.chunkXPos + ", " + coord.chunkZPos + " for map : " + name);
+			FlansMod.log("Loading chunk at " + coord.x + ", " + coord.z + " for map : " + name);
 			ForgeChunkManager.forceChunk(ticket, coord);
 		}
 	}

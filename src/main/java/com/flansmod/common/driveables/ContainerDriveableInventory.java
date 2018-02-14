@@ -122,7 +122,7 @@ public class ContainerDriveableInventory extends Container
 					int yPos = -1000;
 					if(slotsDone < 3 + scroll && slotsDone >= scroll)
 						yPos = 25 + 19 * (slotsDone - scroll);
-					((Slot)inventorySlots.get(slotsDone)).yDisplayPosition = yPos;
+					((Slot)inventorySlots.get(slotsDone)).yPos = yPos;
 					slotsDone++;
 				}	
 				break;
@@ -139,7 +139,7 @@ public class ContainerDriveableInventory extends Container
 						yPos = 25 + 19 * (row - scroll);
 					for(int col = 0; col < ((row + 1) * 8 <= numItems ? 8 : numItems % 8); col++)
 					{
-						((Slot)inventorySlots.get(row * 8 + col)).yDisplayPosition = yPos;
+						((Slot)inventorySlots.get(row * 8 + col)).yPos = yPos;
 					}
 				}
 				break;
@@ -178,7 +178,7 @@ public class ContainerDriveableInventory extends Container
 				}
 			}
 
-			if (slotStack.stackSize == 0)
+			if (slotStack.getCount() == 0)
 			{
 				currentSlot.putStack(null);
 			}
@@ -187,12 +187,12 @@ public class ContainerDriveableInventory extends Container
 				currentSlot.onSlotChanged();
 			}
 
-			if (slotStack.stackSize == stack.stackSize)
+			if (slotStack.getCount() == stack.getCount())
 			{
 				return null;
 			}
 
-			currentSlot.onPickupFromSlot(player, slotStack);
+			currentSlot.onTake(player, slotStack);
 		}
 
 		return stack;

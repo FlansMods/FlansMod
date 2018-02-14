@@ -2,7 +2,7 @@ package com.flansmod.client.debug;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import com.flansmod.common.vector.Vector3f;

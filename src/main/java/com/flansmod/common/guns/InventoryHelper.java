@@ -12,7 +12,7 @@ public class InventoryHelper
 	{
 		if(stack == null)
 			return false;
-		else if(stack.stackSize == 0)
+		else if(stack.getCount() == 0)
 			return false;
 		else
 		{
@@ -26,15 +26,15 @@ public class InventoryHelper
 
 					if (i >= 0)
 					{
-						ItemStack stackToAdd = ItemStack.copyItemStack(stack);
-						stackToAdd.animationsToGo = 5;
+						ItemStack stackToAdd = stack.copy();
+						stackToAdd.setAnimationsToGo(5);
 						inventory.setInventorySlotContents(i, stackToAdd);
-						stack.stackSize = 0;
+						stack.setCount(0);
 						return true;
 					}
 					else if(creative)
 					{
-						stack.stackSize = 0;
+						stack.setCount(0);
 						return true;
 					}
 					return false;
@@ -43,19 +43,19 @@ public class InventoryHelper
 				{
 					do
 					{
-						i = stack.stackSize;
-						stack.stackSize = storePartialItemStack(inventory, stack);
+						i = stack.getCount();
+						stack.setCount(storePartialItemStack(inventory, stack));
 					}
-					while (stack.stackSize > 0 && stack.stackSize < i);
+					while (stack.getCount() > 0 && stack.getCount() < i);
 
-					if (stack.stackSize == i && creative)
+					if (stack.getCount() == i && creative)
 					{
-						stack.stackSize = 0;
+						stack.setCount(0);
 						return true;
 					}
 					else
 					{
-						return stack.stackSize < i;
+						return stack.getCount() < i;
 					}
 				}
 			}
@@ -72,7 +72,9 @@ public class InventoryHelper
 		for (int i = 0; i < inventory.getSizeInventory(); ++i)
 		{
 			ItemStack oldStack = inventory.getStackInSlot(i);
-			if (oldStack != null && oldStack.getItem() == stack.getItem() && oldStack.isStackable() && oldStack.stackSize < oldStack.getMaxStackSize() && oldStack.stackSize < inventory.getInventoryStackLimit() && (!oldStack.getHasSubtypes() || oldStack.getItemDamage() == stack.getItemDamage()) && ItemStack.areItemStackTagsEqual(oldStack, stack))
+			if (oldStack != null && oldStack.getItem() == stack.getItem() && oldStack.isStackable() && 
+					oldStack.getCount() < oldStack.getMaxStackSize() && oldStack.getCount() < inventory.getInventoryStackLimit() && 
+					(!oldStack.getHasSubtypes() || oldStack.getItemDamage() == stack.getItemDamage()) && ItemStack.areItemStackTagsEqual(oldStack, stack))
 			{
 				return i;
 			}
@@ -84,7 +86,7 @@ public class InventoryHelper
 	public static int storePartialItemStack(IInventory inventory, ItemStack stack)
 	{
 		Item item = stack.getItem();
-		int j = stack.stackSize;
+		int j = stack.getCount();
 		int k;
 
 		//If the item doesn't stack, just find an empty slot for it
@@ -100,7 +102,7 @@ public class InventoryHelper
 			{
 				if(inventory.getStackInSlot(k) == null)
 				{
-					inventory.setInventorySlotContents(k, ItemStack.copyItemStack(stack));
+					inventory.setInventorySlotContents(k, stack.copy());
 				}
 				return 0;
 			}
@@ -131,14 +133,14 @@ public class InventoryHelper
 
 				int l = j;
 
-				if(j > oldStack.getMaxStackSize() - oldStack.stackSize)
+				if(j > oldStack.getMaxStackSize() - oldStack.getCount())
 				{
-					l = oldStack.getMaxStackSize() - oldStack.stackSize;
+					l = oldStack.getMaxStackSize() - oldStack.getCount();
 				}
 
-				if (l > inventory.getInventoryStackLimit() - oldStack.stackSize)
+				if (l > inventory.getInventoryStackLimit() - oldStack.getCount())
 				{
-					l = inventory.getInventoryStackLimit() - oldStack.stackSize;
+					l = inventory.getInventoryStackLimit() - oldStack.getCount();
 				}
 
 				if (l == 0)
@@ -148,8 +150,8 @@ public class InventoryHelper
 				else
 				{
 					j -= l;
-					oldStack.stackSize += l;
-					oldStack.animationsToGo = 5;
+					oldStack.setCount(oldStack.getCount() + l);
+					oldStack.setAnimationsToGo(5);
 					return j;
 				}
 			}

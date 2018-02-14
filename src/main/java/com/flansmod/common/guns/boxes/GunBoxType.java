@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EnumDriveablePart;
@@ -106,6 +107,12 @@ public class GunBoxType extends BoxType
 			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void registerBlock(IForgeRegistry<Block> registry)
+	{
+		registry.register(block);
 	}
 
 	private List<ItemStack> getRecipe(String[] split) 
@@ -307,22 +314,22 @@ public class GunBoxType extends BoxType
 					if(stackInSlot != null && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
 					{
 						//Work out the amount to take from the stack
-						int amountFound = Math.min(stackInSlot.stackSize, stackNeeded.stackSize - totalAmountFound);
+						int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
 						//Take it
-						stackInSlot.stackSize -= amountFound;
+						stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 						//Check for empty stacks
-						if(stackInSlot.stackSize <= 0)
+						if(stackInSlot.getCount() <= 0)
 							stackInSlot = null;
 						//Put the modified stack back in the inventory
 						temporaryInventory.setInventorySlotContents(m, stackInSlot);
 						//Increase the amount found counter
 						totalAmountFound += amountFound;
 						//If we have enough, stop looking
-						if(totalAmountFound == stackNeeded.stackSize)
+						if(totalAmountFound == stackNeeded.getCount())
 							break;
 					}
 				}
-				if(totalAmountFound < stackNeeded.stackSize)
+				if(totalAmountFound < stackNeeded.getCount())
 					canCraft = false;
 			}
 			

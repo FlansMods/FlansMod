@@ -15,7 +15,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
@@ -88,11 +91,16 @@ public class FlansModResourceHandler
 		return resLoc;
 	}
 	
+	public static SoundEvent getSoundEvent(String sound)
+	{
+		throw new NotImplementedException(sound);
+	}
+	
 	public static ResourceLocation getSound(String sound)
 	{
 		if(soundMap.containsKey(sound))
 		{
-			//return soundMap.get(sound);
+			return soundMap.get(sound);
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", sound);
 		soundMap.put(sound, resLoc);

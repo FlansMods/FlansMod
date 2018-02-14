@@ -140,7 +140,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		// Draw text
 		drawCenteredString(fontRendererObj, ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
-		drawString(fontRendererObj, mc.thePlayer.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
+		drawString(fontRendererObj, mc.player.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
 		drawCenteredString(fontRendererObj, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
 		
 		// Draw rank icon

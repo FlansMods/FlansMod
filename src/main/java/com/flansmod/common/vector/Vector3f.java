@@ -37,7 +37,7 @@ import java.nio.FloatBuffer;
 import com.flansmod.common.FlansMod;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 /**
  *
@@ -92,9 +92,9 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 		set(x, y, z);
 	}
 	
-	public Vector3f(Vec3 vec)
+	public Vector3f(Vec3d vec)
 	{
-		this((float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord);
+		this((float)vec.x, (float)vec.y, (float)vec.z);
 	}
 	
 	public Vector3f(double x, double y, double z) 
@@ -102,9 +102,9 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 		this((float)x, (float)y, (float)z);
 	}
 
-	public Vec3 toVec3()
+	public Vec3d toVec3()
 	{
-		return new Vec3(x, y, z);
+		return new Vec3d(x, y, z);
 	}
 
 	/* (non-Javadoc)

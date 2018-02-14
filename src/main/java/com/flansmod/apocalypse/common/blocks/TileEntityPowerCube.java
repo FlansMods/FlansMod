@@ -1,9 +1,9 @@
 package com.flansmod.apocalypse.common.blocks;
 
-import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.server.gui.ITickable;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityPowerCube extends TileEntity implements IUpdatePlayerListBox
+public class TileEntityPowerCube extends TileEntity implements ITickable
 {
 	public int age;
 	

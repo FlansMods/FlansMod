@@ -3,12 +3,16 @@ package com.flansmod.common.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,8 +62,15 @@ public class PacketBreakSound extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
+		World world = clientPlayer.world;
+		BlockPos pos = new BlockPos(x, y, z);
+		IBlockState state = world.getBlockState(new BlockPos(x, y, z));
 		Block block = Block.getBlockById(blockID);
-    	FMLClientHandler.instance().getClient().effectRenderer.func_180533_a(new BlockPos(x, y, z), block.getDefaultState());
-    	FMLClientHandler.instance().getClient().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(block.stepSound.getBreakSound()), x + 0.5F, y + 0.5F, z + 0.5F, (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F));
+		
+    	FMLClientHandler.instance().getClient().effectRenderer.addBlockDestroyEffects(new BlockPos(x, y, z), block.getDefaultState());
+    	SoundType sound = block.getSoundType(state, world, pos, clientPlayer);
+    	SoundEvent event = sound.getBreakSound();
+    	FMLClientHandler.instance().getClient().getSoundHandler().playSound(
+    			new PositionedSoundRecord(event, SoundCategory.BLOCKS, x + 0.5F, y + 0.5F, z + 0.5F, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F));
 	}
 }

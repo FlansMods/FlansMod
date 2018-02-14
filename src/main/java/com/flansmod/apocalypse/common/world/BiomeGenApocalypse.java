@@ -73,13 +73,13 @@ public class BiomeGenApocalypse extends BiomeGenBase
         {
             if (k1 <= rand.nextInt(5))
             {
-                primer.setBlockState(j1, k1, i1, Blocks.bedrock.getDefaultState());
+                primer.setBlockState(j1, k1, i1, Blocks.BEDROCK.getDefaultState());
             }
             else
             {
                 IBlockState iblockstate2 = primer.getBlockState(j1, k1, i1);
 
-                if (iblockstate2.getBlock().getMaterial() == Material.air)
+                if (iblockstate2.getMaterial() == Material.AIR)
                 {
                     k = -1;
                 }

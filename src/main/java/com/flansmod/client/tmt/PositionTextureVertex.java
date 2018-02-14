@@ -1,6 +1,6 @@
 package com.flansmod.client.tmt;
 
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 public class PositionTextureVertex extends net.minecraft.client.model.PositionTextureVertex
 {
@@ -13,7 +13,7 @@ public class PositionTextureVertex extends net.minecraft.client.model.PositionTe
 	
 	public PositionTextureVertex(float par1, float par2, float par3, float par4, float par5, float par6)
 	{
-		this(new Vec3(par1, par2, par3), par4, par5);
+		this(new Vec3d(par1, par2, par3), par4, par5);
 	}
 
 	@Override
@@ -38,12 +38,12 @@ public class PositionTextureVertex extends net.minecraft.client.model.PositionTe
 		this.texturePositionW = q;
 	}
 	
-	public PositionTextureVertex(Vec3 par1Vec3, float par2, float par3)
+	public PositionTextureVertex(Vec3d par1Vec3, float par2, float par3)
 	{
 		this(par1Vec3, par2, par3, 1F);
 	}
 	
-	public PositionTextureVertex(Vec3 par1Vec3, float par2, float par3, float par4)
+	public PositionTextureVertex(Vec3d par1Vec3, float par2, float par3, float par4)
 	{
 		super(par1Vec3, par2, par3);
 		this.texturePositionW = par4;

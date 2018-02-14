@@ -14,7 +14,7 @@ public class BlockSulphur extends Block
 {
 	public BlockSulphur() 
 	{
-		super(Material.sand);
+		super(Material.SAND);
 	}
     
 	@Override

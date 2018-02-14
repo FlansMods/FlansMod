@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,13 +30,12 @@ public class BlockArmourBox extends Block
 	
 	public BlockArmourBox(ArmourBoxType t) 
 	{
-		super(Material.wood);
+		super(Material.WOOD);
 		type = t;
 
 		setUnlocalizedName(type.shortName);
 		setHardness(2F);
 		setResistance(4F);
-		GameRegistry.registerBlock(this, type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		type.block = this;
 		type.item = Item.getItemFromBlock(this);

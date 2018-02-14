@@ -3,16 +3,21 @@ package com.flansmod.common.driveables.mechas;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,17 +43,16 @@ public class ItemMecha extends Item implements IPaintableItem
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanMechas);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean b)
+	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
 			Collections.addAll(lines, type.description.split("_"));
 		}
-		NBTTagCompound tags = getTagCompound(stack, player.world);
+		NBTTagCompound tags = getTagCompound(stack, world);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
 		if(part != null)
@@ -78,54 +82,50 @@ public class ItemMecha extends Item implements IPaintableItem
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
     {
+		ItemStack itemstack = entityplayer.getHeldItem(hand);
+		
     	//Raytracing
         float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
         float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, true);
+        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+        Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+        RayTraceResult RayTraceResult = world.rayTraceBlocks(posVec, lookVec, true);
         
         //Result check
-        if(movingobjectposition == null)
+        if(RayTraceResult == null)
         {
-            return itemstack;
+        	return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
         }
-        if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
+        if(RayTraceResult.typeOfHit == Type.BLOCK)
         {
-        	BlockPos pos = movingobjectposition.getBlockPos();
+        	BlockPos pos = RayTraceResult.getBlockPos();
             if(!world.isRemote)
             {
 				world.spawnEntity(new EntityMecha(world, (double)pos.getX() + 0.5F, (double)pos.getY() + 1.5F + type.yOffset, (double)pos.getZ() + 0.5F, entityplayer, type, getData(itemstack, world), getTagCompound(itemstack, world)));
             }
 			if(!entityplayer.capabilities.isCreativeMode)
 			{	
-				itemstack.stackSize--;
+				itemstack.setCount(itemstack.getCount() - 1);
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	public DriveableData getData(ItemStack itemstack, World world)
 	{
 		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
 	}
-   
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-	{
-		return type.colour;
-	}
 	
     @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	ItemStack mechaStack = new ItemStack(item, 1, 0);
+    	ItemStack mechaStack = new ItemStack(this, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
     	if(PartType.defaultEngines.containsKey(EnumType.mecha))
@@ -136,7 +136,7 @@ public class ItemMecha extends Item implements IPaintableItem
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
     	mechaStack.setTagCompound(tags);
-        list.add(mechaStack);
+        items.add(mechaStack);
     }
     
 	@Override

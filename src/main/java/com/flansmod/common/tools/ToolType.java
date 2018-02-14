@@ -6,10 +6,15 @@ import java.util.HashMap;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
@@ -100,14 +105,20 @@ public class ToolType extends InfoType
 	}
 	
 	@Override
-	public void addRecipe(Item item)
+	public void addRecipe(IForgeRegistry<IRecipe> registry, Item item)
 	{
-		super.addRecipe(item);
+		super.addRecipe(registry, item);
 		//Add the recharge recipe if there is one
 		if(rechargeRecipe.size() < 1)
 			return;
 		rechargeRecipe.add(new ItemStack(item, 1, toolLife));
-		GameRegistry.addShapelessRecipe(new ItemStack(item, 1, 0), rechargeRecipe.toArray());
+		
+		NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
+		for(ItemStack stack : rechargeRecipe)
+		{
+			ingredients.add(Ingredient.fromStacks(stack));
+		}
+		registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, 1, 0), ingredients));
 	}
 	
 	public static ToolType getType(String shortName)

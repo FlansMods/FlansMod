@@ -173,7 +173,7 @@ public class PlayerHitbox
 			//Calculate the hit damage
 			float hitDamage = damage * bulletType.damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = damageOwner == null ? DamageSource.generic 
+			DamageSource damagesource = damageOwner == null ? DamageSource.GENERIC 
 					: EntityBullet.GetBulletDamage(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
 
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
@@ -193,7 +193,7 @@ public class PlayerHitbox
 		}
 		case RIGHTITEM :
 		{
-			ItemStack currentStack = player.getCurrentEquippedItem();
+			ItemStack currentStack = player.getHeldItemMainhand();
 			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
 			{
 				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();

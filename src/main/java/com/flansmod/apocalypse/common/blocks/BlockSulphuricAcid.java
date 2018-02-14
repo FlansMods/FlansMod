@@ -112,7 +112,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 				return 0.875F;
 			}
 		}
-		return !state.getBlock().getMaterial().isSolid() && verticalOrigin == this ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
+		return !state.getMaterial().isSolid() && verticalOrigin == this ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
 	}
 	
 	@Override

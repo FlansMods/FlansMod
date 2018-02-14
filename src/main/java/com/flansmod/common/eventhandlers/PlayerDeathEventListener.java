@@ -13,40 +13,59 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class PlayerDeathEventListener {
-
-	public PlayerDeathEventListener() {
+public class PlayerDeathEventListener 
+{
+	public PlayerDeathEventListener() 
+	{
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@EventHandler
 	@SubscribeEvent
-	public void PlayerDied(LivingDeathEvent DamageEvent) {
-		if ((DamageEvent.source.getDamageType().equalsIgnoreCase("explosion") && ((DamageEvent.source.getSourceOfDamage() instanceof EntityGrenade) || (DamageEvent.source.getSourceOfDamage() instanceof EntityBullet))) && DamageEvent.entityLiving instanceof EntityPlayer) {
+	public void PlayerDied(LivingDeathEvent event) 
+	{
+		if ((event.getSource().getDamageType().equalsIgnoreCase("explosion") && 
+				((event.getSource().getTrueSource() instanceof EntityGrenade) || (event.getSource().getTrueSource() instanceof EntityBullet))) 
+				&& event.getEntityLiving() instanceof EntityPlayer) 
+		{
 			boolean isGrenade;
-			if (DamageEvent.source.getSourceOfDamage() instanceof EntityGrenade) {
+			if (event.getSource().getTrueSource() instanceof EntityGrenade) 
+			{
 				isGrenade = true;
-				EntityGrenade Grenade = (EntityGrenade) DamageEvent.source.getSourceOfDamage();
-			} else {
+				EntityGrenade Grenade = (EntityGrenade) event.getSource().getTrueSource();
+			} else 
+			{
 				isGrenade = false;
-				EntityBullet Grenade = (EntityBullet) DamageEvent.source.getSourceOfDamage();
+				EntityBullet Grenade = (EntityBullet) event.getSource().getTrueSource();
 			}
 			EntityPlayer killer = null;
-			EntityPlayer killed = (EntityPlayer) DamageEvent.entityLiving;
+			EntityPlayer killed = (EntityPlayer) event.getEntityLiving();
 			Team killerTeam = null;
 			Team killedTeam = null;
-			if (isGrenade) {
-				killer = (EntityPlayer) ((EntityGrenade) DamageEvent.source.getSourceOfDamage()).thrower;
-			} else {
-				killer = (EntityPlayer) ((EntityBullet) DamageEvent.source.getSourceOfDamage()).owner;
+			if (isGrenade) 
+			{
+				killer = (EntityPlayer) ((EntityGrenade) event.getSource().getTrueSource()).thrower;
+			} else 
+			{
+				killer = (EntityPlayer) ((EntityBullet) event.getSource().getTrueSource()).owner;
 			}
 			killerTeam = PlayerHandler.getPlayerData(killer).team;
 			killedTeam = PlayerHandler.getPlayerData(killed).team;
-			if (DamageEvent.entityLiving instanceof EntityPlayer && !isGrenade) {
-				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityBullet) DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.entity).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.source.getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.entityLiving.dimension);
+			if (event.getEntityLiving() instanceof EntityPlayer && !isGrenade) 
+			{
+				FlansMod.getPacketHandler().sendToDimension(
+						new PacketKillMessage(false, ((EntityBullet) event.getSource().getTrueSource()).type, 
+								(killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) event.getEntity()).getDisplayName().getFormattedText(), 
+								(killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) event.getSource().getTrueSource()).getDisplayName().getFormattedText()), 
+						event.getEntityLiving().dimension);
 			}
-			if (DamageEvent.entityLiving instanceof EntityPlayer && isGrenade) {
-				FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(false, ((EntityGrenade) DamageEvent.source.getSourceOfDamage()).type, (killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.entity).getDisplayName().getFormattedText(), (killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) DamageEvent.source.getSourceOfDamage()).getDisplayName().getFormattedText()), DamageEvent.entityLiving.dimension);
+			if (event.getEntityLiving() instanceof EntityPlayer && isGrenade) 
+			{
+				FlansMod.getPacketHandler().sendToDimension(
+						new PacketKillMessage(false, ((EntityGrenade) event.getSource().getTrueSource()).type, 
+								(killedTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) event.getEntity()).getDisplayName().getFormattedText(), 
+								(killerTeam == null ? "f" : killedTeam.textColour) + ((EntityPlayer) event.getSource().getTrueSource()).getDisplayName().getFormattedText()), 
+						event.getEntityLiving().dimension);
 			}
 		}
 	}

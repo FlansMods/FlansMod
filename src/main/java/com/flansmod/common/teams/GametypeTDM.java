@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.PlayerData;
 
@@ -135,7 +135,7 @@ public class GametypeTDM extends Gametype
 	}
 
 	@Override
-	public Vec3 getSpawnPoint(EntityPlayerMP player) 
+	public Vec3d getSpawnPoint(EntityPlayerMP player) 
 	{
 		if(teamsManager.currentRound == null)
 			return null;
@@ -157,7 +157,7 @@ public class GametypeTDM extends Gametype
 		if(validSpawnPoints.size() > 0)
 		{
 			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			return new Vec3d(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
 		}
 		
 		return null;

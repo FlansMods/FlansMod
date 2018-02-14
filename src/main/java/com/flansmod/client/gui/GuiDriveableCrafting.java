@@ -320,7 +320,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	{
 		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
-			mc.thePlayer.closeScreen();
+			mc.player.closeScreen();
 		}
 	}
 	

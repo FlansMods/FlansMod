@@ -54,7 +54,7 @@ public class PlayerLoadout
 	{
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
-			slots[i] = ItemStack.loadItemStackFromNBT(tags.getCompoundTag("slot_" + i));
+			slots[i] = new ItemStack(tags.getCompoundTag("slot_" + i));
 		}
 	}
 

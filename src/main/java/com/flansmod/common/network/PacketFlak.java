@@ -4,7 +4,7 @@ import java.util.Random;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
@@ -68,13 +68,12 @@ public class PacketFlak extends PacketBase
 		World world = clientPlayer.world;
 		for (int i = 0; i < numParticles; i++)
 		{
-			EntityFX obj = FlansModClient.getParticle(particleType, world, x + rand.nextGaussian(), y + rand.nextGaussian(), z + rand.nextGaussian());
+			Particle obj = FlansModClient.getParticle(particleType, world, x + rand.nextGaussian(), y + rand.nextGaussian(), z + rand.nextGaussian());
 			if(obj != null)
 			{
-				obj.motionX = rand.nextGaussian() / 20;
-				obj.motionY = rand.nextGaussian() / 20;
-				obj.motionZ = rand.nextGaussian() / 20;
-				obj.renderDistanceWeight = 250D;
+				obj.multiplyVelocity((float)rand.nextGaussian() / 20.0f);
+				// TODO: [1.12] Apparently we can't set the render distance higher, so let's boost the scale and see how that works
+				obj.multipleParticleScaleBy(250.0f);
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
 			}
 		}		

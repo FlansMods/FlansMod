@@ -23,7 +23,7 @@ public class RenderBullet extends Render
 
 	public void render(EntityBullet bullet, double d, double d1, double d2, float f, float f1)
 	{
-		if(bullet.owner == Minecraft.getMinecraft().thePlayer && bullet.ticksExisted < 1)
+		if(bullet.owner == Minecraft.getMinecraft().player && bullet.ticksExisted < 1)
 			return;
 		bindEntityTexture(bullet);
 		GL11.glPushMatrix();

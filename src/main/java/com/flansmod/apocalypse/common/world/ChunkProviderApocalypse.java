@@ -35,7 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IProgressUpdate;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
@@ -66,7 +66,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	public NoiseGeneratorOctaves noiseGen5;
 	public NoiseGeneratorOctaves noiseGen6;
 	public NoiseGeneratorOctaves mobSpawnerNoise;
-	private World worldObj;
+	private World world;
 	private double[] noiseArray;
 	private double[] stoneNoise = new double[256];
 	//private MapGenBase caveGenerator = new MapGenCaves();
@@ -112,7 +112,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	
 	public ChunkProviderApocalypse(World world, long seed) 
 	{
-		worldObj = world;
+		world = world;
 		rand = new Random(seed);
 		noiseGen1 = new NoiseGeneratorOctaves(rand, 16);
 		noiseGen2 = new NoiseGeneratorOctaves(rand, 16);
@@ -129,7 +129,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         {
             for (int k = -2; k <= 2; ++k)
             {
-                float f = 10.0F / MathHelper.sqrt_float((float)(j * j + k * k) + 0.2F);
+                float f = 10.0F / MathHelper.sqrt((float)(j * j + k * k) + 0.2F);
                 this.parabolicField[j + 2 + (k + 2) * 5] = f;
             }
         }
@@ -222,7 +222,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         boolean flag = false;
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(p_73153_2_, p_73153_3_);
 
-        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag));
+        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(p_73153_1_, world, rand, p_73153_2_, p_73153_3_, flag));
 
         /*
         if (this.settings.useMineShafts && this.mapFeaturesEnabled)
@@ -259,7 +259,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	        k1 = this.rand.nextInt(16) + 8;
 	        l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
 	        i2 = this.rand.nextInt(16) + 8;
-	        skeletonGenerator.generate(worldObj, rand, blockpos.add(k1, l1, i2));
+	        skeletonGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
         }
         
         if(rand.nextInt(FlansModApocalypse.DEAD_TREE_RARITY) == 0)
@@ -267,7 +267,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	        k1 = this.rand.nextInt(16) + 8;
 	        l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
 	        i2 = this.rand.nextInt(16) + 8;
-	        deadTreeGenerator.generate(worldObj, rand, blockpos.add(k1, l1, i2));
+	        deadTreeGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
         }
         
         
@@ -276,13 +276,13 @@ public class ChunkProviderApocalypse implements IChunkProvider
 	        k1 = this.rand.nextInt(16) + 8;
 	        l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
 	        i2 = this.rand.nextInt(16) + 8;
-	        dyeFactoryGenerator.generate(worldObj, rand, blockpos.add(k1, l1, i2));
+	        dyeFactoryGenerator.generate(world, rand, blockpos.add(k1, l1, i2));
         }
         
         
         
         /*
-        if (TerrainGen.populate(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag, LAVA) && !flag && this.rand.nextInt(this.settings.lavaLakeChance / 10) == 0 && this.settings.useLavaLakes)
+        if (TerrainGen.populate(p_73153_1_, world, rand, p_73153_2_, p_73153_3_, flag, LAVA) && !flag && this.rand.nextInt(this.settings.lavaLakeChance / 10) == 0 && this.settings.useLavaLakes)
         {
             k1 = this.rand.nextInt(16) + 8;
             l1 = this.rand.nextInt(this.rand.nextInt(248) + 8);
@@ -290,13 +290,13 @@ public class ChunkProviderApocalypse implements IChunkProvider
 
             if (l1 < 63 || this.rand.nextInt(this.settings.lavaLakeChance / 8) == 0)
             {
-                (new WorldGenLakes(Blocks.lava)).generate(this.world, this.rand, blockpos.add(k1, l1, i2));
+                (new WorldGenLakes(Blocks.LAVA)).generate(this.world, this.rand, blockpos.add(k1, l1, i2));
             }
         }
 
         if (this.settings.useDungeons)
         {
-            boolean doGen = TerrainGen.populate(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag, DUNGEON);
+            boolean doGen = TerrainGen.populate(p_73153_1_, world, rand, p_73153_2_, p_73153_3_, flag, DUNGEON);
             for (k1 = 0; doGen && k1 < this.settings.dungeonChance; ++k1)
             {
                 l1 = this.rand.nextInt(16) + 8;
@@ -310,14 +310,14 @@ public class ChunkProviderApocalypse implements IChunkProvider
         biomegenbase.decorate(this.world, this.rand, new BlockPos(k, 0, l));
         
         this.generateEntities(chunkcoordintpair);
-        if (TerrainGen.populate(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag, ANIMALS))
+        if (TerrainGen.populate(p_73153_1_, world, rand, p_73153_2_, p_73153_3_, flag, ANIMALS))
         {
         SpawnerAnimals.performWorldGenSpawning(this.world, biomegenbase, k + 8, l + 8, 16, 16, this.rand);
         //this.generateEntities(chunkcoordintpair);
         }
         blockpos = blockpos.add(8, 0, 8);
 
-        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(p_73153_1_, worldObj, rand, p_73153_2_, p_73153_3_, flag));
+        MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(p_73153_1_, world, rand, p_73153_2_, p_73153_3_, flag));
         
         int xOrigin = ModuloHelper.divide(p_73153_2_, 4);
         
@@ -331,12 +331,12 @@ public class ChunkProviderApocalypse implements IChunkProvider
         	boolean canSpawn = true;
         	for(int i = 0; i < 4; i++)
         	{
-        		if(!worldObj.getWorldChunkManager().areBiomesViable((xOrigin * 4 + i) * 16 + 8, p_73153_3_ * 16 + 8, 0, runwaySpawnBiome))
+        		if(!world.getWorldChunkManager().areBiomesViable((xOrigin * 4 + i) * 16 + 8, p_73153_3_ * 16 + 8, 0, runwaySpawnBiome))
         			canSpawn = false;
         	}
         	//Generate runway section xOffset at chunk p_73153_2_
         	if(canSpawn)
-        		runwayGenerator.generate(worldObj, rand, new BlockPos(xOrigin * 4 * 16, 0, p_73153_3_ * 16));
+        		runwayGenerator.generate(world, rand, new BlockPos(xOrigin * 4 * 16, 0, p_73153_3_ * 16));
         }
         
         xOrigin = ModuloHelper.divide(p_73153_2_, 3);
@@ -354,7 +354,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
         	{
             	for(int j = 0; j < 5; j++)
             	{
-	        		if(!worldObj.getWorldChunkManager().areBiomesViable((xOrigin * 3 - 1 + i) * 16 + 8, (zOrigin * 3 - 1 + j) * 16 + 8, 0, labSpawnBiome))
+	        		if(!world.getWorldChunkManager().areBiomesViable((xOrigin * 3 - 1 + i) * 16 + 8, (zOrigin * 3 - 1 + j) * 16 + 8, 0, labSpawnBiome))
 	        			canSpawn = false;
             	}
         	}
@@ -366,7 +366,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
                 i1 = this.rand.nextLong() / 2L * 2L + 1L;
                 j1 = this.rand.nextLong() / 2L * 2L + 1L;
                 this.rand.setSeed((long)p_73153_2_ * i1 + (long)p_73153_3_ * j1 ^ this.world.getSeed());
-        		researchLabGenerator.generate(worldObj, rand, new BlockPos(p_73153_2_ * 16, 0, p_73153_3_ * 16));
+        		researchLabGenerator.generate(world, rand, new BlockPos(p_73153_2_ * 16, 0, p_73153_3_ * 16));
         	}
         }
 
@@ -384,16 +384,16 @@ public class ChunkProviderApocalypse implements IChunkProvider
         if (rand.nextInt(FlansModApocalypse.SURVIVOR_RARITY) == 0)
         {
         	
-            EntitySurvivor survivor = new EntitySurvivor(worldObj);
+            EntitySurvivor survivor = new EntitySurvivor(world);
             double x = chunkcoordintpair.chunkXPos * 16 + rand.nextInt(16) + 0.5D;
             double z = chunkcoordintpair.chunkZPos * 16 + rand.nextInt(16) + 0.5D;
             
             BlockPos surface = new BlockPos((int)x, 30, (int)z);
-            for(; !worldObj.isAirBlock(surface.up()); surface = surface.up()) {}
+            for(; !world.isAirBlock(surface.up()); surface = surface.up()) {}
             
             survivor.setLocationAndAngles(x, surface.getY() + 1, z, 0.0F, 0.0F);
             //survivor.func_180482_a(world.getDifficultyForLocation(new BlockPos(entityvillager)), (IEntityLivingData)null);
-            worldObj.spawnEntity(survivor);
+            world.spawnEntity(survivor);
         }
         
         if(rand.nextInt(FlansModApocalypse.VEHICLE_RARITY) == 0)
@@ -402,7 +402,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
             double z = chunkcoordintpair.chunkZPos * 16 + rand.nextInt(16) + 0.5D;
             
             BlockPos surface = new BlockPos((int)x, 30, (int)z);
-            for(; !worldObj.isAirBlock(surface.up()); surface = surface.up()) {}
+            for(; !world.isAirBlock(surface.up()); surface = surface.up()) {}
             
         	DriveableType type = FlansModApocalypse.getLootGenerator().getRandomDriveable(rand);
         	NBTTagCompound tags = new NBTTagCompound();
@@ -420,13 +420,13 @@ public class ChunkProviderApocalypse implements IChunkProvider
         			killPart(randomPart, tags);
         	}
         	
-        	EntityDriveable entity = type.createDriveable(worldObj, x, surface.getY() + 1, z, new DriveableData(tags));
+        	EntityDriveable entity = type.createDriveable(world, x, surface.getY() + 1, z, new DriveableData(tags));
         	
         	if(rand.nextBoolean())
         		entity.driveableData.fuel = new ItemStack(FlansModApocalypse.getLootGenerator().getRandomFuel(rand).item, 1);
         	entity.setRotation(rand.nextInt(360), 0, 0);
         	
-            worldObj.spawnEntity(entity);
+            world.spawnEntity(entity);
         }
 
     }
@@ -563,7 +563,7 @@ public class ChunkProviderApocalypse implements IChunkProvider
                                 }
                                 else if (subChunkY * 8 + blockY < this.seaLevel)
                                 {
-                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.water.getDefaultState());
+                                    p_180518_3_.setBlockState(subChunkX * 4 + blockX, subChunkY * 8 + blockY, subChunkZ * 4 + blockZ, Blocks.WATER.getDefaultState());
                                 }
                             }
 

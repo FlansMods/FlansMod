@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import com.flansmod.common.FlansMod;
@@ -51,7 +51,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		super.onUpdate();
 		//If the base is null, maybe because the flag loaded before the base, check again to see if it exists.
 		//Do not do this client side
-		if(base == null && !worldObj.isRemote)
+		if(base == null && !world.isRemote)
 		{
 			setBase(TeamsManager.getInstance().getBase(baseID));
 		}
@@ -68,7 +68,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 			
 		}
 		if(!addedToChunk)
-			worldObj.spawnEntity(this);
+			world.spawnEntity(this);
 		
 		if(timeUntilReturn > 0)
 		{
@@ -87,7 +87,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		}
 		
 		//Temporary fire glitch fix
-		if(worldObj.isRemote)
+		if(world.isRemote)
 			extinguish();
 	}
 	
@@ -214,7 +214,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target)
+	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;

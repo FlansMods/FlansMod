@@ -185,7 +185,7 @@ public class GuiGunModTable extends GuiContainer
 	        		for(int s = 0; s < inventory.getSizeInventory(); s++)
 	        		{
 	        			ItemStack stack = inventory.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.dye && stack.getItemDamage() == hoveringOver.dyesNeeded[n].getItemDamage())
+	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == hoveringOver.dyesNeeded[n].getItemDamage())
 	        			{
 	        				amountNeeded -= stack.stackSize;
 	        			}

@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public abstract class ItemShootable extends Item 
@@ -21,25 +21,24 @@ public abstract class ItemShootable extends Item
 		type = t;
 		maxStackSize = type.maxStackSize;
 		setMaxDamage(type.roundsPerItem);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 	
 	//Can be overriden to allow new types of bullets to be created, for planes
-	public abstract EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public abstract EntityShootable getEntity(World world, Vec3d origin, float yaw,
 			float pitch, double motionX, double motionY, double motionZ,
 			EntityLivingBase shooter,float gunDamage, InfoType shotFrom);
 
 	//Can be overriden to allow new types of bullets to be created, vector constructor
-	public abstract EntityShootable getEntity(World worldObj, Vector3f origin, Vector3f direction,
+	public abstract EntityShootable getEntity(World world, Vector3f origin, Vector3f direction,
 			EntityLivingBase shooter, float spread, float damage, float speed, InfoType shotFrom);
 
 	//Can be overriden to allow new types of bullets to be created, AA/MG constructor
-	public abstract EntityShootable getEntity(World worldObj, Vec3 origin, float yaw,
+	public abstract EntityShootable getEntity(World world, Vec3d origin, float yaw,
 			float pitch, EntityLivingBase shooter, float spread, float damage,
 			InfoType shotFrom);
 
 	//Can be overriden to allow new types of bullets to be created, Handheld constructor
-	public abstract EntityShootable getEntity(World worldObj, EntityLivingBase player,
+	public abstract EntityShootable getEntity(World world, EntityLivingBase player,
 			float bulletSpread, float damage, float bulletSpeed, boolean b,
 			InfoType shotFrom);
 	

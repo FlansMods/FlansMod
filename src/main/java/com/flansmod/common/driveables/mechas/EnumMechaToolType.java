@@ -20,11 +20,11 @@ public enum EnumMechaToolType
 	{
 		switch(this)
 		{
-		case pickaxe : return material == Material.iron || material == Material.anvil || material == Material.rock || material == Material.ice;
-		case axe : return material == Material.wood || material == Material.plants || material == Material.vine;
-		case shovel : return material == Material.grass || material == Material.ground || material == Material.sponge || material == Material.sand || material == Material.snow || material == Material.craftedSnow || material == Material.clay;
-		case shears : return material == Material.leaves || material == Material.vine || material == Material.cloth || material == Material.carpet;
-		case sword : return material == Material.web;
+		case pickaxe : return material == Material.IRON || material == Material.ANVIL || material == Material.ROCK || material == Material.ICE;
+		case axe : return material == Material.WOOD || material == Material.PLANTS || material == Material.VINE;
+		case shovel : return material == Material.GRASS || material == Material.GROUND || material == Material.SPONGE || material == Material.SAND || material == Material.SNOW || material == Material.CRAFTED_SNOW || material == Material.CLAY;
+		case shears : return material == Material.LEAVES || material == Material.VINE || material == Material.CLOTH || material == Material.CARPET;
+		case sword : return material == Material.WEB;
 		}
 		return false;
 	}

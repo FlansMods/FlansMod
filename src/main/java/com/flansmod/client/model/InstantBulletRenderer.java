@@ -120,8 +120,8 @@ public class InstantBulletRenderer
 
 	        dPos.normalise();
 	        
-	        EntityPlayer thePlayer = Minecraft.getMinecraft().thePlayer;
-	        Vector3f vectorToPlayer = new Vector3f(thePlayer.posX - hitPos.x, thePlayer.posY - hitPos.y, thePlayer.posZ - hitPos.z);
+	        EntityPlayer player = Minecraft.getMinecraft().player;
+	        Vector3f vectorToPlayer = new Vector3f(player.posX - hitPos.x, player.posY - hitPos.y, player.posZ - hitPos.z);
 	        
 	        vectorToPlayer.normalise();
 	        

@@ -1,7 +1,7 @@
 package com.flansmod.common.vector;
 
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class Matrix3f 
 {
@@ -28,7 +28,7 @@ public class Matrix3f
 		return Matrix3f.multMatrix(this, m);
 	}
 	
-	public Vec3 mult(Vec3 v)
+	public Vec3d mult(Vec3d v)
 	{
 		return Matrix3f.multVec(this, v);
 	}
@@ -72,7 +72,7 @@ public class Matrix3f
 				});
 	}
 
-	public static Vec3 multVec(Matrix3f m, Vec3 vec)
+	public static Vec3d multVec(Matrix3f m, Vec3d vec)
 	{
 		float[][] retMat = new float[3][3];
 		float[] retVec = new float[3];
@@ -80,11 +80,11 @@ public class Matrix3f
 		for(int i =0;i < 3;i++)
 		{
 			float[] row = {m.matrix[i][0],m.matrix[i][1],m.matrix[i][2]};
-			float[] column = {(float)vec.xCoord, (float)vec.yCoord, (float)vec.zCoord};
+			float[] column = {(float)vec.x, (float)vec.y, (float)vec.z};
 			for(int sm = 0; sm < 3; sm++) retVec[i] += row[sm]*column[sm];
     	}
     	
-    	return new Vec3(retVec[0], retVec[1], retVec[2]);
+    	return new Vec3d(retVec[0], retVec[1], retVec[2]);
     }
     
     public static Matrix3f multMatrix(Matrix3f m1, Matrix3f m2)

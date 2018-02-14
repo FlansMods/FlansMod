@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -114,7 +114,7 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 			return false;
 		for(int i = 0; i < 2; i++)
 			for(int j = 0; j < 2; j++)
-				if(world.getBlockState(pos.add(i * 3, -1, j * 3)).getBlock() != Blocks.obsidian || world.getBlockState(pos.add(1 + i, -1, 1 + j)).getBlock() != Blocks.obsidian)
+				if(world.getBlockState(pos.add(i * 3, -1, j * 3)).getBlock() != Blocks.OBSIDIAN || world.getBlockState(pos.add(1 + i, -1, 1 + j)).getBlock() != Blocks.OBSIDIAN)
 					return false;
 		return true;
 	}

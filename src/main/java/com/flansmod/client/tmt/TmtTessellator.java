@@ -170,7 +170,7 @@ public class TmtTessellator extends Tessellator
      * Draws the data set up in this tessellator and resets the state to prepare for new drawing.
      */
     @Override
-	public int draw()
+	public void draw()
     {
         if (!this.isDrawing)
         {
@@ -322,7 +322,7 @@ public class TmtTessellator extends Tessellator
 
             int var1 = this.rawBufferIndex * 4;
             this.reset();
-            return var1;
+            return;
         }
     }
     

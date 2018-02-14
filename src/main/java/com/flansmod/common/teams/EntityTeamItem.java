@@ -40,7 +40,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 	}
 	
 	@Override
-	public void func_180426_a(double x, double y, double z, float yaw, float pitch, int i, boolean b)
+	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int i, boolean b)
 	{
 		
 	}
@@ -54,14 +54,14 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		prevPosZ = posZ;
 		prevRotationYaw = rotationYaw;
 		++age;
-		if(worldObj.isRemote)
+		if(world.isRemote)
 		{
 			angle += 0.05D;
 			setPosition(xCoord + 0.5F + Math.cos(angle) * 0.3F, yCoord + 0.5F, zCoord + 0.5F + Math.sin(angle) * 0.3F);
 		}
 
 		//Temporary fire glitch fix
-		if(worldObj.isRemote)
+		if(world.isRemote)
 			extinguish();
 	}
 
@@ -73,7 +73,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player)
 	{
-		if (!worldObj.isRemote)
+		if (!world.isRemote)
 		{
 			EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
 
@@ -140,7 +140,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		yCoord = data.readInt();
 		zCoord = data.readInt();
 		angle = data.readDouble();
-		setEntityItemStack(ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(data)));
+		setEntityItemStack(new ItemStack(ByteBufUtils.readTag(data)));
 	}
 	
 	@Override

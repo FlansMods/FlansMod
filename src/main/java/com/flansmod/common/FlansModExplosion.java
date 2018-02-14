@@ -155,7 +155,7 @@ public class FlansModExplosion extends Explosion
         int i1 = MathHelper.floor(this.z + (double)f3 + 1.0D);
         List list = this.world.getEntitiesWithinAABBExcludingEntity(explosive, new AxisAlignedBB((double)j, (double)j1, (double)k1, (double)k, (double)l, (double)i1));
         net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.world, this, list, f3);
-        Vec3d vec3 = new Vec3d(x, y, z);
+        Vec3d Vec3d = new Vec3d(x, y, z);
 
         for (int l1 = 0; l1 < list.size(); ++l1)
         {
@@ -177,7 +177,7 @@ public class FlansModExplosion extends Explosion
                         d5 /= d13;
                         d7 /= d13;
                         d9 /= d13;
-                        double d14 = (double)this.world.getBlockDensity(vec3, entity.getEntityBoundingBox());
+                        double d14 = (double)this.world.getBlockDensity(Vec3d, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
                         entity.attackEntityFrom(new EntityDamageSourceGun(type.shortName, explosive, detonator, type, false), (float)((int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)f3 + 1.0D)));
                         double d11 = entity instanceof EntityLivingBase ? EnchantmentProtection.getBlastDamageReduction((EntityLivingBase) entity, d10) : 0.0d;

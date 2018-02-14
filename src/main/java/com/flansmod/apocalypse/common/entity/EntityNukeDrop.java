@@ -62,7 +62,7 @@ public class EntityNukeDrop extends Entity
 				setDead();
 		}
 		
-		if(!worldObj.isRemote && FlansModApocalypse.proxy.getApocalypseCountdown() <= 0)
+		if(!world.isRemote && FlansModApocalypse.proxy.getApocalypseCountdown() <= 0)
 			setDead();
 	}
 }

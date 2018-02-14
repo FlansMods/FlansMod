@@ -8,6 +8,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,11 +17,15 @@ import net.minecraft.item.ItemMapBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,7 +49,6 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 		type = type1;
 		type.item = this;
 		setCreativeTab(FlansMod.tabFlanDriveables);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 
 	@Override
@@ -95,13 +99,13 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
+	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
 			Collections.addAll(lines, type.description.split("_"));
 		}
-		NBTTagCompound tags = getTagCompound(stack, player.world);
+		NBTTagCompound tags = getTagCompound(stack, world);
 		String engineName = tags.getString("Engine");
 		PartType part = PartType.getPart(engineName);
 		if(part != null)
@@ -109,26 +113,28 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
     {
+		ItemStack itemstack = entityplayer.getHeldItem(hand);
+		
     	//Raytracing
         float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
         float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
         float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
         float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
         double length = 5D;
-        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
+        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+        Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+        RayTraceResult RayTraceResult = world.rayTraceBlocks(posVec, lookVec, type.placeableOnWater);
         
         //Result check
-        if(movingobjectposition == null)
+        if(RayTraceResult == null)
         {
-            return itemstack;
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
         }
-        if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
+        if(RayTraceResult.typeOfHit == Type.BLOCK)
         {
-            BlockPos pos = movingobjectposition.getBlockPos();
+            BlockPos pos = RayTraceResult.getBlockPos();
             Block block = world.getBlockState(pos).getBlock();
             if(type.placeableOnLand || block instanceof BlockLiquid)
             {
@@ -138,11 +144,12 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 	            }
 				if(!entityplayer.capabilities.isCreativeMode)
 				{	
-					itemstack.stackSize--;
+					itemstack.setCount(itemstack.getCount() - 1);
 				}
 			}
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 
 	public Entity spawnVehicle(World world, double x, double y, double z, ItemStack stack)
@@ -159,19 +166,12 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 	{
 		return new DriveableData(getTagCompound(itemstack, world), itemstack.getItemDamage());
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	return type.colour;
-    }
     
     /** Make sure that creatively spawned planes have nbt data */
     @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	ItemStack planeStack = new ItemStack(item, 1, 0);
+    	ItemStack planeStack = new ItemStack(this, 1, 0);
     	NBTTagCompound tags = new NBTTagCompound();
     	tags.setString("Type", type.shortName);
     	if(PartType.defaultEngines.containsKey(EnumType.vehicle))
@@ -182,7 +182,7 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
     		tags.setBoolean(part.getShortName() + "_Fire", false);
     	}
     	planeStack.setTagCompound(tags);
-        list.add(planeStack);
+        items.add(planeStack);
     }
 	
 	@Override

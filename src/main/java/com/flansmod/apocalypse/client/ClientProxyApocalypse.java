@@ -145,7 +145,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 					alpha = 1F - alpha * alpha;
 					alpha *= 0.5F;
 					//Render white screen
-					if(mc.thePlayer.getDistanceSqToEntity(nuke) < scale * scale)
+					if(mc.player.getDistanceSq(nuke) < scale * scale)
 					{
 						FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 						GL11.glEnable(3042 /* GL_BLEND */);

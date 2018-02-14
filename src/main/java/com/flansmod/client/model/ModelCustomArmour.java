@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 
@@ -32,20 +33,19 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glPushMatrix();
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
-		ItemStack itemstack = ((EntityLivingBase)entity).getEquipmentInSlot(0);
-		heldItemRight = itemstack != null ? 1 : 0;
-
-        aimedBow = false;
+		ItemStack itemstack = ((EntityLivingBase)entity).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+		rightArmPose = itemstack != null ? ArmPose.ITEM : ArmPose.EMPTY;
+        
         if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
         {
         	EnumAction enumaction = itemstack.getItemUseAction();
             if (enumaction == EnumAction.BLOCK)
             {
-                heldItemRight = 3;
+            	rightArmPose = ArmPose.BLOCK;
             }
             else if (enumaction == EnumAction.BOW)
             {
-                aimedBow = true;
+            	rightArmPose = ArmPose.BOW_AND_ARROW;
             }
         }
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 

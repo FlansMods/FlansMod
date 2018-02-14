@@ -3,6 +3,7 @@ package com.flansmod.common.guns;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -53,8 +54,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -63,6 +65,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -70,14 +73,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3d;
-import net.minecraft.util.Vec3i;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -128,7 +136,6 @@ public class ItemGun extends Item implements IPaintableItem
 		type.item = this;
 		setMaxDamage(0);
 		setCreativeTab(FlansMod.tabFlanGuns);
-		GameRegistry.registerItem(this, type.shortName, FlansMod.MODID);
 	}
 	
 	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
@@ -155,7 +162,7 @@ public class ItemGun extends Item implements IPaintableItem
 		NBTTagList ammoTagsList = gun.getTagCompound().getTagList("ammo", Constants.NBT.TAG_COMPOUND);
 		//Get the specific ammo tags required
 		NBTTagCompound ammoTags = ammoTagsList.getCompoundTagAt(id);
-		return ItemStack.loadItemStackFromNBT(ammoTags);
+		return new ItemStack(ammoTags);
 	}
 	
 	/** Set the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
@@ -207,8 +214,10 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	/** Deployable guns only */
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
 	{
+		ItemStack itemstack = entityplayer.getHeldItem(hand);
+		
 		if (type.deployable)
 		{
 	    	//Raytracing
@@ -217,12 +226,12 @@ public class ItemGun extends Item implements IPaintableItem
 	        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
 	        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
 	        double length = 5D;
-	        Vec3 posVec = new Vec3(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-	        Vec3 lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-	        MovingObjectPosition look = world.rayTraceBlocks(posVec, lookVec, true);
+	        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
+	        Vec3d lookVec = posVec.addVector(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+	        RayTraceResult look = world.rayTraceBlocks(posVec, lookVec, true);
 	        
 	        //Result check
-			if (look != null && look.typeOfHit == MovingObjectType.BLOCK)
+			if (look != null && look.typeOfHit == Type.BLOCK)
 			{
 				if (look.sideHit == EnumFacing.UP)
 				{
@@ -232,16 +241,22 @@ public class ItemGun extends Item implements IPaintableItem
 					int k = look.getBlockPos().getZ();
 					if (!world.isRemote)
 					{
-						if (world.getBlockState(new BlockPos(i, j, k)).getBlock() == Blocks.snow)
+						if (world.getBlockState(new BlockPos(i, j, k)).getBlock() == Blocks.SNOW)
 						{
 							j--;
 						}
-						if (isSolid(world, i, j, k) && (world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.air || world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.snow) && (world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.air) && (world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.air || world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.snow))
+						if (isSolid(world, i, j, k) && 
+								(world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.AIR || world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.SNOW)
+								&&
+								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR) 
+								&& 
+								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR 
+								|| world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.SNOW))
 						{
 							for (EntityMG mg : EntityMG.mgs)
 							{
 								if (mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
-									return itemstack;
+									return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 							}
 							if(!world.isRemote)
 							{
@@ -254,7 +269,7 @@ public class ItemGun extends Item implements IPaintableItem
 								
 							}
 							if (!entityplayer.capabilities.isCreativeMode)
-								itemstack.stackSize = 0;
+								itemstack.setCount(0);
 						}
 					}
 				}
@@ -266,7 +281,7 @@ public class ItemGun extends Item implements IPaintableItem
 			for(int i = 0; i < 3; i++)
 				Minecraft.getMinecraft().entityRenderer.itemRenderer.updateEquippedItem();
 		}
-		return itemstack;
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	// _____________________________________________________________________________
@@ -652,10 +667,12 @@ public class ItemGun extends Item implements IPaintableItem
 	private void PlayShotSound(World world, boolean silenced, float x, float y, float z)
 	{
 		FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-				new PositionedSoundRecord(FlansModResourceHandler.getSound(type.shootSound), 
+				new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent(type.shootSound), 
+						SoundCategory.PLAYERS,
+						x, y, z,
 						silenced ? 5F : 10F, 
-						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F), 
-						x, y, z));
+						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F) 
+						));
 	}
 	
 	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
@@ -698,12 +715,16 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					for(int i = 0; i < 2; i++)
 					{
-		                EntityFX fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+		                Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
 		                		EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f, 
 		                		Block.getIdFromBlock(blockState.getBlock()));
 		                
-		                double scale = world.rand.nextGaussian() * 0.1d + 0.5d;
-		                
+		               
+		                		                
+		                // TODO: [1.12] Pretty sure we need this precise control of the PFX direction to get it looking good
+		                /*
+		                float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
+		                   
 		                fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
 		                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
 		                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
@@ -711,23 +732,28 @@ public class ItemGun extends Item implements IPaintableItem
 		                fx.motionX += bulletDir.x;
 		                fx.motionY += bulletDir.y;
 		                fx.motionZ += bulletDir.z;
+		                */
 		                
-	             		if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
-	             			fx.renderDistanceWeight = 100D;
+		                // TODO: [1.12] More long range PFX
+	             		//if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
+	             		//	fx.renderDistanceWeight = 100D;
 					}
 				}
 				
 				
-				EntityFX fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f);
+				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f);
+				/*
+				 * TODO: [1.12] Likewise
 				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
                 fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
                 fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
                 fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+                */
 			}
 			
 			if(world.isRemote)
 			{
-				if(shooter == Minecraft.getMinecraft().thePlayer)
+				if(shooter == Minecraft.getMinecraft().player)
 				{
 					if(hitData instanceof EntityHit || hitData instanceof DriveableHit)
 					{
@@ -901,13 +927,13 @@ public class ItemGun extends Item implements IPaintableItem
 							
 					//Load the new magazine
 					ItemStack stackToLoad = newBulletStack.copy();
-					stackToLoad.stackSize = 1;
+					stackToLoad.setCount(1);
 					setBulletItemStack(gunstack, stackToLoad, i);					
 					
 					//Remove the magazine from the inventory
 					if(!isCreative)
-						newBulletStack.stackSize--;
-					if(newBulletStack.stackSize <= 0)
+						newBulletStack.setCount(newBulletStack.getCount() - 1);
+					if(newBulletStack.getCount() <= 0)
 						newBulletStack = null;
 					inventory.setInventorySlotContents(bestSlot, newBulletStack);
 								
@@ -1017,10 +1043,10 @@ public class ItemGun extends Item implements IPaintableItem
 								//If we couldn't get a snapshot, use normal entity hitbox calculations
 								if(otherData == null || shouldDoNormalHitDetect)
 								{
-									MovingObjectPosition mop = data.lastMeleePositions[k] == null ? player.getEntityBoundingBox().calculateIntercept(nextPosInWorldCoords.toVec3(), new Vec3(0F, 0F, 0F)) : player.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									RayTraceResult mop = data.lastMeleePositions[k] == null ? player.getEntityBoundingBox().calculateIntercept(nextPosInWorldCoords.toVec3(), new Vec3d(0F, 0F, 0F)) : player.getBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
-										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);
+										Vector3f hitPoint = new Vector3f(mop.hitVec.x - data.lastMeleePositions[k].x, mop.hitVec.y - data.lastMeleePositions[k].y, mop.hitVec.z - data.lastMeleePositions[k].z);
 										float hitLambda = 1F;
 										if(dPos.x != 0F)
 											hitLambda = hitPoint.x / dPos.x;
@@ -1040,10 +1066,10 @@ public class ItemGun extends Item implements IPaintableItem
 								Entity entity = (Entity)obj;
 								if(entity != player && !entity.isDead && (entity instanceof EntityLivingBase || entity instanceof EntityAAGun))
 								{
-									MovingObjectPosition mop = entity.getEntityBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
+									RayTraceResult mop = entity.getEntityBoundingBox().calculateIntercept(data.lastMeleePositions[k].toVec3(), nextPosInWorldCoords.toVec3());
 									if(mop != null)
 									{
-										Vector3f hitPoint = new Vector3f(mop.hitVec.xCoord - data.lastMeleePositions[k].x, mop.hitVec.yCoord - data.lastMeleePositions[k].y, mop.hitVec.zCoord - data.lastMeleePositions[k].z);
+										Vector3f hitPoint = new Vector3f(mop.hitVec.x - data.lastMeleePositions[k].x, mop.hitVec.y - data.lastMeleePositions[k].y, mop.hitVec.z - data.lastMeleePositions[k].z);
 										float hitLambda = 1F;
 										if(dPos.x != 0F)
 											hitLambda = hitPoint.x / dPos.x;
@@ -1176,7 +1202,7 @@ public class ItemGun extends Item implements IPaintableItem
 	// _____________________________________________________________________________
 	
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List lines, boolean advancedTooltips)
+	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
 		if(type.description != null)
 		{
@@ -1225,10 +1251,10 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	private boolean isSolid(World world, int i, int j, int k)
 	{
-		Block block = world.getBlockState(new BlockPos(i, j, k)).getBlock();
-		if (block == null)
+		IBlockState state = world.getBlockState(new BlockPos(i, j, k));
+		if (state == null)
 			return false;
-		return block.getMaterial().isSolid() && block.isOpaqueCube();
+		return state.getMaterial().isSolid() && state.isOpaqueCube();
 	}
 	
 	//Stop damage being done to entities when scoping etc.
@@ -1275,18 +1301,11 @@ public class ItemGun extends Item implements IPaintableItem
     }
 
 	@Override
-    public boolean canHarvestBlock(Block p_150897_1_)
+	 public boolean canHarvestBlock(IBlockState state, ItemStack stack)
     {
         return false;
     }
     
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-	{
-		return type.colour;
-	}
-
 	public boolean isItemStackDamageable()
 	{
 		return true;
@@ -1294,40 +1313,24 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	// ----------------- Paintjobs -----------------
 	
-    @Override
-    public void getSubItems(Item item, CreativeTabs tabs, List list)
+	 @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	GunType type = ((ItemGun)item).type;
+    	PaintableType type = ((IPaintableItem)this).GetPaintableType();
     	if(FlansMod.addAllPaintjobsToCreative)
     	{
     		for(Paintjob paintjob : type.paintjobs)
-    			addPaintjobToList(item, type, paintjob, list);
+    			addPaintjobToList(this, type, paintjob, items);
     	}
-        else addPaintjobToList(item, type, type.defaultPaintjob, list);
+        else addPaintjobToList(this, type, type.defaultPaintjob, items);
     }
-    
-    private void addPaintjobToList(Item item, GunType type, Paintjob paintjob, List list)
+
+    private void addPaintjobToList(Item item, PaintableType type, Paintjob paintjob, List list)
     {
-    	ItemStack gunStack = new ItemStack(item, 1, paintjob.ID);
+    	ItemStack paintableStack = new ItemStack(item, 1, paintjob.ID);
     	NBTTagCompound tags = new NBTTagCompound();
-    	
-    	/*
-    	NBTTagCompound customPaintTags = new NBTTagCompound();
-    	
-    	customPaintTags.setInteger("Hash", type.hashCode());
-    	customPaintTags.setByteArray("Skin", new byte[] { (byte) 0x40, (byte) 0x00, (byte) 0xff, (byte) 0xff, (byte) 0x61, (byte) 0x74 });
-    	customPaintTags.setInteger("SkinWidth", 2);
-    	customPaintTags.setInteger("SkinHeight", 1);
-    	
-    	customPaintTags.setByteArray("Icon", new byte[] { (byte) 0xff, (byte) 0x00, (byte) 0xff });
-    	customPaintTags.setInteger("IconWidth", 1);
-    	customPaintTags.setInteger("IconHeight", 1);
-    	
-    	tags.setTag("CustomPaint", customPaintTags);
-    	*/
-    	
-    	gunStack.setTagCompound(tags);
-        list.add(gunStack);
+    	paintableStack.setTagCompound(tags);
+        list.add(paintableStack);
     }
     
     // ---------------------------------------------
@@ -1344,17 +1347,17 @@ public class ItemGun extends Item implements IPaintableItem
         return EnumAction.BOW;
     }
 	
-    @Override
-    public Multimap getAttributeModifiers(ItemStack stack)
+    protected static final UUID KNOCKBACK_RESIST_MODIFIER = UUID.fromString("77777777-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("99999999-4180-4865-B01B-BCCE9785ACA3");
+    
+	@Override
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
-       	Multimap map = super.getAttributeModifiers(stack);
-       	if(type.knockbackModifier != 0F)
-       		map.put(SharedMonsterAttributes.knockbackResistance.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "KnockbackResist", type.knockbackModifier, 0));
-       	if(type.moveSpeedModifier != 1F)
-       		map.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "MovementSpeed", type.moveSpeedModifier - 1F, 2));
-        if(type.secondaryFunction == EnumSecondaryFunction.MELEE)
-        	map.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(itemModifierUUID, "Weapon modifier", type.meleeDamage, 0));
-       	return map;
+        Multimap multimap = super.getAttributeModifiers(slot, stack);
+        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));
+        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
+        return multimap;
     }
 	
 	@Override

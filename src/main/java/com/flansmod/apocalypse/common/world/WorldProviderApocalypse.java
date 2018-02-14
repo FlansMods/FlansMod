@@ -4,8 +4,8 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -29,7 +29,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
 	public IChunkProvider createChunkGenerator()
 	{
-		return new ChunkProviderApocalypse(worldObj, worldObj.getSeed());
+		return new ChunkProviderApocalypse(world, world.getSeed());
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class WorldProviderApocalypse extends WorldProvider
      */
 	@Override
     @SideOnly(Side.CLIENT)
-    public Vec3 getFogColor(float celestialAngle, float partialTicks)
+    public Vec3d getFogColor(float celestialAngle, float partialTicks)
     {
         float f2 = MathHelper.cos(celestialAngle * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
         f2 = MathHelper.clamp_float(f2, 0.0F, 1.0F);
@@ -72,13 +72,13 @@ public class WorldProviderApocalypse extends WorldProvider
         f3 *= f2 * 0.94F + 0.06F;
         f4 *= f2 * 0.94F + 0.06F;
         f5 *= f2 * 0.91F + 0.09F;
-        return new Vec3((double)f3, (double)f4, (double)f5);
+        return new Vec3d((double)f3, (double)f4, (double)f5);
     }
 	
     @SideOnly(Side.CLIENT)
-    public Vec3 getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks)
+    public Vec3d getSkyColor(net.minecraft.entity.Entity cameraEntity, float partialTicks)
     {
-        return new Vec3(0.8F, 0.6F, 0.5F);
+        return new Vec3d(0.8F, 0.6F, 0.5F);
     }
     
     @Override

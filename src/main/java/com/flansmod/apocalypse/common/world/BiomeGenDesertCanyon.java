@@ -7,7 +7,6 @@ import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeGenDesertCanyon extends BiomeGenApocalypse

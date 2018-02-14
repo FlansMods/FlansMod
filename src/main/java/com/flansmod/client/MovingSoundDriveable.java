@@ -1,7 +1,7 @@
 package com.flansmod.client;
 
 import net.minecraft.client.audio.MovingSound;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.driveables.EntityDriveable;

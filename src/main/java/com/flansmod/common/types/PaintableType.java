@@ -63,7 +63,7 @@ public abstract class PaintableType extends InfoType
 			{
 				ItemStack[] dyeStacks = new ItemStack[(split.length - 3) / 2];
 				for(int i = 0; i < (split.length - 3) / 2; i++)
-					dyeStacks[i] = new ItemStack(Items.dye, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
+					dyeStacks[i] = new ItemStack(Items.DYE, Integer.parseInt(split[i * 2 + 4]), getDyeDamageValue(split[i * 2 + 3]));
 				if(split[1].contains("_"))
 				{
 					String[] splat = split[1].split("_");

@@ -1,15 +1,19 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,15 +30,17 @@ public class ItemFlagpole extends Item implements IFlanItem
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
 	{
+		ItemStack itemstack = entityplayer.getHeldItem(hand);
+	
         float f = 1.0F;
         float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
         float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
         double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * f;
         double d1 = (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * f + 1.6200000000000001D) - entityplayer.getYOffset();
         double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * f;
-        Vec3 vec3d = new Vec3(d, d1, d2);
+        Vec3d vec3d = new Vec3d(d, d1, d2);
         float f3 = MathHelper.cos(-f2 * 0.01745329F - 3.141593F);
         float f4 = MathHelper.sin(-f2 * 0.01745329F - 3.141593F);
         float f5 = -MathHelper.cos(-f1 * 0.01745329F);
@@ -43,18 +49,18 @@ public class ItemFlagpole extends Item implements IFlanItem
         float f8 = f6;
         float f9 = f3 * f5;
         double d3 = 5D;
-        Vec3 vec3d1 = vec3d.addVector(f7 * d3, f8 * d3, f9 * d3);
-        MovingObjectPosition movingobjectposition = world.rayTraceBlocks(vec3d, vec3d1, true);
-        if(movingobjectposition == null)
+        Vec3d vec3d1 = vec3d.addVector(f7 * d3, f8 * d3, f9 * d3);
+        RayTraceResult RayTraceResult = world.rayTraceBlocks(vec3d, vec3d1, true);
+        if(RayTraceResult == null)
         {
-            return itemstack;
+        	return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
         }
-        if(movingobjectposition.typeOfHit == MovingObjectType.BLOCK)
+        if(RayTraceResult.typeOfHit == Type.BLOCK)
         {
-            BlockPos pos = movingobjectposition.getBlockPos();
+            BlockPos pos = RayTraceResult.getBlockPos();
             if(!world.isRemote)
             {
-				if(world.getBlockState(pos).getBlock() == Blocks.snow)
+				if(world.getBlockState(pos).getBlock() == Blocks.SNOW)
 				{
 					pos.add(0, -1, 0);
 				}
@@ -63,16 +69,17 @@ public class ItemFlagpole extends Item implements IFlanItem
 					world.spawnEntity(new EntityFlagpole(world, pos));
 				}		            
 			}
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 		}
-		return itemstack;
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemstack);
 	}
 	
 	private boolean isSolid(World world, BlockPos pos)
 	{
-		Block block = world.getBlockState(pos).getBlock();
-		if (block == null)
+		IBlockState state = world.getBlockState(pos);
+		if (state == null)
 			return false;
-		return block.getMaterial().isSolid() && block.isOpaqueCube();
+		return state.getMaterial().isSolid() && state.isOpaqueCube();
 	}
 
 	@Override

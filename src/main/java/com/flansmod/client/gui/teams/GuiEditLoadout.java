@@ -193,11 +193,11 @@ public class GuiEditLoadout extends GuiTeamsBase
 									
 									switch(n)
 									{
-										case 2: attachmentStack = ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("scope")); break;
-										case 3: attachmentStack = ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("barrel")); break;
-										case 4: attachmentStack = ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("stock")); break;
-										case 5: attachmentStack = ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("grip")); break;
-										case 6: attachmentStack = ItemStack.loadItemStackFromNBT(attachmentTags.getCompoundTag("generic_0")); break;
+										case 2: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("scope")); break;
+										case 3: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("barrel")); break;
+										case 4: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("stock")); break;
+										case 5: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("grip")); break;
+										case 6: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("generic_0")); break;
 									}
 									
 									drawSlotInventory(attachmentStack, guiOriginX + 172, guiOriginY + 35 + 22 * n);

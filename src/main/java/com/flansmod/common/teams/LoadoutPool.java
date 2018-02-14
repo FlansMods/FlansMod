@@ -183,7 +183,7 @@ public class LoadoutPool extends InfoType
 				}
 				else
 				{
-					stack.stackSize = Integer.parseInt(split[2 * i + 4]);
+					stack.setCount(Integer.parseInt(split[2 * i + 4]));
 					entry.extraItems.add(stack);
 				}
 			}

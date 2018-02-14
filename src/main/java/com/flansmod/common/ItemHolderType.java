@@ -2,10 +2,12 @@ package com.flansmod.common;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.client.model.ModelItemHolder;
@@ -53,6 +55,12 @@ public class ItemHolderType extends InfoType
 			FlansMod.log("Reading item holder file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void registerBlock(IForgeRegistry<Block> registry)
+	{
+		registry.register(block);
 	}
 	
 	public static ItemHolderType getItemHolder(String string) 
