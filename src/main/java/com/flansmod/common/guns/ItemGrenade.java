@@ -38,6 +38,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 		super(t);
 		type = t;
 		type.item = this;
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 	

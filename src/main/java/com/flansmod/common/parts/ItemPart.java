@@ -31,6 +31,7 @@ public class ItemPart extends Item implements IFlanItem
 		}
 		type.item = this;
 		setUnlocalizedName("FlansMod:" + type.iconPath);
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanParts);
 	}
 	

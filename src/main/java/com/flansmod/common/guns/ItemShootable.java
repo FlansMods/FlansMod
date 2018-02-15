@@ -20,6 +20,7 @@ public abstract class ItemShootable extends Item
 	{
 		type = t;
 		maxStackSize = type.maxStackSize;
+		setRegistryName(type.shortName);
 		setMaxDamage(type.roundsPerItem);
 	}
 	

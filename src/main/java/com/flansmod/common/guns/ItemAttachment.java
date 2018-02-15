@@ -30,6 +30,7 @@ public class ItemAttachment extends Item implements IPaintableItem
 		type = t;
 		type.item = this;
 		maxStackSize = t.maxStackSize;
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 

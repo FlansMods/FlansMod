@@ -32,6 +32,7 @@ public class BlockFlansWorkbench extends Block
         super(Material.IRON);
         setHardness(3F);
         setResistance(6F);
+		setRegistryName("flansWorkbench");
         setCreativeTab(FlansMod.tabFlanDriveables);
         setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
     }

@@ -42,6 +42,7 @@ public class ItemMecha extends Item implements IPaintableItem
 		maxStackSize = 1;
 		type = type1;
 		type.item = this;
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanMechas);
 	}
 	

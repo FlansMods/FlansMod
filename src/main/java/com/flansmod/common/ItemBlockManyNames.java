@@ -10,6 +10,7 @@ public class ItemBlockManyNames extends ItemBlock {
 	public ItemBlockManyNames(Block b)
 	{
 		super(b);
+		setRegistryName(b.getRegistryName());
 		setHasSubtypes(true);
 	}
 	

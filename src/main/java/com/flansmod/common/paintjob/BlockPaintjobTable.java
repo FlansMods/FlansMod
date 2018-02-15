@@ -47,6 +47,7 @@ public class BlockPaintjobTable extends BlockContainer
 		setHardness(2F);
 		setResistance(4F);
 	    setUnlocalizedName("paintjobTable");
+	    setRegistryName("paintjobTable");
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 

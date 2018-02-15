@@ -31,6 +31,7 @@ public class ItemBullet extends ItemShootable implements IFlanItem
 		setMaxStackSize(type.maxStackSize);
 		setHasSubtypes(true);
 		type.item = this;
+		setRegistryName(type.shortName);
 		switch(type.weaponType)
 		{
 		case SHELL : case BOMB : case MINE : case MISSILE : setCreativeTab(FlansMod.tabFlanDriveables); break;

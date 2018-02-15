@@ -135,6 +135,7 @@ public class ItemGun extends Item implements IPaintableItem
 		this.type = type;
 		type.item = this;
 		setMaxDamage(0);
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 	

@@ -34,6 +34,7 @@ public class ItemAAGun extends Item implements IFlanItem
 		maxStackSize = 1;
 		type = type1;
 		type.item = this;
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 

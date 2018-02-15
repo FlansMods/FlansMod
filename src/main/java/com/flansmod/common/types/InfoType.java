@@ -50,7 +50,7 @@ public class InfoType
 	public int colour = 0xffffff;
 	public String iconPath;
 	public String[] recipeLine;
-	public char[][] recipeGrid;
+	public char[][] recipeGrid = new char[3][3];
 	public int recipeOutput = 1;
 	public boolean shapeless;
 	public String smeltableFrom = null;

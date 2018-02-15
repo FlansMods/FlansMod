@@ -13,8 +13,12 @@ import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.SimpleBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -22,19 +26,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class FluidBlockModel implements ISmartBlockModel
+public class FluidBlockModel implements IBakedModel
 {
 	
 	static final float RENDER_OFFSET = 0.001F;	//Copied from old forge fluid renderer
-	
+		
 	@Override
-	public List getFaceQuads(EnumFacing facing)
-	{
-		return null;
-	}
-	
-	@Override
-	public List getGeneralQuads()
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) 
 	{
 		return null;
 	}
@@ -101,10 +99,10 @@ public class FluidBlockModel implements ISmartBlockModel
 		for(int i = 0; i < 6; i++)
 		{
 			if(i == EnumFacing.DOWN.ordinal())
-				faceQuads.add(Arrays.asList(createQuad(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(1, 0, 1), new Vector3f(0, 0, 1), block.getFluid().getStillIcon(), EnumFacing.DOWN)));
+				faceQuads.add(Arrays.asList(createQuad(new Vector3f(0, 0, 0), new Vector3f(1, 0, 0), new Vector3f(1, 0, 1), new Vector3f(0, 0, 1), block.getFluid().getStill(), EnumFacing.DOWN)));
 			else if(i == EnumFacing.UP.ordinal())
 			{
-				TextureAtlasSprite sprite = param.get(4) < -999F ? block.getFluid().getStillIcon() : block.getFluid().getFlowingIcon();
+				TextureAtlasSprite sprite = param.get(4) < -999F ? block.getFluid().getStill() : block.getFluid().getFlowingIcon();
 				BakedQuad quad1 = createQuad(new Vector3f(0, param.get(2), 0), new Vector3f(0, param.get(1), 1),
 						new Vector3f(1, param.get(0), 1), new Vector3f(1, param.get(3), 0), sprite, EnumFacing.UP, param.get(4));
 				BakedQuad quad2 = createQuad(new Vector3f(0, param.get(2) - RENDER_OFFSET, 0), new Vector3f(1, param.get(3) - RENDER_OFFSET, 0),
@@ -133,7 +131,7 @@ public class FluidBlockModel implements ISmartBlockModel
 			}
 		}
 		
-		return new SimpleBakedModel(Collections.emptyList(), faceQuads, false, false, block.getFluid().getStillIcon(), null);
+		return new SimpleBakedModel(Collections.emptyList(), faceQuads, false, false, block.getFluid().getStill(), null);
 	}
 	
 	private BakedQuad createQuad(Vector3f vec1, Vector3f vec2, Vector3f Vec3d, Vector3f vec4, TextureAtlasSprite sprite, EnumFacing facing)
@@ -186,7 +184,7 @@ public class FluidBlockModel implements ISmartBlockModel
 			}
 			
 		}
-		return new BakedQuad(data, -1, facing);
+		return new BakedQuad(data, -1, facing, sprite, false, new VertexFormat());
 	}
 	
 	private int getShade(EnumFacing facing)	//Copied from FaceBakery (Only the end result, and not the process)
@@ -198,5 +196,19 @@ public class FluidBlockModel implements ISmartBlockModel
 		if(facing == EnumFacing.WEST || facing == EnumFacing.EAST)
 			return -6710887;
 		else return -1;
+	}
+
+
+
+	@Override
+	public TextureAtlasSprite getParticleTexture() 
+	{
+		return null;
+	}
+
+	@Override
+	public ItemOverrideList getOverrides() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

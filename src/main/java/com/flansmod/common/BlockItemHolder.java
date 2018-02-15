@@ -49,6 +49,7 @@ public class BlockItemHolder extends BlockContainer
 		setCreativeTab(FlansMod.tabFlanParts);
 		setHardness(2F);
 		setResistance(4F);
+		setRegistryName(type.shortName);
 	    setUnlocalizedName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanParts);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));

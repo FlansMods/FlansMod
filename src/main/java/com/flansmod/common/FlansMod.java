@@ -190,6 +190,9 @@ public class FlansMod
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		log("Preinitialising Flan's mod.");
+		
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
 		syncConfig();
 
@@ -222,7 +225,7 @@ public class FlansMod
 		opStick = new ItemOpStick();
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
 		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
-		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
+		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setRegistryName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
 		paintjobTable = new BlockPaintjobTable();
 		
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
@@ -268,16 +271,16 @@ public class FlansMod
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
 
 		//Config
-		FMLCommonHandler.instance().bus().register(INSTANCE);
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		//Starting the EventListener
 		new PlayerDeathEventListener();
 		log("Loading complete.");
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{		
+		log("Registering Recipes.");
+		
 		// Recipes
 		for (InfoType type : InfoType.infoTypes.values())
 		{
@@ -318,13 +321,13 @@ public class FlansMod
 
 			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 3, ingredients, new ItemStack(workbench, 1, 0)));
 		}
-		
-		log("Loaded recipes.");
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
+		log("Registering Items");
+		
 		for (InfoType type : InfoType.infoTypes.values())
 		{
 			type.registerItem(event.getRegistry());
@@ -335,9 +338,11 @@ public class FlansMod
 		event.getRegistry().register(flag); //, "flagpole", MODID);
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{
+		log("Registering Blocks");
+		
 		for (InfoType type : InfoType.infoTypes.values())
 		{
 			type.registerBlock(event.getRegistry());
@@ -348,9 +353,10 @@ public class FlansMod
 		event.getRegistry().register(paintjobTable); //, "paintjobTable");
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
 	{
+		log("Registering Entities");
 		//Register teams mod entities
 		/*
 		 * TODO: [1.12] Find out where the update intervals have ended up.

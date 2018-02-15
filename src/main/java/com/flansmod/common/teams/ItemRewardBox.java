@@ -21,6 +21,7 @@ public class ItemRewardBox extends Item
 	{
 		super();
 		type = box;
+		setRegistryName(type.shortName);
 		type.item = this;
 	}
 	

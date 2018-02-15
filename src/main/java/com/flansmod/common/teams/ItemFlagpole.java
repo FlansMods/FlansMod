@@ -27,6 +27,7 @@ public class ItemFlagpole extends Item implements IFlanItem
 	public ItemFlagpole() 
 	{
 		setCreativeTab(FlansMod.tabFlanTeams);
+		setRegistryName("flagpole");
 	}
 
 	@Override

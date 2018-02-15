@@ -46,6 +46,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 		type = t;
 		type.item = this;
 		setMaxDamage(type.toolLife);
+		setRegistryName(type.shortName);
 		if(type.foodness == 0)
 		{
 			setCreativeTab(FlansMod.tabFlanParts);

@@ -60,6 +60,12 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
+		/*
+		if(FMLServerHandler.instance().getServer() == null)
+		{
+			FlansMod.log("Receiving server ticks when server is null");
+			return;
+		}
 		for(WorldServer world : FMLServerHandler.instance().getServer().worlds)
 		{
 			for(Object player : world.playerEntities)
@@ -67,6 +73,7 @@ public class PlayerHandler
 				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
 			}
 		}
+		*/
 	}
 	
 	public void clientTick()

@@ -24,6 +24,7 @@ public class ItemOpStick extends Item implements IFlanItem
 	{
 		super();
 		setUnlocalizedName("opStick");
+		setRegistryName("opStick");
 		setHasSubtypes(true);
 	}
 		

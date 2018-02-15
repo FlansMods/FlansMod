@@ -38,6 +38,7 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		super(ItemArmor.ArmorMaterial.LEATHER, 0, EntityEquipmentSlot.values()[5 - t.type]);
 		type = t;
 		type.item = this;
+		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 	}
 
