@@ -25,22 +25,22 @@ public class ApocalypseData
 	@SubscribeEvent
 	public void worldData(WorldEvent event)
 	{
-		if(event.world.isRemote)
+		if(event.getWorld().isRemote)
 			return;
 		if(event instanceof WorldEvent.Load)
 		{
-			loadPerWorldData(event, event.world);
-			savePerWorldData(event, event.world);
+			loadPerWorldData(event, event.getWorld());
+			savePerWorldData(event, event.getWorld());
 		}
 		if(event instanceof WorldEvent.Save)
 		{
-			savePerWorldData(event, event.world);
+			savePerWorldData(event, event.getWorld());
 		}
 	}
 
 	private void savePerWorldData(WorldEvent event, World world) 
 	{
-		if(world.provider.getDimensionId() == 0)
+		if(world.provider.getDimension() == 0)
 		{
 			try
 			{
@@ -83,7 +83,7 @@ public class ApocalypseData
 
 	private void loadPerWorldData(WorldEvent event, World world) 
 	{
-		if(world.provider.getDimensionId() == 0)
+		if(world.provider.getDimension() == 0)
 		{
 			try
 			{

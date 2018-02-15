@@ -17,9 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.client.FlansModResourceHandler;
@@ -34,7 +34,7 @@ import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.guns.Paintjob;
 
-public class RenderPlane extends Render implements IItemRenderer 
+public class RenderPlane extends Render implements CustomItemRenderer
 {	
 	public RenderPlane(RenderManager renderManager) 
 	{
@@ -153,30 +153,19 @@ public class RenderPlane extends Render implements IItemRenderer
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
-	{
-		switch(type)
-		{
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON : case ENTITY : return Minecraft.getMinecraft().gameSettings.fancyGraphics && item != null && item.getItem() instanceof ItemPlane && ((ItemPlane)item.getItem()).type.model != null;
-		default : break;
-		}
-		return false;
-	}
-	
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
 		//Get the world
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		if(world == null)
 			return;
 
 		//Get the camera frustrum for clipping
         Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.partialTicks;
-        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.partialTicks;
-        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.partialTicks;
+        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
+        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
+        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
         
         //Frustum frustrum = new Frustum();
         //frustrum.setPosition(x, y, z);
@@ -197,7 +186,7 @@ public class RenderPlane extends Render implements IItemRenderer
 			if(entity instanceof EntityPlane)
 			{
 				EntityPlane plane = (EntityPlane)entity;
-		        int i = plane.getBrightnessForRender(event.partialTicks);
+		        int i = plane.getBrightnessForRender();
 
 		        if (plane.isBurning())
 		        {
@@ -208,7 +197,9 @@ public class RenderPlane extends Render implements IItemRenderer
 		        int k = i / 65536;
 		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		        render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.partialTicks, plane.prevPosY + (plane.posY - plane.prevPosY) * event.partialTicks, plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.partialTicks, 0F, event.partialTicks);
+		        render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(), 
+		        		plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(), 
+		        		plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
 			}
 		}
 		
@@ -221,13 +212,7 @@ public class RenderPlane extends Render implements IItemRenderer
 	}
 
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
-	{
-		return false;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemPlane)
@@ -278,5 +263,14 @@ public class RenderPlane extends Render implements IItemRenderer
 			}
 		}
 		GL11.glPopMatrix();
+	}
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderPlane(manager);
+		}
 	}
 }

@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +35,7 @@ public class GuiLandingPage extends GuiTeamsBase
 	{
 		super.initGui();
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - WIDTH / 2;
@@ -96,7 +95,7 @@ public class GuiLandingPage extends GuiTeamsBase
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
@@ -138,10 +137,10 @@ public class GuiLandingPage extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX + 106, guiOriginY + 146, 259, 164, (int)(92.0f * XPProgress), 16, textureX, textureY);
 		
 		// Draw text
-		drawCenteredString(fontRendererObj, ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawCenteredString(fontRenderer, ClientTeamsData.motd, guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
-		drawString(fontRendererObj, mc.player.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
-		drawCenteredString(fontRendererObj, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
+		drawString(fontRenderer, mc.player.getName(), guiOriginX + 30, guiOriginY + 150, 0xffffff);
+		drawCenteredString(fontRenderer, "Rank " + data.currentLevel, guiOriginX + 154, guiOriginY + 150, 0xffffff);
 		
 		// Draw rank icon
 		DrawRankIcon(data.currentLevel, 0, 9, 146, false);
@@ -165,6 +164,6 @@ public class GuiLandingPage extends GuiTeamsBase
 	{
 		RewardBox box = pool.rewardBoxes[index];
 		drawSlotInventory(new ItemStack(box.getItem()), x + 3, y + 3);
-		drawCenteredString(fontRendererObj, "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
+		drawCenteredString(fontRenderer, "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
 	}
 }

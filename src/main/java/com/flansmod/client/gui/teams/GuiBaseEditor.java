@@ -42,7 +42,7 @@ public class GuiBaseEditor extends GuiScreen
 		this.buttonList.clear();
 		//Setup the text entry field
 		Keyboard.enableRepeatEvents(true);
-		nameEntryField = new GuiTextField(0, this.fontRendererObj, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRendererObj.FONT_HEIGHT);
+		nameEntryField = new GuiTextField(0, this.fontRenderer, width / 2 - 128 + 70, height / 2 - 94 + 24, 179, fontRenderer.FONT_HEIGHT);
 		nameEntryField.setMaxStringLength(60);
 		nameEntryField.setEnableBackgroundDrawing(true);
 		nameEntryField.setVisible(true);
@@ -75,10 +75,10 @@ public class GuiBaseEditor extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -87,9 +87,9 @@ public class GuiBaseEditor extends GuiScreen
 		int n = guiOriginY = l / 2 - 94;
 		drawTexturedModalRect(m, n, 0, 0, 256, 189);
 		
-		drawString(fontRendererObj, "Base Settings", guiOriginX + 6, guiOriginY + 6, 0xffffff);
-		drawString(fontRendererObj, "Base Name : ", guiOriginX + 6, guiOriginY + 24, 0xffffff);
-		drawString(fontRendererObj, "Map", guiOriginX + 6, guiOriginY + 64, 0xffffff);
+		drawString(fontRenderer, "Base Settings", guiOriginX + 6, guiOriginY + 6, 0xffffff);
+		drawString(fontRenderer, "Base Name : ", guiOriginX + 6, guiOriginY + 24, 0xffffff);
+		drawString(fontRenderer, "Map", guiOriginX + 6, guiOriginY + 64, 0xffffff);
 		
 		nameEntryField.drawTextBox();
 		

@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +44,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.model.RenderItemHolder;
 import com.flansmod.client.model.RenderMecha;
+import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.TileEntityItemHolder;
 import com.flansmod.common.driveables.EntityDriveable;
@@ -121,20 +122,20 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		//DEBUG vehicles
 		if(apocalypseCountdown > 0 && FlansMod.DEBUG)
 		{		
-			mc.fontRendererObj.drawString("Seconds to the apocalypse: " + (apocalypseCountdown / 20), 2, 2, 0xffffff);
+			mc.fontRenderer.drawString("Seconds to the apocalypse: " + (apocalypseCountdown / 20), 2, 2, 0xffffff);
 		}
 		
 		//Draw white screen if we are being nuked
-		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft, FlansModClient.minecraft.displayWidth, FlansModClient.minecraft.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
 					
 		Tessellator tessellator = Tessellator.getInstance();
 		
-		if(!event.isCancelable() && event.type == ElementType.HELMET)
+		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
 		{
 			boolean playerIsInExplosion = false;
-			for(Object obj : mc.theWorld.loadedEntityList)
+			for(Object obj : mc.world.loadedEntityList)
 			{
 				if(obj instanceof EntityNukeDrop)
 				{
@@ -156,12 +157,13 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 						GL11.glColor4f(1F, 1F, 1F, alpha);
 						GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
-						tessellator.getWorldRenderer().startDrawingQuads();
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
-						tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-						tessellator.draw();
+						WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+						worldrenderer.startDrawingQuads();
+						worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+						worldrenderer.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+						worldrenderer.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+						worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+						worldrenderer.draw();
 						GL11.glDepthMask(true);
 						GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 						GL11.glEnable(3008 /* GL_ALPHA_TEST */);

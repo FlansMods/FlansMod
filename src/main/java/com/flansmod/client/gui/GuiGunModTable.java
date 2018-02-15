@@ -16,9 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.flansmod.client.ClientProxy;
+import com.flansmod.client.model.CustomItemRenderType;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ContainerGunModTable;
@@ -45,8 +45,8 @@ public class GuiGunModTable extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y)
 	{
-		fontRendererObj.drawString("Inventory", 8, (ySize - 94) + 2, 0x404040);
-		fontRendererObj.drawString("Gun Modification Table", 8, 6, 0x404040);
+		fontRenderer.drawString("Inventory", 8, (ySize - 94) + 2, 0x404040);
+		fontRenderer.drawString("Gun Modification Table", 8, 6, 0x404040);
 
 		ItemStack gunStack = inventorySlots.getSlot(0).getStack();
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
@@ -74,7 +74,7 @@ public class GuiGunModTable extends GuiContainer
 				GL11.glRotatef(20, 0F, 1F, 0F);
 				GL11.glScalef(-50F, 50F, 50F);
 				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
-				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack);
+				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, tempStack);
 				GL11.glPopMatrix();
 			}
 		}
@@ -92,7 +92,7 @@ public class GuiGunModTable extends GuiContainer
         drawTexturedModalRect(xOrigin, yOrigin, 0, 0, xSize, ySize);
                 
         for(int z = 1; z < 13; z++)
-        	inventorySlots.getSlot(z).yDisplayPosition = -1000;
+        	inventorySlots.getSlot(z).yPos = -1000;
         
         ItemStack gunStack = inventorySlots.getSlot(0).getStack();
         if(gunStack != null && gunStack.getItem() instanceof ItemGun)
@@ -101,22 +101,22 @@ public class GuiGunModTable extends GuiContainer
         	if(gunType.allowBarrelAttachments)
         	{
         		drawTexturedModalRect(xOrigin + 51, yOrigin + 107, 176, 122, 22, 22);
-        		inventorySlots.getSlot(1).yDisplayPosition = 110;
+        		inventorySlots.getSlot(1).yPos = 110;
         	}
         	if(gunType.allowScopeAttachments)
         	{
         		drawTexturedModalRect(xOrigin + 77, yOrigin + 81, 202, 96, 22, 22);
-        		inventorySlots.getSlot(2).yDisplayPosition = 84;
+        		inventorySlots.getSlot(2).yPos = 84;
         	}
         	if(gunType.allowStockAttachments)
         	{
         		drawTexturedModalRect(xOrigin + 103, yOrigin + 107, 228, 122, 22, 22);
-        		inventorySlots.getSlot(3).yDisplayPosition = 110;
+        		inventorySlots.getSlot(3).yPos = 110;
         	}
         	if(gunType.allowGripAttachments)
         	{
         		drawTexturedModalRect(xOrigin + 77, yOrigin + 133, 202, 148, 22, 22);
-        		inventorySlots.getSlot(4).yDisplayPosition = 136;
+        		inventorySlots.getSlot(4).yPos = 136;
         	}
         	
         	for(int x = 0; x < 2; x++)
@@ -124,7 +124,7 @@ public class GuiGunModTable extends GuiContainer
         		for(int y = 0; y < 4; y++)
         		{
         			if(x + y * 2 < gunType.numGenericAttachmentSlots)
-        				inventorySlots.getSlot(5 + x + y * 2).yDisplayPosition = 83 + 18 * y;
+        				inventorySlots.getSlot(5 + x + y * 2).yPos = 83 + 18 * y;
         		}
         	}
         	
@@ -181,13 +181,13 @@ public class GuiGunModTable extends GuiContainer
 	        	boolean[] haveDyes = new boolean[numDyes];
 	        	for(int n = 0; n < numDyes; n++)
 	        	{
-	        		int amountNeeded = hoveringOver.dyesNeeded[n].stackSize;
+	        		int amountNeeded = hoveringOver.dyesNeeded[n].getCount();
 	        		for(int s = 0; s < inventory.getSizeInventory(); s++)
 	        		{
 	        			ItemStack stack = inventory.getStackInSlot(s);
 	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == hoveringOver.dyesNeeded[n].getItemDamage())
 	        			{
-	        				amountNeeded -= stack.stackSize;
+	        				amountNeeded -= stack.getCount();
 	        			}
 	        		}
 					if(amountNeeded <= 0)
@@ -222,7 +222,7 @@ public class GuiGunModTable extends GuiContainer
 	        	for(int s = 0; s < numDyes; s++)
 	        	{
 	        		itemRender.renderItemIntoGUI(hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3);
-	        		itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3, null);
+	        		itemRender.renderItemOverlayIntoGUI(this.fontRenderer, hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3, null);
 	        	}
         	}
         }

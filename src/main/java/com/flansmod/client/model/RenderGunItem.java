@@ -2,31 +2,32 @@ package com.flansmod.client.model;
 
 import com.flansmod.common.guns.ItemGun;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderGunItem extends RenderEntityItem 
 {
 	private RenderGun gunRenderer;
 	
-	public RenderGunItem(RenderManager renderManager, RenderItem renderItem, RenderGun gunRenderer) 
+	public RenderGunItem(RenderManager renderManager, RenderItem renderItem) 
 	{
 		super(renderManager, renderItem);
-		this.gunRenderer = gunRenderer;
+		this.gunRenderer = new RenderGun();
 	}
 	
 	@Override
-    public void func_177075_a(EntityItem entity, double x, double y, double z, float p_177075_8_, float partialTicks)
+    public void doRender(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
-        ItemStack stack = entity.getEntityItem();
+        ItemStack stack = entity.getItem();
         
         if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
         {
@@ -34,12 +35,21 @@ public class RenderGunItem extends RenderEntityItem
         	GlStateManager.translate(x, y + 0.25D, z);
         	GlStateManager.rotate(entity.ticksExisted + partialTicks, 0F, 1F, 0F);
         	
-        	gunRenderer.renderItem(ItemRenderType.ENTITY, stack);
+        	gunRenderer.renderItem(CustomItemRenderType.ENTITY, stack);
         	GlStateManager.popMatrix();
         }
         else
         {
-        	super.func_177075_a(entity, x, y, z, p_177075_8_, partialTicks);
+        	super.doRender(entity, x, y, z, partialTicks, partialTicks);
         } 
     }
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderGunItem(manager, Minecraft.getMinecraft().getRenderItem());
+		}
+	}
 }

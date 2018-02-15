@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
@@ -21,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.FlansModResourceHandler;
@@ -41,35 +39,15 @@ import com.flansmod.common.vector.Vector3f;
 
 import net.minecraftforge.fml.relauncher.Side;
 
-public class RenderGun implements IItemRenderer
-{
+public class RenderGun implements CustomItemRenderer
+{	
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
 	public static boolean bindTextures = true;
 	
 	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
-	{
-		switch(type)
-		{
-		case ENTITY : if(!Minecraft.getMinecraft().gameSettings.fancyGraphics) return false;
-		case EQUIPPED : case EQUIPPED_FIRST_PERSON :  /*case INVENTORY : */return item != null 
-				&& item.getItem() instanceof ItemGun 
-				&& ((ItemGun)item.getItem()).GetType().model != null;
-		default : break;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
-	{
-		return false;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
@@ -85,12 +63,12 @@ public class RenderGun implements IItemRenderer
 
 		//Render main hand gun
 		{
-			GunAnimations animations = (type == ItemRenderType.ENTITY || type == ItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
+			GunAnimations animations = (type == CustomItemRenderType.ENTITY || type == CustomItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
 			renderGun(type, item, gunType, animations, false, data);
 		}
 		
 		//Render off-hand gun
-		if(gunType.oneHanded && type == ItemRenderType.EQUIPPED_FIRST_PERSON)
+		if(gunType.oneHanded && type == CustomItemRenderType.EQUIPPED_FIRST_PERSON)
 		{
 			EntityLivingBase entity = (EntityLivingBase)data[1];
 			if(entity instanceof EntityPlayer)
@@ -132,10 +110,10 @@ public class RenderGun implements IItemRenderer
 		if(!offHandGunType.oneHanded)
 			return;
 		
-		renderGun(ItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
+		renderGun(CustomItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
 	}
 		
-	private void renderGun(ItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
+	private void renderGun(CustomItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
 	{
 		//The model scale
 		float f = 1F / 16F;
@@ -601,7 +579,7 @@ public class RenderGun implements IItemRenderer
 						case RIFLE : 
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
-							int bulletNum = MathHelper.floor_float(thing);
+							int bulletNum = MathHelper.floor(thing);
 							float bulletProgress = thing - bulletNum;
 							
 							GL11.glRotatef(bulletProgress * 15F, 0F, 1F, 0F);
@@ -613,7 +591,7 @@ public class RenderGun implements IItemRenderer
 						case RIFLE_TOP : 
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
-							int bulletNum = MathHelper.floor_float(thing);
+							int bulletNum = MathHelper.floor(thing);
 							float bulletProgress = thing - bulletNum;
 							
 							GL11.glRotatef(bulletProgress * 55F, 0F, 1F, 0F);
@@ -625,7 +603,7 @@ public class RenderGun implements IItemRenderer
 						case SHOTGUN : case STRIKER :
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
-							int bulletNum = MathHelper.floor_float(thing);
+							int bulletNum = MathHelper.floor(thing);
 							float bulletProgress = thing - bulletNum;
 							
 							GL11.glRotatef(bulletProgress * -30F, 0F, 0F, 1F);

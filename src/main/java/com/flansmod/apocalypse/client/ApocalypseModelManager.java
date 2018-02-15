@@ -5,7 +5,6 @@ import com.flansmod.apocalypse.common.FlansModApocalypse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;

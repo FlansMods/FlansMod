@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class GuiOpenRewardBox extends GuiTeamsBase 
@@ -68,7 +69,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	{
 		super.initGui();
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - WIDTH / 2;
@@ -153,14 +154,14 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				{
 					spinSpeed = 0.0f;
 					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-							new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 1.0F, 2.0f, 
+							new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 1.0F, 2.0f, 
 									(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 					SwitchToState(EnumPageState.STOPPED);
 				}
 				int timeInState = slowdownTime - timeLeftInState;
-				int preIndex = MathHelper.floor_float(spinner) % options.size();
+				int preIndex = MathHelper.floor(spinner) % options.size();
 				spinner = target + timeInState * InitialVelocity() + 0.5f * Acceleration() * timeInState * timeInState;
-				int postIndex = MathHelper.floor_float(spinner) % options.size();
+				int postIndex = MathHelper.floor(spinner) % options.size();
 				
 	
 				break;
@@ -180,9 +181,9 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	
 	private void SimulateSpinner()
 	{
-		int preIndex = MathHelper.floor_float(spinner) % options.size();
+		int preIndex = MathHelper.floor(spinner) % options.size();
 		spinner += spinSpeed;
-		int postIndex = MathHelper.floor_float(spinner) % options.size();
+		int postIndex = MathHelper.floor(spinner) % options.size();
 		
 		if(spinner > options.size())
 		{
@@ -200,19 +201,19 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		int preIndex = MathHelper.floor_float(spinner) % options.size();
-		int postIndex = MathHelper.floor_float(spinner + spinSpeed * f) % options.size();
+		int preIndex = MathHelper.floor(spinner) % options.size();
+		int postIndex = MathHelper.floor(spinner + spinSpeed * f) % options.size();
 
 		if(preIndex != postIndex && Minecraft.getSystemTime() - timeOfLastSound >= 80)
 		{
 			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-					new PositionedSoundRecord(FlansModResourceHandler.getSound("UnlockNotch"), 0.5F, 1.0f, 
+					new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 0.5F, 1.0f, 
 							(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 			timeOfLastSound = Minecraft.getSystemTime();
 		}
 		
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
@@ -239,16 +240,16 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
 				
-		int pixelOffset = ModuloHelper.modulo(MathHelper.floor_float(spinner * 18.0f), 18) - 18;
+		int pixelOffset = ModuloHelper.modulo(MathHelper.floor(spinner * 18.0f), 18) - 18;
 		
 		drawModalRectWithCustomSizedTexture(guiOriginX + 9, guiOriginY + 101, 239 + pixelOffset + 10, 101, 180, 18, textureX, textureY);
 		
 		// Draw text
-		drawCenteredString(fontRendererObj, "Reward Box", guiOriginX + 98, guiOriginY + 12, 0xffffff);
+		drawCenteredString(fontRenderer, "Reward Box", guiOriginX + 98, guiOriginY + 12, 0xffffff);
 		
 		for(int n = 0; n < 10; n++)
 		{
-			int index = MathHelper.floor_float(spinner) - 4 + n;
+			int index = MathHelper.floor(spinner) - 4 + n;
 			Paintjob paintjob = options.get(ModuloHelper.modulo(index, options.size()));
 			
 			ItemStack stack = new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID);
@@ -257,7 +258,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		
 		for(int n = 0; n < 10; n++)
 		{
-			int index = MathHelper.floor_float(spinner) - 4 + n;
+			int index = MathHelper.floor(spinner) - 4 + n;
 			Paintjob paintjob = options.get(ModuloHelper.modulo(index, options.size()));
 			
 			DrawRarityBackground(paintjob.rarity, guiOriginX + 18 - 18 - pixelOffset + 18 * n, guiOriginY + 102);
@@ -268,15 +269,15 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX + 0, guiOriginY + 93, 0, 93, 196, 34, textureX, textureY);
 		GlStateManager.enableDepth();
 		
-		int currentIndex = MathHelper.floor_float(spinner) % options.size();
+		int currentIndex = MathHelper.floor(spinner) % options.size();
 		ItemStack gunStack = new ItemStack(options.get(currentIndex).parent.item, 1, options.get(currentIndex).ID);
 		DrawGun(gunStack, guiOriginX + 98, guiOriginY + 65, 60.0f);
 		
 		if(state == EnumPageState.STOPPED)
 		{
-			drawCenteredString(fontRendererObj, "New paintjob unlocked!", guiOriginX + 98, guiOriginY + 130, 0xffffff);
-			drawCenteredString(fontRendererObj, options.get(target).parent.name, guiOriginX + 98, guiOriginY + 142, 0xffffff);
-			drawCenteredString(fontRendererObj, "\"" + options.get(target).iconName + "\"", guiOriginX + 98, guiOriginY + 154, 0xffffff);
+			drawCenteredString(fontRenderer, "New paintjob unlocked!", guiOriginX + 98, guiOriginY + 130, 0xffffff);
+			drawCenteredString(fontRenderer, options.get(target).parent.name, guiOriginX + 98, guiOriginY + 142, 0xffffff);
+			drawCenteredString(fontRenderer, "\"" + options.get(target).iconName + "\"", guiOriginX + 98, guiOriginY + 154, 0xffffff);
 		}
 		
 		super.drawScreen(i, j, f);

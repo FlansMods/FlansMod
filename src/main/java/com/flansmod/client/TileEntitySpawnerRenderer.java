@@ -6,24 +6,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.BlockSpawner;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TileEntitySpawner;
 
-public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer 
+public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer<TileEntitySpawner>
 {
-	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float f, int i) 
+	@Override 
+	public void render(TileEntitySpawner te, double x, double y, double z, float f, int i, float alpha) 
 	{
-		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 		
 		TileEntitySpawner spawner = (TileEntitySpawner)te;
         int spawnerTeamID = spawner.getTeamID();
@@ -61,55 +60,55 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer
 	        default: FlansMod.log("" + te.getBlockMetadata());
         }
         
-        RenderBox(tessellator, worldRenderer, x + inset, x + 1.0d - inset, y + 0.0625d, y + 0.125d, z + inset, z + 1.0d - inset);
+        RenderBox(worldrenderer, x + inset, x + 1.0d - inset, y + 0.0625d, y + 0.125d, z + inset, z + 1.0d - inset);
 
         GlStateManager.enableTexture2D();
 		GlStateManager.color(1.0f, 1.0f, 1.0f);		
 	}
 	
-	private void RenderBox(Tessellator t, WorldRenderer wr, double x0, double x1, double y0, double y1, double z0, double z1)
+	private void RenderBox(WorldRenderer wr, double x0, double x1, double y0, double y1, double z0, double z1)
 	{
 		// Top
 		wr.startDrawingQuads();
-        wr.addVertex(x0, y1, z0);
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x1, y1, z1);
-        wr.addVertex(x1, y1, z0);
-        t.draw();
+        wr.addVertexWithUV(x0, y1, z0, 0d, 0d);
+        wr.addVertexWithUV(x0, y1, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y1, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y1, z0, 0d, 0d);
+        wr.draw();
         // Bottom
         wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x1, y0, z0);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x0, y0, z1);
-        t.draw();
+        wr.addVertexWithUV(x0, y0, z0, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z0, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z1, 0d, 0d);
+        wr.addVertexWithUV(x0, y0, z1, 0d, 0d);
+        wr.draw();
         // Left
         wr.startDrawingQuads();
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x0, y0, z1);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x1, y1, z1);
-        t.draw();
+        wr.addVertexWithUV(x0, y1, z1, 0d, 0d);
+        wr.addVertexWithUV(x0, y0, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y1, z1, 0d, 0d);
+        wr.draw();
         // Right
         wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x0, y1, z0);
-        wr.addVertex(x1, y1, z0);
-        wr.addVertex(x1, y0, z0);
-        t.draw();
+        wr.addVertexWithUV(x0, y0, z0, 0d, 0d);
+        wr.addVertexWithUV(x0, y1, z0, 0d, 0d);
+        wr.addVertexWithUV(x1, y1, z0, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z0, 0d, 0d);
+        wr.draw();
         // Front
         wr.startDrawingQuads();
-        wr.addVertex(x1, y1, z0);
-        wr.addVertex(x1, y1, z1);
-        wr.addVertex(x1, y0, z1);
-        wr.addVertex(x1, y0, z0);
-        t.draw();
+        wr.addVertexWithUV(x1, y1, z0, 0d, 0d);
+        wr.addVertexWithUV(x1, y1, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z1, 0d, 0d);
+        wr.addVertexWithUV(x1, y0, z0, 0d, 0d);
+        wr.draw();
         // Front
         wr.startDrawingQuads();
-        wr.addVertex(x0, y0, z0);
-        wr.addVertex(x0, y0, z1);
-        wr.addVertex(x0, y1, z1);
-        wr.addVertex(x0, y1, z0);
-        t.draw();
+        wr.addVertexWithUV(x0, y0, z0, 0d, 0d);
+        wr.addVertexWithUV(x0, y0, z1, 0d, 0d);
+        wr.addVertexWithUV(x0, y1, z1, 0d, 0d);
+        wr.addVertexWithUV(x0, y1, z0, 0d, 0d);
+        wr.draw();
 	}
 }

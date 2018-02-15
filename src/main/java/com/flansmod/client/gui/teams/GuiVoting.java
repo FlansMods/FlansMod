@@ -50,10 +50,10 @@ public class GuiVoting extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 
@@ -71,15 +71,15 @@ public class GuiVoting extends GuiScreen
 			drawTexturedModalRect(m, n + 22 + 24 * p, 0, 23, 256, 24);
 		drawTexturedModalRect(m, l / 2 + guiHeight / 2 - 6, 0, 73, 256, 7);
 		
-		drawString(fontRendererObj, "Vote for the Next Round", m + 8, n + 8, 0xffffff);
-		drawString(fontRendererObj, (ClientTeamsData.timeLeftTotal / 20) + "", m + 256 - 20, n + 8, 0xffffff);
+		drawString(fontRenderer, "Vote for the Next Round", m + 8, n + 8, 0xffffff);
+		drawString(fontRenderer, (ClientTeamsData.timeLeftTotal / 20) + "", m + 256 - 20, n + 8, 0xffffff);
 		
 		for(int p = 0; p < ClientTeamsData.roundFinishedData.votingOptions.length; p++)
 		{
-			drawString(fontRendererObj, ClientTeamsData.roundFinishedData.votingOptions[p].mapName, m + 10, n + 25 + 24 * p, 0xffffff);
-			drawString(fontRendererObj, ClientTeamsData.roundFinishedData.votingOptions[p].gametype + " : \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[0] + ", \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
+			drawString(fontRenderer, ClientTeamsData.roundFinishedData.votingOptions[p].mapName, m + 10, n + 25 + 24 * p, 0xffffff);
+			drawString(fontRenderer, ClientTeamsData.roundFinishedData.votingOptions[p].gametype + " : \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[0] + ", \u00a7" + ClientTeamsData.roundFinishedData.votingOptions[p].teamNames[1], m + 10, n + 35 + 24 * p, 0xffffff);
 			
-			drawCenteredString(fontRendererObj, (myVote == p + 1 ? "\u00a72" : "") + ClientTeamsData.roundFinishedData.votingOptions[p].numVotes, m + 196, n + 31 + 24 * p, 0xffffff);
+			drawCenteredString(fontRenderer, (myVote == p + 1 ? "\u00a72" : "") + ClientTeamsData.roundFinishedData.votingOptions[p].numVotes, m + 196, n + 31 + 24 * p, 0xffffff);
 		}
 		
 		super.drawScreen(i, j, f);

@@ -4,7 +4,9 @@ import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.vector.Vector3f;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
 public class EntityCamera extends EntityLivingBase 
@@ -54,32 +56,27 @@ public class EntityCamera extends EntityLivingBase
 	}
 
 	@Override
-	public ItemStack getHeldItem() 
+	public Iterable<ItemStack> getArmorInventoryList() 
 	{
 		return null;
 	}
 
 	@Override
-	public ItemStack getEquipmentInSlot(int p_71124_1_) 
+	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) 
 	{
 		return null;
 	}
 
 	@Override
-	public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_) 
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) 
 	{
-
-	}
-	@Override
-	public ItemStack getCurrentArmor(int slotIn) 
-	{
-		return null;
+		
 	}
 
 	@Override
-	public ItemStack[] getInventory() 
+	public EnumHandSide getPrimaryHand() 
 	{
-		return null;
+		return EnumHandSide.RIGHT;
 	}
 
 }

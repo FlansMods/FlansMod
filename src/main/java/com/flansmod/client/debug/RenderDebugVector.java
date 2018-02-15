@@ -6,7 +6,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
+import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.common.FlansMod;
 
 public class RenderDebugVector extends Render 
@@ -45,4 +47,12 @@ public class RenderDebugVector extends Render
 		return null;
 	}
 
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderDebugVector(manager);
+		}
+	}
 }

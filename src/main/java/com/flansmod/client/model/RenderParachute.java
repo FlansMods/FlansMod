@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.tools.EntityParachute;
@@ -38,5 +39,13 @@ public class RenderParachute extends Render
 	{
 		return FlansModResourceHandler.getTexture(((EntityParachute)entity).type);
 	}
-
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderParachute(manager);
+		}
+	}
 }

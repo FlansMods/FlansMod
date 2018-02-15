@@ -70,6 +70,7 @@ import com.flansmod.client.gui.teams.GuiMissionResults;
 import com.flansmod.client.gui.teams.GuiTeamScores;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -139,10 +140,14 @@ public class FlansModClient extends FlansMod
 	public static ArrayList<Vector3i> blockLightOverrides = new ArrayList<Vector3i>();
 	public static int lightOverrideRefreshRate = 5;
 	
+	private static WorldRenderer wr;
+	
+	public static WorldRenderer getWorldRenderer() { return wr; }
+	
 	public void load()
 	{		
 		log("Loading Flan's mod client side.");
-
+		wr = new WorldRenderer();
 	}
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");

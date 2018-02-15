@@ -130,7 +130,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	{
 		super.initGui();
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - WIDTH / 2;
@@ -188,7 +188,7 @@ public class GuiMissionResults extends GuiTeamsBase
 				{
 					currentTarget = pool.GetXPForLevel(displayRank + 1);
 				}
-				displayXP = MathHelper.floor_float(lastXP + ((float)(currentTarget - lastXP) * (float)(timeInState - 1) / (float)stateTimes[state.ordinal()]));
+				displayXP = MathHelper.floor(lastXP + ((float)(currentTarget - lastXP) * (float)(timeInState - 1) / (float)stateTimes[state.ordinal()]));
 				
 				if(timeInState > stateTimes[state.ordinal()])
 				{
@@ -323,7 +323,7 @@ public class GuiMissionResults extends GuiTeamsBase
 			return;
 		}
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
@@ -360,7 +360,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		{
 			XPProgress = 1.0f;
 		}
-		XPProgress = MathHelper.clamp_float(XPProgress, 0.0f, 1.0f);
+		XPProgress = MathHelper.clamp(XPProgress, 0.0f, 1.0f);
 		
 		drawModalRectWithCustomSizedTexture(guiOriginX + 7, guiOriginY + 109, 259, 109, (int)(242 * XPProgress), 10, textureX, textureY);
 		
@@ -371,46 +371,46 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(XPForNextLevel > 0)
 		{
-			drawCenteredString(fontRendererObj, displayXP + " / " + XPForNextLevel, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+			drawCenteredString(fontRenderer, displayXP + " / " + XPForNextLevel, guiOriginX + 128, guiOriginY + 110, 0xffffff);
 		}
 		else
 		{
-			drawCenteredString(fontRendererObj, "" + displayXP, guiOriginX + 128, guiOriginY + 110, 0xffffff);
+			drawCenteredString(fontRenderer, "" + displayXP, guiOriginX + 128, guiOriginY + 110, 0xffffff);
 		}
 		
 		// Draw text
-		drawString(fontRendererObj, (ClientTeamsData.timeLeftInStage / 20) + "", guiOriginX + 12, guiOriginY + 12, 0xffffff);
-		drawCenteredString(fontRendererObj, "ROUND OVER", guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawString(fontRenderer, (ClientTeamsData.timeLeftInStage / 20) + "", guiOriginX + 12, guiOriginY + 12, 0xffffff);
+		drawCenteredString(fontRenderer, "ROUND OVER", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.LEVEL_UP.ordinal() && state.ordinal() <= EnumResultsState.REVEAL_UNLOCK4.ordinal())
 		{
-			drawCenteredString(fontRendererObj, "RANK INCREASED", guiOriginX + 128, guiOriginY + 135, 0xffffff);
+			drawCenteredString(fontRenderer, "RANK INCREASED", guiOriginX + 128, guiOriginY + 135, 0xffffff);
 		}
 		else
 		{
-			drawString(fontRendererObj, "Rank " + displayRank, guiOriginX + 44, guiOriginY + 135, 0xffffff);
-			drawString(fontRendererObj, "Next Rank", guiOriginX + 163, guiOriginY + 135, 0xffffff);
+			drawString(fontRenderer, "Rank " + displayRank, guiOriginX + 44, guiOriginY + 135, 0xffffff);
+			drawString(fontRenderer, "Next Rank", guiOriginX + 163, guiOriginY + 135, 0xffffff);
 		}
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_1_XP.ordinal())
 		{
-			drawString(fontRendererObj, "XP Earned: ", guiOriginX + 11, guiOriginY + 31, 0xffffff);
-			drawString(fontRendererObj, "" + earnedXP, guiOriginX + 244 - fontRendererObj.getStringWidth("" + earnedXP), guiOriginY + 31, 0xffffff);
+			drawString(fontRenderer, "XP Earned: ", guiOriginX + 11, guiOriginY + 31, 0xffffff);
+			drawString(fontRenderer, "" + earnedXP, guiOriginX + 244 - fontRenderer.getStringWidth("" + earnedXP), guiOriginY + 31, 0xffffff);
 		}
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_2_VICTORY_BONUS.ordinal())
-			drawString(fontRendererObj, "", guiOriginX + 11, guiOriginY + 41, 0xffffff);
+			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 41, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_3.ordinal())
-			drawString(fontRendererObj, "", guiOriginX + 11, guiOriginY + 51, 0xffffff);
+			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 51, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_4.ordinal())
-			drawString(fontRendererObj, "", guiOriginX + 11, guiOriginY + 61, 0xffffff);
+			drawString(fontRenderer, "", guiOriginX + 11, guiOriginY + 61, 0xffffff);
 		
 		if(state.ordinal() >= EnumResultsState.SHOW_LINE_5_TOTAL.ordinal())
 		{
-			drawString(fontRendererObj, "Total: ", guiOriginX + 11, guiOriginY + 91, 0xffffff);
-			drawString(fontRendererObj, "" + earnedXP, guiOriginX + 244 - fontRendererObj.getStringWidth("" + earnedXP), guiOriginY + 91, 0xffffff);
+			drawString(fontRenderer, "Total: ", guiOriginX + 11, guiOriginY + 91, 0xffffff);
+			drawString(fontRenderer, "" + earnedXP, guiOriginX + 244 - fontRenderer.getStringWidth("" + earnedXP), guiOriginY + 91, 0xffffff);
 		}
 		
 		// Draw rank icon
@@ -445,8 +445,8 @@ public class GuiMissionResults extends GuiTeamsBase
 					
 		if(entry.isWeapon)
 		{
-			drawCenteredString(fontRendererObj, "New item unlocked", i + 58, j + 2, 0xffffff);
-			drawCenteredString(fontRendererObj, entry.loadoutEntry.type.name, i + 58, j + 31, 0xffffff);
+			drawCenteredString(fontRenderer, "New item unlocked", i + 58, j + 2, 0xffffff);
+			drawCenteredString(fontRenderer, entry.loadoutEntry.type.name, i + 58, j + 31, 0xffffff);
 			
 			if(entry.loadoutEntry.type instanceof GunType)
 			{
@@ -459,8 +459,8 @@ public class GuiMissionResults extends GuiTeamsBase
 		}
 		else
 		{
-			drawCenteredString(fontRendererObj, "Reward obtained", i + 58, j + 2, 0xffffff);
-			drawCenteredString(fontRendererObj, entry.rewardBox.name, i + 58, j + 31, 0xffffff);
+			drawCenteredString(fontRenderer, "Reward obtained", i + 58, j + 2, 0xffffff);
+			drawCenteredString(fontRenderer, entry.rewardBox.name, i + 58, j + 31, 0xffffff);
 			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);			
 		}
 	}

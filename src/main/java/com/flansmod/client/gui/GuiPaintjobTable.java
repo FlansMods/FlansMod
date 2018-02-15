@@ -23,10 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.model.CustomItemRenderType;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.model.ModelDriveable;
@@ -162,7 +162,7 @@ public class GuiPaintjobTable extends GuiContainer
 		
         for(int i = 0; i < 4 * 9 + 2; i++)
         {
-        	inventorySlots.getSlot(i).xDisplayPosition += dPos;
+        	inventorySlots.getSlot(i).xPos += dPos;
         }
         
         if(movingFlatTextureWindow)
@@ -199,8 +199,8 @@ public class GuiPaintjobTable extends GuiContainer
             //int xOrigin = ((width - xSize) / 2)  + GetMainPageX();
             //int yOrigin = ((height - ySize) / 2) + GetMainPageY();
             
-    		fontRendererObj.drawString("Inventory", GetMainPageX() + 8, GetMainPageY() + (ySize - 94) + 2, 0x404040);
-    		fontRendererObj.drawString("Paintjob Table", GetMainPageX() + 8, GetMainPageY() + 6, 0x404040);
+    		fontRenderer.drawString("Inventory", GetMainPageX() + 8, GetMainPageY() + (ySize - 94) + 2, 0x404040);
+    		fontRenderer.drawString("Paintjob Table", GetMainPageX() + 8, GetMainPageY() + 6, 0x404040);
         }
         
         // Render custom screen
@@ -209,9 +209,9 @@ public class GuiPaintjobTable extends GuiContainer
             int xOrigin = ((width - xSize) / 2)  + GetCustomPageX() - 32;
             int yOrigin = ((height - ySize) / 2) + GetCustomPageY();
             
-    		fontRendererObj.drawString("Confirm", xOrigin - 7, yOrigin + 169, 0x000000);
-    		fontRendererObj.drawString("Cancel", xOrigin - 6, yOrigin + 186, 0x000000);
-    		fontRendererObj.drawString("Inventory", xOrigin - 12, yOrigin + 203, 0x000000);
+    		fontRenderer.drawString("Confirm", xOrigin - 7, yOrigin + 169, 0x000000);
+    		fontRenderer.drawString("Cancel", xOrigin - 6, yOrigin + 186, 0x000000);
+    		fontRenderer.drawString("Inventory", xOrigin - 12, yOrigin + 203, 0x000000);
         }
 
         Vector3f renderOrigin = GetRenderOrigin();
@@ -267,7 +267,7 @@ public class GuiPaintjobTable extends GuiContainer
 				        if(inCustomMode)
 				        	RenderGun.bindTextures = false;
 				        
-						ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, tempStack);
+						ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, tempStack);
 						RenderGun.bindTextures = true;
 						break;
 					}
@@ -353,13 +353,13 @@ public class GuiPaintjobTable extends GuiContainer
     	        	boolean[] haveDyes = new boolean[numDyes];
     	        	for(int n = 0; n < numDyes; n++)
     	        	{
-    	        		int amountNeeded = hoveringOver.dyesNeeded[n].stackSize;
+    	        		int amountNeeded = hoveringOver.dyesNeeded[n].getCount();
     	        		for(int s = 0; s < inventory.getSizeInventory(); s++)
     	        		{
     	        			ItemStack stack = inventory.getStackInSlot(s);
     	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == hoveringOver.dyesNeeded[n].getItemDamage())
     	        			{
-    	        				amountNeeded -= stack.stackSize;
+    	        				amountNeeded -= stack.getCount();
     	        			}
     	        		}
     					if(amountNeeded <= 0)
@@ -394,7 +394,7 @@ public class GuiPaintjobTable extends GuiContainer
     	        	for(int s = 0; s < numDyes; s++)
     	        	{
     	        		itemRender.renderItemIntoGUI(hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3);
-    	        		itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3, null);
+    	        		itemRender.renderItemOverlayIntoGUI(this.fontRenderer, hoveringOver.dyesNeeded[s], originX + 3 + s * 18, originY + 3, null);
     	        	}
             	}
             }

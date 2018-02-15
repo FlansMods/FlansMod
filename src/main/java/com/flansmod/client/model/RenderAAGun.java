@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.guns.EntityAAGun;
@@ -50,5 +51,14 @@ public class RenderAAGun extends Render
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return FlansModResourceHandler.getTexture(((EntityAAGun)entity).type);
+	}
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderAAGun(manager);
+		}
 	}
 }

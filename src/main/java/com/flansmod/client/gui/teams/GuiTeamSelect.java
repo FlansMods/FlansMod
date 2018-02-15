@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -108,7 +108,7 @@ public class GuiTeamSelect extends GuiScreen
 				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 48, 256, 24);		
 			}
 		}
-		fontRendererObj.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 120, height / 2 - guiHeight / 2 + 8, 0xffffff);
+		fontRenderer.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 120, height / 2 - guiHeight / 2 + 8, 0xffffff);
 
 		super.drawScreen(i, j, f);
 		if(classMenu)
@@ -141,7 +141,7 @@ public class GuiTeamSelect extends GuiScreen
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
 	}
 	
 	@Override

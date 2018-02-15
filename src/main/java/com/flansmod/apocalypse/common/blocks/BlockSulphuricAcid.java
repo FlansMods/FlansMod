@@ -6,7 +6,7 @@ import com.flansmod.common.FlansMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +42,7 @@ public class BlockSulphuricAcid extends BlockFluidClassic
     }
 	
 	@Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
 	{
 		return new ExtendedBlockState(this, new IProperty[] {LEVEL}, new IUnlistedProperty[] {HEIGHT_SW, HEIGHT_NW, HEIGHT_SE, HEIGHT_NE, FLOW_DIRECTION, LEVEL_CORNERS[0], LEVEL_CORNERS[1], LEVEL_CORNERS[2], LEVEL_CORNERS[3]});
 	}
@@ -87,6 +87,8 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 		return extState;
 	}
 	
+	/*
+	 // TODO : [1.12] Fluids?
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side)
 	{
@@ -94,15 +96,15 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 			return world.getBlockState(pos).getBlock() != this;
 		else return super.shouldSideBeRendered(world, pos, side);
 	}
+	*/
 	
-	@Override
 	public float getFluidHeightForRender(IBlockAccess world, BlockPos pos)
 	{
 		IBlockState state = world.getBlockState(pos);
 		Block verticalOrigin = world.getBlockState(pos.down(this.densityDir)).getBlock();
 		if (state.getBlock() == this)
 		{
-			if (verticalOrigin.getMaterial().isLiquid() || verticalOrigin instanceof IFluidBlock)
+			if (state.getMaterial().isLiquid() || verticalOrigin instanceof IFluidBlock)
 			{
 				return 1;
 			}
@@ -141,12 +143,5 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 			end = total / count;
 		
 		return end;
-	}
-	
-	@Override
-	public int getRenderType()
-	{
-		return 3;
-	}
-	
+	}	
 }

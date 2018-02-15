@@ -31,7 +31,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 	{
 		super.initGui();
 		
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - 128;
@@ -77,7 +77,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int w = scaledresolution.getScaledWidth();
 		int h = scaledresolution.getScaledHeight();
 		drawDefaultBackground();
@@ -106,7 +106,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY + 143, 256, 180, 256, 76, textureX, textureY);
 				
 		// Draw text
-		drawCenteredString(fontRendererObj, "Choose a loadout", guiOriginX + 128, guiOriginY + 12, 0xffffff);
+		drawCenteredString(fontRenderer, "Choose a loadout", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
 		// Draw loadout panels
 		for(int n = 0; n < 5; n++)

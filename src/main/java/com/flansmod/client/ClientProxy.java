@@ -183,25 +183,6 @@ public class ClientProxy extends CommonProxy
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable), 
 				new ResourceLocation[] {new ResourceLocation("flansmod:paintjobTable")});
 		
-		gunRenderer = new RenderGun();
-		grenadeRenderer = new RenderGrenade(Minecraft.getMinecraft().getRenderManager());
-		planeRenderer = new RenderPlane(Minecraft.getMinecraft().getRenderManager());
-		vehicleRenderer = new RenderVehicle(Minecraft.getMinecraft().getRenderManager());
-		mechaRenderer = new RenderMecha(Minecraft.getMinecraft().getRenderManager());
-		
-		//Register custom item renderers
-		for(GunType gunType : GunType.guns.values())
-			MinecraftForgeClient.registerItemRenderer(gunType.item, gunRenderer);		
-		for(GrenadeType grenadeType : GrenadeType.grenades)
-			MinecraftForgeClient.registerItemRenderer(grenadeType.item, grenadeRenderer);		
-		for(PlaneType planeType : PlaneType.types)
-			MinecraftForgeClient.registerItemRenderer(planeType.item, planeRenderer);		
-		for(VehicleType vehicleType : VehicleType.types)
-			MinecraftForgeClient.registerItemRenderer(vehicleType.item, vehicleRenderer);		
-		for(MechaType mechaType : MechaType.types)
-			MinecraftForgeClient.registerItemRenderer(mechaType.item, mechaRenderer);
-
-		
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
 				
         // Create one event handler for the client and register it with MC Forge and FML
@@ -256,25 +237,25 @@ public class ClientProxy extends CommonProxy
 	/** Register entity renderers */
 	@Override
 	public void registerRenderers()
-	{		
+	{				
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull(rm));		
-		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha(rm));
-		RenderingRegistry.registerEntityRenderingHandler(EntityItemCustomRender.class, new RenderGunItem(rm, Minecraft.getMinecraft().getRenderItem(), gunRenderer));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderBullet.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new RenderGrenade.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityPlane.class, new RenderPlane.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicle.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull.Factory());		
+		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugDot.class, new RenderDebugDot.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugVector.class, new RenderDebugVector.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDebugAABB.class, new RenderDebugAABB.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMecha.class, new RenderMecha.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityItemCustomRender.class, new RenderGunItem.Factory());
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}

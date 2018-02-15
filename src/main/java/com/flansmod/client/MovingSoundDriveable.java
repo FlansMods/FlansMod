@@ -3,12 +3,15 @@ package com.flansmod.client;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 import com.flansmod.common.driveables.EntityDriveable;
 
 //TODO : Implement this!
-public class MovingSoundDriveable extends MovingSound 
+public class MovingSoundDriveable // extends MovingSound 
 {
+	/*
 	private final EntityDriveable driveable;
 	private float field_147669_l = 0.0F;
 	
@@ -20,9 +23,6 @@ public class MovingSoundDriveable extends MovingSound
 	    repeatDelay = 0;
 	}
 	
-	/**
-	 * Updates the JList with a new model.
-	 */
 	public void update()
 	{
 		if(driveable.isDead)
@@ -48,4 +48,5 @@ public class MovingSoundDriveable extends MovingSound
 			}
 		}
 	}
-	}
+	*/
+}

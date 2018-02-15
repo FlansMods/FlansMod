@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,6 +41,7 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderItemInFrameEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent.CameraSetup;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -53,9 +55,16 @@ import org.lwjgl.util.glu.Project;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.gui.teams.GuiTeamScores;
+import com.flansmod.client.model.CustomItemRenderType;
+import com.flansmod.client.model.CustomItemRenderer;
 import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.ModelGun;
+import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.client.model.RenderMecha;
+import com.flansmod.client.model.RenderPlane;
+import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -68,6 +77,8 @@ import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.network.PacketTeamInfo.PlayerScoreData;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
+import com.flansmod.common.types.EnumType;
+import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 
@@ -85,11 +96,21 @@ public class ClientRenderHooks
 	private static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private static List<KillMessage> killMessages = new ArrayList<KillMessage>();
 	
+	private CustomItemRenderer[] customRenderers = new CustomItemRenderer[EnumType.values().length];
+	
 	public ClientRenderHooks()
 	{
 		mc = Minecraft.getMinecraft();
-	}
 		
+		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
+		
+		customRenderers[EnumType.gun.ordinal()] = new RenderGun();
+		customRenderers[EnumType.grenade.ordinal()] = new RenderGrenade(rm);
+		customRenderers[EnumType.plane.ordinal()] = new RenderPlane(rm);
+		customRenderers[EnumType.vehicle.ordinal()] = new RenderVehicle(rm);
+		customRenderers[EnumType.mecha.ordinal()] = new RenderMecha(rm);
+	}
+	
 	/** Render guns in 3D in item frames */
 	public void renderItemFrame(RenderItemInFrameEvent event)
 	{
@@ -108,128 +129,128 @@ public class ClientRenderHooks
 				float scale = 0.75F;
 				GlStateManager.scale(scale, scale, scale);
 				GlStateManager.translate(0.15F, -0.15F, 0F);
-				ClientProxy.gunRenderer.renderItem(ItemRenderType.ENTITY, event.getItem());
+				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, event.getItem());
 				GlStateManager.popMatrix();
 			}
 		}
 	}
 	
 	/** When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too. */
-	public void renderHeldItem(RenderHandEvent event)
-	{
+	public void renderHeldItem(RenderSpecificHandEvent event)
+	{		
 		EntityPlayer player = mc.player;
-		if(itemToRender != null && itemToRender.getItem() instanceof ItemGun && ((ItemGun)itemToRender.getItem()).GetType().model != null)
-		{
-			//Cancel the hand render event so that we can do our own.
-			event.setCanceled(true);
 		
-			//Render the gun in hand
-			ItemStack stack = itemToRender;
-			GunType type = ((ItemGun)stack.getItem()).GetType();
-			float partialTicks = event.getPartialTicks();
-			int pass = event.getRenderPass();
-			EntityRenderer renderer = mc.entityRenderer;
-			float farPlaneDistance = mc.gameSettings.renderDistanceChunks * 16F;
-			ItemRenderer itemRenderer = mc.getItemRenderer();
-			
-			GlStateManager.clear(256);
-			GlStateManager.matrixMode(5889);
-	        GlStateManager.loadIdentity();
-	        
-	        float f1 = 0.07F;
-	        if(mc.gameSettings.anaglyph)
-	            GlStateManager.translate((float)(-(pass * 2 - 1)) * f1, 0.0F, 0.0F);
-	        
-	        Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
-	        GlStateManager.matrixMode(5888);
-	        GlStateManager.loadIdentity();
+		ItemStack stack = event.getItemStack();
+		if(stack != null && stack.getItem() instanceof IFlanItem)
+		{
+			InfoType type = ((IFlanItem)stack.getItem()).getInfoType();
+			// Muhahaha
+			EnumType typeType = EnumType.getFromObject(type);
+			if(customRenderers[typeType.ordinal()] != null && type.GetModel() != null)
+			{
+				//Cancel the hand render event so that we can do our own.
+				event.setCanceled(true);
+				
+				float partialTicks = event.getPartialTicks();
+				int pass = 0; // TODO [1.12] ?
+				EntityRenderer renderer = mc.entityRenderer;
+				float farPlaneDistance = mc.gameSettings.renderDistanceChunks * 16F;
+				ItemRenderer itemRenderer = mc.getItemRenderer();
+				
+				GlStateManager.clear(256);
+				GlStateManager.matrixMode(5889);
+		        GlStateManager.loadIdentity();
+		        
+		        float separation = 0.07F;
+		        if(mc.gameSettings.anaglyph)
+		            GlStateManager.translate((float)(-(pass * 2 - 1)) * separation, 0.0F, 0.0F);
+		        
+		        Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
+		        GlStateManager.matrixMode(5888);
+		        GlStateManager.loadIdentity();
 
-	        if(mc.gameSettings.anaglyph)
-	            GlStateManager.translate((float)(pass * 2 - 1) * 0.1F, 0.0F, 0.0F);
+		        if(mc.gameSettings.anaglyph)
+		            GlStateManager.translate((float)(pass * 2 - 1) * 0.1F, 0.0F, 0.0F);
 
-	        GlStateManager.pushMatrix();
-	        hurtCameraEffect(partialTicks);
+		        GlStateManager.pushMatrix();
+		        hurtCameraEffect(partialTicks);
 
-	        if(mc.gameSettings.viewBobbing)
-	        	setupViewBobbing(partialTicks);
+		        if(mc.gameSettings.viewBobbing)
+		        	setupViewBobbing(partialTicks);
 
-	        boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
+		        boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
 
-	        if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
-	        {
-	        	renderer.enableLightmap();
-	            renderItemInFirstPerson(stack, itemRenderer, partialTicks);
-	            renderer.disableLightmap();
-	        }
+		        if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
+		        {
+		        	renderer.enableLightmap();
+		    		float f1 = 1.0F - (prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks);
+		            EntityPlayerSP entityplayersp = this.mc.player;
+		            float f2 = entityplayersp.getSwingProgress(partialTicks);
+		            float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
+		            float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
+		            
+		            //Setup lighting
+		            GlStateManager.disableLighting();
+		            GlStateManager.pushMatrix();
+		            GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
+		            GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
+		            RenderHelper.enableStandardItemLighting();
+		            GlStateManager.popMatrix();
+		            
+		            //Do lighting
+		            int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX, entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
+		            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535), (float)(i >> 16));
+		            
+		            //Do hand rotations
+		            float f5 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
+		            float f6 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
+		            GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
+		            GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
+		            
+		            GlStateManager.enableRescaleNormal();
+		            GlStateManager.pushMatrix();
 
-	        GlStateManager.popMatrix();
+		            //Do vanilla weapon swing
+		            float f7 = -0.4F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
+		            float f8 = 0.2F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI * 2.0F);
+		            float f9 = -0.2F * MathHelper.sin(f2 * (float)Math.PI);
+		            GlStateManager.translate(f7, f8, f9);
+		            
+		            GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
+		            GlStateManager.translate(0.0F, f1 * -0.6F, 0.0F);
+		            GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+		            float f10 = MathHelper.sin(f2 * f2 * (float)Math.PI);
+		            float f11 = MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
+		            GlStateManager.rotate(f10 * -20.0F, 0.0F, 1.0F, 0.0F);
+		            GlStateManager.rotate(f11 * -20.0F, 0.0F, 0.0F, 1.0F);
+		            GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
+		            GlStateManager.scale(0.4F, 0.4F, 0.4F);
 
-	        if(mc.gameSettings.thirdPersonView == 0 && !flag)
-	        {
-	            itemRenderer.renderOverlays(partialTicks);
-	            hurtCameraEffect(partialTicks);
-	        }
+		            //ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
+		            customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
+		            
+		            GlStateManager.popMatrix();
+		            GlStateManager.disableRescaleNormal();
+		            RenderHelper.disableStandardItemLighting();
+		            renderer.disableLightmap();
+		        }
 
-	        if(mc.gameSettings.viewBobbing)
-	        {
-	            setupViewBobbing(partialTicks);
-	        }
+		        GlStateManager.popMatrix();
+
+		        if(mc.gameSettings.thirdPersonView == 0 && !flag)
+		        {
+		            itemRenderer.renderOverlays(partialTicks);
+		            hurtCameraEffect(partialTicks);
+		        }
+
+		        if(mc.gameSettings.viewBobbing)
+		        {
+		            setupViewBobbing(partialTicks);
+		        }
+			}
 		}
 	}
-	
-	private void renderItemInFirstPerson(ItemStack stack, ItemRenderer renderer, float partialTicks)
-	{
-		float f1 = 1.0F - (prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks);
-        EntityPlayerSP entityplayersp = this.mc.player;
-        float f2 = entityplayersp.getSwingProgress(partialTicks);
-        float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
-        float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
-        
-        //Setup lighting
-        GlStateManager.disableLighting();
-        GlStateManager.pushMatrix();
-        GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.popMatrix();
-        
-        //Do lighting
-        int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX, entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535), (float)(i >> 16));
-        
-        //Do hand rotations
-        float f5 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
-        float f6 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
-        GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
-        
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.pushMatrix();
-
-        //Do vanilla weapon swing
-        float f7 = -0.4F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
-        float f8 = 0.2F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI * 2.0F);
-        float f9 = -0.2F * MathHelper.sin(f2 * (float)Math.PI);
-        GlStateManager.translate(f7, f8, f9);
-        
-        GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
-        GlStateManager.translate(0.0F, f1 * -0.6F, 0.0F);
-        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
-        float f10 = MathHelper.sin(f2 * f2 * (float)Math.PI);
-        float f11 = MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
-        GlStateManager.rotate(f10 * -20.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(f11 * -20.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.scale(0.4F, 0.4F, 0.4F);
-
-        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
-
-        GlStateManager.popMatrix();
-        GlStateManager.disableRescaleNormal();
-        RenderHelper.disableStandardItemLighting();
-	}
-
-	
+		
     private void hurtCameraEffect(float partialTicks)
     {
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
@@ -477,7 +498,7 @@ public class ClientRenderHooks
 		        
 		        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
 	
-		        ClientProxy.gunRenderer.renderItem(ItemRenderType.EQUIPPED, stack, mc.world, entity);
+		        ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, stack, mc.world, entity);
 		        GlStateManager.popMatrix();
 	        }
 	        
@@ -675,12 +696,13 @@ public class ClientRenderHooks
 
 			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
 
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
-			tessellator.draw();
+			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+			worldrenderer.startDrawingQuads();
+			worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
+			worldrenderer.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
+			worldrenderer.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
+			worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
+			worldrenderer.draw();
 			GL11.glDepthMask(true);
 			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
 			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
@@ -704,12 +726,14 @@ public class ClientRenderHooks
 			PlayerData data = PlayerHandler.getPlayerData(mc.player, Side.CLIENT);
 			double zLevel = 0D;
 			
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 + 5d, zLevel, 0D / 16D, 9D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 + 5d, zLevel, 9D / 16D, 9D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 5d, j / 2 - 4d, zLevel, 9D / 16D, 0D / 16D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
-			tessellator.draw();
+			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+			
+			worldrenderer.startDrawingQuads();
+			worldrenderer.addVertexWithUV(i / 2 - 4d, j / 2 + 5d, zLevel, 0D / 16D, 9D / 16D);
+			worldrenderer.addVertexWithUV(i / 2 + 5d, j / 2 + 5d, zLevel, 9D / 16D, 9D / 16D);
+			worldrenderer.addVertexWithUV(i / 2 + 5d, j / 2 - 4d, zLevel, 9D / 16D, 0D / 16D);
+			worldrenderer.addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
+			worldrenderer.draw();
 			
 
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -726,6 +750,7 @@ public class ClientRenderHooks
 		ItemStack currentStack = mc.player.inventory.getCurrentItem();
 		PlayerData data = PlayerHandler.getPlayerData(mc.player, Side.CLIENT);
 		double zLevel = 0D;
+		WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 		
 		if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).GetType().oneHanded)
 		{
@@ -733,21 +758,21 @@ public class ClientRenderHooks
 			{
 				if(data.offHandGunSlot == n + 1)
 				{
-					tessellator.getWorldRenderer().startDrawingQuads();
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 32D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 32D / 64D, 0D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-					tessellator.draw();
+					worldrenderer.startDrawingQuads();
+					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 32D / 64D, 16D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 32D / 64D, 0D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
+					worldrenderer.draw();
 				}
 				else if(data.isValidOffHandWeapon(mc.player, n + 1))
 				{					
-					tessellator.getWorldRenderer().startDrawingQuads();
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 0D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-					tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 0D / 64D, 0D / 32D);
-					tessellator.draw();
+					worldrenderer.startDrawingQuads();
+					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 0D / 64D, 16D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
+					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 0D / 64D, 0D / 32D);
+					worldrenderer.draw();
 				}
 			}
 		}
@@ -772,15 +797,15 @@ public class ClientRenderHooks
 						RenderHelper.enableGUIStandardItemLighting();
 						GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 						OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-						drawSlotInventory(mc.fontRendererObj, bulletStack, i / 2 + 16 + x, j - 65);
+						drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
 						GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 						RenderHelper.disableStandardItemLighting();
 						String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 						if(bulletStack.getMaxDamage() == 1)
 							s = "";
-						mc.fontRendererObj.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
-						mc.fontRendererObj.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
-						x += 16 + mc.fontRendererObj.getStringWidth(s);
+						mc.fontRenderer.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
+						mc.fontRenderer.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
+						x += 16 + mc.fontRenderer.getStringWidth(s);
 					}
 				}
 				//Render secondary gun
@@ -807,14 +832,14 @@ public class ClientRenderHooks
 								GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-								drawSlotInventory(mc.fontRendererObj, bulletStack, i / 2 - 32 - x, j - 65);	
-								x += 16 + mc.fontRendererObj.getStringWidth(s);
+								drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);	
+								x += 16 + mc.fontRenderer.getStringWidth(s);
 								
 								//Draw the string
 								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 								RenderHelper.disableStandardItemLighting();
-								mc.fontRendererObj.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
-								mc.fontRendererObj.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
+								mc.fontRenderer.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
+								mc.fontRenderer.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
 							}
 						}
 					}
@@ -837,13 +862,14 @@ public class ClientRenderHooks
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
 
 			mc.renderEngine.bindTexture(GuiTeamScores.texture);
-							
-			tessellator.getWorldRenderer().startDrawingQuads();
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
-			tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
-			tessellator.draw();
+						
+			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+			worldrenderer.startDrawingQuads();
+			worldrenderer.addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
+			worldrenderer.addVertexWithUV(i / 2 + 43, 27, -90D, 171D / 256D, 27D / 256D);
+			worldrenderer.addVertexWithUV(i / 2 + 43, 0D, -90D, 171D / 256D, 0D / 256D);
+			worldrenderer.addVertexWithUV(i / 2 - 43, 0D, -90D, 85D / 256D, 0D / 256D);
+			worldrenderer.draw();
 			
 			//If we are in a two team gametype, draw the team scores at the top of the screen
 			
@@ -858,21 +884,21 @@ public class ClientRenderHooks
 				//Draw team 1 colour bit
 				int colour = teamInfo.teamData[0].team.teamColour;	
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-				tessellator.getWorldRenderer().startDrawingQuads();
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
-				tessellator.draw();
+				worldrenderer.startDrawingQuads();
+				worldrenderer.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 - 19, 27, -90D, 24D / 256D, 125D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 - 19, 0D, -90D, 24D / 256D, 98D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
+				worldrenderer.draw();
 				//Draw team 2 colour bit
 				colour = teamInfo.teamData[1].team.teamColour;	
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
-				tessellator.getWorldRenderer().startDrawingQuads();
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
-				tessellator.getWorldRenderer().addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
-				tessellator.draw();
+				worldrenderer.startDrawingQuads();
+				worldrenderer.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 + 43, 27, -90D, 86D / 256D, 125D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 + 43, 0D, -90D, 86D / 256D, 98D / 256D);
+				worldrenderer.addVertexWithUV(i / 2 + 19, 0D, -90D, 62D / 256D, 98D / 256D);
+				worldrenderer.draw();
 				
 				GL11.glDepthMask(true);
 				GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -882,25 +908,25 @@ public class ClientRenderHooks
 				//Draw the team scores
 				if(teamInfo.teamData[0] != null && teamInfo.teamData[1] != null)
 				{
-					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
-					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
-					mc.fontRendererObj.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRendererObj.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
+					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 35, 9, 0x000000);
+					mc.fontRenderer.drawString(teamInfo.teamData[0].score + "", i / 2 - 36, 8, 0xffffff);
+					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 35 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 9, 0x000000);
+					mc.fontRenderer.drawString(teamInfo.teamData[1].score + "", i / 2 + 34 - mc.fontRenderer.getStringWidth(teamInfo.teamData[1].score + ""), 8, 0xffffff);
 				}
 			}
 			
 			
-			mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
-			mc.fontRendererObj.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
-			mc.fontRendererObj.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRendererObj.getStringWidth(teamInfo.map + ""), 9, 0x000000);
-			mc.fontRendererObj.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRendererObj.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
+			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 48, 9, 0x000000);
+			mc.fontRenderer.drawString(teamInfo.gametype + "", i / 2 + 47, 8, 0xffffff);
+			mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 47 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 9, 0x000000);
+			mc.fontRenderer.drawString(teamInfo.map + "", i / 2 - 48 - mc.fontRenderer.getStringWidth(teamInfo.map + ""), 8, 0xffffff);
 			
 			int secondsLeft = teamInfo.timeLeft / 20;
 			int minutesLeft = secondsLeft / 60;
 			secondsLeft = secondsLeft % 60;
 			String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
-			mc.fontRendererObj.drawString(timeLeft, i / 2 - mc.fontRendererObj.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
-			mc.fontRendererObj.drawString(timeLeft, i / 2 - mc.fontRendererObj.getStringWidth(timeLeft) / 2, 30, 0xffffff);
+			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
+			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
 
 			
 			GL11.glDepthMask(true);
@@ -912,9 +938,9 @@ public class ClientRenderHooks
 			PlayerScoreData data = teamInfo.getPlayerScoreData(playerUsername);
 			if(data != null)
 			{
-				mc.fontRendererObj.drawString(data.score + "", i / 2 - 7, 1, 0x000000);
-				mc.fontRendererObj.drawString(data.kills + "", i / 2 - 7, 9, 0x000000);
-				mc.fontRendererObj.drawString(data.deaths + "", i / 2 - 7, 17, 0x000000);
+				mc.fontRenderer.drawString(data.score + "", i / 2 - 7, 1, 0x000000);
+				mc.fontRenderer.drawString(data.kills + "", i / 2 - 7, 9, 0x000000);
+				mc.fontRenderer.drawString(data.deaths + "", i / 2 - 7, 17, 0x000000);
 			}
 		}
 	}
@@ -924,7 +950,7 @@ public class ClientRenderHooks
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
-			mc.fontRendererObj.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRendererObj.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
+			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 		}
 					
 		//Draw icons indicated weapons used
@@ -936,7 +962,7 @@ public class ClientRenderHooks
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
-			drawSlotInventory(mc.fontRendererObj, new ItemStack(killMessage.weapon.item, 1, killMessage.paint), i - mc.fontRendererObj.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
+			drawSlotInventory(mc.fontRenderer, new ItemStack(killMessage.weapon.item, 1, killMessage.paint), i - mc.fontRenderer.getStringWidth("     " + killMessage.killedName) - 12, j - 36 - killMessage.line * 16);
 		}
 		GL11.glDisable(3042 /*GL_BLEND*/);
 		RenderHelper.disableStandardItemLighting();
@@ -958,11 +984,11 @@ public class ClientRenderHooks
 			
 			speed = (int)(speed * 10F) / 10F;
 			
-			mc.fontRendererObj.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
+			mc.fontRenderer.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
 			
 			if(FlansMod.DEBUG)
 			{
-				mc.fontRendererObj.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
+				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
 			}
 		}
 	}

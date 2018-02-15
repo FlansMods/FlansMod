@@ -15,7 +15,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -51,10 +51,10 @@ public class GuiArmourBox extends GuiScreen
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
-		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		ScaledResolution scaledresolution = new ScaledResolution(mc);
 		int k = scaledresolution.getScaledWidth();
 		int l = scaledresolution.getScaledHeight();
-		FontRenderer fontrenderer = mc.fontRendererObj;
+		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
 		mc.renderEngine.bindTexture(texture);
@@ -67,7 +67,7 @@ public class GuiArmourBox extends GuiScreen
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investigate
 		
-		drawCenteredString(fontRendererObj, type.name, k / 2, n + 5, 0xffffff);
+		drawCenteredString(fontRenderer, type.name, k / 2, n + 5, 0xffffff);
 		mc.renderEngine.bindTexture(texture);
 		
 		// Grey out buttons when they are unavaliable
@@ -148,7 +148,7 @@ public class GuiArmourBox extends GuiScreen
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
 	}
 	
 	@Override

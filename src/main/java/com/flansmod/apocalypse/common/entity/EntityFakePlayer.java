@@ -30,7 +30,7 @@ public class EntityFakePlayer extends EntityFlansModShooter
 		inventory = new InventoryBasic("FakePlayer", true, player.inventory.getSizeInventory());
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
-			inventory.setInventorySlotContents(i, ItemStack.copyItemStack(player.inventory.getStackInSlot(i)));
+			inventory.setInventorySlotContents(i, player.inventory.getStackInSlot(i).copy());
 		}
 	}
 

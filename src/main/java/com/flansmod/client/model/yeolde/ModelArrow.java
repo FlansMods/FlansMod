@@ -3,10 +3,12 @@ package com.flansmod.client.model.yeolde;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.util.WorldRenderer;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelArrow extends ModelBase
@@ -22,8 +24,7 @@ public class ModelArrow extends ModelBase
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
-	    Tessellator tessellator = Tessellator.getInstance();
-	    WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
         byte var11 = 0;
         float var12 = 0.0F;
         float var13 = 0.5F;
@@ -45,14 +46,14 @@ public class ModelArrow extends ModelBase
         worldrenderer.addVertexWithUV(-7.0D, -2.0D, 2.0D, var17, var18);
         worldrenderer.addVertexWithUV(-7.0D, 2.0D, 2.0D, var17, var19);
         worldrenderer.addVertexWithUV(-7.0D, 2.0D, -2.0D, var16, var19);
-        tessellator.draw();
+        worldrenderer.draw();
         GL11.glNormal3f(-var20, 0.0F, 0.0F);
         worldrenderer.startDrawingQuads();
         worldrenderer.addVertexWithUV(-7.0D, 2.0D, -2.0D, var16, var18);
         worldrenderer.addVertexWithUV(-7.0D, 2.0D, 2.0D, var17, var18);
         worldrenderer.addVertexWithUV(-7.0D, -2.0D, 2.0D, var17, var19);
         worldrenderer.addVertexWithUV(-7.0D, -2.0D, -2.0D, var16, var19);
-        tessellator.draw();
+        worldrenderer.draw();
 
         for (int var23 = 0; var23 < 4; ++var23)
         {
@@ -63,7 +64,7 @@ public class ModelArrow extends ModelBase
             worldrenderer.addVertexWithUV(8.0D, -2.0D, 0.0D, var13, var14);
             worldrenderer.addVertexWithUV(8.0D, 2.0D, 0.0D, var13, var15);
             worldrenderer.addVertexWithUV(-8.0D, 2.0D, 0.0D, var12, var15);
-            tessellator.draw();
+            worldrenderer.draw();
         }
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.common.teams.EntityFlagpole;
 
@@ -41,5 +42,14 @@ public class RenderFlagpole extends Render
 	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
 		return texture;
+	}
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderFlagpole(manager);
+		}
 	}
 }

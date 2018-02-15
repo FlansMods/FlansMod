@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -47,18 +46,21 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 	{
 	   return false;
 	}
-		
+	
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos)
+	{
+	    return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
+	}
+	
+	/*
 	@Override
 	public boolean isOpaqueCube()
 	{
 	    return false;
 	}
     
-	@Override
-	public boolean canPlaceBlockAt(World par1World, BlockPos pos)
-	{
-	    return par1World.doesBlockHaveSolidTopSurface(par1World, pos.add(0, -1, 0));
-	}
+
 	
 	@Override
     public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
@@ -79,18 +81,7 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
         float var3 = 0.5F;
         this.setBlockBounds(0.0F, 0.5F - var2, 0.0F, 1F, 0.5F + var2, 1F);
     }
-
-	@Override
-	public int getMobilityFlag()
-	{
-		return 1;
-	}  
-	
-	@Override
-    public int getRenderType()
-    {
-        return -1;
-    }
+	 */
 	
 	@Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
@@ -99,7 +90,7 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 		{
 			for(int j = 0; j < 2; j++)
 			{
-				if(world.provider.getDimensionId() == FlansModApocalypse.dimensionID && isPortal(world, pos.add(-3 * i, 0, -3 * j)))
+				if(world.provider.getDimension() == FlansModApocalypse.dimensionID && isPortal(world, pos.add(-3 * i, 0, -3 * j)))
 				{
 					world.spawnEntity(new EntityTeleporter(world, pos.add(-3 * i, 0, -3 * j)));
 				}

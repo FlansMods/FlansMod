@@ -14,7 +14,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -249,9 +249,9 @@ public class GuiGunBox extends GuiContainer
 				renderInfoType(entry.type, originX + 106, originY + 58 + i * 22);
 			}
 		}
-		int stringWidth = mc.fontRendererObj.getStringWidth(type.name);
-		mc.fontRendererObj.drawString(type.name, originX + xSize / 2 - stringWidth / 2, originY + 8, 0x00000000);
-		mc.fontRendererObj.drawString(type.name, originX + xSize / 2 - stringWidth / 2 + 1, originY + 7, 0xffffffff);
+		int stringWidth = mc.fontRenderer.getStringWidth(type.name);
+		mc.fontRenderer.drawString(type.name, originX + xSize / 2 - stringWidth / 2, originY + 8, 0x00000000);
+		mc.fontRenderer.drawString(type.name, originX + xSize / 2 - stringWidth / 2 + 1, originY + 7, 0xffffffff);
 	}
 	
 	private void renderInfoType(InfoType type, int x, int y)
@@ -283,7 +283,7 @@ public class GuiGunBox extends GuiContainer
 		{
 			return;
 		}
-		FontRenderer fr = mc.fontRendererObj;
+		FontRenderer fr = mc.fontRenderer;
 		
 		String bufferLine = "";
 		String bufferLine2 = "";
@@ -324,7 +324,7 @@ public class GuiGunBox extends GuiContainer
 		RenderHelper.enableGUIStandardItemLighting();
 		
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
-		itemRenderer.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
 	}
 
 	@Override

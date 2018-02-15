@@ -51,8 +51,8 @@ public class GuiDriveableInventory extends GuiContainer
 		if(screen == 1) title = " - " + driveable.getBombInventoryName();
 		if(screen == 2) title = " - Cargo";
 		if(screen == 3) title = " - " + driveable.getMissileInventoryName();
-		fontRendererObj.drawString(driveable.getDriveableType().name + title, 6, 6, 0x404040);
-		fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+		fontRenderer.drawString(driveable.getDriveableType().name + title, 6, 6, 0x404040);
+		fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glColor3f(1.0F, 1.0F, 1.0F);
@@ -67,7 +67,7 @@ public class GuiDriveableInventory extends GuiContainer
 				{
 					if(slotsDone >= scroll)
 					{
-						fontRendererObj.drawString(driveable.getDriveableType().seats[i].gunName, 53, 29 + 19 * (slotsDone - scroll), 0x000000);
+						fontRenderer.drawString(driveable.getDriveableType().seats[i].gunName, 53, 29 + 19 * (slotsDone - scroll), 0x000000);
 						drawStack(new ItemStack(driveable.getDriveableType().seats[i].gunType.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
@@ -81,7 +81,7 @@ public class GuiDriveableInventory extends GuiContainer
 				{
 					if(slotsDone >= scroll)
 					{
-						fontRendererObj.drawString("Driver's gun " + (i + 1), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
+						fontRenderer.drawString("Driver's gun " + (i + 1), 53, 29 + 19 * (slotsDone - scroll), 0x000000);
 						drawStack(new ItemStack(driveable.getDriveableType().pilotGuns.get(i).type.getItem()), 10, 25 + 19 * (slotsDone - scroll));
 					}
 					slotsDone++;
@@ -98,7 +98,7 @@ public class GuiDriveableInventory extends GuiContainer
 	private void drawStack(ItemStack itemstack, int i, int j)
     {
 		itemRender.renderItemIntoGUI(itemstack, i, j);
-		itemRender.renderItemOverlayIntoGUI(fontRendererObj, itemstack, i, j, null);
+		itemRender.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
     }
 
 	

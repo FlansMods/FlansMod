@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -113,7 +114,7 @@ public class EntityAIMecha extends EntityMecha
 				double blockHitZ = hit == null ? 0 : hit.hitVec.z - rightArmOrigin.z; 
 				
 				//If the target is nearer than the block hit or there was no block
-				if(hit == null || hit.typeOfHit != RayTraceResult.MovingObjectType.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
+				if(hit == null || hit.typeOfHit != RayTraceResult.Type.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
 				{
 					useItem(usingLeft);
 					if(rand.nextInt(5) == 0)
@@ -200,7 +201,7 @@ public class EntityAIMecha extends EntityMecha
 
 		MechaType type = getMechaType();
 
-		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (seats[0] == null || seats[0].getControllingPassenger() == null))
 		{
 			return false;
 		}

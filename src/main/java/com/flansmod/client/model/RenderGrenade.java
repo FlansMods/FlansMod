@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.GrenadeType;
 import com.flansmod.common.guns.ItemGrenade;
 
-public class RenderGrenade extends Render implements IItemRenderer 
+public class RenderGrenade extends Render implements CustomItemRenderer
 {
 	public RenderGrenade(RenderManager renderManager) 
 	{
@@ -71,8 +71,7 @@ public class RenderGrenade extends Render implements IItemRenderer
 		return texture;
 	}
 
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) 
+	public boolean handleRenderType(ItemStack item, CustomItemRenderType type) 
 	{
 		switch(type)
 		{
@@ -81,15 +80,9 @@ public class RenderGrenade extends Render implements IItemRenderer
 		}
 		return false;
 	}
-
+	
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) 
-	{
-		return false;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemGrenade)
@@ -124,6 +117,15 @@ public class RenderGrenade extends Render implements IItemRenderer
 			}
 		}
 		GL11.glPopMatrix();
+	}
+	
+	public static class Factory implements IRenderFactory
+	{
+		@Override
+		public Render createRenderFor(RenderManager manager) 
+		{
+			return new RenderGrenade(manager);
+		}
 	}
 
 }
