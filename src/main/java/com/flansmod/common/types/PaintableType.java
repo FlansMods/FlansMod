@@ -11,6 +11,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetDamage;
+import net.minecraftforge.event.LootTableLoadEvent;
 
 public abstract class PaintableType extends InfoType
 {
@@ -103,18 +111,21 @@ public abstract class PaintableType extends InfoType
 	}
 	
 	@Override
-	public void addDungeonLoot() 
+	public void addLoot(LootTableLoadEvent event) 
 	{
 		if(dungeonChance > 0)
 		{
-			for(int i = 0; i < paintjobs.size(); i++)
+			LootPool pool = event.getTable().getPool("FlansMod");
+			if(pool == null)
 			{
-				ItemStack stack = new ItemStack(this.item);
-				NBTTagCompound tags = new NBTTagCompound();
-				tags.setString("Paint", paintjobs.get(i).iconName);
-				stack.setTagCompound(tags);
-				
-				addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
+				pool = new LootPool(new LootEntry[0], new LootCondition[0], new RandomValueRange(1, 1), new RandomValueRange(1, 1), "FlansMod");
+				event.getTable().addPool(pool);
+			}
+			
+			if(pool != null)
+			{
+				LootEntry entry = new LootEntryItem(item, FlansMod.dungeonLootChance * dungeonChance, 1, new LootFunction[] { new SetDamage(new LootCondition[0], new RandomValueRange(0, paintjobs.size() - 1)) }, new LootCondition[0], shortName);
+				pool.addEntry(entry);
 			}
 		}
 	}

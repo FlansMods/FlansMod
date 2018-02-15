@@ -1,17 +1,26 @@
 package com.flansmod.common.teams;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
 
-public class EntityFlag extends Entity implements ITeamObject {
+public class EntityFlag extends Entity implements ITeamObject 
+{
+    private static final DataParameter<Byte> TEAMID = EntityDataManager.<Byte>createKey(EntityFlag.class, DataSerializers.BYTE);
 	
 	public int baseID;
 	public EntityFlagpole base;
@@ -22,9 +31,21 @@ public class EntityFlag extends Entity implements ITeamObject {
 	{
 		super(world);
 		setSize(1F, 1F);
-		renderDistanceWeight = 100D;
 		ignoreFrustumCheck = true;
 	}
+	
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+    public boolean isInRangeToRender3d(double x, double y, double z)
+    {
+        double dX = this.posX - x;
+        double dY = this.posY - y;
+        double dZ = this.posZ - z;
+        double distSq = dX * dX + dY * dY + dZ * dZ;
+        double maxDist = 128.0D * getRenderDistanceWeight();
+        return distSq < maxDist * maxDist;
+    }
 	
 	public EntityFlag(World world, EntityFlagpole pole) 
 	{
@@ -42,7 +63,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	protected void entityInit() 
 	{
-		dataWatcher.addObject(5, new Byte((byte)0));
+		getDataManager().register(TEAMID, Byte.valueOf((byte)0));
 	}
 	
 	@Override
@@ -55,16 +76,16 @@ public class EntityFlag extends Entity implements ITeamObject {
 		{
 			setBase(TeamsManager.getInstance().getBase(baseID));
 		}
-		if(ridingEntity != null && ridingEntity.isDead)
+		if(getRidingEntity() != null && getRidingEntity().isDead)
 		{
-			if(ridingEntity instanceof EntityPlayerMP)
+			if(getRidingEntity() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP player = ((EntityPlayerMP)ridingEntity);
+				EntityPlayerMP player = ((EntityPlayerMP)getRidingEntity());
 				Team team = PlayerHandler.getPlayerData(player.getName()).team;
 				TeamsManager.getInstance();
 				TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
-			mountEntity(null);
+			dismountRidingEntity();
 			
 		}
 		if(!addedToChunk)
@@ -72,7 +93,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 		
 		if(timeUntilReturn > 0)
 		{
-			if(ridingEntity != null || isHome)
+			if(getRidingEntity() != null || isHome)
 				timeUntilReturn = 0;
 			else
 			{
@@ -92,23 +113,18 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-	public void mountEntity(Entity entity)
+	public void dismountRidingEntity()
 	{
-		if(entity == null)
+		if(TeamsManager.getInstance().currentRound != null && TeamsManager.getInstance().currentRound.gametype instanceof GametypeCTF)
 		{
-			if(TeamsManager.getInstance().currentRound != null && TeamsManager.getInstance().currentRound.gametype instanceof GametypeCTF)
-			{
-				timeUntilReturn = ((GametypeCTF)TeamsManager.getInstance().currentRound.gametype).flagReturnTime * 20;
-			}
-			else timeUntilReturn = 600; //30 seconds
+			timeUntilReturn = ((GametypeCTF)TeamsManager.getInstance().currentRound.gametype).flagReturnTime * 20;
 		}
-		
-		super.mountEntity(entity);
+		else timeUntilReturn = 600; //30 seconds
 	}
 	
 	public void reset()
 	{
-		mountEntity(null);
+		dismountRidingEntity();
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 		isHome = true;
 	}
@@ -142,7 +158,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	@Override
 	public void onBaseSet(int newTeamID) 
 	{
-		dataWatcher.updateObject(5, (byte)newTeamID);
+		getDataManager().set(TEAMID, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
 	}
 
@@ -194,7 +210,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 
 	public int getTeamID()
 	{
-		return dataWatcher.getWatchableObjectByte(5);
+		return getDataManager().get(TEAMID);
 	}
 		
 	@Override
@@ -204,7 +220,7 @@ public class EntityFlag extends Entity implements ITeamObject {
 	}
 	
 	@Override
-	public boolean interactFirst(EntityPlayer player) //interact
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
 		/* TODO : Check the generalised code in TeamsManager works
 		if(player instanceof EntityPlayerMP && TeamsManager.getInstance().currentGametype != null)

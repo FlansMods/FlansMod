@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -92,17 +93,17 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 			}
 
 			//Getter of EntityItem
-			int var2 = getEntityItem().stackSize;
+			int var2 = getItem().getCount();
 
-			if ((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(getEntityItem())))
+			if ((event.getResult() == Result.ALLOW || var2 <= 0 || player.inventory.addItemStackToInventory(getItem())))
 			{
-				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this);
+				FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, getItem().copy());
 
-				playSound("random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+				playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 				player.onItemPickup(this, var2);
 
 				//Getter of EntityItem
-				if (getEntityItem().stackSize <= 0)
+				if (getItem().getCount() <= 0)
 				{
 					spawner.itemEntities.remove(this);
 					setDead();
@@ -129,7 +130,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		data.writeDouble(angle);
 		NBTTagCompound tags = new NBTTagCompound();
 		//Getter of EntityItem
-		getEntityItem().writeToNBT(tags);
+		getItem().writeToNBT(tags);
 		ByteBufUtils.writeTag(data, tags);
 	}
 
@@ -140,7 +141,7 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		yCoord = data.readInt();
 		zCoord = data.readInt();
 		angle = data.readDouble();
-		setEntityItemStack(new ItemStack(ByteBufUtils.readTag(data)));
+		setItem(new ItemStack(ByteBufUtils.readTag(data)));
 	}
 	
 	@Override
@@ -149,12 +150,6 @@ public class EntityTeamItem extends EntityItemCustomRender implements IEntityAdd
 		setDead();
 	}
 	
-	@Override
-	public boolean canAttackWithItem()
-	{
-		return false;
-	}
-
 	@Override
 	public boolean isBurning()
 	{

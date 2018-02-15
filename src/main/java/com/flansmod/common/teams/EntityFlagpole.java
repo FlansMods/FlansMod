@@ -8,10 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -45,7 +48,6 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		super(world);
 		setSize(1F, 2F);
-		renderDistanceWeight = 100D;
 	}	
 	
 	public EntityFlagpole(World world, double x, double y, double z) 
@@ -68,9 +70,21 @@ public class EntityFlagpole extends Entity implements ITeamBase
     {
 		this(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
 	}
+    
+	@SideOnly(Side.CLIENT)
+	@Override
+    public boolean isInRangeToRender3d(double x, double y, double z)
+    {
+        double dX = this.posX - x;
+        double dY = this.posY - y;
+        double dZ = this.posZ - z;
+        double distSq = dX * dX + dY * dY + dZ * dZ;
+        double maxDist = 128.0D * getRenderDistanceWeight();
+        return distSq < maxDist * maxDist;
+    }
 
 	@Override
-	public AxisAlignedBB getBoundingBox()
+	public AxisAlignedBB getCollisionBoundingBox()
 	{
 		return null;
 		//return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
@@ -260,7 +274,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
-	public boolean interactFirst(EntityPlayer player) //interact
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		if(!world.isRemote && data.team == null && TeamsManager.getInstance().playerIsOp(player) && (player.getHeldItemMainhand() == null || !(player.getHeldItemMainhand().getItem() instanceof ItemOpStick)))

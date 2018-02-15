@@ -1,11 +1,13 @@
 package com.flansmod.common.driveables;
 
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.TextComponentString;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -132,7 +134,7 @@ public class EntityPlane extends EntityDriveable
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
 		{
-			if(seats[i].interactFirst(entityplayer))
+			if(seats[i].processInitialInteract(entityplayer, hand))
 			{
 				if(i == 0)
 				{
@@ -155,7 +157,8 @@ public class EntityPlane extends EntityDriveable
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
 			return true;
 		}
-		boolean canThrust = ((seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0) && hasWorkingProp();
+		boolean canThrust = ((seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer 
+				&& ((EntityPlayer)seats[0].getControllingPassenger()).capabilities.isCreativeMode) || getDriveableData().fuelInTank > 0) && hasWorkingProp();
 		switch(key)
 		{
 			case 0 : //Accelerate : Increase the throttle, up to 1.
@@ -204,15 +207,15 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 6 : //Exit : Get out
 			{
-				if(seats[0].riddenByEntity != null)
-					seats[0].riddenByEntity.mountEntity(null);
+				if(seats[0].getControllingPassenger() != null)
+					seats[0].removePassengers();
 		  		return true;
 			}
 			case 7 : //Inventory : Check to see if this plane allows in-flight inventory editing or if the plane is on the ground
 			{
 				if(world.isRemote && (type.invInflight || (Math.abs(throttle) < 0.1F && onGround)))
 				{
-					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].riddenByEntity, world, this);
+					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].getControllingPassenger(), world, this);
 				}
 				return true;
 			}
@@ -223,7 +226,7 @@ public class EntityPlane extends EntityDriveable
 			}
 			case 10 : //Change control mode
 			{
-				FlansMod.proxy.changeControlMode((EntityPlayer)seats[0].riddenByEntity);
+				FlansMod.proxy.changeControlMode((EntityPlayer)seats[0].getControllingPassenger());
 				return true;
 			}
 			case 11 : //Roll left
@@ -325,11 +328,12 @@ public class EntityPlane extends EntityDriveable
 		}
 
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].riddenByEntity);
+		boolean thePlayerIsDrivingThis = world.isRemote && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer 
+				&& FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].getControllingPassenger());
 
 		//Despawning
 		ticksSinceUsed++;
-		if(!world.isRemote && seats[0].riddenByEntity != null)
+		if(!world.isRemote && seats[0].getControllingPassenger() != null)
 			ticksSinceUsed = 0;
 		if(!world.isRemote && TeamsManager.planeLife > 0 && ticksSinceUsed > TeamsManager.planeLife * 20)
 		{
@@ -380,9 +384,9 @@ public class EntityPlane extends EntityDriveable
 				double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
 				double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
 				double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
-				double dYaw = MathHelper.wrapAngleTo180_double(serverYaw - axes.getYaw());
-				double dPitch = MathHelper.wrapAngleTo180_double(serverPitch - axes.getPitch());
-				double dRoll = MathHelper.wrapAngleTo180_double(serverRoll - axes.getRoll());
+				double dYaw = MathHelper.wrapDegrees(serverYaw - axes.getYaw());
+				double dPitch = MathHelper.wrapDegrees(serverPitch - axes.getPitch());
+				double dRoll = MathHelper.wrapDegrees(serverRoll - axes.getRoll());
 				rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
 				rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
 				float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
@@ -401,7 +405,7 @@ public class EntityPlane extends EntityDriveable
 		//With a player default to 0.5 for helicopters (hover speed)
 		//And default to the range 0.25 ~ 0.5 for planes (taxi speed ~ take off speed)
 		float throttlePull = 0.99F;
-		if(seats[0] != null && seats[0].riddenByEntity != null && mode == EnumPlaneMode.HELI && canThrust())
+		if(seats[0] != null && seats[0].getControllingPassenger() != null && mode == EnumPlaneMode.HELI && canThrust())
 			throttle = (throttle - 0.5F) * throttlePull + 0.5F;
 
 		//Get the speed of the plane
@@ -595,7 +599,7 @@ public class EntityPlane extends EntityDriveable
 		for(EntityWheel wheel : wheels)
 		{
 			if(wheel != null && world != null)
-			if(type.floatOnWater && world.isAnyLiquid(wheel.getEntityBoundingBox()))
+			if(type.floatOnWater && world.containsAnyLiquid(wheel.getEntityBoundingBox()))
 			{
 				motionY += type.buoyancy;
 			}
@@ -607,7 +611,7 @@ public class EntityPlane extends EntityDriveable
 			if(wheel != null)
 			{
 				wheel.prevPosY = wheel.posY;
-				wheel.moveEntity(motionX, motionY, motionZ);
+				wheel.move(MoverType.SELF, motionX, motionY, motionZ);
 			}
 		}
 		
@@ -676,11 +680,11 @@ public class EntityPlane extends EntityDriveable
 					amountToMoveCar.y += ((wheel.posY - wheel.prevPosY) - (motionY)) * 0.5F / wheels.length;
 					//amountToMoveCar.z += ((wheel.posZ - wheel.prevPosZ) - (motionZ)) * 0.0616F / wheels.length;
 													
-					wheel.moveEntity(amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
+					wheel.move(MoverType.SELF, amountToMoveWheel.x, amountToMoveWheel.y, amountToMoveWheel.z);
 				}
 			}
 		
-			moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+			move(MoverType.SELF, amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
 			
 		}
 				
@@ -730,7 +734,8 @@ public class EntityPlane extends EntityDriveable
 
 	public boolean canThrust() 
 	{
-		return (seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
+		return (seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer 
+				&& ((EntityPlayer)seats[0].getControllingPassenger()).capabilities.isCreativeMode) || driveableData.fuelInTank > 0;
 	}
 
 	@Override
@@ -769,7 +774,7 @@ public class EntityPlane extends EntityDriveable
 
 		PlaneType type = PlaneType.getPlane(driveableType);
 
-		if(damagesource.damageType.equals("player") && damagesource.getEntity().onGround && (seats[0] == null || seats[0].riddenByEntity == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (seats[0] == null || seats[0].getControllingPassenger() == null))
 		{
 			ItemStack planeStack = new ItemStack(type.item, 1, driveableData.paintjobID);
 			NBTTagCompound tags = new NBTTagCompound();

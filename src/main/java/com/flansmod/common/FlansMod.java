@@ -38,6 +38,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -281,7 +282,6 @@ public class FlansMod
 		for (InfoType type : InfoType.infoTypes.values())
 		{
 			type.addRecipe(event.getRegistry());
-			type.addDungeonLoot();
 		}
 		if(addGunpowderRecipe)
 		{
@@ -325,6 +325,11 @@ public class FlansMod
 	@EventHandler
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
+		for (InfoType type : InfoType.infoTypes.values())
+		{
+			type.registerItem(event.getRegistry());
+		}
+		
 		event.getRegistry().register(rainbowPaintcan); //, "rainbowPaintcan", MODID);
 		event.getRegistry().register(opStick); //, "opStick", MODID);
 		event.getRegistry().register(flag); //, "flagpole", MODID);
@@ -333,6 +338,11 @@ public class FlansMod
 	@EventHandler
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{
+		for (InfoType type : InfoType.infoTypes.values())
+		{
+			type.registerBlock(event.getRegistry());
+		}
+		
 		event.getRegistry().register(workbench);//, ItemBlockManyNames.class, "flansWorkbench");
 		event.getRegistry().register(spawner); // ItemBlockManyNames.class, "teamsSpawner");
 		event.getRegistry().register(paintjobTable); //, "paintjobTable");
@@ -396,6 +406,15 @@ public class FlansMod
 		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade"));
 		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG"));
 		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun"));
+	}
+	
+	@EventHandler
+	public void registerLoot(LootTableLoadEvent event)
+	{
+		for (InfoType type : InfoType.infoTypes.values())
+		{
+			type.addLoot(event);
+		}
 	}
 	
 	/** The mod post-initialisation method */

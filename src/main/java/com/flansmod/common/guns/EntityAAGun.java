@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
@@ -285,7 +288,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		// update motion
 		motionX *= 0.5;
 		motionZ *= 0.5;
-		moveEntity(motionX, motionY, motionZ);
+		move(MoverType.SELF, motionX, motionY, motionZ);
 		
 		if (world.isRemote && getControllingPassenger() != null && getControllingPassenger() == FMLClientHandler.instance().getClient().player)
 		{
@@ -561,7 +564,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						if(!entityplayer.capabilities.isCreativeMode)
 							entityplayer.inventory.decrStackSize(slot, 1);
 						reloadTimer = type.reloadTime;
-						world.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+						world.playSound(posX, posY, posZ, FlansModResourceHandler.getSoundEvent(type.reloadSound), SoundCategory.PLAYERS, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), true);
 					}
 				}
 			}

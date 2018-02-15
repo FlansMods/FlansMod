@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketMGFire;
@@ -231,7 +233,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		if (damagesource.damageType.equals("player"))
 		{
-			Entity player = damagesource.getEntity();
+			Entity player = damagesource.getTrueSource();
 			if (player == gunner)
 			{
 				// Player left clicked on the gun
@@ -277,7 +279,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer player) //interact : change back when Forge updates
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
 		// Player right clicked on gun
 		// Mount gun
@@ -317,7 +319,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 					ammo = player.inventory.getStackInSlot(slot);
 					player.inventory.setInventorySlotContents(slot, null);
 					reloadTimer = type.reloadTime;
-					world.playSoundAtEntity(this, type.reloadSound, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
+					playSound(FlansModResourceHandler.getSoundEvent(type.reloadSound), 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
 			}
 			

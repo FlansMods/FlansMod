@@ -12,6 +12,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -670,7 +671,7 @@ public abstract class DriveableType extends PaintableType
 	}
 	
 	@Override
-	public void addDungeonLoot() 
+	public void addLoot(LootTableLoadEvent event) 
 	{
 		//Do not add vehicles to dungeon chests. That would be so op.
 	}

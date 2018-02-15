@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -486,11 +487,13 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 
 		float spread = 0.1F;
 		for (int i = 0; i < 10; i++) {
-			EntityFX particle = FlansModClient.getParticle(type.trailParticleType, world,
+			Particle particle = FlansModClient.getParticle(type.trailParticleType, world,
 					prevPosX + dX * i + rand.nextGaussian() * spread, prevPosY + dY * i + rand.nextGaussian() * spread,
 					prevPosZ + dZ * i + rand.nextGaussian() * spread);
-			if (particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
-				particle.renderDistanceWeight = 100D;
+			// TODO: [1.12] once again, render distance
+			
+			//if (particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
+			//	particle.renderDistanceWeight = 100D;
 			// world.spawnEntity(particle);
 		}
 	}

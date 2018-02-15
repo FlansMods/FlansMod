@@ -109,7 +109,6 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
         multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
         return multimap;
     }   
-
     
 	@Override
 	public InfoType getInfoType() 
@@ -121,9 +120,9 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
 	{
 		if(type.nightVision && FlansMod.ticker % 25 == 0)
-			player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 250));
+			player.addPotionEffect(new PotionEffect(Potion.getPotionById(16), 250)); // 16 = night vision
 		if(type.jumpModifier > 1.01F && FlansMod.ticker % 25 == 0)
-			player.addPotionEffect(new PotionEffect(Potion.jump.id, 250, (int)((type.jumpModifier - 1F) * 2F), true, false));
+			player.addPotionEffect(new PotionEffect(Potion.getPotionById(8), 250, (int)((type.jumpModifier - 1F) * 2F), true, false)); // 8 = jump boost
 		if(type.negateFallDamage)
 			player.fallDistance = 0F;
 	}

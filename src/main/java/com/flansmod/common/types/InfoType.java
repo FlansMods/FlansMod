@@ -22,8 +22,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -562,32 +570,22 @@ public class InfoType
 		return Material.GROUND;
 	}
 
-	public void addDungeonLoot() 
+	public void addLoot(LootTableLoadEvent event) 
 	{
 		if(dungeonChance > 0)
 		{
-			ItemStack stack = new ItemStack(this.item);
-			addToRandomChest(stack, (float)(FlansMod.dungeonLootChance * dungeonChance) / (float)totalDungeonChance);
-		}
-	}
-	
-	protected void addToRandomChest(ItemStack stack, float rawChance)
-	{
-		if(rawChance >= 1 || random.nextFloat() < rawChance)
-		{
-			int chance = MathHelper.ceil(rawChance);
-			switch(random.nextInt(10))
+			LootPool pool = event.getTable().getPool("FlansMod");
+			if(pool == null)
 			{
-			case 0 : ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 1 : ChestGenHooks.addItem(ChestGenHooks.MINESHAFT_CORRIDOR, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 2 : ChestGenHooks.addItem(ChestGenHooks.PYRAMID_DESERT_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 3 : ChestGenHooks.addItem(ChestGenHooks.PYRAMID_JUNGLE_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 4 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 5 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_LIBRARY, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 6 : ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CROSSING, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 7 : ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 8 : ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
-			case 9 : ChestGenHooks.addItem(ChestGenHooks.NETHER_FORTRESS, new WeightedRandomChestContent(new ItemStack(this.item), 1, 1, chance)); break;
+				pool = new LootPool(new LootEntry[0], new LootCondition[0], new RandomValueRange(1, 1), new RandomValueRange(1, 1), "FlansMod");
+				event.getTable().addPool(pool);
+			}
+			
+			LootEntry entry = new LootEntryItem(item, FlansMod.dungeonLootChance * dungeonChance, 1, new LootFunction[0], new LootCondition[0], shortName);
+			
+			if(pool != null)
+			{
+				pool.addEntry(entry);
 			}
 		}
 	}

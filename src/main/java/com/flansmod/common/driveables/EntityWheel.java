@@ -59,9 +59,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
     {
 		if(vehicle == null || k <= 0) 
 			return;
-		int i = MathHelper.ceiling_float_int(k - 3F);
+		int i = MathHelper.ceil(k - 3F);
 		if(i > 0)
-			vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.fall, i);
+			vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.FALL, i);
 	}
 
 	@Override

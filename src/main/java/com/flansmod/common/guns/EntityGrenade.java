@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -31,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.PlayerHandler;
@@ -123,9 +126,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				double dZ = (posZ - prevPosZ) / 10;
 				for (int i = 0; i < 10; i++)
 				{
-					EntityFX particle = FlansModClient.getParticle(type.trailParticleType, world, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
-					if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
-						particle.renderDistanceWeight = 100D;
+					Particle particle = FlansModClient.getParticle(type.trailParticleType, world, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
+					// TODO: [1.12] Particles
+					//if(particle != null && Minecraft.getMinecraft().gameSettings.fancyGraphics)
+					//	particle.renderDistanceWeight = 100D;
 					//world.spawnEntity(particle);
 				}
 			}
@@ -290,7 +294,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					
 					//Play the bounce sound
 					if(motVec.lengthSquared() > 0.01D)
-						playSound(type.bounceSound, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
+						playSound(FlansModResourceHandler.getSoundEvent(type.bounceSound), 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 					
 					//If this grenade is sticky, stick it to the block
 					if(type.sticky)
@@ -418,7 +422,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 							*/
 							{
 								world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState(), 2);
-								world.markBlockForUpdate(new BlockPos(x, y, z));
+								world.scheduleUpdate(new BlockPos(x, y, z), Blocks.FIRE, 0);
 							}
 						}
 					}
@@ -540,7 +544,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 	
 	@Override
-	public boolean interactFirst(EntityPlayer player)
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
 		// Player right clicked on grenade
 		//For deployable bags, give player rewards

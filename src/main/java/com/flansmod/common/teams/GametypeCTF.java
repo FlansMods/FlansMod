@@ -103,7 +103,7 @@ public class GametypeCTF extends Gametype
 			EntityFlag flag = (EntityFlag)player.getPassengers().get(0);
 			
 			Team flagTeam = teamsManager.getTeam(flag.getBase().getOwnerID());
-			flag.mountEntity(null);
+			flag.dismountRidingEntity();
 			TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 		}
 	}
@@ -179,14 +179,14 @@ public class GametypeCTF extends Gametype
 					{
 						if(flag.getRidingEntity() == player)
 						{
-							flag.mountEntity(null);
+							flag.dismountRidingEntity();
 							TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 						}
 						else if(flag.getRidingEntity() == null)
 						{
 							if(flag.isHome)
 								playerData.score += 3;
-							flag.mountEntity(player);
+							flag.startRiding(player);
 							TeamsManager.messageAll("\u00a7f" + player.getName() + " picked up the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 							flag.isHome = false;
 						}

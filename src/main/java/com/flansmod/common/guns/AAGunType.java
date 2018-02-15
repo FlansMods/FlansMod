@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -157,7 +158,7 @@ public class AAGunType extends InfoType
 	}
 	
 	@Override
-	public void addDungeonLoot() 
+	public void addLoot(LootTableLoadEvent event) 
 	{
 		//Do not add AA guns to dungeon chests. That would be so op.
 	}
