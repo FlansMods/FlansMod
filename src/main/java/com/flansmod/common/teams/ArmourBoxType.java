@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.FlansMod;
@@ -83,6 +84,13 @@ public class ArmourBoxType extends BoxType
 			FlansMod.log("Reading gun box file failed : " + shortName);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void registerItem(IForgeRegistry<Item> registry)
+	{
+		//item = Item.getItemFromBlock(block);
+		//super.registerItem(registry);
 	}
 	
 	@Override

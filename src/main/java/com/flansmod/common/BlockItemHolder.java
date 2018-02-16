@@ -54,7 +54,7 @@ public class BlockItemHolder extends BlockContainer
 		setCreativeTab(FlansMod.tabFlanParts);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		type.block = this;
-		type.item = Item.getItemFromBlock(this);
+		//type.item = Item.getItemFromBlock(this);
 	}
 		
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)

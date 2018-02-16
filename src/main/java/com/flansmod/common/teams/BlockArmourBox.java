@@ -39,7 +39,7 @@ public class BlockArmourBox extends Block
 		setRegistryName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanTeams);
 		type.block = this;
-		type.item = Item.getItemFromBlock(this);
+		//type.item = Item.getItemFromBlock(this);
 	}
 	
 	public void buyArmour(String shortName, int piece, InventoryPlayer inventory)

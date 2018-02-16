@@ -110,6 +110,13 @@ public class GunBoxType extends BoxType
 	}
 	
 	@Override
+	public void registerItem(IForgeRegistry<Item> registry)
+	{
+		//item = Item.getItemFromBlock(block);
+		//super.registerItem(registry);
+	}
+	
+	@Override
 	public void registerBlock(IForgeRegistry<Block> registry)
 	{
 		registry.register(block);

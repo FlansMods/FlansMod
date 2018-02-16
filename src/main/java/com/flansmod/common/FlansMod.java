@@ -397,21 +397,21 @@ public class FlansMod
 		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
 		*/
-		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole"));
-		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag"));
-		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem"));
-		event.getRegistry().register(new EntityEntry(EntityGunItem.class, "GunItem"));
-		event.getRegistry().register(new EntityEntry(EntityItemCustomRender.class, "CustomItem"));
-		event.getRegistry().register(new EntityEntry(EntityPlane.class, "Plane"));
-		event.getRegistry().register(new EntityEntry(EntityVehicle.class, "Vehicle"));
-		event.getRegistry().register(new EntityEntry(EntitySeat.class, "Seat"));
-		event.getRegistry().register(new EntityEntry(EntityWheel.class, "Wheel"));
-		event.getRegistry().register(new EntityEntry(EntityParachute.class, "Parachute"));
-		event.getRegistry().register(new EntityEntry(EntityMecha.class, "Mecha"));
-		event.getRegistry().register(new EntityEntry(EntityBullet.class, "Bullet"));
-		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade"));
-		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG"));
-		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun"));
+		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole").setRegistryName("Flagpole"));
+		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag").setRegistryName("Flag"));
+		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem").setRegistryName("TeamsItem"));
+		event.getRegistry().register(new EntityEntry(EntityGunItem.class, "GunItem").setRegistryName("GunItem"));
+		event.getRegistry().register(new EntityEntry(EntityItemCustomRender.class, "CustomItem").setRegistryName("CustomItem"));
+		event.getRegistry().register(new EntityEntry(EntityPlane.class, "Plane").setRegistryName("Plane"));
+		event.getRegistry().register(new EntityEntry(EntityVehicle.class, "Vehicle").setRegistryName("Vehicle"));
+		event.getRegistry().register(new EntityEntry(EntitySeat.class, "Seat").setRegistryName("Seat"));
+		event.getRegistry().register(new EntityEntry(EntityWheel.class, "Wheel").setRegistryName("Wheel"));
+		event.getRegistry().register(new EntityEntry(EntityParachute.class, "Parachute").setRegistryName("Parachute"));
+		event.getRegistry().register(new EntityEntry(EntityMecha.class, "Mecha").setRegistryName("Mecha"));
+		event.getRegistry().register(new EntityEntry(EntityBullet.class, "Bullet").setRegistryName("Bullet"));
+		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade").setRegistryName("Grenade"));
+		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
+		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
 	}
 	
 	@EventHandler

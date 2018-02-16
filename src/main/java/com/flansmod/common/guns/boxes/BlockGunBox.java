@@ -45,7 +45,6 @@ public class BlockGunBox extends Block
 	    setUnlocalizedName(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 		type.block = this;
-		type.item = Item.getItemFromBlock(this);
 	}
 		
 	public void buyGun(InfoType gun, InventoryPlayer inventory, GunBoxType type)
