@@ -294,7 +294,7 @@ public class FlansMod
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			ingredients.add(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 1)));
 			
-			event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients));
+			event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("FM_Gunpowder"));
 		}
 		
 		// Add the two workbench recipes
@@ -307,7 +307,7 @@ public class FlansMod
 			for(int i = 0; i < 4; i++)
 				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
 
-			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 2, ingredients, new ItemStack(workbench, 1, 1)));
+			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 2, ingredients, new ItemStack(workbench, 1, 1)).setRegistryName("FM_Workbench"));
 		}
 		{
 			// BBB B = Bowl
@@ -319,7 +319,7 @@ public class FlansMod
 			for(int i = 0; i < 6; i++)
 				ingredients.add(Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
 
-			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 3, ingredients, new ItemStack(workbench, 1, 0)));
+			event.getRegistry().register(new ShapedRecipes("FlansMod", 3, 3, ingredients, new ItemStack(workbench, 1, 0)).setRegistryName("FM_Workbench2"));
 		}
 	}
 	

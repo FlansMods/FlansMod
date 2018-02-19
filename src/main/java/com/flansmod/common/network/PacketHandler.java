@@ -166,7 +166,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		for(String playerName : receivedPacketsServer.keySet())
 		{
 			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
-			EntityPlayerMP player = FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUsername(playerName); 
+			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(playerName); 
 			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
 			{
 				packet.handleServerSide(player);

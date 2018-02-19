@@ -93,7 +93,7 @@ public class FlansModResourceHandler
 	
 	public static SoundEvent getSoundEvent(String sound)
 	{
-		throw new NotImplementedException(sound);
+		return new SoundEvent(getSound(sound));
 	}
 	
 	public static ResourceLocation getSound(String sound)

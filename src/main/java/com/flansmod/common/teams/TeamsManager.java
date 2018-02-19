@@ -201,7 +201,7 @@ public class TeamsManager
 		for(ITeamObject object : objects)
 			object.tick();
 		if(overrideHunger && currentRound != null)
-			for(World world : FMLServerHandler.instance().getServer().worlds)
+			for(World world :FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
 				for(Object player : world.playerEntities)
 					((EntityPlayer)player).getFoodStats().addStats(20, 10F);
 		
@@ -660,7 +660,7 @@ public class TeamsManager
 			return;
 		if(event.getHand() == EnumHand.MAIN_HAND && event.getEntityPlayer().getHeldItemMainhand() != null && event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
-			event.setCanceled(true);
+			//event.setCanceled(true);
 			return;	
 		}
 		
@@ -885,7 +885,7 @@ public class TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp = FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(player.getGameProfile());
+		boolean playerIsOp =FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -908,7 +908,7 @@ public class TeamsManager
 	
 	public boolean playerIsOp(EntityPlayer player)
 	{ 
-		return FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(player.getGameProfile());
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 	}
 	
 	public boolean autoBalance() {
@@ -1375,7 +1375,7 @@ public class TeamsManager
 	
 	public static EntityPlayerMP getPlayer(String username)
 	{
-		return FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUsername(username);
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(username);
 	}
 	
 	public static void log(String s)
@@ -1404,7 +1404,7 @@ public class TeamsManager
 	
 	public static List<EntityPlayerMP> getPlayers()
 	{
-		return FMLServerHandler.instance().getServer().getPlayerList().getPlayers();
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 	}
 
 	/** Returns the team associated with the given ID */

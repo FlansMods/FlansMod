@@ -104,7 +104,7 @@ public class ClientRenderHooks
 		
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		
-		customRenderers[EnumType.gun.ordinal()] = new RenderGun();
+		customRenderers[EnumType.gun.ordinal()] = ClientProxy.gunRenderer = new RenderGun();
 		customRenderers[EnumType.grenade.ordinal()] = new RenderGrenade(rm);
 		customRenderers[EnumType.plane.ordinal()] = new RenderPlane(rm);
 		customRenderers[EnumType.vehicle.ordinal()] = new RenderVehicle(rm);

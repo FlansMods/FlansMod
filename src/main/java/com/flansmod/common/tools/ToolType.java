@@ -118,7 +118,7 @@ public class ToolType extends InfoType
 		{
 			ingredients.add(Ingredient.fromStacks(stack));
 		}
-		registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, 1, 0), ingredients));
+		registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, 1, 0), ingredients).setRegistryName(name + "_recharge"));
 	}
 	
 	public static ToolType getType(String shortName)

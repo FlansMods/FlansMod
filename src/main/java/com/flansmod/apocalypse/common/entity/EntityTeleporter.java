@@ -102,7 +102,7 @@ public class EntityTeleporter extends Entity
 		BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
 
 		//Find a valid place to enter the world
-		World overworld = FMLServerHandler.instance().getServer().worldServerForDimension(0);
+		World overworld =FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0);
 		
 		if(entryPoint == null)
 			entryPoint = overworld.getSpawnPoint();

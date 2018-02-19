@@ -412,11 +412,20 @@ public class InfoType
 					for(int j = 0; j < height; j++)
 					{
 						char c = recipeGrid[minX + i][minY + j];
-						ingredients.add(Ingredient.fromStacks(menu.get(Character.valueOf(c)).copy()));
+						if(c != ' ')
+						{
+							ItemStack stack = menu.get(Character.valueOf(c));
+							if(stack == null)
+							{
+								FlansMod.log("Failed to find " + c + " in recipe for " + shortName);
+								continue;
+							}
+							ingredients.add(Ingredient.fromStacks(stack.copy()));
+						}
 					}
 				}
 				// And finally hand all that over to the registry
-				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)));
+				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)).setRegistryName(name + "_shaped"));
 			} 
 			else
 			{				
@@ -426,7 +435,7 @@ public class InfoType
 					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
 				}
 
-				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients));
+				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(name + "_shapeless"));
 			}
 		}
 		catch (Exception e)
@@ -483,7 +492,7 @@ public class InfoType
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage)
 	{
-		return getRecipeElement(s, amount, damage, "nothing");
+		return getRecipeElement(s, amount, damage, "unknown");
 	}
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
@@ -492,9 +501,21 @@ public class InfoType
 		{
 			return new ItemStack(Items.IRON_DOOR, amount);
 		}
-		if (s.equals("clayItem"))
+		else if (s.equals("clayItem"))
 		{
 			return new ItemStack(Items.CLAY_BALL, amount);
+		}
+		else if (s.equals("gunpowder"))
+		{
+			return new ItemStack(Items.GUNPOWDER, amount);
+		}
+		else if (s.equals("iron"))
+		{
+			return new ItemStack(Items.IRON_INGOT, amount);
+		}
+		else if(s.equals("boat"))
+		{
+			return new ItemStack(Items.BOAT, amount);
 		}
 		for(Item item : Item.REGISTRY)
 		{
@@ -508,14 +529,8 @@ public class InfoType
 			if(type.shortName.equals(s))
 				return new ItemStack(type.item, amount, damage);
 		}
-		if (s.equals("gunpowder"))
-		{
-			return new ItemStack(Items.GUNPOWDER, amount);
-		}
-		if (s.equals("iron"))
-		{
-			return new ItemStack(Items.IRON_INGOT, amount);
-		}
+
+
 		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
 		return null;
 	}

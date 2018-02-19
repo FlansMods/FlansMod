@@ -373,7 +373,7 @@ public class FlansModRaytracer
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			for(World world : FMLServerHandler.instance().getServer().worlds)
+			for(World world :FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
 			{
 				Entity entity = world.getEntityByID(id);
 				if(entity != null)

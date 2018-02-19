@@ -161,7 +161,7 @@ public class CommonProxyApocalypse
 				}
 			}
 			
-			WorldServer world = FMLServerHandler.instance().getServer().getWorld(FlansModApocalypse.dimensionID);
+			WorldServer world =FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID);
 			if(world != null)
 			{
 				for(int i = 0; i < world.playerEntities.size(); i++)
@@ -238,7 +238,7 @@ public class CommonProxyApocalypse
 		player.timeUntilPortal = 10;
 		data.entryPoints.put(player.getPersistentID(), new BlockPos(apocalypseMecha.posX, apocalypseMecha.posY, apocalypseMecha.posZ));
 		BlockPos exitPoint = new BlockPos(apocalypseMecha.posX, 128, apocalypseMecha.posZ);
-		for(; FMLServerHandler.instance().getServer().getWorld(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
+		for(;FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
 		FMLServerHandler.instance().getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLServerHandler.instance().getServer().getWorld(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
 		
 		giveStarterKit(player);

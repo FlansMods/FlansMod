@@ -66,7 +66,7 @@ public class PlayerHandler
 			FlansMod.log("Receiving server ticks when server is null");
 			return;
 		}
-		for(WorldServer world : FMLServerHandler.instance().getServer().worlds)
+		for(WorldServer world :FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
 		{
 			for(Object player : world.playerEntities)
 			{

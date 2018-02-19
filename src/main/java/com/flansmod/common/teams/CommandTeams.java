@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.FlansMod;
@@ -762,7 +763,7 @@ public class CommandTeams extends CommandBase
 				return;
 			}
 			
-			GameProfile profile = FMLServerHandler.instance().getServer().getPlayerProfileCache().getGameProfileForUsername(name);
+			GameProfile profile = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getGameProfileForUsername(name);
 			if(profile != null)
 			{
 				RewardBoxInstance instance = RewardBoxInstance.CreateCheatReward(box, name);
@@ -861,7 +862,7 @@ public class CommandTeams extends CommandBase
 
 	public EntityPlayerMP getPlayer(String name)
 	{
-		return FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUsername(name);
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(name);
 	}
 
 	@Override
