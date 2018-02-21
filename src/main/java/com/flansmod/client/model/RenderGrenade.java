@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -82,7 +83,7 @@ public class RenderGrenade extends Render implements CustomItemRenderer
 	}
 	
 	@Override
-	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemGrenade)
@@ -102,10 +103,16 @@ public class RenderGrenade extends Render implements CustomItemRenderer
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					//GL11.glRotatef(25F, 0F, 0F, 1F); 
-					//GL11.glRotatef(-5F, 0F, 1F, 0F);
-					//GL11.glTranslatef(0.15F, 0.2F, -0.6F);
-					GL11.glTranslatef(-1.25F, 0.8F, 0.1F);
+					if(hand == EnumHand.MAIN_HAND)
+					{
+						GL11.glTranslatef(-1.25F, 0.8F, 0.1F);
+					}
+					else
+					{
+						GL11.glRotatef(45F, 0F, 1F, 0F);
+						GL11.glTranslatef(-1F, 0.8F, -2F);
+						GL11.glRotatef(-135F, 0F, 1F, 0F);
+					}
 					break;
 				}
 				default : break;

@@ -29,7 +29,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.FlansMod;
 
@@ -197,14 +196,12 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketMechaControl.class);	
 		registerPacket(PacketMGFire.class);	
 		registerPacket(PacketMGMount.class);	
-		registerPacket(PacketOffHandGunInfo.class);	
 		registerPacket(PacketPlaneControl.class);	
 		registerPacket(PacketPlaySound.class);	
 		registerPacket(PacketReload.class);	
 		registerPacket(PacketRepairDriveable.class);
 		registerPacket(PacketRoundFinished.class);
 		registerPacket(PacketSeatUpdates.class);	
-		registerPacket(PacketSelectOffHandGun.class);	
 		registerPacket(PacketShotData.class);
 		registerPacket(PacketTeamInfo.class);	
 		registerPacket(PacketTeamSelect.class);	
@@ -289,7 +286,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/** Send a packet to all players */
 	public void sendToAll(Packet packet)
 	{
-		FMLServerHandler.instance().getServer().getPlayerList().sendPacketToAllPlayers(packet);
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayers(packet);
 	}
 
 	/** Send a packet to a player */
@@ -301,13 +298,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/** Send a packet to all around a point */
 	public void sendToAllAround(Packet packet, NetworkRegistry.TargetPoint point)
 	{
-		FMLServerHandler.instance().getServer().getPlayerList().sendToAllNearExcept(null, point.x, point.y, point.z, point.range, point.dimension, packet);
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendToAllNearExcept(null, point.x, point.y, point.z, point.range, point.dimension, packet);
 	}
 	
 	/** Send a packet to all in a dimension */
 	public void sendToDimension(Packet packet, int dimensionID)
 	{
-		FMLServerHandler.instance().getServer().getPlayerList().sendPacketToAllPlayersInDimension(packet, dimensionID);
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayersInDimension(packet, dimensionID);
 	}
 	
 	/** Send a packet to the server */

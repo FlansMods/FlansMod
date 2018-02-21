@@ -20,7 +20,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.server.FMLServerHandler;
 
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
@@ -61,7 +60,7 @@ public class PlayerHandler
 	public void serverTick()
 	{
 		/*
-		if(FMLServerHandler.instance().getServer() == null)
+		if(FMLCommonHandler.instance().getMinecraftServerInstance() == null)
 		{
 			FlansMod.log("Receiving server ticks when server is null");
 			return;

@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -85,7 +86,7 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 		       
 		        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
 		        {
-		        	ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, stack);		        			
+		        	ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);		        			
 		        }
 		        else Minecraft.getMinecraft().getRenderItem().renderItem(stack, TransformType.NONE);
 			}

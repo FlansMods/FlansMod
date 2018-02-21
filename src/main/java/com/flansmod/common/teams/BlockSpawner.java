@@ -26,6 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.server.FMLServerHandler;
@@ -118,7 +119,7 @@ public class BlockSpawner extends BlockContainer
     	if(TeamsManager.getInstance().currentGametype != null)
     		TeamsManager.getInstance().currentGametype.objectClickedByPlayer((TileEntitySpawner)world.getTileEntity(x, y, z), (EntityPlayerMP)player);
     	*/
-    	if(FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(player.getGameProfile()))
+    	if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile()))
     	{
     		TileEntitySpawner spawner = (TileEntitySpawner)world.getTileEntity(pos);
     		ItemStack item = player.getHeldItemMainhand();

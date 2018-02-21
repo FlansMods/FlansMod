@@ -12,18 +12,23 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -33,6 +38,7 @@ import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.discovery.ContainerType;
 import net.minecraftforge.fml.common.discovery.ModCandidate;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -121,10 +127,29 @@ public class ClientProxy extends CommonProxy
 	private FlansModClient flansModClient;
 
 	@Override
-	public void load()
+	public void preInit()
+	{
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+	
+	@Override
+	public void init()
 	{
 		flansModClient = new FlansModClient();
 		flansModClient.load();
+		
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
+				
+        // Create one event handler for the client and register it with MC Forge and FML
+		ClientEventHandler eventHandler = new ClientEventHandler();
+		MinecraftForge.EVENT_BUS.register(eventHandler);
+	}
+	
+	@SubscribeEvent
+	public void registerModels(ModelRegistryEvent event)
+	{	
+		//ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+		FlansMod.log("Registering models.");
 		
 		//Register a null vanilla renderer to avoid error messages spamming chat - doesn't work.
 		for(InfoType type : InfoType.infoTypes.values())
@@ -135,56 +160,52 @@ public class ClientProxy extends CommonProxy
 				{
 					for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 					{
-						ModelBakery.registerItemVariants(type.item, 
+						ModelLoader.registerItemVariants(type.item, 
 								new ResourceLocation[] { new ResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)))});
-						Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
+						ModelLoader.setCustomModelResourceLocation(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
 					}
 				}
-				else Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
+				else ModelLoader.setCustomModelResourceLocation(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
 			}
 		}
 		
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 0, new ModelResourceLocation("flansmod:flansWorkbench_guns", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 1, new ModelResourceLocation("flansmod:flansWorkbench_vehicles", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.workbench), 2, new ModelResourceLocation("flansmod:flansWorkbench_parts", "inventory"));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(FlansMod.workbench), 
+		FlansMod.Assert(FlansMod.workbenchItem == Item.getItemFromBlock(FlansMod.workbench), "ItemBlock Mismatch");
+		
+		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 0, new ModelResourceLocation("flansmod:flansworkbench_guns", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 0, new ModelResourceLocation("flansmod:flansworkbench_guns", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 1, new ModelResourceLocation("flansmod:flansworkbench_vehicles", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 2, new ModelResourceLocation("flansmod:flansworkbench_parts", "inventory"));
+		ModelLoader.registerItemVariants(FlansMod.workbenchItem, 
 				new ResourceLocation[] {
 						new ResourceLocation("flansmod:flansWorkbench_guns"), 
 						new ResourceLocation("flansmod:flansWorkbench_parts"), 
 						new ResourceLocation("flansmod:flansWorkbench_vehicles")});
 
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.opStick, 0, new ModelResourceLocation("flansmod:opstick_Ownership", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.opStick, 1, new ModelResourceLocation("flansmod:opstick_Connecting", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.opStick, 2, new ModelResourceLocation("flansmod:opstick_Mapping", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.opStick, 3, new ModelResourceLocation("flansmod:opstick_Destruction", "inventory"));
-		ModelBakery.registerItemVariants(FlansMod.opStick, 
+		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 0, new ModelResourceLocation("flansmod:opstick_Ownership", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 1, new ModelResourceLocation("flansmod:opstick_Connecting", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 2, new ModelResourceLocation("flansmod:opstick_Mapping", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 3, new ModelResourceLocation("flansmod:opstick_Destruction", "inventory"));
+		ModelLoader.registerItemVariants(FlansMod.opStick, 
 				new ResourceLocation[] {
 						new ResourceLocation("flansmod:opstick_Ownership"), 
 						new ResourceLocation("flansmod:opstick_Connecting"), 
 						new ResourceLocation("flansmod:opstick_Mapping"), 
 						new ResourceLocation("flansmod:opstick_Destruction")});
 		
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 0, new ModelResourceLocation("flansmod:teamsSpawner_items", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 1, new ModelResourceLocation("flansmod:teamsSpawner_players", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.spawner), 2, new ModelResourceLocation("flansmod:teamsSpawner_vehicles", "inventory"));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(FlansMod.spawner), 
+		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 0, new ModelResourceLocation("flansmod:teamsSpawner_items", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 1, new ModelResourceLocation("flansmod:teamsSpawner_players", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 2, new ModelResourceLocation("flansmod:teamsSpawner_vehicles", "inventory"));
+		ModelLoader.registerItemVariants(FlansMod.spawnerItem, 
 				new ResourceLocation[] {
 						new ResourceLocation("flansmod:teamsSpawner_items"), 
 						new ResourceLocation("flansmod:teamsSpawner_players"), 
 						new ResourceLocation("flansmod:teamsSpawner_vehicles")});
 
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(FlansMod.rainbowPaintcan, 0, new ModelResourceLocation("flansmod:rainbowPaintcan", "inventory"));
-		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
-		ModelBakery.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable), 
+		ModelLoader.setCustomModelResourceLocation(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(FlansMod.rainbowPaintcan, 0, new ModelResourceLocation("flansmod:rainbowPaintcan", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
+		ModelLoader.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable), 
 				new ResourceLocation[] {new ResourceLocation("flansmod:paintjobTable")});
-		
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
-				
-        // Create one event handler for the client and register it with MC Forge and FML
-		ClientEventHandler eventHandler = new ClientEventHandler();
-		FMLCommonHandler.instance().bus().register(eventHandler);
-		MinecraftForge.EVENT_BUS.register(eventHandler);
 	}
 		
 	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */
@@ -485,7 +506,7 @@ public class ClientProxy extends CommonProxy
 					{
 						BoxType box = (BoxType)type;
 						
-						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"flansmod:block/" + type.shortName + "\", \"display\": { \"thirdperson\": { \"rotation\": [ 10, -45, 170 ], \"translation\": [ 0, 1.5, -2.75 ], \"scale\": [ 0.375, 0.375, 0.375 ] } } }");
+						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + "_item.json"), "{ \"parent\": \"flansmod:block/" + type.shortName + "\", \"display\": { \"thirdperson\": { \"rotation\": [ 10, -45, 170 ], \"translation\": [ 0, 1.5, -2.75 ], \"scale\": [ 0.375, 0.375, 0.375 ] } } }");
 						createJSONFile(new File(blockModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"block/cube\", \"textures\": { \"particle\": \"flansmod:blocks/" + box.sideTexturePath + 
 								"\", \"down\": \"flansmod:blocks/" + box.bottomTexturePath + "\", \"up\": \"flansmod:blocks/" + box.topTexturePath + "\", \"north\": \"flansmod:blocks/" + box.sideTexturePath + 
 								"\", \"east\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"south\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"west\": \"flansmod:blocks/" + box.sideTexturePath + "\" } } ");
@@ -495,7 +516,7 @@ public class ClientProxy extends CommonProxy
 					{
 						for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 						{
-							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");							
+							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] } } }");							
 						}
 					}
 					else if(typeToCheckFor == EnumType.itemHolder)
@@ -506,7 +527,7 @@ public class ClientProxy extends CommonProxy
 								"\" }, \"facing=south\": { \"model\": \"flansmod:" + type.shortName + 
 								"\" }, \"facing=west\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");	
 						createJSONFile(new File(blockModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"ambientocclusion\": false, \"textures\": { \"particle\": \"flansmod:items/" + type.iconPath + "\" }, \"elements\": [ {\"from\": [ 0, 0, 0 ],\"to\": [ 0, 0, 0 ], \"faces\": { \"down\":  { \"texture\": \"#down\", \"cullface\": \"down\" }, \"up\":    { \"texture\": \"#up\", \"cullface\": \"up\" }, \"north\": { \"texture\": \"#north\", \"cullface\": \"north\" }, \"south\": { \"texture\": \"#south\", \"cullface\": \"south\" }, \"west\":  { \"texture\": \"#west\", \"cullface\": \"west\" }, \"east\":  { \"texture\": \"#east\", \"cullface\": \"east\" } } } ] }");
-						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");						
+						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + "_item.json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");						
 					}
 					//Create the item JSON for normal items
 					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)

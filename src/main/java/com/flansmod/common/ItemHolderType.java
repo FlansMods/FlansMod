@@ -5,6 +5,7 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,8 +62,8 @@ public class ItemHolderType extends InfoType
 	@Override
 	public void registerItem(IForgeRegistry<Item> registry)
 	{
-		//item = Item.getItemFromBlock(block);
-		//super.registerItem(registry);
+		item = new ItemBlock(block).setRegistryName(shortName + "_item");
+		registry.register(item);
 	}
 	
 	@Override

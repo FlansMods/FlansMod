@@ -45,6 +45,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -446,10 +447,10 @@ public class FlansModClient extends FlansMod
 		return fx;
 	}
 
-	public static GunAnimations getGunAnimations(EntityLivingBase living, boolean offHand) 
+	public static GunAnimations getGunAnimations(EntityLivingBase living, EnumHand hand) 
 	{
 		GunAnimations animations = null;
-		if(offHand)
+		if(hand == EnumHand.OFF_HAND)
 		{
 			if(FlansModClient.gunAnimationsLeft.containsKey(living))
 				animations = FlansModClient.gunAnimationsLeft.get(living);

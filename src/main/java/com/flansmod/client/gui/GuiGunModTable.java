@@ -14,6 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -74,7 +75,7 @@ public class GuiGunModTable extends GuiContainer
 				GL11.glRotatef(20, 0F, 1F, 0F);
 				GL11.glScalef(-50F, 50F, 50F);
 				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
-				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, tempStack);
+				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, tempStack);
 				GL11.glPopMatrix();
 			}
 		}

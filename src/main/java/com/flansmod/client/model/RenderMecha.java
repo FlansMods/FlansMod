@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.ClientProxy;
@@ -40,7 +41,7 @@ import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.Paintjob;
 
-public class RenderMecha extends Render implements CustomItemRenderer
+public class RenderMecha extends Render<EntityMecha> implements CustomItemRenderer
 {
     private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
     private static final ItemRenderer renderer = new ItemRenderer(Minecraft.getMinecraft());
@@ -53,7 +54,7 @@ public class RenderMecha extends Render implements CustomItemRenderer
 		shadowSize = 0.5F;
 	}
 	
-	public void render(EntityMecha mecha, double d, double d1, double d2, float f, float f1)
+	public void doRender(EntityMecha mecha, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(mecha);
 		float scale = 1F / 16F;
@@ -352,19 +353,12 @@ public class RenderMecha extends Render implements CustomItemRenderer
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 
-	{
-		render((EntityMecha)entity, d0, d1, d2, f, f1);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(EntityMecha entity) 
 	{
 		DriveableType type = ((EntityDriveable)entity).getDriveableType();
 		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
-
 	
 	private void renderItem(EntityMecha mecha, ItemStack stack, int par3, boolean leftHand, float dT)
 	{
@@ -417,7 +411,7 @@ public class RenderMecha extends Render implements CustomItemRenderer
 	}
 
 	@Override
-	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemMecha)

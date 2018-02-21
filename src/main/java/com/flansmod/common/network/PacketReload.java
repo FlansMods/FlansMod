@@ -5,6 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,9 +28,9 @@ public class PacketReload extends PacketBase
 	
 	public PacketReload() {}
 	
-	public PacketReload(boolean isOffHand, boolean isForced) 
+	public PacketReload(EnumHand hand , boolean isForced) 
 	{
-		this.isOffHand = isOffHand;
+		this.isOffHand = hand == EnumHand.OFF_HAND;
 		this.isForced = isForced;
 	}
 		
@@ -51,18 +52,15 @@ public class PacketReload extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
-		ItemStack stack = playerEntity.getHeldItemMainhand();
-		int slot = playerEntity.inventory.currentItem;
-		if(isOffHand && data.offHandGunSlot != 0)
-		{
-			stack = playerEntity.inventory.getStackInSlot(data.offHandGunSlot - 1);
-			slot = data.offHandGunSlot - 1;
-		}
+		ItemStack main = playerEntity.getHeldItemMainhand();
+		ItemStack off = playerEntity.getHeldItemOffhand();
+		ItemStack stack = isOffHand ? off : main;
+		boolean hasOffHand = main != null && off != null;
 		if(data != null && stack != null && stack.getItem() instanceof ItemGun)
 		{
 			GunType type = ((ItemGun)stack.getItem()).GetType();
 			
-			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, isOffHand, data.offHandGunSlot != 0, isForced, playerEntity.capabilities.isCreativeMode))
+			if(((ItemGun)stack.getItem()).Reload(stack, playerEntity.world, playerEntity, playerEntity.inventory, isOffHand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND, hasOffHand, isForced, playerEntity.capabilities.isCreativeMode))
 			{
 				//Set the reload delay
 				data.shootTimeRight = data.shootTimeLeft = type.reloadTime;

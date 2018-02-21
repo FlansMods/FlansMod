@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -112,8 +113,8 @@ public class GunBoxType extends BoxType
 	@Override
 	public void registerItem(IForgeRegistry<Item> registry)
 	{
-		//item = Item.getItemFromBlock(block);
-		//super.registerItem(registry);
+		item = new ItemBlock(block).setRegistryName(shortName + "_item");
+		registry.register(item);
 	}
 	
 	@Override
@@ -302,8 +303,11 @@ public class GunBoxType extends BoxType
 		{			
 			//Create a temporary copy of the player inventory for backup purposes
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
-			temporaryInventory.copyInventory(inv);
-			
+			for(int i = 0; i < inv.getSizeInventory(); i++)
+			{
+				temporaryInventory.setInventorySlotContents(i, inv.getStackInSlot(i).copy());
+			}
+		
 			//This becomes false if some recipe element is not found on the player
 			boolean canCraft = true;
 			
@@ -326,7 +330,7 @@ public class GunBoxType extends BoxType
 						stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 						//Check for empty stacks
 						if(stackInSlot.getCount() <= 0)
-							stackInSlot = null;
+							stackInSlot = ItemStack.EMPTY.copy();
 						//Put the modified stack back in the inventory
 						temporaryInventory.setInventorySlotContents(m, stackInSlot);
 						//Increase the amount found counter

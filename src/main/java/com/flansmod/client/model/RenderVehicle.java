@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -172,7 +173,7 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 	}
 
 	@Override
-	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemVehicle)
@@ -206,9 +207,17 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 				}
 				case EQUIPPED_FIRST_PERSON:
 				{
-					//GL11.glRotatef(25F, 0F, 0F, 1F); 
-					GL11.glRotatef(45F, 0F, 1F, 0F);
-					GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
+					if(hand == EnumHand.MAIN_HAND)
+					{
+						GL11.glRotatef(45F, 0F, 1F, 0F);
+						GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
+					}
+					else
+					{
+						GL11.glRotatef(45F, 0F, 1F, 0F);
+						GL11.glTranslatef(-0.5F, 0.5F, -2.3F);
+					}
+
 					break;
 				}
 				default : break;

@@ -67,7 +67,11 @@ public class CommonProxy
 	}
 	
 	/** A ton of client only methods follow */
-	public void load()
+	public void preInit()
+	{
+	}
+	
+	public void init()
 	{
 	}
 	

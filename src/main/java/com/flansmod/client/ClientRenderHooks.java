@@ -35,6 +35,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
@@ -129,7 +130,7 @@ public class ClientRenderHooks
 				float scale = 0.75F;
 				GlStateManager.scale(scale, scale, scale);
 				GlStateManager.translate(0.15F, -0.15F, 0F);
-				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, event.getItem());
+				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, event.getItem());
 				GlStateManager.popMatrix();
 			}
 		}
@@ -227,7 +228,7 @@ public class ClientRenderHooks
 		            GlStateManager.scale(0.4F, 0.4F, 0.4F);
 
 		            //ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
-		            customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
+		            customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, event.getHand(), stack, mc.world, mc.player);
 		            
 		            GlStateManager.popMatrix();
 		            GlStateManager.disableRescaleNormal();
@@ -403,145 +404,124 @@ public class ClientRenderHooks
 		ModelBase mainModel = event.getRenderer().getMainModel();
 		EntityLivingBase entity = event.getEntity();
 		
-		if(entity.getHeldItemMainhand() != null && entity.getHeldItemMainhand().getItem() instanceof ItemGun && mainModel instanceof ModelBiped)
+		for(int i = 0; i < 2; i++)
 		{
-			ModelBiped biped = (ModelBiped)mainModel;
-			ItemStack stack = entity.getHeldItemMainhand();
-			GunType type = ((ItemGun)stack.getItem()).GetType();
-			if(type.model == null)
-				return;
-			ModelGun gunModel = type.model;
-			
-			GlStateManager.pushMatrix();
-	        GlStateManager.disableCull();
-	        mainModel.swingProgress = entity.getSwingProgress(partialTicks);
-	        mainModel.isRiding = entity.isRiding();
-	        mainModel.isChild = entity.isChild();
-	
-	        float f2 = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
-	        float f3 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
-	        float f4 = f3 - f2;
-	        float f5;
-	        
-	        
-	        if(Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 30F)
-	        	f2 = entity.renderYawOffset;
-	        if(Math.abs(entity.prevRotationYawHead - entity.rotationYawHead) > 30F)
-	        	f3 = entity.rotationYawHead;
-	        f4 = f3 - f2;
-	        
-	        //System.out.println(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
-	        
-	        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
-	        {
-	            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
-	            f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
-	            f4 = f3 - f2;
-	            f5 = MathHelper.wrapDegrees(f4);	
-	            
-	            if (f5 < -85.0F)
-	            {
-	                f5 = -85.0F;
-	            }
-	
-	            if (f5 >= 85.0F)
-	            {
-	                f5 = 85.0F;
-	            }
-	
-	            f2 = f3 - f5;
-	
-	            if (f5 * f5 > 2500.0F)
-	            {
-	                f2 += f5 * 0.2F;
-	            }
-	        }
-	
-	        float f9 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
-	        if(Math.abs(entity.prevRotationPitch - entity.rotationPitch) > 5F)
-	        	f9 = entity.rotationPitch;
-	        GlStateManager.translate(event.getX(), event.getY(), event.getZ());
-	        
-	        f5 = entity.ticksExisted + partialTicks;
-	        //this.rotateCorpse(entity, f5, f2, partialTicks);
-	        GlStateManager.rotate(180.0F - f2, 0.0F, 1.0F, 0.0F);
-	        GlStateManager.enableRescaleNormal();
-	        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-	        //this.preRenderCallback(entity, partialTicks);
-	        float f6 = 0.0625F;
-	        GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
-	        float f7 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
-	        float f8 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
-	
-	        if (entity.isChild())
-	        {
-	            f8 *= 3.0F;
-	        }
-	
-	        if (f7 > 1.0F)
-	        {
-	            f7 = 1.0F;
-	        }
-	
-	        GlStateManager.enableAlpha();
-	        
-	        //biped.isSneak = false;
-	        biped.rightArmPose = ArmPose.ITEM;
-	        biped.setLivingAnimations(entity, f8, f7, partialTicks);
-	        biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
-
-	        //Render main hand gun
-	        {
-		        GlStateManager.pushMatrix();
-
-		        biped.bipedRightArm.postRender(0.0625F);
-		        
-		        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
-	
-		        ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, stack, mc.world, entity);
-		        GlStateManager.popMatrix();
-	        }
-	        
-	        //Render off hand gun
-	        if(entity instanceof EntityPlayer)
-	        {
-		        PlayerData data = PlayerHandler.getPlayerData((EntityPlayer)entity, Side.CLIENT);
-				ItemStack gunStack = null;
+			EnumHand hand = EnumHand.values()[i];
+			if(entity.getHeldItem(hand) != null && entity.getHeldItem(hand).getItem() instanceof ItemGun && mainModel instanceof ModelBiped)
+			{
+				ModelBiped biped = (ModelBiped)mainModel;
+				ItemStack stack = entity.getHeldItem(hand);
+				GunType type = ((ItemGun)stack.getItem()).GetType();
+				if(type.model == null)
+					return;
+				ModelGun gunModel = type.model;
 				
-				//Check current stack is a one handed gun
-				if(entity instanceof EntityOtherPlayerMP)
-				{
-					gunStack = data.offHandGunStack;
-				}
-				else if(entity instanceof EntityPlayerSP)
-				{
-					if(type.oneHanded && data.offHandGunSlot != 0)
-						gunStack = ((EntityPlayer)entity).inventory.getStackInSlot(data.offHandGunSlot - 1);
-				}
-						
-				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
-				{
-					GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
-							
-					//Render!
-					GlStateManager.pushMatrix();			
-					biped.bipedLeftArm.postRender(0.0625F);
-					GlStateManager.rotate(-90F, 1F, 0F, 0F);
-					GlStateManager.rotate(-90F, 0F, 1F, 0F);
-
-					GlStateManager.translate(0.6F, 0F, -0.05F);
-					ClientProxy.gunRenderer.renderOffHandGun((EntityPlayer)entity, gunStack);
-					GlStateManager.popMatrix();
-				}
-	        }
-	        
-	        GlStateManager.depthMask(true);
-	        GlStateManager.disableRescaleNormal();
-	        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-	        GlStateManager.enableTexture2D();
-	        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-	        GlStateManager.enableCull();
-	        GlStateManager.popMatrix();
+				GlStateManager.pushMatrix();
+		        GlStateManager.disableCull();
+		        mainModel.swingProgress = entity.getSwingProgress(partialTicks);
+		        mainModel.isRiding = entity.isRiding();
+		        mainModel.isChild = entity.isChild();
+		
+		        float f2 = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
+		        float f3 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
+		        float f4 = f3 - f2;
+		        float f5;
+		        
+		        
+		        if(Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 30F)
+		        	f2 = entity.renderYawOffset;
+		        if(Math.abs(entity.prevRotationYawHead - entity.rotationYawHead) > 30F)
+		        	f3 = entity.rotationYawHead;
+		        f4 = f3 - f2;
+		        
+		        //System.out.println(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
+		        
+		        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
+		        {
+		            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
+		            f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
+		            f4 = f3 - f2;
+		            f5 = MathHelper.wrapDegrees(f4);	
+		            
+		            if (f5 < -85.0F)
+		            {
+		                f5 = -85.0F;
+		            }
+		
+		            if (f5 >= 85.0F)
+		            {
+		                f5 = 85.0F;
+		            }
+		
+		            f2 = f3 - f5;
+		
+		            if (f5 * f5 > 2500.0F)
+		            {
+		                f2 += f5 * 0.2F;
+		            }
+		        }
+		
+		        float f9 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+		        if(Math.abs(entity.prevRotationPitch - entity.rotationPitch) > 5F)
+		        	f9 = entity.rotationPitch;
+		        GlStateManager.translate(event.getX(), event.getY(), event.getZ());
+		        
+		        f5 = entity.ticksExisted + partialTicks;
+		        //this.rotateCorpse(entity, f5, f2, partialTicks);
+		        GlStateManager.rotate(180.0F - f2, 0.0F, 1.0F, 0.0F);
+		        GlStateManager.enableRescaleNormal();
+		        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		        //this.preRenderCallback(entity, partialTicks);
+		        float f6 = 0.0625F;
+		        GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
+		        float f7 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
+		        float f8 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
+		
+		        if (entity.isChild())
+		        {
+		            f8 *= 3.0F;
+		        }
+		
+		        if (f7 > 1.0F)
+		        {
+		            f7 = 1.0F;
+		        }
+		
+		        GlStateManager.enableAlpha();
+		        
+		        //biped.isSneak = false;
+		        biped.rightArmPose = ArmPose.ITEM;
+		        biped.setLivingAnimations(entity, f8, f7, partialTicks);
+		        biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
+	
+		        //Render main hand gun
+		        {
+			        GlStateManager.pushMatrix();
+			        if(hand == EnumHand.MAIN_HAND)
+			        {
+				        biped.bipedRightArm.postRender(0.0625F);
+				        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
+				        ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
+			        }
+			        else
+			        {
+						biped.bipedLeftArm.postRender(0.0625F);
+						GlStateManager.rotate(-90F, 1F, 0F, 0F);
+						GlStateManager.rotate(-90F, 0F, 1F, 0F);
+						GlStateManager.translate(0.6F, 0F, -0.05F);
+						ClientProxy.gunRenderer.renderOffHandGun((EntityPlayer)entity, stack);
+			        }
+			        GlStateManager.popMatrix();
+		        }
+				
+		        GlStateManager.depthMask(true);
+		        GlStateManager.disableRescaleNormal();
+		        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		        GlStateManager.enableTexture2D();
+		        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		        GlStateManager.enableCull();
+		        GlStateManager.popMatrix();
+			}
 		}
 	}
 	
@@ -651,10 +631,6 @@ public class ClientRenderHooks
 		{
 			RenderHitMarker(tessellator, i, j);
 		}			
-		if(event.isCancelable() && event.getType() == ElementType.HOTBAR)
-		{
-			RenderOffHandHighlights(tessellator, i, j);
-		}
 		if(!event.isCancelable() && event.getType() == ElementType.HOTBAR)
 		{
 			RenderPlayerAmmo(i, j);
@@ -742,105 +718,39 @@ public class ClientRenderHooks
 		}
 	}
 	
-	private void RenderOffHandHighlights(Tessellator tessellator, int i, int j)
-	{
-		//Off-hand weapon graphics
-		mc.renderEngine.bindTexture(offHand);
-		
-		ItemStack currentStack = mc.player.inventory.getCurrentItem();
-		PlayerData data = PlayerHandler.getPlayerData(mc.player, Side.CLIENT);
-		double zLevel = 0D;
-		WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
-		
-		if(currentStack != null && currentStack.getItem() instanceof ItemGun && ((ItemGun)currentStack.getItem()).GetType().oneHanded)
-		{
-			for(int n = 0; n < 9; n++)
-			{
-				if(data.offHandGunSlot == n + 1)
-				{
-					worldrenderer.startDrawingQuads();
-					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 32D / 64D, 16D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 32D / 64D, 0D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-					worldrenderer.draw();
-				}
-				else if(data.isValidOffHandWeapon(mc.player, n + 1))
-				{					
-					worldrenderer.startDrawingQuads();
-					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 3, zLevel, 0D / 64D, 16D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 3, zLevel, 16D / 64D, 16D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 72 + 20 * n, j - 19, zLevel, 16D / 64D, 0D / 32D);
-					worldrenderer.addVertexWithUV(i / 2 - 88 + 20 * n, j - 19, zLevel, 0D / 64D, 0D / 32D);
-					worldrenderer.draw();
-				}
-			}
-		}
-	}
-	
 	private void RenderPlayerAmmo(int i, int j)
 	{
 		//Player ammo overlay
 		if(mc.player != null)
 		{
-			ItemStack stack = mc.player.inventory.getCurrentItem();
-			if(stack != null && stack.getItem() instanceof ItemGun)
+			for(EnumHand hand : EnumHand.values())
 			{
-				ItemGun gunItem = (ItemGun)stack.getItem();
-				GunType gunType = gunItem.GetType();
-				int x = 0;
-				for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
+				ItemStack stack = mc.player.getHeldItem(hand);
+				if(stack != null && stack.getItem() instanceof ItemGun)
 				{
-					ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
-					if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+					ItemGun gunItem = (ItemGun)stack.getItem();
+					GunType gunType = gunItem.GetType();
+					int x = 0;
+					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 					{
-						RenderHelper.enableGUIStandardItemLighting();
-						GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-						OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-						drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 + 16 + x, j - 65);
-						GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-						RenderHelper.disableStandardItemLighting();
-						String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
-						if(bulletStack.getMaxDamage() == 1)
-							s = "";
-						mc.fontRenderer.drawString(s, i / 2 + 32 + x, j - 59, 0x000000);
-						mc.fontRenderer.drawString(s, i / 2 + 33 + x, j - 60, 0xffffff);
-						x += 16 + mc.fontRenderer.getStringWidth(s);
-					}
-				}
-				//Render secondary gun
-				PlayerData data = PlayerHandler.getPlayerData(mc.player, Side.CLIENT);
-				if(gunType.oneHanded && data.offHandGunSlot != 0)
-				{
-					ItemStack offHandStack = mc.player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-					if(offHandStack != null && offHandStack.getItem() instanceof ItemGun)
-					{
-						GunType offHandGunType = ((ItemGun)offHandStack.getItem()).GetType();
-						x = 0;
-						for(int n = 0; n < offHandGunType.numAmmoItemsInGun; n++)
+						ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
+						if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 						{
-							ItemStack bulletStack = ((ItemGun)offHandStack.getItem()).getBulletItemStack(offHandStack, n);
-							if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
-							{
-								//Find the string we are displaying next to the ammo item
-								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
-								if(bulletStack.getMaxDamage() == 1)
-									s = "";
-								
-								//Draw the slot and then move leftwards
-								RenderHelper.enableGUIStandardItemLighting();
-								GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-								drawSlotInventory(mc.fontRenderer, bulletStack, i / 2 - 32 - x, j - 65);	
-								x += 16 + mc.fontRenderer.getStringWidth(s);
-								
-								//Draw the string
-								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-								RenderHelper.disableStandardItemLighting();
-								mc.fontRenderer.drawString(s, i / 2 - 16 - x, j - 59, 0x000000);
-								mc.fontRenderer.drawString(s, i / 2 - 17 - x, j - 60, 0xffffff);
-							}
+							RenderHelper.enableGUIStandardItemLighting();
+							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+							OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+							int xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 16 + x : i / 2 - 32 - x;
+							drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
+							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+							RenderHelper.disableStandardItemLighting();
+							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+							if(bulletStack.getMaxDamage() == 1)
+								s = "";
+							
+							xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 32 + x : i / 2 - 16 - x;
+							mc.fontRenderer.drawString(s, xPos, j - 59, 0x000000);
+							mc.fontRenderer.drawString(s, xPos + 1, j - 60, 0xffffff);
+							x += 16 + mc.fontRenderer.getStringWidth(s);
 						}
 					}
 				}

@@ -25,9 +25,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.collection.concurrent.Debug;
 
 public class PacketShotData extends PacketBase 
 {
@@ -56,6 +58,7 @@ public class PacketShotData extends PacketBase
 			data.writeByte((byte)current.slot);
 			data.writeInt(current.shotFrom.hashCode());
 			data.writeInt(current.shotType.hashCode());
+			data.writeBoolean(current.hand == EnumHand.MAIN_HAND);
 			
 			if(current instanceof SpawnEntityShotData)
 			{
@@ -90,6 +93,7 @@ public class PacketShotData extends PacketBase
 			byte slot = data.readByte();
 			InfoType shotFrom = InfoType.getType(data.readInt());	
 			ShootableType shotType = ShootableType.getShootableType(data.readInt());
+			EnumHand hand = data.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 			
 			byte dataType = data.readByte();
 			switch(dataType)
@@ -99,7 +103,7 @@ public class PacketShotData extends PacketBase
 					int shooterID = data.readInt();
 					Vector3f direction = Vector3f.readFromBuffer(data);
 					
-					shotData.add(new SpawnEntityShotData(slot, shotFrom, shotType, shooterID, direction));
+					shotData.add(new SpawnEntityShotData(slot, hand, shotFrom, shotType, shooterID, direction));
 					break;
 				}
 				case 1: // InstantShotData
@@ -112,7 +116,7 @@ public class PacketShotData extends PacketBase
 					boolean isExtraBullet = data.readBoolean();
 					boolean silenced = data.readBoolean();
 					
-					shotData.add(new InstantShotData(slot, shotFrom, shotType, shooterID, origin, hitData, hit, damage, isExtraBullet, silenced));
+					shotData.add(new InstantShotData(slot, hand, shotFrom, shotType, shooterID, origin, hitData, hit, damage, isExtraBullet, silenced));
 					break;
 				}
 				default:
@@ -124,8 +128,6 @@ public class PacketShotData extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP player) 
 	{
-		PlayerData data = PlayerHandler.getPlayerData(player, Side.SERVER);
-		
 		for(ShotData entry : shotData)
 		{
 			if(entry.slot == -1)
@@ -135,14 +137,22 @@ public class PacketShotData extends PacketBase
 					((ItemGun)entry.shotFrom.item).ServerHandleShotData(null, entry.slot, player.world, player, false, entry);
 				}
 			}
+			else if(entry.hand == EnumHand.OFF_HAND)
+			{
+				ItemStack gunStack = player.getHeldItemOffhand();
+				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
+				{
+					ItemGun gunItem = (ItemGun)gunStack.getItem();
+					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, true, entry);
+				}
+			}
 			else
 			{
 				ItemStack gunStack = player.inventory.getStackInSlot(entry.slot);
 				if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 				{
 					ItemGun gunItem = (ItemGun)gunStack.getItem();
-					boolean isOffHand = (data.offHandGunSlot + 1 == entry.slot);
-					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, isOffHand, entry);
+					gunItem.ServerHandleShotData(gunStack, entry.slot, player.world, player, false, entry);
 				}
 			}
 		}

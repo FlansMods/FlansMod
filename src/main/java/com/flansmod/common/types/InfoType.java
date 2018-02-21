@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -67,6 +68,9 @@ public class InfoType
 	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
 	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
 	public int dungeonChance = 1;
+	
+	@SideOnly(Side.CLIENT)
+	public List<SoundEvent> eventsToRegister;
 	
 	private static Random random = new Random();
 	

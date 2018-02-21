@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.FlansModClient;
@@ -12,7 +13,6 @@ import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.raytracing.PlayerSnapshot;
-import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.teams.IPlayerClass;
 import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.PlayerClass;
@@ -35,11 +35,6 @@ public class PlayerData
 	public PlayerSnapshot[] snapshots;
 	
 	//Gun related fields
-	/** The slotID of the gun being used by the off-hand. 0 = no slot. 1 ~ 9 = hotbar slots */
-	public int offHandGunSlot = 0;
-	/** The off hand gun stack. For viewing other player's off hand weapons only (since you don't know what is in their inventory and hence just the ID is insufficient) */
-	@SideOnly(Side.CLIENT)
-	public ItemStack offHandGunStack;
 	/** The MG this player is using */
 	public EntityMG mountingGun;
 	/** Stops player shooting immediately after swapping weapons */
@@ -65,11 +60,11 @@ public class PlayerData
 	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
 	
 	// Handed getters and setters
-	public float GetShootTime(boolean bOffHand) { return bOffHand ? shootTimeLeft : shootTimeRight; }
-	public void SetShootTime(boolean bOffHand, float set) { if(bOffHand) shootTimeLeft = set; else shootTimeRight = set; }
+	public float GetShootTime(EnumHand hand) { return hand == EnumHand.OFF_HAND ? shootTimeLeft : shootTimeRight; }
+	public void SetShootTime(EnumHand hand, float set) { if(hand == EnumHand.OFF_HAND) shootTimeLeft = set; else shootTimeRight = set; }
 
-	public int GetBurstRoundsRemaining(boolean bOffHand) { return bOffHand ? burstRoundsRemainingLeft : burstRoundsRemainingRight; }
-	public void SetBurstRoundsRemaining(boolean bOffHand, int set) { if(bOffHand) burstRoundsRemainingLeft = set; else burstRoundsRemainingRight = set; }
+	public int GetBurstRoundsRemaining(EnumHand hand) { return hand == EnumHand.OFF_HAND ? burstRoundsRemainingLeft : burstRoundsRemainingRight; }
+	public void SetBurstRoundsRemaining(EnumHand hand, int set) { if(hand == EnumHand.OFF_HAND) burstRoundsRemainingLeft = set; else burstRoundsRemainingRight = set; }
 	
 	public Vector3f[] lastMeleePositions;
 	
@@ -134,14 +129,6 @@ public class PlayerData
 	
 	public void clientTick(EntityPlayer player)
 	{
-		if(player.getHeldItemMainhand() == null 
-				|| !(player.getHeldItemMainhand().getItem() instanceof ItemGun) 
-				|| ((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded 
-				|| player.getHeldItemMainhand() == offHandGunStack)
-		{
-			//offHandGunSlot = 0;
-			offHandGunStack = null;
-		}
 	}
 
 	public IPlayerClass getPlayerClass()
@@ -165,12 +152,6 @@ public class PlayerData
 		snapshots = new PlayerSnapshot[FlansMod.numPlayerSnapshots];
 	}
 	
-	public void selectOffHandWeapon(EntityPlayer player, int slot)
-	{
-		if(isValidOffHandWeapon(player, slot))
-			offHandGunSlot = slot;
-	}
-	
 	public boolean isValidOffHandWeapon(EntityPlayer player, int slot)
 	{
 		if(slot == 0)
@@ -187,18 +168,6 @@ public class PlayerData
 				return true;
 		}
 		return false;
-	}
-
-	public void cycleOffHandItem(EntityPlayer player, int dWheel) 
-	{
-		if(dWheel < 0)
-			for(offHandGunSlot = ((offHandGunSlot + 1) % 10); !isValidOffHandWeapon(player, offHandGunSlot); offHandGunSlot = ((offHandGunSlot + 1) % 10)) ;
-		else if(dWheel > 0)
-			for(offHandGunSlot = ((offHandGunSlot + 9) % 10); !isValidOffHandWeapon(player, offHandGunSlot); offHandGunSlot = ((offHandGunSlot + 9) % 10)) ;
-		
-		FlansModClient.currentScope = null;
-		
-		FlansMod.getPacketHandler().sendToServer(new PacketSelectOffHandGun(offHandGunSlot));
 	}
 	
 	public void doMelee(EntityPlayer player, int meleeTime, GunType type)	

@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
@@ -559,14 +560,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						world.spawnEntity(new EntityDebugDot(world, gunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
 
-					ShotData shotData = new InstantShotData(-1, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
+					ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
 					((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
 				}
 			}
 			// Else, spawn an entity
 			else
 			{
-				ShotData shotData = new SpawnEntityShotData(-1, type, shootableType, driver, lookVector);
+				ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, lookVector);
 				((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
 			}
 			

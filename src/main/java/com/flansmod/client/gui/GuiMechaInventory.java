@@ -115,7 +115,7 @@ public class GuiMechaInventory extends GuiContainer
 		GL11.glRotatef(30F, 1F, 0F, 0F);
 		GL11.glRotatef(FlansMod.ticker, 0F, 1F, 0F);
 		mc.renderEngine.bindTexture(FlansModResourceHandler.getTexture(type));
-		mechaRenderer.render(mecha, 0, 0, 0, 0F, 0F);
+		mechaRenderer.doRender(mecha, 0, 0, 0, 0F, 0F);
 		//type.model.render(type);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);

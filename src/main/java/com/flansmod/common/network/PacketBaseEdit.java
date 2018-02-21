@@ -5,6 +5,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.ITeamBase;
 import com.flansmod.common.teams.TeamsManager;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.server.FMLServerHandler;
@@ -83,7 +84,7 @@ public class PacketBaseEdit extends PacketBase
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
 		//Do another op check
-		if(!FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(playerEntity.getGameProfile()))
+		if(!FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(playerEntity.getGameProfile()))
 			return;
 		
 		//Find the base and change its attributes (or destroy it)

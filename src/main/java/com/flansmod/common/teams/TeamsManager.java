@@ -1104,7 +1104,7 @@ public class TeamsManager
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ItemGun)
 			{
-				((ItemGun)stack.getItem()).Reload(stack, player.world, player, player.inventory, false, false, true, false);
+				((ItemGun)stack.getItem()).Reload(stack, player.world, player, player.inventory, EnumHand.MAIN_HAND, false, true, false);
 			}
 		}
 	}

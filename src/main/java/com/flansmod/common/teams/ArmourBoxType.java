@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.FlansMod;
@@ -89,8 +90,8 @@ public class ArmourBoxType extends BoxType
 	@Override
 	public void registerItem(IForgeRegistry<Item> registry)
 	{
-		//item = Item.getItemFromBlock(block);
-		//super.registerItem(registry);
+		item = new ItemBlock(block).setRegistryName(shortName + "_item");
+		registry.register(item);
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiTeamsBase extends GuiScreen 
@@ -144,8 +145,7 @@ public class GuiTeamsBase extends GuiScreen
 				GL11.glRotatef(160, 1F, 0F, 0F);
 				GL11.glRotatef(10, 0F, 1F, 0F);
 				GL11.glScalef(-scale, scale, scale);
-				//ClientProxy.gunRenderer.renderGun(gunStack, gunType, 1F / 16F, gunType.model, GunAnimations.defaults, 0F);
-				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, stack);
+				ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);
 				
 				RenderHelper.disableStandardItemLighting();
 				

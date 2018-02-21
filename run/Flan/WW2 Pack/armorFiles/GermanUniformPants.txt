@@ -11,7 +11,7 @@ ItemID Your ID
 
 // Visuals
 ModelScale 1
-Icon GermanNPants
+Icon GermanPants
 
 
 // Recipe

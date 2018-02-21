@@ -204,21 +204,14 @@ public class PlayerHitbox
 		}
 		case LEFTITEM : 
 		{
-			PlayerData data = PlayerHandler.getPlayerData(player);
-			if(data.offHandGunSlot != 0)
+			ItemStack currentStack = player.getHeldItemOffhand();
+			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
 			{
-				ItemStack leftHandStack = null;
-				if(player.world.isRemote && !FlansMod.proxy.isThePlayer(player))
-					leftHandStack = data.offHandGunStack;
-				else leftHandStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-				
-				if(leftHandStack != null && leftHandStack.getItem() instanceof ItemGun)
-				{
-					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).GetType();
-					//TODO : Shield damage
-					return penetratingPower - leftGunType.shieldDamageAbsorption;
-				}
+				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
+				//TODO : Shield damage
+				return penetratingPower - gunType.shieldDamageAbsorption;
 			}
+			else return penetratingPower;
 		}
 		default : return penetratingPower;
 		}

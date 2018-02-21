@@ -54,6 +54,9 @@ public class ItemAttachment extends Item implements IPaintableItem
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
+    	if(tab != FlansMod.tabFlanGuns)
+    		return;
+    	
     	PaintableType type = ((IPaintableItem)this).GetPaintableType();
     	if(FlansMod.addAllPaintjobsToCreative)
     	{

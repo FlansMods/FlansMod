@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 /** 
@@ -35,7 +36,7 @@ public class PacketRequestDebug extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		if(FMLServerHandler.instance().getServer().getPlayerList().canSendCommands(playerEntity.getGameProfile()))
+		if(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(playerEntity.getGameProfile()))
 			FlansMod.packetHandler.sendTo(new PacketRequestDebug(), playerEntity);
 	}
 

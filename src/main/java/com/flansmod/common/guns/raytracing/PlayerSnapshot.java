@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 
 /** This class takes a snapshot of the player's position rotation and held items at a certain point in time. 
@@ -84,25 +85,14 @@ public class PlayerSnapshot
 			{
 				hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(rightArmAxes), new Vector3f(originXRight, 1.3F, originZRight), new Vector3f(gunType.shieldOrigin.y, -1.05F + gunType.shieldOrigin.x, -1F / 16F + gunType.shieldOrigin.z), new Vector3f(gunType.shieldDimensions.y, gunType.shieldDimensions.x, gunType.shieldDimensions.z), EnumHitboxType.RIGHTITEM));	
 			}
-			
-			//Add left hand shield box
-			PlayerData data = PlayerHandler.getPlayerData(player);
-			if(gunType.oneHanded && data.offHandGunSlot != 0)
+		}
+		ItemStack playerLeftHandStack = player.getHeldItemOffhand();
+		if(playerLeftHandStack != null && playerLeftHandStack.getItem() instanceof ItemGun)
+		{
+			GunType gunType = ((ItemGun)playerLeftHandStack.getItem()).GetType();
+			if(gunType.shield)
 			{
-				ItemStack leftHandStack = null;
-				//Client side other players
-				if(player.world.isRemote && !FlansMod.proxy.isThePlayer(player))
-					leftHandStack = data.offHandGunStack;
-				else leftHandStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-				
-				if(leftHandStack != null && leftHandStack.getItem() instanceof ItemGun)
-				{
-					GunType leftGunType = ((ItemGun)leftHandStack.getItem()).GetType();
-					if(leftGunType.shield)
-					{
-						hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(leftArmAxes), new Vector3f(originXLeft, 1.3F, originZLeft), new Vector3f(leftGunType.shieldOrigin.y, -1.05F + leftGunType.shieldOrigin.x, -1F / 16F + leftGunType.shieldOrigin.z), new Vector3f(leftGunType.shieldDimensions.y, leftGunType.shieldDimensions.x, leftGunType.shieldDimensions.z), EnumHitboxType.LEFTITEM));	
-					}
-				}
+				hitboxes.add(new PlayerHitbox(player, bodyAxes.findLocalAxesGlobally(rightArmAxes), new Vector3f(originXRight, 1.3F, originZRight), new Vector3f(gunType.shieldOrigin.y, -1.05F + gunType.shieldOrigin.x, -1F / 16F + gunType.shieldOrigin.z), new Vector3f(gunType.shieldDimensions.y, gunType.shieldDimensions.x, gunType.shieldDimensions.z), EnumHitboxType.RIGHTITEM));	
 			}
 		}
 	}
@@ -148,9 +138,9 @@ public class PlayerSnapshot
 		return null;
 	}
 	
-	public Vector3f GetMuzzleLocation(GunType gunType, AttachmentType barrelAttachment, boolean isOffHand)
+	public Vector3f GetMuzzleLocation(GunType gunType, AttachmentType barrelAttachment, EnumHand hand)
 	{
-		PlayerHitbox hitbox = GetHitbox(isOffHand ? EnumHitboxType.LEFTARM : EnumHitboxType.RIGHTARM);
+		PlayerHitbox hitbox = GetHitbox(hand == EnumHand.OFF_HAND ? EnumHitboxType.LEFTARM : EnumHitboxType.RIGHTARM);
 		Vector3f muzzlePos = new Vector3f(hitbox.o.x, hitbox.o.y + hitbox.d.y * 0.5f, hitbox.o.z + hitbox.d.z * 0.5f);
 		
 		if(gunType != null && gunType.model != null)

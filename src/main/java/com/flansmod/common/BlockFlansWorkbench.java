@@ -46,8 +46,6 @@ public class BlockFlansWorkbench extends Block
     		items.add(new ItemStack(this, 1, 1));
     	else if(tab == FlansMod.tabFlanParts)
     		items.add(new ItemStack(this, 1, 2));
-    	
-        items.add(new ItemStack(this));
     }
 
     @Override

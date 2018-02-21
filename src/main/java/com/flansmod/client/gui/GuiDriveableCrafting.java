@@ -184,7 +184,10 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
-			temporaryInventory.copyInventory(inventory);
+			for(int q = 0; q < inventory.getSizeInventory(); q++)
+			{
+				temporaryInventory.setInventorySlotContents(q, inventory.getStackInSlot(q).copy());
+			}
 			
 			//Draw the recipe items
 			//Iterate over rows then columns
@@ -215,7 +218,7 @@ public class GuiDriveableCrafting extends GuiScreen
 								stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 								//Check for empty stacks
 								if(stackInSlot.getCount() <= 0)
-									stackInSlot = null;
+									stackInSlot = ItemStack.EMPTY.copy();
 								//Put the modified stack back in the inventory
 								temporaryInventory.setInventorySlotContents(n, stackInSlot);
 								//Increase the amount found counter

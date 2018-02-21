@@ -1,5 +1,5 @@
 {
-	"parent": "flansmod:block/flansWorkbench_vehicles",
+	"parent": "flansmod:block/flansworkbench_vehicles",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

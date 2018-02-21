@@ -8,6 +8,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -123,13 +124,13 @@ public class KeyInputHandler
 					
 					if(item.CanReload(stack, player.inventory))
 					{
-						FlansMod.getPacketHandler().sendToServer(new PacketReload(false, true));
+						FlansMod.getPacketHandler().sendToServer(new PacketReload(EnumHand.MAIN_HAND, true));
 	
 						//Set player shoot delay to be the reload delay
 						//Set both gun delays to avoid reloading two guns at once
 						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
 						
-						GunAnimations animations = FlansModClient.getGunAnimations(player, false);
+						GunAnimations animations = FlansModClient.getGunAnimations(player, EnumHand.MAIN_HAND);
 		
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
@@ -143,8 +144,8 @@ public class KeyInputHandler
 		}
 		if(lookAtGunKey.isPressed())
 		{
-			FlansModClient.getGunAnimations(mc.player, false).lookAt = LookAtState.TILT1;
-			FlansModClient.getGunAnimations(mc.player, true).lookAt = LookAtState.TILT1;
+			FlansModClient.getGunAnimations(mc.player, EnumHand.MAIN_HAND).lookAt = LookAtState.TILT1;
+			FlansModClient.getGunAnimations(mc.player, EnumHand.OFF_HAND).lookAt = LookAtState.TILT1;
 		}
 		if(debugKey.isPressed())
 		{

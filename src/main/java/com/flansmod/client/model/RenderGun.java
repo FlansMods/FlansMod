@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.client.FlansModClient;
@@ -47,7 +48,7 @@ public class RenderGun implements CustomItemRenderer
 	public static boolean bindTextures = true;
 	
 	@Override
-	public void renderItem(CustomItemRenderType type, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
@@ -62,39 +63,11 @@ public class RenderGun implements CustomItemRenderer
 			return;
 
 		//Render main hand gun
-		{
-			GunAnimations animations = (type == CustomItemRenderType.ENTITY || type == CustomItemRenderType.INVENTORY) ? new GunAnimations() : FlansModClient.getGunAnimations((EntityLivingBase)data[1], false);
-			renderGun(type, item, gunType, animations, false, data);
-		}
-		
-		//Render off-hand gun
-		if(gunType.oneHanded && type == CustomItemRenderType.EQUIPPED_FIRST_PERSON)
-		{
-			EntityLivingBase entity = (EntityLivingBase)data[1];
-			if(entity instanceof EntityPlayer)
-			{
-				EntityPlayer player = (EntityPlayer)entity;
-				PlayerData playerData = PlayerHandler.getPlayerData(player, Side.CLIENT);
-				if(playerData.offHandGunSlot != 0)
-				{
-					GunAnimations animations = FlansModClient.gunAnimationsLeft.get(data[1]);
-					if(animations == null)
-					{
-						animations = new GunAnimations();
-						FlansModClient.gunAnimationsLeft.put((EntityLivingBase)data[1], animations);
-					}
-					ItemStack offHandItem = player.inventory.getStackInSlot(playerData.offHandGunSlot - 1);
-					if(offHandItem == null || !(offHandItem.getItem() instanceof ItemGun))
-						return;
-					GunType offHandGunType = ((ItemGun)offHandItem.getItem()).GetType();
-					if(!offHandGunType.oneHanded)
-						return;
-					
-					renderGun(type, offHandItem, offHandGunType, animations, true, data);
-				}
-			
-			}
-		}
+		GunAnimations animations = 
+				(type == CustomItemRenderType.ENTITY || type == CustomItemRenderType.INVENTORY) 
+					? new GunAnimations() 
+					: FlansModClient.getGunAnimations((EntityLivingBase)data[1], hand);
+		renderGun(type, item, gunType, animations, hand, data);
 	}
 	
 	//Render off-hand gun in 3rd person
@@ -107,19 +80,16 @@ public class RenderGun implements CustomItemRenderer
 			FlansModClient.gunAnimationsLeft.put(player, animations);
 		}
 		GunType offHandGunType = ((ItemGun)offHandItemStack.getItem()).GetType();
-		if(!offHandGunType.oneHanded)
-			return;
-		
-		renderGun(CustomItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, true, player);
+		renderGun(CustomItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, EnumHand.OFF_HAND, player);
 	}
 		
-	private void renderGun(CustomItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, boolean offHand, Object... data)
+	private void renderGun(CustomItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, EnumHand hand, Object... data)
 	{
 		//The model scale
 		float f = 1F / 16F;
 		ModelGun model = gunType.model;
 		
-		int flip = offHand ? -1 : 1;
+		int flip = hand == EnumHand.OFF_HAND ? -1 : 1;
 		
 		GL11.glPushMatrix();
 		{
@@ -143,7 +113,7 @@ public class RenderGun implements CustomItemRenderer
 				}
 				case EQUIPPED:
 				{
-					if(offHand)
+					if(hand == EnumHand.OFF_HAND)
 					{
 						GL11.glRotatef(-70F, 1F, 0F, 0F);
 						GL11.glRotatef(48F, 0F, 0F, 1F);
@@ -152,10 +122,12 @@ public class RenderGun implements CustomItemRenderer
 					}
 					else
 					{
-						GL11.glRotatef(90F, 0F, 0F, 1F);
-						GL11.glRotatef(-90F, 1F, 0F, 0F);
-						GL11.glTranslatef(0.25F, 0F, 0F);
+						GL11.glRotatef(-70F, 1F, 0F, 0F);
+						GL11.glRotatef(48F, 0F, 0F, 1F);
+						GL11.glRotatef(105F, 0F, 1F, 0F);
+						GL11.glTranslatef(-0.1F, -0.22F, -0.15F);
 						GL11.glScalef(1F, 1F, -1F);
+						GL11.glTranslatef(0F, 0F, -1F);
 					}
 					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
 					/*
@@ -178,7 +150,7 @@ public class RenderGun implements CustomItemRenderer
 					}
 					float adsSwitch = FlansModClient.lastZoomProgress + (FlansModClient.zoomProgress - FlansModClient.lastZoomProgress) * smoothing;//0F;//((float)Math.sin((FlansMod.ticker) / 10F) + 1F) / 2F;
 					
-					if(offHand)
+					if(hand == EnumHand.OFF_HAND)
 					{
 						GL11.glRotatef(45F, 0F, 1F, 0F);
 						GL11.glTranslatef(-1F, 0.675F, -1.8F);

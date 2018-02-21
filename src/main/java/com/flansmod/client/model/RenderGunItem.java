@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -35,7 +36,7 @@ public class RenderGunItem extends RenderEntityItem
         	GlStateManager.translate(x, y + 0.25D, z);
         	GlStateManager.rotate(entity.ticksExisted + partialTicks, 0F, 1F, 0F);
         	
-        	gunRenderer.renderItem(CustomItemRenderType.ENTITY, stack);
+        	gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);
         	GlStateManager.popMatrix();
         }
         else

@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -165,21 +166,19 @@ public class FlansModRaytracer
 		return hits;
 	}
 	
-	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, boolean isOffHand)
+	public static Vector3f GetPlayerMuzzlePosition(EntityPlayer player, EnumHand hand)
 	{
 		PlayerSnapshot snapshot = new PlayerSnapshot(player);
 		PlayerData data = PlayerHandler.getPlayerData(player);
 		
-		ItemStack itemstack = (isOffHand && data != null && data.offHandGunSlot != 0 ) 
-				? player.inventory.getStackInSlot(data.offHandGunSlot - 1)
-				: player.getHeldItemMainhand();
+		ItemStack itemstack = hand == EnumHand.OFF_HAND ? player.getHeldItemOffhand() : player.getHeldItemMainhand();
 		
 		if(itemstack != null && itemstack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)itemstack.getItem()).GetType();
 			AttachmentType barrelType = gunType.getBarrel(itemstack);
 			
-			return Vector3f.add(new Vector3f(player.posX, player.posY, player.posZ), snapshot.GetMuzzleLocation(gunType, barrelType, isOffHand), null);
+			return Vector3f.add(new Vector3f(player.posX, player.posY, player.posZ), snapshot.GetMuzzleLocation(gunType, barrelType, hand), null);
 		}
 		
 		return new Vector3f(player.getPositionEyes(0.0f));

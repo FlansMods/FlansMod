@@ -168,7 +168,9 @@ public class FlansMod
 	
 	//Items and creative tabs
 	public static BlockFlansWorkbench workbench;
+	public static ItemBlockManyNames workbenchItem;
 	public static BlockSpawner spawner;
+	public static ItemBlockManyNames spawnerItem;
 	public static ItemOpStick opStick;
 	public static ItemFlagpole flag;
 	public static ArrayList<ItemPart> partItems = new ArrayList<ItemPart>();
@@ -192,6 +194,8 @@ public class FlansMod
 		log("Preinitialising Flan's mod.");
 		
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		
+		proxy.preInit();
 		
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
 		syncConfig();
@@ -227,6 +231,9 @@ public class FlansMod
 		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
 		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setRegistryName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
 		paintjobTable = new BlockPaintjobTable();
+		workbenchItem = new ItemBlockManyNames(workbench);
+		spawnerItem = new ItemBlockManyNames(spawner);
+		
 		
 		GameRegistry.registerTileEntity(TileEntitySpawner.class, "teamsSpawner");
 		GameRegistry.registerTileEntity(TileEntityPaintjobTable.class, "paintjobTable");
@@ -248,7 +255,7 @@ public class FlansMod
 		log("Initialising Flan's Mod.");
 
 		//Do proxy loading
-		proxy.load();
+		proxy.init();
 		proxy.registerRenderers();
 				
 		//Initialising handlers
@@ -336,6 +343,9 @@ public class FlansMod
 		event.getRegistry().register(rainbowPaintcan); //, "rainbowPaintcan", MODID);
 		event.getRegistry().register(opStick); //, "opStick", MODID);
 		event.getRegistry().register(flag); //, "flagpole", MODID);
+		
+		event.getRegistry().register(workbenchItem);
+		event.getRegistry().register(spawnerItem);
 	}
 	
 	@SubscribeEvent

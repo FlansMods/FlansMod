@@ -36,7 +36,6 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.PlayerBulletHit;
 import com.flansmod.common.network.PacketGunFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketReload;
-import com.flansmod.common.network.PacketSelectOffHandGun;
 import com.flansmod.common.network.PacketShotData;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
@@ -114,17 +113,17 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
 	
-	private static boolean GetMouseHeld(boolean isOffHand) 
+	private static boolean GetMouseHeld(EnumHand hand) 
 	{ 
 		if(FlansMod.shootOnRightClick)
-			return isOffHand ? leftMouseHeld : rightMouseHeld; 
-		else return isOffHand ? rightMouseHeld : leftMouseHeld;
+			return hand == EnumHand.MAIN_HAND ? leftMouseHeld : rightMouseHeld; 
+		else return hand == EnumHand.MAIN_HAND ? rightMouseHeld : leftMouseHeld;
 	}
-	private static boolean GetLastMouseHeld(boolean isOffHand) 
+	private static boolean GetLastMouseHeld(EnumHand hand) 
 	{ 
 		if(FlansMod.shootOnRightClick)
-			return isOffHand ? lastLeftMouseHeld : lastRightMouseHeld; 
-		else return isOffHand ? lastRightMouseHeld : lastLeftMouseHeld;
+			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld; 
+		else return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
 	}
 	
 	private static List<ShotData> shotsFiredClient = new ArrayList<ShotData>(), shotsFiredServer = new ArrayList<ShotData>();
@@ -291,7 +290,7 @@ public class ItemGun extends Item implements IPaintableItem
 	// _____________________________________________________________________________
 	
 	@SideOnly(Side.CLIENT)
-	public void onUpdateClient(ItemStack gunstack, int gunSlot, World world, Entity entity, boolean isOffHand, boolean hasOffHand)
+	public void onUpdateClient(ItemStack gunstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
 		if(!(entity instanceof EntityPlayer))
 		{			
@@ -319,18 +318,7 @@ public class ItemGun extends Item implements IPaintableItem
 		
 		// If we have an off hand item, then disable our secondary functions
 		boolean secondaryFunctionsEnabled = true;
-		
-		// Update off hand cycling. Controlled by the main gun, since it is always around.
-		if(!isOffHand && type.oneHanded) 
-		{				
-			//Cycle selection
-			int dWheel = Mouse.getDWheel();
-			if(mc.gameSettings.keyBindSneak.isPressed() && dWheel != 0)
-			{
-				data.cycleOffHandItem(player, dWheel);
-			}
-		}
-		
+				
 		if(type.usableByPlayers)
 		{
 			boolean needsToReload = needsToReload(gunstack);
@@ -339,7 +327,7 @@ public class ItemGun extends Item implements IPaintableItem
 			{
 				case BURST:
 				{
-					if(data.GetBurstRoundsRemaining(isOffHand) > 0)
+					if(data.GetBurstRoundsRemaining(hand) > 0)
 					{
 						shouldShootThisTick = true;
 					}
@@ -347,7 +335,7 @@ public class ItemGun extends Item implements IPaintableItem
 				}
 				case SEMIAUTO:
 				{
-					if(GetMouseHeld(isOffHand) && !GetLastMouseHeld(isOffHand))
+					if(GetMouseHeld(hand) && !GetLastMouseHeld(hand))
 					{
 						shouldShootThisTick = true;
 					}
@@ -358,10 +346,10 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					if(needsToReload)
 					{
-						needsToReload = GetMouseHeld(isOffHand);
+						needsToReload = GetMouseHeld(hand);
 						break;
 					}
-					if(GetMouseHeld(isOffHand))
+					if(GetMouseHeld(hand))
 					{
 						data.minigunSpeed += 2.0f;
 						data.minigunSpeed *= 0.9f;
@@ -384,7 +372,7 @@ public class ItemGun extends Item implements IPaintableItem
 				}
 				case FULLAUTO:
 				{
-					shouldShootThisTick = GetMouseHeld(isOffHand);
+					shouldShootThisTick = GetMouseHeld(hand);
 					if(!shouldShootThisTick)
 					{
 						needsToReload = false;
@@ -399,19 +387,19 @@ public class ItemGun extends Item implements IPaintableItem
 			// Do reload if we pressed fire.
 			if(needsToReload)
 			{
-				if(Reload(gunstack, world, player, player.inventory, isOffHand, hasOffHand, false, player.capabilities.isCreativeMode))
+				if(Reload(gunstack, world, player, player.inventory, hand, hasOffHand, false, player.capabilities.isCreativeMode))
 				{
 					//Set player shoot delay to be the reload delay
 					//Set both gun delays to avoid reloading two guns at once
 					data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(gunstack);
 					
-					GunAnimations animations = FlansModClient.getGunAnimations(player, isOffHand);
+					GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
 
 					int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 					int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 					animations.doReload(type.reloadTime, pumpDelay, pumpTime);
 					
-					if(isOffHand)
+					if(hand == EnumHand.OFF_HAND)
 					{
 						data.reloadingLeft = true;
 						data.burstRoundsRemainingLeft = 0;
@@ -422,15 +410,15 @@ public class ItemGun extends Item implements IPaintableItem
 						data.burstRoundsRemainingRight = 0;
 					}
 					//Send reload packet to server
-					FlansMod.getPacketHandler().sendToServer(new PacketReload(isOffHand, false));
+					FlansMod.getPacketHandler().sendToServer(new PacketReload(hand, false));
 				}
 			}
 			// Fire!
 			else if(shouldShootThisTick)
 			{
-				GunAnimations animations = FlansModClient.getGunAnimations(player, isOffHand);
+				GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
 				animations.lookAt = LookAtState.NONE;
-				float shootTime = data.GetShootTime(isOffHand);
+				float shootTime = data.GetShootTime(hand);
 									
 				// For each 
 				while(shootTime <= 0.0f)
@@ -472,7 +460,7 @@ public class ItemGun extends Item implements IPaintableItem
 								victim = firstHit.GetEntity();
 							}
 							
-							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, isOffHand);
+							Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
 							
 							if(FlansMod.DEBUG)
 							{
@@ -480,14 +468,14 @@ public class ItemGun extends Item implements IPaintableItem
 							}
 							
 							boolean silenced = type.getBarrel(gunstack) != null && type.getBarrel(gunstack).silencer;
-							ShotData shotData = new InstantShotData(gunSlot, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1, silenced);
+							ShotData shotData = new InstantShotData(gunSlot, hand, type, shootableType, player, gunOrigin, firstHit, hitPos, type.getDamage(gunstack), i < type.numBullets * shootableType.numBullets - 1, silenced);
 							shotsFiredClient.add(shotData);
 						}
 					}
 					// Else, spawn an entity
 					else
 					{
-						ShotData shotData = new SpawnEntityShotData(gunSlot, type, shootableType, player, new Vector3f(player.getLookVec()));
+						ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
 						shotsFiredClient.add(shotData);
 					}
 
@@ -503,20 +491,20 @@ public class ItemGun extends Item implements IPaintableItem
 					// Update burst fire
 					if(type.getFireMode(gunstack) == EnumFireMode.BURST)
 					{
-						int burstRoundsRemaining = data.GetBurstRoundsRemaining(isOffHand);
+						int burstRoundsRemaining = data.GetBurstRoundsRemaining(hand);
 
 						if(burstRoundsRemaining > 0)
 							burstRoundsRemaining--;
 						else burstRoundsRemaining = type.numBurstRounds;
 						
-						data.SetBurstRoundsRemaining(isOffHand, burstRoundsRemaining);
+						data.SetBurstRoundsRemaining(hand, burstRoundsRemaining);
 					}
 				}
 				
-				data.SetShootTime(isOffHand, shootTime);
+				data.SetShootTime(hand, shootTime);
 			}
 			
-			Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, isOffHand);
+			Vector3f gunOrigin = FlansModRaytracer.GetPlayerMuzzlePosition(player, hand);
 			
 			if(FlansMod.DEBUG)
 			{
@@ -532,10 +520,29 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			// Check for scoping in / out
 			IScope currentScope = type.getCurrentScope(gunstack);
-			if(!isOffHand && !hasOffHand && GetMouseHeld(true) && !GetLastMouseHeld(true)
-					&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM) )
+			if(!hasOffHand)
 			{
-				FlansModClient.SetScope(currentScope);
+				switch(hand)
+				{
+					case MAIN_HAND:
+					{
+						if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND) 
+								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+						{
+							FlansModClient.SetScope(currentScope);
+						}
+						break;
+					}
+					case OFF_HAND:
+					{
+						if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND) 
+								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
+						{
+							FlansModClient.SetScope(currentScope);
+						}
+						break;	
+					}
+				}
 			}
 		}
 		
@@ -787,7 +794,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
-	public void onUpdateServer(ItemStack itemstack, int gunSlot, World world, Entity entity, boolean isOffHand, boolean hasOffHand)
+	public void onUpdateServer(ItemStack itemstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
 		if(!(entity instanceof EntityPlayerMP))
 		{
@@ -804,8 +811,6 @@ public class ItemGun extends Item implements IPaintableItem
 			if(player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() == null || !(player.inventory.getCurrentItem().getItem() instanceof ItemGun))
 			{
 				data.isShootingRight = data.isShootingLeft = false;
-				data.offHandGunSlot = 0;
-				(new PacketSelectOffHandGun(0)).handleServerSide(player);
 			}
 			return;
 		}
@@ -822,8 +827,23 @@ public class ItemGun extends Item implements IPaintableItem
 	@Override
 	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
-		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.getCurrentItem() == itemstack)
+		if(entity instanceof EntityPlayer)
 		{
+			EntityPlayer player = (EntityPlayer)entity;
+			EnumHand hand = EnumHand.MAIN_HAND;
+			if(itemstack == player.getHeldItemMainhand()) 
+			{
+				hand = EnumHand.MAIN_HAND;
+			}
+			else if(itemstack == player.getHeldItemOffhand())
+			{
+				hand = EnumHand.OFF_HAND;
+			}
+			else
+			{
+				return;
+			}
+			
 			if(world.isRemote)
 			{
 				// Get button presses. Do this before splitting into each hand. Prevents second pass wiping the data
@@ -833,41 +853,23 @@ public class ItemGun extends Item implements IPaintableItem
 				leftMouseHeld = Mouse.isButtonDown(0);
 			}
 			
-			boolean hasOffHand = false;
-			EntityPlayer player = (EntityPlayer)entity;
-			PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
+			ItemStack main = player.getHeldItemMainhand();
+			ItemStack off = player.getHeldItemOffhand();
+			boolean hasOffHand = main != null && !main.isEmpty() && off != null && !off.isEmpty();
 			
-			if(type.oneHanded) 
-			{
-				// If the offhand item is this item, select none
-				if(data.offHandGunSlot == player.inventory.currentItem + 1)
-					data.offHandGunSlot = 0;
-				
-				if(data.offHandGunSlot != 0)
-				{
-					hasOffHand = true;
-					ItemStack offHandGunStack = player.inventory.getStackInSlot(data.offHandGunSlot - 1);
-					if(offHandGunStack != null && offHandGunStack.getItem() instanceof ItemGun)
-					{
-						GunType offHandGunType = ((ItemGun)offHandGunStack.getItem()).type;
-						((ItemGun)offHandGunStack.getItem()).onUpdateEach(offHandGunStack, data.offHandGunSlot - 1, world, entity, true, hasOffHand);
-					}
-				}
-			}
-			
-			onUpdateEach(itemstack, player.inventory.currentItem, world, entity, false, hasOffHand);
+			onUpdateEach(itemstack, i, world, entity, hand, hasOffHand);
 		}
 	}
 	
 	/** Called once for each weapon we are weilding */
-	private void onUpdateEach(ItemStack itemstack, int gunSlot, World world, Entity entity, boolean isOffHand, boolean hasOffHand)
+	private void onUpdateEach(ItemStack itemstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
 		if(world.isRemote)
-			onUpdateClient(itemstack, gunSlot, world, entity, isOffHand, hasOffHand);
-		else onUpdateServer(itemstack, gunSlot, world, entity, isOffHand, hasOffHand);		
+			onUpdateClient(itemstack, gunSlot, world, entity, hand, hasOffHand);
+		else onUpdateServer(itemstack, gunSlot, world, entity, hand, hasOffHand);		
 	}
 	
-	public boolean Reload(ItemStack gunstack, World world, Entity entity, IInventory inventory, boolean isOffHand, boolean hasOffHand, boolean forceReload, boolean isCreative)
+	public boolean Reload(ItemStack gunstack, World world, Entity entity, IInventory inventory, EnumHand hand, boolean hasOffHand, boolean forceReload, boolean isCreative)
 	{
 		//Deployable guns cannot be reloaded in the inventory
 		if(type.deployable)
@@ -1282,7 +1284,7 @@ public class ItemGun extends Item implements IPaintableItem
 			//Do animation
 			if(entityLiving.world.isRemote)
 			{
-				GunAnimations animations = FlansModClient.getGunAnimations(entityLiving, false);
+				GunAnimations animations = FlansModClient.getGunAnimations(entityLiving, EnumHand.MAIN_HAND);
 				animations.doMelee(type.meleeTime);
 			}
 			//Do custom melee hit detection
@@ -1317,6 +1319,9 @@ public class ItemGun extends Item implements IPaintableItem
 	 @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
+    	if(tab != FlansMod.tabFlanGuns)
+    		return;
+		 
     	PaintableType type = ((IPaintableItem)this).GetPaintableType();
     	if(FlansMod.addAllPaintjobsToCreative)
     	{

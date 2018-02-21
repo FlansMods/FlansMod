@@ -1,5 +1,5 @@
 {
-	"parent": "flansmod:block/flansWorkbench_guns",
+	"parent": "flansmod:block/flansworkbench_guns",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

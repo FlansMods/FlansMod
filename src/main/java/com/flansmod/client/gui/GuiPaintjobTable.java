@@ -21,6 +21,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -267,7 +268,7 @@ public class GuiPaintjobTable extends GuiContainer
 				        if(inCustomMode)
 				        	RenderGun.bindTextures = false;
 				        
-						ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, tempStack);
+						ClientProxy.gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, tempStack);
 						RenderGun.bindTextures = true;
 						break;
 					}

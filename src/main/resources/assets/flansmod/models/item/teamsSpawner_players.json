@@ -1,5 +1,5 @@
 {
-	"parent": "flansmod:block/teamsSpawner_players",
+	"parent": "flansmod:block/teamsspawner_players",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],
