@@ -122,12 +122,10 @@ public class RenderGun implements CustomItemRenderer
 					}
 					else
 					{
-						GL11.glRotatef(-70F, 1F, 0F, 0F);
-						GL11.glRotatef(48F, 0F, 0F, 1F);
-						GL11.glRotatef(105F, 0F, 1F, 0F);
-						GL11.glTranslatef(-0.1F, -0.22F, -0.15F);
+						GL11.glRotatef(90F, 0F, 0F, 1F);
+						GL11.glRotatef(-90F, 1F, 0F, 0F);
+						GL11.glTranslatef(0.2F, 0.05F, -0F);
 						GL11.glScalef(1F, 1F, -1F);
-						GL11.glTranslatef(0F, 0F, -1F);
 					}
 					GL11.glTranslatef(model.thirdPersonOffset.x, model.thirdPersonOffset.y, model.thirdPersonOffset.z);
 					/*

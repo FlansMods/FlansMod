@@ -362,26 +362,26 @@
 	
 	"gewehr43Shoot": {
 		"category" : "player",
-		"sounds" : [ "gewehr43Shoot" ]
+		"sounds" : [ "flansmod:gewehr43Shoot" ]
 	},
 	
 	"50CalShoot": {
 		"category" : "player",
-		"sounds" : [ "50CalShoot" ]
+		"sounds" : [ "flansmod:50CalShoot" ]
 	},
 	
 	"20mmPlane": {
 		"category" : "player",
-		"sounds" : [ "20mmPlane" ]
+		"sounds" : [ "flansmod:20mmPlane" ]
 	},
 	
 	"ptboatidle": {
 		"category" : "player",
-		"sounds" : [ "ptboatidle" ]
+		"sounds" : [ "flansmod:ptboatidle" ]
 	},
 	
 	"ptboatmove": {
 		"category" : "player",
-		"sounds" : [ "ptboatmove" ]
+		"sounds" : [ "flansmod:ptboatmove" ]
 	}
 }

@@ -147,7 +147,10 @@ public abstract class ShootableType extends InfoType
 			else if(split[0].equals("DropItemOnDetonate"))
 				dropItemOnDetonate = split[1];
 			else if(split[0].equals("DetonateSound"))
+			{
 				detonateSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, shortName, split[1]);
+			}
 			
 			//Particles
 			else if(split[0].equals("TrailParticles") || split[0].equals("SmokeTrail"))

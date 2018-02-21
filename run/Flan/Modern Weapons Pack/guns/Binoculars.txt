@@ -17,7 +17,7 @@ Accuracy 0
 //Time in ticks between rounds
 ShootDelay 0
 //ShootSound DesertEagleShoot
-//ReloadSound lugerReload
+//ReloadSound MWlugerReload
 Mode SemiAuto
 Scope Binoculars
 ZoomLevel 16

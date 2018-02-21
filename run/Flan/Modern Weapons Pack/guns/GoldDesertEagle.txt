@@ -18,7 +18,7 @@ Accuracy 5
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound DesertEagleShoot
-ReloadSound LugerReload
+ReloadSound MWLugerReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

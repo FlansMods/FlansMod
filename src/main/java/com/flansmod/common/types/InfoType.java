@@ -69,9 +69,6 @@ public class InfoType
 	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
 	public int dungeonChance = 1;
 	
-	@SideOnly(Side.CLIENT)
-	public List<SoundEvent> eventsToRegister;
-	
 	private static Random random = new Random();
 	
 	/** Used for scaling */

@@ -34,6 +34,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,6 +61,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry.EntityRegistration;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -196,6 +198,7 @@ public class FlansMod
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		
 		proxy.preInit();
+		proxy.registerRenderers();
 		
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
 		syncConfig();
@@ -256,7 +259,6 @@ public class FlansMod
 
 		//Do proxy loading
 		proxy.init();
-		proxy.registerRenderers();
 				
 		//Initialising handlers
 		packetHandler.initialise();
@@ -367,46 +369,7 @@ public class FlansMod
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
 	{
 		log("Registering Entities");
-		//Register teams mod entities
-		/*
-		 * TODO: [1.12] Find out where the update intervals have ended up.
-		EntityRegistry.registerGlobalEntityID(EntityFlagpole.class, "Flagpole", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
-		EntityRegistry.registerGlobalEntityID(EntityFlag.class, "Flag", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityFlag.class, "Flag", 94, this, 40, 5, true);
-		EntityRegistry.registerGlobalEntityID(EntityTeamItem.class, "TeamsItem", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
-		EntityRegistry.registerGlobalEntityID(EntityGunItem.class, "GunItem", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
-		EntityRegistry.registerGlobalEntityID(EntityItemCustomRender.class, "CustomItem", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
 		
-		//Register driveables
-		EntityRegistry.registerGlobalEntityID(EntityPlane.class, "Plane", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityPlane.class, "Plane", 90, this, 250, 3, false);
-		EntityRegistry.registerGlobalEntityID(EntityVehicle.class, "Vehicle", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);
-		EntityRegistry.registerGlobalEntityID(EntitySeat.class, "Seat", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 99, this, 250, 1000, false);
-		EntityRegistry.registerGlobalEntityID(EntityWheel.class, "Wheel", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityWheel.class, "Wheel", 103, this, 250, 20, false);
-		EntityRegistry.registerGlobalEntityID(EntityParachute.class, "Parachute", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityParachute.class, "Parachute", 101, this, 40, 20, false);
-		EntityRegistry.registerGlobalEntityID(EntityMecha.class, "Mecha", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityMecha.class, "Mecha", 102, this, 250, 20, false);
-		
-		//Register bullets and grenades
-		//EntityRegistry.registerGlobalEntityID(EntityBullet.class, "Bullet", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityBullet.class, "Bullet", 96, this, 40, 100, false);
-		EntityRegistry.registerGlobalEntityID(EntityGrenade.class, "Grenade", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
-
-		//Register MGs and AA guns
-		EntityRegistry.registerGlobalEntityID(EntityMG.class, "MG", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityMG.class, "MG", 91, this, 40, 5, true);
-		EntityRegistry.registerGlobalEntityID(EntityAAGun.class, "AAGun", EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
-		*/
 		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole").setRegistryName("Flagpole"));
 		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag").setRegistryName("Flag"));
 		event.getRegistry().register(new EntityEntry(EntityTeamItem.class, "TeamsItem").setRegistryName("TeamsItem"));
@@ -422,6 +385,22 @@ public class FlansMod
 		event.getRegistry().register(new EntityEntry(EntityGrenade.class, "Grenade").setRegistryName("Grenade"));
 		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
 		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
+	
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), 	EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), 		EntityPlane.class, "Plane", 90, this, 250, 3, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), 			EntityMG.class, "MG", 91, this, 40, 5, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), 		EntityAAGun.class, "AAGun", 92, this, 40, 500, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), 	EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), 		EntityFlag.class, "Flag", 94, this, 40, 5, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), 		EntityVehicle.class, "Vehicle", 95, this, 250, 10, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), 		EntityBullet.class, "Bullet", 96, this, 40, 100, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:TeamsItem"), 	EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:GunItem"), 		EntityGunItem.class, "GunItem", 98, this, 100, 20, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Seat"), 		EntitySeat.class, "Seat", 99, this, 250, 1000, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Grenade"), 		EntityGrenade.class, "Grenade", 100, this, 40, 100, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), 	EntityParachute.class, "Parachute", 101, this, 40, 20, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), 		EntityMecha.class, "Mecha", 102, this, 250, 20, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), 		EntityWheel.class, "Wheel", 103, this, 250, 20, false, 0, 0);
 	}
 	
 	@EventHandler

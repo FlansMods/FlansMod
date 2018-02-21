@@ -677,10 +677,9 @@ public class ItemGun extends Item implements IPaintableItem
 		FMLClientHandler.instance().getClient().getSoundHandler().playSound(
 				new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent(type.shootSound), 
 						SoundCategory.PLAYERS,
-						x, y, z,
 						silenced ? 5F : 10F, 
-						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F) 
-						));
+						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F) ,
+						x, y, z));
 	}
 	
 	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)

@@ -117,7 +117,10 @@ public class GrenadeType extends ShootableType
 			else if(split[0].equals("ThrowDelay"))
 				throwDelay = Integer.parseInt(split[1]);
 			else if(split[0].equals("ThrowSound"))
+			{
 				throwSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "grenades", split[1]);
+			}
 			else if(split[0].equals("DropItemOnThrow"))
 				dropItemOnThrow = split[1];
 			else if(split[0].equals("CanThrow"))
@@ -132,7 +135,10 @@ public class GrenadeType extends ShootableType
 				penetratesBlocks = Boolean.parseBoolean(split[1].toLowerCase());
 
 			else if(split[0].equals("BounceSound"))
+			{
 				bounceSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, "grenades", split[1]);
+			}
 			else if(split[0].equals("Sticky"))
 				sticky = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("LivingProximityTrigger"))

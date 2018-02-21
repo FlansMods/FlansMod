@@ -19,9 +19,9 @@
 		"sounds" : [ "flansmod:BarrettShoot" ]
 	},
 	
-	"BazookaReload": {
+	"MWBazookaReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:BazookaReload" ]
+		"sounds" : [ "flansmod:MWBazookaReload" ]
 	},
 	
 	"BrenReload": {
@@ -34,9 +34,9 @@
 		"sounds" : [ "flansmod:BrowningReload" ]
 	},
 	
-	"ColtReload": {
+	"MWColtReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:ColtReload" ]
+		"sounds" : [ "flansmod:MWColtReload" ]
 	},
 	
 	"DesertEagleShoot": {
@@ -69,9 +69,9 @@
 		"sounds" : [ "flansmod:LeeEnfieldReload" ]
 	},
 	
-	"LugerReload": {
+	"MWLugerReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:LugerReload" ]
+		"sounds" : [ "flansmod:MWLugerReload" ]
 	},
 	
 	"L96Shoot": {
@@ -134,14 +134,14 @@
 		"sounds" : [ "flansmod:MP5Shoot" ]
 	},
 	
-	"MP40Reload": {
+	"MWMP40Reload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:MP40Reload" ]
+		"sounds" : [ "flansmod:MWMP40Reload" ]
 	},
 	
-	"MP44Reload": {
+	"MWMP44Reload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:MP44Reload" ]
+		"sounds" : [ "flansmod:MWMP44Reload" ]
 	},
 	
 	"P90Shoot": {
@@ -179,19 +179,19 @@
 		"sounds" : [ "flansmod:SkorpionShoot" ]
 	},
 	
-	"SpringfieldReload": {
+	"MWSpringfieldReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:SpringfieldReload" ]
+		"sounds" : [ "flansmod:MWSpringfieldReload" ]
 	},
 	
-	"StenReload": {
+	"MWStenReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:StenReload" ]
+		"sounds" : [ "flansmod:MWStenReload" ]
 	},
 	
-	"ThompsonReload": {
+	"MWThompsonReload": {
 		"category" : "player",
-		"sounds" : [ "flansmod:ThompsonReload" ]
+		"sounds" : [ "flansmod:MWThompsonReload" ]
 	},
 	
 	"TT33Reload": {

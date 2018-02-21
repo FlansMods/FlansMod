@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -39,6 +40,8 @@ import net.minecraftforge.fml.common.discovery.ContainerType;
 import net.minecraftforge.fml.common.discovery.ModCandidate;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -124,6 +127,8 @@ public class ClientProxy extends CommonProxy
 	/** The file locations of the content packs, used for loading */
 	public List<File> contentPacks;
 	
+	public List<SoundEvent> eventsToRegister = new ArrayList<SoundEvent>();
+	
 	private FlansModClient flansModClient;
 
 	@Override
@@ -143,6 +148,20 @@ public class ClientProxy extends CommonProxy
         // Create one event handler for the client and register it with MC Forge and FML
 		ClientEventHandler eventHandler = new ClientEventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
+	}
+	
+	@SubscribeEvent
+	public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
+	{	
+		FlansMod.log("Registering sounds.");
+		
+		for(SoundEvent sound : eventsToRegister)
+		{
+			event.getRegistry().register(sound);
+		}
+		
+		event.getRegistry().register(FlansModResourceHandler.getSoundEvent("bulletFlyby"));
+		event.getRegistry().register(FlansModResourceHandler.getSoundEvent("UnlockNotch"));
 	}
 	
 	@SubscribeEvent
@@ -395,8 +414,16 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void loadSound(String contentPack, String type, String sound)
 	{
-		FlansModResourceHandler.getSound(sound);
-		//FMLClientHandler.instance().getClient().installResource("sound3/" + type + "/" + sound + ".ogg", new File(FMLClientHandler.instance().getClient().mcDataDir, "/Flan/" + contentPack + "/sounds/" + sound + ".ogg"));
+		SoundEvent event = FlansModResourceHandler.getSoundEvent(sound);
+		if(event == null)
+		{
+			FlansMod.log("Null sound event");
+			return;
+		}
+		if(!eventsToRegister.contains(event))
+		{
+		eventsToRegister.add(event);
+		}
 	}
 	
 	/** Checks whether "player" is the current player. Always false on server, since there is no current player */

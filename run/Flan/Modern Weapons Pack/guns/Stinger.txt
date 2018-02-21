@@ -16,7 +16,7 @@ Accuracy 20
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound RPGShoot
-ReloadSound BazookaReload
+ReloadSound MWBazookaReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 1.0

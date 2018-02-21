@@ -24,7 +24,7 @@ Accuracy 6
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound M9Shoot
-ReloadSound ColtReload
+ReloadSound MWColtReload
 Mode SemiAuto
 OneHanded true
 //Bullet speed, default 3.0

@@ -22,7 +22,7 @@ Accuracy 1
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound MP5Shoot
-ReloadSound StenReload
+ReloadSound MWStenReload
 Mode FullAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

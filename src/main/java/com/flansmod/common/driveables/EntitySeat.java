@@ -666,6 +666,12 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		return getControllingPassenger();
 	}
+	
+	@Override
+    public Entity getControllingPassenger()
+    {
+        return getPassengers().size() == 0 ? null : getPassengers().get(0);
+    }
 
 	@Override
 	public boolean isDead() 
@@ -690,11 +696,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			passenger.prevRotationYaw = prevPlayerYaw;
 			passenger.prevRotationPitch = prevPlayerPitch;
 		}
-		passenger.lastTickPosX = passenger.prevPosX = prevPlayerPosX;
-		passenger.lastTickPosY = passenger.prevPosY = prevPlayerPosY;
-		passenger.lastTickPosZ = passenger.prevPosZ = prevPlayerPosZ;
+		//passenger.lastTickPosX = passenger.prevPosX = prevPlayerPosX;
+		//passenger.lastTickPosY = passenger.prevPosY = prevPlayerPosY;
+		//passenger.lastTickPosZ = passenger.prevPosZ = prevPlayerPosZ;
 		
-		//riddenByEntity.setPosition(playerPosX, playerPosY, playerPosZ);
+		passenger.setPosition(playerPosX, playerPosY, playerPosZ);
     }
 	
 	@Override

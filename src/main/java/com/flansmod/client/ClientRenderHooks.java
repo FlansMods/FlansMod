@@ -399,7 +399,7 @@ public class ClientRenderHooks
     	partialTicks = dT;
     }
     
-	public void renderThirdPersonWeapons(RenderLivingEvent.Post event)
+	public void renderThirdPersonWeapons(RenderLivingEvent.Pre event)
 	{
 		ModelBase mainModel = event.getRenderer().getMainModel();
 		EntityLivingBase entity = event.getEntity();

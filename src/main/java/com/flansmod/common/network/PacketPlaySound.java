@@ -94,9 +94,9 @@ public class PacketPlaySound extends PacketBase
     	FMLClientHandler.instance().getClient().getSoundHandler().playSound(
     			new PositionedSoundRecord(event, 
     					SoundCategory.PLAYERS, 
-    					posX, posY, posZ, 
     					silenced ? 5F : 10F, 
-    					(distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F)));
+    					(distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F),
+    					posX, posY, posZ));
 	}
 
 }

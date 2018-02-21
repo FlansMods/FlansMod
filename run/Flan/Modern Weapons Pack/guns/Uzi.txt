@@ -21,7 +21,7 @@ Accuracy 1
 //Time in ticks between rounds
 ShootDelay 1
 ShootSound MiniUziShoot
-ReloadSound ColtReload
+ReloadSound MWColtReload
 Mode FullAuto
 OneHanded true
 //Bullet speed, default 3.0

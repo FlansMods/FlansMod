@@ -17,7 +17,7 @@ Accuracy 3
 ShootDelay 1
 ConsumeGunOnUse True
 ShootSound AT4Shoot
-//ReloadSound bazookaReload
+//ReloadSound MWbazookaReload
 Mode SemiAuto
 Scope None
 Deployable False

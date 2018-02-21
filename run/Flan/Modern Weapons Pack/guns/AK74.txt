@@ -20,7 +20,7 @@ Accuracy 9
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound AK74Shoot
-ReloadSound MP40Reload
+ReloadSound MWMP40Reload
 Mode FullAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

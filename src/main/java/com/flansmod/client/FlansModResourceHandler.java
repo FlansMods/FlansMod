@@ -35,7 +35,7 @@ public class FlansModResourceHandler
 	private static HashMap<Paintjob, ResourceLocation> paintjobMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<Paintjob, ResourceLocation> paintjobIconMap = new HashMap<Paintjob, ResourceLocation>();
 	private static HashMap<String, ResourceLocation> scopeMap = new HashMap<String, ResourceLocation>();
-	private static HashMap<String, ResourceLocation> soundMap = new HashMap<String, ResourceLocation>();	
+	private static HashMap<String, SoundEvent> soundMap = new HashMap<String, SoundEvent>();	
 	private static HashMap<String, ResourceLocation> blockMap = new HashMap<String, ResourceLocation>();
 	
 	public static ResourceLocation flag = new ResourceLocation("flansmod", "textures/items/flagpole.png");
@@ -93,19 +93,15 @@ public class FlansModResourceHandler
 	
 	public static SoundEvent getSoundEvent(String sound)
 	{
-		return new SoundEvent(getSound(sound));
-	}
-	
-	public static ResourceLocation getSound(String sound)
-	{
 		if(soundMap.containsKey(sound))
 		{
 			return soundMap.get(sound);
 		}
 		ResourceLocation resLoc = new ResourceLocation("flansmod", sound);
-		soundMap.put(sound, resLoc);
-		return resLoc;
-		//FMLClientHandler.instance().getClient().getSoundHandler().playSound("flansmod:" + sound + ".ogg");   
+		SoundEvent event = new SoundEvent(resLoc);
+		event.setRegistryName(sound);
+		soundMap.put(sound, event);
+		return event;
 	}
 
 	public static ResourceLocation getPaintjobTexture(Paintjob paintjob) 

@@ -91,7 +91,10 @@ public class MechaItemType extends InfoType
 			if(split[0].equals("CoalMultiplier"))
 				fortuneCoal = Float.parseFloat(split[1]);
 			if(split[0].equals("DetectSound"))
+			{
 				detectSound = split[1];
+				FlansMod.proxy.loadSound(contentPack, shortName, split[1]);
+			}
 			if(split[0].equals("DiamondDetect"))
 				diamondDetect = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("DiamondMultiplier"))

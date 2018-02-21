@@ -474,8 +474,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		{
 			playedFlybySound = true;
 			FMLClientHandler.instance().getClient().getSoundHandler()
-					.playSound(new PositionedSoundRecord(FlansModResourceHandler.getSound("bulletFlyby"), SoundCategory.HOSTILE, 10F,
-							1.0F / (rand.nextFloat() * 0.4F + 0.8F), false, 0, AttenuationType.LINEAR, (float) posX, (float) posY, (float) posZ));
+					.playSound(new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("bulletFlyby"), SoundCategory.HOSTILE, 10F,
+							1.0F / (rand.nextFloat() * 0.4F + 0.8F), (float) posX, (float) posY, (float) posZ));
 		}
 	}
 

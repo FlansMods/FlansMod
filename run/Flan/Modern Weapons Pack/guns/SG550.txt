@@ -18,7 +18,7 @@ Accuracy 2.5
 //Time in ticks between rounds
 ShootDelay 2
 ShootSound SG550Shoot
-ReloadSound MP44Reload
+ReloadSound MWMP44Reload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

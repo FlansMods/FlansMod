@@ -20,7 +20,7 @@ LoadIntoGun 4
 //Time in ticks between rounds
 ShootDelay 20
 ShootSound R700Shoot
-ReloadSound SpringfieldReload
+ReloadSound MWSpringfieldReload
 Mode SemiAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

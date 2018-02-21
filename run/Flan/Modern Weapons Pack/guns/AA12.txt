@@ -16,7 +16,7 @@ Accuracy 50
 //Time in ticks between rounds
 ShootDelay 4
 ShootSound R870Shoot
-ReloadSound MP44Reload
+ReloadSound MWMP44Reload
 Mode FullAuto
 //Bullet speed, default 3.0
 BulletSpeed 10.0

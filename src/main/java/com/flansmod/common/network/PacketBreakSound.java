@@ -71,6 +71,6 @@ public class PacketBreakSound extends PacketBase
     	SoundType sound = block.getSoundType(state, world, pos, clientPlayer);
     	SoundEvent event = sound.getBreakSound();
     	FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-    			new PositionedSoundRecord(event, SoundCategory.BLOCKS, x + 0.5F, y + 0.5F, z + 0.5F, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F));
+    			new PositionedSoundRecord(event, SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F, x + 0.5F, y + 0.5F, z + 0.5F));
 	}
 }
