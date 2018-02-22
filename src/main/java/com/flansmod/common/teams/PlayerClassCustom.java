@@ -27,7 +27,7 @@ public class PlayerClassCustom implements IPlayerClass
 		for(int n = 0; n < EnumLoadoutSlot.values().length; n++)
 		{
 			ItemStack stack = playerLoadout.slots[n];
-			if(stack != null)
+			if(stack != null && !stack.isEmpty())
 			{
 				// For now, just support chest slot overrides
 				if(n == EnumLoadoutSlot.armour.ordinal())

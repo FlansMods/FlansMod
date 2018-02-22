@@ -60,7 +60,7 @@ public class BlockGunBox extends Block
 				for (int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack stack = inventory.getStackInSlot(j);
-					if (stack != null && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
+					if (stack != null && !stack.isEmpty() && stack.getItem() == check.getItem() && stack.getItemDamage() == check.getItemDamage())
 					{
 						numMatchingStuff += stack.getCount();
 					}
@@ -78,7 +78,7 @@ public class BlockGunBox extends Block
 					for (int j = 0; j < inventory.getSizeInventory(); j++)
 					{
 						ItemStack stack = inventory.getStackInSlot(j);
-						if (amountLeft > 0 && stack != null && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
+						if (amountLeft > 0 && stack != null && !stack.isEmpty() && stack.getItem() == remove.getItem() && stack.getItemDamage() == remove.getItemDamage())
 						{
 							amountLeft -= inventory.decrStackSize(j, amountLeft).getCount();
 						}

@@ -18,14 +18,18 @@ public class SlotGun extends Slot
 
 	public boolean isItemValid(ItemStack stack)
 	{
+		if(stack == null)
+			return false;
+		if(stack.isEmpty())
+			return true;
 		switch(slotID)
 		{
-		case 0 : return stack == null || (stack.getItem() instanceof ItemGun && !((ItemGun)stack.getItem()).GetType().deployable && stack.getTagCompound() != null);
-		case 1 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.barrel);
-		case 2 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.sights);
-		case 3 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.stock);
-		case 4 : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.grip);
-		default : return stack == null || (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.generic);
+		case 0 : return (stack.getItem() instanceof ItemGun && !((ItemGun)stack.getItem()).GetType().deployable && stack.getTagCompound() != null);
+		case 1 : return (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.barrel);
+		case 2 : return (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.sights);
+		case 3 : return (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.stock);
+		case 4 : return (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.grip);
+		default : return (canAttachToCurrentGun(stack) && ((ItemAttachment)stack.getItem()).type.type == EnumAttachmentType.generic);
 		}
 	}
 

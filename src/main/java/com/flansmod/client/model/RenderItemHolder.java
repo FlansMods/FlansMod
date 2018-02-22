@@ -74,7 +74,7 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 	        model.render();
 	        
 			ItemStack stack = holder.getStackInSlot(0);
-			if(stack != null)
+			if(stack != null && !stack.isEmpty())
 			{
 				GlStateManager.rotate(180F, 0F, 0F, 1F);
 				GlStateManager.translate(-0.5F, 0.5F, 0.5F);

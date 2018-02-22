@@ -137,7 +137,7 @@ public abstract class PaintableType extends InfoType
 	
 	public static boolean HasCustomPaintjob(ItemStack stack)
 	{
-		if(stack == null)
+		if(stack == null || stack.isEmpty())
 		{
 			return false;
 		}

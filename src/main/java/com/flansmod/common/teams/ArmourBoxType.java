@@ -66,13 +66,13 @@ public class ArmourBoxType extends BoxType
 					entry.armours[i] = ArmourType.getArmourType(lineSplit[0]);
 					for(int j = 0; j < (lineSplit.length - 1) / 2; j++)
 					{
-						ItemStack stack = null;
+						ItemStack stack = ItemStack.EMPTY.copy();
 						if(lineSplit[j * 2 + 1].contains("."))
 							stack = getRecipeElement(lineSplit[j * 2 + 1].split("\\.")[0], Integer.valueOf(lineSplit[j * 2 + 2]), Integer.valueOf(lineSplit[j * 2 + 1].split("\\.")[1]), shortName);
 						else
 							stack = getRecipeElement(lineSplit[j * 2 + 1], Integer.valueOf(lineSplit[j * 2 + 2]), 0, shortName);
 						
-						if(stack != null)
+						if(stack != null && !stack.isEmpty())
 							entry.requiredStacks[i].add(stack);
 					}
 				}

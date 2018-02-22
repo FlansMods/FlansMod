@@ -248,7 +248,7 @@ public class CommonProxy
 		}
 		
 		//If the player doesn't have any suitable engines, return
-		if(bestEngineStack == null)
+		if(bestEngineStack == null || bestEngineStack.isEmpty())
 		{
 			player.inventory.copyInventory(temporaryInventory);
 			return;
@@ -261,7 +261,7 @@ public class CommonProxy
 			//Get the stack in each slot
 			ItemStack stackInSlot = player.inventory.getStackInSlot(n);
 			//Check to see if its the engine we want
-			if(stackInSlot != null && stackInSlot.getItem() == bestEngineStack.getItem())
+			if(stackInSlot != null && !stackInSlot.isEmpty() && stackInSlot.getItem() == bestEngineStack.getItem())
 			{
 				//Work out the amount to take from the stack
 				int amountFound = Math.min(stackInSlot.getCount(), type.numEngines() - numEnginesAcquired);
@@ -269,7 +269,7 @@ public class CommonProxy
 				stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 				//Check for empty stacks
 				if(stackInSlot.getCount() <= 0)
-					stackInSlot = null;
+					stackInSlot = ItemStack.EMPTY.copy();
 				//Put the modified stack back in the inventory
 				player.inventory.setInventorySlotContents(n, stackInSlot);
 				//Increase the amount found counter
@@ -324,7 +324,7 @@ public class CommonProxy
 				//Get the stack in each slot
 				ItemStack stackInSlot = temporaryInventory.getStackInSlot(m);
 				//If the stack is what we want
-				if(stackInSlot != null && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
+				if(stackInSlot != null && !stackInSlot.isEmpty() && stackInSlot.getItem() == stackNeeded.getItem() && stackInSlot.getItemDamage() == stackNeeded.getItemDamage())
 				{
 					//Work out the amount to take from the stack
 					int amountFound = Math.min(stackInSlot.getCount(), stackNeeded.getCount() - totalAmountFound);
@@ -332,7 +332,7 @@ public class CommonProxy
 					stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 					//Check for empty stacks
 					if(stackInSlot.getCount() <= 0)
-						stackInSlot = null;
+						stackInSlot = ItemStack.EMPTY.copy();
 					//Put the modified stack back in the inventory
 					temporaryInventory.setInventorySlotContents(m, stackInSlot);
 					//Increase the amount found counter

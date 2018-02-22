@@ -131,7 +131,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			GL11.glTranslatef(0F + type.leftHandModifierY, -type.armLength - type.leftHandModifierX, 0F + type.leftHandModifierZ);
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.leftTool);
 			GL11.glScalef(modelScale, modelScale, modelScale);			
-			if(holdingStack == null)
+			if(holdingStack == null || holdingStack.isEmpty())
 			{
 				model.renderLeftHand(scale, mecha, f1);
 			}
@@ -173,7 +173,7 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 			GL11.glTranslatef(0F + type.rightHandModifierY, -type.armLength - type.rightHandModifierX, 0F + type.rightHandModifierZ);
 			GL11.glScalef(modelScale, modelScale, modelScale);	
 			ItemStack holdingStack = mecha.inventory.getStackInSlot(EnumMechaSlotType.rightTool);
-			if(holdingStack == null)
+			if(holdingStack == null || holdingStack.isEmpty())
 			{
 				model.renderRightHand(scale, mecha, f1);
 			}

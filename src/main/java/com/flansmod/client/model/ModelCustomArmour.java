@@ -34,9 +34,9 @@ public class ModelCustomArmour extends ModelBiped
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		ItemStack itemstack = ((EntityLivingBase)entity).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-		rightArmPose = itemstack != null ? ArmPose.ITEM : ArmPose.EMPTY;
+		rightArmPose = itemstack == null || itemstack.isEmpty() ? ArmPose.EMPTY : ArmPose.ITEM;
         
-        if (itemstack != null && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
+        if (itemstack != null && !itemstack.isEmpty() && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
         {
         	EnumAction enumaction = itemstack.getItemUseAction();
             if (enumaction == EnumAction.BLOCK)

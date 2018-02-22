@@ -2,6 +2,9 @@ package com.flansmod.api;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.flansmod.common.driveables.EntitySeat;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,4 +44,6 @@ public interface IControllable
 	
 	@SideOnly(Side.CLIENT)
 	public EntityLivingBase getCamera();
+	
+	public EntitySeat getSeat(EntityLivingBase living);
 }

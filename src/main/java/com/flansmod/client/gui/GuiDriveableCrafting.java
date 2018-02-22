@@ -269,7 +269,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//Find the stack of engines that is fastest but which also has enough for this driveable
 			float bestEngineSpeed = -1F;
-			ItemStack bestEngineStack = null;
+			ItemStack bestEngineStack = ItemStack.EMPTY;
 			for(PartType part : engines.keySet())
 			{
 				//If this engine outperforms the currently selected best one and there are enough of them, swap
@@ -282,7 +282,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//If we didn't find a suitable stack of engines, red the box out
 			mc.renderEngine.bindTexture(texture);
-			if(bestEngineStack == null)
+			if(bestEngineStack == null || bestEngineStack.isEmpty())
 			{
 				drawTexturedModalRect(guiOriginX + 152, guiOriginY + 138, 195, 11, 16, 16);
 				canCraft = false;

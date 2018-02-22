@@ -416,7 +416,7 @@ public class InfoType
 						if(c != ' ')
 						{
 							ItemStack stack = menu.get(Character.valueOf(c));
-							if(stack == null)
+							if(stack == null || stack.isEmpty())
 							{
 								FlansMod.log("Failed to find " + c + " in recipe for " + shortName);
 								continue;
@@ -533,7 +533,7 @@ public class InfoType
 
 
 		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 	
 	/** To be overriden by subtypes for model reloading */
@@ -565,7 +565,7 @@ public class InfoType
 
 	public static InfoType getType(ItemStack itemStack) 
 	{
-		if(itemStack == null)
+		if(itemStack == null || itemStack.isEmpty())
 			return null;
 		Item item = itemStack.getItem();
 		if(item instanceof IFlanItem)

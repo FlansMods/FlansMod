@@ -65,6 +65,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
+import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
@@ -153,6 +154,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			{
 				seats[i] = new EntitySeat(world, this, i);
 				world.spawnEntity(seats[i]);
+				seats[i].startRiding(this);
 			}
 		}
 		wheels = new EntityWheel[type.wheelPositions.length];
@@ -524,7 +526,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
 			EntityPlayer driver = GetDriver();
 			
-			if(shootableStack == null)
+			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 				return;
 			
 			// For each 
@@ -623,7 +625,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								bulletStack.setItemDamage(0);
 								bulletStack.setCount(bulletStack.getCount() - 1);
 								if(bulletStack.getCount() == 0)
-									bulletStack = null;
+									bulletStack = ItemStack.EMPTY.copy();
 							}
 							driveableData.setInventorySlotContents(slot, bulletStack);
 						}
@@ -676,7 +678,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 								bulletStack.setItemDamage(0);
 								bulletStack.setCount(bulletStack.getCount() - 1);
 								if(bulletStack.getCount() == 0)
-									bulletStack = null;
+									bulletStack = ItemStack.EMPTY.copy();
 							}
 							driveableData.setInventorySlotContents(slot, bulletStack);
 						}
@@ -725,6 +727,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         
         DriveableType type = getDriveableType();
         
+        /*
         if(!world.isRemote)
         {
         	for(int i = 0; i < getDriveableType().numPassengers + 1; i++)
@@ -744,6 +747,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         		}
         	}
         }
+        */
         
         //Harvest stuff
   		//Aesthetics
@@ -948,7 +952,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
 		{
 			ItemStack stack = getDriveableData().getStackInSlot(i);
-			if(stack == null || stack.getCount() <= 0)
+			if(stack == null || stack.isEmpty())
 				continue;
 			Item item = stack.getItem();
 			//If we have an electric engine, look for RedstoneFlux power source items, such as power cubes
@@ -1163,6 +1167,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(seat.getControllingPassenger() == ent)
 				return true;
 		}
+		for(EntityWheel wheel : wheels)
+		{
+			if(ent == wheel)
+				return true;
+		}
 		return ent == this;	
 	}
 	
@@ -1375,7 +1384,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
 				{
 					ItemStack stack = getDriveableData().getStackInSlot(i);
-					if(stack != null)
+					if(stack != null && !stack.isEmpty())
 					{
 						world.spawnEntity(new EntityItem(world, posX + rand.nextGaussian(), posY + rand.nextGaussian(), posZ + rand.nextGaussian(), stack));
 					}
@@ -1487,5 +1496,48 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	}
 	
 	
+	@Override
+    protected boolean canFitPassenger(Entity passenger)
+    {
+		if(passenger instanceof EntitySeat)
+		{
+			return getPassengers().size() < getDriveableType().numPassengers + 1;
+		}
+        return false;
+    }
 	
+	@Override
+    public void updatePassenger(Entity passenger)
+    {
+		// They can handle themselves, but maybe the code should be moved to here
+    }
+	
+	@Override
+	public void removePassenger(Entity passenger)
+	{
+		FlansMod.log("Driveable is trying to remove seat " + passenger);
+		super.removePassenger(passenger);
+	}
+	
+	public EntitySeat getSeat(EntityLivingBase passenger)
+	{
+		for(EntitySeat seat : seats)
+		{
+			if(seat.getControllingEntity() == passenger)
+			{
+				return seat;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	protected void addPassenger(Entity passenger)
+    {
+		super.addPassenger(passenger);
+		if(world.isRemote)
+		{
+			// We need to do some handling to work out which seat to get into. Or not?
+		}
+    }
 }

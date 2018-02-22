@@ -402,7 +402,7 @@ public class GunType extends PaintableType implements IScope
 
 	public boolean isAmmo(ItemStack stack)
 	{
-		if (stack == null)
+		if (stack == null || stack.isEmpty())
 			return false;
 		else if(stack.getItem() instanceof ItemBullet)
 		{

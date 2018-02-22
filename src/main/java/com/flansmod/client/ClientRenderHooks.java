@@ -16,8 +16,10 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -27,6 +29,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,7 +93,7 @@ public class ClientRenderHooks
 	private Minecraft mc;
 	private float fovModifierHandPrev, fovModifierHand;
 	private float equippedProgress, prevEquippedProgress;
-	private ItemStack itemToRender;
+	private ItemStack itemToRender = ItemStack.EMPTY.copy();
 	private int equippedItemSlot;
 	private float partialTicks;
 	
@@ -345,7 +348,7 @@ public class ClientRenderHooks
 	        ItemStack itemstack = player.inventory.getCurrentItem();
 	        boolean equippedGun = false;
 	
-	        if(itemToRender != null && itemstack != null)
+	        if(itemToRender != null && !itemToRender.isEmpty() && itemstack != null && !itemstack.isEmpty())
 	        {
 	            if (!ItemStack.areItemsEqual(itemToRender, itemstack))
 	            {
@@ -358,7 +361,7 @@ public class ClientRenderHooks
 	                equippedGun = true;
 	            }
 	        }
-	        else if(itemToRender == null && itemstack == null)
+	        else if((itemToRender == null || itemToRender.isEmpty()) && (itemstack == null || itemstack.isEmpty()))
 	        {
 	        	equippedGun = false;
 	        }
@@ -584,18 +587,23 @@ public class ClientRenderHooks
 	{
 		if(mc.player.getRidingEntity() instanceof IControllable)
 		{
-			IControllable cont = (IControllable)mc.player.getRidingEntity();
-			float roll = interpolateRotation(cont.getPrevPlayerRoll(), cont.getPlayerRoll(), (float)event.getRenderPartialTicks());
-			//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
-			if(((EntitySeat)mc.player.getRidingEntity()).driveable != null){
-			EntityDriveable ent = ((EntitySeat)mc.player.getRidingEntity()).driveable;
-			
-			if(ent.getDriveableType().canRoll){
-				roll = 0F;
+			EntitySeat seat = ((IControllable)mc.player.getRidingEntity()).getSeat(mc.player);
+			if(seat != null)
+			{
+				float roll = interpolateRotation(seat.getPrevPlayerRoll(), seat.getPlayerRoll(), (float)event.getRenderPartialTicks());
+				//If we are driving a vehicle with the roll component enabled, having the camera roll with the vehicle is disorientating at best, so we disable the roll component for these vehicles
+				if(seat.driveable != null && seat.driveable.getDriveableType().canRoll)
+				{
+					roll = 0F;
+				}
+				
+				event.setRoll(roll);
 			}
+			else
+			{
+				FlansMod.log("Null seat in roll event");
 			}
-			
-			event.setRoll(roll);
+				
 		}
 	}
 	
@@ -619,7 +627,7 @@ public class ClientRenderHooks
 		
 		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
 		{
-			RenderScopeOverlay(tessellator, i, j);
+			RenderScopeOverlay(i, j);
 		}
 		if(event.isCancelable() && event.getType() == ElementType.CROSSHAIRS)
 		{
@@ -637,7 +645,7 @@ public class ClientRenderHooks
 		}
 	}
 	
-	private void RenderScopeOverlay(Tessellator tessellator, int i, int j)
+	private void RenderScopeOverlay(int i, int j)
 	{
 		//Scopes and helmet overlays
 		String overlayTexture = null;
@@ -656,27 +664,25 @@ public class ClientRenderHooks
 		
 		if(overlayTexture != null)
 		{
-			FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
-			GL11.glEnable(3042 /* GL_BLEND */);
-			GL11.glDisable(2929 /* GL_DEPTH_TEST */);
-			GL11.glDepthMask(false);
-			GL11.glBlendFunc(770, 771);
-			GL11.glColor4f(1F, 1F, 1F, 1.0F);
-			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-
-			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
-
-			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
-			worldrenderer.startDrawingQuads();
+			//FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
+			
+	        GlStateManager.disableDepth();
+	        GlStateManager.depthMask(false);
+	        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	        GlStateManager.disableAlpha();
+	        mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
+	        WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+	        worldrenderer.startDrawingQuads();
 			worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
 			worldrenderer.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
 			worldrenderer.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
 			worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
 			worldrenderer.draw();
-			GL11.glDepthMask(true);
-			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
-			GL11.glEnable(3008 /* GL_ALPHA_TEST */);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	        GlStateManager.depthMask(true);
+	        GlStateManager.enableDepth();
+	        GlStateManager.enableAlpha();
+	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 	
@@ -728,7 +734,7 @@ public class ClientRenderHooks
 					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 					{
 						ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
-						if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+						if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 						{
 							RenderHelper.enableGUIStandardItemLighting();
 							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
@@ -899,7 +905,7 @@ public class ClientRenderHooks
 	
 	private void drawSlotInventory(FontRenderer fontRenderer, ItemStack itemstack, int i, int j)
 	{
-		if(itemstack == null || itemstack.getItem() == null)
+		if(itemstack == null || itemstack.isEmpty())
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null); //May be something other than null

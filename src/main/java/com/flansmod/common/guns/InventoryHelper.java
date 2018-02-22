@@ -10,7 +10,7 @@ public class InventoryHelper
 {
 	public static boolean addItemStackToInventory(IInventory inventory, ItemStack stack, boolean creative)
 	{
-		if(stack == null)
+		if(stack == null || stack.isEmpty())
 			return false;
 		else if(stack.getCount() == 0)
 			return false;
@@ -72,7 +72,7 @@ public class InventoryHelper
 		for (int i = 0; i < inventory.getSizeInventory(); ++i)
 		{
 			ItemStack oldStack = inventory.getStackInSlot(i);
-			if (oldStack != null && oldStack.getItem() == stack.getItem() && oldStack.isStackable() && 
+			if (oldStack != null && !oldStack.isEmpty() && oldStack.getItem() == stack.getItem() && oldStack.isStackable() && 
 					oldStack.getCount() < oldStack.getMaxStackSize() && oldStack.getCount() < inventory.getInventoryStackLimit() && 
 					(!oldStack.getHasSubtypes() || oldStack.getItemDamage() == stack.getItemDamage()) && ItemStack.areItemStackTagsEqual(oldStack, stack))
 			{
@@ -100,7 +100,7 @@ public class InventoryHelper
 			}
 			else
 			{
-				if(inventory.getStackInSlot(k) == null)
+				if(inventory.getStackInSlot(k) == null || inventory.getStackInSlot(k).isEmpty())
 				{
 					inventory.setInventorySlotContents(k, stack.copy());
 				}
@@ -123,7 +123,7 @@ public class InventoryHelper
 			{
 				ItemStack oldStack = inventory.getStackInSlot(k);
 
-				if(oldStack == null)
+				if(oldStack == null || oldStack.isEmpty())
 				{
 					oldStack = new ItemStack(item, 0, stack.getItemDamage());
 					if(stack.hasTagCompound())
@@ -162,7 +162,7 @@ public class InventoryHelper
 	public static int getFirstEmptyStack(IInventory inventory)
 	{
 		for(int i = 0; i < inventory.getSizeInventory(); ++i)
-			if (inventory.getStackInSlot(i) == null)
+			if (inventory.getStackInSlot(i) == null || inventory.getStackInSlot(i).isEmpty())
 				return i;
 
 		return -1;

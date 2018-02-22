@@ -170,8 +170,13 @@ public class GuiEditLoadout extends GuiTeamsBase
 					{
 						case 0: // Main item
 						{
-							ItemStack copy = stack == null ? null : stack.copy();
-							if(copy != null) copy.setItemDamage(0);
+							ItemStack copy = ItemStack.EMPTY.copy();
+							if(stack != null) 
+							{
+								copy = stack.copy();
+								copy.setItemDamage(0);
+							}
+								
 							drawSlotInventory(copy, guiOriginX + 172, guiOriginY + 35 + 22 * n);
 							break;
 						}
@@ -182,12 +187,12 @@ public class GuiEditLoadout extends GuiTeamsBase
 						}
 						default:
 						{
-							if(stack != null && stack.getTagCompound() != null)
+							if(stack != null && !stack.isEmpty() && stack.getTagCompound() != null)
 							{
 								NBTTagCompound attachmentTags = stack.getTagCompound().getCompoundTag("attachments");
 								if(attachmentTags != null)
 								{					
-									ItemStack attachmentStack = null;
+									ItemStack attachmentStack = ItemStack.EMPTY;
 									
 									switch(n)
 									{
@@ -217,8 +222,12 @@ public class GuiEditLoadout extends GuiTeamsBase
 					{
 						case 0: // Main item
 						{
-							ItemStack copy = stack == null ? null : stack.copy();
-							if(copy != null) copy.setItemDamage(0);
+							ItemStack copy = ItemStack.EMPTY.copy();
+							if(stack != null) 
+							{
+								copy = stack.copy();
+								copy.setItemDamage(0);
+							}
 							drawSlotInventory(copy, guiOriginX + 172, guiOriginY + 35 + 22 * n);
 							break;
 						}
@@ -240,7 +249,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 		{
 			String name = "";
 			ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
-			if(stack != null)
+			if(stack != null && !stack.isEmpty())
 			{
 				name = stack.getDisplayName();
 			}
@@ -446,7 +455,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 				if(entry instanceof LoadoutEntryInfoType || entry == null)
 				{
 					ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
-					if(stack != null)
+					if(stack != null && !stack.isEmpty())
 					{
 						if(stack.getTagCompound() == null)
 						{

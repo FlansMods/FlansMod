@@ -64,7 +64,7 @@ public class EntityCamera extends EntityLivingBase
 	@Override
 	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) 
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 
 	@Override

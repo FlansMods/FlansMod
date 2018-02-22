@@ -102,8 +102,20 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
         Multimap multimap = super.getAttributeModifiers(slot, stack);
-        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
-        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+        /** 0 = Helmet, 1 = Chestplate, 2 = Legs, 3 = Shoes */
+        boolean bShouldAdd = false;
+        switch(type.type)
+        { 
+	    	case 0: bShouldAdd = slot == EntityEquipmentSlot.HEAD; break; 
+	    	case 1: bShouldAdd = slot == EntityEquipmentSlot.CHEST; break; 
+	    	case 2: bShouldAdd = slot == EntityEquipmentSlot.LEGS; break; 
+	    	case 3: bShouldAdd = slot == EntityEquipmentSlot.FEET; break; 
+        }
+        if(bShouldAdd)
+        {
+	        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid[type.type], "KnockbackResist", type.knockbackModifier, 0));
+	        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(uuid[type.type], "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+        }
         return multimap;
     }   
     

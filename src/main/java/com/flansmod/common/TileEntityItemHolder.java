@@ -56,7 +56,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 		{ 
 			getStack().setCount(getStack().getCount() - count); 
 			if(getStack().getCount() <= 0) 
-				setStack(null); 
+				setStack(ItemStack.EMPTY.copy()); 
 		} 
 		return getStack(); 
 	}
@@ -141,14 +141,14 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 	@Override
 	public boolean isEmpty() 
 	{
-		return stack == null || stack.getCount() == 0;
+		return stack == null || stack.isEmpty();
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) 
 	{
 		ItemStack temp = stack;
-		stack = null;
+		stack = ItemStack.EMPTY.copy();
 		return temp;
 	}
 }

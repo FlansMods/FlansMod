@@ -427,7 +427,7 @@ public class ItemGun extends Item implements IPaintableItem
 					shootTime += type.GetShootDelay(gunstack);
 					
 					ItemStack shootableStack = getBestNonEmptyShootableStack(gunstack);
-					if(shootableStack == null)
+					if(shootableStack == null || shootableStack.isEmpty())
 					{
 						continue;
 					}
@@ -875,7 +875,7 @@ public class ItemGun extends Item implements IPaintableItem
 			ItemStack bulletStack = getBulletItemStack(gunstack, i);
 			
 			//If there is no magazine, if the magazine is empty or if this is a forced reload
-			if(bulletStack == null || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
+			if(bulletStack == null || bulletStack.isEmpty() || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
 			{		
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;
@@ -907,7 +907,7 @@ public class ItemGun extends Item implements IPaintableItem
 					}
 						
 					//The magazine was not finished, pull it out and give it back to the player or, failing that, drop it
-					if(bulletStack != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+					if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 					{
 						if(!InventoryHelper.addItemStackToInventory(inventory, bulletStack, isCreative))
 						{
@@ -925,7 +925,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(!isCreative)
 						newBulletStack.setCount(newBulletStack.getCount() - 1);
 					if(newBulletStack.getCount() <= 0)
-						newBulletStack = null;
+						newBulletStack = ItemStack.EMPTY.copy();
 					inventory.setInventorySlotContents(bestSlot, newBulletStack);
 								
 					
@@ -1152,7 +1152,7 @@ public class ItemGun extends Item implements IPaintableItem
 		for(int i = 0; i < type.numAmmoItemsInGun; i++)
 		{
 			ItemStack bulletStack = getBulletItemStack(stack, i);
-			if(bulletStack != null && bulletStack.getItem() != null && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+			if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 			{
 				return false;
 			}
@@ -1178,7 +1178,7 @@ public class ItemGun extends Item implements IPaintableItem
 		for(int i = 0; i < type.numAmmoItemsInGun; i++)
 		{
 			ItemStack shootableStack = getBulletItemStack(stack, i);
-			if(shootableStack != null && shootableStack.getItem() != null && shootableStack.getItemDamage() < shootableStack.getMaxDamage())
+			if(shootableStack != null && !shootableStack.isEmpty() && shootableStack.getItemDamage() < shootableStack.getMaxDamage())
 			{
 				return shootableStack;
 			}
@@ -1348,9 +1348,12 @@ public class ItemGun extends Item implements IPaintableItem
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
     {
         Multimap multimap = super.getAttributeModifiers(slot, stack);
-        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));
-        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
+        if(slot == EntityEquipmentSlot.MAINHAND)
+        {
+	        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));
+	        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+	        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
+        }
         return multimap;
     }
 	

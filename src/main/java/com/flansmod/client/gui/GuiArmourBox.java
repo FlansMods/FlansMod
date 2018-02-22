@@ -144,7 +144,7 @@ public class GuiArmourBox extends GuiScreen
 	
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
-		if(itemstack == null || itemstack.getItem() == null)
+		if(itemstack == null || itemstack.isEmpty())
 			return;
 		RenderHelper.enableGUIStandardItemLighting();
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);

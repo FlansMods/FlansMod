@@ -53,8 +53,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 		setSize(1F, 1F);
 		ammoStacks = new ArrayList<ItemStack>();
 		for (ItemStack ammoStack : stacks) {
-			if (ammoStack != null && ammoStack.getItem() != null
-					&& (ammoStack.getItem() instanceof ItemBullet))
+			if (ammoStack != null && (ammoStack.getItem() instanceof ItemBullet))
 				ammoStacks.add(ammoStack);
 		}
 		teamsModEnabled = true;
@@ -166,7 +165,7 @@ public class EntityGunItem extends EntityItemCustomRender {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) 
 				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (stack != null && stack.getItem() != null && stack.getItem() instanceof ItemGun) 
+					if (stack != null && stack.getItem() instanceof ItemGun) 
 					{
 						GunType type = ((ItemGun) stack.getItem()).GetType();
 						for (int j = ammoStacks.size() - 1; j >= 0; j--) 

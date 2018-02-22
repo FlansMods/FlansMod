@@ -413,9 +413,8 @@ public class EntityPlane extends EntityDriveable
 		
 		//Alter angles
 		//Sensitivity function
-		float sensitivityAdjust = (throttle > 0.5F ? 1.5F - throttle : 4F * throttle - 1F); 
-		if(sensitivityAdjust < 0F)
-			sensitivityAdjust = 0F;
+		float sensitivityAdjust = 2.00677104758f - (float)Math.exp(-2.0f * throttle) / (4.5f * (throttle + 0.1f));
+		sensitivityAdjust = MathHelper.clamp(sensitivityAdjust, 0.0f, 1.0f);
 		//Scalar
 		sensitivityAdjust *= 0.125F;
 		
@@ -535,10 +534,10 @@ public class EntityPlane extends EntityDriveable
 			
 			//Calculate the amount to alter motion by
 			float proportionOfMotionToCorrect = 2F * throttleTemp - 0.5F;
-			if(proportionOfMotionToCorrect < 0F)
-				proportionOfMotionToCorrect = 0F;
-			if(proportionOfMotionToCorrect > 0.5F)
-				proportionOfMotionToCorrect = 0.5F;
+			if(proportionOfMotionToCorrect < 0.2F)
+				proportionOfMotionToCorrect = 0.2F;
+			if(proportionOfMotionToCorrect > 0.6F)
+				proportionOfMotionToCorrect = 0.6F;
 			
 			//Apply gravity
 			g = 0.98F / 20F;

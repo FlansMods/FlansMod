@@ -124,6 +124,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		health = type.health;
 		barrelRecoil = new float[type.numBarrels];
 		ammo = new ItemStack[type.numBarrels];
+		for(int i = 0; i < type.numBarrels; i++)
+		{
+			ammo[i] = ItemStack.EMPTY.copy();
+		}
 	}
 
 	@Override
@@ -331,12 +335,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			for (int i = 0; i < type.numBarrels; i++)
 			{
-				if (ammo[i] != null && ammo[i].getItemDamage() == ammo[i].getMaxDamage())
+				if (ammo[i] != null && !ammo[i].isEmpty() && ammo[i].getItemDamage() == ammo[i].getMaxDamage())
 				{
-					ammo[i] = null;
+					ammo[i] = ItemStack.EMPTY.copy();
 					// Scrap metal output?
 				}
-				if (ammo[i] == null && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
+				if ((ammo[i] == null || ammo[i].isEmpty()) && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
 				{
 					int slot = findAmmo(((EntityPlayer) getControllingPassenger()));
 					if (slot >= 0)
@@ -359,7 +363,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				EntityPlayer player = (EntityPlayer)getControllingPassenger();
 				for(int j = 0; j < type.numBarrels; j++)
 				{
-					if(shootDelay <= 0 && ammo[j] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+					if(shootDelay <= 0 && ammo[j] != null && !ammo[j].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
 						// Fire
 						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
@@ -387,7 +391,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					int ammoSlot = j;
 					if(type.shareAmmo)
 						ammoSlot = 0;
-					if(shootDelay <= 0 && ammo[ammoSlot] != null && (!type.fireAlternately || type.fireAlternately && currentBarrel == ammoSlot))
+					if(shootDelay <= 0 && ammo[ammoSlot] != null && !ammo[ammoSlot].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == ammoSlot))
 					{
 						// Fire
 						BulletType bullet = BulletType.getBullet(ammo[ammoSlot].getItem());
@@ -481,7 +485,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		// Drop ammo boxes
 		for (ItemStack stack : ammo)
 		{
-			if (stack != null)
+			if (stack != null && !stack.isEmpty())
 				entityDropItem(stack, 0.5F);
 		}
 	}
@@ -554,7 +558,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				entityplayer.startRiding(this);
 			for (int i = 0; i < (type.shareAmmo ? 1 : type.numBarrels); i++)
 			{
-				if (ammo[i] == null)
+				if (ammo[i] == null && !ammo[i].isEmpty())
 				{
 					int slot = findAmmo(entityplayer);
 					if (slot >= 0)

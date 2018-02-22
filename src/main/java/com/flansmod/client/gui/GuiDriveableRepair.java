@@ -171,7 +171,7 @@ public class GuiDriveableRepair extends GuiScreen
 								stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 								//Check for empty stacks
 								if(stackInSlot.getCount() <= 0)
-									stackInSlot = null;
+									stackInSlot = ItemStack.EMPTY.copy();
 								//Put the modified stack back in the inventory
 								temporaryInventory.setInventorySlotContents(m, stackInSlot);
 								//Increase the amount found counter
@@ -217,7 +217,7 @@ public class GuiDriveableRepair extends GuiScreen
 	/** Item stack renderering method */
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
-		if(itemstack == null || itemstack.getItem() == null)
+		if(itemstack == null || itemstack.isEmpty())
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);

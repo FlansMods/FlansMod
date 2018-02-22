@@ -168,7 +168,7 @@ public class GuiTeamsBase extends GuiScreen
 	/** Item stack renderering method */
 	protected void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
-		if(itemstack == null || itemstack.getItem() == null)
+		if(itemstack == null || itemstack.isEmpty())
 			return;
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);

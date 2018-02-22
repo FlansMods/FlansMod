@@ -592,7 +592,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			}
 			ItemStack dropStack = InfoType.getRecipeElement(itemName, damage);
 			
-			if (dropStack != null && dropStack.getCount() != 0 && dropStack.getItem() != null)
+			if (dropStack != null && !dropStack.isEmpty())
 		    {
 		        EntityItem entityitem = new EntityItem(world, detonatePos.x, detonatePos.y, detonatePos.z, dropStack);
 		        entityitem.setDefaultPickupDelay();

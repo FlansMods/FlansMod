@@ -697,7 +697,7 @@ public class TeamsManager
 			for(EntityItem entity : event.getDrops())
 			{
 				ItemStack stack = entity.getItem();
-				if(stack != null && stack.getItem() != null)
+				if(stack != null && !stack.isEmpty())
 				{
 					if(stack.getItem() instanceof ItemGun)
 					{	
@@ -741,7 +741,7 @@ public class TeamsManager
 		for(EntityItem entity : event.getDrops())
 		{
 			ItemStack stack = entity.getItem();
-			if(stack != null && stack.getItem() != null && stack.getCount() > 0)
+			if(stack != null && !stack.isEmpty())
 			{
 				if(stack.getItem() instanceof ItemGun || stack.getItem() instanceof ItemPlane || stack.getItem() instanceof ItemVehicle || stack.getItem() instanceof ItemAAGun || stack.getItem() instanceof ItemBullet)
 				{

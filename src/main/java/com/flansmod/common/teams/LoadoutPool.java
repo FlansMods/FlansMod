@@ -177,7 +177,7 @@ public class LoadoutPool extends InfoType
 			for(int i = 0; i < numAdditionalItems; i++)
 			{
 				ItemStack stack = getNonRecipeElement(split[2 * i + 3]);
-				if(stack == null)
+				if(stack == null || stack.isEmpty())
 				{
 					FlansMod.Assert(false, "Recipe item stack null");
 				}

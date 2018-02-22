@@ -11,6 +11,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.driveables.EntitySeat;
 
 public class RenderNull extends Render
 {
@@ -37,11 +38,15 @@ public class RenderNull extends Render
 			GL11.glTranslatef((float)d, (float)d1, (float)d2);
 			GL11.glRotatef(-entity.rotationYaw, 0F, 1F, 0F);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
+			//GL11.glEnable(GL11.GL_BLEND);
 			//GL11.glDisable(GL11.GL_DEPTH_TEST);
-			GL11.glColor4f(0F, 0F, 1F, 0.3F);
+			if(entity instanceof EntitySeat)
+			{
+				GL11.glColor4f(1F, 1F, 1F, 1F);
+			}
+			else GL11.glColor4f(0F, 0F, 1F, 0.3F);
 			GL11.glScalef(-1F, 1F, -1F);
-			renderOffsetAABB(new AxisAlignedBB(-0.25F, -0.25F, -0.25F, 0.25F, 0.25F, 0.25F), 0, 0, 0);
+			renderOffsetAABB(new AxisAlignedBB(-1F, -1F, -1F, 1F, 1F, 1F), 0, 0, 0);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glDisable(GL11.GL_BLEND);

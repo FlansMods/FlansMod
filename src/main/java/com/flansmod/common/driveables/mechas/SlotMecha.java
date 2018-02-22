@@ -20,7 +20,7 @@ public class SlotMecha extends Slot
 	@Override
 	public boolean isItemValid(ItemStack stack)
 	{
-		if(stack == null || stack.getItem() == null)
+		if(stack == null || stack.isEmpty())
 			return true;
 
 		EnumMechaItemType itemType = null;

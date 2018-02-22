@@ -73,7 +73,7 @@ public class PacketFlak extends PacketBase
 			{
 				obj.multiplyVelocity((float)rand.nextGaussian() / 20.0f);
 				// TODO: [1.12] Apparently we can't set the render distance higher, so let's boost the scale and see how that works
-				obj.multipleParticleScaleBy(250.0f);
+				obj.multipleParticleScaleBy(5.0f);
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(obj);
 			}
 		}		

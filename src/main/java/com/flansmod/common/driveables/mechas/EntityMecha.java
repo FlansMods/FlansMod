@@ -316,7 +316,7 @@ public class EntityMecha extends EntityDriveable
 		if(left? isPartIntact(EnumDriveablePart.leftArm) : isPartIntact(EnumDriveablePart.rightArm))
 		{
 			ItemStack heldStack = left ? inventory.getStackInSlot(EnumMechaSlotType.leftTool) : inventory.getStackInSlot(EnumMechaSlotType.rightTool);
-			if(heldStack == null)
+			if(heldStack == null || heldStack.isEmpty())
 				return false;
 			
 			Item heldItem = heldStack.getItem();
@@ -372,7 +372,7 @@ public class EntityMecha extends EntityDriveable
 					for(; bulletID < gunType.numAmmoItemsInGun; bulletID++)
 					{
 						ItemStack checkingStack = gunItem.getBulletItemStack(heldStack, bulletID);
-						if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+						if(checkingStack != null && !checkingStack.isEmpty() && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
 						{
 							bulletStack = checkingStack;
 							break;
@@ -380,7 +380,7 @@ public class EntityMecha extends EntityDriveable
 					}
 
 					//If no bullet stack was found, reload
-					if(bulletStack == null)
+					if(bulletStack == null || bulletStack.isEmpty())
 					{
 						 gunItem.Reload(heldStack, world, this, driveableData, left ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND, true, true, (infiniteAmmo() || creative()));
 					}
