@@ -162,38 +162,38 @@ public class MechaInventory implements IInventory
 	}
 
 	@Override
-	public int getField(int id) {
-		// TODO Auto-generated method stub
+	public int getField(int id) 
+	{
 		return 0;
 	}
 
 	@Override
-	public void setField(int id, int value) {
-		// TODO Auto-generated method stub
+	public void setField(int id, int value) 
+	{
 		
 	}
 
 	@Override
-	public int getFieldCount() {
-		// TODO Auto-generated method stub
+	public int getFieldCount() 
+	{
 		return 0;
 	}
 
 	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
+	public void clear() 
+	{
 		
 	}
 
 	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+	public boolean isEmpty() 
+	{
 		return false;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		// TODO Auto-generated method stub
+	public ItemStack removeStackFromSlot(int index) 
+	{
 		return null;
 	}
 	

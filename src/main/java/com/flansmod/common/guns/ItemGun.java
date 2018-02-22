@@ -722,40 +722,29 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					for(int i = 0; i < 2; i++)
 					{
-		                Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-		                		EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f, 
-		                		Block.getIdFromBlock(blockState.getBlock()));
-		                
-		               
-		                		                
-		                // TODO: [1.12] Pretty sure we need this precise control of the PFX direction to get it looking good
-		                /*
+						// TODO: [1.12] Check why this isn't moving right 
 		                float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
 		                   
-		                fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-		                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-		                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+		                double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+		                double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+		                double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+						
+		                motionX += bulletDir.x;
+		                motionY += bulletDir.y;
+		                motionZ += bulletDir.z;
 		                
-		                fx.motionX += bulletDir.x;
-		                fx.motionY += bulletDir.y;
-		                fx.motionZ += bulletDir.z;
-		                */
-		                
-		                // TODO: [1.12] More long range PFX
-	             		//if(Minecraft.getMinecraft().gameSettings.fancyGraphics)
-	             		//	fx.renderDistanceWeight = 100D;
+		                Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+		                		EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ, 
+		                		Block.getIdFromBlock(blockState.getBlock()));
 					}
 				}
 				
-				
-				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, 0.0f, 0.0f, 0.0f);
-				/*
-				 * TODO: [1.12] Likewise
 				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
-                fx.motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-                fx.motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-                fx.motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
-                */
+                double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+                double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+                double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+				
+				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			}
 			
 			if(world.isRemote)

@@ -65,22 +65,18 @@ public class ItemTeamArmour extends ItemArmor implements ISpecialArmor, IFlanIte
 		//Do nothing to the armour. It should not break as that would leave the player's team ambiguous
 	}
 
-	// TODO: [1.12] Where do dis go?
-	/*
 	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, int slot, String s) 
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String armourType)
 	{
 		return "flansmod:armor/" + type.armourTextureName + "_" + (type.type == 2 ? "2" : "1") + ".png";
 	}
 	
 	@Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot)
-    {
-        return type.model;
-    }
-	
-	*/
+	@SideOnly(Side.CLIENT)
+	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped defaultModel)
+	{
+		return type.model;
+	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)

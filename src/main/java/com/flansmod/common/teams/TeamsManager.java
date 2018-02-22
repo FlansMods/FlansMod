@@ -1187,7 +1187,7 @@ public class TeamsManager
 	
 	private void savePerWorldData(Event event, World world)
 	{
-		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimension() + ".dat");
+		File file = new File(world.getSaveHandler().getWorldDirectory(), "teams_" + world.provider.getDimensionType().getName() + ".dat");
 		checkFileExists(file);
 		try
 		{

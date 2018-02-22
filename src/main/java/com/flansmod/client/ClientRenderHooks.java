@@ -153,7 +153,6 @@ public class ClientRenderHooks
 				event.setCanceled(true);
 				
 				float partialTicks = event.getPartialTicks();
-				int pass = 0; // TODO [1.12] ?
 				EntityRenderer renderer = mc.entityRenderer;
 				float farPlaneDistance = mc.gameSettings.renderDistanceChunks * 16F;
 				ItemRenderer itemRenderer = mc.getItemRenderer();
@@ -163,15 +162,10 @@ public class ClientRenderHooks
 		        GlStateManager.loadIdentity();
 		        
 		        float separation = 0.07F;
-		        if(mc.gameSettings.anaglyph)
-		            GlStateManager.translate((float)(-(pass * 2 - 1)) * separation, 0.0F, 0.0F);
 		        
 		        Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
 		        GlStateManager.matrixMode(5888);
 		        GlStateManager.loadIdentity();
-
-		        if(mc.gameSettings.anaglyph)
-		            GlStateManager.translate((float)(pass * 2 - 1) * 0.1F, 0.0F, 0.0F);
 
 		        GlStateManager.pushMatrix();
 		        hurtCameraEffect(partialTicks);

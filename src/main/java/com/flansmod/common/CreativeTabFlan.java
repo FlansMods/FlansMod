@@ -4,9 +4,16 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Comparator;
 
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.guns.GunType;
+import com.flansmod.common.types.IFlanItem;
+import com.flansmod.common.types.InfoType;
 
 public class CreativeTabFlan extends CreativeTabs
 {
@@ -42,4 +49,53 @@ public class CreativeTabFlan extends CreativeTabs
 		}
 		return new ItemStack(FlansMod.workbench);
 	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public void displayAllRelevantItems(NonNullList<ItemStack> list)
+    {
+        super.displayAllRelevantItems(list);
+        
+        list.sort(new ItemSorter());
+    }
+	
+    private class ItemSorter implements Comparator<ItemStack>
+    {
+		@Override
+		public int compare(ItemStack stackA, ItemStack stackB) 
+		{
+			Item itemA = stackA.getItem();
+			Item itemB = stackB.getItem();
+			boolean invalidA = itemA == null || !(itemA instanceof IFlanItem);
+			boolean invalidB = itemB == null || !(itemB instanceof IFlanItem);
+			
+			if(invalidA)
+			{
+				return invalidB ? 0 : -1;
+			}
+			if(invalidB)
+			{
+				return 1;
+			}
+			
+			InfoType typeA = ((IFlanItem)itemA).getInfoType();
+			InfoType typeB = ((IFlanItem)itemB).getInfoType();
+			
+			if(typeA == null)
+				return typeB == null ? 0 : -1;
+			if(typeB == null)
+				return 1;
+			
+			int contentPackComparison = typeA.contentPack.compareTo(typeB.contentPack);
+			if(contentPackComparison != 0)
+				return contentPackComparison;
+			
+			int shortNameComparison = typeA.shortName.compareTo(typeB.shortName);
+			if(contentPackComparison != 0)
+				return contentPackComparison;
+			
+			return 0;
+		}
+    	
+    }
 }
