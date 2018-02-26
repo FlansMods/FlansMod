@@ -118,4 +118,10 @@ public class GuiDriveableMenu extends GuiContainer
 		int k = (height - ySize) / 2;
 		drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

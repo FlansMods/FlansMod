@@ -132,6 +132,7 @@ public class FlansModClient extends FlansMod
 	
 	/** Whether the player is in a plane or not */
 	public static boolean inPlane = false;
+	public static int numVehicleExceptions = 0;
 	
 	/** Packet containing teams mod information from the server */
 	public static PacketTeamInfo teamInfo;
@@ -153,6 +154,7 @@ public class FlansModClient extends FlansMod
 	
 	//private static final ResourceLocation zombieSkin = new ResourceLocation("flansmod", "skins/zombie.png");
 
+	@SuppressWarnings("null")
 	public static void tick()
 	{
 		if (minecraft.player == null || minecraft.world == null)
@@ -165,6 +167,13 @@ public class FlansModClient extends FlansMod
 			teamInfo.timeLeft--;
 		
 		ClientTeamsData.Tick();
+		
+		// Force crash if too many vehicles break to prevent save data corruption
+		if(numVehicleExceptions > 2)
+		{
+			List list = null;
+			list.size();
+		}
 		
 		// Guns
 		if(scopeTime > 0)

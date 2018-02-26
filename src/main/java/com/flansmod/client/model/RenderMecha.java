@@ -109,8 +109,8 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 	
 			//Get the arm pitch from the mecha entity
 			float smoothedPitch = 0F;
-			if(mecha.seats[0] != null)
-				smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
+			if(mecha.getSeat(0) != null)
+				smoothedPitch = mecha.getSeat(0).prevLooking.getPitch() + (mecha.getSeat(0).looking.getPitch() - mecha.getSeat(0).prevLooking.getPitch()) * f1;
 			
 			//Lower Limit
 			if(smoothedPitch > type.lowerArmLimit)
@@ -151,8 +151,8 @@ public class RenderMecha extends Render<EntityMecha> implements CustomItemRender
 	
 			//Get the arm pitch from the mecha entity
 			float smoothedPitch = 0F;
-			if(mecha.seats[0] != null)
-				smoothedPitch = mecha.seats[0].prevLooking.getPitch() + (mecha.seats[0].looking.getPitch() - mecha.seats[0].prevLooking.getPitch()) * f1;
+			if(mecha.getSeat(0) != null)
+				smoothedPitch = mecha.getSeat(0).prevLooking.getPitch() + (mecha.getSeat(0).looking.getPitch() - mecha.getSeat(0).prevLooking.getPitch()) * f1;
 			
 			//Lower Limit
 			if(smoothedPitch > type.lowerArmLimit)

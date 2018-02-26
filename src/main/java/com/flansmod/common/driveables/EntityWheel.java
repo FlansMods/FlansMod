@@ -18,11 +18,11 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	/** The vehicle this wheel is part of */
 	public EntityDriveable vehicle;
 	/** The ID of this wheel within the vehicle */
-	public int ID;
+	private int ID;
 	
-	/** Set this to true when the client has found the parent vehicle and connected them */
-	@SideOnly(Side.CLIENT)
-	public boolean foundVehicle;
+	///** Set this to true when the client has found the parent vehicle and connected them */
+	//@SideOnly(Side.CLIENT)
+	//public boolean foundVehicle;
 	/** The ID of the vehicle this wheel is part of, for client-server syncing */
 	private int vehicleID;
 	
@@ -72,12 +72,28 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
 	{
-		setDead();
+		DriveableType type = DriveableType.getDriveable(tags.getString("DriveableType"));
+		ID = tags.getInteger("Index");
+		
+		if(type == null)
+		{
+			FlansMod.log("Killing seat due to invlaid type tag");
+			setDead();
+			return;
+		}
+		
+		if(getRidingEntity() instanceof EntityDriveable)
+		{
+			EntityDriveable driveable = (EntityDriveable)getRidingEntity();
+			driveable.registerWheel(this);
+		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
-	{
+	{		
+		tags.setString("DriveableType", vehicle == null ? "" : vehicle.getDriveableType().shortName);
+		tags.setInteger("Index", ID);
 	}
 	
 	@Override
@@ -89,7 +105,11 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		//prevPosY = posY;
 		//prevPosZ = posZ;
 		
+		if(vehicle == null)
+			return;
+		
 		//If on the client and the vehicle parent has yet to be found, search for it
+		/*
 		if(world.isRemote && !foundVehicle)
 		{
 			if(!(world.getEntityByID(vehicleID) instanceof EntityDriveable))
@@ -97,11 +117,8 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			vehicle = (EntityDriveable)world.getEntityByID(vehicleID);
 			foundVehicle = true;
 			vehicle.wheels[ID] = this;
-		}	
-		
-		if(vehicle == null)
-			return;
-		
+		}
+		*/		
 		if(!addedToChunk)
 			world.spawnEntity(this);
 		/*
@@ -154,7 +171,23 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 
 	}
 	
+	@Override
+	public void setDead()
+	{
+		// No chance. You do not have the power
+	}
 	
+	@Override
+	public boolean canBeCollidedWith()
+	{
+		return !isDead;
+	}
+	
+	
+	public void reallySetDead()
+	{
+		super.setDead();
+	}
 	
 	public double getSpeedXZ()
 	{
@@ -180,7 +213,26 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		ID = data.readInt();
 		if(world.getEntityByID(vehicleID) instanceof EntityDriveable)
 			vehicle = (EntityDriveable)world.getEntityByID(vehicleID);
-		if(vehicle != null)
-			setPosition(posX, posY, posZ);
+
+		setPosition(posX, posY, posZ);
 	}
+	
+	public int getExpectedWheelID()
+	{
+		return ID;
+	}
+	
+	@Override
+    public void updateRidden()
+    {
+		Entity entity = getRidingEntity();
+
+        if(!updateBlocked)
+        	onUpdate();
+
+        if (isRiding())
+        {
+            entity.updatePassenger(this);
+        }
+    }
 }

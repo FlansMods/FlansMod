@@ -99,6 +99,8 @@ public class PacketDriveableControl extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
+		if(playerEntity == null || playerEntity.world == null || playerEntity.world.loadedEntityList == null)
+			return;
 		EntityDriveable driveable = null;
 		for(int i = 0; i < playerEntity.world.loadedEntityList.size(); i++)
 		{
@@ -132,7 +134,7 @@ public class PacketDriveableControl extends PacketBase
 			{
 				driveable = (EntityDriveable)obj;
 				driveable.driveableData.fuelInTank = fuelInTank;
-				if(driveable.seats[0] != null && driveable.seats[0].getControllingPassenger() == clientPlayer)
+				if(driveable.getSeat(0) != null && driveable.getSeat(0).getControllingPassenger() == clientPlayer)
 					return;
 				break;
 			}

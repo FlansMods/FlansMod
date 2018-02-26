@@ -72,12 +72,12 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 					modVehicle.render(vehicle, f1);
 				
 				GL11.glPushMatrix();
-				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.seats != null && vehicle.seats[0] != null)
+				if(type.turretOrigin != null && vehicle.isPartIntact(EnumDriveablePart.turret) && vehicle.getSeat(0) != null)
 				{
-					dYaw = (vehicle.seats[0].looking.getYaw() - vehicle.seats[0].prevLooking.getYaw());
+					dYaw = (vehicle.getSeat(0).looking.getYaw() - vehicle.getSeat(0).prevLooking.getYaw());
 					for(; dYaw > 180F; dYaw -= 360F) {}
 					for(; dYaw <= -180F; dYaw += 360F) {}
-					float yaw = vehicle.seats[0].prevLooking.getYaw() + dYaw * f1;
+					float yaw = vehicle.getSeat(0).prevLooking.getYaw() + dYaw * f1;
 
 					GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
 					GL11.glRotatef(-yaw, 0.0F, 1.0F, 0.0F);
@@ -89,7 +89,7 @@ public class RenderVehicle extends Render implements CustomItemRenderer
 					if(FlansMod.DEBUG)
 					{					
 						GL11.glTranslatef(type.turretOrigin.x, type.turretOrigin.y, type.turretOrigin.z);
-						GL11.glRotatef(-vehicle.seats[0].looking.getPitch(), 0.0F, 0.0F, 1.0F);
+						GL11.glRotatef(-vehicle.getSeat(0).looking.getPitch(), 0.0F, 0.0F, 1.0F);
 						GL11.glTranslatef(-type.turretOrigin.x, -type.turretOrigin.y, -type.turretOrigin.z);
 						
 						//Render shoot points

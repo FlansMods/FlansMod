@@ -59,7 +59,6 @@ public class PlayerHandler
 		
 	public void serverTick()
 	{
-		/*
 		if(FMLCommonHandler.instance().getMinecraftServerInstance() == null)
 		{
 			FlansMod.log("Receiving server ticks when server is null");
@@ -72,7 +71,6 @@ public class PlayerHandler
 				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
 			}
 		}
-		*/
 	}
 	
 	public void clientTick()

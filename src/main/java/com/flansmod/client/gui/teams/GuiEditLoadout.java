@@ -602,4 +602,10 @@ public class GuiEditLoadout extends GuiTeamsBase
 		availableComponents.addAll(unlockedEntries);
 		availableComponents.addAll(lockedEntries);
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

@@ -282,4 +282,10 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		
 		super.drawScreen(i, j, f);
 	}	
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

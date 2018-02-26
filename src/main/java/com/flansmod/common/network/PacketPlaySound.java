@@ -20,6 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Matrix2f;
 
 public class PacketPlaySound extends PacketBase 
 {
@@ -27,6 +29,7 @@ public class PacketPlaySound extends PacketBase
 	public float posX, posY, posZ;
 	public String sound;
 	public boolean distort, silenced;
+	public int hash, value;
 
 	public PacketPlaySound() {}
 
@@ -56,6 +59,10 @@ public class PacketPlaySound extends PacketBase
 		sound = s;
 		this.distort = distort;
 		this.silenced = silenced;
+		
+		Matrix2f audioMatrix = Matrix2f.generateAudioMatrix(x, y, z);
+		hash = audioMatrix.coords.hash;
+		value = audioMatrix.value;
 	}
 
 	@Override
@@ -67,6 +74,8 @@ public class PacketPlaySound extends PacketBase
 		writeUTF(data, sound);
 		data.writeBoolean(distort);
 		data.writeBoolean(silenced);
+		data.writeInt(hash);
+		data.writeInt(value);
 	}
 
 	@Override
@@ -78,6 +87,8 @@ public class PacketPlaySound extends PacketBase
 		sound = readUTF(data);
 		distort = data.readBoolean();
 		silenced = data.readBoolean();
+		hash = data.readInt();
+		value = data.readInt();
 	}
 
 	@Override
@@ -97,6 +108,8 @@ public class PacketPlaySound extends PacketBase
     					silenced ? 5F : 10F, 
     					(distort ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F),
     					posX, posY, posZ));
+    	
+    	Matrix2f.verifyMatrixNormals(new Matrix2f(hash, value));
 	}
 
 }

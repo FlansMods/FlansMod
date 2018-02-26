@@ -26,6 +26,7 @@ import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemShootable;
@@ -40,9 +41,9 @@ import com.flansmod.common.vector.Vector3f;
 
 public class EntitySeat extends Entity implements IControllable, IEntityAdditionalSpawnData
 {
-	/** Set this to true when the client has found the parent driveable and connected them */
-	@SideOnly(Side.CLIENT)
-	public boolean foundDriveable;
+	///** Set this to true when the client has found the parent driveable and connected them */
+	//@SideOnly(Side.CLIENT)
+	//public boolean foundDriveable;
 	private int driveableID;
 	private int seatID;
 	public EntityDriveable driveable;
@@ -99,6 +100,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		driveable = d;
 		driveableID = d.getEntityId();
 		seatInfo = driveable.getDriveableType().seats[id];
+		seatID = id;
 		driver = id == 0;
 		setPosition(d.posX, d.posY, d.posZ);
 		playerPosX = prevPlayerPosX = posX;
@@ -123,8 +125,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		//prevPosY = posY;
 		//prevPosZ = posZ;
 		
+		if(driveable == null)
+		{
+			return;
+		}
 		
 		//If on the client and the driveable parent has yet to be found, search for it
+		/*
 		if(world.isRemote && !foundDriveable)
 		{
 			driveable = (EntityDriveable)world.getEntityByID(driveableID);
@@ -141,6 +148,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
 			setPosition(posX, posY, posZ);
 		}		
+		*/
 		//Update gun delay ticker
 		if(gunDelay > 0)
 			gunDelay--;
@@ -201,8 +209,23 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public void updatePosition()
 	{
 		//If we haven't found our driveable, give up
-		if(world.isRemote && !foundDriveable)
-			return;
+		//if(world.isRemote && !foundDriveable)
+		//	return;
+		
+		if(driveable == null)
+		{
+			if(getRidingEntity() instanceof EntityDriveable)
+			{
+				driveable = (EntityDriveable)getRidingEntity();
+			}
+			else
+			{
+				return;
+			}
+		}
+		
+		if(seatInfo == null)
+			seatInfo = driveable.getDriveableType().seats[seatID];
 		
 		prevPlayerPosX = playerPosX;
 		prevPlayerPosY = playerPosY;
@@ -216,9 +239,9 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		Vector3f localPosition = new Vector3f(seatInfo.x / 16F, seatInfo.y / 16F, seatInfo.z / 16F);
 		
 		//Rotate the offset vector by the turret yaw
-		if(driveable != null && driveable.seats != null && driveable.seats[0] != null && driveable.seats[0].looking != null)
+		if(driveable != null && driveable.getSeat(0) != null && driveable.getSeat(0).looking != null)
 		{
-			RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.seats[0].looking.getYaw(), 0F, 0F);
+			RotatedAxes yawOnlyLooking = new RotatedAxes(driveable.getSeat(0).looking.getYaw(), 0F, 0F);
 			Vector3f rotatedOffset = yawOnlyLooking.findLocalVectorGlobally(seatInfo.rotatedOffset);
 			Vector3f.add(localPosition, new Vector3f(rotatedOffset.x, 0F, rotatedOffset.z), localPosition);
 		}
@@ -297,14 +320,31 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags) 
-	{
-		//Do not read. Spawn with driveable
+	{		
+		DriveableType type = DriveableType.getDriveable(tags.getString("DriveableType"));
+		seatID = tags.getInteger("Index");
+		
+		if(type == null)
+		{
+			FlansMod.log("Killing seat due to invlaid type tag");
+			setDead();
+			return;
+		}
+		
+		seatInfo = type.seats[seatID];
+		
+		if(getRidingEntity() instanceof EntityDriveable)
+		{
+			driveable = (EntityDriveable)getRidingEntity();
+			driveable.registerSeat(this);
+		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags) 
 	{
-		//Do not write. Spawn with driveable
+		tags.setString("DriveableType", driveable == null ? "" : driveable.getDriveableType().shortName);
+		tags.setInteger("Index", seatID);
 	}
 	
 	@Override
@@ -316,7 +356,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY) 
 	{
-		if(!foundDriveable)
+		if(driveable == null)
 			return;
 		
 		Entity entityInThisSeat = getControllingPassenger(); 
@@ -333,8 +373,6 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(!driver || !FlansModClient.controlModeMouse || !driveable.hasMouseControlMode())
 		{
 			float lookSpeed = 4F;
-			
-			
 			
 			//Angle stuff for the player
 			
@@ -520,7 +558,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public void updateKeyHeldState(int key, boolean held)
 	{
-		if(world.isRemote && foundDriveable)
+		if(world.isRemote && driveable != null)
 		{
 			FlansMod.getPacketHandler().sendToServer(new PacketDriveableKeyHeld(key, held));
 
@@ -539,14 +577,14 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public boolean pressKey(int key, EntityPlayer player) 
 	{
 		//Driver seat should pass input to driveable
-		if(driver && (!world.isRemote || foundDriveable))
+		if(driver && driveable != null)
 		{
 			return driveable.pressKey(key, player);
 		}
 		
 		if(world.isRemote)
 		{
-			if(foundDriveable)
+			if(driveable != null)
 			{
 				FlansMod.getPacketHandler().sendToServer(new PacketDriveableKey(key));
 				if(key == 9)
@@ -631,6 +669,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return false;
 		if(world.isRemote)
 			return false;
+		if(driveable == null)
+			return false;
 		//If they are using a repair tool, don't put them in
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
 		if(currentItem != null && currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
@@ -693,9 +733,14 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	{
 		return isDead;
 	}
-
+	
 	@Override
 	public void setDead()
+	{
+		// No chance. You do not have the power
+	}
+	
+	public void reallySetDead()
 	{
 		super.setDead();
 	}
@@ -703,6 +748,18 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	public EntitySeat getSeat(EntityLivingBase living)
 	{
 		return this;
+	}
+	
+	@Override
+	public boolean startRiding(Entity riding)
+	{
+		boolean success = super.startRiding(riding);
+		if(success && riding instanceof EntityDriveable)
+		{
+			EntityDriveable driveable = (EntityDriveable)riding;
+			driveable.registerSeat(this);
+		}
+		return success;
 	}
 	
 	@Override
@@ -725,8 +782,8 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
-		if(world.isRemote && !foundDriveable)
-			return null;
+		if(driveable == null)
+			return ItemStack.EMPTY.copy();
 		return driveable.getPickedResult(target);
 	}
 	
@@ -745,16 +802,13 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 	@Override
 	public float getCameraDistance()
 	{
-		return foundDriveable && seatID == 0 ? driveable.getDriveableType().cameraDistance * 1.5f : 5F;
+		return driveable != null && seatID == 0 ? driveable.getDriveableType().cameraDistance * 2.0f : 5F;
 	}
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float f) 
 	{
-		if(world.isRemote && !foundDriveable)
-			return false;
-		FlansMod.Assert(driveable != null, "Attacking seat with bad parent");
-		if(driveable == null) 
+		if(driveable == null)
 			return false;
 		return driveable.attackEntityFrom(source, f);
 	}
@@ -789,13 +843,32 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			playerPosX = prevPlayerPosX = posX = driveable.posX;
 			playerPosY = prevPlayerPosY = posY = driveable.posY;
 			playerPosZ = prevPlayerPosZ = posZ = driveable.posZ;
-			setPosition(posX, posY, posZ);
 		}
 		
+		setPosition(posX, posY, posZ);
+	}
+	
+	public int getExpectedSeatID()
+	{
+		return seatID;
 	}
 
 	public float getMinigunSpeed() 
 	{
 		return minigunSpeed;
 	}
+	
+	@Override
+    public void updateRidden()
+    {
+		Entity entity = getRidingEntity();
+
+        if(!updateBlocked)
+        	onUpdate();
+
+        if (isRiding())
+        {
+            entity.updatePassenger(this);
+        }
+    }
 }

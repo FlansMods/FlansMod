@@ -179,7 +179,7 @@ public class DriveableData implements IInventory
 						inv = new ItemStack[1];
 						inv[0] = fuel;		
 	
-						setInventorySlotContents(getFuelSlot(), null);
+						setInventorySlotContents(getFuelSlot(), ItemStack.EMPTY.copy());
 					}
 				}
 			}	
@@ -190,13 +190,13 @@ public class DriveableData implements IInventory
 			if(inv[i].getCount() <= j)
 			{
 				ItemStack itemstack = inv[i];
-				inv[i] = null;
+				inv[i] = ItemStack.EMPTY.copy();
 				return itemstack;
 			}
 			ItemStack itemstack1 = inv[i].splitStack(j);
 			if(inv[i].getCount() <= 0)
 			{
-				inv[i] = null;
+				inv[i] = ItemStack.EMPTY.copy();
 			}
 			return itemstack1;
 		} else
@@ -363,7 +363,7 @@ public class DriveableData implements IInventory
 	@Override
 	public ItemStack removeStackFromSlot(int index) 
 	{
-		return null;
+		return ItemStack.EMPTY.copy();
 	}
 
 }

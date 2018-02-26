@@ -334,7 +334,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			if(bullet != null)
 				bullet.setPosition(blockHit.raytraceResult.hitVec.x, blockHit.raytraceResult.hitVec.y, blockHit.raytraceResult.hitVec.z);
 			//play sound when bullet hits block
-			if(!world.isRemote && shooter != null)
+			if(!world.isRemote && shooter != null && bulletType.hitSound != null)
 				PacketPlaySound.sendSoundPacket(hit.x, hit.y, hit.z, bulletType.hitSoundRange, shooter.dimension, bulletType.hitSound, true);
 			if(bullet != null) bullet.penetratingPower = penetratingPower;
 			return true;
@@ -423,13 +423,19 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			double dX = lockedOnTo.posX - posX;
 			double dY = lockedOnTo.posY - posY;
 			double dZ = lockedOnTo.posZ - posZ;
-			double dXYZ = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+			double dXYZ = dX * dX + dY * dY + dZ * dZ;
 
-			Vector3f relPosVec = new Vector3f(lockedOnTo.posX - posX, lockedOnTo.posY - posY, lockedOnTo.posZ - posZ);
+			Vector3f relPosVec = new Vector3f(dX, dY, dZ);
 			float angle = Math.abs(Vector3f.angle(motion, relPosVec));
 
-			double lockOnPull = angle / 2F * type.lockOnForce;
+			double lockOnPull = (angle) * type.lockOnForce;
 
+			lockOnPull = lockOnPull * lockOnPull;
+			
+			motionX *= 0.95f;
+			motionY *= 0.95f;
+			motionZ *= 0.95f;
+			
 			motionX += lockOnPull * dX / dXYZ;
 			motionY += lockOnPull * dY / dXYZ;
 			motionZ += lockOnPull * dZ / dXYZ;

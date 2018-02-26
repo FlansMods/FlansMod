@@ -166,4 +166,10 @@ public class GuiLandingPage extends GuiTeamsBase
 		drawSlotInventory(new ItemStack(box.getItem()), x + 3, y + 3);
 		drawCenteredString(fontRenderer, "x " + data.GetNumOfUnopenedBoxes(box), x + 33, y + 7, 0xffffff);
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

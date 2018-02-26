@@ -278,7 +278,7 @@ public class ModelPlane extends ModelDriveable
 			}
 		}
 		//Render guns
-		for(EntitySeat seat : plane.seats)
+		for(EntitySeat seat : plane.getSeats())
 		{
 			//If the seat has a gun model attached
 			if(seat != null && seat.seatInfo != null && seat.seatInfo.gunName != null && gunModels.get(seat.seatInfo.gunName) != null && plane.isPartIntact(seat.seatInfo.part))

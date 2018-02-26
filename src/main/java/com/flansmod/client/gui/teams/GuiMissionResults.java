@@ -464,4 +464,10 @@ public class GuiMissionResults extends GuiTeamsBase
 			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);			
 		}
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

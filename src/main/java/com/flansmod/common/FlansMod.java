@@ -552,7 +552,7 @@ public class FlansMod
 								}
 								if (line == null)
 									break;
-								typeFile.lines.add(line);
+								typeFile.parseLine(line);
 							}
 							reader.close();
 						}
@@ -606,7 +606,7 @@ public class FlansMod
 							}
 							if (line == null)
 								break;
-							typeFile.lines.add(line);
+							typeFile.parseLine(line);
 						}
 					}
 					while(zipEntry != null);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -64,12 +65,14 @@ public class InfoType
 	/** If this is set to false, then this item cannot be dropped */
 	public boolean canDrop = true;
 	
+	public int hash = 0;
+	
 	/** The probability that this item will appear in a dungeon chest. 
 	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
 	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
 	public int dungeonChance = 1;
 	
-	private static Random random = new Random();
+	public static Random random = new Random();
 	
 	/** Used for scaling */
 	public static int totalDungeonChance = 0;
@@ -97,6 +100,7 @@ public class InfoType
 		}
 		postRead(file);
 
+		hash = file.hashCode();
 		infoTypes.put(shortName.hashCode(), this);
 		totalDungeonChance += dungeonChance;
 	}
@@ -605,4 +609,6 @@ public class InfoType
 			}
 		}
 	}
+
+
 }

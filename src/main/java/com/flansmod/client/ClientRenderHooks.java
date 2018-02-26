@@ -885,20 +885,23 @@ public class ClientRenderHooks
 		{
 			EntityDriveable ent = ((EntitySeat)mc.player.getRidingEntity()).driveable;
 			
-			double dX = ent.posX - ent.prevPosX;
-			double dY = ent.posY - ent.prevPosY;
-			double dZ = ent.posZ - ent.prevPosZ;
-			
-			//Convert to chunks per Minecraft hour
-			float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F; 
-			
-			speed = (int)(speed * 10F) / 10F;
-			
-			mc.fontRenderer.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
-			
-			if(FlansMod.DEBUG)
+			if(ent != null)
 			{
-				mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
+				double dX = ent.posX - ent.prevPosX;
+				double dY = ent.posY - ent.prevPosY;
+				double dZ = ent.posZ - ent.prevPosZ;
+				
+				//Convert to chunks per Minecraft hour
+				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F; 
+				
+				speed = (int)(speed * 10F) / 10F;
+				
+				mc.fontRenderer.drawString("Speed: " + speed + " chunks per hour", 2, 2, 0xffffff);
+				
+				if(FlansMod.DEBUG)
+				{
+					mc.fontRenderer.drawString("Throttle : " + ent.throttle, 2, 12, 0xffffff);
+				}
 			}
 		}
 	}

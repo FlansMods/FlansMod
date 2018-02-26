@@ -50,7 +50,7 @@ public class GunBoxType extends BoxType
 	{
 		super.preRead(file);
 		//Make sure NumGuns is read before anything else
-		for(String line : file.lines)
+		for(String line : file.getLines())
 		{
 			if(line == null)
 				break;

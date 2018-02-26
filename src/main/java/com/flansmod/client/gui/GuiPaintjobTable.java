@@ -703,4 +703,10 @@ public class GuiPaintjobTable extends GuiContainer
 		FlansMod.getPacketHandler().sendToServer(new PacketGunPaint(hoveringOver.ID));
 		((ContainerPaintjobTable)inventorySlots).clickPaintjob(hoveringOver.ID);
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

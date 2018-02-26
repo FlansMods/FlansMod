@@ -115,7 +115,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public RotatedAxes prevAxes;
 	public RotatedAxes axes;
 	
-	public EntitySeat[] seats;
+	private EntitySeat[] seats;
+	/** Until this is true, just look for seat and wheel connections */
+	protected boolean readyForUpdates = false;
 	
 	private float yOffset;
 	
@@ -145,25 +147,24 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		driveableData = d;
 	}
 	
-	protected void initType(DriveableType type, boolean clientSide)
+	protected void initType(DriveableType type, boolean firstSpawn, boolean clientSide)
 	{
 		seats = new EntitySeat[type.numPassengers + 1];
-		for(int i = 0; i < type.numPassengers + 1; i++)
+		wheels = new EntityWheel[type.wheelPositions.length];
+		if(!clientSide && firstSpawn)
 		{
-			if(!clientSide)
+			for(int i = 0; i < type.numPassengers + 1; i++)
 			{
 				seats[i] = new EntitySeat(world, this, i);
 				world.spawnEntity(seats[i]);
 				seats[i].startRiding(this);
 			}
-		}
-		wheels = new EntityWheel[type.wheelPositions.length];
-		for(int i = 0; i < wheels.length; i++)
-		{
-			if(!clientSide)
+			
+			for(int i = 0; i < wheels.length; i++)
 			{
 				wheels[i] = new EntityWheel(world, this, i);
 				world.spawnEntity(wheels[i]);
+				wheels[i].startRiding(this);
 			}
 		}
 		stepHeight = type.wheelStepHeight;
@@ -207,7 +208,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	{
 		driveableType = tag.getString("Type");
 		driveableData = new DriveableData(tag);
-		initType(DriveableType.getDriveable(driveableType), false);
+		initType(DriveableType.getDriveable(driveableType), false, false);
 		
 		prevRotationYaw = tag.getFloat("RotationYaw");
 		prevRotationPitch = tag.getFloat("RotationPitch");
@@ -244,7 +245,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			driveableType = ByteBufUtils.readUTF8String(data);
 			driveableData = new DriveableData(ByteBufUtils.readTag(data));
-			initType(getDriveableType(), true);
+			initType(getDriveableType(), false, true);
 			
 			axes.setAngles(data.readFloat(), data.readFloat(), data.readFloat());
 			prevRotationYaw = axes.getYaw();
@@ -343,8 +344,15 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			camera.setDead();
 		
 		for(EntitySeat seat : seats)
+		{
 			if(seat != null)
-				seat.setDead();
+				seat.reallySetDead();
+		}
+		for(EntityWheel wheel : wheels)
+		{
+			if(wheel != null) 
+				wheel.reallySetDead();
+		}
 	}
 	
 	@Override
@@ -353,6 +361,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		//Do nothing. Like a boss.
 		// TODO: perhaps send the player flying??
 		//Sounds good. ^ 
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void ReportVehicleError()
+	{
+		FlansMod.log("Vehicle error in " + this);
+		FlansModClient.numVehicleExceptions++;
 	}
 
 	@Override
@@ -527,7 +542,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			EntityPlayer driver = GetDriver();
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
+			{
+				shootDelayPrimary = shootDelaySecondary = 1;
 				return;
+			}
 			
 			// For each 
 			ItemShootable shootableItem = (ItemShootable)shootableStack.getItem();
@@ -631,6 +649,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						}
 						setShootDelay(type.shootDelay(secondary), secondary);
 					}
+					else
+					{
+						shootDelayPrimary = shootDelaySecondary = 1;
+					}
 				}
 				break;
 			}		
@@ -684,6 +706,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						}
 						setShootDelay(type.shootDelay(secondary), secondary);
 					}
+					else
+					{
+						shootDelayPrimary = shootDelaySecondary = 1;
+					}
 				}
 				break;
 			}				
@@ -726,28 +752,58 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
         super.onUpdate();
         
         DriveableType type = getDriveableType();
-        
-        /*
-        if(!world.isRemote)
-        {
-        	for(int i = 0; i < getDriveableType().numPassengers + 1; i++)
-        	{
-        		if(seats[i] == null || !seats[i].addedToChunk)
-        		{
-        			seats[i] = new EntitySeat(world, this, i);
-    				world.spawnEntity(seats[i]);
-        		}
-        	}
-        	for(int i = 0; i < type.wheelPositions.length; i++)
-        	{
-        		if(wheels[i] == null || !wheels[i].addedToChunk)
-        		{
-        			wheels[i] = new EntityWheel(world, this, i);
-    				world.spawnEntity(wheels[i]);
-        		}
-        	}
-        }
-        */
+
+        // Do a full check of our passengers for wheels or seats
+		for(Entity passenger : getPassengers())
+		{
+			if(passenger instanceof EntitySeat)
+			{
+				EntitySeat seat = (EntitySeat)passenger;
+				if(seat.getExpectedSeatID() >= 0 && seats[seat.getExpectedSeatID()] == null)
+				{
+					seats[seat.getExpectedSeatID()] = seat;
+				}
+			}
+			else if(passenger instanceof EntityWheel)
+			{
+				EntityWheel wheel = (EntityWheel)passenger;
+				if(wheel.getExpectedWheelID() >= 0 && wheels[wheel.getExpectedWheelID()] == null)
+				{
+					wheels[wheel.getExpectedWheelID()] = wheel;
+				}
+			}
+			else
+			{
+				FlansMod.log("Entity " + passenger + " is riding a driveable core entity.");
+			}
+		}
+		
+		readyForUpdates = true;
+		for(int i = 0; i < type.numPassengers; i++)
+		{
+			if(seats[i] == null)
+			{
+				readyForUpdates = false;
+			}
+		}
+		for(int i = 0; i < type.wheelPositions.length; i++)
+		{
+			if(wheels[i] == null)
+			{
+				readyForUpdates = false;
+			}
+		}
+		
+		if(!readyForUpdates)
+		{
+			if(!world.isRemote)
+			{
+				// Well heck, if it's bork, let's make new ones
+				initType(type, true, false);
+			}
+			
+			return;
+		}
         
         //Harvest stuff
   		//Aesthetics
@@ -911,6 +967,10 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			throttle *= 0.98F;
 			rightMouseHeld = leftMouseHeld = false;
+		}
+		else if(seats[0] != null && seats[0].getControllingPassenger() != null && seats[0].getControllingPassenger() == getControllingPassenger())
+		{
+			ReportVehicleError();
 		}
 		
 		//Check if shooting
@@ -1499,9 +1559,9 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
     protected boolean canFitPassenger(Entity passenger)
     {
-		if(passenger instanceof EntitySeat)
+		if(passenger instanceof EntitySeat || passenger instanceof EntityWheel)
 		{
-			return getPassengers().size() < getDriveableType().numPassengers + 1;
+			return getPassengers().size() < getDriveableType().numPassengers + getDriveableType().wheelPositions.length + 1;
 		}
         return false;
     }
@@ -1515,7 +1575,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public void removePassenger(Entity passenger)
 	{
-		FlansMod.log("Driveable is trying to remove seat " + passenger);
 		super.removePassenger(passenger);
 	}
 	
@@ -1540,4 +1599,62 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			// We need to do some handling to work out which seat to get into. Or not?
 		}
     }
+	
+	public void registerSeat(EntitySeat seat)
+	{
+		seats[seat.getExpectedSeatID()] = seat;
+	}
+	
+	public void registerWheel(EntityWheel wheel)
+	{
+		wheels[wheel.getExpectedWheelID()] = wheel;
+	}
+	
+	public EntitySeat[] getSeats()
+	{
+		return seats;
+	}
+	
+	public EntitySeat getSeat(int id)
+	{
+		if(seats[id] == null)
+		{
+			for(Entity passenger : getPassengers())
+			{
+				if(passenger instanceof EntitySeat)
+				{
+					EntitySeat seat = (EntitySeat)passenger;
+					if(seat.getExpectedSeatID() == id)
+					{
+						seats[id] = seat;
+						seats[id].driveable = this;
+						break;
+					}
+				}
+			}
+		}
+		
+		return seats[id];
+	}
+	
+	public EntityWheel getWheel(int id)
+	{
+		if(wheels[id] == null)
+		{
+			for(Entity passenger : getPassengers())
+			{
+				if(passenger instanceof EntityWheel)
+				{
+					EntityWheel wheel = (EntityWheel)passenger;
+					if(wheel.getExpectedWheelID() == id)
+					{
+						wheels[id] = wheel;
+						break;
+					}
+				}
+			}
+		}
+		
+		return wheels[id];
+	}
 }

@@ -77,5 +77,10 @@ public class GuiDriveableFuel extends GuiContainer
 			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, plane));
 		}
 	}
-
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return false;
+	}
 }

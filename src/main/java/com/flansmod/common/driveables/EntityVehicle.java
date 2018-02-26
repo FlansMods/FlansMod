@@ -1,6 +1,7 @@
 package com.flansmod.common.driveables;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +56,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		super(world, type, data);
 		stepHeight = 1.0F;
 		setPosition(x, y, z);
-		initType(type, false);
+		initType(type, true, false);
 	}
 
 	//This one allows you to deal with spawning from items
@@ -65,13 +66,13 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		stepHeight = 1.0F;
 		setPosition(x, y, z);
 		rotateYaw(placer.rotationYaw + 90F);
-		initType(type, false);
+		initType(type, true, false);
 	}
 	
 	@Override
-	protected void initType(DriveableType type, boolean clientSide)
+	protected void initType(DriveableType type, boolean firstSpawn, boolean clientSide)
 	{
-		super.initType(type, clientSide);
+		super.initType(type, firstSpawn, clientSide);
 	}
 	
 	@Override
@@ -128,7 +129,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
 		{
-			if(seats[i].processInitialInteract(entityplayer, hand))
+			if(getSeat(i).processInitialInteract(entityplayer, hand))
 			{
 				if(i == 0)
 				{
@@ -195,14 +196,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			}
 			case 6 : //Exit : Get out
 			{
-				seats[0].removePassengers();
+				getSeat(0).removePassengers();
 		  		return true;
 			}
 			case 7 : //Inventory
 			{
 				if(world.isRemote)
 				{
-					FlansMod.proxy.openDriveableMenu((EntityPlayer)seats[0].getControllingPassenger(), world, this);
+					FlansMod.proxy.openDriveableMenu((EntityPlayer)getSeat(0).getControllingPassenger(), world, this);
 				}
 				return true;
 			}
@@ -259,13 +260,18 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	@Override
 	public Vector3f getLookVector(DriveablePosition dp)
 	{
-		return rotate(seats[0].looking.getXAxis());
+		return rotate(getSeat(0).looking.getXAxis());
 	}
 	
 	@Override
 	public void onUpdate()
 	{
 		super.onUpdate();
+		
+		if(!readyForUpdates)
+		{
+			return;
+		}
 
 		//Get vehicle type
 		VehicleType type = this.getVehicleType();
@@ -277,12 +283,12 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer 
-				&& FlansMod.proxy.isThePlayer((EntityPlayer)seats[0].getControllingPassenger());
-
+		boolean thePlayerIsDrivingThis = world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer 
+				&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
+		
 		//Despawning
 		ticksSinceUsed++;
-		if(!world.isRemote && seats[0].getControllingPassenger() != null)
+		if(!world.isRemote && getSeat(0).getControllingPassenger() != null)
 			ticksSinceUsed = 0;
 		if(!world.isRemote && TeamsManager.vehicleLife > 0 && ticksSinceUsed > TeamsManager.vehicleLife * 20)
 		{
@@ -365,7 +371,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			//Update angles
 			wheel.rotationYaw = axes.getYaw();
 			//Front wheels
-			if(!type.tank && (wheel.ID == 2 || wheel.ID == 3))
+			if(!type.tank && (wheel.getExpectedWheelID() == 2 || wheel.getExpectedWheelID() == 3))
 			{
 				wheel.rotationYaw += wheelsYaw;
 			}
@@ -379,14 +385,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			//Apply velocity
 			//If the player driving this is in creative, then we can thrust, no matter what
-			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (seats != null && seats[0] != null 
-					&& seats[0].getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)seats[0].getControllingPassenger()).capabilities.isCreativeMode);
+			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (getSeat(0) != null 
+					&& getSeat(0).getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode);
 			//Otherwise, check the fuel tanks!
 			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
 			{
 				if(getVehicleType().tank)
 				{
-					boolean left = wheel.ID == 0 || wheel.ID == 3;
+					boolean left = wheel.getExpectedWheelID() == 0 || wheel.getExpectedWheelID() == 3;
 					
 					float turningDrag = 0.02F;
 					wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
@@ -410,7 +416,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					}
 					
 					//Apply steering
-					if(wheel.ID == 2 || wheel.ID == 3)
+					if(wheel.getExpectedWheelID() == 2 || wheel.getExpectedWheelID() == 3)
 					{
 						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
 		
@@ -430,23 +436,23 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				wheel.motionY += type.buoyancy;
 			}
 
-			wheel.move(MoverType.SELF, wheel.motionX, wheel.motionY, wheel.motionZ);
+			wheel.move(MoverType.PLAYER, wheel.motionX, wheel.motionY, wheel.motionZ);
 			
 			//Pull wheels towards car
-			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.ID].position);
+			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.getExpectedWheelID()].position);
 			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 			
 			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
 				
 			if(dPos.length() > 0.001F)
 			{
-				wheel.move(MoverType.SELF, dPos.x, dPos.y, dPos.z);
+				wheel.move(MoverType.PLAYER, dPos.x, dPos.y, dPos.z);
 				dPos.scale(0.5F);
 				Vector3f.sub(amountToMoveCar, dPos, amountToMoveCar);
 			}
 		}
 		
-		move(MoverType.SELF, amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+		move(MoverType.PLAYER, amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
 		
 		if(wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
 		{
@@ -497,7 +503,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			soundPosition = type.engineSoundLength;
 		}
 		
-		for(EntitySeat seat : seats)
+		for(EntitySeat seat : getSeats())
 		{
 			if(seat != null)
 				seat.updatePosition();
@@ -600,7 +606,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 		VehicleType type = getVehicleType();
 
-		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (seats[0] == null || seats[0].getControllingPassenger() == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.item, 1, driveableData.paintjobID);
 			NBTTagCompound tags = new NBTTagCompound();
@@ -657,8 +663,5 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public void setDead()
 	{
 		super.setDead();
-		for(EntityWheel wheel : wheels)
-			if(wheel != null)
-				wheel.setDead();
 	}
 }

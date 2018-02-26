@@ -156,7 +156,7 @@ public abstract class DriveableType extends PaintableType
 	{
 		super.preRead(file);
 		//Make sure the passenger arrays are set up first
-		for(String line : file.lines)
+		for(String line : file.getLines())
 		{
 			if(line == null)
 				break;
@@ -174,7 +174,7 @@ public abstract class DriveableType extends PaintableType
 			}
 		}
 		//Make sure NumWheels is read before anything else
-		for(String line : file.lines)
+		for(String line : file.getLines())
 		{
 			if(line == null)
 				break;
