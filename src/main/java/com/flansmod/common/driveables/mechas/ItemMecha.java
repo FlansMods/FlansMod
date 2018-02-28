@@ -126,7 +126,7 @@ public class ItemMecha extends Item implements IPaintableItem
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	if(tab != FlansMod.tabFlanMechas)
+    	if(tab != FlansMod.tabFlanMechas && tab != CreativeTabs.SEARCH)
     		return;
     	
     	ItemStack mechaStack = new ItemStack(this, 1, 0);

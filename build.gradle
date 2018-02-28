@@ -7,20 +7,20 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "5.3.1"
+version = "5.5.0"
 group= "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
 minecraft {
-    version = "1.8-11.14.4.1577"
+    version = "1.12.2-14.23.2.2611"
     runDir = "run"
 
-    replace "@ALLOWED_VERSION@", "[5.3,5.4)"
+    replace "@ALLOWED_VERSION@", "[5.5.0,5.5.1)"
     replace "@VERSION@", project.version
     replaceIn "FlansMod.java"
 	
@@ -28,7 +28,7 @@ minecraft {
     replace "@APOCALYPSEVERSION@", "1.0"
     replaceIn "FlansModApocalypse.java"
 	
-	mappings = "snapshot_20141130"
+    mappings = "snapshot_20171003"
 }
 
 processResources

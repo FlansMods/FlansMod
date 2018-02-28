@@ -96,10 +96,10 @@ public class EntityAIMecha extends EntityMecha
 			double dZ = targetOrigin.z - rightArmOrigin.z;
 
 			axes.setAngles((float)Math.atan2(dZ, dX) * 180F / 3.14159F, 0F, 0F);
-			if(seats != null && seats[0] != null)
+			if(getSeat(0) != null)
 			{
-				seats[0].looking.setAngles(0F, -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F, 0F);
-				seats[0].prevLooking.setAngles(0F, -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F, 0F);
+				getSeat(0).looking.setAngles(0F, -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F, 0F);
+				getSeat(0).prevLooking.setAngles(0F, -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F, 0F);
 			}
 			
 			RayTraceResult hit = world.rayTraceBlocks(rightArmOrigin, targetOrigin, false);
@@ -201,7 +201,7 @@ public class EntityAIMecha extends EntityMecha
 
 		MechaType type = getMechaType();
 
-		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (seats[0] == null || seats[0].getControllingPassenger() == null))
+		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
 		{
 			return false;
 		}

@@ -1,0 +1,3 @@
+Get-ChildItem ".\src\main\resources\assets\flansmodapocalypse" -recurse | 
+  Where {-Not $_.PSIsContainer} | 
+  Rename-Item -NewName {$_.FullName.ToLower()}

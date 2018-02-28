@@ -178,7 +178,7 @@ public class ItemPlane extends Item implements IPaintableItem
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	if(tab != FlansMod.tabFlanDriveables)
+    	if(tab != FlansMod.tabFlanDriveables && tab != CreativeTabs.SEARCH)
     		return;
     	
     	ItemStack planeStack = new ItemStack(this, 1, 0);

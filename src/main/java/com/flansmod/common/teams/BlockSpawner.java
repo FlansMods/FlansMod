@@ -36,6 +36,7 @@ import com.flansmod.common.FlansMod;
 
 public class BlockSpawner extends BlockContainer
 {
+    protected static final AxisAlignedBB CARPET_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.0625D, 1.0D);
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	public static boolean colouredPass = false;
 	
@@ -56,6 +57,24 @@ public class BlockSpawner extends BlockContainer
 	        list.add(new ItemStack(this, 1, 1));
 	        list.add(new ItemStack(this, 1, 2));
     	}
+    }
+    
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        return CARPET_AABB;
+    }
+    
+    @Override
+    public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
     }
     
     /*

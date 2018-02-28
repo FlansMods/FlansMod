@@ -3,7 +3,7 @@ package com.flansmod.apocalypse.common.world.buildings;
 import java.util.Random;
 
 import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.apocalypse.common.world.BiomeGenApocalypse;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.common.FlansMod;
 
 import net.minecraft.block.BlockLog;
@@ -18,7 +18,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) 
 	{
-		if(world.getBiomeGenForCoords(pos) != BiomeGenApocalypse.deepCanyon)
+		if(world.getBiome(pos) != BiomeApocalypse.deepCanyon)
 			return false;
 		int maxHeight = 0;
 		int minHeight = 128;
@@ -51,20 +51,20 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		int z = pos.getZ();
 		
 		//Set our base
-		fillArea(world, x, minHeight, z, x + 16, maxHeight + 1, z + 16, Blocks.sand.getStateFromMeta(1));
+		fillArea(world, x, minHeight, z, x + 16, maxHeight + 1, z + 16, Blocks.SAND.getStateFromMeta(1));
 		
 		//Build walls
-		fillArea(world, x, y, z, x + 6, y + 1, z + 16, Blocks.cobblestone.getDefaultState());
+		fillArea(world, x, y, z, x + 6, y + 1, z + 16, Blocks.COBBLESTONE.getDefaultState());
 		fillArea(world, x, y + 1, z, x + 6, y + 5, z + 16, Blocks.PLANKS.getDefaultState());
 		//Horizontal logs
-		fillArea(world, x, y + 4, z, x + 6, y + 5, z + 1, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
-		fillArea(world, x, y + 4, z + 15, x + 6, y + 5, z + 16, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
-		fillArea(world, x, y + 4, z, x + 1, y + 5, z + 16, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z));
-		fillArea(world, x + 5, y + 4, z, x + 6, y + 5, z + 16, Blocks.log.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z));
+		fillArea(world, x, y + 4, z, x + 6, y + 5, z + 1, Blocks.LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
+		fillArea(world, x, y + 4, z + 15, x + 6, y + 5, z + 16, Blocks.LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X));
+		fillArea(world, x, y + 4, z, x + 1, y + 5, z + 16, Blocks.LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z));
+		fillArea(world, x + 5, y + 4, z, x + 6, y + 5, z + 16, Blocks.LOG.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z));
 		//Vertical logs
 		for(int i = 0; i < 6; i += 5)
 			for(int k = 0; k < 16; k += 5)
-				fillArea(world, x + i, y + 1, z + k, x + i + 1, y + 6, z + k + 1, Blocks.log.getDefaultState());
+				fillArea(world, x + i, y + 1, z + k, x + i + 1, y + 6, z + k + 1, Blocks.LOG.getDefaultState());
 		//Hollow out
 		fillArea(world, x + 1, y, z + 1, x + 5, y + 4, z + 15, Blocks.AIR.getDefaultState());
 		//Open door
@@ -97,7 +97,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		
 		//Build sewing table
 		fillArea(world, x + 1, y, z + 11, x + 2, y + 1, z + 15, Blocks.CRAFTING_TABLE.getDefaultState());
-		fillArea(world, x + 1, y, z + 12, x + 2, y + 1, z + 14, Blocks.wooden_slab.getStateFromMeta(8));
+		fillArea(world, x + 1, y, z + 12, x + 2, y + 1, z + 14, Blocks.WOODEN_SLAB.getStateFromMeta(8));
 		
 		for(int k = 0; k < 2; k++)
 		{
@@ -125,7 +125,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		boolean tall = rand.nextBoolean();
 		
 		//Create square tank
-		fillArea(world, x, y, z, x + 4, y + 1, z + 4, Blocks.cobblestone.getDefaultState());
+		fillArea(world, x, y, z, x + 4, y + 1, z + 4, Blocks.COBBLESTONE.getDefaultState());
 		fillArea(world, x, y + 1, z, x + 4, y + (tall ? 3 : 2), z + 4, Blocks.PLANKS.getDefaultState());
 		
 		//Cut out corners

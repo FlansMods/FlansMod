@@ -6,42 +6,30 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenHills;
-import net.minecraft.world.biome.WorldChunkManager;
-import net.minecraft.world.biome.WorldChunkManagerHell;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldProviderApocalypse extends WorldProvider 
 {
 	@Override
-	public void registerWorldChunkManager()
+	public void init()
 	{
-		this.worldChunkMgr = new WorldChunkManagerApocalypse(this.world);
-		dimensionId = FlansModApocalypse.dimensionID;
-		hasNoSky = false;
+		super.init();
+		
+		this.biomeProvider = new BiomeProviderApocalypse(this.world);
+		this.setDimension(FlansModApocalypse.dimensionID);
 	}
 	
 	@Override
-	public IChunkProvider createChunkGenerator()
+	public IChunkGenerator createChunkGenerator()
 	{
-		return new ChunkProviderApocalypse(world, world.getSeed());
-	}
-	
-	@Override
-	public String getDimensionName() 
-	{
-		return "Apocalypse";
-	}
-
-	@Override
-	public String getInternalNameSuffix() 
-	{
-		return "_apocalypse";
+		return new ChunkProviderApocalypse(world, world.getSeed(), true);
 	}
 
 	@Override
@@ -53,7 +41,7 @@ public class WorldProviderApocalypse extends WorldProvider
 	@Override
     public boolean canCoordinateBeSpawn(int x, int z)
     {
-        return this.world.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.sand;
+        return this.world.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.SAND;
     }
 	
     /**
@@ -64,7 +52,7 @@ public class WorldProviderApocalypse extends WorldProvider
     public Vec3d getFogColor(float celestialAngle, float partialTicks)
     {
         float f2 = MathHelper.cos(celestialAngle * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
-        f2 = MathHelper.clamp_float(f2, 0.0F, 1.0F);
+        f2 = MathHelper.clamp(f2, 0.0F, 1.0F);
         
         float f3 = 1.0F;
         float f4 = 0.85F;
@@ -92,4 +80,10 @@ public class WorldProviderApocalypse extends WorldProvider
     {
         return false;
     }
+
+	@Override
+	public DimensionType getDimensionType() 
+	{
+		return DimensionType.OVERWORLD;
+	}
 }

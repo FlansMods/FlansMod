@@ -3,9 +3,9 @@ package com.flansmod.apocalypse.common.entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
-import com.flansmod.apocalypse.common.world.BiomeGenApocalypse;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.PlaneType;
@@ -37,13 +37,13 @@ public class EntityFlyByPlane extends EntityPlane
 		
 	}
 	
-	private float getBiomeHeight(BiomeGenBase biome)
+	private float getBiomeHeight(Biome biome)
 	{
-		if(biome == BiomeGenApocalypse.desert)
+		if(biome == BiomeApocalypse.desert)
 			return 80F;
-		else if(biome == BiomeGenApocalypse.deepCanyon || biome == BiomeGenApocalypse.sulphurPits)
+		else if(biome == BiomeApocalypse.deepCanyon || biome == BiomeApocalypse.sulphurPits)
 			return 80F;
-		else if(biome == BiomeGenApocalypse.highPlateau)
+		else if(biome == BiomeApocalypse.highPlateau)
 			return 120F;
 		return 128F;
 	}

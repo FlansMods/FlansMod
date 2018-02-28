@@ -12,15 +12,19 @@ import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
 import com.flansmod.apocalypse.common.network.PacketApocalypseCountdown;
-import com.flansmod.apocalypse.common.world.BiomeGenApocalypse;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.apocalypse.common.world.TeleporterApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces;
+import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableData;
+import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
+import com.flansmod.common.guns.EntityAAGun;
+import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.EntityFlagpole;
 import com.flansmod.common.teams.EntityGunItem;
@@ -38,6 +42,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -76,7 +81,6 @@ public class CommonProxyApocalypse
 		MinecraftForge.EVENT_BUS.register(data = new ApocalypseData());
 		FMLCommonHandler.instance().bus().register(this);
 		
-		BiomeGenApocalypse.registerBiomes();
 		StructureAbandonedVillagePieces.registerVillagePieces();
 	}
 	
@@ -90,14 +94,20 @@ public class CommonProxyApocalypse
 		
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
 	{
-		event.getRegistry().register(new EntityEntry(EntitySurvivor.class, "Survivor"));
-		event.getRegistry().register(new EntityEntry(EntityTeleporter.class, "Teleporter"));
-		event.getRegistry().register(new EntityEntry(EntityAIMecha.class, "AIMecha"));
-		event.getRegistry().register(new EntityEntry(EntityFakePlayer.class, "FakePlayer"));
-		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop"));
+		event.getRegistry().register(new EntityEntry(EntitySurvivor.class, "Survivor").setRegistryName("Survivor"));
+		event.getRegistry().register(new EntityEntry(EntityTeleporter.class, "Teleporter").setRegistryName("Teleporter"));
+		event.getRegistry().register(new EntityEntry(EntityAIMecha.class, "AIMecha").setRegistryName("AIMecha"));
+		event.getRegistry().register(new EntityEntry(EntityFakePlayer.class, "FakePlayer").setRegistryName("FakePlayer"));
+		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop").setRegistryName("NukeDrop"));
+		
+		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 	EntitySurvivor.class, "Survivor", 89, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Teleporter"), 	EntityTeleporter.class, "Teleporter", 113, FlansModApocalypse.INSTANCE, 100, 20, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:AIMecha"), 		EntityAIMecha.class, "AIMecha", 114, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FakePlayer"), 	EntityFakePlayer.class, "FakePlayer", 115, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:NukeDrop"), 		EntityNukeDrop.class, "NukeDrop", 116, FlansModApocalypse.INSTANCE, 250, 20, false);
 	}
 	
 	/** Tick hook for server */
@@ -118,9 +128,9 @@ public class CommonProxyApocalypse
 					setApocalypseCountdown(getApocalypseCountdown() - 1);
 					
 					//Wiggle the apocalypse mecha
-					apocalypseMecha.seats[0].prevLooking = apocalypseMecha.seats[0].looking.clone();
-					apocalypseMecha.seats[0].looking.rotateGlobalYaw(apocalypseMecha.world.rand.nextFloat() * 10F);
-					apocalypseMecha.seats[0].looking.rotateGlobalPitch((float)apocalypseMecha.world.rand.nextGaussian() * 3F);
+					apocalypseMecha.getSeat(0).prevLooking = apocalypseMecha.getSeat(0).looking.clone();
+					apocalypseMecha.getSeat(0).looking.rotateGlobalYaw(apocalypseMecha.world.rand.nextFloat() * 10F);
+					apocalypseMecha.getSeat(0).looking.rotateGlobalPitch((float)apocalypseMecha.world.rand.nextGaussian() * 3F);
 					
 					//Drop nukes
 					if(getApocalypseCountdown() % 20 == 0)
@@ -167,7 +177,7 @@ public class CommonProxyApocalypse
 				for(int i = 0; i < world.playerEntities.size(); i++)
 				{
 					EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
-					//FMLServerHandler.instance().getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLServerHandler.instance().getServer().worldServerForDimension(FlansModApocalypse.dimensionID)));
+					//FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 0, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(FlansModApocalypse.dimensionID)));
 
 					if(world.rand.nextInt(5000) == 0)
 					{
@@ -197,8 +207,8 @@ public class CommonProxyApocalypse
 						world.spawnEntity(plane);
 						
 						float yaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
-						plane.seats[0].looking.setAngles(yaw, 0F, 0F);
-						plane.seats[0].prevLooking.setAngles(yaw, 0F, 0F);
+						plane.getSeat(0).looking.setAngles(yaw, 0F, 0F);
+						plane.getSeat(0).prevLooking.setAngles(yaw, 0F, 0F);
 						plane.axes.setAngles(yaw, 0F, 0F);
 						plane.prevAxes.setAngles(yaw, 0F, 0F);
 						
@@ -206,7 +216,7 @@ public class CommonProxyApocalypse
 						pilot.setPosition(plane.posX, plane.posY, plane.posZ);
 						world.spawnEntity(pilot);
 						
-						pilot.startRiding(plane.seats[0]);
+						pilot.startRiding(plane.getSeat(0));
 					}
 					
 					if(world.rand.nextInt(FlansModApocalypse.WANDERING_SURVIVOR_RARITY) == 0 && !world.provider.isDaytime())
@@ -239,7 +249,7 @@ public class CommonProxyApocalypse
 		data.entryPoints.put(player.getPersistentID(), new BlockPos(apocalypseMecha.posX, apocalypseMecha.posY, apocalypseMecha.posZ));
 		BlockPos exitPoint = new BlockPos(apocalypseMecha.posX, 128, apocalypseMecha.posZ);
 		for(;FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID).isAirBlock(exitPoint); exitPoint = exitPoint.down()) {}
-		FMLServerHandler.instance().getServer().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLServerHandler.instance().getServer().getWorld(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, FlansModApocalypse.dimensionID, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID), exitPoint.add(0, 1, 0)));
 		
 		giveStarterKit(player);
 	}

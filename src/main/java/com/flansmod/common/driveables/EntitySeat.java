@@ -582,6 +582,11 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			return driveable.pressKey(key, player);
 		}
 		
+		if(world.isRemote && key == 7 && driveable != null)
+		{
+			FlansMod.proxy.openDriveableMenu(player, world, driveable);
+		}
+		
 		if(world.isRemote)
 		{
 			if(driveable != null)
@@ -608,7 +613,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			
 			if(gun != null && gun.mode != EnumFireMode.MINIGUN || minigunSpeed > 2F)
 			{
-				if(gunDelay <= 0 && TeamsManager.bulletsEnabled)
+				if(gunDelay <= 0 && TeamsManager.bulletsEnabled && seatInfo.gunnerID < driveable.getDriveableData().ammo.length)
 				{
 	
 					ItemStack bulletItemStack = driveable.getDriveableData().ammo[seatInfo.gunnerID];

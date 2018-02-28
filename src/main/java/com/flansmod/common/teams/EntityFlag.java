@@ -85,15 +85,18 @@ public class EntityFlag extends Entity implements ITeamObject
 				TeamsManager.getInstance();
 				TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + team.textColour + team.name + "\u00a7f flag");
 			}
+			else if(getRidingEntity() instanceof EntityFlagpole)
+			{
+				setDead();
+			}
 			dismountRidingEntity();
-			
 		}
 		if(!addedToChunk)
 			world.spawnEntity(this);
 		
 		if(timeUntilReturn > 0)
 		{
-			if(getRidingEntity() != null || isHome)
+			if(getRidingEntity() instanceof EntityPlayerMP || isHome)
 				timeUntilReturn = 0;
 			else
 			{
@@ -126,6 +129,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	{
 		dismountRidingEntity();
 		setPosition(base.posX, base.posY + 2F, base.posZ);
+		startRiding(base);
 		isHome = true;
 	}
 
@@ -160,6 +164,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	{
 		getDataManager().set(TEAMID, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
+		startRiding(base);
 	}
 
 	@Override

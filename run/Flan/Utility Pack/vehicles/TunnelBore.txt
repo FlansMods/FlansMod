@@ -63,7 +63,7 @@ AddRecipeParts rightTrack 1 catTrack
 AddDye 10 yellow
 //Health and collision
 SetupPart core 400 -32 8 -24 80 16 48
-SetupPart harvester 1200 48 -8 -24 32 48 48
+SetupPart harvester 1200 48 -8 -32 32 48 64
 SetupPart leftTrack 200 -32 -8 -24 64 16 8
 SetupPart rightTrack 200 -32 -8 16 64 16 8
 BulletDetection 5

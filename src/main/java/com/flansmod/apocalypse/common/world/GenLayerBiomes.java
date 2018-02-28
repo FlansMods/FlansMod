@@ -1,15 +1,15 @@
 package com.flansmod.apocalypse.common.world;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerBiomes extends GenLayer 
 {
 	  private static final int RARE_BIOME_CHANCE = 12;
-	  protected BiomeGenBase[] commonBiomes = { BiomeGenApocalypse.deepCanyon, /*BiomeGenApocalypse.canyon,*/ BiomeGenApocalypse.desert, /*BiomeGenApocalypse.plateau,*/ BiomeGenApocalypse.highPlateau };
+	  protected Biome[] commonBiomes = { BiomeApocalypse.deepCanyon, /*BiomeGenApocalypse.canyon,*/ BiomeApocalypse.desert, /*BiomeGenApocalypse.plateau,*/ BiomeApocalypse.highPlateau };
 	
-	  protected BiomeGenBase[] rareBiomes = { BiomeGenApocalypse.sulphurPits };
+	  protected Biome[] rareBiomes = { BiomeApocalypse.sulphurPits };
 	
 	  public GenLayerBiomes(long l, GenLayer genlayer)
 	  {
@@ -22,6 +22,7 @@ public class GenLayerBiomes extends GenLayer
 	    super(l);
 	  }
 	
+	  @Override
 	  public int[] getInts(int x, int z, int width, int depth)
 	  {
 	    int[] dest = IntCache.getIntCache(width * depth);
@@ -32,11 +33,11 @@ public class GenLayerBiomes extends GenLayer
 	    	  initChunkSeed(dx + x, dz + z);
 	        if (nextInt(RARE_BIOME_CHANCE) == 0)
 	        {
-	          dest[(dx + dz * width)] = this.rareBiomes[nextInt(this.rareBiomes.length)].biomeID;
+	          dest[(dx + dz * width)] = Biome.getIdForBiome(rareBiomes[nextInt(this.rareBiomes.length)]);
 	        }
 	        else
 	        {
-	          dest[(dx + dz * width)] = this.commonBiomes[nextInt(this.commonBiomes.length)].biomeID;
+	          dest[(dx + dz * width)] = Biome.getIdForBiome(commonBiomes[nextInt(this.commonBiomes.length)]);
 	        }
 	
 	      }

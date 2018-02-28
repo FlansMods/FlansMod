@@ -181,7 +181,7 @@ public class CommonProxy
 					stackInSlot.setCount(stackInSlot.getCount() - amountFound);
 					//Check for empty stacks
 					if(stackInSlot.getCount() <= 0)
-						stackInSlot = null;
+						stackInSlot = ItemStack.EMPTY.copy();
 					//Put the modified stack back in the inventory
 					player.inventory.setInventorySlotContents(n, stackInSlot);
 					//Increase the amount found counter
@@ -236,19 +236,19 @@ public class CommonProxy
 		
 		//Find the stack of engines that is fastest but which also has enough for this driveable
 		float bestEngineSpeed = -1F;
-		ItemStack bestEngineStack = null;
+		ItemStack bestEngineStack = ItemStack.EMPTY.copy();
 		for(PartType part : engines.keySet())
 		{
 			//If this engine outperforms the currently selected best one and there are enough of them, swap
 			if(part.engineSpeed > bestEngineSpeed && engines.get(part).getCount() >= type.numEngines())
 			{
 				bestEngineSpeed = part.engineSpeed;
-				bestEngineStack = engines.get(part);
+				bestEngineStack = engines.get(part).copy();
 			}
 		}
 		
 		//If the player doesn't have any suitable engines, return
-		if(bestEngineStack == null || bestEngineStack.isEmpty())
+		if(bestEngineStack == null || bestEngineStack.isEmpty()) 
 		{
 			player.inventory.copyInventory(temporaryInventory);
 			return;

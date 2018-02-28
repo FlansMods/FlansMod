@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemOpStick extends Item implements IFlanItem
+public class ItemOpStick extends Item
 {
 	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
 	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
@@ -197,10 +197,4 @@ public class ItemOpStick extends Item implements IFlanItem
     {
         return super.getUnlocalizedName() + "." + stack.getItemDamage();
     }
-
-	@Override
-	public InfoType getInfoType() 
-	{
-		return null;
-	}
 }

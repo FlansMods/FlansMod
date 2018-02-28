@@ -3,6 +3,7 @@ package com.flansmod.apocalypse.common.entity;
 import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -15,7 +16,7 @@ public class EntityNukeDrop extends Entity
 	{
 		super(world);
 		
-		renderDistanceWeight = 400D;
+		setRenderDistanceWeight(400D);
 		setSize(1F, 1F);
 		noClip = false;
 		ignoreFrustumCheck = true;
@@ -52,7 +53,7 @@ public class EntityNukeDrop extends Entity
 		if(!onGround)
 		{
 			motionY -= 0.01D;
-			moveEntity(motionX, motionY, motionZ);
+			move(MoverType.SELF, motionX, motionY, motionZ);
 		}	
 		else
 		{

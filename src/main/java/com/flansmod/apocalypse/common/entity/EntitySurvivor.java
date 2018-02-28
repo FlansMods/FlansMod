@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -31,7 +32,7 @@ public class EntitySurvivor extends EntityFlansModShooter
 			//Pick a random gun for this survivor
 			GunType gun = validGuns.get(world.rand.nextInt(validGuns.size()));
 			ItemStack gunStack = FlansModApocalypse.getLootGenerator().loadAndPaintGun(gun, world.rand);
-			this.setCurrentItemOrArmor(0, gunStack);
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, gunStack);
 			//Add random armour
 			FlansModApocalypse.getLootGenerator().dressMeUp(this, world.rand);
 			
@@ -46,11 +47,11 @@ public class EntitySurvivor extends EntityFlansModShooter
 	    targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityFlansModShooter.class, true));
         //tasks.addTask(5, new EntityAIGoSomewhere(this, 1.0D, world.rand.nextDouble() * 10D, world.rand.nextDouble() * 10D));
 	    
-        for(int i = 0; i < equipmentDropChances.length; ++i)
+        for(int i = 0; i < inventoryArmorDropChances.length; ++i)
         {
-            equipmentDropChances[i] = 0.5F;
+        	inventoryArmorDropChances[i] = 0.5F;
         }
-        equipmentDropChances[0] = 1F;
+        inventoryHandsDropChances[0] = 1F;
         
         experienceValue = 20;
 	}
@@ -74,11 +75,11 @@ public class EntitySurvivor extends EntityFlansModShooter
     	{
     		switch(rand.nextInt(5))
     		{
-    		case 0 : dropItem(Items.cooked_beef, 1); break;
-    		case 1 : dropItem(Items.bread, 1); break;
-    		case 2 : dropItem(Items.mushroom_stew, 1); break;
-    		case 3 : dropItem(Items.cooked_rabbit, 1); break;
-    		case 4 : dropItem(Items.cooked_chicken, 1); break;   		
+    		case 0 : dropItem(Items.COOKED_BEEF, 1); break;
+    		case 1 : dropItem(Items.BREAD, 1); break;
+    		case 2 : dropItem(Items.MUSHROOM_STEW, 1); break;
+    		case 3 : dropItem(Items.COOKED_RABBIT, 1); break;
+    		case 4 : dropItem(Items.COOKED_CHICKEN, 1); break;   		
     		} 		
     	}
     	
@@ -91,19 +92,19 @@ public class EntitySurvivor extends EntityFlansModShooter
     	}
     	
     	if(rand.nextInt(5) == 0)
-    		dropItem(Item.getItemFromBlock(Blocks.log), rand.nextInt(10) + 5);
+    		dropItem(Item.getItemFromBlock(Blocks.LOG), rand.nextInt(10) + 5);
     	if(rand.nextInt(12) == 0)
-    		dropItem(Items.book, 1);
+    		dropItem(Items.BOOK, 1);
     	if(rand.nextInt(12) == 0)
-    		dropItem(Items.flint_and_steel, 1);
+    		dropItem(Items.FLINT_AND_STEEL, 1);
     	if(rand.nextInt(40) == 0)
-    		dropItem(Items.iron_axe, 1);
+    		dropItem(Items.IRON_AXE, 1);
     	if(rand.nextInt(40) == 0)
-    		dropItem(Items.iron_pickaxe, 1);
+    		dropItem(Items.IRON_PICKAXE, 1);
     	if(rand.nextInt(40) == 0)
-    		dropItem(Items.iron_shovel, 1);
+    		dropItem(Items.IRON_SHOVEL, 1);
     	if(rand.nextInt(4) == 0)
-    		dropItem(Item.getItemFromBlock(Blocks.torch), rand.nextInt(5) + 1);
+    		dropItem(Item.getItemFromBlock(Blocks.TORCH), rand.nextInt(5) + 1);
     	
     	if(rand.nextBoolean())
     	{

@@ -723,6 +723,8 @@ public class ClientRenderHooks
 		//Player ammo overlay
 		if(mc.player != null)
 		{
+			int iNumHandsUsed = 0;
+			
 			for(EnumHand hand : EnumHand.values())
 			{
 				ItemStack stack = mc.player.getHeldItem(hand);
@@ -730,27 +732,49 @@ public class ClientRenderHooks
 				{
 					ItemGun gunItem = (ItemGun)stack.getItem();
 					GunType gunType = gunItem.GetType();
-					int x = 0;
-					for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
+					if(gunType.oneHanded)
+						iNumHandsUsed++;
+					else
+						iNumHandsUsed += 2;
+				}
+			}
+			
+			if(iNumHandsUsed > 2)
+			{
+				mc.fontRenderer.drawString("Too many guns, not enough hands", i / 2 - 85, j - 35, 0x000000);
+				mc.fontRenderer.drawString("Too many guns, not enough hands", i / 2 - 86, j - 36, 0xffffff);
+			}
+			else
+			{
+				for(EnumHand hand : EnumHand.values())
+				{
+					ItemStack stack = mc.player.getHeldItem(hand);
+					if(stack != null && stack.getItem() instanceof ItemGun)
 					{
-						ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
-						if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+						ItemGun gunItem = (ItemGun)stack.getItem();
+						GunType gunType = gunItem.GetType();
+						int x = 0;
+						for(int n = 0; n < gunType.numAmmoItemsInGun; n++)
 						{
-							RenderHelper.enableGUIStandardItemLighting();
-							GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-							OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-							int xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 16 + x : i / 2 - 32 - x;
-							drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
-							GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-							RenderHelper.disableStandardItemLighting();
-							String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
-							if(bulletStack.getMaxDamage() == 1)
-								s = "";
-							
-							xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 32 + x : i / 2 - 16 - x;
-							mc.fontRenderer.drawString(s, xPos, j - 59, 0x000000);
-							mc.fontRenderer.drawString(s, xPos + 1, j - 60, 0xffffff);
-							x += 16 + mc.fontRenderer.getStringWidth(s);
+							ItemStack bulletStack = ((ItemGun)stack.getItem()).getBulletItemStack(stack, n);
+							if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
+							{
+								RenderHelper.enableGUIStandardItemLighting();
+								GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+								OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+								int xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 16 + x : i / 2 - 32 - x;
+								drawSlotInventory(mc.fontRenderer, bulletStack, xPos, j - 65);
+								GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+								RenderHelper.disableStandardItemLighting();
+								String s = (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
+								if(bulletStack.getMaxDamage() == 1)
+									s = "";
+								
+								xPos = hand == EnumHand.MAIN_HAND ? i / 2 + 32 + x : i / 2 - 16 - x;
+								mc.fontRenderer.drawString(s, xPos, j - 59, 0x000000);
+								mc.fontRenderer.drawString(s, xPos + 1, j - 60, 0xffffff);
+								x += 16 + mc.fontRenderer.getStringWidth(s);
+							}
 						}
 					}
 				}

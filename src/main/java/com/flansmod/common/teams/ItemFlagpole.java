@@ -22,7 +22,7 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
-public class ItemFlagpole extends Item implements IFlanItem
+public class ItemFlagpole extends Item
 {
 	public ItemFlagpole() 
 	{
@@ -81,11 +81,5 @@ public class ItemFlagpole extends Item implements IFlanItem
 		if (state == null)
 			return false;
 		return state.getMaterial().isSolid() && state.isOpaqueCube();
-	}
-
-	@Override
-	public InfoType getInfoType() 
-	{
-		return null;
 	}
 }

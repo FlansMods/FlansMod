@@ -543,7 +543,14 @@ public class ClientProxy extends CommonProxy
 					{
 						for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 						{
-							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] } } }");							
+							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()), 
+									"{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" },"
+											+ " \"display\": { "
+											+ "\"thirdperson_righthand\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] },"
+											+ " \"thirdperson_lefthand\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] },"
+											+ " \"firstperson_righthand\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] },"
+											+ " \"firstperson_lefthand\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] } "
+											+ "} }");							
 						}
 					}
 					else if(typeToCheckFor == EnumType.itemHolder)
@@ -559,7 +566,12 @@ public class ClientProxy extends CommonProxy
 					//Create the item JSON for normal items
 					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)
 					{
-						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ 0, 90, -35 ], \"translation\": [ 0, 1.25, -2.5 ], \"scale\": [ 0.85, 0.85, 0.85 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");
+						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { "
+								+ "\"thirdperson_lefthand\": { \"rotation\": [ 0, 90, -35 ], \"translation\": [ 0, 1.25, -2.5 ], \"scale\": [ 0.85, 0.85, 0.85 ] }, "
+								+ "\"thirdperson_righthand\": { \"rotation\": [ 0, 90, -35 ], \"translation\": [ 0, 1.25, -2.5 ], \"scale\": [ 0.85, 0.85, 0.85 ] }, "
+								+ "\"firstperson_lefthand\": { \"rotation\": [ 0, -45, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 0.85, 0.85, 0.85 ] }, "
+								+ "\"firstperson_righthand\": { \"rotation\": [ 0, -45, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 0.85, 0.85, 0.85 ] }"
+								+ " } }");
 					}
 				}
 			}
@@ -572,11 +584,20 @@ public class ClientProxy extends CommonProxy
 	
 	private void createJSONFile(File file, String contents) throws Exception
 	{
-		if(file.exists())
+		if(FlansMod.forceUpdateJSONs)
 		{
-			if(!file.delete())
-				FlansMod.log("FAILED TO DELETE");
+			if(file.exists())
+			{
+				if(!file.delete())
+					FlansMod.log("FAILED TO DELETE");
+			}
+			
+			file.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(file));
+			out.write(contents);
+			out.close();
 		}
+		else if(!file.exists())
 		{
 			file.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));

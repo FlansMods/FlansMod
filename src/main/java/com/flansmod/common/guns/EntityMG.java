@@ -42,7 +42,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	public int blockX, blockY, blockZ;
 	public int direction;
 	public GunType type;
-	public ItemStack ammo;
+	public ItemStack ammo = ItemStack.EMPTY.copy();
 	public int reloadTimer;
 	public int soundDelay;
 	public float shootDelay;
@@ -152,19 +152,19 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		// Decrement the reload timer and reload
 		if (reloadTimer > 0)
 			reloadTimer--;
-		if (ammo != null && ammo.getItemDamage() == ammo.getMaxDamage())
+		if (!ammo.isEmpty() && ammo.getItemDamage() == ammo.getMaxDamage())
 		{
-			ammo = null;
+			ammo = ItemStack.EMPTY.copy();
 			// Scrap metal output?
 		}
-		if (ammo == null && gunner != null)
+		if (ammo.isEmpty() && gunner != null)
 		{
 			int slot = findAmmo(gunner);
 			if (slot >= 0)
 			{
 				ammo = gunner.inventory.getStackInSlot(slot);
 				if (!gunner.capabilities.isCreativeMode)
-					gunner.inventory.setInventorySlotContents(slot, null);
+					gunner.inventory.setInventorySlotContents(slot, ItemStack.EMPTY.copy());
 				reloadTimer = type.reloadTime;
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.reloadSound, false);
 			}
@@ -179,7 +179,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if(gunner == null || gunner.isDead)
 				isShooting = false;
 			// Check for ammo / reloading
-			if (ammo == null || reloadTimer > 0 || shootDelay > 0)
+			if (ammo.isEmpty()|| reloadTimer > 0 || shootDelay > 0)
 			{
 				return;
 			}
@@ -240,7 +240,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 				if (type.mode == EnumFireMode.FULLAUTO)
 					return true;
 				// Check for ammo / reloading
-				if (ammo == null || reloadTimer > 0 || shootDelay > 0)
+				if (ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
 				{
 					return true;
 				}
@@ -311,13 +311,13 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			//None of the above applied, so mount the gun
 			mountGun(player, true);
 			FlansMod.getPacketHandler().sendToAllAround(new PacketMGMount(player, this, true), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
-			if (ammo == null)
+			if (ammo.isEmpty())
 			{
 				int slot = findAmmo(player);
 				if (slot >= 0)
 				{
 					ammo = player.inventory.getStackInSlot(slot);
-					player.inventory.setInventorySlotContents(slot, null);
+					player.inventory.setInventorySlotContents(slot, ItemStack.EMPTY.copy());
 					reloadTimer = type.reloadTime;
 					playSound(FlansModResourceHandler.getSoundEvent(type.reloadSound), 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F));
 				}
@@ -374,7 +374,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			{
 				dropItem(type.getItem(), 1);
 				// Drop ammo box
-				if (ammo != null)
+				if (!ammo.isEmpty())
 					entityDropItem(ammo, 0.5F);
 			}
 		}
@@ -388,10 +388,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
 		nbttagcompound.setString("Type", type.shortName);
-		if (ammo != null)
-		{
-			nbttagcompound.setTag("Ammo", ammo.writeToNBT(new NBTTagCompound()));
-		}
+		nbttagcompound.setTag("Ammo", ammo.writeToNBT(new NBTTagCompound()));
 		nbttagcompound.setInteger("BlockX", blockX);
 		nbttagcompound.setInteger("BlockY", blockY);
 		nbttagcompound.setInteger("BlockZ", blockZ);

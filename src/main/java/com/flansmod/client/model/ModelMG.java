@@ -18,7 +18,7 @@ public class ModelMG extends ModelBase
 		{
 			bipodPart.render(f5);
 		}
-		if (mg.reloadTimer > 0 || mg.ammo == null)
+		if (mg.reloadTimer > 0 || mg.ammo.isEmpty())
 			return;
 
 		for (ModelRendererTurbo ammoBoxPart : ammoBoxModel)
@@ -35,7 +35,7 @@ public class ModelMG extends ModelBase
 			gunPart.render(f5);
 		}
 
-		if (mg.reloadTimer > 0 || mg.ammo == null)
+		if (mg.reloadTimer > 0 || mg.ammo.isEmpty())
 			return;
 
 		for (ModelRendererTurbo ammoPart : ammoModel)

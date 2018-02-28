@@ -801,6 +801,28 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 				// Well heck, if it's bork, let's make new ones
 				initType(type, true, false);
 			}
+			// If we end up stuck like this on a client, handle updates from server
+			if(world.isRemote)
+			{
+				//The driveable is currently moving towards its server position. Continue doing so.
+				if (serverPositionTransitionTicker > 0)
+				{
+					double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
+					double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
+					double z = posZ + (serverPosZ - posZ) / serverPositionTransitionTicker;
+					double dYaw = MathHelper.wrapDegrees(serverYaw - axes.getYaw());
+					double dPitch = MathHelper.wrapDegrees(serverPitch - axes.getPitch());
+					double dRoll = MathHelper.wrapDegrees(serverRoll - axes.getRoll());
+					rotationYaw = (float)(axes.getYaw() + dYaw / serverPositionTransitionTicker);
+					rotationPitch = (float)(axes.getPitch() + dPitch / serverPositionTransitionTicker);
+					float rotationRoll = (float)(axes.getRoll() + dRoll / serverPositionTransitionTicker);
+					--serverPositionTransitionTicker;
+					setPosition(x, y, z);
+					setRotation(rotationYaw, rotationPitch, rotationRoll);
+					//return;
+				}
+				//If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
+			}
 			
 			return;
 		}

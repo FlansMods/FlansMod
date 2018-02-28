@@ -195,7 +195,10 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 		base = b;
 		if(b != null)
 			baseID = b.getBaseID();
-		FlansMod.packetHandler.sendToDimension(getUpdatePacket(), world == null ? dimension : world.provider.getDimension());
+		if(!world.isRemote)
+		{
+			FlansMod.packetHandler.sendToDimension(getUpdatePacket(), world == null ? dimension : world.provider.getDimension());
+		}
 	}
 
 	@Override

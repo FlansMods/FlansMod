@@ -41,6 +41,8 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 	public void render(TileEntity te, double posX, double posY, double posZ, float p_180535_8_, int p_180535_9_, float f) 
 	{
 		TileEntityItemHolder holder = (TileEntityItemHolder)te;
+		if(holder == null || holder.type == null) 
+			return;
 		ModelItemHolder model = holder.type.model;
 		
 		if(model != null)

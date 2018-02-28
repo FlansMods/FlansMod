@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -22,6 +26,9 @@ import com.flansmod.common.PlayerHandler;
 
 public class EntityFlagpole extends Entity implements ITeamBase
 {
+    protected static final AxisAlignedBB POLE_AABB = new AxisAlignedBB(-0.2D, 0.0D, -0.2D, 0.4D, 2.0D, 0.4D);
+    private static final DataParameter<Integer> FLAGPOLE_ID = EntityDataManager.<Integer>createKey(EntityFlagpole.class, DataSerializers.VARINT);
+    
 	//Set this when an op sets the base and return to it when the gametype restarts
 	public int defaultTeamID;
 	//This is the team that currently holds this base, reset it to default team at the end of each round
@@ -57,6 +64,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		flag = new EntityFlag(world, this);
 		objects.add(flag);
 		world.spawnEntity(flag);
+		flag.startRiding(this);
 		if(teamsManager.maps.size() > 0)
 			map = teamsManager.maps.values().iterator().next();
 	}	
@@ -86,8 +94,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox()
 	{
-		return null;
-		//return AxisAlignedBB.getBoundingBox(posX - 0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 3D, posZ + 0.5D);
+		return POLE_AABB;
 	}
 
 	@Override
@@ -99,7 +106,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	protected void entityInit() 
 	{
-		//dataWatcher.addObject(16, new Integer(0));
+		getDataManager().register(FLAGPOLE_ID, Integer.valueOf(0));
 	}
 
 	@Override
@@ -110,11 +117,6 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		map = teamsManager.maps.get(tags.getString("Map"));
 		name = tags.getString("Name");
 		setMap(map);
-	
-		//flag = new EntityFlag(world, this);
-		//objects.add(flag);
-		//world.spawnEntity(flag);
-		//world.spawnEntity(new EntityFlag(world, this));
 	}
 
 	@Override
@@ -259,7 +261,11 @@ public class EntityFlagpole extends Entity implements ITeamBase
 			if(!flag.addedToChunk)
 				world.spawnEntity(flag);
 			if(flag.isHome)
+			{
 				flag.setPosition(posX, posY + 2F, posZ);
+				if(!flag.isRiding())
+					flag.startRiding(this);
+			}
 		}
 		
 		//Temporary fire glitch fix

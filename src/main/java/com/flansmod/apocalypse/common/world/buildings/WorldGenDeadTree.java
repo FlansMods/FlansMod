@@ -19,12 +19,12 @@ public class WorldGenDeadTree extends WorldGenFlan
 	{	
 		for( ; pos.getY() < 256; pos = pos.up())
 		{		
-			if(world.isAirBlock(pos) && World.doesBlockHaveSolidTopSurface(world, pos.down()))
+			if(world.isAirBlock(pos) && world.isSideSolid(pos.down(), EnumFacing.UP))
 			{
 				int treeHeight = rand.nextInt(3) + 3;
 				for(int i = 0; i < treeHeight; i++)
 				{
-					world.setBlockState(pos.add(0, i, 0), Blocks.log.getDefaultState());
+					world.setBlockState(pos.add(0, i, 0), Blocks.LOG.getDefaultState());
 				}
 				for(int j = 0; j < rand.nextInt(2) + 2; j++)
 				{
@@ -40,7 +40,7 @@ public class WorldGenDeadTree extends WorldGenFlan
 							dz += branchZDir;
 						}
 						dy++;
-						world.setBlockState(pos.add(dx, dy + treeHeight - 1, dz), Blocks.log.getDefaultState());
+						world.setBlockState(pos.add(dx, dy + treeHeight - 1, dz), Blocks.LOG.getDefaultState());
 					}
 				}
 				break;

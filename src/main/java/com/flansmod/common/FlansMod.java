@@ -129,14 +129,14 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWEDVERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "[5.5.0,5.5.1)", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
 	public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "@VERSION@";
+	public static final String VERSION = "5.5.0";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
 
@@ -153,6 +153,7 @@ public class FlansMod
 	public static boolean addAllPaintjobsToCreative = false;
 	public static boolean addGunpowderRecipe = true;
 	public static boolean shootOnRightClick = false;
+	public static boolean forceUpdateJSONs = false;
 	
 	public static float armourSpawnRate = 0.25F;
 	
@@ -231,7 +232,7 @@ public class FlansMod
 		workbench = (BlockFlansWorkbench)(new BlockFlansWorkbench(1, 0).setUnlocalizedName("flansWorkbench"));
 		opStick = new ItemOpStick();
 		flag = (ItemFlagpole)(new ItemFlagpole().setUnlocalizedName("flagpole"));
-		spawner = (BlockSpawner)(new BlockSpawner(Material.IRON).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
+		spawner = (BlockSpawner)(new BlockSpawner(Material.CARPET).setUnlocalizedName("teamsSpawner").setBlockUnbreakable().setResistance(1000000F));
 		rainbowPaintcan = new Item().setUnlocalizedName("rainbowPaintcan").setRegistryName("rainbowPaintcan").setCreativeTab(tabFlanGuns);
 		paintjobTable = new BlockPaintjobTable();
 		workbenchItem = new ItemBlockManyNames(workbench);
@@ -386,21 +387,21 @@ public class FlansMod
 		event.getRegistry().register(new EntityEntry(EntityMG.class, "MG").setRegistryName("MG"));
 		event.getRegistry().register(new EntityEntry(EntityAAGun.class, "AAGun").setRegistryName("AAGun"));
 	
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), 	EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), 		EntityPlane.class, "Plane", 90, this, 250, 3, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), 			EntityMG.class, "MG", 91, this, 40, 5, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), 		EntityAAGun.class, "AAGun", 92, this, 40, 500, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), 	EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), 		EntityFlag.class, "Flag", 94, this, 40, 5, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), 		EntityVehicle.class, "Vehicle", 95, this, 250, 10, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), 		EntityBullet.class, "Bullet", 96, this, 40, 100, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:TeamsItem"), 	EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:GunItem"), 		EntityGunItem.class, "GunItem", 98, this, 100, 20, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Seat"), 		EntitySeat.class, "Seat", 99, this, 250, 3, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Grenade"), 		EntityGrenade.class, "Grenade", 100, this, 40, 100, true, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), 	EntityParachute.class, "Parachute", 101, this, 40, 20, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), 		EntityMecha.class, "Mecha", 102, this, 250, 20, false, 0, 0);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), 		EntityWheel.class, "Wheel", 103, this, 250, 20, false, 0, 0);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), 	EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), 		EntityPlane.class, "Plane", 90, this, 250, 3, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), 			EntityMG.class, "MG", 91, this, 40, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), 		EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), 	EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), 		EntityFlag.class, "Flag", 94, this, 40, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), 		EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Bullet"), 		EntityBullet.class, "Bullet", 96, this, 40, 100, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:TeamsItem"), 	EntityTeamItem.class, "TeamsItem", 97, this, 100, 10000, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:GunItem"), 		EntityGunItem.class, "GunItem", 98, this, 100, 20, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Seat"), 		EntitySeat.class, "Seat", 99, this, 250, 3, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Grenade"), 		EntityGrenade.class, "Grenade", 100, this, 40, 100, true);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Parachute"), 	EntityParachute.class, "Parachute", 101, this, 40, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Mecha"), 		EntityMecha.class, "Mecha", 102, this, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Wheel"), 		EntityWheel.class, "Wheel", 103, this, 250, 20, false);
 	}
 	
 	@EventHandler
@@ -701,7 +702,8 @@ public class FlansMod
 		addGunpowderRecipe = configFile.getBoolean("Gunpowder Recipe", Configuration.CATEGORY_GENERAL, addGunpowderRecipe, "Whether or not to add the extra gunpowder recipe (3 charcoal + 1 lightstone)");
 		shootOnRightClick = configFile.getBoolean("ShootOnRightClick", Configuration.CATEGORY_GENERAL, shootOnRightClick, "If true, then shoot will be on right click");
 		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
-
+		forceUpdateJSONs = configFile.getBoolean("ForceUpdateJSONs", Configuration.CATEGORY_GENERAL, forceUpdateJSONs, "Turn this on to force re-create all JSON files. Should only be used in dev environment");
+		
 		if(configFile.hasChanged())
 			configFile.save();
 	}

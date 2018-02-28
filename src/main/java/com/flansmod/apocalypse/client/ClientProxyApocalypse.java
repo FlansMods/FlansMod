@@ -2,18 +2,24 @@ package com.flansmod.apocalypse.client;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -55,13 +61,13 @@ import com.flansmod.common.teams.ItemTeamArmour;
 
 public class ClientProxyApocalypse extends CommonProxyApocalypse 
 {
+	private static final String FLUID_MODEL_PATH = "flansmodapocalypse:fluid";
+	
 	public static int apocalypseCountdown = 0;
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
-		MinecraftForge.EVENT_BUS.register(new ApocalypseModelManager());
-		ApocalypseModelManager.registerVariants();
 	}
 	
 	public void init(FMLInitializationEvent event)
@@ -90,6 +96,29 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	public static void updateApocalypseCountdownTimer(int i)
 	{
 		apocalypseCountdown = i; 
+	}
+	
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event)
+	{
+		Item item = Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid);
+		ModelBakery.registerItemVariants(item);
+		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, FlansModApocalypse.sulphuricAcid.getName());
+
+		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition()
+        {
+            public ModelResourceLocation getModelLocation(ItemStack stack)
+            {
+                return modelResourceLocation;
+            }
+        });
+
+		ModelLoader.setCustomStateMapper(FlansModApocalypse.blockSulphuricAcid, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return modelResourceLocation;
+			}
+		});
 	}
 	
 	/** Tick hook for client logic */

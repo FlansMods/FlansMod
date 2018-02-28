@@ -23,6 +23,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackRangedBow;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIFleeSun;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -50,7 +51,7 @@ import net.minecraft.world.WorldProviderHell;
 
 public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 {
-	private EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 1, 70.0F);
+	private EntityAIAttackRangedBow aiArrowAttack = new EntityAIAttackRangedBow(this, 1.0D, 20, 70.0F);
 	public ItemStack[] ammoStacks;
 	public float shootDelay = 0;
 	public float minigunSpeed = 0.0F;
@@ -76,7 +77,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
         	tasks.addTask(4, this.aiArrowAttack);
         }
         
-        renderDistanceWeight = 200D;
+        setRenderDistanceWeight(200D);
 	}
 	
 	@Override
@@ -91,18 +92,18 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute( SharedMonsterAttributes.followRange).setBaseValue(80D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+        this.getEntityAttribute( SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(80D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
     }
 	
 	@Override
-	public IEntityLivingData func_180482_a(DifficultyInstance difficulty, IEntityLivingData data)
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData data)
     {
-        data = super.func_180482_a(difficulty, data);
+        data = super.onInitialSpawn(difficulty, data);
 
         this.tasks.addTask(4, this.aiArrowAttack);
-        this.func_180481_a(difficulty);
-        this.func_180483_b(difficulty);
+        this.setEquipmentBasedOnDifficulty(difficulty);
+        this.setEnchantmentBasedOnDifficulty(difficulty);
 
         this.setCanPickUpLoot(this.rand.nextFloat() < 0.55F * difficulty.getClampedAdditionalDifficulty());
 
@@ -112,7 +113,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase entity, float range)
     {			
-		ItemStack stack = getHeldItem();
+		ItemStack stack = getHeldItemMainhand();
 		if(stack != null && stack.getItem() instanceof ItemGun)
 		{
 			ItemGun item = (ItemGun)stack.getItem();
@@ -143,11 +144,11 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				int damage = 0;
 				//Check all gun's slots for a valid bullet to shoot
 				int bulletID = 0;
-				ItemStack bulletStack = null;
+				ItemStack bulletStack = ItemStack.EMPTY.copy();
 				for(; bulletID < type.numAmmoItemsInGun; bulletID++)
 				{
 					ItemStack checkingStack = item.getBulletItemStack(stack, bulletID);
-					if(checkingStack != null && checkingStack.getItem() != null && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
+					if(checkingStack != null && !checkingStack.isEmpty() && checkingStack.getItemDamage() < checkingStack.getMaxDamage())
 					{
 						bulletStack = checkingStack;
 						break;
@@ -155,7 +156,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 				}
 				
 				//If no bullet stack was found, reload
-				if(bulletStack == null)
+				if(bulletStack == null || bulletStack.isEmpty())
 				{
 					if(reload(stack, type, world, this, false, false))
 					{
@@ -219,7 +220,7 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 			ItemStack bulletStack = item.getBulletItemStack(gunStack, i);
 			
 			//If there is no magazine, if the magazine is empty or if this is a forced reload
-			if(bulletStack == null || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
+			if(bulletStack == null || bulletStack.isEmpty() || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
 			{		
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;
@@ -248,13 +249,13 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
 					
 					//Load the new magazine
 					ItemStack stackToLoad = newBulletStack.copy();
-					stackToLoad.stackSize = 1;
+					stackToLoad.setCount(1);
 					item.setBulletItemStack(gunStack, stackToLoad, i);					
 					
 					//Remove the magazine from the inventory
 					if(!creative)
-						newBulletStack.stackSize--;
-					if(newBulletStack.stackSize <= 0)
+						newBulletStack.setCount(newBulletStack.getCount() - 1);
+					if(newBulletStack.getCount() <= 0)
 						newBulletStack = null;
 					ammoStacks[bestSlot] = newBulletStack;
 								
@@ -328,4 +329,10 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
     {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
+
+	@Override
+	public void setSwingingArms(boolean swingingArms)
+	{
+		
+	}
 }

@@ -38,9 +38,9 @@ public class WorldGenRunway extends WorldGenFlan
 		//Create runway
 		for(int j = 1; j < 8; j++)
 		{
-			fillArea(world, x, yHeight - j, z + j, x + 16, yHeight - j + 1, z + 16 - j, Blocks.stone.getDefaultState());
+			fillArea(world, x, yHeight - j, z + j, x + 16, yHeight - j + 1, z + 16 - j, Blocks.STONE.getDefaultState());
 		}
-		fillArea(world, x, yHeight, z, x + 16, yHeight + 1, z + 16, Blocks.stained_hardened_clay.getStateFromMeta(15));
+		fillArea(world, x, yHeight, z, x + 16, yHeight + 1, z + 16, Blocks.STAINED_HARDENED_CLAY.getStateFromMeta(15));
 		
 		fillArea(world, x + 2, yHeight, z + 7, x + 6, yHeight + 1, z + 9, Blocks.QUARTZ_BLOCK.getDefaultState());
 		fillArea(world, x + 10, yHeight, z + 7, x + 14, yHeight + 1, z + 9, Blocks.QUARTZ_BLOCK.getDefaultState());

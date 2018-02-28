@@ -148,15 +148,15 @@ public class BlockItemHolder extends BlockContainer
     	TileEntityItemHolder holder = (TileEntityItemHolder)world.getTileEntity(pos);
     	ItemStack item = player.getHeldItemMainhand();
     	
-    	if(holder.getStackInSlot(0) == null)
+    	if(holder.getStackInSlot(0).isEmpty())
     	{
     		holder.setInventorySlotContents(0, item);
-    		player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+    		player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY.copy());
     	}
     	else
     	{
     		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), holder.getStackInSlot(0)));
-    		holder.setInventorySlotContents(0, null);
+    		holder.setInventorySlotContents(0, ItemStack.EMPTY.copy());
     		FlansMod.playerHandler.getPlayerData(player, Side.SERVER).shootTimeLeft = FlansMod.playerHandler.getPlayerData(player, Side.SERVER).shootTimeRight = 10;
     	}
     	

@@ -316,6 +316,9 @@ public class ItemGun extends Item implements IPaintableItem
 		if(mc.objectMouseOver != null && (mc.objectMouseOver.entityHit instanceof EntityFlagpole || mc.objectMouseOver.entityHit instanceof EntityFlag || mc.objectMouseOver.entityHit instanceof EntityGunItem || (mc.objectMouseOver.entityHit instanceof EntityGrenade && ((EntityGrenade)mc.objectMouseOver.entityHit).type.isDeployableBag)))
 			return;
 		
+		if(hasOffHand && !type.oneHanded)
+			return;
+		
 		// If we have an off hand item, then disable our secondary functions
 		boolean secondaryFunctionsEnabled = true;
 				
@@ -486,7 +489,7 @@ public class ItemGun extends Item implements IPaintableItem
 					FlansModClient.playerRecoil += type.getRecoil(gunstack);
 					animations.recoil += type.getRecoil(gunstack);
 					if(type.consumeGunUponUse)
-						player.inventory.setInventorySlotContents(gunSlot, null);
+						player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
 					
 					// Update burst fire
 					if(type.getFireMode(gunstack) == EnumFireMode.BURST)
@@ -572,7 +575,7 @@ public class ItemGun extends Item implements IPaintableItem
 
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
-		ItemStack bulletStack = null;
+		ItemStack bulletStack = ItemStack.EMPTY.copy();
 		for(; bulletID < type.numAmmoItemsInGun; bulletID++)
 		{
 			ItemStack checkingStack = getBulletItemStack(gunstack, bulletID);
@@ -584,7 +587,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 		
 		// We have no bullet stack. So we need to reload. The player will send us a message requesting we do a reload
-		if(bulletStack == null)
+		if(bulletStack.isEmpty())
 		{
 			return;
 		}
@@ -832,7 +835,7 @@ public class ItemGun extends Item implements IPaintableItem
 				return;
 			}
 			
-			if(world.isRemote)
+			if(world.isRemote && Minecraft.getMinecraft().currentScreen == null)
 			{
 				// Get button presses. Do this before splitting into each hand. Prevents second pass wiping the data
 				lastRightMouseHeld = rightMouseHeld;
@@ -1307,7 +1310,7 @@ public class ItemGun extends Item implements IPaintableItem
 	 @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    	if(tab != FlansMod.tabFlanGuns)
+    	if(tab != FlansMod.tabFlanGuns && tab != CreativeTabs.SEARCH)
     		return;
 		 
     	PaintableType type = ((IPaintableItem)this).GetPaintableType();

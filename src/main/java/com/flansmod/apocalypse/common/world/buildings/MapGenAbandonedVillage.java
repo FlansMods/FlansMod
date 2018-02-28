@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.world.BiomeGenApocalypse;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Field1;
 import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Field2;
 import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Well;
@@ -15,15 +15,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 public class MapGenAbandonedVillage extends MapGenStructure
 {
-	public static List<BiomeGenBase> villageSpawnBiomes = Arrays.asList(new BiomeGenBase[] {BiomeGenApocalypse.canyon, BiomeGenApocalypse.desert});
+	public static List<Biome> villageSpawnBiomes = Arrays.asList(new Biome[] {BiomeApocalypse.canyon, BiomeApocalypse.desert});
 	
 	private int terrainType;
 	/** Distance between villages? */
@@ -63,7 +64,7 @@ public class MapGenAbandonedVillage extends MapGenStructure
 		xScaled += rand.nextInt(distance - something);
 		zScaled += rand.nextInt(distance - something);
 		
-		if(xAdjusted == xScaled && zAdjusted == zScaled && world.getWorldChunkManager().areBiomesViable(xAdjusted * 16 + 8, zAdjusted * 16 + 8, 0, villageSpawnBiomes))
+		if(xAdjusted == xScaled && zAdjusted == zScaled && world.getBiomeProvider().areBiomesViable(xAdjusted * 16 + 8, zAdjusted * 16 + 8, 0, villageSpawnBiomes))
 		{
 			return true;
 		}
@@ -86,50 +87,43 @@ public class MapGenAbandonedVillage extends MapGenStructure
 		{
 		}
 		
-		public Start(World world, Random rand, int x, int z, int i)
+		public Start(World world, Random rand, int x, int z, int size)
 		{
-			super(x, z);
-			List list = StructureAbandonedVillagePieces.getStructureVillageWeightedPieceList(rand, i);
-			StructureAbandonedVillagePieces.Start start = new StructureAbandonedVillagePieces.Start(world.getWorldChunkManager(), 0, rand, (x << 4) + 2, (z << 4) + 2, list, i);
-            components.add(start);
-            start.buildComponent(start, this.components, rand);
-            List list1 = start.field_74930_j;
-            List list2 = start.field_74932_i;
-            int l;
+			List<StructureVillagePieces.PieceWeight> list = StructureVillagePieces.getStructureVillageWeightedPieceList(rand, size);
+            StructureVillagePieces.Start structurevillagepieces$start = new StructureVillagePieces.Start(world.getBiomeProvider(), 0, rand, (x << 4) + 2, (z << 4) + 2, list, size);
+            this.components.add(structurevillagepieces$start);
+            structurevillagepieces$start.buildComponent(structurevillagepieces$start, this.components, rand);
+            List<StructureComponent> list1 = structurevillagepieces$start.pendingRoads;
+            List<StructureComponent> list2 = structurevillagepieces$start.pendingHouses;
 
             while (!list1.isEmpty() || !list2.isEmpty())
             {
-                StructureComponent structurecomponent;
-
                 if (list1.isEmpty())
                 {
-                    l = rand.nextInt(list2.size());
-                    structurecomponent = (StructureComponent)list2.remove(l);
-                    structurecomponent.buildComponent(start, this.components, rand);
+                    int i = rand.nextInt(list2.size());
+                    StructureComponent structurecomponent = list2.remove(i);
+                    structurecomponent.buildComponent(structurevillagepieces$start, this.components, rand);
                 }
                 else
                 {
-                    l = rand.nextInt(list1.size());
-                    structurecomponent = (StructureComponent)list1.remove(l);
-                    structurecomponent.buildComponent(start, this.components, rand);
+                    int j = rand.nextInt(list1.size());
+                    StructureComponent structurecomponent2 = list1.remove(j);
+                    structurecomponent2.buildComponent(structurevillagepieces$start, this.components, rand);
                 }
             }
 
-            updateBoundingBox();
-            l = 0;
-            Iterator iterator = components.iterator();
+            this.updateBoundingBox();
+            int k = 0;
 
-            while (iterator.hasNext())
+            for (StructureComponent structurecomponent1 : this.components)
             {
-                StructureComponent structurecomponent1 = (StructureComponent)iterator.next();
-
-                if (!(structurecomponent1 instanceof StructureAbandonedVillagePieces.Road))
+                if (!(structurecomponent1 instanceof StructureVillagePieces.Road))
                 {
-                    ++l;
+                    ++k;
                 }
             }
 
-            this.hasMoreThanTwoComponents = l > 2;
+            this.hasMoreThanTwoComponents = k > 2;
 		}
 		
 		@Override
@@ -185,17 +179,24 @@ public class MapGenAbandonedVillage extends MapGenStructure
         }
 		
 		@Override
-		public void func_143022_a(NBTTagCompound tags)
+		public void writeToNBT(NBTTagCompound tags)
 		{
-            super.func_143022_a(tags);
+            super.writeToNBT(tags);
             tags.setBoolean("Valid", this.hasMoreThanTwoComponents);
         }
 		
 		@Override
-        public void func_143017_b(NBTTagCompound tags)
+        public void readFromNBT(NBTTagCompound tags)
         {
-            super.func_143017_b(tags);
+            super.readFromNBT(tags);
             this.hasMoreThanTwoComponents = tags.getBoolean("Valid");
         }
+	}
+
+	@Override
+	public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored) 
+	{
+        this.world = worldIn;
+        return findNearestStructurePosBySpacing(worldIn, this, pos, this.distance, 8, 10387312, false, 100, findUnexplored);
 	}
 }

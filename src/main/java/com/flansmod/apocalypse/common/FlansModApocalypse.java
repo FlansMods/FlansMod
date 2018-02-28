@@ -7,6 +7,7 @@ import com.flansmod.apocalypse.common.blocks.BlockStatic;
 import com.flansmod.apocalypse.common.blocks.BlockSulphur;
 import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
 import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.CreativeTabFlan;
@@ -29,7 +30,9 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -41,6 +44,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@APOCALYPSEALLOWEDVERSIONS@", dependencies = "required-after:" + FlansMod.MODID)//, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
@@ -76,6 +80,7 @@ public class FlansModApocalypse
 	public static TeleportOption OPTION = TeleportOption.PLACER_ONLY;
 	
 	public static int dimensionID;
+	public static DimensionType APOCALYPSE_DIM = null; 
 	public static FlansModLootGenerator lootGenerator;
 	
 	//Custom apoclypse defined items and blocks
@@ -93,13 +98,13 @@ public class FlansModApocalypse
 	//References to apocalypse specific items and blocks:
 	public static BlockItemHolder skeleton, slumpedSkeleton, gunRack;
 
-	@EventHandler
+	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().register(sulphur);
 	}
 	
-	@EventHandler
+	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{				
 		event.getRegistry().register(blockSulphur);
@@ -108,19 +113,33 @@ public class FlansModApocalypse
 		event.getRegistry().register(blockPowerCube);
 	}
 	
-	@EventHandler
+	@SubscribeEvent
+	public void registerBiomes(RegistryEvent.Register<Biome> event)
+	{				
+		BiomeApocalypse.registerBiomes();
+		event.getRegistry().register(BiomeApocalypse.deepCanyon);
+		event.getRegistry().register(BiomeApocalypse.canyon);
+		event.getRegistry().register(BiomeApocalypse.desert);
+		event.getRegistry().register(BiomeApocalypse.plateau);
+		event.getRegistry().register(BiomeApocalypse.highPlateau);
+		event.getRegistry().register(BiomeApocalypse.sulphurPits);
+	}
+	
+	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{		
 		NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
 		ingredients.add(Ingredient.fromStacks(new ItemStack(Blocks.SAND)));
 		ingredients.add(Ingredient.fromStacks(new ItemStack(sulphur)));
 		
-		event.getRegistry().register(new ShapelessRecipes("FlansMod", new ItemStack(Items.GUNPOWDER), ingredients));
+		event.getRegistry().register(new ShapelessRecipes("FlansModApocalypse", new ItemStack(Items.GUNPOWDER), ingredients).setRegistryName("GunpowderFromSulphur"));
 	}
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		
 		//Load config
 		configFile = new Configuration(event.getSuggestedConfigurationFile());
 		syncConfig();
@@ -129,21 +148,28 @@ public class FlansModApocalypse
 		
 		//Sulphur block and item
 		// TODO: [1.12] .setStepSound(Block.soundTypeSand)
-		blockSulphur = new BlockSulphur().setUnlocalizedName("blockSulphur").setCreativeTab(tabApocalypse);
-		sulphur = new Item().setUnlocalizedName("flanSulphur").setCreativeTab(tabApocalypse);
+		blockSulphur = new BlockSulphur().setUnlocalizedName("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
+		sulphur = new Item().setUnlocalizedName("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
 		
 		//Sulphuric acid
 		sulphuricAcid = new Fluid("sulphuricAcid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
-		FluidRegistry.registerFluid(sulphuricAcid);
-		blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setUnlocalizedName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
-		sulphuricAcid.setBlock(blockSulphuricAcid);
-		sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
+		if(FluidRegistry.registerFluid(sulphuricAcid))
+		{
+			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setUnlocalizedName("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
+			sulphuricAcid.setBlock(blockSulphuricAcid);
+			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
+		}
+		else
+		{
+			sulphuricAcid = FluidRegistry.getFluid("sulphuricAcid");
+			blockSulphuricAcid = sulphuricAcid.getBlock();
+		}
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setCreativeTab(tabApocalypse);
+		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
 		
 		//Power Cube
-		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setUnlocalizedName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
+		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setUnlocalizedName("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, "powerCube");
 		
 		proxy.preInit(event);
@@ -154,9 +180,8 @@ public class FlansModApocalypse
 	{
 		proxy.init(event);
 		dimensionID = DimensionManager.getNextFreeDimId();
-		DimensionManager.registerDimension(dimensionID, DimensionType.OVERWORLD);
-		//DimensionManager.registerProviderType(dimensionID, WorldProviderApocalypse.class, true);
-		//DimensionManager.registerDimension(dimensionID, dimensionID);
+		APOCALYPSE_DIM = DimensionType.register("Apocalypse", "_apocalypse", dimensionID, WorldProviderApocalypse.class, false);
+		DimensionManager.registerDimension(dimensionID, APOCALYPSE_DIM);
 
 		//Grab references to apocalypse specific items and blocks here:
 		if(ItemHolderType.getItemHolder("flanSkeleton") != null)
