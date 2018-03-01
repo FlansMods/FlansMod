@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.Render;
@@ -51,6 +52,9 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 	        GlStateManager.pushMatrix();
 	        GlStateManager.translate((float)posX, (float)posY, (float)posZ);
 	        GlStateManager.rotate(180F, 0F, 0F, 1F);
+	        GlStateManager.disableLighting();
+	        RenderHelper.enableStandardItemLighting();
+	        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 	        
 	        switch(EnumFacing.HORIZONTALS[holder.getBlockMetadata()])
 	        {
@@ -93,6 +97,8 @@ public class RenderItemHolder extends TileEntitySpecialRenderer
 		        else Minecraft.getMinecraft().getRenderItem().renderItem(stack, TransformType.NONE);
 			}
 	        
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.enableLighting();
 	        GlStateManager.popMatrix();
 		}
 	}    

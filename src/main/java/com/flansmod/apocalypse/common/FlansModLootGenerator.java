@@ -128,6 +128,8 @@ public class FlansModLootGenerator
 			}
 			stack.getTagCompound().setTag("ammo", ammoTagsList);
 		}
+		if(gunType.paintjobs.size() > 1)
+			stack.setItemDamage(rand.nextInt(gunType.paintjobs.size()));
 		return stack;
 	}
 	
@@ -351,11 +353,19 @@ public class FlansModLootGenerator
 	{
 		for(int i = 0; i < 3 + rand.nextInt(3); i++)
 		{
-			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getRandomAmmo(rand));
+			ItemStack stack = getRandomAmmo(rand);
+			if(stack != null)
+			{
+				chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), stack);
+			}
 		}
 		for(int i = 0; i < 1 + rand.nextInt(1); i++)
 		{
-			chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), getRandomAttachment(rand));			
+			ItemStack stack = getRandomAttachment(rand);
+			if(stack != null)
+			{
+				chest.setInventorySlotContents(rand.nextInt(chest.getSizeInventory()), stack);		
+			}
 		}
 		
 	}

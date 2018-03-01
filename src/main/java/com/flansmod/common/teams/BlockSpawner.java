@@ -75,42 +75,7 @@ public class BlockSpawner extends BlockContainer
     public boolean isFullCube(IBlockState state)
     {
         return false;
-    }
-    
-    /*
-     * 
-     * TODO: [1.12] Collision boxes...
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(World par1World, BlockPos pos, IBlockState state)
-    {
-        return null;
-    }
-    
-    @Override
-    public boolean isFullCube()
-    {
-        return false;
-    }
-    
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-    
-        @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
-    {
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F);
-    }
-
-	@Override
-	public int getMobilityFlag()
-	{
-		return 1;
-	}
-    */
-  
+    }  
     
     @Override
     public boolean canPlaceBlockAt(World world, BlockPos pos)

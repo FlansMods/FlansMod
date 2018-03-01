@@ -18,10 +18,12 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityItemHolder extends TileEntity implements IInventory
 {
-	private ItemStack stack;
+	private ItemStack stack = ItemStack.EMPTY.copy();
 	public ItemHolderType type;
 	
 	public TileEntityItemHolder()
@@ -52,12 +54,13 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 	@Override
 	public ItemStack decrStackSize(int index, int count) 
 	{ 
-		if(getStack() != null) 
+		if(getStack() != null && !getStack().isEmpty()) 
 		{ 
 			getStack().setCount(getStack().getCount() - count); 
 			if(getStack().getCount() <= 0) 
 				setStack(ItemStack.EMPTY.copy()); 
 		} 
+		updateToClients();
 		return getStack(); 
 	}
 
@@ -97,8 +100,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 		super.writeToNBT(nbt);
 
 		NBTTagCompound stackNBT = new NBTTagCompound();
-		if(getStack() != null)
-			getStack().writeToNBT(stackNBT);
+		getStack().writeToNBT(stackNBT);
 		nbt.setTag("stack", stackNBT);		
 		nbt.setString("type", type.shortName);
 		
@@ -110,8 +112,9 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 	{
 		super.readFromNBT(nbt);
 
-		setStack(new ItemStack(nbt.getCompoundTag("stack")));
-		type = ItemHolderType.getItemHolder(nbt.getString("type"));
+		stack = new ItemStack(nbt.getCompoundTag("stack"));
+		if(type == null)
+			type = ItemHolderType.getItemHolder(nbt.getString("type"));
 	}
 	
 	@Override
@@ -127,6 +130,12 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
     {
 		readFromNBT(packet.getNbtCompound());
     }
+	
+	@Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return writeToNBT(new NBTTagCompound());
+    }
 
 	public ItemStack getStack() 
 	{
@@ -136,6 +145,7 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 	public void setStack(ItemStack stack) 
 	{
 		this.stack = stack;
+		updateToClients();
 	}
 
 	@Override
@@ -149,6 +159,15 @@ public class TileEntityItemHolder extends TileEntity implements IInventory
 	{
 		ItemStack temp = stack;
 		stack = ItemStack.EMPTY.copy();
+		updateToClients();
 		return temp;
+	}
+
+	private void updateToClients()
+	{
+		world.markBlockRangeForRenderUpdate(pos, pos);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		world.scheduleBlockUpdate(pos,this.getBlockType(),0,0);
+		markDirty();
 	}
 }

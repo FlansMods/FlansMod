@@ -55,11 +55,7 @@ public class BlockItemHolder extends BlockContainer
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		type.block = this;
 		//type.item = Item.getItemFromBlock(this);
-	}
-		
-	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
-	{
-	   return false;
+		this.lightOpacity = 0;
 	}
 		
 	@Override	
@@ -107,28 +103,25 @@ public class BlockItemHolder extends BlockContainer
     {
     }
     
-	/*
-	 * TODO: [1.12] Reimplement this in JSONS?
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
+    
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+        return AABB;
     }
     
     @Override
-    public void setBlockBoundsForItemRender()
+    public boolean isOpaqueCube(IBlockState state)
     {
-        float var1 = 0.5F;
-        float var2 = 0.015625F;
-        float var3 = 0.5F;
-        this.setBlockBounds(0.0F, 0.5F - var2, 0.0F, 1F, 0.5F + var2, 1F);
+        return false;
     }
-	@Override
-	public int getMobilityFlag()
-	{
-		return 1;
-	}
-	*/
+
+    @Override
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i)

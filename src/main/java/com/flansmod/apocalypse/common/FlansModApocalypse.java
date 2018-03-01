@@ -23,6 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -93,15 +94,25 @@ public class FlansModApocalypse
 	public static Block blockLabStone;
 	public static Block blockPowerCube;
 	
+	public static Item itemBlockPowerCube, itemBlockLabStone, itemBlockSulphur;
+	
 	public static CreativeTabFlan tabApocalypse = new CreativeTabFlan(5);
 	
 	//References to apocalypse specific items and blocks:
 	public static BlockItemHolder skeleton, slumpedSkeleton, gunRack;
+	
+	static 
+	{
+		FluidRegistry.enableUniversalBucket();
+	}
 
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().register(sulphur);
+		event.getRegistry().register(itemBlockLabStone);
+		event.getRegistry().register(itemBlockSulphur);
+		event.getRegistry().register(itemBlockPowerCube);
 	}
 	
 	@SubscribeEvent
@@ -151,6 +162,8 @@ public class FlansModApocalypse
 		blockSulphur = new BlockSulphur().setUnlocalizedName("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
 		sulphur = new Item().setUnlocalizedName("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
 		
+		itemBlockSulphur = new ItemBlock(blockSulphur).setUnlocalizedName("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
+		
 		//Sulphuric acid
 		sulphuricAcid = new Fluid("sulphuricAcid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
 		if(FluidRegistry.registerFluid(sulphuricAcid))
@@ -158,6 +171,7 @@ public class FlansModApocalypse
 			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setUnlocalizedName("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
 			sulphuricAcid.setBlock(blockSulphuricAcid);
 			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
+			FluidRegistry.addBucketForFluid(sulphuricAcid);
 		}
 		else
 		{
@@ -167,9 +181,11 @@ public class FlansModApocalypse
 		
 		//Laboratory Stone
 		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
-		
+		itemBlockLabStone = new ItemBlock(blockLabStone).setUnlocalizedName("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
+
 		//Power Cube
 		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setUnlocalizedName("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
+		itemBlockPowerCube = new ItemBlock(blockPowerCube).setUnlocalizedName("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, "powerCube");
 		
 		proxy.preInit(event);
@@ -189,15 +205,27 @@ public class FlansModApocalypse
 			skeleton = ItemHolderType.getItemHolder("flanSkeleton").block;
 			skeleton.setCreativeTab(tabApocalypse);
 		}
+		else
+		{
+			FlansMod.log("Could not find skeleton item holder!");
+		}
 		if(ItemHolderType.getItemHolder("flanSkeleton2") != null)
 		{
 			slumpedSkeleton = ItemHolderType.getItemHolder("flanSkeleton2").block;
 			slumpedSkeleton.setCreativeTab(tabApocalypse);
+		}		
+		else
+		{
+			FlansMod.log("Could not find skeleton2 item holder!");
 		}
 		if(ItemHolderType.getItemHolder("flanGunRack") != null)
 		{
 			gunRack = ItemHolderType.getItemHolder("flanGunRack").block;
 			gunRack.setCreativeTab(tabApocalypse);
+		}		
+		else
+		{
+			FlansMod.log("Could not find gun rack item holder!");
 		}
 		
 		//Put ai chip in apocalypse tab

@@ -196,9 +196,12 @@ public class EntityTeleporter extends Entity
 		tags.setInteger("X", lowerLeftCornerPowerCube.getX());
 		tags.setInteger("Y", lowerLeftCornerPowerCube.getY());
 		tags.setInteger("Z", lowerLeftCornerPowerCube.getZ());
-		tags.setInteger("targetX", targetTeleporter.getX());
-		tags.setInteger("targetY", targetTeleporter.getY());
-		tags.setInteger("targetZ", targetTeleporter.getZ());
+		if(targetTeleporter != null)
+		{
+			tags.setInteger("targetX", targetTeleporter.getX());
+			tags.setInteger("targetY", targetTeleporter.getY());
+			tags.setInteger("targetZ", targetTeleporter.getZ());
+		}
 	}
 
 }

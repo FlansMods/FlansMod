@@ -53,36 +53,20 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 	    return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
 	}
 	
-	/*
+	
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 	    return false;
 	}
     
-
-	
-	@Override
-    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, Entity par5Entity)
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
+        return AABB;
     }
     
-    @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess access, BlockPos pos)
-    {
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1F, 1.0F);
-    }
-    
-    @Override
-    public void setBlockBoundsForItemRender()
-    {
-        float var1 = 0.5F;
-        float var2 = 0.5F;
-        float var3 = 0.5F;
-        this.setBlockBounds(0.0F, 0.5F - var2, 0.0F, 1F, 0.5F + var2, 1F);
-    }
-	 */
-	
 	@Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {

@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -39,6 +40,7 @@ import com.flansmod.apocalypse.client.model.RenderSurvivor;
 import com.flansmod.apocalypse.client.model.RenderTeleporter;
 import com.flansmod.apocalypse.common.CommonProxyApocalypse;
 import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
 import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 import com.flansmod.apocalypse.common.entity.EntityAIMecha;
 import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
@@ -68,6 +70,10 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
+		
+		MinecraftForge.EVENT_BUS.register(this);
+		
+		((BlockSulphuricAcid)FlansModApocalypse.blockSulphuricAcid).registerRenderer();
 	}
 	
 	public void init(FMLInitializationEvent event)
@@ -99,8 +105,9 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	}
 	
 	@SubscribeEvent
-	public static void registerModels(ModelRegistryEvent event)
+	public void registerModels(ModelRegistryEvent event)
 	{
+		/*
 		Item item = Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid);
 		ModelBakery.registerItemVariants(item);
 		final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(FLUID_MODEL_PATH, FlansModApocalypse.sulphuricAcid.getName());
@@ -119,6 +126,10 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 				return modelResourceLocation;
 			}
 		});
+		*/
+		
+		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, new ModelResourceLocation("flansmodapocalypse:itemblocklabstone", "inventory"));
+		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation[] { new ResourceLocation("flansmodapocalypse:itemblocklabstone")});
 	}
 	
 	/** Tick hook for client logic */

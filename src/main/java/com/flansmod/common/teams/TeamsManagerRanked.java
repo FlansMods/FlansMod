@@ -68,6 +68,12 @@ public class TeamsManagerRanked extends TeamsManager
 	@Override
 	public void startRound()
 	{
+		if(currentPool == null)
+		{
+			
+			return;
+		}
+		
 		for(EntityPlayer player : getPlayers())
 		{		
 			ProcessRankData((EntityPlayerMP)player);

@@ -225,7 +225,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
         this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
 
-        this.ravineGenerator.generate(this.world, x, z, chunkprimer);
+        //this.ravineGenerator.generate(this.world, x, z, chunkprimer);
         this.mineshaftGenerator.generate(this.world, x, z, chunkprimer);
         this.villageGenerator.generate(this.world, x, z, chunkprimer);
 
@@ -446,7 +446,7 @@ public class ChunkProviderApocalypse implements IChunkGenerator
         	}
         	//Generate runway section xOffset at chunk x
         	if(canSpawn)
-        		runwayGenerator.generate(world, rand, new BlockPos(xOrigin * 4 * 16, 0, z * 16));
+        		runwayGenerator.generate(world, rand, new BlockPos(x * 16, 0, z * 16));
         }
         
         xOrigin = ModuloHelper.divide(x, 3);

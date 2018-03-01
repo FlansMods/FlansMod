@@ -49,7 +49,7 @@ public class WorldGenRunway extends WorldGenFlan
 		
 		fillArea(world, x, yHeight + 1, z, x + 16, yHeight + 11, z + 16, Blocks.AIR.getDefaultState());
 		
-		if(ModuloHelper.modulo(chunkX, 4) == 0)
+		if(ModuloHelper.modulo(chunkX, 4) == 1)
 		{
 			//Create hangar
 			fillArea(world, x, yHeight + 1, z, x + 16, yHeight + 5, z + 1, Blocks.WOOL.getStateFromMeta(13));
@@ -100,7 +100,7 @@ public class WorldGenRunway extends WorldGenFlan
 
 		}
 		
-		if(ModuloHelper.modulo(chunkX, 4) == 1)
+		if(ModuloHelper.modulo(chunkX, 4) == 0)
 		{
 			//Spawn a plane
 			DriveableType type = FlansModApocalypse.getLootGenerator().getRandomPlane(rand);

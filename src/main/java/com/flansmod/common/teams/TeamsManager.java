@@ -826,7 +826,7 @@ public class TeamsManager
 			if(spawnPoint != null)
 			{
 				//player.setPositionAndUpdate(spawnPoint.x, spawnPoint.y, spawnPoint.z);
-				playerMP.startRiding((Entity)null);
+				playerMP.dismountRidingEntity();
 				EnumSet enumset = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
 				playerMP.connection.setPlayerLocation(spawnPoint.x, spawnPoint.y, spawnPoint.z, 0F, 0F, enumset);
 				//playerMP.setRotationYawHead(f);

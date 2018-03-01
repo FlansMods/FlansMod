@@ -102,12 +102,14 @@ public class CommonProxyApocalypse
 		event.getRegistry().register(new EntityEntry(EntityAIMecha.class, "AIMecha").setRegistryName("AIMecha"));
 		event.getRegistry().register(new EntityEntry(EntityFakePlayer.class, "FakePlayer").setRegistryName("FakePlayer"));
 		event.getRegistry().register(new EntityEntry(EntityNukeDrop.class, "NukeDrop").setRegistryName("NukeDrop"));
+		event.getRegistry().register(new EntityEntry(EntityFlyByPlane.class, "FlyByPlane").setRegistryName("FlyByPlane"));
 		
-		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 	EntitySurvivor.class, "Survivor", 89, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
+		//EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Survivor"), 		EntitySurvivor.class, "Survivor", 112, FlansModApocalypse.INSTANCE, 100, 20, true, 0, 0);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:Teleporter"), 	EntityTeleporter.class, "Teleporter", 113, FlansModApocalypse.INSTANCE, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:AIMecha"), 		EntityAIMecha.class, "AIMecha", 114, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FakePlayer"), 	EntityFakePlayer.class, "FakePlayer", 115, FlansModApocalypse.INSTANCE, 250, 20, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:NukeDrop"), 		EntityNukeDrop.class, "NukeDrop", 116, FlansModApocalypse.INSTANCE, 250, 20, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmodapocalypse:FlyByPlane"), 	EntityFlyByPlane.class, "FlyByPlane", 117, FlansModApocalypse.INSTANCE, 250, 20, false);
 	}
 	
 	/** Tick hook for server */
