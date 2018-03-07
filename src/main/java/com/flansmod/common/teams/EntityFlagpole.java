@@ -37,6 +37,8 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public TeamsMap map;
 	//List of all TeamObjects associated with this base
 	public List<ITeamObject> objects = new ArrayList<ITeamObject>();
+	// List of spawn points. 
+	public List<BlockPos> spawnPoints = new ArrayList<BlockPos>();
 	//The name of this base, changeable by the baseList and baseRename commands
 	public String name = "Default Name";
 	//This base's ID
@@ -64,7 +66,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		flag = new EntityFlag(world, this);
 		objects.add(flag);
 		world.spawnEntity(flag);
-		flag.startRiding(this);
+		//flag.startRiding(this);
 		if(teamsManager.maps.size() > 0)
 			map = teamsManager.maps.values().iterator().next();
 	}	
@@ -183,6 +185,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	public void addObject(ITeamObject object) 
 	{
 		objects.add(object);
+		if(map != null)
+		{
+			map.addObject(this, object);
+		}	
 	}
 
 	@Override
@@ -200,6 +206,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	@Override
 	public void destroy()
 	{
+		if(map != null)
+		{
+			map.removeBase(this);
+		}
 		setDead();
 	}
 
@@ -253,6 +263,10 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		
 		if(!world.isRemote)
 		{
+			if(flag == null && getPassengers().get(0) instanceof EntityFlag)
+			{
+				flag = (EntityFlag)getPassengers().get(0);
+			}
 			if(flag == null)
 			{
 				flag = new EntityFlag(world, this);
@@ -263,7 +277,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 			if(flag.isHome)
 			{
 				flag.setPosition(posX, posY + 2F, posZ);
-				if(!flag.isRiding())
+				if(!flag.isRiding() && ticksExisted > 2) // Heckin' race conditions. You'd think MC would sort queue bad passenger packets until later...
 					flag.startRiding(this);
 			}
 		}
@@ -337,40 +351,6 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	{
 		currentTeamID = id;
 	}
-	
-	//Chunk loading
-	/*
-	public void forceChunkLoading(Ticket ticket) 
-	{
-		chunkTicket = ticket;
-		for (ChunkCoordIntPair coord : getLoadArea()) {
-			FlansMod.log(String.format("Force loading chunk %s in %s",coord, world.provider.getClass()));
-			ForgeChunkManager.forceChunk(ticket, coord);
-		}
-	}
-	
-	public List<ChunkCoordIntPair> getLoadArea() 
-	{
-		List<ChunkCoordIntPair> loadArea = new LinkedList<ChunkCoordIntPair>();
-		Chunk centerChunk = world.getChunkFromBlockCoords(MathHelper.floor(posX), MathHelper.floor(posZ));
-		loadArea.add(new ChunkCoordIntPair(centerChunk.xPosition, centerChunk.zPosition));
-		return loadArea;
-	}
-	
-	public void updateChunkLoading()
-	{
-		if (world.isRemote)
-			return;
-		if (uninitialized && chunkTicket == null) 
-		{
-			chunkTicket = ForgeChunkManager.requestTicket(FlansMod.INSTANCE, world, Type.NORMAL);
-			if (chunkTicket != null) 
-			{
-				forceChunkLoading(chunkTicket);
-			}
-			uninitialized = false;
-		}
-	}*/
 	
 	@Override
 	public boolean isBurning()

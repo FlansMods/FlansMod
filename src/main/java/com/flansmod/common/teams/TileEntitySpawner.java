@@ -13,6 +13,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 import com.flansmod.common.FlansMod;
@@ -290,4 +291,10 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	{
 		return false;
 	}
+	
+	@Override
+    protected void setWorldCreate(World worldIn)
+    {
+        this.setWorld(worldIn);
+    }
 }

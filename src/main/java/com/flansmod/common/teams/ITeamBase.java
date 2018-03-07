@@ -3,6 +3,7 @@ package com.flansmod.common.teams;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
@@ -67,6 +68,5 @@ public interface ITeamBase
 	
 	//Returns the flag object for CTF like gametypes. May return null, but then this base may not be used in CTF like gametypes
 	public ITeamObject getFlag();
-	
 
 }

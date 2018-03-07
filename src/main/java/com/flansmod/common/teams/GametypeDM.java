@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.PlayerData;
@@ -116,46 +117,30 @@ public class GametypeDM extends Gametype
 
 	@Override
 	public Vec3d getSpawnPoint(EntityPlayerMP player) 
-	{
+	{		
 		if(teamsManager.currentRound == null)
 			return null;
 		PlayerData data = getPlayerData(player);
-		List<ITeamObject> validSpawnPoints = new ArrayList<ITeamObject>();
+		List<BlockPos> validSpawnPoints = new ArrayList<BlockPos>();
 		if(data.newTeam == null)
 			return null;
 		
-		//Check each team's spawnpoints
 		if(data.newTeam == Team.spectators)
 		{
-			ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(teamsManager.currentRound.getTeamID(data.newTeam));
-			for (ITeamBase base : bases) {
-				if (base.getMap() != teamsManager.currentRound.map)
-					continue;
-				for (int i = 0; i < base.getObjects().size(); i++) {
-					if (base.getObjects().get(i).isSpawnPoint())
-						validSpawnPoints.add(base.getObjects().get(i));
-				}
-			}
+			teamsManager.currentRound.map.getValidSpawnPoints(teamsManager.currentRound.getTeamID(data.newTeam), validSpawnPoints);
 		}
 		else
 		{
 			for(int k = 2; k < 4; k++)
 			{
-				ArrayList<ITeamBase> bases = teamsManager.currentRound.map.getBasesPerTeam(k);
-				for (ITeamBase base : bases) {
-					if (base.getMap() != teamsManager.currentRound.map)
-						continue;
-					for (int i = 0; i < base.getObjects().size(); i++) {
-						if (base.getObjects().get(i).isSpawnPoint())
-							validSpawnPoints.add(base.getObjects().get(i));
-					}
-				}
+				teamsManager.currentRound.map.getValidSpawnPoints(teamsManager.currentRound.getTeamID(data.newTeam), validSpawnPoints);
 			}
 		}
+		
 		if(validSpawnPoints.size() > 0)
 		{
-			ITeamObject spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
-			return new Vec3d(spawnPoint.getPosX(), spawnPoint.getPosY(), spawnPoint.getPosZ());
+			BlockPos spawnPoint = validSpawnPoints.get(rand.nextInt(validSpawnPoints.size()));
+			return new Vec3d(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
 		}
 		
 		return null;

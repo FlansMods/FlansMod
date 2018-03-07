@@ -129,7 +129,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	{
 		dismountRidingEntity();
 		setPosition(base.posX, base.posY + 2F, base.posZ);
-		startRiding(base);
+		//startRiding(base);
 		isHome = true;
 	}
 
@@ -164,7 +164,7 @@ public class EntityFlag extends Entity implements ITeamObject
 	{
 		getDataManager().set(TEAMID, (byte)newTeamID);
 		setPosition(base.posX, base.posY + 2F, base.posZ);
-		startRiding(base);
+		//startRiding(base);
 	}
 
 	@Override

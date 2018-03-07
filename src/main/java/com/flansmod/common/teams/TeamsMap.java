@@ -1,10 +1,13 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.flansmod.common.FlansMod;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -18,21 +21,12 @@ public class TeamsMap
 	public Ticket chunkLoadingTicket;
 	public ArrayList<ITeamBase> bases = new ArrayList<ITeamBase>();
 	public int minPlayers = 0, maxPlayers = 1000000;
-		
+	public ArrayList<PermanentBaseData> permanentBaseData = new ArrayList<PermanentBaseData>();
+	
 	public TeamsMap(World world, String sn, String n)
 	{
 		shortName = sn;
 		name = n;
-		
-		//Ask Forge for a chunk loading ticket
-		chunkLoadingTicket = ForgeChunkManager.requestTicket(FlansMod.INSTANCE, world, Type.NORMAL);
-		if(chunkLoadingTicket == null)
-		{
-			FlansMod.log("Failed to add chunk loading ticket as Flan's Mod has run out");
-			return;
-		}
-		//We give the ticket some information so that when we receive the ticket later, we can pass it back to this map
-		chunkLoadingTicket.getModData().setString("ShortName", shortName);
 	}
 	
 	public ArrayList<ITeamBase> getBasesPerTeam(int teamID)
@@ -46,18 +40,51 @@ public class TeamsMap
 		return basesForThisTeam;
 	}
 	
+	public void getValidSpawnPoints(int teamID, List<BlockPos> validSpawnPoints)
+	{
+		for(PermanentBaseData data : permanentBaseData)
+		{
+			if(data.teamID == teamID)
+			{
+				validSpawnPoints.addAll(data.spawnPoints);
+			}
+		}
+	}
+	
 	public void addBase(ITeamBase base)
 	{
 		bases.add(base);
+		PermanentBaseData data = getPermanentData(base);
+		if(data == null)
+		{
+			data = new PermanentBaseData();
+			
+			permanentBaseData.add(data);
+		}
 		
+		data.baseID = base.getBaseID();
+		data.teamID = base.getDefaultOwnerID();
+		data.spawnPoints.clear();
+		for(ITeamObject object : base.getObjects())
+		{
+			if(object.isSpawnPoint())
+				data.spawnPoints.add(new BlockPos(object.getPosX(), object.getPosY(), object.getPosZ()));
+		}
+	}
+	
+	private PermanentBaseData getPermanentData(ITeamBase base)
+	{
+		for(PermanentBaseData data : permanentBaseData)
+		{
+			if(data.baseID == base.getBaseID())
+				return data;
+		}
+		return null;
 	}
 	
 	public void addBaseFirstTime(ITeamBase base)
 	{
 		addBase(base);
-		//Add the chunk this base is in to our chunk loading ticket
-		ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkPos((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
-		FlansMod.log("Added chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " to chunk loading ticket for base " + name );
 	}
 	
 	public void removeBase(ITeamBase base)
@@ -68,20 +95,30 @@ public class TeamsMap
 			return;
 		}
 		bases.remove(base);
-		//Remove the chunk from the chunk loading ticket
-		ForgeChunkManager.unforceChunk(chunkLoadingTicket, new ChunkPos((int)base.getPosX() >> 4, (int)base.getPosZ() >> 4));
-		FlansMod.log("Removed chunk at " + ((int)base.getPosX() >> 4) + ",  " + ((int)base.getPosZ() >> 4) + " from chunk loading ticket for base " + name );
+		for(int i = permanentBaseData.size() - 1; i >= 0; i--)
+		{
+			if(permanentBaseData.get(i).baseID == base.getBaseID())
+			{
+				permanentBaseData.remove(i);
+				return;
+			}
+		}
 	}
 	
-	public void addObject(ITeamObject object)
+	public void addObject(ITeamBase base, ITeamObject object)
 	{
+		if(object.isSpawnPoint())
+		{
+			PermanentBaseData data = getPermanentData(base);
+			if(data != null)
+			{
+				data.addObject(object);
+			}
+		}
 	}
 	
-	public void addObjectFirstTime(ITeamObject object)
+	public void addObjectFirstTime(ITeamBase base, ITeamObject object)
 	{
-		//Add the chunk this object is in to our chunk loading ticket
-		if(object.forceChunkLoading())
-			ForgeChunkManager.forceChunk(chunkLoadingTicket, new ChunkPos((int)object.getPosX() >> 4, (int)object.getPosZ() >> 4));
 	}
 	
 	public TeamsMap(World world, NBTTagCompound tags)
@@ -90,6 +127,14 @@ public class TeamsMap
 		name = tags.getString("Name");
 		minPlayers = tags.getInteger("MinPlayers");
 		maxPlayers = tags.getInteger("MaxPlayers");
+		
+		int iNumBases = tags.getInteger("NumBases");
+		for(int i = 0; i < iNumBases; i++)
+		{
+			PermanentBaseData data = new PermanentBaseData();
+			data.readBaseFromNBT(tags.getCompoundTag("Base_" + i));
+			permanentBaseData.add(data);
+		}
 	}
 	
 	public void writeToNBT(NBTTagCompound tags)
@@ -98,21 +143,12 @@ public class TeamsMap
 		tags.setString("Name", name);
 		tags.setInteger("MinPlayers", minPlayers);
 		tags.setInteger("MaxPlayers", maxPlayers);
-	}
-
-	//Called by the chunk loading callback handler. Upon loading a world, the chunk loading positions
-	//for this map are handed to this method and this method loads the required chunks
-	public void forceChunkLoading(Ticket ticket) 
-	{
-		for (ChunkPos coord : ticket.getChunkList()) 
+		tags.setInteger("NumBases", permanentBaseData.size());
+		for(int i = 0; i < permanentBaseData.size(); i++)
 		{
-			FlansMod.log("Loading chunk at " + coord.x + ", " + coord.z + " for map : " + name);
-			ForgeChunkManager.forceChunk(ticket, coord);
+			NBTTagCompound baseTags =  new NBTTagCompound();
+			permanentBaseData.get(i).writeBaseToNBT(baseTags);
+			tags.setTag("Base_" + i, baseTags);
 		}
-	}
-	
-	public void deleteMap()
-	{
-		ForgeChunkManager.releaseTicket(chunkLoadingTicket);
 	}
 }

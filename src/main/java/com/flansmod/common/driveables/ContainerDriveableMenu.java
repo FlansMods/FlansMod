@@ -47,7 +47,7 @@ public class ContainerDriveableMenu extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY.copy();
 		Slot currentSlot = (Slot)inventorySlots.get(slotID);
 
 		if(currentSlot != null && currentSlot.getHasStack())
@@ -59,19 +59,19 @@ public class ContainerDriveableMenu extends Container
 			{
 				if(!mergeItemStack(slotStack, 0, 1, false))
 				{
-					return null;
+					return ItemStack.EMPTY.copy();
 				}
 			}
 			else {
 				if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
 				{
-					return null;
+					return ItemStack.EMPTY.copy();
 				}
 			}
 
 			if (slotStack.getCount() == 0)
 			{
-				currentSlot.putStack(null);
+				currentSlot.putStack(ItemStack.EMPTY.copy());
 			}
 			else
 			{
@@ -80,7 +80,7 @@ public class ContainerDriveableMenu extends Container
 
 			if (slotStack.getCount() == stack.getCount())
 			{
-				return null;
+				return ItemStack.EMPTY.copy();
 			}
 
 			currentSlot.onTake(player, slotStack);

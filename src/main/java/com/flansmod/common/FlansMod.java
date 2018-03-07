@@ -105,7 +105,6 @@ import com.flansmod.common.teams.ArmourBoxType;
 import com.flansmod.common.teams.ArmourType;
 import com.flansmod.common.teams.BlockArmourBox;
 import com.flansmod.common.teams.BlockSpawner;
-import com.flansmod.common.teams.ChunkLoadingHandler;
 import com.flansmod.common.teams.CommandTeams;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
@@ -129,14 +128,14 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "[5.5.0,5.5.1)", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWEDVERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
 	public static Configuration configFile;
 	public static final String MODID = "flansmod";
-	public static final String VERSION = "5.5.0";
+	public static final String VERSION = "@VERSION@";
 	@Instance(MODID)
 	public static FlansMod INSTANCE;
 
@@ -276,10 +275,6 @@ public class FlansMod
 			}
 		}
 		
-		//Register the chunk loader 
-		//TODO : Re-do chunk loading
-		ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoadingHandler());
-
 		//Config
 		//Starting the EventListener
 		new PlayerDeathEventListener();

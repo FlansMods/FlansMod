@@ -417,13 +417,18 @@ public class InfoType
 					for(int j = 0; j < height; j++)
 					{
 						char c = recipeGrid[minX + i][minY + j];
-						if(c != ' ')
+						if(c == ' ')
+						{
+							ingredients.add(Ingredient.fromStacks(ItemStack.EMPTY.copy()));
+						}
+						else
 						{
 							ItemStack stack = menu.get(Character.valueOf(c));
 							if(stack == null || stack.isEmpty())
 							{
 								FlansMod.log("Failed to find " + c + " in recipe for " + shortName);
-								continue;
+								// This recipe is BORK. Kill it
+								return;
 							}
 							ingredients.add(Ingredient.fromStacks(stack.copy()));
 						}
