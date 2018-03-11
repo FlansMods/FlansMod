@@ -66,7 +66,7 @@ public class PacketDriveableDamage extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Driveable damage packet received on server. Skipping.");
+		FlansMod.log.warn("Driveable damage packet received on server. Skipping.");
 	}
 
 	@Override

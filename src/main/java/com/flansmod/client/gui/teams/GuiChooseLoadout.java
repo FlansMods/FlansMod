@@ -42,7 +42,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in choose loadout page!");
+			FlansMod.log.warn("Problem in choose loadout page!");
 			return;
 		}
 		
@@ -97,7 +97,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in choose loadout page!");
+			FlansMod.log.warn("Problem in choose loadout page!");
 			return;
 		}
 		

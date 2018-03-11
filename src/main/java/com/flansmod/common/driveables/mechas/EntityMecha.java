@@ -554,7 +554,7 @@ public class EntityMecha extends EntityDriveable
 		DriveableData data = getDriveableData();
 		if (type == null)
 		{
-			FlansMod.log("Mecha type null. Not ticking mecha");
+			FlansMod.log.warn("Mecha type null. Not ticking mecha");
 			return;
 		}
 		

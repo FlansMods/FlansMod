@@ -55,6 +55,6 @@ public class PacketMGFire extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("MG firing packet received on client. Skipping.");
+		FlansMod.log.warn("MG firing packet received on client. Skipping.");
 	}
 }

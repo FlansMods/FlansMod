@@ -161,7 +161,8 @@ public class InfoType
 					}
 					
 					if(line.length() > 3)
-						FlansMod.log("Looks like a bad recipe in " + shortName + ". Double check whether '" + line + "' is supposed to be part of the recipe");
+						FlansMod.log.warn("Looks like a bad recipe in " + shortName + ". Double check whether '"
+								+ line + "' is supposed to be part of the recipe");
 					
 					for(int j = 0; j < 3; j++)
 					{
@@ -179,7 +180,7 @@ public class InfoType
 		} 
 		catch (Exception e)
 		{
-			FlansMod.log("Reading file failed : " + shortName);
+			FlansMod.log.error("Reading file failed : " + shortName);
 			e.printStackTrace();
 		}
 	}
@@ -331,7 +332,7 @@ public class InfoType
 	
 	protected static void LogError(String shortName, String s)
 	{
-		FlansMod.log("[Problem in " + shortName + ".txt]" + s);
+		FlansMod.log.error("[Problem in " + shortName + ".txt]" + s);
 	}
 	
 	@Override
@@ -393,7 +394,7 @@ public class InfoType
 				
 				if((minX == 3 && maxX == -1) || (minY == 3 && maxY == -1))
 				{
-					FlansMod.log("Invalid recipe grid in " + shortName);
+					FlansMod.log.warn("Invalid recipe grid in " + shortName);
 					return;
 				}
 				
@@ -426,7 +427,7 @@ public class InfoType
 							ItemStack stack = menu.get(Character.valueOf(c));
 							if(stack == null || stack.isEmpty())
 							{
-								FlansMod.log("Failed to find " + c + " in recipe for " + shortName);
+								FlansMod.log.warn("Failed to find " + c + " in recipe for " + shortName);
 								// This recipe is BORK. Kill it
 								return;
 							}
@@ -450,7 +451,7 @@ public class InfoType
 		}
 		catch (Exception e)
 		{
-			FlansMod.log("Failed to add recipe for : " + shortName);
+			FlansMod.log.error("Failed to add recipe for : " + shortName);
 			e.printStackTrace();
 		}
 	}
@@ -465,7 +466,7 @@ public class InfoType
 				damage = i;
 		}
 		if(damage == -1)
-			FlansMod.log("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
+			FlansMod.log.warn("Failed to find dye colour : " + dyeName + " while adding " + contentPack);
 		
 		return damage;
 	}
@@ -541,7 +542,7 @@ public class InfoType
 		}
 
 
-		FlansMod.log("Could not find " + s + " when adding recipe for " + requester);
+		FlansMod.log.warn("Could not find " + s + " when adding recipe for " + requester);
 		return ItemStack.EMPTY.copy();
 	}
 	

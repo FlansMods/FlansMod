@@ -326,7 +326,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(type == null)
 		{
-			FlansMod.log("Killing seat due to invlaid type tag");
+			FlansMod.log.warn("Killing seat due to invlaid type tag");
 			setDead();
 			return;
 		}
@@ -703,7 +703,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 					}
 					else
 					{
-						FlansMod.log("Failed to put pet in seat");
+						FlansMod.log.warn("Failed to put pet in seat");
 					}
 				}
 			}
@@ -714,7 +714,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		{
 			if(!entityplayer.startRiding(this))
 			{
-				FlansMod.log("Failed to mount seat");
+				FlansMod.log.warn("Failed to mount seat");
 			}
 			return true;
 		}
@@ -825,7 +825,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		if(seatInfo == null)
 		{
 			data.writeInt(-1);
-			FlansMod.log("Bad seat data. This is very bad");
+			FlansMod.log.warn("Bad seat data. This is very bad");
 		}
 		else
 		{

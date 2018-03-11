@@ -46,7 +46,7 @@ public class PacketMGMount extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received MG mount packet on server. Skipping.");
+		FlansMod.log.warn("Received MG mount packet on server. Skipping.");
 	}
 
 	@Override

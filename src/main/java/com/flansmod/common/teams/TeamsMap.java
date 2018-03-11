@@ -91,7 +91,7 @@ public class TeamsMap
 	{
 		if(bases == null)
 		{
-			FlansMod.log("Base array for map " + name + " null");
+			FlansMod.log.warn("Base array for map " + name + " null");
 			return;
 		}
 		bases.remove(base);

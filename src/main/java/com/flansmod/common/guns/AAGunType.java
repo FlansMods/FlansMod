@@ -126,7 +126,7 @@ public class AAGunType extends InfoType
 		} 
 		catch (Exception e)
 		{
-			FlansMod.log("" + e);
+			FlansMod.log.error("" + e);
 		}
 	}
 

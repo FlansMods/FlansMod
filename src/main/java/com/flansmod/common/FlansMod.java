@@ -132,6 +132,7 @@ import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 public class FlansMod
 {
 	//Core mod stuff
+	public static Logger log;
 	public static boolean DEBUG = false;
 	public static Configuration configFile;
 	public static final String MODID = "flansmod";
@@ -153,11 +154,11 @@ public class FlansMod
 	public static boolean addGunpowderRecipe = true;
 	public static boolean shootOnRightClick = false;
 	public static boolean forceUpdateJSONs = false;
-	
+
 	public static float armourSpawnRate = 0.25F;
-	
+
 	public static int dungeonLootChance = 500;
-	
+
 	/** The spectator team. Moved here to avoid a concurrent modification error */
 	public static Team spectators = new Team("spectators", "Spectators", 0x404040, '7');
 
@@ -167,7 +168,7 @@ public class FlansMod
 	public static final TeamsManager teamsManager = new TeamsManagerRanked();
 	public static final CommonTickHandler tickHandler = new CommonTickHandler();
 	public static FlansHooks hooks = new FlansHooks();
-	
+
 	//Items and creative tabs
 	public static BlockFlansWorkbench workbench;
 	public static ItemBlockManyNames workbenchItem;
@@ -181,19 +182,21 @@ public class FlansMod
 	public static ArrayList<ItemTeamArmour> armourItems = new ArrayList<ItemTeamArmour>();
 	public static CreativeTabFlan tabFlanGuns = new CreativeTabFlan(0), tabFlanDriveables = new CreativeTabFlan(1),
 			tabFlanParts = new CreativeTabFlan(2), tabFlanTeams = new CreativeTabFlan(3), tabFlanMechas = new CreativeTabFlan(4);
-	
+
 	/** Custom paintjob item */
 	public static Item rainbowPaintcan;
 	public static BlockPaintjobTable paintjobTable;
-	
+
 	private static Random rewardsRandom = new Random();
+
 	public static float Pick(float totalWeight) { return rewardsRandom.nextFloat() * totalWeight; }
 
 	/** The mod pre-initialiser method */
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		log("Preinitialising Flan's mod.");
+		log = event.getModLog();
+		log.debug("Preinitialising Flan's mod.");
 		
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		
@@ -221,8 +224,8 @@ public class FlansMod
 	
 		if (!flanDir.exists())
 		{
-			log("Flan folder not found. Creating empty folder.");
-			log("You should get some content packs and put them in the Flan folder.");
+			log.info("Flan folder not found. Creating empty folder.%n" +
+					"You should get some content packs and put them in the Flan folder.");
 			flanDir.mkdirs();
 			flanDir.mkdir();
 		}
@@ -248,14 +251,14 @@ public class FlansMod
 		//Force Minecraft to reload all resources in order to load content pack resources.
 		proxy.forceReload();
 						
-		log("Preinitializing complete.");
+		log.debug("Preinitializing complete.");
 	}
 	
 	/** The mod initialiser method */
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		log("Initialising Flan's Mod.");
+		log.info("Initialising Flan's Mod.");
 
 		//Do proxy loading
 		proxy.init();
@@ -278,13 +281,13 @@ public class FlansMod
 		//Config
 		//Starting the EventListener
 		new PlayerDeathEventListener();
-		log("Loading complete.");
+		log.info("Loading complete.");
 	}
 	
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
 	{		
-		log("Registering Recipes.");
+		log.info("Registering Recipes.");
 		
 		// Recipes
 		for (InfoType type : InfoType.infoTypes.values())
@@ -331,7 +334,7 @@ public class FlansMod
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
-		log("Registering Items");
+		log.info("Registering Items");
 		
 		for (InfoType type : InfoType.infoTypes.values())
 		{
@@ -349,7 +352,7 @@ public class FlansMod
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event)
 	{
-		log("Registering Blocks");
+		log.info("Registering Blocks");
 		
 		for (InfoType type : InfoType.infoTypes.values())
 		{
@@ -364,7 +367,7 @@ public class FlansMod
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event)
 	{
-		log("Registering Entities");
+		log.info("Registering Entities");
 		
 		event.getRegistry().register(new EntityEntry(EntityFlagpole.class, "Flagpole").setRegistryName("Flagpole"));
 		event.getRegistry().register(new EntityEntry(EntityFlag.class, "Flag").setRegistryName("Flag"));
@@ -631,7 +634,7 @@ public class FlansMod
 			method.setAccessible(true);
 		} catch (Exception e)
 		{
-			log("Failed to get class loader. All content loading will now fail.");
+			log.error("Failed to get class loader. All content loading will now fail.");
 			e.printStackTrace();
 		}
 
@@ -670,16 +673,16 @@ public class FlansMod
 					case itemHolder:	new BlockItemHolder((ItemHolderType)infoType); break;
 					case rewardBox:		new ItemRewardBox((RewardBox)infoType).setUnlocalizedName(infoType.shortName); break;
 					case loadout:		break;
-					default : log("Unrecognised type for " + infoType.shortName); break;
+					default : log.warn("Unrecognised type for " + infoType.shortName); break;
 					}
 				}
 				catch(Exception e)
 				{
-					log("Failed to add " + type.name() + " : " + typeFile.name);
+					log.error("Failed to add " + type.name() + " : " + typeFile.name);
 					e.printStackTrace();
 				}
 			}
-			log("Loaded " + type.name() + ".");
+			log.info("Loaded " + type.name() + ".");
 		}		
 		Team.spectators = spectators;
 		
@@ -703,17 +706,11 @@ public class FlansMod
 			configFile.save();
 	}
 
-	//TODO : Proper logger
-	public static void log(String string) 
-	{
-		System.out.println("[Flan's Mod] " + string);
-	}
-
 	public static void Assert(boolean b, String string)
 	{
 		if(!b)
 		{
-			log(string);
+			log.warn(string);
 		}
 	}
 	

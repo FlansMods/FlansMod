@@ -182,7 +182,7 @@ public class FlansModResourceHandler
 		}
 		catch(IOException e)
 		{
-			FlansMod.log("Failed to create custom skin!");
+			FlansMod.log.error("Failed to create custom skin!");
 			return;
 		}
 	}
@@ -205,7 +205,7 @@ public class FlansModResourceHandler
 		}
 		catch(IOException e)
 		{
-			FlansMod.log("Failed to create custom icon!");
+			FlansMod.log.error("Failed to create custom icon!");
 			return;
 		}	
 	}

@@ -46,7 +46,7 @@ public class PacketVoting extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received vote info packet on server. Rejecting.");
+		FlansMod.log.warn("Received vote info packet on server. Rejecting.");
 	}
 
 	@Override

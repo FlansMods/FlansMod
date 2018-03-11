@@ -41,7 +41,7 @@ public class PacketVoteCast extends PacketBase
 	{
 		if(vote < 0 || vote > TeamsManager.getInstance().voteOptions.length)
 		{
-			FlansMod.log("Invalid vote " + vote + " from " + playerEntity.getName());
+			FlansMod.log.warn("Invalid vote " + vote + " from " + playerEntity.getName());
 			return;
 		}
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity, Side.SERVER);
@@ -51,7 +51,7 @@ public class PacketVoteCast extends PacketBase
 	@Override
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Received vote cast packet on client. Skipping.");
+		FlansMod.log.warn("Received vote cast packet on client. Skipping.");
 	}
 
 }

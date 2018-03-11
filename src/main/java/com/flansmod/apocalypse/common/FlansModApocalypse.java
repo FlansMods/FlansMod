@@ -207,7 +207,7 @@ public class FlansModApocalypse
 		}
 		else
 		{
-			FlansMod.log("Could not find skeleton item holder!");
+			FlansMod.log.warn("Could not find skeleton item holder!");
 		}
 		if(ItemHolderType.getItemHolder("flanSkeleton2") != null)
 		{
@@ -216,7 +216,7 @@ public class FlansModApocalypse
 		}		
 		else
 		{
-			FlansMod.log("Could not find skeleton2 item holder!");
+			FlansMod.log.warn("Could not find skeleton2 item holder!");
 		}
 		if(ItemHolderType.getItemHolder("flanGunRack") != null)
 		{
@@ -225,7 +225,7 @@ public class FlansModApocalypse
 		}		
 		else
 		{
-			FlansMod.log("Could not find gun rack item holder!");
+			FlansMod.log.warn("Could not find gun rack item holder!");
 		}
 		
 		//Put ai chip in apocalypse tab

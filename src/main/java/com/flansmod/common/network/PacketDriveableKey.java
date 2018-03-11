@@ -48,7 +48,7 @@ public class PacketDriveableKey extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Driveable keypress packet received on client. Skipping.");
+		FlansMod.log.warn("Driveable keypress packet received on client. Skipping.");
 	}
 
 }

@@ -152,7 +152,7 @@ public class TeamsManagerClassic extends TeamsManager
 		if(!data.newTeam.classes.contains(playerClass))
 		{
 			player.sendMessage(new TextComponentString("You may not select " + playerClass.name + ". Please try again"));
-			FlansMod.log(player.getName() + " tried to pick an invalid class : " + playerClass.name);
+			FlansMod.log.warn(player.getName() + " tried to pick an invalid class : " + playerClass.name);
 			//sendClassMenuToPlayer(player);
 			return;
 		}

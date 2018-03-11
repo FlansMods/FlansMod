@@ -345,7 +345,7 @@ public class FlansModRaytracer
 				}
 				else
 				{
-					FlansMod.log("Entity was not a driveable");
+					FlansMod.log.warn("Entity was not a driveable");
 					return null;
 				}
 			}
@@ -361,7 +361,7 @@ public class FlansModRaytracer
 				}
 				else
 				{
-					FlansMod.log("Entity was not a player");
+					FlansMod.log.warn("Entity was not a player");
 					return null;
 				}
 			}

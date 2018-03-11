@@ -605,7 +605,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to retreive AA gun type from server.");
+			FlansMod.log.error("Failed to retreive AA gun type from server.");
 			super.setDead();
 			e.printStackTrace();
 		}

@@ -50,7 +50,7 @@ public class PacketKillMessage extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received kill message packet on the server. Skipping.");
+		FlansMod.log.warn("Received kill message packet on the server. Skipping.");
 	}
 
 	@Override

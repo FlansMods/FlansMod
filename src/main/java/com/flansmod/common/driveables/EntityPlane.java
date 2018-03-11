@@ -328,7 +328,7 @@ public class EntityPlane extends EntityDriveable
 		DriveableData data = getDriveableData();
 		if(type == null)
 		{
-			FlansMod.log("Plane type null. Not ticking plane");
+			FlansMod.log.warn("Plane type null. Not ticking plane");
 			return;
 		}
 

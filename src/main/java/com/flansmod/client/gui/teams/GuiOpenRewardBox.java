@@ -233,7 +233,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in landing page!");
+			FlansMod.log.warn("Problem in landing page!");
 			return;
 		}
 		

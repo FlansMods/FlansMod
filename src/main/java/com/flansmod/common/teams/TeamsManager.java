@@ -858,7 +858,8 @@ public class TeamsManager
 		if(spawnPoint != null)
 			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.x), MathHelper.floor(spawnPoint.y) + 1, MathHelper.floor(spawnPoint.z)), 0);
 		else
-			FlansMod.log("Could not find spawn point for " + player.getDisplayName() + " on team " + (data.newTeam == null ? "null" : data.newTeam.name));
+			FlansMod.log.warn("Could not find spawn point for " + player.getDisplayName() + " on team " +
+					(data.newTeam == null ? "null" : data.newTeam.name));
 	}
 	
 	/** Force a respawn */
@@ -954,7 +955,7 @@ public class TeamsManager
 		if(!isValid)
 		{
 			player.sendMessage(new TextComponentString("You may not join " + selectedTeam.name + " for it is invalid. Please try again"));
-			FlansMod.log(player.getName() + " tried to spawn on an invalid team : " + selectedTeam.name);
+			FlansMod.log.warn(player.getName() + " tried to spawn on an invalid team : " + selectedTeam.name);
 			selectedTeam = Team.spectators;
 		}
 		
@@ -1000,7 +1001,7 @@ public class TeamsManager
 		if(!data.newTeam.classes.contains(playerClass))
 		{
 			player.sendMessage(new TextComponentString("You may not select " + playerClass.name + ". Please try again"));
-			FlansMod.log(player.getName() + " tried to pick an invalid class : " + playerClass.name);
+			FlansMod.log.warn(player.getName() + " tried to pick an invalid class : " + playerClass.name);
 			//sendClassMenuToPlayer(player);
 			return;
 		}
@@ -1012,7 +1013,7 @@ public class TeamsManager
 	{
 		if(playerClass == null)
 		{
-			FlansMod.log("Error in class selection");
+			FlansMod.log.warn("Error in class selection");
 			return;
 		}
 		
@@ -1129,7 +1130,7 @@ public class TeamsManager
 					bases.add((ITeamBase)entity);
 					if(((ITeamBase)entity).getBaseID() > nextBaseID)
 					{
-						FlansMod.log("Loaded base with ID higher than the supposed highest ID. Adjusted highest ID");
+						FlansMod.log.warn("Loaded base with ID higher than the supposed highest ID. Adjusted highest ID");
 						nextBaseID = ((ITeamBase)entity).getBaseID();
 					}
 				}
@@ -1175,7 +1176,7 @@ public class TeamsManager
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load from teams.dat");
+			FlansMod.log.error("Failed to load from teams.dat");
 			e.printStackTrace();
 			
 		}
@@ -1199,7 +1200,7 @@ public class TeamsManager
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to save to teams.dat");
+			FlansMod.log.error("Failed to save to teams.dat");
 			e.printStackTrace();
 		}
 	}
@@ -1324,12 +1325,12 @@ public class TeamsManager
 			try
 			{ 
 				file.createNewFile();
-				FlansMod.log("Created new file");
+				FlansMod.log.info("Created new file");
 			}
 			catch(Exception e)
 			{
-				FlansMod.log("Failed to create file");
-				FlansMod.log(file.getAbsolutePath());
+				FlansMod.log.error("Failed to create file");
+				FlansMod.log.error(file.getAbsolutePath());
 				e.printStackTrace();
 			}
 			return false;
@@ -1382,7 +1383,7 @@ public class TeamsManager
 	
 	public static void log(String s)
 	{
-		FlansMod.log("Teams Info : " + s);
+		FlansMod.log.info("Teams Info : " + s);
 	}	
 	
 	public static void messagePlayer(EntityPlayerMP player, String s)
@@ -1392,7 +1393,7 @@ public class TeamsManager
 	
 	public static void messageAll(String s)
 	{
-		FlansMod.log("Teams Announcement : " + s);
+		FlansMod.log.info("Teams Announcement : " + s);
 		for(EntityPlayerMP player : getPlayers())
 		{
 			player.sendMessage(new TextComponentString(s));

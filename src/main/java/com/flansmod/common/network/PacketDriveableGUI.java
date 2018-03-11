@@ -64,6 +64,6 @@ public class PacketDriveableGUI extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Received GUI open packet on client. Skipping.");
+		FlansMod.log.warn("Received GUI open packet on client. Skipping.");
 	}
 }

@@ -153,7 +153,7 @@ public class ClientProxy extends CommonProxy
 	@SubscribeEvent
 	public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
 	{	
-		FlansMod.log("Registering sounds.");
+		FlansMod.log.info("Registering sounds.");
 		
 		for(SoundEvent sound : eventsToRegister)
 		{
@@ -168,7 +168,7 @@ public class ClientProxy extends CommonProxy
 	public void registerModels(ModelRegistryEvent event)
 	{	
 		//ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		FlansMod.log("Registering models.");
+		FlansMod.log.info("Registering models.");
 		
 		//Register a null vanilla renderer to avoid error messages spamming chat - doesn't work.
 		for(InfoType type : InfoType.infoTypes.values())
@@ -257,16 +257,16 @@ public class ClientProxy extends CommonProxy
 				
 				} catch (Exception e)
 				{
-					FlansMod.log("Failed to load images for content pack : " + file.getName());
+					FlansMod.log.error("Failed to load images for content pack : " + file.getName());
 					e.printStackTrace();
 				}
 				// Add the directory to the content pack list
-				FlansMod.log("Loaded content pack : " + file.getName());
+				FlansMod.log.info("Loaded content pack : " + file.getName());
 				contentPacks.add(file);
 			}
 		}
 			
-		FlansMod.log("Loaded textures and models.");
+		FlansMod.log.info("Loaded textures and models.");
 		return contentPacks;
 	}
 	
@@ -274,7 +274,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers()
 	{				
-		FlansMod.log("Registering Renderers");
+		FlansMod.log.info("Registering Renderers");
 		
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 		
@@ -404,7 +404,7 @@ public class ClientProxy extends CommonProxy
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to load model : " + shortName + " (" + s + ")");
+			FlansMod.log.error("Failed to load model : " + shortName + " (" + s + ")");
 			e.printStackTrace();
 		}
 		return null;
@@ -417,7 +417,7 @@ public class ClientProxy extends CommonProxy
 		SoundEvent event = FlansModResourceHandler.getSoundEvent(sound);
 		if(event == null)
 		{
-			FlansMod.log("Null sound event");
+			FlansMod.log.warn("Null sound event");
 			return;
 		}
 		if(!eventsToRegister.contains(event))
@@ -589,7 +589,7 @@ public class ClientProxy extends CommonProxy
 			if(file.exists())
 			{
 				if(!file.delete())
-					FlansMod.log("FAILED TO DELETE");
+					FlansMod.log.warn("FAILED TO DELETE");
 			}
 			
 			file.createNewFile();

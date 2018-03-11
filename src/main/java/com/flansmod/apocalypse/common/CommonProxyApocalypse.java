@@ -145,7 +145,7 @@ public class CommonProxyApocalypse
 					//Start the apocalypse
 					if(getApocalypseCountdown() == 0)
 					{
-						FlansMod.log("The apocalypse has begun!");
+						FlansMod.log.info("The apocalypse has begun!");
 						EntityPlayer placer = apocalypseMecha.placer;
 						
 						switch(FlansModApocalypse.OPTION)

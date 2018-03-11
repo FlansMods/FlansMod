@@ -49,6 +49,6 @@ public class PacketBuyWeapon extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		FlansMod.log("Received gun box purchase packet on client. Skipping.");
+		FlansMod.log.warn("Received gun box purchase packet on client. Skipping.");
 	}
 }

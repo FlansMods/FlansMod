@@ -258,7 +258,7 @@ public class GuiGunBox extends GuiContainer
 	{
 		if(type == null)
 		{
-			FlansMod.log("Null type when rendering!");
+			FlansMod.log.warn("Null type when rendering!");
 			return;
 		}
 		drawSlotInventory(new ItemStack(type.item), x, y);

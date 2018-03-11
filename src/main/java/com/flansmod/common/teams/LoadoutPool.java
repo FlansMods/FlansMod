@@ -194,7 +194,7 @@ public class LoadoutPool extends InfoType
 			}
 			else
 			{
-				FlansMod.log("Entry with no InfoType: " + split[1]);
+				FlansMod.log.warn("Entry with no InfoType: " + split[1]);
 			}
 			return true;
 		}

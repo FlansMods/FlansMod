@@ -93,7 +93,7 @@ public class ItemVehicle extends ItemMapBase implements IPaintableItem
 		}
 		catch(IOException e)
 		{
-			FlansMod.log("Failed to read old vehicle file");
+			FlansMod.log.error("Failed to read old vehicle file");
 			e.printStackTrace();
 			return null;
 		}

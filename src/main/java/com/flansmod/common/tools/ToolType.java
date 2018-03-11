@@ -99,7 +99,7 @@ public class ToolType extends InfoType
 		} 
 		catch (Exception e)
 		{
-			FlansMod.log("Reading file failed : " + shortName);
+			FlansMod.log.error("Reading file failed : " + shortName);
 			e.printStackTrace();
 		}
 	}
