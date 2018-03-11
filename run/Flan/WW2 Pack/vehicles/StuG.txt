@@ -61,7 +61,7 @@ DamageModifierPrimary 42
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts core 1 tankBody 2 vehicleSeat 1 tankBarrel
+AddRecipeParts core 1 mediumTankBody 2 vehicleSeat 1 tankBarrel
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"

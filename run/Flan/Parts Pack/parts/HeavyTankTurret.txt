@@ -1,5 +1,5 @@
 Name Heavy Tank Turret
-ShortName heavytankTurret
+ShortName heavyTankTurret
 Icon HeavyTankTurret
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

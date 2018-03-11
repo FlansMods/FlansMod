@@ -1,5 +1,5 @@
 Name Light Tank Body
-ShortName lighttankBody
+ShortName lightTankBody
 Icon LightTankBody
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255
