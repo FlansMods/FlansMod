@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -890,8 +891,10 @@ public class EntityMecha extends EntityDriveable
 								boolean vacuumItems = vacuumItems();
 								if(vacuumItems)
 								{
-									for(ItemStack stack : blockHit.getDrops(world, new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), state, 0))
-									{
+									NonNullList<ItemStack> drops = NonNullList.create();
+									blockHit.getDrops(drops, world, new BlockPos(breakingBlock.x, breakingBlock.y,
+											breakingBlock.z), state, 0);
+									for(ItemStack stack : drops) {
 										//Check for iron regarding refining
 										boolean fuelCheck = (data.fuelInTank >= 5F || ((EntityPlayer)driverSeat.getControllingPassenger()).capabilities.isCreativeMode);
 										if(fuelCheck && refineIron() && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).getBlock() == Blocks.IRON_ORE)

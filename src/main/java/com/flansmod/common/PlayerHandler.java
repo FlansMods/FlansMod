@@ -34,7 +34,6 @@ public class PlayerHandler
 	public PlayerHandler()
 	{
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this); 
 	}
 
 	@SubscribeEvent

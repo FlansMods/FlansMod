@@ -135,7 +135,6 @@ public class TeamsManager
 	{
 		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLCommonHandler.instance().bus().register(this);
 
 		//Init arrays
 		bases = new ArrayList<ITeamBase>();

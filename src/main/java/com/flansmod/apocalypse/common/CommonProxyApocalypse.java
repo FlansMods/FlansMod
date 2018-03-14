@@ -79,7 +79,6 @@ public class CommonProxyApocalypse
 	{
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(data = new ApocalypseData());
-		FMLCommonHandler.instance().bus().register(this);
 		
 		StructureAbandonedVillagePieces.registerVillagePieces();
 	}
