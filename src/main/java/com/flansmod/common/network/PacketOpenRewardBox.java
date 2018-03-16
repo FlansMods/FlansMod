@@ -58,7 +58,7 @@ public class PacketOpenRewardBox extends PacketBase
 		}
 		else
 		{
-			FlansMod.log("Recieved reward box open packet from player " + playerEntity.getDisplayNameString() + " for box " + box.shortName);
+			FlansMod.log.info("Recieved reward box open packet from player " + playerEntity.getDisplayNameString() + " for box " + box.shortName);
 			TeamsManagerRanked.OpenRewardBox(playerEntity, box);
 		}
 	}

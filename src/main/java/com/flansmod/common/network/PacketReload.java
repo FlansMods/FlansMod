@@ -78,6 +78,6 @@ public class PacketReload extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Recieved reload packet on client!");
+		FlansMod.log.warn("Recieved reload packet on client!");
 	}
 }

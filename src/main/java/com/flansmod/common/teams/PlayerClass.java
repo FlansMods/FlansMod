@@ -147,7 +147,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 				}
 				if(matchingItem == null)
 				{
-					FlansMod.log("Tried to add " + split[1] + " to player class " + shortName + " but the item did not exist");
+					FlansMod.log.warn("Tried to add " + split[1] + " to player class " + shortName + " but the item did not exist");
 					return;
 				}
 				if(split.length > 2)

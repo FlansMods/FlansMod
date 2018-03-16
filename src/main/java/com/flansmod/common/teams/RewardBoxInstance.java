@@ -71,24 +71,24 @@ public class RewardBoxInstance
 	
 	public static RewardBoxInstance CreateLevelUpReward(RewardBox box, EntityPlayer player)
 	{
-		FlansMod.log("Level up reward box created for " + player.getDisplayNameString());
+		FlansMod.log.info("Level up reward box created for " + player.getDisplayNameString());
 		return new RewardBoxInstance(EnumRewardOrigin.LEVEL_UP, box);
 	}
 	
 	// Ideally this would go through some automated system, but for now, this will be quicker
 	public static RewardBoxInstance CreatePurchasedReward(RewardBox box, EntityPlayer player, EntityPlayer commandSender)
 	{
-		FlansMod.log("--------------------------------------------------------------------------------------------------------------------------------------------");
-		FlansMod.log("PURCHASED REWARD BOX MANUALLY REDEEMED FOR USER: " + player.getDisplayNameString() + " BY PLAYER " + commandSender.getDisplayNameString());
-		FlansMod.log("--------------------------------------------------------------------------------------------------------------------------------------------");
+		FlansMod.log.info("--------------------------------------------------------------------------------------------------------------------------------------------");
+		FlansMod.log.info("PURCHASED REWARD BOX MANUALLY REDEEMED FOR USER: " + player.getDisplayNameString() + " BY PLAYER " + commandSender.getDisplayNameString());
+		FlansMod.log.info("--------------------------------------------------------------------------------------------------------------------------------------------");
 		return new RewardBoxInstance(EnumRewardOrigin.PURCHASE, box);
 	}
 	
 	public static RewardBoxInstance CreateCheatReward(RewardBox box, String username)
 	{
-		FlansMod.log("---------------------------------------------------------------------------");
-		FlansMod.log("REWARD BOX CREATED VIA OP CHEAT FOR USER: " + username);
-		FlansMod.log("---------------------------------------------------------------------------");
+		FlansMod.log.info("---------------------------------------------------------------------------");
+		FlansMod.log.info("REWARD BOX CREATED VIA OP CHEAT FOR USER: " + username);
+		FlansMod.log.info("---------------------------------------------------------------------------");
 		return new RewardBoxInstance(EnumRewardOrigin.OP_CHEAT, box);
 	}
 

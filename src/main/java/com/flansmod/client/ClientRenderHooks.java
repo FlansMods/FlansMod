@@ -601,7 +601,7 @@ public class ClientRenderHooks
 			}
 			else
 			{
-				FlansMod.log("Null seat in roll event");
+				FlansMod.log.warn("Null seat in roll event");
 			}
 				
 		}

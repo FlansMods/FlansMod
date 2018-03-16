@@ -98,7 +98,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in mission results!");
+			FlansMod.log.warn("Problem in mission results!");
 			return;
 		}
 		
@@ -157,7 +157,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in mission results!");
+			FlansMod.log.warn("Problem in mission results!");
 			return;
 		}
 		
@@ -236,7 +236,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in mission results!");
+			FlansMod.log.warn("Problem in mission results!");
 			return;
 		}
 		
@@ -343,7 +343,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in mission results!");
+			FlansMod.log.warn("Problem in mission results!");
 			return;
 		}
 		

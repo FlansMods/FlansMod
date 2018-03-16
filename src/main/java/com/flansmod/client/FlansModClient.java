@@ -148,7 +148,7 @@ public class FlansModClient extends FlansMod
 	
 	public void load()
 	{		
-		log("Loading Flan's mod client side.");
+		log.info("Loading Flan's mod client side.");
 		wr = new WorldRenderer();
 	}
 	
@@ -239,7 +239,7 @@ public class FlansModClient extends FlansMod
 				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, ((IControllable)minecraft.player.getRidingEntity()).getCameraDistance(), "thirdPersonDistance", "q", "field_78490_B");
 			} catch (Exception e)
 			{
-				log("I forgot to update obfuscated reflection D:");
+				log.error("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
 			}		
 		}
@@ -250,7 +250,7 @@ public class FlansModClient extends FlansMod
 				ObfuscationReflectionHelper.setPrivateValue(EntityRenderer.class, minecraft.entityRenderer, 4.0F, "thirdPersonDistance", "q", "field_78490_B");
 			} catch (Exception e)
 			{
-				log("I forgot to update obfuscated reflection D:");
+				log.error("I forgot to update obfuscated reflection D:");
 				throw new RuntimeException(e);
 			}	
 			inPlane = false;
@@ -314,8 +314,8 @@ public class FlansModClient extends FlansMod
 			}
 			catch(Exception e)
 			{
-				FlansMod.log("Failed to create file");
-				FlansMod.log(file.getAbsolutePath());
+				FlansMod.log.error("Failed to create file");
+				FlansMod.log.error(file.getAbsolutePath());
 			}
 			return false;
 		}	

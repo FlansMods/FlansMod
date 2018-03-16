@@ -125,7 +125,7 @@ public class PacketTeamSelect extends PacketBase
 	{
 		if(!selectionPacket)
 		{
-			FlansMod.log("Class / Team listing packet received on server. Rejecting.");
+			FlansMod.log.warn("Class / Team listing packet received on server. Rejecting.");
 			return;
 		}
 		if(classChoicesPacket)
@@ -145,7 +145,7 @@ public class PacketTeamSelect extends PacketBase
 	{		
 		if(selectionPacket)
 		{
-			FlansMod.log("Class / Team selection packet received on client. Rejecting.");
+			FlansMod.log.warn("Class / Team selection packet received on client. Rejecting.");
 			return;
 		}
 		if(classChoicesPacket)

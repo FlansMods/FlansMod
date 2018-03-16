@@ -182,7 +182,7 @@ public class PacketShotData extends PacketBase
 			}
 			else
 			{
-				FlansMod.log("Only expect instant shot types on client side.");
+				FlansMod.log.warn("Only expect instant shot types on client side.");
 			}
 		}
 	}

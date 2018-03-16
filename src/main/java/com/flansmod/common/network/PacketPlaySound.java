@@ -94,7 +94,7 @@ public class PacketPlaySound extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received play sound packet on server. Skipping.");
+		FlansMod.log.warn("Received play sound packet on server. Skipping.");
 	}
 
 	@Override

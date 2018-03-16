@@ -263,7 +263,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("Failed to retreive plane type from server.");
+			FlansMod.log.error("Failed to retreive plane type from server.");
 			super.setDead();
 			e.printStackTrace();
 		}
@@ -366,7 +366,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@SideOnly(Side.CLIENT)
 	private void ReportVehicleError()
 	{
-		FlansMod.log("Vehicle error in " + this);
+		FlansMod.log.warn("Vehicle error in " + this);
 		FlansModClient.numVehicleExceptions++;
 	}
 
@@ -774,7 +774,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			}
 			else
 			{
-				FlansMod.log("Entity " + passenger + " is riding a driveable core entity.");
+				FlansMod.log.warn("Entity " + passenger + " is riding a driveable core entity.");
 			}
 		}
 		

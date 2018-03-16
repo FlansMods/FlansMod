@@ -400,7 +400,7 @@ public abstract class DriveableType extends PaintableType
 				}
 				if(damage == -1)
 				{
-					FlansMod.log("Failed to find dye colour : " + split[2] + " while adding " + file.name);
+					FlansMod.log.warn("Failed to find dye colour : " + split[2] + " while adding " + file.name);
 					return;
 				}
 				driveableRecipe.add(new ItemStack(Items.DYE, amount, damage));
@@ -565,7 +565,7 @@ public abstract class DriveableType extends PaintableType
 		}
 		catch (Exception e)
 		{
-			FlansMod.log("Errored reading " + file.name);
+			FlansMod.log.error("Errored reading " + file.name);
 			e.printStackTrace();
 		}
 	}

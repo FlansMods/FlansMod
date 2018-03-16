@@ -55,7 +55,7 @@ public class PacketBreakSound extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received block break sound packet on server. Skipping.");
+		FlansMod.log.warn("Received block break sound packet on server. Skipping.");
 	}
 
 	@Override

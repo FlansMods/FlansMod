@@ -81,11 +81,11 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		super.init(event);
 		registerVanillaItemModel(FlansModApocalypse.sulphur, Item.getItemFromBlock(FlansModApocalypse.blockSulphur), Item.getItemFromBlock(FlansModApocalypse.blockSulphuricAcid), Item.getItemFromBlock(FlansModApocalypse.blockLabStone), Item.getItemFromBlock(FlansModApocalypse.blockPowerCube));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCube.class, new RenderPowerCube());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySurvivor.class, new RenderSurvivor(Minecraft.getMinecraft().getRenderManager(), new ModelBiped(), 0));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFakePlayer.class, new RenderFakePlayer(Minecraft.getMinecraft().getRenderManager(), new ModelBiped(), 0));
-		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, new RenderTeleporter(Minecraft.getMinecraft().getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, new RenderMecha(Minecraft.getMinecraft().getRenderManager()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, new RenderNukeDrop(Minecraft.getMinecraft().getRenderManager()));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySurvivor.class, manager -> new RenderSurvivor(manager, new ModelBiped(), 0));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFakePlayer.class, manager -> new RenderFakePlayer(manager, new ModelBiped(), 0));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTeleporter.class, RenderTeleporter::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAIMecha.class, RenderMecha::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityNukeDrop.class, RenderNukeDrop::new);
 	}
 	
 	private void registerVanillaItemModel(Item... items)

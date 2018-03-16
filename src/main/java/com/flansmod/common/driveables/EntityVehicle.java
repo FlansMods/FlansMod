@@ -278,7 +278,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		DriveableData data = getDriveableData();
 		if(type == null)
 		{
-			FlansMod.log("Vehicle type null. Not ticking vehicle");
+			FlansMod.log.warn("Vehicle type null. Not ticking vehicle");
 			return;
 		}
 
@@ -566,7 +566,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 
 	private float averageAngles(float a, float b)
 	{
-		FlansMod.log("Pre  " + a + " " + b);
+		FlansMod.log.debug("Pre  " + a + " " + b);
 
 		float pi = (float)Math.PI;
 		for(; a > b + pi; a -= 2 * pi) ;
@@ -577,7 +577,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		for(; avg > pi; avg -= 2 * pi) ;
 		for(; avg < -pi; avg += 2 * pi) ;
 
-		FlansMod.log("Post " + a + " " + b + " " + avg);
+		FlansMod.log.debug("Post " + a + " " + b + " " + avg);
 
 		return avg;
 	}

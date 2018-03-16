@@ -1,5 +1,5 @@
 Name Heavy Tank Body
-ShortName heavytankBody
+ShortName heavyTankBody
 Icon HeavyTankBody
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

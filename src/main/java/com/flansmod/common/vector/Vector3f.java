@@ -74,7 +74,7 @@ public class Vector3f extends Vector implements Serializable, ReadableVector3f, 
 		}
 		else
 		{
-			FlansMod.log("Invalid vector input in " + typeName + "!");
+			FlansMod.log.warn("Invalid vector input in " + typeName + "!");
 		}
 	}
 

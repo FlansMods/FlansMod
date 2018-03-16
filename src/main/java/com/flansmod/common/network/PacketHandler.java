@@ -56,17 +56,17 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	{
 		if(packets.size() > 256)
 		{
-			FlansMod.log("Packet limit exceeded in Flan's Mod packet handler by packet " + cl.getCanonicalName() + ".");
+			FlansMod.log.warn("Packet limit exceeded in Flan's Mod packet handler by packet " + cl.getCanonicalName() + ".");
 			return false;
 		}
 		if(packets.contains(cl))
 		{
-			FlansMod.log("Tried to register " + cl.getCanonicalName() + " packet class twice.");
+			FlansMod.log.warn("Tried to register " + cl.getCanonicalName() + " packet class twice.");
 			return false;
 		}
 		if(modInitialised)
 		{
-			FlansMod.log("Tried to register packet " + cl.getCanonicalName() + " after mod initialisation.");
+			FlansMod.log.warn("Tried to register packet " + cl.getCanonicalName() + " after mod initialisation.");
 			return false;
 		}
 		
@@ -101,7 +101,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("ERROR encoding packet");
+			FlansMod.log.error("ERROR encoding packet");
 			e.printStackTrace();	
 		}
 	}
@@ -147,7 +147,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 		catch(Exception e)
 		{
-			FlansMod.log("ERROR decoding packet");
+			FlansMod.log.error("ERROR decoding packet");
 			e.printStackTrace();	
 		}
 	}

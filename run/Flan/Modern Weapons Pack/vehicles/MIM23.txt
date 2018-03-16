@@ -68,7 +68,7 @@ ShootSoundPrimary RocketFire2
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
 AddRecipeParts turret 3 aaBarrel
-AddRecipeParts core 1 tankBody 1 vehicleSeat
+AddRecipeParts core 1 mediumTankBody 1 vehicleSeat
 AddRecipeParts leftTrack 1 catTrack
 AddRecipeParts rightTrack 1 catTrack
 //Dye colours are "black", "red", "green", "brown", "blue", "purple", "cyan", "silver", "gray", "pink", "lime", "yellow", "lightBlue", "magenta", "orange", "white"

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.ItemGun;
 
-public class PacketGunFire extends PacketBase 
+public class PacketGunFire extends PacketBase
 {
 	public boolean held;
 	public boolean left;
@@ -43,13 +43,13 @@ public class PacketGunFire extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Depreceated message!");
+		FlansMod.log.warn("Depreceated message!");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Received gun button packet on client. Skipping.");
+		FlansMod.log.warn("Received gun button packet on client. Skipping.");
 	}
 }

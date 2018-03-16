@@ -58,7 +58,7 @@ public class PacketFlak extends PacketBase
 	@Override
 	public void handleServerSide(EntityPlayerMP playerEntity) 
 	{
-		FlansMod.log("Received flak packet on server. Disregarding.");
+		FlansMod.log.warn("Received flak packet on server. Disregarding.");
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		
 		if(type == null)
 		{
-			FlansMod.log("Killing seat due to invlaid type tag");
+			FlansMod.log.warn("Killing seat due to invlaid type tag");
 			setDead();
 			return;
 		}

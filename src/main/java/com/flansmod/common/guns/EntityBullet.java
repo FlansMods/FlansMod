@@ -256,7 +256,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	{
 		if(!(shootableType instanceof BulletType))
 		{
-			FlansMod.log("Tried to fire grenade instantly");
+			FlansMod.log.warn("Tried to fire grenade instantly");
 			return true;
 		}
 		if(world == null || origin == null || hit == null || shooter == null || shotFrom == null || shootableType == null)
@@ -679,7 +679,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 				}
 			}
 		} catch (Exception e) {
-			FlansMod.log("Failed to read bullet owner from server.");
+			FlansMod.log.error("Failed to read bullet owner from server.");
 			super.setDead();
 			e.printStackTrace();
 		}

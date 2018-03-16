@@ -1,5 +1,5 @@
 Name Medium Tank Body
-ShortName tankBody
+ShortName mediumTankBody
 Icon MediumTankBody
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

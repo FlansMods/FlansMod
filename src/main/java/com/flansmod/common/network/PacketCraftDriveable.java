@@ -47,6 +47,6 @@ public class PacketCraftDriveable extends PacketBase
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer clientPlayer) 
 	{
-		FlansMod.log("Received driveable repair packet on client side. Skipping.");
+		FlansMod.log.warn("Received driveable repair packet on client side. Skipping.");
 	}
 }

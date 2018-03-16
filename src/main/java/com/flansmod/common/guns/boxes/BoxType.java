@@ -33,7 +33,7 @@ public abstract class BoxType extends InfoType
 		} 
 		catch (Exception e)
 		{
-			FlansMod.log("Reading box file failed : " + shortName);
+			FlansMod.log.error("Reading box file failed : " + shortName);
 			e.printStackTrace();
 		}
 	}

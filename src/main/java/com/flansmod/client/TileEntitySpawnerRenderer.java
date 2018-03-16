@@ -57,7 +57,7 @@ public class TileEntitySpawnerRenderer extends TileEntitySpecialRenderer<TileEnt
 	        case 0: inset = 0.375d; break;
 	        case 1: inset = 0.25d; break;
 	        case 2: inset = 0.0625d; break;
-	        default: FlansMod.log("" + te.getBlockMetadata());
+	        default: FlansMod.log.warn("" + te.getBlockMetadata());
         }
         
         RenderBox(worldrenderer, x + inset, x + 1.0d - inset, y + 0.0625d, y + 0.125d, z + inset, z + 1.0d - inset);

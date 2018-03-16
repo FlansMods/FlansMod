@@ -53,11 +53,11 @@ public class CommonProxy
 			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
 				//Add the directory to the content pack list
-				FlansMod.log("Loaded content pack : " + file.getName());
+				FlansMod.log.info("Loaded content pack : " + file.getName());
 				contentPacks.add(file);
 			}
 		}
-		FlansMod.log("Loaded content pack list server side.");
+		FlansMod.log.info("Loaded content pack list server side.");
 		return contentPacks;
 	}
 	

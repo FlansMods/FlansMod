@@ -1,5 +1,5 @@
 Name Medium Tank Turret
-ShortName tankTurret
+ShortName mediumTankTurret
 Icon MediumTankTurret
 //Colour in Red, Green, Blue, each going up to 255.
 Colour 255 255 255

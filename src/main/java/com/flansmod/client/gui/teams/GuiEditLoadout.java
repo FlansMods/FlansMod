@@ -122,7 +122,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 		
 		if(data == null || pool == null)
 		{
-			FlansMod.log("Problem in landing page!");
+			FlansMod.log.warn("Problem in landing page!");
 			return;
 		}
 		
@@ -431,7 +431,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 				}
 				else if(entry != null)
 				{
-					FlansMod.log("Loadout entry doesn't match for slot");
+					FlansMod.log.warn("Loadout entry doesn't match for slot");
 				}
 				break;
 			}
@@ -443,11 +443,11 @@ public class GuiEditLoadout extends GuiTeamsBase
 					{
 						data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()].setItemDamage(((LoadoutEntryPaintjob) entry).paintjob.ID);
 					}
-					else FlansMod.log("Applying paintjob to null item!"); 
+					else FlansMod.log.warn("Applying paintjob to null item!");
 				}
 				else if(entry != null)
 				{
-					FlansMod.log("Loadout entry doesn't match slot");
+					FlansMod.log.warn("Loadout entry doesn't match slot");
 				}
 			}
 			default: // Attachments
@@ -485,9 +485,9 @@ public class GuiEditLoadout extends GuiTeamsBase
 						
 						stack.getTagCompound().setTag("attachments", attachmentTags);
 					}
-					else FlansMod.log("Applying attachment to null item!");
+					else FlansMod.log.warn("Applying attachment to null item!");
 				}
-				else FlansMod.log("Loadout entry doesn't match for slot");
+				else FlansMod.log.warn("Loadout entry doesn't match for slot");
 			}
 				
 		}

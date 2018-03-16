@@ -144,7 +144,7 @@ public class ClientTeamsData
 	
 	public static void StartTimers()
 	{
-		FlansMod.log("Starting round finished timers. Scores:" + roundFinishedData.scoresTime +
+		FlansMod.log.info("Starting round finished timers. Scores:" + roundFinishedData.scoresTime +
 													" RankUpdate:" + roundFinishedData.rankUpdateTime +
 													" Voting:" + roundFinishedData.votingTime);
 		

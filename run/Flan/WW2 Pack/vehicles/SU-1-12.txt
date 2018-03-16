@@ -58,7 +58,7 @@ TurretRotationSpeed 0.035
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,
 //rightWing, nose, turret, coreWheel, core
-AddRecipeParts turret 1 lighttankTurret 1 vehicleSeat
+AddRecipeParts turret 1 lightTankBody 1 vehicleSeat
 AddRecipeParts core 1 smallChassis 2 vehicleSeat
 AddRecipeParts frontLeftWheel 1 wheel
 AddRecipeParts frontRightWheel 1 wheel
