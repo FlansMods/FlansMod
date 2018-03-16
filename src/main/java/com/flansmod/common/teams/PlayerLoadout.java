@@ -22,6 +22,10 @@ public class PlayerLoadout
 	public PlayerLoadout()
 	{
 		slots = new ItemStack[EnumLoadoutSlot.values().length];
+		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
+		{
+			slots[i] = ItemStack.EMPTY.copy();
+		}
 	}
 	
 	public PlayerLoadout copy()
@@ -55,6 +59,8 @@ public class PlayerLoadout
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
 			slots[i] = new ItemStack(tags.getCompoundTag("slot_" + i));
+			if(slots[i] == null)
+				slots[i] = ItemStack.EMPTY.copy();
 		}
 	}
 

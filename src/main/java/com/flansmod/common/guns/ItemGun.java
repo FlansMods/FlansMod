@@ -617,7 +617,7 @@ public class ItemGun extends Item implements IPaintableItem
 				setBulletItemStack(gunstack, bulletStack, bulletID);
 				
 				if(type.consumeGunUponUse && gunSlot != -1)
-					player.inventory.setInventorySlotContents(gunSlot, null);
+					player.inventory.setInventorySlotContents(gunSlot, ItemStack.EMPTY.copy());
 			}
 			
 			// Spawn an entity, classic style

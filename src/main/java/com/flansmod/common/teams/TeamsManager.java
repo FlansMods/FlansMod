@@ -706,6 +706,9 @@ public class TeamsManager
 						boolean alreadyAdded = false;
 						for(EntityItem check : dropsToThrow)
 						{
+							if(check.getItem().isEmpty() || !(check.getItem().getItem() instanceof ItemGun))
+								continue;
+							
 							if(((ItemGun)stack.getItem()).GetType() == ((ItemGun)check.getItem().getItem()).GetType())
 								alreadyAdded = true;
 						}

@@ -127,8 +127,14 @@ public class EntityFlag extends Entity implements ITeamObject
 	
 	public void reset()
 	{
+		if(base == null)
+		{
+			if(getRidingEntity() instanceof EntityFlagpole)
+				base = (EntityFlagpole)getRidingEntity();
+		}
 		dismountRidingEntity();
-		setPosition(base.posX, base.posY + 2F, base.posZ);
+		if(base != null)
+			setPosition(base.posX, base.posY + 2F, base.posZ);
 		//startRiding(base);
 		isHome = true;
 	}

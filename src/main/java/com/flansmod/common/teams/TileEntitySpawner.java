@@ -35,7 +35,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	private int baseID = -1;
 	private int dimension;
 	public int currentDelay;
-
+	public boolean isSpawner = false;
+	
 	//Chunk loading
 	private Ticket chunkTicket;
 	private boolean uninitialized = true;
@@ -88,7 +89,10 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			return;
 		}
 		if(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue() == 1)
+		{
+			isSpawner = true;
 			return;
+		}
 		for(int i = itemEntities.size() - 1; i >= 0; i--)
 		{
 			if(itemEntities.get(i).isDead)
@@ -136,6 +140,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
+		isSpawner = isSpawnPoint();
+		nbt.setBoolean("isSpawner", isSpawner);
 		nbt.setInteger("delay", spawnDelay);
 		nbt.setInteger("Base", baseID);
 		nbt.setInteger("dim", world.provider.getDimension());
@@ -153,6 +159,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
+		isSpawner = nbt.getBoolean("isSpawner");
 		currentDelay = spawnDelay = nbt.getInteger("delay");
 		baseID = nbt.getInteger("Base");
 		dimension = nbt.getInteger("dim");
@@ -235,7 +242,15 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	@Override
 	public boolean isSpawnPoint()
 	{
-		if(world.getBlockState(pos).getProperties().containsKey(TYPE))
+		return isSpawner;
+	}
+	
+	private boolean isSpawnPointByMetadata()
+	{
+		if(world != null 
+				&& world.getBlockState(pos) != null 
+				&& world.getBlockState(pos).getProperties() != null
+				&& world.getBlockState(pos).getProperties().containsKey(TYPE))
 		{
 			int metadata = ((Integer)world.getBlockState(pos).getValue(TYPE)).intValue();
 			return metadata == 1;
