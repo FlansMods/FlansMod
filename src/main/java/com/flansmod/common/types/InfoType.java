@@ -392,6 +392,13 @@ public class InfoType
 					}
 				}
 				
+				// Make the recipe square
+				if (maxX != maxY)
+				{
+					maxX = Math.max(maxX, maxY);
+					maxY = Math.max(maxX, maxY);
+				}
+				
 				if((minX == 3 && maxX == -1) || (minY == 3 && maxY == -1))
 				{
 					FlansMod.log.warn("Invalid recipe grid in " + shortName);
