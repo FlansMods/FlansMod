@@ -559,11 +559,11 @@ public class FlansMod
 						}
 						catch(FileNotFoundException e)
 						{
-							e.printStackTrace();
+							FlansMod.log.throwing(e);
 						}
 						catch(IOException e)
 						{
-							e.printStackTrace();
+							FlansMod.log.throwing(e);
 						}
 					}		
 				}
@@ -617,7 +617,7 @@ public class FlansMod
 				}
 				catch(IOException e)
 				{
-					e.printStackTrace();
+					FlansMod.log.throwing(e);
 				}
 			}
 		}
@@ -637,7 +637,7 @@ public class FlansMod
 		} catch (Exception e)
 		{
 			log.error("Failed to get class loader. All content loading will now fail.");
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 
 		List<File> contentPacks = proxy.getContentList(method, classloader);
@@ -681,7 +681,7 @@ public class FlansMod
 				catch(Exception e)
 				{
 					log.error("Failed to add " + type.name() + " : " + typeFile.name);
-					e.printStackTrace();
+					FlansMod.log.throwing(e);
 				}
 			}
 			log.info("Loaded " + type.name() + ".");

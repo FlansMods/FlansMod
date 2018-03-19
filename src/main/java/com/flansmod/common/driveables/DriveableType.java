@@ -566,7 +566,7 @@ public abstract class DriveableType extends PaintableType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Errored reading " + file.name);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 

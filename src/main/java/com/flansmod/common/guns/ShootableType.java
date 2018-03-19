@@ -161,7 +161,7 @@ public abstract class ShootableType extends InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading grenade file failed: " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 

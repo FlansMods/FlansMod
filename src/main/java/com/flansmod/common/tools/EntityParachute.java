@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import com.flansmod.common.FlansMod;
+
 public class EntityParachute extends Entity implements IEntityAdditionalSpawnData
 {
 	public ToolType type;
@@ -24,7 +26,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	{
 		super(w);
 		ignoreFrustumCheck = true;
-		System.out.println(w.isRemote ? "Client paraspawn" : "Server paraspawn");
+		FlansMod.log.debug(w.isRemote ? "Client paraspawn" : "Server paraspawn");
 	}
 	
 	public EntityParachute(World w, ToolType t, EntityPlayer player)

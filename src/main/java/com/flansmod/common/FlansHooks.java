@@ -20,7 +20,7 @@ public class FlansHooks
 		{
 			BuildCraftFuelBucket = getBuildCraftItem("bucketFuel");
 			BuildCraftOilBucket = getBuildCraftItem("bucketOil");
-			System.out.println("[Flan] BuildCraft integration loaded.");
+			FlansMod.log.info("BuildCraft integration loaded.");
 			BuildCraftLoaded = true;
 		}
 	}
@@ -40,7 +40,7 @@ public class FlansHooks
 				throw new Exception();
 			}
 		} catch(Exception e) {
-			System.out.println("[Flan] Unable to retrieve BuildCraft item " + name + ".");
+			FlansMod.log.error("Unable to retrieve BuildCraft item " + name + ".");
 			return null;
 		}
 	}

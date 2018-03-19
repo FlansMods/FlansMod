@@ -134,8 +134,8 @@ public class AttachmentType extends PaintableType implements IScope {
 					zoomOverlay = split[1];
 			}
 		} catch (Exception e) {
-			System.out.println("Reading attachment file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Reading attachment file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 

@@ -102,7 +102,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		catch(Exception e)
 		{
 			FlansMod.log.error("ERROR encoding packet");
-			e.printStackTrace();	
+			FlansMod.log.throwing(e);
 		}
 	}
 
@@ -148,7 +148,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		catch(Exception e)
 		{
 			FlansMod.log.error("ERROR decoding packet");
-			e.printStackTrace();	
+			FlansMod.log.throwing(e);
 		}
 	}
 	

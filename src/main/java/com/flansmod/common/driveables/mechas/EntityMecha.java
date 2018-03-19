@@ -744,7 +744,7 @@ public class EntityMecha extends EntityDriveable
 				moveZ = 1;
 				/*
 				EntityLiving ent = (EntityLiving)seats[0].riddenByEntity;
-				//System.out.println(ent.moveForward);
+				//FlansMod.log.debug(ent.moveForward);
 				Vec3d target = Vec3d.createVectorHelper(0D, 0D, 0D);
 				if(ent.getNavigator().getPath() != null)
 					target = ent.getNavigator().getPath().getPosition(ent);

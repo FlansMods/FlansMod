@@ -81,8 +81,8 @@ public class ArmourType extends InfoType
 		} 
 		catch (Exception e)
 		{
-			System.out.println("Reading armour file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Reading armour file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 

@@ -438,7 +438,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			FlansMod.log.error("Failed to retreive gun type from server.");
 			super.setDead();
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

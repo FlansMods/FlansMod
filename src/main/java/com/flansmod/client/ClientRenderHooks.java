@@ -431,7 +431,7 @@ public class ClientRenderHooks
 		        	f3 = entity.rotationYawHead;
 		        f4 = f3 - f2;
 		        
-		        //System.out.println(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
+		        //FlansMod.log.debug(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
 		        
 		        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
 		        {

@@ -265,7 +265,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		{
 			FlansMod.log.error("Failed to retreive plane type from server.");
 			super.setDead();
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 		
 		camera = new EntityCamera(world, this);

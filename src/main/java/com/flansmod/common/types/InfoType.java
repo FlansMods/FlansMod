@@ -181,7 +181,7 @@ public class InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	
@@ -459,7 +459,7 @@ public class InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Failed to add recipe for : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

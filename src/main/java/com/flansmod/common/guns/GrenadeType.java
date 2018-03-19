@@ -192,8 +192,8 @@ public class GrenadeType extends ShootableType
 		} 
 		catch (Exception e)
 		{
-			System.out.println("Reading grenade file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Reading grenade file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 	

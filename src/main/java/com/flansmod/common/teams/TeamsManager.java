@@ -1179,7 +1179,7 @@ public class TeamsManager
 		catch(Exception e)
 		{
 			FlansMod.log.error("Failed to load from teams.dat");
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 			
 		}
 		
@@ -1203,7 +1203,7 @@ public class TeamsManager
 		catch(Exception e)
 		{
 			FlansMod.log.error("Failed to save to teams.dat");
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	
@@ -1333,7 +1333,7 @@ public class TeamsManager
 			{
 				FlansMod.log.error("Failed to create file");
 				FlansMod.log.error(file.getAbsolutePath());
-				e.printStackTrace();
+				FlansMod.log.throwing(e);
 			}
 			return false;
 		}	

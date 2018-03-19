@@ -390,8 +390,8 @@ public class GunType extends PaintableType implements IScope
 		} 
 		catch (Exception e)
 		{
-			System.out.println("Reading gun file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Reading gun file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 	

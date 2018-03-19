@@ -83,7 +83,7 @@ public class ArmourBoxType extends BoxType
 		} catch (Exception e)
 		{
 			FlansMod.log.error("Reading gun box file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

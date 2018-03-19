@@ -55,7 +55,7 @@ public class ItemHolderType extends InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading item holder file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

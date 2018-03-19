@@ -539,7 +539,7 @@ public class GuiPaintjobTable extends GuiContainer
         	}
         	catch(IOException e)
         	{
-        		e.printStackTrace();
+        		FlansMod.log.throwing(e);
         	}
         	
         	copyImageToTexture();

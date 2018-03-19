@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.flansmod.common.FlansMod;
+
 public class ApocalypseData 
 {
 	/** The point at which each player entered the apocalypse. For deciding where they should come out */
@@ -76,7 +78,7 @@ public class ApocalypseData
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				FlansMod.log.throwing(e);
 			}
 		}
 	}
@@ -113,7 +115,7 @@ public class ApocalypseData
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				FlansMod.log.throwing(e);
 			}
 		}
 	}

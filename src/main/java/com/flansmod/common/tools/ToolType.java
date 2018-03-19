@@ -100,7 +100,7 @@ public class ToolType extends InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

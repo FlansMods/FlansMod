@@ -149,8 +149,8 @@ public class Team extends InfoType
 			}
 		} catch (Exception e)
 		{
-			System.out.println("Reading team file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Reading team file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 	

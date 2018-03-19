@@ -285,7 +285,7 @@ public class PacketTeamInfo extends PacketBase
 		catch(Exception e)
 		{
 			FlansMod.Assert(false, "Messed up in teams packet");
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 			teamData = new TeamData[] { new TeamData() };
 		}
 	}

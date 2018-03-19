@@ -5,6 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.flansmod.common.FlansMod;
+
 /** Adds access to the InventoryPlayer stack combination methods for arbitrary inventories */
 public class InventoryHelper 
 {
@@ -61,7 +63,7 @@ public class InventoryHelper
 			}
 			catch (Throwable throwable)
 			{
-				throwable.printStackTrace();
+				FlansMod.log.throwing(throwable);
 				return false;
 			}
 		}

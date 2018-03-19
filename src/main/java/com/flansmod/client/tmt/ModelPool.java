@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flansmod.common.FlansMod;
 import net.minecraftforge.fml.common.Loader;
 
 public class ModelPool
@@ -23,8 +24,8 @@ public class ModelPool
 		}
 		catch(Exception e)
 		{
-			System.out.println("A new " + entry.getClass().getName() + " could not be initialized.");
-			System.out.println(e.getMessage());
+			FlansMod.log.error("A new " + entry.getClass().getName() + " could not be initialized.");
+			FlansMod.log.error(e.getMessage());
 			return null;
 		}
 		File modelFile = null;
@@ -37,7 +38,7 @@ public class ModelPool
 		}
 		if(modelFile == null || !modelFile.exists())
 		{
-			System.out.println("The model with the name " + file + " does not exist.");
+			FlansMod.log.warn("The model with the name " + file + " does not exist.");
 			return null;
 		}
 		entry.groups = new HashMap<String, TransformGroupBone>();

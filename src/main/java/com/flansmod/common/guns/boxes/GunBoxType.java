@@ -106,7 +106,7 @@ public class GunBoxType extends BoxType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading gun box file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	
@@ -255,7 +255,7 @@ public class GunBoxType extends BoxType
 		} catch (Exception e)
 		{
 			FlansMod.log("Failed to add recipe for : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	*/

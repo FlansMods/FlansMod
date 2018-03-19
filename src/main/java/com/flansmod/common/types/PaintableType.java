@@ -84,7 +84,7 @@ public abstract class PaintableType extends InfoType
 		catch (Exception e)
 		{
 			FlansMod.log.error("Reading file failed : " + shortName);
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 	

@@ -198,8 +198,8 @@ public class PlayerClass extends InfoType implements IPlayerClass
 			}
 		} catch (Exception e)
 		{
-			System.out.println("Interpreting player class file failed.");
-			e.printStackTrace();
+			FlansMod.log.error("Interpreting player class file failed.");
+			FlansMod.log.throwing(e);
 		}
 	}
 	

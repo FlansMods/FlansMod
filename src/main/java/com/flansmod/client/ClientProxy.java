@@ -258,7 +258,7 @@ public class ClientProxy extends CommonProxy
 				} catch (Exception e)
 				{
 					FlansMod.log.error("Failed to load images for content pack : " + file.getName());
-					e.printStackTrace();
+					FlansMod.log.throwing(e);
 				}
 				// Add the directory to the content pack list
 				FlansMod.log.info("Loaded content pack : " + file.getName());
@@ -405,7 +405,7 @@ public class ClientProxy extends CommonProxy
 		catch(Exception e)
 		{
 			FlansMod.log.error("Failed to load model : " + shortName + " (" + s + ")");
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 		return null;
 	}
@@ -577,7 +577,7 @@ public class ClientProxy extends CommonProxy
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				FlansMod.log.throwing(e);
 			}
 		}
 	}

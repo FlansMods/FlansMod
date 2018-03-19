@@ -681,7 +681,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		} catch (Exception e) {
 			FlansMod.log.error("Failed to read bullet owner from server.");
 			super.setDead();
-			e.printStackTrace();
+			FlansMod.log.throwing(e);
 		}
 	}
 
