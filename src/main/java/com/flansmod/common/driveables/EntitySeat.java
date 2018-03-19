@@ -326,7 +326,7 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 		
 		if(type == null)
 		{
-			FlansMod.log.warn("Killing seat due to invlaid type tag");
+			FlansMod.log.warn("Killing seat due to invalid type tag");
 			setDead();
 			return;
 		}
