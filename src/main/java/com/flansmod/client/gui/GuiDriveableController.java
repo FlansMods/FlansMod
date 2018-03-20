@@ -9,6 +9,8 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 import com.flansmod.api.IControllable;
 import com.flansmod.client.FlansModClient;
@@ -134,6 +136,8 @@ public class GuiDriveableController extends GuiScreen
 		{
 			FlansModClient.reloadModels(false);
 		}
+		
+		MinecraftForge.EVENT_BUS.post(new InputEvent.KeyInputEvent());
 	}
 	
 	@Override
