@@ -5,7 +5,7 @@
 //---Standard-------------------------------------
 // Naming
 Name GermanHelmet
-ShortName GermanHelmet
+ShortName germanHelmet
 ItemID Your ID
 
 
