@@ -111,7 +111,7 @@ public class GuiGunBox extends GuiContainer
 		buttonList.add(categoryLeft);
 		
 		categoryRight = new GuiButton(3, width / 2 + 99, height / 2 - 122, 20, 20, ">");
-		categoryRight.enabled = type.pages.size() > (pageScroller + 1) * 5;
+		categoryRight.enabled = type.pages.size() > (pageScroller + 1) * numCategories;
 		buttonList.add(categoryRight);
 		
 		for(int i = 0; i < numCategories; i++)
