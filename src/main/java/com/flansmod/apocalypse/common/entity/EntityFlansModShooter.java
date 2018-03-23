@@ -75,9 +75,10 @@ public class EntityFlansModShooter extends EntityMob implements IRangedAttackMob
         if (world != null && !world.isRemote)
         {
         	tasks.addTask(4, this.aiArrowAttack);
-        }
-        
-        setRenderDistanceWeight(200D);
+        } else
+		{
+			setRenderDistanceWeight(200D);
+		}
 	}
 	
 	@Override

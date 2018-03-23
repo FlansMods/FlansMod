@@ -16,7 +16,10 @@ public class EntityNukeDrop extends Entity
 	{
 		super(world);
 		
-		setRenderDistanceWeight(400D);
+		if (world.isRemote)
+		{
+			setRenderDistanceWeight(400D);
+		}
 		setSize(1F, 1F);
 		noClip = false;
 		ignoreFrustumCheck = true;
