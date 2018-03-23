@@ -490,7 +490,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void shoot(boolean secondary)
 	{
 		DriveableType type = getDriveableType();
-		if(seats[0] == null && !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
+		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
 			return;
 		//Check shoot delay
 		while(getShootDelay(secondary) <= 0.0f)
@@ -563,7 +563,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			if(gunType.bulletSpeed == 0.0f)
 			{
 				for(int i = 0; i < gunType.numBullets * shootableType.numBullets; i++)
-				{					
+				{
 					List<BulletHit> hits = FlansModRaytracer.Raytrace(world, driver, false, null, gunVec, lookVector, 0);
 					Entity victim = null;
 					Vector3f hitPos = Vector3f.add(gunVec, lookVector, null);
@@ -580,15 +580,21 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 						world.spawnEntity(new EntityDebugDot(world, gunVec, 100, 1.0f, 1.0f, 1.0f));
 					}
 
-					ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
-					((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+					if (driver != null)
+					{
+						ShotData shotData = new InstantShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, gunVec, firstHit, hitPos, gunType.damage, i < gunType.numBullets * shootableType.numBullets - 1, false);
+						((ItemGun) gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+					}
 				}
 			}
 			// Else, spawn an entity
 			else
 			{
-				ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, lookVector);
-				((ItemGun)gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+				if (driver != null)
+				{
+					ShotData shotData = new SpawnEntityShotData(-1, EnumHand.MAIN_HAND, type, shootableType, driver, lookVector);
+					((ItemGun) gunType.item).ServerHandleShotData(null, -1, world, this, false, shotData);
+				}
 			}
 			
 			//Reset the shoot delay
@@ -1073,7 +1079,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							stack.setCount(stack.getCount() - 1);
 							//If we consumed the last one, destroy the stack
 							if(stack.getCount() <= 0)
-								getDriveableData().setInventorySlotContents(i, null);
+								getDriveableData().setInventorySlotContents(i, ItemStack.EMPTY.copy());
 						}
 						
 						//We found a fuel item and consumed some, so we are done
