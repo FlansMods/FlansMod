@@ -1,16 +1,44 @@
-[
 {
-  "modid": "flansmod",
-  "name": "Flan's Mod",
-  "description": "Guns, planes and other vehicles in Minecraft.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "http://www.flansmod.com",
-  "updateUrl": "",
-  "authorList": ["jamioflan"],
-  "credits": "All code contributors.",
-  "logoFile": "flansmod.png",
-  "screenshots": [],
-  "dependencies": []
+  "modListVersion": 2,
+  "modList": [
+    {
+      "modid": "flansmod",
+      "name": "Flan's Mod",
+      "description": "Guns, planes and other vehicles in Minecraft.",
+      "version": "${version}",
+      "mcversion": "${mcversion}",
+      "url": "https://www.flansmod.com",
+      "updateUrl": "",
+      "authorList": [
+        "jamioflan"
+      ],
+      "credits": "All code contributors.",
+      "logoFile": "/flansmod.png",
+      "dependants": [
+        "flansmodapocalypse"
+      ],
+      "useDependencyInformation": true
+    },
+    {
+      "modid": "flansmodapocalypse",
+      "name": "Flan's Mod: Apocalypse",
+      "description": "The Flan's Mod apocalyptic dimension.",
+      "version": "${apocalypseversion}",
+      "mcversion": "${mcversion}",
+      "url": "https://www.flansmod.com",
+      "updateUrl": "",
+      "authorList": [
+        "jamioflan"
+      ],
+      "credits": "All code contributors.",
+      "logoFile": "/flansmod.png",
+      "requiredMods": [
+        "flansmod"
+      ],
+      "dependencies": [
+        "flansmod"
+      ],
+      "useDependencyInformation": true
+    }
+  ]
 }
-]

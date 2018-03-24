@@ -130,7 +130,7 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.eventhandlers.PlayerDeathEventListener;
 
-@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWEDVERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+@Mod(modid = FlansMod.MODID, name = "Flan's Mod", version = FlansMod.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS@", guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
 public class FlansMod
 {
 	//Core mod stuff
