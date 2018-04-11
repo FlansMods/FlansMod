@@ -1,5 +1,6 @@
 package com.flansmod.common;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import com.flansmod.common.driveables.EntityDriveable;
@@ -30,10 +33,18 @@ public class PlayerHandler
 	public static Map<String, PlayerData> serverSideData = new HashMap<String, PlayerData>();
 	public static Map<String, PlayerData> clientSideData = new HashMap<String, PlayerData>();
 	public static ArrayList<String> clientsToRemoveAfterThisRound = new ArrayList<String>();
+	public static Field floatingTickCount = null;
 	
 	public PlayerHandler()
 	{
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		try {
+			floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class,  "floatingTickCount", "field_147365_f");
+		}
+		catch (Exception e) {
+			FlansMod.log.error("Couldn't find floatingTickCount field.", e);
+		}
 	}
 
 	@SubscribeEvent

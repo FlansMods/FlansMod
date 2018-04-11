@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemLead;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,6 +39,8 @@ import com.flansmod.common.network.PacketSeatUpdates;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
+
+import static com.flansmod.common.PlayerHandler.floatingTickCount;
 
 public class EntitySeat extends Entity implements IControllable, IEntityAdditionalSpawnData
 {
@@ -194,6 +197,20 @@ public class EntitySeat extends Entity implements IControllable, IEntityAddition
 			{
 				looking = new RotatedAxes();
 				playerLooking = new RotatedAxes();
+			}
+		}
+		else
+		{
+			if (entityInThisSeat instanceof EntityPlayerMP)
+			{
+				// Reset the floating tick count value for a player to avoid kicking them for flight detection
+				try
+				{
+					floatingTickCount.setInt(((EntityPlayerMP) entityInThisSeat).connection, 0);
+				} catch (IllegalAccessException e)
+				{
+					FlansMod.log.error("Failed to reset player's floating state.", e);
+				}
 			}
 		}
 
