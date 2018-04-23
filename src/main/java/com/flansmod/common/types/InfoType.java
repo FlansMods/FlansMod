@@ -395,8 +395,11 @@ public class InfoType
 				// Make the recipe square
 				if (maxX != maxY)
 				{
-					maxX = Math.max(maxX, maxY);
-					maxY = Math.max(maxX, maxY);
+					maxX = maxY = Math.max(maxX, maxY);
+				}
+				if (minX != minY)
+				{
+					minX = minY = Math.min(minX, minY);
 				}
 				
 				if((minX == 3 && maxX == -1) || (minY == 3 && maxY == -1))
