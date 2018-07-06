@@ -1,17 +1,27 @@
 package com.flansmod.common.driveables;
 
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.damages.DamageRunOver;
+import com.flansmod.common.mpmhook.MPMHook;
 import com.flansmod.common.vector.Vector3f;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noppes.mpm.constants.EnumAnimation;
 
 public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 {
@@ -183,6 +193,10 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 		return !isDead;
 	}
 	
+	@Override
+	public void applyEntityCollision(Entity e) {
+		
+	}
 	
 	public void reallySetDead()
 	{
@@ -233,6 +247,42 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
         if (isRiding())
         {
             entity.updatePassenger(this);
+        }
+        
+        if(/*vehicle.getDriveableType().squashMobs || */FlansMod.alwaysSquashMobs)
+        {
+	        if(!getEntityWorld().isRemote)
+	        {
+		        if(vehicle != null)
+		        {
+		        	double dX = vehicle.posX - vehicle.prevPosX;
+					double dY = vehicle.posY - vehicle.prevPosY;
+					double dZ = vehicle.posZ - vehicle.prevPosZ;
+					float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F; 
+					speed = (int)(speed * 10F) / 10F;	
+			        if(speed > 0.1)
+			        {
+			        	for(EntityLivingBase ent : getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox()))
+			        	{
+			        		if(vehicle.getSeat(0).getPassengers().size() != 0)
+			        		{
+			        			ent.attackEntityFrom(new DamageRunOver(vehicle.getDriveableType().shortName, (EntityLivingBase)vehicle.getSeat(0).getPassengers().get(0)), vehicle.getDriveableType().mass * 5);
+			        		}
+			        		else
+			        		{
+			        			ent.attackEntityFrom(new DamageRunOver(vehicle.getDriveableType().shortName), vehicle.getDriveableType().mass * 5);
+			        		}
+			        		if(ent instanceof EntityPlayer)
+			        		{
+			        			if(FlansMod.isMorePlayerModelsLoaded)
+			        			{
+			        				MPMHook.processAnimation((EntityPlayer) ent, MPMHook.calcSleepingAnimation((EntityPlayer) ent));
+			        			}
+			        		}
+			        	}
+			        }
+		        }
+	        }
         }
     }
 }
