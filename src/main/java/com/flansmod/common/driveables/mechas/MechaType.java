@@ -22,8 +22,6 @@ public class MechaType extends DriveableType
 {
 	/** Movement modifiers */
 	public float turnLeftModifier = 1F, turnRightModifier = 1F, moveSpeed = 1F;
-	/** If true, this will crush any living entity under the wheels */
-	public boolean squashMobs = false;
 	/** How many blocks can be stepped up when walking */
 	public int stepHeight = 0;
 	/** Jump Height (set 0 for no jump) */
@@ -99,8 +97,6 @@ public class MechaType extends DriveableType
 				turnRightModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("MoveSpeed"))
 				moveSpeed = Float.parseFloat(split[1]);
-			if(split[0].equals("SquashMobs"))
-				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("StepHeight"))
 				stepHeight = Integer.parseInt(split[1]);
 			if(split[0].equals("JumpHeight"))
