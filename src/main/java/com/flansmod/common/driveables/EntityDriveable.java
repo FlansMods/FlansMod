@@ -46,6 +46,7 @@ import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
+import com.flansmod.common.damages.DamageKnockDown;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
@@ -306,7 +307,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity)
 	{
-		return null;//entity.boundingBox;
+		return getRenderBoundingBox();//entity.boundingBox;
 	}
 
 	@Override
@@ -380,7 +381,13 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void applyEntityCollision(Entity entity)
 	{
 		if(!isPartOfThis(entity))
+		{
+			/*if(getSeat(0).getPassengers().size() != 0)
+				entity.attackEntityFrom(new DamageKnockDown(getDriveableType().shortName, (EntityLivingBase) getSeat(0).getPassengers().get(0)), (float)getSpeedXZ());
+			else
+				entity.attackEntityFrom(new DamageKnockDown(getDriveableType().shortName), (float)getSpeedXZ());*/
 			super.applyEntityCollision(entity);
+		}
 	}
 	
 	@Override
