@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "5.5.2"
+version = "5.5.3"
 group = "com.flansmod"
 archivesBaseName = "Flan's Mod"
 
