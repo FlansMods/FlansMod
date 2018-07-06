@@ -14,8 +14,6 @@ public class VehicleType extends DriveableType
 {
 	/** Movement modifiers */
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
-	/** If true, this will crush any living entity under the wheels */
-	public boolean squashMobs = false;
 	/** If this is true, the vehicle will drive from all wheels */
 	public boolean fourWheelDrive = false;
 	/** If true, then wheels will rotate as the vehicle drives */
@@ -54,8 +52,6 @@ public class VehicleType extends DriveableType
 				turnLeftModifier = Float.parseFloat(split[1]);
 			if(split[0].equals("TurnRightSpeed"))
 				turnRightModifier = Float.parseFloat(split[1]);
-			if(split[0].equals("SquashMobs"))
-				squashMobs = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("FourWheelDrive"))
 				fourWheelDrive = Boolean.parseBoolean(split[1].toLowerCase());
 			if(split[0].equals("Tank") || split[0].equals("TankMode"))
@@ -108,7 +104,7 @@ public class VehicleType extends DriveableType
 	{
 		for(VehicleType type : types)
 		{
-			if(type.shortName.equals(find))
+			if(type.shortName.equalsIgnoreCase(find))
 				return type;
 		}
 		return null;
