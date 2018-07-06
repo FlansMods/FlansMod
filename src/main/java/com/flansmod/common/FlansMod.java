@@ -152,10 +152,12 @@ public class FlansMod
 	public static final float driveableUpdateRange = 200F;
 	public static final int numPlayerSnapshots = 20;
 	public static boolean isApocalypseLoaded = false;
+	public static boolean isMorePlayerModelsLoaded = false;
 	public static boolean addAllPaintjobsToCreative = false;
 	public static boolean addGunpowderRecipe = true;
 	public static boolean shootOnRightClick = false;
 	public static boolean forceUpdateJSONs = false;
+	public static boolean alwaysSquashMobs = true;
 
 	public static float armourSpawnRate = 0.25F;
 
@@ -220,6 +222,15 @@ public class FlansMod
 		catch(Exception e)
 		{
 			isApocalypseLoaded = false;
+		}
+		try
+		{
+			isMorePlayerModelsLoaded = true;
+			Class.forName("noppes.mpm.MorePlayerModels");
+		}
+		catch(Exception e)
+		{
+			isMorePlayerModelsLoaded = false;
 		}
 		
 		flanDir = new File(event.getModConfigurationDirectory().getParentFile(), "/Flan/");
@@ -703,6 +714,7 @@ public class FlansMod
 		shootOnRightClick = configFile.getBoolean("ShootOnRightClick", Configuration.CATEGORY_GENERAL, shootOnRightClick, "If true, then shoot will be on right click");
 		addAllPaintjobsToCreative = configFile.getBoolean("Add All Paintjobs to Creative", Configuration.CATEGORY_GENERAL, addAllPaintjobsToCreative, "Whether all paintjobs should appear in creative");
 		forceUpdateJSONs = configFile.getBoolean("ForceUpdateJSONs", Configuration.CATEGORY_GENERAL, forceUpdateJSONs, "Turn this on to force re-create all JSON files. Should only be used in dev environment");
+		alwaysSquashMobs = configFile.getBoolean("AlwaysSquashMobs", Configuration.CATEGORY_GENERAL, alwaysSquashMobs, "Always squash mobs under wheels ignoring vehicle SquashMobs option");
 		
 		if(configFile.hasChanged())
 			configFile.save();
