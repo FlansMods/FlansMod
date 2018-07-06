@@ -16,3 +16,8 @@ tile.teamsSpawner.1.name=Player Spawner
 tile.teamsSpawner.2.name=Vehicle Spawner
 item.rainbowPaintcan.name=Rainbow Paint Can (for Custom Paintjobs)
 tile.paintjobTable.name=Paintjob Table
+
+death.attack.run_over=%s was ran over using %s
+death.attack.run_over.player=%s was ran over using %s by %s
+death.attack.knock_down=%s was knocked down to death using %s
+death.attack.knock_down.player=%s was knocked down to death using %s by %s
