@@ -16,3 +16,8 @@ tile.teamsSpawner.1.name=Спаунер игроков
 tile.teamsSpawner.2.name=Спаунер техники
 item.rainbowPaintcan.name=Ведёрко с разноцветной краской (для кастомной покраски)
 block.paintjobTable.name=Окрасочный стол
+
+death.attack.run_over=%s был задавлен при помощи %s
+death.attack.run_over.player=%s$1 был задавлен при помощи %s водителем %s
+death.attack.knock_down=%s был сбит насмерть при помощи %s
+death.attack.knock_down.player=%s был сбит насмерть при помощи %s водителем %s
