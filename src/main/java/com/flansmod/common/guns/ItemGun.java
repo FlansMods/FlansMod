@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -17,6 +19,7 @@ import com.flansmod.client.model.InstantBulletRenderer;
 import com.flansmod.client.model.GunAnimations.LookAtState;
 import com.flansmod.client.model.InstantBulletRenderer.InstantShotTrail;
 import com.flansmod.client.model.RenderGun;
+import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
