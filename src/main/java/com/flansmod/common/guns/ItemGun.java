@@ -1259,6 +1259,17 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 
 	@Override
+	public boolean hasCustomEntity(ItemStack stack) {
+		return true;
+	}
+
+	@Nullable
+	@Override
+	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        return new EntityItemCustomRender(location, itemstack);
+	}
+
+	@Override
 	public boolean isFull3D()
 	{
 		return true;

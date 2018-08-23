@@ -508,8 +508,6 @@ public class FlansMod
 				}
 			}
 		}
-		
-		tickHandler.onEntitySpawn(event);
 	}
 
 	@SubscribeEvent

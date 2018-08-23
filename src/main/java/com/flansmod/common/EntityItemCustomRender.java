@@ -1,18 +1,19 @@
 package com.flansmod.common;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityItemCustomRender extends EntityItem 
 {
-	public EntityItemCustomRender(EntityItem entity) 
+	public EntityItemCustomRender(Entity entity, ItemStack itemStack)
 	{
-		super(entity.world, entity.posX, entity.posY, entity.posZ, entity.getItem());
+		super(entity.world, entity.posX, entity.posY, entity.posZ, itemStack);
 		this.motionX = entity.motionX;
 		this.motionY = entity.motionY;
 		this.motionZ = entity.motionZ;
-		this.setDefaultPickupDelay();
+		this.setPickupDelay(40);
 	}
 
 	public EntityItemCustomRender(World world, double posX, double posY, double posZ, ItemStack stack) 
