@@ -21,22 +21,7 @@ Thumbs.db
 
 # Flan's Mod
 !run/Flan/
-run/Flan/Parts Pack/assets/flansmod/.DS_Store
 
-run/Flan/.DS_Store
-
-run/Flan/Modern Weapons Pack/.DS_Store
-
-run/Flan/Parts Pack/.DS_Store
-
-run/Flan/Parts Pack/assets/.DS_Store
-
-run/Flan/Parts Pack/assets/flansmod/textures/.DS_Store
-
-run/Flan/Utility Pack/.DS_Store
-
-run/Flan/WW2 Pack/.DS_Store
-
-run/Flan/WW2 Pack/boxes/.DS_Store
+# Flan's Scripts
 upload.bat
 *.launch
