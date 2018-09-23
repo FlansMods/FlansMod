@@ -244,8 +244,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				//If we hit glass and can break it, do so
 				else if(type.breaksGlass && mat == Material.GLASS && TeamsManager.canBreakGlass)
 				{
-					world.setBlockToAir(hit.getBlockPos());
-					FlansMod.proxy.playBlockBreakSound(hit.getBlockPos().getX(), hit.getBlockPos().getY(), hit.getBlockPos().getZ(), block);
+					world.destroyBlock(hit.getBlockPos(), false);
 				}
 				
 				//If this grenade does not penetrate blocks, hit the block instead

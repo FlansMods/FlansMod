@@ -1137,9 +1137,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					//playAuxSFXAtEntity(null, 2001, pos, Block.getStateId(state));					
 					
 					if(!world.isRemote)
-					{	
-						blockHit.dropBlockAsItem(world, pos, state, 1);		
-						world.setBlockToAir(pos);
+					{
+						world.destroyBlock(pos, true);
 					}
 				}
 				else
