@@ -82,11 +82,6 @@ public class BlockSpawner extends BlockContainer
     {
         return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
     }
-    
-    @Override
-    public void onEntityCollidedWithBlock(World par1World, BlockPos pos, IBlockState state, Entity par5Entity)
-    {
-    }
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i)

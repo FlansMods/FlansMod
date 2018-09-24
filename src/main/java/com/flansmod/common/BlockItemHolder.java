@@ -50,7 +50,7 @@ public class BlockItemHolder extends BlockContainer
 		setHardness(2F);
 		setResistance(4F);
 		setRegistryName(type.shortName);
-	    setUnlocalizedName(type.shortName);
+	    setTranslationKey(type.shortName);
 		setCreativeTab(FlansMod.tabFlanParts);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		type.block = this;
@@ -74,7 +74,7 @@ public class BlockItemHolder extends BlockContainer
 	@Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
     }
 	
 	@Override
@@ -97,11 +97,6 @@ public class BlockItemHolder extends BlockContainer
 	{
 	    return par1World.getBlockState(pos.add(0, -1, 0)).isSideSolid(par1World, pos.add(0, -1, 0), EnumFacing.UP);
 	}
-	
-	@Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
-    {
-    }
     
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
     

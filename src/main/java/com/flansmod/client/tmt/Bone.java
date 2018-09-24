@@ -473,7 +473,7 @@ public class Bone
 		vector = new Vec3d(xVec, yVec, zVec);
 	}
 
-	protected void addVector(Vec3d destVec, Vec3d srcVec)
+	protected void add(Vec3d destVec, Vec3d srcVec)
 	{
 		destVec = destVec.add(srcVec);	
 	}
@@ -482,7 +482,7 @@ public class Bone
 	{
 		Vec3d tempVec = new Vec3d(0, 0, length);
 		positionVector = new Vec3d(offsetX, offsetY, offsetZ);
-		addVector(tempVec, positionVector);
+		add(tempVec, positionVector);
 		setVectorRotations(tempVec);
 		for (Bone childNode : childNodes) {
 			childNode.setVectors(tempVec);
@@ -494,7 +494,7 @@ public class Bone
 		positionVector = vector;
 		Vec3d tempVec = new Vec3d(0, 0, length);
 		setVectorRotations(tempVec);
-		addVector(tempVec, vector);
+		add(tempVec, vector);
 		for (Bone childNode : childNodes) {
 			childNode.setVectors(tempVec);
 		}

@@ -42,7 +42,7 @@ public class BlockGunBox extends Block
 		setResistance(4F);
 		type = t;
 		setRegistryName(type.shortName);
-	    setUnlocalizedName(type.shortName);
+	    setTranslationKey(type.shortName);
 		setCreativeTab(FlansMod.tabFlanGuns);
 		type.block = this;
 	}
