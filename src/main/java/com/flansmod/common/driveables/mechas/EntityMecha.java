@@ -29,6 +29,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -64,6 +65,8 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
 import com.flansmod.common.vector.Vector3i;
+
+import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
 public class EntityMecha extends EntityDriveable
 {
@@ -975,8 +978,14 @@ public class EntityMecha extends EntityDriveable
 									}
 								}
 								//Destroy block
-								world.destroyBlock(new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z), atLeastOneEffectiveTool && !vacuumItems);
-					        }
+								if (!world.isRemote)
+								{
+									WorldServer worldServer = (WorldServer) world;
+									BlockPos pos = new BlockPos(breakingBlock.x, breakingBlock.y, breakingBlock.z);
+									boolean dropBlocks = atLeastOneEffectiveTool && !vacuumItems;
+									destroyBlock(worldServer, pos, driverSeat.getControllingPassenger(), dropBlocks);
+								}
+							}
 						}
 					}
 				}

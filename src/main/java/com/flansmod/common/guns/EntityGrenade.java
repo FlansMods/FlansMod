@@ -25,6 +25,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -45,7 +49,10 @@ import com.flansmod.common.teams.ItemTeamArmour;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
+import com.flansmod.common.util.BlockUtil;
 import com.flansmod.common.vector.Vector3f;
+
+import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
 public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
 {
@@ -71,12 +78,12 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	/** For deployable bags */
 	public int numUsesRemaining = 0;
 	
-	public EntityGrenade(World w) 
+	public EntityGrenade(World w)
 	{
 		super(w);
 	}
 	
-	public EntityGrenade(World w, GrenadeType g, EntityLivingBase t) 
+	public EntityGrenade(World w, GrenadeType g, EntityLivingBase t)
 	{
 		this(w);
 		setPosition(t.posX, t.posY + t.getEyeHeight(), t.posZ);
@@ -107,7 +114,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	public void onUpdate()
 	{
 		super.onUpdate();
-				
+		
 		//Quiet despawning
 		if(type == null || (type.despawnTime > 0 && ticksExisted > type.despawnTime))
 		{
@@ -118,9 +125,9 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		
 		//Visuals
 		if(world.isRemote)
-		{	
+		{
 			if(type.trailParticles)
-			{			
+			{
 				double dX = (posX - prevPosX) / 10;
 				double dY = (posY - prevPosY) / 10;
 				double dZ = (posZ - prevPosZ) / 10;
@@ -244,13 +251,17 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				//If we hit glass and can break it, do so
 				else if(type.breaksGlass && mat == Material.GLASS && TeamsManager.canBreakGlass)
 				{
-					world.destroyBlock(hit.getBlockPos(), false);
+					if (!world.isRemote)
+					{
+						WorldServer worldServer = (WorldServer) world;
+						destroyBlock(worldServer, hit.getBlockPos(), thrower, false);
+					}
 				}
 				
 				//If this grenade does not penetrate blocks, hit the block instead
 				//The grenade cannot bounce if it detonated on impact, so hence the "else" condition
 				else if(!type.penetratesBlocks)
-				{				
+				{
 					Vector3f hitVec = new Vector3f(hit.hitVec);
 					//Motion of the grenade pre-hit
 					Vector3f preHitMotVec = Vector3f.sub(hitVec, posVec, null);
@@ -395,7 +406,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 	        if((thrower instanceof EntityPlayer))
 	        	new FlansModExplosion(world, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
-	        else 
+	        else
 	        	world.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
@@ -437,7 +448,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				world.spawnParticle(FlansModClient.getParticleType(type.explodeParticleType), posX, posY, posZ, rand.nextGaussian(), rand.nextGaussian(), rand.nextGaussian());
 			}
 		}
-			
+		
 		//Drop item upon detonation, after explosions and whatnot
 		if(!world.isRemote && type.dropItemOnDetonate != null)
 		{
@@ -478,13 +489,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		type = GrenadeType.getGrenade(tags.getString("Type"));
 		thrower = world.getPlayerEntityByName(tags.getString("Thrower"));
@@ -494,7 +505,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tags) 
+	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
 		if(type == null)
 			setDead();
@@ -509,7 +520,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf data) 
+	public void writeSpawnData(ByteBuf data)
 	{
 		ByteBufUtils.writeUTF8String(data, type.shortName);
 		data.writeInt(thrower == null ? 0 : thrower.getEntityId());
@@ -518,7 +529,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf data) 
+	public void readSpawnData(ByteBuf data)
 	{
 		type = GrenadeType.getGrenade(ByteBufUtils.readUTF8String(data));
 		thrower = (EntityLivingBase)world.getEntityByID(data.readInt());

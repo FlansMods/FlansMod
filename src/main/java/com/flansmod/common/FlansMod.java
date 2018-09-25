@@ -455,17 +455,6 @@ public class FlansMod
 		if(eventArgs.getModID().equals(MODID))
 			syncConfig();
 	}
-	
-	@SubscribeEvent
-	public void onBlockBreak(BlockEvent.BreakEvent event)
-	{
-		if(event.getPlayer() != null
-				&& event.getPlayer().getHeldItemMainhand() != null
-				&& event.getPlayer().getHeldItemMainhand().getItem() instanceof ItemGun)
-		{
-			event.setCanceled(true);
-		}
-	}
 
 	@SubscribeEvent
 	public void onLivingSpecialSpawn(EntityJoinWorldEvent event)

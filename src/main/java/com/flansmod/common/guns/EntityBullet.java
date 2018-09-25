@@ -32,6 +32,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -68,6 +69,8 @@ import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
+
+import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
 public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
@@ -321,11 +324,12 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			Block block = world.getBlockState(pos).getBlock();
 			Material mat = world.getBlockState(pos).getMaterial();
 			//If the bullet breaks glass, and can do so according to FlansMod, do so.
-			if(bulletType.breaksGlass && mat == Material.GLASS)
+			if(bulletType.breaksGlass && mat == Material.GLASS && !world.isRemote)
 			{
 				if(TeamsManager.canBreakGlass)
                 {
-                	world.destroyBlock(pos, false);
+					WorldServer worldServer = (WorldServer) world;
+                	destroyBlock(worldServer, pos, shooter, false);
                 }
 			}
 			

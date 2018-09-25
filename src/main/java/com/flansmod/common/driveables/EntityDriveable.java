@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +28,7 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -48,7 +48,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.driveables.DriveableType.ParticleEmitter;
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityShootable;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.guns.GunType;
@@ -65,13 +64,14 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.network.PacketDriveableDamage;
 import com.flansmod.common.network.PacketDriveableKeyHeld;
-import com.flansmod.common.network.PacketFlak;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.parts.EnumPartCategory;
 import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
+
+import static com.flansmod.common.util.BlockUtil.destroyBlock;
 
 public abstract class EntityDriveable extends Entity implements IControllable, IExplodeable, IEntityAdditionalSpawnData
 {
@@ -519,7 +519,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		return seats != null && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)seats[0].getControllingPassenger()).capabilities.isCreativeMode;
 	}
 	
-	private EntityPlayer GetDriver()
+	private EntityPlayer getDriver()
 	{
 		if(seats != null && seats[0] != null && seats[0].getControllingPassenger() instanceof EntityPlayer)
 			return ((EntityPlayer)seats[0].getControllingPassenger());
@@ -539,7 +539,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 			//Get the gun from the plane type and the ammo from the data
 			GunType gunType = pilotGun.type;
 			ItemStack shootableStack = driveableData.ammo[getDriveableType().numPassengerGunners + currentGun];
-			EntityPlayer driver = GetDriver();
+			EntityPlayer driver = getDriver();
 			
 			if(shootableStack == null || !(shootableStack.getItem() instanceof ItemShootable))
 			{
@@ -880,7 +880,12 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	  								}
 	  							}
 	  							//Destroy block
-	  							world.destroyBlock(new BlockPos(blockX, blockY, blockZ), false);
+								if (!world.isRemote)
+								{
+									WorldServer worldServer = (WorldServer) world;
+									BlockPos pos = new BlockPos(blockX, blockY, blockZ);
+									destroyBlock(worldServer, pos, getDriver(), false);
+								}
 	  						}
 						}
   					}
@@ -1138,7 +1143,8 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 					
 					if(!world.isRemote)
 					{
-						world.destroyBlock(pos, true);
+						WorldServer worldServer = (WorldServer) world;
+						destroyBlock(worldServer, pos, getDriver(), true);
 					}
 				}
 				else
