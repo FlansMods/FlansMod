@@ -1,17 +1,16 @@
-# Auto detect text files and perform LF normalization
+# Auto detect text file line endings
 * text=auto
 
-# Custom for Visual Studio
-*.cs     diff=csharp
+# Text
+*.java  text
+*.json  text
+*.md    text
+*.txt   text
+*.sh    text    eol=lf
+*.bat   text    eol=crlf
 
-# Standard to msysgit
-*.doc	 diff=astextplain
-*.DOC	 diff=astextplain
-*.docx diff=astextplain
-*.DOCX diff=astextplain
-*.dot  diff=astextplain
-*.DOT  diff=astextplain
-*.pdf  diff=astextplain
-*.PDF	 diff=astextplain
-*.rtf	 diff=astextplain
-*.RTF	 diff=astextplain
+# Binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.jar   binary
