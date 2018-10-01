@@ -6,9 +6,7 @@ package com.flansmod.apocalypse.client.model;
 
 import net.minecraft.client.model.ModelBase;
 
-import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelPowerCube extends ModelBase
 {

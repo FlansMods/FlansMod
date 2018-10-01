@@ -1,18 +1,10 @@
 package com.flansmod.apocalypse.client.model;
 
-import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.model.ModelItemHolder;
-import com.flansmod.common.ItemHolderType;
-import com.flansmod.common.TileEntityItemHolder;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
 
 public class RenderPowerCube extends TileEntitySpecialRenderer<TileEntityPowerCube>
 {

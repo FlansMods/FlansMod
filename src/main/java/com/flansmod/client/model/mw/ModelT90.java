@@ -6,8 +6,6 @@ package com.flansmod.client.model.mw; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelT90 extends ModelVehicle //Same as Filename
 {

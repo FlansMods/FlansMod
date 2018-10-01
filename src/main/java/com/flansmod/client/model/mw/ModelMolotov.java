@@ -1,9 +1,9 @@
 package com.flansmod.client.model.mw;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
+
+import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelMolotov extends ModelBase
 {

@@ -5,9 +5,7 @@
 package com.flansmod.client.model.utility;
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Shape2D;
 import com.flansmod.common.vector.Vector3f;
 
 public class ModelTunnelBore extends ModelVehicle

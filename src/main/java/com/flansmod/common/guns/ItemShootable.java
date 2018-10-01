@@ -1,16 +1,12 @@
 package com.flansmod.common.guns;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-import com.flansmod.common.vector.Vector3f;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import com.flansmod.common.types.InfoType;
+import com.flansmod.common.vector.Vector3f;
 
 public abstract class ItemShootable extends Item
 {

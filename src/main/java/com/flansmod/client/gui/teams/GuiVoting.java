@@ -2,16 +2,15 @@ package com.flansmod.client.gui.teams;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.teams.ClientTeamsData;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketVoteCast;
-import com.flansmod.common.network.PacketVoting;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketVoteCast;
 
 public class GuiVoting extends GuiScreen
 {

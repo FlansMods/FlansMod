@@ -6,10 +6,16 @@ import java.util.Comparator;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.ClientProxy;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumAttachmentType;
 import com.flansmod.common.guns.GunType;
@@ -18,26 +24,16 @@ import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.teams.LoadoutPool;
-import com.flansmod.common.teams.PlayerLoadout;
-import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryPaintjob;
+import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
-import com.flansmod.common.types.EnumPaintjobRarity;
+import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
-
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 
 public class GuiEditLoadout extends GuiTeamsBase
 {

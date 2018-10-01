@@ -1,36 +1,21 @@
 package com.flansmod.client.model;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.model.apocalypse.ModelGroundSkeleton;
-import com.flansmod.common.BlockItemHolder;
 import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.TileEntityItemHolder;
-import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.teams.BlockSpawner;
 
 public class RenderItemHolder extends TileEntitySpecialRenderer
 {

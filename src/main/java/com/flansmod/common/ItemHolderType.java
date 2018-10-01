@@ -11,10 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.client.model.ModelItemHolder;
-import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 

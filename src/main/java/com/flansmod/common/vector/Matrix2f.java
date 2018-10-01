@@ -2,13 +2,11 @@ package com.flansmod.common.vector;
 
 import java.util.Set;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.common.types.InfoType;
 
 public class Matrix2f
 {

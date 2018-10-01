@@ -1,10 +1,10 @@
 package com.flansmod.client.gui.teams;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketBaseEdit;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -13,8 +13,8 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
-import java.io.IOException;
-import java.util.Arrays;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketBaseEdit;
 
 public class GuiBaseEditor extends GuiScreen
 {

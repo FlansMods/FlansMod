@@ -9,7 +9,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -20,8 +19,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.guns.ItemAAGun;
-
-import com.google.common.collect.ImmutableMap;
 
 public class TileEntitySpawner extends TileEntity implements ITeamObject, ITickable
 {

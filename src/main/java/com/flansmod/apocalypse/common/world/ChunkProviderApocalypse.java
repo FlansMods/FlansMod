@@ -1,23 +1,13 @@
 package com.flansmod.apocalypse.common.world;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
-
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.apocalypse.common.world.buildings.MapGenAbandonedVillage;
-import com.flansmod.apocalypse.common.world.buildings.WorldGenDeadTree;
-import com.flansmod.apocalypse.common.world.buildings.WorldGenDyeFactory;
-import com.flansmod.apocalypse.common.world.buildings.WorldGenResearchLab;
-import com.flansmod.apocalypse.common.world.buildings.WorldGenRunway;
-import com.flansmod.apocalypse.common.world.buildings.WorldGenSkeleton;
-import com.flansmod.common.ModuloHelper;
 
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -28,21 +18,22 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenBase;
-import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
-import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
-import net.minecraft.world.gen.structure.MapGenScatteredFeature;
-import net.minecraft.world.gen.structure.MapGenStronghold;
-import net.minecraft.world.gen.structure.MapGenVillage;
-import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
+
+import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.apocalypse.common.world.buildings.MapGenAbandonedVillage;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenDeadTree;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenDyeFactory;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenResearchLab;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenRunway;
+import com.flansmod.apocalypse.common.world.buildings.WorldGenSkeleton;
+import com.flansmod.common.ModuloHelper;
 
 public class ChunkProviderApocalypse implements IChunkGenerator
 {

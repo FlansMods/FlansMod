@@ -1,18 +1,14 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import com.flansmod.common.FlansMod;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
+
+import com.flansmod.common.FlansMod;
 
 public class TeamsMap
 {

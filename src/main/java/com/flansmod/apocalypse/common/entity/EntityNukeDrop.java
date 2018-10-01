@@ -1,11 +1,11 @@
 package com.flansmod.apocalypse.common.entity;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 public class EntityNukeDrop extends Entity
 {

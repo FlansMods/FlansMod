@@ -4,20 +4,18 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.util.WorldRenderer;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.vector.Vector3f;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.client.util.WorldRenderer;
+import com.flansmod.common.guns.BulletType;
+import com.flansmod.common.vector.Vector3f;
 
 public class InstantBulletRenderer
 {

@@ -1,12 +1,5 @@
 package com.flansmod.common.paintjob;
 
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.Paintjob;
-import com.flansmod.common.guns.SlotGun;
-import com.flansmod.common.types.IPaintableItem;
-import com.flansmod.common.types.PaintableType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -14,6 +7,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.flansmod.common.guns.Paintjob;
+import com.flansmod.common.types.IPaintableItem;
+import com.flansmod.common.types.PaintableType;
 
 public class ContainerPaintjobTable extends Container
 {

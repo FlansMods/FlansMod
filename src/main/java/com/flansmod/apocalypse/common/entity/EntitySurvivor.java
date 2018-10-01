@@ -2,20 +2,19 @@ package com.flansmod.apocalypse.common.entity;
 
 import java.util.ArrayList;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.common.guns.EnumFireMode;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ShootableType;
-
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.common.guns.EnumFireMode;
+import com.flansmod.common.guns.GunType;
+import com.flansmod.common.guns.ShootableType;
 
 public class EntitySurvivor extends EntityFlansModShooter
 {

@@ -3,13 +3,12 @@ package com.flansmod.client.model.yeolde;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.util.WorldRenderer;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
+
+import com.flansmod.client.FlansModClient;
+import com.flansmod.client.util.WorldRenderer;
 
 public class ModelArrow extends ModelBase
 {

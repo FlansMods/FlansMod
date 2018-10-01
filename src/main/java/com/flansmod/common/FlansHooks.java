@@ -2,7 +2,6 @@ package com.flansmod.common;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fml.common.Loader;
 
 public class FlansHooks

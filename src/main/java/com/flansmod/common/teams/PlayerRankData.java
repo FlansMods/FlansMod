@@ -1,16 +1,14 @@
 package com.flansmod.common.teams;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import io.netty.buffer.ByteBuf;
 
 public class PlayerRankData
 {

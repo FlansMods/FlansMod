@@ -1,17 +1,10 @@
 package com.flansmod.apocalypse.common.world.buildings;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.world.BiomeApocalypse;
-import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Field1;
-import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Field2;
-import com.flansmod.apocalypse.common.world.buildings.StructureAbandonedVillagePieces.Well;
-
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +14,8 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
 
 public class MapGenAbandonedVillage extends MapGenStructure
 {

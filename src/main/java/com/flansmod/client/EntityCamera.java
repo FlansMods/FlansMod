@@ -1,13 +1,13 @@
 package com.flansmod.client;
 
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.vector.Vector3f;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
+
+import com.flansmod.common.driveables.EntityDriveable;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityCamera extends EntityLivingBase
 {

@@ -3,10 +3,6 @@ package com.flansmod.common.types;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.Paintjob;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +15,10 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetDamage;
 import net.minecraftforge.event.LootTableLoadEvent;
+
+import com.flansmod.client.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.guns.Paintjob;
 
 public abstract class PaintableType extends InfoType
 {

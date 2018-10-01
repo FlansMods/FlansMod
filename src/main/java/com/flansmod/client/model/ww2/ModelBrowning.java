@@ -5,12 +5,7 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelMG;
-
-import net.minecraft.entity.Entity;
-
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelBrowning extends ModelMG //Same as Filename
 {

@@ -12,7 +12,6 @@ import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.DriveablePart;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.TypeFile;

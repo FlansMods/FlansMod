@@ -1,12 +1,11 @@
 package com.flansmod.common.guns;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumHand;
+
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumHand;
 
 
 public class ShotData

@@ -1,14 +1,12 @@
 package com.flansmod.common.network;
 
-import com.flansmod.common.FlansMod;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.server.FMLServerHandler;
+
+import com.flansmod.common.FlansMod;
 
 /**
  * Sent from client to server when player wants to go into debug mode

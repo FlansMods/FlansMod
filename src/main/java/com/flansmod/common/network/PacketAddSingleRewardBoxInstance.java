@@ -1,12 +1,12 @@
 package com.flansmod.common.network;
 
-import com.flansmod.client.teams.ClientTeamsData;
-import com.flansmod.common.FlansMod;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.common.FlansMod;
 
 public class PacketAddSingleRewardBoxInstance extends PacketBase
 {

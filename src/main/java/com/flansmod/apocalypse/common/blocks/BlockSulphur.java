@@ -2,13 +2,12 @@ package com.flansmod.apocalypse.common.blocks;
 
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+
+import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 public class BlockSulphur extends Block
 {

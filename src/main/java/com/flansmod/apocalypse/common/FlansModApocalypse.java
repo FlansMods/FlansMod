@@ -1,25 +1,7 @@
 package com.flansmod.apocalypse.common;
 
-import java.util.Random;
-
-import com.flansmod.apocalypse.common.blocks.BlockPowerCube;
-import com.flansmod.apocalypse.common.blocks.BlockStatic;
-import com.flansmod.apocalypse.common.blocks.BlockSulphur;
-import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
-import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
-import com.flansmod.apocalypse.common.world.BiomeApocalypse;
-import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
-import com.flansmod.common.BlockItemHolder;
-import com.flansmod.common.CreativeTabFlan;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.ItemHolderType;
-import com.flansmod.common.TileEntityItemHolder;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -39,14 +21,27 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import com.flansmod.apocalypse.common.blocks.BlockPowerCube;
+import com.flansmod.apocalypse.common.blocks.BlockStatic;
+import com.flansmod.apocalypse.common.blocks.BlockSulphur;
+import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
+import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
+import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
+import com.flansmod.common.BlockItemHolder;
+import com.flansmod.common.CreativeTabFlan;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.ItemHolderType;
+import com.flansmod.common.parts.PartType;
 
 @Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS_APOCALYPSE@", dependencies = "required-after:" + FlansMod.MODID)
 //, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")

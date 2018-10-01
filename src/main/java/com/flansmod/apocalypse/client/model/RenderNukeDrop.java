@@ -2,9 +2,6 @@ package com.flansmod.apocalypse.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
-import com.flansmod.common.driveables.EntityPlane;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -17,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 
 public class RenderNukeDrop extends Render
 {

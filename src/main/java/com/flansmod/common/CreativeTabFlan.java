@@ -1,5 +1,7 @@
 package com.flansmod.common;
 
+import java.util.Comparator;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -7,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Comparator;
 
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.guns.GunType;

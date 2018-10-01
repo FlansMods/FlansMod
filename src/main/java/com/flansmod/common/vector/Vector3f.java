@@ -34,10 +34,10 @@ package com.flansmod.common.vector;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
-import com.flansmod.common.FlansMod;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.Vec3d;
+
+import com.flansmod.common.FlansMod;
 
 /**
  * Holds a 3-tuple vector.

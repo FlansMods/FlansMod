@@ -1,10 +1,10 @@
 package com.flansmod.common;
 
-import com.flansmod.common.teams.TeamsManager;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import com.flansmod.common.teams.TeamsManager;
 
 public class CommonTickHandler
 {

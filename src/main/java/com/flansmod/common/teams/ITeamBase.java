@@ -3,7 +3,6 @@ package com.flansmod.common.teams;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**

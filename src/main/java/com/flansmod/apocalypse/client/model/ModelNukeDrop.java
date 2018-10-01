@@ -1,8 +1,8 @@
 package com.flansmod.apocalypse.client.model;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
+
+import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelNukeDrop extends ModelBase
 {

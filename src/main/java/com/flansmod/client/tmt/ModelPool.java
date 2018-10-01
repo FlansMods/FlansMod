@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.flansmod.common.FlansMod;
-
 import net.minecraftforge.fml.common.Loader;
+
+import com.flansmod.common.FlansMod;
 
 public class ModelPool
 {

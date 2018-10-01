@@ -1,9 +1,8 @@
 package com.flansmod.common.guns;
 
-import io.netty.buffer.ByteBuf;
-
 import org.lwjgl.input.Mouse;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityMob;
@@ -33,7 +32,6 @@ import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.vector.Vector3f;
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {

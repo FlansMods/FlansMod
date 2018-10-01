@@ -2,16 +2,14 @@ package com.flansmod.apocalypse.common.world;
 
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import com.flansmod.apocalypse.common.FlansModApocalypse;
 
 public class WorldGenSulphurPool extends WorldGenerator
 {

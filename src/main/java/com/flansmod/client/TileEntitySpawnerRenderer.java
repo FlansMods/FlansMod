@@ -1,19 +1,10 @@
 package com.flansmod.client;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.teams.BlockSpawner;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TileEntitySpawner;
 

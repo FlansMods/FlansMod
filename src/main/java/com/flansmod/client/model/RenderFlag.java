@@ -1,7 +1,5 @@
 package com.flansmod.client.model;
 
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.entity.Render;

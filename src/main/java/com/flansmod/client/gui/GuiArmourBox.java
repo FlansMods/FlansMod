@@ -5,10 +5,6 @@ import java.io.IOException;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.flansmod.common.teams.ArmourBoxType;
-import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
-
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,6 +15,10 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
+import com.flansmod.common.teams.ArmourBoxType;
+import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
 
 public class GuiArmourBox extends GuiScreen
 {

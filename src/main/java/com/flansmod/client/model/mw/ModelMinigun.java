@@ -2,13 +2,10 @@ package com.flansmod.client.model.mw;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.renderer.GlStateManager;
-
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.GunAnimations;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.vector.Vector3f;
 
 public class ModelMinigun extends ModelGun

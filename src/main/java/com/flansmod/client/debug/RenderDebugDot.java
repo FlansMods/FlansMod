@@ -2,14 +2,13 @@ package com.flansmod.client.debug;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.model.RenderGrenade;
-import com.flansmod.common.FlansMod;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+
+import com.flansmod.common.FlansMod;
 
 public class RenderDebugDot extends Render
 {

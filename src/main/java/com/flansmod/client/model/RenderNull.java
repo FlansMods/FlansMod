@@ -6,9 +6,9 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntitySeat;

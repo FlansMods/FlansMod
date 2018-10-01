@@ -1,19 +1,14 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketBaseEdit;
-import com.flansmod.common.types.IFlanItem;
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketBaseEdit;
 
 public class ItemOpStick extends Item
 {

@@ -1,8 +1,5 @@
 package com.flansmod.common.driveables;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.vector.Vector3f;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,8 +7,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 {

@@ -1,21 +1,15 @@
 package com.flansmod.common.network;
 
-import com.flansmod.client.gui.teams.GuiVoting;
-import com.flansmod.client.teams.ClientTeamsData;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.teams.RoundFinishedData;
-import com.flansmod.common.teams.TeamsManager;
-import com.flansmod.common.teams.TeamsRound;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.flansmod.client.teams.ClientTeamsData;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.teams.RoundFinishedData;
 
 public class PacketVoting extends PacketBase
 {

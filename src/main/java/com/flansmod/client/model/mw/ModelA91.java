@@ -3,12 +3,10 @@
 // This file is for Flan's Flying Mod Version 4.0.x+
 package com.flansmod.client.model.mw;
 
-import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.model.EnumAnimationType;
+import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelA91 extends ModelGun
 {

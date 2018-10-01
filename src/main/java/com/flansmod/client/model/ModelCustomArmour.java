@@ -2,9 +2,6 @@ package com.flansmod.client.model;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.common.teams.ArmourType;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+
+import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.common.teams.ArmourType;
 
 public class ModelCustomArmour extends ModelBiped
 {

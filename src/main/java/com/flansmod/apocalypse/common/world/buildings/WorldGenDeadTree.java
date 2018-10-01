@@ -2,15 +2,10 @@ package com.flansmod.apocalypse.common.world.buildings;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockLog;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.common.BlockItemHolder;
-import com.flansmod.common.TileEntityItemHolder;
 
 public class WorldGenDeadTree extends WorldGenFlan
 {
