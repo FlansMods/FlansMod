@@ -277,7 +277,6 @@ public class ModelKV1 extends ModelVehicle //Same as Filename
 		barrelModel[1].setRotationPoint(15F, -26F, 0F);
 
 
-
 		translateAll(0F, 0F, 0F);
 
 

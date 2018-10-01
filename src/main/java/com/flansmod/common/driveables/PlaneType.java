@@ -13,37 +13,63 @@ import com.flansmod.common.vector.Vector3f;
 
 public class PlaneType extends DriveableType
 {
-	/** What type of flying vehicle is this? */
-	public EnumPlaneMode mode = EnumPlaneMode.PLANE;	
-	/** Pitch modifiers */
+	/**
+	 * What type of flying vehicle is this?
+	 */
+	public EnumPlaneMode mode = EnumPlaneMode.PLANE;
+	/**
+	 * Pitch modifiers
+	 */
 	public float lookDownModifier = 1F, lookUpModifier = 1F;
-	/** Roll modifiers */
+	/**
+	 * Roll modifiers
+	 */
 	public float rollLeftModifier = 1F, rollRightModifier = 1F;
-	/** Yaw modifiers */
+	/**
+	 * Yaw modifiers
+	 */
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
-	/** Co-efficient of lift which determines how the plane flies */
+	/**
+	 * Co-efficient of lift which determines how the plane flies
+	 */
 	public float lift = 1F;
 	
-	/** The point at which bomb entities spawn */
+	/**
+	 * The point at which bomb entities spawn
+	 */
 	public Vector3f bombPosition;
-	/** The time in ticks between bullets fired by the nose / wing guns */
+	/**
+	 * The time in ticks between bullets fired by the nose / wing guns
+	 */
 	public int planeShootDelay;
-	/** The time in ticks between bombs dropped */
+	/**
+	 * The time in ticks between bombs dropped
+	 */
 	public int planeBombDelay;
 	
-	/** The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly */
+	/**
+	 * The positions, parent parts and recipe items of the propellers, used to calculate forces and render the plane correctly
+	 */
 	public ArrayList<Propeller> propellers = new ArrayList<Propeller>();
-	/** The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly */
+	/**
+	 * The positions, parent parts and recipe items of the helicopter propellers, used to calculate forces and render the plane correctly
+	 */
 	public ArrayList<Propeller> heliPropellers = new ArrayList<Propeller>(), heliTailPropellers = new ArrayList<Propeller>();
-				
-	/** Aesthetic features */
+	
+	/**
+	 * Aesthetic features
+	 */
 	public boolean hasGear = false, hasDoor = false, hasWing = false;
-	/** Default pitch for when parked. Will implement better system soon */
+	/**
+	 * Default pitch for when parked. Will implement better system soon
+	 */
 	public float restingPitch = 0F;
-
-	/** Whether the player can access the inventory while in the air */
+	
+	/**
+	 * Whether the player can access the inventory while in the air
+	 */
 	public boolean invInflight = true;
-
+	
 	public static ArrayList<PlaneType> types = new ArrayList<PlaneType>();
 	
 	public PlaneType(TypeFile file)
@@ -51,19 +77,19 @@ public class PlaneType extends DriveableType
 		super(file);
 		types.add(this);
 	}
-
+	
 	@Override
 	public void preRead(TypeFile file)
 	{
 		super.preRead(file);
 	}
-
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
-		{		
+		{
 			//Plane Mode
 			if(split[0].equals("Mode"))
 				mode = EnumPlaneMode.getMode(split[1]);
@@ -86,9 +112,9 @@ public class PlaneType extends DriveableType
 			//Lift
 			if(split[0].equals("Lift"))
 				lift = Float.parseFloat(split[1]);
-				
+			
 			//Propellers and Armaments
-
+			
 			if(split[0].equals("ShootDelay"))
 				planeShootDelay = Integer.parseInt(split[1]);
 			if(split[0].equals("BombDelay"))
@@ -113,7 +139,7 @@ public class PlaneType extends DriveableType
 				heliTailPropellers.add(propeller);
 				driveableRecipe.add(new ItemStack(propeller.itemType.item));
 			}
-
+			
 			//Sound
 			if(split[0].equals("PropSoundLength"))
 				engineSoundLength = Integer.parseInt(split[1]);
@@ -142,29 +168,31 @@ public class PlaneType extends DriveableType
 				hasWing = split[1].equals("True");
 			if(split[0].equals("RestingPitch"))
 				restingPitch = Float.parseFloat(split[1]);
-
+			
 			//In-flight inventory
 			if(split[0].equals("InflightInventory"))
 				invInflight = split[1].equals("False");
 		}
-		catch (Exception ignored)
+		catch(Exception ignored)
 		{
 		}
 	}
-
+	
 	@Override
 	public int numEngines()
 	{
 		switch(mode)
 		{
-		case VTOL : return Math.max(propellers.size(), heliPropellers.size());
-		case PLANE : return propellers.size();
-		case HELI : return heliPropellers.size();
-		default : return 1;
+			case VTOL: return Math.max(propellers.size(), heliPropellers.size());
+			case PLANE: return propellers.size();
+			case HELI: return heliPropellers.size();
+			default: return 1;
 		}
 	}
-
-	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	
+	/**
+	 * Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up
+	 */
 	@Override
 	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
 	{
@@ -181,7 +209,7 @@ public class PlaneType extends DriveableType
 		}
 		return stacks;
 	}
-
+	
 	public static PlaneType getPlane(String find)
 	{
 		for(PlaneType type : types)
@@ -192,14 +220,16 @@ public class PlaneType extends DriveableType
 		return null;
 	}
 	
-	/** To be overriden by subtypes for model reloading */
+	/**
+	 * To be overriden by subtypes for model reloading
+	 */
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelPlane.class);
 	}
-
+	
 	@Override
-	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data) 
+	public EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data)
 	{
 		return new EntityPlane(world, x, y, z, this, data);
 	}

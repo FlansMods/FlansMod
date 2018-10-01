@@ -18,14 +18,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-public class EntityTeleporter extends Entity 
+public class EntityTeleporter extends Entity
 {
-	/** Points to the lower left power cube in the portal frame */
+	/**
+	 * Points to the lower left power cube in the portal frame
+	 */
 	private BlockPos lowerLeftCornerPowerCube;
-	/** Points to the lower left power cube in the target teleporter */
+	/**
+	 * Points to the lower left power cube in the target teleporter
+	 */
 	private BlockPos targetTeleporter;
 	
-	public EntityTeleporter(World world) 
+	public EntityTeleporter(World world)
 	{
 		super(world);
 		setSize(1F, 1F);
@@ -63,7 +67,7 @@ public class EntityTeleporter extends Entity
 			double dX = rand.nextGaussian();
 			double dY = rand.nextGaussian();
 			double dZ = rand.nextGaussian();
-			world.spawnParticle(EnumParticleTypes.PORTAL, posX + dX, posY + 1+ dY, posZ + dZ, dX, dY, dZ);
+			world.spawnParticle(EnumParticleTypes.PORTAL, posX + dX, posY + 1 + dY, posZ + dZ, dX, dY, dZ);
 		}
 	}
 	
@@ -78,7 +82,7 @@ public class EntityTeleporter extends Entity
 	public void onCollideWithPlayer(EntityPlayer player)
 	{
 		if(!world.isRemote)
-		{			
+		{
 			if(targetTeleporter == null && world.provider.getDimension() == FlansModApocalypse.dimensionID)
 				findPortal(player);
 			
@@ -88,13 +92,13 @@ public class EntityTeleporter extends Entity
 				//Switch between overworld and apocalypse
 				if(world.provider.getDimension() == 0)
 				{
-					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 
-							FlansModApocalypse.dimensionID, 
+					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player,
+							FlansModApocalypse.dimensionID,
 							new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(FlansModApocalypse.dimensionID), this.targetTeleporter));
 				}
 				else
 				{
-					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player, 
+					FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().transferPlayerToDimension((EntityPlayerMP)player,
 							0, new TeleporterApocalypse(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0), this.targetTeleporter));
 				}
 			}
@@ -107,19 +111,19 @@ public class EntityTeleporter extends Entity
 		BlockPos entryPoint = FlansModApocalypse.proxy.data.entryPoints.get(player.getPersistentID());
 
 		//Find a valid place to enter the world
-		World overworld =FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
+		World overworld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
 		
 		if(entryPoint == null)
 			entryPoint = overworld.getSpawnPoint();
-			
+
 		for(int i = overworld.rand.nextInt(100); i < 300; i++)
 		{
 			double dX = Math.cos(i) * FlansModApocalypse.RETURN_RADIUS;
 			double dZ = Math.sin(i) * FlansModApocalypse.RETURN_RADIUS;
 			
 			BlockPos pos = new BlockPos(entryPoint.getX() + dX, 256, entryPoint.getZ() + dZ);
-			for( ; pos.getY() >= 0; pos = pos.down())
-			{		
+			for(; pos.getY() >= 0; pos = pos.down())
+			{
 				if(overworld.isAirBlock(pos) && overworld.isSideSolid(pos.down(), EnumFacing.UP))
 				{
 					//We have found a valid position
@@ -176,13 +180,13 @@ public class EntityTeleporter extends Entity
 	}
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		lowerLeftCornerPowerCube = new BlockPos(tags.getInteger("X"), tags.getInteger("Y"), tags.getInteger("Z"));
 		this.setPosition(lowerLeftCornerPowerCube.getX() + 2D, lowerLeftCornerPowerCube.getY() + 1D, lowerLeftCornerPowerCube.getZ() + 2D);
@@ -191,7 +195,7 @@ public class EntityTeleporter extends Entity
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tags) 
+	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
 		tags.setInteger("X", lowerLeftCornerPowerCube.getX());
 		tags.setInteger("Y", lowerLeftCornerPowerCube.getY());

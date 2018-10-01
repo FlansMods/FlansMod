@@ -11,16 +11,16 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import com.flansmod.client.model.RenderGrenade;
 import com.flansmod.common.FlansMod;
 
-public class RenderDebugVector extends Render 
+public class RenderDebugVector extends Render
 {
-
-	public RenderDebugVector(RenderManager renderManager) 
+	
+	public RenderDebugVector(RenderManager renderManager)
 	{
 		super(renderManager);
 	}
-
+	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 
+	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1)
 	{
 		if(!FlansMod.DEBUG)
 			return;
@@ -40,17 +40,17 @@ public class RenderDebugVector extends Render
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return null;
 	}
-
+	
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderDebugVector(manager);
 		}

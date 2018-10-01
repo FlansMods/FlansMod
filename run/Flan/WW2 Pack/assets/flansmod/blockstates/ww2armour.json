@@ -1,1 +1,7 @@
-{ "variants": { "normal": { "model": "flansmod:ww2Armour" } } }
+{
+  "variants": {
+    "normal": {
+      "model": "flansmod:ww2Armour"
+    }
+  }
+}

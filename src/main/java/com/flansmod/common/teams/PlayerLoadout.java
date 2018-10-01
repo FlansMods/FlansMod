@@ -15,7 +15,7 @@ import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 
-public class PlayerLoadout 
+public class PlayerLoadout
 {
 	public ItemStack[] slots;
 	
@@ -37,24 +37,24 @@ public class PlayerLoadout
 		}
 		return copy;
 	}
-
-	public void writeToBuf(ByteBuf data) 
+	
+	public void writeToBuf(ByteBuf data)
 	{
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
 			ByteBufUtils.writeItemStack(data, slots[i]);
 		}
 	}
-
-	public void readFromBuf(ByteBuf data) 
+	
+	public void readFromBuf(ByteBuf data)
 	{
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
 			slots[i] = ByteBufUtils.readItemStack(data);
 		}
 	}
-
-	public void readFromNBT(NBTTagCompound tags) 
+	
+	public void readFromNBT(NBTTagCompound tags)
 	{
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
@@ -63,8 +63,8 @@ public class PlayerLoadout
 				slots[i] = ItemStack.EMPTY.copy();
 		}
 	}
-
-	public void writeToNBT(NBTTagCompound tags) 
+	
+	public void writeToNBT(NBTTagCompound tags)
 	{
 		for(int i = 0; i < EnumLoadoutSlot.values().length; i++)
 		{
@@ -74,10 +74,10 @@ public class PlayerLoadout
 				slots[i].writeToNBT(stackTags);
 				tags.setTag("slot_" + i, stackTags);
 			}
-		}	
+		}
 	}
-
-	public boolean Verify(int currentLevel, ArrayList<RewardBoxInstance> rewardBoxData) 
+	
+	public boolean Verify(int currentLevel, ArrayList<RewardBoxInstance> rewardBoxData)
 	{
 		LoadoutPool pool = TeamsManagerRanked.GetInstance().currentPool;
 		if(pool == null)
@@ -122,10 +122,10 @@ public class PlayerLoadout
 					}
 					break;
 				}
-					
+				
 				default:
 				{
-					FlansMod.Assert(false,  "Missing case in loadout verification");
+					FlansMod.Assert(false, "Missing case in loadout verification");
 					return false;
 				}
 			}

@@ -1,11 +1,12 @@
 package com.flansmod.common;
 
 import com.flansmod.common.teams.TeamsManager;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class CommonTickHandler 
+public class CommonTickHandler
 {
 	public CommonTickHandler()
 	{
@@ -17,15 +18,15 @@ public class CommonTickHandler
 	{
 		switch(event.phase)
 		{
-		case START :
-		{
-			break;
-		}
-		case END :
-		{
-			FlansMod.playerHandler.clientTick();
-			break;
-		}		
+			case START:
+			{
+				break;
+			}
+			case END:
+			{
+				FlansMod.playerHandler.clientTick();
+				break;
+			}
 		}
 	}
 	
@@ -34,22 +35,22 @@ public class CommonTickHandler
 	{
 		switch(event.phase)
 		{
-		case START :
-		{
-			//Handle all packets received since last tick
-			FlansMod.getPacketHandler().handleServerPackets();
-			break;
-		}
-		case END :
-		{
-			if(TeamsManager.getInstance() != null)
+			case START:
 			{
-				TeamsManager.getInstance().tick();
+				//Handle all packets received since last tick
+				FlansMod.getPacketHandler().handleServerPackets();
+				break;
 			}
-			FlansMod.playerHandler.serverTick();
-			FlansMod.ticker++;
-			break;
-		}		
+			case END:
+			{
+				if(TeamsManager.getInstance() != null)
+				{
+					TeamsManager.getInstance().tick();
+				}
+				FlansMod.playerHandler.serverTick();
+				FlansMod.ticker++;
+				break;
+			}
 		}
 	}
 }

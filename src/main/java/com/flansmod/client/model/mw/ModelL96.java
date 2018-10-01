@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelL96 extends ModelGun 
+public class ModelL96 extends ModelGun
 {
 	public ModelL96()
 	{
@@ -68,12 +68,12 @@ public class ModelL96 extends ModelGun
 		ammoModel = new ModelRendererTurbo[1];
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 41, 7, textureX, textureY);
-		ammoModel[0].addShapeBox(3F, -2F, -1F, 3, 2, 2, 0F, /* 0 */ 0F, 1F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		ammoModel[0].addShapeBox(3F, -2F, -1F, 3, 2, 2, 0F, /* 0 */ 0F, 1F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		translateAll(0, 2.5F, 0);
 		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;
-
+		
 	}
 }

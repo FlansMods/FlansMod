@@ -15,7 +15,7 @@ public class PositionTextureVertex extends net.minecraft.client.model.PositionTe
 	{
 		this(new Vec3d(par1, par2, par3), par4, par5);
 	}
-
+	
 	@Override
 	public PositionTextureVertex setTexturePosition(float par1, float par2)
 	{

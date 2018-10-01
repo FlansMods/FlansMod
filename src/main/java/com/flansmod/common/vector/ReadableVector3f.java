@@ -34,7 +34,8 @@ package com.flansmod.common.vector;
 /**
  * @author foo
  */
-public interface ReadableVector3f extends ReadableVector2f {
+public interface ReadableVector3f extends ReadableVector2f
+{
 	/**
 	 * @return z
 	 */

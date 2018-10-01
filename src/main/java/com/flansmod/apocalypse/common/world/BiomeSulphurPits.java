@@ -3,9 +3,9 @@ package com.flansmod.apocalypse.common.world;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 
-public class BiomeSulphurPits extends BiomeApocalypse 
+public class BiomeSulphurPits extends BiomeApocalypse
 {
-	public BiomeSulphurPits(Biome.BiomeProperties properties) 
+	public BiomeSulphurPits(Biome.BiomeProperties properties)
 	{
 		super(properties);
 		spawnableMonsterList.clear();

@@ -4,18 +4,26 @@ import java.util.Random;
 
 import com.flansmod.common.vector.Vector3f;
 
-public class GunAnimations 
+public class GunAnimations
 {
 	public static GunAnimations defaults = new GunAnimations();
 	
 	/** (Purely aesthetic) gun animation variables */
-	/** Slide */
+	/**
+	 * Slide
+	 */
 	public float gunSlide = 0F, lastGunSlide = 0F;
-	/** Delayed Reload Animations */
+	/**
+	 * Delayed Reload Animations
+	 */
 	public int timeUntilPump = 0, timeToPumpFor = 0;
-	/** Delayed Reload Animations : -1, 1 = At rest, 0 = Mid Animation */
+	/**
+	 * Delayed Reload Animations : -1, 1 = At rest, 0 = Mid Animation
+	 */
 	public float pumped = -1F, lastPumped = -1F;
-	/** Delayed Reload Animations : Doing the delayed animation */
+	/**
+	 * Delayed Reload Animations : Doing the delayed animation
+	 */
 	public boolean pumping = false;
 	
 	public boolean reloading = false;
@@ -23,11 +31,13 @@ public class GunAnimations
 	public float reloadAnimationTime = 0;
 	
 	public float reloadAnimationProgress = 0F, lastReloadAnimationProgress = 0F;
-
+	
 	public float minigunBarrelRotation = 0F;
 	public float minigunBarrelRotationSpeed = 0F;
 	
-	/** Melee animations */
+	/**
+	 * Melee animations
+	 */
 	public int meleeAnimationProgress = 0, meleeAnimationLength = 0;
 	
 	public float recoil = 0.0f, antiRecoil = 0.0f, recoilAngle = 0.0f;
@@ -37,7 +47,7 @@ public class GunAnimations
 	public LookAtState lookAt = LookAtState.NONE;
 	public float lookAtTimer = 0;
 	
-	public static final int[] lookAtTimes = new int[] { 1, 10, 20, 10, 20, 10 };
+	public static final int[] lookAtTimes = new int[]{1, 10, 20, 10, 20, 10};
 	
 	public enum LookAtState
 	{
@@ -64,7 +74,7 @@ public class GunAnimations
 			if(timeUntilPump == 0)
 			{
 				//Pump it!
-				pumping = true;	
+				pumping = true;
 				lastPumped = pumped = -1F;
 			}
 		}
@@ -96,11 +106,11 @@ public class GunAnimations
 			if(meleeAnimationProgress == meleeAnimationLength)
 				meleeAnimationProgress = meleeAnimationLength = 0;
 		}
-
+		
 		float scale = 0.5f;
 		float offsetScale = 0.005f;
 		
-		if (recoil > 0)
+		if(recoil > 0)
 			recoil *= 0.5F;
 		
 		recoilVelocity.x += (random.nextGaussian() - 0.5f) * recoil * offsetScale;
@@ -114,7 +124,7 @@ public class GunAnimations
 		
 		recoilAngle -= recoil * scale;
 		antiRecoil += recoil;
-
+		
 		recoilAngle += antiRecoil * 0.2f * scale;
 		antiRecoil *= 0.8F;
 		
@@ -149,7 +159,7 @@ public class GunAnimations
 		timeUntilPump = pumpDelay;
 		timeToPumpFor = pumpTime;
 	}
-		
+	
 	public void doReload(int reloadTime, int pumpDelay, int pumpTime)
 	{
 		reloading = true;

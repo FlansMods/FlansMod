@@ -37,9 +37,9 @@ public class ItemMechaAddon extends Item implements IFlanItem
 			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-    
+	
 	@Override
-	public InfoType getInfoType() 
+	public InfoType getInfoType()
 	{
 		return type;
 	}

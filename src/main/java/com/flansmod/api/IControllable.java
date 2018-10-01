@@ -13,13 +13,13 @@ public interface IControllable
 {
 	/**
 	 * This is fired every tick.
-	 * @param deltaX  change in X of the mouse.
+	 *
+	 * @param deltaX change in X of the mouse.
 	 * @param deltaY change in Y of the mouse.
 	 */
 	public void onMouseMoved(int deltaX, int deltaY);
-
+	
 	/**
-	 * 
 	 * @param key the keycode of the key. see @link:KeyInputHandler
 	 * @return boolean to indicate it this key was handled.
 	 */
@@ -27,19 +27,23 @@ public interface IControllable
 	
 	public void updateKeyHeldState(int key, boolean held);
 	
-	/** 
+	/**
 	 * @return riddenByEntity
-	 * 
 	 */
 	public Entity getControllingEntity();
 	
 	public boolean isDead();
 	
-	/** @return The player's view roll */
+	/**
+	 * @return The player's view roll
+	 */
 	public float getPlayerRoll();
+	
 	public float getPrevPlayerRoll();
 	
-	/** @return The player's 3rd person view distance */
+	/**
+	 * @return The player's 3rd person view distance
+	 */
 	public float getCameraDistance();
 	
 	@SideOnly(Side.CLIENT)

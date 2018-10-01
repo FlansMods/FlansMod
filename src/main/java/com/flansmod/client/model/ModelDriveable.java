@@ -8,7 +8,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 
-public class ModelDriveable extends ModelBase 
+public class ModelDriveable extends ModelBase
 {
 	public static final float pi = 3.14159265F;
 	public static final float tau = 2 * pi;
@@ -18,15 +18,21 @@ public class ModelDriveable extends ModelBase
 	public ModelRendererTurbo bodyDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bodyDoorCloseModel[] = new ModelRendererTurbo[0];
 	
-	/** Set to true to use the old rotation order (ZYX) rather than (YZX) */
+	/**
+	 * Set to true to use the old rotation order (ZYX) rather than (YZX)
+	 */
 	public boolean oldRotateOrder = false;
 	
-	/** For rendering a specific entity */
+	/**
+	 * For rendering a specific entity
+	 */
 	public void render(EntityDriveable driveable, float f1)
 	{
 	}
-	   
-	/** For rendering from GUIs */
+
+	/**
+	 * For rendering from GUIs
+	 */
 	public void render(DriveableType type)
 	{
 		renderPart(bodyModel);
@@ -36,7 +42,9 @@ public class ModelDriveable extends ModelBase
 				renderPart(gunPart);
 	}
 	
-	/** Renders the specified parts */
+	/**
+	 * Renders the specified parts
+	 */
 	public void renderPart(ModelRendererTurbo[] part)
 	{
 		for(ModelRendererTurbo bit : part)
@@ -55,7 +63,7 @@ public class ModelDriveable extends ModelBase
 		for(ModelRendererTurbo part : model)
 		{
 			part.doMirror(false, true, true);
-			part.setRotationPoint(part.rotationPointX, - part.rotationPointY, - part.rotationPointZ);
+			part.setRotationPoint(part.rotationPointX, -part.rotationPointY, -part.rotationPointZ);
 		}
 	}
 

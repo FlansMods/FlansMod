@@ -13,12 +13,12 @@ public class EntityDebugVector extends Entity
 	public int life;
 	public float red = 1F, green = 1F, blue = 1F;
 	
-	public EntityDebugVector(World w) 
+	public EntityDebugVector(World w)
 	{
 		super(w);
 	}
 	
-	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i, float r, float g, float b) 
+	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i, float r, float g, float b)
 	{
 		super(w);
 		setPosition(u.x, u.y, u.z);
@@ -28,15 +28,15 @@ public class EntityDebugVector extends Entity
 		green = g;
 		blue = b;
 	}
-
-	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i) 
+	
+	public EntityDebugVector(World w, Vector3f u, Vector3f v, int i)
 	{
 		super(w);
 		setPosition(u.x, u.y, u.z);
 		vector = v;
 		life = i;
 	}
-
+	
 	@Override
 	public void onUpdate()
 	{
@@ -50,23 +50,23 @@ public class EntityDebugVector extends Entity
 	{
 		return null;
 	}
-
-
+	
+	
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 		
 	}
-
+	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) 
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound)
 	{
 		
 	}
-
+	
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) 
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
-
+	
 	}
 }

@@ -7,6 +7,7 @@ public class Shape3D
 		vertices = verts;
 		faces = poly;
 	}
+	
 	public PositionTransformVertex[] vertices;
 	public TexturedPolygon[] faces;
 }

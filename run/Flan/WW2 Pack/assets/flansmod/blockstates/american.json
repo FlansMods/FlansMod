@@ -1,1 +1,7 @@
-{ "variants": { "normal": { "model": "flansmod:american" } } }
+{
+  "variants": {
+    "normal": {
+      "model": "flansmod:american"
+    }
+  }
+}

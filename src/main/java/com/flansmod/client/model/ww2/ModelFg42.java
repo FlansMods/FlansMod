@@ -328,13 +328,11 @@ public class ModelFg42 extends ModelGun //Same as Filename
 		slideModel[0].addShapeBox(0F, 0F, 0F, 1, 1, 2, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, -1F, -0.4F, -0.4F, -1F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, -1F, -0.4F, -0.4F, -1F); // Box 66
 		slideModel[0].setRotationPoint(6.5F, -3.53F, -1.51F);
 
-
-
 		
-		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
-		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		barrelAttachPoint = new Vector3f(0F / 16F, 0F / 16F, 0F / 16F);
+		stockAttachPoint = new Vector3f(0F / 16F, 0F / 16F, 0F / 16F);
 		scopeAttachPoint = new Vector3f(2F / 16F, 6F / 12.5F, -0.3F / 16F);
-		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
+		gripAttachPoint = new Vector3f(0 / 16F, 0F / 16F, 0F / 16F);
 
 
 		gunSlideDistance = 0.5F;

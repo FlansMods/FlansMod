@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import io.netty.buffer.ByteBuf;
 
-public class PlayerRankData 
+public class PlayerRankData
 {
 	// XP gained this round, to be applied at the end of the round
 	public int pendingXP = 0;
@@ -24,7 +24,7 @@ public class PlayerRankData
 	public int currentKillstreak = 0;
 	public int bestKillstreak = 0;
 	
-	public ArrayList<RewardBoxInstance> rewardBoxData = new ArrayList<RewardBoxInstance>(); 
+	public ArrayList<RewardBoxInstance> rewardBoxData = new ArrayList<RewardBoxInstance>();
 	
 	public PlayerLoadout[] loadouts = new PlayerLoadout[5];
 	
@@ -35,8 +35,8 @@ public class PlayerRankData
 			loadouts[i] = new PlayerLoadout();
 		}
 	}
-
-	public void writeToBuf(ByteBuf data) 
+	
+	public void writeToBuf(ByteBuf data)
 	{
 		data.writeInt(currentLevel);
 		data.writeInt(currentXP);
@@ -62,8 +62,8 @@ public class PlayerRankData
 			}
 		}
 	}
-
-	public void readFromBuf(ByteBuf data) 
+	
+	public void readFromBuf(ByteBuf data)
 	{
 		currentLevel = data.readInt();
 		currentXP = data.readInt();
@@ -80,8 +80,8 @@ public class PlayerRankData
 			rewardBoxData.add(RewardBoxInstance.CreateClientRewardBoxInstance(data.readInt(), data.readInt()));
 		}
 	}
-
-	public void readFromNBT(NBTTagCompound tags) 
+	
+	public void readFromNBT(NBTTagCompound tags)
 	{
 		currentLevel = tags.getInteger("level");
 		currentXP = tags.getInteger("XP");
@@ -106,12 +106,12 @@ public class PlayerRankData
 			}
 		}
 	}
-
-	public void writeToNBT(NBTTagCompound tags) 
+	
+	public void writeToNBT(NBTTagCompound tags)
 	{
 		tags.setInteger("level", currentLevel);
 		tags.setInteger("XP", currentXP);
-	
+		
 		for(int i = 0; i < 5; i++)
 		{
 			NBTTagCompound slotTags = new NBTTagCompound();
@@ -131,8 +131,8 @@ public class PlayerRankData
 		
 		tags.setTag("rewardBoxes", rewardTags);
 	}
-
-	public void AddXP(int amount) 
+	
+	public void AddXP(int amount)
 	{
 		pendingXP += amount;
 	}
@@ -150,8 +150,8 @@ public class PlayerRankData
 	{
 		currentKillstreak = 0;
 	}
-
-	public boolean OwnsUnlock(int unlockHash) 
+	
+	public boolean OwnsUnlock(int unlockHash)
 	{
 		for(RewardBoxInstance instance : rewardBoxData)
 		{
@@ -163,8 +163,8 @@ public class PlayerRankData
 		
 		return false;
 	}
-
-	public int GetNumOfUnopenedBoxes(RewardBox box) 
+	
+	public int GetNumOfUnopenedBoxes(RewardBox box)
 	{
 		if(box == null)
 		{
@@ -180,22 +180,22 @@ public class PlayerRankData
 		}
 		return num;
 	}
-
-	public void AddRewardBoxInstance(RewardBoxInstance instance) 
+	
+	public void AddRewardBoxInstance(RewardBoxInstance instance)
 	{
 		rewardBoxData.add(instance);
 	}
-
-	public int GetNumUnlocksForType(InfoType type) 
+	
+	public int GetNumUnlocksForType(InfoType type)
 	{
 		int n = 0;
 		if(type instanceof PaintableType)
 		{
 			for(RewardBoxInstance instance : rewardBoxData)
 			{
-				for(int i = 0; i < ((PaintableType) type).paintjobs.size(); i++)
+				for(int i = 0; i < ((PaintableType)type).paintjobs.size(); i++)
 				{
-					if(instance.unlockHash == ((PaintableType) type).paintjobs.get(i).hashCode())
+					if(instance.unlockHash == ((PaintableType)type).paintjobs.get(i).hashCode())
 					{
 						n++;
 					}
@@ -204,8 +204,8 @@ public class PlayerRankData
 		}
 		return n;
 	}
-
-	public boolean VerifyLoadouts() 
+	
+	public boolean VerifyLoadouts()
 	{
 		for(int i = 0; i < 5; i++)
 		{
@@ -218,7 +218,7 @@ public class PlayerRankData
 				}
 			}
 		}
-
+		
 		return true;
 	}
 }

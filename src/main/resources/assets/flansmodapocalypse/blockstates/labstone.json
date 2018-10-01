@@ -1,9 +1,7 @@
 {
-	"variants": 
-	{
-		"normal": 
-		{ 
-			"model": "flansmodapocalypse:labStone" 
-		}
-	}
+  "variants": {
+    "normal": {
+      "model": "flansmodapocalypse:labStone"
+    }
+  }
 }

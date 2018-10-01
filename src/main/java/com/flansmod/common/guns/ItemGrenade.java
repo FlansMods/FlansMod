@@ -27,13 +27,14 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
+
 import com.google.common.collect.Multimap;
 
 public class ItemGrenade extends ItemShootable implements IFlanItem
 {
 	public GrenadeType type;
 	
-	public ItemGrenade(GrenadeType t) 
+	public ItemGrenade(GrenadeType t)
 	{
 		super(t);
 		type = t;
@@ -42,12 +43,12 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = super.getAttributeModifiers(slot, stack);
-        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
-        return multimap;
-    }
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
+	{
+		Multimap multimap = super.getAttributeModifiers(slot, stack);
+		multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
+		return multimap;
+	}
 	
 	@Override
 	public boolean isFull3D()
@@ -88,7 +89,7 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 			{
 				String itemName = type.dropItemOnDetonate;
 				int damage = 0;
-				if (itemName.contains("."))
+				if(itemName.contains("."))
 				{
 					damage = Integer.parseInt(itemName.split("\\.")[1]);
 					itemName = itemName.split("\\.")[0];
@@ -102,40 +103,40 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	@Override
-	public InfoType getInfoType() 
+	public InfoType getInfoType()
 	{
 		return type;
 	}
-
+	
 	@Override
 	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
-			float pitch, double motionX, double motionY, double motionZ,
-			EntityLivingBase shooter, float gunDamage,
-			InfoType shotFrom) 
+									 float pitch, double motionX, double motionY, double motionZ,
+									 EntityLivingBase shooter, float gunDamage,
+									 InfoType shotFrom)
 	{
 		return null;
 	}
-
+	
 	@Override
 	public EntityShootable getEntity(World world, Vector3f origin,
-			Vector3f direction, EntityLivingBase thrower, float spread,
-			float damage, float speed, InfoType shotFrom) 
+									 Vector3f direction, EntityLivingBase thrower, float spread,
+									 float damage, float speed, InfoType shotFrom)
 	{
 		return getGrenade(world, thrower);
 	}
-
+	
 	@Override
 	public EntityShootable getEntity(World world, Vec3d origin, float yaw,
-			float pitch, EntityLivingBase shooter, float spread, float damage,
-			InfoType shotFrom)
+									 float pitch, EntityLivingBase shooter, float spread, float damage,
+									 InfoType shotFrom)
 	{
 		return null;
 	}
-
+	
 	@Override
 	public EntityShootable getEntity(World world, EntityLivingBase player,
-			float bulletSpread, float damage, float bulletSpeed, boolean b,
-			InfoType shotFrom) 
+									 float bulletSpread, float damage, float bulletSpeed, boolean b,
+									 InfoType shotFrom)
 	{
 		return getGrenade(world, player);
 	}
@@ -160,13 +161,13 @@ public class ItemGrenade extends ItemShootable implements IFlanItem
 	}
 	
 	public void Shoot(World world,
-			Vector3f origin,
-			Vector3f direction,
-			float damageModifier,
-			float spreadModifier,
-			float speedModifier,
-			InfoType shotFrom,
-			EntityLivingBase shooter)
+					  Vector3f origin,
+					  Vector3f direction,
+					  float damageModifier,
+					  float spreadModifier,
+					  float speedModifier,
+					  InfoType shotFrom,
+					  EntityLivingBase shooter)
 	{
 		EntityGrenade grenade = getGrenade(world, shooter);
 		world.spawnEntity(grenade);

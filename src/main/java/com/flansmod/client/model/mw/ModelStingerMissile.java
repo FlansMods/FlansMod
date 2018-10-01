@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import com.flansmod.client.model.ModelBullet;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelStingerMissile extends ModelBullet 
+public class ModelStingerMissile extends ModelBullet
 {
 	public ModelRendererTurbo[] bulletModel;
 	

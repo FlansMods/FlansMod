@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TeamsManagerClassic extends TeamsManager 
+public class TeamsManagerClassic extends TeamsManager
 {
 	private static TeamsManagerClassic INSTANCE;
 	
@@ -41,7 +41,7 @@ public class TeamsManagerClassic extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogout(EntityPlayer player) 
+	public void onPlayerLogout(EntityPlayer player)
 	{
 		super.onPlayerLogout(player);
 	}
@@ -66,7 +66,7 @@ public class TeamsManagerClassic extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogin(EntityPlayer player) 
+	public void onPlayerLogin(EntityPlayer player)
 	{
 		if(!enabled || currentRound == null)
 			return;
@@ -91,7 +91,7 @@ public class TeamsManagerClassic extends TeamsManager
 			//Catch for people not on a team, such as builders
 			if(data.builder && playerIsOp(player))
 				continue;
-
+			
 			sendTeamsMenuToPlayer((EntityPlayerMP)player, info);
 		}
 	}
@@ -104,7 +104,7 @@ public class TeamsManagerClassic extends TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp =FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -162,7 +162,7 @@ public class TeamsManagerClassic extends TeamsManager
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void SelectTeam(Team team) 
+	public void SelectTeam(Team team)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);

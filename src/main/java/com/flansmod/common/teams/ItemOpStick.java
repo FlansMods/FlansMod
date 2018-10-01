@@ -17,9 +17,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemOpStick extends Item
 {
-	public static final String[] teamNames = new String[] {"No Team", "Spectators", "Team 1", "Team 2"};	
-	public static final String[] stickNames = new String[] {"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
-
+	public static final String[] teamNames = new String[]{"No Team", "Spectators", "Team 1", "Team 2"};
+	public static final String[] stickNames = new String[]{"opStick_ownership", "opStick_connecting", "opStick_mapping", "opStick_destruction"};
+	
 	public ItemOpStick()
 	{
 		super();
@@ -27,7 +27,7 @@ public class ItemOpStick extends Item
 		setRegistryName("opStick");
 		setHasSubtypes(true);
 	}
-		
+	
 	@Override
 	public boolean shouldRotateAroundWhenRendering()
 	{
@@ -69,88 +69,88 @@ public class ItemOpStick extends Item
 			i++;
 		}
 		FlansMod.getPacketHandler().sendTo(new PacketBaseEdit(base.getBaseID(), base.getBaseName(), maps, currentMapID, base.getDefaultOwnerID()), player);
-
+		
 	}
 	
 	public void clickedBase(World world, EntityPlayerMP player, ITeamBase base)
 	{
 		if(!world.isRemote)
 		{
-			int damage = player.inventory.getCurrentItem().getItemDamage(); 
+			int damage = player.inventory.getCurrentItem().getItemDamage();
 			TeamsManager teamsManager = TeamsManager.getInstance();
 			switch(damage)
-	    	{
-		    	case 0 : //Stick of Ownership
-		    	{
-		    		//Take the existing ownerID, increment it (mod 4 for now - assume all gametypes involve 2 teams)
-		    		int currentOwnerID = base.getDefaultOwnerID();
-		    		currentOwnerID++;
-		    		currentOwnerID = currentOwnerID % 4;
-		    		base.setDefaultOwnerID(currentOwnerID);
-		    		base.setOwnerID(currentOwnerID);
-		    		
-		    		for(ITeamObject object : base.getObjects())
-		    			object.onBaseSet(currentOwnerID);
-		    		
-		    		TeamsManager.messagePlayer(player, "Base owner changed to " + teamNames[currentOwnerID]);
-	
-		    		break;
-		    	}
-		    	case 1 : //Stick of Connecting
-		    	{
-		    		if(player.fishEntity == null)
-		    		{
-		    			EntityConnectingLine hook = new EntityConnectingLine(world, player, base);
-		    			world.spawnEntity(hook);
-		    		}
-		    		else
-		    		{
-		    			if(player.fishEntity instanceof EntityConnectingLine)
-		    			{
-		    				EntityConnectingLine line = (EntityConnectingLine)player.fishEntity;
-		    				if(line.connectedTo instanceof ITeamObject)
-		    				{
-		    					ITeamObject object = (ITeamObject)line.connectedTo;
-		    					object.setBase(base);
-		    					base.addObject(object);
-		    					line.setDead();
-		    					player.fishEntity = null;
-		    					TeamsManager.messagePlayer(player, "Successfully connected.");
-		    				}
-		    				else
-		    				{
-		    					TeamsManager.messagePlayer(player, "Cannot connect bases to bases.");
-		    				}
-		    			}
-		    		}
-		    		break;
-		    	}
-		    	case 2 : //Stick of Mapping
-		    	{
-		    		openBaseEditGUI(base, player);
-		    		break;
-		    	}
-		    	case 3 : //Stick of Destruction
-		    	{
-		    		base.destroy();
-		    		break;
-		    	}
-	    	}
-    	}
+			{
+				case 0: //Stick of Ownership
+				{
+					//Take the existing ownerID, increment it (mod 4 for now - assume all gametypes involve 2 teams)
+					int currentOwnerID = base.getDefaultOwnerID();
+					currentOwnerID++;
+					currentOwnerID = currentOwnerID % 4;
+					base.setDefaultOwnerID(currentOwnerID);
+					base.setOwnerID(currentOwnerID);
+					
+					for(ITeamObject object : base.getObjects())
+						object.onBaseSet(currentOwnerID);
+					
+					TeamsManager.messagePlayer(player, "Base owner changed to " + teamNames[currentOwnerID]);
+					
+					break;
+				}
+				case 1: //Stick of Connecting
+				{
+					if(player.fishEntity == null)
+					{
+						EntityConnectingLine hook = new EntityConnectingLine(world, player, base);
+						world.spawnEntity(hook);
+					}
+					else
+					{
+						if(player.fishEntity instanceof EntityConnectingLine)
+						{
+							EntityConnectingLine line = (EntityConnectingLine)player.fishEntity;
+							if(line.connectedTo instanceof ITeamObject)
+							{
+								ITeamObject object = (ITeamObject)line.connectedTo;
+								object.setBase(base);
+								base.addObject(object);
+								line.setDead();
+								player.fishEntity = null;
+								TeamsManager.messagePlayer(player, "Successfully connected.");
+							}
+							else
+							{
+								TeamsManager.messagePlayer(player, "Cannot connect bases to bases.");
+							}
+						}
+					}
+					break;
+				}
+				case 2: //Stick of Mapping
+				{
+					openBaseEditGUI(base, player);
+					break;
+				}
+				case 3: //Stick of Destruction
+				{
+					base.destroy();
+					break;
+				}
+			}
+		}
 	}
 	
 	public void clickedObject(World world, EntityPlayerMP player, ITeamObject object)
 	{
-		int damage = player.inventory.getCurrentItem().getItemDamage(); 
+		int damage = player.inventory.getCurrentItem().getItemDamage();
 		TeamsManager teamsManager = TeamsManager.getInstance();
 		switch(damage)
 		{
-			case 0 : //Stick of Ownership
+			case 0: //Stick of Ownership
 			{
 				//Do nothing. Ownership is a property of bases.
 				break;
 			}
-			case 1 : //Stick of Connecting
+			case 1: //Stick of Connecting
 			{
 				if(player.fishEntity == null)
 				{
@@ -179,12 +179,12 @@ public class ItemOpStick extends Item
 				}
 				break;
 			}
-			case 2 : //Stick of Mapping
+			case 2: //Stick of Mapping
 			{
 				//Again, this is a property of bases. Objects will follow their parent base in regards to which map they are a part of
 				break;
 			}
-			case 3 : //Stick of Destruction
+			case 3: //Stick of Destruction
 			{
 				object.destroy();
 				break;
@@ -193,8 +193,8 @@ public class ItemOpStick extends Item
 	}
 	
 	@Override
-    public String getTranslationKey(ItemStack stack)
-    {
-        return super.getTranslationKey() + "." + stack.getItemDamage();
-    }
+	public String getTranslationKey(ItemStack stack)
+	{
+		return super.getTranslationKey() + "." + stack.getItemDamage();
+	}
 }

@@ -23,14 +23,14 @@ public class ModelDP28 extends ModelMG
 		gunModel[0].setRotationPoint(0F, 6F, 0F);
 		gunModel[1] = new ModelRendererTurbo(this, 4, 0);
 		gunModel[1].addBox(-1F, -2F, 14F, 2, 3, 2);
-		gunModel[1].setRotationPoint(0F, 6F, 0F);	
+		gunModel[1].setRotationPoint(0F, 6F, 0F);
 		gunModel[2] = new ModelRendererTurbo(this, 0, 18);
 		gunModel[2].addBox(-0.5F, -0.5F, -8F, 1, 1, 6);
-		gunModel[2].setRotationPoint(0F, 6F, 0F);		
+		gunModel[2].setRotationPoint(0F, 6F, 0F);
 		
 		ammoModel = new ModelRendererTurbo[1];
 		ammoModel[0] = new ModelRendererTurbo(this, 20, 0);
 		ammoModel[0].addBox(-3F, 1F, 1F, 6, 1, 6);
-		ammoModel[0].setRotationPoint(0F, 6F, 0F);	
+		ammoModel[0].setRotationPoint(0F, 6F, 0F);
 	}
 }

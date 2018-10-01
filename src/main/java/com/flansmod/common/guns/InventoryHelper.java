@@ -7,8 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.FlansMod;
 
-/** Adds access to the InventoryPlayer stack combination methods for arbitrary inventories */
-public class InventoryHelper 
+/**
+ * Adds access to the InventoryPlayer stack combination methods for arbitrary inventories
+ */
+public class InventoryHelper
 {
 	public static boolean addItemStackToInventory(IInventory inventory, ItemStack stack, boolean creative)
 	{
@@ -21,12 +23,12 @@ public class InventoryHelper
 			try
 			{
 				int i;
-
-				if (stack.isItemDamaged())
+				
+				if(stack.isItemDamaged())
 				{
 					i = getFirstEmptyStack(inventory);
-
-					if (i >= 0)
+					
+					if(i >= 0)
 					{
 						ItemStack stackToAdd = stack.copy();
 						stackToAdd.setAnimationsToGo(5);
@@ -48,9 +50,9 @@ public class InventoryHelper
 						i = stack.getCount();
 						stack.setCount(storePartialItemStack(inventory, stack));
 					}
-					while (stack.getCount() > 0 && stack.getCount() < i);
-
-					if (stack.getCount() == i && creative)
+					while(stack.getCount() > 0 && stack.getCount() < i);
+					
+					if(stack.getCount() == i && creative)
 					{
 						stack.setCount(0);
 						return true;
@@ -61,7 +63,7 @@ public class InventoryHelper
 					}
 				}
 			}
-			catch (Throwable throwable)
+			catch(Throwable throwable)
 			{
 				FlansMod.log.throwing(throwable);
 				return false;
@@ -71,17 +73,17 @@ public class InventoryHelper
 	
 	public static int storeItemStack(IInventory inventory, ItemStack stack)
 	{
-		for (int i = 0; i < inventory.getSizeInventory(); ++i)
+		for(int i = 0; i < inventory.getSizeInventory(); ++i)
 		{
 			ItemStack oldStack = inventory.getStackInSlot(i);
-			if (oldStack != null && !oldStack.isEmpty() && oldStack.getItem() == stack.getItem() && oldStack.isStackable() && 
-					oldStack.getCount() < oldStack.getMaxStackSize() && oldStack.getCount() < inventory.getInventoryStackLimit() && 
+			if(oldStack != null && !oldStack.isEmpty() && oldStack.getItem() == stack.getItem() && oldStack.isStackable() &&
+					oldStack.getCount() < oldStack.getMaxStackSize() && oldStack.getCount() < inventory.getInventoryStackLimit() &&
 					(!oldStack.getHasSubtypes() || oldStack.getItemDamage() == stack.getItemDamage()) && ItemStack.areItemStackTagsEqual(oldStack, stack))
 			{
 				return i;
 			}
 		}
-
+		
 		return -1;
 	}
 	
@@ -90,13 +92,13 @@ public class InventoryHelper
 		Item item = stack.getItem();
 		int j = stack.getCount();
 		int k;
-
+		
 		//If the item doesn't stack, just find an empty slot for it
 		if(stack.getMaxStackSize() == 1)
 		{
 			k = getFirstEmptyStack(inventory);
 			//If it is impossible, return
-			if (k < 0)
+			if(k < 0)
 			{
 				return j;
 			}
@@ -112,19 +114,19 @@ public class InventoryHelper
 		else
 		{
 			k = storeItemStack(inventory, stack);
-			if (k < 0)
+			if(k < 0)
 			{
 				k = getFirstEmptyStack(inventory);
 			}
-
-			if (k < 0)
+			
+			if(k < 0)
 			{
 				return j;
 			}
 			else
 			{
 				ItemStack oldStack = inventory.getStackInSlot(k);
-
+				
 				if(oldStack == null || oldStack.isEmpty())
 				{
 					oldStack = new ItemStack(item, 0, stack.getItemDamage());
@@ -132,20 +134,20 @@ public class InventoryHelper
 						oldStack.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					inventory.setInventorySlotContents(k, oldStack);
 				}
-
+				
 				int l = j;
-
+				
 				if(j > oldStack.getMaxStackSize() - oldStack.getCount())
 				{
 					l = oldStack.getMaxStackSize() - oldStack.getCount();
 				}
-
-				if (l > inventory.getInventoryStackLimit() - oldStack.getCount())
+				
+				if(l > inventory.getInventoryStackLimit() - oldStack.getCount())
 				{
 					l = inventory.getInventoryStackLimit() - oldStack.getCount();
 				}
-
-				if (l == 0)
+				
+				if(l == 0)
 				{
 					return j;
 				}
@@ -160,13 +162,15 @@ public class InventoryHelper
 		}
 	}
 	
-	/** Method from InventoryPlayer */
+	/**
+	 * Method from InventoryPlayer
+	 */
 	public static int getFirstEmptyStack(IInventory inventory)
 	{
 		for(int i = 0; i < inventory.getSizeInventory(); ++i)
-			if (inventory.getStackInSlot(i) == null || inventory.getStackInSlot(i).isEmpty())
+			if(inventory.getStackInSlot(i) == null || inventory.getStackInSlot(i).isEmpty())
 				return i;
-
+		
 		return -1;
 	}
 	

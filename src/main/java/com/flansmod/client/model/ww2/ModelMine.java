@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelMine extends ModelBase 
+public class ModelMine extends ModelBase
 {
 	public ModelRendererTurbo[] mineModel;
 	public ModelRendererTurbo buttonModel;

@@ -18,22 +18,22 @@ public class ModelAmericanPants extends ModelCustomArmour //Same as Filename
 {
 	int textureX = 256;
 	int textureY = 256;
-
+	
 	public ModelAmericanPants() //Same as Filename
 	{
 		leftLegModel = new ModelRendererTurbo[1];
 		leftLegModel[0] = new ModelRendererTurbo(this, 25, 17, textureX, textureY); // Box 4
-
+		
 		leftLegModel[0].addShapeBox(-2F, 0F, -2F, 4, 9, 4, 0F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F); // Box 4
 		leftLegModel[0].setRotationPoint(0F, 0F, 0F);
-
-
+		
+		
 		rightLegModel = new ModelRendererTurbo[1];
 		rightLegModel[0] = new ModelRendererTurbo(this, 1, 17, textureX, textureY); // Box 3
-
+		
 		rightLegModel[0].addShapeBox(-2F, 0F, -2F, 4, 9, 4, 0F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F, 0F, 0.2F, 0.2F); // Box 3
 		rightLegModel[0].setRotationPoint(0F, 0F, 0F);
-
-
+		
+		
 	}
 }

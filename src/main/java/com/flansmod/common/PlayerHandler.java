@@ -39,14 +39,16 @@ public class PlayerHandler
 	{
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		try {
-			floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class,  "floatingTickCount", "field_147365_f");
+		try
+		{
+			floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "floatingTickCount", "field_147365_f");
 		}
-		catch (Exception e) {
+		catch(Exception e)
+		{
 			FlansMod.log.error("Couldn't find floatingTickCount field.", e);
 		}
 	}
-
+	
 	@SubscribeEvent
 	public void onEntityHurt(LivingAttackEvent event)
 	{
@@ -58,7 +60,7 @@ public class PlayerHandler
 	}
 	
 	@SubscribeEvent
-	public void onEntityKilled(LivingDeathEvent event) 
+	public void onEntityKilled(LivingDeathEvent event)
 	{
 		EntityLivingBase entity = event.getEntityLiving();
 		if(entity instanceof EntityPlayer)
@@ -66,7 +68,7 @@ public class PlayerHandler
 			getPlayerData((EntityPlayer)entity).playerKilled();
 		}
 	}
-		
+	
 	public void serverTick()
 	{
 		if(FMLCommonHandler.instance().getMinecraftServerInstance() == null)
@@ -74,7 +76,7 @@ public class PlayerHandler
 			FlansMod.log.warn("Receiving server ticks when server is null");
 			return;
 		}
-		for(WorldServer world :FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
+		for(WorldServer world : FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
 		{
 			for(Object player : world.playerEntities)
 			{
@@ -90,7 +92,7 @@ public class PlayerHandler
 			for(Object player : Minecraft.getMinecraft().world.playerEntities)
 			{
 				getPlayerData((EntityPlayer)player).tick((EntityPlayer)player);
-			}	
+			}
 		}
 	}
 	
@@ -105,7 +107,7 @@ public class PlayerHandler
 	{
 		return getPlayerData(username, Side.SERVER);
 	}
-
+	
 	public static PlayerData getPlayerData(EntityPlayer player, Side side)
 	{
 		if(player == null)
@@ -127,9 +129,9 @@ public class PlayerHandler
 		}
 		return side.isClient() ? clientSideData.get(username) : serverSideData.get(username);
 	}
-
+	
 	@SubscribeEvent
-	public void onPlayerEvent(PlayerEvent event) 
+	public void onPlayerEvent(PlayerEvent event)
 	{
 		if(event instanceof PlayerLoggedInEvent)
 		{
@@ -165,7 +167,9 @@ public class PlayerHandler
 		}
 	}
 	
-	/** Called by teams manager to remove lingering player data */
+	/**
+	 * Called by teams manager to remove lingering player data
+	 */
 	public static void roundEnded()
 	{
 		for(String username : clientsToRemoveAfterThisRound)

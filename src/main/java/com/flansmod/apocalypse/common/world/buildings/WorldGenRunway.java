@@ -23,10 +23,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class WorldGenRunway extends WorldGenFlan 
+public class WorldGenRunway extends WorldGenFlan
 {
 	@Override
-	public boolean generate(World world, Random rand, BlockPos pos) 
+	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		int chunkX = pos.getX() / 16;
 		
@@ -46,7 +46,6 @@ public class WorldGenRunway extends WorldGenFlan
 		fillArea(world, x + 10, yHeight, z + 7, x + 14, yHeight + 1, z + 9, Blocks.QUARTZ_BLOCK.getDefaultState());
 		
 
-		
 		fillArea(world, x, yHeight + 1, z, x + 16, yHeight + 11, z + 16, Blocks.AIR.getDefaultState());
 		
 		if(ModuloHelper.modulo(chunkX, 4) == 1)
@@ -60,7 +59,7 @@ public class WorldGenRunway extends WorldGenFlan
 			
 			fillArea(world, x, yHeight + 8, z + 11, x + 16, yHeight + 9, z + 13, Blocks.WOOL.getStateFromMeta(13));
 			fillArea(world, x, yHeight + 7, z + 13, x + 16, yHeight + 8, z + 14, Blocks.WOOL.getStateFromMeta(13));
-			fillArea(world, x, yHeight + 5, z + 14, x + 16, yHeight + 7, z + 15, Blocks.WOOL.getStateFromMeta(13));		
+			fillArea(world, x, yHeight + 5, z + 14, x + 16, yHeight + 7, z + 15, Blocks.WOOL.getStateFromMeta(13));
 			fillArea(world, x, yHeight + 1, z + 15, x + 16, yHeight + 5, z + 16, Blocks.WOOL.getStateFromMeta(13));
 			
 			fillArea(world, x, yHeight + 1, z + 1, x + 1, yHeight + 5, z + 15, Blocks.WOOL.getStateFromMeta(13));
@@ -85,18 +84,18 @@ public class WorldGenRunway extends WorldGenFlan
 			world.setBlockState(new BlockPos(x + 5, yHeight + 1, z + 1), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH), 2);
 			
 			BlockPos chestPos = new BlockPos(x + 4, yHeight + 1, z + 1);
-            TileEntity tileentity = world.getTileEntity(chestPos);
-            if (tileentity instanceof TileEntityChest)
-            {
-            	FlansModApocalypse.getLootGenerator().fillVillageChest(rand, (TileEntityChest)tileentity);
-            }
-            
+			TileEntity tileentity = world.getTileEntity(chestPos);
+			if(tileentity instanceof TileEntityChest)
+			{
+				FlansModApocalypse.getLootGenerator().fillVillageChest(rand, (TileEntityChest)tileentity);
+			}
+
 			chestPos = new BlockPos(x + 5, yHeight + 1, z + 1);
-            tileentity = world.getTileEntity(chestPos);
-            if (tileentity instanceof TileEntityChest)
-            {
-            	FlansModApocalypse.getLootGenerator().fillVillageChest(rand, (TileEntityChest)tileentity);
-            }
+			tileentity = world.getTileEntity(chestPos);
+			if(tileentity instanceof TileEntityChest)
+			{
+				FlansModApocalypse.getLootGenerator().fillVillageChest(rand, (TileEntityChest)tileentity);
+			}
 
 		}
 		
@@ -104,20 +103,20 @@ public class WorldGenRunway extends WorldGenFlan
 		{
 			//Spawn a plane
 			DriveableType type = FlansModApocalypse.getLootGenerator().getRandomPlane(rand);
-	    	NBTTagCompound tags = new NBTTagCompound();
-	    	tags.setString("Engine", FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand).shortName);
-	    	tags.setString("Type", type.shortName);
-	    	for(EnumDriveablePart part : EnumDriveablePart.values())
-	    	{
-	    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : rand.nextInt(type.health.get(part).health));
-	    		tags.setBoolean(part.getShortName() + "_Fire", false);
-	    	}
-	    	
-	    	EntityDriveable entity = type.createDriveable(world, x + 8, yHeight + 3, z + 8, new DriveableData(tags));
-	    	
-	    	entity.setRotation(0F, 0, 0);
-	    	
-	        world.spawnEntity(entity);
+			NBTTagCompound tags = new NBTTagCompound();
+			tags.setString("Engine", FlansModApocalypse.getLootGenerator().getRandomEngine(type, rand).shortName);
+			tags.setString("Type", type.shortName);
+			for(EnumDriveablePart part : EnumDriveablePart.values())
+			{
+				tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : rand.nextInt(type.health.get(part).health));
+				tags.setBoolean(part.getShortName() + "_Fire", false);
+			}
+
+			EntityDriveable entity = type.createDriveable(world, x + 8, yHeight + 3, z + 8, new DriveableData(tags));
+
+			entity.setRotation(0F, 0, 0);
+
+			world.spawnEntity(entity);
 		}
 
 		return false;

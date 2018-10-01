@@ -179,7 +179,6 @@ public class ModelTunnelBore extends ModelVehicle
 		rightTrackModel[9].setRotationPoint(-20F, 0F, -23F);
 
 
-
 		translateAll(0F, 0F, 0F);
 
 

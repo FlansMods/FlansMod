@@ -37,13 +37,13 @@ public class BlockSulphuricAcid extends BlockFluidClassic
 	}
 	
 	@Override
-    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
-    {
-        entity.attackEntityFrom(acidDamage, 5.0F);
-    }
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity)
+	{
+		entity.attackEntityFrom(acidDamage, 5.0F);
+	}
 	
 	@SideOnly(Side.CLIENT)
-	public void registerRenderer() 
+	public void registerRenderer()
 	{
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
 	}

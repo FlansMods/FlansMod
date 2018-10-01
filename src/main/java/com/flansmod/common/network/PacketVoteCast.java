@@ -12,12 +12,13 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class PacketVoteCast extends PacketBase 
+public class PacketVoteCast extends PacketBase
 {
 	public int vote;
 	
 	public PacketVoteCast()
-	{}
+	{
+	}
 	
 	public PacketVoteCast(int vote)
 	{
@@ -25,19 +26,19 @@ public class PacketVoteCast extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeByte(vote);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		vote = data.readByte();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		if(vote < 0 || vote > TeamsManager.getInstance().voteOptions.length)
 		{
@@ -47,11 +48,11 @@ public class PacketVoteCast extends PacketBase
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity, Side.SERVER);
 		data.vote = vote;
 	}
-
+	
 	@Override
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		FlansMod.log.warn("Received vote cast packet on client. Skipping.");
 	}
-
+	
 }

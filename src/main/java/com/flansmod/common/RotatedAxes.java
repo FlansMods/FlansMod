@@ -186,7 +186,7 @@ public class RotatedAxes
 		mat.rotate(rotationYaw * 3.14159265F / 180F, new Vector3f(0F, 1F, 0F));
 		return new Vector3f(mat.m00, mat.m10, mat.m20);
 	}
-
+	
 	private void convertAnglesToMatrix()
 	{
 		//Re-load the identity

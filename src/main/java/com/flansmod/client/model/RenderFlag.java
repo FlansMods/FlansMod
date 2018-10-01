@@ -21,15 +21,15 @@ public class RenderFlag extends Render
 	
 	public ModelFlagpole modelFlagpole;
 	public static float angle;
-		
-	public RenderFlag(RenderManager renderManager) 
+	
+	public RenderFlag(RenderManager renderManager)
 	{
 		super(renderManager);
 		modelFlagpole = new ModelFlagpole();
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
+	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(entity);
 		EntityFlag flag = (EntityFlag)entity;
@@ -40,26 +40,30 @@ public class RenderFlag extends Render
 			//Give each team a default colour
 			switch(teamID)
 			{
-			case 0 : GL11.glColor3f(0x80 / 255F, 0x80 / 255F, 0x80 / 255F); break; //No team
-			case 1 : GL11.glColor3f(0x40 / 255F, 0x40 / 255F, 0x40 / 255F); break; //Spectators 
-			case 2 : GL11.glColor3f(0xa1 / 255F, 0x7f / 255F, 0xff / 255F); break; //Team 1
-			case 3 : GL11.glColor3f(0xff / 255F, 0x7f / 255F, 0xb6 / 255F); break; //Team 2
+				case 0: GL11.glColor3f(0x80 / 255F, 0x80 / 255F, 0x80 / 255F);
+					break; //No team
+				case 1: GL11.glColor3f(0x40 / 255F, 0x40 / 255F, 0x40 / 255F);
+					break; //Spectators
+				case 2: GL11.glColor3f(0xa1 / 255F, 0x7f / 255F, 0xff / 255F);
+					break; //Team 1
+				case 3: GL11.glColor3f(0xff / 255F, 0x7f / 255F, 0xb6 / 255F);
+					break; //Team 2
 			}
 		}
-		else 
+		else
 		{
 			int colour = team.teamColour;
 			GL11.glColor3f(((colour >> 16) & 0xff) / 255F, ((colour >> 8) & 0xff) / 255F, (colour & 0xff) / 255F);
 		}
-
+		
 		GL11.glPushMatrix();
-        GL11.glTranslatef((float)d, (float)d1, (float)d2);
-        GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
-        
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
+		GL11.glRotatef(f, 0.0F, 1.0F, 0.0F);
+		
 		if(!(flag.getRidingEntity() instanceof EntityFlagpole))
 		{
-			 GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
-			 GL11.glTranslatef(0.5F, 0F, 0F);
+			GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
+			GL11.glTranslatef(0.5F, 0F, 0F);
 		}
 		else
 		{
@@ -73,15 +77,15 @@ public class RenderFlag extends Render
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return texture;
 	}
-
+	
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderFlag(manager);
 		}

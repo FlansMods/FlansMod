@@ -1,6 +1,6 @@
 package com.flansmod.client.gui.teams;
 
-public enum EnumLoadoutSlot 
+public enum EnumLoadoutSlot
 {
 	primary("Primary", true),
 	secondary("Secondary", true),

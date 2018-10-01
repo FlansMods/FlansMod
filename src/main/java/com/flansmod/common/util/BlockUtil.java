@@ -16,10 +16,11 @@ public class BlockUtil
 	public static boolean destroyBlock(WorldServer world, BlockPos pos, Entity entity, boolean dropBlock)
 	{
 		EntityPlayer player;
-		if (entity instanceof EntityPlayer)
+		if(entity instanceof EntityPlayer)
 		{
-			player = (EntityPlayer) entity;
-		} else
+			player = (EntityPlayer)entity;
+		}
+		else
 		{
 			player = new FakePlayer(world, new GameProfile(UUID.randomUUID(), "fakePlayer"));
 		}
@@ -27,7 +28,7 @@ public class BlockUtil
 		BreakEvent breakEvent = new BreakEvent(world, pos, world.getBlockState(pos), player);
 		MinecraftForge.EVENT_BUS.post(breakEvent);
 		
-		if (breakEvent.isCanceled())
+		if(breakEvent.isCanceled())
 		{
 			return false;
 		}

@@ -14,13 +14,15 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntitySeat;
 
-public class PacketSeatUpdates extends PacketBase 
+public class PacketSeatUpdates extends PacketBase
 {
 	public int entityId, seatId;
 	public float yaw, pitch;
 	
-	public PacketSeatUpdates() {}
-
+	public PacketSeatUpdates()
+	{
+	}
+	
 	public PacketSeatUpdates(EntitySeat seat)
 	{
 		entityId = seat.driveable.getEntityId();
@@ -28,16 +30,16 @@ public class PacketSeatUpdates extends PacketBase
 		yaw = seat.looking.getYaw();
 		pitch = seat.looking.getPitch();
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(entityId);
 		data.writeInt(seatId);
 		data.writeFloat(yaw);
 		data.writeFloat(pitch);
 	}
-
+	
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
@@ -46,9 +48,9 @@ public class PacketSeatUpdates extends PacketBase
 		yaw = data.readFloat();
 		pitch = data.readFloat();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		EntityDriveable driveable = null;
 		for(Object obj : playerEntity.world.loadedEntityList)
@@ -67,10 +69,10 @@ public class PacketSeatUpdates extends PacketBase
 			FlansMod.getPacketHandler().sendToAllAround(this, driveable.posX, driveable.posY, driveable.posZ, FlansMod.soundRange, driveable.dimension);
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		EntityDriveable driveable = null;
 		for(int i = 0; i < clientPlayer.world.loadedEntityList.size(); i++)

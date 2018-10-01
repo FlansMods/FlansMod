@@ -15,14 +15,18 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketOpenRewardBox extends PacketBase 
+public class PacketOpenRewardBox extends PacketBase
 {
 	public int boxHash = 0;
 	public int unlockHash = 0;
 	
-	public PacketOpenRewardBox() {}
+	public PacketOpenRewardBox()
+	{
+	}
 	
-	/** Server to client reward request packet */
+	/**
+	 * Server to client reward request packet
+	 */
 	public PacketOpenRewardBox(RewardBox box)
 	{
 		boxHash = box.hashCode();
@@ -35,26 +39,26 @@ public class PacketOpenRewardBox extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(boxHash);
 		data.writeInt(unlockHash);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		boxHash = data.readInt();
 		unlockHash = data.readInt();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		RewardBox box = RewardBox.GetRewardBox(boxHash);
 		if(box == null)
 		{
-			FlansMod.Assert(false, "Recieved invalid reward box open packet from player " + playerEntity.getDisplayNameString());		
+			FlansMod.Assert(false, "Recieved invalid reward box open packet from player " + playerEntity.getDisplayNameString());
 		}
 		else
 		{
@@ -62,10 +66,10 @@ public class PacketOpenRewardBox extends PacketBase
 			TeamsManagerRanked.OpenRewardBox(playerEntity, box);
 		}
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		ClientTeamsData.UnlockReward(boxHash, unlockHash);
 	}

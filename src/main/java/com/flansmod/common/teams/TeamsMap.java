@@ -14,7 +14,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 
-public class TeamsMap 
+public class TeamsMap
 {
 	public String shortName;
 	public String name;
@@ -146,7 +146,7 @@ public class TeamsMap
 		tags.setInteger("NumBases", permanentBaseData.size());
 		for(int i = 0; i < permanentBaseData.size(); i++)
 		{
-			NBTTagCompound baseTags =  new NBTTagCompound();
+			NBTTagCompound baseTags = new NBTTagCompound();
 			permanentBaseData.get(i).writeBaseToNBT(baseTags);
 			tags.setTag("Base_" + i, baseTags);
 		}

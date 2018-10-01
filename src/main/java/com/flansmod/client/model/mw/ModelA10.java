@@ -1819,7 +1819,6 @@ public class ModelA10 extends ModelPlane //Same as Filename
 		hudModel[0].setRotationPoint(-94F, -46F, 0F);
 
 
-
 		propellerModels = new ModelRendererTurbo[2][4];
 		propellerModels[0] = makeProp1(29F, -41F, 21F);
 		propellerModels[1] = makeProp2(29F, -41F, -21F);

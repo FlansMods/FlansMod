@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelTT33 extends ModelGun 
+public class ModelTT33 extends ModelGun
 {
 	public ModelTT33()
 	{

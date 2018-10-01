@@ -15,7 +15,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 
-public class ModelCustomArmour extends ModelBiped 
+public class ModelCustomArmour extends ModelBiped
 {
 	public ArmourType type;
 	
@@ -29,30 +29,30 @@ public class ModelCustomArmour extends ModelBiped
 	public ModelRendererTurbo[] skirtRearModel = new ModelRendererTurbo[0]; //Acts like a leg piece, but its pitch is set to the minimum of the two legs
 
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{ 
+	{
 		GL11.glPushMatrix();
 		GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
 		isSneak = entity.isSneaking();
 		ItemStack itemstack = ((EntityLivingBase)entity).getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 		rightArmPose = itemstack == null || itemstack.isEmpty() ? ArmPose.EMPTY : ArmPose.ITEM;
-        
-        if (itemstack != null && !itemstack.isEmpty() && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
-        {
-        	EnumAction enumaction = itemstack.getItemUseAction();
-            if (enumaction == EnumAction.BLOCK)
-            {
-            	rightArmPose = ArmPose.BLOCK;
-            }
-            else if (enumaction == EnumAction.BOW)
-            {
-            	rightArmPose = ArmPose.BOW_AND_ARROW;
-            }
-        }
-		setRotationAngles(f, f1, f2, f3, f4, f5, entity); 
-        if (isSneak)
-        {
-            GlStateManager.translate(0.0F, 0.2F, 0.0F);
-        }
+
+		if(itemstack != null && !itemstack.isEmpty() && entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0)
+		{
+			EnumAction enumaction = itemstack.getItemUseAction();
+			if(enumaction == EnumAction.BLOCK)
+			{
+				rightArmPose = ArmPose.BLOCK;
+			}
+			else if(enumaction == EnumAction.BOW)
+			{
+				rightArmPose = ArmPose.BOW_AND_ARROW;
+			}
+		}
+		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		if(isSneak)
+		{
+			GlStateManager.translate(0.0F, 0.2F, 0.0F);
+		}
 		render(headModel, bipedHead, f5, type.modelScale);
 		render(bodyModel, bipedBody, f5, type.modelScale);
 		render(leftArmModel, bipedLeftArm, f5, type.modelScale);
@@ -86,7 +86,7 @@ public class ModelCustomArmour extends ModelBiped
 			}
 		}
 		GL11.glPopMatrix();
-	} 
+	}
 	
 	public void render(ModelRendererTurbo[] models, ModelRenderer bodyPart, float f5, float scale)
 	{

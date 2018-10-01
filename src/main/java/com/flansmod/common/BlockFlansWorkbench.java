@@ -27,62 +27,65 @@ public class BlockFlansWorkbench extends Block
 {
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2);
 	
-    public BlockFlansWorkbench(int j, int k)
-    {
-        super(Material.IRON);
-        setHardness(3F);
-        setResistance(6F);
+	public BlockFlansWorkbench(int j, int k)
+	{
+		super(Material.IRON);
+		setHardness(3F);
+		setResistance(6F);
 		setRegistryName("flansWorkbench");
-        setCreativeTab(FlansMod.tabFlanDriveables);
-        setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
-    }
-    
-    @Override
-    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items)
-    {
-    	if(tab == FlansMod.tabFlanDriveables)
-    		items.add(new ItemStack(this, 1, 0));
-    	else if(tab == FlansMod.tabFlanGuns)
-    		items.add(new ItemStack(this, 1, 1));
-    	else if(tab == FlansMod.tabFlanParts)
-    		items.add(new ItemStack(this, 1, 2));
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-    	switch(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue())
-    	{
-    	case 0 : if(world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 0, world, pos.getX(), pos.getY(), pos.getZ()); break;
-    	case 1 : if(!world.isRemote) entityplayer.openGui(FlansMod.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ()); break; 
-    	}    	
+		setCreativeTab(FlansMod.tabFlanDriveables);
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, Integer.valueOf(0)));
+	}
+	
+	@Override
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items)
+	{
+		if(tab == FlansMod.tabFlanDriveables)
+			items.add(new ItemStack(this, 1, 0));
+		else if(tab == FlansMod.tabFlanGuns)
+			items.add(new ItemStack(this, 1, 1));
+		else if(tab == FlansMod.tabFlanParts)
+			items.add(new ItemStack(this, 1, 2));
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		switch(((Integer)world.getBlockState(pos).getValue(TYPE)).intValue())
+		{
+			case 0: if(world.isRemote)
+				entityplayer.openGui(FlansMod.INSTANCE, 0, world, pos.getX(), pos.getY(), pos.getZ());
+				break;
+			case 1: if(!world.isRemote)
+				entityplayer.openGui(FlansMod.INSTANCE, 2, world, pos.getX(), pos.getY(), pos.getZ());
+				break;
+		}
 		return true;
-    }
-    
-
-    
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {TYPE});
-    }
-    
-    @Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
-    }
-    
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-    
-    @Override
-    public int damageDropped(IBlockState state)
-    {
-        return ((Integer)state.getValue(TYPE)).intValue();
-    }
-
+	}
+	
+	
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer(this, new IProperty[]{TYPE});
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta)
+	{
+		return this.getDefaultState().withProperty(TYPE, Integer.valueOf(meta));
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return ((Integer)state.getValue(TYPE)).intValue();
+	}
+	
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		return ((Integer)state.getValue(TYPE)).intValue();
+	}
+	
 }

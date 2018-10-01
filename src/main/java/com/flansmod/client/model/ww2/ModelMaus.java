@@ -16,39 +16,39 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 public class ModelMaus extends ModelVehicle
 {
 	int textureX = 1024;
-	int textureY = 1024  ;
+	int textureY = 1024;
 
 	public ModelMaus()
 	{
 
 // Body
 		bodyModel = new ModelRendererTurbo[26];
-		bodyModel[0] = new ModelRendererTurbo(this,  1,  1, textureX, textureY); // Base
-		bodyModel[1] = new ModelRendererTurbo(this,  1,  1, textureX, textureY); // FrontArmor
-		bodyModel[2] = new ModelRendererTurbo(this,  481,  1, textureX, textureY); // FrontArmor
-		bodyModel[3] = new ModelRendererTurbo(this,  553,  1, textureX, textureY); // FrontArmorAngle
-		bodyModel[4] = new ModelRendererTurbo(this,  633,  41, textureX, textureY); // FrontAngledUnder
-		bodyModel[5] = new ModelRendererTurbo(this,  97,  409, textureX, textureY); // CoverUnder
-		bodyModel[6] = new ModelRendererTurbo(this,  1,  481, textureX, textureY); // CoverUnder
-		bodyModel[7] = new ModelRendererTurbo(this,  393,  481, textureX, textureY); // CoverUnder
-		bodyModel[8] = new ModelRendererTurbo(this,  1,  81, textureX, textureY); // Side
-		bodyModel[9] = new ModelRendererTurbo(this,  425,  153, textureX, textureY); // Side
-		bodyModel[10] = new ModelRendererTurbo(this,  833,  161, textureX, textureY); // Side
-		bodyModel[11] = new ModelRendererTurbo(this,  145,  177, textureX, textureY); // Side
-		bodyModel[12] = new ModelRendererTurbo(this,  305,  177, textureX, textureY); // Side
-		bodyModel[13] = new ModelRendererTurbo(this,  1,  209, textureX, textureY); // Side
-		bodyModel[14] = new ModelRendererTurbo(this,  393,  241, textureX, textureY); // Side
-		bodyModel[15] = new ModelRendererTurbo(this,  553,  241, textureX, textureY); // Side
-		bodyModel[16] = new ModelRendererTurbo(this,  713,  241, textureX, textureY); // Side
-		bodyModel[17] = new ModelRendererTurbo(this,  793,  257, textureX, textureY); // Side
-		bodyModel[18] = new ModelRendererTurbo(this,  89,  273, textureX, textureY); // Side
-		bodyModel[19] = new ModelRendererTurbo(this,  249,  273, textureX, textureY); // Side
-		bodyModel[20] = new ModelRendererTurbo(this,  329,  329, textureX, textureY); // Sideangled
-		bodyModel[21] = new ModelRendererTurbo(this,  433,  345, textureX, textureY); // CoverSide
-		bodyModel[22] = new ModelRendererTurbo(this,  1,  353, textureX, textureY); // CoverSide
-		bodyModel[23] = new ModelRendererTurbo(this,  761,  345, textureX, textureY); // BodyBack
-		bodyModel[24] = new ModelRendererTurbo(this,  433,  361, textureX, textureY); // CoverBack
-		bodyModel[25] = new ModelRendererTurbo(this,  1,  369, textureX, textureY); // 
+		bodyModel[0] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Base
+		bodyModel[1] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // FrontArmor
+		bodyModel[2] = new ModelRendererTurbo(this, 481, 1, textureX, textureY); // FrontArmor
+		bodyModel[3] = new ModelRendererTurbo(this, 553, 1, textureX, textureY); // FrontArmorAngle
+		bodyModel[4] = new ModelRendererTurbo(this, 633, 41, textureX, textureY); // FrontAngledUnder
+		bodyModel[5] = new ModelRendererTurbo(this, 97, 409, textureX, textureY); // CoverUnder
+		bodyModel[6] = new ModelRendererTurbo(this, 1, 481, textureX, textureY); // CoverUnder
+		bodyModel[7] = new ModelRendererTurbo(this, 393, 481, textureX, textureY); // CoverUnder
+		bodyModel[8] = new ModelRendererTurbo(this, 1, 81, textureX, textureY); // Side
+		bodyModel[9] = new ModelRendererTurbo(this, 425, 153, textureX, textureY); // Side
+		bodyModel[10] = new ModelRendererTurbo(this, 833, 161, textureX, textureY); // Side
+		bodyModel[11] = new ModelRendererTurbo(this, 145, 177, textureX, textureY); // Side
+		bodyModel[12] = new ModelRendererTurbo(this, 305, 177, textureX, textureY); // Side
+		bodyModel[13] = new ModelRendererTurbo(this, 1, 209, textureX, textureY); // Side
+		bodyModel[14] = new ModelRendererTurbo(this, 393, 241, textureX, textureY); // Side
+		bodyModel[15] = new ModelRendererTurbo(this, 553, 241, textureX, textureY); // Side
+		bodyModel[16] = new ModelRendererTurbo(this, 713, 241, textureX, textureY); // Side
+		bodyModel[17] = new ModelRendererTurbo(this, 793, 257, textureX, textureY); // Side
+		bodyModel[18] = new ModelRendererTurbo(this, 89, 273, textureX, textureY); // Side
+		bodyModel[19] = new ModelRendererTurbo(this, 249, 273, textureX, textureY); // Side
+		bodyModel[20] = new ModelRendererTurbo(this, 329, 329, textureX, textureY); // Sideangled
+		bodyModel[21] = new ModelRendererTurbo(this, 433, 345, textureX, textureY); // CoverSide
+		bodyModel[22] = new ModelRendererTurbo(this, 1, 353, textureX, textureY); // CoverSide
+		bodyModel[23] = new ModelRendererTurbo(this, 761, 345, textureX, textureY); // BodyBack
+		bodyModel[24] = new ModelRendererTurbo(this, 433, 361, textureX, textureY); // CoverBack
+		bodyModel[25] = new ModelRendererTurbo(this, 1, 369, textureX, textureY); //
 
 		bodyModel[0].addBox(0F, 0F, 0F, 200, 2, 75, 0F); // Base
 		bodyModel[0].setRotationPoint(-55F, -8F, -37.5F);
@@ -134,19 +134,18 @@ public class ModelMaus extends ModelVehicle
 		bodyModel[25].rotateAngleZ = -0.3490658F;
 
 
-
 // Turret
 		turretModel = new ModelRendererTurbo[10];
-		turretModel[0] = new ModelRendererTurbo(this,  657,  65, textureX, textureY); // TurretMain
-		turretModel[1] = new ModelRendererTurbo(this,  633,  1, textureX, textureY); // TurretSide
-		turretModel[2] = new ModelRendererTurbo(this,  1,  177, textureX, textureY); // TurretSide
-		turretModel[3] = new ModelRendererTurbo(this,  497,  1, textureX, textureY); // TurretMantle
-		turretModel[4] = new ModelRendererTurbo(this,  801,  1, textureX, textureY); // TurretMantleTop
-		turretModel[5] = new ModelRendererTurbo(this,  929,  1, textureX, textureY); // GunMantleBack
-		turretModel[6] = new ModelRendererTurbo(this,  913,  1, textureX, textureY); // Commander'sParascope
-		turretModel[7] = new ModelRendererTurbo(this,  1,  1, textureX, textureY); // Commander'sParascope
-		turretModel[8] = new ModelRendererTurbo(this,  865,  33, textureX, textureY); // Commander'sHatch
-		turretModel[9] = new ModelRendererTurbo(this,  969,  1, textureX, textureY); // GunnerHatch
+		turretModel[0] = new ModelRendererTurbo(this, 657, 65, textureX, textureY); // TurretMain
+		turretModel[1] = new ModelRendererTurbo(this, 633, 1, textureX, textureY); // TurretSide
+		turretModel[2] = new ModelRendererTurbo(this, 1, 177, textureX, textureY); // TurretSide
+		turretModel[3] = new ModelRendererTurbo(this, 497, 1, textureX, textureY); // TurretMantle
+		turretModel[4] = new ModelRendererTurbo(this, 801, 1, textureX, textureY); // TurretMantleTop
+		turretModel[5] = new ModelRendererTurbo(this, 929, 1, textureX, textureY); // GunMantleBack
+		turretModel[6] = new ModelRendererTurbo(this, 913, 1, textureX, textureY); // Commander'sParascope
+		turretModel[7] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Commander'sParascope
+		turretModel[8] = new ModelRendererTurbo(this, 865, 33, textureX, textureY); // Commander'sHatch
+		turretModel[9] = new ModelRendererTurbo(this, 969, 1, textureX, textureY); // GunnerHatch
 
 		turretModel[0].addBox(-50F, -59F, -28.5F, 100, 25, 57, 0F); // TurretMain
 		turretModel[0].setRotationPoint(0F, 0F, 0F);
@@ -182,12 +181,11 @@ public class ModelMaus extends ModelVehicle
 		turretModel[9].setRotationPoint(0F, 0F, 0F);
 
 
-
 // Barrel
 		barrelModel = new ModelRendererTurbo[3];
-		barrelModel[0] = new ModelRendererTurbo(this,  425,  129, textureX, textureY); // Barrel
-		barrelModel[1] = new ModelRendererTurbo(this,  569,  1, textureX, textureY); // TurretGun
-		barrelModel[2] = new ModelRendererTurbo(this,  866,  1, textureX, textureY); // 
+		barrelModel[0] = new ModelRendererTurbo(this, 425, 129, textureX, textureY); // Barrel
+		barrelModel[1] = new ModelRendererTurbo(this, 569, 1, textureX, textureY); // TurretGun
+		barrelModel[2] = new ModelRendererTurbo(this, 866, 1, textureX, textureY); //
 
 		barrelModel[0].addBox(11F, 4F, 5F, 100, 6, 6, 0F); // Barrel
 		barrelModel[0].setRotationPoint(54F, -54F, -7.5F);
@@ -199,23 +197,22 @@ public class ModelMaus extends ModelVehicle
 		barrelModel[2].setRotationPoint(54F, -54F, -7.5F);
 
 
-
 // Left Track
 		leftTrackModel = new ModelRendererTurbo[14];
-		leftTrackModel[0] = new ModelRendererTurbo(this,  1,  81, textureX, textureY); // LW
-		leftTrackModel[1] = new ModelRendererTurbo(this,  425,  81, textureX, textureY); // LW
-		leftTrackModel[2] = new ModelRendererTurbo(this,  489,  81, textureX, textureY); // LW
-		leftTrackModel[3] = new ModelRendererTurbo(this,  1,  113, textureX, textureY); // LW
-		leftTrackModel[4] = new ModelRendererTurbo(this,  961,  137, textureX, textureY); // LW
-		leftTrackModel[5] = new ModelRendererTurbo(this,  833,  153, textureX, textureY); // LW
-		leftTrackModel[6] = new ModelRendererTurbo(this,  921,  169, textureX, textureY); // LW
-		leftTrackModel[7] = new ModelRendererTurbo(this,  233,  177, textureX, textureY); // LW
-		leftTrackModel[8] = new ModelRendererTurbo(this,  297,  177, textureX, textureY); // LW
-		leftTrackModel[9] = new ModelRendererTurbo(this,  393,  177, textureX, textureY); // LW
-		leftTrackModel[10] = new ModelRendererTurbo(this,  833,  185, textureX, textureY); // LW
-		leftTrackModel[11] = new ModelRendererTurbo(this,  953,  73, textureX, textureY); // 
-		leftTrackModel[12] = new ModelRendererTurbo(this,  969,  25, textureX, textureY); // 
-		leftTrackModel[13] = new ModelRendererTurbo(this,  417,  449, textureX, textureY); // 
+		leftTrackModel[0] = new ModelRendererTurbo(this, 1, 81, textureX, textureY); // LW
+		leftTrackModel[1] = new ModelRendererTurbo(this, 425, 81, textureX, textureY); // LW
+		leftTrackModel[2] = new ModelRendererTurbo(this, 489, 81, textureX, textureY); // LW
+		leftTrackModel[3] = new ModelRendererTurbo(this, 1, 113, textureX, textureY); // LW
+		leftTrackModel[4] = new ModelRendererTurbo(this, 961, 137, textureX, textureY); // LW
+		leftTrackModel[5] = new ModelRendererTurbo(this, 833, 153, textureX, textureY); // LW
+		leftTrackModel[6] = new ModelRendererTurbo(this, 921, 169, textureX, textureY); // LW
+		leftTrackModel[7] = new ModelRendererTurbo(this, 233, 177, textureX, textureY); // LW
+		leftTrackModel[8] = new ModelRendererTurbo(this, 297, 177, textureX, textureY); // LW
+		leftTrackModel[9] = new ModelRendererTurbo(this, 393, 177, textureX, textureY); // LW
+		leftTrackModel[10] = new ModelRendererTurbo(this, 833, 185, textureX, textureY); // LW
+		leftTrackModel[11] = new ModelRendererTurbo(this, 953, 73, textureX, textureY); //
+		leftTrackModel[12] = new ModelRendererTurbo(this, 969, 25, textureX, textureY); //
+		leftTrackModel[13] = new ModelRendererTurbo(this, 417, 449, textureX, textureY); //
 
 		leftTrackModel[0].addBox(0F, 0F, 0F, 12, 12, 18, 0F); // LW
 		leftTrackModel[0].setRotationPoint(-49F, -4F, -33F);
@@ -262,23 +259,22 @@ public class ModelMaus extends ModelVehicle
 		leftTrackModel[13].setRotationPoint(-50F, 8F, -36F);
 
 
-
 // Right Track
 		rightTrackModel = new ModelRendererTurbo[14];
-		rightTrackModel[0] = new ModelRendererTurbo(this,  921,  201, textureX, textureY); // RW
-		rightTrackModel[1] = new ModelRendererTurbo(this,  1,  209, textureX, textureY); // RW
-		rightTrackModel[2] = new ModelRendererTurbo(this,  89,  209, textureX, textureY); // RW
-		rightTrackModel[3] = new ModelRendererTurbo(this,  153,  209, textureX, textureY); // RW
-		rightTrackModel[4] = new ModelRendererTurbo(this,  233,  209, textureX, textureY); // RW
-		rightTrackModel[5] = new ModelRendererTurbo(this,  297,  209, textureX, textureY); // RW
-		rightTrackModel[6] = new ModelRendererTurbo(this,  1,  241, textureX, textureY); // RW
-		rightTrackModel[7] = new ModelRendererTurbo(this,  481,  241, textureX, textureY); // RW
-		rightTrackModel[8] = new ModelRendererTurbo(this,  545,  241, textureX, textureY); // RW
-		rightTrackModel[9] = new ModelRendererTurbo(this,  641,  241, textureX, textureY); // RW
-		rightTrackModel[10] = new ModelRendererTurbo(this,  705,  241, textureX, textureY); // RW
-		rightTrackModel[11] = new ModelRendererTurbo(this,  921,  49, textureX, textureY); // 
-		rightTrackModel[12] = new ModelRendererTurbo(this,  569,  9, textureX, textureY); // 
-		rightTrackModel[13] = new ModelRendererTurbo(this,  1,  449, textureX, textureY); // 
+		rightTrackModel[0] = new ModelRendererTurbo(this, 921, 201, textureX, textureY); // RW
+		rightTrackModel[1] = new ModelRendererTurbo(this, 1, 209, textureX, textureY); // RW
+		rightTrackModel[2] = new ModelRendererTurbo(this, 89, 209, textureX, textureY); // RW
+		rightTrackModel[3] = new ModelRendererTurbo(this, 153, 209, textureX, textureY); // RW
+		rightTrackModel[4] = new ModelRendererTurbo(this, 233, 209, textureX, textureY); // RW
+		rightTrackModel[5] = new ModelRendererTurbo(this, 297, 209, textureX, textureY); // RW
+		rightTrackModel[6] = new ModelRendererTurbo(this, 1, 241, textureX, textureY); // RW
+		rightTrackModel[7] = new ModelRendererTurbo(this, 481, 241, textureX, textureY); // RW
+		rightTrackModel[8] = new ModelRendererTurbo(this, 545, 241, textureX, textureY); // RW
+		rightTrackModel[9] = new ModelRendererTurbo(this, 641, 241, textureX, textureY); // RW
+		rightTrackModel[10] = new ModelRendererTurbo(this, 705, 241, textureX, textureY); // RW
+		rightTrackModel[11] = new ModelRendererTurbo(this, 921, 49, textureX, textureY); //
+		rightTrackModel[12] = new ModelRendererTurbo(this, 569, 9, textureX, textureY); //
+		rightTrackModel[13] = new ModelRendererTurbo(this, 1, 449, textureX, textureY); //
 
 		rightTrackModel[0].addBox(0F, 0F, 0F, 12, 12, 18, 0F); // RW
 		rightTrackModel[0].setRotationPoint(-49F, -4F, 15F);

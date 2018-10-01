@@ -27,25 +27,58 @@ public class PlayerClass extends InfoType implements IPlayerClass
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public boolean horse = false;
 	
-	/** Override armour. If this is set, then it will override the team armour */
+	/**
+	 * Override armour. If this is set, then it will override the team armour
+	 */
 	public ItemStack hat, chest, legs, shoes;
 	
 	@Override
-	public List<ItemStack> GetStartingItems() { return startingItems; }
+	public List<ItemStack> GetStartingItems()
+	{
+		return startingItems;
+	}
+	
 	@Override
-	public boolean GetHorse() { return horse; }
+	public boolean GetHorse()
+	{
+		return horse;
+	}
+	
 	@Override
-	public ItemStack GetHat() { return hat; }
+	public ItemStack GetHat()
+	{
+		return hat;
+	}
+	
 	@Override
-	public ItemStack GetChest() { return chest; }
+	public ItemStack GetChest()
+	{
+		return chest;
+	}
+	
 	@Override
-	public ItemStack GetLegs() { return legs; }
+	public ItemStack GetLegs()
+	{
+		return legs;
+	}
+	
 	@Override
-	public ItemStack GetShoes() { return shoes; }
+	public ItemStack GetShoes()
+	{
+		return shoes;
+	}
+	
 	@Override
-	public String GetName() { return name; }
+	public String GetName()
+	{
+		return name;
+	}
+	
 	@Override
-	public String GetShortName() { return name; }
+	public String GetShortName()
+	{
+		return name;
+	}
 	
 	public PlayerClass(TypeFile file)
 	{
@@ -57,7 +90,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
-		if (split[0].equals("AddItem"))
+		if(split[0].equals("AddItem"))
 		{
 			startingItemStrings.add(split);
 		}
@@ -109,16 +142,20 @@ public class PlayerClass extends InfoType implements IPlayerClass
 		}
 	}
 	
-	/** This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once */
+	/**
+	 * This loads the items once for clients connecting to remote servers, since the clients can't tell what attachments a gun has in the GUI and they need to load it at least once
+	 */
 	@Override
-	protected void postRead(TypeFile file) 
+	protected void postRead(TypeFile file)
 	{
 		onWorldLoad(null);
 	}
 	
-	/** In the loading phase item IDs are all up in the air and so too are NBT tags regarding ItemStacks 
-	 * So to avoid guns with attachments having their attachments replaced with incorrect ones, 
-	 * random guns and other silly things, we read the relevant lines here, as the world loads */
+	/**
+	 * In the loading phase item IDs are all up in the air and so too are NBT tags regarding ItemStacks
+	 * So to avoid guns with attachments having their attachments replaced with incorrect ones,
+	 * random guns and other silly things, we read the relevant lines here, as the world loads
+	 */
 	@Override
 	public void onWorldLoad(World world)
 	{
@@ -153,7 +190,7 @@ public class PlayerClass extends InfoType implements IPlayerClass
 				if(split.length > 2)
 				{
 					amount = Integer.parseInt(split[2]);
-				}				
+				}
 				if(split.length > 3)
 				{
 					damage = Integer.parseInt(split[3]);
@@ -162,41 +199,47 @@ public class PlayerClass extends InfoType implements IPlayerClass
 				if(itemNames.length > 1 && matchingItem instanceof ItemGun)
 				{
 					GunType gunType = ((ItemGun)matchingItem).GetType();
-			    	NBTTagCompound tags = new NBTTagCompound();
-			    	NBTTagCompound attachmentTags = new NBTTagCompound();
-			    	int genericID = 0;
-			    	for(int i = 0; i < itemNames.length - 1; i++)
-			    	{
-			    		AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
-			    		if(attachment != null)
-			    		{
-				    		String tagName = null;
-				    		switch(attachment.type)
-				    		{
-				    			case sights : tagName = "scope"; break;
-				    			case barrel : tagName = "barrel"; break;
-				    			case stock : tagName = "stock"; break;
-				    			case grip : tagName = "grip"; break;
-				    			case generic : tagName = "generic_" + genericID++; break;
-				    		}
-				    		NBTTagCompound specificAttachmentTags = new NBTTagCompound();
-				    		new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
-				    		attachmentTags.setTag(tagName, specificAttachmentTags);
-			    		}
-			    		//Maybe it was a paintjob
-			    		else
-			    		{
-			    			Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
-			    			if(paintjob != null)
-			    				tags.setString("Paint", paintjob.iconName);
-			    		}
-			    	}
-			    	tags.setTag("attachments", attachmentTags);
-			    	stack.setTagCompound(tags);
+					NBTTagCompound tags = new NBTTagCompound();
+					NBTTagCompound attachmentTags = new NBTTagCompound();
+					int genericID = 0;
+					for(int i = 0; i < itemNames.length - 1; i++)
+					{
+						AttachmentType attachment = AttachmentType.getAttachment(itemNames[i + 1]);
+						if(attachment != null)
+						{
+							String tagName = null;
+							switch(attachment.type)
+							{
+								case sights: tagName = "scope";
+									break;
+								case barrel: tagName = "barrel";
+									break;
+								case stock: tagName = "stock";
+									break;
+								case grip: tagName = "grip";
+									break;
+								case generic: tagName = "generic_" + genericID++;
+									break;
+							}
+							NBTTagCompound specificAttachmentTags = new NBTTagCompound();
+							new ItemStack(attachment.item).writeToNBT(specificAttachmentTags);
+							attachmentTags.setTag(tagName, specificAttachmentTags);
+						}
+						//Maybe it was a paintjob
+						else
+						{
+							Paintjob paintjob = gunType.getPaintjob(itemNames[i + 1]);
+							if(paintjob != null)
+								tags.setString("Paint", paintjob.iconName);
+						}
+					}
+					tags.setTag("attachments", attachmentTags);
+					stack.setTagCompound(tags);
 				}
 				startingItems.add(stack);
 			}
-		} catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Interpreting player class file failed.");
 			FlansMod.log.throwing(e);
@@ -212,12 +255,12 @@ public class PlayerClass extends InfoType implements IPlayerClass
 		}
 		return null;
 	}
-
+	
 	@Override
 	protected void preRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()

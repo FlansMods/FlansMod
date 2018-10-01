@@ -40,21 +40,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPaintjobTable extends BlockContainer
-{	
-	public BlockPaintjobTable() 
+{
+	public BlockPaintjobTable()
 	{
 		super(Material.ROCK);
 		setHardness(2F);
 		setResistance(4F);
-	    setTranslationKey("paintjobTable");
-	    setRegistryName("paintjobTable");
+		setTranslationKey("paintjobTable");
+		setRegistryName("paintjobTable");
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
-
+	
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-	    return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
+		return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
 	}
 	
 	@Override
@@ -62,36 +62,36 @@ public class BlockPaintjobTable extends BlockContainer
 	{
 		return new TileEntityPaintjobTable();
 	}
-			
-    @Override
+	
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float par7, float par8, float par9)
-    {
-    	if(world.isRemote)
-    	{
-    		FlansMod.playerHandler.getPlayerData(player, Side.CLIENT).shootTimeLeft = FlansMod.playerHandler.getPlayerData(player, Side.CLIENT).shootTimeRight = 10;
-    		return true;
-    	}
-
-    	TileEntityPaintjobTable table = (TileEntityPaintjobTable)world.getTileEntity(pos);
-    	
-    	if(!world.isRemote) 
-    	{
-    		player.openGui(FlansMod.INSTANCE, 13, world, pos.getX(), pos.getY(), pos.getZ());
-    	}
+	{
+		if(world.isRemote)
+		{
+			FlansMod.playerHandler.getPlayerData(player, Side.CLIENT).shootTimeLeft = FlansMod.playerHandler.getPlayerData(player, Side.CLIENT).shootTimeRight = 10;
+			return true;
+		}
+		
+		TileEntityPaintjobTable table = (TileEntityPaintjobTable)world.getTileEntity(pos);
+		
+		if(!world.isRemote)
+		{
+			player.openGui(FlansMod.INSTANCE, 13, world, pos.getX(), pos.getY(), pos.getZ());
+		}
 		return true;
-    }
-    
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-
-        if (tileentity instanceof IInventory)
-        {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
-        }
-
-        super.breakBlock(worldIn, pos, state);
-    }
+	}
+	
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+	{
+		TileEntity tileentity = worldIn.getTileEntity(pos);
+		
+		if(tileentity instanceof IInventory)
+		{
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
+			worldIn.updateComparatorOutputLevel(pos, this);
+		}
+		
+		super.breakBlock(worldIn, pos, state);
+	}
 }

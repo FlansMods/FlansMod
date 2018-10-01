@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 // Does nothing. Just here for rendering purposes
-public class ItemRewardBox extends Item 
+public class ItemRewardBox extends Item
 {
 	public RewardBox type;
 	

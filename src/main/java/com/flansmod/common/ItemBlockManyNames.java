@@ -5,7 +5,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockManyNames extends ItemBlock {
+public class ItemBlockManyNames extends ItemBlock
+{
 	
 	public ItemBlockManyNames(Block b)
 	{
@@ -21,7 +22,7 @@ public class ItemBlockManyNames extends ItemBlock {
 	}
 	
 	@Override
-	public int getMetadata(int par1) 
+	public int getMetadata(int par1)
 	{
 		return par1;
 	}
@@ -29,6 +30,6 @@ public class ItemBlockManyNames extends ItemBlock {
 	@Override
 	public CreativeTabs[] getCreativeTabs()
 	{
-		return new CreativeTabs[]{ FlansMod.tabFlanDriveables, FlansMod.tabFlanGuns, FlansMod.tabFlanTeams, FlansMod.tabFlanParts };
+		return new CreativeTabs[]{FlansMod.tabFlanDriveables, FlansMod.tabFlanGuns, FlansMod.tabFlanTeams, FlansMod.tabFlanParts};
 	}
 }

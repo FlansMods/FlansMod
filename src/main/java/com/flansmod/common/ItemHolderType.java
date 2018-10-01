@@ -18,7 +18,7 @@ import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class ItemHolderType extends InfoType 
+public class ItemHolderType extends InfoType
 {
 	@SideOnly(Side.CLIENT)
 	public ModelItemHolder model;
@@ -27,7 +27,7 @@ public class ItemHolderType extends InfoType
 	
 	private static HashMap<String, ItemHolderType> itemHolders = new HashMap<String, ItemHolderType>();
 	
-	public ItemHolderType(TypeFile file) 
+	public ItemHolderType(TypeFile file)
 	{
 		super(file);
 	}
@@ -36,7 +36,7 @@ public class ItemHolderType extends InfoType
 	protected void preRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	public void postRead(TypeFile file)
 	{
@@ -48,11 +48,11 @@ public class ItemHolderType extends InfoType
 	{
 		super.read(split, file);
 		try
-		{		
+		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelItemHolder.class);
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading item holder file failed : " + shortName);
 			FlansMod.log.throwing(e);
@@ -72,18 +72,20 @@ public class ItemHolderType extends InfoType
 		registry.register(block);
 	}
 	
-	public static ItemHolderType getItemHolder(String string) 
+	public static ItemHolderType getItemHolder(String string)
 	{
 		return itemHolders.get(string);
 	}
 	
-	/** To be overriden by subtypes for model reloading */
+	/**
+	 * To be overriden by subtypes for model reloading
+	 */
 	@Override
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelItemHolder.class);
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()

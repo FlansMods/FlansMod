@@ -13,7 +13,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiVoting extends GuiScreen 
+public class GuiVoting extends GuiScreen
 {
 	public static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/vote.png");
 	public static int myVote = 0;
@@ -56,14 +56,13 @@ public class GuiVoting extends GuiScreen
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-
+		
 		mc.renderEngine.bindTexture(texture);
 		
-
+		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = k / 2 - 128;
 		int n = l / 2 - guiHeight / 2;
-		
 		
 		
 		drawTexturedModalRect(m, n, 0, 0, 256, 22);

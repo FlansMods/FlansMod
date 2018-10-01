@@ -1,7 +1,13 @@
 {
-    "variants": {
-        "type=0":    { "model": "flansmod:flansworkbench_guns" },
-        "type=1":     { "model": "flansmod:flansworkbench_vehicles" },
-        "type=2":     { "model": "flansmod:flansworkbench_parts" }
+  "variants": {
+    "type=0": {
+      "model": "flansmod:flansworkbench_guns"
+    },
+    "type=1": {
+      "model": "flansmod:flansworkbench_vehicles"
+    },
+    "type=2": {
+      "model": "flansmod:flansworkbench_parts"
     }
+  }
 }

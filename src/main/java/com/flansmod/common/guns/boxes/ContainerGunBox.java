@@ -49,14 +49,15 @@ public class ContainerGunBox extends Container
 					return null;
 				}
 			}
-			else {
+			else
+			{
 				if(!mergeItemStack(slotStack, 1, inventorySlots.size(), true))
 				{
 					return null;
 				}
 			}
 
-			if (slotStack.getCount() == 0)
+			if(slotStack.getCount() == 0)
 			{
 				currentSlot.putStack(null);
 			}
@@ -65,7 +66,7 @@ public class ContainerGunBox extends Container
 				currentSlot.onSlotChanged();
 			}
 
-			if (slotStack.getCount() == stack.getCount())
+			if(slotStack.getCount() == stack.getCount())
 			{
 				return null;
 			}

@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
-public class WorldRenderer 
+public class WorldRenderer
 {
 	public Tessellator tessellator;
 	

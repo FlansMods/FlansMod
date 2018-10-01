@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelM60E4 extends ModelGun 
+public class ModelM60E4 extends ModelGun
 {
 	public ModelM60E4()
 	{
@@ -33,32 +33,32 @@ public class ModelM60E4 extends ModelGun
 		
 		gunModel[5] = new ModelRendererTurbo(this, 10, 4, textureX, textureY);
 		gunModel[5].addBox(5F, 1.5F, -1.25F, 5, 1.5F, 2.5F);
-
+		
 		gunModel[6] = new ModelRendererTurbo(this, 10, 14, textureX, textureY);
 		gunModel[6].addBox(8F, 2.1F, -0.4F, 7, 0.8F, 0.8F);
-
+		
 		gunModel[7] = new ModelRendererTurbo(this, 8, 12, textureX, textureY);
 		gunModel[7].addBox(8F, 3.2F, -0.3F, 8, 0.6F, 0.6F);
-
+		
 		gunModel[8] = new ModelRendererTurbo(this, 18, 10, textureX, textureY);
 		gunModel[8].addBox(12F, 2.9F, -0.4F, 1, 1, 0.8F);
-
+		
 		gunModel[9] = new ModelRendererTurbo(this, 22, 9, textureX, textureY);
 		gunModel[9].addBox(14F, 3.1F, -0.4F, 1, 2, 0.8F);
-
+		
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[1];
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 26, 6, textureX, textureY);
-		ammoModel[0].addBox(1F, -1F, -7F, 3, 4, 6);		
+		ammoModel[0].addBox(1F, -1F, -7F, 3, 4, 6);
 		
 		//Stock - Nope.
 		stockAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
 		
 		//Barrel - Nope.
 		barrelAttachPoint = new Vector3f(11.75F / 16F, 3.5F / 16F, 0F);
-				
+		
 		//Scope
 		scopeAttachPoint = new Vector3f(0F, 5F / 16F, 0F);
 		

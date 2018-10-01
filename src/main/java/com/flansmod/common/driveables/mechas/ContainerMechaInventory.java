@@ -7,7 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ContainerMechaInventory extends Container 
+public class ContainerMechaInventory extends Container
 {
 	public InventoryPlayer inventory;
 	public World world;
@@ -26,7 +26,7 @@ public class ContainerMechaInventory extends Container
 		maxScroll = (numRows > 3 ? numRows - 3 : 0);
 		
 		int startSlot = mecha.driveableData.getCargoInventoryStart();
-
+		
 		for(int row = 0; row < numRows; row++)
 		{
 			int yPos = -1000;
@@ -57,7 +57,7 @@ public class ContainerMechaInventory extends Container
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u3, 10, 80));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u4, 10, 104));
 		addSlotToContainer(new SlotMecha(mecha.inventory, EnumMechaSlotType.u5, 10, 128));
-
+		
 		
 		//Main inventory slots
 		for(int row = 0; row < 3; row++)
@@ -66,7 +66,7 @@ public class ContainerMechaInventory extends Container
 			{
 				addSlotToContainer(new Slot(inventory, col + row * 9 + 9, 182 + col * 18, 98 + row * 18));
 			}
-
+			
 		}
 		//Quickbar slots
 		for(int col = 0; col < 9; col++)
@@ -81,7 +81,7 @@ public class ContainerMechaInventory extends Container
 		super.onContainerClosed(par1EntityPlayer);
 		mecha.couldNotFindFuel = false;
 	}
-
+	
 	public void updateScroll(int scrololol)
 	{
 		scroll = scrololol;
@@ -99,7 +99,7 @@ public class ContainerMechaInventory extends Container
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) 
+	public boolean canInteractWith(EntityPlayer entityplayer)
 	{
 		return true;
 	}
@@ -109,17 +109,17 @@ public class ContainerMechaInventory extends Container
 	{
 		ItemStack stack = ItemStack.EMPTY.copy();
 		Slot currentSlot = (Slot)inventorySlots.get(slotID);
-
+		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{
 			ItemStack slotStack = currentSlot.getStack();
 			stack = slotStack.copy();
-
+			
 			///if(stack.getItem() instanceof ItemMechaAddon)
-		   // {
-				//((ItemMechaAddon)stack.getItem()).type;
+			// {
+			//((ItemMechaAddon)stack.getItem()).type;
 			//}
-
+			
 			if(slotID >= numItems)
 			{
 				if(!mergeItemStack(slotStack, 0, numItems, false))
@@ -127,14 +127,15 @@ public class ContainerMechaInventory extends Container
 					return ItemStack.EMPTY.copy();
 				}
 			}
-			else {
+			else
+			{
 				if(!mergeItemStack(slotStack, numItems, inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY.copy();
 				}
 			}
-
-			if (slotStack.getCount() == 0)
+			
+			if(slotStack.getCount() == 0)
 			{
 				currentSlot.putStack(ItemStack.EMPTY.copy());
 			}
@@ -142,16 +143,16 @@ public class ContainerMechaInventory extends Container
 			{
 				currentSlot.onSlotChanged();
 			}
-
-			if (slotStack.getCount() == stack.getCount())
+			
+			if(slotStack.getCount() == stack.getCount())
 			{
 				return ItemStack.EMPTY.copy();
 			}
-
+			
 			currentSlot.onTake(player, slotStack);
 		}
-
+		
 		return stack;
 	}
-
+	
 }

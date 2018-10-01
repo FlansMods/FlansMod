@@ -43,7 +43,7 @@ import net.minecraft.util.math.Vec3d;
  * <pre>
  * // First, the origin will be placed. This is where the rest is attached to.
  * skeletonOrigin = new Bone(0, 0, 0, 0);
- * 
+ *
  * // Next, the entire skeleton is built up.
  * skeletonHead = new Bone(-3.141593F / 2, 0, 0, 0, skeletonOrigin);
  * skeletonBody = new Bone(3.141593F / 2, 0, 0, 12, skeletonOrigin);
@@ -55,7 +55,7 @@ import net.minecraft.util.math.Vec3d;
  * skeletonPelvisLeft = new Bone(0, 3.141593F / 2, 0, 2, skeletonBody);
  * skeletonLegRight = new Bone(3.141593F / 2, 0, 0, 12, skeletonPelvisRight);
  * skeletonLegLeft = new Bone(3.141593F / 2, 0, 0, 12, skeletonPelvisLeft);
- * 
+ *
  * // Finally, all models will be attached to the skeletons.
  * skeletonHead.addModel(bipedHead);
  * skeletonHead.addModel(bipedHeadwear);
@@ -94,13 +94,14 @@ import net.minecraft.util.math.Vec3d;
  * the individual render methods for each model though, as it won't automatically
  * render them.
  * <br /><br />
- * @author GaryCXJk
  *
+ * @author GaryCXJk
  */
 public class Bone
 {
 	/**
 	 * Constructor to create a bone.
+	 *
 	 * @param x the x-rotation of the bone
 	 * @param y the y-rotation of the bone
 	 * @param z the z-rotation of the bone
@@ -125,13 +126,14 @@ public class Bone
 	
 	/**
 	 * Constructor to create a bone.
+	 *
 	 * @param xOrig the x-offset of the origin
 	 * @param yOrig the y-offset of the origin
 	 * @param zOrig the z-offset of the origin
-	 * @param xRot the x-rotation of the bone
-	 * @param yRot the y-rotation of the bone
-	 * @param zRot the z-rotation of the bone
-	 * @param l the length of the bone
+	 * @param xRot  the x-rotation of the bone
+	 * @param yRot  the y-rotation of the bone
+	 * @param zRot  the z-rotation of the bone
+	 * @param l     the length of the bone
 	 */
 	public Bone(float xOrig, float yOrig, float zOrig, float xRot, float yRot, float zRot, float l)
 	{
@@ -142,10 +144,11 @@ public class Bone
 	/**
 	 * Constructor to create a bone. This attaches the bone to a parent bone, and will
 	 * calculate its current position relative to the origin.
-	 * @param x the x-rotation of the bone
-	 * @param y the y-rotation of the bone
-	 * @param z the z-rotation of the bone
-	 * @param l the length of the bone
+	 *
+	 * @param x      the x-rotation of the bone
+	 * @param y      the y-rotation of the bone
+	 * @param z      the z-rotation of the bone
+	 * @param l      the length of the bone
 	 * @param parent the parent Bone node this Bone is attached to
 	 */
 	public Bone(float x, float y, float z, float l, Bone parent)
@@ -166,6 +169,7 @@ public class Bone
 	/**
 	 * Attaches the bone to a parent. If the parent is already set, detaches the bone
 	 * from the previous parent.
+	 *
 	 * @param parent the parent Bone node this Bone is attached to
 	 */
 	public void attachBone(Bone parent)
@@ -184,6 +188,7 @@ public class Bone
 	 * Sets the current offset of the parent root Bone. Note that this will
 	 * always set the parent root Bone, not the current Bone, as its offset
 	 * is determined by the offset, rotation and length of its parent.
+	 *
 	 * @param x the x-position
 	 * @param y the y-position
 	 * @param z the z-position
@@ -216,6 +221,7 @@ public class Bone
 	
 	/**
 	 * Resets the offset.
+	 *
 	 * @param doRecursive
 	 */
 	public void resetOffset(boolean doRecursive)
@@ -224,11 +230,12 @@ public class Bone
 		{
 			positionVector = new Vec3d(0, 0, parentNode.length);
 			parentNode.setVectorRotations(positionVector);
-			positionVector = positionVector.add(parentNode.positionVector);		
+			positionVector = positionVector.add(parentNode.positionVector);
 		}
 		if(doRecursive && !childNodes.isEmpty())
 		{
-			for (Bone childNode : childNodes) {
+			for(Bone childNode : childNodes)
+			{
 				childNode.resetOffset(doRecursive);
 			}
 		}
@@ -237,6 +244,7 @@ public class Bone
 	/**
 	 * Sets the current neutral rotation of the bone. This is the same rotation as in
 	 * the constructor.
+	 *
 	 * @param x the x-rotation of the bone
 	 * @param y the y-rotation of the bone
 	 * @param z the z-rotation of the bone
@@ -250,6 +258,7 @@ public class Bone
 	
 	/**
 	 * Gets the root parent bone.
+	 *
 	 * @return the root parent Bone.
 	 */
 	public Bone getRootParent()
@@ -263,6 +272,7 @@ public class Bone
 	/**
 	 * Attaches a model to the bone. Its base rotation will be set to the neutral
 	 * rotation of the model.
+	 *
 	 * @param model the model to attach
 	 */
 	public void addModel(ModelRenderer model)
@@ -274,7 +284,8 @@ public class Bone
 	 * Attaches a model to the bone. If inherit is true, it sets the base rotation
 	 * to the neutral rotation of the Bone, otherwise it's set to the neutral
 	 * rotation of the model.
-	 * @param model the model to attach
+	 *
+	 * @param model   the model to attach
 	 * @param inherit whether the model should inherit the Bone's base rotations
 	 */
 	public void addModel(ModelRenderer model, boolean inherit)
@@ -287,10 +298,11 @@ public class Bone
 	 * to the neutral rotation of the Bone, otherwise it's set to the neutral
 	 * rotation of the model. When isUpright is set, the model will be rotated
 	 * (-PI / 2, 0, 0).
-	 * @param model the model to attach
-	 * @param inherit whether the model should inherit the Bone's base rotations
+	 *
+	 * @param model     the model to attach
+	 * @param inherit   whether the model should inherit the Bone's base rotations
 	 * @param isUpright whether the model is modeled in the upright position
-	 */	
+	 */
 	public void addModel(ModelRenderer model, boolean inherit, boolean isUpright)
 	{
 		addModel(model, 0F, 0F, 0F, inherit, isUpright);
@@ -298,10 +310,11 @@ public class Bone
 	
 	/**
 	 * Attaches a model to the bone with a given base rotation.
+	 *
 	 * @param model the model to attach
-	 * @param x the base x-rotation
-	 * @param y the base y-rotation
-	 * @param z the base z-rotation
+	 * @param x     the base x-rotation
+	 * @param y     the base y-rotation
+	 * @param z     the base z-rotation
 	 */
 	public void addModel(ModelRenderer model, float x, float y, float z)
 	{
@@ -311,12 +324,13 @@ public class Bone
 	/**
 	 * Attaches a model to the bone with a given base rotation. When inherit is
 	 * true, it will add the Bone's neutral rotation to the given angles.
-	 * @param model the model to attach
-	 * @param x the base x-rotation
-	 * @param y the base y-rotation
-	 * @param z the base z-rotation
+	 *
+	 * @param model   the model to attach
+	 * @param x       the base x-rotation
+	 * @param y       the base y-rotation
+	 * @param z       the base z-rotation
 	 * @param inherit whether the model should inherit the Bone's base rotations
-	 */	
+	 */
 	public void addModel(ModelRenderer model, float x, float y, float z, boolean inherit)
 	{
 		addModel(model, x, y, z, inherit, false);
@@ -326,13 +340,14 @@ public class Bone
 	 * Attaches a model to the bone with a given base rotation. When inherit is
 	 * true, it will add the Bone's neutral rotation to the given angles.
 	 * When isUpright is set, the model will be rotated (-PI / 2, 0, 0).
-	 * @param model the model to attach
-	 * @param x the base x-rotation
-	 * @param y the base y-rotation
-	 * @param z the base z-rotation
-	 * @param inherit whether the model should inherit the Bone's base rotations
+	 *
+	 * @param model     the model to attach
+	 * @param x         the base x-rotation
+	 * @param y         the base y-rotation
+	 * @param z         the base z-rotation
+	 * @param inherit   whether the model should inherit the Bone's base rotations
 	 * @param isUpright whether the model is modeled in the upright position
-	 */		
+	 */
 	public void addModel(ModelRenderer model, float x, float y, float z, boolean inherit, boolean isUpright)
 	{
 		if(inherit)
@@ -349,6 +364,7 @@ public class Bone
 	 * Removes the given model from the Bone. Always detach the model before adding
 	 * it to another Bone. The best thing however is to just keep the model to one
 	 * bone.
+	 *
 	 * @param model the model to remove from the bone
 	 */
 	public void removeModel(ModelRenderer model)
@@ -361,6 +377,7 @@ public class Bone
 	 * Gets the current absolute angles. The absolute angle is calculated by getting
 	 * the sum of all parent Bones' relative angles plus the current relative angle.
 	 * This must be called after using the prepareDraw method.
+	 *
 	 * @return an Angle3D object which holds the current angles of the current node.
 	 */
 	public Angle3D getAbsoluteAngle()
@@ -371,6 +388,7 @@ public class Bone
 	/**
 	 * Gets the current position of the bone. You should call this after all rotations
 	 * and positions are applied, e.g. after prepareDraw has been called.
+	 *
 	 * @return a vector containing the current position relative to the origin.
 	 */
 	public Vec3d getPosition()
@@ -400,6 +418,7 @@ public class Bone
 	
 	/**
 	 * Sets the current rotation of the Bone, not calculating any parent bones in.
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
@@ -416,7 +435,8 @@ public class Bone
 		absoluteAngles.angleX = relativeAngles.angleX;
 		absoluteAngles.angleY = relativeAngles.angleY;
 		absoluteAngles.angleZ = relativeAngles.angleZ;
-		for (Bone childNode : childNodes) {
+		for(Bone childNode : childNodes)
+		{
 			childNode.setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
 		}
 	}
@@ -426,7 +446,8 @@ public class Bone
 		absoluteAngles.angleX = relativeAngles.angleX + x;
 		absoluteAngles.angleY = relativeAngles.angleY + y;
 		absoluteAngles.angleZ = relativeAngles.angleZ + z;
-		for (Bone childNode : childNodes) {
+		for(Bone childNode : childNodes)
+		{
 			childNode.setAbsoluteRotations(absoluteAngles.angleX, absoluteAngles.angleY, absoluteAngles.angleZ);
 		}
 		
@@ -451,20 +472,20 @@ public class Bone
 		float yS = MathHelper.sin(y);
 		float zC = MathHelper.cos(z);
 		float zS = MathHelper.sin(z);
-
+		
 		double xVec = vector.x;
 		double yVec = vector.y;
 		double zVec = vector.z;
-
+		
 		// rotation around x
-		double xy = xC*yVec - xS*zVec;
-		double xz = xC*zVec + xS*yVec;
+		double xy = xC * yVec - xS * zVec;
+		double xz = xC * zVec + xS * yVec;
 		// rotation around y
-		double yz = yC*xz - yS*xVec;
-		double yx = yC*xVec + yS*xz;
+		double yz = yC * xz - yS * xVec;
+		double yx = yC * xVec + yS * xz;
 		// rotation around z
-		double zx = zC*yx - zS*xy;
-		double zy = zC*xy + zS*yx;
+		double zx = zC * yx - zS * xy;
+		double zy = zC * xy + zS * yx;
 		
 		xVec = zx;
 		yVec = zy;
@@ -472,19 +493,20 @@ public class Bone
 		
 		vector = new Vec3d(xVec, yVec, zVec);
 	}
-
+	
 	protected void add(Vec3d destVec, Vec3d srcVec)
 	{
-		destVec = destVec.add(srcVec);	
+		destVec = destVec.add(srcVec);
 	}
-
+	
 	protected void setVectors()
 	{
 		Vec3d tempVec = new Vec3d(0, 0, length);
 		positionVector = new Vec3d(offsetX, offsetY, offsetZ);
 		add(tempVec, positionVector);
 		setVectorRotations(tempVec);
-		for (Bone childNode : childNodes) {
+		for(Bone childNode : childNodes)
+		{
 			childNode.setVectors(tempVec);
 		}
 	}
@@ -495,7 +517,8 @@ public class Bone
 		Vec3d tempVec = new Vec3d(0, 0, length);
 		setVectorRotations(tempVec);
 		add(tempVec, vector);
-		for (Bone childNode : childNodes) {
+		for(Bone childNode : childNodes)
+		{
 			childNode.setVectors(tempVec);
 		}
 		
@@ -506,21 +529,23 @@ public class Bone
 	 */
 	public void setAnglesToModels()
 	{
-		for (ModelRenderer currentModel : models) {
+		for(ModelRenderer currentModel : models)
+		{
 			Angle3D baseAngles = modelBaseRot.get(currentModel);
 			currentModel.rotateAngleX = baseAngles.angleX + absoluteAngles.angleX;
 			currentModel.rotateAngleY = baseAngles.angleY + absoluteAngles.angleY;
 			currentModel.rotateAngleZ = baseAngles.angleZ + absoluteAngles.angleZ;
-			currentModel.rotationPointX = (float) positionVector.x;
-			currentModel.rotationPointY = (float) positionVector.y;
-			currentModel.rotationPointZ = (float) positionVector.z;
+			currentModel.rotationPointX = (float)positionVector.x;
+			currentModel.rotationPointY = (float)positionVector.y;
+			currentModel.rotationPointZ = (float)positionVector.z;
 		}
-
-		for (Bone childNode : childNodes) {
+		
+		for(Bone childNode : childNodes)
+		{
 			childNode.setAnglesToModels();
 		}
 	}
-		
+	
 	protected Angle3D neutralAngles;
 	public Angle3D relativeAngles;
 	protected Angle3D absoluteAngles;

@@ -13,15 +13,15 @@ public class RenderFakePlayer extends RenderBiped
 {
 	private static final ResourceLocation SURVIVOR_SKIN = new ResourceLocation("flansmodapocalypse", "textures/entity/Survivor.png");
 	
-	public RenderFakePlayer(RenderManager man, ModelBiped model, float f) 
+	public RenderFakePlayer(RenderManager man, ModelBiped model, float f)
 	{
 		super(man, model, f);
 		
-        this.addLayer(new LayerBipedArmor(this));
+		this.addLayer(new LayerBipedArmor(this));
 	}
-
-    protected ResourceLocation getEntityTexture(EntityLiving entity)
-    {
-        return SURVIVOR_SKIN;
-    }
+	
+	protected ResourceLocation getEntityTexture(EntityLiving entity)
+	{
+		return SURVIVOR_SKIN;
+	}
 }

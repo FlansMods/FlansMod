@@ -24,7 +24,7 @@ public class ItemPart extends Item implements IFlanItem
 		super();
 		type = type1;
 		setMaxStackSize(type.stackSize);
-		if (type.category == EnumPartCategory.FUEL)
+		if(type.category == EnumPartCategory.FUEL)
 		{
 			setMaxDamage(type.fuel);
 			setHasSubtypes(true);
@@ -43,9 +43,9 @@ public class ItemPart extends Item implements IFlanItem
 			lines.add("Fuel Stored: " + (type.fuel - stack.getItemDamage()) + " / " + type.fuel);
 		}
 	}
-    
+	
 	@Override
-	public InfoType getInfoType() 
+	public InfoType getInfoType()
 	{
 		return type;
 	}

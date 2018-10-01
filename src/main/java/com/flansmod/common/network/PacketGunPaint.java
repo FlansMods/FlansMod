@@ -9,9 +9,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import com.flansmod.common.guns.ContainerGunModTable;
 import com.flansmod.common.paintjob.ContainerPaintjobTable;
 
-public class PacketGunPaint extends PacketBase 
+public class PacketGunPaint extends PacketBase
 {
-	private int paintjobID; 
+	private int paintjobID;
 	
 	public PacketGunPaint()
 	{
@@ -24,19 +24,19 @@ public class PacketGunPaint extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(paintjobID);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		paintjobID = data.readInt();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		if(playerEntity.openContainer instanceof ContainerGunModTable)
 		{
@@ -49,10 +49,10 @@ public class PacketGunPaint extends PacketBase
 			paintjobTable.clickPaintjob(paintjobID);
 		}
 	}
-
+	
 	@Override
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-
+	
 	}
 }

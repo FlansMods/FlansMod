@@ -32,13 +32,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 
-/** 
+/**
  * Flan's Mod packet handler class. Directs packet data to packet classes.
+ *
  * @author Flan
  * With much inspiration from http://www.minecraftforge.net/wiki/Netty_Packet_Handling
- * */
+ */
 @ChannelHandler.Sharable
-public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketBase> 
+public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketBase>
 {
 	//Map of channels for each side
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
@@ -47,11 +48,15 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	//Whether or not Flan's Mod has initialised yet. Once true, no more packets may be registered.
 	private boolean modInitialised = false;
 	
-	/** Store received packets in these queues and have the main Minecraft threads use these */
+	/**
+	 * Store received packets in these queues and have the main Minecraft threads use these
+	 */
 	private ConcurrentLinkedQueue<PacketBase> receivedPacketsClient = new ConcurrentLinkedQueue<PacketBase>();
 	private HashMap<String, ConcurrentLinkedQueue<PacketBase>> receivedPacketsServer = new HashMap<String, ConcurrentLinkedQueue<PacketBase>>();
 	
-	/** Registers a packet with the handler */
+	/**
+	 * Registers a packet with the handler
+	 */
 	public boolean registerPacket(Class<? extends PacketBase> cl)
 	{
 		if(packets.size() > 256)
@@ -75,7 +80,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	}
 	
 	@Override
-	protected void encode(ChannelHandlerContext ctx, PacketBase msg, List<Object> out) throws Exception 
+	protected void encode(ChannelHandlerContext ctx, PacketBase msg, List<Object> out) throws Exception
 	{
 		try
 		{
@@ -89,11 +94,11 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				throw new NullPointerException("Packet not registered : " + cl.getCanonicalName());
 			
 			//Like a packet ID. Stored as the first entry in the packet code for recognition
-			byte discriminator = (byte) packets.indexOf(cl);
+			byte discriminator = (byte)packets.indexOf(cl);
 			encodedData.writeByte(discriminator);
 			//Get the packet class to encode our packet
 			msg.encodeInto(ctx, encodedData);
-	
+			
 			//Convert our packet into a Forge packet to get it through the Netty system
 			FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(encodedData.copy()), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 			//Add our packet to the outgoing packet queue
@@ -105,9 +110,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			FlansMod.log.throwing(e);
 		}
 	}
-
+	
 	@Override
-	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception 
+	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception
 	{
 		try
 		{
@@ -127,13 +132,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			//Check the side and handle our packet accordingly
 			switch(FMLCommonHandler.instance().getEffectiveSide())
 			{
-				case CLIENT : 
+				case CLIENT:
 				{
 					receivedPacketsClient.offer(packet);
 					//packet.handleClientSide(getClientPlayer());
 					break;
 				}
-				case SERVER :
+				case SERVER:
 				{
 					INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 					EntityPlayer player = ((NetHandlerPlayServer)netHandler).player;
@@ -165,7 +170,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		for(String playerName : receivedPacketsServer.keySet())
 		{
 			ConcurrentLinkedQueue<PacketBase> receivedPacketsFromPlayer = receivedPacketsServer.get(playerName);
-			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(playerName); 
+			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(playerName);
 			for(PacketBase packet = receivedPacketsFromPlayer.poll(); packet != null; packet = receivedPacketsFromPlayer.poll())
 			{
 				packet.handleServerSide(player);
@@ -173,7 +178,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 	}
 	
-	/** Initialisation method called from FMLInitializationEvent in FlansMod */
+	/**
+	 * Initialisation method called from FMLInitializationEvent in FlansMod
+	 */
 	public void initialise()
 	{
 		channels = NetworkRegistry.INSTANCE.newChannel("FlansMod", this);
@@ -183,28 +190,28 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketBreakSound.class);
 		registerPacket(PacketBuyArmour.class);
 		registerPacket(PacketBuyWeapon.class);
-		registerPacket(PacketCraftDriveable.class);	
-		registerPacket(PacketDriveableControl.class);	
-		registerPacket(PacketDriveableDamage.class);	
-		registerPacket(PacketDriveableGUI.class);	
-		registerPacket(PacketDriveableKey.class);	
-		registerPacket(PacketDriveableKeyHeld.class);	
-		registerPacket(PacketFlak.class);	
+		registerPacket(PacketCraftDriveable.class);
+		registerPacket(PacketDriveableControl.class);
+		registerPacket(PacketDriveableDamage.class);
+		registerPacket(PacketDriveableGUI.class);
+		registerPacket(PacketDriveableKey.class);
+		registerPacket(PacketDriveableKeyHeld.class);
+		registerPacket(PacketFlak.class);
 		//registerPacket(PacketGunFire.class);	
 		registerPacket(PacketGunPaint.class);
 		registerPacket(PacketKillMessage.class);
-		registerPacket(PacketMechaControl.class);	
-		registerPacket(PacketMGFire.class);	
-		registerPacket(PacketMGMount.class);	
-		registerPacket(PacketPlaneControl.class);	
-		registerPacket(PacketPlaySound.class);	
-		registerPacket(PacketReload.class);	
+		registerPacket(PacketMechaControl.class);
+		registerPacket(PacketMGFire.class);
+		registerPacket(PacketMGMount.class);
+		registerPacket(PacketPlaneControl.class);
+		registerPacket(PacketPlaySound.class);
+		registerPacket(PacketReload.class);
 		registerPacket(PacketRepairDriveable.class);
 		registerPacket(PacketRoundFinished.class);
-		registerPacket(PacketSeatUpdates.class);	
+		registerPacket(PacketSeatUpdates.class);
 		registerPacket(PacketShotData.class);
-		registerPacket(PacketTeamInfo.class);	
-		registerPacket(PacketTeamSelect.class);	
+		registerPacket(PacketTeamInfo.class);
+		registerPacket(PacketTeamSelect.class);
 		registerPacket(PacketVehicleControl.class);
 		registerPacket(PacketVoteCast.class);
 		registerPacket(PacketVoting.class);
@@ -213,9 +220,11 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		registerPacket(PacketOpenRewardBox.class);
 		registerPacket(PacketAddSingleRewardBoxInstance.class);
 	}
-
-	/** Post-Initialisation method called from FMLPostInitializationEvent in FlansMod 
-	 * Logically sorts the packets client and server side to ensure a matching ordering */
+	
+	/**
+	 * Post-Initialisation method called from FMLPostInitializationEvent in FlansMod
+	 * Logically sorts the packets client and server side to ensure a matching ordering
+	 */
 	public void postInitialise()
 	{
 		if(modInitialised)
@@ -223,42 +232,48 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		
 		modInitialised = true;
 		//Define our comparator on the fly and apply it to our list
-		Collections.sort(packets, 
-		new Comparator<Class<? extends PacketBase>>() 
-		{
-			@Override
-			public int compare(Class<? extends PacketBase> c1, Class<? extends PacketBase> c2)
-			{
-				int com = String.CASE_INSENSITIVE_ORDER.compare(c1.getCanonicalName(), c2.getCanonicalName());
-				if(com == 0)
-					com = c1.getCanonicalName().compareTo(c2.getCanonicalName());
-				return com;
-			}
-		});
+		Collections.sort(packets,
+				new Comparator<Class<? extends PacketBase>>()
+				{
+					@Override
+					public int compare(Class<? extends PacketBase> c1, Class<? extends PacketBase> c2)
+					{
+						int com = String.CASE_INSENSITIVE_ORDER.compare(c1.getCanonicalName(), c2.getCanonicalName());
+						if(com == 0)
+							com = c1.getCanonicalName().compareTo(c2.getCanonicalName());
+						return com;
+					}
+				});
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private EntityPlayer getClientPlayer() 
+	private EntityPlayer getClientPlayer()
 	{
 		return Minecraft.getMinecraft().player;
 	}
 	
-	/** Send a packet to all players */
+	/**
+	 * Send a packet to all players
+	 */
 	public void sendToAll(PacketBase packet)
 	{
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
 		channels.get(Side.SERVER).writeAndFlush(packet);
 	}
-
-	/** Send a packet to a player */
+	
+	/**
+	 * Send a packet to a player
+	 */
 	public void sendTo(PacketBase packet, EntityPlayerMP player)
 	{
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		channels.get(Side.SERVER).writeAndFlush(packet);
-	}	
+	}
 	
-	/** Send a packet to all around a point */
+	/**
+	 * Send a packet to all around a point
+	 */
 	public void sendToAllAround(PacketBase packet, NetworkRegistry.TargetPoint point)
 	{
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
@@ -266,7 +281,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		channels.get(Side.SERVER).writeAndFlush(packet);
 	}
 	
-	/** Send a packet to all in a dimension */
+	/**
+	 * Send a packet to all in a dimension
+	 */
 	public void sendToDimension(PacketBase packet, int dimensionID)
 	{
 		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
@@ -274,7 +291,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		channels.get(Side.SERVER).writeAndFlush(packet);
 	}
 	
-	/** Send a packet to the server */
+	/**
+	 * Send a packet to the server
+	 */
 	public void sendToServer(PacketBase packet)
 	{
 		channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
@@ -283,38 +302,50 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	
 	//Vanilla packets follow
 	
-	/** Send a packet to all players */
+	/**
+	 * Send a packet to all players
+	 */
 	public void sendToAll(Packet packet)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayers(packet);
 	}
-
-	/** Send a packet to a player */
+	
+	/**
+	 * Send a packet to a player
+	 */
 	public void sendTo(Packet packet, EntityPlayerMP player)
 	{
 		player.connection.sendPacket(packet);
-	}	
+	}
 	
-	/** Send a packet to all around a point */
+	/**
+	 * Send a packet to all around a point
+	 */
 	public void sendToAllAround(Packet packet, NetworkRegistry.TargetPoint point)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendToAllNearExcept(null, point.x, point.y, point.z, point.range, point.dimension, packet);
 	}
 	
-	/** Send a packet to all in a dimension */
+	/**
+	 * Send a packet to all in a dimension
+	 */
 	public void sendToDimension(Packet packet, int dimensionID)
 	{
 		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendPacketToAllPlayersInDimension(packet, dimensionID);
 	}
 	
-	/** Send a packet to the server */
+	/**
+	 * Send a packet to the server
+	 */
 	public void sendToServer(Packet packet)
 	{
 		Minecraft.getMinecraft().player.connection.sendPacket(packet);
 	}
-
-	/** Send a packet to all around a point without having to create one's own TargetPoint */
-	public void sendToAllAround(PacketBase packet, double x, double y, double z, float range, int dimension) 
+	
+	/**
+	 * Send a packet to all around a point without having to create one's own TargetPoint
+	 */
+	public void sendToAllAround(PacketBase packet, double x, double y, double z, float range, int dimension)
 	{
 		sendToAllAround(packet, new NetworkRegistry.TargetPoint(dimension, x, y, z, range));
 	}

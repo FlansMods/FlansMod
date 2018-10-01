@@ -31,7 +31,7 @@ public class PacketLoadoutData extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		writeUTF(data, motd);
 		data.writeInt(teamsAvailable.length);
@@ -41,12 +41,12 @@ public class PacketLoadoutData extends PacketBase
 		}
 		
 		myRankData.writeToBuf(data);
-
+		
 		data.writeInt(currentPool == null ? 0 : currentPool.shortName.hashCode());
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		motd = readUTF(data);
 		int numTeams = data.readInt();
@@ -60,9 +60,9 @@ public class PacketLoadoutData extends PacketBase
 		
 		currentPool = LoadoutPool.GetPool(data.readInt());
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		PlayerRankData rankData = TeamsManagerRanked.rankData.get(playerEntity.getUniqueID());
 		if(rankData == null)
@@ -99,12 +99,12 @@ public class PacketLoadoutData extends PacketBase
 			}
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		ClientTeamsData.motd = motd;		
+		ClientTeamsData.motd = motd;
 		ClientTeamsData.theRankData = myRankData;
 		ClientTeamsData.currentPool = currentPool;
 		GuiTeamSelect.teamChoices = teamsAvailable;

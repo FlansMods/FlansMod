@@ -1,16 +1,20 @@
-{	
-	"bomb": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bomb" ]
-	},
-	
-	"bow": {
-		"category" : "player",
-		"sounds" : [ "flansmod:bow" ]
-	},
-	
-	"propSound": {
-		"category" : "player",
-		"sounds" : [ "flansmod:propSound" ]
-	}
+{
+  "bomb": {
+    "category": "player",
+    "sounds": [
+      "flansmod:bomb"
+    ]
+  },
+  "bow": {
+    "category": "player",
+    "sounds": [
+      "flansmod:bow"
+    ]
+  },
+  "propSound": {
+    "category": "player",
+    "sounds": [
+      "flansmod:propSound"
+    ]
+  }
 }

@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelFlashlight extends ModelAttachment 
+public class ModelFlashlight extends ModelAttachment
 {
 	public ModelFlashlight()
 	{

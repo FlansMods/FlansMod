@@ -25,11 +25,15 @@ public class GunBoxType extends BoxType
 {
 	public BlockGunBox block;
 	
-	/** Stores pages for the gun box indexed by their title (unlocalized!) */
+	/**
+	 * Stores pages for the gun box indexed by their title (unlocalized!)
+	 */
 	public HashMap<String, GunBoxPage> pagesByTitle;
 	public ArrayList<GunBoxPage> pages;
 	
-	/** Points to the page we are currently adding to. */
+	/**
+	 * Points to the page we are currently adding to.
+	 */
 	private GunBoxPage currentPage;
 	
 	public GunBoxPage defaultPage;
@@ -60,7 +64,7 @@ public class GunBoxType extends BoxType
 			if(split.length < 2)
 				continue;
 			
-			if (split[0].equals("NumGuns"))
+			if(split[0].equals("NumGuns"))
 			{
 				pagesByTitle.put("default", currentPage = new GunBoxPage("default"));
 				pages.add(currentPage);
@@ -80,7 +84,7 @@ public class GunBoxType extends BoxType
 	{
 		super.read(split, file);
 		try
-		{		
+		{
 			//Sets the current page of the reader.
 			if(split[0].equals("SetPage"))
 			{
@@ -102,8 +106,8 @@ public class GunBoxType extends BoxType
 			{
 				currentPage.addAmmoToCurrentEntry(InfoType.getType(split[1]), getRecipe(split));
 			}
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading gun box file failed : " + shortName);
 			FlansMod.log.throwing(e);
@@ -123,13 +127,13 @@ public class GunBoxType extends BoxType
 		registry.register(block);
 	}
 
-	private List<ItemStack> getRecipe(String[] split) 
+	private List<ItemStack> getRecipe(String[] split)
 	{
 		List<ItemStack> recipe = new ArrayList<ItemStack>();
 		
 		for(int i = 0; i < (split.length - 2) / 2; i++)
 		{
-			if (split[i * 2 + 3].contains("."))
+			if(split[i * 2 + 3].contains("."))
 				recipe.add(getRecipeElement(split[i * 2 + 3].split("\\.")[0], Integer.parseInt(split[i * 2 + 2]), Integer.valueOf(split[i * 2 + 3].split("\\.")[1]), shortName));
 			else
 				recipe.add(getRecipeElement(split[i * 2 + 3], Integer.parseInt(split[i * 2 + 2]), 0, shortName));
@@ -260,11 +264,15 @@ public class GunBoxType extends BoxType
 	}
 	*/
 	
-	/** Represents a page in the gun box */
+	/**
+	 * Represents a page in the gun box
+	 */
 	public static class GunBoxPage
 	{
 		public List<GunBoxEntryTopLevel> entries;
-		/** Points to the gun box entry we are currently reading from file. Allows for the old format to write in ammo on a separate line to the gun. */
+		/**
+		 * Points to the gun box entry we are currently reading from file. Allows for the old format to write in ammo on a separate line to the gun.
+		 */
 		private GunBoxEntryTopLevel currentlyEditing;
 		public String name;
 		
@@ -287,7 +295,9 @@ public class GunBoxType extends BoxType
 		}
 	}
 	
-	/** Represents an entry on a page of the gun box. */
+	/**
+	 * Represents an entry on a page of the gun box.
+	 */
 	public static class GunBoxEntry
 	{
 		public InfoType type;
@@ -300,14 +310,14 @@ public class GunBoxType extends BoxType
 		}
 		
 		public boolean canCraft(InventoryPlayer inv, boolean takeItems)
-		{			
+		{
 			//Create a temporary copy of the player inventory for backup purposes
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
 			for(int i = 0; i < inv.getSizeInventory(); i++)
 			{
 				temporaryInventory.setInventorySlotContents(i, inv.getStackInSlot(i).copy());
 			}
-		
+
 			//This becomes false if some recipe element is not found on the player
 			boolean canCraft = true;
 			
@@ -353,7 +363,9 @@ public class GunBoxType extends BoxType
 		}
 	}
 	
-	/** Represents a top level entry, normally a gun. This has child entries, normally ammo that are listed below in the GUI. */
+	/**
+	 * Represents a top level entry, normally a gun. This has child entries, normally ammo that are listed below in the GUI.
+	 */
 	public static class GunBoxEntryTopLevel extends GunBoxEntry
 	{
 		public List<GunBoxEntry> childEntries;
@@ -364,13 +376,13 @@ public class GunBoxType extends BoxType
 			childEntries = new ArrayList<GunBoxEntry>();
 		}
 
-		public void addAmmo(InfoType type, List<ItemStack> requiredParts) 
+		public void addAmmo(InfoType type, List<ItemStack> requiredParts)
 		{
 			childEntries.add(new GunBoxEntry(type, requiredParts));
 		}
 	}
 
-	public GunBoxEntry canCraft(InfoType type) 
+	public GunBoxEntry canCraft(InfoType type)
 	{
 		for(GunBoxPage page : pagesByTitle.values())
 		{
@@ -378,7 +390,7 @@ public class GunBoxType extends BoxType
 			{
 				if(entry.type == type)
 					return entry;
-				else 
+				else
 				{
 					for(GunBoxEntry child : entry.childEntries)
 					{

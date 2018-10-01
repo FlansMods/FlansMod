@@ -11,8 +11,8 @@ import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class LoadoutPool extends InfoType 
-{	
+public class LoadoutPool extends InfoType
+{
 	public static ArrayList<LoadoutPool> pools = new ArrayList<LoadoutPool>();
 	
 	public static class LoadoutEntry
@@ -43,9 +43,9 @@ public class LoadoutPool extends InfoType
 	public RewardBox[] rewardBoxes = new RewardBox[3];
 	public ArrayList<RewardBox>[] rewardsPerLevel;
 	
-	public int[] slotUnlockLevels = new int[] { 0, 0, 5, 10, 20 };
+	public int[] slotUnlockLevels = new int[]{0, 0, 5, 10, 20};
 	
-	public LoadoutPool(TypeFile file) 
+	public LoadoutPool(TypeFile file)
 	{
 		super(file);
 		pools.add(this);
@@ -61,7 +61,7 @@ public class LoadoutPool extends InfoType
 			defaultLoadouts[i] = new PlayerLoadout();
 		}
 	}
-
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
@@ -71,7 +71,7 @@ public class LoadoutPool extends InfoType
 		XPForDeath = Read(split, "XPForDeath", XPForDeath);
 		XPForKillstreakBonus = Read(split, "XPForKillstreakBonus", XPForKillstreakBonus);
 		
-		if (KeyMatches(split, "MaxLevel"))
+		if(KeyMatches(split, "MaxLevel"))
 		{
 			maxLevel = Integer.parseInt(split[1]);
 			XPPerLevel = new int[maxLevel];
@@ -100,10 +100,10 @@ public class LoadoutPool extends InfoType
 		}
 		else if(ParseLoadoutEntry("AddSpecial", EnumLoadoutSlot.special, split))
 		{
-		}		
+		}
 		else if(ParseLoadoutEntry("AddMelee", EnumLoadoutSlot.melee, split))
 		{
-		}		
+		}
 		else if(ParseLoadoutEntry("AddArmour", EnumLoadoutSlot.armour, split))
 		{
 		}
@@ -189,7 +189,7 @@ public class LoadoutPool extends InfoType
 			}
 			
 			if(entry.type != null)
-			{ 
+			{
 				unlocks[slot.ordinal()].add(entry);
 			}
 			else
@@ -223,6 +223,7 @@ public class LoadoutPool extends InfoType
 		}
 		return null;
 	}
+	
 	public static LoadoutPool GetPool(int iHash)
 	{
 		for(LoadoutPool pool : pools)
@@ -234,16 +235,16 @@ public class LoadoutPool extends InfoType
 		}
 		return null;
 	}
-
-	public LoadoutEntryInfoType GetLoadoutEntryForInfoType(int loadoutSlot, InfoType infoType) 
+	
+	public LoadoutEntryInfoType GetLoadoutEntryForInfoType(int loadoutSlot, InfoType infoType)
 	{
 		for(LoadoutEntry entry : unlocks[loadoutSlot])
 		{
 			if(entry instanceof LoadoutEntryInfoType)
 			{
-				if(((LoadoutEntryInfoType) entry).type == infoType)
+				if(((LoadoutEntryInfoType)entry).type == infoType)
 				{
-					return (LoadoutEntryInfoType) entry;
+					return (LoadoutEntryInfoType)entry;
 				}
 			}
 		}

@@ -19,7 +19,7 @@ public class ModelMiniUzi extends ModelGun
 		
 		gunModel[1] = new ModelRendererTurbo(this, 0, 4, textureX, textureY);
 		gunModel[1].addShapeBox(0F, 2F, -1F, 6, 1, 2, 0F, /* 0 */ -1F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ -1F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
-
+		
 		gunModel[2] = new ModelRendererTurbo(this, 0, 7, textureX, textureY);
 		gunModel[2].addBox(1F, -1F, -1F, 2, 3, 2);
 		
@@ -31,10 +31,10 @@ public class ModelMiniUzi extends ModelGun
 		
 		gunModel[5] = new ModelRendererTurbo(this, 4, 12, textureX, textureY);
 		gunModel[5].addBox(6.5F, 3.25F, -0.5F, 1, 1, 1);
-
+		
 		gunModel[6] = new ModelRendererTurbo(this, 4, 14, textureX, textureY);
 		gunModel[6].addBox(7F, 3.5F, -0.25F, 2, 0.5F, 0.5F);
-
+		
 		ammoModel = new ModelRendererTurbo[1];
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 10, 7, textureX, textureY);

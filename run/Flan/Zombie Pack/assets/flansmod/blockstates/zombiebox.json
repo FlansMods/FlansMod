@@ -1,1 +1,7 @@
-{ "variants": { "normal": { "model": "flansmod:zombieBox" } } }
+{
+  "variants": {
+    "normal": {
+      "model": "flansmod:zombieBox"
+    }
+  }
+}

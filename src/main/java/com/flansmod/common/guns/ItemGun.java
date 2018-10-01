@@ -49,6 +49,7 @@ import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.vector.Vector3f;
+
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
@@ -103,11 +104,22 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	private GunType type;
 	
-	public GunType GetType() { return type; }
+	public GunType GetType()
+	{
+		return type;
+	}
+	
 	@Override
-	public InfoType getInfoType() { return type; }
+	public InfoType getInfoType()
+	{
+		return type;
+	}
+	
 	@Override
-	public PaintableType GetPaintableType() { return type; }
+	public PaintableType GetPaintableType()
+	{
+		return type;
+	}
 	
 	private int soundDelay = 0;
 	
@@ -116,16 +128,17 @@ public class ItemGun extends Item implements IPaintableItem
 	private static boolean leftMouseHeld;
 	private static boolean lastLeftMouseHeld;
 	
-	private static boolean GetMouseHeld(EnumHand hand) 
-	{ 
+	private static boolean GetMouseHeld(EnumHand hand)
+	{
 		if(FlansMod.shootOnRightClick)
-			return hand == EnumHand.MAIN_HAND ? leftMouseHeld : rightMouseHeld; 
+			return hand == EnumHand.MAIN_HAND ? leftMouseHeld : rightMouseHeld;
 		else return hand == EnumHand.MAIN_HAND ? rightMouseHeld : leftMouseHeld;
 	}
-	private static boolean GetLastMouseHeld(EnumHand hand) 
-	{ 
+	
+	private static boolean GetLastMouseHeld(EnumHand hand)
+	{
 		if(FlansMod.shootOnRightClick)
-			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld; 
+			return hand == EnumHand.MAIN_HAND ? lastLeftMouseHeld : lastRightMouseHeld;
 		else return hand == EnumHand.MAIN_HAND ? lastRightMouseHeld : lastLeftMouseHeld;
 	}
 	
@@ -141,7 +154,9 @@ public class ItemGun extends Item implements IPaintableItem
 		setCreativeTab(FlansMod.tabFlanGuns);
 	}
 	
-	/** Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
+	/**
+	 * Get the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets)
+	 */
 	public ItemStack getBulletItemStack(ItemStack gun, int id)
 	{
 		//If the gun has no tags, give it some
@@ -168,7 +183,9 @@ public class ItemGun extends Item implements IPaintableItem
 		return new ItemStack(ammoTags);
 	}
 	
-	/** Set the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets) */
+	/**
+	 * Set the bullet item stack stored in the gun's NBT data (the loaded magazine / bullets)
+	 */
 	public void setBulletItemStack(ItemStack gun, ItemStack bullet, int id)
 	{
 		//If the gun has no tags, give it some
@@ -199,13 +216,15 @@ public class ItemGun extends Item implements IPaintableItem
 		bullet.writeToNBT(ammoTags);
 	}
 	
-	/** Method for dropping items on reload and on shoot */
+	/**
+	 * Method for dropping items on reload and on shoot
+	 */
 	public static void dropItem(World world, Entity entity, String itemName)
 	{
-		if (itemName != null)
+		if(itemName != null)
 		{
 			int damage = 0;
-			if (itemName.contains("."))
+			if(itemName.contains("."))
 			{
 				damage = Integer.parseInt(itemName.split("\\.")[1]);
 				itemName = itemName.split("\\.")[0];
@@ -215,50 +234,52 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
-	/** Deployable guns only */
+	/**
+	 * Deployable guns only
+	 */
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
 	{
 		ItemStack itemstack = entityplayer.getHeldItem(hand);
 		
-		if (type.deployable)
+		if(type.deployable)
 		{
-	    	//Raytracing
-	        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
-	        float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
-	        float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
-	        double length = 5D;
-	        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-	        Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-	        RayTraceResult look = world.rayTraceBlocks(posVec, lookVec, true);
-	        
-	        //Result check
-			if (look != null && look.typeOfHit == Type.BLOCK)
+			//Raytracing
+			float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+			float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F - 3.141593F);
+			float cosPitch = -MathHelper.cos(-entityplayer.rotationPitch * 0.01745329F);
+			float sinPitch = MathHelper.sin(-entityplayer.rotationPitch * 0.01745329F);
+			double length = 5D;
+			Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);
+			Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+			RayTraceResult look = world.rayTraceBlocks(posVec, lookVec, true);
+			
+			//Result check
+			if(look != null && look.typeOfHit == Type.BLOCK)
 			{
-				if (look.sideHit == EnumFacing.UP)
+				if(look.sideHit == EnumFacing.UP)
 				{
 					int playerDir = MathHelper.floor(((entityplayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 					int i = look.getBlockPos().getX();
 					int j = look.getBlockPos().getY();
 					int k = look.getBlockPos().getZ();
-					if (!world.isRemote)
+					if(!world.isRemote)
 					{
-						if (world.getBlockState(new BlockPos(i, j, k)).getBlock() == Blocks.SNOW)
+						if(world.getBlockState(new BlockPos(i, j, k)).getBlock() == Blocks.SNOW)
 						{
 							j--;
 						}
-						if (isSolid(world, i, j, k) && 
+						if(isSolid(world, i, j, k) &&
 								(world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.AIR || world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == Blocks.SNOW)
 								&&
-								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR) 
-								&& 
-								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR 
-								|| world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.SNOW))
+								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j + 1, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR)
+								&&
+								(world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.AIR
+										|| world.getBlockState(new BlockPos(i + (playerDir == 1 ? 1 : 0) - (playerDir == 3 ? 1 : 0), j, k - (playerDir == 0 ? 1 : 0) + (playerDir == 2 ? 1 : 0))).getBlock() == Blocks.SNOW))
 						{
-							for (EntityMG mg : EntityMG.mgs)
+							for(EntityMG mg : EntityMG.mgs)
 							{
-								if (mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
+								if(mg.blockX == i && mg.blockY == j + 1 && mg.blockZ == k && !mg.isDead)
 									return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
 							}
 							if(!world.isRemote)
@@ -271,7 +292,7 @@ public class ItemGun extends Item implements IPaintableItem
 								world.spawnEntity(mg);
 								
 							}
-							if (!entityplayer.capabilities.isCreativeMode)
+							if(!entityplayer.capabilities.isCreativeMode)
 								itemstack.setCount(0);
 						}
 					}
@@ -296,7 +317,7 @@ public class ItemGun extends Item implements IPaintableItem
 	public void onUpdateClient(ItemStack gunstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
 		if(!(entity instanceof EntityPlayer))
-		{			
+		{
 			return;
 		}
 		// Get useful objects
@@ -305,14 +326,14 @@ public class ItemGun extends Item implements IPaintableItem
 		PlayerData data = PlayerHandler.getPlayerData(player, Side.CLIENT);
 		
 		// Play idle sounds
-		if (soundDelay <= 0 && type.idleSound != null)
+		if(soundDelay <= 0 && type.idleSound != null)
 		{
 			PacketPlaySound.sendSoundPacket(entity.posX, entity.posY, entity.posZ, FlansMod.soundRange, entity.dimension, type.idleSound, false);
 			soundDelay = type.idleSoundLength;
 		}
 		
 		// This code is not for deployables
-		if (type.deployable)
+		if(type.deployable)
 			return;
 		
 		// Do not shoot ammo bags, flags or dropped gun items
@@ -324,7 +345,7 @@ public class ItemGun extends Item implements IPaintableItem
 		
 		// If we have an off hand item, then disable our secondary functions
 		boolean secondaryFunctionsEnabled = true;
-				
+		
 		if(type.usableByPlayers)
 		{
 			boolean needsToReload = needsToReload(gunstack);
@@ -373,7 +394,7 @@ public class ItemGun extends Item implements IPaintableItem
 					{
 						data.shouldPlayCooldownSound = true;
 					}
-						
+					
 					//else fallthrough to full auto
 				}
 				case FULLAUTO:
@@ -400,7 +421,7 @@ public class ItemGun extends Item implements IPaintableItem
 					data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(gunstack);
 					
 					GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
-
+					
 					int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 					int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 					animations.doReload(type.reloadTime, pumpDelay, pumpTime);
@@ -425,7 +446,7 @@ public class ItemGun extends Item implements IPaintableItem
 				GunAnimations animations = FlansModClient.getGunAnimations(player, hand);
 				animations.lookAt = LookAtState.NONE;
 				float shootTime = data.GetShootTime(hand);
-									
+				
 				// For each 
 				while(shootTime <= 0.0f)
 				{
@@ -484,7 +505,7 @@ public class ItemGun extends Item implements IPaintableItem
 						ShotData shotData = new SpawnEntityShotData(gunSlot, hand, type, shootableType, player, new Vector3f(player.getLookVec()));
 						shotsFiredClient.add(shotData);
 					}
-
+					
 					// Now do client side things					
 					int pumpDelay = type.model == null ? 0 : type.model.pumpDelay;
 					int pumpTime = type.model == null ? 1 : type.model.pumpTime;
@@ -498,7 +519,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(type.getFireMode(gunstack) == EnumFireMode.BURST)
 					{
 						int burstRoundsRemaining = data.GetBurstRoundsRemaining(hand);
-
+						
 						if(burstRoundsRemaining > 0)
 							burstRoundsRemaining--;
 						else burstRoundsRemaining = type.numBurstRounds;
@@ -532,7 +553,7 @@ public class ItemGun extends Item implements IPaintableItem
 				{
 					case MAIN_HAND:
 					{
-						if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND) 
+						if(GetMouseHeld(EnumHand.OFF_HAND) && !GetLastMouseHeld(EnumHand.OFF_HAND)
 								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 						{
 							FlansModClient.SetScope(currentScope);
@@ -541,19 +562,19 @@ public class ItemGun extends Item implements IPaintableItem
 					}
 					case OFF_HAND:
 					{
-						if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND) 
+						if(GetMouseHeld(EnumHand.MAIN_HAND) && !GetLastMouseHeld(EnumHand.MAIN_HAND)
 								&& (type.secondaryFunction == EnumSecondaryFunction.ADS_ZOOM || type.secondaryFunction == EnumSecondaryFunction.ZOOM))
 						{
 							FlansModClient.SetScope(currentScope);
 						}
-						break;	
+						break;
 					}
 				}
 			}
 		}
 		
 		// And finally do sounds
-		if (soundDelay > 0)
+		if(soundDelay > 0)
 		{
 			soundDelay--;
 		}
@@ -575,7 +596,7 @@ public class ItemGun extends Item implements IPaintableItem
 		
 		
 		boolean isExtraBullet = shotData instanceof InstantShotData ? ((InstantShotData)shotData).isExtraBullet : false;
-
+		
 		//Go through the bullet stacks in the gun and see if any of them are not null
 		int bulletID = 0;
 		ItemStack bulletStack = ItemStack.EMPTY.copy();
@@ -600,7 +621,7 @@ public class ItemGun extends Item implements IPaintableItem
 			ShootableType bullet = ((ItemShootable)bulletStack.getItem()).type;
 			
 			if(!isExtraBullet)
-			{				
+			{
 				// Drop item on shooting if bullet requires it
 				if(bullet.dropItemOnShoot != null && !player.capabilities.isCreativeMode)
 					dropItem(world, player, bullet.dropItemOnShoot);
@@ -611,7 +632,7 @@ public class ItemGun extends Item implements IPaintableItem
 				if(type.knockback > 0)
 				{
 					//TODO : Apply knockback		
-				}	
+				}
 				
 				//Damage the bullet item
 				bulletStack.setItemDamage(bulletStack.getItemDamage() + 1);
@@ -627,7 +648,7 @@ public class ItemGun extends Item implements IPaintableItem
 			if(shotData instanceof SpawnEntityShotData)
 			{
 				// Play a sound if the previous sound has finished
-				if (soundDelay <= 0 && type.shootSound != null)
+				if(soundDelay <= 0 && type.shootSound != null)
 				{
 					AttachmentType barrel = type.getBarrel(gunstack);
 					boolean silenced = barrel != null && barrel.silencer;
@@ -638,23 +659,23 @@ public class ItemGun extends Item implements IPaintableItem
 				
 				//Shoot
 				// Spawn the bullet entities
-				for (int k = 0; k < type.numBullets * bullet.numBullets; k++)
+				for(int k = 0; k < type.numBullets * bullet.numBullets; k++)
 				{
 					// Actually shoot the bullet
-					((ItemShootable)bulletStack.getItem()).Shoot(world, 
-							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ), 
-							new Vector3f(player.getLookVec()), 
-							type.getDamage(gunstack), 
+					((ItemShootable)bulletStack.getItem()).Shoot(world,
+							new Vector3f(player.posX, player.posY + player.getEyeHeight(), player.posZ),
+							new Vector3f(player.getLookVec()),
+							type.getDamage(gunstack),
 							(player.isSneaking() ? 0.7F : 1F) * type.getSpread(gunstack) * bullet.bulletSpread,
-							type.getBulletSpeed(gunstack), 
-							type, 
+							type.getBulletSpeed(gunstack),
+							type,
 							player);
 				}
 			}
 			// Do a raytrace check on what they've sent us.
 			else if(shotData instanceof InstantShotData)
 			{
-				InstantShotData instantData = (InstantShotData) shotData;
+				InstantShotData instantData = (InstantShotData)shotData;
 				//if(stuff)
 				//{
 				//	calculate our own raytrace to verify they're not cheating
@@ -681,10 +702,10 @@ public class ItemGun extends Item implements IPaintableItem
 	private void PlayShotSound(World world, boolean silenced, float x, float y, float z)
 	{
 		FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-				new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent(type.shootSound), 
+				new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent(type.shootSound),
 						SoundCategory.PLAYERS,
-						silenced ? 5F : 10F, 
-						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F) ,
+						silenced ? 5F : 10F,
+						(type.distortSound ? 1.0F / (world.rand.nextFloat() * 0.4F + 0.8F) : 1.0F) * (silenced ? 2F : 1F),
 						x, y, z));
 	}
 	
@@ -698,10 +719,10 @@ public class ItemGun extends Item implements IPaintableItem
 		if(world.isRemote)
 		{
 			// Play a sound if the previous sound has finished
-			if (!isExtraBullet && soundDelay <= 0 && type.shootSound != null && shooter != null)
-			{				
+			if(!isExtraBullet && soundDelay <= 0 && type.shootSound != null && shooter != null)
+			{
 				PlayShotSound(world, silenced, (float)shooter.posX, (float)shooter.posY, (float)shooter.posZ);
-
+				
 				soundDelay = type.shootSoundLength;
 			}
 			
@@ -729,26 +750,26 @@ public class ItemGun extends Item implements IPaintableItem
 					for(int i = 0; i < 2; i++)
 					{
 						// TODO: [1.12] Check why this isn't moving right 
-		                float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
-		                   
-		                double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-		                double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-		                double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+						float scale = (float)world.rand.nextGaussian() * 0.1f + 0.5f;
 						
-		                motionX += bulletDir.x;
-		                motionY += bulletDir.y;
-		                motionZ += bulletDir.z;
-		                
-		                Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
-		                		EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ, 
-		                		Block.getIdFromBlock(blockState.getBlock()));
+						double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+						double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+						double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+						
+						motionX += bulletDir.x;
+						motionY += bulletDir.y;
+						motionZ += bulletDir.z;
+						
+						Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(
+								EnumParticleTypes.BLOCK_CRACK.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ,
+								Block.getIdFromBlock(blockState.getBlock()));
 					}
 				}
 				
 				double scale = world.rand.nextGaussian() * 0.05d + 0.05d;
-                double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
-                double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
-                double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
+				double motionX = (double)normal.getX() * scale + world.rand.nextGaussian() * 0.025d;
+				double motionY = (double)normal.getY() * scale + world.rand.nextGaussian() * 0.025d;
+				double motionZ = (double)normal.getZ() * scale + world.rand.nextGaussian() * 0.025d;
 				
 				Particle fx = Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.CLOUD.getParticleID(), hit.x, hit.y, hit.z, motionX, motionY, motionZ);
 			}
@@ -768,7 +789,7 @@ public class ItemGun extends Item implements IPaintableItem
 						if(FlansModClient.teamInfo != null)
 						{
 							Team shooterTeam = FlansModClient.teamInfo.getTeam((EntityPlayer)shooter);
-							Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit) hitData).hitbox.player);
+							Team victimTeam = FlansModClient.teamInfo.getTeam(((PlayerBulletHit)hitData).hitbox.player);
 							if(shooterTeam == null || shooterTeam != victimTeam)
 							{
 								FlansModClient.AddHitMarker();
@@ -811,13 +832,15 @@ public class ItemGun extends Item implements IPaintableItem
 		
 		if(!shotsFiredServer.isEmpty())// && entity.ticksExisted % SERVER_TO_CLIENT_UPDATE_INTERVAL == 0)
 		{
-			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension );
+			FlansMod.getPacketHandler().sendToDimension(new PacketShotData(shotsFiredServer), player.dimension);
 			shotsFiredServer.clear();
 		}
 	}
 	
-	/** Generic update method. If we have an off hand weapon, it will also make calls for that 
-	 *  Passes on to onUpdateEach */
+	/**
+	 * Generic update method. If we have an off hand weapon, it will also make calls for that
+	 * Passes on to onUpdateEach
+	 */
 	@Override
 	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
 	{
@@ -825,7 +848,7 @@ public class ItemGun extends Item implements IPaintableItem
 		{
 			EntityPlayer player = (EntityPlayer)entity;
 			EnumHand hand = EnumHand.MAIN_HAND;
-			if(itemstack == player.getHeldItemMainhand()) 
+			if(itemstack == player.getHeldItemMainhand())
 			{
 				hand = EnumHand.MAIN_HAND;
 			}
@@ -855,12 +878,14 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 	}
 	
-	/** Called once for each weapon we are weilding */
+	/**
+	 * Called once for each weapon we are weilding
+	 */
 	private void onUpdateEach(ItemStack itemstack, int gunSlot, World world, Entity entity, EnumHand hand, boolean hasOffHand)
 	{
 		if(world.isRemote)
 			onUpdateClient(itemstack, gunSlot, world, entity, hand, hasOffHand);
-		else onUpdateServer(itemstack, gunSlot, world, entity, hand, hasOffHand);		
+		else onUpdateServer(itemstack, gunSlot, world, entity, hand, hasOffHand);
 	}
 	
 	public boolean Reload(ItemStack gunstack, World world, Entity entity, IInventory inventory, EnumHand hand, boolean hasOffHand, boolean forceReload, boolean isCreative)
@@ -882,14 +907,14 @@ public class ItemGun extends Item implements IPaintableItem
 			
 			//If there is no magazine, if the magazine is empty or if this is a forced reload
 			if(bulletStack == null || bulletStack.isEmpty() || bulletStack.getItemDamage() == bulletStack.getMaxDamage() || forceReload)
-			{		
+			{
 				//Iterate over all inventory slots and find the magazine / bullet item with the most bullets
 				int bestSlot = -1;
 				int bulletsInBestSlot = 0;
-				for (int j = 0; j < inventory.getSizeInventory(); j++)
+				for(int j = 0; j < inventory.getSizeInventory(); j++)
 				{
 					ItemStack item = inventory.getStackInSlot(j);
-					if (item != null && item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
+					if(item != null && item.getItem() instanceof ItemShootable && type.isAmmo(((ItemShootable)(item.getItem())).type))
 					{
 						int bulletsInThisSlot = item.getMaxDamage() - item.getItemDamage();
 						if(bulletsInThisSlot > bulletsInBestSlot)
@@ -911,7 +936,7 @@ public class ItemGun extends Item implements IPaintableItem
 						if(!world.isRemote)
 							dropItem(world, entity, ((ItemShootable)bulletStack.getItem()).type.dropItemOnReload);
 					}
-						
+					
 					//The magazine was not finished, pull it out and give it back to the player or, failing that, drop it
 					if(bulletStack != null && !bulletStack.isEmpty() && bulletStack.getItemDamage() < bulletStack.getMaxDamage())
 					{
@@ -921,11 +946,11 @@ public class ItemGun extends Item implements IPaintableItem
 								entity.entityDropItem(bulletStack, 0.5F);
 						}
 					}
-							
+					
 					//Load the new magazine
 					ItemStack stackToLoad = newBulletStack.copy();
 					stackToLoad.setCount(1);
-					setBulletItemStack(gunstack, stackToLoad, i);					
+					setBulletItemStack(gunstack, stackToLoad, i);
 					
 					//Remove the magazine from the inventory
 					if(!isCreative)
@@ -933,7 +958,7 @@ public class ItemGun extends Item implements IPaintableItem
 					if(newBulletStack.getCount() <= 0)
 						newBulletStack = ItemStack.EMPTY.copy();
 					inventory.setInventorySlotContents(bestSlot, newBulletStack);
-								
+					
 					
 					//Tell the sound player that we reloaded something
 					reloadedSomething = true;
@@ -1191,7 +1216,7 @@ public class ItemGun extends Item implements IPaintableItem
 		}
 		return null;
 	}
-		
+	
 	
 	// _____________________________________________________________________________
 	//
@@ -1226,7 +1251,7 @@ public class ItemGun extends Item implements IPaintableItem
 			ItemStack bulletStack = getBulletItemStack(stack, i);
 			if(bulletStack != null && bulletStack.getItem() instanceof ItemBullet)
 			{
-				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;					
+				BulletType bulletType = ((ItemBullet)bulletStack.getItem()).type;
 				//String line = bulletType.name + (bulletStack.getMaxDamage() == 1 ? "" : " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage());
 				String line = bulletType.name + " " + (bulletStack.getMaxDamage() - bulletStack.getItemDamage()) + "/" + bulletStack.getMaxDamage();
 				lines.add(line);
@@ -1249,7 +1274,7 @@ public class ItemGun extends Item implements IPaintableItem
 	private boolean isSolid(World world, int i, int j, int k)
 	{
 		IBlockState state = world.getBlockState(new BlockPos(i, j, k));
-		if (state == null)
+		if(state == null)
 			return false;
 		return state.getMaterial().isSolid() && state.isOpaqueCube();
 	}
@@ -1260,18 +1285,20 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		return type.secondaryFunction != EnumSecondaryFunction.MELEE;
 	}
-
+	
 	@Override
-	public boolean hasCustomEntity(ItemStack stack) {
+	public boolean hasCustomEntity(ItemStack stack)
+	{
 		return true;
 	}
-
+	
 	@Nullable
 	@Override
-	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        return new EntityItemCustomRender(location, itemstack);
+	public Entity createEntity(World world, Entity location, ItemStack itemstack)
+	{
+		return new EntityItemCustomRender(location, itemstack);
 	}
-
+	
 	@Override
 	public boolean isFull3D()
 	{
@@ -1281,7 +1308,7 @@ public class ItemGun extends Item implements IPaintableItem
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack)
 	{
-		if (type.meleeSound != null)
+		if(type.meleeSound != null)
 			PacketPlaySound.sendSoundPacket(entityLiving.posX, entityLiving.posY, entityLiving.posZ, FlansMod.soundRange, entityLiving.dimension, type.meleeSound, true);
 		//Do custom melee code here
 		if(type.secondaryFunction == EnumSecondaryFunction.CUSTOM_MELEE)
@@ -1303,17 +1330,17 @@ public class ItemGun extends Item implements IPaintableItem
 	}
 	
 	@Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
-    {
-        return true;
-    }
-
+	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
+	{
+		return true;
+	}
+	
 	@Override
-	 public boolean canHarvestBlock(IBlockState state, ItemStack stack)
-    {
-        return false;
-    }
-    
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack)
+	{
+		return false;
+	}
+	
 	public boolean isItemStackDamageable()
 	{
 		return true;
@@ -1321,75 +1348,75 @@ public class ItemGun extends Item implements IPaintableItem
 	
 	// ----------------- Paintjobs -----------------
 	
-	 @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
-    {
-    	if(tab != FlansMod.tabFlanGuns && tab != CreativeTabs.SEARCH)
-    		return;
-		 
-    	PaintableType type = ((IPaintableItem)this).GetPaintableType();
-    	if(FlansMod.addAllPaintjobsToCreative)
-    	{
-    		for(Paintjob paintjob : type.paintjobs)
-    			addPaintjobToList(this, type, paintjob, items);
-    	}
-        else addPaintjobToList(this, type, type.defaultPaintjob, items);
-    }
-
-    private void addPaintjobToList(Item item, PaintableType type, Paintjob paintjob, List list)
-    {
-    	ItemStack paintableStack = new ItemStack(item, 1, paintjob.ID);
-    	NBTTagCompound tags = new NBTTagCompound();
-    	paintableStack.setTagCompound(tags);
-        list.add(paintableStack);
-    }
-    
-    // ---------------------------------------------
-	
-    @Override
-    public int getMaxItemUseDuration(ItemStack par1ItemStack)
-    {
-        return 100;
-    }
-    
-    @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack)
-    {
-        return EnumAction.BOW;
-    }
-	
-    protected static final UUID KNOCKBACK_RESIST_MODIFIER = UUID.fromString("77777777-645C-4F38-A497-9C13A33DB5CF");
-    protected static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("99999999-4180-4865-B01B-BCCE9785ACA3");
-    
 	@Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-    {
-        Multimap multimap = super.getAttributeModifiers(slot, stack);
-        if(slot == EntityEquipmentSlot.MAINHAND)
-        {
-	        multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));
-	        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
-	        multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
-        }
-        return multimap;
-    }
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
+	{
+		if(tab != FlansMod.tabFlanGuns && tab != CreativeTabs.SEARCH)
+			return;
+		
+		PaintableType type = ((IPaintableItem)this).GetPaintableType();
+		if(FlansMod.addAllPaintjobsToCreative)
+		{
+			for(Paintjob paintjob : type.paintjobs)
+				addPaintjobToList(this, type, paintjob, items);
+		}
+		else addPaintjobToList(this, type, type.defaultPaintjob, items);
+	}
+	
+	private void addPaintjobToList(Item item, PaintableType type, Paintjob paintjob, List list)
+	{
+		ItemStack paintableStack = new ItemStack(item, 1, paintjob.ID);
+		NBTTagCompound tags = new NBTTagCompound();
+		paintableStack.setTagCompound(tags);
+		list.add(paintableStack);
+	}
+	
+	// ---------------------------------------------
 	
 	@Override
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
-    {
-        return slotChanged;
-    }
+	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	{
+		return 100;
+	}
+	
+	@Override
+	public EnumAction getItemUseAction(ItemStack par1ItemStack)
+	{
+		return EnumAction.BOW;
+	}
+	
+	protected static final UUID KNOCKBACK_RESIST_MODIFIER = UUID.fromString("77777777-645C-4F38-A497-9C13A33DB5CF");
+	protected static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("99999999-4180-4865-B01B-BCCE9785ACA3");
+	
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
+	{
+		Multimap multimap = super.getAttributeModifiers(slot, stack);
+		if(slot == EntityEquipmentSlot.MAINHAND)
+		{
+			multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(KNOCKBACK_RESIST_MODIFIER, "KnockbackResist", type.knockbackModifier, 0));
+			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "MovementSpeed", type.moveSpeedModifier - 1.0f, 2));
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.meleeDamage, 0));
+		}
+		return multimap;
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return slotChanged;
+	}
 	
 	// For when we have custom paintjob names
 	//@Override
-    //public String getTranslationKey(ItemStack stack)
-    //{
-    //    return getTranslationKey();//stack.getTagCompound().getString("Paint");
-    //}
+	//public String getTranslationKey(ItemStack stack)
+	//{
+	//    return getTranslationKey();//stack.getTagCompound().getString("Paint");
+	//}
 	
 	@Override
-    public boolean canItemEditBlocks()
-    {
-        return false;
-    }
+	public boolean canItemEditBlocks()
+	{
+		return false;
+	}
 }

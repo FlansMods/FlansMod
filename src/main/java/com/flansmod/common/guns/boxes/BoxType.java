@@ -10,13 +10,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public abstract class BoxType extends InfoType 
+public abstract class BoxType extends InfoType
 {
 	public String topTexturePath;
 	public String sideTexturePath;
 	public String bottomTexturePath;
 	
-	public BoxType(TypeFile file) 
+	public BoxType(TypeFile file)
 	{
 		super(file);
 	}
@@ -26,12 +26,12 @@ public abstract class BoxType extends InfoType
 	{
 		super.read(split, file);
 		try
-		{		
+		{
 			topTexturePath = Read(split, "TopTexture", topTexturePath);
 			bottomTexturePath = Read(split, "BottomTexture", bottomTexturePath);
 			sideTexturePath = Read(split, "SideTexture", sideTexturePath);
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading box file failed : " + shortName);
 			FlansMod.log.throwing(e);

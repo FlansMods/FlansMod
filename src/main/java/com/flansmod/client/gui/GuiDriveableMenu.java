@@ -47,7 +47,7 @@ public class GuiDriveableMenu extends GuiContainer
 		buttonList.add(gunsButton);
 		
 		//Fuel button
-		GuiButton fuelButton = new GuiButton(2, width / 2 -60, height / 2 - 49, 58, 20, "Fuel");
+		GuiButton fuelButton = new GuiButton(2, width / 2 - 60, height / 2 - 49, 58, 20, "Fuel");
 		fuelButton.enabled = type.fuelTankSize > 0;
 		buttonList.add(fuelButton);
 		

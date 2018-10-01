@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 
 import com.flansmod.common.guns.ItemGun;
 
-public class SlotMecha extends Slot 
+public class SlotMecha extends Slot
 {
 	private EnumMechaSlotType slotType;
 	
-	public SlotMecha(IInventory inv, EnumMechaSlotType e, int x, int y) 
+	public SlotMecha(IInventory inv, EnumMechaSlotType e, int x, int y)
 	{
 		super(inv, e.ordinal(), x, y);
 		slotType = e;

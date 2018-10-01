@@ -9,7 +9,7 @@ import com.flansmod.client.ClientRenderHooks;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.InfoType;
 
-public class PacketKillMessage extends PacketBase 
+public class PacketKillMessage extends PacketBase
 {
 	public InfoType killedBy;
 	public String killerName;
@@ -30,33 +30,33 @@ public class PacketKillMessage extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeBoolean(headshot);
 		writeUTF(data, killedBy.shortName);
 		writeUTF(data, killerName);
 		writeUTF(data, killedName);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		headshot = data.readBoolean();
 		killedBy = InfoType.getType(readUTF(data));
 		killerName = readUTF(data);
 		killedName = readUTF(data);
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		FlansMod.log.warn("Received kill message packet on the server. Skipping.");
 	}
-
+	
 	@Override
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		ClientRenderHooks.addKillMessage(headshot, killedBy, killerName, killedName);
 	}
-
+	
 }

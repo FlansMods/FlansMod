@@ -15,12 +15,12 @@ public class EntityFakePlayer extends EntityFlansModShooter
 {
 	private IInventory inventory;
 	
-	public EntityFakePlayer(World world) 
+	public EntityFakePlayer(World world)
 	{
 		super(world);
 	}
 	
-	public EntityFakePlayer(World world, EntityPlayer player) 
+	public EntityFakePlayer(World world, EntityPlayer player)
 	{
 		this(world);
 		
@@ -35,7 +35,7 @@ public class EntityFakePlayer extends EntityFlansModShooter
 	}
 
 	@Override
-    protected void dropFewItems(boolean b, int i)
+	protected void dropFewItems(boolean b, int i)
 	{
 		if(!world.isRemote)
 		{
@@ -48,18 +48,18 @@ public class EntityFakePlayer extends EntityFlansModShooter
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tags) 
+	public void readEntityFromNBT(NBTTagCompound tags)
 	{
 		super.readEntityFromNBT(tags);
 		inventory = new InventoryBasic("FakePlayer", true, 40);
 		for(int i = 0; i < 40; i++)
 		{
 			inventory.setInventorySlotContents(i, new ItemStack(tags.getCompoundTag("S" + i)));
-		}	
+		}
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tags) 
+	public void writeEntityToNBT(NBTTagCompound tags)
 	{
 		super.writeEntityToNBT(tags);
 		for(int i = 0; i < 40; i++)

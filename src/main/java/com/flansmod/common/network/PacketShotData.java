@@ -31,25 +31,27 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.collection.concurrent.Debug;
 
-public class PacketShotData extends PacketBase 
+public class PacketShotData extends PacketBase
 {
 	private List<ShotData> shotData;
 	
-	public PacketShotData() {}
+	public PacketShotData()
+	{
+	}
 	
 	public PacketShotData(List<ShotData> shotData)
 	{
 		this.shotData = shotData;
 	}
-
-	public PacketShotData(ShotData shotData) 
+	
+	public PacketShotData(ShotData shotData)
 	{
 		this.shotData = new ArrayList<ShotData>();
 		this.shotData.add(shotData);
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(shotData.size());
 		for(int i = 0; i < shotData.size(); i++)
@@ -78,12 +80,12 @@ public class PacketShotData extends PacketBase
 				data.writeFloat(currentCast.damage);
 				data.writeBoolean(currentCast.isExtraBullet);
 				data.writeBoolean(currentCast.silenced);
-			}			
+			}
 		}
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		shotData = new ArrayList<ShotData>();
 		int numEntries = data.readInt();
@@ -91,7 +93,7 @@ public class PacketShotData extends PacketBase
 		{
 			// Lookup types by hash
 			byte slot = data.readByte();
-			InfoType shotFrom = InfoType.getType(data.readInt());	
+			InfoType shotFrom = InfoType.getType(data.readInt());
 			ShootableType shotType = ShootableType.getShootableType(data.readInt());
 			EnumHand hand = data.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 			
@@ -124,9 +126,9 @@ public class PacketShotData extends PacketBase
 			}
 		}
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP player) 
+	public void handleServerSide(EntityPlayerMP player)
 	{
 		for(ShotData entry : shotData)
 		{
@@ -157,10 +159,10 @@ public class PacketShotData extends PacketBase
 			}
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		for(ShotData entry : shotData)
 		{
@@ -171,10 +173,10 @@ public class PacketShotData extends PacketBase
 				{
 					ItemGun gunItem = (ItemGun)entry.shotFrom.getItem();
 					
-					gunItem.DoInstantShot(clientPlayer.world, 
-							FlansModRaytracer.GetEntityByID(instantData.shooterID), 
-							instantData.shotFrom, (BulletType)instantData.shotType, 
-							instantData.origin, instantData.hitPos, 
+					gunItem.DoInstantShot(clientPlayer.world,
+							FlansModRaytracer.GetEntityByID(instantData.shooterID),
+							instantData.shotFrom, (BulletType)instantData.shotType,
+							instantData.origin, instantData.hitPos,
 							instantData.hitData, instantData.damage,
 							instantData.isExtraBullet,
 							instantData.silenced);

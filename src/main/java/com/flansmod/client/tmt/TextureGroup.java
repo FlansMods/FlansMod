@@ -19,7 +19,7 @@ public class TextureGroup
 	{
 		poly.add(polygon);
 	}
-
+	
 	public void loadTexture()
 	{
 		loadTexture(-1);

@@ -72,9 +72,13 @@ import com.flansmod.common.types.InfoType;
 
 public class TeamsManager
 {
-	/** Overall switch for teams mod */
+	/**
+	 * Overall switch for teams mod
+	 */
 	public static boolean enabled = true;
-	/** The instance */
+	/**
+	 * The instance
+	 */
 	public static TeamsManager instance;
 	
 	//Configuration variables
@@ -87,41 +91,69 @@ public class TeamsManager
 	//Life of certain entity types. 0 is eternal.
 	public static int mgLife = 0, planeLife = 0, vehicleLife = 0, mechaLove = 0, aaLife = 0;
 	
-	/** The number of ticks for which to display the round summary page */
+	/**
+	 * The number of ticks for which to display the round summary page
+	 */
 	public static int scoreDisplayTime = 200;
-	/** The number of ticks for which to display the voting box, if enabled */
+	/**
+	 * The number of ticks for which to display the voting box, if enabled
+	 */
 	public static int votingTime = 200;
-	/** The number of ticks for which to display the rank update page */
+	/**
+	 * The number of ticks for which to display the rank update page
+	 */
 	public static int rankUpdateTime = 200;
 	
-	/** The current round in play. This class replaces the old set of 3 fields "currentGametype", "currentMap" and "teams" */
+	/**
+	 * The current round in play. This class replaces the old set of 3 fields "currentGametype", "currentMap" and "teams"
+	 */
 	public TeamsRound currentRound;
-	/** This contains a list of all the valid rounds, similar to the old RotationEntry and map rotation */
+	/**
+	 * This contains a list of all the valid rounds, similar to the old RotationEntry and map rotation
+	 */
 	public ArrayList<TeamsRound> rounds;
-	/** The list of all available maps */
+	/**
+	 * The list of all available maps
+	 */
 	public HashMap<String, TeamsMap> maps;
 	
-	/** For assigning base IDs to bases. Used primarily in client-server syncing and saving */
+	/**
+	 * For assigning base IDs to bases. Used primarily in client-server syncing and saving
+	 */
 	private int nextBaseID = 1;
 	public ArrayList<ITeamBase> bases;
 	public ArrayList<ITeamObject> objects;
 	
 	protected long time;
 	
-	/** A downwards counter that times the round (in ticks) */
+	/**
+	 * A downwards counter that times the round (in ticks)
+	 */
 	public int roundTimeLeft;
-	/** A downwards counter that times inter-round phases (in ticks) */
+	/**
+	 * A downwards counter that times inter-round phases (in ticks)
+	 */
 	public int interRoundTimeLeft;
-	/** The list of rounds currently being voted upon */
+	/**
+	 * The list of rounds currently being voted upon
+	 */
 	public TeamsRound[] voteOptions;
-	/** For forcing the next round. Not normally used */
+	/**
+	 * For forcing the next round. Not normally used
+	 */
 	public TeamsRound nextRound;
 	
-	/** Whether to use autobalance */
+	/**
+	 * Whether to use autobalance
+	 */
 	public static boolean autoBalance;
-	/** Time between autobalance attempts */
+	/**
+	 * Time between autobalance attempts
+	 */
 	public static int autoBalanceInterval;
-	/** The current message of the day. Displays at the top of the landing page */
+	/**
+	 * The current message of the day. Displays at the top of the landing page
+	 */
 	public String motd = "Welcome to the Teams server";
 	
 	//Disused. Delete when done
@@ -135,7 +167,7 @@ public class TeamsManager
 	{
 		instance = this;
 		MinecraftForge.EVENT_BUS.register(this);
-
+		
 		//Init arrays
 		bases = new ArrayList<ITeamBase>();
 		objects = new ArrayList<ITeamObject>();
@@ -193,14 +225,14 @@ public class TeamsManager
 			currentRound.gametype.tick();
 		time++;
 		
-
+		
 		//Tick bases and objects
 		for(ITeamBase base : bases)
 			base.tick();
 		for(ITeamObject object : objects)
 			object.tick();
 		if(overrideHunger && currentRound != null)
-			for(World world :FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
+			for(World world : FMLCommonHandler.instance().getMinecraftServerInstance().worlds)
 				for(Object player : world.playerEntities)
 					((EntityPlayer)player).getFoodStats().addStats(20, 10F);
 		
@@ -229,7 +261,7 @@ public class TeamsManager
 							pickVoteOptions();
 						displayVotingGUI();
 					}
-				}	
+				}
 			}
 			//If the timer is finished, start the next round
 			if(interRoundTimeLeft == 0)
@@ -268,10 +300,10 @@ public class TeamsManager
 			{
 				OnRoundEnded();
 			}
-		}	
+		}
 	}
 	
-	protected void OnRoundEnded() 
+	protected void OnRoundEnded()
 	{
 		//The round has ended on a timer, so display the scoreboard summary
 		roundTimeLeft = 0;
@@ -281,7 +313,7 @@ public class TeamsManager
 		currentRound.gametype.roundEnd();
 		PlayerHandler.roundEnded();
 	}
-
+	
 	public boolean needAutobalance()
 	{
 		if(!autoBalance() || currentRound == null || currentRound.teams.length != 2)
@@ -324,10 +356,10 @@ public class TeamsManager
 	{
 		switch(Gametype.rand.nextInt(4))
 		{
-		case 0 : return "That's time!";
-		case 1 : return "How dull; a tie...";
-		case 2 : return "Everybody's a loser but the clock.";
-		default : return "Time up.";
+			case 0: return "That's time!";
+			case 1: return "How dull; a tie...";
+			case 2: return "Everybody's a loser but the clock.";
+			default: return "Time up.";
 		}
 	}
 	
@@ -360,7 +392,7 @@ public class TeamsManager
 		voteOptions[Gametype.rand.nextInt(voteOptions.length)] = rounds.get(Gametype.rand.nextInt(rounds.size()));
 	}
 	
-	public void start() 
+	public void start()
 	{
 		if(!enabled || rounds.size() == 0)
 			return;
@@ -368,7 +400,7 @@ public class TeamsManager
 		//Can only start once
 		//if(currentRound != null)
 		//	return;
-			
+		
 		if(currentRound != null)
 		{
 			
@@ -384,7 +416,7 @@ public class TeamsManager
 	{
 		if(!enabled || rounds.size() == 0)
 			return;
-				
+		
 		//If the next round has not been forced
 		if(nextRound == null)
 		{
@@ -425,7 +457,7 @@ public class TeamsManager
 						voteOptions[i].popularity = 1F - (1F - voteOptions[i].popularity) * 0.8F;
 						voteOptions[i].roundsSincePlayed = 0;
 					}
-					else 
+					else
 					{
 						voteOptions[i].popularity *= 0.9F;
 						voteOptions[i].popularity += 0.01F;
@@ -482,7 +514,9 @@ public class TeamsManager
 		messageAll("\u00a7fA new round has started!");
 	}
 	
-	/** Called at the start of a round. Shows all players the team selection menu. Exludes people on the building / op team */
+	/**
+	 * Called at the start of a round. Shows all players the team selection menu. Exludes people on the building / op team
+	 */
 	public void showTeamsMenuToAll()
 	{
 		showTeamsMenuToAll(false);
@@ -499,35 +533,36 @@ public class TeamsManager
 			//Catch for people not on a team, such as builders
 			if(data.builder && playerIsOp(player))
 				continue;
-
+			
 			sendTeamsMenuToPlayer((EntityPlayerMP)player, info);
 		}
 	}
-			
+	
 	@SubscribeEvent
 	public void onPlayerInteract(EntityInteract event)
 	{
 		if(event.getEntityPlayer().inventory.getCurrentItem() != null && event.getEntityPlayer().inventory.getCurrentItem().getItem() instanceof ItemOpStick)
 			((ItemOpStick)event.getEntityPlayer().inventory.getCurrentItem().getItem()).clickedEntity(event.getEntityPlayer().world, event.getEntityPlayer(), event.getTarget());
-	}	
+	}
 	
-	/** Stop damage being taken when it shouldn't 
+	/**
+	 * Stop damage being taken when it shouldn't
 	 * N - NoTeam, S - Spectator, 1 - Team 1, 2 - Team 2, O - Other (mobs and world inflicted damage etc)
-	 * 
-	 *   | N S O 1 2 
-	 *  ------------
-	 *  N| y n y n n
-	 *  S| n n n n n
-	 *  O| y n y y y
-	 *  1| n n y G G
-	 *  2| n n y G G
-	 * 
+	 * <p>
+	 * | N S O 1 2
+	 * ------------
+	 * N| y n y n n
+	 * S| n n n n n
+	 * O| y n y y y
+	 * 1| n n y G G
+	 * 2| n n y G G
+	 * <p>
 	 * y - yes, can hurt
 	 * n - no, can't hurt
 	 * G - decided by gametype
-	 * */
+	 */
 	@SubscribeEvent
-	public void onEntityHurt(LivingAttackEvent event) 
+	public void onEntityHurt(LivingAttackEvent event)
 	{
 		if(!enabled || currentRound == null)
 			return;
@@ -545,7 +580,7 @@ public class TeamsManager
 			
 			if(source instanceof EntityDamageSource && source.getImmediateSource() instanceof EntityPlayerMP)
 			{
-				EntityPlayerMP attacker = ((EntityPlayerMP) source.getImmediateSource());
+				EntityPlayerMP attacker = ((EntityPlayerMP)source.getImmediateSource());
 				PlayerData attackerData = PlayerHandler.getPlayerData(attacker);
 				
 				if(attackerData == null)
@@ -563,12 +598,12 @@ public class TeamsManager
 				}
 				
 				//Cannot be fights between people in the game and outside the game
-				if((attackerData.team == null && data.team != null) || (attackerData.team != null && data.team == null)) 
+				if((attackerData.team == null && data.team != null) || (attackerData.team != null && data.team == null))
 				{
 					event.setCanceled(true);
 					return;
 				}
-
+				
 				//Final case. Either the two players are not in the game (in which case, ignore) or they are both in the game.
 				//At this point, we pass over to the gametype
 				if(attackerData.team != null && data.team != null)
@@ -588,9 +623,11 @@ public class TeamsManager
 		}
 	}
 	
-	/** Handles entity deaths. Passes information to gametype for scoring */
+	/**
+	 * Handles entity deaths. Passes information to gametype for scoring
+	 */
 	@SubscribeEvent
-	public void onEntityKilled(LivingDeathEvent event) 
+	public void onEntityKilled(LivingDeathEvent event)
 	{
 		if(!enabled)
 			return;
@@ -613,7 +650,9 @@ public class TeamsManager
 		}
 	}
 	
-	/** Base and object gathering hooks for entities, not tile entities */
+	/**
+	 * Base and object gathering hooks for entities, not tile entities
+	 */
 	@SubscribeEvent
 	public void entityJoinedWorld(EntityJoinWorldEvent event)
 	{
@@ -624,7 +663,7 @@ public class TeamsManager
 		if(event.getEntity() instanceof ITeamObject)
 		{
 			objects.add((ITeamObject)event.getEntity());
-		}	
+		}
 	}
 	
 	@SubscribeEvent
@@ -634,7 +673,7 @@ public class TeamsManager
 			return;
 		if(event.getEntityPlayer().world.isRemote)
 			return;
-
+		
 		ItemStack currentItem = event.getEntityPlayer().getHeldItemMainhand();
 		if(currentItem != null && currentItem.getItem() != null && currentItem.getItem() instanceof ItemOpStick)
 		{
@@ -660,7 +699,7 @@ public class TeamsManager
 		if(event.getHand() == EnumHand.MAIN_HAND && event.getEntityPlayer().getHeldItemMainhand() != null && event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
 			//event.setCanceled(true);
-			return;	
+			return;
 		}
 		
 		if(event.getEntityPlayer().world.isRemote)
@@ -699,7 +738,7 @@ public class TeamsManager
 				if(stack != null && !stack.isEmpty())
 				{
 					if(stack.getItem() instanceof ItemGun)
-					{	
+					{
 						EntityGunItem gunEntity = new EntityGunItem(entity);
 						stack.setCount(0);
 						boolean alreadyAdded = false;
@@ -735,7 +774,7 @@ public class TeamsManager
 					{
 						gunEntity.ammoStacks.add(ammoItemstack.copy());
 						ammoItemstack.setCount(0);
-					}	
+					}
 				}
 			}
 		}
@@ -758,10 +797,12 @@ public class TeamsManager
 			}
 		}
 		event.getDrops().removeAll(dropsToThrow);
-
+		
 	}
 	
-	/** Stop spectators looting items */
+	/**
+	 * Stop spectators looting items
+	 */
 	@SubscribeEvent
 	public void playerLoot(EntityItemPickupEvent event)
 	{
@@ -776,9 +817,9 @@ public class TeamsManager
 			}
 		}
 	}
-		
+	
 	@SubscribeEvent
-	public void onPlayerRespawn(PlayerEvent event) 
+	public void onPlayerRespawn(PlayerEvent event)
 	{
 		if(event instanceof PlayerEvent.PlayerRespawnEvent)
 			respawnPlayer(event.player, false);
@@ -788,7 +829,7 @@ public class TeamsManager
 			onPlayerLogin(event.player);
 	}
 	
-	public void onPlayerLogin(EntityPlayer player) 
+	public void onPlayerLogin(EntityPlayer player)
 	{
 		if(!enabled || currentRound == null)
 			return;
@@ -801,7 +842,7 @@ public class TeamsManager
 		}
 	}
 	
-	public void onPlayerLogout(EntityPlayer player) 
+	public void onPlayerLogout(EntityPlayer player)
 	{
 		for(Team team : Team.teams)
 			team.removePlayer(player);
@@ -834,20 +875,20 @@ public class TeamsManager
 				//playerMP.setRotationYawHead(f);
 			}
 		}
-
+		
 		//To set their next spawn position, override their bed position
 		setPlayersNextSpawnpoint(playerMP);
-
+		
 		if(forceAdventureMode)
 			player.setGameType(GameType.ADVENTURE);
-		resetInventory(player);	
+		resetInventory(player);
 		currentRound.gametype.playerRespawned((EntityPlayerMP)player);
 	}
 	
 	private void setPlayersNextSpawnpoint(EntityPlayerMP player, BlockPos pos, int dimension)
 	{
 		player.setSpawnChunk(pos, true, dimension);
-	}	
+	}
 	
 	private void setPlayersNextSpawnpoint(EntityPlayerMP player)
 	{
@@ -855,7 +896,7 @@ public class TeamsManager
 			return;
 		
 		PlayerData data = PlayerHandler.getPlayerData(player);
-
+		
 		Vec3d spawnPoint = currentRound.gametype.getSpawnPoint(player);
 		if(spawnPoint != null)
 			setPlayersNextSpawnpoint(player, new BlockPos(MathHelper.floor(spawnPoint.x), MathHelper.floor(spawnPoint.y) + 1, MathHelper.floor(spawnPoint.z)), 0);
@@ -864,7 +905,9 @@ public class TeamsManager
 					(data.newTeam == null ? "null" : data.newTeam.name));
 	}
 	
-	/** Force a respawn */
+	/**
+	 * Force a respawn
+	 */
 	public void forceRespawn(EntityPlayerMP player)
 	{
 		if(playerIsOp(player) && PlayerHandler.getPlayerData(player).builder)
@@ -888,7 +931,7 @@ public class TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp =FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -910,11 +953,12 @@ public class TeamsManager
 	}
 	
 	public boolean playerIsOp(EntityPlayer player)
-	{ 
+	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 	}
 	
-	public boolean autoBalance() {
+	public boolean autoBalance()
+	{
 		return !(currentRound != null && !currentRound.gametype.shouldAutobalance()) && autoBalance;
 	}
 	
@@ -937,7 +981,7 @@ public class TeamsManager
 				data.builder = true;
 				return;
 			}
-			else teamName = "spectators"; 
+			else teamName = "spectators";
 		}
 		
 		//The team the player selected
@@ -945,12 +989,13 @@ public class TeamsManager
 		//They cannot pick no team
 		if(selectedTeam == null)
 			selectedTeam = Team.spectators;
-
+		
 		//Validate the selected team
 		boolean isValid = selectedTeam == Team.spectators;
 		Team[] validTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
-		for (Team validTeam : validTeams) {
-			if (selectedTeam == validTeam)
+		for(Team validTeam : validTeams)
+		{
+			if(selectedTeam == validTeam)
 				isValid = true;
 		}
 		//Default to spectator
@@ -974,7 +1019,7 @@ public class TeamsManager
 			respawnPlayer(player, true);
 		}
 		//Give other players the chance to select a class
-		else 
+		else
 		{
 			Team otherTeam = currentRound.getOtherTeam(selectedTeam);
 			if(autoBalance() && selectedTeam.members.size() > otherTeam.members.size() + 1)
@@ -986,7 +1031,7 @@ public class TeamsManager
 			data.newTeam = selectedTeam;
 			sendClassMenuToPlayer(player);
 		}
-					
+		
 		currentRound.gametype.playerChoseTeam(player, data.team, selectedTeam);
 	}
 	
@@ -1061,12 +1106,12 @@ public class TeamsManager
 			}
 		}
 	}
-		
+	
 	public void resetInventory(EntityPlayer player)
 	{
 		Team team = PlayerHandler.getPlayerData(player).team;
 		IPlayerClass playerClass = PlayerHandler.getPlayerData(player).getPlayerClass();
-
+		
 		if(team == null)
 			return;
 		
@@ -1080,7 +1125,7 @@ public class TeamsManager
 		if(team.legs != null)
 			player.setItemStackToSlot(EntityEquipmentSlot.LEGS, team.legs.copy());
 		if(team.shoes != null)
-			player.setItemStackToSlot(EntityEquipmentSlot.FEET, team.shoes.copy());	
+			player.setItemStackToSlot(EntityEquipmentSlot.FEET, team.shoes.copy());
 		
 		if(playerClass == null)
 			return;
@@ -1093,7 +1138,7 @@ public class TeamsManager
 		if(playerClass.GetLegs() != null)
 			player.setItemStackToSlot(EntityEquipmentSlot.LEGS, playerClass.GetLegs().copy());
 		if(playerClass.GetShoes() != null)
-			player.setItemStackToSlot(EntityEquipmentSlot.FEET, playerClass.GetShoes().copy());	
+			player.setItemStackToSlot(EntityEquipmentSlot.FEET, playerClass.GetShoes().copy());
 		
 		for(ItemStack stack : playerClass.GetStartingItems())
 		{
@@ -1111,7 +1156,7 @@ public class TeamsManager
 			}
 		}
 	}
-			
+	
 	//---------------------------------------------------------
 	// Saving and Loading
 	//---------------------------------------------------------
@@ -1222,14 +1267,14 @@ public class TeamsManager
 		{
 			maps.put("default" + dimension, new TeamsMap(world, "default" + dimension, "Default " + world.getWorldInfo().getWorldName()));
 		}
-
+		
 		//Read the rounds list		
 		for(int i = 0; i < tags.getInteger("RoundsSize"); i++)
 		{
 			TeamsRound round = new TeamsRound(tags.getCompoundTag("Round_" + i));
 			rounds.add(round);
 		}
-
+		
 		//Read variables
 		enabled = tags.getBoolean("Enabled");
 		voting = tags.getBoolean("Voting");
@@ -1294,7 +1339,7 @@ public class TeamsManager
 		{
 			gametype.saveToNBT(tags);
 		}
-
+		
 		//Save variables
 		tags.setBoolean("Enabled", enabled);
 		tags.setBoolean("Voting", voting);
@@ -1319,13 +1364,12 @@ public class TeamsManager
 	}
 	
 	
-	
 	private boolean checkFileExists(File file)
 	{
 		if(!file.exists())
 		{
 			try
-			{ 
+			{
 				file.createNewFile();
 				FlansMod.log.info("Created new file");
 			}
@@ -1336,7 +1380,7 @@ public class TeamsManager
 				FlansMod.log.throwing(e);
 			}
 			return false;
-		}	
+		}
 		return true;
 	}
 	
@@ -1371,7 +1415,7 @@ public class TeamsManager
 		if(base.getBaseID() == 0)
 			base.setBaseID(nextBaseID++);
 		bases.add(base);
-	}	
+	}
 	
 	public void registerObject(ITeamObject obj)
 	{
@@ -1386,7 +1430,7 @@ public class TeamsManager
 	public static void log(String s)
 	{
 		FlansMod.log.info("Teams Info : " + s);
-	}	
+	}
 	
 	public static void messagePlayer(EntityPlayerMP player, String s)
 	{
@@ -1411,9 +1455,11 @@ public class TeamsManager
 	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 	}
-
-	/** Returns the team associated with the given ID */
-	public Team getTeam(int spawnerTeamID) 
+	
+	/**
+	 * Returns the team associated with the given ID
+	 */
+	public Team getTeam(int spawnerTeamID)
 	{
 		if(!enabled || currentRound == null || spawnerTeamID == 0)
 			return null;
@@ -1421,9 +1467,11 @@ public class TeamsManager
 			return Team.spectators;
 		return currentRound.teams[spawnerTeamID - 2];
 	}
-
-	/** The maps HashMap is indexed by shortName, not full name, so this method helps there */
-	public TeamsMap getMapFromFullName(String string) 
+	
+	/**
+	 * The maps HashMap is indexed by shortName, not full name, so this method helps there
+	 */
+	public TeamsMap getMapFromFullName(String string)
 	{
 		for(TeamsMap map : maps.values())
 		{
@@ -1432,8 +1480,8 @@ public class TeamsManager
 		}
 		return null;
 	}
-
-	public void SelectTeam(Team team) 
+	
+	public void SelectTeam(Team team)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);

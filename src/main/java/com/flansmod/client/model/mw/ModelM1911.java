@@ -19,7 +19,7 @@ public class ModelM1911 extends ModelM9
 		
 		gunModel[2] = new ModelRendererTurbo(this, 0, 6, textureX, textureY);
 		gunModel[2].addBox(-1F, 2F, -1F, 8, 1, 2);
-
+		
 		gunModel[3] = new ModelRendererTurbo(this, 0, 9, textureX, textureY);
 		gunModel[3].addBox(-0.5F, 3.5F, -0.5F, 8, 1, 1);
 		

@@ -9,17 +9,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
-public class EntityCamera extends EntityLivingBase 
+public class EntityCamera extends EntityLivingBase
 {
 	public EntityDriveable driveable;
 	
-	public EntityCamera(World world) 
+	public EntityCamera(World world)
 	{
 		super(world);
 		setSize(0F, 0F);
 	}
 	
-	public EntityCamera(World world, EntityDriveable d) 
+	public EntityCamera(World world, EntityDriveable d)
 	{
 		this(world);
 		driveable = d;
@@ -54,29 +54,29 @@ public class EntityCamera extends EntityLivingBase
 		for(; rotationYaw - prevRotationYaw >= 180F; rotationYaw -= 360F) ;
 		for(; rotationYaw - prevRotationYaw < -180F; rotationYaw += 360F) ;
 	}
-
+	
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList() 
+	public Iterable<ItemStack> getArmorInventoryList()
 	{
 		return null;
 	}
-
+	
 	@Override
-	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) 
+	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
 	{
 		return ItemStack.EMPTY.copy();
 	}
-
+	
 	@Override
-	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) 
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
 	{
 		
 	}
-
+	
 	@Override
-	public EnumHandSide getPrimaryHand() 
+	public EnumHandSide getPrimaryHand()
 	{
 		return EnumHandSide.RIGHT;
 	}
-
+	
 }

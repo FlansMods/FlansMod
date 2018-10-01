@@ -86,9 +86,9 @@ import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 
-public class ClientRenderHooks 
+public class ClientRenderHooks
 {
-	public static final ResourceLocation offHand = new ResourceLocation("flansmod","gui/offHand.png");
+	public static final ResourceLocation offHand = new ResourceLocation("flansmod", "gui/offHand.png");
 	public static final ResourceLocation hitMarker = new ResourceLocation("flansmod", "gui/hitMarker.png");
 	private Minecraft mc;
 	private float fovModifierHandPrev, fovModifierHand;
@@ -115,7 +115,9 @@ public class ClientRenderHooks
 		customRenderers[EnumType.mecha.ordinal()] = new RenderMecha(rm);
 	}
 	
-	/** Render guns in 3D in item frames */
+	/**
+	 * Render guns in 3D in item frames
+	 */
 	public void renderItemFrame(RenderItemInFrameEvent event)
 	{
 		if(event.getItem().getItem() instanceof ItemGun)
@@ -139,9 +141,11 @@ public class ClientRenderHooks
 		}
 	}
 	
-	/** When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too. */
+	/**
+	 * When Minecraft would render a 2D gun item, instead cancel it and render the gun properly. Render the offhand gun too.
+	 */
 	public void renderHeldItem(RenderSpecificHandEvent event)
-	{		
+	{
 		EntityPlayer player = mc.player;
 		
 		ItemStack stack = event.getItemStack();
@@ -162,158 +166,158 @@ public class ClientRenderHooks
 				
 				GlStateManager.clear(256);
 				GlStateManager.matrixMode(5889);
-		        GlStateManager.loadIdentity();
-		        
-		        float separation = 0.07F;
-		        
-		        Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
-		        GlStateManager.matrixMode(5888);
-		        GlStateManager.loadIdentity();
-
-		        GlStateManager.pushMatrix();
-		        hurtCameraEffect(partialTicks);
-
-		        if(mc.gameSettings.viewBobbing)
-		        	setupViewBobbing(partialTicks);
-
-		        boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
-
-		        if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
-		        {
-		        	renderer.enableLightmap();
-		    		float f1 = 1.0F - (prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks);
-		            EntityPlayerSP entityplayersp = this.mc.player;
-		            float f2 = entityplayersp.getSwingProgress(partialTicks);
-		            float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
-		            float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
-		            
-		            //Setup lighting
-		            GlStateManager.disableLighting();
-		            GlStateManager.pushMatrix();
-		            GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
-		            GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
-		            RenderHelper.enableStandardItemLighting();
-		            GlStateManager.popMatrix();
-		            
-		            //Do lighting
-		            int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX, entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
-		            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535), (float)(i >> 16));
-		            
-		            //Do hand rotations
-		            float f5 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
-		            float f6 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
-		            GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
-		            GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
-		            
-		            GlStateManager.enableRescaleNormal();
-		            GlStateManager.pushMatrix();
-
-		            //Do vanilla weapon swing
-		            float f7 = -0.4F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
-		            float f8 = 0.2F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI * 2.0F);
-		            float f9 = -0.2F * MathHelper.sin(f2 * (float)Math.PI);
-		            GlStateManager.translate(f7, f8, f9);
-		            
-		            GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
-		            GlStateManager.translate(0.0F, f1 * -0.6F, 0.0F);
-		            GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
-		            float f10 = MathHelper.sin(f2 * f2 * (float)Math.PI);
-		            float f11 = MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
-		            GlStateManager.rotate(f10 * -20.0F, 0.0F, 1.0F, 0.0F);
-		            GlStateManager.rotate(f11 * -20.0F, 0.0F, 0.0F, 1.0F);
-		            GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
-		            GlStateManager.scale(0.4F, 0.4F, 0.4F);
-
-		            //ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
-		            customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, event.getHand(), stack, mc.world, mc.player);
-		            
-		            GlStateManager.popMatrix();
-		            GlStateManager.disableRescaleNormal();
-		            RenderHelper.disableStandardItemLighting();
-		            renderer.disableLightmap();
-		        }
-
-		        GlStateManager.popMatrix();
-
-		        if(mc.gameSettings.thirdPersonView == 0 && !flag)
-		        {
-		            itemRenderer.renderOverlays(partialTicks);
-		            hurtCameraEffect(partialTicks);
-		        }
-
-		        if(mc.gameSettings.viewBobbing)
-		        {
-		            setupViewBobbing(partialTicks);
-		        }
+				GlStateManager.loadIdentity();
+				
+				float separation = 0.07F;
+				
+				Project.gluPerspective(getFOVModifier(partialTicks), (float)mc.displayWidth / (float)mc.displayHeight, 0.05F, farPlaneDistance * 2.0F);
+				GlStateManager.matrixMode(5888);
+				GlStateManager.loadIdentity();
+				
+				GlStateManager.pushMatrix();
+				hurtCameraEffect(partialTicks);
+				
+				if(mc.gameSettings.viewBobbing)
+					setupViewBobbing(partialTicks);
+				
+				boolean flag = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
+				
+				if(mc.gameSettings.thirdPersonView == 0 && !flag && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator())
+				{
+					renderer.enableLightmap();
+					float f1 = 1.0F - (prevEquippedProgress + (equippedProgress - prevEquippedProgress) * partialTicks);
+					EntityPlayerSP entityplayersp = this.mc.player;
+					float f2 = entityplayersp.getSwingProgress(partialTicks);
+					float f3 = entityplayersp.prevRotationPitch + (entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
+					float f4 = entityplayersp.prevRotationYaw + (entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
+					
+					//Setup lighting
+					GlStateManager.disableLighting();
+					GlStateManager.pushMatrix();
+					GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
+					GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
+					RenderHelper.enableStandardItemLighting();
+					GlStateManager.popMatrix();
+					
+					//Do lighting
+					int i = this.mc.world.getCombinedLight(new BlockPos(entityplayersp.posX, entityplayersp.posY + (double)entityplayersp.getEyeHeight(), entityplayersp.posZ), 0);
+					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)(i & 65535), (float)(i >> 16));
+					
+					//Do hand rotations
+					float f5 = entityplayersp.prevRenderArmPitch + (entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
+					float f6 = entityplayersp.prevRenderArmYaw + (entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
+					GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
+					GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
+					
+					GlStateManager.enableRescaleNormal();
+					GlStateManager.pushMatrix();
+					
+					//Do vanilla weapon swing
+					float f7 = -0.4F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
+					float f8 = 0.2F * MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI * 2.0F);
+					float f9 = -0.2F * MathHelper.sin(f2 * (float)Math.PI);
+					GlStateManager.translate(f7, f8, f9);
+					
+					GlStateManager.translate(0.56F, -0.52F, -0.71999997F);
+					GlStateManager.translate(0.0F, f1 * -0.6F, 0.0F);
+					GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+					float f10 = MathHelper.sin(f2 * f2 * (float)Math.PI);
+					float f11 = MathHelper.sin(MathHelper.sqrt(f2) * (float)Math.PI);
+					GlStateManager.rotate(f10 * -20.0F, 0.0F, 1.0F, 0.0F);
+					GlStateManager.rotate(f11 * -20.0F, 0.0F, 0.0F, 1.0F);
+					GlStateManager.rotate(f11 * -80.0F, 1.0F, 0.0F, 0.0F);
+					GlStateManager.scale(0.4F, 0.4F, 0.4F);
+					
+					//ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, stack, mc.world, mc.player);
+					customRenderers[typeType.ordinal()].renderItem(CustomItemRenderType.EQUIPPED_FIRST_PERSON, event.getHand(), stack, mc.world, mc.player);
+					
+					GlStateManager.popMatrix();
+					GlStateManager.disableRescaleNormal();
+					RenderHelper.disableStandardItemLighting();
+					renderer.disableLightmap();
+				}
+				
+				GlStateManager.popMatrix();
+				
+				if(mc.gameSettings.thirdPersonView == 0 && !flag)
+				{
+					itemRenderer.renderOverlays(partialTicks);
+					hurtCameraEffect(partialTicks);
+				}
+				
+				if(mc.gameSettings.viewBobbing)
+				{
+					setupViewBobbing(partialTicks);
+				}
 			}
 		}
 	}
+	
+	private void hurtCameraEffect(float partialTicks)
+	{
+		if(this.mc.getRenderViewEntity() instanceof EntityLivingBase)
+		{
+			EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
+			float f1 = (float)entitylivingbase.hurtTime - partialTicks;
+			float f2;
+			
+			if(entitylivingbase.getHealth() <= 0.0F)
+			{
+				f2 = (float)entitylivingbase.deathTime + partialTicks;
+				GlStateManager.rotate(40.0F - 8000.0F / (f2 + 200.0F), 0.0F, 0.0F, 1.0F);
+			}
+			
+			if(f1 < 0.0F)
+			{
+				return;
+			}
+			
+			f1 /= (float)entitylivingbase.maxHurtTime;
+			f1 = MathHelper.sin(f1 * f1 * f1 * f1 * (float)Math.PI);
+			f2 = entitylivingbase.attackedAtYaw;
+			GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(-f1 * 14.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
+		}
+	}
+	
+	private void setupViewBobbing(float partialTicks)
+	{
+		if(this.mc.getRenderViewEntity() instanceof EntityPlayer)
+		{
+			EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
+			float f1 = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
+			float f2 = -(entityplayer.distanceWalkedModified + f1 * partialTicks);
+			float f3 = entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
+			float f4 = entityplayer.prevCameraPitch + (entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
+			GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F, -Math.abs(MathHelper.cos(f2 * (float)Math.PI) * f3), 0.0F);
+			GlStateManager.rotate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(Math.abs(MathHelper.cos(f2 * (float)Math.PI - 0.2F) * f3) * 5.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(f4, 1.0F, 0.0F, 0.0F);
+		}
+	}
+	
+	private float getFOVModifier(float partialTicks)
+	{
+		Entity entity = this.mc.getRenderViewEntity();
+		float f1 = 70.0F;
 		
-    private void hurtCameraEffect(float partialTicks)
-    {
-        if (this.mc.getRenderViewEntity() instanceof EntityLivingBase)
-        {
-            EntityLivingBase entitylivingbase = (EntityLivingBase)this.mc.getRenderViewEntity();
-            float f1 = (float)entitylivingbase.hurtTime - partialTicks;
-            float f2;
-
-            if (entitylivingbase.getHealth() <= 0.0F)
-            {
-                f2 = (float)entitylivingbase.deathTime + partialTicks;
-                GlStateManager.rotate(40.0F - 8000.0F / (f2 + 200.0F), 0.0F, 0.0F, 1.0F);
-            }
-
-            if (f1 < 0.0F)
-            {
-                return;
-            }
-
-            f1 /= (float)entitylivingbase.maxHurtTime;
-            f1 = MathHelper.sin(f1 * f1 * f1 * f1 * (float)Math.PI);
-            f2 = entitylivingbase.attackedAtYaw;
-            GlStateManager.rotate(-f2, 0.0F, 1.0F, 0.0F);
-            GlStateManager.rotate(-f1 * 14.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(f2, 0.0F, 1.0F, 0.0F);
-        }
-    }
-    
-    private void setupViewBobbing(float partialTicks)
-    {
-        if (this.mc.getRenderViewEntity() instanceof EntityPlayer)
-        {
-            EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
-            float f1 = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
-            float f2 = -(entityplayer.distanceWalkedModified + f1 * partialTicks);
-            float f3 = entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
-            float f4 = entityplayer.prevCameraPitch + (entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
-            GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F, -Math.abs(MathHelper.cos(f2 * (float)Math.PI) * f3), 0.0F);
-            GlStateManager.rotate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 3.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(Math.abs(MathHelper.cos(f2 * (float)Math.PI - 0.2F) * f3) * 5.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(f4, 1.0F, 0.0F, 0.0F);
-        }
-    }
-    
-    private float getFOVModifier(float partialTicks)
-    {
-        Entity entity = this.mc.getRenderViewEntity();
-        float f1 = 70.0F;
-
-        if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0F)
-        {
-            float f2 = (float)((EntityLivingBase)entity).deathTime + partialTicks;
-            f1 /= (1.0F - 500.0F / (f2 + 500.0F)) * 2.0F + 1.0F;
-        }
-
-        IBlockState state = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.world, entity, partialTicks);
-
-        if (state.getMaterial() == Material.WATER)
-            f1 = f1 * 60.0F / 70.0F;
-
-        return f1;
-    }
-    
-    public void update()
-    {    	    	
+		if(entity instanceof EntityLivingBase && ((EntityLivingBase)entity).getHealth() <= 0.0F)
+		{
+			float f2 = (float)((EntityLivingBase)entity).deathTime + partialTicks;
+			f1 /= (1.0F - 500.0F / (f2 + 500.0F)) * 2.0F + 1.0F;
+		}
+		
+		IBlockState state = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.world, entity, partialTicks);
+		
+		if(state.getMaterial() == Material.WATER)
+			f1 = f1 * 60.0F / 70.0F;
+		
+		return f1;
+	}
+	
+	public void update()
+	{
 		for(int i = 0; i < killMessages.size(); i++)
 		{
 			killMessages.get(i).timer--;
@@ -322,80 +326,80 @@ public class ClientRenderHooks
 				killMessages.remove(i);
 			}
 		}
-
-        //Update the FOV Modifier
+		
+		//Update the FOV Modifier
 		float fovModifier = 1.0F;
-        if (mc.getRenderViewEntity() instanceof AbstractClientPlayer)
-        {
-            AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer)this.mc.getRenderViewEntity();
-            fovModifier = abstractclientplayer.getFovModifier();
-        }
-        //Adjust FOV modifier
-        fovModifierHandPrev = fovModifierHand;
-        fovModifierHand += (fovModifier - fovModifierHand) * 0.5F;
-        //Limit FOV modifier to a certain range
-        if (fovModifierHand > 1.5F)
-            fovModifierHand = 1.5F;
-        if (fovModifierHand < 0.1F)
-            fovModifierHand = 0.1F;
-        
-        //And update the itemToRender, for item switching
-        
-        prevEquippedProgress = equippedProgress;
-        EntityPlayerSP player = mc.player;
-        if(player != null)
-        {
-	        ItemStack itemstack = player.inventory.getCurrentItem();
-	        boolean equippedGun = false;
-	
-	        if(itemToRender != null && !itemToRender.isEmpty() && itemstack != null && !itemstack.isEmpty())
-	        {
-	            if (!ItemStack.areItemsEqual(itemToRender, itemstack))
-	            {
-	                if (!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != player.inventory.currentItem))
-	                {
-	                    itemToRender = itemstack;
-	                    equippedItemSlot = player.inventory.currentItem;
-	                    return;
-	                }
-	                equippedGun = true;
-	            }
-	        }
-	        else if((itemToRender == null || itemToRender.isEmpty()) && (itemstack == null || itemstack.isEmpty()))
-	        {
-	        	equippedGun = false;
-	        }
-	        else
-	        {
-	        	equippedGun = true;
-	        }
-
-	        float maxChange = 0.4F;
-	        float targetProgress = equippedGun ? 0.0F : 1.0F;
-	        float difference = MathHelper.clamp(targetProgress - equippedProgress, -maxChange, maxChange);
-	        equippedProgress += difference;
-	
-	        if(equippedProgress < 0.1F)
-	        {
-	            itemToRender = itemstack;
-	            equippedItemSlot = player.inventory.currentItem;
-	        }
-	        
+		if(mc.getRenderViewEntity() instanceof AbstractClientPlayer)
+		{
+			AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer)this.mc.getRenderViewEntity();
+			fovModifier = abstractclientplayer.getFovModifier();
+		}
+		//Adjust FOV modifier
+		fovModifierHandPrev = fovModifierHand;
+		fovModifierHand += (fovModifier - fovModifierHand) * 0.5F;
+		//Limit FOV modifier to a certain range
+		if(fovModifierHand > 1.5F)
+			fovModifierHand = 1.5F;
+		if(fovModifierHand < 0.1F)
+			fovModifierHand = 0.1F;
+		
+		//And update the itemToRender, for item switching
+		
+		prevEquippedProgress = equippedProgress;
+		EntityPlayerSP player = mc.player;
+		if(player != null)
+		{
+			ItemStack itemstack = player.inventory.getCurrentItem();
+			boolean equippedGun = false;
+			
+			if(itemToRender != null && !itemToRender.isEmpty() && itemstack != null && !itemstack.isEmpty())
+			{
+				if(!ItemStack.areItemsEqual(itemToRender, itemstack))
+				{
+					if(!itemToRender.getItem().shouldCauseReequipAnimation(itemToRender, itemstack, equippedItemSlot != player.inventory.currentItem))
+					{
+						itemToRender = itemstack;
+						equippedItemSlot = player.inventory.currentItem;
+						return;
+					}
+					equippedGun = true;
+				}
+			}
+			else if((itemToRender == null || itemToRender.isEmpty()) && (itemstack == null || itemstack.isEmpty()))
+			{
+				equippedGun = false;
+			}
+			else
+			{
+				equippedGun = true;
+			}
+			
+			float maxChange = 0.4F;
+			float targetProgress = equippedGun ? 0.0F : 1.0F;
+			float difference = MathHelper.clamp(targetProgress - equippedProgress, -maxChange, maxChange);
+			equippedProgress += difference;
+			
+			if(equippedProgress < 0.1F)
+			{
+				itemToRender = itemstack;
+				equippedItemSlot = player.inventory.currentItem;
+			}
+			
 			//Render debug boxes for player snapshots
-	        PlayerData data = PlayerHandler.getPlayerData(player);
+			PlayerData data = PlayerHandler.getPlayerData(player);
 			if(FlansMod.DEBUG && data != null)
 			{
 				if(data.snapshots[0] != null)
 					data.snapshots[0].renderSnapshot();
 			}
-        }
-    }
-    
-    public void SetPartialTick(float dT)
-    {
-    	partialTicks = dT;
-    }
-    
+		}
+	}
+	
+	public void SetPartialTick(float dT)
+	{
+		partialTicks = dT;
+	}
+	
 	public void renderThirdPersonWeapons(RenderLivingEvent.Pre event)
 	{
 		ModelBase mainModel = event.getRenderer().getMainModel();
@@ -414,110 +418,110 @@ public class ClientRenderHooks
 				ModelGun gunModel = type.model;
 				
 				GlStateManager.pushMatrix();
-		        GlStateManager.disableCull();
-		        mainModel.swingProgress = entity.getSwingProgress(partialTicks);
-		        mainModel.isRiding = entity.isRiding();
-		        mainModel.isChild = entity.isChild();
-		
-		        float f2 = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
-		        float f3 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
-		        float f4 = f3 - f2;
-		        float f5;
-		        
-		        
-		        if(Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 30F)
-		        	f2 = entity.renderYawOffset;
-		        if(Math.abs(entity.prevRotationYawHead - entity.rotationYawHead) > 30F)
-		        	f3 = entity.rotationYawHead;
-		        f4 = f3 - f2;
-		        
-		        //FlansMod.log.debug(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
-		        
-		        if (entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
-		        {
-		            EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
-		            f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
-		            f4 = f3 - f2;
-		            f5 = MathHelper.wrapDegrees(f4);	
-		            
-		            if (f5 < -85.0F)
-		            {
-		                f5 = -85.0F;
-		            }
-		
-		            if (f5 >= 85.0F)
-		            {
-		                f5 = 85.0F;
-		            }
-		
-		            f2 = f3 - f5;
-		
-		            if (f5 * f5 > 2500.0F)
-		            {
-		                f2 += f5 * 0.2F;
-		            }
-		        }
-		
-		        float f9 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
-		        if(Math.abs(entity.prevRotationPitch - entity.rotationPitch) > 5F)
-		        	f9 = entity.rotationPitch;
-		        GlStateManager.translate(event.getX(), event.getY(), event.getZ());
-		        
-		        f5 = entity.ticksExisted + partialTicks;
-		        //this.rotateCorpse(entity, f5, f2, partialTicks);
-		        GlStateManager.rotate(180.0F - f2, 0.0F, 1.0F, 0.0F);
-		        GlStateManager.enableRescaleNormal();
-		        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-		        //this.preRenderCallback(entity, partialTicks);
-		        float f6 = 0.0625F;
-		        GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
-		        float f7 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
-		        float f8 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
-		
-		        if (entity.isChild())
-		        {
-		            f8 *= 3.0F;
-		        }
-		
-		        if (f7 > 1.0F)
-		        {
-		            f7 = 1.0F;
-		        }
-		
-		        GlStateManager.enableAlpha();
-		        
-		        //biped.isSneak = false;
-		        biped.rightArmPose = ArmPose.ITEM;
-		        biped.setLivingAnimations(entity, f8, f7, partialTicks);
-		        biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
-	
-		        //Render main hand gun
-		        {
-			        GlStateManager.pushMatrix();
-			        if(hand == EnumHand.MAIN_HAND)
-			        {
-				        biped.bipedRightArm.postRender(0.0625F);
-				        GlStateManager.translate(-0.05F, 0.4F, 0.05F);
-				        ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
-			        }
-			        else
-			        {
+				GlStateManager.disableCull();
+				mainModel.swingProgress = entity.getSwingProgress(partialTicks);
+				mainModel.isRiding = entity.isRiding();
+				mainModel.isChild = entity.isChild();
+				
+				float f2 = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
+				float f3 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
+				float f4 = f3 - f2;
+				float f5;
+				
+				
+				if(Math.abs(entity.prevRenderYawOffset - entity.renderYawOffset) > 30F)
+					f2 = entity.renderYawOffset;
+				if(Math.abs(entity.prevRotationYawHead - entity.rotationYawHead) > 30F)
+					f3 = entity.rotationYawHead;
+				f4 = f3 - f2;
+				
+				//FlansMod.log.debug(entity.prevRenderYawOffset + "     " + entity.renderYawOffset);
+				
+				if(entity.isRiding() && entity.getRidingEntity() instanceof EntityLivingBase)
+				{
+					EntityLivingBase entitylivingbase1 = (EntityLivingBase)entity.getRidingEntity();
+					f2 = this.interpolateRotation(entitylivingbase1.prevRenderYawOffset, entitylivingbase1.renderYawOffset, partialTicks);
+					f4 = f3 - f2;
+					f5 = MathHelper.wrapDegrees(f4);
+					
+					if(f5 < -85.0F)
+					{
+						f5 = -85.0F;
+					}
+					
+					if(f5 >= 85.0F)
+					{
+						f5 = 85.0F;
+					}
+					
+					f2 = f3 - f5;
+					
+					if(f5 * f5 > 2500.0F)
+					{
+						f2 += f5 * 0.2F;
+					}
+				}
+				
+				float f9 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+				if(Math.abs(entity.prevRotationPitch - entity.rotationPitch) > 5F)
+					f9 = entity.rotationPitch;
+				GlStateManager.translate(event.getX(), event.getY(), event.getZ());
+				
+				f5 = entity.ticksExisted + partialTicks;
+				//this.rotateCorpse(entity, f5, f2, partialTicks);
+				GlStateManager.rotate(180.0F - f2, 0.0F, 1.0F, 0.0F);
+				GlStateManager.enableRescaleNormal();
+				GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+				//this.preRenderCallback(entity, partialTicks);
+				float f6 = 0.0625F;
+				GlStateManager.translate(0.0F, -1.5078125F, 0.0F);
+				float f7 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
+				float f8 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
+				
+				if(entity.isChild())
+				{
+					f8 *= 3.0F;
+				}
+				
+				if(f7 > 1.0F)
+				{
+					f7 = 1.0F;
+				}
+				
+				GlStateManager.enableAlpha();
+				
+				//biped.isSneak = false;
+				biped.rightArmPose = ArmPose.ITEM;
+				biped.setLivingAnimations(entity, f8, f7, partialTicks);
+				biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
+				
+				//Render main hand gun
+				{
+					GlStateManager.pushMatrix();
+					if(hand == EnumHand.MAIN_HAND)
+					{
+						biped.bipedRightArm.postRender(0.0625F);
+						GlStateManager.translate(-0.05F, 0.4F, 0.05F);
+						ClientProxy.gunRenderer.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
+					}
+					else
+					{
 						biped.bipedLeftArm.postRender(0.0625F);
 						GlStateManager.rotate(-90F, 1F, 0F, 0F);
 						GlStateManager.rotate(-90F, 0F, 1F, 0F);
 						GlStateManager.translate(0.6F, 0F, -0.05F);
 						ClientProxy.gunRenderer.renderOffHandGun((EntityPlayer)entity, stack);
-			        }
-			        GlStateManager.popMatrix();
-		        }
+					}
+					GlStateManager.popMatrix();
+				}
 				
-		        GlStateManager.depthMask(true);
-		        GlStateManager.disableRescaleNormal();
-		        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		        GlStateManager.enableTexture2D();
-		        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		        GlStateManager.enableCull();
-		        GlStateManager.popMatrix();
+				GlStateManager.depthMask(true);
+				GlStateManager.disableRescaleNormal();
+				GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+				GlStateManager.enableTexture2D();
+				GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+				GlStateManager.enableCull();
+				GlStateManager.popMatrix();
 			}
 		}
 	}
@@ -525,20 +529,24 @@ public class ClientRenderHooks
 	private float interpolateRotation(float x, float y, float dT)
 	{
 		float f3;
-
-		for(f3 = y - x; f3 < -180.0F; f3 += 360.0F) { }
-		for( ; f3 >= 180.0F; f3 -= 360.0F) { }
-
+		
+		for(f3 = y - x; f3 < -180.0F; f3 += 360.0F)
+		{
+		}
+		for(; f3 >= 180.0F; f3 -= 360.0F)
+		{
+		}
+		
 		return x + dT * f3;
 	}
-
+	
 	//Handle player hiding / name tag removal for teams
 	public void renderPlayer(RenderPlayerEvent.Pre event)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(event.getEntityPlayer(), Side.CLIENT);
-					
+		
 		RenderLivingBase.NAME_TAG_RANGE = 64F;
-		RenderLivingBase.NAME_TAG_RANGE_SNEAK = 32F;		
+		RenderLivingBase.NAME_TAG_RANGE_SNEAK = 32F;
 		if(event.getEntity() instanceof EntityPlayer && FlansModClient.teamInfo != null && FlansModClient.teamInfo.gametype != null && !"No Gametype".equals(FlansModClient.teamInfo.gametype))
 		{
 			PlayerScoreData rendering = FlansModClient.teamInfo.getPlayerScoreData(event.getEntity().getName());
@@ -546,7 +554,7 @@ public class ClientRenderHooks
 			
 			Team renderingTeam = rendering == null ? Team.spectators : rendering.team.team;
 			Team thePlayerTeam = player == null ? Team.spectators : player.team.team;
-						
+			
 			//Do custom skin overrides
 			//If we have no stored skin, try to get it
 			if(data.skin == null)
@@ -603,7 +611,7 @@ public class ClientRenderHooks
 			{
 				FlansMod.log.warn("Null seat in roll event");
 			}
-				
+			
 		}
 	}
 	
@@ -613,7 +621,7 @@ public class ClientRenderHooks
 		
 		//Remove crosshairs if looking down the sights of a gun
 		if(event.getType() == ElementType.CROSSHAIRS //&& mc.player.getHeldItemMainhand() != null && mc.player.getHeldItemMainhand().getItem() instanceof ItemGun)
-			 && FlansModClient.currentScope != null)
+				&& FlansModClient.currentScope != null)
 		{
 			event.setCanceled(true);
 			return;
@@ -622,7 +630,7 @@ public class ClientRenderHooks
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
-					
+		
 		Tessellator tessellator = Tessellator.getInstance();
 		
 		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
@@ -632,7 +640,7 @@ public class ClientRenderHooks
 		if(event.isCancelable() && event.getType() == ElementType.CROSSHAIRS)
 		{
 			RenderHitMarker(tessellator, i, j);
-		}			
+		}
 		if(!event.isCancelable() && event.getType() == ElementType.HOTBAR)
 		{
 			RenderPlayerAmmo(i, j);
@@ -649,7 +657,7 @@ public class ClientRenderHooks
 	{
 		//Scopes and helmet overlays
 		String overlayTexture = null;
-		if (FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
+		if(FlansModClient.currentScope != null && FlansModClient.currentScope.hasZoomOverlay() && FMLClientHandler.instance().getClient().currentScreen == null && FlansModClient.zoomProgress > 0.8F)
 		{
 			overlayTexture = FlansModClient.currentScope.getZoomOverlay();
 		}
@@ -666,23 +674,23 @@ public class ClientRenderHooks
 		{
 			//FlansModClient.minecraft.entityRenderer.setupOverlayRendering();
 			
-	        GlStateManager.disableDepth();
-	        GlStateManager.depthMask(false);
-	        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-	        GlStateManager.disableAlpha();
-	        mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
-	        WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
-	        worldrenderer.startDrawingQuads();
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.disableAlpha();
+			mc.renderEngine.bindTexture(FlansModResourceHandler.getScope(overlayTexture));
+			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
+			worldrenderer.startDrawingQuads();
 			worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);
 			worldrenderer.addVertexWithUV(i / 2 + 2 * j, j, -90D, 1.0D, 1.0D);
 			worldrenderer.addVertexWithUV(i / 2 + 2 * j, 0.0D, -90D, 1.0D, 0.0D);
 			worldrenderer.addVertexWithUV(i / 2 - 2 * j, 0.0D, -90D, 0.0D, 0.0D);
 			worldrenderer.draw();
-	        GlStateManager.depthMask(true);
-	        GlStateManager.enableDepth();
-	        GlStateManager.enableAlpha();
-	        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.depthMask(true);
+			GlStateManager.enableDepth();
+			GlStateManager.enableAlpha();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 	}
 	
@@ -696,7 +704,7 @@ public class ClientRenderHooks
 			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
 			GlStateManager.color(1.0f, 1.0f, 1.0f, Math.max(((float)FlansModClient.hitMarkerTime - 10.0f + partialTicks) / 10.0f, 0.0f));
-
+			
 			
 			ItemStack currentStack = mc.player.inventory.getCurrentItem();
 			PlayerData data = PlayerHandler.getPlayerData(mc.player, Side.CLIENT);
@@ -711,7 +719,7 @@ public class ClientRenderHooks
 			worldrenderer.addVertexWithUV(i / 2 - 4d, j / 2 - 4d, zLevel, 0D / 16D, 0D / 16D);
 			worldrenderer.draw();
 			
-
+			
 			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 			GlStateManager.disableAlpha();
 			GlStateManager.disableBlend();
@@ -794,9 +802,9 @@ public class ClientRenderHooks
 			GL11.glBlendFunc(770, 771);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-
+			
 			mc.renderEngine.bindTexture(GuiTeamScores.texture);
-						
+			
 			WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 			worldrenderer.startDrawingQuads();
 			worldrenderer.addVertexWithUV(i / 2 - 43, 27, -90D, 85D / 256D, 27D / 256D);
@@ -816,7 +824,7 @@ public class ClientRenderHooks
 				}
 				
 				//Draw team 1 colour bit
-				int colour = teamInfo.teamData[0].team.teamColour;	
+				int colour = teamInfo.teamData[0].team.teamColour;
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2 - 43, 27, -90D, 0D / 256D, 125D / 256D);
@@ -825,7 +833,7 @@ public class ClientRenderHooks
 				worldrenderer.addVertexWithUV(i / 2 - 43, 0D, -90D, 0D / 256D, 98D / 256D);
 				worldrenderer.draw();
 				//Draw team 2 colour bit
-				colour = teamInfo.teamData[1].team.teamColour;	
+				colour = teamInfo.teamData[1].team.teamColour;
 				GL11.glColor4f(((colour >> 16) & 0xff) / 256F, ((colour >> 8) & 0xff) / 256F, (colour & 0xff) / 256F, 1.0F);
 				worldrenderer.startDrawingQuads();
 				worldrenderer.addVertexWithUV(i / 2 + 19, 27, -90D, 62D / 256D, 125D / 256D);
@@ -861,7 +869,7 @@ public class ClientRenderHooks
 			String timeLeft = minutesLeft + ":" + (secondsLeft < 10 ? "0" + secondsLeft : secondsLeft);
 			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2 - 1, 29, 0x000000);
 			mc.fontRenderer.drawString(timeLeft, i / 2 - mc.fontRenderer.getStringWidth(timeLeft) / 2, 30, 0xffffff);
-
+			
 			
 			GL11.glDepthMask(true);
 			GL11.glEnable(2929 /* GL_DEPTH_TEST */);
@@ -886,13 +894,13 @@ public class ClientRenderHooks
 			KillMessage killMessage = killMessages.get(n);
 			mc.fontRenderer.drawString("\u00a7" + killMessage.killerName + "     " + "\u00a7" + killMessage.killedName, i - mc.fontRenderer.getStringWidth(killMessage.killerName + "     " + killMessage.killedName) - 6, j - 32 - killMessage.line * 16, 0xffffff);
 		}
-					
+		
 		//Draw icons indicated weapons used
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);	
+		
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		for(int n = 0; n < killMessages.size(); n++)
 		{
 			KillMessage killMessage = killMessages.get(n);
@@ -916,7 +924,7 @@ public class ClientRenderHooks
 				double dZ = ent.posZ - ent.prevPosZ;
 				
 				//Convert to chunks per Minecraft hour
-				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F; 
+				float speed = (float)Math.sqrt(dX * dX + dY * dY + dZ * dZ) * 1000F / 16F;
 				
 				speed = (int)(speed * 10F) / 10F;
 				
@@ -937,7 +945,7 @@ public class ClientRenderHooks
 		itemRenderer.renderItemIntoGUI(itemstack, i, j);
 		itemRenderer.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null); //May be something other than null
 	}
-		
+	
 	public static void addKillMessage(boolean headshot, InfoType infoType, String killer, String killed)
 	{
 		for(KillMessage killMessage : killMessages)

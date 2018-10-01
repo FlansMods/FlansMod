@@ -5,11 +5,11 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelWW2Parachute extends ModelBase 
+public class ModelWW2Parachute extends ModelBase
 {
 	public ModelRendererTurbo backpackModel;
 	public ModelRendererTurbo[] parachuteModel = new ModelRendererTurbo[6];
-
+	
 	public ModelWW2Parachute()
 	{
 		backpackModel = new ModelRendererTurbo(this, 0, 0, 128, 128);
@@ -34,7 +34,7 @@ public class ModelWW2Parachute extends ModelBase
 		parachuteModel[5].flip = true;
 		parachuteModel[5].addTrapezoid(-8, 70, -8, 16, 4, 16, 0F, -4F, ModelRendererTurbo.MR_BOTTOM);
 	}
-
+	
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{

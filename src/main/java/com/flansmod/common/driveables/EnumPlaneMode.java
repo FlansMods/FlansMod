@@ -1,10 +1,10 @@
 package com.flansmod.common.driveables;
 
-public enum EnumPlaneMode 
+public enum EnumPlaneMode
 {
 	PLANE, VTOL, HELI;
-
-	public static EnumPlaneMode getMode(String s) 
+	
+	public static EnumPlaneMode getMode(String s)
 	{
 		if(s.toLowerCase().equals("vtol"))
 			return VTOL;

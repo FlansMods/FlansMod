@@ -11,54 +11,55 @@ import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.PlayerData;
 
-public class GametypeCTF extends Gametype 
+public class GametypeCTF extends Gametype
 {
 	public boolean friendlyFire = false;
 	public boolean autoBalance = true;
 	public int time;
 	public int autoBalanceInterval = 1200;
 	public int flagReturnTime = 60;
-
-	public GametypeCTF() 
+	
+	public GametypeCTF()
 	{
 		super("Capture the Flag", "CTF", 2);
 	}
 	
 	@Override
-	public void roundStart() 
+	public void roundStart()
 	{
 	}
-
+	
 	@Override
-	public void roundEnd() 
+	public void roundEnd()
 	{
 	}
-
+	
 	@Override
-	public void roundCleanup() 
-	{
-		
-	}
-
-	@Override
-	public void tick() 
+	public void roundCleanup()
 	{
 		
 	}
 	
 	@Override
-	public void playerQuit(EntityPlayerMP player) 
+	public void tick()
 	{
-
+		
 	}
 	
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+	public void playerQuit(EntityPlayerMP player)
+	{
+	
+	}
+	
+	@Override
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam)
+	{
 		return attackerTeam != victimTeam || friendlyFire;
 	}
-
+	
 	@Override
-	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
+	public boolean playerAttacked(EntityPlayerMP player, DamageSource source)
 	{
 		if(getPlayerData(player) == null || getPlayerData(player).team == null)
 			return false;
@@ -76,9 +77,9 @@ public class GametypeCTF extends Gametype
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public void playerKilled(EntityPlayerMP player, DamageSource source) 
+	public void playerKilled(EntityPlayerMP player, DamageSource source)
 	{
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
@@ -86,9 +87,9 @@ public class GametypeCTF extends Gametype
 			//Killed self. Lose a point
 			if(attacker == player)
 				getPlayerData(player).score--;
-			//Killed someone else. Get points
-			else 
-			{	
+				//Killed someone else. Get points
+			else
+			{
 				getPlayerData(attacker).score++;
 				getPlayerData(attacker).kills++;
 			}
@@ -108,26 +109,26 @@ public class GametypeCTF extends Gametype
 			TeamsManager.messageAll("\u00a7f" + player.getName() + " dropped the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 		}
 	}
-
+	
 	@Override
-	public void baseAttacked(ITeamBase base, DamageSource source) 
+	public void baseAttacked(ITeamBase base, DamageSource source)
 	{
-
+	
 	}
-
+	
 	@Override
-	public void objectAttacked(ITeamObject object, DamageSource source) 
+	public void objectAttacked(ITeamObject object, DamageSource source)
 	{
-
+	
 	}
-
+	
 	@Override
-	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) 
+	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player)
 	{
 		if(base instanceof EntityFlagpole && ((EntityFlag)base.getFlag()).isHome)
 			objectClickedByPlayer(base.getFlag(), player);
 	}
-
+	
 	@Override
 	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player)
 	{
@@ -155,7 +156,7 @@ public class GametypeCTF extends Gametype
 						{
 							flag.reset();
 							playerData.score += 2;
-							TeamsManager.messageAll("\u00a7f" + player.getName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");		
+							TeamsManager.messageAll("\u00a7f" + player.getName() + " returned the \u00a7" + flagTeam.textColour + flagTeam.name + "\u00a7f flag");
 						}
 						
 						//TODO : Move to be a proximity thing?
@@ -197,9 +198,9 @@ public class GametypeCTF extends Gametype
 			}
 		}
 	}
-
+	
 	@Override
-	public Vec3d getSpawnPoint(EntityPlayerMP player) 
+	public Vec3d getSpawnPoint(EntityPlayerMP player)
 	{
 		if(teamsManager.currentRound == null)
 			return null;
@@ -218,15 +219,15 @@ public class GametypeCTF extends Gametype
 		
 		return null;
 	}
-
+	
 	@Override
-	public void playerRespawned(EntityPlayerMP player) 
+	public void playerRespawned(EntityPlayerMP player)
 	{
 		
 	}
-
+	
 	@Override
-	public boolean setVariable(String variable, String value) 
+	public boolean setVariable(String variable, String value)
 	{
 		if(variable.toLowerCase().equals("friendlyfire"))
 		{
@@ -245,17 +246,17 @@ public class GametypeCTF extends Gametype
 		}
 		return false;
 	}
-
+	
 	@Override
-	public void readFromNBT(NBTTagCompound tags) 
+	public void readFromNBT(NBTTagCompound tags)
 	{
 		friendlyFire = tags.getBoolean("CTFFriendlyFire");
 		autoBalance = tags.getBoolean("CTFAutoBalance");
 		flagReturnTime = tags.getInteger("CTFFlagTime");
 	}
-
+	
 	@Override
-	public void saveToNBT(NBTTagCompound tags) 
+	public void saveToNBT(NBTTagCompound tags)
 	{
 		tags.setBoolean("CTFFriendlyFire", friendlyFire);
 		tags.setBoolean("CTFAutoBalance", autoBalance);
@@ -269,7 +270,7 @@ public class GametypeCTF extends Gametype
 	}
 	
 	@Override
-	public boolean teamHasWon(Team team) 
+	public boolean teamHasWon(Team team)
 	{
 		return teamsManager.currentRound != null && team.score == teamsManager.currentRound.scoreLimit;
 	}

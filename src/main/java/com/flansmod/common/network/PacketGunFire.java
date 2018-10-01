@@ -18,37 +18,39 @@ public class PacketGunFire extends PacketBase
 	public boolean held;
 	public boolean left;
 	
-	public PacketGunFire() {}
+	public PacketGunFire()
+	{
+	}
 	
 	public PacketGunFire(boolean l, boolean h)
 	{
 		left = l;
 		held = h;
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeBoolean(held);
 		data.writeBoolean(left);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		held = data.readBoolean();
 		left = data.readBoolean();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		FlansMod.log.warn("Depreceated message!");
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		FlansMod.log.warn("Received gun button packet on client. Skipping.");
 	}

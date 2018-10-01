@@ -17,7 +17,9 @@ import com.flansmod.common.types.TypeFile;
 
 public class AAGunType extends InfoType
 {
-	/** The ammo types used by this gun */
+	/**
+	 * The ammo types used by this gun
+	 */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	public int reloadTime;
 	public int recoil = 5;
@@ -34,32 +36,38 @@ public class AAGunType extends InfoType
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
 	public int[] barrelX, barrelY, barrelZ;
-	/** Sentry mode. If target players is true then it either targets everyone on the other team, or everyone other than the owner when not playing with teams */
+	/**
+	 * Sentry mode. If target players is true then it either targets everyone on the other team, or everyone other than the owner when not playing with teams
+	 */
 	public boolean targetMobs = false, targetPlayers = false, targetVehicles = false, targetPlanes = false, targetMechas = false;
-	/** Targeting radius */
+	/**
+	 * Targeting radius
+	 */
 	public float targetRange = 10F;
-	/** If true, then all barrels share the same ammo slot */
+	/**
+	 * If true, then all barrels share the same ammo slot
+	 */
 	public boolean shareAmmo = false;
 	
 	public static List<AAGunType> infoTypes = new ArrayList<AAGunType>();
-
+	
 	public AAGunType(TypeFile file)
 	{
 		super(file);
 		infoTypes.add(this);
 	}
-
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
 		try
 		{
-			if (FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
+			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAAGun.class);
-			} 
-
+			}
+			
 			damage = Read(split, "Damage", damage);
 			reloadTime = Read(split, "ReloadTime", reloadTime);
 			recoil = Read(split, "Recoil", recoil);
@@ -80,18 +88,18 @@ public class AAGunType extends InfoType
 			
 			if(split[0].equals("TargetDriveables"))
 				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);
-
-			if (split[0].equals("ShootSound"))
+			
+			if(split[0].equals("ShootSound"))
 			{
 				shootSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "aaguns", split[1]);
 			}
-			if (split[0].equals("ReloadSound"))
+			if(split[0].equals("ReloadSound"))
 			{
 				reloadSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "aaguns", split[1]);
 			}
-			if (split[0].equals("NumBarrels"))
+			if(split[0].equals("NumBarrels"))
 			{
 				numBarrels = Integer.parseInt(split[1]);
 				barrelX = new int[numBarrels];
@@ -105,74 +113,77 @@ public class AAGunType extends InfoType
 				barrelY[id] = Integer.parseInt(split[3]);
 				barrelZ[id] = Integer.parseInt(split[4]);
 			}
-			if (split[0].equals("Health"))
+			if(split[0].equals("Health"))
 			{
 				health = Integer.parseInt(split[1]);
 			}
-			if (split[0].equals("Ammo"))
+			if(split[0].equals("Ammo"))
 			{
 				BulletType type = BulletType.getBullet(split[1]);
-				if (type != null)
+				if(type != null)
 				{
 					ammo.add(type);
 				}
 			}
-			if (split[0].equals("GunnerPos"))
+			if(split[0].equals("GunnerPos"))
 			{
 				gunnerX = Integer.parseInt(split[1]);
 				gunnerY = Integer.parseInt(split[2]);
 				gunnerZ = Integer.parseInt(split[3]);
 			}
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("" + e);
 		}
 	}
-
+	
 	public boolean isAmmo(BulletType type)
 	{
 		return ammo.contains(type);
 	}
-
-	public boolean isAmmo(ItemStack stack) {
-		if (stack == null || stack.isEmpty())
+	
+	public boolean isAmmo(ItemStack stack)
+	{
+		if(stack == null || stack.isEmpty())
 			return false;
-		return stack.getItem() instanceof ItemBullet && isAmmo(((ItemBullet) stack.getItem()).type);
+		return stack.getItem() instanceof ItemBullet && isAmmo(((ItemBullet)stack.getItem()).type);
 	}
-
+	
 	public static AAGunType getAAGun(String s)
 	{
-		for (AAGunType gun : infoTypes)
+		for(AAGunType gun : infoTypes)
 		{
-			if (gun.shortName.equals(s))
+			if(gun.shortName.equals(s))
 				return gun;
 		}
 		return null;
 	}
 	
-	/** To be overriden by subtypes for model reloading */
+	/**
+	 * To be overriden by subtypes for model reloading
+	 */
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelAAGun.class);
 	}
 	
 	@Override
-	public void addLoot(LootTableLoadEvent event) 
+	public void addLoot(LootTableLoadEvent event)
 	{
 		//Do not add AA guns to dungeon chests. That would be so op.
 	}
-
+	
 	@Override
 	protected void preRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	protected void postRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()

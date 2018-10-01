@@ -33,7 +33,7 @@ import com.flansmod.common.network.PacketRequestDebug;
 
 @SideOnly(value = Side.CLIENT)
 public class KeyInputHandler
-{  
+{
 	//public static KeyBinding accelerateKey = new KeyBinding("Accelerate Key", Keyboard.KEY_W, "Flan's Mod");
 	//public static KeyBinding decelerateKey = new KeyBinding("Decelerate Key", Keyboard.KEY_S, "Flan's Mod");
 	//public static KeyBinding leftKey = new KeyBinding("Left Key", Keyboard.KEY_A, "Flan's Mod");
@@ -58,7 +58,7 @@ public class KeyInputHandler
 	public static KeyBinding debugKey = new KeyBinding("Debug Key", Keyboard.KEY_F10, "Flan's Mod");
 	public static KeyBinding reloadModelsKey = new KeyBinding("Reload Models Key", Keyboard.KEY_F9, "Flan's Mod");
 	//public static KeyBinding zoomKey = new KeyBinding("Zoom Key", 2 - 100, "Flan's Mod");
-
+	
 	Minecraft mc;
 	
 	public KeyInputHandler()
@@ -90,7 +90,7 @@ public class KeyInputHandler
 		
 		mc = Minecraft.getMinecraft();
 	}
-
+	
 	public void CheckKeyInput(KeyInputEvent event)
 	{
 		if(FMLClientHandler.instance().isGUIOpen(GuiChat.class) || mc.currentScreen != null)
@@ -125,13 +125,13 @@ public class KeyInputHandler
 					if(item.CanReload(stack, player.inventory))
 					{
 						FlansMod.getPacketHandler().sendToServer(new PacketReload(EnumHand.MAIN_HAND, true));
-	
+						
 						//Set player shoot delay to be the reload delay
 						//Set both gun delays to avoid reloading two guns at once
 						data.shootTimeRight = data.shootTimeLeft = (int)type.getReloadTime(stack);
 						
 						GunAnimations animations = FlansModClient.getGunAnimations(player, EnumHand.MAIN_HAND);
-		
+						
 						int pumpDelay = type.model == null ? 0 : type.model.pumpDelayAfterReload;
 						int pumpTime = type.model == null ? 1 : type.model.pumpTime;
 						animations.doReload(type.reloadTime, pumpDelay, pumpTime);

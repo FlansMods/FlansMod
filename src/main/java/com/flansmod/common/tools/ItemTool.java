@@ -38,7 +38,7 @@ import com.flansmod.common.vector.Vector3f;
 public class ItemTool extends ItemFood implements IFlanItem
 {
 	public ToolType type;
-
+	
 	public ItemTool(ToolType t)
 	{
 		super(t.foodness, false);
@@ -56,7 +56,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				setCreativeTab(FlansMod.tabFlanDriveables);
 		}
 	}
-
+	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> lines, ITooltipFlag b)
 	{
@@ -65,14 +65,14 @@ public class ItemTool extends ItemFood implements IFlanItem
 			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-
+	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand)
 	{
 		ItemStack itemstack = entityplayer.getHeldItem(hand);
 		if(type.foodness > 0)
 			return super.onItemRightClick(world, entityplayer, hand);
-
+		
 		else if(type.parachute)
 		{
 			//Create a parachute, spawn it and put the player in it
@@ -91,7 +91,7 @@ public class ItemTool extends ItemFood implements IFlanItem
 				itemstack.setCount(itemstack.getCount() - 1);
 			//Our work here is done. Let's be off
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
-		}	
+		}
 		else if(type.remote)
 		{
 			PlayerData data = PlayerHandler.getPlayerData(entityplayer, world.isRemote ? Side.CLIENT : Side.SERVER);
@@ -116,23 +116,23 @@ public class ItemTool extends ItemFood implements IFlanItem
 		}
 		else
 		{
-		
-	    	//Raytracing
-	        float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
-	        float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
-	        float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
-	        float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
-	        double length = 5D;
-	        Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);        
-	        Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
-	        
-	        if(world.isRemote && FlansMod.DEBUG)
-	        {
-	        	world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
-	        }
-	        
-	        if(type.healDriveables)
-	        {
+			
+			//Raytracing
+			float cosYaw = MathHelper.cos(-entityplayer.rotationYaw * 0.01745329F);
+			float sinYaw = MathHelper.sin(-entityplayer.rotationYaw * 0.01745329F);
+			float cosPitch = -MathHelper.cos(entityplayer.rotationPitch * 0.01745329F);
+			float sinPitch = MathHelper.sin(entityplayer.rotationPitch * 0.01745329F);
+			double length = 5D;
+			Vec3d posVec = new Vec3d(entityplayer.posX, entityplayer.posY + 1.62D - entityplayer.getYOffset(), entityplayer.posZ);
+			Vec3d lookVec = posVec.add(sinYaw * cosPitch * length, sinPitch * length, cosYaw * cosPitch * length);
+			
+			if(world.isRemote && FlansMod.DEBUG)
+			{
+				world.spawnEntity(new EntityDebugVector(world, new Vector3f(posVec), new Vector3f(posVec.subtract(lookVec)), 100));
+			}
+			
+			if(type.healDriveables)
+			{
 				//Iterate over all EntityDriveables
 				for(int i = 0; i < world.loadedEntityList.size(); i++)
 				{
@@ -166,27 +166,28 @@ public class ItemTool extends ItemFood implements IFlanItem
 					}
 				}
 			}
-	
+			
 			if(!world.isRemote && type.healPlayers)
 			{
 				//By default, heal the player
 				EntityLivingBase hitLiving = entityplayer;
-
+				
 				//Iterate over entities within range of the ray
 				List list = world.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(
-						Math.min(posVec.x, lookVec.x), Math.min(posVec.y, lookVec.y), Math.min(posVec.z, lookVec.z), 
+						Math.min(posVec.x, lookVec.x), Math.min(posVec.y, lookVec.y), Math.min(posVec.z, lookVec.z),
 						Math.max(posVec.x, lookVec.x), Math.max(posVec.y, lookVec.y), Math.max(posVec.z, lookVec.z)));
-				for (Object aList : list) {
-					if (!(aList instanceof EntityLivingBase))
+				for(Object aList : list)
+				{
+					if(!(aList instanceof EntityLivingBase))
 						continue;
-					EntityLivingBase checkEntity = (EntityLivingBase) aList;
+					EntityLivingBase checkEntity = (EntityLivingBase)aList;
 					//Don't check the player using it
-					if (checkEntity == entityplayer)
+					if(checkEntity == entityplayer)
 						continue;
 					//Do a more accurate ray trace on this entity
 					RayTraceResult hit = checkEntity.getEntityBoundingBox().calculateIntercept(posVec, lookVec);
 					//If it hit, heal it
-					if (hit != null)
+					if(hit != null)
 						hitLiving = checkEntity;
 				}
 				//Now heal whatever it was we just decided to heal
@@ -195,10 +196,10 @@ public class ItemTool extends ItemFood implements IFlanItem
 					//If its finished, don't use it
 					if(itemstack.getItemDamage() >= itemstack.getMaxDamage() && type.toolLife > 0)
 						return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
-
+					
 					hitLiving.heal(type.healAmount);
 					FlansMod.getPacketHandler().sendToAllAround(new PacketFlak(hitLiving.posX, hitLiving.posY, hitLiving.posZ, 5, "heart"), new NetworkRegistry.TargetPoint(hitLiving.dimension, hitLiving.posX, hitLiving.posY, hitLiving.posZ, 50F));
-
+					
 					//If not in creative and the tool should decay, damage it
 					if(!entityplayer.capabilities.isCreativeMode && type.toolLife > 0)
 						itemstack.setItemDamage(itemstack.getItemDamage() + 1);
@@ -218,9 +219,9 @@ public class ItemTool extends ItemFood implements IFlanItem
 	{
 		return type == null ? getTranslationKey() : type.name;
 	}
-
+	
 	@Override
-	public InfoType getInfoType() 
+	public InfoType getInfoType()
 	{
 		return type;
 	}

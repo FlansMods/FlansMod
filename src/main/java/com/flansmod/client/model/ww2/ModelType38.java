@@ -19,30 +19,30 @@ public class ModelType38 extends ModelGun
 	int textureX = 512;
 	int textureY = 512;
 
-	public ModelType38()	
+	public ModelType38()
 	{
 
 
 // Gun
 		gunModel = new ModelRendererTurbo[18];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  220, textureX, textureY); // GN.StockBodyconnector
-		gunModel[1] = new ModelRendererTurbo(this,  0,  230, textureX, textureY); // GN.MainWoodenBodytop
-		gunModel[2] = new ModelRendererTurbo(this,  0,  240, textureX, textureY); // GN.StockForward
-		gunModel[3] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // GN.StockTop
-		gunModel[4] = new ModelRendererTurbo(this,  0,  260, textureX, textureY); // GN.StockBottom
-		gunModel[5] = new ModelRendererTurbo(this,  80,  250, textureX, textureY); // GN.Trigger
-		gunModel[6] = new ModelRendererTurbo(this,  0,  230, textureX, textureY); // GN.MainWoodenBodyBottomBack
-		gunModel[7] = new ModelRendererTurbo(this,  0,  230, textureX, textureY); // GN.MainWoodenBodyBottomfront
-		gunModel[8] = new ModelRendererTurbo(this,  0,  100, textureX, textureY); // GN.Backmetalbinder
-		gunModel[9] = new ModelRendererTurbo(this,  0,  112, textureX, textureY); // GN.MetalPart1
-		gunModel[10] = new ModelRendererTurbo(this,  0,  112, textureX, textureY); // GN.MetalPart2
-		gunModel[11] = new ModelRendererTurbo(this,  0,  120, textureX, textureY); // GN.Woodenmidway1
-		gunModel[12] = new ModelRendererTurbo(this,  0,  120, textureX, textureY); // GN.Woodenmidway2
-		gunModel[13] = new ModelRendererTurbo(this,  0,  100, textureX, textureY); // GN.Forwardmetalbinder
-		gunModel[14] = new ModelRendererTurbo(this,  0,  130, textureX, textureY); // GN.Barrel
-		gunModel[15] = new ModelRendererTurbo(this,  30,  130, textureX, textureY); // 
-		gunModel[16] = new ModelRendererTurbo(this,  50,  130, textureX, textureY); // 
-		gunModel[17] = new ModelRendererTurbo(this,  50,  130, textureX, textureY); // GN.Ironsight1
+		gunModel[0] = new ModelRendererTurbo(this, 0, 220, textureX, textureY); // GN.StockBodyconnector
+		gunModel[1] = new ModelRendererTurbo(this, 0, 230, textureX, textureY); // GN.MainWoodenBodytop
+		gunModel[2] = new ModelRendererTurbo(this, 0, 240, textureX, textureY); // GN.StockForward
+		gunModel[3] = new ModelRendererTurbo(this, 0, 250, textureX, textureY); // GN.StockTop
+		gunModel[4] = new ModelRendererTurbo(this, 0, 260, textureX, textureY); // GN.StockBottom
+		gunModel[5] = new ModelRendererTurbo(this, 80, 250, textureX, textureY); // GN.Trigger
+		gunModel[6] = new ModelRendererTurbo(this, 0, 230, textureX, textureY); // GN.MainWoodenBodyBottomBack
+		gunModel[7] = new ModelRendererTurbo(this, 0, 230, textureX, textureY); // GN.MainWoodenBodyBottomfront
+		gunModel[8] = new ModelRendererTurbo(this, 0, 100, textureX, textureY); // GN.Backmetalbinder
+		gunModel[9] = new ModelRendererTurbo(this, 0, 112, textureX, textureY); // GN.MetalPart1
+		gunModel[10] = new ModelRendererTurbo(this, 0, 112, textureX, textureY); // GN.MetalPart2
+		gunModel[11] = new ModelRendererTurbo(this, 0, 120, textureX, textureY); // GN.Woodenmidway1
+		gunModel[12] = new ModelRendererTurbo(this, 0, 120, textureX, textureY); // GN.Woodenmidway2
+		gunModel[13] = new ModelRendererTurbo(this, 0, 100, textureX, textureY); // GN.Forwardmetalbinder
+		gunModel[14] = new ModelRendererTurbo(this, 0, 130, textureX, textureY); // GN.Barrel
+		gunModel[15] = new ModelRendererTurbo(this, 30, 130, textureX, textureY); //
+		gunModel[16] = new ModelRendererTurbo(this, 50, 130, textureX, textureY); //
+		gunModel[17] = new ModelRendererTurbo(this, 50, 130, textureX, textureY); // GN.Ironsight1
 
 		gunModel[0].addBox(0F, 0F, 0F, 4, 2, 2, 0F); // GN.StockBodyconnector
 		gunModel[0].setRotationPoint(-2.5F, -1.7F, -1F);
@@ -103,15 +103,12 @@ public class ModelType38 extends ModelGun
 		gunModel[17].setRotationPoint(26F, -4.5F, -0.5F);
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[1];
-		ammoModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Ammo
+		ammoModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Ammo
 
 		ammoModel[0].addBox(3F, -3.5F, -0.5F, 3, 2, 1, 0F); // Ammo
 		ammoModel[0].setRotationPoint(0F, 0F, 0F);
-
-		
 
 
 		gunSlideDistance = 0F;

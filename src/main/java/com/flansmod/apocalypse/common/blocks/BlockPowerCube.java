@@ -31,45 +31,46 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPowerCube extends Block implements ITileEntityProvider
 {
-	public BlockPowerCube(Material material) 
+	public BlockPowerCube(Material material)
 	{
 		super(material);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) 
+	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
 		return new TileEntityPowerCube();
 	}
-		
+
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l)
 	{
-	   return false;
+		return false;
 	}
 	
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos)
 	{
-	    return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
+		return world.getBlockState(pos.add(0, -1, 0)).isSideSolid(world, pos.add(0, -1, 0), EnumFacing.UP);
 	}
 	
 	
 	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
-	    return false;
+		return false;
 	}
-    
-    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return AABB;
-    }
-    
+
+	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
+
 	@Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-    {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	{
+		return AABB;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+	{
 		for(int i = 0; i < 2; i++)
 		{
 			for(int j = 0; j < 2; j++)
@@ -80,12 +81,12 @@ public class BlockPowerCube extends Block implements ITileEntityProvider
 				}
 			}
 		}
-    }
+	}
 	
 	private boolean isPortal(World world, BlockPos pos)
 	{
-		if(world.getBlockState(pos).getBlock() != FlansModApocalypse.blockPowerCube 				|| world.getBlockState(pos.add(3, 0, 0)).getBlock() != FlansModApocalypse.blockPowerCube
-		|| world.getBlockState(pos.add(0, 0, 3)).getBlock() != FlansModApocalypse.blockPowerCube 	|| world.getBlockState(pos.add(3, 0, 3)).getBlock() != FlansModApocalypse.blockPowerCube)
+		if(world.getBlockState(pos).getBlock() != FlansModApocalypse.blockPowerCube || world.getBlockState(pos.add(3, 0, 0)).getBlock() != FlansModApocalypse.blockPowerCube
+				|| world.getBlockState(pos.add(0, 0, 3)).getBlock() != FlansModApocalypse.blockPowerCube || world.getBlockState(pos.add(3, 0, 3)).getBlock() != FlansModApocalypse.blockPowerCube)
 			return false;
 		for(int i = 0; i < 2; i++)
 			for(int j = 0; j < 2; j++)

@@ -18,9 +18,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiLandingPage extends GuiTeamsBase 
+public class GuiLandingPage extends GuiTeamsBase
 {
-	/** The background image */
+	/**
+	 * The background image
+	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/LandingPage.png");
 	
 	private static final int WIDTH = 256, HEIGHT = 215;
@@ -56,7 +58,7 @@ public class GuiLandingPage extends GuiTeamsBase
 			if(data.currentLevel >= pool.slotUnlockLevels[i])
 			{
 				buttonList.add(
-				 new GuiButton(i, width / 2 - WIDTH / 2 + 12 + 49 * i, height / 2 - HEIGHT / 2 + 117, 36, 20, "Edit"));
+						new GuiButton(i, width / 2 - WIDTH / 2 + 12 + 49 * i, height / 2 - HEIGHT / 2 + 117, 36, 20, "Edit"));
 			}
 		}
 		
@@ -75,7 +77,7 @@ public class GuiLandingPage extends GuiTeamsBase
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id >= 0 && button.id < 5)
+		if(button.id >= 0 && button.id < 5)
 		{
 			ClientTeamsData.OpenEditLoadoutPage(button.id);
 		}
@@ -91,7 +93,7 @@ public class GuiLandingPage extends GuiTeamsBase
 			ClientTeamsData.OpenRewardBox(button.id - 6);
 		}
 	}
-		
+	
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
@@ -158,7 +160,7 @@ public class GuiLandingPage extends GuiTeamsBase
 		}
 		
 		super.drawScreen(i, j, f);
-	}	
+	}
 	
 	private void DrawRewardBoxPanel(LoadoutPool pool, PlayerRankData data, int x, int y, int index)
 	{

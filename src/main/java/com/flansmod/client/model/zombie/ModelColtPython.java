@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelColtPython extends ModelGun 
+public class ModelColtPython extends ModelGun
 {
 	public ModelColtPython()
 	{
@@ -15,10 +15,10 @@ public class ModelColtPython extends ModelGun
 		gunModel = new ModelRendererTurbo[6];
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[0].addShapeBox(-1F, -1F, -0.5F, 2, 3, 1, 0F, /* 0 */ -0.5F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -0.5F, 0F, 0F, /* 4 */ -0.5F, -1F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -0.5F, -1F, 0F);	
+		gunModel[0].addShapeBox(-1F, -1F, -0.5F, 2, 3, 1, 0F, /* 0 */ -0.5F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -0.5F, 0F, 0F, /* 4 */ -0.5F, -1F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -0.5F, -1F, 0F);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 6, 0, textureX, textureY);
-		gunModel[1].addShapeBox(1F, 1F, -0.5F, 1, 2, 1, 0F, /* 0 */ 0F, 0.5F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0.5F, 0F, /* 4 */ 0F, -1F, 0F, /* 5 */ 0F, 0.5F, 0F, /* 6 */ 0F, 0.5F, 0F, /* 7 */ 0F, -1F, 0F);	
+		gunModel[1].addShapeBox(1F, 1F, -0.5F, 1, 2, 1, 0F, /* 0 */ 0F, 0.5F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0.5F, 0F, /* 4 */ 0F, -1F, 0F, /* 5 */ 0F, 0.5F, 0F, /* 6 */ 0F, 0.5F, 0F, /* 7 */ 0F, -1F, 0F);
 
 		gunModel[2] = new ModelRendererTurbo(this, 10, 0, textureX, textureY);
 		gunModel[2].addBox(2F, 1F, -0.5F, 3, 0.25F, 1);
@@ -51,7 +51,7 @@ public class ModelColtPython extends ModelGun
 
 		barrelAttachPoint = new Vector3f(11F / 16F, 4.5F / 16F, 0F);
 		
-		scopeAttachPoint = new Vector3f(4F / 16F, 5F / 16F, 0F);		
+		scopeAttachPoint = new Vector3f(4F / 16F, 5F / 16F, 0F);
 		
 		translateAll(0F, 1.5F, 0F);
 		gunSlideDistance = 0.25F;

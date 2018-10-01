@@ -11,7 +11,9 @@ import com.flansmod.common.driveables.PlaneType;
 import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.vector.Vector3f;
 
-/** Extensible ModelPlane class for rendering plane models */
+/**
+ * Extensible ModelPlane class for rendering plane models
+ */
 public class ModelPlane extends ModelDriveable
 {
 	//Shapebox template for copy paste
@@ -22,7 +24,7 @@ public class ModelPlane extends ModelDriveable
 	public ModelRendererTurbo rightWingModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo topWingModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo bayModel[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo tailModel[] = new ModelRendererTurbo[0];	
+	public ModelRendererTurbo tailModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo propellerModels[][] = new ModelRendererTurbo[0][0]; //Propeller array [numProps][prop blades]
 	public ModelRendererTurbo yawFlapModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo pitchFlapLeftModel[] = new ModelRendererTurbo[0];
@@ -40,7 +42,7 @@ public class ModelPlane extends ModelDriveable
 	
 	//VTOL bits. They are swapped between when you swap modes
 	public ModelRendererTurbo helicopterModeParts[] = new ModelRendererTurbo[0];
-	public ModelRendererTurbo planeModeParts[] = new ModelRendererTurbo[0];		
+	public ModelRendererTurbo planeModeParts[] = new ModelRendererTurbo[0];
 	
 	public ModelRendererTurbo bodyWheelModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailWheelModel[] = new ModelRendererTurbo[0];
@@ -49,12 +51,13 @@ public class ModelPlane extends ModelDriveable
 	
 	public ModelRendererTurbo tailDoorOpenModel[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo tailDoorCloseModel[] = new ModelRendererTurbo[0];
-		
+	
 	public ModelRendererTurbo rightWingPos1Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo rightWingPos2Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingPos1Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo leftWingPos2Model[] = new ModelRendererTurbo[0];
 	public ModelRendererTurbo hudModel[] = new ModelRendererTurbo[0];
+	
 	@Override
 	public void render(EntityDriveable driveable, float f1)
 	{
@@ -80,8 +83,8 @@ public class ModelPlane extends ModelDriveable
 				prop[j].render(0.0625F);
 			}
 		}
-		for (ModelRendererTurbo[] heliMainRotorModel : heliMainRotorModels) renderPart(heliMainRotorModel);
-		for (ModelRendererTurbo[] heliTailRotorModel : heliTailRotorModels) renderPart(heliTailRotorModel);
+		for(ModelRendererTurbo[] heliMainRotorModel : heliMainRotorModels) renderPart(heliMainRotorModel);
+		for(ModelRendererTurbo[] heliTailRotorModel : heliTailRotorModels) renderPart(heliTailRotorModel);
 		renderPart(helicopterModeParts);
 		renderPart(skidsModel);
 		renderPart(yawFlapModel);
@@ -116,48 +119,56 @@ public class ModelPlane extends ModelDriveable
 				}
 			}
 		}
-				
+		
 		if(plane.isPartIntact(EnumDriveablePart.nose))
 		{
 			//Nose
-			for (ModelRendererTurbo aNoseModel : noseModel) {
+			for(ModelRendererTurbo aNoseModel : noseModel)
+			{
 				aNoseModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.bay))
 		{
 			//Bay
-			for (ModelRendererTurbo aBayModel : bayModel) {
+			for(ModelRendererTurbo aBayModel : bayModel)
+			{
 				aBayModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.tail))
 		{
 			//Rendering the tail
-			for (ModelRendererTurbo aTailModel : tailModel) {
+			for(ModelRendererTurbo aTailModel : tailModel)
+			{
 				aTailModel.render(f5);
 			}
 			//Doors
-			for (ModelRendererTurbo aTailDoorOpenModel : tailDoorOpenModel) {
-				if (plane.varDoor)
+			for(ModelRendererTurbo aTailDoorOpenModel : tailDoorOpenModel)
+			{
+				if(plane.varDoor)
 					aTailDoorOpenModel.render(f5);
 			}
-			for (ModelRendererTurbo aTailDoorCloseModel : tailDoorCloseModel) {
-				if (!plane.varDoor)
+			for(ModelRendererTurbo aTailDoorCloseModel : tailDoorCloseModel)
+			{
+				if(!plane.varDoor)
 					aTailDoorCloseModel.render(f5);
 			}
 			//Rotating the yaw flap
-			for (ModelRendererTurbo aYawFlapModel : yawFlapModel) {
+			for(ModelRendererTurbo aYawFlapModel : yawFlapModel)
+			{
 				aYawFlapModel.rotateAngleY = plane.flapsYaw * 3.14159265F / 180F;
 				aYawFlapModel.render(f5);
 			}
 			//Rotating the left pitch flap
-			for (ModelRendererTurbo aPitchFlapLeftModel : pitchFlapLeftModel) {
+			for(ModelRendererTurbo aPitchFlapLeftModel : pitchFlapLeftModel)
+			{
 				aPitchFlapLeftModel.rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
 				aPitchFlapLeftModel.render(f5);
 			}
 			//Rotating the right pitch flap
-			for (ModelRendererTurbo aPitchFlapRightModel : pitchFlapRightModel) {
+			for(ModelRendererTurbo aPitchFlapRightModel : pitchFlapRightModel)
+			{
 				aPitchFlapRightModel.rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
 				aPitchFlapRightModel.render(f5);
 			}
@@ -165,36 +176,42 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.skids))
 		{
 			//Skids
-			for (ModelRendererTurbo aSkidsModel : skidsModel) {
-				if (plane.varGear)
+			for(ModelRendererTurbo aSkidsModel : skidsModel)
+			{
+				if(plane.varGear)
 					aSkidsModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.tailWheel))
 		{
 			//Gear
-			for (ModelRendererTurbo aTailWheelModel : tailWheelModel) {
-				if (plane.varGear)
+			for(ModelRendererTurbo aTailWheelModel : tailWheelModel)
+			{
+				if(plane.varGear)
 					aTailWheelModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.leftWing))
 		{
 			//Rendering the left wing
-			for (ModelRendererTurbo aLeftWingModel : leftWingModel) {
+			for(ModelRendererTurbo aLeftWingModel : leftWingModel)
+			{
 				aLeftWingModel.render(f5);
 			}
 			//Changeable Wings
-			for (ModelRendererTurbo aLeftWingPos1Model : leftWingPos1Model) {
-				if (plane.varWing)
+			for(ModelRendererTurbo aLeftWingPos1Model : leftWingPos1Model)
+			{
+				if(plane.varWing)
 					aLeftWingPos1Model.render(f5);
 			}
-			for (ModelRendererTurbo aLeftWingPos2Model : leftWingPos2Model) {
-				if (!plane.varWing)
+			for(ModelRendererTurbo aLeftWingPos2Model : leftWingPos2Model)
+			{
+				if(!plane.varWing)
 					aLeftWingPos2Model.render(f5);
 			}
 			//Rotating the left wing pitch flap
-			for (ModelRendererTurbo aPitchFlapLeftWingModel : pitchFlapLeftWingModel) {
+			for(ModelRendererTurbo aPitchFlapLeftWingModel : pitchFlapLeftWingModel)
+			{
 				aPitchFlapLeftWingModel.rotateAngleZ = plane.flapsPitchLeft * 3.14159265F / 180F;
 				aPitchFlapLeftWingModel.render(f5);
 			}
@@ -202,20 +219,24 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.rightWing))
 		{
 			//Rendering the right wing
-			for (ModelRendererTurbo aRightWingModel : rightWingModel) {
+			for(ModelRendererTurbo aRightWingModel : rightWingModel)
+			{
 				aRightWingModel.render(f5);
 			}
 			//Changeable Wings
-			for (ModelRendererTurbo aRightWingPos1Model : rightWingPos1Model) {
-				if (plane.varWing)
+			for(ModelRendererTurbo aRightWingPos1Model : rightWingPos1Model)
+			{
+				if(plane.varWing)
 					aRightWingPos1Model.render(f5);
 			}
-			for (ModelRendererTurbo aRightWingPos2Model : rightWingPos2Model) {
-				if (!plane.varWing)
+			for(ModelRendererTurbo aRightWingPos2Model : rightWingPos2Model)
+			{
+				if(!plane.varWing)
 					aRightWingPos2Model.render(f5);
 			}
 			//Rotating the right wing pitch flap
-			for (ModelRendererTurbo aPitchFlapRightWingModel : pitchFlapRightWingModel) {
+			for(ModelRendererTurbo aPitchFlapRightWingModel : pitchFlapRightWingModel)
+			{
 				aPitchFlapRightWingModel.rotateAngleZ = plane.flapsPitchRight * 3.14159265F / 180F;
 				aPitchFlapRightWingModel.render(f5);
 			}
@@ -223,35 +244,41 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.leftWingWheel))
 		{
 			//Gear
-			for (ModelRendererTurbo aLeftWingWheelModel : leftWingWheelModel) {
-				if (plane.varGear)
+			for(ModelRendererTurbo aLeftWingWheelModel : leftWingWheelModel)
+			{
+				if(plane.varGear)
 					aLeftWingWheelModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.rightWingWheel))
 		{
 			//Gear
-			for (ModelRendererTurbo aRightWingWheelModel : rightWingWheelModel) {
-				if (plane.varGear)
+			for(ModelRendererTurbo aRightWingWheelModel : rightWingWheelModel)
+			{
+				if(plane.varGear)
 					aRightWingWheelModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.core))
 		{
 			//Rendering the body
-			for (ModelRendererTurbo aBodyModel : bodyModel) {
+			for(ModelRendererTurbo aBodyModel : bodyModel)
+			{
 				aBodyModel.render(f5);
 			}
 			//Doors
-			for (ModelRendererTurbo aBodyDoorOpenModel : bodyDoorOpenModel) {
-				if (plane.varDoor)
+			for(ModelRendererTurbo aBodyDoorOpenModel : bodyDoorOpenModel)
+			{
+				if(plane.varDoor)
 					aBodyDoorOpenModel.render(f5);
 			}
-			for (ModelRendererTurbo aBodyDoorCloseModel : bodyDoorCloseModel) {
-				if (!plane.varDoor)
+			for(ModelRendererTurbo aBodyDoorCloseModel : bodyDoorCloseModel)
+			{
+				if(!plane.varDoor)
 					aBodyDoorCloseModel.render(f5);
 			}
-			for (ModelRendererTurbo aHudModel : hudModel) {
+			for(ModelRendererTurbo aHudModel : hudModel)
+			{
 				aHudModel.rotateAngleX = -(plane.axes.getRoll() * 3.14159265F / 180F);
 				aHudModel.render(f5);
 			}
@@ -265,15 +292,17 @@ public class ModelPlane extends ModelDriveable
 		if(plane.isPartIntact(EnumDriveablePart.coreWheel))
 		{
 			//Gear
-			for (ModelRendererTurbo aBodyWheelModel : bodyWheelModel) {
-				if (plane.varGear)
+			for(ModelRendererTurbo aBodyWheelModel : bodyWheelModel)
+			{
+				if(plane.varGear)
 					aBodyWheelModel.render(f5);
 			}
 		}
 		if(plane.isPartIntact(EnumDriveablePart.topWing))
 		{
 			//Rendering the top wing
-			for (ModelRendererTurbo aTopWingModel : topWingModel) {
+			for(ModelRendererTurbo aTopWingModel : topWingModel)
+			{
 				aTopWingModel.render(f5);
 			}
 		}
@@ -285,7 +314,7 @@ public class ModelPlane extends ModelDriveable
 			{
 				float yaw = seat.prevLooking.getYaw() + (seat.looking.getYaw() - seat.prevLooking.getYaw()) * f;
 				float pitch = seat.prevLooking.getPitch() + (seat.looking.getPitch() - seat.prevLooking.getPitch()) * f;
-
+				
 				//Iterate over the parts of that model
 				ModelRendererTurbo[][] gunModel = gunModels.get(seat.seatInfo.gunName);
 				//Yaw only parts
@@ -327,10 +356,12 @@ public class ModelPlane extends ModelDriveable
 			}
 		}
 	}
-
-
-	/** Renders helicopter rotor number i. */
-	public void renderRotor(EntityPlane plane, float f5, int i) 
+	
+	
+	/**
+	 * Renders helicopter rotor number i.
+	 */
+	public void renderRotor(EntityPlane plane, float f5, int i)
 	{
 		PlaneType type = plane.getPlaneType();
 		//If its not covered by the plane type heli propellers, render it. Otherwise, see if the part is intact
@@ -342,9 +373,11 @@ public class ModelPlane extends ModelDriveable
 			}
 		}
 	}
-
-	/** Renders helicopter tail rotor number i. */
-	public void renderTailRotor(EntityPlane plane, float f5, int i) 
+	
+	/**
+	 * Renders helicopter tail rotor number i.
+	 */
+	public void renderTailRotor(EntityPlane plane, float f5, int i)
 	{
 		PlaneType type = plane.getPlaneType();
 		//If its not covered by the plane type heli propellers, render it. Otherwise, see if the part is intact
@@ -400,7 +433,7 @@ public class ModelPlane extends ModelDriveable
 			flip(propellerModel);
 		}
 	}
-
+	
 	@Override
 	public void translateAll(float x, float y, float z)
 	{
@@ -430,7 +463,7 @@ public class ModelPlane extends ModelDriveable
 		translate(leftWingPos1Model, x, y, z);
 		translate(leftWingPos2Model, x, y, z);
 		translate(hudModel, x, y, z);
-
+		
 		for(ModelRendererTurbo[] mods : propellerModels)
 		{
 			translate(mods, x, y, z);

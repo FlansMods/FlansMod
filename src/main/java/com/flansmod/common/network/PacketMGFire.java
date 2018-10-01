@@ -18,27 +18,29 @@ public class PacketMGFire extends PacketBase
 {
 	public boolean held;
 	
-	public PacketMGFire() {}
+	public PacketMGFire()
+	{
+	}
 	
 	public PacketMGFire(boolean h)
 	{
 		held = h;
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeBoolean(held);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		held = data.readBoolean();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		EntityMG mg = PlayerHandler.getPlayerData(playerEntity).mountingGun;
 		if(mg != null)
@@ -50,10 +52,10 @@ public class PacketMGFire extends PacketBase
 			((EntityAAGun)playerEntity.getRidingEntity()).setMouseHeld(held);
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		FlansMod.log.warn("MG firing packet received on client. Skipping.");
 	}

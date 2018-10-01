@@ -1,1 +1,16 @@
-{ "variants": { "facing=north": { "model": "flansmod:flanSkeleton2" }, "facing=east": { "model": "flansmod:flanSkeleton2" }, "facing=south": { "model": "flansmod:flanSkeleton2" }, "facing=west": { "model": "flansmod:flanSkeleton2" } } }
+{
+  "variants": {
+    "facing=north": {
+      "model": "flansmod:flanSkeleton2"
+    },
+    "facing=east": {
+      "model": "flansmod:flanSkeleton2"
+    },
+    "facing=south": {
+      "model": "flansmod:flanSkeleton2"
+    },
+    "facing=west": {
+      "model": "flansmod:flanSkeleton2"
+    }
+  }
+}

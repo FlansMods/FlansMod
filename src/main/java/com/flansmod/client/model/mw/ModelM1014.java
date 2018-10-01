@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelM1014 extends ModelGun 
+public class ModelM1014 extends ModelGun
 {
 	public ModelM1014()
 	{
@@ -30,7 +30,7 @@ public class ModelM1014 extends ModelGun
 		gunModel[4].addBox(1F, 2F, -1F, 1, 1, 2);
 		
 		gunModel[5] = new ModelRendererTurbo(this, 28, 0, textureX, textureY);
-		gunModel[5].addBox(1F, 2.5F, -2F, 4, 3, 1);		
+		gunModel[5].addBox(1F, 2.5F, -2F, 4, 3, 1);
 		
 		//Shotgun Handle
 		pumpModel = new ModelRendererTurbo[1];
@@ -40,7 +40,7 @@ public class ModelM1014 extends ModelGun
 		
 		//Scope
 		scopeAttachPoint = new Vector3f(3F / 16F, 5F / 16F, 0F);
-
+		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[3];
 		
@@ -66,7 +66,7 @@ public class ModelM1014 extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 22, 0, textureX, textureY);
 		ammoModel[0].addBox(4F, 3.5F, -0.5F, 2, 1, 1);
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.SHOTGUN;
 		pumpDelayAfterReload = 65;

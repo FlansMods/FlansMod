@@ -23,14 +23,14 @@ public class ModelYak9 extends ModelPlane
 
 // Nose
 		noseModel = new ModelRendererTurbo[8];
-		noseModel[0] = new ModelRendererTurbo(this,  35,  461, textureX, textureY); // NS.Nose
-		noseModel[1] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // NS.Core/NoseTransitionTop
-		noseModel[2] = new ModelRendererTurbo(this,  280,  440, textureX, textureY); // NS.Core/NoseTransitionBottom
-		noseModel[3] = new ModelRendererTurbo(this,  280,  400, textureX, textureY); // NS.NoseAirIntake
-		noseModel[4] = new ModelRendererTurbo(this,  280,  350, textureX, textureY); // NS.EngineThingiesLeft
-		noseModel[5] = new ModelRendererTurbo(this,  280,  350, textureX, textureY); // NS.EngineThingiesRight
-		noseModel[6] = new ModelRendererTurbo(this,  280,  380, textureX, textureY); // NS.Cannon
-		noseModel[7] = new ModelRendererTurbo(this,  0,  480, textureX, textureY); // NS.Cannon
+		noseModel[0] = new ModelRendererTurbo(this, 35, 461, textureX, textureY); // NS.Nose
+		noseModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // NS.Core/NoseTransitionTop
+		noseModel[2] = new ModelRendererTurbo(this, 280, 440, textureX, textureY); // NS.Core/NoseTransitionBottom
+		noseModel[3] = new ModelRendererTurbo(this, 280, 400, textureX, textureY); // NS.NoseAirIntake
+		noseModel[4] = new ModelRendererTurbo(this, 280, 350, textureX, textureY); // NS.EngineThingiesLeft
+		noseModel[5] = new ModelRendererTurbo(this, 280, 350, textureX, textureY); // NS.EngineThingiesRight
+		noseModel[6] = new ModelRendererTurbo(this, 280, 380, textureX, textureY); // NS.Cannon
+		noseModel[7] = new ModelRendererTurbo(this, 0, 480, textureX, textureY); // NS.Cannon
 
 		noseModel[0].addBox(0F, 0F, 0F, 14, 10, 12, 0F); // NS.Nose
 		noseModel[0].setRotationPoint(-65F, -22.5F, -6F);
@@ -65,42 +65,40 @@ public class ModelYak9 extends ModelPlane
 		propellerModels[0][0] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
 		propellerModels[0][1] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 1
 		propellerModels[0][2] = new ModelRendererTurbo(this, 0, 450, textureX, textureY); //Propeller 0 - Blade 2
-		propellerModels[0][0].addBox(0F, 0F, -1F, 1, 21, 2, 0F);		//Propeller Blades
-		propellerModels[0][1].addBox(0F, 0F, -1F, 1, 21, 2, 0F);		//They will all be the same
+		propellerModels[0][0].addBox(0F, 0F, -1F, 1, 21, 2, 0F);        //Propeller Blades
+		propellerModels[0][1].addBox(0F, 0F, -1F, 1, 21, 2, 0F);        //They will all be the same
 		propellerModels[0][2].addBox(0F, 0F, -1F, 1, 21, 2, 0F);
-		propellerModels[0][0].setRotationPoint(-69F, -18F, 0F);	//Set the position of the propeller
+		propellerModels[0][0].setRotationPoint(-69F, -18F, 0F);    //Set the position of the propeller
 		propellerModels[0][1].setRotationPoint(-69F, -18F, 0F);
 		propellerModels[0][2].setRotationPoint(-69F, -18F, 0F);
-		
-
 
 
 // Body
 		bodyModel = new ModelRendererTurbo[24];
-		bodyModel[0] = new ModelRendererTurbo(this,  280,  470, textureX, textureY); // CR.CoreFront
-		bodyModel[1] = new ModelRendererTurbo(this,  450,  450, textureX, textureY); // CR.Intake
-		bodyModel[2] = new ModelRendererTurbo(this,  450,  415, textureX, textureY); // CR.ControlPanel
-		bodyModel[3] = new ModelRendererTurbo(this,  440,  490, textureX, textureY); // CR.FrontLeftSideTube
-		bodyModel[4] = new ModelRendererTurbo(this,  440,  490, textureX, textureY); // CR.FrontRightSideTube
-		bodyModel[5] = new ModelRendererTurbo(this,  420,  460, textureX, textureY); // CR.FrontTopTube
-		bodyModel[6] = new ModelRendererTurbo(this,  430,  490, textureX, textureY); // CR.FrontLeftTube
-		bodyModel[7] = new ModelRendererTurbo(this,  430,  490, textureX, textureY); // CR.FrontRightTube
-		bodyModel[8] = new ModelRendererTurbo(this,  440,  490, textureX, textureY); // CR.BackRightSideTube
-		bodyModel[9] = new ModelRendererTurbo(this,  440,  490, textureX, textureY); // CR.BackLeftSideTube
-		bodyModel[10] = new ModelRendererTurbo(this,  420,  480, textureX, textureY); // CR.RightTopSideTube
-		bodyModel[11] = new ModelRendererTurbo(this,  420,  480, textureX, textureY); // CR.LeftSideTube
-		bodyModel[12] = new ModelRendererTurbo(this,  410,  445, textureX, textureY); // CR.BackRightTube
-		bodyModel[13] = new ModelRendererTurbo(this,  410,  445, textureX, textureY); // CR.BackLeftTube
-		bodyModel[14] = new ModelRendererTurbo(this,  420,  460, textureX, textureY); // CR.BackTopTube
-		bodyModel[15] = new ModelRendererTurbo(this,  450,  370, textureX, textureY); // CR.CoreBack
-		bodyModel[16] = new ModelRendererTurbo(this,  430,  340, textureX, textureY); // CR.CoreFloor
-		bodyModel[17] = new ModelRendererTurbo(this,  460,  310, textureX, textureY); // CR.CoreWallLeft
-		bodyModel[18] = new ModelRendererTurbo(this,  390,  500, textureX, textureY); // CR.UnderJoystick
-		bodyModel[19] = new ModelRendererTurbo(this,  410,  370, textureX, textureY); // CR.ChairBottom
-		bodyModel[20] = new ModelRendererTurbo(this,  420,  390, textureX, textureY); // CR.ChairTop
-		bodyModel[21] = new ModelRendererTurbo(this,  460,  310, textureX, textureY); // CR.CoreWallRight
-		bodyModel[22] = new ModelRendererTurbo(this,  430,  420, textureX, textureY); // CR.Antenna
-		bodyModel[23] = new ModelRendererTurbo(this,  80,  200, textureX, textureY); // CR.MagicSquare
+		bodyModel[0] = new ModelRendererTurbo(this, 280, 470, textureX, textureY); // CR.CoreFront
+		bodyModel[1] = new ModelRendererTurbo(this, 450, 450, textureX, textureY); // CR.Intake
+		bodyModel[2] = new ModelRendererTurbo(this, 450, 415, textureX, textureY); // CR.ControlPanel
+		bodyModel[3] = new ModelRendererTurbo(this, 440, 490, textureX, textureY); // CR.FrontLeftSideTube
+		bodyModel[4] = new ModelRendererTurbo(this, 440, 490, textureX, textureY); // CR.FrontRightSideTube
+		bodyModel[5] = new ModelRendererTurbo(this, 420, 460, textureX, textureY); // CR.FrontTopTube
+		bodyModel[6] = new ModelRendererTurbo(this, 430, 490, textureX, textureY); // CR.FrontLeftTube
+		bodyModel[7] = new ModelRendererTurbo(this, 430, 490, textureX, textureY); // CR.FrontRightTube
+		bodyModel[8] = new ModelRendererTurbo(this, 440, 490, textureX, textureY); // CR.BackRightSideTube
+		bodyModel[9] = new ModelRendererTurbo(this, 440, 490, textureX, textureY); // CR.BackLeftSideTube
+		bodyModel[10] = new ModelRendererTurbo(this, 420, 480, textureX, textureY); // CR.RightTopSideTube
+		bodyModel[11] = new ModelRendererTurbo(this, 420, 480, textureX, textureY); // CR.LeftSideTube
+		bodyModel[12] = new ModelRendererTurbo(this, 410, 445, textureX, textureY); // CR.BackRightTube
+		bodyModel[13] = new ModelRendererTurbo(this, 410, 445, textureX, textureY); // CR.BackLeftTube
+		bodyModel[14] = new ModelRendererTurbo(this, 420, 460, textureX, textureY); // CR.BackTopTube
+		bodyModel[15] = new ModelRendererTurbo(this, 450, 370, textureX, textureY); // CR.CoreBack
+		bodyModel[16] = new ModelRendererTurbo(this, 430, 340, textureX, textureY); // CR.CoreFloor
+		bodyModel[17] = new ModelRendererTurbo(this, 460, 310, textureX, textureY); // CR.CoreWallLeft
+		bodyModel[18] = new ModelRendererTurbo(this, 390, 500, textureX, textureY); // CR.UnderJoystick
+		bodyModel[19] = new ModelRendererTurbo(this, 410, 370, textureX, textureY); // CR.ChairBottom
+		bodyModel[20] = new ModelRendererTurbo(this, 420, 390, textureX, textureY); // CR.ChairTop
+		bodyModel[21] = new ModelRendererTurbo(this, 460, 310, textureX, textureY); // CR.CoreWallRight
+		bodyModel[22] = new ModelRendererTurbo(this, 430, 420, textureX, textureY); // CR.Antenna
+		bodyModel[23] = new ModelRendererTurbo(this, 80, 200, textureX, textureY); // CR.MagicSquare
 
 		bodyModel[0].addBox(0F, 0F, 0F, 12, 17, 16, 0F); // CR.CoreFront
 		bodyModel[0].setRotationPoint(-36F, -23.5F, -8F);
@@ -192,14 +190,13 @@ public class ModelYak9 extends ModelPlane
 		bodyModel[23].setRotationPoint(-5F, -25F, -2F);
 
 
-
 // Bay
 		bayModel = new ModelRendererTurbo[5];
-		bayModel[0] = new ModelRendererTurbo(this,  300,  150, textureX, textureY); // BY.BayRight
-		bayModel[1] = new ModelRendererTurbo(this,  300,  180, textureX, textureY); // BY.BayLeft
-		bayModel[2] = new ModelRendererTurbo(this,  300,  210, textureX, textureY); // BY.Core/Bayconnector
-		bayModel[3] = new ModelRendererTurbo(this,  340,  210, textureX, textureY); // BY.BayBottom
-		bayModel[4] = new ModelRendererTurbo(this,  425,  200, textureX, textureY); // BY.WheelHolder
+		bayModel[0] = new ModelRendererTurbo(this, 300, 150, textureX, textureY); // BY.BayRight
+		bayModel[1] = new ModelRendererTurbo(this, 300, 180, textureX, textureY); // BY.BayLeft
+		bayModel[2] = new ModelRendererTurbo(this, 300, 210, textureX, textureY); // BY.Core/Bayconnector
+		bayModel[3] = new ModelRendererTurbo(this, 340, 210, textureX, textureY); // BY.BayBottom
+		bayModel[4] = new ModelRendererTurbo(this, 425, 200, textureX, textureY); // BY.WheelHolder
 
 		bayModel[0].addBox(0F, 0F, -4F, 54, 13, 8, 0F); // BY.BayRight
 		bayModel[0].setRotationPoint(2F, -23F, -4F);
@@ -221,17 +218,16 @@ public class ModelYak9 extends ModelPlane
 		bayModel[4].rotateAngleZ = 0.1745329F;
 
 
-
 // Tail
 		tailModel = new ModelRendererTurbo[8];
-		tailModel[0] = new ModelRendererTurbo(this,  180,  235, textureX, textureY); // TL.Dorsal/FlapCapital
-		tailModel[1] = new ModelRendererTurbo(this,  180,  250, textureX, textureY); // TL.DorsalFinFront
-		tailModel[2] = new ModelRendererTurbo(this,  180,  265, textureX, textureY); // TL.DorsalFiller1
-		tailModel[3] = new ModelRendererTurbo(this,  180,  300, textureX, textureY); // TL.FinAngleLeft
-		tailModel[4] = new ModelRendererTurbo(this,  180,  340, textureX, textureY); // TL.LeftFlapHinge
-		tailModel[5] = new ModelRendererTurbo(this,  180,  300, textureX, textureY); // TL.FinAngleRight
-		tailModel[6] = new ModelRendererTurbo(this,  180,  340, textureX, textureY); // TL.RightFlapHinge
-		tailModel[7] = new ModelRendererTurbo(this,  180,  375, textureX, textureY); // TL.MiddleCoverUp
+		tailModel[0] = new ModelRendererTurbo(this, 180, 235, textureX, textureY); // TL.Dorsal/FlapCapital
+		tailModel[1] = new ModelRendererTurbo(this, 180, 250, textureX, textureY); // TL.DorsalFinFront
+		tailModel[2] = new ModelRendererTurbo(this, 180, 265, textureX, textureY); // TL.DorsalFiller1
+		tailModel[3] = new ModelRendererTurbo(this, 180, 300, textureX, textureY); // TL.FinAngleLeft
+		tailModel[4] = new ModelRendererTurbo(this, 180, 340, textureX, textureY); // TL.LeftFlapHinge
+		tailModel[5] = new ModelRendererTurbo(this, 180, 300, textureX, textureY); // TL.FinAngleRight
+		tailModel[6] = new ModelRendererTurbo(this, 180, 340, textureX, textureY); // TL.RightFlapHinge
+		tailModel[7] = new ModelRendererTurbo(this, 180, 375, textureX, textureY); // TL.MiddleCoverUp
 
 		tailModel[0].addBox(0F, 0F, 0F, 6, 4, 2, 0F); // TL.Dorsal/FlapCapital
 		tailModel[0].setRotationPoint(47F, -38F, -1F);
@@ -261,14 +257,13 @@ public class ModelYak9 extends ModelPlane
 		tailModel[7].setRotationPoint(42F, -21F, -13F);
 
 
-
 // Left Wing
 		leftWingModel = new ModelRendererTurbo[5];
-		leftWingModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // LW.LeftWingMain
-		leftWingModel[1] = new ModelRendererTurbo(this,  390,  0, textureX, textureY); // LW.LeftWingBackCenter
-		leftWingModel[2] = new ModelRendererTurbo(this,  390,  20, textureX, textureY); // LW.LeftWingFlapSupport
-		leftWingModel[3] = new ModelRendererTurbo(this,  390,  80, textureX, textureY); // LW.LeftWingOuterTip
-		leftWingModel[4] = new ModelRendererTurbo(this,  20,  80, textureX, textureY); // LW.LeftWingForwards
+		leftWingModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // LW.LeftWingMain
+		leftWingModel[1] = new ModelRendererTurbo(this, 390, 0, textureX, textureY); // LW.LeftWingBackCenter
+		leftWingModel[2] = new ModelRendererTurbo(this, 390, 20, textureX, textureY); // LW.LeftWingFlapSupport
+		leftWingModel[3] = new ModelRendererTurbo(this, 390, 80, textureX, textureY); // LW.LeftWingOuterTip
+		leftWingModel[4] = new ModelRendererTurbo(this, 20, 80, textureX, textureY); // LW.LeftWingForwards
 
 		leftWingModel[0].addBox(0F, -1F, 0F, 20, 2, 68, 0F); // LW.LeftWingMain
 		leftWingModel[0].setRotationPoint(-30F, -8F, 8F);
@@ -296,14 +291,13 @@ public class ModelYak9 extends ModelPlane
 		leftWingModel[4].rotateAngleY = -0.1396263F;
 
 
-
 // Right Wing
 		rightWingModel = new ModelRendererTurbo[5];
-		rightWingModel[0] = new ModelRendererTurbo(this,  200,  0, textureX, textureY); // RW.RightWingMain
-		rightWingModel[1] = new ModelRendererTurbo(this,  390,  0, textureX, textureY); // RW.RightWingBackCenter
-		rightWingModel[2] = new ModelRendererTurbo(this,  390,  20, textureX, textureY); // RW.RightWingFlapSupport
-		rightWingModel[3] = new ModelRendererTurbo(this,  390,  80, textureX, textureY); // RW.RightWingOuterTip
-		rightWingModel[4] = new ModelRendererTurbo(this,  20,  80, textureX, textureY); // RW.RightWingForwards
+		rightWingModel[0] = new ModelRendererTurbo(this, 200, 0, textureX, textureY); // RW.RightWingMain
+		rightWingModel[1] = new ModelRendererTurbo(this, 390, 0, textureX, textureY); // RW.RightWingBackCenter
+		rightWingModel[2] = new ModelRendererTurbo(this, 390, 20, textureX, textureY); // RW.RightWingFlapSupport
+		rightWingModel[3] = new ModelRendererTurbo(this, 390, 80, textureX, textureY); // RW.RightWingOuterTip
+		rightWingModel[4] = new ModelRendererTurbo(this, 20, 80, textureX, textureY); // RW.RightWingForwards
 
 		rightWingModel[0].addBox(0F, -1F, -68F, 20, 2, 68, 0F); // RW.RightWingMain
 		rightWingModel[0].setRotationPoint(-30F, -8F, -8F);
@@ -331,13 +325,12 @@ public class ModelYak9 extends ModelPlane
 		rightWingModel[4].rotateAngleY = 0.1396263F;
 
 
-
 // Yaw Flap
 		yawFlapModel = new ModelRendererTurbo[4];
-		yawFlapModel[0] = new ModelRendererTurbo(this,  420,  420, textureX, textureY); // YF.JoyStick
-		yawFlapModel[1] = new ModelRendererTurbo(this,  410,  420, textureX, textureY); // YF.JoyStickGrip
-		yawFlapModel[2] = new ModelRendererTurbo(this,  200,  480, textureX, textureY); // YF.TailYawFlap
-		yawFlapModel[3] = new ModelRendererTurbo(this,  200,  460, textureX, textureY); // YF.TailYawFlapTop
+		yawFlapModel[0] = new ModelRendererTurbo(this, 420, 420, textureX, textureY); // YF.JoyStick
+		yawFlapModel[1] = new ModelRendererTurbo(this, 410, 420, textureX, textureY); // YF.JoyStickGrip
+		yawFlapModel[2] = new ModelRendererTurbo(this, 200, 480, textureX, textureY); // YF.TailYawFlap
+		yawFlapModel[3] = new ModelRendererTurbo(this, 200, 460, textureX, textureY); // YF.TailYawFlapTop
 
 		yawFlapModel[0].addBox(-0.5F, -0.5F, -0.5F, 1, 11, 1, 0F); // YF.JoyStick
 		yawFlapModel[0].setRotationPoint(-18F, -19F, 0F);
@@ -352,12 +345,11 @@ public class ModelYak9 extends ModelPlane
 		yawFlapModel[3].setRotationPoint(56F, -34F, -1F);
 
 
-
 // Pitch Flap Left
 		pitchFlapLeftModel = new ModelRendererTurbo[3];
-		pitchFlapLeftModel[0] = new ModelRendererTurbo(this,  400,  460, textureX, textureY); // LF.LeftPedal
-		pitchFlapLeftModel[1] = new ModelRendererTurbo(this,  0,  220, textureX, textureY); // LF.LeftWingFlap
-		pitchFlapLeftModel[2] = new ModelRendererTurbo(this,  200,  430, textureX, textureY); // LF.LeftTailFlap
+		pitchFlapLeftModel[0] = new ModelRendererTurbo(this, 400, 460, textureX, textureY); // LF.LeftPedal
+		pitchFlapLeftModel[1] = new ModelRendererTurbo(this, 0, 220, textureX, textureY); // LF.LeftWingFlap
+		pitchFlapLeftModel[2] = new ModelRendererTurbo(this, 200, 430, textureX, textureY); // LF.LeftTailFlap
 
 		pitchFlapLeftModel[0].addBox(0F, 0F, -2F, 2, 1, 4, 0F); // LF.LeftPedal
 		pitchFlapLeftModel[0].setRotationPoint(-24F, -11F, -4F);
@@ -372,12 +364,11 @@ public class ModelYak9 extends ModelPlane
 		pitchFlapLeftModel[2].setRotationPoint(53F, -20F, 5F);
 
 
-
 // Pitch Flap Right
 		pitchFlapRightModel = new ModelRendererTurbo[3];
-		pitchFlapRightModel[0] = new ModelRendererTurbo(this,  400,  460, textureX, textureY); // RF.RightPedal
-		pitchFlapRightModel[1] = new ModelRendererTurbo(this,  0,  220, textureX, textureY); // RF.RightWingFlap
-		pitchFlapRightModel[2] = new ModelRendererTurbo(this,  200,  430, textureX, textureY); // RF.RightTailFlap
+		pitchFlapRightModel[0] = new ModelRendererTurbo(this, 400, 460, textureX, textureY); // RF.RightPedal
+		pitchFlapRightModel[1] = new ModelRendererTurbo(this, 0, 220, textureX, textureY); // RF.RightWingFlap
+		pitchFlapRightModel[2] = new ModelRendererTurbo(this, 200, 430, textureX, textureY); // RF.RightTailFlap
 
 		pitchFlapRightModel[0].addBox(0F, 0F, -2F, 2, 1, 4, 0F); // RF.RightPedal
 		pitchFlapRightModel[0].setRotationPoint(-24F, -11F, 4F);
@@ -392,20 +383,18 @@ public class ModelYak9 extends ModelPlane
 		pitchFlapRightModel[2].setRotationPoint(53F, -20F, -27F);
 
 
-
 // Tail Wheel
 		tailWheelModel = new ModelRendererTurbo[1];
-		tailWheelModel[0] = new ModelRendererTurbo(this,  0,  300, textureX, textureY); // LGT.BackWheel
+		tailWheelModel[0] = new ModelRendererTurbo(this, 0, 300, textureX, textureY); // LGT.BackWheel
 
 		tailWheelModel[0].addBox(0F, 0F, 0F, 4, 4, 2, 0F); // LGT.BackWheel
 		tailWheelModel[0].setRotationPoint(50F, -8F, -1F);
 
 
-
 // Left Wing Wheel
 		leftWingWheelModel = new ModelRendererTurbo[2];
-		leftWingWheelModel[0] = new ModelRendererTurbo(this,  0,  320, textureX, textureY); // LGLW.Stick
-		leftWingWheelModel[1] = new ModelRendererTurbo(this,  0,  345, textureX, textureY); // LGLW.Wheel
+		leftWingWheelModel[0] = new ModelRendererTurbo(this, 0, 320, textureX, textureY); // LGLW.Stick
+		leftWingWheelModel[1] = new ModelRendererTurbo(this, 0, 345, textureX, textureY); // LGLW.Wheel
 
 		leftWingWheelModel[0].addBox(0F, 0F, -1F, 3, 12, 2, 0F); // LGLW.Stick
 		leftWingWheelModel[0].setRotationPoint(-27F, -8F, 22F);
@@ -418,11 +407,10 @@ public class ModelYak9 extends ModelPlane
 		leftWingWheelModel[1].rotateAngleZ = -0.03490658F;
 
 
-
 // Right Wing Wheel
 		rightWingWheelModel = new ModelRendererTurbo[2];
-		rightWingWheelModel[0] = new ModelRendererTurbo(this,  0,  320, textureX, textureY); // LGRW.Stick
-		rightWingWheelModel[1] = new ModelRendererTurbo(this,  0,  345, textureX, textureY); // LGRW.Wheel
+		rightWingWheelModel[0] = new ModelRendererTurbo(this, 0, 320, textureX, textureY); // LGRW.Stick
+		rightWingWheelModel[1] = new ModelRendererTurbo(this, 0, 345, textureX, textureY); // LGRW.Wheel
 
 		rightWingWheelModel[0].addBox(0F, 0F, -1F, 3, 12, 2, 0F); // LGRW.Stick
 		rightWingWheelModel[0].setRotationPoint(-27F, -8F, -22F);
@@ -434,8 +422,6 @@ public class ModelYak9 extends ModelPlane
 		rightWingWheelModel[1].rotateAngleX = -0.03490658F;
 		rightWingWheelModel[1].rotateAngleZ = -0.03490658F;
 
-		
-		
 
 		translateAll(4, 10, 0);
 
@@ -448,6 +434,6 @@ public class ModelYak9 extends ModelPlane
 	{
 		ModelRendererTurbo[] prop = new ModelRendererTurbo[0];
 		return prop;
-	
+
 	}
 }

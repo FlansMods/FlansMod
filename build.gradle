@@ -47,7 +47,7 @@ processResources {
 
         // replace version and mcversion
         expand 'version': project.version, 'apocalypseversion': project.apocalypseVersion,
-                'mcversion': project.minecraft.version
+            'mcversion': project.minecraft.version
     }
 
     // copy everything else except the mcmod.info

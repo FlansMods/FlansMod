@@ -59,7 +59,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
-/** All handled events for the client should go through here and be passed on. Makes it easier to see which events are being handled by the mod */
+/**
+ * All handled events for the client should go through here and be passed on. Makes it easier to see which events are being handled by the mod
+ */
 public class ClientEventHandler
 {
 	private KeyInputHandler keyInputHandler = new KeyInputHandler();
@@ -70,19 +72,19 @@ public class ClientEventHandler
 	{
 		switch(event.phase)
 		{
-			case START :
+			case START:
 			{
 				RenderGun.smoothing = event.renderTickTime;
 				FlansModClient.UpdateCameraZoom(event.renderTickTime);
 				renderHooks.SetPartialTick(event.renderTickTime);
 				break;
 			}
-			case END :
+			case END:
 			{
 				
 				break;
 			}
-		}	
+		}
 	}
 	
 	@SubscribeEvent
@@ -90,23 +92,23 @@ public class ClientEventHandler
 	{
 		switch(event.phase)
 		{
-			case START :
+			case START:
 			{
 				//Handle all packets received since last tick
 				FlansMod.getPacketHandler().handleClientPackets();
 				FlansModClient.UpdateFlashlights(Minecraft.getMinecraft());
 				break;
 			}
-			case END :
+			case END:
 			{
-		    	InstantBulletRenderer.UpdateAllTrails();
+				InstantBulletRenderer.UpdateAllTrails();
 				renderHooks.update();
 				RenderFlag.angle += 2F;
 				FlansModClient.tick();
 				
 				break;
 			}
-		}	
+		}
 	}
 	
 	@SubscribeEvent
@@ -124,7 +126,7 @@ public class ClientEventHandler
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemGun)
 		{
-			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded && 
+			if(((ItemGun)player.getHeldItemMainhand().getItem()).GetType().oneHanded &&
 					Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) && Math.abs(event.getDwheel()) > 0)
 				event.setCanceled(true);
 		}

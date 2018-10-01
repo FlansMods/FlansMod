@@ -23,49 +23,49 @@ public class ModelGothaGV extends ModelPlane
 
 // Body
 		bodyModel = new ModelRendererTurbo[43];
-		bodyModel[0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingRB
-		bodyModel[1] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingRT
-		bodyModel[2] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WindLB
-		bodyModel[3] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingLT
-		bodyModel[4] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // CockpitSideL
-		bodyModel[5] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // CockpitSideR
-		bodyModel[6] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // CockpitFront
-		bodyModel[7] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingRFIStake
-		bodyModel[8] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingRBIStake
-		bodyModel[9] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingLFIStake
-		bodyModel[10] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // WingLBIStake
-		bodyModel[11] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape1
-		bodyModel[12] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape2
-		bodyModel[13] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape2
-		bodyModel[14] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape3
-		bodyModel[15] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape3
-		bodyModel[16] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape3
-		bodyModel[17] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape3
-		bodyModel[18] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape4
-		bodyModel[19] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape4
-		bodyModel[20] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape5
-		bodyModel[21] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape5
-		bodyModel[22] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape6
-		bodyModel[23] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape7
-		bodyModel[24] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape8
-		bodyModel[25] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape9
-		bodyModel[26] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape10
-		bodyModel[27] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape11
-		bodyModel[28] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape12
-		bodyModel[29] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape12
-		bodyModel[30] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape12
-		bodyModel[31] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape12
-		bodyModel[32] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape13
-		bodyModel[33] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape13
-		bodyModel[34] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape14
-		bodyModel[35] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape15
-		bodyModel[36] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape16
-		bodyModel[37] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape17
-		bodyModel[38] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape18
-		bodyModel[39] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape19
-		bodyModel[40] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape19
-		bodyModel[41] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape18
-		bodyModel[42] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Shape20
+		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingRB
+		bodyModel[1] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingRT
+		bodyModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WindLB
+		bodyModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingLT
+		bodyModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // CockpitSideL
+		bodyModel[5] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // CockpitSideR
+		bodyModel[6] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // CockpitFront
+		bodyModel[7] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingRFIStake
+		bodyModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingRBIStake
+		bodyModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingLFIStake
+		bodyModel[10] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // WingLBIStake
+		bodyModel[11] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape1
+		bodyModel[12] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape2
+		bodyModel[13] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape2
+		bodyModel[14] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape3
+		bodyModel[15] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape3
+		bodyModel[16] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape3
+		bodyModel[17] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape3
+		bodyModel[18] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape4
+		bodyModel[19] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape4
+		bodyModel[20] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape5
+		bodyModel[21] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape5
+		bodyModel[22] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape6
+		bodyModel[23] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape7
+		bodyModel[24] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape8
+		bodyModel[25] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape9
+		bodyModel[26] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape10
+		bodyModel[27] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape11
+		bodyModel[28] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape12
+		bodyModel[29] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape12
+		bodyModel[30] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape12
+		bodyModel[31] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape12
+		bodyModel[32] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape13
+		bodyModel[33] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape13
+		bodyModel[34] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape14
+		bodyModel[35] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape15
+		bodyModel[36] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape16
+		bodyModel[37] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape17
+		bodyModel[38] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape18
+		bodyModel[39] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape19
+		bodyModel[40] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape19
+		bodyModel[41] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape18
+		bodyModel[42] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Shape20
 
 		bodyModel[0].addBox(0F, 0F, 0F, 75, 2, 225, 0F); // WingRB
 		bodyModel[0].setRotationPoint(22F, -24F, -223F);
@@ -218,17 +218,17 @@ public class ModelGothaGV extends ModelPlane
 		bodyModel[42].addBox(0F, 0F, 0F, 10, 2, 10, 0F); // Shape20
 		bodyModel[42].setRotationPoint(5F, -35F, -11F);
 		
-		ModelRendererTurbo[][] MGBModel = new ModelRendererTurbo[3][];		
+		ModelRendererTurbo[][] MGBModel = new ModelRendererTurbo[3][];
 		MGBModel[0] = new ModelRendererTurbo[0];
 		
 		MGBModel[1] = new ModelRendererTurbo[0];
 
 
 		MGBModel[2] = new ModelRendererTurbo[1];
-		MGBModel[2][0] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // MGB
+		MGBModel[2][0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // MGB
 
 		MGBModel[2][0].addBox(101F, -45F, 0F, 18, 1, 1, 0F); // MGB
-		MGBModel[2][0].setRotationPoint(-100F,29F,0F);		
+		MGBModel[2][0].setRotationPoint(-100F, 29F, 0F);
 		
 		for(ModelRendererTurbo MGBPart : MGBModel[2])
 			MGBPart.setRotationPoint(0F, 0F, 0F);
@@ -240,15 +240,14 @@ public class ModelGothaGV extends ModelPlane
 		propellerModels[0][0] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 0 : 192, 12 is the texture origin
 		propellerModels[0][1] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 1
 		propellerModels[0][2] = new ModelRendererTurbo(this, 192, 12, textureX, textureY); //Propeller 0 - Blade 2
-		propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//Propeller Blades
-		propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);		//They will all be the same
+		propellerModels[0][0].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);        //Propeller Blades
+		propellerModels[0][1].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);        //They will all be the same
 		propellerModels[0][2].addBox(-0F, -12F, -1F, 2, 11, 2, 0.0F);
-		propellerModels[0][0].setRotationPoint(-54, -2, 0);	//Set the position of the propeller
+		propellerModels[0][0].setRotationPoint(-54, -2, 0);    //Set the position of the propeller
 		propellerModels[0][1].setRotationPoint(-54, -2, 0);
 		propellerModels[0][2].setRotationPoint(-54, -2, 0);
 		
 		
-
 		translateAll(0, 0, 0);
 
 

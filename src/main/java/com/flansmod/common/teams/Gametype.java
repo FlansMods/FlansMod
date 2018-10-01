@@ -23,7 +23,7 @@ import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.network.PacketBase;
 import com.flansmod.common.types.InfoType;
 
-public abstract class Gametype 
+public abstract class Gametype
 {
 	public static HashMap<String, Gametype> gametypes = new HashMap<String, Gametype>();
 	public static TeamsManager teamsManager = TeamsManager.getInstance();
@@ -46,71 +46,127 @@ public abstract class Gametype
 		gametypes.put(shortName, this);
 	}
 	
-	/** Called when a round starts */
+	/**
+	 * Called when a round starts
+	 */
 	public abstract void roundStart();
 	
-	/** Called when a round ends. (The point at which scoreboards are displayed) */
+	/**
+	 * Called when a round ends. (The point at which scoreboards are displayed)
+	 */
 	public abstract void roundEnd();
 	
-	/** Called when the scoreboards and voting are finished */
+	/**
+	 * Called when the scoreboards and voting are finished
+	 */
 	public abstract void roundCleanup();
 	
 	public abstract boolean teamHasWon(Team team);
 	
-	public void tick() {}
+	public void tick()
+	{
+	}
 	
 	public Team[] getTeamsCanSpawnAs(TeamsRound currentRound, EntityPlayer player)
 	{
 		return currentRound.teams;
 	}
 	
-	public void playerJoined(EntityPlayerMP player) {}
+	public void playerJoined(EntityPlayerMP player)
+	{
+	}
 	
-	public void playerRespawned(EntityPlayerMP player) {}
+	public void playerRespawned(EntityPlayerMP player)
+	{
+	}
 	
-	public void playerQuit(EntityPlayerMP player) {}
-		
+	public void playerQuit(EntityPlayerMP player)
+	{
+	}
+	
 	//Return true if damage should be dealt.
-	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) { return true; }
+	public boolean playerAttacked(EntityPlayerMP player, DamageSource source)
+	{
+		return true;
+	}
 	
-	public void playerKilled(EntityPlayerMP player, DamageSource source) {}
+	public void playerKilled(EntityPlayerMP player, DamageSource source)
+	{
+	}
 	
-	public void baseAttacked(ITeamBase base, DamageSource source) {}
+	public void baseAttacked(ITeamBase base, DamageSource source)
+	{
+	}
 	
-	public void objectAttacked(ITeamObject object, DamageSource source) {}
-
-	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) {}
+	public void objectAttacked(ITeamObject object, DamageSource source)
+	{
+	}
 	
-	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) {}
+	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player)
+	{
+	}
 	
-	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) { return true; }
+	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player)
+	{
+	}
+	
+	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam)
+	{
+		return true;
+	}
 	
 	public abstract Vec3d getSpawnPoint(EntityPlayerMP player);
 	
 	//Return whether or not the variable exists
-	public boolean setVariable(String variable, String value) { return false; }
+	public boolean setVariable(String variable, String value)
+	{
+		return false;
+	}
 	
 	public abstract void readFromNBT(NBTTagCompound tags);
 	
 	public abstract void saveToNBT(NBTTagCompound tags);
 	
-	public boolean sortScoreboardByTeam() { return true; }
+	public boolean sortScoreboardByTeam()
+	{
+		return true;
+	}
 	
-	public boolean showZombieScore() { return false; }
-
-	/** Whether "attacker" can attack "victim" */
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) { return true; }
-
-	/** Called when any entity is killed. This allows one to track mob deaths too */
-	public void entityKilled(Entity entity, DamageSource source) {}
-
-	public void playerChoseTeam(EntityPlayerMP player, Team team, Team newTeam) {}
-		
-	public void playerChoseNewClass(EntityPlayerMP player, IPlayerClass playerClass) {}
+	public boolean showZombieScore()
+	{
+		return false;
+	}
 	
-	public void playerDefected(EntityPlayerMP player, Team team, Team newTeam) {}
+	/**
+	 * Whether "attacker" can attack "victim"
+	 */
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam)
+	{
+		return true;
+	}
 	
-	public void playerEnteredTheGame(EntityPlayerMP player, Team team, IPlayerClass playerClass) {}
+	/**
+	 * Called when any entity is killed. This allows one to track mob deaths too
+	 */
+	public void entityKilled(Entity entity, DamageSource source)
+	{
+	}
+	
+	public void playerChoseTeam(EntityPlayerMP player, Team team, Team newTeam)
+	{
+	}
+	
+	public void playerChoseNewClass(EntityPlayerMP player, IPlayerClass playerClass)
+	{
+	}
+	
+	public void playerDefected(EntityPlayerMP player, Team team, Team newTeam)
+	{
+	}
+	
+	public void playerEnteredTheGame(EntityPlayerMP player, Team team, IPlayerClass playerClass)
+	{
+	}
 	
 	//--------------------------------------
 	// Helper methods - Do not override
@@ -130,7 +186,7 @@ public abstract class Gametype
 	{
 		FlansMod.getPacketHandler().sendTo(packet, player);
 	}
-		
+	
 	public static String[] getPlayerNames()
 	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getOnlinePlayerNames();
@@ -140,7 +196,7 @@ public abstract class Gametype
 	{
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 	}
-						
+	
 	public static void givePoints(EntityPlayerMP player, int points)
 	{
 		PlayerData data = getPlayerData(player);
@@ -155,15 +211,18 @@ public abstract class Gametype
 		if(source instanceof EntityDamageSource)
 		{
 			if(source.getTrueSource() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP) source.getTrueSource();
+				attacker = (EntityPlayerMP)source.getTrueSource();
 		}
 		if(source instanceof EntityDamageSourceIndirect)
 		{
 			if(source.getTrueSource() instanceof EntityPlayerMP)
-				attacker = (EntityPlayerMP) source.getTrueSource();
+				attacker = (EntityPlayerMP)source.getTrueSource();
 		}
 		return attacker;
 	}
 	
-	public boolean shouldAutobalance() { return true; }
+	public boolean shouldAutobalance()
+	{
+		return true;
+	}
 }

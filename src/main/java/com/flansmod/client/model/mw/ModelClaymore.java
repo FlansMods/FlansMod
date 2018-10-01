@@ -5,10 +5,10 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelClaymore extends ModelBase 
+public class ModelClaymore extends ModelBase
 {
 	public ModelRendererTurbo[] claymoreModel;
-
+	
 	public ModelClaymore()
 	{
 		claymoreModel = new ModelRendererTurbo[2];

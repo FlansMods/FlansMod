@@ -57,25 +57,43 @@ import static com.flansmod.common.util.BlockUtil.destroyBlock;
 public class EntityGrenade extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	public GrenadeType type;
-	/** The entity that threw them */
+	/**
+	 * The entity that threw them
+	 */
 	public EntityLivingBase thrower;
-	/** This is to avoid players grenades teamkilling after they switch team */
+	/**
+	 * This is to avoid players grenades teamkilling after they switch team
+	 */
 	public Team teamOfThrower;
-	/** Yeah, I want my grenades to have fancy physics */
+	/**
+	 * Yeah, I want my grenades to have fancy physics
+	 */
 	public RotatedAxes axes = new RotatedAxes();
 	public Vector3f angularVelocity = new Vector3f(0F, 0F, 0F);
 	public float prevRotationRoll = 0F;
-	/** Set to the smoke amount when the grenade detonates and decremented every tick after that */
+	/**
+	 * Set to the smoke amount when the grenade detonates and decremented every tick after that
+	 */
 	public int smokeTime = 0;
-	/** Set to true when smoke grenade detonates */
+	/**
+	 * Set to true when smoke grenade detonates
+	 */
 	public boolean smoking = false;
-	/** Set to true when a sticky grenade sticks. Impedes further movement */
+	/**
+	 * Set to true when a sticky grenade sticks. Impedes further movement
+	 */
 	public boolean stuck = false;
-	/** Stores the position of the block this grenade is stuck to. Used to determine when to unstick */
+	/**
+	 * Stores the position of the block this grenade is stuck to. Used to determine when to unstick
+	 */
 	public int stuckToX, stuckToY, stuckToZ;
-	/** Stop repeat detonations */
+	/**
+	 * Stop repeat detonations
+	 */
 	public boolean detonated = false;
-	/** For deployable bags */
+	/**
+	 * For deployable bags
+	 */
 	public int numUsesRemaining = 0;
 	
 	public EntityGrenade(World w)
@@ -131,7 +149,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				double dX = (posX - prevPosX) / 10;
 				double dY = (posY - prevPosY) / 10;
 				double dZ = (posZ - prevPosZ) / 10;
-				for (int i = 0; i < 10; i++)
+				for(int i = 0; i < 10; i++)
 				{
 					Particle particle = FlansModClient.getParticle(type.trailParticleType, world, prevPosX + dX * i, prevPosY + dY * i, prevPosZ + dZ * i);
 					// TODO: [1.12] Particles
@@ -141,7 +159,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				}
 			}
 			
-
+			
 		}
 		
 		//Smoke
@@ -217,7 +235,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				}
 			}
 		}
-
+		
 		//If the block we were stuck to is gone, unstick
 		if(stuck && world.isAirBlock(new BlockPos(stuckToX, stuckToY, stuckToZ)))
 			stuck = false;
@@ -230,7 +248,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			prevRotationRoll = axes.getRoll();
 			if(angularVelocity.lengthSquared() > 0.00000001F)
 				axes.rotateLocal(angularVelocity.length(), angularVelocity.normalise(null));
-
+			
 			Vector3f posVec = new Vector3f(posX, posY, posZ);
 			Vector3f motVec = new Vector3f(motionX, motionY, motionZ);
 			Vector3f nextPosVec = Vector3f.add(posVec, motVec, null);
@@ -247,13 +265,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				//If this grenade detonates on impact, do so
 				if(type.explodeOnImpact)
 					detonate();
-				
-				//If we hit glass and can break it, do so
+					
+					//If we hit glass and can break it, do so
 				else if(type.breaksGlass && mat == Material.GLASS && TeamsManager.canBreakGlass)
 				{
-					if (!world.isRemote)
+					if(!world.isRemote)
 					{
-						WorldServer worldServer = (WorldServer) world;
+						WorldServer worldServer = (WorldServer)world;
 						destroyBlock(worldServer, hit.getBlockPos(), thrower, false);
 					}
 				}
@@ -272,10 +290,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					EnumFacing sideHit = hit.sideHit;
 					switch(sideHit)
 					{
-					case UP : case DOWN : postHitMotVec.setY(-postHitMotVec.getY()); break;
-					case EAST : case WEST : postHitMotVec.setX(-postHitMotVec.getX()); break;
-					case NORTH : case SOUTH : postHitMotVec.setZ(-postHitMotVec.getZ()); break;
-					//TODO : Check the compass directions are correct
+						case UP: case DOWN: postHitMotVec.setY(-postHitMotVec.getY());
+						break;
+						case EAST: case WEST: postHitMotVec.setX(-postHitMotVec.getX());
+						break;
+						case NORTH: case SOUTH: postHitMotVec.setZ(-postHitMotVec.getZ());
+						break;
+						//TODO : Check the compass directions are correct
 					}
 					
 					//Calculate the time interval spent post reflection
@@ -321,12 +342,22 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-						case DOWN : axes.setAngles(yaw, 180F, 0F); break;
-						case UP : axes.setAngles(yaw, 0F, 0F); break;
-						case NORTH : axes.setAngles(270F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case SOUTH : axes.setAngles(90F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case WEST : axes.setAngles(180F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
-						case EAST : axes.setAngles(0F, 90F, 0F); axes.rotateLocalYaw(yaw); break;
+							case DOWN: axes.setAngles(yaw, 180F, 0F);
+								break;
+							case UP: axes.setAngles(yaw, 0F, 0F);
+								break;
+							case NORTH: axes.setAngles(270F, 90F, 0F);
+								axes.rotateLocalYaw(yaw);
+								break;
+							case SOUTH: axes.setAngles(90F, 90F, 0F);
+								axes.rotateLocalYaw(yaw);
+								break;
+							case WEST: axes.setAngles(180F, 90F, 0F);
+								axes.rotateLocalYaw(yaw);
+								break;
+							case EAST: axes.setAngles(0F, 90F, 0F);
+								axes.rotateLocalYaw(yaw);
+								break;
 						}
 						
 						//Set the stuck flag on
@@ -344,7 +375,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 				posY += motionY;
 				posZ += motionZ;
 			}
-	
+			
 			//Update the grenade position
 			setPosition(posX, posY, posZ);
 		}
@@ -370,7 +401,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					((EntityLivingBase)obj).attackEntityFrom(getGrenadeDamage(), type.damageVsLiving * motVec.lengthSquared() * 3);
 			}
 		}
-	
+		
 		//Apply gravity
 		motionY -= 9.81D / 400D * type.fallSpeed;
 		
@@ -404,10 +435,10 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!world.isRemote && type.explosionRadius > 0.1F)
 		{
-	        if((thrower instanceof EntityPlayer))
-	        	new FlansModExplosion(world, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
-	        else
-	        	world.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+			if((thrower instanceof EntityPlayer))
+				new FlansModExplosion(world, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
+			else
+				world.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
@@ -454,7 +485,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		{
 			String itemName = type.dropItemOnDetonate;
 			int damage = 0;
-			if (itemName.contains("."))
+			if(itemName.contains("."))
 			{
 				damage = Integer.parseInt(itemName.split("\\.")[1]);
 				itemName = itemName.split("\\.")[0];
@@ -487,13 +518,13 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			return (new EntityDamageSourceGun(type.shortName, this, (EntityPlayer)thrower, type, false)).setProjectile();
 		else return (new EntityDamageSourceIndirect(type.shortName, this, thrower)).setProjectile();
 	}
-
+	
 	@Override
 	protected void entityInit()
 	{
-
+	
 	}
-
+	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
@@ -503,7 +534,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		rotationPitch = tags.getFloat("RotationPitch");
 		axes.setAngles(rotationYaw, rotationPitch, 0F);
 	}
-
+	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
@@ -518,7 +549,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 			tags.setFloat("RotationPitch", axes.getPitch());
 		}
 	}
-
+	
 	@Override
 	public void writeSpawnData(ByteBuf data)
 	{
@@ -527,7 +558,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		data.writeFloat(axes.getYaw());
 		data.writeFloat(axes.getPitch());
 	}
-
+	
 	@Override
 	public void readSpawnData(ByteBuf data)
 	{
@@ -540,7 +571,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		if(type.spinWhenThrown)
 			angularVelocity = new Vector3f(0F, 0F, 10F);
 	}
-
+	
 	@Override
 	public boolean isBurning()
 	{

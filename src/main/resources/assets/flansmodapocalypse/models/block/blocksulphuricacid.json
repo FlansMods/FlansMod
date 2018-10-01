@@ -1,7 +1,7 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "flansmodapocalypse:blocks/SulphuricAcidStill",
-        "flowing": "flansmodapocalypse:blocks/SulphuricAcidFlowing"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "flansmodapocalypse:blocks/SulphuricAcidStill",
+    "flowing": "flansmodapocalypse:blocks/SulphuricAcidFlowing"
+  }
 }

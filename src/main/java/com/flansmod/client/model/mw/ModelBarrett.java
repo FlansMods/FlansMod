@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelBarrett extends ModelGun 
+public class ModelBarrett extends ModelGun
 {
 	public ModelBarrett()
 	{
@@ -38,34 +38,34 @@ public class ModelBarrett extends ModelGun
 		
 		gunModel[3].addBox(12F, 1F, -1F, 6, 3, 2, 0F); // Box 0
 		gunModel[3].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[4].addBox(8F, -0.5F, -1.5F, 1, 5, 3, 0F); // Box 1
 		gunModel[4].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[5].addBox(10F, -0.5F, -1.5F, 1, 5, 3, 0F); // Box 2
 		gunModel[5].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[6].addBox(12F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 3
 		gunModel[6].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[7].addBox(14F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 4
 		gunModel[7].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[8].addBox(16F, 0.5F, -1.5F, 1, 4, 3, 0F); // Box 5
 		gunModel[8].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[9].addShapeBox(6F, 0F, -1F, 6, 2, 2, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, 0F); // Box 6
 		gunModel[9].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[10].addBox(6F, 1.5F, -1.5F, 1, 3, 3, 0F); // Box 9
 		gunModel[10].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[11].addBox(-2F, 1.5F, -1.5F, 1, 3, 3, 0F); // Box 13
 		gunModel[11].setRotationPoint(0F, 0F, 0F);
-
+		
 		gunModel[12].addBox(-1F, 2.5F, -1.5F, 7, 1, 3, 0F); // Box 15
 		gunModel[12].setRotationPoint(0F, 0F, 0F);
-
+		
 		
 		//Bolt
 		slideModel = new ModelRendererTurbo[2];

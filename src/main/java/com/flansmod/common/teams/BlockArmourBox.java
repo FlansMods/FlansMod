@@ -28,11 +28,11 @@ public class BlockArmourBox extends Block
 {
 	public ArmourBoxType type;
 	
-	public BlockArmourBox(ArmourBoxType t) 
+	public BlockArmourBox(ArmourBoxType t)
 	{
 		super(Material.WOOD);
 		type = t;
-
+		
 		setTranslationKey(type.shortName);
 		setHardness(2F);
 		setResistance(4F);
@@ -47,7 +47,7 @@ public class BlockArmourBox extends Block
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 		{
 			FlansMod.proxy.buyArmour(shortName, piece, type);
-		} 
+		}
 		ArmourBoxEntry entryPicked = null;
 		for(ArmourBoxEntry page : type.pages)
 		{
@@ -63,7 +63,7 @@ public class BlockArmourBox extends Block
 			crafting.craft(inventory.player);
 		}
 	}
-
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{

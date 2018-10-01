@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelG36 extends ModelGun 
+public class ModelG36 extends ModelGun
 {
 	public ModelG36()
 	{
@@ -31,15 +31,15 @@ public class ModelG36 extends ModelGun
 		
 		gunModel[5] = new ModelRendererTurbo(this, 22, 4, textureX, textureY);
 		gunModel[5].addBox(1F, 1F, -1F, 6, 1, 2);
-
+		
 		gunModel[6] = new ModelRendererTurbo(this, 0, 10, textureX, textureY);
 		gunModel[6].addBox(-0.5F, -2F, -0.5F, 1, 3, 1);
 		gunModel[6].setRotationPoint(2F, 1F, 0F);
 		gunModel[6].rotateAngleZ = -0.5F;
-
+		
 		//Scope
 		scopeAttachPoint = new Vector3f(4F / 16F, 5F / 16F, 0F);
-
+		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[5];
 		
@@ -54,7 +54,7 @@ public class ModelG36 extends ModelGun
 		
 		defaultStockModel[3] = new ModelRendererTurbo(this, 14, 14, textureX, textureY);
 		defaultStockModel[3].addBox(-6F, 3.5F, -0.5F, 5, 0.5F, 1);
-
+		
 		defaultStockModel[4] = new ModelRendererTurbo(this, 26, 14, textureX, textureY);
 		defaultStockModel[4].addBox(-3F, 2.5F, -0.5F, 1, 1, 1);
 		

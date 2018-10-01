@@ -1,5 +1,7 @@
 {
-	"variants": {
-		"normal": { "model": "flansmodapocalypse:powerCube" }
-	}
+  "variants": {
+    "normal": {
+      "model": "flansmodapocalypse:powerCube"
+    }
+  }
 }

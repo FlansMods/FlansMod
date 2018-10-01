@@ -22,7 +22,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 {
 	public ToolType type;
 	
-	public EntityParachute(World w) 
+	public EntityParachute(World w)
 	{
 		super(w);
 		ignoreFrustumCheck = true;
@@ -35,7 +35,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 		type = t;
 		setPosition(player.posX, player.posY, player.posZ);
 	}
-
+	
 	@Override
 	public void onUpdate()
 	{
@@ -63,7 +63,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 			
 			prevRotationYaw = rotationYaw;
 			rotationYaw = getControllingPassenger().rotationYaw;
-		}		
+		}
 		
 		motionX *= 0.8F;
 		motionZ *= 0.8F;
@@ -78,7 +78,7 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	
 	@Override
 	public void fall(float par1, float k)
-    {
+	{
 		//Ignore fall damage
 	}
 	
@@ -90,37 +90,37 @@ public class EntityParachute extends Entity implements IEntityAdditionalSpawnDat
 	}
 	
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 	}
 	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		type = ToolType.getType(tags.getString("Type"));
 	}
-
+	
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tags) 
+	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
 		tags.setString("Type", type.shortName);
 	}
-
+	
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		ItemStack stack = new ItemStack(type.item, 1, 0);
 		return stack;
 	}
-
+	
 	@Override
-	public void writeSpawnData(ByteBuf buffer) 
+	public void writeSpawnData(ByteBuf buffer)
 	{
 		ByteBufUtils.writeUTF8String(buffer, type.shortName);
 	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf additionalData) 
+	public void readSpawnData(ByteBuf additionalData)
 	{
 		type = ToolType.getType(ByteBufUtils.readUTF8String(additionalData));
 	}

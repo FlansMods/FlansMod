@@ -22,78 +22,142 @@ import com.flansmod.common.vector.Vector3f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PlayerData 
+public class PlayerData
 {
-	/** Their username */
+	/**
+	 * Their username
+	 */
 	public String username;
-
+	
 	//Movement related fields
-	/** Roll variables */
+	/**
+	 * Roll variables
+	 */
 	public float prevRotationRoll, rotationRoll;
-	/** Snapshots for bullet hit detection. Array size is set to number of snapshots required. When a new one is taken, 
-	 * each snapshot is moved along one place and new one is added at the start, so that when the array fills up, the oldest one is lost */
+	/**
+	 * Snapshots for bullet hit detection. Array size is set to number of snapshots required. When a new one is taken,
+	 * each snapshot is moved along one place and new one is added at the start, so that when the array fills up, the oldest one is lost
+	 */
 	public PlayerSnapshot[] snapshots;
 	
 	//Gun related fields
-	/** The MG this player is using */
+	/**
+	 * The MG this player is using
+	 */
 	public EntityMG mountingGun;
-	/** Stops player shooting immediately after swapping weapons */
+	/**
+	 * Stops player shooting immediately after swapping weapons
+	 */
 	public int shootClickDelay;
-	/** The speed of the minigun the player is using */
+	/**
+	 * The speed of the minigun the player is using
+	 */
 	public float minigunSpeed = 0F;
-	/** When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates */
+	/**
+	 * When remote explosives are thrown they are added to this list. When the player uses a remote, the first one from this list detonates
+	 */
 	public ArrayList<EntityGrenade> remoteExplosives = new ArrayList<EntityGrenade>();
-	/** Sound delay parameters */
+	/**
+	 * Sound delay parameters
+	 */
 	public int loopedSoundDelay;
-	/** Sound delay parameters */
+	/**
+	 * Sound delay parameters
+	 */
 	public boolean shouldPlayCooldownSound, shouldPlayWarmupSound;
-	/** Melee weapon custom hit simulation */
+	/**
+	 * Melee weapon custom hit simulation
+	 */
 	public int meleeProgress, meleeLength;
 	
-	/** Tickers to stop shooting too fast */
+	/**
+	 * Tickers to stop shooting too fast
+	 */
 	public float shootTimeRight, shootTimeLeft;
-	/** True if this player is shooting */
+	/**
+	 * True if this player is shooting
+	 */
 	public boolean isShootingRight, isShootingLeft;
-	/** Reloading booleans */
+	/**
+	 * Reloading booleans
+	 */
 	public boolean reloadingRight, reloadingLeft;
-	/** When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired */
+	/**
+	 * When the player shoots a burst fire weapon, one shot is fired immediately and this counter keeps track of how many more should be fired
+	 */
 	public int burstRoundsRemainingLeft = 0, burstRoundsRemainingRight = 0;
 	
 	// Handed getters and setters
-	public float GetShootTime(EnumHand hand) { return hand == EnumHand.OFF_HAND ? shootTimeLeft : shootTimeRight; }
-	public void SetShootTime(EnumHand hand, float set) { if(hand == EnumHand.OFF_HAND) shootTimeLeft = set; else shootTimeRight = set; }
-
-	public int GetBurstRoundsRemaining(EnumHand hand) { return hand == EnumHand.OFF_HAND ? burstRoundsRemainingLeft : burstRoundsRemainingRight; }
-	public void SetBurstRoundsRemaining(EnumHand hand, int set) { if(hand == EnumHand.OFF_HAND) burstRoundsRemainingLeft = set; else burstRoundsRemainingRight = set; }
+	public float GetShootTime(EnumHand hand)
+	{
+		return hand == EnumHand.OFF_HAND ? shootTimeLeft : shootTimeRight;
+	}
+	
+	public void SetShootTime(EnumHand hand, float set)
+	{
+		if(hand == EnumHand.OFF_HAND) shootTimeLeft = set;
+		else shootTimeRight = set;
+	}
+	
+	public int GetBurstRoundsRemaining(EnumHand hand)
+	{
+		return hand == EnumHand.OFF_HAND ? burstRoundsRemainingLeft : burstRoundsRemainingRight;
+	}
+	
+	public void SetBurstRoundsRemaining(EnumHand hand, int set)
+	{
+		if(hand == EnumHand.OFF_HAND) burstRoundsRemainingLeft = set;
+		else burstRoundsRemainingRight = set;
+	}
 	
 	public Vector3f[] lastMeleePositions;
 	
 	//Teams related fields
-	/** Gametype variables */
+	/**
+	 * Gametype variables
+	 */
 	public int score, kills, deaths;
-	/** Zombies variables */
+	/**
+	 * Zombies variables
+	 */
 	public int zombieScore;
-	/** Gametype variable for Nerf */
+	/**
+	 * Gametype variable for Nerf
+	 */
 	public boolean out;
-	/** The player's vote for the next round from 1 ~ 5. 0 is not yet voted */
+	/**
+	 * The player's vote for the next round from 1 ~ 5. 0 is not yet voted
+	 */
 	public int vote;
-	/** The team this player is currently on */
+	/**
+	 * The team this player is currently on
+	 */
 	public Team team;
-	/** The team this player will switch to upon respawning */
+	/**
+	 * The team this player will switch to upon respawning
+	 */
 	public Team newTeam;
-	/** The class the player is currently using */
+	/**
+	 * The class the player is currently using
+	 */
 	public IPlayerClass playerClass;
-	/** The class the player will switch to upon respawning */
+	/**
+	 * The class the player will switch to upon respawning
+	 */
 	public IPlayerClass newPlayerClass;
-	/** Keeps the player out of having to rechose their team each round */
+	/**
+	 * Keeps the player out of having to rechose their team each round
+	 */
 	public boolean builder;
-	/** Save the player's skin here, to replace after having done a swap for a certain class override */
+	/**
+	 * Save the player's skin here, to replace after having done a swap for a certain class override
+	 */
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation skin;
 	
-	public PlayerData(String name) 
+	public PlayerData(String name)
 	{
-		username = name;	
+		username = name;
 		snapshots = new PlayerSnapshot[FlansMod.numPlayerSnapshots];
 	}
 	
@@ -113,14 +177,14 @@ public class PlayerData
 		
 		if(shootClickDelay > 0)
 			shootClickDelay--;
-
+		
 		if(loopedSoundDelay > 0)
 		{
 			loopedSoundDelay--;
 			if(loopedSoundDelay == 0 && !isShootingRight)
 				shouldPlayCooldownSound = true;
 		}
-				
+		
 		//Move all snapshots along one place
 		System.arraycopy(snapshots, 0, snapshots, 1, snapshots.length - 2 + 1);
 		//Take new snapshot
@@ -130,15 +194,15 @@ public class PlayerData
 	public void clientTick(EntityPlayer player)
 	{
 	}
-
+	
 	public IPlayerClass getPlayerClass()
 	{
 		if(playerClass != newPlayerClass)
 			playerClass = newPlayerClass;
 		return playerClass;
 	}
-
-	public void resetScore() 
+	
+	public void resetScore()
 	{
 		score = zombieScore = kills = deaths = 0;
 		team = newTeam = null;
@@ -170,7 +234,7 @@ public class PlayerData
 		return false;
 	}
 	
-	public void doMelee(EntityPlayer player, int meleeTime, GunType type)	
+	public void doMelee(EntityPlayer player, int meleeTime, GunType type)
 	{
 		meleeLength = meleeTime;
 		lastMeleePositions = new Vector3f[type.meleePath.size()];

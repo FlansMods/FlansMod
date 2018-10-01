@@ -1,6 +1,6 @@
 package com.flansmod.common.guns;
 
-public enum EnumFireMode 
+public enum EnumFireMode
 {
 	SEMIAUTO, FULLAUTO, MINIGUN, BURST;
 	

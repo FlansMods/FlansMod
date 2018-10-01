@@ -1,6 +1,6 @@
 package com.flansmod.client.model;
 
-public enum CustomItemRenderType 
+public enum CustomItemRenderType
 {
 	ENTITY,
 	EQUIPPED,

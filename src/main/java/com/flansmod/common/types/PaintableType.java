@@ -23,16 +23,30 @@ import net.minecraftforge.event.LootTableLoadEvent;
 public abstract class PaintableType extends InfoType
 {
 	//Paintjobs
-	/** The list of all available paintjobs for this gun */
+	/**
+	 * The list of all available paintjobs for this gun
+	 */
 	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
-	/** The default paintjob for this gun. This is created automatically in the load process from existing info */
-	public Paintjob defaultPaintjob;	
-	/** Assigns IDs to paintjobs */
+	/**
+	 * The default paintjob for this gun. This is created automatically in the load process from existing info
+	 */
+	public Paintjob defaultPaintjob;
+	/**
+	 * Assigns IDs to paintjobs
+	 */
 	private int nextPaintjobID = 1;
 	
 	private static HashMap<Integer, PaintableType> paintableTypes = new HashMap<Integer, PaintableType>();
-	public static PaintableType GetPaintableType(int iHash) { return paintableTypes.get(iHash); }
-	public static PaintableType GetPaintableType(String name) { return paintableTypes.get(name.hashCode()); }
+	
+	public static PaintableType GetPaintableType(int iHash)
+	{
+		return paintableTypes.get(iHash);
+	}
+	
+	public static PaintableType GetPaintableType(String name)
+	{
+		return paintableTypes.get(name.hashCode());
+	}
 	
 	public PaintableType(TypeFile file)
 	{
@@ -60,7 +74,9 @@ public abstract class PaintableType extends InfoType
 		paintableTypes.put(shortName.hashCode(), this);
 	}
 	
-	/** Pack reader */
+	/**
+	 * Pack reader
+	 */
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
@@ -80,8 +96,8 @@ public abstract class PaintableType extends InfoType
 				}
 				paintjobs.add(new Paintjob(this, nextPaintjobID++, split[1], split[2], dyeStacks));
 			}
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading file failed : " + shortName);
 			FlansMod.log.throwing(e);
@@ -111,7 +127,7 @@ public abstract class PaintableType extends InfoType
 	}
 	
 	@Override
-	public void addLoot(LootTableLoadEvent event) 
+	public void addLoot(LootTableLoadEvent event)
 	{
 		if(dungeonChance > 0)
 		{
@@ -124,12 +140,12 @@ public abstract class PaintableType extends InfoType
 			
 			if(pool != null)
 			{
-				LootEntry entry = new LootEntryItem(item, FlansMod.dungeonLootChance * dungeonChance, 1, new LootFunction[] { new SetDamage(new LootCondition[0], new RandomValueRange(0, paintjobs.size() - 1)) }, new LootCondition[0], shortName);
+				LootEntry entry = new LootEntryItem(item, FlansMod.dungeonLootChance * dungeonChance, 1, new LootFunction[]{new SetDamage(new LootCondition[0], new RandomValueRange(0, paintjobs.size() - 1))}, new LootCondition[0], shortName);
 				pool.addEntry(entry);
 			}
 		}
 	}
-
+	
 	public float GetRecommendedScale()
 	{
 		return 50.0f;

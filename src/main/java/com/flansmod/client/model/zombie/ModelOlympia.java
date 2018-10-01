@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelOlympia extends ModelGun 
+public class ModelOlympia extends ModelGun
 {
 	public ModelOlympia()
 	{
@@ -15,22 +15,22 @@ public class ModelOlympia extends ModelGun
 		gunModel = new ModelRendererTurbo[6];
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[0].addShapeBox(-5F, 2F, -1F, 2, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0.8F, 0F, 0F, /* 6 */ 0.8F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[0].addShapeBox(-5F, 2F, -1F, 2, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0.8F, 0F, 0F, /* 6 */ 0.8F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 8, 0, textureX, textureY);
-		gunModel[1].addShapeBox(-3F, 2F, -1F, 4, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, -0.5F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, -0.5F, 0F);	
+		gunModel[1].addShapeBox(-3F, 2F, -1F, 4, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, -0.5F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, -0.5F, 0F);
 
 		gunModel[2] = new ModelRendererTurbo(this, 0, 5, textureX, textureY);
 		gunModel[2].addBox(1F, 2F, -1F, 2, 1, 2);
 		
 		gunModel[3] = new ModelRendererTurbo(this, 10, 5, textureX, textureY);
-		gunModel[3].addBox(1F, 3F, -1F, 1, 2, 2);	
+		gunModel[3].addBox(1F, 3F, -1F, 1, 2, 2);
 		
 		gunModel[4] = new ModelRendererTurbo(this, 30, 0, textureX, textureY);
-		gunModel[4].addBox(-1.5F, 4F, -0.5F, 1, 1, 1);	
+		gunModel[4].addBox(-1.5F, 4F, -0.5F, 1, 1, 1);
 		
 		gunModel[5] = new ModelRendererTurbo(this, 20, 2, textureX, textureY);
-		gunModel[5].addShapeBox(-9F, 1F, -1F, 4, 3, 2, 0F, /* 0 */ 0F, 1F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[5].addShapeBox(-9F, 1F, -1F, 4, 3, 2, 0F, /* 0 */ 0F, 1F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 
 		breakActionModel = new ModelRendererTurbo[4];
 		

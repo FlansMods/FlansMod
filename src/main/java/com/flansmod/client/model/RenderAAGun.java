@@ -14,22 +14,26 @@ import com.flansmod.common.guns.EntityAAGun;
 
 public class RenderAAGun extends Render
 {
-	public RenderAAGun(RenderManager renderManager) 
+	public RenderAAGun(RenderManager renderManager)
 	{
 		super(renderManager);
 		shadowSize = 0.5F;
 	}
-
+	
 	public void render(EntityAAGun aa, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(aa);
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d, (float) d1, (float) d2);
+		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		GL11.glScalef(1F, 1F, 1.0F);
 		
 		float dYaw = aa.gunYaw - aa.prevGunYaw;
-		for(; dYaw > 180F; dYaw -= 360F) {}
-		for(; dYaw <= -180F; dYaw += 360F) {}
+		for(; dYaw > 180F; dYaw -= 360F)
+		{
+		}
+		for(; dYaw <= -180F; dYaw += 360F)
+		{
+		}
 		
 		ModelAAGun modelAAGun = aa.type.model;
 		if(modelAAGun != null)
@@ -40,15 +44,15 @@ public class RenderAAGun extends Render
 		}
 		GL11.glPopMatrix();
 	}
-
+	
 	@Override
 	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
-		render((EntityAAGun) entity, d, d1, d2, f, f1);
+		render((EntityAAGun)entity, d, d1, d2, f, f1);
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return FlansModResourceHandler.getTexture(((EntityAAGun)entity).type);
 	}
@@ -56,7 +60,7 @@ public class RenderAAGun extends Render
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderAAGun(manager);
 		}

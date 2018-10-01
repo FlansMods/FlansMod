@@ -8,7 +8,7 @@ import com.flansmod.common.types.PaintableType;
 
 import net.minecraft.item.ItemStack;
 
-public class Paintjob 
+public class Paintjob
 {
 	private static HashMap<Integer, Paintjob> paintjobs = new HashMap<Integer, Paintjob>();
 	

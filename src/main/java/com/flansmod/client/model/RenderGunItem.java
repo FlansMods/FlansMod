@@ -15,40 +15,40 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderGunItem extends RenderEntityItem 
+public class RenderGunItem extends RenderEntityItem
 {
 	private RenderGun gunRenderer;
 	
-	public RenderGunItem(RenderManager renderManager, RenderItem renderItem) 
+	public RenderGunItem(RenderManager renderManager, RenderItem renderItem)
 	{
 		super(renderManager, renderItem);
 		this.gunRenderer = new RenderGun();
 	}
 	
 	@Override
-    public void doRender(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks)
-    {
-        ItemStack stack = entity.getItem();
-        
-        if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
-        {
-        	GlStateManager.pushMatrix();
-        	GlStateManager.translate(x, y + 0.25D, z);
-        	GlStateManager.rotate(entity.ticksExisted + partialTicks, 0F, 1F, 0F);
-        	
-        	gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);
-        	GlStateManager.popMatrix();
-        }
-        else
-        {
-        	super.doRender(entity, x, y, z, partialTicks, partialTicks);
-        } 
-    }
+	public void doRender(EntityItem entity, double x, double y, double z, float entityYaw, float partialTicks)
+	{
+		ItemStack stack = entity.getItem();
+		
+		if(stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).GetType().model != null)
+		{
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + 0.25D, z);
+			GlStateManager.rotate(entity.ticksExisted + partialTicks, 0F, 1F, 0F);
+			
+			gunRenderer.renderItem(CustomItemRenderType.ENTITY, EnumHand.MAIN_HAND, stack);
+			GlStateManager.popMatrix();
+		}
+		else
+		{
+			super.doRender(entity, x, y, z, partialTicks, partialTicks);
+		}
+	}
 	
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderGunItem(manager, Minecraft.getMinecraft().getRenderItem());
 		}

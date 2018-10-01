@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelDragunov extends ModelGun 
+public class ModelDragunov extends ModelGun
 {
 	public ModelDragunov()
 	{
@@ -40,7 +40,7 @@ public class ModelDragunov extends ModelGun
 		
 		defaultScopeModel[2] = new ModelRendererTurbo(this, 10, 12, textureX, textureY);
 		defaultScopeModel[2].addBox(2F, 5.5F, -1F, 4, 2, 2);
-				
+		
 		defaultScopeModel[3] = new ModelRendererTurbo(this, 11, 10, textureX, textureY);
 		defaultScopeModel[3].addBox(1F, 4.5F, -0.5F, 5, 1, 1);
 		
@@ -68,7 +68,7 @@ public class ModelDragunov extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 33, 9, textureX, textureY);
 		ammoModel[0].addBox(2F, -1F, -1F, 3, 4, 2);
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.BOTTOM_CLIP;
 	}

@@ -41,18 +41,18 @@ import com.flansmod.common.vector.Vector3f;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class RenderGun implements CustomItemRenderer
-{	
+{
 	private static TextureManager renderEngine;
 	
 	public static float smoothing;
 	public static boolean bindTextures = true;
 	
 	@Override
-	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data)
 	{
 		//Avoid any broken cases by returning
 		if(!(item.getItem() instanceof ItemGun))
-			return;	
+			return;
 		
 		GunType gunType = ((ItemGun)item.getItem()).GetType();
 		if(gunType == null)
@@ -61,12 +61,12 @@ public class RenderGun implements CustomItemRenderer
 		ModelGun model = gunType.model;
 		if(model == null)
 			return;
-
+		
 		//Render main hand gun
-		GunAnimations animations = 
-				(type == CustomItemRenderType.ENTITY || type == CustomItemRenderType.INVENTORY) 
-					? new GunAnimations() 
-					: FlansModClient.getGunAnimations((EntityLivingBase)data[1], hand);
+		GunAnimations animations =
+				(type == CustomItemRenderType.ENTITY || type == CustomItemRenderType.INVENTORY)
+						? new GunAnimations()
+						: FlansModClient.getGunAnimations((EntityLivingBase)data[1], hand);
 		renderGun(type, item, gunType, animations, hand, data);
 	}
 	
@@ -82,7 +82,7 @@ public class RenderGun implements CustomItemRenderer
 		GunType offHandGunType = ((ItemGun)offHandItemStack.getItem()).GetType();
 		renderGun(CustomItemRenderType.INVENTORY, offHandItemStack, offHandGunType, animations, EnumHand.OFF_HAND, player);
 	}
-		
+	
 	private void renderGun(CustomItemRenderType type, ItemStack item, GunType gunType, GunAnimations animations, EnumHand hand, Object... data)
 	{
 		//The model scale
@@ -99,14 +99,14 @@ public class RenderGun implements CustomItemRenderer
 			//Setup transforms based on gun position
 			switch(type)
 			{
-				case ENTITY :
+				case ENTITY:
 				{
 					//EntityItem entity = (EntityItem)data[1];
 					//GL11.glRotatef(entity.getAge() + (entity.getAge() == 0 ? 0 : smoothing), 0F, 1F, 0F);
 					GL11.glTranslatef(-0.45F + model.itemFrameOffset.x, -0.05F + model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
 				}
-				case INVENTORY :
+				case INVENTORY:
 				{
 					GL11.glTranslatef(model.itemFrameOffset.x, model.itemFrameOffset.y, model.itemFrameOffset.z);
 					break;
@@ -156,7 +156,7 @@ public class RenderGun implements CustomItemRenderer
 					else
 					{
 						GL11.glRotatef(45F, 0F, 1F, 0F);
-						GL11.glRotatef(0F - 5F * adsSwitch, 0F, 0F, 1F); 
+						GL11.glRotatef(0F - 5F * adsSwitch, 0F, 0F, 1F);
 						
 						GL11.glTranslatef(-1F, 0.675F + 0.180F * adsSwitch, -1F - 0.395F * adsSwitch);
 						if(gunType.hasScopeOverlay)
@@ -165,7 +165,7 @@ public class RenderGun implements CustomItemRenderer
 						GL11.glTranslatef(0F, -0.03F * adsSwitch, 0F);
 					}
 					
-					if(animations.meleeAnimationProgress > 0 && animations.meleeAnimationProgress < gunType.meleePath.size()) 
+					if(animations.meleeAnimationProgress > 0 && animations.meleeAnimationProgress < gunType.meleePath.size())
 					{
 						Vector3f meleePos = gunType.meleePath.get(animations.meleeAnimationProgress);
 						Vector3f nextMeleePos = animations.meleeAnimationProgress + 1 < gunType.meleePath.size() ? gunType.meleePath.get(animations.meleeAnimationProgress + 1) : new Vector3f();
@@ -181,7 +181,7 @@ public class RenderGun implements CustomItemRenderer
 					float interp = animations.lookAtTimer + smoothing;
 					interp /= animations.lookAtTimes[animations.lookAt.ordinal()];
 					
-					final Vector3f idlePos = new Vector3f(0.0f, 0.0f, 0.0f);			
+					final Vector3f idlePos = new Vector3f(0.0f, 0.0f, 0.0f);
 					final Vector3f look1Pos = new Vector3f(0.25f, 0.25f, 0.0f);
 					final Vector3f look2Pos = new Vector3f(0.25f, 0.25f, -0.5f);
 					final Vector3f idleAngles = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -224,8 +224,8 @@ public class RenderGun implements CustomItemRenderer
 							break;
 					}
 					
-					GL11.glRotatef(startAngles.y + (endAngles.y - startAngles.y) * interp, 0f, 1f, 0f); 
-					GL11.glRotatef(startAngles.z + (endAngles.z - startAngles.z) * interp, 0f, 0f, 1f); 
+					GL11.glRotatef(startAngles.y + (endAngles.y - startAngles.y) * interp, 0f, 1f, 0f);
+					GL11.glRotatef(startAngles.z + (endAngles.z - startAngles.z) * interp, 0f, 0f, 1f);
 					GL11.glTranslatef(startPos.x + (endPos.x - startPos.x) * interp,
 							startPos.y + (endPos.y - startPos.y) * interp,
 							startPos.z + (endPos.z - startPos.z) * interp);
@@ -262,75 +262,75 @@ public class RenderGun implements CustomItemRenderer
 						//Rotate the gun dependent on the animation type
 						switch(model.animationType)
 						{
-							case BOTTOM_CLIP : case PISTOL_CLIP : case SHOTGUN : case END_LOADED : 
-							{
-								GL11.glRotatef(60F * reloadRotate, 0F, 0F, 1F);
-								GL11.glRotatef(30F * reloadRotate * flip, 1F, 0F, 0F);
-								GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
-								break;
-							}
-							case BACK_LOADED :
+							case BOTTOM_CLIP: case PISTOL_CLIP: case SHOTGUN: case END_LOADED:
+						{
+							GL11.glRotatef(60F * reloadRotate, 0F, 0F, 1F);
+							GL11.glRotatef(30F * reloadRotate * flip, 1F, 0F, 0F);
+							GL11.glTranslatef(0.25F * reloadRotate, 0F, 0F);
+							break;
+						}
+							case BACK_LOADED:
 							{
 								GL11.glRotatef(-75F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(-30F * reloadRotate * flip, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, 0F);
 								break;
 							}
-							case BULLPUP :
+							case BULLPUP:
 							{
 								GL11.glRotatef(70F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(10F * reloadRotate * flip, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, -0.2F * reloadRotate, 0F);
 								break;
 							}
-							case RIFLE : 
+							case RIFLE:
 							{
 								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(-30F * reloadRotate * flip, 1F, 0F, 0F);
 								GL11.glTranslatef(0.5F * reloadRotate, 0F, -0.5F * reloadRotate);
 								break;
 							}
-							case RIFLE_TOP : case REVOLVER :
-							{
-								GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
-								GL11.glRotatef(10F * reloadRotate, 0F, 1F, 0F);
-								GL11.glRotatef(-10F * reloadRotate * flip, 1F, 0F, 0F);
-								GL11.glTranslatef(0.1F * reloadRotate, -0.2F * reloadRotate, -0.1F * reloadRotate);
-								break;
-							}
-							case ALT_PISTOL_CLIP :
+							case RIFLE_TOP: case REVOLVER:
+						{
+							GL11.glRotatef(30F * reloadRotate, 0F, 0F, 1F);
+							GL11.glRotatef(10F * reloadRotate, 0F, 1F, 0F);
+							GL11.glRotatef(-10F * reloadRotate * flip, 1F, 0F, 0F);
+							GL11.glTranslatef(0.1F * reloadRotate, -0.2F * reloadRotate, -0.1F * reloadRotate);
+							break;
+						}
+							case ALT_PISTOL_CLIP:
 							{
 								GL11.glRotatef(60F * reloadRotate * flip, 0F, 1F, 0F);
 								GL11.glTranslatef(0.15F * reloadRotate, 0.25F * reloadRotate, 0F);
 								break;
 							}
-							case STRIKER : 
+							case STRIKER:
 							{
 								GL11.glRotatef(-35F * reloadRotate * flip, 1F, 0F, 0F);
 								GL11.glTranslatef(0.2F * reloadRotate, 0F, -0.1F * reloadRotate);
 								break;
 							}
-							case GENERIC :
+							case GENERIC:
 							{
 								//Gun reloads partly or completely off-screen.
 								GL11.glRotatef(45F * reloadRotate, 0F, 0F, 1F);
 								GL11.glTranslatef(-0.2F * reloadRotate, -0.5F * reloadRotate, 0F);
 								break;
 							}
-							case CUSTOM :
+							case CUSTOM:
 							{
 								GL11.glRotatef(model.rotateGunVertical * reloadRotate, 0F, 0F, 1F);
 								GL11.glRotatef(model.rotateGunHorizontal * reloadRotate, 0F, 1F, 0F);
 								GL11.glRotatef(model.tiltGun * reloadRotate, 1F, 0F, 0F);
-								GL11.glTranslatef(model.translateGun.x * reloadRotate,  model.translateGun.y * reloadRotate, model.translateGun.z * reloadRotate);
+								GL11.glTranslatef(model.translateGun.x * reloadRotate, model.translateGun.y * reloadRotate, model.translateGun.z * reloadRotate);
 								break;
 							}
-							default : break;
+							default: break;
 						}
 					}
 					break;
 				}
-				default : break;
+				default: break;
 			}
 			
 			renderGun(item, gunType, f, model, animations, reloadRotate);
@@ -338,7 +338,9 @@ public class RenderGun implements CustomItemRenderer
 		GL11.glPopMatrix();
 	}
 	
-	/** Gun render method, seperated from transforms so that mecha renderer may also call this */
+	/**
+	 * Gun render method, seperated from transforms so that mecha renderer may also call this
+	 */
 	public void renderGun(ItemStack item, GunType type, float f, ModelGun model, GunAnimations animations, float reloadRotate)
 	{
 		//Make sure we actually have the renderEngine
@@ -368,7 +370,7 @@ public class RenderGun implements CustomItemRenderer
 			if(bulletStacks[i] != null && bulletStacks[i].getItem() instanceof ItemBullet && bulletStacks[i].getItemDamage() < bulletStacks[i].getMaxDamage())
 				empty = false;
 		}
-				
+		
 		//Load texture
 		//renderEngine.bindTexture(FlansModResourceHandler.getPaintjobTexture(type.getPaintjob(item.getTagCompound().getString("Paint"))));
 		Paintjob paintjob = type.getPaintjob(item.getItemDamage());
@@ -391,7 +393,7 @@ public class RenderGun implements CustomItemRenderer
 		GL11.glPushMatrix();
 		{
 			GL11.glScalef(type.modelScale, type.modelScale, type.modelScale);
-
+			
 			model.renderGun(f);
 			model.renderCustom(f, animations);
 			if(scopeAttachment == null && !model.scopeIsOnSlide && !model.scopeIsOnBreakAction)
@@ -432,7 +434,7 @@ public class RenderGun implements CustomItemRenderer
 				GL11.glTranslatef(-(1 - Math.abs(animations.lastPumped + (animations.pumped - animations.lastPumped) * smoothing)) * model.pumpHandleDistance, 0F, 0F);
 				model.renderPump(f);
 				if(gripAttachment == null && model.gripIsOnPump)
-					   model.renderDefaultGrip(f);
+					model.renderDefaultGrip(f);
 			}
 			GL11.glPopMatrix();
 			
@@ -466,12 +468,12 @@ public class RenderGun implements CustomItemRenderer
 				//Check to see if the ammo should be rendered first
 				switch(model.animationType)
 				{
-					case END_LOADED : case BACK_LOADED :
-					{
-						if(empty)
-							shouldRender = false;
-						break;
-					}
+					case END_LOADED: case BACK_LOADED:
+				{
+					if(empty)
+						shouldRender = false;
+					break;
+				}
 					default: break;
 				}
 				//If it should be rendered, do the transformations required
@@ -490,7 +492,7 @@ public class RenderGun implements CustomItemRenderer
 					//Rotate the gun dependent on the animation type
 					switch(model.animationType)
 					{
-						case BREAK_ACTION : 
+						case BREAK_ACTION:
 						{
 							GL11.glTranslatef(model.barrelBreakPoint.x, model.barrelBreakPoint.y, model.barrelBreakPoint.z);
 							GL11.glRotatef(reloadRotate * -model.breakAngle, 0F, 0F, 1F);
@@ -498,55 +500,55 @@ public class RenderGun implements CustomItemRenderer
 							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
 							break;
 						}
-						case REVOLVER :
-						{				
+						case REVOLVER:
+						{
 							GL11.glTranslatef(model.revolverFlipPoint.x, model.revolverFlipPoint.y, model.revolverFlipPoint.z);
 							GL11.glRotatef(reloadRotate * model.revolverFlipAngle, 1F, 0F, 0F);
 							GL11.glTranslatef(-model.revolverFlipPoint.x, -model.revolverFlipPoint.y, -model.revolverFlipPoint.z);
 							GL11.glTranslatef(-1F * clipPosition, 0F, 0F);
 							break;
 						}
-						case BOTTOM_CLIP : 
+						case BOTTOM_CLIP:
 						{
 							GL11.glRotatef(-180F * clipPosition, 0F, 0F, 1F);
 							GL11.glRotatef(60F * clipPosition, 1F, 0F, 0F);
 							GL11.glTranslatef(0.5F * clipPosition, 0F, 0F);
 							break;
 						}
-						case PISTOL_CLIP :
+						case PISTOL_CLIP:
 						{
 							GL11.glRotatef(-90F * clipPosition * clipPosition, 0F, 0F, 1F);
 							GL11.glTranslatef(0F, -1F * clipPosition, 0F);
 							break;
 						}
-						case ALT_PISTOL_CLIP :
+						case ALT_PISTOL_CLIP:
 						{
 							GL11.glRotatef(5F * clipPosition, 0F, 0F, 1F);
 							GL11.glTranslatef(0F, -3F * clipPosition, 0F);
 							break;
 						}
-						case SIDE_CLIP : 
+						case SIDE_CLIP:
 						{
 							GL11.glRotatef(180F * clipPosition, 0F, 1F, 0F);
 							GL11.glRotatef(60F * clipPosition, 0F, 1F, 0F);
 							GL11.glTranslatef(0.5F * clipPosition, 0F, 0F);
 							break;
 						}
-						case BULLPUP :
+						case BULLPUP:
 						{
 							GL11.glRotatef(-150F * clipPosition, 0F, 0F, 1F);
 							GL11.glRotatef(60F * clipPosition, 1F, 0F, 0F);
 							GL11.glTranslatef(1F * clipPosition, -0.5F * clipPosition, 0F);
 							break;
 						}
-						case P90 :
+						case P90:
 						{
 							GL11.glRotatef(-15F * reloadRotate * reloadRotate, 0F, 0F, 1F);
 							GL11.glTranslatef(0F, 0.075F * reloadRotate, 0F);
 							GL11.glTranslatef(-2F * clipPosition, -0.3F * clipPosition, 0.5F * clipPosition);
 							break;
 						}
-						case RIFLE : 
+						case RIFLE:
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
 							int bulletNum = MathHelper.floor(thing);
@@ -558,7 +560,7 @@ public class RenderGun implements CustomItemRenderer
 							
 							break;
 						}
-						case RIFLE_TOP : 
+						case RIFLE_TOP:
 						{
 							float thing = clipPosition * model.numBulletsInReloadAnimation;
 							int bulletNum = MathHelper.floor(thing);
@@ -570,32 +572,31 @@ public class RenderGun implements CustomItemRenderer
 							
 							break;
 						}
-						case SHOTGUN : case STRIKER :
-						{
-							float thing = clipPosition * model.numBulletsInReloadAnimation;
-							int bulletNum = MathHelper.floor(thing);
-							float bulletProgress = thing - bulletNum;
-							
-							GL11.glRotatef(bulletProgress * -30F, 0F, 0F, 1F);
-							GL11.glTranslatef(bulletProgress * -0.5F, bulletProgress * -1F, 0F);
-							
-							break;
-						}
-						case CUSTOM :
+						case SHOTGUN: case STRIKER:
+					{
+						float thing = clipPosition * model.numBulletsInReloadAnimation;
+						int bulletNum = MathHelper.floor(thing);
+						float bulletProgress = thing - bulletNum;
+						
+						GL11.glRotatef(bulletProgress * -30F, 0F, 0F, 1F);
+						GL11.glTranslatef(bulletProgress * -0.5F, bulletProgress * -1F, 0F);
+						
+						break;
+					}
+						case CUSTOM:
 						{
 							GL11.glRotatef(model.rotateClipVertical * clipPosition, 0F, 0F, 1F);
 							GL11.glRotatef(model.rotateClipHorizontal * clipPosition, 0F, 1F, 0F);
 							GL11.glRotatef(model.tiltClip * clipPosition, 1F, 0F, 0F);
-							GL11.glTranslatef(model.translateClip.x * clipPosition,  model.translateClip.y * clipPosition, model.translateClip.z * clipPosition);
+							GL11.glTranslatef(model.translateClip.x * clipPosition, model.translateClip.y * clipPosition, model.translateClip.z * clipPosition);
 							break;
 						}
-						case END_LOADED :
+						case END_LOADED:
 						{
 							//float bulletProgress = 1F;
 							//if(effectiveReloadAnimationProgress > model.tiltGunTime)
 							//	bulletProgress = 1F - Math.min((effectiveReloadAnimationProgress - model.tiltGunTime) / (model.unloadClipTime + model.loadClipTime), 1);
 							
-
 							
 							float dYaw = (loadOnlyClipPosition > 0.5F ? loadOnlyClipPosition * 2F - 1F : 0F);
 							
@@ -622,7 +623,7 @@ public class RenderGun implements CustomItemRenderer
 							
 							break;
 						}
-						case BACK_LOADED :
+						case BACK_LOADED:
 						{
 							float dYaw = (loadOnlyClipPosition > 0.5F ? loadOnlyClipPosition * 2F - 1F : 0F);
 							
@@ -635,10 +636,10 @@ public class RenderGun implements CustomItemRenderer
 							GL11.glTranslatef(-model.endLoadedAmmoDistance * xDisplacement, 0F, 0F);
 						}
 						
-						default : break;
+						default: break;
 					}
 				}
-
+				
 				if(shouldRender)
 					model.renderAmmo(f);
 			}
@@ -661,7 +662,7 @@ public class RenderGun implements CustomItemRenderer
 					GL11.glTranslatef(-model.barrelBreakPoint.x, -model.barrelBreakPoint.y, -model.barrelBreakPoint.z);
 				}
 				GL11.glTranslatef(model.scopeAttachPoint.x * type.modelScale, model.scopeAttachPoint.y * type.modelScale, model.scopeAttachPoint.z * type.modelScale);
-
+				
 				if(model.scopeIsOnSlide)
 					GL11.glTranslatef(-(animations.lastGunSlide + (animations.gunSlide - animations.lastGunSlide) * smoothing) * model.gunSlideDistance, 0F, 0F);
 				GL11.glScalef(scopeAttachment.modelScale, scopeAttachment.modelScale, scopeAttachment.modelScale);

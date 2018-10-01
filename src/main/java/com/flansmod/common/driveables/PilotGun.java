@@ -5,7 +5,9 @@ import com.flansmod.common.vector.Vector3f;
 
 public class PilotGun extends DriveablePosition
 {
-	/** The gun type used by this pilot gun */
+	/**
+	 * The gun type used by this pilot gun
+	 */
 	public GunType type;
 	
 	public PilotGun(String[] split)

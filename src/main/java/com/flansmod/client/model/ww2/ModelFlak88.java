@@ -668,7 +668,6 @@ public class ModelFlak88 extends ModelVehicle //Same as Filename
 		barrelModel[70].setRotationPoint(-11F, -14F, 0F);
 
 
-
 		translateAll(0F, 0F, 0F);
 
 

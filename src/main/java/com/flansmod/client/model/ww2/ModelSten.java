@@ -20,19 +20,19 @@ public class ModelSten extends ModelGun
 	int textureX = 64;
 	int textureY = 32;
 
-	public ModelSten()	
+	public ModelSten()
 	{
 
 
 // Gun
 		gunModel = new ModelRendererTurbo[7];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  14, textureX, textureY); // Body1
-		gunModel[1] = new ModelRendererTurbo(this,  0,  21, textureX, textureY); // Body2
-		gunModel[2] = new ModelRendererTurbo(this,  0,  8, textureX, textureY); // Body3
-		gunModel[3] = new ModelRendererTurbo(this,  14,  14, textureX, textureY); // Body4
-		gunModel[4] = new ModelRendererTurbo(this,  14,  18, textureX, textureY); // Body5
-		gunModel[5] = new ModelRendererTurbo(this,  0,  27, textureX, textureY); // Body6
-		gunModel[6] = new ModelRendererTurbo(this,  28,  26, textureX, textureY); // Body10
+		gunModel[0] = new ModelRendererTurbo(this, 0, 14, textureX, textureY); // Body1
+		gunModel[1] = new ModelRendererTurbo(this, 0, 21, textureX, textureY); // Body2
+		gunModel[2] = new ModelRendererTurbo(this, 0, 8, textureX, textureY); // Body3
+		gunModel[3] = new ModelRendererTurbo(this, 14, 14, textureX, textureY); // Body4
+		gunModel[4] = new ModelRendererTurbo(this, 14, 18, textureX, textureY); // Body5
+		gunModel[5] = new ModelRendererTurbo(this, 0, 27, textureX, textureY); // Body6
+		gunModel[6] = new ModelRendererTurbo(this, 28, 26, textureX, textureY); // Body10
 
 		gunModel[0].addBox(0F, 0F, 0F, 5, 4, 2, 0F); // Body1
 		gunModel[0].setRotationPoint(0F, 0F, -1F);
@@ -56,12 +56,11 @@ public class ModelSten extends ModelGun
 		gunModel[6].setRotationPoint(-2F, -3F, -1.5F);
 
 
-
 // Default Stock
 		defaultStockModel = new ModelRendererTurbo[3];
-		defaultStockModel[0] = new ModelRendererTurbo(this,  14,  24, textureX, textureY); // Body7
-		defaultStockModel[1] = new ModelRendererTurbo(this,  20,  24, textureX, textureY); // Body8
-		defaultStockModel[2] = new ModelRendererTurbo(this,  20,  26, textureX, textureY); // Body9
+		defaultStockModel[0] = new ModelRendererTurbo(this, 14, 24, textureX, textureY); // Body7
+		defaultStockModel[1] = new ModelRendererTurbo(this, 20, 24, textureX, textureY); // Body8
+		defaultStockModel[2] = new ModelRendererTurbo(this, 20, 26, textureX, textureY); // Body9
 
 		defaultStockModel[0].addBox(0F, -1F, 0F, 1, 6, 2, 0F); // Body7
 		defaultStockModel[0].setRotationPoint(-9F, 1F, -1F);
@@ -75,10 +74,9 @@ public class ModelSten extends ModelGun
 		defaultStockModel[2].rotateAngleZ = 0.2268928F;
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[1];
-		ammoModel[0] = new ModelRendererTurbo(this,  26,  14, textureX, textureY); // Ammo1
+		ammoModel[0] = new ModelRendererTurbo(this, 26, 14, textureX, textureY); // Ammo1
 
 		ammoModel[0].addBox(0F, 0F, 0F, 2, 1, 7, 0F); // Ammo1
 		ammoModel[0].setRotationPoint(8.5F, -2.1F, 3.6F);

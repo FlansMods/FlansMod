@@ -36,14 +36,14 @@ import com.flansmod.common.driveables.Propeller;
 import com.flansmod.common.guns.Paintjob;
 
 public class RenderPlane extends Render implements CustomItemRenderer
-{	
-	public RenderPlane(RenderManager renderManager) 
+{
+	public RenderPlane(RenderManager renderManager)
 	{
 		super(renderManager);
 		shadowSize = 0.5F;
 		MinecraftForge.EVENT_BUS.register(this);
 	}
-
+	
 	public void render(EntityPlane entityPlane, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(entityPlane);
@@ -51,18 +51,30 @@ public class RenderPlane extends Render implements CustomItemRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d, (float)d1, (float)d2);
 		float dYaw = (entityPlane.axes.getYaw() - entityPlane.prevRotationYaw);
-		for(; dYaw > 180F; dYaw -= 360F) {}
-		for(; dYaw <= -180F; dYaw += 360F) {}
+		for(; dYaw > 180F; dYaw -= 360F)
+		{
+		}
+		for(; dYaw <= -180F; dYaw += 360F)
+		{
+		}
 		float dPitch = (entityPlane.axes.getPitch() - entityPlane.prevRotationPitch);
-		for(; dPitch > 180F; dPitch -= 360F) {}
-		for(; dPitch <= -180F; dPitch += 360F) {}
+		for(; dPitch > 180F; dPitch -= 360F)
+		{
+		}
+		for(; dPitch <= -180F; dPitch += 360F)
+		{
+		}
 		float dRoll = (entityPlane.axes.getRoll() - entityPlane.prevRotationRoll);
-		for(; dRoll > 180F; dRoll -= 360F) {}
-		for(; dRoll <= -180F; dRoll += 360F) {}
+		for(; dRoll > 180F; dRoll -= 360F)
+		{
+		}
+		for(; dRoll <= -180F; dRoll += 360F)
+		{
+		}
 		GL11.glRotatef(180F - entityPlane.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(entityPlane.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(entityPlane.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
-
+		
 		float modelScale = type.modelScale;
 		GL11.glScalef(modelScale, modelScale, modelScale);
 		ModelPlane model = (ModelPlane)type.model;
@@ -109,17 +121,17 @@ public class RenderPlane extends Render implements CustomItemRenderer
 			}
 			GL11.glColor4f(1F, 1F, 0F, 0.3F);
 			for(Propeller prop : type.propellers)
-			{				
+			{
 				renderOffsetAABB(new AxisAlignedBB(prop.x / 16F - 0.25F, prop.y / 16F - 0.25F, prop.z / 16F - 0.25F, prop.x / 16F + 0.25F, prop.y / 16F + 0.25F, prop.z / 16F + 0.25F), 0, 0, 0);
 			}
 			
 			//Render shoot points
 			GL11.glColor4f(1F, 0F, 1F, 0.3F);
-			for(DriveablePosition point : type.shootPointsPrimary)			
+			for(DriveablePosition point : type.shootPointsPrimary)
 				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			GL11.glColor4f(0F, 1F, 0F, 0.3F);
-			for(DriveablePosition point : type.shootPointsSecondary)			
+			for(DriveablePosition point : type.shootPointsSecondary)
 				renderOffsetAABB(new AxisAlignedBB(point.position.x - 0.25F, point.position.y - 0.25F, point.position.z - 0.25F, point.position.x + 0.25F, point.position.y + 0.25F, point.position.z + 0.25F), 0, 0, 0);
 			
 			//GL11.glColor4f(0F, 0F, 0F, 0.3F);	
@@ -133,27 +145,27 @@ public class RenderPlane extends Render implements CustomItemRenderer
 		}
 		GL11.glPopMatrix();
 	}
-
+	
 	@Override
-    public boolean shouldRender(Entity entity, ICamera camera, double camX, double camY, double camZ)
-    {
-        return true;
-    }
-    
+	public boolean shouldRender(Entity entity, ICamera camera, double camX, double camY, double camZ)
+	{
+		return true;
+	}
+	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, 
-			float f, float f1)
+	public void doRender(Entity entity, double d, double d1, double d2,
+						 float f, float f1)
 	{
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		DriveableType type = ((EntityDriveable)entity).getDriveableType();
 		Paintjob paintjob = type.getPaintjob(((EntityDriveable)entity).getDriveableData().paintjobID);
 		return FlansModResourceHandler.getPaintjobTexture(paintjob);
 	}
-
+	
 	@SubscribeEvent
 	public void renderWorld(RenderWorldLastEvent event)
 	{
@@ -161,46 +173,46 @@ public class RenderPlane extends Render implements CustomItemRenderer
 		World world = Minecraft.getMinecraft().world;
 		if(world == null)
 			return;
-
+		
 		//Get the camera frustrum for clipping
-        Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
-        double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
-        double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
-        double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
-        
-        //Frustum frustrum = new Frustum();
-        //frustrum.setPosition(x, y, z);
-        
-        //Push
-        GL11.glPushMatrix();
-        //Setup lighting
-        Minecraft.getMinecraft().entityRenderer.enableLightmap();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        
-        RenderHelper.enableStandardItemLighting();
-        
-        GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
+		Entity camera = Minecraft.getMinecraft().getRenderViewEntity();
+		double x = camera.lastTickPosX + (camera.posX - camera.lastTickPosX) * event.getPartialTicks();
+		double y = camera.lastTickPosY + (camera.posY - camera.lastTickPosY) * event.getPartialTicks();
+		double z = camera.lastTickPosZ + (camera.posZ - camera.lastTickPosZ) * event.getPartialTicks();
+		
+		//Frustum frustrum = new Frustum();
+		//frustrum.setPosition(x, y, z);
+		
+		//Push
+		GL11.glPushMatrix();
+		//Setup lighting
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+		
+		RenderHelper.enableStandardItemLighting();
+		
+		GL11.glTranslatef(-(float)x, -(float)y, -(float)z);
 		for(Object entity : world.loadedEntityList)
 		{
 			if(entity instanceof EntityPlane)
 			{
 				EntityPlane plane = (EntityPlane)entity;
-		        int i = plane.getBrightnessForRender();
-
-		        if (plane.isBurning())
-		        {
-		            i = 15728880;
-		        }
-
-		        int j = i % 65536;
-		        int k = i / 65536;
-		        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
-		        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		        render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(), 
-		        		plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(), 
-		        		plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
+				int i = plane.getBrightnessForRender();
+				
+				if(plane.isBurning())
+				{
+					i = 15728880;
+				}
+				
+				int j = i % 65536;
+				int k = i / 65536;
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				render(plane, plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(),
+						plane.prevPosY + (plane.posY - plane.prevPosY) * event.getPartialTicks(),
+						plane.prevPosZ + (plane.posZ - plane.prevPosZ) * event.getPartialTicks(), 0F, event.getPartialTicks());
 			}
 		}
 		
@@ -211,9 +223,9 @@ public class RenderPlane extends Render implements CustomItemRenderer
 		//Pop
 		GL11.glPopMatrix();
 	}
-
+	
 	@Override
-	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data) 
+	public void renderItem(CustomItemRenderType type, EnumHand hand, ItemStack item, Object... data)
 	{
 		GL11.glPushMatrix();
 		if(item != null && item.getItem() instanceof ItemPlane)
@@ -224,46 +236,46 @@ public class RenderPlane extends Render implements CustomItemRenderer
 				float scale = 0.5F;
 				switch(type)
 				{
-				case INVENTORY:
-				{
-					GL11.glRotatef(180F, 0F, 1F, 0F);
-					scale = 1.0F;
-					break;
-				}
-				case ENTITY:
-				{
-					scale = 1.5F;
-					//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
-					break;
-				}
-				case EQUIPPED:
-				{
-					GL11.glRotatef(0F, 0F, 0F, 1F);
-					GL11.glRotatef(270F, 1F, 0F, 0F);
-					GL11.glRotatef(270F, 0F, 1F, 0F);
-					GL11.glTranslatef(0F, 0.25F, 0F);
-					scale = 0.5F;
-					break;
-				}
-				case EQUIPPED_FIRST_PERSON:
-				{
-					//GL11.glRotatef(25F, 0F, 0F, 1F);
-					if(hand == EnumHand.MAIN_HAND)
+					case INVENTORY:
 					{
-						GL11.glRotatef(45F, 0F, 1F, 0F);
-						GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
 						GL11.glRotatef(180F, 0F, 1F, 0F);
+						scale = 1.0F;
+						break;
 					}
-					else
+					case ENTITY:
 					{
-						GL11.glRotatef(45F, 0F, 1F, 0F);
-						GL11.glTranslatef(-0.5F, 0.5F, -2.3F);
-						GL11.glRotatef(180F, 0F, 1F, 0F);
+						scale = 1.5F;
+						//GL11.glRotatef(((EntityItem)data[1]).ticksExisted, 0F, 1F, 0F);
+						break;
 					}
-					scale = 1F;
-					break;
-				}
-				default : break;
+					case EQUIPPED:
+					{
+						GL11.glRotatef(0F, 0F, 0F, 1F);
+						GL11.glRotatef(270F, 1F, 0F, 0F);
+						GL11.glRotatef(270F, 0F, 1F, 0F);
+						GL11.glTranslatef(0F, 0.25F, 0F);
+						scale = 0.5F;
+						break;
+					}
+					case EQUIPPED_FIRST_PERSON:
+					{
+						//GL11.glRotatef(25F, 0F, 0F, 1F);
+						if(hand == EnumHand.MAIN_HAND)
+						{
+							GL11.glRotatef(45F, 0F, 1F, 0F);
+							GL11.glTranslatef(-0.5F, 0.5F, -0.5F);
+							GL11.glRotatef(180F, 0F, 1F, 0F);
+						}
+						else
+						{
+							GL11.glRotatef(45F, 0F, 1F, 0F);
+							GL11.glTranslatef(-0.5F, 0.5F, -2.3F);
+							GL11.glRotatef(180F, 0F, 1F, 0F);
+						}
+						scale = 1F;
+						break;
+					}
+					default: break;
 				}
 				
 				GL11.glScalef(scale / planeType.cameraDistance, scale / planeType.cameraDistance, scale / planeType.cameraDistance);
@@ -278,7 +290,7 @@ public class RenderPlane extends Render implements CustomItemRenderer
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderPlane(manager);
 		}

@@ -19,9 +19,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.flansmod.common.FlansMod;
 
-public class ApocalypseData 
+public class ApocalypseData
 {
-	/** The point at which each player entered the apocalypse. For deciding where they should come out */
+	/**
+	 * The point at which each player entered the apocalypse. For deciding where they should come out
+	 */
 	public HashMap<UUID, BlockPos> entryPoints = new HashMap<UUID, BlockPos>();
 	
 	@SubscribeEvent
@@ -40,7 +42,7 @@ public class ApocalypseData
 		}
 	}
 
-	private void savePerWorldData(WorldEvent event, World world) 
+	private void savePerWorldData(WorldEvent event, World world)
 	{
 		if(world.provider.getDimension() == 0)
 		{
@@ -71,7 +73,7 @@ public class ApocalypseData
 						playerFile.createNewFile();
 					
 					BlockPos pos = entryPoints.get(uuid);
-					playerTags.setIntArray("EntryPoint", new int[] { pos.getX(), pos.getY(), pos.getZ() });
+					playerTags.setIntArray("EntryPoint", new int[]{pos.getX(), pos.getY(), pos.getZ()});
 					
 					CompressedStreamTools.write(playerTags, new DataOutputStream(new FileOutputStream(playerFile)));
 				}
@@ -83,7 +85,7 @@ public class ApocalypseData
 		}
 	}
 
-	private void loadPerWorldData(WorldEvent event, World world) 
+	private void loadPerWorldData(WorldEvent event, World world)
 	{
 		if(world.provider.getDimension() == 0)
 		{

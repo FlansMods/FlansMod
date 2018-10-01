@@ -462,7 +462,6 @@ public class ModelM45Quad extends ModelVehicle //Same as Filename
 		barrelModel[57].setRotationPoint(0F, -13F, -0.5F);
 
 
-
 		translateAll(0F, 0F, 0F);
 
 

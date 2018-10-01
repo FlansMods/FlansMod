@@ -96,25 +96,25 @@ public class GuiDriveableInventory extends GuiContainer
 	}
 	
 	private void drawStack(ItemStack itemstack, int i, int j)
-    {
+	{
 		itemRender.renderItemIntoGUI(itemstack, i, j);
 		itemRender.renderItemOverlayIntoGUI(fontRenderer, itemstack, i, j, null);
-    }
+	}
 
 	
 	private static String getGunSlotName(int i)
 	{
 		switch(i)
 		{
-			case 0 : return "Left Nose Gun";
-			case 1 : return "Right Nose Gun";
-			case 2 : return "Left Wing Gun";
-			case 3 : return "Right Wing Gun";
-			case 4 : return "Tail Gun";
-			case 5 : return "Left Bay Gun";
-			case 6 : return "Right Bay Gun";
-			case 7 : return "Dorsal Gun";
-		}		
+			case 0: return "Left Nose Gun";
+			case 1: return "Right Nose Gun";
+			case 2: return "Left Wing Gun";
+			case 3: return "Right Wing Gun";
+			case 4: return "Tail Gun";
+			case 5: return "Left Bay Gun";
+			case 6: return "Right Bay Gun";
+			case 7: return "Dorsal Gun";
+		}
 		return "Not a Gun";
 	}
 
@@ -130,7 +130,7 @@ public class GuiDriveableInventory extends GuiContainer
 		drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
 		switch(screen)
 		{
-			case 0 : 
+			case 0:
 			{
 				for(int n = 0; n < (numItems > 3 ? 3 : numItems); n++)
 				{
@@ -138,9 +138,9 @@ public class GuiDriveableInventory extends GuiContainer
 				}
 				break;
 			}
-			case 1 :
-			case 2 :
-			case 3 : 
+			case 1:
+			case 2:
+			case 3:
 			{
 				int m = ((numItems + 7) / 8);
 				for(int row = 0; row < (m > 3 ? 3 : m); row++)
@@ -158,8 +158,8 @@ public class GuiDriveableInventory extends GuiContainer
 	
 	@Override
 	protected void mouseClicked(int i, int j, int k) throws IOException
-    {
-        super.mouseClicked(i, j, k);
+	{
+		super.mouseClicked(i, j, k);
 		int m = i - (width - xSize) / 2;
 		int n = j - (height - ySize) / 2;
 		if(scroll > 0 && m > 161 && m < 171 && n > 41 && n < 51)
@@ -180,7 +180,7 @@ public class GuiDriveableInventory extends GuiContainer
 				(inventory.player).openGui(FlansMod.INSTANCE, 10, world, driveable.chunkCoordX, driveable.chunkCoordY, driveable.chunkCoordZ);
 			}
 			else
-			 mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, driveable));
+				mc.displayGuiScreen(new GuiDriveableMenu(inventory, world, driveable));
 		}
 	}
 	
