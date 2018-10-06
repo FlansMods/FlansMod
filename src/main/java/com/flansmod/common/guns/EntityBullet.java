@@ -65,7 +65,7 @@ import static com.flansmod.common.util.BlockUtil.destroyBlock;
 public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
 {
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
-	public Entity owner;
+	public EntityLivingBase owner;
 	private int ticksInAir;
 	public BulletType type;
 	/**
@@ -590,21 +590,14 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		OnDetonate(world, new Vector3f(posX, posY, posZ), owner, this, firedFrom, type);
 	}
 	
-	public static void OnDetonate(World world, Vector3f detonatePos, Entity owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
+	public static void OnDetonate(World world, Vector3f detonatePos, EntityLivingBase owner, EntityBullet bullet, InfoType shotFrom, BulletType bulletType)
 	{
 		if(world.isRemote)
 			return;
 		if(bulletType.explosionRadius > 0)
 		{
-			if((owner instanceof EntityPlayer))
-			{
-				new FlansModExplosion(world, bullet, (EntityPlayer)owner, bulletType,
-						detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
-			}
-			else
-			{
-				world.createExplosion(bullet, detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, TeamsManager.explosions && bulletType.explosionBreaksBlocks);
-			}
+			new FlansModExplosion(world, bullet, owner, bulletType,
+					detonatePos.x, detonatePos.y, detonatePos.z, bulletType.explosionRadius, bulletType.fireRadius > 0, bulletType.flak > 0, bulletType.explosionBreaksBlocks);
 		}
 		if(bulletType.fireRadius > 0)
 		{

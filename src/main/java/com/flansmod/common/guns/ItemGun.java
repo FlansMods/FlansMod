@@ -694,7 +694,7 @@ public class ItemGun extends Item implements IPaintableItem
 						x, y, z));
 	}
 	
-	public void DoInstantShot(World world, Entity shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
+	public void DoInstantShot(World world, EntityLivingBase shooter, InfoType shotFrom, BulletType shotType, Vector3f origin, Vector3f hit, BulletHit hitData, float damage, boolean isExtraBullet, boolean silenced)
 	{
 		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
 		{

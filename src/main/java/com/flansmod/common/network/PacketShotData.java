@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -168,7 +169,7 @@ public class PacketShotData extends PacketBase
 					ItemGun gunItem = (ItemGun)entry.shotFrom.getItem();
 					
 					gunItem.DoInstantShot(clientPlayer.world,
-							FlansModRaytracer.GetEntityByID(instantData.shooterID),
+							(EntityLivingBase)FlansModRaytracer.GetEntityByID(instantData.shooterID),
 							instantData.shotFrom, (BulletType)instantData.shotType,
 							instantData.origin, instantData.hitPos,
 							instantData.hitData, instantData.damage,

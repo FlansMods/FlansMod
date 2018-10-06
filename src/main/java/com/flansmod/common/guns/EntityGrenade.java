@@ -281,12 +281,18 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 					EnumFacing sideHit = hit.sideHit;
 					switch(sideHit)
 					{
-						case UP: case DOWN: postHitMotVec.setY(-postHitMotVec.getY());
-						break;
-						case EAST: case WEST: postHitMotVec.setX(-postHitMotVec.getX());
-						break;
-						case NORTH: case SOUTH: postHitMotVec.setZ(-postHitMotVec.getZ());
-						break;
+						case UP:
+						case DOWN:
+							postHitMotVec.setY(-postHitMotVec.getY());
+							break;
+						case EAST:
+						case WEST:
+							postHitMotVec.setX(-postHitMotVec.getX());
+							break;
+						case NORTH:
+						case SOUTH:
+							postHitMotVec.setZ(-postHitMotVec.getZ());
+							break;
 						//TODO : Check the compass directions are correct
 					}
 					
@@ -333,20 +339,26 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 						
 						switch(hit.sideHit)
 						{
-							case DOWN: axes.setAngles(yaw, 180F, 0F);
+							case DOWN:
+								axes.setAngles(yaw, 180F, 0F);
 								break;
-							case UP: axes.setAngles(yaw, 0F, 0F);
+							case UP:
+								axes.setAngles(yaw, 0F, 0F);
 								break;
-							case NORTH: axes.setAngles(270F, 90F, 0F);
+							case NORTH:
+								axes.setAngles(270F, 90F, 0F);
 								axes.rotateLocalYaw(yaw);
 								break;
-							case SOUTH: axes.setAngles(90F, 90F, 0F);
+							case SOUTH:
+								axes.setAngles(90F, 90F, 0F);
 								axes.rotateLocalYaw(yaw);
 								break;
-							case WEST: axes.setAngles(180F, 90F, 0F);
+							case WEST:
+								axes.setAngles(180F, 90F, 0F);
 								axes.rotateLocalYaw(yaw);
 								break;
-							case EAST: axes.setAngles(0F, 90F, 0F);
+							case EAST:
+								axes.setAngles(0F, 90F, 0F);
 								axes.rotateLocalYaw(yaw);
 								break;
 						}
@@ -426,10 +438,7 @@ public class EntityGrenade extends EntityShootable implements IEntityAdditionalS
 		//Explode
 		if(!world.isRemote && type.explosionRadius > 0.1F)
 		{
-			if((thrower instanceof EntityPlayer))
-				new FlansModExplosion(world, this, (EntityPlayer)thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
-			else
-				world.createExplosion(this, posX, posY, posZ, type.explosionRadius, TeamsManager.explosions && type.explosionBreaksBlocks);
+			new FlansModExplosion(world, this, thrower, type, posX, posY, posZ, type.explosionRadius, type.fireRadius > 0, type.smokeRadius > 0, type.explosionBreaksBlocks);
 		}
 		
 		//Make fire
