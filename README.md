@@ -10,8 +10,8 @@ permission from jamioflan.
 
 
 ## Building
-0. Download/clone this repository
-0. Run the build command for your system in the repository
+1. Download/clone this repository
+1. Run the build command for your system in the repository
 	- Linux/Mac: `./gradlew build`
 	- Windows: `gradlew.bat build`
-0. Built files are found in the directory `./build/output`
+1. Built files are found in the directory `./build/output`
