@@ -1,0 +1,18 @@
+#By China MCBBS FlansMod fans
+
+itemGroup.tabFlan0=Flan's Mod 武器
+itemGroup.tabFlan1=Flan's Mod 載具
+itemGroup.tabFlan2=Flan's Mod 零件
+itemGroup.tabFlan3=Flan's Mod 團隊工具
+itemGroup.tabFlan4=Flan's Mod 其他
+tile.flansWorkbench.0.name=載具製作台
+tile.flansWorkbench.1.name=槍械改造台
+tile.flansWorkbench.2.name=零件合成台（很快到來）
+item.opStick.0.name=所有權杖
+item.opStick.1.name=聯絡杖
+item.opStick.2.name=繪圖杖
+item.opStick.3.name=破壞原杖
+item.flagpole.name=旗桿
+tile.teamsSpawner.0.name=物品生成器
+tile.teamsSpawner.1.name=士兵生成器
+tile.teamsSpawner.2.name=載俱生成器
