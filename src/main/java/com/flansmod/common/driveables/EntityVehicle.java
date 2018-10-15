@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -13,6 +14,7 @@ import net.minecraft.world.World;
 
 import com.flansmod.api.IExplodeable;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.network.PacketDriveableKey;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.network.PacketVehicleControl;
@@ -40,6 +42,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	public float wheelsAngle;
 	/** Delayer for door button */
 	public int toggleTimer = 0;
+	
+	public float yaw = 0;
+	public float pitch = 0;
+	public float roll = 0;
+
+	public float yawSpeed = 0;
+
+	public boolean leftTurnHeld = false;
+	public boolean rightTurnHeld = false;
+	public boolean allWheelsOnGround;
 
 	public EntityVehicle(World world)
 	{
@@ -336,171 +348,323 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			//If the driveable is at its server position and does not have the next update, it should just simulate itself as a server side driveable would, so continue
 		}
 		
-		//Movement
+
+		// Movement
 
 		Vector3f amountToMoveCar = new Vector3f();
-		
-		for(EntityWheel wheel : wheels)
+		double bkPrevPosY = this.prevPosY;
+		for (EntityWheel wheel : wheels)
 		{
-			if(wheel != null && worldObj != null)
+			if (wheel != null && worldObj != null)
 			{
 				wheel.prevPosX = wheel.posX;
 				wheel.prevPosY = wheel.posY;
 				wheel.prevPosZ = wheel.prevPosZ;
 			}
 		}
-		
-		for(EntityWheel wheel : wheels)
+
+		for (EntityWheel wheel : wheels)
 		{
-			if(wheel == null)
+			if (wheel == null)
 				continue;
-			
-			//Hacky way of forcing the car to step up blocks
+
+			double prevPosYWheel = wheel.posY;
+
+			// Hacky way of forcing the car to step up blocks
 			onGround = true;
 			wheel.onGround = true;
-			
-			//Update angles
+
+			// Update angles
 			wheel.rotationYaw = axes.getYaw();
-			//Front wheels
-			if(!type.tank && (wheel.ID == 2 || wheel.ID == 3))
+			// Front wheels
+			if (!type.tank && (wheel.ID == 2 || wheel.ID == 3))
 			{
 				wheel.rotationYaw += wheelsYaw;
 			}
-			
+
 			wheel.motionX *= 0.9F;
-			wheel.motionY *= 0.9F;
+			wheel.motionY *= this.posY - bkPrevPosY < 0 ? 0.999F : 0.9F;
 			wheel.motionZ *= 0.9F;
-			
-			//Apply gravity
-			wheel.motionY -= 0.98F / 20F;
-			
-			//Apply velocity
-			//If the player driving this is in creative, then we can thrust, no matter what
-			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer && ((EntityPlayer)seats[0].riddenByEntity).capabilities.isCreativeMode);
-			//Otherwise, check the fuel tanks!
-			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
+
+			// Apply velocity
+			// If the player driving this is in creative, then we can thrust, no
+			// matter what
+			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel
+					|| (seats != null && seats[0] != null && seats[0].riddenByEntity instanceof EntityPlayer
+					&& ((EntityPlayer) seats[0].riddenByEntity).capabilities.isCreativeMode);
+			// Otherwise, check the fuel tanks!
+			if (canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
 			{
-				if(getVehicleType().tank)
+				if (getVehicleType().tank)
 				{
 					boolean left = wheel.ID == 0 || wheel.ID == 3;
-					
+
 					float turningDrag = 0.02F;
 					wheel.motionX *= 1F - (Math.abs(wheelsYaw) * turningDrag);
 					wheel.motionZ *= 1F - (Math.abs(wheelsYaw) * turningDrag);
-					
-					float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+
+					float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle)
+							* data.engine.engineSpeed;
 					float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
-					float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale)) * velocityScale;
+					float effectiveWheelSpeed = (throttle + (wheelsYaw * (left ? 1 : -1) * steeringScale))
+							* velocityScale;
 					wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
 					wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
-					
-	
-				}
-				else
+					yawSpeed += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
+
+				} else
 				{
-					//if(getVehicleType().fourWheelDrive || wheel.ID == 0 || wheel.ID == 1)
+
+					// if(getVehicleType().fourWheelDrive || wheel.ID == 0 ||
+					// wheel.ID == 1)
 					{
-						float velocityScale = 0.1F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle) * data.engine.engineSpeed;
+						float velocityScale = 0.1F * throttle
+								* (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle)
+								* data.engine.engineSpeed;
 						wheel.motionX += Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
 						wheel.motionZ += Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale;
 					}
-					
-					//Apply steering
-					if(wheel.ID == 2 || wheel.ID == 3)
+
+					// Apply steering
+					if (wheel.ID == 2 || wheel.ID == 3)
 					{
-						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
-		
-						wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
-						wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
+						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier)
+								* (throttle > 0 ? 1 : -1);
+						RotatedAxes x = axes.clone();
+						x.rotateLocalYaw(wheelsYaw);
+						Vector3f mot = new Vector3f(wheel.motionX, 0, wheel.motionZ);
+						mot = axes.findGlobalVectorLocally(mot);
+						mot = x.findLocalVectorGlobally(mot);
+						wheel.motionX = mot.x;
+						wheel.motionZ = mot.z;
+						// wheel.motionX -= wheel.getSpeedXZ() *
+						// Math.sin(wheel.rotationYaw * 3.14159265F / 180F) *
+						// velocityScale * wheelsYaw;
+						// wheel.motionZ += wheel.getSpeedXZ() *
+						// Math.cos(wheel.rotationYaw * 3.14159265F / 180F) *
+						// velocityScale * wheelsYaw;
 					}
-					else
+					float adjThrot = (float) Math.sqrt(throttle * throttle);
+					float grip = 1 - adjThrot;
+					grip = 0;
+					float adjYaw = (float) Math.sqrt(wheelsYaw * wheelsYaw);
+					if (wheel.ID == 0 || wheel.ID == 1)
 					{
-						wheel.motionX *= 0.9F;
-						wheel.motionZ *= 0.9F;
+						float velocityScale = 0.01F * (wheelsYaw < 0 ? type.turnLeftModifier : type.turnRightModifier)
+								* (throttle > 0 ? 1 : -1);
+						RotatedAxes x = axes.clone();
+						x.rotateLocalYaw(-wheelsYaw * grip);
+						Vector3f mot = new Vector3f(wheel.motionX, 0, wheel.motionZ);
+						mot = axes.findGlobalVectorLocally(mot);
+						mot = x.findLocalVectorGlobally(mot);
+						wheel.motionX = mot.x;
+						wheel.motionZ = mot.z;
+						// wheel.motionX -= wheel.getSpeedXZ() *
+						// Math.sin(wheel.rotationYaw * 3.14159265F / 180F) *
+						// velocityScale * wheelsYaw;
+						// wheel.motionZ += wheel.getSpeedXZ() *
+						// Math.cos(wheel.rotationYaw * 3.14159265F / 180F) *
+						// velocityScale * wheelsYaw;
+					} else
+					{
+						wheel.motionX *= 1F;
+						wheel.motionZ *= 1F;
 					}
+
+					// Spawn drift particles. Sort of works.
+					/**
+					 * if(adjYaw - (adjYaw*grip) > 5){
+					 * //worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+					 * wheel.posX, wheel.posY, wheel.posZ, 0,0,0);
+					 * //FlansMod.getPacketHandler().sendToAllAround(new
+					 * PacketParticle("explode",wheel.posX, wheel.posY,
+					 * wheel.posZ, 0,0,0), posX, posY, posZ, 150, dimension); }
+					 */
 				}
-			}
-			
-			if(type.floatOnWater && worldObj.isAnyLiquid(wheel.getEntityBoundingBox()))
-			{
-				wheel.motionY += type.buoyancy;
 			}
 
 			wheel.moveEntity(wheel.motionX, wheel.motionY, wheel.motionZ);
-			
-			//Pull wheels towards car
+
+			// Pull wheels towards car
 			Vector3f targetWheelPos = axes.findLocalVectorGlobally(getVehicleType().wheelPositions[wheel.ID].position);
+
 			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
-			
-			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
-				
-			if(dPos.length() > 0.001F)
+
+			Vector3f dPos = ((Vector3f) Vector3f.sub(targetWheelPos, currentWheelPos, null)
+					.scale(type.wheelSpringStrength));
+
+			if (dPos.length() > 0.001F)
 			{
 				wheel.moveEntity(dPos.x, dPos.y, dPos.z);
 				dPos.scale(0.5F);
 				Vector3f.sub(amountToMoveCar, dPos, amountToMoveCar);
 			}
+
+			float avgWheelHeight = 0F;
+
+			// Secondary check whether all wheels are on ground...
+			if (wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
+			{
+				avgWheelHeight = (float) (wheels[0].posX + wheels[1].posX + wheels[2].posX + wheels[3].posX) / 4;
+				if (!wheels[0].onGround && !wheels[1].onGround && !wheels[2].onGround && !wheels[3].onGround)
+				{
+					allWheelsOnGround = false;
+				} else
+				{
+					allWheelsOnGround = true;
+				}
+			}
+
+			// Now we apply gravity and handle floating
+			if (allWheelsOnGround && !(type.floatOnWater && worldObj.isAnyLiquid(wheel.getBoundingBox())))
+			{
+				wheel.moveEntity(0F, -0.98 / 5, 0F);
+			} else if ((type.floatOnWater && worldObj.isAnyLiquid(wheel.getBoundingBox()))
+					&& worldObj.isAnyLiquid(wheel.getBoundingBox().offset(0, 1 - 0, 0)))
+			{
+				wheel.moveEntity(0F, 1F, 0F);
+			} else if ((type.floatOnWater && worldObj.isAnyLiquid(wheel.getBoundingBox()))
+					&& !worldObj.isAnyLiquid(wheel.getBoundingBox().offset(0, 1 - 0, 0)))
+			{
+				wheel.moveEntity(0F, 0F, 0F);
+				this.roll = 0;
+				this.pitch = 0;
+			} else
+			{
+				wheel.moveEntity(0F, -0.98F, 0F);
+			}
+
+			// This part kills the throttle whenever we collide with something
+			// we can't step over.
+			if ((throttle >= 0.3 || throttle <= -0.3))
+			{
+				Vector3f motionVec = new Vector3f(0, 0, 0);
+				Vector3f targetVec = type.wheelPositions[wheel.ID].position;
+				targetVec = axes.findLocalVectorGlobally(targetVec);
+				if (throttle > 0.1)
+					motionVec = new Vector3f(1, 0, 0);
+				if (throttle < -0.1)
+					motionVec = new Vector3f(-1, 0, 0);
+				if ((wheel.ID == 2 || wheel.ID == 3) && wheelsYaw >= 0.1)
+					motionVec = new Vector3f(motionVec.x, 0, 1);
+				if ((wheel.ID == 0 || wheel.ID == 1) && wheelsYaw <= -0.1)
+					motionVec = new Vector3f(motionVec.x, 0, -1);
+				motionVec = axes.findLocalVectorGlobally(motionVec);
+				Vector3f test1Pos = new Vector3f(posX + targetVec.x + motionVec.x, posY + targetVec.y,
+						posZ + targetVec.z + motionVec.z);
+				boolean test1 = worldObj.isAirBlock(
+						new BlockPos(Math.round(test1Pos.x), Math.round(test1Pos.y), Math.round(test1Pos.z)));
+				boolean test2 = worldObj.isAirBlock(new BlockPos(Math.round(test1Pos.x),
+						Math.round(test1Pos.y + type.wheelStepHeight), Math.round(test1Pos.z)));
+				if (!test1 && !test2)
+				{
+					throttle *= 0.6;
+					// for(EntityWheel wheel2 : wheels){
+					// Vector3f wheelPos3 =
+					// axes.findLocalVectorGlobally(type.wheelPositions[wheel2.ID].position);
+					// }
+				}
+			}
 		}
-		
-		moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
-		
-		if(wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
+
+		double bmy = this.motionY;
+		this.motionY = amountToMoveCar.y;
+		if (amountToMoveCar != null)
+			moveEntity(amountToMoveCar.x, amountToMoveCar.y, amountToMoveCar.z);
+		this.motionY = bmy;
+
+		if (wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
 		{
-			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F); 
-			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F); 
-			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F); 
-			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F); 
-			
+			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F,
+					(wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F);
+			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F,
+					(wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F);
+			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F,
+					(wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F);
+			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F,
+					(wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F);
+
+			if (frontAxleCentre.y > backAxleCentre.y)
+			{
+				if (throttle > 0)
+				{
+					float diff = frontAxleCentre.y - backAxleCentre.y;
+					float dx = frontAxleCentre.x - backAxleCentre.x;
+					dx = (float) Math.sqrt(dx * dx);
+					float dz = frontAxleCentre.z - backAxleCentre.z;
+					dz = (float) Math.sqrt(dz * dz);
+					float dist = (float) Math.sqrt(dx + dz);
+					diff = diff / dist;
+					throttle *= (1F - (diff / 60));
+				}
+			}
+
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
 			float dz = frontAxleCentre.z - backAxleCentre.z;
 			float drx = leftSideCentre.x - rightSideCentre.x;
 			float dry = leftSideCentre.y - rightSideCentre.y;
 			float drz = leftSideCentre.z - rightSideCentre.z;
-			
-			
-			float dxz = (float)Math.sqrt(dx * dx + dz * dz);
-			float drxz = (float)Math.sqrt(drx * drx + drz * drz);
-			
-			float yaw = (float)Math.atan2(dz, dx);
-			float pitch = -(float)Math.atan2(dy, dxz);
-			float roll = 0F;
-			if(type.canRoll){
-				roll = -(float)Math.atan2(dry, drxz);
-			}
-			
-			if(type.tank)
+
+			float dxz = (float) Math.sqrt(dx * dx + dz * dz);
+			float drxz = (float) Math.sqrt(drx * drx + drz * drz);
+
+			float tyaw = (float) Math.atan2(dz, dx);
+			float tpitch = -(float) Math.atan2(dy, dxz);
+			float troll = 0F;
+			if (type.canRoll)
 			{
-				yaw = (float)Math.atan2(wheels[3].posZ - wheels[2].posZ, wheels[3].posX - wheels[2].posX) + (float)Math.PI / 2F;
+				troll = -(float) Math.atan2(dry, drxz);
 			}
-			
+
+			yaw = tyaw;
+			pitch = Lerp(pitch, tpitch, 0.2F);
+			roll = Lerp(roll, troll, 0.2F);
+
+			if (type.tank)
+			{
+				float velocityScale = 0.04F * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle)
+						* data.engine.engineSpeed;
+				float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+				float effectiveWheelSpeed = ((wheelsYaw * steeringScale)) * velocityScale;
+				yaw = axes.getYaw() / 180F * 3.14159F + (effectiveWheelSpeed);
+			} else
+			{
+				float velocityScale = 0.1F * throttle * (throttle > 0 ? type.maxThrottle : type.maxNegativeThrottle)
+						* data.engine.engineSpeed;
+				float steeringScale = 0.1F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier);
+				float effectiveWheelSpeed = ((wheelsYaw * steeringScale)) * velocityScale;
+				yaw = axes.getYaw() / 180F * 3.14159F + (effectiveWheelSpeed);
+			}
+
 			axes.setAngles(yaw * 180F / 3.14159F, pitch * 180F / 3.14159F, roll * 180F / 3.14159F);
 		}
-		
+
 		checkForCollisions();
 
-		//Sounds
-		//Starting sound
+		// Sounds
+		// Starting sound
 		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
-		//Flying sound
+		// Flying sound
 		if (throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;
 		}
-		
-		for(EntitySeat seat : seats)
+
+		for (EntitySeat seat : seats)
 		{
-			if(seat != null)
+			if (seat != null)
 				seat.updatePosition();
 		}
-		
-		//Calculate movement on the client and then send position, rotation etc to the server
-		if(thePlayerIsDrivingThis)
+
+		// Calculate movement on the client and then send position, rotation etc
+		// to the server
+		if (thePlayerIsDrivingThis)
 		{
 			FlansMod.getPacketHandler().sendToServer(new PacketVehicleControl(this));
 			serverPosX = posX;
@@ -508,52 +672,139 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			serverPosZ = posZ;
 			serverYaw = axes.getYaw();
 		}
-		
-		//If this is the server, send position updates to everyone, having received them from the driver
-		if(!worldObj.isRemote && ticksExisted % 5 == 0)
+
+		// If this is the server, send position updates to everyone, having
+		// received them from the driver
+		if (!worldObj.isRemote && ticksExisted % 5 == 0)
 		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
+			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ,
+					FlansMod.driveableUpdateRange, dimension);
 		}
-				
-				int animSpeed = 4;
-		//Change animation speed based on our current throttle
-		if((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33)){
+
+		animateTracks();
+
+	}
+
+	public void animateTracks()
+	{
+		VehicleType type = getVehicleType();
+		int animSpeed = 4;
+
+		if ((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33))
+		{
 			animSpeed = 3;
-		} else if((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66)){
+		} else if ((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66))
+		{
 			animSpeed = 2;
-		} else if((throttle > 0.66 && throttle <= 0.9) || (throttle < -0.66 && throttle >= -0.9)){
+		} else if ((throttle > 0.66 && throttle <= 0.9) || (throttle < -0.66 && throttle >= -0.9))
+		{
 			animSpeed = 1;
-		} else if((throttle > 0.9 && throttle <= 1) || (throttle < -0.9 && throttle >= -1)){
+		} else if ((throttle > 0.9 && throttle <= 1) || (throttle < -0.9 && throttle >= -1))
+		{
 			animSpeed = 0;
 		}
-		
-    	if(throttle > 0.05){
-    		animCount --;
-        } else if (throttle < -0.05){
-        	animCount ++;
-        }
-        	
-        if(animCount <= 0){
-        	animCount = animSpeed;
-        	animFrame ++;
-        }
 
-        if(throttle < 0){
-        		if(animCount >= animSpeed){
-        			animCount = 0;
-                	animFrame --;
-        		}
-        }
-	//Cycle the animation frame, but only if we have anything to cycle
-	if(type.animFrames != 0){
-        if(animFrame > type.animFrames){
-        	animFrame = 0;
-        } if(animFrame < 0){
-        	animFrame = type.animFrames;
-        }
-	}
+		boolean turningLeft = false;
+		boolean turningRight = false;
+
+		if (throttle > 0.05)
+		{
+			animCountLeft--;
+			animCountRight--;
+		} else if (throttle < -0.05)
+		{
+			animCountLeft++;
+			animCountRight++;
+		} else if (wheelsYaw < -1)
+		{
+			turningLeft = true;
+			animCountLeft++;
+			animCountRight--;
+			animSpeed = 1;
+			if (soundPosition == 0 && hasEnoughFuel() && type.tank)
+			{
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
+				soundPosition = type.engineSoundLength;
+			}
+		} else if (wheelsYaw > 1)
+		{
+			turningRight = true;
+			animCountLeft--;
+			animCountRight++;
+			animSpeed = 1;
+			if (soundPosition == 0 && hasEnoughFuel() && type.tank)
+			{
+				PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
+				soundPosition = type.engineSoundLength;
+			}
+		} else
+		{
+			turningLeft = false;
+			turningRight = false;
+		}
+
+		if (animCountLeft <= 0)
+		{
+			animCountLeft = animSpeed;
+			animFrameLeft++;
+		}
+
+		if (animCountRight <= 0)
+		{
+			animCountRight = animSpeed;
+			animFrameRight++;
+		}
+
+		if (throttle < 0 || turningLeft)
+		{
+			if (animCountLeft >= animSpeed)
+			{
+				animCountLeft = 0;
+				animFrameLeft--;
+			}
+		}
+
+		if (throttle < 0 || turningRight)
+		{
+			if (animCountRight >= animSpeed)
+			{
+				animCountRight = 0;
+				animFrameRight--;
+			}
+		}
+
+		if (animFrameLeft > type.animFrames)
+		{
+			animFrameLeft = 0;
+		}
+		if (animFrameLeft < 0)
+		{
+			animFrameLeft = type.animFrames;
+		}
+
+		if (animFrameRight > type.animFrames)
+		{
+			animFrameRight = 0;
+		}
+		if (animFrameRight < 0)
+		{
+			animFrameRight = type.animFrames;
+		}
 	}
 
+	public float rotateTowards(Vector3f point, Vector3f original)
+	{
+
+		float angle = (float) Math.atan2(point.y - original.y, point.x - original.x);
+		return angle;
+	}
+
+	public float Lerp(float start, float end, float percent)
+	{
+		float result = (start + percent * (end - start));
+
+		return result;
+	}
 	private float averageAngles(float a, float b)
 	{
 		FlansMod.log("Pre  " + a + " " + b);
