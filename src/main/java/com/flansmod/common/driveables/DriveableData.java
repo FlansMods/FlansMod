@@ -218,7 +218,7 @@ public class DriveableData implements IInventory
 		}
 		else
 		{
-			return null;
+			return ItemStack.EMPTY.copy();
 		}
 		
 	}
