@@ -141,8 +141,8 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			rotationPitch--;
 		}
 		
-		if(rotationPitch < type.topViewLimit)
-			rotationPitch = type.topViewLimit;
+		if(rotationPitch < -type.topViewLimit)
+			rotationPitch = -type.topViewLimit;
 		if(rotationPitch > type.bottomViewLimit)
 			rotationPitch = type.bottomViewLimit;
 		
