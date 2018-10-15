@@ -368,7 +368,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				wheel.prevPosX = wheel.posX;
 				wheel.prevPosY = wheel.posY;
-				wheel.prevPosZ = wheel.prevPosZ;
+				wheel.prevPosZ = wheel.posZ;
 			}
 		}
 		
