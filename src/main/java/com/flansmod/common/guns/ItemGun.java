@@ -1317,6 +1317,13 @@ public class ItemGun extends Item implements IPaintableItem
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player)
 	{
+		World world = player.world;
+		if(!world.isRemote)
+		{
+			// Client will still render block break if player is in creative so update block state
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
+		}
 		return true;
 	}
 	
