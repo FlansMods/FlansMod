@@ -478,7 +478,7 @@ public class ClientRenderHooks
 				GlStateManager.enableAlpha();
 				
 				//biped.isSneak = false;
-				biped.rightArmPose = ArmPose.ITEM;
+				biped.rightArmPose = ArmPose.BOW_AND_ARROW;
 				biped.setLivingAnimations(entity, f8, f7, partialTicks);
 				biped.setRotationAngles(f8, f7, f5, f4, f9, 0.0625F, entity);
 				
