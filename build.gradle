@@ -21,7 +21,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.4.2705"
+    version = "1.12.2-14.23.5.2768"
     runDir = "run"
 
     replace "@ALLOWED_VERSIONS@", "[5.5.2,5.5.3)"
