@@ -208,10 +208,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
-			for(int q = 0; q < inventory.getSizeInventory(); q++)
-			{
-				temporaryInventory.setInventorySlotContents(q, inventory.getStackInSlot(q).copy());
-			}
+			temporaryInventory.copyInventory(inventory);
 			
 			//Draw the recipe items
 			//Iterate over rows then columns
@@ -232,7 +229,7 @@ public class GuiDriveableCrafting extends GuiScreen
 						for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
 						{
 							//Get the stack in each slot
-							ItemStack stackInSlot = temporaryInventory.getStackInSlot(n);
+							ItemStack stackInSlot = temporaryInventory.getStackInSlot(n).copy();
 							//If the stack is what we want
 							if(stackInSlot != null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
 							{
@@ -319,17 +316,19 @@ public class GuiDriveableCrafting extends GuiScreen
 			}
 		}
 		
-		//If we can't craft it, draw a red box around the craft button
+		//If we can't craft it, draw a red box around the craft button and disable it
 		if(!canCraft)
 		{
+			buttonList.get(0).enabled = false;
 			mc.renderEngine.bindTexture(texture);
 			drawTexturedModalRect(guiOriginX + 108, guiOriginY + 160, 176, 28, 44, 24);
 			drawString(fontRenderer, "Craft", guiOriginX + 116, guiOriginY + 168, 0xa0a0a0);
 		}
-		//If we can craft it, draw the button for crafting
+		//If we can craft it, draw and enable the button for crafting
 		else
 		{
 			super.drawScreen(i, j, f);
+			buttonList.get(0).enabled = true;
 		}
 	}
 	

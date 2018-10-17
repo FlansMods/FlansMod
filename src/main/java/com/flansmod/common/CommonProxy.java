@@ -180,7 +180,7 @@ public class CommonProxy
 			for(int n = 0; n < player.inventory.getSizeInventory(); n++)
 			{
 				//Get the stack in each slot
-				ItemStack stackInSlot = player.inventory.getStackInSlot(n);
+				ItemStack stackInSlot = player.inventory.getStackInSlot(n).copy();
 				//If the stack is what we want
 				if(stackInSlot != null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
 				{
