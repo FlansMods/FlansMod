@@ -174,7 +174,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	* Mass (In tons)
 	*/
-	public float mass = 1.0;
+	public float mass = 1.0F;
 	
 	/**
 	 * Collision points for block based collisions
