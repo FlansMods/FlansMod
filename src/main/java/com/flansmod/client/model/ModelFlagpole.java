@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 import com.flansmod.common.teams.EntityFlag;
 import com.flansmod.common.teams.EntityFlagpole;
 
-public class ModelFlagpole extends ModelBase 
+public class ModelFlagpole extends ModelBase
 {
 	public ModelFlagpole()
 	{

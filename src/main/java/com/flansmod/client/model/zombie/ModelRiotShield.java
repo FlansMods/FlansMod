@@ -3,7 +3,7 @@ package com.flansmod.client.model.zombie;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelRiotShield extends ModelGun 
+public class ModelRiotShield extends ModelGun
 {
 	public ModelRiotShield()
 	{

@@ -3,7 +3,7 @@ package com.flansmod.client.model.ww2;
 import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelPanzerfaust extends ModelGun 
+public class ModelPanzerfaust extends ModelGun
 {
 	public ModelPanzerfaust()
 	{
@@ -22,6 +22,6 @@ public class ModelPanzerfaust extends ModelGun
 		gunModel[2].addTrapezoid(10F, 1F, -1.5F, 3, 3, 3, 0F, -1F, ModelRendererTurbo.MR_RIGHT);
 		
 		gunModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[3].addTrapezoid(13F, 1F, -1.5F, 1, 3, 3, 0F, -0.5F,  ModelRendererTurbo.MR_LEFT);
+		gunModel[3].addTrapezoid(13F, 1F, -1.5F, 1, 3, 3, 0F, -0.5F, ModelRendererTurbo.MR_LEFT);
 	}
 }

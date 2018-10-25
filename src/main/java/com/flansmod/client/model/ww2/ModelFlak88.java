@@ -6,8 +6,6 @@ package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelFlak88 extends ModelVehicle //Same as Filename
 {
@@ -666,7 +664,6 @@ public class ModelFlak88 extends ModelVehicle //Same as Filename
 
 		barrelModel[70].addShapeBox(60F, -1F, -1.5F, 1, 6, 6, 0F, 0F, -0.5F, -0.5F, 0F, -0.5F, -0.5F, 0F, -0.5F, -3.5F, 0F, -0.5F, -3.5F, 0F, -3.5F, -0.5F, 0F, -3.5F, -0.5F, 0F, -3.5F, -3.5F, 0F, -3.5F, -3.5F); // Box 0
 		barrelModel[70].setRotationPoint(-11F, -14F, 0F);
-
 
 
 		translateAll(0F, 0F, 0F);

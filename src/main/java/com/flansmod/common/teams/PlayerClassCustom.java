@@ -3,23 +3,20 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 import com.flansmod.client.gui.teams.EnumLoadoutSlot;
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.types.IFlanItem;
 
-import net.minecraft.item.ItemStack;
-
-public class PlayerClassCustom implements IPlayerClass 
+public class PlayerClassCustom implements IPlayerClass
 {
 	public int index;
 	public PlayerLoadout loadout;
 	public List<ItemStack> startingItems = new ArrayList<ItemStack>();
 	public ItemStack chest = null;
 	
-	public PlayerClassCustom(int i, PlayerLoadout playerLoadout) 
+	public PlayerClassCustom(int i, PlayerLoadout playerLoadout)
 	{
 		index = i;
 		loadout = playerLoadout;
@@ -50,7 +47,7 @@ public class PlayerClassCustom implements IPlayerClass
 				LoadoutEntryInfoType loadoutEntry = TeamsManagerRanked.GetInstance().currentPool.GetLoadoutEntryForInfoType(n, ((IFlanItem)stack.getItem()).getInfoType());
 				if(loadoutEntry != null)
 				{
-					for(ItemStack extraStack : loadoutEntry.extraItems)						
+					for(ItemStack extraStack : loadoutEntry.extraItems)
 					{
 						startingItems.add(extraStack);
 					}
@@ -60,51 +57,51 @@ public class PlayerClassCustom implements IPlayerClass
 	}
 	
 	@Override
-	public List<ItemStack> GetStartingItems() 
+	public List<ItemStack> GetStartingItems()
 	{
 		return startingItems;
 	}
-
+	
 	@Override
-	public boolean GetHorse() 
+	public boolean GetHorse()
 	{
 		return false;
 	}
-
+	
 	@Override
-	public ItemStack GetHat() 
+	public ItemStack GetHat()
 	{
 		return null;
 	}
-
+	
 	@Override
-	public ItemStack GetChest() 
+	public ItemStack GetChest()
 	{
 		return chest;
 	}
-
+	
 	@Override
-	public ItemStack GetLegs() 
+	public ItemStack GetLegs()
 	{
 		return null;
 	}
-
+	
 	@Override
-	public ItemStack GetShoes() 
+	public ItemStack GetShoes()
 	{
 		return null;
 	}
-
+	
 	@Override
-	public String GetName() 
+	public String GetName()
 	{
 		return "Loadout " + index;
 	}
-
+	
 	@Override
-	public String GetShortName() 
+	public String GetShortName()
 	{
 		return "custom_" + index;
 	}
-
+	
 }

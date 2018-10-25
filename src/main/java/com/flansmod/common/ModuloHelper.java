@@ -1,6 +1,6 @@
 package com.flansmod.common;
 
-public class ModuloHelper 
+public class ModuloHelper
 {
 	public static int divide(int x, int y)
 	{

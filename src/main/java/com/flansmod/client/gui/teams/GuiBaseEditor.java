@@ -1,10 +1,10 @@
 package com.flansmod.client.gui.teams;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketBaseEdit;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -13,10 +13,10 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 
-import java.io.IOException;
-import java.util.Arrays;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.network.PacketBaseEdit;
 
-public class GuiBaseEditor extends GuiScreen 
+public class GuiBaseEditor extends GuiScreen
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/baseEdit.png");
 	private int guiOriginX;
@@ -28,7 +28,9 @@ public class GuiBaseEditor extends GuiScreen
 	private GuiButton rightButton;
 	private int mapsPage;
 	
-	/** The packet received from the server containing all the base information. Modify this and send it back */
+	/**
+	 * The packet received from the server containing all the base information. Modify this and send it back
+	 */
 	public PacketBaseEdit packet;
 	
 	public GuiBaseEditor(PacketBaseEdit packet)
@@ -71,7 +73,7 @@ public class GuiBaseEditor extends GuiScreen
 		buttonList.add(leftButton);
 		buttonList.add(rightButton);
 	}
-	 
+
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
@@ -102,14 +104,16 @@ public class GuiBaseEditor extends GuiScreen
 	{
 		switch(button.id)
 		{
-		case 0 : case 1 : case 2 : case 3 :
+			case 0: case 1: case 2: case 3:
 			packet.teamID = button.id;
 			break;
-		case 4 : case 5 : case 6 : case 7 : case 8 :
+			case 4: case 5: case 6: case 7: case 8:
 			packet.mapID = mapsPage * 5 + button.id - 4;
 			break;
-		case 9 : mapsPage--; break;
-		case 10 : mapsPage++; break;
+			case 9: mapsPage--;
+				break;
+			case 10: mapsPage++;
+				break;
 		}
 
 	}
@@ -131,36 +135,40 @@ public class GuiBaseEditor extends GuiScreen
 			}
 		}
 		rightButton.visible = packet.maps.length > (mapsPage + 1) * 5;
-		leftButton.visible = mapsPage > 0;	
-			
+		leftButton.visible = mapsPage > 0;
+
 		nameEntryField.updateCursorCounter();
 	}
 	
 	@Override
-    protected void mouseClicked(int i, int j, int k)
-    {
+	protected void mouseClicked(int i, int j, int k)
+	{
 		try
 		{
 			super.mouseClicked(i, j, k);
 		}
-		catch(IOException e) {}
+		catch(IOException e)
+		{
+		}
 
 		nameEntryField.mouseClicked(i, j, k);
 	}
 	
 	@Override
-    protected void keyTyped(char c, int i)
-    {
+	protected void keyTyped(char c, int i)
+	{
 		try
 		{
-			super.keyTyped(c, i);	
+			super.keyTyped(c, i);
 		}
-		catch(IOException e) {}
+		catch(IOException e)
+		{
+		}
 		nameEntryField.textboxKeyTyped(c, i);
 	}
 	
 	@Override
-	public void onGuiClosed() 
+	public void onGuiClosed()
 	{
 		super.onGuiClosed();
 		packet.baseName = nameEntryField.getText();

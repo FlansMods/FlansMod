@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.netty.buffer.ByteBuf;
-
 import org.lwjgl.input.Mouse;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,9 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -61,7 +60,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		setSize(1.0F, 1.0F);
 		ignoreFrustumCheck = true;
 	}
-
+	
 	public EntityMG(World world, int x, int y, int z, int dir, GunType gunType)
 	{
 		super(world);
@@ -80,13 +79,13 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		ignoreFrustumCheck = true;
 		mgs.add(this);
 	}
-
+	
 	@Override
 	public boolean canBeCollidedWith()
 	{
 		return !isDead;
 	}
-
+	
 	@Override
 	public void onUpdate()
 	{
@@ -101,7 +100,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		{
 			setDead();
 		}
-		if (world.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.AIR)
+		if(world.getBlockState(new BlockPos(blockX, blockY - 1, blockZ)).getBlock() == Blocks.AIR)
 		{
 			if(!world.isRemote)
 			{
@@ -110,23 +109,23 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		}
 		prevRotationYaw = rotationYaw;
 		prevRotationPitch = rotationPitch;
-		if (gunner != null)
+		if(gunner != null)
 		{
 			ticksSinceUsed = 0;
 			rotationYaw = gunner.rotationYaw - direction * 90;
-			for (; rotationYaw < -180; rotationYaw += 360)
+			for(; rotationYaw < -180; rotationYaw += 360)
 			{
 			}
-			for (; rotationYaw > 180; rotationYaw -= 360)
+			for(; rotationYaw > 180; rotationYaw -= 360)
 			{
 			}
 			rotationPitch = gunner.rotationPitch;
 			// Keep it within reasonable angles
-			if (rotationYaw > type.sideViewLimit)
+			if(rotationYaw > type.sideViewLimit)
 				prevRotationYaw = rotationYaw = type.sideViewLimit;
-			if (rotationYaw < -type.sideViewLimit)
+			if(rotationYaw < -type.sideViewLimit)
 				prevRotationYaw = rotationYaw = -type.sideViewLimit;
-
+			
 			// Keep user standing behind the gun
 			float angle = direction * 90F + rotationYaw;
 			double dX = (type.standBackDist * Math.sin(angle * 3.1415926535F / 180F));
@@ -136,40 +135,41 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			// (direction == 3 ? 1 : 0)) + 0.5D, blockY + gunner.getYOffset() -
 			// 0.5D, (double)(blockZ - (direction == 0 ? 1 : 0) + (direction ==
 			// 2 ? 1 : 0)) + 0.5D);
-		} else
+		}
+		else
 		{
 			rotationPitch--;
 		}
-
-		if (rotationPitch < type.topViewLimit)
-			rotationPitch = type.topViewLimit;
-		if (rotationPitch > type.bottomViewLimit)
+		
+		if(rotationPitch < -type.topViewLimit)
+			rotationPitch = -type.topViewLimit;
+		if(rotationPitch > type.bottomViewLimit)
 			rotationPitch = type.bottomViewLimit;
 		
 		if(shootDelay > 0)
 			shootDelay--;
-
+		
 		// Decrement the reload timer and reload
-		if (reloadTimer > 0)
+		if(reloadTimer > 0)
 			reloadTimer--;
-		if (!ammo.isEmpty() && ammo.getItemDamage() == ammo.getMaxDamage())
+		if(!ammo.isEmpty() && ammo.getItemDamage() == ammo.getMaxDamage())
 		{
 			ammo = ItemStack.EMPTY.copy();
 			// Scrap metal output?
 		}
-		if (ammo.isEmpty() && gunner != null)
+		if(ammo.isEmpty() && gunner != null)
 		{
 			int slot = findAmmo(gunner);
-			if (slot >= 0)
+			if(slot >= 0)
 			{
 				ammo = gunner.inventory.getStackInSlot(slot);
-				if (!gunner.capabilities.isCreativeMode)
+				if(!gunner.capabilities.isCreativeMode)
 					gunner.inventory.setInventorySlotContents(slot, ItemStack.EMPTY.copy());
 				reloadTimer = type.reloadTime;
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.reloadSound, false);
 			}
 		}
-		if (world.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().player && type.mode == EnumFireMode.FULLAUTO)
+		if(world.isRemote && gunner != null && gunner == FMLClientHandler.instance().getClient().player && type.mode == EnumFireMode.FULLAUTO)
 		{
 			//Send a packet!
 			checkForShooting();
@@ -179,31 +179,31 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			if(gunner == null || gunner.isDead)
 				isShooting = false;
 			// Check for ammo / reloading
-			if (ammo.isEmpty()|| reloadTimer > 0 || shootDelay > 0)
+			if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
 			{
 				return;
 			}
 			// Fire
 			BulletType bullet = BulletType.getBullet(ammo.getItem());
-			if (gunner != null && !gunner.capabilities.isCreativeMode)
+			if(gunner != null && !gunner.capabilities.isCreativeMode)
 				ammo.damageItem(1, gunner);
 			shootDelay = type.shootDelay;
-			world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world, 
-					new Vec3d(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D), 
-					(direction * 90F + rotationYaw), 
-					rotationPitch, 
-					gunner, 
-					bullet.bulletSpread * type.bulletSpread, 
-					type.damage, 
+			world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world,
+					new Vec3d(blockX + 0.5D, blockY + type.pivotHeight, blockZ + 0.5D),
+					(direction * 90F + rotationYaw),
+					rotationPitch,
+					gunner,
+					bullet.bulletSpread * type.bulletSpread,
+					type.damage,
 					type));
 			
-			if (soundDelay <= 0)
+			if(soundDelay <= 0)
 			{
 				soundDelay = type.shootSoundLength;
 				PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
 			}
 		}
-		if (soundDelay > 0)
+		if(soundDelay > 0)
 			soundDelay--;
 	}
 	
@@ -227,67 +227,69 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	{
 		isShooting = held;
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
-		if (damagesource.damageType.equals("player"))
+		if(damagesource.damageType.equals("player"))
 		{
 			Entity player = damagesource.getTrueSource();
-			if (player == gunner)
+			if(player == gunner)
 			{
 				// Player left clicked on the gun
-				if (type.mode == EnumFireMode.FULLAUTO)
+				if(type.mode == EnumFireMode.FULLAUTO)
 					return true;
 				// Check for ammo / reloading
-				if (ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
+				if(ammo.isEmpty() || reloadTimer > 0 || shootDelay > 0)
 				{
 					return true;
 				}
 				// Fire
 				BulletType bullet = BulletType.getBullet(ammo.getItem());
-				if (gunner != null && !gunner.capabilities.isCreativeMode)
-					ammo.damageItem(1, (EntityLiving) player);
+				if(gunner != null && !gunner.capabilities.isCreativeMode)
+					ammo.damageItem(1, (EntityLiving)player);
 				shootDelay = type.shootDelay;
-				if (!world.isRemote)
+				if(!world.isRemote)
 				{
-					world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world, 
-							(EntityLivingBase) player, 
-							bullet.bulletSpread * type.bulletSpread, 
-							type.damage, 
-							type.bulletSpeed, 
-							false, 
+					world.spawnEntity(((ItemBullet)ammo.getItem()).getEntity(world,
+							(EntityLivingBase)player,
+							bullet.bulletSpread * type.bulletSpread,
+							type.damage,
+							type.bulletSpeed,
+							false,
 							type));
 				}
-				if (soundDelay <= 0)
+				if(soundDelay <= 0)
 				{
 					float distortion = type.distortSound ? 1.0F / (rand.nextFloat() * 0.4F + 0.8F) : 1F;
 					//world.playSoundAtEntity(this, type.shootSound, 1.0F, distortion);
 					PacketPlaySound.sendSoundPacket(posX, posY, posZ, FlansMod.soundRange, dimension, type.shootSound, type.distortSound);
-
+					
 					soundDelay = type.shootSoundLength;
 				}
-			} else if(gunner != null)
+			}
+			else if(gunner != null)
 			{
 				return gunner.attackEntityFrom(damagesource, i);
-			} else if(TeamsManager.canBreakGuns)
+			}
+			else if(TeamsManager.canBreakGuns)
 			{
 				setDead();
 			}
 		}
 		return true;
 	}
-
+	
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
 		// Player right clicked on gun
 		// Mount gun
-		if (gunner != null && (gunner instanceof EntityPlayer) && gunner != player)
+		if(gunner != null && (gunner instanceof EntityPlayer) && gunner != player)
 		{
 			return true;
 		}
-		if (!world.isRemote)
+		if(!world.isRemote)
 		{
 			//If this is the player currently using this MG, dismount
 			if(gunner == player)
@@ -307,14 +309,14 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			//Spectators can't mount guns
 			if(TeamsManager.instance.currentRound != null && PlayerHandler.getPlayerData(player).team == Team.spectators)
 				return true;
-
+			
 			//None of the above applied, so mount the gun
 			mountGun(player, true);
 			FlansMod.getPacketHandler().sendToAllAround(new PacketMGMount(player, this, true), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
-			if (ammo.isEmpty())
+			if(ammo.isEmpty())
 			{
 				int slot = findAmmo(player);
-				if (slot >= 0)
+				if(slot >= 0)
 				{
 					ammo = player.inventory.getStackInSlot(slot);
 					player.inventory.setInventorySlotContents(slot, ItemStack.EMPTY.copy());
@@ -348,17 +350,17 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 	
 	public int findAmmo(EntityPlayer player)
 	{
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++)
+		for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 		{
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (type.isAmmo(stack))
+			if(type.isAmmo(stack))
 			{
 				return i;
 			}
 		}
 		return -1;
 	}
-
+	
 	@Override
 	public void setDead()
 	{
@@ -374,16 +376,16 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 			{
 				dropItem(type.getItem(), 1);
 				// Drop ammo box
-				if (!ammo.isEmpty())
+				if(!ammo.isEmpty())
 					entityDropItem(ammo, 0.5F);
 			}
 		}
-		if (gunner != null && PlayerHandler.getPlayerData(gunner) != null)
+		if(gunner != null && PlayerHandler.getPlayerData(gunner) != null)
 			PlayerHandler.getPlayerData(gunner).mountingGun = null;
 		
 		super.setDead();
 	}
-
+	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
 	{
@@ -392,7 +394,7 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		nbttagcompound.setInteger("BlockX", blockX);
 		nbttagcompound.setInteger("BlockY", blockY);
 		nbttagcompound.setInteger("BlockZ", blockZ);
-		nbttagcompound.setByte("Dir", (byte) direction);
+		nbttagcompound.setByte("Dir", (byte)direction);
 	}
 	
 	@Override
@@ -405,14 +407,14 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		direction = nbttagcompound.getByte("Dir");
 		ammo = new ItemStack(nbttagcompound.getCompoundTag("Ammo"));
 	}
-
+	
 	@Override
 	protected void entityInit()
 	{
 	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf data) 
+	public void writeSpawnData(ByteBuf data)
 	{
 		ByteBufUtils.writeUTF8String(data, type.shortName);
 		data.writeInt(direction);
@@ -421,9 +423,9 @@ public class EntityMG extends Entity implements IEntityAdditionalSpawnData
 		data.writeInt(blockZ);
 		ByteBufUtils.writeItemStack(data, ammo);
 	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf data) 
+	public void readSpawnData(ByteBuf data)
 	{
 		try
 		{

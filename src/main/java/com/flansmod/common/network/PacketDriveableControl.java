@@ -23,7 +23,9 @@ public class PacketDriveableControl extends PacketBase
 	public float fuelInTank;
 	public float steeringYaw;
 	
-	public PacketDriveableControl() {}
+	public PacketDriveableControl()
+	{
+	}
 	
 	public PacketDriveableControl(EntityDriveable driveable)
 	{
@@ -53,9 +55,9 @@ public class PacketDriveableControl extends PacketBase
 			steeringYaw = plane.flapsYaw;
 		}
 	}
-		
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(entityId);
 		data.writeDouble(posX);
@@ -74,9 +76,9 @@ public class PacketDriveableControl extends PacketBase
 		data.writeFloat(fuelInTank);
 		data.writeFloat(steeringYaw);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		entityId = data.readInt();
 		posX = data.readDouble();
@@ -95,9 +97,9 @@ public class PacketDriveableControl extends PacketBase
 		fuelInTank = data.readFloat();
 		steeringYaw = data.readFloat();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		if(playerEntity == null || playerEntity.world == null || playerEntity.world.loadedEntityList == null)
 			return;
@@ -120,10 +122,10 @@ public class PacketDriveableControl extends PacketBase
 		driveable.setPositionRotationAndMotion(posX, posY, posZ, yaw, pitch, roll, motX, motY, motZ, avelx, avely, avelz, throttle, steeringYaw);
 		driveable.driveableData.fuelInTank = fuelInTank;
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		if(clientPlayer == null || clientPlayer.world == null)
 			return;

@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelP90 extends ModelGun 
+public class ModelP90 extends ModelGun
 {
 	public ModelP90()
 	{
@@ -37,13 +37,13 @@ public class ModelP90 extends ModelGun
 		
 		gunModel[7] = new ModelRendererTurbo(this, 25, 1, textureX, textureY);
 		gunModel[7].addBox(4.9F, 2F, -1.5F, 5, 3, 3);
-				
+		
 		//Scope
 		scopeAttachPoint = new Vector3f(7.5F / 16F, 5F / 16F, 0F);
 		
 		//Barrel
 		defaultBarrelModel = new ModelRendererTurbo[1];
-				
+		
 		defaultBarrelModel[0] = new ModelRendererTurbo(this, 21, 11, textureX, textureY);
 		defaultBarrelModel[0].addBox(10F, 1.5F, -0.5F, 1, 1, 1);
 		

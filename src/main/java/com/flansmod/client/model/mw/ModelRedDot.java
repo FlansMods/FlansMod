@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelRedDot extends ModelAttachment 
+public class ModelRedDot extends ModelAttachment
 {
 	public ModelRedDot()
 	{
@@ -26,6 +26,6 @@ public class ModelRedDot extends ModelAttachment
 		
 		attachmentModel[4] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		attachmentModel[4].addBox(15F, 9.5F, -0.5F, 1, 1, 1);
-
+		
 	}
 }

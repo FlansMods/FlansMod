@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -26,9 +25,9 @@ import com.flansmod.common.PlayerHandler;
 
 public class EntityFlagpole extends Entity implements ITeamBase
 {
-    protected static final AxisAlignedBB POLE_AABB = new AxisAlignedBB(-0.2D, 0.0D, -0.2D, 0.4D, 2.0D, 0.4D);
-    private static final DataParameter<Integer> FLAGPOLE_ID = EntityDataManager.<Integer>createKey(EntityFlagpole.class, DataSerializers.VARINT);
-    
+	protected static final AxisAlignedBB POLE_AABB = new AxisAlignedBB(-0.2D, 0.0D, -0.2D, 0.4D, 2.0D, 0.4D);
+	private static final DataParameter<Integer> FLAGPOLE_ID = EntityDataManager.<Integer>createKey(EntityFlagpole.class, DataSerializers.VARINT);
+	
 	//Set this when an op sets the base and return to it when the gametype restarts
 	public int defaultTeamID;
 	//This is the team that currently holds this base, reset it to default team at the end of each round
@@ -52,67 +51,67 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	//Chunk loading
 	private boolean uninitialized = true;
 	private int loadDistance = 1;
-
-	public EntityFlagpole(World world) 
+	
+	public EntityFlagpole(World world)
 	{
 		super(world);
 		setSize(1F, 2F);
-	}	
+	}
 	
-	public EntityFlagpole(World world, double x, double y, double z) 
+	public EntityFlagpole(World world, double x, double y, double z)
 	{
 		this(world);
-		setPosition(x, y, z);		
+		setPosition(x, y, z);
 		flag = new EntityFlag(world, this);
 		objects.add(flag);
 		world.spawnEntity(flag);
 		//flag.startRiding(this);
 		if(teamsManager.maps.size() > 0)
 			map = teamsManager.maps.values().iterator().next();
-	}	
+	}
 	
-	public EntityFlagpole(World world, int x, int y, int z) 
+	public EntityFlagpole(World world, int x, int y, int z)
 	{
 		this(world, x + 0.5D, y, z + 0.5D);
 	}
-		
-    public EntityFlagpole(World world, BlockPos pos) 
-    {
+	
+	public EntityFlagpole(World world, BlockPos pos)
+	{
 		this(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
 	}
-    
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-    public boolean isInRangeToRender3d(double x, double y, double z)
-    {
-        double dX = this.posX - x;
-        double dY = this.posY - y;
-        double dZ = this.posZ - z;
-        double distSq = dX * dX + dY * dY + dZ * dZ;
-        double maxDist = 128.0D * getRenderDistanceWeight();
-        return distSq < maxDist * maxDist;
-    }
-
+	public boolean isInRangeToRender3d(double x, double y, double z)
+	{
+		double dX = this.posX - x;
+		double dY = this.posY - y;
+		double dZ = this.posZ - z;
+		double distSq = dX * dX + dY * dY + dZ * dZ;
+		double maxDist = 128.0D * getRenderDistanceWeight();
+		return distSq < maxDist * maxDist;
+	}
+	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox()
 	{
 		return POLE_AABB;
 	}
-
+	
 	@Override
 	public boolean canBeCollidedWith()
 	{
 		return true;
 	}
-
+	
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 		getDataManager().register(FLAGPOLE_ID, Integer.valueOf(0));
 	}
-
+	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		setBaseID(tags.getInteger("ID"));
 		currentTeamID = defaultTeamID = tags.getInteger("TeamID");
@@ -120,7 +119,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		name = tags.getString("Name");
 		setMap(map);
 	}
-
+	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
@@ -129,15 +128,15 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		tags.setInteger("ID", getBaseID());
 		tags.setString("Name", name);
 	}
-
+	
 	@Override
-	public TeamsMap getMap() 
+	public TeamsMap getMap()
 	{
 		return map;
 	}
-
+	
 	@Override
-	public void setMap(TeamsMap newMap) 
+	public void setMap(TeamsMap newMap)
 	{
 		if(newMap == null)
 		{
@@ -162,47 +161,47 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		map = newMap;
 		newMap.addBaseFirstTime(this);
 	}
-
+	
 	@Override
-	public List<ITeamObject> getObjects() 
+	public List<ITeamObject> getObjects()
 	{
 		return objects;
 	}
-		
+	
 	@Override
-	public void tick() 
+	public void tick()
 	{
 		
 	}
-
+	
 	@Override
-	public void startRound() 
+	public void startRound()
 	{
 		currentTeamID = defaultTeamID;
 	}
-
+	
 	@Override
-	public void addObject(ITeamObject object) 
+	public void addObject(ITeamObject object)
 	{
 		objects.add(object);
 		if(map != null)
 		{
 			map.addObject(this, object);
-		}	
+		}
 	}
-
+	
 	@Override
-	public String getBaseName() 
+	public String getBaseName()
 	{
 		return name;
 	}
-
+	
 	@Override
-	public void setBaseName(String newName) 
+	public void setBaseName(String newName)
 	{
 		name = newName;
 	}
-
+	
 	@Override
 	public void destroy()
 	{
@@ -212,27 +211,27 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		}
 		setDead();
 	}
-
+	
 	@Override
 	public Entity getEntity()
 	{
 		return this;
 	}
-
+	
 	@Override
-	public double getPosX() 
+	public double getPosX()
 	{
 		return posX;
 	}
-
+	
 	@Override
-	public double getPosY() 
+	public double getPosY()
 	{
 		return posY;
 	}
-
+	
 	@Override
-	public double getPosZ() 
+	public double getPosZ()
 	{
 		return posZ;
 	}
@@ -251,7 +250,7 @@ public class EntityFlagpole extends Entity implements ITeamBase
 	}
 	
 	@Override
-	public ITeamObject getFlag() 
+	public ITeamObject getFlag()
 	{
 		return flag;
 	}
@@ -286,9 +285,9 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		if(world.isRemote)
 			extinguish();
 	}
-		
+	
 	@Override
-	public void setDead() 
+	public void setDead()
 	{
 		super.setDead();
 	}
@@ -313,41 +312,41 @@ public class EntityFlagpole extends Entity implements ITeamBase
 		ItemStack stack = new ItemStack(FlansMod.flag, 1, 0);
 		return stack;
 	}
-
+	
 	@Override
-	public void setBaseID(int i) 
+	public void setBaseID(int i)
 	{
 		ID = i;
 	}
-
+	
 	@Override
-	public int getBaseID() 
+	public int getBaseID()
 	{
 		return ID;
 	}
-
+	
 	@Override
-	public int getDefaultOwnerID() 
+	public int getDefaultOwnerID()
 	{
 		return defaultTeamID;
 	}
-
+	
 	@Override
-	public void setDefaultOwnerID(int id) 
+	public void setDefaultOwnerID(int id)
 	{
 		currentTeamID = defaultTeamID = id;
 		for(ITeamObject object : objects)
 			object.onBaseSet(id);
 	}
-
+	
 	@Override
-	public int getOwnerID() 
+	public int getOwnerID()
 	{
 		return currentTeamID;
 	}
-
+	
 	@Override
-	public void setOwnerID(int id) 
+	public void setOwnerID(int id)
 	{
 		currentTeamID = id;
 	}

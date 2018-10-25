@@ -4,14 +4,8 @@
 
 package com.flansmod.client.model.apocalypse;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.entity.Entity;
-
 import com.flansmod.client.model.ModelItemHolder;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
-import com.flansmod.common.guns.EntityMG;
 import com.flansmod.common.vector.Vector3f;
 
 public class ModelGroundSkeleton extends ModelItemHolder

@@ -1,7 +1,5 @@
 package com.flansmod.apocalypse.common.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -10,14 +8,14 @@ import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.PlaneType;
 
-public class EntityFlyByPlane extends EntityPlane 
+public class EntityFlyByPlane extends EntityPlane
 {
 	public EntityFlyByPlane(World world)
 	{
 		super(world);
 	}
 	
-	public EntityFlyByPlane(World world, double x, double y, double z, PlaneType type, DriveableData data) 
+	public EntityFlyByPlane(World world, double x, double y, double z, PlaneType type, DriveableData data)
 	{
 		super(world, x, y, z, type, data);
 	}
@@ -38,8 +36,6 @@ public class EntityFlyByPlane extends EntityPlane
 		super.onUpdate();
 		
 		
-		
-		
 	}
 	
 	private float getBiomeHeight(Biome biome)
@@ -54,19 +50,19 @@ public class EntityFlyByPlane extends EntityPlane
 	}
 
 	@Override
-	public boolean canThrust() 
+	public boolean canThrust()
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean hasFuel() 
+	public boolean hasFuel()
 	{
 		return true;
 	}
 
 	@Override
-	public boolean hasEnoughFuel() 
+	public boolean hasEnoughFuel()
 	{
 		return true;
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class TypeFile 
+public class TypeFile
 {
 	public EnumType type;
 	public String name, contentPack;
@@ -37,7 +37,7 @@ public class TypeFile
 		if(addToTypeFileList)
 			files.get(type).add(this);
 	}
-
+	
 	public void parseLine(String line)
 	{
 		lines.add(line);

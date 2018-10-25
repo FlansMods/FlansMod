@@ -8,7 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ContainerGunModTable extends Container 
+public class ContainerGunModTable extends Container
 {
 	private InventoryGunModTable inventory;
 	public InventoryPlayer playerInv;
@@ -45,7 +45,7 @@ public class ContainerGunModTable extends Container
 			{
 				addSlotToContainer(new Slot(playerInv, col + row * 9 + 9, 8 + col * 18, 176 + row * 18));
 			}
-
+			
 		}
 		//Quickbar slots
 		for(int col = 0; col < 9; col++)
@@ -60,9 +60,9 @@ public class ContainerGunModTable extends Container
 		if(inventory.getStackInSlot(0) != null)
 			player.dropItem(inventory.getStackInSlot(0), false);
 	}
-		
+	
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) 
+	public boolean canInteractWith(EntityPlayer entityplayer)
 	{
 		return true;
 	}
@@ -70,46 +70,46 @@ public class ContainerGunModTable extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotID)
 	{
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot currentSlot = (Slot)inventorySlots.get(slotID);
-
+		
 		if(currentSlot != null && currentSlot.getHasStack())
 		{
 			ItemStack slotStack = currentSlot.getStack();
 			stack = slotStack.copy();
-
+			
 			if(slotID >= 13)
 			{
-				return null;
+				return ItemStack.EMPTY;
 			}
 			else
 			{
 				if(!mergeItemStack(slotStack, 13, inventorySlots.size(), true))
 				{
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
-
-			if (slotStack.getCount() == 0)
+			
+			if(slotStack.getCount() == 0)
 			{
-				currentSlot.putStack(null);
+				currentSlot.putStack(ItemStack.EMPTY);
 			}
 			else
 			{
 				currentSlot.onSlotChanged();
 			}
-
-			if (slotStack.getCount() == stack.getCount())
+			
+			if(slotStack.getCount() == stack.getCount())
 			{
-				return null;
+				return ItemStack.EMPTY;
 			}
-
+			
 			currentSlot.onTake(player, slotStack);
 		}
-
+		
 		return stack;
 	}
-
+	
 	public void pressButton(boolean paint, boolean left)
 	{
 		//Nope.
@@ -131,9 +131,9 @@ public class ContainerGunModTable extends Container
 		if(gunStack != null && gunStack.getItem() instanceof ItemGun)
 		{
 			GunType gunType = ((ItemGun)gunStack.getItem()).GetType();
-
+			
 			int numDyes = paintjob.dyesNeeded.length;
-
+			
 			if(!playerInv.player.capabilities.isCreativeMode)
 			{
 				//Calculate which dyes we have in our inventory
@@ -151,26 +151,26 @@ public class ContainerGunModTable extends Container
 					//We don't have enough of this dye
 					if(amountNeeded > 0)
 						return;
-	        	}
-	    	
-	        	for(int n = 0; n < numDyes; n++)
-	        	{
-	        		int amountNeeded = paintjob.dyesNeeded[n].getCount();
-	        		for(int s = 0; s < playerInv.getSizeInventory(); s++)
-	        		{
-	        			if(amountNeeded <= 0)
-	        				continue;
-	        			ItemStack stack = playerInv.getStackInSlot(s);
-	        			if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
-	        			{
-	        				ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
-	        				amountNeeded -= consumed.getCount();
-	        			}
-	        		}
-	        	}
-	    	}
-	    	
-	    	//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
+				}
+				
+				for(int n = 0; n < numDyes; n++)
+				{
+					int amountNeeded = paintjob.dyesNeeded[n].getCount();
+					for(int s = 0; s < playerInv.getSizeInventory(); s++)
+					{
+						if(amountNeeded <= 0)
+							continue;
+						ItemStack stack = playerInv.getStackInSlot(s);
+						if(stack != null && stack.getItem() == Items.DYE && stack.getItemDamage() == paintjob.dyesNeeded[n].getItemDamage())
+						{
+							ItemStack consumed = playerInv.decrStackSize(s, amountNeeded);
+							amountNeeded -= consumed.getCount();
+						}
+					}
+				}
+			}
+			
+			//Paint the gun. This line is only reached if the player is in creative or they have had their dyes taken already
 			//gunStack.getTagCompound().setString("Paint", paintjob.iconName);
 			gunStack.setItemDamage(paintjob.ID);
 		}

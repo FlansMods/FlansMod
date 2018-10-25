@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelRPK extends ModelGun 
+public class ModelRPK extends ModelGun
 {
 	public ModelRPK()
 	{
@@ -28,7 +28,7 @@ public class ModelRPK extends ModelGun
 		
 		//Scope
 		scopeAttachPoint = new Vector3f(4F / 16F, 5F / 16F, 0F);
-
+		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
 		
@@ -42,7 +42,7 @@ public class ModelRPK extends ModelGun
 		
 		//Barrel
 		defaultBarrelModel = new ModelRendererTurbo[4];
-				
+		
 		defaultBarrelModel[0] = new ModelRendererTurbo(this, 30, 14, textureX, textureY);
 		defaultBarrelModel[0].addBox(14F, 2.5F, -0.5F, 8, 1, 1);
 		
@@ -50,10 +50,10 @@ public class ModelRPK extends ModelGun
 		defaultBarrelModel[1].addBox(22F, 2.5F, -0.5F, 1, 2, 1);
 		
 		defaultBarrelModel[2] = new ModelRendererTurbo(this, 38, 0, textureX, textureY);
-		defaultBarrelModel[2].addShapeBox(20F, -2.5F, -1F, 1, 5, 1, 0F, /* 0 */ 0F, 0F, 3F, /* 1 */ 0F, 0F, 3F, /* 2 */ 0F, 0F, -3F, /* 3 */ 0F, 0F, -3F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		defaultBarrelModel[2].addShapeBox(20F, -2.5F, -1F, 1, 5, 1, 0F, /* 0 */ 0F, 0F, 3F, /* 1 */ 0F, 0F, 3F, /* 2 */ 0F, 0F, -3F, /* 3 */ 0F, 0F, -3F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		defaultBarrelModel[3] = new ModelRendererTurbo(this, 38, 0, textureX, textureY);
-		defaultBarrelModel[3].addShapeBox(20F, -2.5F, 0F, 1, 5, 1, 0F, /* 0 */ 0F, 0F, -3F, /* 1 */ 0F, 0F, -3F, /* 2 */ 0F, 0F, 3F, /* 3 */ 0F, 0F, 3F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		defaultBarrelModel[3].addShapeBox(20F, -2.5F, 0F, 1, 5, 1, 0F, /* 0 */ 0F, 0F, -3F, /* 1 */ 0F, 0F, -3F, /* 2 */ 0F, 0F, 3F, /* 3 */ 0F, 0F, 3F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		barrelAttachPoint = new Vector3f(14F / 16F, 3.25F / 16F, 0F);
 		

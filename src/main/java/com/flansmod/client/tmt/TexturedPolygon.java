@@ -35,14 +35,14 @@ public class TexturedPolygon
 	
 	public void setNormals(float x, float y, float z)
 	{
-		normals = new float[] {x, y, z};
+		normals = new float[]{x, y, z};
 	}
 	
 	public void flipFace()
 	{
 		PositionTextureVertex[] var1 = new PositionTextureVertex[this.vertexPositions.length];
-
-		for (int var2 = 0; var2 < this.vertexPositions.length; ++var2)
+		
+		for(int var2 = 0; var2 < this.vertexPositions.length; ++var2)
 		{
 			var1[var2] = this.vertexPositions[this.vertexPositions.length - var2 - 1];
 		}
@@ -60,7 +60,7 @@ public class TexturedPolygon
 		
 		if(nVertices == 3)
 			tessellator.startDrawing(GL11.GL_TRIANGLES);
-		else if (nVertices == 4)
+		else if(nVertices == 4)
 			tessellator.startDrawingQuads();
 		else
 			tessellator.startDrawing(GL11.GL_POLYGON);
@@ -72,21 +72,23 @@ public class TexturedPolygon
 				if(invertNormal)
 				{
 					tessellator.setNormal(-normals[0], -normals[1], -normals[2]);
-				} else
+				}
+				else
 				{
 					tessellator.setNormal(normals[0], normals[1], normals[2]);
 				}
-			} else
-			if(vertexPositions.length >= 3)
+			}
+			else if(vertexPositions.length >= 3)
 			{
 				Vec3d Vec3d = vertexPositions[1].vector3D.subtract(vertexPositions[0].vector3D);
 				Vec3d Vec31 = vertexPositions[1].vector3D.subtract(vertexPositions[2].vector3D);
 				Vec3d Vec32 = Vec31.crossProduct(Vec3d).normalize();
-		
+				
 				if(invertNormal)
 				{
 					tessellator.setNormal(-(float)Vec32.x, -(float)Vec32.y, -(float)Vec32.z);
-				} else
+				}
+				else
 				{
 					tessellator.setNormal((float)Vec32.x, (float)Vec32.y, (float)Vec32.z);
 				}
@@ -114,7 +116,7 @@ public class TexturedPolygon
 			}
 			tessellator.addVertexWithUVW((float)positionTexturevertex.vector3D.x * f, (float)positionTexturevertex.vector3D.y * f, (float)positionTexturevertex.vector3D.z * f, positionTexturevertex.texturePositionX, positionTexturevertex.texturePositionY, positionTexturevertex.texturePositionW);
 		}
-
+		
 		tessellator.draw();
 	}
 	

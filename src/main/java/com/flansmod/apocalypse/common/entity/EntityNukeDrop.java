@@ -1,22 +1,22 @@
 package com.flansmod.apocalypse.common.entity;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class EntityNukeDrop extends Entity 
+import com.flansmod.apocalypse.common.FlansModApocalypse;
+
+public class EntityNukeDrop extends Entity
 {
 	public static final int explosionLength = 500;
 	public int timeSinceExplosion;
 	
-	public EntityNukeDrop(World world) 
+	public EntityNukeDrop(World world)
 	{
 		super(world);
 		
-		if (world.isRemote)
+		if(world.isRemote)
 		{
 			setRenderDistanceWeight(400D);
 		}
@@ -25,25 +25,25 @@ public class EntityNukeDrop extends Entity
 		ignoreFrustumCheck = true;
 	}
 	
-	public EntityNukeDrop(World world, double x, double y, double z) 
+	public EntityNukeDrop(World world, double x, double y, double z)
 	{
 		this(world);
 		setPosition(x, y, z);
 	}
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tags) 
+	protected void writeEntityToNBT(NBTTagCompound tags)
 	{
 
 	}
@@ -57,7 +57,7 @@ public class EntityNukeDrop extends Entity
 		{
 			motionY -= 0.01D;
 			move(MoverType.SELF, motionX, motionY, motionZ);
-		}	
+		}
 		else
 		{
 			timeSinceExplosion++;

@@ -2,10 +2,6 @@ package com.flansmod.apocalypse.common.world.buildings;
 
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-import com.flansmod.apocalypse.common.world.BiomeApocalypse;
-import com.flansmod.common.FlansMod;
-
 import net.minecraft.block.BlockLog;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
@@ -13,10 +9,14 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldGenDyeFactory extends WorldGenFlan 
+import com.flansmod.apocalypse.common.FlansModApocalypse;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
+import com.flansmod.common.FlansMod;
+
+public class WorldGenDyeFactory extends WorldGenFlan
 {
 	@Override
-	public boolean generate(World world, Random rand, BlockPos pos) 
+	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		if(world.getBiome(pos) != BiomeApocalypse.deepCanyon)
 			return false;
@@ -114,7 +114,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 		return true;
 	}
 	
-	private void fillChest(World world, Random rand, int i, int j, int k) 
+	private void fillChest(World world, Random rand, int i, int j, int k)
 	{
 		TileEntityChest chest = (TileEntityChest)world.getTileEntity(new BlockPos(i, j, k));
 		FlansModApocalypse.getLootGenerator().fillDyeFactoryChest(chest, rand);
@@ -134,7 +134,7 @@ public class WorldGenDyeFactory extends WorldGenFlan
 				fillArea(world, x + i, y, z + k, x + i + 1, y + 3, z + k + 1, Blocks.AIR.getDefaultState());
 		
 		//Fill tank with wool
-		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.AIR.getDefaultState());	
-		fillArea(world, x + 1, y, z + 1, x + 3, y + (tall ? 2 : 1), z + 3, Blocks.WOOL.getStateFromMeta(rand.nextInt(16)));	
+		fillArea(world, x + 1, y, z + 1, x + 3, y + 3, z + 3, Blocks.AIR.getDefaultState());
+		fillArea(world, x + 1, y, z + 1, x + 3, y + (tall ? 2 : 1), z + 3, Blocks.WOOL.getStateFromMeta(rand.nextInt(16)));
 	}
 }

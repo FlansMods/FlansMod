@@ -12,20 +12,15 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,15 +28,11 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.FMLModContainer;
 import net.minecraftforge.fml.common.MetadataCollection;
 import net.minecraftforge.fml.common.discovery.ContainerType;
 import net.minecraftforge.fml.common.discovery.ModCandidate;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
@@ -59,7 +50,6 @@ import com.flansmod.client.gui.GuiGunBox;
 import com.flansmod.client.gui.GuiGunModTable;
 import com.flansmod.client.gui.GuiMechaInventory;
 import com.flansmod.client.gui.GuiPaintjobTable;
-import com.flansmod.client.gui.teams.GuiLandingPage;
 import com.flansmod.client.model.RenderAAGun;
 import com.flansmod.client.model.RenderBullet;
 import com.flansmod.client.model.RenderFlag;
@@ -77,7 +67,6 @@ import com.flansmod.client.model.RenderVehicle;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.ItemHolderType;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.TileEntityItemHolder;
@@ -89,15 +78,11 @@ import com.flansmod.common.driveables.EntitySeat;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.EntityWheel;
 import com.flansmod.common.driveables.PlaneType;
-import com.flansmod.common.driveables.VehicleType;
 import com.flansmod.common.driveables.mechas.EntityMecha;
-import com.flansmod.common.driveables.mechas.MechaType;
 import com.flansmod.common.guns.EntityAAGun;
 import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.EntityGrenade;
 import com.flansmod.common.guns.EntityMG;
-import com.flansmod.common.guns.GrenadeType;
-import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.guns.boxes.BlockGunBox;
 import com.flansmod.common.guns.boxes.BoxType;
@@ -124,13 +109,15 @@ public class ClientProxy extends CommonProxy
 	/* These renderers handle rendering in hand items */
 	public static RenderGun gunRenderer;
 	
-	/** The file locations of the content packs, used for loading */
+	/**
+	 * The file locations of the content packs, used for loading
+	 */
 	public List<File> contentPacks;
 	
 	public List<SoundEvent> eventsToRegister = new ArrayList<SoundEvent>();
 	
 	private FlansModClient flansModClient;
-
+	
 	@Override
 	public void preInit()
 	{
@@ -143,16 +130,16 @@ public class ClientProxy extends CommonProxy
 		flansModClient = new FlansModClient();
 		flansModClient.load();
 		
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
-				
-        // Create one event handler for the client and register it with MC Forge and FML
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemHolder.class, new RenderItemHolder());
+		
+		// Create one event handler for the client and register it with MC Forge and FML
 		ClientEventHandler eventHandler = new ClientEventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 	}
 	
 	@SubscribeEvent
 	public void registerSoundEvents(RegistryEvent.Register<SoundEvent> event)
-	{	
+	{
 		FlansMod.log.info("Registering sounds.");
 		
 		for(SoundEvent sound : eventsToRegister)
@@ -166,7 +153,7 @@ public class ClientProxy extends CommonProxy
 	
 	@SubscribeEvent
 	public void registerModels(ModelRegistryEvent event)
-	{	
+	{
 		//ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		FlansMod.log.info("Registering models.");
 		
@@ -179,12 +166,13 @@ public class ClientProxy extends CommonProxy
 				{
 					for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 					{
-						ModelLoader.registerItemVariants(type.item, 
-								new ResourceLocation[] { new ResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)))});
+						ModelLoader.registerItemVariants(type.item,
+								new ResourceLocation[]{new ResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)))});
 						ModelLoader.setCustomModelResourceLocation(type.item, paintjob.ID, new ModelResourceLocation("flansmod:" + type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)), "inventory"));
 					}
 				}
-				else ModelLoader.setCustomModelResourceLocation(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
+				else
+					ModelLoader.setCustomModelResourceLocation(type.item, 0, new ModelResourceLocation("flansmod:" + type.shortName, "inventory"));
 			}
 		}
 		
@@ -194,54 +182,58 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 0, new ModelResourceLocation("flansmod:flansworkbench_guns", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 1, new ModelResourceLocation("flansmod:flansworkbench_vehicles", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.workbenchItem, 2, new ModelResourceLocation("flansmod:flansworkbench_parts", "inventory"));
-		ModelLoader.registerItemVariants(FlansMod.workbenchItem, 
-				new ResourceLocation[] {
-						new ResourceLocation("flansmod:flansWorkbench_guns"), 
-						new ResourceLocation("flansmod:flansWorkbench_parts"), 
+		ModelLoader.registerItemVariants(FlansMod.workbenchItem,
+				new ResourceLocation[]{
+						new ResourceLocation("flansmod:flansWorkbench_guns"),
+						new ResourceLocation("flansmod:flansWorkbench_parts"),
 						new ResourceLocation("flansmod:flansWorkbench_vehicles")});
-
+		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 0, new ModelResourceLocation("flansmod:opstick_Ownership", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 1, new ModelResourceLocation("flansmod:opstick_Connecting", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 2, new ModelResourceLocation("flansmod:opstick_Mapping", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.opStick, 3, new ModelResourceLocation("flansmod:opstick_Destruction", "inventory"));
-		ModelLoader.registerItemVariants(FlansMod.opStick, 
-				new ResourceLocation[] {
-						new ResourceLocation("flansmod:opstick_Ownership"), 
-						new ResourceLocation("flansmod:opstick_Connecting"), 
-						new ResourceLocation("flansmod:opstick_Mapping"), 
+		ModelLoader.registerItemVariants(FlansMod.opStick,
+				new ResourceLocation[]{
+						new ResourceLocation("flansmod:opstick_Ownership"),
+						new ResourceLocation("flansmod:opstick_Connecting"),
+						new ResourceLocation("flansmod:opstick_Mapping"),
 						new ResourceLocation("flansmod:opstick_Destruction")});
 		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 0, new ModelResourceLocation("flansmod:teamsSpawner_items", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 1, new ModelResourceLocation("flansmod:teamsSpawner_players", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.spawnerItem, 2, new ModelResourceLocation("flansmod:teamsSpawner_vehicles", "inventory"));
-		ModelLoader.registerItemVariants(FlansMod.spawnerItem, 
-				new ResourceLocation[] {
-						new ResourceLocation("flansmod:teamsSpawner_items"), 
-						new ResourceLocation("flansmod:teamsSpawner_players"), 
+		ModelLoader.registerItemVariants(FlansMod.spawnerItem,
+				new ResourceLocation[]{
+						new ResourceLocation("flansmod:teamsSpawner_items"),
+						new ResourceLocation("flansmod:teamsSpawner_players"),
 						new ResourceLocation("flansmod:teamsSpawner_vehicles")});
-
+		
 		ModelLoader.setCustomModelResourceLocation(FlansMod.flag, 0, new ModelResourceLocation("flansmod:flagpole", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(FlansMod.rainbowPaintcan, 0, new ModelResourceLocation("flansmod:rainbowPaintcan", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(FlansMod.paintjobTable), 0, new ModelResourceLocation("flansmod:paintjobTable", "inventory"));
-		ModelLoader.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable), 
-				new ResourceLocation[] {new ResourceLocation("flansmod:paintjobTable")});
+		ModelLoader.registerItemVariants(Item.getItemFromBlock(FlansMod.paintjobTable),
+				new ResourceLocation[]{new ResourceLocation("flansmod:paintjobTable")});
 	}
-		
-	/** This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init */
+	
+	/**
+	 * This method reloads all textures from all mods and resource packs. It forces Minecraft to read images from the content packs added after mod init
+	 */
 	@Override
 	public void forceReload()
 	{
 		Minecraft.getMinecraft().refreshResources();
 	}
-
-	/** This method grabs all the content packs and puts them in a list. The client side part registers them as FMLModContainers which adds their resources to the game after a refresh */
+	
+	/**
+	 * This method grabs all the content packs and puts them in a list. The client side part registers them as FMLModContainers which adds their resources to the game after a refresh
+	 */
 	@Override
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		contentPacks = new ArrayList<File>();
-		for (File file : FlansMod.flanDir.listFiles())
+		for(File file : FlansMod.flanDir.listFiles())
 		{
-			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
+			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
 				try
 				{
@@ -254,8 +246,9 @@ public class ClientProxy extends CommonProxy
 					FMLModContainer container = new FMLModContainer("com.flansmod.common.FlansMod", new ModCandidate(file, file, file.isDirectory() ? ContainerType.DIR : ContainerType.JAR), map);
 					container.bindMetadata(MetadataCollection.from(null, ""));
 					FMLClientHandler.instance().addModAsResource(container);
-				
-				} catch (Exception e)
+					
+				}
+				catch(Exception e)
 				{
 					FlansMod.log.error("Failed to load images for content pack : " + file.getName());
 					FlansMod.log.throwing(e);
@@ -265,15 +258,17 @@ public class ClientProxy extends CommonProxy
 				contentPacks.add(file);
 			}
 		}
-			
+		
 		FlansMod.log.info("Loaded textures and models.");
 		return contentPacks;
 	}
 	
-	/** Register entity renderers */
+	/**
+	 * Register entity renderers
+	 */
 	@Override
 	public void registerRenderers()
-	{				
+	{
 		FlansMod.log.info("Registering Renderers");
 		
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
@@ -285,7 +280,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityAAGun.class, new RenderAAGun.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlagpole.class, new RenderFlagpole.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlag.class, new RenderFlag.Factory());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull.Factory());		
+		RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, new RenderNull.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityWheel.class, new RenderNull.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMG.class, new RenderMG.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityParachute.class, new RenderParachute.Factory());
@@ -298,11 +293,13 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawner.class, new TileEntitySpawnerRenderer());
 	}
 	
-	/** Old one time tutorial code that displays messages the first time you enter a plane / vehicle. Needs reworking */
+	/**
+	 * Old one time tutorial code that displays messages the first time you enter a plane / vehicle. Needs reworking
+	 */
 	@Override
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
-		if (!FlansModClient.doneTutorial)
+		if(!FlansModClient.doneTutorial)
 		{
 			FlansModClient.doneTutorial = true;
 			
@@ -310,7 +307,7 @@ public class ClientProxy extends CommonProxy
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()) + " to get out"));
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.controlSwitchKey.getKeyCode()) + " to switch controls"));
 			player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.modeKey.getKeyCode()) + " to switch VTOL mode"));
-			if (entityType instanceof EntityPlane)
+			if(entityType instanceof EntityPlane)
 			{
 				if(PlaneType.getPlane(((EntityPlane)entityType).driveableType).hasGear)
 					player.sendMessage(new TextComponentString("Press " + Keyboard.getKeyName(KeyInputHandler.gearKey.getKeyCode()) + " to switch the gear"));
@@ -322,7 +319,9 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
-	/** Adds the client side text message regarding mouse control mode switching */
+	/**
+	 * Adds the client side text message regarding mouse control mode switching
+	 */
 	@Override
 	public void changeControlMode(EntityPlayer player)
 	{
@@ -330,48 +329,56 @@ public class ClientProxy extends CommonProxy
 			player.sendMessage(new TextComponentString("Mouse Control mode is now set to " + FlansModClient.controlModeMouse));
 	}
 	
-	/** Whether the player is in mouse control mode for planes. Now the default setting for planes, but it can be deactivated to look around while flying */
+	/**
+	 * Whether the player is in mouse control mode for planes. Now the default setting for planes, but it can be deactivated to look around while flying
+	 */
 	@Override
 	public boolean mouseControlEnabled()
 	{
 		return FlansModClient.controlModeMouse;
 	}
-
-	/** Client GUI object getter */
+	
+	/**
+	 * Client GUI object getter
+	 */
 	@Override
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		//Null riding entity, don't open GUI in this case
 		if(((ID >= 6 && ID <= 10) || ID == 12) && player.getRidingEntity() == null) return null;
 		
-		switch(ID) 
+		switch(ID)
 		{
-		case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
-		case 1: return new GuiDriveableRepair(player);
-		case 2: return new GuiGunModTable(player.inventory, world);
-		case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
-		case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 0);
-		case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 1);
-		case 8: return new GuiDriveableFuel		(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable);
-		case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 2);
-		case 10: return new GuiMechaInventory	(player.inventory, world, (EntityMecha)((EntitySeat)player.getRidingEntity()).driveable);
-		case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
-		case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 3);
-		case 13: return new GuiPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
+			case 0: return new GuiDriveableCrafting(player.inventory, world, x, y, z);
+			case 1: return new GuiDriveableRepair(player);
+			case 2: return new GuiGunModTable(player.inventory, world);
+			case 5: return new GuiGunBox(player.inventory, ((BlockGunBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
+			case 6: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 0);
+			case 7: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 1);
+			case 8: return new GuiDriveableFuel(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable);
+			case 9: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 2);
+			case 10: return new GuiMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.getRidingEntity()).driveable);
+			case 11: return new GuiArmourBox(player.inventory, ((BlockArmourBox)world.getBlockState(new BlockPos(x, y, z)).getBlock()).type);
+			case 12: return new GuiDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 3);
+			case 13: return new GuiPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
 	
-	/** Called when the player presses the plane inventory key. Opens menu client side */
+	/**
+	 * Called when the player presses the plane inventory key. Opens menu client side
+	 */
 	@Override
 	public void openDriveableMenu(EntityPlayer player, World world, EntityDriveable driveable)
 	{
 		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiDriveableMenu(player.inventory, world, driveable));
 	}
 	
-	/** Helper method that sorts out packages with model name input
+	/**
+	 * Helper method that sorts out packages with model name input
 	 * For example, the model class "com.flansmod.client.model.mw.ModelMP5"
-	 * is referenced in the type file by the string "mw.MP5" */
+	 * is referenced in the type file by the string "mw.MP5"
+	 */
 	private String getModelName(String in)
 	{
 		//Split about dots
@@ -379,7 +386,7 @@ public class ClientProxy extends CommonProxy
 		//If there is no dot, our model class is in the default model package
 		if(split.length == 1)
 			return "Model" + in;
-		//Otherwise, we need to slightly rearrange the wording of the string for it to make sense
+			//Otherwise, we need to slightly rearrange the wording of the string for it to make sense
 		else if(split.length > 1)
 		{
 			String out = "Model" + split[split.length - 1];
@@ -392,14 +399,16 @@ public class ClientProxy extends CommonProxy
 		return in;
 	}
 	
-	/** Generic model loader method for getting model classes and casting them to the required class type */
+	/**
+	 * Generic model loader method for getting model classes and casting them to the required class type
+	 */
 	@Override
 	public <T> T loadModel(String s, String shortName, Class<T> typeClass)
 	{
 		if(s == null || shortName == null)
 			return null;
-		try 
-		{	
+		try
+		{
 			return typeClass.cast(Class.forName(modelDir + getModelName(s)).getConstructor().newInstance());
 		}
 		catch(Exception e)
@@ -410,7 +419,9 @@ public class ClientProxy extends CommonProxy
 		return null;
 	}
 	
-	/** Sound loading method. Defers to FlansModResourceHandler */
+	/**
+	 * Sound loading method. Defers to FlansModResourceHandler
+	 */
 	@Override
 	public void loadSound(String contentPack, String type, String sound)
 	{
@@ -422,11 +433,13 @@ public class ClientProxy extends CommonProxy
 		}
 		if(!eventsToRegister.contains(event))
 		{
-		eventsToRegister.add(event);
+			eventsToRegister.add(event);
 		}
 	}
 	
-	/** Checks whether "player" is the current player. Always false on server, since there is no current player */
+	/**
+	 * Checks whether "player" is the current player. Always false on server, since there is no current player
+	 */
 	@Override
 	public boolean isThePlayer(EntityPlayer player)
 	{
@@ -468,42 +481,48 @@ public class ClientProxy extends CommonProxy
 			FlansMod.getPacketHandler().sendToServer(new PacketRepairDriveable(part.type));
 	}
 	
-	/** Helper method that returns whether there is a GUI open */
+	/**
+	 * Helper method that returns whether there is a GUI open
+	 */
 	@Override
 	public boolean isScreenOpen()
 	{
 		return Minecraft.getMinecraft().currentScreen != null;
 	}
 	
-	/** Mecha input getters */
+	/**
+	 * Mecha input getters
+	 */
 	@Override
 	public boolean isKeyDown(int key)
 	{
 		switch(key)
 		{
-		case 0 : //Press Forwards
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode());
+			case 0: //Press Forwards
+				return keyDown(Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode());
 			
-		case 1 : //Press Backwards
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode()); 
+			case 1: //Press Backwards
+				return keyDown(Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode());
 			
-		case 2 : //Press Left
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode());
+			case 2: //Press Left
+				return keyDown(Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode());
 			
-		case 3 : //Press Right
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode()); 
-
-		case 4 : //Press Jump
-			return keyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode());
+			case 3: //Press Right
+				return keyDown(Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode());
+			
+			case 4: //Press Jump
+				return keyDown(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode());
 		}
 		return false;
 	}
 	
-	/** Helper method that deals with the way Minecraft handles binding keys to the mouse */
+	/**
+	 * Helper method that deals with the way Minecraft handles binding keys to the mouse
+	 */
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-	   	boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
+		boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
 		return state;
 	}
 	
@@ -534,8 +553,8 @@ public class ClientProxy extends CommonProxy
 						BoxType box = (BoxType)type;
 						
 						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + "_item.json"), "{ \"parent\": \"flansmod:block/" + type.shortName + "\", \"display\": { \"thirdperson\": { \"rotation\": [ 10, -45, 170 ], \"translation\": [ 0, 1.5, -2.75 ], \"scale\": [ 0.375, 0.375, 0.375 ] } } }");
-						createJSONFile(new File(blockModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"block/cube\", \"textures\": { \"particle\": \"flansmod:blocks/" + box.sideTexturePath + 
-								"\", \"down\": \"flansmod:blocks/" + box.bottomTexturePath + "\", \"up\": \"flansmod:blocks/" + box.topTexturePath + "\", \"north\": \"flansmod:blocks/" + box.sideTexturePath + 
+						createJSONFile(new File(blockModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"parent\": \"block/cube\", \"textures\": { \"particle\": \"flansmod:blocks/" + box.sideTexturePath +
+								"\", \"down\": \"flansmod:blocks/" + box.bottomTexturePath + "\", \"up\": \"flansmod:blocks/" + box.topTexturePath + "\", \"north\": \"flansmod:blocks/" + box.sideTexturePath +
 								"\", \"east\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"south\": \"flansmod:blocks/" + box.sideTexturePath + "\", \"west\": \"flansmod:blocks/" + box.sideTexturePath + "\" } } ");
 						createJSONFile(new File(blockstatesDir, type.shortName.toLowerCase() + ".json"), "{ \"variants\": { \"normal\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");
 					}
@@ -543,25 +562,25 @@ public class ClientProxy extends CommonProxy
 					{
 						for(Paintjob paintjob : ((PaintableType)type).paintjobs)
 						{
-							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()), 
+							createJSONFile(new File(itemModelsDir, (type.shortName + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + ".json").toLowerCase()),
 									"{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + (paintjob.iconName.equals("") ? "" : ("_" + paintjob.iconName)) + "\" },"
 											+ " \"display\": { "
 											+ "\"thirdperson_righthand\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] },"
 											+ " \"thirdperson_lefthand\": { \"rotation\": [ 0, 90, -45 ], \"translation\": [ 0, 2, -2 ], \"scale\": [ 0, 0, 0 ] },"
 											+ " \"firstperson_righthand\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] },"
 											+ " \"firstperson_lefthand\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1, 1, 1 ] } "
-											+ "} }");							
+											+ "} }");
 						}
 					}
 					else if(typeToCheckFor == EnumType.itemHolder)
 					{
-						createJSONFile(new File(blockstatesDir, type.shortName.toLowerCase() + ".json"), 
-					"{ \"variants\": { \"facing=north\": { \"model\": \"flansmod:" + type.shortName + 
-								"\" }, \"facing=east\": { \"model\": \"flansmod:" + type.shortName + 
-								"\" }, \"facing=south\": { \"model\": \"flansmod:" + type.shortName + 
-								"\" }, \"facing=west\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");	
+						createJSONFile(new File(blockstatesDir, type.shortName.toLowerCase() + ".json"),
+								"{ \"variants\": { \"facing=north\": { \"model\": \"flansmod:" + type.shortName +
+										"\" }, \"facing=east\": { \"model\": \"flansmod:" + type.shortName +
+										"\" }, \"facing=south\": { \"model\": \"flansmod:" + type.shortName +
+										"\" }, \"facing=west\": { \"model\": \"flansmod:" + type.shortName + "\" } } }");
 						createJSONFile(new File(blockModelsDir, type.shortName.toLowerCase() + ".json"), "{ \"ambientocclusion\": false, \"textures\": { \"particle\": \"flansmod:items/" + type.iconPath + "\" }, \"elements\": [ {\"from\": [ 0, 0, 0 ],\"to\": [ 0, 0, 0 ], \"faces\": { \"down\":  { \"texture\": \"#down\", \"cullface\": \"down\" }, \"up\":    { \"texture\": \"#up\", \"cullface\": \"up\" }, \"north\": { \"texture\": \"#north\", \"cullface\": \"north\" }, \"south\": { \"texture\": \"#south\", \"cullface\": \"south\" }, \"west\":  { \"texture\": \"#west\", \"cullface\": \"west\" }, \"east\":  { \"texture\": \"#east\", \"cullface\": \"east\" } } } ] }");
-						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + "_item.json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");						
+						createJSONFile(new File(itemModelsDir, type.shortName.toLowerCase() + "_item.json"), "{ \"parent\": \"builtin/generated\", \"textures\": { \"layer0\": \"flansmod:items/" + type.iconPath + "\" }, \"display\": { \"thirdperson\": { \"rotation\": [ -90, 0, 0 ], \"translation\": [ 0, 1, -3 ], \"scale\": [ 0.55, 0.55, 0.55 ] }, \"firstperson\": { \"rotation\": [ 0, -135, 25 ], \"translation\": [ 0, 4, 2 ], \"scale\": [ 1.7, 1.7, 1.7 ] } } }");
 					}
 					//Create the item JSON for normal items
 					else if(typeToCheckFor != EnumType.team && typeToCheckFor != EnumType.playerClass)

@@ -9,12 +9,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,150 +28,173 @@ import com.flansmod.common.guns.ItemGun;
 import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.ShootableType;
 
-public class EntityGunItem extends EntityItemCustomRender {
-
+public class EntityGunItem extends EntityItemCustomRender
+{
+	
 	public List<ItemStack> ammoStacks;
 	private boolean teamsModEnabled = false;
 	private int age;
-
-	public EntityGunItem(World w) {
+	
+	public EntityGunItem(World w)
+	{
 		super(w);
 	}
-
-	public EntityGunItem(EntityItem entity) {
+	
+	public EntityGunItem(EntityItem entity)
+	{
 		super(entity.world, entity.posX, entity.posY, entity.posZ, entity
 				.getItem().copy());
 		setSize(1F, 1F);
 		ammoStacks = new ArrayList<ItemStack>();
 	}
-
+	
 	public EntityGunItem(World w, double x, double y, double z,
-			ItemStack stack, List<ItemStack> stacks) {
+						 ItemStack stack, List<ItemStack> stacks)
+	{
 		super(w, x, y, z, stack);
 		setSize(1F, 1F);
 		ammoStacks = new ArrayList<ItemStack>();
-		for (ItemStack ammoStack : stacks) {
-			if (ammoStack != null && (ammoStack.getItem() instanceof ItemBullet))
+		for(ItemStack ammoStack : stacks)
+		{
+			if(ammoStack != null && (ammoStack.getItem() instanceof ItemBullet))
 				ammoStacks.add(ammoStack);
 		}
 		teamsModEnabled = true;
 	}
-
-	public EntityGunItem(World w, double x, double y, double z) {
+	
+	public EntityGunItem(World w, double x, double y, double z)
+	{
 		super(w, x, y, z);
 	}
-
+	
 	@Override
-	public boolean canBeCollidedWith() {
+	public boolean canBeCollidedWith()
+	{
 		return true;
 	}
-
+	
 	@Override
-	protected boolean canTriggerWalking() {
+	protected boolean canTriggerWalking()
+	{
 		return true;
 	}
-
+	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox() {
+	public AxisAlignedBB getCollisionBoundingBox()
+	{
 		return null;
 	}
-
+	
 	@Override
-	public void onUpdate() {
+	public void onUpdate()
+	{
 		onEntityUpdate();
-		if (getItem() == null || getItem().getItem() == null
+		if(getItem() == null || getItem().getItem() == null
 				|| !(getItem().getItem() instanceof ItemGun))
 			setDead();
-
-		if (!world.isRemote && ammoStacks == null)
+		
+		if(!world.isRemote && ammoStacks == null)
 			setDead();
-
+		
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= 0.03999999910593033D;
-		if (getEntityBoundingBox() != null) {
+		if(getEntityBoundingBox() != null)
+		{
 			pushOutOfBlocks(
 					posX,
 					(getEntityBoundingBox().minY + getEntityBoundingBox().maxY) / 2.0D,
 					posZ); // PushOutOfBlocks
 		}
 		move(MoverType.SELF, motionX, motionY, motionZ);
-
+		
 		float var2 = 0.98F;
-
-		if (onGround) {
+		
+		if(onGround)
+		{
 			var2 = 0.58800006F;
 			Block block = world.getBlockState(
 					new BlockPos(MathHelper.floor(posX), MathHelper
 							.floor(getEntityBoundingBox().minY) - 1,
 							MathHelper.floor(posZ))).getBlock();
-
-			if (block != null) {
+			
+			if(block != null)
+			{
 				var2 = block.slipperiness * 0.98F;
 			}
 		}
-
+		
 		motionX *= var2;
 		motionY *= 0.9800000190734863D;
 		motionZ *= var2;
-
-		if (onGround) {
+		
+		if(onGround)
+		{
 			motionY *= -0.5D;
 		}
-
+		
 		++age;
-
+		
 		ItemStack item = getItem();
-
-		if (!world.isRemote && age >= lifespan) {
-			if (item != null) {
+		
+		if(!world.isRemote && age >= lifespan)
+		{
+			if(item != null)
+			{
 				ItemExpireEvent event = new ItemExpireEvent(this,
 						(item.getItem() == null ? 6000 : item.getItem()
 								.getEntityLifespan(item, world)));
-				if (MinecraftForge.EVENT_BUS.post(event)) {
+				if(MinecraftForge.EVENT_BUS.post(event))
+				{
 					lifespan += event.getExtraLife();
-				} else {
+				}
+				else
+				{
 					setDead();
 				}
-			} else {
+			}
+			else
+			{
 				setDead();
 			}
 		}
-
-		if (item != null && item.getCount() <= 0) {
+		
+		if(item != null && item.getCount() <= 0)
+		{
 			setDead();
 		}
-
+		
 		// Temporary fire glitch fix
-		if (world.isRemote)
+		if(world.isRemote)
 			extinguish();
 	}
-
+	
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
+	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2)
+	{
 		return true;
 	}
-
+	
 	@Override
-	public void onCollideWithPlayer(EntityPlayer player) 
+	public void onCollideWithPlayer(EntityPlayer player)
 	{
-		if (!world.isRemote) 
+		if(!world.isRemote)
 		{
-			if (ammoStacks != null && ammoStacks.size() > 0) 
+			if(ammoStacks != null && ammoStacks.size() > 0)
 			{
-				for (int i = 0; i < player.inventory.getSizeInventory(); i++) 
+				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
 				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (stack != null && stack.getItem() instanceof ItemGun) 
+					if(stack != null && stack.getItem() instanceof ItemGun)
 					{
-						GunType type = ((ItemGun) stack.getItem()).GetType();
-						for (int j = ammoStacks.size() - 1; j >= 0; j--) 
+						GunType type = ((ItemGun)stack.getItem()).GetType();
+						for(int j = ammoStacks.size() - 1; j >= 0; j--)
 						{
 							ItemStack ammoStack = ammoStacks.get(j);
-							if (type.isAmmo(((ItemShootable)ammoStack.getItem()).type)) 
+							if(type.isAmmo(((ItemShootable)ammoStack.getItem()).type))
 							{
-								if (player.inventory.addItemStackToInventory(ammoStack)) 
+								if(player.inventory.addItemStackToInventory(ammoStack))
 								{
 									FMLCommonHandler.instance().firePlayerItemPickupEvent(player, this, stack.copy());
 									playSound(
@@ -184,37 +205,42 @@ public class EntityGunItem extends EntityItemCustomRender {
 								}
 							}
 						}
-						if (ammoStacks.size() == 0)
+						if(ammoStacks.size() == 0)
 							setDead();
 					}
 				}
-			} 
-			else if (!teamsModEnabled)
+			}
+			else if(!teamsModEnabled)
 			{
 				super.onCollideWithPlayer(player);
 			}
 		}
 	}
-
+	
 	@Override
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
 	{
-		if (world.isRemote)
+		if(world.isRemote)
 			return true;
 		EntityItemPickupEvent event = new EntityItemPickupEvent(player, this);
 		TeamsManager.getInstance().playerLoot(event);
-		if (!event.isCanceled()) {
+		if(!event.isCanceled())
+		{
 			ItemStack currentItem = player.getHeldItemMainhand();
-			if (currentItem != null && currentItem.getItem() instanceof ItemGun) {
-				GunType gunType = ((ItemGun) currentItem.getItem()).GetType();
+			if(currentItem != null && currentItem.getItem() instanceof ItemGun)
+			{
+				GunType gunType = ((ItemGun)currentItem.getItem()).GetType();
 				List<ItemStack> newAmmoStacks = new ArrayList<ItemStack>();
-				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+				for(int i = 0; i < player.inventory.getSizeInventory(); i++)
+				{
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (stack != null
-							&& stack.getItem() instanceof ItemShootable) {
-						ShootableType bulletType = ((ItemShootable) stack
+					if(stack != null
+							&& stack.getItem() instanceof ItemShootable)
+					{
+						ShootableType bulletType = ((ItemShootable)stack
 								.getItem()).type;
-						if (gunType.isAmmo(bulletType)) {
+						if(gunType.isAmmo(bulletType))
+						{
 							newAmmoStacks.add(stack.copy());
 							player.inventory.setInventorySlotContents(i, null);
 						}
@@ -225,7 +251,8 @@ public class EntityGunItem extends EntityItemCustomRender {
 				world.spawnEntity(newGunItem);
 				player.inventory.setInventorySlotContents(
 						player.inventory.currentItem, getItem());
-				for (ItemStack stack : ammoStacks) {
+				for(ItemStack stack : ammoStacks)
+				{
 					player.inventory.addItemStackToInventory(stack);
 				}
 				setDead();
@@ -236,9 +263,10 @@ public class EntityGunItem extends EntityItemCustomRender {
 		}
 		return false;
 	}
-
+	
 	@Override
-	public boolean isBurning() {
+	public boolean isBurning()
+	{
 		return false;
 	}
 }

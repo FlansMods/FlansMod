@@ -4,13 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.types.IFlanItem;
@@ -37,9 +33,9 @@ public class ItemMechaAddon extends Item implements IFlanItem
 			Collections.addAll(lines, type.description.split("_"));
 		}
 	}
-    
+	
 	@Override
-	public InfoType getInfoType() 
+	public InfoType getInfoType()
 	{
 		return type;
 	}

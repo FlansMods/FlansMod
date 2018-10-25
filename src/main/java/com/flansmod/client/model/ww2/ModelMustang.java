@@ -5,8 +5,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelPlane;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelMustang extends ModelPlane //Same as Filename
@@ -245,13 +245,13 @@ public class ModelMustang extends ModelPlane //Same as Filename
 		leftWingModel[2].addBox(0F, 0F, 0F, 6, 1, 1, 0F); // Box 55
 		leftWingModel[2].setRotationPoint(-42.5F, -20.6F, -49F);
 
-		leftWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(33, 95, 33, 95), new Coord2D(24, 99, 24, 99), new Coord2D(13, 99, 13, 99), new Coord2D(10, 95, 10, 95) }), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[] {96 ,5 ,11 ,10 ,97 ,49}); // Import 
+		leftWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(33, 95, 33, 95), new Coord2D(24, 99, 24, 99), new Coord2D(13, 99, 13, 99), new Coord2D(10, 95, 10, 95)}), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[]{96, 5, 11, 10, 97, 49}); // Import
 		leftWingModel[3].setRotationPoint(-43.5F, -17.5F, -30.5F);
 		leftWingModel[3].rotateAngleX = -1.48352986F;
 		leftWingModel[3].rotateAngleY = 3.15904595F;
 		leftWingModel[3].rotateAngleZ = 0.05235988F;
 
-		leftWingModel[4].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(59, 0, 59, 0), new Coord2D(54, 24, 54, 24), new Coord2D(54, 24, 54, 24), new Coord2D(13, 24, 13, 24), new Coord2D(5, 24, 5, 24) }), 3, 59, 24, 158, 3, ModelRendererTurbo.MR_FRONT, new float[] {25 ,8 ,41 ,0 ,25 ,59}); // Shape 4
+		leftWingModel[4].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(0, 0, 0, 0), new Coord2D(59, 0, 59, 0), new Coord2D(54, 24, 54, 24), new Coord2D(54, 24, 54, 24), new Coord2D(13, 24, 13, 24), new Coord2D(5, 24, 5, 24)}), 3, 59, 24, 158, 3, ModelRendererTurbo.MR_FRONT, new float[]{25, 8, 41, 0, 25, 59}); // Shape 4
 		leftWingModel[4].setRotationPoint(-48F, -15.5F, -7F);
 		leftWingModel[4].rotateAngleX = -1.48352986F;
 		leftWingModel[4].rotateAngleY = 3.15904595F;
@@ -275,19 +275,19 @@ public class ModelMustang extends ModelPlane //Same as Filename
 		rightWingModel[2].addBox(0F, 0F, 0F, 6, 1, 1, 0F); // Box 58
 		rightWingModel[2].setRotationPoint(-44F, -20F, 39F);
 
-		rightWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(59, 0, 59, 0), new Coord2D(54, 24, 54, 24), new Coord2D(54, 24, 54, 24), new Coord2D(13, 24, 13, 24), new Coord2D(5, 24, 5, 24) }), 3, 59, 24, 158, 3, ModelRendererTurbo.MR_FRONT, new float[] {25 ,8 ,41 ,0 ,25 ,59}); // Shape 6
+		rightWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(0, 0, 0, 0), new Coord2D(59, 0, 59, 0), new Coord2D(54, 24, 54, 24), new Coord2D(54, 24, 54, 24), new Coord2D(13, 24, 13, 24), new Coord2D(5, 24, 5, 24)}), 3, 59, 24, 158, 3, ModelRendererTurbo.MR_FRONT, new float[]{25, 8, 41, 0, 25, 59}); // Shape 6
 		rightWingModel[3].setRotationPoint(-48.1F, -18.5F, 5F);
 		rightWingModel[3].rotateAngleX = 1.48352986F;
 		rightWingModel[3].rotateAngleY = 3.15904595F;
 		rightWingModel[3].rotateAngleZ = 0.05235988F;
 
-		rightWingModel[4].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(33, 95, 33, 95), new Coord2D(24, 99, 24, 99), new Coord2D(13, 99, 13, 99), new Coord2D(10, 95, 10, 95) }), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[] {96 ,5 ,11 ,10 ,97 ,49}); // Shape 7
+		rightWingModel[4].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(33, 95, 33, 95), new Coord2D(24, 99, 24, 99), new Coord2D(13, 99, 13, 99), new Coord2D(10, 95, 10, 95)}), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[]{96, 5, 11, 10, 97, 49}); // Shape 7
 		rightWingModel[4].setRotationPoint(-44.35F, -20.5F, 29F);
 		rightWingModel[4].rotateAngleX = 1.48352986F;
 		rightWingModel[4].rotateAngleY = 3.15904595F;
 		rightWingModel[4].rotateAngleZ = 0.05235988F;
 
-		rightWingModel[5].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(23, 0, 23, 0), new Coord2D(46, 0, 46, 0), new Coord2D(37, 13, 37, 13), new Coord2D(31, 25, 31, 25), new Coord2D(28, 28, 28, 28), new Coord2D(22, 28, 22, 28) }), 2, 46, 28, 93, 2, ModelRendererTurbo.MR_FRONT, new float[] {29 ,6 ,5 ,14 ,16 ,23}); // Shape 1
+		rightWingModel[5].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(23, 0, 23, 0), new Coord2D(46, 0, 46, 0), new Coord2D(37, 13, 37, 13), new Coord2D(31, 25, 31, 25), new Coord2D(28, 28, 28, 28), new Coord2D(22, 28, 22, 28)}), 2, 46, 28, 93, 2, ModelRendererTurbo.MR_FRONT, new float[]{29, 6, 5, 14, 16, 23}); // Shape 1
 		rightWingModel[5].setRotationPoint(108.5F, -38F, 1F);
 		rightWingModel[5].rotateAngleZ = 0.05235988F;
 
@@ -492,7 +492,6 @@ public class ModelMustang extends ModelPlane //Same as Filename
 		bodyDoorCloseModel[2].addShapeBox(0F, 0F, 0F, 10, 1, 8, 0F, 0F, -2F, 0F, 0F, -0.9F, 0F, 0F, -0.9F, 0F, 0F, -2F, 0F, 0F, 1.1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 1.1F, 0F); // Box 6
 		bodyDoorCloseModel[2].setRotationPoint(-17.9F, -49.1F, -4F);
 		bodyDoorCloseModel[2].rotateAngleZ = -0.10471976F;
-
 
 
 		propellerModels = new ModelRendererTurbo[1][4];

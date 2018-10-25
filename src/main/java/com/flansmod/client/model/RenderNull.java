@@ -6,9 +6,9 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraft.util.ResourceLocation;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.EntitySeat;
@@ -16,21 +16,21 @@ import com.flansmod.common.driveables.EntitySeat;
 public class RenderNull extends Render
 {
 	private static final ResourceLocation texture = new ResourceLocation("Flan", "null.png");
-
-	public RenderNull(RenderManager renderManager) 
+	
+	public RenderNull(RenderManager renderManager)
 	{
 		super(renderManager);
 		shadowSize = 0.5F;
 	}
-
+	
 	public void func_157_a(Entity entity, double d, double d1, double d2,
-			float f, float f1)
+						   float f, float f1)
 	{
 	}
-
+	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, 
-			float f, float f1)
+	public void doRender(Entity entity, double d, double d1, double d2,
+						 float f, float f1)
 	{
 		if(FlansMod.DEBUG)
 		{
@@ -54,9 +54,9 @@ public class RenderNull extends Render
 			GL11.glPopMatrix();
 		}
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return texture;
 	}
@@ -66,7 +66,7 @@ public class RenderNull extends Render
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderNull(manager);
 		}

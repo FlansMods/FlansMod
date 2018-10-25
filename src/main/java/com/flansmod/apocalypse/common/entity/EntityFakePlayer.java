@@ -2,25 +2,22 @@ package com.flansmod.apocalypse.common.entity;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntityFakePlayer extends EntityFlansModShooter
 {
 	private IInventory inventory;
 	
-	public EntityFakePlayer(World world) 
+	public EntityFakePlayer(World world)
 	{
 		super(world);
 	}
 	
-	public EntityFakePlayer(World world, EntityPlayer player) 
+	public EntityFakePlayer(World world, EntityPlayer player)
 	{
 		this(world);
 		
@@ -35,7 +32,7 @@ public class EntityFakePlayer extends EntityFlansModShooter
 	}
 
 	@Override
-    protected void dropFewItems(boolean b, int i)
+	protected void dropFewItems(boolean b, int i)
 	{
 		if(!world.isRemote)
 		{
@@ -48,18 +45,18 @@ public class EntityFakePlayer extends EntityFlansModShooter
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound tags) 
+	public void readEntityFromNBT(NBTTagCompound tags)
 	{
 		super.readEntityFromNBT(tags);
 		inventory = new InventoryBasic("FakePlayer", true, 40);
 		for(int i = 0; i < 40; i++)
 		{
 			inventory.setInventorySlotContents(i, new ItemStack(tags.getCompoundTag("S" + i)));
-		}	
+		}
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tags) 
+	public void writeEntityToNBT(NBTTagCompound tags)
 	{
 		super.writeEntityToNBT(tags);
 		for(int i = 0; i < 40; i++)

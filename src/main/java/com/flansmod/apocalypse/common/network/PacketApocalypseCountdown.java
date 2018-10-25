@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import com.flansmod.apocalypse.client.ClientProxyApocalypse;
 import com.flansmod.common.network.PacketBase;
 
-public class PacketApocalypseCountdown extends PacketBase 
+public class PacketApocalypseCountdown extends PacketBase
 {
 	private int timeRemaining;
 	
@@ -23,25 +23,25 @@ public class PacketApocalypseCountdown extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(timeRemaining);
 	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		timeRemaining = data.readInt();
 	}
 
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		//Should not be received on server
 	}
 
 	@Override
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		ClientProxyApocalypse.updateApocalypseCountdownTimer(timeRemaining);
 	}

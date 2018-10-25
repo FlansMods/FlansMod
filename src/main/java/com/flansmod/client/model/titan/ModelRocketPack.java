@@ -3,7 +3,7 @@ package com.flansmod.client.model.titan;
 import com.flansmod.client.model.ModelMechaTool;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelRocketPack extends ModelMechaTool 
+public class ModelRocketPack extends ModelMechaTool
 {
 	public ModelRocketPack()
 	{

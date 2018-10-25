@@ -6,7 +6,7 @@ import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelProtoTitan extends ModelMecha 
+public class ModelProtoTitan extends ModelMecha
 {
 	public ModelProtoTitan()
 	{
@@ -22,10 +22,10 @@ public class ModelProtoTitan extends ModelMecha
 		bodyModel[0].addBox(-12, 29, -12, 16, 19, 24);
 		
 		bodyModel[1] = new ModelRendererTurbo(this, 88, 0, textureX, textureY);
-		bodyModel[1].addShape3D(0, 21, 12, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(12, 8, 8, 0), new Coord2D(12, 18, 8, 10), new Coord2D(4, 27, 0, 19) }), 24, 8, 19, 49, 24, ModelRendererTurbo.MR_BACK, new float[] { 19, 12, 10, 8 });
+		bodyModel[1].addShape3D(0, 21, 12, new Shape2D(new Coord2D[]{new Coord2D(4, 8, 0, 0), new Coord2D(12, 8, 8, 0), new Coord2D(12, 18, 8, 10), new Coord2D(4, 27, 0, 19)}), 24, 8, 19, 49, 24, ModelRendererTurbo.MR_BACK, new float[]{19, 12, 10, 8});
 		
 		bodyModel[2] = new ModelRendererTurbo(this, 139, 0, textureX, textureY);
-		bodyModel[2].addShape3D(0, 21, 12, new Shape2D(new Coord2D[] { new Coord2D(-12, 0, 0, 0), new Coord2D(8, 0, 20, 0), new Coord2D(12, 8, 24, 8), new Coord2D(-12, 8, 0, 8) }), 24, 24, 8, 61, 24, ModelRendererTurbo.MR_BACK, new float[] { 8, 24, 9, 20 });
+		bodyModel[2].addShape3D(0, 21, 12, new Shape2D(new Coord2D[]{new Coord2D(-12, 0, 0, 0), new Coord2D(8, 0, 20, 0), new Coord2D(12, 8, 24, 8), new Coord2D(-12, 8, 0, 8)}), 24, 24, 8, 61, 24, ModelRendererTurbo.MR_BACK, new float[]{8, 24, 9, 20});
 		
 		//Body inside
 		bodyModel[3] = new ModelRendererTurbo(this, 118, 34, textureX, textureY);
@@ -33,10 +33,10 @@ public class ModelProtoTitan extends ModelMecha
 		bodyModel[3].addBox(-12, 29, -11.5F, 16, 19, 23);
 		
 		bodyModel[4] = new ModelRendererTurbo(this, 203, 0, textureX, textureY);
-		bodyModel[4].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 8, 0, 0), new Coord2D(4, 27, 0, 19), new Coord2D(12, 18, 8, 10), new Coord2D(12, 8, 8, 0) }), 23, 8, 19, 49, 24, ModelRendererTurbo.MR_BACK, new float[] { 8, 10, 12, 19 });
+		bodyModel[4].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 8, 0, 0), new Coord2D(4, 27, 0, 19), new Coord2D(12, 18, 8, 10), new Coord2D(12, 8, 8, 0)}), 23, 8, 19, 49, 24, ModelRendererTurbo.MR_BACK, new float[]{8, 10, 12, 19});
 		
 		bodyModel[5] = new ModelRendererTurbo(this, 0, 52, textureX, textureY);
-		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[] { new Coord2D(-12, 2, 0, 0),  new Coord2D(-12, 8, 0, 6), new Coord2D(12, 8, 24, 6), new Coord2D(9, 2, 21, 0) }), 23, 24, 6, 61, 24, ModelRendererTurbo.MR_BACK, new float[] { 20, 9, 24, 8 });
+		bodyModel[5].addShape3D(0, 21, 11.5F, new Shape2D(new Coord2D[]{new Coord2D(-12, 2, 0, 0), new Coord2D(-12, 8, 0, 6), new Coord2D(12, 8, 24, 6), new Coord2D(9, 2, 21, 0)}), 23, 24, 6, 61, 24, ModelRendererTurbo.MR_BACK, new float[]{20, 9, 24, 8});
 
 		bodyModel[6] = new ModelRendererTurbo(this, 85, 82, textureX, textureY);
 		bodyModel[6].addBox(6, 21, -5, 2, 8, 2);

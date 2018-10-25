@@ -4,8 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.flansmod.common.FlansMod;
 import net.minecraftforge.fml.common.Loader;
+
+import com.flansmod.common.FlansMod;
 
 public class ModelPool
 {
@@ -33,7 +34,7 @@ public class ModelPool
 		{
 			String absPath = new File(Loader.instance().getConfigDir().getParent(), resourceDir[i]).getAbsolutePath();
 			if(!absPath.endsWith("/") || !absPath.endsWith("\\"))
-				absPath+= "/";
+				absPath += "/";
 			modelFile = entry.checkValidPath(absPath + file);
 		}
 		if(modelFile == null || !modelFile.exists())
@@ -53,10 +54,10 @@ public class ModelPool
 	}
 	
 	private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
-	private static String[] resourceDir = new String[] {
-						"/resources/models/",
-						"/resources/mod/models/",
-    						"/Flan/"
-		};
+	private static String[] resourceDir = new String[]{
+			"/resources/models/",
+			"/resources/mod/models/",
+			"/Flan/"
+	};
 	public static final Class OBJ = ModelPoolObjEntry.class;
 }

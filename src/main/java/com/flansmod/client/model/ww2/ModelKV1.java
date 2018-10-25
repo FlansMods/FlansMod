@@ -6,8 +6,6 @@ package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelKV1 extends ModelVehicle //Same as Filename
 {
@@ -275,7 +273,6 @@ public class ModelKV1 extends ModelVehicle //Same as Filename
 
 		barrelModel[1].addBox(5F, -1.5F, -1F, 32, 2, 2, 0F); // Import BL,75MM
 		barrelModel[1].setRotationPoint(15F, -26F, 0F);
-
 
 
 		translateAll(0F, 0F, 0F);

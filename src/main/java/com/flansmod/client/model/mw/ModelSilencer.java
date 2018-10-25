@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelSilencer extends ModelAttachment 
+public class ModelSilencer extends ModelAttachment
 {
 	public ModelSilencer()
 	{

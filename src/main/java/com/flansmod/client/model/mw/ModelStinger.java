@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelStinger extends ModelGun 
+public class ModelStinger extends ModelGun
 {
 	public ModelStinger()
 	{
@@ -54,14 +54,14 @@ public class ModelStinger extends ModelGun
 		
 		ammoModel[2] = new ModelRendererTurbo(this, 55, 2, textureX, textureY);
 		ammoModel[2].addBox(0F, -10F, -1F, 0, 1, 2);
-
+		
 		
 		for(int i = 0; i < 3; i++)
 		{
 			ammoModel[i].setRotationPoint(0F, 3.5F, 2F);
 			ammoModel[i].rotateAngleZ = -(float)Math.PI / 2F;
 		}
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.END_LOADED;
 		

@@ -6,8 +6,6 @@ package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelExoskeletonBody extends ModelCustomArmour
 {
@@ -78,7 +76,7 @@ public class ModelExoskeletonBody extends ModelCustomArmour
 		bodyModel[8].addBox(-15F, 6F, -10F, 30, 10, 1, 0F); // Box 25
 		bodyModel[8].setRotationPoint(0F, 0F, -1F);
 
-		bodyModel[9].addShapeBox(-41F, -7F, 11.25F, 19, 4, 4, 0F,-6F, 0F, 9F,0F, 0F, 0F,0F, 0F, 0F,-1F, 0F, -13F,-6F, 0F, 9F,0F, 0F, 0F,0F, 0F, 0F,-1F, 0F, -13F); // Box 36
+		bodyModel[9].addShapeBox(-41F, -7F, 11.25F, 19, 4, 4, 0F, -6F, 0F, 9F, 0F, 0F, 0F, 0F, 0F, 0F, -1F, 0F, -13F, -6F, 0F, 9F, 0F, 0F, 0F, 0F, 0F, 0F, -1F, 0F, -13F); // Box 36
 		bodyModel[9].setRotationPoint(0F, 0F, 0F);
 
 		bodyModel[10].addBox(-5F, 1F, 9F, 3, 35, 1, 0F); // Box 37
@@ -114,7 +112,7 @@ public class ModelExoskeletonBody extends ModelCustomArmour
 		bodyModel[20].addBox(35.5F, -7.5F, -2.2F, 5, 5, 5, 0F); // Box 67
 		bodyModel[20].setRotationPoint(0F, 0F, 0F);
 
-		bodyModel[21].addShapeBox(22F, -7F, 11.25F, 19, 4, 4, 0F,0F, 0F, 0F,-6F, 0F, 10F,-1F, 0F, -14F,0F, 0F, 0F,0F, 0F, 0F,-6F, 0F, 10F,-1F, 0F, -14F,0F, 0F, 0F); // Box 68
+		bodyModel[21].addShapeBox(22F, -7F, 11.25F, 19, 4, 4, 0F, 0F, 0F, 0F, -6F, 0F, 10F, -1F, 0F, -14F, 0F, 0F, 0F, 0F, 0F, 0F, -6F, 0F, 10F, -1F, 0F, -14F, 0F, 0F, 0F); // Box 68
 		bodyModel[21].setRotationPoint(0F, 0F, 0F);
 
 		bodyModel[22].addBox(-16F, 6F, 7F, 32, 36, 2, 0F); // Box 72
@@ -183,7 +181,7 @@ public class ModelExoskeletonBody extends ModelCustomArmour
 		rightArmModel[3].addBox(-40F + armOffsetX, -74F + armOffsetY, -2F + armOffsetZ, 4, 32, 4, 0F); // Box 34
 		rightArmModel[3].setRotationPoint(0F, 0F, 0F);
 
-		rightArmModel[4].addShapeBox(-40F + armOffsetX, -42F + armOffsetY, -2F + armOffsetZ, 4, 16, 4, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,-6F, 0F, 0F,2F, 0F, 0F,2F, 0F, 0F,-6F, 0F, 0F); // Box 35
+		rightArmModel[4].addShapeBox(-40F + armOffsetX, -42F + armOffsetY, -2F + armOffsetZ, 4, 16, 4, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -6F, 0F, 0F, 2F, 0F, 0F, 2F, 0F, 0F, -6F, 0F, 0F); // Box 35
 		rightArmModel[4].setRotationPoint(0F, 0F, 0F);
 
 		rightArmModel[5].addBox(-33.5F + armOffsetX, -28F + armOffsetY, -8F + armOffsetZ, 16, 3, 18, 0F); // Box 63
@@ -233,7 +231,7 @@ public class ModelExoskeletonBody extends ModelCustomArmour
 		leftArmModel[1].addBox(36F - armOffsetX, -74F + armOffsetY, -2F + armOffsetZ, 4, 32, 4, 0F); // Box 71
 		leftArmModel[1].setRotationPoint(0F, 0F, 0F);
 
-		leftArmModel[2].addShapeBox(36F - armOffsetX, -42F + armOffsetY, -2F + armOffsetZ, 4, 16, 4, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,0F, 0F, 0F,2F, 0F, 0F,-6F, 0F, 0F,-6F, 0F, 0F,2F, 0F, 0F); // Box 77
+		leftArmModel[2].addShapeBox(36F - armOffsetX, -42F + armOffsetY, -2F + armOffsetZ, 4, 16, 4, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 2F, 0F, 0F, -6F, 0F, 0F, -6F, 0F, 0F, 2F, 0F, 0F); // Box 77
 		leftArmModel[2].setRotationPoint(0F, 0F, 0F);
 
 		leftArmModel[3].addBox(32F - armOffsetX, -67F + armOffsetY, -4F + armOffsetZ, 2, 20, 8, 0F); // Box 79

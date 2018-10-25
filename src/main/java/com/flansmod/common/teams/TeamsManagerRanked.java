@@ -1,19 +1,23 @@
 package com.flansmod.common.teams;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.flansmod.client.gui.GuiDriveableMenu;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.flansmod.client.gui.teams.EnumLoadoutSlot;
 import com.flansmod.client.gui.teams.GuiChooseLoadout;
-import com.flansmod.client.gui.teams.GuiEditLoadout;
-import com.flansmod.client.gui.teams.GuiLandingPage;
-import com.flansmod.client.gui.teams.GuiMissionResults;
-import com.flansmod.client.gui.teams.GuiTeamScores;
-import com.flansmod.client.gui.teams.GuiTeamSelect;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
@@ -23,27 +27,6 @@ import com.flansmod.common.network.PacketOpenRewardBox;
 import com.flansmod.common.network.PacketRoundFinished;
 import com.flansmod.common.network.PacketTeamSelect;
 import com.flansmod.common.network.PacketVoting;
-import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
-import com.flansmod.common.teams.LoadoutPool.LoadoutEntryPaintjob;
-import com.flansmod.common.teams.RoundFinishedData.VotingOption;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class TeamsManagerRanked extends TeamsManager
 {
@@ -54,7 +37,7 @@ public class TeamsManagerRanked extends TeamsManager
 	public float XPMultiplier = 1.0f;
 	
 	public RoundFinishedData roundFinishedTemplateData = new RoundFinishedData();
-		
+	
 	public static TeamsManagerRanked GetInstance()
 	{
 		return (TeamsManagerRanked)TeamsManager.instance;
@@ -75,12 +58,12 @@ public class TeamsManagerRanked extends TeamsManager
 		}
 		
 		for(EntityPlayer player : getPlayers())
-		{		
+		{
 			ProcessRankData((EntityPlayerMP)player);
 		}
 		
 		super.startRound();
-
+		
 		for(EntityPlayer player : getPlayers())
 		{
 			PlayerData data = PlayerHandler.getPlayerData(player);
@@ -97,7 +80,7 @@ public class TeamsManagerRanked extends TeamsManager
 		super.tick();
 		
 		if(interRoundTimeLeft > 0 && time % 10 == 0
-			&& roundFinishedTemplateData.votingOptions != null && roundFinishedTemplateData.votingOptions.length > 0)
+				&& roundFinishedTemplateData.votingOptions != null && roundFinishedTemplateData.votingOptions.length > 0)
 		{
 			for(int i = 0; i < roundFinishedTemplateData.votingOptions.length; i++)
 			{
@@ -125,7 +108,7 @@ public class TeamsManagerRanked extends TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp =FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -139,7 +122,7 @@ public class TeamsManagerRanked extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogin(EntityPlayer player) 
+	public void onPlayerLogin(EntityPlayer player)
 	{
 		if(!rankData.containsKey(player.getUniqueID()))
 		{
@@ -158,7 +141,7 @@ public class TeamsManagerRanked extends TeamsManager
 					}
 				}
 			}
-
+			
 			rankData.put(player.getUniqueID(), data);
 		}
 		
@@ -177,7 +160,7 @@ public class TeamsManagerRanked extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogout(EntityPlayer player) 
+	public void onPlayerLogout(EntityPlayer player)
 	{
 		super.onPlayerLogout(player);
 	}
@@ -214,7 +197,7 @@ public class TeamsManagerRanked extends TeamsManager
 		}
 	}
 	
-	public static void ResetRank(EntityPlayerMP player) 
+	public static void ResetRank(EntityPlayerMP player)
 	{
 		PlayerRankData data = rankData.get(player.getUniqueID());
 		if(data != null)
@@ -232,7 +215,7 @@ public class TeamsManagerRanked extends TeamsManager
 		UpdateRoundFinishedTemplate();
 		
 		for(EntityPlayer player : getPlayers())
-		{			
+		{
 			SendRoundFinishedDataToPlayer((EntityPlayerMP)player);
 		}
 		
@@ -245,7 +228,7 @@ public class TeamsManagerRanked extends TeamsManager
 		roundFinishedTemplateData.scoresTime = scoreDisplayTime;
 		roundFinishedTemplateData.rankUpdateTime = rankUpdateTime;
 		
-		roundFinishedTemplateData.votingEnabled = voting; 
+		roundFinishedTemplateData.votingEnabled = voting;
 		if(voting)
 		{
 			roundFinishedTemplateData.FillVoteOptions(voteOptions);
@@ -282,7 +265,7 @@ public class TeamsManagerRanked extends TeamsManager
 		FlansMod.getPacketHandler().sendTo(new PacketRoundFinished(finishedData), player);
 	}
 	
-		
+	
 	private void SendRankDataToPlayer(EntityPlayerMP player)
 	{
 		/*
@@ -364,7 +347,7 @@ public class TeamsManagerRanked extends TeamsManager
 	{
 		if(!enabled || currentRound == null || currentRound.teams == null)
 			return;
-
+		
 		sendLoadoutData(player);
 	}
 	
@@ -437,15 +420,15 @@ public class TeamsManagerRanked extends TeamsManager
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static void ConfirmLoadoutChanges() 
+	public static void ConfirmLoadoutChanges()
 	{
 		PacketLoadoutData packet = new PacketLoadoutData();
 		packet.myRankData = ClientTeamsData.theRankData;
 		FlansMod.getPacketHandler().sendToServer(packet);
 	}
-
+	
 	@SideOnly(Side.CLIENT)
-	public static void ChooseLoadout(int id) 
+	public static void ChooseLoadout(int id)
 	{
 		PacketTeamSelect packet = new PacketTeamSelect();
 		packet.classChoicesPacket = true;
@@ -458,7 +441,7 @@ public class TeamsManagerRanked extends TeamsManager
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void SelectTeam(Team team) 
+	public void SelectTeam(Team team)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
 		if(team == null)
@@ -470,7 +453,7 @@ public class TeamsManagerRanked extends TeamsManager
 			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiChooseLoadout());
 		}
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public static boolean LocalPlayerOwnsUnlock(int unlockHash)
 	{
@@ -481,15 +464,15 @@ public class TeamsManagerRanked extends TeamsManager
 	{
 		return false;
 	}
-
-	public static void OpenRewardBox(EntityPlayerMP player, RewardBox box) 
+	
+	public static void OpenRewardBox(EntityPlayerMP player, RewardBox box)
 	{
 		PlayerRankData data = rankData.get(player.getUniqueID());
 		for(RewardBoxInstance instance : data.rewardBoxData)
 		{
-			if(!instance.opened 
-			&& instance.boxHash == box.hashCode()
-			&& instance.unlockHash == 0)
+			if(!instance.opened
+					&& instance.boxHash == box.hashCode()
+					&& instance.unlockHash == 0)
 			{
 				int unlockHash = instance.OpenBox(data);
 				FlansMod.getPacketHandler().sendTo(new PacketOpenRewardBox(box.hashCode(), unlockHash), player);
@@ -499,13 +482,13 @@ public class TeamsManagerRanked extends TeamsManager
 		
 		FlansMod.Assert(false, "Player " + player.getDisplayNameString() + " tried to open box they don't have");
 	}
-
-	public static PlayerRankData GetRankData(EntityPlayer player) 
+	
+	public static PlayerRankData GetRankData(EntityPlayer player)
 	{
 		return GetInstance().rankData.get(player.getUniqueID());
 	}
-
-	public static PlayerRankData GetRankData(UUID id) 
+	
+	public static PlayerRankData GetRankData(UUID id)
 	{
 		return GetInstance().rankData.get(id);
 	}

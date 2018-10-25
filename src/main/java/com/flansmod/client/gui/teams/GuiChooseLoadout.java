@@ -1,24 +1,23 @@
 package com.flansmod.client.gui.teams;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-
-import org.lwjgl.opengl.GL11;
 
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
-import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManagerRanked;
 
-public class GuiChooseLoadout extends GuiTeamsBase 
+public class GuiChooseLoadout extends GuiTeamsBase
 {
-	/** The background image */
+	/**
+	 * The background image
+	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/LandingPage.png");
 	
 	public GuiChooseLoadout()
@@ -51,7 +50,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 			if(data.currentLevel >= pool.slotUnlockLevels[i])
 			{
 				buttonList.add(
-				 new GuiButton(i, width / 2 -128 + 12 + 49 * i, height / 2 - 99 + 117, 36, 20, "Select"));
+						new GuiButton(i, width / 2 - 128 + 12 + 49 * i, height / 2 - 99 + 117, 36, 20, "Select"));
 			}
 		}
 		
@@ -61,7 +60,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id >= 0 && button.id < 5)
+		if(button.id >= 0 && button.id < 5)
 		{
 			TeamsManagerRanked.ChooseLoadout(button.id);
 			FMLClientHandler.instance().getClient().displayGuiScreen(null);
@@ -73,7 +72,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 			ClientTeamsData.OpenTeamSelectPage();
 		}
 	}
-		
+	
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
@@ -104,7 +103,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, 256, 143, textureX, textureY);
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY + 143, 256, 180, 256, 76, textureX, textureY);
-				
+		
 		// Draw text
 		drawCenteredString(fontRenderer, "Choose a loadout", guiOriginX + 128, guiOriginY + 12, 0xffffff);
 		
@@ -115,7 +114,7 @@ public class GuiChooseLoadout extends GuiTeamsBase
 		}
 		
 		super.drawScreen(i, j, f);
-	}	
+	}
 	
 	@Override
 	public boolean doesGuiPauseGame()

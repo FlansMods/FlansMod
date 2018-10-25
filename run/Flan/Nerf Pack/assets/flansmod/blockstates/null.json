@@ -1,1 +1,7 @@
-{ "variants": { "normal": { "model": "flansmod:null" } } }
+{
+  "variants": {
+    "normal": {
+      "model": "flansmod:null"
+    }
+  }
+}

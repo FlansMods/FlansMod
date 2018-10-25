@@ -2,24 +2,24 @@ package com.flansmod.client.debug;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.model.RenderGrenade;
-import com.flansmod.common.FlansMod;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderDebugDot extends Render {
+import com.flansmod.common.FlansMod;
 
-	public RenderDebugDot(RenderManager renderManager) 
+public class RenderDebugDot extends Render
+{
+	
+	public RenderDebugDot(RenderManager renderManager)
 	{
 		super(renderManager);
 	}
-
+	
 	@Override
-	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1) 
+	public void doRender(Entity entity, double d0, double d1, double d2, float f, float f1)
 	{
 		if(!FlansMod.DEBUG)
 			return;
@@ -38,9 +38,9 @@ public class RenderDebugDot extends Render {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity p_110775_1_) 
+	protected ResourceLocation getEntityTexture(Entity p_110775_1_)
 	{
 		return null;
 	}
@@ -48,7 +48,7 @@ public class RenderDebugDot extends Render {
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderDebugDot(manager);
 		}

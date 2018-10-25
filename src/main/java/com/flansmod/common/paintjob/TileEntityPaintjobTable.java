@@ -1,20 +1,9 @@
 package com.flansmod.common.paintjob;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.flansmod.common.guns.GunType;
-import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.ShootableType;
-import com.flansmod.common.teams.TeamsManager;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -32,25 +21,34 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	}
 	
 	@Override
-	public String getName() { return "PaintjobTable"; }
-
-	@Override
-	public boolean hasCustomName() { return false; }
-
-	@Override
-	public int getSizeInventory() { return 2; }
-
-	@Override
-	public ItemStack getStackInSlot(int index) 
-	{ 
-		return inventoryStacks[index]; 
+	public String getName()
+	{
+		return "PaintjobTable";
 	}
-
+	
 	@Override
-	public ItemStack decrStackSize(int index, int count) 
-	{ 
-		if(getStackInSlot(index) != null) 
-		{ 
+	public boolean hasCustomName()
+	{
+		return false;
+	}
+	
+	@Override
+	public int getSizeInventory()
+	{
+		return 2;
+	}
+	
+	@Override
+	public ItemStack getStackInSlot(int index)
+	{
+		return inventoryStacks[index];
+	}
+	
+	@Override
+	public ItemStack decrStackSize(int index, int count)
+	{
+		if(getStackInSlot(index) != null)
+		{
 			if(count >= getStackInSlot(index).getCount())
 			{
 				ItemStack returnStack = getStackInSlot(index);
@@ -63,40 +61,58 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 				
 				return returnStack;
 			}
-		} 
-		return null; 
+		}
+		return null;
 	}
-
+	
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) 
-	{ 
+	public void setInventorySlotContents(int index, ItemStack stack)
+	{
 		inventoryStacks[index] = stack;
 	}
-
+	
 	@Override
-	public int getInventoryStackLimit() { return 64; }
-
+	public int getInventoryStackLimit()
+	{
+		return 64;
+	}
+	
 	@Override
-	public void openInventory(EntityPlayer player) { }
-
+	public void openInventory(EntityPlayer player)
+	{
+	}
+	
 	@Override
-	public void closeInventory(EntityPlayer player) { }
-
+	public void closeInventory(EntityPlayer player)
+	{
+	}
+	
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) { return true; }
-
+	public boolean isItemValidForSlot(int index, ItemStack stack)
+	{
+		return true;
+	}
+	
 	@Override
-	public int getField(int id) { return 0; }
-
+	public int getField(int id)
+	{
+		return 0;
+	}
+	
 	@Override
-	public void setField(int id, int value) { }
-
+	public void setField(int id, int value)
+	{
+	}
+	
 	@Override
-	public int getFieldCount() { return 0; }
-
+	public int getFieldCount()
+	{
+		return 0;
+	}
+	
 	@Override
-	public void clear() 
-	{ 
+	public void clear()
+	{
 		for(int i = 0; i < getSizeInventory(); i++)
 		{
 			setInventorySlotContents(i, null);
@@ -123,38 +139,38 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-
+		
 		for(int i = 0; i < inventoryStacks.length; i++)
 		{
 			setInventorySlotContents(i, new ItemStack(nbt.getCompoundTag("stack_" + i)));
 		}
 	}
-
+	
 	@Override
-	public void update() 
+	public void update()
 	{
 	}
 	
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-        return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
-    }
+		return new SPacketUpdateTileEntity(getPos(), getBlockMetadata(), nbt);
+	}
 	
 	@Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, SPacketUpdateTileEntity packet)
-    {
+	public void onDataPacket(net.minecraft.network.NetworkManager net, SPacketUpdateTileEntity packet)
+	{
 		readFromNBT(packet.getNbtCompound());
-    }
-
-	public ItemStack getPaintableStack() 
+	}
+	
+	public ItemStack getPaintableStack()
 	{
 		return inventoryStacks[0];
 	}
-
-	public void setPaintableStack(ItemStack stack) 
+	
+	public void setPaintableStack(ItemStack stack)
 	{
 		inventoryStacks[0] = stack;
 	}
@@ -164,26 +180,29 @@ public class TileEntityPaintjobTable extends TileEntity implements IInventory, I
 		return inventoryStacks[1];
 	}
 	
-
+	
 	@Override
-	public ITextComponent getDisplayName() { return null; }
-
+	public ITextComponent getDisplayName()
+	{
+		return null;
+	}
+	
 	@Override
-	public boolean isEmpty() 
+	public boolean isEmpty()
 	{
 		return inventoryStacks[0] == null || inventoryStacks[0].isEmpty();
 	}
-
+	
 	@Override
-	public ItemStack removeStackFromSlot(int index) 
+	public ItemStack removeStackFromSlot(int index)
 	{
 		ItemStack stack = inventoryStacks[index];
 		inventoryStacks[index] = null;
 		return stack;
 	}
-
+	
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) 
+	public boolean isUsableByPlayer(EntityPlayer player)
 	{
 		return true;
 	}

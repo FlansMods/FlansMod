@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelR870 extends ModelGun 
+public class ModelR870 extends ModelGun
 {
 	public ModelR870()
 	{
@@ -21,13 +21,13 @@ public class ModelR870 extends ModelGun
 		gunModel[1].addBox(3F, 4.5F, -0.5F, 15, 1, 1);
 		
 		gunModel[2] = new ModelRendererTurbo(this, 0, 4, textureX, textureY);
-		gunModel[2].addShapeBox(-2F, 3F, -1F, 4, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, -1F, 0F);	
+		gunModel[2].addShapeBox(-2F, 3F, -1F, 4, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, -1F, 0F);
 		
 		gunModel[3] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-		gunModel[3].addShapeBox(-2F, 1F, -1F, 2, 2, 2, 0F, /* 0 */ 0F, -1F, 0F, /* 1 */ -0.5F, 0F, 0F, /* 2 */ -0.5F, 0F, 0F, /* 3 */ 0F, -1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-				
+		gunModel[3].addShapeBox(-2F, 1F, -1F, 2, 2, 2, 0F, /* 0 */ 0F, -1F, 0F, /* 1 */ -0.5F, 0F, 0F, /* 2 */ -0.5F, 0F, 0F, /* 3 */ 0F, -1F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
+		
 		gunModel[4] = new ModelRendererTurbo(this, 0, 12, textureX, textureY);
-		gunModel[4].addShapeBox(1F, 2F, -1F, 3, 1, 2, 0F, /* 0 */ -1F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ -1F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[4].addShapeBox(1F, 2F, -1F, 3, 1, 2, 0F, /* 0 */ -1F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ -1F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		//Shotgun Handle
 		pumpModel = new ModelRendererTurbo[2];
@@ -40,7 +40,7 @@ public class ModelR870 extends ModelGun
 		
 		//Scope
 		scopeAttachPoint = new Vector3f(5F / 16F, 5F / 16F, 0F);
-
+		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
 		
@@ -48,7 +48,7 @@ public class ModelR870 extends ModelGun
 		defaultStockModel[0].addBox(-8F, 1F, -1F, 1, 3, 2);
 		
 		defaultStockModel[1] = new ModelRendererTurbo(this, 16, 8, textureX, textureY);
-		defaultStockModel[1].addShapeBox(-7F, 1F, -1F, 5, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		defaultStockModel[1].addShapeBox(-7F, 1F, -1F, 5, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		stockAttachPoint = new Vector3f(1F / 16F, 4F / 16F, 0F);
 		
@@ -65,7 +65,7 @@ public class ModelR870 extends ModelGun
 		ammoModel[0].addBox(4F, 3.5F, -0.5F, 2, 1, 1);
 		
 		translateAll(0F, -0.5F, 0F);
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.SHOTGUN;
 		pumpDelayAfterReload = 115;

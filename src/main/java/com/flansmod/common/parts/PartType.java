@@ -15,52 +15,81 @@ import com.flansmod.common.types.EnumType;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-public class PartType extends InfoType {
-	/** Category */
+public class PartType extends InfoType
+{
+	/**
+	 * Category
+	 */
 	public EnumPartCategory category;
-	/** Max stack size of item */
+	/**
+	 * Max stack size of item
+	 */
 	public int stackSize;
-	/** (Engine) Multiplier applied to the thrust of the driveable */
+	/**
+	 * (Engine) Multiplier applied to the thrust of the driveable
+	 */
 	public float engineSpeed = 1.0F;
-	/** (Engine) Rate at which this engine consumes fuel */
+	/**
+	 * (Engine) Rate at which this engine consumes fuel
+	 */
 	public float fuelConsumption = 1.0F;
-	/** (Fuel) The amount of fuel this fuel tank gives */
+	/**
+	 * (Fuel) The amount of fuel this fuel tank gives
+	 */
 	public int fuel = 0;
-	/** The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot */
+	/**
+	 * The types of driveables that this engine works with. Used to designate some engines as mecha CPUs and whatnot
+	 */
 	public List<EnumType> worksWith = Arrays.asList(EnumType.mecha, EnumType.plane, EnumType.vehicle);
-	/** Let's just say you probably don't want to use this to power a mecha... */
+	/**
+	 * Let's just say you probably don't want to use this to power a mecha...
+	 */
 	public boolean isAIChip = false;
-	/** If set to false, then this engine will definitely not be the default for creatively spawned vehicles */
+	/**
+	 * If set to false, then this engine will definitely not be the default for creatively spawned vehicles
+	 */
 	public boolean canBeDefaultEngine = true;
 	
 	public ArrayList<ItemStack> partBoxRecipe = new ArrayList<ItemStack>();
 	
 	//------- RedstoneFlux -------
-	/** If true, then this engine will draw from RedstoneFlux power source items such as power cubes. Otherwise it will draw from Flan's Mod fuel items */
+	/**
+	 * If true, then this engine will draw from RedstoneFlux power source items such as power cubes. Otherwise it will draw from Flan's Mod fuel items
+	 */
 	public boolean useRFPower = false;
-	/** The power draw rate for RF (per tick) */
+	/**
+	 * The power draw rate for RF (per tick)
+	 */
 	public int RFDrawRate = 1;
 	//-----------------------------
-
-	/** The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative  */
+	
+	/**
+	 * The default engine (normally the first one read by the type loader) for driveables with corrupt nbt or those spawned in creative
+	 */
 	public static HashMap<EnumType, PartType> defaultEngines = new HashMap<EnumType, PartType>();
-	/** The list of all PartTypes */
+	/**
+	 * The list of all PartTypes
+	 */
 	public static List<PartType> parts = new ArrayList<PartType>();
-	/** Hash map sorted */
+	/**
+	 * Hash map sorted
+	 */
 	public static HashMap<EnumPartCategory, ArrayList<PartType>> partsByCategory = new HashMap<EnumPartCategory, ArrayList<PartType>>();
+	
 	static
 	{
 		for(EnumPartCategory cat : EnumPartCategory.values())
 			partsByCategory.put(cat, new ArrayList<PartType>());
 	}
 	
-	public PartType(TypeFile file) {
+	public PartType(TypeFile file)
+	{
 		super(file);
 		parts.add(this);
 	}
-
+	
 	@Override
-	public void postRead(TypeFile file) 
+	public void postRead(TypeFile file)
 	{
 		if(category == EnumPartCategory.ENGINE && !useRFPower && canBeDefaultEngine)
 		{
@@ -78,12 +107,12 @@ public class PartType extends InfoType {
 		}
 		partsByCategory.get(category).add(this);
 	}
-
+	
 	@Override
-	protected void read(String[] split, TypeFile file) 
+	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
-		try 
+		try
 		{
 			if(split[0].equals("Category"))
 				category = getCategory(split[1]);
@@ -95,7 +124,7 @@ public class PartType extends InfoType {
 				fuelConsumption = Float.parseFloat(split[1]);
 			else if(split[0].equals("Fuel"))
 				fuel = Integer.parseInt(split[1]);
-			//Recipe
+				//Recipe
 			else if(split[0].equals("PartBoxRecipe"))
 			{
 				ItemStack[] stacks = new ItemStack[(split.length - 2) / 2];
@@ -123,14 +152,14 @@ public class PartType extends InfoType {
 				useRFPower = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("RFDrawRate"))
 				RFDrawRate = Integer.parseInt(split[1]);
-			//-----------------------------
+				//-----------------------------
 			
 			else if(split[0].equals("IsAIChip"))
 				isAIChip = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("CanBeDefaultEngine"))
 				canBeDefaultEngine = Boolean.parseBoolean(split[1]);
-		} 
-		catch (Exception e) 
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading part file failed.");
 			FlansMod.log.throwing(e);
@@ -141,46 +170,49 @@ public class PartType extends InfoType {
 	{
 		return engineSpeed > quitePossiblyAnInferiorEngine.engineSpeed;
 	}
-
-	public static PartType getPart(String s) {
-		for (PartType part : parts) {
-			if (part.shortName.equals(s))
+	
+	public static PartType getPart(String s)
+	{
+		for(PartType part : parts)
+		{
+			if(part.shortName.equals(s))
 				return part;
 		}
 		return null;
 	}
-
-	private EnumPartCategory getCategory(String s) {
-		if (s.equals("Cockpit"))
+	
+	private EnumPartCategory getCategory(String s)
+	{
+		if(s.equals("Cockpit"))
 			return EnumPartCategory.COCKPIT;
-		if (s.equals("Wing"))
+		if(s.equals("Wing"))
 			return EnumPartCategory.WING;
-		if (s.equals("Engine"))
+		if(s.equals("Engine"))
 			return EnumPartCategory.ENGINE;
-		if (s.equals("Propeller"))
+		if(s.equals("Propeller"))
 			return EnumPartCategory.PROPELLER;
-		if (s.equals("Bay"))
+		if(s.equals("Bay"))
 			return EnumPartCategory.BAY;
-		if (s.equals("Tail"))
+		if(s.equals("Tail"))
 			return EnumPartCategory.TAIL;
-		if (s.equals("Wheel"))
+		if(s.equals("Wheel"))
 			return EnumPartCategory.WHEEL;
-		if (s.equals("Chassis"))
+		if(s.equals("Chassis"))
 			return EnumPartCategory.CHASSIS;
-		if (s.equals("Turret"))
+		if(s.equals("Turret"))
 			return EnumPartCategory.TURRET;
-		if (s.equals("Fuel"))
+		if(s.equals("Fuel"))
 			return EnumPartCategory.FUEL;
-		if (s.equals("Misc"))
+		if(s.equals("Misc"))
 			return EnumPartCategory.MISC;
 		return EnumPartCategory.MISC;
 	}
-
+	
 	@Override
 	protected void preRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()

@@ -7,12 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.flansmod.client.debug.EntityDebugAABB;
 import com.flansmod.client.debug.EntityDebugDot;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.RotatedAxes;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityBullet;
@@ -23,22 +22,29 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-public class PlayerHitbox 
+public class PlayerHitbox
 {
 	/** */
 	public EntityPlayer player;
-	/** The angles of this box */
+	/**
+	 * The angles of this box
+	 */
 	public RotatedAxes axes;
-	/** The origin of rotation for this box */
+	/**
+	 * The origin of rotation for this box
+	 */
 	public Vector3f rP;
-	/** The lower left corner of this box */
+	/**
+	 * The lower left corner of this box
+	 */
 	public Vector3f o;
-	/** The dimensions of this box */
+	/**
+	 * The dimensions of this box
+	 */
 	public Vector3f d;
-	/** The type of hitbox */
+	/**
+	 * The type of hitbox
+	 */
 	public EnumHitboxType type;
 	
 	public PlayerHitbox(EntityPlayer player, RotatedAxes axes, Vector3f rotationPoint, Vector3f origin, Vector3f dimensions, EnumHitboxType type)
@@ -71,7 +77,7 @@ public class PlayerHitbox
 		
 	}
 
-	public PlayerBulletHit raytrace(Vector3f origin, Vector3f motion) 
+	public PlayerBulletHit raytrace(Vector3f origin, Vector3f motion)
 	{
 		//Move to local coords for this hitbox, but don't modify the original "origin" vector
 		origin = Vector3f.sub(origin, rP, null);
@@ -147,7 +153,7 @@ public class PlayerHitbox
 		return null;
 	}
 
-	public float hitByBullet(DamageSource source, Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower) 
+	public float hitByBullet(DamageSource source, Entity damageOwner, InfoType firedFrom, BulletType bulletType, float damage, float penetratingPower)
 	{
 		if(bulletType.setEntitiesOnFire)
 			player.setFire(20);
@@ -158,22 +164,25 @@ public class PlayerHitbox
 		float damageModifier = bulletType.penetratingPower < 0.1F ? penetratingPower / bulletType.penetratingPower : 1;
 		switch(type)
 		{
-		case BODY : break;
-		case HEAD : damageModifier *= 1.6F; break;
-		case LEFTARM : damageModifier *= 0.6F; break;
-		case RIGHTARM : damageModifier *= 0.6F; break;
-		case LEFTITEM : break;
-		case RIGHTITEM : break;
-		default : break;
+			case BODY: break;
+			case HEAD: damageModifier *= 1.6F;
+				break;
+			case LEFTARM: damageModifier *= 0.6F;
+				break;
+			case RIGHTARM: damageModifier *= 0.6F;
+				break;
+			case LEFTITEM: break;
+			case RIGHTITEM: break;
+			default: break;
 		}
 		switch(type)
 		{
-		case BODY :  case HEAD :  case LEFTARM :  case RIGHTARM : 
+			case BODY: case HEAD: case LEFTARM: case RIGHTARM:
 		{
 			//Calculate the hit damage
 			float hitDamage = damage * bulletType.damageVsLiving * damageModifier;
 			//Create a damage source object
-			DamageSource damagesource = damageOwner == null ? DamageSource.GENERIC 
+			DamageSource damagesource = damageOwner == null ? DamageSource.GENERIC
 					: EntityBullet.GetBulletDamage(firedFrom, bulletType, damageOwner, type == EnumHitboxType.HEAD);
 
 			//When the damage is 0 (such as with Nerf guns) the entityHurt Forge hook is not called, so this hacky thing is here
@@ -191,29 +200,29 @@ public class PlayerHitbox
 			}
 			return penetratingPower - 1;
 		}
-		case RIGHTITEM :
-		{
-			ItemStack currentStack = player.getHeldItemMainhand();
-			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
+			case RIGHTITEM:
 			{
-				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
-				//TODO : Shield damage
-				return penetratingPower - gunType.shieldDamageAbsorption;
+				ItemStack currentStack = player.getHeldItemMainhand();
+				if(currentStack != null && currentStack.getItem() instanceof ItemGun)
+				{
+					GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
+					//TODO : Shield damage
+					return penetratingPower - gunType.shieldDamageAbsorption;
+				}
+				else return penetratingPower;
 			}
-			else return penetratingPower;
-		}
-		case LEFTITEM : 
-		{
-			ItemStack currentStack = player.getHeldItemOffhand();
-			if(currentStack != null && currentStack.getItem() instanceof ItemGun)
+			case LEFTITEM:
 			{
-				GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
-				//TODO : Shield damage
-				return penetratingPower - gunType.shieldDamageAbsorption;
+				ItemStack currentStack = player.getHeldItemOffhand();
+				if(currentStack != null && currentStack.getItem() instanceof ItemGun)
+				{
+					GunType gunType = ((ItemGun)currentStack.getItem()).GetType();
+					//TODO : Shield damage
+					return penetratingPower - gunType.shieldDamageAbsorption;
+				}
+				else return penetratingPower;
 			}
-			else return penetratingPower;
-		}
-		default : return penetratingPower;
+			default: return penetratingPower;
 		}
 	}
 }

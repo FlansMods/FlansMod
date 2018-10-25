@@ -5,9 +5,9 @@ import net.minecraft.block.material.Material;
 
 public class BlockStatic extends Block
 {
-	public BlockStatic(Material material) 
+	public BlockStatic(Material material)
 	{
 		super(material);
 	}
-
+	
 }

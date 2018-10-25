@@ -4,7 +4,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelSledgehammer extends ModelGun 
+public class ModelSledgehammer extends ModelGun
 {
 	public ModelSledgehammer()
 	{

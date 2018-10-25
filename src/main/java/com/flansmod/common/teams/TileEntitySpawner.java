@@ -9,7 +9,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -20,7 +19,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.ItemPlane;
 import com.flansmod.common.driveables.ItemVehicle;
 import com.flansmod.common.guns.ItemAAGun;
-import com.google.common.collect.ImmutableMap;
 
 public class TileEntitySpawner extends TileEntity implements ITeamObject, ITickable
 {
@@ -52,27 +50,27 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	}
 	
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
-        NBTTagCompound tags = new NBTTagCompound();
-        tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
-        tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
-        return new SPacketUpdateTileEntity(pos, 1, tags);
-    }
-    
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet)
-    {
-    	teamID = packet.getNbtCompound().getByte("TeamID");
-    	map = packet.getNbtCompound().getString("Map");
-    }
-    
+	public SPacketUpdateTileEntity getUpdatePacket()
+	{
+		NBTTagCompound tags = new NBTTagCompound();
+		tags.setByte("TeamID", base == null ? (byte)0 : (byte)base.getOwnerID());
+		tags.setString("Map", base == null || base.getMap() == null ? "" : base.getMap().shortName);
+		return new SPacketUpdateTileEntity(pos, 1, tags);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet)
+	{
+		teamID = packet.getNbtCompound().getByte("TeamID");
+		map = packet.getNbtCompound().getString("Map");
+	}
+	
 	@Override
 	public void update()
-    {
-    	if(world.isRemote)
-    		return;
-    	//updateChunkLoading();
+	{
+		if(world.isRemote)
+			return;
+		//updateChunkLoading();
 		//If the base was loaded after the spawner, check to see if the base has now been loaded
 		if(baseID >= 0 && base == null)
 		{
@@ -117,7 +115,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 					if(stack != null && stack.getItem() instanceof ItemPlane)
 					{
 						spawnedEntity = ((ItemPlane)stack.getItem()).spawnPlane(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
-					}					
+					}
 					if(stack != null && stack.getItem() instanceof ItemVehicle)
 					{
 						spawnedEntity = ((ItemVehicle)stack.getItem()).spawnVehicle(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, stack);
@@ -135,7 +133,7 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			}
 		}
 	}
-
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt)
 	{
@@ -171,9 +169,9 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			stacksToSpawn.add(new ItemStack(nbt.getCompoundTag("stack" + i)));
 		}
 	}
-
+	
 	@Override
-	public ITeamBase getBase() 
+	public ITeamBase getBase()
 	{
 		return base;
 	}
@@ -184,21 +182,21 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			return teamID;
 		else return base == null ? 0 : base.getOwnerID();
 	}
-
+	
 	@Override
-	public void onBaseSet(int newTeamID) 
+	public void onBaseSet(int newTeamID)
 	{
 		FlansMod.packetHandler.sendToDimension(getUpdatePacket(), world == null ? dimension : world.provider.getDimension());
 	}
-
+	
 	@Override
-	public void onBaseCapture(int newTeamID) 
+	public void onBaseCapture(int newTeamID)
 	{
 		onBaseSet(newTeamID);
 	}
-
+	
 	@Override
-	public void setBase(ITeamBase b) 
+	public void setBase(ITeamBase b)
 	{
 		base = b;
 		if(b != null)
@@ -208,33 +206,33 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 			FlansMod.packetHandler.sendToDimension(getUpdatePacket(), world == null ? dimension : world.provider.getDimension());
 		}
 	}
-
+	
 	@Override
-	public void tick() 
+	public void tick()
 	{
-
+	
 	}
-
+	
 	@Override
-	public void destroy() 
+	public void destroy()
 	{
 		world.setBlockState(pos, Blocks.AIR.getDefaultState());
 	}
-
+	
 	@Override
-	public double getPosX() 
+	public double getPosX()
 	{
 		return pos.getX() + 0.5F;
 	}
-
+	
 	@Override
-	public double getPosY() 
+	public double getPosY()
 	{
 		return pos.getY() + 0.5F;
 	}
-
+	
 	@Override
-	public double getPosZ() 
+	public double getPosZ()
 	{
 		return pos.getZ() + 0.5F;
 	}
@@ -247,8 +245,8 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 	
 	private boolean isSpawnPointByMetadata()
 	{
-		if(world != null 
-				&& world.getBlockState(pos) != null 
+		if(world != null
+				&& world.getBlockState(pos) != null
 				&& world.getBlockState(pos).getProperties() != null
 				&& world.getBlockState(pos).getProperties().containsKey(TYPE))
 		{
@@ -300,16 +298,16 @@ public class TileEntitySpawner extends TileEntity implements ITeamObject, ITicka
 		ForgeChunkManager.releaseTicket(chunkTicket);
 	}
 */
-
+	
 	@Override
-	public boolean forceChunkLoading() 
+	public boolean forceChunkLoading()
 	{
 		return false;
 	}
 	
 	@Override
-    protected void setWorldCreate(World worldIn)
-    {
-        this.setWorld(worldIn);
-    }
+	protected void setWorldCreate(World worldIn)
+	{
+		this.setWorld(worldIn);
+	}
 }

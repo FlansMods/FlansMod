@@ -5,8 +5,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelChaffee extends ModelVehicle //Same as Filename
@@ -1006,34 +1006,34 @@ public class ModelChaffee extends ModelVehicle //Same as Filename
 		leftTrackWheelModels[8] = new ModelRendererTurbo(this, 81, 91, textureX, textureY); // Shape 12
 		leftTrackWheelModels[9] = new ModelRendererTurbo(this, 78, 244, textureX, textureY); // Shape 33
 
-		leftTrackWheelModels[0].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 165
+		leftTrackWheelModels[0].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 165
 		leftTrackWheelModels[0].setRotationPoint(10.5F, 2.5F, 20.5F);
 
-		leftTrackWheelModels[1].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 1
+		leftTrackWheelModels[1].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 1
 		leftTrackWheelModels[1].setRotationPoint(-3F, 2.5F, 20.5F);
 
-		leftTrackWheelModels[2].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 2
+		leftTrackWheelModels[2].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 2
 		leftTrackWheelModels[2].setRotationPoint(24F, 2.5F, 20.5F);
 
-		leftTrackWheelModels[3].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 3
+		leftTrackWheelModels[3].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 3
 		leftTrackWheelModels[3].setRotationPoint(-16.5F, 2.5F, 20.5F);
 
-		leftTrackWheelModels[4].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 4
+		leftTrackWheelModels[4].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 4
 		leftTrackWheelModels[4].setRotationPoint(-30F, 2.5F, 20.5F);
 
-		leftTrackWheelModels[5].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 9
+		leftTrackWheelModels[5].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 9
 		leftTrackWheelModels[5].setRotationPoint(36F, -4.35F, 20.5F);
 
-		leftTrackWheelModels[6].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 535
+		leftTrackWheelModels[6].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 535
 		leftTrackWheelModels[6].setRotationPoint(17F, -7.5F, 0F);
 
-		leftTrackWheelModels[7].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 11
+		leftTrackWheelModels[7].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 11
 		leftTrackWheelModels[7].setRotationPoint(3F, -7.5F, 0F);
 
-		leftTrackWheelModels[8].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 12
+		leftTrackWheelModels[8].addShape3D(3F, -3F, -26F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 12
 		leftTrackWheelModels[8].setRotationPoint(-23F, -7.2F, 0F);
 
-		leftTrackWheelModels[9].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 33
+		leftTrackWheelModels[9].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 33
 		leftTrackWheelModels[9].setRotationPoint(-42F, -4.25F, 20.5F);
 
 
@@ -1049,34 +1049,34 @@ public class ModelChaffee extends ModelVehicle //Same as Filename
 		rightTrackWheelModels[8] = new ModelRendererTurbo(this, 81, 91, textureX, textureY); // Shape 32
 		rightTrackWheelModels[9] = new ModelRendererTurbo(this, 78, 244, textureX, textureY); // Shape 1
 
-		rightTrackWheelModels[0].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 24
+		rightTrackWheelModels[0].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 24
 		rightTrackWheelModels[0].setRotationPoint(10.5F, 2.5F, -21.5F);
 
-		rightTrackWheelModels[1].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 25
+		rightTrackWheelModels[1].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 25
 		rightTrackWheelModels[1].setRotationPoint(-3F, 2.5F, -21.5F);
 
-		rightTrackWheelModels[2].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 26
+		rightTrackWheelModels[2].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 26
 		rightTrackWheelModels[2].setRotationPoint(24F, 2.5F, -21.5F);
 
-		rightTrackWheelModels[3].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 27
+		rightTrackWheelModels[3].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 27
 		rightTrackWheelModels[3].setRotationPoint(-16.5F, 2.5F, -21.5F);
 
-		rightTrackWheelModels[4].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 28
+		rightTrackWheelModels[4].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 28
 		rightTrackWheelModels[4].setRotationPoint(-30F, 2.5F, -21.5F);
 
-		rightTrackWheelModels[5].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 29
+		rightTrackWheelModels[5].addShape3D(6.5F, -6.5F, 0.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 29
 		rightTrackWheelModels[5].setRotationPoint(36F, -4.35F, -21.5F);
 
-		rightTrackWheelModels[6].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 30
+		rightTrackWheelModels[6].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 30
 		rightTrackWheelModels[6].setRotationPoint(17F, -7.5F, -43F);
 
-		rightTrackWheelModels[7].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 31
+		rightTrackWheelModels[7].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 31
 		rightTrackWheelModels[7].setRotationPoint(3F, -7.5F, -43F);
 
-		rightTrackWheelModels[8].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2) }), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[] {3 ,2 ,3 ,2 ,3 ,2 ,3 ,2}); // Shape 32
+		rightTrackWheelModels[8].addShape3D(3F, -3F, -20F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(4, 0, 4, 0), new Coord2D(6, 2, 6, 2), new Coord2D(6, 4, 6, 4), new Coord2D(4, 6, 4, 6), new Coord2D(2, 6, 2, 6), new Coord2D(0, 4, 0, 4), new Coord2D(0, 2, 0, 2)}), 3, 6, 6, 20, 3, ModelRendererTurbo.MR_FRONT, new float[]{3, 2, 3, 2, 3, 2, 3, 2}); // Shape 32
 		rightTrackWheelModels[8].setRotationPoint(-23F, -7.2F, -43F);
 
-		rightTrackWheelModels[9].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4) }), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[] {6 ,5 ,6 ,5 ,6 ,5 ,6 ,5}); // Shape 1
+		rightTrackWheelModels[9].addShape3D(6.5F, -6.5F, -5.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(9, 0, 9, 0), new Coord2D(13, 4, 13, 4), new Coord2D(13, 9, 13, 9), new Coord2D(9, 13, 9, 13), new Coord2D(4, 13, 4, 13), new Coord2D(0, 9, 0, 9), new Coord2D(0, 4, 0, 4)}), 5, 13, 13, 44, 5, ModelRendererTurbo.MR_FRONT, new float[]{6, 5, 6, 5, 6, 5, 6, 5}); // Shape 1
 		rightTrackWheelModels[9].setRotationPoint(-42F, -4.25F, -27.5F);
 
 
@@ -1180,7 +1180,6 @@ public class ModelChaffee extends ModelVehicle //Same as Filename
 		rightTrackModel[10].addShapeBox(0F, 0F, 0F, 6, 1, 7, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 23
 		rightTrackModel[10].setRotationPoint(-45.6F, 3F, -28F);
 		rightTrackModel[10].rotateAngleZ = 2.32128791F;
-
 
 
 		translateAll(0F, 0F, 0F);

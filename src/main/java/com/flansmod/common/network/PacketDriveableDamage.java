@@ -2,11 +2,9 @@ package com.flansmod.common.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,7 +19,7 @@ public class PacketDriveableDamage extends PacketBase
 	public short[] health;
 	public boolean[] onFire;
 	
-	public PacketDriveableDamage() 
+	public PacketDriveableDamage()
 	{
 		health = new short[EnumDriveablePart.values().length];
 		onFire = new boolean[EnumDriveablePart.values().length];
@@ -40,9 +38,9 @@ public class PacketDriveableDamage extends PacketBase
 			onFire[i] = part.onFire;
 		}
 	}
-		
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeInt(entityId);
 		for(int i = 0; i < EnumDriveablePart.values().length; i++)
@@ -51,9 +49,9 @@ public class PacketDriveableDamage extends PacketBase
 			data.writeBoolean(onFire[i]);
 		}
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		entityId = data.readInt();
 		for(int i = 0; i < EnumDriveablePart.values().length; i++)
@@ -62,16 +60,16 @@ public class PacketDriveableDamage extends PacketBase
 			onFire[i] = data.readBoolean();
 		}
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		FlansMod.log.warn("Driveable damage packet received on server. Skipping.");
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		EntityDriveable driveable = null;
 		for(Object obj : clientPlayer.world.loadedEntityList)

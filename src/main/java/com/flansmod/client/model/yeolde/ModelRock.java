@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelRock extends ModelBase 
+public class ModelRock extends ModelBase
 {
 	public ModelRendererTurbo rockModel;
 

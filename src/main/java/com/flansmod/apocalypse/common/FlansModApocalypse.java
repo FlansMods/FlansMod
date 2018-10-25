@@ -1,25 +1,7 @@
 package com.flansmod.apocalypse.common;
 
-import java.util.Random;
-
-import com.flansmod.apocalypse.common.blocks.BlockPowerCube;
-import com.flansmod.apocalypse.common.blocks.BlockStatic;
-import com.flansmod.apocalypse.common.blocks.BlockSulphur;
-import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
-import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
-import com.flansmod.apocalypse.common.world.BiomeApocalypse;
-import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
-import com.flansmod.common.BlockItemHolder;
-import com.flansmod.common.CreativeTabFlan;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.ItemHolderType;
-import com.flansmod.common.TileEntityItemHolder;
-import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -39,23 +21,37 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS_APOCALYPSE@", dependencies = "required-after:" + FlansMod.MODID)//, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
-public class FlansModApocalypse 
+import com.flansmod.apocalypse.common.blocks.BlockPowerCube;
+import com.flansmod.apocalypse.common.blocks.BlockStatic;
+import com.flansmod.apocalypse.common.blocks.BlockSulphur;
+import com.flansmod.apocalypse.common.blocks.BlockSulphuricAcid;
+import com.flansmod.apocalypse.common.blocks.TileEntityPowerCube;
+import com.flansmod.apocalypse.common.world.BiomeApocalypse;
+import com.flansmod.apocalypse.common.world.WorldProviderApocalypse;
+import com.flansmod.common.BlockItemHolder;
+import com.flansmod.common.CreativeTabFlan;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.ItemHolderType;
+import com.flansmod.common.parts.PartType;
+
+@Mod(modid = FlansModApocalypse.MODID, name = "Flan's Mod: Apocalypse", version = FlansModApocalypse.VERSION, acceptableRemoteVersions = "@ALLOWED_VERSIONS_APOCALYPSE@", dependencies = "required-after:" + FlansMod.MODID)
+//, guiFactory = "com.flansmod.client.gui.config.ModGuiFactory")
+public class FlansModApocalypse
 {
 	//Core mod stuff
 	public static boolean DEBUG = false;
 	public static final String MODID = "flansmodapocalypse";
 	public static final String VERSION = "@VERSION_APOCALYPSE@";
-
+	
 	@Instance(MODID)
 	public static FlansModApocalypse INSTANCE;
 	@SidedProxy(clientSide = "com.flansmod.apocalypse.client.ClientProxyApocalypse", serverSide = "com.flansmod.apocalypse.common.CommonProxyApocalypse")
@@ -63,7 +59,9 @@ public class FlansModApocalypse
 	
 	//Config options
 	public static Configuration configFile;
-	/** The time it takes between an AI chip being activated and the apocalypse happening (in ticks) */
+	/**
+	 * The time it takes between an AI chip being activated and the apocalypse happening (in ticks)
+	 */
 	public static int apocalypseCountdownLength = 469;
 	public static int SURVIVOR_RARITY = 450;
 	public static int WANDERING_SURVIVOR_RARITY = 2500;
@@ -73,15 +71,21 @@ public class FlansModApocalypse
 	public static int AIRPORT_RARITY = 125;
 	public static int DYE_FACTORY_RARITY = 800;
 	public static int LAB_RARITY = 100;
-	/** The distance between where the player left the overworld, and where they return */
+	/**
+	 * The distance between where the player left the overworld, and where they return
+	 */
 	public static int RETURN_RADIUS = 100;
-	/** How far from their death point does the player respawn? */
+	/**
+	 * How far from their death point does the player respawn?
+	 */
 	public static int SPAWN_RADIUS = 100;
-	/** Who gets teleported to the apocalypse when a player places a mecha? */
+	/**
+	 * Who gets teleported to the apocalypse when a player places a mecha?
+	 */
 	public static TeleportOption OPTION = TeleportOption.PLACER_ONLY;
 	
 	public static int dimensionID;
-	public static DimensionType APOCALYPSE_DIM = null; 
+	public static DimensionType APOCALYPSE_DIM = null;
 	public static FlansModLootGenerator lootGenerator;
 	
 	//Custom apoclypse defined items and blocks
@@ -89,7 +93,7 @@ public class FlansModApocalypse
 	public static Block blockSulphur;
 	public static Fluid sulphuricAcid;
 	public static Block blockSulphuricAcid;
-	public static ResourceLocation sulphuricAcidStill = new ResourceLocation("flansmodapocalypse", "blocks/sulphuricAcidStill"), 
+	public static ResourceLocation sulphuricAcidStill = new ResourceLocation("flansmodapocalypse", "blocks/sulphuricAcidStill"),
 			sulphuricAcidFlowing = new ResourceLocation("flansmodapocalypse", "blocks/sulphuricAcidFlowing");
 	public static Block blockLabStone;
 	public static Block blockPowerCube;
@@ -101,11 +105,11 @@ public class FlansModApocalypse
 	//References to apocalypse specific items and blocks:
 	public static BlockItemHolder skeleton, slumpedSkeleton, gunRack;
 	
-	static 
+	static
 	{
 		FluidRegistry.enableUniversalBucket();
 	}
-
+	
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event)
 	{
@@ -117,7 +121,7 @@ public class FlansModApocalypse
 	
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event)
-	{				
+	{
 		event.getRegistry().register(blockSulphur);
 		event.getRegistry().register(blockSulphuricAcid);
 		event.getRegistry().register(blockLabStone);
@@ -126,7 +130,7 @@ public class FlansModApocalypse
 	
 	@SubscribeEvent
 	public void registerBiomes(RegistryEvent.Register<Biome> event)
-	{				
+	{
 		BiomeApocalypse.registerBiomes();
 		event.getRegistry().register(BiomeApocalypse.deepCanyon);
 		event.getRegistry().register(BiomeApocalypse.canyon);
@@ -138,7 +142,7 @@ public class FlansModApocalypse
 	
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event)
-	{		
+	{
 		NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
 		ingredients.add(Ingredient.fromStacks(new ItemStack(Blocks.SAND)));
 		ingredients.add(Ingredient.fromStacks(new ItemStack(sulphur)));
@@ -159,18 +163,18 @@ public class FlansModApocalypse
 		
 		//Sulphur block and item
 		// TODO: [1.12] .setStepSound(Block.soundTypeSand)
-		blockSulphur = new BlockSulphur().setUnlocalizedName("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
-		sulphur = new Item().setUnlocalizedName("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
+		blockSulphur = new BlockSulphur().setTranslationKey("blockSulphur").setRegistryName("blockSulphur").setCreativeTab(tabApocalypse);
+		sulphur = new Item().setTranslationKey("flanSulphur").setRegistryName("flanSulphur").setCreativeTab(tabApocalypse);
 		
-		itemBlockSulphur = new ItemBlock(blockSulphur).setUnlocalizedName("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
+		itemBlockSulphur = new ItemBlock(blockSulphur).setTranslationKey("blockSulphur").setRegistryName("itemBlockSulphur").setCreativeTab(tabApocalypse);
 		
 		//Sulphuric acid
 		sulphuricAcid = new Fluid("sulphuricAcid", sulphuricAcidStill, sulphuricAcidFlowing).setTemperature(300).setViscosity(800);
 		if(FluidRegistry.registerFluid(sulphuricAcid))
 		{
-			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setUnlocalizedName("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
+			blockSulphuricAcid = new BlockSulphuricAcid(sulphuricAcid, Material.WATER).setTranslationKey("blockSulphuricAcid").setRegistryName("blockSulphuricAcid").setCreativeTab(tabApocalypse);
 			sulphuricAcid.setBlock(blockSulphuricAcid);
-			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getUnlocalizedName());
+			sulphuricAcid.setUnlocalizedName(blockSulphuricAcid.getTranslationKey());
 			FluidRegistry.addBucketForFluid(sulphuricAcid);
 		}
 		else
@@ -180,12 +184,12 @@ public class FlansModApocalypse
 		}
 		
 		//Laboratory Stone
-		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setUnlocalizedName("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
-		itemBlockLabStone = new ItemBlock(blockLabStone).setUnlocalizedName("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
-
+		blockLabStone = new BlockStatic(Material.ROCK).setHardness(3F).setResistance(5F).setTranslationKey("labStone").setRegistryName("labStone").setCreativeTab(tabApocalypse);
+		itemBlockLabStone = new ItemBlock(blockLabStone).setTranslationKey("labStone").setRegistryName("itemBlockLabStone").setCreativeTab(tabApocalypse);
+		
 		//Power Cube
-		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setUnlocalizedName("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
-		itemBlockPowerCube = new ItemBlock(blockPowerCube).setUnlocalizedName("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
+		blockPowerCube = new BlockPowerCube(Material.CIRCUITS).setTranslationKey("powerCube").setRegistryName("powerCube").setHardness(3F).setResistance(5F).setCreativeTab(tabApocalypse);
+		itemBlockPowerCube = new ItemBlock(blockPowerCube).setTranslationKey("powerCube").setRegistryName("itemBlockPowerCube").setCreativeTab(tabApocalypse);
 		GameRegistry.registerTileEntity(TileEntityPowerCube.class, "powerCube");
 		
 		proxy.preInit(event);
@@ -198,7 +202,7 @@ public class FlansModApocalypse
 		dimensionID = DimensionManager.getNextFreeDimId();
 		APOCALYPSE_DIM = DimensionType.register("Apocalypse", "_apocalypse", dimensionID, WorldProviderApocalypse.class, false);
 		DimensionManager.registerDimension(dimensionID, APOCALYPSE_DIM);
-
+		
 		//Grab references to apocalypse specific items and blocks here:
 		if(ItemHolderType.getItemHolder("flanSkeleton") != null)
 		{
@@ -213,7 +217,7 @@ public class FlansModApocalypse
 		{
 			slumpedSkeleton = ItemHolderType.getItemHolder("flanSkeleton2").block;
 			slumpedSkeleton.setCreativeTab(tabApocalypse);
-		}		
+		}
 		else
 		{
 			FlansMod.log.warn("Could not find skeleton2 item holder!");
@@ -222,7 +226,7 @@ public class FlansModApocalypse
 		{
 			gunRack = ItemHolderType.getItemHolder("flanGunRack").block;
 			gunRack.setCreativeTab(tabApocalypse);
-		}		
+		}
 		else
 		{
 			FlansMod.log.warn("Could not find gun rack item holder!");
@@ -244,27 +248,27 @@ public class FlansModApocalypse
 	{
 		proxy.postInit(event);
 	}
-
-	public static FlansModLootGenerator getLootGenerator() 
+	
+	public static FlansModLootGenerator getLootGenerator()
 	{
 		return lootGenerator;
 	}
 	
-	public static void syncConfig() 
+	public static void syncConfig()
 	{
 		apocalypseCountdownLength = configFile.getInt("Apocalypse Countdown Length", Configuration.CATEGORY_GENERAL, apocalypseCountdownLength, 19, Integer.MAX_VALUE, "Time between placing an AI mecha and going to the apocalypse");
-		SURVIVOR_RARITY = 			configFile.getInt("Survivor Rarity", Configuration.CATEGORY_GENERAL, SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities spawned during world creation");
+		SURVIVOR_RARITY = configFile.getInt("Survivor Rarity", Configuration.CATEGORY_GENERAL, SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities spawned during world creation");
 		WANDERING_SURVIVOR_RARITY = configFile.getInt("Wandering Survivor Rarity", Configuration.CATEGORY_GENERAL, WANDERING_SURVIVOR_RARITY, 1, Integer.MAX_VALUE, "Rarity of survivor entities spawned at night");
-		SKELETON_RARITY = 			configFile.getInt("Skeleton Rarity", Configuration.CATEGORY_GENERAL, SKELETON_RARITY, 1, Integer.MAX_VALUE, "Rarity of buried skeletons");
-		DEAD_TREE_RARITY = 			configFile.getInt("Dead Tree Rarity", Configuration.CATEGORY_GENERAL, DEAD_TREE_RARITY, 1, Integer.MAX_VALUE, "Rarity of dead trees");
-		VEHICLE_RARITY = 			configFile.getInt("Vehicle Rarity", Configuration.CATEGORY_GENERAL, VEHICLE_RARITY, 1, Integer.MAX_VALUE, "Rarity of broken vehicles");
-		AIRPORT_RARITY = 			configFile.getInt("Airport Rarity", Configuration.CATEGORY_GENERAL, AIRPORT_RARITY, 1, Integer.MAX_VALUE, "Rarity of airstrips");
-		DYE_FACTORY_RARITY = 		configFile.getInt("Dye Factory Rarity", Configuration.CATEGORY_GENERAL, DYE_FACTORY_RARITY, 1, Integer.MAX_VALUE, "Rarity of dye factories");
-		LAB_RARITY = 				configFile.getInt("Lab Rarity", Configuration.CATEGORY_GENERAL, LAB_RARITY, 1, Integer.MAX_VALUE, "Rarity of the research lab");
-		RETURN_RADIUS = 			configFile.getInt("Return Radius", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
-		SPAWN_RADIUS = 				configFile.getInt("Spawn Radius", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
-		OPTION = 					TeleportOption.getOption(configFile.getString("Option", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
-
+		SKELETON_RARITY = configFile.getInt("Skeleton Rarity", Configuration.CATEGORY_GENERAL, SKELETON_RARITY, 1, Integer.MAX_VALUE, "Rarity of buried skeletons");
+		DEAD_TREE_RARITY = configFile.getInt("Dead Tree Rarity", Configuration.CATEGORY_GENERAL, DEAD_TREE_RARITY, 1, Integer.MAX_VALUE, "Rarity of dead trees");
+		VEHICLE_RARITY = configFile.getInt("Vehicle Rarity", Configuration.CATEGORY_GENERAL, VEHICLE_RARITY, 1, Integer.MAX_VALUE, "Rarity of broken vehicles");
+		AIRPORT_RARITY = configFile.getInt("Airport Rarity", Configuration.CATEGORY_GENERAL, AIRPORT_RARITY, 1, Integer.MAX_VALUE, "Rarity of airstrips");
+		DYE_FACTORY_RARITY = configFile.getInt("Dye Factory Rarity", Configuration.CATEGORY_GENERAL, DYE_FACTORY_RARITY, 1, Integer.MAX_VALUE, "Rarity of dye factories");
+		LAB_RARITY = configFile.getInt("Lab Rarity", Configuration.CATEGORY_GENERAL, LAB_RARITY, 1, Integer.MAX_VALUE, "Rarity of the research lab");
+		RETURN_RADIUS = configFile.getInt("Return Radius", Configuration.CATEGORY_GENERAL, RETURN_RADIUS, 1, Integer.MAX_VALUE, "The distance away from your initial AI mecha that your return portal appears");
+		SPAWN_RADIUS = configFile.getInt("Spawn Radius", Configuration.CATEGORY_GENERAL, SPAWN_RADIUS, 1, Integer.MAX_VALUE, "The distance from your deathpoint that you respawn in the apocalypse");
+		OPTION = TeleportOption.getOption(configFile.getString("Option", Configuration.CATEGORY_GENERAL, OPTION.toString(), "Who gets teleported to the apocalypse with a player (One of PLACER_ONLY, DIM, DIM_OPT_IN, NEARBY, NEARBY_OPT_IN)"));
+		
 		if(configFile.hasChanged())
 			configFile.save();
 	}

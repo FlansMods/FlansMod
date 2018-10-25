@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelAttachment;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelACOG extends ModelAttachment 
+public class ModelACOG extends ModelAttachment
 {
 	public ModelACOG()
 	{
@@ -29,7 +29,7 @@ public class ModelACOG extends ModelAttachment
 		
 		attachmentModel[5] = new ModelRendererTurbo(this, 0, 19, textureX, textureY);
 		attachmentModel[5].addBox(-15F, 10.5F, -1.5F, 30, 3, 3);
-
+		
 		renderOffset = 0F;
 	}
 }

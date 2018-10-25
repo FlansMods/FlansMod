@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 import com.flansmod.common.PlayerData;
 
-public class GametypeTDM extends Gametype 
+public class GametypeTDM extends Gametype
 {
 	public boolean friendlyFire = false;
 	public boolean autoBalance = true;
@@ -19,47 +19,47 @@ public class GametypeTDM extends Gametype
 	public int newRoundTimer = 0;
 	public int time;
 	public int autoBalanceInterval = 1200;
-
-	public GametypeTDM() 
+	
+	public GametypeTDM()
 	{
 		super("Team Deathmatch", "TDM", 2);
 	}
-
+	
 	@Override
-	public void roundStart() 
+	public void roundStart()
 	{
 		
 	}
-
+	
 	@Override
 	public void roundEnd()
 	{
 		
 	}
-
+	
 	@Override
-	public void roundCleanup() 
+	public void roundCleanup()
 	{
 		
 	}
-		
+	
 	@Override
-	public void tick() 
-	{
-	}
-
-	@Override
-	public void playerJoined(EntityPlayerMP player) 
+	public void tick()
 	{
 	}
 	
 	@Override
-	public void playerQuit(EntityPlayerMP player) 
+	public void playerJoined(EntityPlayerMP player)
 	{
 	}
-
+	
 	@Override
-	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
+	public void playerQuit(EntityPlayerMP player)
+	{
+	}
+	
+	@Override
+	public boolean playerAttacked(EntityPlayerMP player, DamageSource source)
 	{
 		if(getPlayerData(player) == null || getPlayerData(player).team == null)
 			return false;
@@ -77,14 +77,15 @@ public class GametypeTDM extends Gametype
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam)
+	{
 		return attackerTeam != victimTeam || friendlyFire;
 	}
 	
 	@Override
-	public void playerKilled(EntityPlayerMP player, DamageSource source) 
+	public void playerKilled(EntityPlayerMP player, DamageSource source)
 	{
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
 		if(attacker != null)
@@ -92,14 +93,14 @@ public class GametypeTDM extends Gametype
 			//They killed themself. -1 point.
 			if(attacker == player)
 				getPlayerData(player).score--;
-			//They teamkilled. -1 point.
+				//They teamkilled. -1 point.
 			else if(getPlayerData(attacker).team == getPlayerData(player).team)
 			{
 				getPlayerData(attacker).score--;
 			}
 			//They killed an enemy. +1 point to them and their team
-			else 
-			{	
+			else
+			{
 				givePoints(attacker, 1);
 				getPlayerData(attacker).kills++;
 			}
@@ -110,33 +111,33 @@ public class GametypeTDM extends Gametype
 		}
 		getPlayerData(player).deaths++;
 	}
-
+	
 	@Override
-	public void baseAttacked(ITeamBase base, DamageSource source) 
+	public void baseAttacked(ITeamBase base, DamageSource source)
 	{
-
+	
 	}
-
+	
 	@Override
 	public void objectAttacked(ITeamObject object, DamageSource source)
 	{
-
+	
 	}
-
+	
 	@Override
-	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player) 
+	public void baseClickedByPlayer(ITeamBase base, EntityPlayerMP player)
 	{
-
+	
 	}
-
+	
 	@Override
-	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player) 
+	public void objectClickedByPlayer(ITeamObject object, EntityPlayerMP player)
 	{
-
+	
 	}
-
+	
 	@Override
-	public Vec3d getSpawnPoint(EntityPlayerMP player) 
+	public Vec3d getSpawnPoint(EntityPlayerMP player)
 	{
 		if(teamsManager.currentRound == null)
 			return null;
@@ -155,15 +156,15 @@ public class GametypeTDM extends Gametype
 		
 		return null;
 	}
-
+	
 	@Override
-	public void playerRespawned(EntityPlayerMP player) 
+	public void playerRespawned(EntityPlayerMP player)
 	{
 		
 	}
-
+	
 	@Override
-	public boolean setVariable(String variable, String value) 
+	public boolean setVariable(String variable, String value)
 	{
 		if(variable.toLowerCase().equals("scorelimit"))
 		{
@@ -182,17 +183,17 @@ public class GametypeTDM extends Gametype
 		}
 		return false;
 	}
-
+	
 	@Override
-	public void readFromNBT(NBTTagCompound tags) 
+	public void readFromNBT(NBTTagCompound tags)
 	{
 		scoreLimit = tags.getInteger("TDMScoreLimit");
 		friendlyFire = tags.getBoolean("TDMFriendlyFire");
 		autoBalance = tags.getBoolean("TDMAutoBalance");
 	}
-
+	
 	@Override
-	public void saveToNBT(NBTTagCompound tags) 
+	public void saveToNBT(NBTTagCompound tags)
 	{
 		tags.setInteger("TDMScoreLimit", scoreLimit);
 		tags.setBoolean("TDMFriendlyFire", friendlyFire);
@@ -204,9 +205,9 @@ public class GametypeTDM extends Gametype
 	{
 		return true;
 	}
-
+	
 	@Override
-	public boolean teamHasWon(Team team) 
+	public boolean teamHasWon(Team team)
 	{
 		return teamsManager.currentRound != null && team != null && team.score == teamsManager.currentRound.scoreLimit;
 	}

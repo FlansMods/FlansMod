@@ -14,17 +14,21 @@ import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
-public class PacketTeamSelect extends PacketBase 
+public class PacketTeamSelect extends PacketBase
 {
 	public boolean selectionPacket = false;
 	public String selection;
 	public boolean classChoicesPacket = false;
 	public Team[] teams;
 	public PlayerClass[] playerClasses;
-	/** If true, then this packet simply updates the available choices, rather than forcing the player to choose */
+	/**
+	 * If true, then this packet simply updates the available choices, rather than forcing the player to choose
+	 */
 	public boolean info = false;
 	
-	public PacketTeamSelect() {}
+	public PacketTeamSelect()
+	{
+	}
 	
 	public PacketTeamSelect(Team[] t, boolean i)
 	{
@@ -33,7 +37,7 @@ public class PacketTeamSelect extends PacketBase
 		teams = t;
 		info = i;
 	}
-
+	
 	public PacketTeamSelect(Team[] t)
 	{
 		this(t, false);
@@ -45,21 +49,21 @@ public class PacketTeamSelect extends PacketBase
 		classChoicesPacket = true;
 		playerClasses = c;
 	}
-		
+	
 	public PacketTeamSelect(String shortName, boolean classPacket)
 	{
 		selectionPacket = true;
 		classChoicesPacket = classPacket;
 		selection = shortName;
 	}
-
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeBoolean(selectionPacket);
 		data.writeBoolean(classChoicesPacket);
 		data.writeBoolean(info);
-
+		
 		//If it is a selection packet, then we need only send the selection
 		if(selectionPacket)
 		{
@@ -71,22 +75,24 @@ public class PacketTeamSelect extends PacketBase
 			if(classChoicesPacket)
 			{
 				data.writeByte(playerClasses.length);
-				for (PlayerClass playerClass : playerClasses) {
+				for(PlayerClass playerClass : playerClasses)
+				{
 					writeUTF(data, playerClass.shortName);
 				}
 			}
 			else
 			{
 				data.writeByte(teams.length);
-				for (Team team : teams) {
+				for(Team team : teams)
+				{
 					writeUTF(data, team == null ? "null" : team.shortName);
 				}
 			}
 		}
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		selectionPacket = data.readBoolean();
 		classChoicesPacket = data.readBoolean();
@@ -118,10 +124,12 @@ public class PacketTeamSelect extends PacketBase
 			}
 		}
 	}
-
-	/** Handle player responses to team / class selection packets */
+	
+	/**
+	 * Handle player responses to team / class selection packets
+	 */
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		if(!selectionPacket)
 		{
@@ -137,12 +145,14 @@ public class PacketTeamSelect extends PacketBase
 			TeamsManager.getInstance().playerSelectedTeam(playerEntity, selection);
 		}
 	}
-
-	/** Handle a request from the server to display a team / class selection window */
+	
+	/**
+	 * Handle a request from the server to display a team / class selection window
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
-	{		
+	public void handleClientSide(EntityPlayer clientPlayer)
+	{
 		if(selectionPacket)
 		{
 			FlansMod.log.warn("Class / Team selection packet received on client. Rejecting.");

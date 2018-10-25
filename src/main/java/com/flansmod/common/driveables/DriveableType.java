@@ -8,7 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -17,13 +16,11 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.flansmod.client.FlansModClient;
 import com.flansmod.client.model.ModelDriveable;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EnumFireMode;
 import com.flansmod.common.parts.PartType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 import com.flansmod.common.vector.Vector3f;
@@ -33,116 +30,192 @@ public abstract class DriveableType extends PaintableType
 	@SideOnly(value = Side.CLIENT)
 	/** The plane model */
 	public ModelDriveable model;
-		
+	
 	//Health and recipe
-	/** Health of each driveable part */
+	/**
+	 * Health of each driveable part
+	 */
 	public HashMap<EnumDriveablePart, CollisionBox> health = new HashMap<EnumDriveablePart, CollisionBox>();
-	/** Recipe parts associated to each driveable part */
+	/**
+	 * Recipe parts associated to each driveable part
+	 */
 	public HashMap<EnumDriveablePart, ItemStack[]> partwiseRecipe = new HashMap<EnumDriveablePart, ItemStack[]>();
-	/** Recipe parts as one complete list */
+	/**
+	 * Recipe parts as one complete list
+	 */
 	public ArrayList<ItemStack> driveableRecipe = new ArrayList<ItemStack>();
 	
 	//Ammo
-	/** If true, then all ammo is accepted. Default is true to minimise backwards compatibility issues */
+	/**
+	 * If true, then all ammo is accepted. Default is true to minimise backwards compatibility issues
+	 */
 	public boolean acceptAllAmmo = true;
-	/** The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc) */
+	/**
+	 * The list of bullet types that can be used in this driveable for the main gun (tank shells, plane bombs etc)
+	 */
 	public List<BulletType> ammo = new ArrayList<BulletType>();
 	
 	//Harvesting variables
-	/** If true, then this vehicle harvests blocks from the harvester hitbox and places them in the inventory */
+	/**
+	 * If true, then this vehicle harvests blocks from the harvester hitbox and places them in the inventory
+	 */
 	public boolean harvestBlocks = false;
-	/** What materials this harvester eats */
+	/**
+	 * What materials this harvester eats
+	 */
 	public ArrayList<Material> materialsHarvested = new ArrayList<Material>();
 	
 	
 	//Weapon variables
-	/** The weapon type assigned to left mouse */
+	/**
+	 * The weapon type assigned to left mouse
+	 */
 	public EnumWeaponType primary = EnumWeaponType.NONE, secondary = EnumWeaponType.NONE;
-	/** Whether to alternate weapons or fire all at once */
+	/**
+	 * Whether to alternate weapons or fire all at once
+	 */
 	public boolean alternatePrimary = false, alternateSecondary = false;
-	/** Delays. Can override gun delays */
+	/**
+	 * Delays. Can override gun delays
+	 */
 	public int shootDelayPrimary = 1, shootDelaySecondary = 1;
-	/** Firing modes for primary and secondary guns. Minigun also an option */
+	/**
+	 * Firing modes for primary and secondary guns. Minigun also an option
+	 */
 	public EnumFireMode modePrimary = EnumFireMode.FULLAUTO, modeSecondary = EnumFireMode.FULLAUTO;
-	/** Damage modifiers, so that different vehicles firing the same weapons can do different damage */
+	/**
+	 * Damage modifiers, so that different vehicles firing the same weapons can do different damage
+	 */
 	public int damageModifierPrimary = 1, damageModifierSecondary = 1;
-	/** Sounds */
+	/**
+	 * Sounds
+	 */
 	public String shootSoundPrimary, shootSoundSecondary;
-	/** Positions of primary and secondary weapons */
+	/**
+	 * Positions of primary and secondary weapons
+	 */
 	public ArrayList<DriveablePosition> shootPointsPrimary = new ArrayList<DriveablePosition>(), shootPointsSecondary = new ArrayList<DriveablePosition>();
-	/** Pilot guns also have their own seperate array so ammo handling can be done */
+	/**
+	 * Pilot guns also have their own seperate array so ammo handling can be done
+	 */
 	public ArrayList<PilotGun> pilotGuns = new ArrayList<PilotGun>();
 	
 	//Passengers
-	/** The number of passengers, not including the pilot */
-	public int numPassengers = 0;	
-	/** Seat objects for holding information about the position and gun setup of each seat */
+	/**
+	 * The number of passengers, not including the pilot
+	 */
+	public int numPassengers = 0;
+	/**
+	 * Seat objects for holding information about the position and gun setup of each seat
+	 */
 	public Seat[] seats;
-	/** Automatic counter used to setup ammo inventory for gunners */
+	/**
+	 * Automatic counter used to setup ammo inventory for gunners
+	 */
 	public int numPassengerGunners = 0;
 	
 	//Inventory + Pilot guns
-	/** Inventory sizes */
+	/**
+	 * Inventory sizes
+	 */
 	public int numCargoSlots, numBombSlots, numMissileSlots;
-	/** The fuel tank size */
+	/**
+	 * The fuel tank size
+	 */
 	public int fuelTankSize = 100;
-		
+	
 	//Rendering variables
-	/** The yOffset of the model. Shouldn't be needed if you made your model properly */
+	/**
+	 * The yOffset of the model. Shouldn't be needed if you made your model properly
+	 */
 	public float yOffset = 10F / 16F;
-	/** Third person render distance */
+	/**
+	 * Third person render distance
+	 */
 	public float cameraDistance = 5F;
-	/** A list of ambient particle emitters on this vehicle */
+	/**
+	 * A list of ambient particle emitters on this vehicle
+	 */
 	public ArrayList<ParticleEmitter> emitters = new ArrayList<ParticleEmitter>();
 	
 	//Movement variables
-	/** Generic movement modifiers, no longer repeated for plane and vehicle */
+	/**
+	 * Generic movement modifiers, no longer repeated for plane and vehicle
+	 */
 	public float maxThrottle = 1F, maxNegativeThrottle = 0F;
-	/** The origin of the tank turret */
+	/**
+	 * The origin of the tank turret
+	 */
 	public Vector3f turretOrigin = new Vector3f();
 	
-	/** Wheel positions */
+	/**
+	 * Wheel positions
+	 */
 	public DriveablePosition[] wheelPositions = new DriveablePosition[0];
-	/** Strength of springs connecting car to wheels */
+	/**
+	 * Strength of springs connecting car to wheels
+	 */
 	public float wheelSpringStrength = 0.5F;
-	/** The wheel radius for onGround checks */
+	/**
+	 * The wheel radius for onGround checks
+	 */
 	public float wheelStepHeight = 1.0F;
-	/** Whether or not the vehicle rolls */
+	/**
+	 * Whether or not the vehicle rolls
+	 */
 	public boolean canRoll = false;
 	/** */
 	public float turretRotationSpeed = 2.5F;
 	
 	
-	/** Collision points for block based collisions */
+	/**
+	 * Collision points for block based collisions
+	 */
 	public ArrayList<DriveablePosition> collisionPoints = new ArrayList<DriveablePosition>();
 	
-	/** Coefficient of drag */
+	/**
+	 * Coefficient of drag
+	 */
 	public float drag = 1F;
 	
 	//Boat Stuff
-	/** If true, then the vehicles wheels float on water */
+	/**
+	 * If true, then the vehicles wheels float on water
+	 */
 	public boolean floatOnWater = false;
-	/** Defines where you can place this vehicle */
+	/**
+	 * Defines where you can place this vehicle
+	 */
 	public boolean placeableOnLand = true, placeableOnWater = false;
-	/** The upwards force to apply to the vehicle per wheel when on water */
+	/**
+	 * The upwards force to apply to the vehicle per wheel when on water
+	 */
 	public float buoyancy = 0.0165F;
 	
-	/** The radius within which to check for bullets */
+	/**
+	 * The radius within which to check for bullets
+	 */
 	public float bulletDetectionRadius = 5F;
-
-	/** Plane is shown on ICBM Radar and engaged by AA Guns */
+	
+	/**
+	 * Plane is shown on ICBM Radar and engaged by AA Guns
+	 */
 	public boolean onRadar = false;
 	
-	/** Sounds */
+	/**
+	 * Sounds
+	 */
 	//TODO : Overhaul sounds
 	public String startSound;
 	public int startSoundLength;
 	public String engineSound;
 	public int engineSoundLength;
 	
-	/**Track animation frames */
+	/**
+	 * Track animation frames
+	 */
 	public int animFrames = 0;
-
+	
 	
 	public static ArrayList<DriveableType> types = new ArrayList<DriveableType>();
 	
@@ -150,7 +223,7 @@ public abstract class DriveableType extends PaintableType
 	{
 		super(file);
 	}
-
+	
 	@Override
 	public void preRead(TypeFile file)
 	{
@@ -184,7 +257,7 @@ public abstract class DriveableType extends PaintableType
 			if(split.length < 2)
 				continue;
 			
-			if (split[0].equals("NumWheels"))
+			if(split[0].equals("NumWheels"))
 			{
 				wheelPositions = new DriveablePosition[Integer.parseInt(split[1])];
 				break;
@@ -207,8 +280,8 @@ public abstract class DriveableType extends PaintableType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelDriveable.class);
-						
-			//Movement Variables
+				
+				//Movement Variables
 			else if(split[0].equals("MaxThrottle"))
 				maxThrottle = Float.parseFloat(split[1]);
 			else if(split[0].equals("MaxNegativeThrottle"))
@@ -223,7 +296,7 @@ public abstract class DriveableType extends PaintableType
 				turretRotationSpeed = Float.parseFloat(split[1]);
 			else if(split[0].equals("CanRoll"))
 				canRoll = Boolean.parseBoolean(split[1]);
-			//Boats
+				//Boats
 			else if(split[0].equals("PlaceableOnLand"))
 				placeableOnLand = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("PlaceableOnWater"))
@@ -239,8 +312,8 @@ public abstract class DriveableType extends PaintableType
 			}
 			else if(split[0].equals("Buoyancy"))
 				buoyancy = Float.parseFloat(split[1]);
-
-			//Wheels
+				
+				//Wheels
 			else if(split[0].equals("Wheel") || split[0].equals("WheelPosition"))
 			{
 				wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
@@ -249,8 +322,8 @@ public abstract class DriveableType extends PaintableType
 				wheelStepHeight = Float.parseFloat(split[1]);
 			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
 				wheelSpringStrength = Float.parseFloat(split[1]);
-
-			//Harvesting
+				
+				//Harvesting
 			else if(split[0].equals("Harvester"))
 				harvestBlocks = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("HarvestMaterial"))
@@ -278,7 +351,7 @@ public abstract class DriveableType extends PaintableType
 					materialsHarvested.add(Material.SAND);
 					materialsHarvested.add(Material.SNOW);
 					materialsHarvested.add(Material.CLAY);
-				}				
+				}
 				else if(split[1].equals("Hoe") || split[1].equals("Combine"))
 				{
 					materialsHarvested.add(Material.PLANTS);
@@ -299,18 +372,18 @@ public abstract class DriveableType extends PaintableType
 			else if(split[0].equals("FuelTankSize"))
 				fuelTankSize = Integer.parseInt(split[1]);
 			else if(split[0].equals("TrackFrames"))
-				animFrames = Integer.parseInt(split[1])-1;
+				animFrames = Integer.parseInt(split[1]) - 1;
 			
 			else if(split[0].equals("BulletDetection"))
 				bulletDetectionRadius = Integer.parseInt(split[1]);
-			
-			//Ammo limiters
+				
+				//Ammo limiters
 			else if(split[0].equals("AddAmmo"))
 				ammo.add(BulletType.getBullet(split[1]));
 			else if(split[0].equals("AllowAllAmmo") || split[0].equals("AcceptAllAmmo"))
 				acceptAllAmmo = Boolean.parseBoolean(split[1]);
-			
-			//Weaponry
+				
+				//Weaponry
 			else if(split[0].equals("Primary"))
 				primary = EnumWeaponType.valueOf(split[1].toUpperCase());
 			else if(split[0].equals("Secondary"))
@@ -359,19 +432,19 @@ public abstract class DriveableType extends PaintableType
 			else if(split[0].equals("BombPosition"))
 			{
 				primary = EnumWeaponType.BOMB;
-				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.core));	
+				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.core));
 			}
 			else if(split[0].equals("BarrelPosition"))
 			{
 				primary = EnumWeaponType.SHELL;
-				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.turret));	
+				shootPointsPrimary.add(new DriveablePosition(new Vector3f(Float.parseFloat(split[1]) / 16F, Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F), EnumDriveablePart.turret));
 			}
 			else if(split[0].equals("ShootDelay"))
 				shootDelaySecondary = Integer.parseInt(split[1]);
 			else if(split[0].equals("ShellDelay") || split[0].equals("BombDelay"))
 				shootDelayPrimary = Integer.parseInt(split[1]);
-			
-			//Recipe
+				
+				//Recipe
 			else if(split[0].equals("AddRecipeParts"))
 			{
 				EnumDriveablePart part = EnumDriveablePart.getPart(split[1]);
@@ -395,7 +468,7 @@ public abstract class DriveableType extends PaintableType
 				int damage = -1;
 				for(int i = 0; i < EnumDyeColor.values().length; i++)
 				{
-					if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(split[2]))
+					if(EnumDyeColor.byDyeDamage(i).getTranslationKey().equals(split[2]))
 						damage = i;
 				}
 				if(damage == -1)
@@ -420,7 +493,8 @@ public abstract class DriveableType extends PaintableType
 			{
 				if(split.length > 4)
 					seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Float.parseFloat(split[4]), Float.parseFloat(split[5]), Float.parseFloat(split[6]), Float.parseFloat(split[7]));
-				else seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
+				else
+					seats[0] = new Seat(Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]));
 			}
 			
 			else if(split[0].equals("RotatedDriverOffset"))
@@ -439,28 +513,36 @@ public abstract class DriveableType extends PaintableType
 			{
 				seats[Integer.parseInt(split[1])].aimingSpeed = new Vector3f(Float.parseFloat(split[2]), Float.parseFloat(split[3]), Float.parseFloat(split[4]));
 			}
-			else if(split[0].equals("DriverLegacyAiming")){
+			else if(split[0].equals("DriverLegacyAiming"))
+			{
 				seats[0].legacyAiming = Boolean.parseBoolean(split[1]);
 			}
-			else if(split[0].equals("PassengerLegacyAiming")){
+			else if(split[0].equals("PassengerLegacyAiming"))
+			{
 				seats[Integer.parseInt(split[1])].legacyAiming = Boolean.parseBoolean(split[2]);
 			}
-			else if(split[0].equals("DriverYawBeforePitch")){
+			else if(split[0].equals("DriverYawBeforePitch"))
+			{
 				seats[0].yawBeforePitch = Boolean.parseBoolean(split[1]);
 			}
-			else if(split[0].equals("PassengerYawBeforePitch")){
+			else if(split[0].equals("PassengerYawBeforePitch"))
+			{
 				seats[Integer.parseInt(split[1])].yawBeforePitch = Boolean.parseBoolean(split[2]);
 			}
-			else if(split[0].equals("DriverLatePitch")){
+			else if(split[0].equals("DriverLatePitch"))
+			{
 				seats[0].latePitch = Boolean.parseBoolean(split[1]);
 			}
-			else if(split[0].equals("PassengerLatePitch")){
+			else if(split[0].equals("PassengerLatePitch"))
+			{
 				seats[Integer.parseInt(split[1])].latePitch = Boolean.parseBoolean(split[2]);
 			}
-			else if(split[0].equals("DriverTraverseSounds")){
+			else if(split[0].equals("DriverTraverseSounds"))
+			{
 				seats[0].traverseSounds = Boolean.parseBoolean(split[1]);
 			}
-			else if(split[0].equals("PassengerTraverseSounds")){
+			else if(split[0].equals("PassengerTraverseSounds"))
+			{
 				seats[Integer.parseInt(split[1])].traverseSounds = Boolean.parseBoolean(split[2]);
 			}
 			
@@ -478,15 +560,15 @@ public abstract class DriveableType extends PaintableType
 			}
 			else if(split[0].equals("GunOrigin"))
 				seats[Integer.parseInt(split[1])].gunOrigin = new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F);
-						
-			//Y offset for badly built models :P
+				
+				//Y offset for badly built models :P
 			else if(split[0].equals("YOffset"))
 				yOffset = Float.parseFloat(split[1]);
-			//Third person camera distance
+				//Third person camera distance
 			else if(split[0].equals("CameraDistance"))
 				cameraDistance = Float.parseFloat(split[1]);
-			
-			//Sound
+				
+				//Sound
 			else if(split[0].equals("StartSoundLength"))
 				startSoundLength = Integer.parseInt(split[1]);
 			else if(split[0].equals("EngineSoundLength"))
@@ -563,13 +645,13 @@ public abstract class DriveableType extends PaintableType
 				emitters.add(emitter);
 			}
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			FlansMod.log.error("Errored reading " + file.name);
 			FlansMod.log.throwing(e);
 		}
 	}
-
+	
 	public abstract EntityDriveable createDriveable(World world, double x, double y, double z, DriveableData data);
 	
 	private DriveablePosition getShootPoint(String[] split)
@@ -585,48 +667,50 @@ public abstract class DriveableType extends PaintableType
 		}
 		return new DriveablePosition(new Vector3f(), EnumDriveablePart.core);
 	}
-
+	
 	public ArrayList<DriveablePosition> shootPoints(boolean s)
 	{
 		return s ? shootPointsSecondary : shootPointsPrimary;
 	}
-
+	
 	public boolean alternate(boolean s)
 	{
 		return s ? alternateSecondary : alternatePrimary;
 	}
-
+	
 	public EnumWeaponType weaponType(boolean s)
 	{
 		return s ? secondary : primary;
 	}
-
+	
 	public int shootDelay(boolean s)
 	{
 		return s ? shootDelaySecondary : shootDelayPrimary;
 	}
-
+	
 	public String shootSound(boolean s)
 	{
 		return s ? shootSoundSecondary : shootSoundPrimary;
 	}
-
+	
 	public int numEngines()
 	{
 		return 1;
 	}
-
+	
 	public int ammoSlots()
 	{
 		return numPassengerGunners + pilotGuns.size();
 	}
-
+	
 	public boolean isValidAmmo(BulletType bulletType, EnumWeaponType weaponType)
 	{
 		return (acceptAllAmmo || ammo.contains(bulletType)) && bulletType.weaponType == weaponType;
 	}
-
-	/** Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up */
+	
+	/**
+	 * Find the items needed to rebuild a part. The returned array is disconnected from the template items it has looked up
+	 */
 	public ArrayList<ItemStack> getItemsRequired(DriveablePart part, PartType engine)
 	{
 		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
@@ -671,32 +755,52 @@ public abstract class DriveableType extends PaintableType
 	}
 	
 	@Override
-	public void addLoot(LootTableLoadEvent event) 
+	public void addLoot(LootTableLoadEvent event)
 	{
 		//Do not add vehicles to dungeon chests. That would be so op.
 	}
 	
 	public class ParticleEmitter
 	{
-		/** The name of the effect */
+		/**
+		 * The name of the effect
+		 */
 		public EnumParticleTypes effectType;
-		/** The rate of emission */
+		/**
+		 * The rate of emission
+		 */
 		public int emitRate;
-		/** The centre of the effect emitter */
+		/**
+		 * The centre of the effect emitter
+		 */
 		public Vector3f origin;
-		/** The size of the box in which it emits */
+		/**
+		 * The size of the box in which it emits
+		 */
 		public Vector3f extents;
-		/** The velocity of the particle */
+		/**
+		 * The velocity of the particle
+		 */
 		public Vector3f velocity;
-		/** Lower throttle bound */
+		/**
+		 * Lower throttle bound
+		 */
 		public float minThrottle;
-		/** Upper throttle bound */
+		/**
+		 * Upper throttle bound
+		 */
 		public float maxThrottle;
-		/** Model part the emitter is bound to */
+		/**
+		 * Model part the emitter is bound to
+		 */
 		public String part;
-		/** Minimum health for the emitter to work */
+		/**
+		 * Minimum health for the emitter to work
+		 */
 		public float minHealth;
-		/** Maximum health for the emitter to work */
+		/**
+		 * Maximum health for the emitter to work
+		 */
 		public float maxHealth;
 	}
 	

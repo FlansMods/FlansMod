@@ -5,8 +5,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelUC2Pdr extends ModelVehicle //Same as Filename
@@ -975,28 +975,28 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		bodyModel[192].addShapeBox(0F, 0F, 0F, 9, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 53
 		bodyModel[192].setRotationPoint(10F, -7F, -20F);
 
-		bodyModel[193].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 0
+		bodyModel[193].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 0
 		bodyModel[193].setRotationPoint(-11.9F, 6.9F, 20F);
 
-		bodyModel[194].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 3
+		bodyModel[194].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 3
 		bodyModel[194].setRotationPoint(3.1F, 6.9F, 20F);
 
-		bodyModel[195].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 4
+		bodyModel[195].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 4
 		bodyModel[195].setRotationPoint(16.9F, 6.9F, 20F);
 
-		bodyModel[196].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 5
+		bodyModel[196].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 5
 		bodyModel[196].setRotationPoint(-11.9F, 6.9F, -14F);
 
-		bodyModel[197].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 6
+		bodyModel[197].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 6
 		bodyModel[197].setRotationPoint(3.1F, 6.9F, -14F);
 
-		bodyModel[198].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 7
+		bodyModel[198].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 7
 		bodyModel[198].setRotationPoint(16.9F, 6.9F, -14F);
 
-		bodyModel[199].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(5, 1, 5, 1), new Coord2D(6, 2, 6, 2), new Coord2D(6, 3, 6, 3), new Coord2D(5, 4, 5, 4), new Coord2D(4, 4, 4, 4), new Coord2D(3, 3, 3, 3), new Coord2D(3, 2, 3, 2) }), 4, 6, 4, 12, 4, ModelRendererTurbo.MR_FRONT, new float[] {2 ,1 ,2 ,1 ,2 ,1 ,2 ,1}); // Shape 8
+		bodyModel[199].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(5, 1, 5, 1), new Coord2D(6, 2, 6, 2), new Coord2D(6, 3, 6, 3), new Coord2D(5, 4, 5, 4), new Coord2D(4, 4, 4, 4), new Coord2D(3, 3, 3, 3), new Coord2D(3, 2, 3, 2)}), 4, 6, 4, 12, 4, ModelRendererTurbo.MR_FRONT, new float[]{2, 1, 2, 1, 2, 1, 2, 1}); // Shape 8
 		bodyModel[199].setRotationPoint(8.5F, 0.5F, 19F);
 
-		bodyModel[200].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(5, 1, 5, 1), new Coord2D(6, 2, 6, 2), new Coord2D(6, 3, 6, 3), new Coord2D(5, 4, 5, 4), new Coord2D(4, 4, 4, 4), new Coord2D(3, 3, 3, 3), new Coord2D(3, 2, 3, 2) }), 4, 6, 4, 12, 4, ModelRendererTurbo.MR_FRONT, new float[] {2 ,1 ,2 ,1 ,2 ,1 ,2 ,1}); // Shape 9
+		bodyModel[200].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(5, 1, 5, 1), new Coord2D(6, 2, 6, 2), new Coord2D(6, 3, 6, 3), new Coord2D(5, 4, 5, 4), new Coord2D(4, 4, 4, 4), new Coord2D(3, 3, 3, 3), new Coord2D(3, 2, 3, 2)}), 4, 6, 4, 12, 4, ModelRendererTurbo.MR_FRONT, new float[]{2, 1, 2, 1, 2, 1, 2, 1}); // Shape 9
 		bodyModel[200].setRotationPoint(8.5F, 0.5F, -15F);
 
 		bodyModel[201].addBox(0F, 0F, 0F, 1, 13, 1, 0F); // Box 16
@@ -1052,7 +1052,7 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		bodyModel[215].setRotationPoint(-5F, -7F, 20.5F);
 		bodyModel[215].rotateAngleX = 0.27925268F;
 
-		bodyModel[216].addShape3D(6F, -6F, -1F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 12, 12, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 47
+		bodyModel[216].addShape3D(6F, -6F, -1F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 12, 12, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 47
 		bodyModel[216].setRotationPoint(31F, -7.85F, -15.1F);
 		bodyModel[216].rotateAngleX = 1.57079633F;
 		bodyModel[216].rotateAngleY = 1.57079633F;
@@ -1615,7 +1615,7 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		bodyModel[333].setRotationPoint(31F, -7.85F, -15.1F);
 		bodyModel[333].rotateAngleX = 1.57079633F;
 
-		bodyModel[334].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 38
+		bodyModel[334].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 6, 7, 7, 16, 6, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 38
 		bodyModel[334].setRotationPoint(35.9F, -5.1F, -18F);
 		bodyModel[334].rotateAngleX = -1.57079633F;
 
@@ -1744,31 +1744,31 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		leftTrackWheelModels[19] = new ModelRendererTurbo(this, 326, 256, textureX, textureY); // Box 36
 		leftTrackWheelModels[20] = new ModelRendererTurbo(this, 326, 256, textureX, textureY); // Box 37
 
-		leftTrackWheelModels[0].addShape3D(4F, -4F, -4F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2) }), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[] {3 ,4 ,3 ,4 ,3 ,4 ,3 ,4}); // Shape 52
+		leftTrackWheelModels[0].addShape3D(4F, -4F, -4F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2)}), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[]{3, 4, 3, 4, 3, 4, 3, 4}); // Shape 52
 		leftTrackWheelModels[0].setRotationPoint(29F, 0F, 15F);
 
-		leftTrackWheelModels[1].addShape3D(4F, -4F, -4F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2) }), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[] {3 ,4 ,3 ,4 ,3 ,4 ,3 ,4}); // Shape 191
+		leftTrackWheelModels[1].addShape3D(4F, -4F, -4F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2)}), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[]{3, 4, 3, 4, 3, 4, 3, 4}); // Shape 191
 		leftTrackWheelModels[1].setRotationPoint(-34F, 1F, 15F);
 
-		leftTrackWheelModels[2].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 52
+		leftTrackWheelModels[2].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 52
 		leftTrackWheelModels[2].setRotationPoint(12F, 4F, 16F);
 
-		leftTrackWheelModels[3].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 194
+		leftTrackWheelModels[3].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 194
 		leftTrackWheelModels[3].setRotationPoint(-2F, 4F, 16F);
 
-		leftTrackWheelModels[4].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 195
+		leftTrackWheelModels[4].addShape3D(6F, -6F, -2F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 195
 		leftTrackWheelModels[4].setRotationPoint(-17F, 4F, 16F);
 
-		leftTrackWheelModels[5].addShape3D(5F, -3F, -2F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 2, 7, 5, 16, 2, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 0
+		leftTrackWheelModels[5].addShape3D(5F, -3F, -2F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 2, 7, 5, 16, 2, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 0
 		leftTrackWheelModels[5].setRotationPoint(4F, -2F, 16F);
 
-		leftTrackWheelModels[6].addShape3D(5F, -3F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 2, 7, 5, 16, 2, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 8
+		leftTrackWheelModels[6].addShape3D(5F, -3F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 2, 7, 5, 16, 2, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 8
 		leftTrackWheelModels[6].setRotationPoint(4F, -2F, -16F);
 
-		leftTrackWheelModels[7].addShape3D(5F, -3F, -1.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 1, 7, 7, 16, 1, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 43
+		leftTrackWheelModels[7].addShape3D(5F, -3F, -1.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 1, 7, 7, 16, 1, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 43
 		leftTrackWheelModels[7].setRotationPoint(-34F, 0.8F, 18F);
 
-		leftTrackWheelModels[8].addShape3D(5F, -3F, 36.5F, new Shape2D(new Coord2D[] { new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2) }), 1, 7, 7, 16, 1, ModelRendererTurbo.MR_FRONT, new float[] {2 ,2 ,2 ,2 ,2 ,2 ,2 ,2}); // Shape 44
+		leftTrackWheelModels[8].addShape3D(5F, -3F, 36.5F, new Shape2D(new Coord2D[]{new Coord2D(4, 1, 4, 1), new Coord2D(6, 1, 6, 1), new Coord2D(7, 2, 7, 2), new Coord2D(7, 4, 7, 4), new Coord2D(6, 5, 6, 5), new Coord2D(4, 5, 4, 5), new Coord2D(3, 4, 3, 4), new Coord2D(3, 2, 3, 2)}), 1, 7, 7, 16, 1, ModelRendererTurbo.MR_FRONT, new float[]{2, 2, 2, 2, 2, 2, 2, 2}); // Shape 44
 		leftTrackWheelModels[8].setRotationPoint(-34F, 0.8F, 18F);
 
 		leftTrackWheelModels[9].addShapeBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F); // Box 26
@@ -1827,19 +1827,19 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		rightTrackWheelModels[15] = new ModelRendererTurbo(this, 326, 256, textureX, textureY); // Box 24
 		rightTrackWheelModels[16] = new ModelRendererTurbo(this, 326, 256, textureX, textureY); // Box 25
 
-		rightTrackWheelModels[0].addShape3D(4F, -4F, 0F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2) }), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[] {3 ,4 ,3 ,4 ,3 ,4 ,3 ,4}); // Shape 190
+		rightTrackWheelModels[0].addShape3D(4F, -4F, 0F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2)}), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[]{3, 4, 3, 4, 3, 4, 3, 4}); // Shape 190
 		rightTrackWheelModels[0].setRotationPoint(29F, 0F, -15F);
 
-		rightTrackWheelModels[1].addShape3D(4F, -4F, 0F, new Shape2D(new Coord2D[] { new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2) }), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[] {3 ,4 ,3 ,4 ,3 ,4 ,3 ,4}); // Shape 192
+		rightTrackWheelModels[1].addShape3D(4F, -4F, 0F, new Shape2D(new Coord2D[]{new Coord2D(2, 0, 2, 0), new Coord2D(6, 0, 6, 0), new Coord2D(8, 2, 8, 2), new Coord2D(8, 6, 8, 6), new Coord2D(6, 8, 6, 8), new Coord2D(2, 8, 2, 8), new Coord2D(0, 6, 0, 6), new Coord2D(0, 2, 0, 2)}), 4, 8, 8, 28, 4, ModelRendererTurbo.MR_FRONT, new float[]{3, 4, 3, 4, 3, 4, 3, 4}); // Shape 192
 		rightTrackWheelModels[1].setRotationPoint(-34F, 1F, -15F);
 
-		rightTrackWheelModels[2].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 1
+		rightTrackWheelModels[2].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 1
 		rightTrackWheelModels[2].setRotationPoint(12F, 4F, -16F);
 
-		rightTrackWheelModels[3].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 2
+		rightTrackWheelModels[3].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 2
 		rightTrackWheelModels[3].setRotationPoint(-2F, 4F, -16F);
 
-		rightTrackWheelModels[4].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[] { new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3) }), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[] {3 ,6 ,3 ,6 ,3 ,6 ,3 ,6}); // Shape 3
+		rightTrackWheelModels[4].addShape3D(6F, -6F, 0F, new Shape2D(new Coord2D[]{new Coord2D(3, 1, 3, 1), new Coord2D(9, 1, 9, 1), new Coord2D(11, 3, 11, 3), new Coord2D(11, 9, 11, 9), new Coord2D(9, 11, 9, 11), new Coord2D(3, 11, 3, 11), new Coord2D(1, 9, 1, 9), new Coord2D(1, 3, 1, 3)}), 2, 13, 13, 36, 2, ModelRendererTurbo.MR_FRONT, new float[]{3, 6, 3, 6, 3, 6, 3, 6}); // Shape 3
 		rightTrackWheelModels[4].setRotationPoint(-17F, 4F, -16F);
 
 		rightTrackWheelModels[5].addShapeBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F, 4F, 0F, 0F); // Box 11
@@ -2190,7 +2190,6 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		steeringWheelModel[5].setRotationPoint(21.2F, -11.5F, -7F);
 
 
-
 		// Passenger 2
 		ModelRendererTurbo[][] gun_1_Model = new ModelRendererTurbo[3][];
 
@@ -2233,78 +2232,78 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		gun_1_Model[1][33] = new ModelRendererTurbo(this, 57, 221, textureX, textureY); // Box 33
 		gun_1_Model[1][34] = new ModelRendererTurbo(this, 34, 202, textureX, textureY); // Box 0
 
-		gun_1_Model[1][0].addShapeBox(-1F, -2F, -1F, 10, 1, 1, 0F,0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F); // Box 0
+		gun_1_Model[1][0].addShapeBox(-1F, -2F, -1F, 10, 1, 1, 0F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F); // Box 0
 
-		gun_1_Model[1][1].addShapeBox(9F, -2F, -1F, 4, 1, 1, 0F,0F, -0.2F, -0.2F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.2F, -0.2F); // Box 1
+		gun_1_Model[1][1].addShapeBox(9F, -2F, -1F, 4, 1, 1, 0F, 0F, -0.2F, -0.2F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.2F, -0.2F); // Box 1
 
-		gun_1_Model[1][2].addShapeBox(2F, -2F, -1F, 1, 1, 1, 0F,0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F); // Box 2
+		gun_1_Model[1][2].addShapeBox(2F, -2F, -1F, 1, 1, 1, 0F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F); // Box 2
 
-		gun_1_Model[1][3].addShapeBox(-8F, -2F, -1F, 7, 2, 1, 0F,0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, -0.2F, 0.2F, 0F, -0.2F, 0.2F, 0F, 0F, 0.2F); // Box 3
+		gun_1_Model[1][3].addShapeBox(-8F, -2F, -1F, 7, 2, 1, 0F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, -0.2F, 0.2F, 0F, -0.2F, 0.2F, 0F, 0F, 0.2F); // Box 3
 
-		gun_1_Model[1][4].addShapeBox(-1.8F, -1.2F, -1F, 9, 1, 1, 0F,0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F); // Box 4
+		gun_1_Model[1][4].addShapeBox(-1.8F, -1.2F, -1F, 9, 1, 1, 0F, 0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, -0.3F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F, 0.01F, 0F, -0.3F); // Box 4
 
-		gun_1_Model[1][5].addShapeBox(6F, -2F, -1F, 1, 1, 1, 0F,0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F); // Box 5
+		gun_1_Model[1][5].addShapeBox(6F, -2F, -1F, 1, 1, 1, 0F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F, 0.2F, -0.1F, -0.1F); // Box 5
 
-		gun_1_Model[1][6].addShapeBox(6F, -1.2F, -1F, 1, 1, 1, 0F,0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F); // Box 6
+		gun_1_Model[1][6].addShapeBox(6F, -1.2F, -1F, 1, 1, 1, 0F, 0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.1F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F, 0.1F, -0.3F, -0.4F); // Box 6
 
-		gun_1_Model[1][7].addShapeBox(-7F, -2F, -1F, 5, 1, 1, 0F,0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 7
+		gun_1_Model[1][7].addShapeBox(-7F, -2F, -1F, 5, 1, 1, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 7
 
-		gun_1_Model[1][8].addShapeBox(-6F, -3.1F, -1F, 3, 1, 1, 0F,-0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, -0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F, 0F, 0.2F, -0.2F, 0F, 0.2F, -0.2F, 0F, 0F, -0.2F); // Box 8
+		gun_1_Model[1][8].addShapeBox(-6F, -3.1F, -1F, 3, 1, 1, 0F, -0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, -0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F, 0F, 0.2F, -0.2F, 0F, 0.2F, -0.2F, 0F, 0F, -0.2F); // Box 8
 
-		gun_1_Model[1][9].addShapeBox(-5.9F, -4.6F, -1F, 3, 1, 1, 0F,-0.3F, 0.5F, -0.2F, 0.1F, -0.2F, -0.2F, 0.1F, -0.2F, -0.2F, -0.3F, 0.5F, -0.2F, 0F, 0F, -0.2F, -0.1F, 0.5F, -0.2F, -0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F); // Box 9
+		gun_1_Model[1][9].addShapeBox(-5.9F, -4.6F, -1F, 3, 1, 1, 0F, -0.3F, 0.5F, -0.2F, 0.1F, -0.2F, -0.2F, 0.1F, -0.2F, -0.2F, -0.3F, 0.5F, -0.2F, 0F, 0F, -0.2F, -0.1F, 0.5F, -0.2F, -0.1F, 0.5F, -0.2F, 0F, 0F, -0.2F); // Box 9
 
-		gun_1_Model[1][10].addShapeBox(-5.6F, -6.1F, -1F, 3, 1, 1, 0F,-0.8F, 0.5F, -0.2F, 0.4F, -0.5F, -0.2F, 0.4F, -0.5F, -0.2F, -0.8F, 0.5F, -0.2F, 0F, 0F, -0.2F, -0.2F, 0.7F, -0.2F, -0.2F, 0.7F, -0.2F, 0F, 0F, -0.2F); // Box 10
+		gun_1_Model[1][10].addShapeBox(-5.6F, -6.1F, -1F, 3, 1, 1, 0F, -0.8F, 0.5F, -0.2F, 0.4F, -0.5F, -0.2F, 0.4F, -0.5F, -0.2F, -0.8F, 0.5F, -0.2F, 0F, 0F, -0.2F, -0.2F, 0.7F, -0.2F, -0.2F, 0.7F, -0.2F, 0F, 0F, -0.2F); // Box 10
 
-		gun_1_Model[1][11].addShapeBox(-10F, -2F, -1F, 2, 2, 1, 0F,0F, -0.2F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.2F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 11
+		gun_1_Model[1][11].addShapeBox(-10F, -2F, -1F, 2, 2, 1, 0F, 0F, -0.2F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.2F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 11
 
-		gun_1_Model[1][12].addShapeBox(-11F, -2F, -1F, 1, 2, 1, 0F,0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 12
+		gun_1_Model[1][12].addShapeBox(-11F, -2F, -1F, 1, 2, 1, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 12
 
-		gun_1_Model[1][13].addShapeBox(-13F, -1F, -1F, 2, 1, 1, 0F,0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.3F, 0F); // Box 13
+		gun_1_Model[1][13].addShapeBox(-13F, -1F, -1F, 2, 1, 1, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.3F, 0F); // Box 13
 
-		gun_1_Model[1][14].addShapeBox(-14F, -1F, -1F, 1, 1, 1, 0F,0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.5F, 0F); // Box 14
+		gun_1_Model[1][14].addShapeBox(-14F, -1F, -1F, 1, 1, 1, 0F, 0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0.5F, 0F); // Box 14
 
-		gun_1_Model[1][15].addShapeBox(-15F, -1F, -1F, 1, 1, 1, 0F,0F, 0.3F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.8F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.8F, 0F); // Box 15
+		gun_1_Model[1][15].addShapeBox(-15F, -1F, -1F, 1, 1, 1, 0F, 0F, 0.3F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.3F, 0F, 0F, 0.8F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.8F, 0F); // Box 15
 
-		gun_1_Model[1][16].addShapeBox(-8F, 0F, -1F, 1, 3, 1, 0F,0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0.2F, -0.3F, -0.1F, -0.2F, -0.3F, -0.1F, -0.2F, -0.3F, -0.1F, 0.2F, -0.3F, -0.1F); // Box 16
+		gun_1_Model[1][16].addShapeBox(-8F, 0F, -1F, 1, 3, 1, 0F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0.2F, -0.3F, -0.1F, -0.2F, -0.3F, -0.1F, -0.2F, -0.3F, -0.1F, 0.2F, -0.3F, -0.1F); // Box 16
 
-		gun_1_Model[1][17].addShapeBox(-7.5F, -0.2F, -1F, 2, 1, 1, 0F,0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F); // Box 17
+		gun_1_Model[1][17].addShapeBox(-7.5F, -0.2F, -1F, 2, 1, 1, 0F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F); // Box 17
 
-		gun_1_Model[1][18].addShapeBox(9F, -2F, -1F, 1, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 18
+		gun_1_Model[1][18].addShapeBox(9F, -2F, -1F, 1, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 18
 
-		gun_1_Model[1][19].addShapeBox(9F, -3F, 0F, 1, 1, 1, 0F,0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F); // Box 19
+		gun_1_Model[1][19].addShapeBox(9F, -3F, 0F, 1, 1, 1, 0F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F, 0F, -0.3F, -0.4F); // Box 19
 
-		gun_1_Model[1][20].addShapeBox(9F, -3F, 0.4F, 1, 1, 1, 0F,0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 20
+		gun_1_Model[1][20].addShapeBox(9F, -3F, 0.4F, 1, 1, 1, 0F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 20
 
-		gun_1_Model[1][21].addShapeBox(9F, -3F, -0.4F, 1, 1, 1, 0F,0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 21
+		gun_1_Model[1][21].addShapeBox(9F, -3F, -0.4F, 1, 1, 1, 0F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, -0.2F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 21
 
-		gun_1_Model[1][22].addShapeBox(9F, -3F, 0F, 1, 1, 1, 0F,0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 22
+		gun_1_Model[1][22].addShapeBox(9F, -3F, 0F, 1, 1, 1, 0F, 0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, -0.7F, 0F, 0F, 0.3F, 0F, 0F, 0.3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 22
 
-		gun_1_Model[1][23].addShapeBox(-4F, -3F, -0.5F, 1, 1, 1, 0F,0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 23
+		gun_1_Model[1][23].addShapeBox(-4F, -3F, -0.5F, 1, 1, 1, 0F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 23
 
-		gun_1_Model[1][24].addShapeBox(-4F, -3F, 0.5F, 1, 1, 1, 0F,0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 24
+		gun_1_Model[1][24].addShapeBox(-4F, -3F, 0.5F, 1, 1, 1, 0F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F); // Box 24
 
-		gun_1_Model[1][25].addShapeBox(-4F, -3F, -0.5F, 1, 1, 2, 0F,0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F); // Box 25
+		gun_1_Model[1][25].addShapeBox(-4F, -3F, -0.5F, 1, 1, 2, 0F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F); // Box 25
 
-		gun_1_Model[1][26].addShapeBox(-4F, -2.2F, -0.5F, 1, 1, 2, 0F,0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F); // Box 26
+		gun_1_Model[1][26].addShapeBox(-4F, -2.2F, -0.5F, 1, 1, 2, 0F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, 0F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F, 0F, -0.8F, -0.4F); // Box 26
 
-		gun_1_Model[1][27].addShapeBox(2F, -2F, -0.2F, 1, 1, 2, 0F,0.2F, -0.4F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, 0.6F, -0.1F, 0.2F, 0.6F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, -1.4F, -0.1F, 0.2F, -1.4F, -0.1F); // Box 27
+		gun_1_Model[1][27].addShapeBox(2F, -2F, -0.2F, 1, 1, 2, 0F, 0.2F, -0.4F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, 0.6F, -0.1F, 0.2F, 0.6F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, -0.4F, -0.1F, 0.2F, -1.4F, -0.1F, 0.2F, -1.4F, -0.1F); // Box 27
 
-		gun_1_Model[1][28].addShapeBox(1F, -3F, 1.6F, 3, 1, 1, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 28
+		gun_1_Model[1][28].addShapeBox(1F, -3F, 1.6F, 3, 1, 1, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 28
 
-		gun_1_Model[1][29].addShapeBox(5.2F, -0.5F, -1F, 6, 1, 1, 0F,0F, -0.3F, -0.3F, 0F, -1.3F, -2.3F, 0F, -1.3F, 1.7F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, 0.7F, -2.3F, 0F, 0.7F, 1.7F, 0F, -0.3F, -0.3F); // Box 29
+		gun_1_Model[1][29].addShapeBox(5.2F, -0.5F, -1F, 6, 1, 1, 0F, 0F, -0.3F, -0.3F, 0F, -1.3F, -2.3F, 0F, -1.3F, 1.7F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, 0.7F, -2.3F, 0F, 0.7F, 1.7F, 0F, -0.3F, -0.3F); // Box 29
 
-		gun_1_Model[1][30].addShapeBox(5.2F, -0.5F, -1F, 6, 1, 1, 0F,0F, -0.3F, -0.3F, 0F, -1.3F, 1.7F, 0F, -1.3F, -2.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, 0.7F, 1.7F, 0F, 0.7F, -2.3F, 0F, -0.3F, -0.3F); // Box 30
+		gun_1_Model[1][30].addShapeBox(5.2F, -0.5F, -1F, 6, 1, 1, 0F, 0F, -0.3F, -0.3F, 0F, -1.3F, 1.7F, 0F, -1.3F, -2.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, 0.7F, 1.7F, 0F, 0.7F, -2.3F, 0F, -0.3F, -0.3F); // Box 30
 
-		gun_1_Model[1][31].addShapeBox(5F, -0.5F, -1F, 1, 1, 1, 0F,-0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F); // Box 31
+		gun_1_Model[1][31].addShapeBox(5F, -0.5F, -1F, 1, 1, 1, 0F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F); // Box 31
 
-		gun_1_Model[1][32].addShapeBox(11F, 0.5F, 1F, 1, 1, 1, 0F,-0.2F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.2F, 0F, -0.2F); // Box 32
+		gun_1_Model[1][32].addShapeBox(11F, 0.5F, 1F, 1, 1, 1, 0F, -0.2F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.2F, 0F, -0.2F); // Box 32
 
-		gun_1_Model[1][33].addShapeBox(11F, 0.5F, -3F, 1, 1, 1, 0F,-0.2F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.2F, 0F, -0.2F); // Box 33
+		gun_1_Model[1][33].addShapeBox(11F, 0.5F, -3F, 1, 1, 1, 0F, -0.2F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.6F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, -0.2F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.6F, 0F, -0.2F, -0.2F, 0F, -0.2F); // Box 33
 
-		gun_1_Model[1][34].addShapeBox(-7F, -0.5F, -1F, 1, 1, 1, 0F,-0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F); // Box 0
+		gun_1_Model[1][34].addShapeBox(-7F, -0.5F, -1F, 1, 1, 1, 0F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F, -0.3F, 0F, -0.3F); // Box 0
 
 		//Gun Origin
-		for (ModelRendererTurbo gunPart : gun_1_Model[1])
+		for(ModelRendererTurbo gunPart : gun_1_Model[1])
 		{
 			gunPart.setRotationPoint(27F, -13F, 7F);
 		}
@@ -2348,66 +2347,66 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		gun_2_Model[0][27] = new ModelRendererTurbo(this, 113, 271, textureX, textureY); // Box 3
 		gun_2_Model[0][28] = new ModelRendererTurbo(this, 1, 279, textureX, textureY); // Box 4
 
-		gun_2_Model[0][0].addShapeBox(-6F, 5F, -5.5F, 12, 1, 3, 0F,-3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 0
+		gun_2_Model[0][0].addShapeBox(-6F, 5F, -5.5F, 12, 1, 3, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 0
 
 		gun_2_Model[0][1].addBox(-6F, 5F, -2.5F, 12, 1, 5, 0F); // Box 1
 
-		gun_2_Model[0][2].addShapeBox(-6F, 4F, -5.5F, 12, 1, 3, 0F,-3F, 0F, -1F, -3F, 0F, -1F, -1F, 0F, 0F, -1F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 4
+		gun_2_Model[0][2].addShapeBox(-6F, 4F, -5.5F, 12, 1, 3, 0F, -3F, 0F, -1F, -3F, 0F, -1F, -1F, 0F, 0F, -1F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 4
 
-		gun_2_Model[0][3].addShapeBox(-6F, 4F, -2.5F, 12, 1, 5, 0F,-1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 5
+		gun_2_Model[0][3].addShapeBox(-6F, 4F, -2.5F, 12, 1, 5, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 5
 
-		gun_2_Model[0][4].addShapeBox(-6F, 5F, 2.5F, 12, 1, 3, 0F,0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F); // Box 15
+		gun_2_Model[0][4].addShapeBox(-6F, 5F, 2.5F, 12, 1, 3, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F); // Box 15
 
-		gun_2_Model[0][5].addShapeBox(-6F, 4F, 2.5F, 12, 1, 3, 0F,-1F, 0F, 0F, -1F, 0F, 0F, -3F, 0F, -1F, -3F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F); // Box 16
+		gun_2_Model[0][5].addShapeBox(-6F, 4F, 2.5F, 12, 1, 3, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -3F, 0F, -1F, -3F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, -3F, 0F, 0F, -3F, 0F, 0F); // Box 16
 
-		gun_2_Model[0][6].addShapeBox(6.2F, -6.5F, 7.7F, 1, 12, 3, 0F,3.4F, -0.7F, 0F, -4F, -0.7F, 0F, -6.3F, -0.7F, 2F, 5.7F, -0.7F, 2F, -0.6F, -0.3F, 6.2F, 0F, -0.3F, 6.2F, -6.3F, -0.3F, 2F, 5.7F, -0.3F, 2F); // Box 18
+		gun_2_Model[0][6].addShapeBox(6.2F, -6.5F, 7.7F, 1, 12, 3, 0F, 3.4F, -0.7F, 0F, -4F, -0.7F, 0F, -6.3F, -0.7F, 2F, 5.7F, -0.7F, 2F, -0.6F, -0.3F, 6.2F, 0F, -0.3F, 6.2F, -6.3F, -0.3F, 2F, 5.7F, -0.3F, 2F); // Box 18
 
-		gun_2_Model[0][7].addShapeBox(2.2F, -6.8F, 2.3F, 1, 1, 2, 0F,-0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 54
+		gun_2_Model[0][7].addShapeBox(2.2F, -6.8F, 2.3F, 1, 1, 2, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 54
 
-		gun_2_Model[0][8].addShapeBox(2.2F, -6.8F, 4.3F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 55
+		gun_2_Model[0][8].addShapeBox(2.2F, -6.8F, 4.3F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 55
 
-		gun_2_Model[0][9].addShapeBox(2.2F, -6.8F, 6.3F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 56
+		gun_2_Model[0][9].addShapeBox(2.2F, -6.8F, 6.3F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 56
 
-		gun_2_Model[0][10].addShapeBox(2.2F, -6.8F, 1F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 67
+		gun_2_Model[0][10].addShapeBox(2.2F, -6.8F, 1F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 67
 
-		gun_2_Model[0][11].addShapeBox(2.2F, -6.8F, -1F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 68
+		gun_2_Model[0][11].addShapeBox(2.2F, -6.8F, -1F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 68
 
-		gun_2_Model[0][12].addShapeBox(2.2F, -6.8F, -3F, 1, 1, 2, 0F,-0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 69
+		gun_2_Model[0][12].addShapeBox(2.2F, -6.8F, -3F, 1, 1, 2, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 69
 
-		gun_2_Model[0][13].addShapeBox(2.2F, -6.8F, -8.3F, 1, 1, 2, 0F,-0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 70
+		gun_2_Model[0][13].addShapeBox(2.2F, -6.8F, -8.3F, 1, 1, 2, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 70
 
-		gun_2_Model[0][14].addShapeBox(2.2F, -6.8F, -6.3F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 71
+		gun_2_Model[0][14].addShapeBox(2.2F, -6.8F, -6.3F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, 0F, 0F); // Box 71
 
-		gun_2_Model[0][15].addShapeBox(2.2F, -6.8F, -4.3F, 1, 1, 2, 0F,-0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 72
+		gun_2_Model[0][15].addShapeBox(2.2F, -6.8F, -4.3F, 1, 1, 2, 0F, -0.3F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, -0.3F, -0.6F, -0.3F, -0.3F, -0.6F, -0.6F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.6F, -0.6F, 0F, -0.6F); // Box 72
 
-		gun_2_Model[0][16].addShapeBox(2.2F, -6.8F, -3.15F, 1, 1, 1, 0F,-0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.6F, 0F, -0.25F, 0F, 0F, -0.25F, 0F, 0F, -0.25F, -0.6F, 0F, -0.25F); // Box 73
+		gun_2_Model[0][16].addShapeBox(2.2F, -6.8F, -3.15F, 1, 1, 1, 0F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.6F, 0F, -0.25F, 0F, 0F, -0.25F, 0F, 0F, -0.25F, -0.6F, 0F, -0.25F); // Box 73
 
-		gun_2_Model[0][17].addShapeBox(2.2F, -6.8F, 2.15F, 1, 1, 1, 0F,-0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.6F, 0F, -0.25F, 0F, 0F, -0.25F, 0F, 0F, -0.25F, -0.6F, 0F, -0.25F); // Box 74
+		gun_2_Model[0][17].addShapeBox(2.2F, -6.8F, 2.15F, 1, 1, 1, 0F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.3F, -0.3F, -0.25F, -0.6F, 0F, -0.25F, 0F, 0F, -0.25F, 0F, 0F, -0.25F, -0.6F, 0F, -0.25F); // Box 74
 
-		gun_2_Model[0][18].addShapeBox(6.5F, -5.8F, 1.5F, 1, 11, 6, 0F,3.7F, 0F, 0.2F, -4.3F, 0F, 0.2F, -4.3F, 0F, 0.2F, 3.7F, 0F, 0.2F, -0.3F, 0F, 0.2F, -0.3F, 0F, 0.2F, -0.3F, 0F, -6F, -0.3F, 0F, -6F); // Box 75
+		gun_2_Model[0][18].addShapeBox(6.5F, -5.8F, 1.5F, 1, 11, 6, 0F, 3.7F, 0F, 0.2F, -4.3F, 0F, 0.2F, -4.3F, 0F, 0.2F, 3.7F, 0F, 0.2F, -0.3F, 0F, 0.2F, -0.3F, 0F, 0.2F, -0.3F, 0F, -6F, -0.3F, 0F, -6F); // Box 75
 
-		gun_2_Model[0][19].addShapeBox(6.5F, -5.8F, -1F, 1, 3, 2, 0F,3.7F, 0F, 0.3F, -4.3F, 0F, 0.3F, -4.3F, 0F, 0.3F, 3.7F, 0F, 0.3F, 2.6F, 0F, 0.3F, -3.2F, 0F, 0.3F, -3.2F, 0F, 0.3F, 2.6F, 0F, 0.3F); // Box 77
+		gun_2_Model[0][19].addShapeBox(6.5F, -5.8F, -1F, 1, 3, 2, 0F, 3.7F, 0F, 0.3F, -4.3F, 0F, 0.3F, -4.3F, 0F, 0.3F, 3.7F, 0F, 0.3F, 2.6F, 0F, 0.3F, -3.2F, 0F, 0.3F, -3.2F, 0F, 0.3F, 2.6F, 0F, 0.3F); // Box 77
 
-		gun_2_Model[0][20].addShapeBox(9.5F, 3.2F, -1F, 1, 2, 2, 0F,3.45F, 0F, 0.3F, -4F, 0F, 0.3F, -4F, 0F, 0.3F, 3.45F, 0F, 0.3F, 2.7F, 0F, 0.3F, -3.3F, 0F, 0.3F, -3.3F, 0F, 0.3F, 2.7F, 0F, 0.3F); // Box 78
+		gun_2_Model[0][20].addShapeBox(9.5F, 3.2F, -1F, 1, 2, 2, 0F, 3.45F, 0F, 0.3F, -4F, 0F, 0.3F, -4F, 0F, 0.3F, 3.45F, 0F, 0.3F, 2.7F, 0F, 0.3F, -3.3F, 0F, 0.3F, -3.3F, 0F, 0.3F, 2.7F, 0F, 0.3F); // Box 78
 
-		gun_2_Model[0][21].addShapeBox(-3F, -1F, -3.6F, 6, 2, 1, 0F,-1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 100
+		gun_2_Model[0][21].addShapeBox(-3F, -1F, -3.6F, 6, 2, 1, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 100
 
-		gun_2_Model[0][22].addShapeBox(-3F, -1F, 2.6F, 6, 2, 1, 0F,-1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 101
+		gun_2_Model[0][22].addShapeBox(-3F, -1F, 2.6F, 6, 2, 1, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 101
 
-		gun_2_Model[0][23].addShapeBox(-3F, 1F, 2.6F, 6, 3, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 102
+		gun_2_Model[0][23].addShapeBox(-3F, 1F, 2.6F, 6, 3, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 102
 
-		gun_2_Model[0][24].addShapeBox(-3F, 1F, -3.6F, 6, 3, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 103
+		gun_2_Model[0][24].addShapeBox(-3F, 1F, -3.6F, 6, 3, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 103
 
-		gun_2_Model[0][25].addShapeBox(6.2F, -6.5F, -10.7F, 1, 12, 3, 0F,5.7F, -0.78F, 2F, -6.3F, -0.7F, 2F, -4F, -0.7F, 0F, 3.4F, -0.7F, 0F, 5.7F, -0.3F, 2F, -6.3F, -0.3F, 2F, 0F, -0.3F, 6.2F, -0.6F, -0.3F, 6.2F); // Box 1
+		gun_2_Model[0][25].addShapeBox(6.2F, -6.5F, -10.7F, 1, 12, 3, 0F, 5.7F, -0.78F, 2F, -6.3F, -0.7F, 2F, -4F, -0.7F, 0F, 3.4F, -0.7F, 0F, 5.7F, -0.3F, 2F, -6.3F, -0.3F, 2F, 0F, -0.3F, 6.2F, -0.6F, -0.3F, 6.2F); // Box 1
 
-		gun_2_Model[0][26].addShapeBox(6.5F, -5.8F, -7.5F, 1, 11, 6, 0F,3.7F, 0F, 0.2F, -4.3F, 0F, 0.2F, -4.3F, 0F, 0.2F, 3.7F, 0F, 0.2F, -0.3F, 0F, -6F, -0.3F, 0F, -6F, -0.3F, 0F, 0.2F, -0.3F, 0F, 0.2F); // Box 2
+		gun_2_Model[0][26].addShapeBox(6.5F, -5.8F, -7.5F, 1, 11, 6, 0F, 3.7F, 0F, 0.2F, -4.3F, 0F, 0.2F, -4.3F, 0F, 0.2F, 3.7F, 0F, 0.2F, -0.3F, 0F, -6F, -0.3F, 0F, -6F, -0.3F, 0F, 0.2F, -0.3F, 0F, 0.2F); // Box 2
 
-		gun_2_Model[0][27].addShapeBox(6.2F, -7.3F, 7.7F, 1, 2, 3, 0F,3.7F, -0.8F, 0F, -4.3F, -0.8F, 0F, -6.3F, -0.8F, 2F, 5.7F, -0.8F, 2F, 3.4F, -0.5F, 0F, -4F, -0.5F, 0F, -6.3F, -0.5F, 2F, 5.7F, -0.5F, 2F); // Box 3
+		gun_2_Model[0][27].addShapeBox(6.2F, -7.3F, 7.7F, 1, 2, 3, 0F, 3.7F, -0.8F, 0F, -4.3F, -0.8F, 0F, -6.3F, -0.8F, 2F, 5.7F, -0.8F, 2F, 3.4F, -0.5F, 0F, -4F, -0.5F, 0F, -6.3F, -0.5F, 2F, 5.7F, -0.5F, 2F); // Box 3
 
-		gun_2_Model[0][28].addShapeBox(6.2F, -7.3F, -10.7F, 1, 2, 3, 0F,5.7F, -0.8F, 2F, -6.3F, -0.8F, 2F, -4.3F, -0.8F, 0F, 3.7F, -0.8F, 0F, 5.7F, -0.5F, 2F, -6.3F, -0.5F, 2F, -4F, -0.5F, 0F, 3.4F, -0.5F, 0F); // Box 4
+		gun_2_Model[0][28].addShapeBox(6.2F, -7.3F, -10.7F, 1, 2, 3, 0F, 5.7F, -0.8F, 2F, -6.3F, -0.8F, 2F, -4.3F, -0.8F, 0F, 3.7F, -0.8F, 0F, 5.7F, -0.5F, 2F, -6.3F, -0.5F, 2F, -4F, -0.5F, 0F, 3.4F, -0.5F, 0F); // Box 4
 
 		//Gun Origin
-		for (ModelRendererTurbo gunPart : gun_2_Model[0])
+		for(ModelRendererTurbo gunPart : gun_2_Model[0])
 		{
 			gunPart.setRotationPoint(0F, -26F, 0F);
 		}
@@ -2433,44 +2432,44 @@ public class ModelUC2Pdr extends ModelVehicle //Same as Filename
 		gun_2_Model[1][16] = new ModelRendererTurbo(this, 97, 263, textureX, textureY); // Box 99
 		gun_2_Model[1][17] = new ModelRendererTurbo(this, 113, 263, textureX, textureY); // Box 104
 
-		gun_2_Model[1][0].addShapeBox(-5.5F, -1.8F, -1F, 5, 2, 2, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 9
+		gun_2_Model[1][0].addShapeBox(-5.5F, -1.8F, -1F, 5, 2, 2, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 9
 
-		gun_2_Model[1][1].addShapeBox(-9.5F, -0.8F, -1F, 4, 1, 2, 0F,0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F); // Box 10
+		gun_2_Model[1][1].addShapeBox(-9.5F, -0.8F, -1F, 4, 1, 2, 0F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.1F); // Box 10
 
-		gun_2_Model[1][2].addShapeBox(-9.5F, -1.8F, -0.3F, 5, 2, 2, 0F,0F, 0F, -1.8F, 0F, 0F, -1.8F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -1.8F, 0F, 0F, -1.8F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 11
+		gun_2_Model[1][2].addShapeBox(-9.5F, -1.8F, -0.3F, 5, 2, 2, 0F, 0F, 0F, -1.8F, 0F, 0F, -1.8F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -1.8F, 0F, 0F, -1.8F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 11
 
-		gun_2_Model[1][3].addShapeBox(-5.5F, -1.8F, 0.7F, 1, 2, 1, 0F,-0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.1F); // Box 12
+		gun_2_Model[1][3].addShapeBox(-5.5F, -1.8F, 0.7F, 1, 2, 1, 0F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.3F, -0.4F, -0.3F, -0.1F, -0.4F, -0.3F, -0.1F); // Box 12
 
-		gun_2_Model[1][4].addShapeBox(-0.5F, -1.8F, -1F, 4, 2, 2, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 13
+		gun_2_Model[1][4].addShapeBox(-0.5F, -1.8F, -1F, 4, 2, 2, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 13
 
-		gun_2_Model[1][5].addShapeBox(13.5F, -1.8F, -1F, 12, 2, 2, 0F,0F, -0.2F, -0.2F, 0F, -0.5F, -0.5F, 0F, -0.5F, -0.5F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.5F, -0.5F, 0F, -0.5F, -0.5F, 0F, -0.2F, -0.2F); // Box 14
+		gun_2_Model[1][5].addShapeBox(13.5F, -1.8F, -1F, 12, 2, 2, 0F, 0F, -0.2F, -0.2F, 0F, -0.5F, -0.5F, 0F, -0.5F, -0.5F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.5F, -0.5F, 0F, -0.5F, -0.5F, 0F, -0.2F, -0.2F); // Box 14
 
-		gun_2_Model[1][6].addShapeBox(25.5F, -1.8F, -1F, 1, 2, 2, 0F,0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F); // Box 76
+		gun_2_Model[1][6].addShapeBox(25.5F, -1.8F, -1F, 1, 2, 2, 0F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F, 0F, -0.4F, -0.4F); // Box 76
 
-		gun_2_Model[1][7].addShapeBox(-9.5F, -2F, -1F, 4, 2, 1, 0F,0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.8F, 0F, -0.8F, -0.8F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.8F, 0F, 0F, -0.8F); // Box 81
+		gun_2_Model[1][7].addShapeBox(-9.5F, -2F, -1F, 4, 2, 1, 0F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.8F, 0F, -0.8F, -0.8F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.8F, 0F, 0F, -0.8F); // Box 81
 
-		gun_2_Model[1][8].addShapeBox(-9.5F, -2F, 0.7F, 4, 2, 1, 0F,0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.8F, 0F, -0.8F, -0.8F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.8F, 0F, 0F, -0.8F); // Box 82
+		gun_2_Model[1][8].addShapeBox(-9.5F, -2F, 0.7F, 4, 2, 1, 0F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.1F, 0F, -0.8F, -0.8F, 0F, -0.8F, -0.8F, 0F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, -0.8F, 0F, 0F, -0.8F); // Box 82
 
-		gun_2_Model[1][9].addShapeBox(-2.5F, -2F, -1.5F, 5, 3, 3, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F); // Box 90
+		gun_2_Model[1][9].addShapeBox(-2.5F, -2F, -1.5F, 5, 3, 3, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F); // Box 90
 
-		gun_2_Model[1][10].addShapeBox(-2.5F, -3F, -0.5F, 5, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F); // Box 91
+		gun_2_Model[1][10].addShapeBox(-2.5F, -3F, -0.5F, 5, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F); // Box 91
 
-		gun_2_Model[1][11].addShapeBox(12.5F, -1.8F, -1F, 1, 2, 2, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F); // Box 94
+		gun_2_Model[1][11].addShapeBox(12.5F, -1.8F, -1F, 1, 2, 2, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F); // Box 94
 
-		gun_2_Model[1][12].addShapeBox(3.5F, -1.8F, -1F, 9, 2, 2, 0F,0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F); // Box 95
+		gun_2_Model[1][12].addShapeBox(3.5F, -1.8F, -1F, 9, 2, 2, 0F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F); // Box 95
 
-		gun_2_Model[1][13].addShapeBox(6.5F, 0.2F, -1F, 7, 1, 2, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 96
+		gun_2_Model[1][13].addShapeBox(6.5F, 0.2F, -1F, 7, 1, 2, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 96
 
-		gun_2_Model[1][14].addShapeBox(6.5F, -1.8F, -1F, 1, 2, 2, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F); // Box 97
+		gun_2_Model[1][14].addShapeBox(6.5F, -1.8F, -1F, 1, 2, 2, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F, 0F, 0.1F, -0.1F); // Box 97
 
-		gun_2_Model[1][15].addShapeBox(-0.5F, 1F, -0.5F, 15, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 98
+		gun_2_Model[1][15].addShapeBox(-0.5F, 1F, -0.5F, 15, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 98
 
-		gun_2_Model[1][16].addShapeBox(-2.5F, 1F, -1.5F, 5, 1, 3, 0F,0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 99
+		gun_2_Model[1][16].addShapeBox(-2.5F, 1F, -1.5F, 5, 1, 3, 0F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 1F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 99
 
-		gun_2_Model[1][17].addShapeBox(-1F, -1F, -2.5F, 2, 2, 5, 0F,-0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F); // Box 104
+		gun_2_Model[1][17].addShapeBox(-1F, -1F, -2.5F, 2, 2, 5, 0F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F, -0.3F, -0.3F, 0.1F); // Box 104
 
 		//Gun Origin
-		for (ModelRendererTurbo gunPart : gun_2_Model[1])
+		for(ModelRendererTurbo gunPart : gun_2_Model[1])
 		{
 			gunPart.setRotationPoint(0F, -26F, 0F);
 		}

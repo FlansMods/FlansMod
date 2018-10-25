@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelGL6 extends ModelGun 
+public class ModelGL6 extends ModelGun
 {
 	public ModelGL6()
 	{
@@ -15,37 +15,37 @@ public class ModelGL6 extends ModelGun
 		gunModel = new ModelRendererTurbo[13];
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[0].addShapeBox(-12F, 1F, -1F, 9, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[0].addShapeBox(-12F, 1F, -1F, 9, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 22, 0, textureX, textureY);
 		gunModel[1].addBox(-3F, 1F, -1F, 3, 3, 2);
 		
 		gunModel[2] = new ModelRendererTurbo(this, 32, 0, textureX, textureY);
-		gunModel[2].addShapeBox(-3F, -2F, -1F, 2, 3, 2, 0F, /* 0 */ 1F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ 1F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[2].addShapeBox(-3F, -2F, -1F, 2, 3, 2, 0F, /* 0 */ 1F, 0F, 0F, /* 1 */ -1F, 0F, 0F, /* 2 */ -1F, 0F, 0F, /* 3 */ 1F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		gunModel[3] = new ModelRendererTurbo(this, 0, 5, textureX, textureY);
-		gunModel[3].addBox(-2F, 4F, -1F, 10, 1, 2);	
+		gunModel[3].addBox(-2F, 4F, -1F, 10, 1, 2);
 		
 		//Round bit before drum
 		gunModel[4] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
 		gunModel[4].addBox(0F, -2F, -1F, 1, 6, 2);
 		
 		gunModel[5] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-		gunModel[5].addShapeBox(0F, -2F, 1F, 1, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);	
-
+		gunModel[5].addShapeBox(0F, -2F, 1F, 1, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);
+		
 		gunModel[6] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-		gunModel[6].addShapeBox(0F, -2F, -3F, 1, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[6].addShapeBox(0F, -2F, -3F, 1, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		//Round bit after drum
 		gunModel[7] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
 		gunModel[7].addBox(7F, -2F, -1F, 1, 6, 2);
 		
 		gunModel[8] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-		gunModel[8].addShapeBox(7F, -2F, 1F, 1, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);	
-
+		gunModel[8].addShapeBox(7F, -2F, 1F, 1, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);
+		
 		gunModel[9] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
-		gunModel[9].addShapeBox(7F, -2F, -3F, 1, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-	
+		gunModel[9].addShapeBox(7F, -2F, -3F, 1, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
+		
 		//Bit under drum
 		gunModel[10] = new ModelRendererTurbo(this, 22, 13, textureX, textureY);
 		gunModel[10].addBox(0F, -3F, -1F, 8, 1, 2);
@@ -63,11 +63,11 @@ public class ModelGL6 extends ModelGun
 		revolverBarrelModel[0].addBox(1F, -2F, -1F, 6, 6, 2);
 		
 		revolverBarrelModel[1] = new ModelRendererTurbo(this, 6, 8, textureX, textureY);
-		revolverBarrelModel[1].addShapeBox(1F, -2F, 1F, 6, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);	
-
+		revolverBarrelModel[1].addShapeBox(1F, -2F, 1F, 6, 6, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, -1.5F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, -1.5F, 0F, /* 7 */ 0F, -1.5F, 0F);
+		
 		revolverBarrelModel[2] = new ModelRendererTurbo(this, 6, 8, textureX, textureY);
-		revolverBarrelModel[2].addShapeBox(1F, -2F, -3F, 6, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
-
+		revolverBarrelModel[2].addShapeBox(1F, -2F, -3F, 6, 6, 2, 0F, /* 0 */ 0F, -1.5F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, -1.5F, 0F, /* 5 */ 0F, -1.5F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
+		
 		revolverFlipAngle = -90F;
 		
 		revolverFlipPoint = new Vector3f(0F, -2.5F / 16F, 0F);
@@ -103,7 +103,7 @@ public class ModelGL6 extends ModelGun
 		ammoModel[5].addBox(0.9F, -2.75F, -0.75F, 4, 1.5F, 1.5F);
 		ammoModel[5].setRotationPoint(0F, 1F, 0F);
 		ammoModel[5].rotateAngleX = 6.28f;
-
+		
 		barrelAttachPoint = new Vector3f(7.5F / 16F, 4F / 16F, 0F);
 		
 		scopeAttachPoint = new Vector3f(6F / 16F, 5F / 16F, 0F);

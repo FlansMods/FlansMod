@@ -6,10 +6,16 @@ import java.util.Comparator;
 
 import org.lwjgl.opengl.GL11;
 
-import com.flansmod.client.ClientProxy;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.guns.AttachmentType;
 import com.flansmod.common.guns.EnumAttachmentType;
 import com.flansmod.common.guns.GunType;
@@ -18,30 +24,22 @@ import com.flansmod.common.guns.ItemShootable;
 import com.flansmod.common.guns.Paintjob;
 import com.flansmod.common.guns.ShootableType;
 import com.flansmod.common.teams.LoadoutPool;
-import com.flansmod.common.teams.PlayerLoadout;
-import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryPaintjob;
+import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
-import com.flansmod.common.types.EnumPaintjobRarity;
+import com.flansmod.common.teams.TeamsManagerRanked;
 import com.flansmod.common.types.IFlanItem;
 import com.flansmod.common.types.IPaintableItem;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-
-public class GuiEditLoadout extends GuiTeamsBase 
-{	
-	/** The background image */
+public class GuiEditLoadout extends GuiTeamsBase
+{
+	/**
+	 * The background image
+	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/LoadoutEditor.png");
 	
 	private static final int WIDTH = 326, HEIGHT = 198;
@@ -55,10 +53,10 @@ public class GuiEditLoadout extends GuiTeamsBase
 	
 	protected ArrayList<LoadoutEntry> availableComponents = new ArrayList<LoadoutEntry>();
 	
-	private static final String[] WEAPON_COMPONENT_NAMES = new String[] 
-			{ "Weapon", "Paint", "Scope", "Barrel", "Stock", "Grip", "Extra" };
-	private static final String[] NON_WEAPON_COMPONENT_NAMES = new String[] 
-			{ "Item", "Paint" };
+	private static final String[] WEAPON_COMPONENT_NAMES = new String[]
+			{"Weapon", "Paint", "Scope", "Barrel", "Stock", "Grip", "Extra"};
+	private static final String[] NON_WEAPON_COMPONENT_NAMES = new String[]
+			{"Item", "Paint"};
 	
 	public GuiEditLoadout(int i)
 	{
@@ -86,7 +84,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id == 0) // Confirm
+		if(button.id == 0) // Confirm
 		{
 			// Send data to server
 			TeamsManagerRanked.ConfirmLoadoutChanges();
@@ -159,24 +157,25 @@ public class GuiEditLoadout extends GuiTeamsBase
 				{
 					ItemStack stack = data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()];
 					InfoType type = (stack != null && stack.getItem() instanceof IFlanItem) ? ((IFlanItem)stack.getItem()).getInfoType() : null;
-					int numUnlocks = type != null ? data.GetNumUnlocksForType(type) : 0; 
+					int numUnlocks = type != null ? data.GetNumUnlocksForType(type) : 0;
 					if(n == 1 && type != null && numUnlocks > 0)
 					{
 						drawCenteredString(fontRenderer, WEAPON_COMPONENT_NAMES[n] + " (" + numUnlocks + ")", guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
 					}
-					else drawCenteredString(fontRenderer, WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
+					else
+						drawCenteredString(fontRenderer, WEAPON_COMPONENT_NAMES[n], guiOriginX + 138, guiOriginY + 38 + 22 * n, 0xffffff);
 					
 					switch(n)
 					{
 						case 0: // Main item
 						{
 							ItemStack copy = ItemStack.EMPTY.copy();
-							if(stack != null) 
+							if(stack != null)
 							{
 								copy = stack.copy();
 								copy.setItemDamage(0);
 							}
-								
+							
 							drawSlotInventory(copy, guiOriginX + 172, guiOriginY + 35 + 22 * n);
 							break;
 						}
@@ -191,22 +190,27 @@ public class GuiEditLoadout extends GuiTeamsBase
 							{
 								NBTTagCompound attachmentTags = stack.getTagCompound().getCompoundTag("attachments");
 								if(attachmentTags != null)
-								{					
+								{
 									ItemStack attachmentStack = ItemStack.EMPTY;
 									
 									switch(n)
 									{
-										case 2: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("scope")); break;
-										case 3: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("barrel")); break;
-										case 4: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("stock")); break;
-										case 5: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("grip")); break;
-										case 6: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("generic_0")); break;
+										case 2: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("scope"));
+											break;
+										case 3: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("barrel"));
+											break;
+										case 4: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("stock"));
+											break;
+										case 5: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("grip"));
+											break;
+										case 6: attachmentStack = new ItemStack(attachmentTags.getCompoundTag("generic_0"));
+											break;
 									}
 									
 									drawSlotInventory(attachmentStack, guiOriginX + 172, guiOriginY + 35 + 22 * n);
 								}
 							}
-
+							
 							break;
 						}
 					}
@@ -223,7 +227,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 						case 0: // Main item
 						{
 							ItemStack copy = ItemStack.EMPTY.copy();
-							if(stack != null) 
+							if(stack != null)
 							{
 								copy = stack.copy();
 								copy.setItemDamage(0);
@@ -257,7 +261,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 			drawCenteredString(fontRenderer, name, guiOriginX + 262, guiOriginY + 18, 0xffffff);
 			
 			DrawGun(stack, guiOriginX + 254, guiOriginY + 48, 40f);
-						
+			
 			drawCenteredString(fontRenderer, "Damage", guiOriginX + 234, guiOriginY + 60, 0xffffff);
 			drawCenteredString(fontRenderer, "Accuracy", guiOriginX + 234, guiOriginY + 70, 0xffffff);
 			drawCenteredString(fontRenderer, "Ammo", guiOriginX + 234, guiOriginY + 80, 0xffffff);
@@ -307,17 +311,17 @@ public class GuiEditLoadout extends GuiTeamsBase
 					LoadoutEntry entry = availableComponents.get(index);
 					if(entry instanceof LoadoutEntryInfoType)
 					{
-						drawSlotInventory(new ItemStack(((LoadoutEntryInfoType) entry).type.getItem()), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
+						drawSlotInventory(new ItemStack(((LoadoutEntryInfoType)entry).type.getItem()), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 					}
 					else if(entry instanceof LoadoutEntryPaintjob)
 					{
 						Paintjob paintjob = ((LoadoutEntryPaintjob)entry).paintjob;
 						
-						DrawRarityBackground(paintjob.rarity, guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);						
+						DrawRarityBackground(paintjob.rarity, guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 						
 						drawSlotInventory(new ItemStack(paintjob.parent.getItem(), 1, paintjob.ID), guiOriginX + 209 + col * 18, guiOriginY + 107 + row * 18);
 					}
-										
+					
 					if(!entry.available)
 					{
 						mc.renderEngine.bindTexture(texture);
@@ -338,12 +342,12 @@ public class GuiEditLoadout extends GuiTeamsBase
 		drawSlotInventory(new ItemStack(Items.STICK), -50, -50);
 		
 		super.drawScreen(i, j, f);
-	}	
+	}
 	
 	private boolean IsInSquare(int clickX, int clickY, int x, int y, int w, int h)
 	{
 		return x <= clickX && clickX < x + w
-			&& y <= clickY && clickY < y + h;
+				&& y <= clickY && clickY < y + h;
 	}
 	
 	@Override
@@ -352,7 +356,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 		super.mouseClicked(i, j, k);
 		int x = i - guiOriginX;
 		int y = j - guiOriginY;
-		if (k == 0 || k == 1)
+		if(k == 0 || k == 1)
 		{
 			// Loadout slots panel
 			for(int n = 0; n < EnumLoadoutSlot.values().length; n++)
@@ -365,7 +369,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 					RecalculateAvailableEntries();
 				}
 			}
-		
+			
 			// Slot panel
 			if(selectedSlot.isWeapon)
 			{
@@ -405,7 +409,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 					{
 						LoadoutEntry entry = availableComponents.get(index);
 						SelectItem(entry);
-					}					
+					}
 				}
 			}
 			
@@ -427,7 +431,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 			{
 				if(entry instanceof LoadoutEntryInfoType)
 				{
-					data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()] = new ItemStack(((LoadoutEntryInfoType) entry).type.getItem());
+					data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()] = new ItemStack(((LoadoutEntryInfoType)entry).type.getItem());
 				}
 				else if(entry != null)
 				{
@@ -441,7 +445,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 				{
 					if(data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()] != null)
 					{
-						data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()].setItemDamage(((LoadoutEntryPaintjob) entry).paintjob.ID);
+						data.loadouts[selectedLoadout].slots[selectedSlot.ordinal()].setItemDamage(((LoadoutEntryPaintjob)entry).paintjob.ID);
 					}
 					else FlansMod.log.warn("Applying paintjob to null item!");
 				}
@@ -470,17 +474,22 @@ public class GuiEditLoadout extends GuiTeamsBase
 						NBTTagCompound ourTags = new NBTTagCompound();
 						if(entry != null)
 						{
-							ItemStack attachmentStack = new ItemStack(((LoadoutEntryInfoType) entry).type.getItem());
+							ItemStack attachmentStack = new ItemStack(((LoadoutEntryInfoType)entry).type.getItem());
 							attachmentStack.writeToNBT(ourTags);
 						}
 						
 						switch(selectedCategory)
 						{
-							case 2: attachmentTags.setTag("scope", ourTags); break;
-							case 3: attachmentTags.setTag("barrel", ourTags); break;
-							case 4: attachmentTags.setTag("stock", ourTags); break;
-							case 5: attachmentTags.setTag("grip", ourTags); break;
-							case 6: attachmentTags.setTag("generic_0", ourTags); break;
+							case 2: attachmentTags.setTag("scope", ourTags);
+								break;
+							case 3: attachmentTags.setTag("barrel", ourTags);
+								break;
+							case 4: attachmentTags.setTag("stock", ourTags);
+								break;
+							case 5: attachmentTags.setTag("grip", ourTags);
+								break;
+							case 6: attachmentTags.setTag("generic_0", ourTags);
+								break;
 						}
 						
 						stack.getTagCompound().setTag("attachments", attachmentTags);
@@ -489,7 +498,7 @@ public class GuiEditLoadout extends GuiTeamsBase
 				}
 				else FlansMod.log.warn("Loadout entry doesn't match for slot");
 			}
-				
+			
 		}
 		
 	}
@@ -497,15 +506,17 @@ public class GuiEditLoadout extends GuiTeamsBase
 	public class LoadoutComparator implements Comparator<LoadoutEntry>
 	{
 		@Override
-		public int compare(LoadoutEntry a, LoadoutEntry b) 
+		public int compare(LoadoutEntry a, LoadoutEntry b)
 		{
 			if(a.unlockLevel < b.unlockLevel) return -1;
 			if(a.unlockLevel > b.unlockLevel) return 1;
 			
 			if(a instanceof LoadoutEntryPaintjob && b instanceof LoadoutEntryPaintjob)
 			{
-				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() < ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal()) return -1;
-				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() > ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal()) return 1;
+				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() < ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal())
+					return -1;
+				if(((LoadoutEntryPaintjob)a).paintjob.rarity.ordinal() > ((LoadoutEntryPaintjob)b).paintjob.rarity.ordinal())
+					return 1;
 			}
 			
 			return 0;
@@ -574,11 +585,16 @@ public class GuiEditLoadout extends GuiTeamsBase
 						EnumAttachmentType attachType = ((AttachmentType)entry.type).type;
 						switch(selectedCategory)
 						{
-							case 2: if(attachType != EnumAttachmentType.sights) continue; else break;
-							case 3: if(attachType != EnumAttachmentType.barrel) continue; else break;
-							case 4: if(attachType != EnumAttachmentType.stock) continue; else break;
-							case 5: if(attachType != EnumAttachmentType.grip) continue; else break;
-							case 6: if(attachType != EnumAttachmentType.generic) continue; else break;
+							case 2: if(attachType != EnumAttachmentType.sights) continue;
+							else break;
+							case 3: if(attachType != EnumAttachmentType.barrel) continue;
+							else break;
+							case 4: if(attachType != EnumAttachmentType.stock) continue;
+							else break;
+							case 5: if(attachType != EnumAttachmentType.grip) continue;
+							else break;
+							case 6: if(attachType != EnumAttachmentType.generic) continue;
+							else break;
 						}
 						break;
 					}

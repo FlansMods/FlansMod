@@ -4,7 +4,6 @@ import com.flansmod.common.FlansMod;
 import com.flansmod.common.damages.DamageRunOver;
 import com.flansmod.common.mpmhook.MPMHook;
 import com.flansmod.common.vector.Vector3f;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -19,31 +18,38 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
 import noppes.mpm.constants.EnumAnimation;
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.vector.Vector3f;
 
 public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 {
-	/** The vehicle this wheel is part of */
+	/**
+	 * The vehicle this wheel is part of
+	 */
 	public EntityDriveable vehicle;
-	/** The ID of this wheel within the vehicle */
+	/**
+	 * The ID of this wheel within the vehicle
+	 */
 	private int ID;
 	
 	///** Set this to true when the client has found the parent vehicle and connected them */
 	//@SideOnly(Side.CLIENT)
 	//public boolean foundVehicle;
-	/** The ID of the vehicle this wheel is part of, for client-server syncing */
+	/**
+	 * The ID of the vehicle this wheel is part of, for client-server syncing
+	 */
 	private int vehicleID;
 	
-	public EntityWheel(World world) 
+	public EntityWheel(World world)
 	{
 		super(world);
 		setSize(1F, 1F);
 		stepHeight = 1.0F;
 	}
-
-	public EntityWheel(World world, EntityDriveable entity,  int i) 
+	
+	public EntityWheel(World world, EntityDriveable entity, int i)
 	{
 		this(world);
 		vehicle = entity;
@@ -65,22 +71,22 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void fall(float k, float l)
-    {
-		if(vehicle == null || k <= 0) 
+	public void fall(float k, float l)
+	{
+		if(vehicle == null || k <= 0)
 			return;
 		int i = MathHelper.ceil(k - 3F);
 		if(i > 0)
 			vehicle.attackPart(vehicle.getDriveableType().wheelPositions[ID].part, DamageSource.FALL, i);
 	}
-
+	
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 	}
-
+	
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tags) 
+	protected void readEntityFromNBT(NBTTagCompound tags)
 	{
 		DriveableType type = DriveableType.getDriveable(tags.getString("DriveableType"));
 		ID = tags.getInteger("Index");
@@ -98,10 +104,10 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			driveable.registerWheel(this);
 		}
 	}
-
+	
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tags) 
-	{		
+	protected void writeEntityToNBT(NBTTagCompound tags)
+	{
 		tags.setString("DriveableType", vehicle == null ? "" : vehicle.getDriveableType().shortName);
 		tags.setInteger("Index", ID);
 	}
@@ -128,7 +134,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			foundVehicle = true;
 			vehicle.wheels[ID] = this;
 		}
-		*/		
+		*/
 		if(!addedToChunk)
 			world.spawnEntity(this);
 		/*
@@ -178,7 +184,7 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 			vehicle.moveEntity(-dPos.x, -dPos.y, -dPos.z);
 		}
 		*/
-
+		
 	}
 	
 	@Override
@@ -209,25 +215,25 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void setPositionAndRotationDirect(double d, double d1, double d2, float f, float f1, int i, boolean b)
-    {
-    }
+	public void setPositionAndRotationDirect(double d, double d1, double d2, float f, float f1, int i, boolean b)
+	{
+	}
 	
 	@Override
-	public void writeSpawnData(ByteBuf data) 
+	public void writeSpawnData(ByteBuf data)
 	{
 		data.writeInt(vehicleID);
 		data.writeInt(ID);
 	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf data) 
+	public void readSpawnData(ByteBuf data)
 	{
 		vehicleID = data.readInt();
 		ID = data.readInt();
 		if(world.getEntityByID(vehicleID) instanceof EntityDriveable)
 			vehicle = (EntityDriveable)world.getEntityByID(vehicleID);
-
+		
 		setPosition(posX, posY, posZ);
 	}
 	
@@ -237,10 +243,9 @@ public class EntityWheel extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-    public void updateRidden()
-    {
+	public void updateRidden()
+	{
 		Entity entity = getRidingEntity();
-
         if(!updateBlocked)
         	onUpdate();
 

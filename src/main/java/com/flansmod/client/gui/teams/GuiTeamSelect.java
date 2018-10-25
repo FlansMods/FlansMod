@@ -16,10 +16,10 @@ import com.flansmod.common.teams.PlayerClass;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 
-public class GuiTeamSelect extends GuiScreen 
+public class GuiTeamSelect extends GuiScreen
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/teams.png");
-
+	
 	
 	private static RenderItem itemRenderer;
 	private boolean classMenu;
@@ -36,7 +36,7 @@ public class GuiTeamSelect extends GuiScreen
 		if(teamChoices == null)
 		{
 			FMLClientHandler.instance().getClient().displayGuiScreen(null);
-			return;		
+			return;
 		}
 		classMenu = false;
 		guiHeight = 29 + 24 * teamChoices.length;
@@ -55,7 +55,7 @@ public class GuiTeamSelect extends GuiScreen
 		classChoices = classes;
 		guiHeight = 29 + 24 * classes.length;
 	}
-		
+	
 	@Override
 	public void initGui()
 	{
@@ -73,13 +73,14 @@ public class GuiTeamSelect extends GuiScreen
 			if(teamChoices == null)
 			{
 				FMLClientHandler.instance().getClient().displayGuiScreen(null);
-				return;		
+				return;
 			}
 			for(int i = 0; i < teamChoices.length; i++)
 			{
 				if(teamChoices[i] != null)
 					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "\u00a7" + teamChoices[i].textColour + teamChoices[i].name));
-				else buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
+				else
+					buttonList.add(new GuiButton(i, width / 2 - 128 + 10, height / 2 - guiHeight / 2 + 24 + 24 * i, 236, 20, "No Team / Builder"));
 			}
 		}
 		itemRenderer = mc.getRenderItem();
@@ -98,18 +99,18 @@ public class GuiTeamSelect extends GuiScreen
 		{
 			for(int n = 0; n < classChoices.length; n++)
 			{
-				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 23, 256, 24);		
+				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 23, 256, 24);
 			}
 		}
 		else
 		{
 			for(int n = 0; n < teamChoices.length; n++)
 			{
-				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 48, 256, 24);		
+				drawTexturedModalRect(width / 2 - 128, height / 2 - guiHeight / 2 + 22 + 24 * n, 0, 48, 256, 24);
 			}
 		}
 		fontRenderer.drawStringWithShadow(classMenu ? "Choose a Class" : "Choose a Team", width / 2 - 120, height / 2 - guiHeight / 2 + 8, 0xffffff);
-
+		
 		super.drawScreen(i, j, f);
 		if(classMenu)
 		{
@@ -134,7 +135,7 @@ public class GuiTeamSelect extends GuiScreen
 		else
 		{
 			TeamsManager.getInstance().SelectTeam(teamChoices[button.id]);
-
+			
 		}
 	}
 	
@@ -153,7 +154,7 @@ public class GuiTeamSelect extends GuiScreen
 	@Override
 	protected void keyTyped(char c, int i)
 	{
-		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
+		if(i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
 			mc.player.closeScreen();
 			if(classMenu)
@@ -166,9 +167,9 @@ public class GuiTeamSelect extends GuiScreen
 	}
 	
 	@Override
-	public void onGuiClosed() 
+	public void onGuiClosed()
 	{
-
+	
 	}
-
+	
 }

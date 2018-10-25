@@ -5,10 +5,7 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelMG;
-import net.minecraft.entity.Entity;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelBren extends ModelMG //Same as Filename
 {
@@ -168,7 +165,6 @@ public class ModelBren extends ModelMG //Same as Filename
 
 		ammoModel[2].addShapeBox(-0.5F, -6.1F, -11.6F, 1, 1, 3, 0F, -0.2F, 0.5F, -0.8F, -0.2F, 0.5F, -0.8F, -0.2F, -0.5F, 0.4F, -0.2F, -0.5F, 0.4F, -0.2F, 0F, 0F, -0.2F, 0F, 0F, -0.2F, 0.7F, -0.2F, -0.2F, 0.7F, -0.2F); // Box 10
 		ammoModel[2].setRotationPoint(0F, -6F, -0.5F);
-
 
 
 		flipAll();

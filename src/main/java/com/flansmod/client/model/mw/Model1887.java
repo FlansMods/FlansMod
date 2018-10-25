@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class Model1887 extends ModelGun 
+public class Model1887 extends ModelGun
 {
 	public Model1887()
 	{
@@ -22,10 +22,10 @@ public class Model1887 extends ModelGun
 		
 		gunModel[2] = new ModelRendererTurbo(this, 0, 4, textureX, textureY);
 		gunModel[2].addBox(3F, 3.05F, -0.45F, 7, 0.9F, 0.9F);
-
+		
 		gunModel[3] = new ModelRendererTurbo(this, 0, 6, textureX, textureY);
 		gunModel[3].addBox(3F, 4.05F, -0.45F, 10, 0.9F, 0.9F);
-
+		
 		gunModel[4] = new ModelRendererTurbo(this, 0, 8, textureX, textureY);
 		gunModel[4].addBox(3F, 3.25F, -0.75F, 5, 1.5F, 1.5F);
 		
@@ -40,7 +40,7 @@ public class Model1887 extends ModelGun
 		
 		//Scope
 		scopeAttachPoint = new Vector3f(5F / 16F, 5F / 16F, 0F);
-
+		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
 		
@@ -48,7 +48,7 @@ public class Model1887 extends ModelGun
 		defaultStockModel[0].addShapeBox(-2F, 1F, -1F, 2, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 1F, 0F, /* 6 */ 0F, 1F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		defaultStockModel[1] = new ModelRendererTurbo(this, 28, 0, textureX, textureY);
-		defaultStockModel[1].addShapeBox(-8F, 0F, -1F, 6, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		defaultStockModel[1].addShapeBox(-8F, 0F, -1F, 6, 3, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		stockAttachPoint = new Vector3f(0F / 16F, 3F / 16F, 0F);
 		
@@ -65,7 +65,7 @@ public class Model1887 extends ModelGun
 		ammoModel[0].addBox(1F, 3F, -0.5F, 2, 1, 1);
 		
 		translateAll(0F, -0.5F, 0F);
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.RIFLE_TOP;
 		pumpDelayAfterReload = 86;

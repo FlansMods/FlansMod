@@ -37,7 +37,7 @@ public class ModelM72LAW extends ModelGun
 		
 		//Ammo
 		ammoModel = new ModelRendererTurbo[0];
-			
+		
 		gunSlideDistance = 0.5F;
 		animationType = EnumAnimationType.END_LOADED;
 		

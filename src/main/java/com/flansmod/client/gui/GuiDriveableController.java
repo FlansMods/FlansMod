@@ -17,7 +17,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.KeyInputHandler;
 import com.flansmod.common.FlansMod;
 
-public class GuiDriveableController extends GuiScreen 
+public class GuiDriveableController extends GuiScreen
 {
 	private IControllable plane;
 	private boolean leftMouseHeld;
@@ -41,7 +41,7 @@ public class GuiDriveableController extends GuiScreen
 	{
 		mc.mouseHelper.ungrabMouseCursor();
 		mc.setRenderViewEntity(mc.player);
-    }
+	}
 	
 	@Override
 	public void handleMouseInput()
@@ -63,7 +63,7 @@ public class GuiDriveableController extends GuiScreen
 		if(Mouse.isButtonDown(1))
 			plane.pressKey(8, player);
 		
-		if(!leftMouseHeld&& Mouse.isButtonDown(0)) //Left mouse, for MGs. Is a holding thing
+		if(!leftMouseHeld && Mouse.isButtonDown(0)) //Left mouse, for MGs. Is a holding thing
 		{
 			leftMouseHeld = true;
 			plane.updateKeyHeldState(9, true);
@@ -91,7 +91,7 @@ public class GuiDriveableController extends GuiScreen
 		if(i == 1)
 		{
 			mc.displayGuiScreen(null);
-			mc.displayInGameMenu();		
+			mc.displayInGameMenu();
 		}
 		if(i == 59)
 		{
@@ -162,14 +162,23 @@ public class GuiDriveableController extends GuiScreen
 			mc.mouseHelper.grabMouseCursor();
 		}
 		handleMouseInput();
-
-        for(; Keyboard.next(); ) {try {handleKeyboardInput();} catch(IOException e){} }
-        
+		
+		for(; Keyboard.next(); )
+		{
+			try
+			{
+				handleKeyboardInput();
+			}
+			catch(IOException e)
+			{
+			}
+		}
+		
 		int l = Mouse.getDX();
 		int m = Mouse.getDY();
 		
 		plane.onMouseMoved(l, m);
-
+		
 		if(plane != null && !plane.isDead() && plane.getControllingEntity() != null && plane.getControllingEntity() instanceof EntityPlayer)
 		{
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindForward.getKeyCode()))//KeyInputHandler.accelerateKey.getKeyCode()))
@@ -187,7 +196,7 @@ public class GuiDriveableController extends GuiScreen
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindRight.getKeyCode()))//KeyInputHandler.rightKey.getKeyCode()))
 			{
 				plane.pressKey(3, player);
-			}	
+			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindJump.getKeyCode()))//KeyInputHandler.upKey.getKeyCode()))
 			{
 				plane.pressKey(4, player);
@@ -195,11 +204,11 @@ public class GuiDriveableController extends GuiScreen
 			if(FlansMod.proxy.keyDown(KeyInputHandler.downKey.getKeyCode()))
 			{
 				plane.pressKey(5, player);
-			}	
+			}
 			if(FlansMod.proxy.keyDown(mc.gameSettings.keyBindSneak.getKeyCode()))//KeyInputHandler.exitKey.getKeyCode()))
 			{
 				plane.pressKey(6, player);
-			}	
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.inventoryKey.getKeyCode()))
 			{
 				plane.pressKey(7, player);
@@ -211,49 +220,49 @@ public class GuiDriveableController extends GuiScreen
 			if(FlansMod.proxy.keyDown(KeyInputHandler.gunKey.getKeyCode()))
 			{
 				plane.pressKey(9, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.controlSwitchKey.getKeyCode()))
 			{
 				plane.pressKey(10, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.leftRollKey.getKeyCode()))
 			{
 				plane.pressKey(11, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.rightRollKey.getKeyCode()))
 			{
 				plane.pressKey(12, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.gearKey.getKeyCode()))
 			{
 				plane.pressKey(13, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.doorKey.getKeyCode()))
 			{
 				plane.pressKey(14, player);
-			}				
+			}
 			if(FlansMod.proxy.keyDown(KeyInputHandler.modeKey.getKeyCode()))
 			{
 				plane.pressKey(15, player);
-			}				
+			}
 			//if(FlansMod.proxy.keyDown(KeyInputHandler.trimKey.getKeyCode()))
 			//{
 			//	plane.pressKey(16, player);
 			//}				
-	
+			
 		}
 		else
 		{
 			mc.displayGuiScreen(null);
 		}
 	}
-	   
+	
 	@Override
 	public void drawBackground(int i)
 	{
 		//Plane gauges overlay
 	}
-
+	
 	@Override
 	public boolean doesGuiPauseGame()
 	{

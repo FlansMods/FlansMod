@@ -11,10 +11,8 @@ package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
-import com.flansmod.common.vector.Vector3f;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelC96 extends ModelGun //Same as Filename
 {
@@ -365,14 +363,13 @@ public class ModelC96 extends ModelGun //Same as Filename
 		slideModel[5].setRotationPoint(12.5F, -25.6F, 0.1F);
 
 
-
 		animationType = EnumAnimationType.ALT_PISTOL_CLIP;
 		gunSlideDistance = 1.5F;
 		
-		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
-		stockAttachPoint = new Vector3f(0.1F /16F, 17F /16F, 0F /16F);
+		barrelAttachPoint = new Vector3f(0F / 16F, 0F / 16F, 0F / 16F);
+		stockAttachPoint = new Vector3f(0.1F / 16F, 17F / 16F, 0F / 16F);
 		scopeAttachPoint = new Vector3f(1.5F / 16F, 4.5F / 16F, 0F / 16F);
-		gripAttachPoint = new Vector3f(8F /16F, 4.5F /16F, 0F /16F);
+		gripAttachPoint = new Vector3f(8F / 16F, 4.5F / 16F, 0F / 16F);
 		
 		translateAll(0F, -13F, 0.3F);
 		thirdPersonOffset = new Vector3f(-0.12F, -0.15F, 0.01F);

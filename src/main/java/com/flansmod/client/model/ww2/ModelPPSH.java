@@ -19,22 +19,22 @@ public class ModelPPSH extends ModelGun
 	int textureX = 512;
 	int textureY = 512;
 
-	public ModelPPSH()	
+	public ModelPPSH()
 	{
 
 
 // Gun
 		gunModel = new ModelRendererTurbo[10];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  310, textureX, textureY); // Barrel
-		gunModel[1] = new ModelRendererTurbo(this,  0,  300, textureX, textureY); // Body
-		gunModel[2] = new ModelRendererTurbo(this,  0,  290, textureX, textureY); // Stock
-		gunModel[3] = new ModelRendererTurbo(this,  0,  280, textureX, textureY); // Stock
-		gunModel[4] = new ModelRendererTurbo(this,  0,  270, textureX, textureY); // StockEnd
-		gunModel[5] = new ModelRendererTurbo(this,  5,  300, textureX, textureY); // Clipholder
-		gunModel[6] = new ModelRendererTurbo(this,  0,  250, textureX, textureY); // StockHandle
-		gunModel[7] = new ModelRendererTurbo(this,  0,  240, textureX, textureY); // Trigger
-		gunModel[8] = new ModelRendererTurbo(this,  0,  235, textureX, textureY); // SightRear
-		gunModel[9] = new ModelRendererTurbo(this,  0,  230, textureX, textureY); // SightFront
+		gunModel[0] = new ModelRendererTurbo(this, 0, 310, textureX, textureY); // Barrel
+		gunModel[1] = new ModelRendererTurbo(this, 0, 300, textureX, textureY); // Body
+		gunModel[2] = new ModelRendererTurbo(this, 0, 290, textureX, textureY); // Stock
+		gunModel[3] = new ModelRendererTurbo(this, 0, 280, textureX, textureY); // Stock
+		gunModel[4] = new ModelRendererTurbo(this, 0, 270, textureX, textureY); // StockEnd
+		gunModel[5] = new ModelRendererTurbo(this, 5, 300, textureX, textureY); // Clipholder
+		gunModel[6] = new ModelRendererTurbo(this, 0, 250, textureX, textureY); // StockHandle
+		gunModel[7] = new ModelRendererTurbo(this, 0, 240, textureX, textureY); // Trigger
+		gunModel[8] = new ModelRendererTurbo(this, 0, 235, textureX, textureY); // SightRear
+		gunModel[9] = new ModelRendererTurbo(this, 0, 230, textureX, textureY); // SightFront
 
 		gunModel[0].addBox(0F, 0F, 0F, 20, 1, 1, 0F); // Barrel
 		gunModel[0].setRotationPoint(0F, -6F, -0.5F);
@@ -71,14 +71,13 @@ public class ModelPPSH extends ModelGun
 		gunModel[9].rotateAngleZ = 0.06981317F;
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[5];
-		ammoModel[0] = new ModelRendererTurbo(this,  0,  260, textureX, textureY); // MagazineMain
-		ammoModel[1] = new ModelRendererTurbo(this,  0,  220, textureX, textureY); // MagTop
-		ammoModel[2] = new ModelRendererTurbo(this,  0,  215, textureX, textureY); // MagBottom
-		ammoModel[3] = new ModelRendererTurbo(this,  10,  215, textureX, textureY); // MagSide
-		ammoModel[4] = new ModelRendererTurbo(this,  10,  220, textureX, textureY); // MagSide
+		ammoModel[0] = new ModelRendererTurbo(this, 0, 260, textureX, textureY); // MagazineMain
+		ammoModel[1] = new ModelRendererTurbo(this, 0, 220, textureX, textureY); // MagTop
+		ammoModel[2] = new ModelRendererTurbo(this, 0, 215, textureX, textureY); // MagBottom
+		ammoModel[3] = new ModelRendererTurbo(this, 10, 215, textureX, textureY); // MagSide
+		ammoModel[4] = new ModelRendererTurbo(this, 10, 220, textureX, textureY); // MagSide
 
 		ammoModel[0].addBox(8F, -4F, -2F, 1, 4, 4, 0F); // MagazineMain
 		ammoModel[0].setRotationPoint(0F, 0F, 0F);
@@ -99,8 +98,6 @@ public class ModelPPSH extends ModelGun
 		ammoModel[4].addBox(8F, -3F, -2.5F, 1, 2, 1, 0F); // MagSide
 		ammoModel[4].setRotationPoint(0F, 0F, 0F);
 		ammoModel[4].rotateAngleZ = 0.05235988F;
-
-		
 
 
 		gunSlideDistance = 0F;

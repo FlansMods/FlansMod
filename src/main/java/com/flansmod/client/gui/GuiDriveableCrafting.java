@@ -27,32 +27,56 @@ import com.flansmod.common.parts.ItemPart;
 import com.flansmod.common.parts.PartType;
 import com.flansmod.common.types.EnumType;
 
-public class GuiDriveableCrafting extends GuiScreen 
+public class GuiDriveableCrafting extends GuiScreen
 {
-	/** The background image */
+	/**
+	 * The background image
+	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/driveableCrafting.png");
 	
-	/** The inventory of the player using this crafting table */
+	/**
+	 * The inventory of the player using this crafting table
+	 */
 	private InventoryPlayer inventory;
-	/** The Minecraft instance */
+	/**
+	 * The Minecraft instance
+	 */
 	private Minecraft mc;
-	/** The world in which this crafting table resides */
+	/**
+	 * The world in which this crafting table resides
+	 */
 	private World world;
-	/** The crafting table co-ordinates */
+	/**
+	 * The crafting table co-ordinates
+	 */
 	private int x, y, z;
-	/** Item renderer */
+	/**
+	 * Item renderer
+	 */
 	private static RenderItem itemRenderer;
-	/** Gui origin */
+	/**
+	 * Gui origin
+	 */
 	private int guiOriginX, guiOriginY;
-	/** Blueprint scroller, static to save position upon exiting crafting window */
+	/**
+	 * Blueprint scroller, static to save position upon exiting crafting window
+	 */
 	private static int blueprintsScroll = 0;
-	/** Recipe scroller */
+	/**
+	 * Recipe scroller
+	 */
 	private int recipeScroll = 0;
-	/** The blueprint that is currently selected */
+	/**
+	 * The blueprint that is currently selected
+	 */
 	private static int selectedBlueprint = 0;
-	/** Spins the driveable model */
+	/**
+	 * Spins the driveable model
+	 */
 	private float spinner = 0;
-	/** Whether or not the currently selected driveable can be crafted */
+	/**
+	 * Whether or not the currently selected driveable can be crafted
+	 */
 	private boolean canCraft = false;
 	
 	public GuiDriveableCrafting(InventoryPlayer playerinventory, World w, int i, int j, int k)
@@ -76,12 +100,12 @@ public class GuiDriveableCrafting extends GuiScreen
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id == 0)
+		if(button.id == 0)
 		{
 			FlansMod.proxy.craftDriveable(inventory.player, DriveableType.types.get(selectedBlueprint));
 		}
 	}
-		
+
 	@Override
 	public void drawScreen(int i, int j, float f)
 	{
@@ -102,7 +126,7 @@ public class GuiDriveableCrafting extends GuiScreen
 		drawString(fontRenderer, "Vehicle Crafting", guiOriginX + 6, guiOriginY + 6, 0xffffff);
 		drawString(fontRenderer, "Requires", guiOriginX + 6, guiOriginY + 125, 0xffffff);
 		drawString(fontRenderer, "Engine", guiOriginX + 114, guiOriginY + 141, 0xffffff);
-				
+
 		for(int m = 0; m < 2; m++)
 		{
 			for(int n = 0; n < 8; n++)
@@ -127,8 +151,8 @@ public class GuiDriveableCrafting extends GuiScreen
 		}
 		
 		//Increment the spinner to spin the driveable. Wheeee!
-		spinner++;	
-		
+		spinner++;
+
 
 		//Return if the selectedBlueprint is invalid
 		if(selectedBlueprint >= DriveableType.types.size())
@@ -147,16 +171,16 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glTranslatef(w / 2 - 46, h /2 - 10, 100);
+			GL11.glTranslatef(w / 2 - 46, h / 2 - 10, 100);
 			
 			//Do lights
-	        GlStateManager.disableLighting();
-	        GlStateManager.pushMatrix();
-	        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
-	        GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
-	        RenderHelper.enableStandardItemLighting();
-	        GlStateManager.popMatrix();
-	        GlStateManager.enableRescaleNormal();
+			GlStateManager.disableLighting();
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
+			RenderHelper.enableStandardItemLighting();
+			GlStateManager.popMatrix();
+			GlStateManager.enableRescaleNormal();
 			
 			if(selectedType instanceof MechaType)
 				GL11.glTranslatef(0, 15, 0);
@@ -171,11 +195,11 @@ public class GuiDriveableCrafting extends GuiScreen
 			GL11.glPopMatrix();
 			
 			recipeName = selectedType.name;
-			if (recipeName.length() > 16)
+			if(recipeName.length() > 16)
 				recipeName = recipeName.substring(0, 15) + "...";
 			
 			//Render the info text alongside the driveable
-			drawString(fontRenderer, recipeName , guiOriginX + 82, guiOriginY + 64, 0xffffff);
+			drawString(fontRenderer, recipeName, guiOriginX + 82, guiOriginY + 64, 0xffffff);
 			drawString(fontRenderer, "Cargo Slots : " + selectedType.numCargoSlots, guiOriginX + 82, guiOriginY + 74, 0xffffff);
 			drawString(fontRenderer, "Bomb Slots : " + selectedType.numBombSlots, guiOriginX + 82, guiOriginY + 84, 0xffffff);
 			drawString(fontRenderer, "Passengers : " + selectedType.numPassengers, guiOriginX + 82, guiOriginY + 94, 0xffffff);
@@ -184,10 +208,7 @@ public class GuiDriveableCrafting extends GuiScreen
 			
 			//Create a temporary copy of the player inventory in order to work out whether the player has each of the itemstacks required
 			InventoryPlayer temporaryInventory = new InventoryPlayer(null);
-			for(int q = 0; q < inventory.getSizeInventory(); q++)
-			{
-				temporaryInventory.setInventorySlotContents(q, inventory.getStackInSlot(q).copy());
-			}
+			temporaryInventory.copyInventory(inventory);
 			
 			//Draw the recipe items
 			//Iterate over rows then columns
@@ -208,7 +229,7 @@ public class GuiDriveableCrafting extends GuiScreen
 						for(int n = 0; n < temporaryInventory.getSizeInventory(); n++)
 						{
 							//Get the stack in each slot
-							ItemStack stackInSlot = temporaryInventory.getStackInSlot(n);
+							ItemStack stackInSlot = temporaryInventory.getStackInSlot(n).copy();
 							//If the stack is what we want
 							if(stackInSlot != null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
 							{
@@ -288,28 +309,32 @@ public class GuiDriveableCrafting extends GuiScreen
 				canCraft = false;
 			}
 			//But if we did, render the stack
-			else 
+			else
 			{
 				//drawTexturedModalRect(guiOriginX + 152, guiOriginY + 138, 213, 11, 16, 16);
 				drawSlotInventory(bestEngineStack, guiOriginX + 152, guiOriginY + 138);
 			}
 		}
 		
-		//If we can't craft it, draw a red box around the craft button
+		//If we can't craft it, draw a red box around the craft button and disable it
 		if(!canCraft)
 		{
+			buttonList.get(0).enabled = false;
 			mc.renderEngine.bindTexture(texture);
 			drawTexturedModalRect(guiOriginX + 108, guiOriginY + 160, 176, 28, 44, 24);
 			drawString(fontRenderer, "Craft", guiOriginX + 116, guiOriginY + 168, 0xa0a0a0);
 		}
-		//If we can craft it, draw the button for crafting
+		//If we can craft it, draw and enable the button for crafting
 		else
 		{
 			super.drawScreen(i, j, f);
+			buttonList.get(0).enabled = true;
 		}
 	}
 	
-	/** Item stack renderering method */
+	/**
+	 * Item stack renderering method
+	 */
 	private void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
 		if(itemstack == null || itemstack.getItem() == null)
@@ -321,7 +346,7 @@ public class GuiDriveableCrafting extends GuiScreen
 	@Override
 	protected void keyTyped(char c, int i)
 	{
-		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
+		if(i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
 			mc.player.closeScreen();
 		}
@@ -333,12 +358,12 @@ public class GuiDriveableCrafting extends GuiScreen
 		super.mouseClicked(i, j, k);
 		int x = i - guiOriginX;
 		int y = j - guiOriginY;
-		if (k == 0 || k == 1)
+		if(k == 0 || k == 1)
 		{
 			//Driveable buttons
 			for(int m = 0; m < 2; m++)
 			{
-				for(int n = 0; n < 8; n++)	
+				for(int n = 0; n < 8; n++)
 				{
 					if(x >= 8 + n * 18 && x <= 26 + n * 18 && y >= 18 + 18 * m && y <= 42 + 18 * m)
 						selectedBlueprint = blueprintsScroll * 8 + m * 8 + n;

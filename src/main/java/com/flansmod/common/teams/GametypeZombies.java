@@ -3,9 +3,6 @@ package com.flansmod.common.teams;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.types.InfoType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -14,36 +11,39 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class GametypeZombies extends Gametype 
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.types.InfoType;
+
+public class GametypeZombies extends Gametype
 {
 	public boolean friendlyFire = false;
 	public int humanPrepTime = 30 * 20;
 	
-	public GametypeZombies() 
+	public GametypeZombies()
 	{
 		super("Zombies", "ZOM", 2);
 	}
-
+	
 	@Override
-	public void roundStart() 
+	public void roundStart()
 	{
-
-	}
-
-	@Override
-	public void roundEnd() 
-	{
-
-	}
-
-	@Override
-	public void roundCleanup() 
-	{
-
+	
 	}
 	
 	@Override
-	public void tick() 
+	public void roundEnd()
+	{
+	
+	}
+	
+	@Override
+	public void roundCleanup()
+	{
+	
+	}
+	
+	@Override
+	public void tick()
 	{
 		//Human prep time nearly over
 		if(teamsManager.roundTimeLeft + humanPrepTime - 200 == teamsManager.currentRound.timeLimit * 20 * 60)
@@ -77,12 +77,12 @@ public class GametypeZombies extends Gametype
 	public Team[] getTeamsCanSpawnAs(TeamsRound currentRound, EntityPlayer player)
 	{
 		if(teamsManager.roundTimeLeft + humanPrepTime > teamsManager.currentRound.timeLimit * 20 * 60)
-			return new Team[] { currentRound.teams[0] };
-		return new Team[] { currentRound.teams[1] };
+			return new Team[]{currentRound.teams[0]};
+		return new Team[]{currentRound.teams[1]};
 	}
 	
 	@Override
-	public boolean playerAttacked(EntityPlayerMP player, DamageSource source) 
+	public boolean playerAttacked(EntityPlayerMP player, DamageSource source)
 	{
 		if(getPlayerData(player) == null || getPlayerData(player).team == null)
 			return false;
@@ -100,14 +100,15 @@ public class GametypeZombies extends Gametype
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam) {
+	public boolean playerCanAttack(EntityPlayerMP attacker, Team attackerTeam, EntityPlayerMP victim, Team victimTeam)
+	{
 		return attackerTeam != victimTeam || friendlyFire;
 	}
-
+	
 	@Override
-	public void playerKilled(EntityPlayerMP player, DamageSource source) 
+	public void playerKilled(EntityPlayerMP player, DamageSource source)
 	{
 		PlayerData playerData = getPlayerData(player);
 		EntityPlayerMP attacker = getPlayerFromDamageSource(source);
@@ -129,8 +130,8 @@ public class GametypeZombies extends Gametype
 				else attackerData.zombieScore--;
 			}
 			//They killed an enemy. +1 point to them and their team
-			else 
-			{	
+			else
+			{
 				if(isHuman(attackerData.team))
 					attackerData.score++;
 				else if(isZombie(attackerData.team))
@@ -155,31 +156,35 @@ public class GametypeZombies extends Gametype
 	}
 	
 	@Override
-	public boolean teamHasWon(Team team) 
+	public boolean teamHasWon(Team team)
 	{
 		//Humans win if there are some left at the end of the round
 		if(isHuman(team))
 			return teamsManager.roundTimeLeft == 1 && team.members.size() > 0;
-		//Zombies win if all the humans are dead
+			//Zombies win if all the humans are dead
 		else if(isZombie(team))
 			return teamsManager.roundTimeLeft + humanPrepTime <= teamsManager.currentRound.timeLimit * 20 * 60 && teamsManager.currentRound.teams[0].members.size() == 0;
 		return false;
 	}
 	
-	/** The human team is team 0. Check to see if a team is the human team */
+	/**
+	 * The human team is team 0. Check to see if a team is the human team
+	 */
 	public boolean isHuman(Team team)
 	{
 		return team == teamsManager.currentRound.teams[0];
 	}
 	
-	/** The zombie team is team 1. Check to see if a team is the zombie team */
+	/**
+	 * The zombie team is team 1. Check to see if a team is the zombie team
+	 */
 	public boolean isZombie(Team team)
 	{
 		return team == teamsManager.currentRound.teams[1];
 	}
-
+	
 	@Override
-	public Vec3d getSpawnPoint(EntityPlayerMP player) 
+	public Vec3d getSpawnPoint(EntityPlayerMP player)
 	{
 		if(teamsManager.currentRound == null)
 			return null;
@@ -216,26 +221,26 @@ public class GametypeZombies extends Gametype
 	}
 	
 	//Zombies can't loot
-	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam) 
-	{ 
-		return playerTeam != teamsManager.currentRound.teams[1]; 
+	public boolean playerCanLoot(ItemStack stack, InfoType infoType, EntityPlayer player, Team playerTeam)
+	{
+		return playerTeam != teamsManager.currentRound.teams[1];
 	}
-
+	
 	@Override
-	public void readFromNBT(NBTTagCompound tags) 
+	public void readFromNBT(NBTTagCompound tags)
 	{
 		humanPrepTime = tags.getInteger("ZOMPrepTime");
 	}
-
+	
 	@Override
-	public void saveToNBT(NBTTagCompound tags) 
+	public void saveToNBT(NBTTagCompound tags)
 	{
 		tags.setInteger("ZOMPrepTime", humanPrepTime);
 	}
 	
-
+	
 	@Override
-	public boolean setVariable(String variable, String value) 
+	public boolean setVariable(String variable, String value)
 	{
 		if(variable.toLowerCase().equals("humanpreptime"))
 		{

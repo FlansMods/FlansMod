@@ -1,10 +1,10 @@
 package com.flansmod.apocalypse.client.model;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
 
-public class ModelNukeDrop extends ModelBase 
+import com.flansmod.client.tmt.ModelRendererTurbo;
+
+public class ModelNukeDrop extends ModelBase
 {
 	private ModelRendererTurbo[] nukeModel;
 	private ModelRendererTurbo[] mushroomCloudModel;
@@ -24,7 +24,7 @@ public class ModelNukeDrop extends ModelBase
 		
 		nukeModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		nukeModel[2].addTrapezoid(-2, 4, -2, 4, 2, 4, 0F, -1F, ModelRendererTurbo.MR_TOP);
-
+		
 		nukeModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		nukeModel[3].addTrapezoid(-2, 6, -2, 4, 2, 4, 0F, -1F, ModelRendererTurbo.MR_BOTTOM);
 		
@@ -51,8 +51,8 @@ public class ModelNukeDrop extends ModelBase
 	{
 		
 	}
-
-	public void renderBall(float scale) 
+	
+	public void renderBall(float scale)
 	{
 		for(int i = 0; i < ballModel.length; i++)
 			ballModel[i].render(scale);

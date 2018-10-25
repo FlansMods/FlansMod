@@ -3,11 +3,10 @@ package com.flansmod.common.driveables;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.flansmod.common.guns.BulletType;
-import com.flansmod.common.guns.EntityBullet;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.DriveableHit;
 import com.flansmod.common.vector.Vector3f;
 
-public class DriveablePart 
+public class DriveablePart
 {
 	public EnumDriveablePart type;
 	public CollisionBox box;
@@ -15,7 +14,9 @@ public class DriveablePart
 	public int health;
 	public int fireTime;
 	public boolean onFire;
-	/** Keeps track of whether death code has been called or not */
+	/**
+	 * Keeps track of whether death code has been called or not
+	 */
 	public boolean dead;
 	
 	public DriveablePart(EnumDriveablePart e, CollisionBox b)
@@ -57,8 +58,11 @@ public class DriveablePart
 		onFire = tags.getBoolean(type.getShortName() + "_Fire");
 	}
 	
-	/** Called when a corner of this part hits the ground.
-	 * @return The amount of damage to do to the block */
+	/**
+	 * Called when a corner of this part hits the ground.
+	 *
+	 * @return The amount of damage to do to the block
+	 */
 	public float smashIntoGround(EntityDriveable driveable, float damage)
 	{
 		//In these cases, there was no collision, so don't damage this or the block
@@ -73,16 +77,19 @@ public class DriveablePart
 		health -= (int)(damage / 2F);
 		return damage / 2F;
 	}
-		
-	/** Called by bullets that may have hit the plane 
-	 * @return A bullet hit if it hit. Otherwise null */
+	
+	/**
+	 * Called by bullets that may have hit the plane
+	 *
+	 * @return A bullet hit if it hit. Otherwise null
+	 */
 	public DriveableHit rayTrace(EntityDriveable driveable, Vector3f origin, Vector3f motion)
 	{
 		if(box == null || health <= 0 || dead)
 			return null;
 		if(!driveable.canHitPart(type))
 			return null;
-
+		
 		//Complicated. Will explain later. Someone remind me.
 		/*
 		boolean enteringX = coordIsEntering(origin.x, origin.x + motion.x, box.x / 16F, (box.x + box.w) / 16F);
@@ -93,7 +100,7 @@ public class DriveablePart
 		boolean inZ = coordIsIn(origin.z, origin.z + motion.z, box.z / 16F, (box.z + box.d) / 16F);
 		boolean hit = (enteringX && inY && inZ) || (inX && enteringY && inZ) || (inX && inY && enteringZ);
 		*/
-				
+		
 		//We now have an AABB starting at box(x, y, z) and with dimensions box(w, h, d) and our ray in the same coordinate system
 		//We are looking for a point at which the ray enters the box, so we need only consider faces that the ray can see. Partition the space into 3 areas in each axis
 		
@@ -159,11 +166,13 @@ public class DriveablePart
 					return new DriveableHit(driveable, type, intersectTime);
 			}
 		}
-
+		
 		return null;
 	}
 	
-	/** Called when the bullet decided that it hit this driveable part */
+	/**
+	 * Called when the bullet decided that it hit this driveable part
+	 */
 	public void hitByBullet(BulletType type, float damage)
 	{
 		//Perform damage code
@@ -175,13 +184,16 @@ public class DriveablePart
 		}
 	}
 	
-	/** Ray traces a single co-ordinate 
+	/**
+	 * Ray traces a single co-ordinate
 	 * But only returns true once upon entering the box, and not while in or exiting
-	 * @param start The start of the ray in this co-ordinate 
-	 * @param end The end of the ray in this co-ordinate
-	 * @param min The start of the box in this co-ordinate
-	 * @param max The end of the box in this co-ordinate 
-	 * @return true if the ray hits in this co-ordinate */
+	 *
+	 * @param start The start of the ray in this co-ordinate
+	 * @param end   The end of the ray in this co-ordinate
+	 * @param min   The start of the box in this co-ordinate
+	 * @param max   The end of the box in this co-ordinate
+	 * @return true if the ray hits in this co-ordinate
+	 */
 	private boolean coordIsEntering(float start, float end, float min, float max)
 	{
 		//Check to see if ray entered from the left hand side
@@ -190,16 +202,19 @@ public class DriveablePart
 		//Check to see if ray entered from the right hand side
 		if(start > max && end <= max)
 			return true;
-		return false;	
+		return false;
 	}
 	
-	/** Ray traces a single co-ordinate 
+	/**
+	 * Ray traces a single co-ordinate
 	 * Returns true if the ray is in the bounds at some point along its length
-	 * @param start The start of the ray in this co-ordinate 
-	 * @param end The end of the ray in this co-ordinate
-	 * @param min The start of the box in this co-ordinate
-	 * @param max The end of the box in this co-ordinate 
-	 * @return true if the ray hits in this co-ordinate */
+	 *
+	 * @param start The start of the ray in this co-ordinate
+	 * @param end   The end of the ray in this co-ordinate
+	 * @param min   The start of the box in this co-ordinate
+	 * @param max   The end of the box in this co-ordinate
+	 * @return true if the ray hits in this co-ordinate
+	 */
 	private boolean coordIsIn(float start, float end, float min, float max)
 	{
 		//Check to see if the start point is in
@@ -213,14 +228,14 @@ public class DriveablePart
 			return true;
 		if(end < min && start > max)
 			return true;
-		return false;	
+		return false;
 	}
-
-	public boolean attack(float damage, boolean fireDamage) 
+	
+	public boolean attack(float damage, boolean fireDamage)
 	{
 		health -= damage;
 		if(fireDamage)
-		{				
+		{
 			fireTime = 20;
 			onFire = true;
 		}

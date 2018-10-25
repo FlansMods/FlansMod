@@ -7,26 +7,24 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.boxes.BoxType;
-import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.TypeFile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.registries.IForgeRegistry;
-
 public class ArmourBoxType extends BoxType
-{	
+{
 	public BlockArmourBox block;
 	
 	public ArrayList<ArmourBoxEntry> pages = new ArrayList<ArmourBoxEntry>();
 	
-	/** The static box map. Indexed by shortName for server ~ client syncing */
+	/**
+	 * The static box map. Indexed by shortName for server ~ client syncing
+	 */
 	public static HashMap<String, ArmourBoxType> boxes = new HashMap<String, ArmourBoxType>();
 	
-	public ArmourBoxType(TypeFile file) 
+	public ArmourBoxType(TypeFile file)
 	{
 		super(file);
 	}
@@ -43,7 +41,7 @@ public class ArmourBoxType extends BoxType
 	{
 		super.read(split, file);
 		try
-		{				
+		{
 			if(split[0].toLowerCase().equals("addarmour") || split[0].toLowerCase().equals("addarmor"))
 			{
 				String name = split[2];
@@ -51,7 +49,7 @@ public class ArmourBoxType extends BoxType
 					name = name + " " + split[i];
 				ArmourBoxEntry entry = new ArmourBoxEntry(split[1], name);
 				//Read the next 4 lines for each armour piece
-				for (int i = 0; i < 4; i++)
+				for(int i = 0; i < 4; i++)
 				{
 					String line = null;
 					line = file.readLine();
@@ -80,7 +78,8 @@ public class ArmourBoxType extends BoxType
 				pages.add(entry);
 			}
 			
-		} catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading gun box file failed : " + shortName);
 			FlansMod.log.throwing(e);
@@ -99,8 +98,10 @@ public class ArmourBoxType extends BoxType
 	{
 		registry.register(block);
 	}
-
-	/** Each instance of this class refers to one page full of recipes, that is, one full set of armour */
+	
+	/**
+	 * Each instance of this class refers to one page full of recipes, that is, one full set of armour
+	 */
 	public class ArmourBoxEntry
 	{
 		public String shortName;
@@ -120,8 +121,8 @@ public class ArmourBoxType extends BoxType
 				requiredStacks[i] = new ArrayList<ItemStack>();
 		}
 	}
-
-	public static ArmourBoxType getBox(String boxShortName) 
+	
+	public static ArmourBoxType getBox(String boxShortName)
 	{
 		return boxes.get(boxShortName);
 	}

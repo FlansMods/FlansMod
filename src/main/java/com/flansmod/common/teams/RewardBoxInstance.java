@@ -4,35 +4,46 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import com.flansmod.common.FlansMod;
 
-/** A player keeps this instance forever, even after they've opened it so as to keep a history */
-public class RewardBoxInstance 
-{	
+/**
+ * A player keeps this instance forever, even after they've opened it so as to keep a history
+ */
+public class RewardBoxInstance
+{
 	public static final int INVALID_HASH = 0;
 	
 	public static enum EnumRewardOrigin
 	{
 		UNKNOWN,
 		OP_CHEAT,
-		LEVEL_UP,		
+		LEVEL_UP,
 		PURCHASE,
 		
 		CLIENT,
 	}
-	/** Boxes can be earned by levelling up or buying them. Keep track of that data here. */
+	
+	/**
+	 * Boxes can be earned by levelling up or buying them. Keep track of that data here.
+	 */
 	public EnumRewardOrigin origin = EnumRewardOrigin.UNKNOWN;
-	/** What did they get from their box? */
+	/**
+	 * What did they get from their box?
+	 */
 	public int unlockHash = INVALID_HASH;
-	/** What sort of box is this? */
+	/**
+	 * What sort of box is this?
+	 */
 	public int boxHash = INVALID_HASH;
-	/** This is the definitive "has been opened" bool, but it should be verified against the hashes */
+	/**
+	 * This is the definitive "has been opened" bool, but it should be verified against the hashes
+	 */
 	public boolean opened = false;
 	
 	protected boolean Verify()
 	{
 		if(origin == EnumRewardOrigin.UNKNOWN
-		|| (unlockHash != INVALID_HASH && !opened)
-		|| (unlockHash == INVALID_HASH && opened)
-		|| boxHash == INVALID_HASH)
+				|| (unlockHash != INVALID_HASH && !opened)
+				|| (unlockHash == INVALID_HASH && opened)
+				|| boxHash == INVALID_HASH)
 		{
 			FlansMod.Assert(false, "Reward box failed verification!");
 			return false;
@@ -91,19 +102,19 @@ public class RewardBoxInstance
 		FlansMod.log.info("---------------------------------------------------------------------------");
 		return new RewardBoxInstance(EnumRewardOrigin.OP_CHEAT, box);
 	}
-
+	
 	public static RewardBoxInstance CreateRewardBoxInstanceFromNBT(int boxHash, int unlockHash, int type)
 	{
 		RewardBoxInstance instance = new RewardBoxInstance(EnumRewardOrigin.values()[type], boxHash);
-		instance.unlockHash = unlockHash; 
+		instance.unlockHash = unlockHash;
 		instance.opened = unlockHash != INVALID_HASH;
 		return instance;
 	}
 	
-	public static RewardBoxInstance CreateClientRewardBoxInstance(int boxHash, int unlockHash) 
+	public static RewardBoxInstance CreateClientRewardBoxInstance(int boxHash, int unlockHash)
 	{
 		RewardBoxInstance instance = new RewardBoxInstance(EnumRewardOrigin.CLIENT, boxHash);
-		instance.unlockHash = unlockHash; 
+		instance.unlockHash = unlockHash;
 		instance.opened = unlockHash != INVALID_HASH;
 		return instance;
 	}

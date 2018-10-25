@@ -3,7 +3,7 @@ package com.flansmod.client.model.zombie;
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelPanHelmet extends ModelCustomArmour 
+public class ModelPanHelmet extends ModelCustomArmour
 {
 	public ModelPanHelmet()
 	{

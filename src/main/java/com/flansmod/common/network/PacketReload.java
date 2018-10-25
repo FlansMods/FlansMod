@@ -9,47 +9,45 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.client.model.GunAnimations;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.guns.ItemGun;
-import com.flansmod.common.guns.ItemShootable;
-import com.flansmod.common.guns.ShootableType;
 
 //When the client receives one, it "reloads". Basically to stop client side recoil effects when the gun should be in a reload animation
 //When the server receives one, it is interpreted as a forced reload
-public class PacketReload extends PacketBase 
+public class PacketReload extends PacketBase
 {
 	public boolean isOffHand;
 	public boolean isForced;
 	
-	public PacketReload() {}
+	public PacketReload()
+	{
+	}
 	
-	public PacketReload(EnumHand hand , boolean isForced) 
+	public PacketReload(EnumHand hand, boolean isForced)
 	{
 		this.isOffHand = hand == EnumHand.OFF_HAND;
 		this.isForced = isForced;
 	}
-		
+	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		data.writeBoolean(isOffHand);
 		data.writeBoolean(isForced);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		isOffHand = data.readBoolean();
 		isForced = data.readBoolean();
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		PlayerData data = PlayerHandler.getPlayerData(playerEntity);
 		ItemStack main = playerEntity.getHeldItemMainhand();
@@ -73,10 +71,10 @@ public class PacketReload extends PacketBase
 			}
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
 		FlansMod.log.warn("Recieved reload packet on client!");
 	}

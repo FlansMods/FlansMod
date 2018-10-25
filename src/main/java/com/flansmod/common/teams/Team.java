@@ -27,7 +27,7 @@ public class Team extends InfoType
 	public List<PlayerClass> classes = new ArrayList<PlayerClass>();
 	
 	public static Team spectators;
-
+	
 	public int score = 0;
 	
 	public int teamColour = 0xffffff;
@@ -60,11 +60,11 @@ public class Team extends InfoType
 		super.read(split, file);
 		try
 		{
-			if (split[0].equals("TeamColour"))
+			if(split[0].equals("TeamColour"))
 			{
 				teamColour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
-			}			
-			if (split[0].equals("TextColour"))
+			}
+			if(split[0].equals("TextColour"))
 			{
 				if(split[1].equals("Black"))
 					textColour = '0';
@@ -147,7 +147,8 @@ public class Team extends InfoType
 			{
 				classes.add(PlayerClass.getClass(split[1]));
 			}
-		} catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading team file failed.");
 			FlansMod.log.throwing(e);
@@ -236,27 +237,27 @@ public class Team extends InfoType
 	public static class ComparatorScore implements Comparator<String>
 	{
 		@Override
-		public int compare(String a, String b) 
+		public int compare(String a, String b)
 		{
 			PlayerData dataA = PlayerHandler.getPlayerData(a);
 			PlayerData dataB = PlayerHandler.getPlayerData(b);
 			if(dataA == null || dataB == null)
-				return 0;			
+				return 0;
 			return dataB.score - dataA.score;
 		}
 		
 	}
-
+	
 	@Override
 	protected void preRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	protected void postRead(TypeFile file)
 	{
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBase GetModel()

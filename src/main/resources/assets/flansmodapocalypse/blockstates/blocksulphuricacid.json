@@ -1,5 +1,7 @@
 {
-	"variants": {
-		"normal": { "model": "flansmodapocalypse:blockSulphuricAcid" }
-	}
+  "variants": {
+    "normal": {
+      "model": "flansmodapocalypse:blockSulphuricAcid"
+    }
+  }
 }

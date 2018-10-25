@@ -1,11 +1,7 @@
 package com.flansmod.apocalypse.common.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -13,18 +9,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import com.flansmod.client.debug.EntityDebugVector;
-import com.flansmod.client.gui.GuiDriveableController;
-import com.flansmod.common.FlansMod;
 import com.flansmod.common.driveables.DriveableData;
 import com.flansmod.common.driveables.EnumDriveablePart;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.driveables.mechas.MechaType;
-import com.flansmod.common.network.PacketDriveableDamage;
-import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
 
-public class EntityAIMecha extends EntityMecha 
+public class EntityAIMecha extends EntityMecha
 {
 	private Entity target;
 	private float targetingRange = 20F;
@@ -37,7 +28,7 @@ public class EntityAIMecha extends EntityMecha
 		super(world);
 	}
 	
-	public EntityAIMecha(World world, double x, double y, double z, MechaType type, DriveableData data, NBTTagCompound tags) 
+	public EntityAIMecha(World world, double x, double y, double z, MechaType type, DriveableData data, NBTTagCompound tags)
 	{
 		super(world, x, y, z, type, data, tags);
 	}
@@ -54,7 +45,6 @@ public class EntityAIMecha extends EntityMecha
 		//flapsPitchLeft = flapsPitchRight += (Math.max(currentTargetHeight, targetHeight) - (float)posY) * 0.1F;
 		
 		
-		
 		super.onUpdate();
 	}
 	
@@ -65,7 +55,7 @@ public class EntityAIMecha extends EntityMecha
 	}
 	
 	@Override
-	protected void moveAI(Vector3f actualMotion) 
+	protected void moveAI(Vector3f actualMotion)
 	{
 		MechaType type = getMechaType();
 		DriveableData data = getDriveableData();
@@ -84,11 +74,11 @@ public class EntityAIMecha extends EntityMecha
 				}
 			}
 		}
-				
+
 		//And if we have line of sight, shoot it
 		if(!world.isRemote && target != null)
 		{
-			Vec3d rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().addVector(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().addVector(posX, posY, posZ);
+			Vec3d rightArmOrigin = usingLeft ? axes.findLocalVectorGlobally(getMechaType().leftArmOrigin).toVec3().add(posX, posY, posZ) : axes.findLocalVectorGlobally(getMechaType().rightArmOrigin).toVec3().add(posX, posY, posZ);
 			Vec3d targetOrigin = new Vec3d(target.posX, target.posY + target.getEyeHeight() / 2D, target.posZ);
 			
 			double dX = targetOrigin.x - rightArmOrigin.x;
@@ -109,16 +99,16 @@ public class EntityAIMecha extends EntityMecha
 				//world.spawnEntity(new EntityDebugVector(world, new Vector3f(rightArmOrigin), new Vector3f(dX, dY, dZ), 2));
 			}
 			{
-				double blockHitX = hit == null ? 0 : hit.hitVec.x - rightArmOrigin.x; 
-				double blockHitY = hit == null ? 0 : hit.hitVec.y - rightArmOrigin.y; 
-				double blockHitZ = hit == null ? 0 : hit.hitVec.z - rightArmOrigin.z; 
+				double blockHitX = hit == null ? 0 : hit.hitVec.x - rightArmOrigin.x;
+				double blockHitY = hit == null ? 0 : hit.hitVec.y - rightArmOrigin.y;
+				double blockHitZ = hit == null ? 0 : hit.hitVec.z - rightArmOrigin.z;
 				
 				//If the target is nearer than the block hit or there was no block
 				if(hit == null || hit.typeOfHit != RayTraceResult.Type.BLOCK || dX * dX + dY * dY + dZ * dZ < blockHitX * blockHitX + blockHitY * blockHitY + blockHitZ * blockHitZ)
 				{
 					useItem(usingLeft);
 					if(rand.nextInt(5) == 0)
-					usingLeft = !usingLeft;
+						usingLeft = !usingLeft;
 				}
 				//Otherwise, move closer
 				else
@@ -131,32 +121,32 @@ public class EntityAIMecha extends EntityMecha
 					
 					Vector3f intent = new Vector3f(moveX, 0, moveZ);
 					
-					if(Math.abs(intent.lengthSquared()) > 0.1) 
+					if(Math.abs(intent.lengthSquared()) > 0.1)
 					{
 						intent.normalise();
 						
 						++legSwing;
-					
+
 						//intent = axes.findLocalVectorGlobally(intent);
-									
+
 						Vector3f intentOnLegAxes = legAxes.findGlobalVectorLocally(intent);
 						float intentAngle = (float)Math.atan2(intent.z, intent.x) * 180F / 3.14159265F;
 						float angleBetween = intentAngle - legAxes.getYaw();
 						if(angleBetween > 180F) angleBetween -= 360F;
 						if(angleBetween < -180F) angleBetween += 360F;
-											
+
 						float signBetween = Math.signum(angleBetween);
 						angleBetween = Math.abs(angleBetween);
 						
 						if(angleBetween > 0.1)
 						{
-							legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed)*signBetween);
+							legAxes.rotateGlobalYaw(Math.min(angleBetween, type.rotateSpeed) * signBetween);
 						}
 						
-						intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier())*(4.3F/20F));
+						intent.scale((type.moveSpeed * data.engine.engineSpeed * speedMultiplier()) * (4.3F / 20F));
 						
 						if(isPartIntact(EnumDriveablePart.hips))
-						{				
+						{
 							//Move!
 							Vector3f.add(actualMotion, intent, actualMotion);
 						}
@@ -182,13 +172,13 @@ public class EntityAIMecha extends EntityMecha
 	}
 	
 	@Override
-	public boolean hasFuel() 
+	public boolean hasFuel()
 	{
 		return true;
 	}
 
 	@Override
-	public boolean hasEnoughFuel() 
+	public boolean hasEnoughFuel()
 	{
 		return true;
 	}

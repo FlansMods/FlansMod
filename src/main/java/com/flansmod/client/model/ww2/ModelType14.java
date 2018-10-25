@@ -19,24 +19,24 @@ public class ModelType14 extends ModelGun
 	int textureX = 512;
 	int textureY = 512;
 
-	public ModelType14()	
+	public ModelType14()
 	{
 
 
 // Gun
 		gunModel = new ModelRendererTurbo[12];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleRight
-		gunModel[1] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleLeft
-		gunModel[2] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleRightForwards
-		gunModel[3] = new ModelRendererTurbo(this,  0,  58, textureX, textureY); // GN.HandleLeftForwards
-		gunModel[4] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // 
-		gunModel[5] = new ModelRendererTurbo(this,  0,  83, textureX, textureY); // GN.Trigger
-		gunModel[6] = new ModelRendererTurbo(this,  0,  285, textureX, textureY); // GN.Barrel
-		gunModel[7] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // 
-		gunModel[8] = new ModelRendererTurbo(this,  0,  285, textureX, textureY); // GN.Backdetail
-		gunModel[9] = new ModelRendererTurbo(this,  0,  305, textureX, textureY); // GN.Ironsight
-		gunModel[10] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // GN.MainbodyTopRight
-		gunModel[11] = new ModelRendererTurbo(this,  0,  73, textureX, textureY); // GN.Mainbodybottomright
+		gunModel[0] = new ModelRendererTurbo(this, 0, 58, textureX, textureY); // GN.HandleRight
+		gunModel[1] = new ModelRendererTurbo(this, 0, 58, textureX, textureY); // GN.HandleLeft
+		gunModel[2] = new ModelRendererTurbo(this, 0, 58, textureX, textureY); // GN.HandleRightForwards
+		gunModel[3] = new ModelRendererTurbo(this, 0, 58, textureX, textureY); // GN.HandleLeftForwards
+		gunModel[4] = new ModelRendererTurbo(this, 0, 73, textureX, textureY); //
+		gunModel[5] = new ModelRendererTurbo(this, 0, 83, textureX, textureY); // GN.Trigger
+		gunModel[6] = new ModelRendererTurbo(this, 0, 285, textureX, textureY); // GN.Barrel
+		gunModel[7] = new ModelRendererTurbo(this, 0, 73, textureX, textureY); //
+		gunModel[8] = new ModelRendererTurbo(this, 0, 285, textureX, textureY); // GN.Backdetail
+		gunModel[9] = new ModelRendererTurbo(this, 0, 305, textureX, textureY); // GN.Ironsight
+		gunModel[10] = new ModelRendererTurbo(this, 0, 73, textureX, textureY); // GN.MainbodyTopRight
+		gunModel[11] = new ModelRendererTurbo(this, 0, 73, textureX, textureY); // GN.Mainbodybottomright
 
 		gunModel[0].addBox(0F, 0F, -0.3F, 1, 5, 1, 0F); // GN.HandleRight
 		gunModel[0].setRotationPoint(0F, -3F, 0F);
@@ -79,25 +79,21 @@ public class ModelType14 extends ModelGun
 		gunModel[11].setRotationPoint(-1.2F, -3F, -0.4F);
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[1];
-		ammoModel[0] = new ModelRendererTurbo(this,  0,  306, textureX, textureY); // AM.Clip
+		ammoModel[0] = new ModelRendererTurbo(this, 0, 306, textureX, textureY); // AM.Clip
 
 		ammoModel[0].addBox(0.2F, 0.5F, -0.5F, 1, 4, 1, 0F); // AM.Clip
 		ammoModel[0].setRotationPoint(0F, -3F, 0F);
 		ammoModel[0].rotateAngleZ = -0.2617994F;
 
 
-
 // Slide
 		slideModel = new ModelRendererTurbo[1];
-		slideModel[0] = new ModelRendererTurbo(this,  0,  295, textureX, textureY); // SL.Slide
+		slideModel[0] = new ModelRendererTurbo(this, 0, 295, textureX, textureY); // SL.Slide
 
 		slideModel[0].addBox(0F, 0F, 0F, 2, 1, 1, 0F); // SL.Slide
 		slideModel[0].setRotationPoint(-1.5F, -3.3F, -0.5F);
-
-		
 
 
 		gunSlideDistance = 0.1F;

@@ -2,31 +2,20 @@ package com.flansmod.apocalypse.client;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.entity.RenderBiped;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -47,21 +36,12 @@ import com.flansmod.apocalypse.common.entity.EntityFakePlayer;
 import com.flansmod.apocalypse.common.entity.EntityNukeDrop;
 import com.flansmod.apocalypse.common.entity.EntitySurvivor;
 import com.flansmod.apocalypse.common.entity.EntityTeleporter;
-import com.flansmod.apocalypse.common.network.PacketApocalypseCountdown;
 import com.flansmod.client.FlansModClient;
-import com.flansmod.client.FlansModResourceHandler;
-import com.flansmod.client.model.RenderItemHolder;
 import com.flansmod.client.model.RenderMecha;
 import com.flansmod.client.util.WorldRenderer;
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.TileEntityItemHolder;
-import com.flansmod.common.driveables.EntityDriveable;
-import com.flansmod.common.driveables.EntitySeat;
-import com.flansmod.common.driveables.mechas.EntityMecha;
-import com.flansmod.common.guns.EntityAAGun;
-import com.flansmod.common.teams.ItemTeamArmour;
 
-public class ClientProxyApocalypse extends CommonProxyApocalypse 
+public class ClientProxyApocalypse extends CommonProxyApocalypse
 {
 	private static final String FLUID_MODEL_PATH = "flansmodapocalypse:fluid";
 	
@@ -91,17 +71,17 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 	private void registerVanillaItemModel(Item... items)
 	{
 		for(Item item : items)
-			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(FlansModApocalypse.MODID + ":" + item.getUnlocalizedName().split("\\.")[1], "inventory"));	
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(FlansModApocalypse.MODID + ":" + item.getTranslationKey().split("\\.")[1], "inventory"));
 	}
 	
-	public void postInit(FMLPostInitializationEvent event) 
+	public void postInit(FMLPostInitializationEvent event)
 	{
 		//FlansMod.getPacketHandler().registerPacket(PacketApocalypseCountdown.class);
 	}
 	
 	public static void updateApocalypseCountdownTimer(int i)
 	{
-		apocalypseCountdown = i; 
+		apocalypseCountdown = i;
 	}
 	
 	@SubscribeEvent
@@ -129,10 +109,12 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		*/
 		
 		ModelLoader.setCustomModelResourceLocation(FlansModApocalypse.itemBlockLabStone, 0, new ModelResourceLocation("flansmodapocalypse:itemblocklabstone", "inventory"));
-		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation[] { new ResourceLocation("flansmodapocalypse:itemblocklabstone")});
+		ModelLoader.registerItemVariants(FlansModApocalypse.itemBlockLabStone, new ResourceLocation[]{new ResourceLocation("flansmodapocalypse:itemblocklabstone")});
 	}
 	
-	/** Tick hook for client logic */
+	/**
+	 * Tick hook for client logic
+	 */
 	@SubscribeEvent
 	public void tick(TickEvent.ClientTickEvent event)
 	{
@@ -145,13 +127,15 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		}
 	}
 	
-	/** Tick hook for client render */
+	/**
+	 * Tick hook for client render
+	 */
 	@SubscribeEvent
 	public void tick(TickEvent.RenderTickEvent event)
 	{
 		if(event.phase == TickEvent.Phase.START)
 		{
-
+		
 		}
 	}
 	
@@ -161,7 +145,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		Minecraft mc = Minecraft.getMinecraft();
 		//DEBUG vehicles
 		if(apocalypseCountdown > 0 && FlansMod.DEBUG)
-		{		
+		{
 			mc.fontRenderer.drawString("Seconds to the apocalypse: " + (apocalypseCountdown / 20), 2, 2, 0xffffff);
 		}
 		
@@ -169,7 +153,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 		ScaledResolution scaledresolution = new ScaledResolution(FlansModClient.minecraft);
 		int i = scaledresolution.getScaledWidth();
 		int j = scaledresolution.getScaledHeight();
-					
+		
 		Tessellator tessellator = Tessellator.getInstance();
 		
 		if(!event.isCancelable() && event.getType() == ElementType.HELMET)
@@ -196,7 +180,7 @@ public class ClientProxyApocalypse extends CommonProxyApocalypse
 						GL11.glBlendFunc(770, 771);
 						GL11.glColor4f(1F, 1F, 1F, alpha);
 						GL11.glDisable(3008 /* GL_ALPHA_TEST */);
-
+						
 						WorldRenderer worldrenderer = FlansModClient.getWorldRenderer();
 						worldrenderer.startDrawingQuads();
 						worldrenderer.addVertexWithUV(i / 2 - 2 * j, j, -90D, 0.0D, 1.0D);

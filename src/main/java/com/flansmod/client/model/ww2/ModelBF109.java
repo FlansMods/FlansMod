@@ -5,8 +5,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelPlane;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelBF109 extends ModelPlane //Same as Filename
@@ -265,25 +265,25 @@ public class ModelBF109 extends ModelPlane //Same as Filename
 		rightWingModel[2] = new ModelRendererTurbo(this, 315, 373, textureX, textureY); // Import Shape5
 		rightWingModel[3] = new ModelRendererTurbo(this, 75, 363, textureX, textureY); // Import Shape8
 
-		rightWingModel[0].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(28, 95, 28, 95), new Coord2D(21, 99, 21, 99), new Coord2D(10, 99, 10, 99), new Coord2D(7, 95, 7, 95) }), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[] {96 ,5 ,11 ,9 ,98 ,49}); // Import Import
+		rightWingModel[0].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(28, 95, 28, 95), new Coord2D(21, 99, 21, 99), new Coord2D(10, 99, 10, 99), new Coord2D(7, 95, 7, 95)}), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[]{96, 5, 11, 9, 98, 49}); // Import Import
 		rightWingModel[0].setRotationPoint(-47.5F, -22F, -31.5F);
 		rightWingModel[0].rotateAngleX = -1.48352986F;
 		rightWingModel[0].rotateAngleY = 3.15904595F;
 		rightWingModel[0].rotateAngleZ = 0.05235988F;
 
-		rightWingModel[1].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(54, 0, 54, 0), new Coord2D(50, 24, 50, 24), new Coord2D(50, 24, 50, 24), new Coord2D(13, 24, 13, 24), new Coord2D(1, 24, 1, 24) }), 3, 54, 24, 153, 3, ModelRendererTurbo.MR_FRONT, new float[] {25 ,12 ,37 ,0 ,25 ,54}); // Import Shape4
+		rightWingModel[1].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(0, 0, 0, 0), new Coord2D(54, 0, 54, 0), new Coord2D(50, 24, 50, 24), new Coord2D(50, 24, 50, 24), new Coord2D(13, 24, 13, 24), new Coord2D(1, 24, 1, 24)}), 3, 54, 24, 153, 3, ModelRendererTurbo.MR_FRONT, new float[]{25, 12, 37, 0, 25, 54}); // Import Shape4
 		rightWingModel[1].setRotationPoint(-48F, -20F, -8F);
 		rightWingModel[1].rotateAngleX = -1.48352986F;
 		rightWingModel[1].rotateAngleY = 3.15904595F;
 		rightWingModel[1].rotateAngleZ = 0.05235988F;
 
-		rightWingModel[2].addShape3D(0F, 0F, -2F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(54, 0, 54, 0), new Coord2D(50, 24, 50, 24), new Coord2D(50, 24, 50, 24), new Coord2D(13, 24, 13, 24), new Coord2D(1, 24, 1, 24) }), 3, 54, 24, 153, 3, ModelRendererTurbo.MR_FRONT, new float[] {25 ,12 ,37 ,0 ,25 ,54}); // Import Shape5
+		rightWingModel[2].addShape3D(0F, 0F, -2F, new Shape2D(new Coord2D[]{new Coord2D(0, 0, 0, 0), new Coord2D(54, 0, 54, 0), new Coord2D(50, 24, 50, 24), new Coord2D(50, 24, 50, 24), new Coord2D(13, 24, 13, 24), new Coord2D(1, 24, 1, 24)}), 3, 54, 24, 153, 3, ModelRendererTurbo.MR_FRONT, new float[]{25, 12, 37, 0, 25, 54}); // Import Shape5
 		rightWingModel[2].setRotationPoint(-48F, -21F, 7F);
 		rightWingModel[2].rotateAngleX = 1.48352986F;
 		rightWingModel[2].rotateAngleY = 3.14159265F;
 		rightWingModel[2].rotateAngleZ = 0.05235988F;
 
-		rightWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(28, 95, 28, 95), new Coord2D(21, 99, 21, 99), new Coord2D(10, 99, 10, 99), new Coord2D(7, 95, 7, 95) }), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[] {96 ,5 ,11 ,9 ,98 ,49}); // Import Shape8
+		rightWingModel[3].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[]{new Coord2D(1, 0, 1, 0), new Coord2D(50, 0, 50, 0), new Coord2D(28, 95, 28, 95), new Coord2D(21, 99, 21, 99), new Coord2D(10, 99, 10, 99), new Coord2D(7, 95, 7, 95)}), 3, 50, 99, 268, 3, ModelRendererTurbo.MR_FRONT, new float[]{96, 5, 11, 9, 98, 49}); // Import Shape8
 		rightWingModel[3].setRotationPoint(-47.7F, -25F, 30.5F);
 		rightWingModel[3].rotateAngleX = 1.48352986F;
 		rightWingModel[3].rotateAngleY = 3.14159265F;
@@ -553,7 +553,6 @@ public class ModelBF109 extends ModelPlane //Same as Filename
 		bodyDoorCloseModel[5].setRotationPoint(5F, -46F, -3F);
 		bodyDoorCloseModel[5].rotateAngleX = 0.01745329F;
 		bodyDoorCloseModel[5].rotateAngleZ = -0.03490659F;
-
 
 
 		propellerModels = new ModelRendererTurbo[1][3];

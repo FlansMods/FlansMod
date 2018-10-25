@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelFlareGun extends ModelGun 
+public class ModelFlareGun extends ModelGun
 {
 	public ModelFlareGun()
 	{
@@ -15,13 +15,13 @@ public class ModelFlareGun extends ModelGun
 		gunModel = new ModelRendererTurbo[3];
 		
 		gunModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
-		gunModel[0].addShapeBox(-1F, -2F, -0.5F, 2, 4, 1, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 1F, 0F, 0F, /* 6 */ 1F, 0F, 0F, /* 7 */ -1F, 0F, 0F);	
+		gunModel[0].addShapeBox(-1F, -2F, -0.5F, 2, 4, 1, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 1F, 0F, 0F, /* 6 */ 1F, 0F, 0F, /* 7 */ -1F, 0F, 0F);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 6, 0, textureX, textureY);
-		gunModel[1].addShapeBox(1F, 0F, -0.5F, 5, 2, 1, 0F, /* 0 */ -0.5F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -0.5F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, 0F, 0F);	
+		gunModel[1].addShapeBox(1F, 0F, -0.5F, 5, 2, 1, 0F, /* 0 */ -0.5F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ -0.5F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, 0F, 0F);
 
 		gunModel[2] = new ModelRendererTurbo(this, 18, 0, textureX, textureY);
-		gunModel[2].addShapeBox(0F, 2F, -0.5F, 2, 2, 1, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, 0F, 0F);	
+		gunModel[2].addShapeBox(0F, 2F, -0.5F, 2, 2, 1, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -1F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -1F, 0F, 0F);
 		
 		breakActionModel = new ModelRendererTurbo[1];
 		

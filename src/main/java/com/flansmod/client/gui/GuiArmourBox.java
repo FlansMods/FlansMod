@@ -5,10 +5,6 @@ import java.io.IOException;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.flansmod.common.teams.ArmourBoxType;
-import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
-
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,8 +15,12 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
-public class GuiArmourBox extends GuiScreen 
+import com.flansmod.common.teams.ArmourBoxType;
+import com.flansmod.common.teams.ArmourBoxType.ArmourBoxEntry;
+
+public class GuiArmourBox extends GuiScreen
 {
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/armourBox.png");
 	private InventoryPlayer inventory;
@@ -71,9 +71,9 @@ public class GuiArmourBox extends GuiScreen
 		mc.renderEngine.bindTexture(texture);
 		
 		// Grey out buttons when they are unavaliable
-		if (page == 0)
+		if(page == 0)
 			drawTexturedModalRect(m + 77, n + 87, 176, 0, 10, 10);
-		if (page >= type.pages.size() - 1)
+		if(page >= type.pages.size() - 1)
 			drawTexturedModalRect(m + 89, n + 87, 186, 0, 10, 10);
 
 		RenderHelper.enableGUIStandardItemLighting();
@@ -84,14 +84,14 @@ public class GuiArmourBox extends GuiScreen
 		// Fill the gun panels with guns
 		drawRecipe(fontrenderer, m, n, page);
 		// Draw the inventory slots (not real slots)
-		for (int row = 0; row < 3; row++)
+		for(int row = 0; row < 3; row++)
 		{
-			for (int col = 0; col < 9; col++)
+			for(int col = 0; col < 9; col++)
 			{
 				drawSlotInventory(inventory.getStackInSlot(col + (row + 1) * 9), m + 8 + col * 18, n + 100 + row * 18);
 			}
 		}
-		for (int col = 0; col < 9; col++)
+		for(int col = 0; col < 9; col++)
 		{
 			drawSlotInventory(inventory.getStackInSlot(col), m + 8 + col * 18, n + 158);
 		}
@@ -99,16 +99,16 @@ public class GuiArmourBox extends GuiScreen
 		GL11.glDisable(3042 /*GL_BLEND*/);
 	}
 	
-	/** 
+	/**
 	 * @param fontrenderer
-	 * @param m : x position to render in
-	 * @param n : y position to render in
-	 * @param q : armour page
-	 * */
+	 * @param m            : x position to render in
+	 * @param n            : y position to render in
+	 * @param q            : armour page
+	 */
 	private void drawRecipe(FontRenderer fontrenderer, int m, int n, int q)
 	{
 		ArmourBoxEntry page = type.pages.get(q);
-		if (page != null)
+		if(page != null)
 		{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			//fontRenderer.drawString(type.guns[q].name, m + 9, n + 22, 0xffffffff);
@@ -119,25 +119,25 @@ public class GuiArmourBox extends GuiScreen
 				//Iterate over y
 				for(int j = 0; j < 2; j++)
 				{
-					if (page.armours[i * 2 + j] != null)
+					if(page.armours[i * 2 + j] != null)
 					{
 						drawSlotInventory(new ItemStack(page.armours[i * 2 + j].item), m + 9 + 83 * i, n + 44 + 22 * j);
 						int numParts = page.requiredStacks[i * 2 + j].size();
 						//Find which 3 parts to render
 						int startPart = 0;
-						if (numParts >= 4)
+						if(numParts >= 4)
 						{
 							startPart = (scroll / 40) % (numParts - 2);
 						}
 						
-						for (int p = 0; p < (numParts < 3 ? numParts : 3); p++)
+						for(int p = 0; p < (numParts < 3 ? numParts : 3); p++)
 						{
 							drawSlotInventory(page.requiredStacks[i * 2 + j].get(startPart + p), m + 30 + p * 19 + 83 * i, n + 44 + 22 * j);
 						}
 					}
 				}
 			}
-	
+
 			//Draw the armour name at the top
 			RenderHelper.disableStandardItemLighting();
 			drawCenteredString(fontrenderer, page.name, m + 87, n + 25, 0xffffff);
@@ -167,19 +167,19 @@ public class GuiArmourBox extends GuiScreen
 		}
 		int m = i - guiOriginX;
 		int n = j - guiOriginY;
-		if (k == 0 || k == 1)
+		if(k == 0 || k == 1)
 		{
 			// Back button
-			if (m > 77 && m < 87 && n > 87 && n < 97)
+			if(m > 77 && m < 87 && n > 87 && n < 97)
 			{
-				if (page > 0)
+				if(page > 0)
 					page--;
 			}
 
 			// Forwards button
-			if (m > 89 && m < 99 && n > 87 && n < 97)
+			if(m > 89 && m < 99 && n > 87 && n < 97)
 			{
-				if (page < type.pages.size() - 1)
+				if(page < type.pages.size() - 1)
 					page++;
 			}
 
@@ -202,7 +202,7 @@ public class GuiArmourBox extends GuiScreen
 	@Override
 	protected void keyTyped(char c, int i)
 	{
-		if (i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
+		if(i == 1 || i == mc.gameSettings.keyBindInventory.getKeyCode())
 		{
 			mc.player.closeScreen();
 		}

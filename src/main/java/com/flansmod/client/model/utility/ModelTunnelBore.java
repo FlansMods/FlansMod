@@ -5,9 +5,7 @@
 package com.flansmod.client.model.utility;
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.Coord2D;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Shape2D;
 import com.flansmod.common.vector.Vector3f;
 
 public class ModelTunnelBore extends ModelVehicle
@@ -177,7 +175,6 @@ public class ModelTunnelBore extends ModelVehicle
 
 		rightTrackModel[9].addBox(0F, 0F, 0F, 8, 8, 6, 0F); // Box 12
 		rightTrackModel[9].setRotationPoint(-20F, 0F, -23F);
-
 
 
 		translateAll(0F, 0F, 0F);

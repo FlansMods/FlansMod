@@ -1,10 +1,7 @@
 package com.flansmod.common.types;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,22 +14,16 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
-import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,13 +31,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.flansmod.common.FlansMod;
-import com.flansmod.common.guns.Paintjob;
 
 public class InfoType
 {
-	/** infoTypes */
+	/**
+	 * infoTypes
+	 */
 	public static HashMap<Integer, InfoType> infoTypes = new HashMap<Integer, InfoType>();
-
+	
 	public String contentPack;
 	public Item item;
 	public int colour = 0xffffff;
@@ -62,19 +54,25 @@ public class InfoType
 	public String modelString = null;
 	public String description;
 	public float modelScale = 1F;
-	/** If this is set to false, then this item cannot be dropped */
+	/**
+	 * If this is set to false, then this item cannot be dropped
+	 */
 	public boolean canDrop = true;
 	
 	public int hash = 0;
 	
-	/** The probability that this item will appear in a dungeon chest. 
-	 *  Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
-	 *  Must be greater than or equal to 0, and should probably not exceed 100 */
+	/**
+	 * The probability that this item will appear in a dungeon chest.
+	 * Scaled so that each chest is likely to have a fixed number of Flan's Mod items.
+	 * Must be greater than or equal to 0, and should probably not exceed 100
+	 */
 	public int dungeonChance = 1;
 	
 	public static Random random = new Random();
 	
-	/** Used for scaling */
+	/**
+	 * Used for scaling
+	 */
 	public static int totalDungeonChance = 0;
 	
 	public InfoType(TypeFile file)
@@ -85,7 +83,7 @@ public class InfoType
 	public void read(TypeFile file)
 	{
 		preRead(file);
-		for(;;)
+		for(; ; )
 		{
 			String line = null;
 			line = file.readLine();
@@ -99,22 +97,35 @@ public class InfoType
 			read(split, file);
 		}
 		postRead(file);
-
+		
 		hash = file.hashCode();
 		infoTypes.put(shortName.hashCode(), this);
 		totalDungeonChance += dungeonChance;
 	}
 	
-	/** Method for performing actions prior to reading the type file */
-	protected void preRead(TypeFile file) {}
+	/**
+	 * Method for performing actions prior to reading the type file
+	 */
+	protected void preRead(TypeFile file)
+	{
+	}
 	
-	/** Method for performing actions after reading the type file */
-	protected void postRead(TypeFile file) {}
+	/**
+	 * Method for performing actions after reading the type file
+	 */
+	protected void postRead(TypeFile file)
+	{
+	}
 	
 	@SideOnly(Side.CLIENT)
-	public ModelBase GetModel() { return null; }
-
-	/** Pack reader */
+	public ModelBase GetModel()
+	{
+		return null;
+	}
+	
+	/**
+	 * Pack reader
+	 */
 	protected void read(String[] split, TypeFile file)
 	{
 		try
@@ -129,7 +140,7 @@ public class InfoType
 			texture = Read(split, "Texture", texture);
 			
 			iconPath = Read(split, "Icon", iconPath);
-
+			
 			dungeonChance = Read(split, "DungeonProbability", dungeonChance);
 			dungeonChance = Read(split, "DungeonLootChance", dungeonChance);
 			
@@ -137,24 +148,24 @@ public class InfoType
 			
 			smeltableFrom = Read(split, "SmeltableFrom", smeltableFrom);
 			canDrop = Read(split, "CanDrop", canDrop);
-
+			
 			// More complicated line reads
-			if (split[0].equals("Colour") || split[0].equals("Color"))
+			if(split[0].equals("Colour") || split[0].equals("Color"))
 			{
 				colour = (Integer.parseInt(split[1]) << 16) + ((Integer.parseInt(split[2])) << 8) + ((Integer.parseInt(split[3])));
 			}
 			
-			if (split[0].equals("Recipe"))
+			if(split[0].equals("Recipe"))
 			{
-				for (int i = 0; i < 3; i++)
+				for(int i = 0; i < 3; i++)
 				{
 					String line = null;
 					line = file.readLine();
-					if (line == null)
+					if(line == null)
 					{
 						continue;
 					}
-					if (line == null || line.startsWith("//"))
+					if(line == null || line.startsWith("//"))
 					{
 						i--;
 						continue;
@@ -172,13 +183,13 @@ public class InfoType
 				recipeLine = split;
 				shapeless = false;
 			}
-			else if (split[0].equals("ShapelessRecipe"))
+			else if(split[0].equals("ShapelessRecipe"))
 			{
 				recipeLine = split;
 				shapeless = true;
 			}
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading file failed : " + shortName);
 			FlansMod.log.throwing(e);
@@ -187,7 +198,9 @@ public class InfoType
 	
 	/** -------------------------------------------------------------------------------------------------------- */
 	/** HELPER FUNCTIONS FOR READING. Should give better debug output                                            */
-	/** -------------------------------------------------------------------------------------------------------- */
+	/**
+	 * --------------------------------------------------------------------------------------------------------
+	 */
 	protected boolean KeyMatches(String[] split, String key)
 	{
 		return split != null && split.length > 1 && key != null && split[0].toLowerCase().equals(key.toLowerCase());
@@ -203,7 +216,7 @@ public class InfoType
 				{
 					currentValue = Integer.parseInt(split[1]);
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an integer");
 				}
@@ -227,7 +240,7 @@ public class InfoType
 				{
 					currentValue = Float.parseFloat(split[1]);
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an float");
 				}
@@ -251,7 +264,7 @@ public class InfoType
 				{
 					currentValue = Double.parseDouble(split[1]);
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an float");
 				}
@@ -289,7 +302,7 @@ public class InfoType
 			if(split.length > 1)
 			{
 				currentValue = split[1];
-				for (int i = 0; i < split.length - 2; i++)
+				for(int i = 0; i < split.length - 2; i++)
 				{
 					currentValue = currentValue + " " + split[i + 2];
 				}
@@ -313,7 +326,7 @@ public class InfoType
 				{
 					currentValue = Boolean.parseBoolean(split[1]);
 				}
-				catch (Exception e)
+				catch(Exception e)
 				{
 					InfoType.LogError(shortName, "Incorrect format for " + key + ". Passed in value is not an boolean");
 				}
@@ -328,7 +341,9 @@ public class InfoType
 	}
 	/** -------------------------------------------------------------------------------------------------------- */
 	/**                                                                                                          */
-	/** -------------------------------------------------------------------------------------------------------- */
+	/**
+	 * --------------------------------------------------------------------------------------------------------
+	 */
 	
 	protected static void LogError(String shortName, String s)
 	{
@@ -351,24 +366,26 @@ public class InfoType
 	{
 		
 	}
-
+	
 	public void addRecipe(IForgeRegistry<IRecipe> registry)
 	{
 		this.addRecipe(registry, getItem());
 	}
-
-	/** Reimported from old code */
+	
+	/**
+	 * Reimported from old code
+	 */
 	public void addRecipe(IForgeRegistry<IRecipe> registry, Item par1Item)
 	{
-		if (smeltableFrom != null)
+		if(smeltableFrom != null)
 		{
 			GameRegistry.addSmelting(getRecipeElement(smeltableFrom, 0), new ItemStack(item), 0.0F);
 		}
-		if (recipeLine == null)
+		if(recipeLine == null)
 			return;
 		try
 		{
-			if (!shapeless)
+			if(!shapeless)
 			{
 				// Find the smallest bounding grid
 				int minX = 3, minY = 3, maxX = -1, maxY = -1;
@@ -393,11 +410,11 @@ public class InfoType
 				}
 				
 				// Make the recipe square
-				if (maxX != maxY)
+				if(maxX != maxY)
 				{
 					maxX = maxY = Math.max(maxX, maxY);
 				}
-				if (minX != minY)
+				if(minX != minY)
 				{
 					minX = minY = Math.min(minX, minY);
 				}
@@ -447,32 +464,34 @@ public class InfoType
 				}
 				// And finally hand all that over to the registry
 				registry.register(new ShapedRecipes("FlansMod", width, height, ingredients, new ItemStack(item, recipeOutput)).setRegistryName(name + "_shaped"));
-			} 
+			}
 			else
-			{				
+			{
 				NonNullList<Ingredient> ingredients = NonNullList.<Ingredient>create();
-				for (int i = 0; i < (recipeLine.length - 1); i++)
+				for(int i = 0; i < (recipeLine.length - 1); i++)
 				{
 					ingredients.add(Ingredient.fromStacks(getRecipeElement(recipeLine[i + 1])));
 				}
-
+				
 				registry.register(new ShapelessRecipes("FlansMod", new ItemStack(item, recipeOutput), ingredients).setRegistryName(name + "_shapeless"));
 			}
 		}
-		catch (Exception e)
+		catch(Exception e)
 		{
 			FlansMod.log.error("Failed to add recipe for : " + shortName);
 			FlansMod.log.throwing(e);
 		}
 	}
 	
-	/** Return a dye damage value from a string name */
+	/**
+	 * Return a dye damage value from a string name
+	 */
 	protected int getDyeDamageValue(String dyeName)
 	{
 		int damage = -1;
 		for(int i = 0; i < EnumDyeColor.values().length; i++)
 		{
-			if(EnumDyeColor.byDyeDamage(i).getUnlocalizedName().equals(dyeName))
+			if(EnumDyeColor.byDyeDamage(i).getTranslationKey().equals(dyeName))
 				damage = i;
 		}
 		if(damage == -1)
@@ -480,27 +499,27 @@ public class InfoType
 		
 		return damage;
 	}
-
+	
 	public Item getItem()
 	{
 		return item;
 	}
 	
 	public static ItemStack getNonRecipeElement(String str)
-	{					
+	{
 		// Split ID with . and if it contains a second part, use it
 		// as damage value.
-		if (str.contains("."))
+		if(str.contains("."))
 			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
 		else
 			return getRecipeElement(str, 0);
 	}
 	
 	public static ItemStack getRecipeElement(String str)
-	{					
+	{
 		// Split ID with . and if it contains a second part, use it
 		// as damage value.
-		if (str.contains("."))
+		if(str.contains("."))
 			return getRecipeElement(str.split("\\.")[0], Integer.valueOf(str.split("\\.")[1]));
 		else
 			return getRecipeElement(str, 32767);
@@ -518,19 +537,19 @@ public class InfoType
 	
 	public static ItemStack getRecipeElement(String s, int amount, int damage, String requester)
 	{
-		if (s.equals("doorIron"))
+		if(s.equals("doorIron"))
 		{
 			return new ItemStack(Items.IRON_DOOR, amount);
 		}
-		else if (s.equals("clayItem"))
+		else if(s.equals("clayItem"))
 		{
 			return new ItemStack(Items.CLAY_BALL, amount);
 		}
-		else if (s.equals("gunpowder"))
+		else if(s.equals("gunpowder"))
 		{
 			return new ItemStack(Items.GUNPOWDER, amount);
 		}
-		else if (s.equals("iron"))
+		else if(s.equals("iron"))
 		{
 			return new ItemStack(Items.IRON_INGOT, amount);
 		}
@@ -540,7 +559,7 @@ public class InfoType
 		}
 		for(Item item : Item.REGISTRY)
 		{
-			if (item != null && item.getUnlocalizedName() != null && (item.getUnlocalizedName().equals("item." + s) || item.getUnlocalizedName().equals("tile." + s)))
+			if(item != null && (item.getTranslationKey().equals("item." + s) || item.getTranslationKey().equals("tile." + s)))
 			{
 				return new ItemStack(item, amount, damage);
 			}
@@ -550,13 +569,15 @@ public class InfoType
 			if(type.shortName.equals(s))
 				return new ItemStack(type.item, amount, damage);
 		}
-
-
+		
+		
 		FlansMod.log.warn("Could not find " + s + " when adding recipe for " + requester);
 		return ItemStack.EMPTY.copy();
 	}
 	
-	/** To be overriden by subtypes for model reloading */
+	/**
+	 * To be overriden by subtypes for model reloading
+	 */
 	public void reloadModel()
 	{
 		
@@ -577,13 +598,13 @@ public class InfoType
 	{
 		return infoTypes.get(hash);
 	}
-
-	public void onWorldLoad(World world) 
+	
+	public void onWorldLoad(World world)
 	{
 		
 	}
-
-	public static InfoType getType(ItemStack itemStack) 
+	
+	public static InfoType getType(ItemStack itemStack)
 	{
 		if(itemStack == null || itemStack.isEmpty())
 			return null;
@@ -605,8 +626,8 @@ public class InfoType
 	{
 		return Material.GROUND;
 	}
-
-	public void addLoot(LootTableLoadEvent event) 
+	
+	public void addLoot(LootTableLoadEvent event)
 	{
 		if(dungeonChance > 0)
 		{
@@ -625,6 +646,6 @@ public class InfoType
 			}
 		}
 	}
-
-
+	
+	
 }

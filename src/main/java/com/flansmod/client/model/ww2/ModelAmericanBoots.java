@@ -11,29 +11,27 @@ package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelAmericanBoots extends ModelCustomArmour //Same as Filename
 {
 	int textureX = 256;
 	int textureY = 256;
-
+	
 	public ModelAmericanBoots() //Same as Filename
 	{
 		leftLegModel = new ModelRendererTurbo[1];
 		leftLegModel[0] = new ModelRendererTurbo(this, 113, 25, textureX, textureY); // Box 46
-
+		
 		leftLegModel[0].addShapeBox(-2.2F, 7.2F, -2F, 8, 12, 4, 0F, 0.1F, -1F, 0.35F, -3.5F, -1F, 0.35F, -3.5F, -1F, 0.35F, 0.1F, -1F, 0.35F, 0.15F, -7F, 0.35F, -3.5F, -7F, 0.35F, -3.59F, -7F, 0.35F, 0.15F, -7F, 0.35F); // Box 46
 		leftLegModel[0].setRotationPoint(0F, 0F, 0F);
-
-
+		
+		
 		rightLegModel = new ModelRendererTurbo[1];
 		rightLegModel[0] = new ModelRendererTurbo(this, 81, 25, textureX, textureY); // Box 44
-
+		
 		rightLegModel[0].addShapeBox(-2.2F, 7.2F, -2F, 8, 12, 4, 0F, 0.1F, -1F, 0.35F, -3.5F, -1F, 0.35F, -3.5F, -1F, 0.35F, 0.1F, -1F, 0.35F, 0.15F, -7F, 0.35F, -3.5F, -7F, 0.35F, -3.59F, -7F, 0.35F, 0.15F, -7F, 0.35F); // Box 44
 		rightLegModel[0].setRotationPoint(0F, 0F, 0F);
-
-
+		
+		
 	}
 }

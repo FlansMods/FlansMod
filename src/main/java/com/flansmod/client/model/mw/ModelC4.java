@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelC4 extends ModelBase 
+public class ModelC4 extends ModelBase
 {
 	public ModelRendererTurbo[] c4Model;
 

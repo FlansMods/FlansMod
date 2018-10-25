@@ -6,8 +6,6 @@ package com.flansmod.client.model.mw; //Path where the model is located
 
 import com.flansmod.client.model.ModelPlane;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelA10 extends ModelPlane //Same as Filename
 {
@@ -1817,7 +1815,6 @@ public class ModelA10 extends ModelPlane //Same as Filename
 
 		hudModel[0].addShapeBox(-0.5F, -3F, -2.25F, 1, 6, 5, 0F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F, 0F, -1.5F, -1F); // Box 1
 		hudModel[0].setRotationPoint(-94F, -46F, 0F);
-
 
 
 		propellerModels = new ModelRendererTurbo[2][4];

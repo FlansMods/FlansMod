@@ -11,9 +11,8 @@ package com.flansmod.client.model.ww2;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
+
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
 public class ModelAmmoBag extends ModelBase
 {
@@ -589,21 +588,14 @@ public class ModelAmmoBag extends ModelBase
 		ammobagModel[97].rotateAngleX = -0.19198622F;
 		ammobagModel[97].rotateAngleY = -2.35619449F;
 
-
-		
-		
-		
 		
 		for(ModelRendererTurbo part : ammobagModel)
-		  {
-		   part.doMirror(false, true, true);
-		   part.setRotationPoint(part.rotationPointX, - part.rotationPointY, - part.rotationPointZ);
-		  }
+		{
+			part.doMirror(false, true, true);
+			part.setRotationPoint(part.rotationPointX, -part.rotationPointY, -part.rotationPointZ);
+		}
 	}
 
-	
-	
-	
 	
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)

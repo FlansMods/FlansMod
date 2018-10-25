@@ -6,13 +6,15 @@ import io.netty.channel.ChannelHandlerContext;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityVehicle;
 
-public class PacketVehicleControl extends PacketDriveableControl 
+public class PacketVehicleControl extends PacketDriveableControl
 {
 	public boolean doors;
 	
-	public PacketVehicleControl() {}
-
-	public PacketVehicleControl(EntityDriveable driveable) 
+	public PacketVehicleControl()
+	{
+	}
+	
+	public PacketVehicleControl(EntityDriveable driveable)
 	{
 		super(driveable);
 		EntityVehicle vehicle = (EntityVehicle)driveable;
@@ -20,14 +22,14 @@ public class PacketVehicleControl extends PacketDriveableControl
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		super.encodeInto(ctx, data);
 		data.writeBoolean(doors);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		super.decodeInto(ctx, data);
 		doors = data.readBoolean();

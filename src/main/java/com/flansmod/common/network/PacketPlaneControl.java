@@ -6,13 +6,15 @@ import io.netty.channel.ChannelHandlerContext;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 
-public class PacketPlaneControl extends PacketDriveableControl 
+public class PacketPlaneControl extends PacketDriveableControl
 {
-	public boolean gear, doors, wings; 
-
-	public PacketPlaneControl() {}
-
-	public PacketPlaneControl(EntityDriveable driveable) 
+	public boolean gear, doors, wings;
+	
+	public PacketPlaneControl()
+	{
+	}
+	
+	public PacketPlaneControl(EntityDriveable driveable)
 	{
 		super(driveable);
 		EntityPlane plane = (EntityPlane)driveable;
@@ -22,16 +24,16 @@ public class PacketPlaneControl extends PacketDriveableControl
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		super.encodeInto(ctx, data);
 		data.writeBoolean(gear);
 		data.writeBoolean(doors);
 		data.writeBoolean(wings);
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		super.decodeInto(ctx, data);
 		gear = data.readBoolean();

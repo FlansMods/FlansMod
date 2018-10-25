@@ -1,13 +1,11 @@
 package com.flansmod.apocalypse.common.world.buildings;
 
-import java.util.Random;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public abstract class WorldGenFlan extends WorldGenerator 
+public abstract class WorldGenFlan extends WorldGenerator
 {
 	protected void fillArea(World world, int x1, int y1, int z1, int x2, int y2, int z2, IBlockState state)
 	{

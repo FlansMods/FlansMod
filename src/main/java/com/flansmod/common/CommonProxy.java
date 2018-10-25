@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import com.flansmod.common.driveables.ContainerDriveableInventory;
 import com.flansmod.common.driveables.ContainerDriveableMenu;
@@ -42,15 +41,17 @@ import com.flansmod.common.types.InfoType;
 public class CommonProxy
 {
 	protected static Pattern zipJar = Pattern.compile("(.+).(zip|jar)$");
-
-	/** Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath */
+	
+	/**
+	 * Returns the list of content pack files, and on the client, adds the content pack resources and models to the classpath
+	 */
 	public List<File> getContentList(Method method, ClassLoader classloader)
 	{
 		List<File> contentPacks = new ArrayList<File>();
-		for (File file : FlansMod.flanDir.listFiles())
+		for(File file : FlansMod.flanDir.listFiles())
 		{
 			//Load folders and valid zip files
-			if (file.isDirectory() || zipJar.matcher(file.getName()).matches())
+			if(file.isDirectory() || zipJar.matcher(file.getName()).matches())
 			{
 				//Add the directory to the content pack list
 				FlansMod.log.info("Loaded content pack : " + file.getName());
@@ -66,7 +67,9 @@ public class CommonProxy
 		
 	}
 	
-	/** A ton of client only methods follow */
+	/**
+	 * A ton of client only methods follow
+	 */
 	public void preInit()
 	{
 	}
@@ -78,11 +81,11 @@ public class CommonProxy
 	public void forceReload()
 	{
 	}
-		
+	
 	public void registerRenderers()
 	{
 	}
-		
+	
 	public void doTutorialStuff(EntityPlayer player, EntityDriveable entityType)
 	{
 	}
@@ -90,7 +93,7 @@ public class CommonProxy
 	public void changeControlMode(EntityPlayer player)
 	{
 	}
-
+	
 	public boolean mouseControlEnabled()
 	{
 		return false;
@@ -118,42 +121,48 @@ public class CommonProxy
 	{
 	}
 	
-	/** Gets the client GUI element from ClientProxy */
+	/**
+	 * Gets the client GUI element from ClientProxy
+	 */
 	public Object getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		return null;
 	}
-
-	/** Gets the container for the specified GUI */
+	
+	/**
+	 * Gets the container for the specified GUI
+	 */
 	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		switch(ID) 
-		{	
-		case 0 : return null; //Driveable crafting. No server side
-		case 1 : return null; //Driveable repair. No server side
-		case 2: return new ContainerGunModTable(player.inventory, world);
-		case 3: return new ContainerDriveableMenu(player.inventory, world);
-		case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.getRidingEntity()).driveable);
-		case 5: return new ContainerGunBox(player.inventory);
-		//Plane inventory screens
-		case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 0);
-		case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 1);
-		case 8: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.getRidingEntity()).driveable);
-		case 9: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 2);
-		case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.getRidingEntity()).driveable);
-		case 11 : return null; //Armour box. No server side
-		case 12 : return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 3);
-		case 13: return new ContainerPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
+		switch(ID)
+		{
+			case 0: return null; //Driveable crafting. No server side
+			case 1: return null; //Driveable repair. No server side
+			case 2: return new ContainerGunModTable(player.inventory, world);
+			case 3: return new ContainerDriveableMenu(player.inventory, world);
+			case 4: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.getRidingEntity()).driveable);
+			case 5: return new ContainerGunBox(player.inventory);
+			//Plane inventory screens
+			case 6: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 0);
+			case 7: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 1);
+			case 8: return new ContainerDriveableMenu(player.inventory, world, true, ((EntitySeat)player.getRidingEntity()).driveable);
+			case 9: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 2);
+			case 10: return new ContainerMechaInventory(player.inventory, world, (EntityMecha)((EntitySeat)player.getRidingEntity()).driveable);
+			case 11: return null; //Armour box. No server side
+			case 12: return new ContainerDriveableInventory(player.inventory, world, ((EntitySeat)player.getRidingEntity()).driveable, 3);
+			case 13: return new ContainerPaintjobTable(player.inventory, world, (TileEntityPaintjobTable)world.getTileEntity(new BlockPos(x, y, z)));
 		}
 		return null;
 	}
 	
-	/** Play a block break sound here */
+	/**
+	 * Play a block break sound here
+	 */
 	public void playBlockBreakSound(int x, int y, int z, Block blockHit)
 	{
 		FlansMod.packetHandler.sendToAll(new PacketBreakSound(x, y, z, blockHit));
 	}
-		
+	
 	public void craftDriveable(EntityPlayer player, DriveableType type)
 	{
 		//Create a temporary copy of the player inventory for backup purposes
@@ -171,7 +180,7 @@ public class CommonProxy
 			for(int n = 0; n < player.inventory.getSizeInventory(); n++)
 			{
 				//Get the stack in each slot
-				ItemStack stackInSlot = player.inventory.getStackInSlot(n);
+				ItemStack stackInSlot = player.inventory.getStackInSlot(n).copy();
 				//If the stack is what we want
 				if(stackInSlot != null && stackInSlot.getItem() == recipeStack.getItem() && stackInSlot.getItemDamage() == recipeStack.getItemDamage())
 				{
@@ -248,7 +257,7 @@ public class CommonProxy
 		}
 		
 		//If the player doesn't have any suitable engines, return
-		if(bestEngineStack == null || bestEngineStack.isEmpty()) 
+		if(bestEngineStack == null || bestEngineStack.isEmpty())
 		{
 			player.inventory.copyInventory(temporaryInventory);
 			return;
@@ -285,17 +294,17 @@ public class CommonProxy
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setString("Engine", ((ItemPart)bestEngineStack.getItem()).type.shortName);
 		tags.setString("Type", type.shortName);
-    	for(EnumDriveablePart part : EnumDriveablePart.values())
-    	{
-    		tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
-    		tags.setBoolean(part.getShortName() + "_Fire", false);
-    	}
+		for(EnumDriveablePart part : EnumDriveablePart.values())
+		{
+			tags.setInteger(part.getShortName() + "_Health", type.health.get(part) == null ? 0 : type.health.get(part).health);
+			tags.setBoolean(part.getShortName() + "_Fire", false);
+		}
 		driveableStack.setTagCompound(tags);
 		if(!player.inventory.addItemStackToInventory(driveableStack))
 			player.dropItem(driveableStack, false);
 	}
-
-	public void repairDriveable(EntityPlayer driver, EntityDriveable driving, DriveablePart part) 
+	
+	public void repairDriveable(EntityPlayer driver, EntityDriveable driving, DriveablePart part)
 	{
 		//If any of this parts parent parts are broken, then it cannot be repaired
 		for(EnumDriveablePart parent : part.type.getParents())
@@ -370,9 +379,9 @@ public class CommonProxy
 	{
 		return false;
 	}
-
-	public void buyArmour(String shortName, int piece, ArmourBoxType type) 
+	
+	public void buyArmour(String shortName, int piece, ArmourBoxType type)
 	{
-
+	
 	}
 }

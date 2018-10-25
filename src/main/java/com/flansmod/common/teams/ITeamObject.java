@@ -2,10 +2,11 @@ package com.flansmod.common.teams;
 
 /**
  * Team Objects are things connected to a team's base such as spawn points, weapon spawners and banners.
- * @author James
  *
+ * @author James
  */
-public interface ITeamObject {
+public interface ITeamObject
+{
 	
 	//Return the base that this object is a part of
 	public ITeamBase getBase();
@@ -29,12 +30,14 @@ public interface ITeamObject {
 	
 	//Returns the position of this object
 	public double getPosX();
+	
 	public double getPosY();
+	
 	public double getPosZ();
 	
 	//Return true if players can spawn here
 	public boolean isSpawnPoint();
-
+	
 	//Return true if this object should force the chunk it is in to remain loaded
 	public boolean forceChunkLoading();
 }

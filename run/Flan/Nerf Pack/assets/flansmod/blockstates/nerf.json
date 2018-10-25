@@ -1,1 +1,7 @@
-{ "variants": { "normal": { "model": "flansmod:nerf" } } }
+{
+  "variants": {
+    "normal": {
+      "model": "flansmod:nerf"
+    }
+  }
+}

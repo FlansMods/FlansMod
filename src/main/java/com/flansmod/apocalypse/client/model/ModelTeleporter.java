@@ -1,10 +1,10 @@
 package com.flansmod.apocalypse.client.model;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
 
-public class ModelTeleporter extends ModelBase 
+import com.flansmod.client.tmt.ModelRendererTurbo;
+
+public class ModelTeleporter extends ModelBase
 {
 	private ModelRendererTurbo model;
 	
@@ -15,8 +15,8 @@ public class ModelTeleporter extends ModelBase
 		model = new ModelRendererTurbo(this, 0, 0, textureX, textureY);
 		model.addSphere(0, 0, 0, 16, 16, 16, 64, 64);
 	}
-
-	public void render(float f) 
+	
+	public void render(float f)
 	{
 		model.render(f);
 	}

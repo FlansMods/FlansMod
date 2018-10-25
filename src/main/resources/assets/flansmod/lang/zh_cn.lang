@@ -1,13 +1,13 @@
-#By Darkyoooooo
+#By MCBBS FlansMod fans
 
-itemGroup.tabFlan0=Flan's Mod 枪械
+itemGroup.tabFlan0=Flan's Mod 武器
 itemGroup.tabFlan1=Flan's Mod 载具
 itemGroup.tabFlan2=Flan's Mod 零件
 itemGroup.tabFlan3=Flan's Mod 团队工具
 itemGroup.tabFlan4=Flan's Mod 其他
-tile.flansWorkbench.0.name=载具制造台
-tile.flansWorkbench.1.name=枪械制造台
-tile.flansWorkbench.2.name=零件合成台
+tile.flansWorkbench.0.name=载具制作台
+tile.flansWorkbench.1.name=枪械改造台
+tile.flansWorkbench.2.name=零件合成台（即将到来）
 item.opStick.0.name=所有权杖
 item.opStick.1.name=联络杖
 item.opStick.2.name=绘图杖

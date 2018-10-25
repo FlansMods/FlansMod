@@ -1,12 +1,5 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.client.gui.teams.EnumLoadoutSlot;
-import com.flansmod.client.gui.teams.GuiChooseLoadout;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.PlayerData;
-import com.flansmod.common.PlayerHandler;
-import com.flansmod.common.network.PacketTeamSelect;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,12 +7,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TeamsManagerClassic extends TeamsManager 
+import com.flansmod.common.FlansMod;
+import com.flansmod.common.PlayerData;
+import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.network.PacketTeamSelect;
+
+public class TeamsManagerClassic extends TeamsManager
 {
 	private static TeamsManagerClassic INSTANCE;
 	
@@ -41,7 +38,7 @@ public class TeamsManagerClassic extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogout(EntityPlayer player) 
+	public void onPlayerLogout(EntityPlayer player)
 	{
 		super.onPlayerLogout(player);
 	}
@@ -66,7 +63,7 @@ public class TeamsManagerClassic extends TeamsManager
 	}
 	
 	@Override
-	public void onPlayerLogin(EntityPlayer player) 
+	public void onPlayerLogin(EntityPlayer player)
 	{
 		if(!enabled || currentRound == null)
 			return;
@@ -91,7 +88,7 @@ public class TeamsManagerClassic extends TeamsManager
 			//Catch for people not on a team, such as builders
 			if(data.builder && playerIsOp(player))
 				continue;
-
+			
 			sendTeamsMenuToPlayer((EntityPlayerMP)player, info);
 		}
 	}
@@ -104,7 +101,7 @@ public class TeamsManagerClassic extends TeamsManager
 		//Get the available teams from the gametype
 		Team[] availableTeams = currentRound.gametype.getTeamsCanSpawnAs(currentRound, player);
 		//Add in the spectators as an option and "none" if the player is an op
-		boolean playerIsOp =FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
+		boolean playerIsOp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
 		Team[] allAvailableTeams = new Team[availableTeams.length + (playerIsOp ? 2 : 1)];
 		System.arraycopy(availableTeams, 0, allAvailableTeams, 0, availableTeams.length);
 		allAvailableTeams[availableTeams.length] = Team.spectators;
@@ -162,7 +159,7 @@ public class TeamsManagerClassic extends TeamsManager
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void SelectTeam(Team team) 
+	public void SelectTeam(Team team)
 	{
 		FlansMod.getPacketHandler().sendToServer(new PacketTeamSelect(team == null ? "null" : team.shortName, false));
 		Minecraft.getMinecraft().displayGuiScreen(null);

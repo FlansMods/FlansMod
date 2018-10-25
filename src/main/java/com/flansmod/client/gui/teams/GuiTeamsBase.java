@@ -4,6 +4,16 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+
 import com.flansmod.client.ClientProxy;
 import com.flansmod.client.model.CustomItemRenderType;
 import com.flansmod.common.guns.GunType;
@@ -13,23 +23,15 @@ import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.types.EnumPaintjobRarity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-
-public class GuiTeamsBase extends GuiScreen 
+public class GuiTeamsBase extends GuiScreen
 {
-	/** Item renderer */
+	/**
+	 * Item renderer
+	 */
 	protected static RenderItem itemRenderer;
-	/** Gui origin */
+	/**
+	 * Gui origin
+	 */
 	protected int guiOriginX, guiOriginY;
 	
 	protected Minecraft mc;
@@ -66,7 +68,7 @@ public class GuiTeamsBase extends GuiScreen
 		int textureX = 512;
 		int textureY = 256;
 		
-		if(data.currentLevel >= pool.slotUnlockLevels[n])	
+		if(data.currentLevel >= pool.slotUnlockLevels[n])
 		{
 			drawModalRectWithCustomSizedTexture(i, j, 7 + 49 * n, 28, 46, 111, textureX, textureY);
 			
@@ -102,17 +104,20 @@ public class GuiTeamsBase extends GuiScreen
 		if(rarity != EnumPaintjobRarity.UNKNOWN)
 		{
 			int x = 0, y = 71;
-			switch( rarity )
+			switch(rarity)
 			{
-				case COMMON: x = 331; break;
-				case UNCOMMON: x = 349; break;
-				case RARE: x = 367; break;
+				case COMMON: x = 331;
+					break;
+				case UNCOMMON: x = 349;
+					break;
+				case RARE: x = 367;
+					break;
 				case LEGENDARY:
 				{
 					x = 385;
 					break;
 				}
-				default: break;							
+				default: break;
 			}
 			if(x > 0)
 			{
@@ -132,16 +137,16 @@ public class GuiTeamsBase extends GuiScreen
 				GL11.glColor4f(1F, 1F, 1F, 1F);
 				
 				GL11.glTranslatef(x, y, 100);
-
-		        GlStateManager.disableLighting();
-		        GlStateManager.pushMatrix();
-		        GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
-		        GlStateManager.rotate(1F, 0.0F, 1.0F, 0.0F);
-		        RenderHelper.enableStandardItemLighting();
-		        
-		        GlStateManager.popMatrix();
-		        GlStateManager.enableRescaleNormal();
-		        
+				
+				GlStateManager.disableLighting();
+				GlStateManager.pushMatrix();
+				GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
+				GlStateManager.rotate(1F, 0.0F, 1.0F, 0.0F);
+				RenderHelper.enableStandardItemLighting();
+				
+				GlStateManager.popMatrix();
+				GlStateManager.enableRescaleNormal();
+				
 				GL11.glRotatef(160, 1F, 0F, 0F);
 				GL11.glRotatef(10, 0F, 1F, 0F);
 				GL11.glScalef(-scale, scale, scale);
@@ -162,10 +167,13 @@ public class GuiTeamsBase extends GuiScreen
 		{
 			drawModalRectWithCustomSizedTexture(guiOriginX + x, guiOriginY + y, rank * 32, prestige * 32, 32, 32, 1024, 512);
 		}
-		else drawModalRectWithCustomSizedTexture(guiOriginX + x, guiOriginY + y, rank * 16, prestige * 16, 16, 16, 512, 256);
+		else
+			drawModalRectWithCustomSizedTexture(guiOriginX + x, guiOriginY + y, rank * 16, prestige * 16, 16, 16, 512, 256);
 	}
 	
-	/** Item stack renderering method */
+	/**
+	 * Item stack renderering method
+	 */
 	protected void drawSlotInventory(ItemStack itemstack, int i, int j)
 	{
 		if(itemstack == null || itemstack.isEmpty())
@@ -181,13 +189,13 @@ public class GuiTeamsBase extends GuiScreen
 	}
 	
 	@Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException
-    {
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+	{
 		if(AllowEscape())
 		{
 			super.keyTyped(typedChar, keyCode);
 		}
-    }
+	}
 	
 	protected boolean AllowEscape()
 	{

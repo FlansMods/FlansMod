@@ -19,28 +19,28 @@ public class ModelPIAT extends ModelGun
 	int textureX = 128;
 	int textureY = 128;
 
-	public ModelPIAT()	
+	public ModelPIAT()
 	{
 
 
 // Gun
 		gunModel = new ModelRendererTurbo[16];
-		gunModel[0] = new ModelRendererTurbo(this,  0,  11, textureX, textureY); // Shape1
-		gunModel[1] = new ModelRendererTurbo(this,  0,  18, textureX, textureY); // Shape2
-		gunModel[2] = new ModelRendererTurbo(this,  0,  22, textureX, textureY); // Shape3
-		gunModel[3] = new ModelRendererTurbo(this,  0,  28, textureX, textureY); // Shape4
-		gunModel[4] = new ModelRendererTurbo(this,  0,  32, textureX, textureY); // Shape5
-		gunModel[5] = new ModelRendererTurbo(this,  0,  37, textureX, textureY); // Shape6
-		gunModel[6] = new ModelRendererTurbo(this,  0,  44, textureX, textureY); // Shape7
-		gunModel[7] = new ModelRendererTurbo(this,  0,  56, textureX, textureY); // Shape8
-		gunModel[8] = new ModelRendererTurbo(this,  0,  60, textureX, textureY); // Shape9
-		gunModel[9] = new ModelRendererTurbo(this,  0,  64, textureX, textureY); // Shape10
-		gunModel[10] = new ModelRendererTurbo(this,  0,  93, textureX, textureY); // Shape11
-		gunModel[11] = new ModelRendererTurbo(this,  0,  93, textureX, textureY); // Shape12
-		gunModel[12] = new ModelRendererTurbo(this,  0,  99, textureX, textureY); // Shape13
-		gunModel[13] = new ModelRendererTurbo(this,  0,  3, textureX, textureY); // Shape14
-		gunModel[14] = new ModelRendererTurbo(this,  0,  103, textureX, textureY); // Shape15
-		gunModel[15] = new ModelRendererTurbo(this,  0,  113, textureX, textureY); // Shape16
+		gunModel[0] = new ModelRendererTurbo(this, 0, 11, textureX, textureY); // Shape1
+		gunModel[1] = new ModelRendererTurbo(this, 0, 18, textureX, textureY); // Shape2
+		gunModel[2] = new ModelRendererTurbo(this, 0, 22, textureX, textureY); // Shape3
+		gunModel[3] = new ModelRendererTurbo(this, 0, 28, textureX, textureY); // Shape4
+		gunModel[4] = new ModelRendererTurbo(this, 0, 32, textureX, textureY); // Shape5
+		gunModel[5] = new ModelRendererTurbo(this, 0, 37, textureX, textureY); // Shape6
+		gunModel[6] = new ModelRendererTurbo(this, 0, 44, textureX, textureY); // Shape7
+		gunModel[7] = new ModelRendererTurbo(this, 0, 56, textureX, textureY); // Shape8
+		gunModel[8] = new ModelRendererTurbo(this, 0, 60, textureX, textureY); // Shape9
+		gunModel[9] = new ModelRendererTurbo(this, 0, 64, textureX, textureY); // Shape10
+		gunModel[10] = new ModelRendererTurbo(this, 0, 93, textureX, textureY); // Shape11
+		gunModel[11] = new ModelRendererTurbo(this, 0, 93, textureX, textureY); // Shape12
+		gunModel[12] = new ModelRendererTurbo(this, 0, 99, textureX, textureY); // Shape13
+		gunModel[13] = new ModelRendererTurbo(this, 0, 3, textureX, textureY); // Shape14
+		gunModel[14] = new ModelRendererTurbo(this, 0, 103, textureX, textureY); // Shape15
+		gunModel[15] = new ModelRendererTurbo(this, 0, 113, textureX, textureY); // Shape16
 
 		gunModel[0].addBox(0F, 0F, 0F, 1, 4, 2, 0F); // Shape1
 		gunModel[0].setRotationPoint(0F, 0F, -1F);
@@ -91,19 +91,18 @@ public class ModelPIAT extends ModelGun
 		gunModel[15].setRotationPoint(8F, 6F, -2.5F);
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[10];
-		ammoModel[0] = new ModelRendererTurbo(this,  0,  75, textureX, textureY); // Ammo1
-		ammoModel[1] = new ModelRendererTurbo(this,  0,  75, textureX, textureY); // Ammo2
-		ammoModel[2] = new ModelRendererTurbo(this,  0,  75, textureX, textureY); // Ammo3
-		ammoModel[3] = new ModelRendererTurbo(this,  0,  80, textureX, textureY); // Ammo4
-		ammoModel[4] = new ModelRendererTurbo(this,  0,  83, textureX, textureY); // Ammo5
-		ammoModel[5] = new ModelRendererTurbo(this,  0,  83, textureX, textureY); // Ammo6
-		ammoModel[6] = new ModelRendererTurbo(this,  0,  83, textureX, textureY); // Ammo7
-		ammoModel[7] = new ModelRendererTurbo(this,  0,  88, textureX, textureY); // Ammo8
-		ammoModel[8] = new ModelRendererTurbo(this,  0,  88, textureX, textureY); // Ammo9
-		ammoModel[9] = new ModelRendererTurbo(this,  0,  88, textureX, textureY); // Ammo10
+		ammoModel[0] = new ModelRendererTurbo(this, 0, 75, textureX, textureY); // Ammo1
+		ammoModel[1] = new ModelRendererTurbo(this, 0, 75, textureX, textureY); // Ammo2
+		ammoModel[2] = new ModelRendererTurbo(this, 0, 75, textureX, textureY); // Ammo3
+		ammoModel[3] = new ModelRendererTurbo(this, 0, 80, textureX, textureY); // Ammo4
+		ammoModel[4] = new ModelRendererTurbo(this, 0, 83, textureX, textureY); // Ammo5
+		ammoModel[5] = new ModelRendererTurbo(this, 0, 83, textureX, textureY); // Ammo6
+		ammoModel[6] = new ModelRendererTurbo(this, 0, 83, textureX, textureY); // Ammo7
+		ammoModel[7] = new ModelRendererTurbo(this, 0, 88, textureX, textureY); // Ammo8
+		ammoModel[8] = new ModelRendererTurbo(this, 0, 88, textureX, textureY); // Ammo9
+		ammoModel[9] = new ModelRendererTurbo(this, 0, 88, textureX, textureY); // Ammo10
 
 		ammoModel[0].addBox(0F, -0.5F, -1.5F, 1, 1, 3, 0F); // Ammo1
 		ammoModel[0].setRotationPoint(11F, -3.5F, 0F);
@@ -134,8 +133,6 @@ public class ModelPIAT extends ModelGun
 
 		ammoModel[9].addShapeBox(0F, 0.5F, -1.5F, 2, 1, 3, 0F, 0F, 0F, 0F, 0F, 0F, -1F, 0F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, -1F, 0F, -1F, -1F, 0F, -1F, -1F, 0F, 0F, -1F); //Test
 		ammoModel[9].setRotationPoint(17F, -3.5F, 0F);
-
-		
 
 
 		gunSlideDistance = 0F;

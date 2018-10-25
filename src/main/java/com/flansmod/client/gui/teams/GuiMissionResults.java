@@ -4,28 +4,28 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
 import com.flansmod.client.FlansModClient;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.GunType;
 import com.flansmod.common.network.PacketTeamInfo;
 import com.flansmod.common.teams.LoadoutPool;
-import com.flansmod.common.teams.LoadoutPool.LoadoutEntry;
 import com.flansmod.common.teams.LoadoutPool.LoadoutEntryInfoType;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
-import com.flansmod.common.teams.TeamsManagerRanked;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
-public class GuiMissionResults extends GuiTeamsBase 
+public class GuiMissionResults extends GuiTeamsBase
 {
-	/** The background image */
+	/**
+	 * The background image
+	 */
 	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/MissionResults.png");
 	
 	private static final int WIDTH = 256, HEIGHT = 256;
@@ -50,23 +50,23 @@ public class GuiMissionResults extends GuiTeamsBase
 		DONE;
 	}
 	
-	private static final int[] stateTimes = new int[] {
-		0,
-		
-		4,
-		4,
-		4,
-		4,
-		4,
-		
-		20,
-		20,
-		5,
-		5,
-		5,
-		25,
-		
-		0
+	private static final int[] stateTimes = new int[]{
+			0,
+			
+			4,
+			4,
+			4,
+			4,
+			4,
+			
+			20,
+			20,
+			5,
+			5,
+			5,
+			25,
+			
+			0
 	};
 	
 	private static class MissionResultsUnlock
@@ -103,7 +103,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		}
 		
 		state = EnumResultsState.SHOW_LINE_1_XP;
-				
+		
 		displayRank = data.currentLevel;
 		lastXP = displayXP = data.currentXP;
 		
@@ -142,7 +142,7 @@ public class GuiMissionResults extends GuiTeamsBase
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id == 0) // Confirm
+		if(button.id == 0) // Confirm
 		{
 			// Send data to server
 			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiTeamScores());
@@ -276,7 +276,7 @@ public class GuiMissionResults extends GuiTeamsBase
 						for(int i = 0; i < index; i++)
 						{
 							if(unlocks[i].isWeapon && unlocks[i].loadoutEntry != null &&
-								unlocks[i].loadoutEntry.type.shortName.equals(entry.type.shortName))
+									unlocks[i].loadoutEntry.type.shortName.equals(entry.type.shortName))
 								conflict = true;
 						}
 						if(conflict) continue;
@@ -421,7 +421,7 @@ public class GuiMissionResults extends GuiTeamsBase
 			DrawRankIcon(displayRank + 1, 0, 216, 123, true);
 		}
 		
-
+		
 		boolean hasDoneFinalLevel = hasDoneFinalLevelUp;
 		
 		if(state.ordinal() >= EnumResultsState.REVEAL_UNLOCK1.ordinal() || hasDoneFinalLevel)
@@ -435,14 +435,14 @@ public class GuiMissionResults extends GuiTeamsBase
 		
 		if(state.ordinal() >= EnumResultsState.REVEAL_UNLOCK4.ordinal() || hasDoneFinalLevel)
 			DrawUnlock(unlocks[3], guiOriginX + 131, guiOriginY + 207);
-
+		
 		super.drawScreen(i, j, f);
-	}	
+	}
 	
 	private void DrawUnlock(MissionResultsUnlock entry, int i, int j)
 	{
 		if(entry == null) return;
-					
+		
 		if(entry.isWeapon)
 		{
 			drawCenteredString(fontRenderer, "New item unlocked", i + 58, j + 2, 0xffffff);
@@ -461,7 +461,7 @@ public class GuiMissionResults extends GuiTeamsBase
 		{
 			drawCenteredString(fontRenderer, "Reward obtained", i + 58, j + 2, 0xffffff);
 			drawCenteredString(fontRenderer, entry.rewardBox.name, i + 58, j + 31, 0xffffff);
-			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);			
+			drawSlotInventory(new ItemStack(entry.rewardBox.getItem()), i + 49, j + 12);
 		}
 	}
 	

@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelM40A3 extends ModelGun 
+public class ModelM40A3 extends ModelGun
 {
 	public ModelM40A3()
 	{
@@ -62,7 +62,7 @@ public class ModelM40A3 extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 26, 6, textureX, textureY);
 		ammoModel[0].addBox(1F, 0.5F, -0.5F, 3, 1, 1);
-	
+		
 		
 		translateAll(0, 2.5F, 0);
 		

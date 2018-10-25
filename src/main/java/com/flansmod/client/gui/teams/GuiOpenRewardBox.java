@@ -5,6 +5,17 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
 import com.flansmod.client.FlansModResourceHandler;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
@@ -14,18 +25,7 @@ import com.flansmod.common.teams.LoadoutPool;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.RewardBox;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
-public class GuiOpenRewardBox extends GuiTeamsBase 
+public class GuiOpenRewardBox extends GuiTeamsBase
 {
 	private static enum EnumPageState
 	{
@@ -35,8 +35,10 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		STOPPED,
 	}
 	
-	/** The background image */
-	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/OpenCrates.png");	
+	/**
+	 * The background image
+	 */
+	private static final ResourceLocation texture = new ResourceLocation("flansmod", "gui/OpenCrates.png");
 	private static final int WIDTH = 196, HEIGHT = 200;
 	private static final int WAITING_FOR_SERVER = -1;
 	private static int spinTime = 30, slowdownTime = 130;
@@ -44,7 +46,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	private static Random gunScrambler = new Random();
 	private float spinSpeed = 0.555555555f;
 	
-	private ArrayList<Paintjob> options = new ArrayList<Paintjob>(); 
+	private ArrayList<Paintjob> options = new ArrayList<Paintjob>();
 	private int target = WAITING_FOR_SERVER;
 	private EnumPageState state = EnumPageState.SPINNING;
 	private int timeLeftInState = spinTime;
@@ -74,7 +76,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		int h = scaledresolution.getScaledHeight();
 		guiOriginX = w / 2 - WIDTH / 2;
 		guiOriginY = h / 2 - HEIGHT / 2;
-						
+		
 		doneButton = new GuiButton(0, width / 2 - 20, guiOriginY + 170, 40, 20, "Done");
 		doneButton.enabled = false;
 		buttonList.add(doneButton);
@@ -83,12 +85,12 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	@Override
 	protected void actionPerformed(GuiButton button)
 	{
-		if (button.id == 0)
+		if(button.id == 0)
 		{
-			ClientTeamsData.OpenLandingPage();	
+			ClientTeamsData.OpenLandingPage();
 		}
 	}
-
+	
 	public GuiOpenRewardBox(RewardBox rewardBox)
 	{
 		super();
@@ -114,7 +116,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		spinSpeed = InitialVelocity();
 	}
 	
-	@Override 
+	@Override
 	public void updateScreen()
 	{
 		super.updateScreen();
@@ -154,7 +156,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				{
 					spinSpeed = 0.0f;
 					FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-							new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 1.0F, 2.0f, 
+							new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 1.0F, 2.0f,
 									(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 					SwitchToState(EnumPageState.STOPPED);
 				}
@@ -163,7 +165,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				spinner = target + timeInState * InitialVelocity() + 0.5f * Acceleration() * timeInState * timeInState;
 				int postIndex = MathHelper.floor(spinner) % options.size();
 				
-	
+				
 				break;
 				
 			}
@@ -173,7 +175,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 				doneButton.enabled = true;
 				break;
 			}
-
+			
 			default:
 				break;
 		}
@@ -190,8 +192,16 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 			spinner -= options.size();
 		}
 	}
-	private float InitialVelocity() { return (2.0f / (float)slowdownTime) * options.size(); }
-	private float Acceleration() { return -(InitialVelocity() * InitialVelocity()) / (2 * options.size()); }
+	
+	private float InitialVelocity()
+	{
+		return (2.0f / (float)slowdownTime) * options.size();
+	}
+	
+	private float Acceleration()
+	{
+		return -(InitialVelocity() * InitialVelocity()) / (2 * options.size());
+	}
 	
 	private void SwitchToState(EnumPageState newState)
 	{
@@ -203,11 +213,11 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 	{
 		int preIndex = MathHelper.floor(spinner) % options.size();
 		int postIndex = MathHelper.floor(spinner + spinSpeed * f) % options.size();
-
+		
 		if(preIndex != postIndex && Minecraft.getSystemTime() - timeOfLastSound >= 80)
 		{
 			FMLClientHandler.instance().getClient().getSoundHandler().playSound(
-					new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 0.5F, 1.0f, 
+					new PositionedSoundRecord(FlansModResourceHandler.getSoundEvent("UnlockNotch"), SoundCategory.NEUTRAL, 0.5F, 1.0f,
 							(float)mc.player.posX, (float)mc.player.posY, (float)mc.player.posZ));
 			timeOfLastSound = Minecraft.getSystemTime();
 		}
@@ -239,7 +249,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		
 		//Draw the background
 		drawModalRectWithCustomSizedTexture(guiOriginX, guiOriginY, 0, 0, WIDTH, HEIGHT, textureX, textureY);
-				
+		
 		int pixelOffset = ModuloHelper.modulo(MathHelper.floor(spinner * 18.0f), 18) - 18;
 		
 		drawModalRectWithCustomSizedTexture(guiOriginX + 9, guiOriginY + 101, 239 + pixelOffset + 10, 101, 180, 18, textureX, textureY);
@@ -281,7 +291,7 @@ public class GuiOpenRewardBox extends GuiTeamsBase
 		}
 		
 		super.drawScreen(i, j, f);
-	}	
+	}
 	
 	@Override
 	public boolean doesGuiPauseGame()

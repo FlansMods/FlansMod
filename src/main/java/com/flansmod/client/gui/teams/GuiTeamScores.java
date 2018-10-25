@@ -3,7 +3,6 @@ package com.flansmod.client.gui.teams;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -45,14 +44,14 @@ public class GuiTeamScores extends GuiTeamsBase
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-
+		
 		mc.renderEngine.bindTexture(texture2);
 		
 		int guiHeight = 68 + 9 * teamInfo.numLines;
-
+		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int m = k / 2 - 156;
-		int n = l / 2 - guiHeight / 2 ;
+		int n = l / 2 - guiHeight / 2;
 		//Like draw texturedModalRect, but with custom image size
 		//func_146110_a(m, n, 100, 0, 312, 180, 512, 256);
 		
@@ -70,7 +69,7 @@ public class GuiTeamScores extends GuiTeamsBase
 		//No idea why this works, but it makes the text bind its texture correctly
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investiagate this
-
+		
 		drawString(fontRenderer, teamInfo.map, m + 6, n + 6, 0xffffff);
 		drawString(fontRenderer, teamInfo.gametype, m + 312 - 6 - fontRenderer.getStringWidth(teamInfo.gametype), n + 6, 0xffffff);
 		
@@ -88,7 +87,7 @@ public class GuiTeamScores extends GuiTeamsBase
 			}
 			
 			drawString(fontRenderer, Math.max(ClientTeamsData.timeLeftInStage / 20, 0) + "", m + 312 - 22, n + 20, 0xffffff);
-
+			
 		}
 		else
 		{
@@ -165,9 +164,9 @@ public class GuiTeamScores extends GuiTeamsBase
 		FontRenderer fontrenderer = mc.fontRenderer;
 		drawDefaultBackground();
 		GL11.glEnable(3042 /*GL_BLEND*/);
-
+		
 		mc.renderEngine.bindTexture(texture);
-
+		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int guiHeight = 34 + 9 * teamInfo.numLines;
 		int m = k / 2 - 128;
@@ -180,7 +179,7 @@ public class GuiTeamScores extends GuiTeamsBase
 		//No idea why this works, but it makes the text bind its texture correctly
 		//mc.renderEngine.bindTexture("/terrain.png");
 		//TODO : Investiagate this
-
+		
 		drawCenteredString(fontRenderer, teamInfo.gametype, k / 2, n + 4, 0xffffff);
 		drawString(fontRenderer, "Name", m + 8, n + 14, 0xffffff);
 		drawString(fontRenderer, "Score", m + 100, n + 14, 0xffffff);

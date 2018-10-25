@@ -10,8 +10,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelM157MM extends ModelVehicle //Same as Filename
@@ -60,7 +60,7 @@ public class ModelM157MM extends ModelVehicle //Same as Filename
 		bodyModel[35] = new ModelRendererTurbo(this, 249, 57, textureX, textureY); // Box 124
 		bodyModel[36] = new ModelRendererTurbo(this, 138, 69, textureX, textureY); // Box 0
 
-		bodyModel[0].addShape3D(8F, -7F, -5F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(12, 0, 12, 0), new Coord2D(15, 3, 15, 3), new Coord2D(15, 11, 15, 11), new Coord2D(12, 14, 12, 14), new Coord2D(4, 14, 4, 14), new Coord2D(1, 11, 1, 11), new Coord2D(1, 3, 1, 3) }), 3, 14, 14, 52, 3, ModelRendererTurbo.MR_FRONT, new float[] {5 ,8 ,5 ,8 ,5 ,8 ,5 ,8}); // Shape 10
+		bodyModel[0].addShape3D(8F, -7F, -5F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(12, 0, 12, 0), new Coord2D(15, 3, 15, 3), new Coord2D(15, 11, 15, 11), new Coord2D(12, 14, 12, 14), new Coord2D(4, 14, 4, 14), new Coord2D(1, 11, 1, 11), new Coord2D(1, 3, 1, 3)}), 3, 14, 14, 52, 3, ModelRendererTurbo.MR_FRONT, new float[]{5, 8, 5, 8, 5, 8, 5, 8}); // Shape 10
 		bodyModel[0].setRotationPoint(7F, 2F, 12F);
 
 		bodyModel[1].addShapeBox(0F, 0F, 0F, 2, 2, 8, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F); // Box 36
@@ -73,7 +73,7 @@ public class ModelM157MM extends ModelVehicle //Same as Filename
 		bodyModel[3].setRotationPoint(13.5F, 4F, -13F);
 		bodyModel[3].rotateAngleZ = 1.01229097F;
 
-		bodyModel[4].addShape3D(8F, -7F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(12, 0, 12, 0), new Coord2D(15, 3, 15, 3), new Coord2D(15, 11, 15, 11), new Coord2D(12, 14, 12, 14), new Coord2D(4, 14, 4, 14), new Coord2D(1, 11, 1, 11), new Coord2D(1, 3, 1, 3) }), 3, 14, 14, 52, 3, ModelRendererTurbo.MR_FRONT, new float[] {5 ,8 ,5 ,8 ,5 ,8 ,5 ,8}); // Shape 19
+		bodyModel[4].addShape3D(8F, -7F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(12, 0, 12, 0), new Coord2D(15, 3, 15, 3), new Coord2D(15, 11, 15, 11), new Coord2D(12, 14, 12, 14), new Coord2D(4, 14, 4, 14), new Coord2D(1, 11, 1, 11), new Coord2D(1, 3, 1, 3)}), 3, 14, 14, 52, 3, ModelRendererTurbo.MR_FRONT, new float[]{5, 8, 5, 8, 5, 8, 5, 8}); // Shape 19
 		bodyModel[4].setRotationPoint(7F, 2F, -14F);
 
 		bodyModel[5].addShapeBox(0F, 0F, 0F, 2, 2, 8, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F); // Box 43
@@ -465,7 +465,6 @@ public class ModelM157MM extends ModelVehicle //Same as Filename
 
 		barrelModel[28].addShapeBox(21.5F, 2.5F, -0.5F, 2, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 129
 		barrelModel[28].setRotationPoint(0F, -6.2F, 0F);
-
 
 
 		translateAll(0F, 0F, 0F);

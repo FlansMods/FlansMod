@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "flansmodapocalypse:blocks/labStone"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "flansmodapocalypse:blocks/labStone"
+  }
 }

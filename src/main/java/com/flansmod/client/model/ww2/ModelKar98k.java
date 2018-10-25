@@ -6,10 +6,8 @@ package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.EnumAnimationType;
 import com.flansmod.client.model.ModelGun;
-import com.flansmod.common.vector.Vector3f;
 import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
+import com.flansmod.common.vector.Vector3f;
 
 public class ModelKar98k extends ModelGun //Same as Filename
 {
@@ -156,13 +154,11 @@ public class ModelKar98k extends ModelGun //Same as Filename
 		pumpModel[2].setRotationPoint(-1F, -4.7F, -3F);
 		pumpModel[2].rotateAngleX = 1.02974426F;
 
-		barrelAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
-		stockAttachPoint = new Vector3f(0F /16F, 0F /16F, 0F /16F);
+		barrelAttachPoint = new Vector3f(0F / 16F, 0F / 16F, 0F / 16F);
+		stockAttachPoint = new Vector3f(0F / 16F, 0F / 16F, 0F / 16F);
 		scopeAttachPoint = new Vector3f(3F / 16F, 8F / 16F, 0F / 16F);
-		gripAttachPoint = new Vector3f(0 /16F, 0F /16F, 0F /16F);
+		gripAttachPoint = new Vector3f(0 / 16F, 0F / 16F, 0F / 16F);
 
-	
-		
 
 		gunSlideDistance = 0.1F;
 		pumpDelayAfterReload = 65;

@@ -1,133 +1,101 @@
 package com.flansmod.apocalypse.common.world;
 
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.BIG_SHROOM;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.CACTUS;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.CLAY;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.DEAD_BUSH;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.FLOWERS;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.GRASS;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_WATER;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LILYPAD;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.PUMPKIN;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.REED;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SAND;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SAND_PASS2;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.SHROOM;
-import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.TREE;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.ANDESITE;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.COAL;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.DIAMOND;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.DIORITE;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.DIRT;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.GOLD;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.GRANITE;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.GRAVEL;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.IRON;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.LAPIS;
-import static net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType.REDSTONE;
-
 import java.util.Random;
 
-import com.flansmod.apocalypse.common.FlansModApocalypse;
-
-import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStone;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenDeadBush;
-import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
-public class BiomeDecoratorApocalypse extends BiomeDecorator 
+import com.flansmod.apocalypse.common.FlansModApocalypse;
+
+import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.LAKE_WATER;
+
+public class BiomeDecoratorApocalypse extends BiomeDecorator
 {
 	public boolean generateSulphurLakes = false;
-
-    public void decorate(World worldIn, Random random, Biome biome, BlockPos pos)
-    {
-        if (this.decorating)
-        {
-            throw new RuntimeException("Already decorating");
-        }
-        else
-        {
-            this.chunkProviderSettings = ChunkGeneratorSettings.Factory.jsonToFactory(worldIn.getWorldInfo().getGeneratorOptions()).build();
-            this.chunkPos = pos;
-            this.dirtGen = new WorldGenMinable(Blocks.DIRT.getDefaultState(), 8);
-            this.clayGen = new WorldGenMinable(Blocks.CLAY.getDefaultState(), 30);
-            this.gravelGen = new WorldGenMinable(Blocks.GRAVEL.getDefaultState(), 25);
-            this.graniteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE), this.chunkProviderSettings.graniteSize);
-            this.dioriteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE), this.chunkProviderSettings.dioriteSize);
-            this.andesiteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE), this.chunkProviderSettings.andesiteSize);
-            this.coalGen = new WorldGenMinable(Blocks.COAL_ORE.getDefaultState(), 8);
-            this.ironGen = new WorldGenMinable(Blocks.IRON_ORE.getDefaultState(), 25);
-            this.goldGen = new WorldGenMinable(Blocks.GOLD_ORE.getDefaultState(), this.chunkProviderSettings.goldSize);
-            this.redstoneGen = new WorldGenMinable(Blocks.REDSTONE_ORE.getDefaultState(), 16);
-            this.diamondGen = new WorldGenMinable(Blocks.DIAMOND_ORE.getDefaultState(), 8);
-            this.lapisGen = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), this.chunkProviderSettings.lapisSize);
-            this.genDecorations(biome, worldIn, random);
-            this.decorating = false;
-        }
-    }
-    
-    @Override
-    protected void genDecorations(Biome biome, World currentWorld, Random randomGenerator)
-    {
-        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(currentWorld, randomGenerator, chunkPos));
-        //Forge generation hook
-        boolean doGen;
-        int i, j, k;
-        
-        if(this.generateSulphurLakes)
-        {
-            BlockPos blockpos1;
-
-            doGen = TerrainGen.decorate(currentWorld, randomGenerator, chunkPos, LAKE_WATER);
-            for(j = 0; doGen && j < 15; ++j)
-            {
-                blockpos1 = this.chunkPos.add(randomGenerator.nextInt(16) + 8, randomGenerator.nextInt(10) + 30, randomGenerator.nextInt(16) + 8);
-                (new WorldGenSulphurPool(FlansModApocalypse.blockSulphuricAcid)).generate(currentWorld, randomGenerator, blockpos1);
-            }
-        }
-        
-        //Ore generation
-        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(currentWorld, randomGenerator, chunkPos));
-        
-        //Generic generation
-        //First parameter is the amount of ore veins, second is the generator, third and fourth are min and max height
-        genStandardOre1(currentWorld, randomGenerator, 5, this.dirtGen, 12, 34);
-        genStandardOre1(currentWorld, randomGenerator, 5, this.gravelGen, 36, 64);
-        genStandardOre1(currentWorld, randomGenerator, 2, this.dioriteGen, 60, 100);
-        genStandardOre1(currentWorld, randomGenerator, 2, this.graniteGen, 60, 100);
-        genStandardOre1(currentWorld, randomGenerator, 1, this.andesiteGen, 60, 100);
-        
-    	genStandardOre1(currentWorld, randomGenerator, 20, this.ironGen, 5, 128);
-      
-        if(biome == BiomeApocalypse.highPlateau)
-        {
-        	genStandardOre1(currentWorld, randomGenerator, 1, this.diamondGen, 95, 128);
-        	genStandardOre1(currentWorld, randomGenerator, 1, this.goldGen, 50, 90);
-        	genStandardOre2(currentWorld, randomGenerator, 2, this.lapisGen, 70, 32);
-        	genStandardOre1(currentWorld, randomGenerator, 10, this.redstoneGen, 30, 60);
-        }
-        else if(biome == BiomeApocalypse.sulphurPits)
-        {
-        	genStandardOre1(currentWorld, randomGenerator, 15, this.coalGen, 0, 25);
-        }
-
-        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(currentWorld, randomGenerator, chunkPos));
+	
+	public void decorate(World worldIn, Random random, Biome biome, BlockPos pos)
+	{
+		if(this.decorating)
+		{
+			throw new RuntimeException("Already decorating");
+		}
+		else
+		{
+			this.chunkProviderSettings = ChunkGeneratorSettings.Factory.jsonToFactory(worldIn.getWorldInfo().getGeneratorOptions()).build();
+			this.chunkPos = pos;
+			this.dirtGen = new WorldGenMinable(Blocks.DIRT.getDefaultState(), 8);
+			this.clayGen = new WorldGenMinable(Blocks.CLAY.getDefaultState(), 30);
+			this.gravelGen = new WorldGenMinable(Blocks.GRAVEL.getDefaultState(), 25);
+			this.graniteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE), this.chunkProviderSettings.graniteSize);
+			this.dioriteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE), this.chunkProviderSettings.dioriteSize);
+			this.andesiteGen = new WorldGenMinable(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE), this.chunkProviderSettings.andesiteSize);
+			this.coalGen = new WorldGenMinable(Blocks.COAL_ORE.getDefaultState(), 8);
+			this.ironGen = new WorldGenMinable(Blocks.IRON_ORE.getDefaultState(), 25);
+			this.goldGen = new WorldGenMinable(Blocks.GOLD_ORE.getDefaultState(), this.chunkProviderSettings.goldSize);
+			this.redstoneGen = new WorldGenMinable(Blocks.REDSTONE_ORE.getDefaultState(), 16);
+			this.diamondGen = new WorldGenMinable(Blocks.DIAMOND_ORE.getDefaultState(), 8);
+			this.lapisGen = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), this.chunkProviderSettings.lapisSize);
+			this.genDecorations(biome, worldIn, random);
+			this.decorating = false;
+		}
+	}
+	
+	@Override
+	protected void genDecorations(Biome biome, World currentWorld, Random randomGenerator)
+	{
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(currentWorld, randomGenerator, chunkPos));
+		//Forge generation hook
+		boolean doGen;
+		int i, j, k;
+		
+		if(this.generateSulphurLakes)
+		{
+			BlockPos blockpos1;
+			
+			doGen = TerrainGen.decorate(currentWorld, randomGenerator, chunkPos, LAKE_WATER);
+			for(j = 0; doGen && j < 15; ++j)
+			{
+				blockpos1 = this.chunkPos.add(randomGenerator.nextInt(16) + 8, randomGenerator.nextInt(10) + 30, randomGenerator.nextInt(16) + 8);
+				(new WorldGenSulphurPool(FlansModApocalypse.blockSulphuricAcid)).generate(currentWorld, randomGenerator, blockpos1);
+			}
+		}
+		
+		//Ore generation
+		MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(currentWorld, randomGenerator, chunkPos));
+		
+		//Generic generation
+		//First parameter is the amount of ore veins, second is the generator, third and fourth are min and max height
+		genStandardOre1(currentWorld, randomGenerator, 5, this.dirtGen, 12, 34);
+		genStandardOre1(currentWorld, randomGenerator, 5, this.gravelGen, 36, 64);
+		genStandardOre1(currentWorld, randomGenerator, 2, this.dioriteGen, 60, 100);
+		genStandardOre1(currentWorld, randomGenerator, 2, this.graniteGen, 60, 100);
+		genStandardOre1(currentWorld, randomGenerator, 1, this.andesiteGen, 60, 100);
+		
+		genStandardOre1(currentWorld, randomGenerator, 20, this.ironGen, 5, 128);
+		
+		if(biome == BiomeApocalypse.highPlateau)
+		{
+			genStandardOre1(currentWorld, randomGenerator, 1, this.diamondGen, 95, 128);
+			genStandardOre1(currentWorld, randomGenerator, 1, this.goldGen, 50, 90);
+			genStandardOre2(currentWorld, randomGenerator, 2, this.lapisGen, 70, 32);
+			genStandardOre1(currentWorld, randomGenerator, 10, this.redstoneGen, 30, 60);
+		}
+		else if(biome == BiomeApocalypse.sulphurPits)
+		{
+			genStandardOre1(currentWorld, randomGenerator, 15, this.coalGen, 0, 25);
+		}
+		
+		MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(currentWorld, randomGenerator, chunkPos));
         
         /*
         this.generateOres();
@@ -332,12 +300,13 @@ public class BiomeDecoratorApocalypse extends BiomeDecorator
 
 
          */
-        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(currentWorld, randomGenerator, chunkPos));
-    }
-    
-    private int nextInt(Random randomGenerator, int i) { //Safety wrapper to prevent exceptions.
-        if (i <= 1)
-            return 0;
-        return randomGenerator.nextInt(i);
-   }
+		MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(currentWorld, randomGenerator, chunkPos));
+	}
+	
+	private int nextInt(Random randomGenerator, int i)
+	{ //Safety wrapper to prevent exceptions.
+		if(i <= 1)
+			return 0;
+		return randomGenerator.nextInt(i);
+	}
 }

@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelSuperHeavyChest extends ModelCustomArmour 
+public class ModelSuperHeavyChest extends ModelCustomArmour
 {
 	public ModelSuperHeavyChest()
 	{
@@ -41,7 +41,6 @@ public class ModelSuperHeavyChest extends ModelCustomArmour
 
 		bodyModel[5] = new ModelRendererTurbo(this, 44, 10, textureX, textureY);
 		bodyModel[5].addBox(-8.5F, -2F, -3F, 4, 4, 6);
-		
 		
 		
 		leftArmModel = new ModelRendererTurbo[2];

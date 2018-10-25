@@ -1,11 +1,11 @@
 package com.flansmod.client.model.zombie;
 
-import com.flansmod.client.tmt.ModelRendererTurbo;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 
-public class ModelBearTrap extends ModelBase 
+import com.flansmod.client.tmt.ModelRendererTurbo;
+
+public class ModelBearTrap extends ModelBase
 {
 	public ModelRendererTurbo[] mineModel;
 	public ModelRendererTurbo buttonModel;
@@ -68,7 +68,7 @@ public class ModelBearTrap extends ModelBase
 		spikeModel[9] = new ModelRendererTurbo(this, 0, 0, 32, 8);
 		spikeModel[9].addTrapezoid(1F, 1F, 2F, 1, 1, 1, 0F, -0.5F, ModelRendererTurbo.MR_BOTTOM);
 
-	
+
 	}
 	
 	@Override

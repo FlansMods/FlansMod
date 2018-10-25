@@ -16,14 +16,14 @@ public class RenderFlagpole extends Render
 	
 	public ModelFlagpole modelFlagpole;
 	
-	public RenderFlagpole(RenderManager renderManager) 
+	public RenderFlagpole(RenderManager renderManager)
 	{
 		super(renderManager);
 		modelFlagpole = new ModelFlagpole();
 	}
 	
 	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) 
+	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
 	{
 		bindEntityTexture(entity);
 		EntityFlagpole flagpole = (EntityFlagpole)entity;
@@ -33,13 +33,13 @@ public class RenderFlagpole extends Render
 		
 		GL11.glScalef(-1F, -1F, 1F);
 		GL11.glColor3f(1F, 1F, 1F);
-
+		
 		modelFlagpole.renderPole(0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F, flagpole);
 		GL11.glPopMatrix();
 	}
-
+	
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return texture;
 	}
@@ -47,7 +47,7 @@ public class RenderFlagpole extends Render
 	public static class Factory implements IRenderFactory
 	{
 		@Override
-		public Render createRenderFor(RenderManager manager) 
+		public Render createRenderFor(RenderManager manager)
 		{
 			return new RenderFlagpole(manager);
 		}

@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,7 +12,6 @@ import com.flansmod.client.gui.teams.GuiTeamSelect;
 import com.flansmod.client.teams.ClientTeamsData;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.teams.LoadoutPool;
-import com.flansmod.common.teams.PlayerLoadout;
 import com.flansmod.common.teams.PlayerRankData;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManagerRanked;
@@ -31,7 +29,7 @@ public class PacketLoadoutData extends PacketBase
 	}
 	
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void encodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		writeUTF(data, motd);
 		data.writeInt(teamsAvailable.length);
@@ -41,12 +39,12 @@ public class PacketLoadoutData extends PacketBase
 		}
 		
 		myRankData.writeToBuf(data);
-
+		
 		data.writeInt(currentPool == null ? 0 : currentPool.shortName.hashCode());
 	}
-
+	
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data) 
+	public void decodeInto(ChannelHandlerContext ctx, ByteBuf data)
 	{
 		motd = readUTF(data);
 		int numTeams = data.readInt();
@@ -60,9 +58,9 @@ public class PacketLoadoutData extends PacketBase
 		
 		currentPool = LoadoutPool.GetPool(data.readInt());
 	}
-
+	
 	@Override
-	public void handleServerSide(EntityPlayerMP playerEntity) 
+	public void handleServerSide(EntityPlayerMP playerEntity)
 	{
 		PlayerRankData rankData = TeamsManagerRanked.rankData.get(playerEntity.getUniqueID());
 		if(rankData == null)
@@ -99,12 +97,12 @@ public class PacketLoadoutData extends PacketBase
 			}
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void handleClientSide(EntityPlayer clientPlayer) 
+	public void handleClientSide(EntityPlayer clientPlayer)
 	{
-		ClientTeamsData.motd = motd;		
+		ClientTeamsData.motd = motd;
 		ClientTeamsData.theRankData = myRankData;
 		ClientTeamsData.currentPool = currentPool;
 		GuiTeamSelect.teamChoices = teamsAvailable;

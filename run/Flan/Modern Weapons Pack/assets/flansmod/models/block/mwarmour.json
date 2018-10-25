@@ -1,1 +1,12 @@
-{ "parent": "block/cube", "textures": { "particle": "flansmod:blocks/ModernArmourBoxSide", "down": "flansmod:blocks/ModernArmourBoxTop", "up": "flansmod:blocks/ModernArmourBoxTop", "north": "flansmod:blocks/ModernArmourBoxSide", "east": "flansmod:blocks/ModernArmourBoxSide", "south": "flansmod:blocks/ModernArmourBoxSide", "west": "flansmod:blocks/ModernArmourBoxSide" } } 
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "flansmod:blocks/ModernArmourBoxSide",
+    "down": "flansmod:blocks/ModernArmourBoxTop",
+    "up": "flansmod:blocks/ModernArmourBoxTop",
+    "north": "flansmod:blocks/ModernArmourBoxSide",
+    "east": "flansmod:blocks/ModernArmourBoxSide",
+    "south": "flansmod:blocks/ModernArmourBoxSide",
+    "west": "flansmod:blocks/ModernArmourBoxSide"
+  }
+}

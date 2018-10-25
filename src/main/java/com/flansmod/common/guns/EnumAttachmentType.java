@@ -1,6 +1,6 @@
 package com.flansmod.common.guns;
 
-public enum EnumAttachmentType 
+public enum EnumAttachmentType
 {
 	barrel, sights, stock, grip, generic;
 	

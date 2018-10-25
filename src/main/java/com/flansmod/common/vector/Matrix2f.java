@@ -2,15 +2,13 @@ package com.flansmod.common.vector;
 
 import java.util.Set;
 
-import com.flansmod.client.FlansModClient;
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.types.InfoType;
-
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class Matrix2f 
+import com.flansmod.client.FlansModClient;
+import com.flansmod.common.types.InfoType;
+
+public class Matrix2f
 {
 	public InfoType coords;
 	public int value;
@@ -34,10 +32,10 @@ public class Matrix2f
 		set.toArray(array);
 		int index = InfoType.random.nextInt(array.length);
 		InfoType type = InfoType.infoTypes.get(Integer.valueOf(array[index]));
-				
+		
 		return new Matrix2f(type);
 	}
-		
+	
 	public static void verifyMatrixNormals(Matrix2f matrix)
 	{
 		if(matrix.coords == null)

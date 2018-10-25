@@ -4,11 +4,13 @@ import net.minecraft.client.model.ModelBase;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelAttachment extends ModelBase 
+public class ModelAttachment extends ModelBase
 {
 	public ModelRendererTurbo[] attachmentModel = new ModelRendererTurbo[0];
 	
-	/** For big scopes, so that the player actually looks through them properly */
+	/**
+	 * For big scopes, so that the player actually looks through them properly
+	 */
 	public float renderOffset = 0F;
 	
 	public void renderAttachment(float f)
@@ -17,10 +19,11 @@ public class ModelAttachment extends ModelBase
 			if(model != null)
 				model.render(f);
 	}
-
+	
 	public void flipAll()
 	{
-		for (ModelRendererTurbo anAttachmentModel : attachmentModel) {
+		for(ModelRendererTurbo anAttachmentModel : attachmentModel)
+		{
 			anAttachmentModel.doMirror(false, true, true);
 			anAttachmentModel.setRotationPoint(anAttachmentModel.rotationPointX, -anAttachmentModel.rotationPointY, -anAttachmentModel.rotationPointZ);
 		}
@@ -35,7 +38,7 @@ public class ModelAttachment extends ModelBase
 			anAttachmentModel.rotationPointZ += z;
 		}
 	}
-
+	
 	public void translateAll(float x, float y, float z)
 	{
 		translate(attachmentModel, x, y, z);

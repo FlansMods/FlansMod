@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelWinchesterModel70 extends ModelGun 
+public class ModelWinchesterModel70 extends ModelGun
 {
 	public ModelWinchesterModel70()
 	{
@@ -18,7 +18,7 @@ public class ModelWinchesterModel70 extends ModelGun
 		gunModel[0].addBox(1F, 1.5F, -0.5F, 16, 1, 1);
 		
 		gunModel[1] = new ModelRendererTurbo(this, 0, 2, textureX, textureY);
-		gunModel[1].addShapeBox(-1F, 0F, -1F, 13, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		gunModel[1].addShapeBox(-1F, 0F, -1F, 13, 2, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1F, 0F, /* 2 */ 0F, -1F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		
 		//Scope
@@ -51,7 +51,7 @@ public class ModelWinchesterModel70 extends ModelGun
 		defaultStockModel[0].addBox(-4F, -0.5F, -1F, 3, 2, 2);
 		
 		defaultStockModel[1] = new ModelRendererTurbo(this, 16, 6, textureX, textureY);
-		defaultStockModel[1].addShapeBox(-9F, -2F, -1F, 5, 4, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);	
+		defaultStockModel[1].addShapeBox(-9F, -2F, -1F, 5, 4, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -1.5F, 0F, /* 2 */ 0F, -1.5F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ 0F, 0F, 0F);
 		
 		stockAttachPoint = new Vector3f(-1F / 16F, 1F / 16F, 0F);
 		
@@ -60,7 +60,7 @@ public class ModelWinchesterModel70 extends ModelGun
 		
 		ammoModel[0] = new ModelRendererTurbo(this, 34, 0, textureX, textureY);
 		ammoModel[0].addBox(1F, 0.5F, -0.5F, 3, 1, 1);
-	
+
 		
 		translateAll(0, 2.5F, 0);
 		

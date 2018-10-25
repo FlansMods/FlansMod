@@ -2,13 +2,12 @@ package com.flansmod.common.guns;
 
 import java.util.HashMap;
 
-import com.flansmod.common.FlansMod;
+import net.minecraft.item.ItemStack;
+
 import com.flansmod.common.types.EnumPaintjobRarity;
 import com.flansmod.common.types.PaintableType;
 
-import net.minecraft.item.ItemStack;
-
-public class Paintjob 
+public class Paintjob
 {
 	private static HashMap<Integer, Paintjob> paintjobs = new HashMap<Integer, Paintjob>();
 	

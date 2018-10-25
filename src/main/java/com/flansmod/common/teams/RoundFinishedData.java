@@ -1,11 +1,10 @@
 package com.flansmod.common.teams;
 
-import com.flansmod.common.FlansMod;
-import com.flansmod.common.network.PacketBase;
-
 import io.netty.buffer.ByteBuf;
 
-public class RoundFinishedData 
+import com.flansmod.common.network.PacketBase;
+
+public class RoundFinishedData
 {
 	public class VotingOption
 	{
@@ -27,7 +26,7 @@ public class RoundFinishedData
 	
 	public int scoresTime = 0;
 	public int rankUpdateTime = 0;
-	public int votingTime = 0; 
+	public int votingTime = 0;
 	
 	public boolean votingEnabled = false;
 	public VotingOption[] votingOptions = new VotingOption[0];
@@ -36,8 +35,9 @@ public class RoundFinishedData
 	public int resultantXP = 0;
 	public int resultantLevel = 0;
 	
-	public RoundFinishedData() 
-	{}
+	public RoundFinishedData()
+	{
+	}
 	
 	public RoundFinishedData(RoundFinishedData other)
 	{
@@ -48,7 +48,7 @@ public class RoundFinishedData
 		votingOptions = other.votingOptions;
 	}
 	
-	public void ReadInitialData(ByteBuf data) 
+	public void ReadInitialData(ByteBuf data)
 	{
 		// Timers 
 		scoresTime = data.readInt();
@@ -71,7 +71,7 @@ public class RoundFinishedData
 		pendingXP = data.readInt();
 		resultantXP = data.readInt();
 		resultantLevel = data.readInt();
-	}	
+	}
 	
 	public void WriteInitialData(ByteBuf data)
 	{
@@ -100,7 +100,7 @@ public class RoundFinishedData
 		data.writeInt(resultantLevel);
 	}
 	
-	public void ReadNumVotesUpdate(ByteBuf data) 
+	public void ReadNumVotesUpdate(ByteBuf data)
 	{
 		int numOptions = data.readByte();
 		votingOptions = new VotingOption[numOptions];
@@ -110,7 +110,7 @@ public class RoundFinishedData
 			votingOptions[i] = new VotingOption("", "", "", "");
 			votingOptions[i].numVotes = data.readInt();
 		}
-	}	
+	}
 	
 	public void WriteNumVotesUpdate(ByteBuf data)
 	{
@@ -128,9 +128,9 @@ public class RoundFinishedData
 		for(int i = 0; i < rounds.length; i++)
 		{
 			votingOptions[i] = new VotingOption(rounds[i].gametype.name,
-							rounds[i].map.name,
-							rounds[i].teams[0].textColour + rounds[i].teams[0].shortName,
-							rounds[i].teams[1].textColour + rounds[i].teams[1].shortName);
+					rounds[i].map.name,
+					rounds[i].teams[0].textColour + rounds[i].teams[0].shortName,
+					rounds[i].teams[1].textColour + rounds[i].teams[1].shortName);
 		}
 	}
 }

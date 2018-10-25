@@ -20,23 +20,23 @@ public class ModelPanzerfaust3 extends ModelGun
 	int textureX = 256;
 	int textureY = 16;
 
-	public ModelPanzerfaust3()	
+	public ModelPanzerfaust3()
 	{
 // Gun
 		gunModel = new ModelRendererTurbo[13];
-		gunModel[0] = new ModelRendererTurbo(this,  1,  1, textureX, textureY); // Grip
-		gunModel[1] = new ModelRendererTurbo(this,  9,  1, textureX, textureY); // Grip
-		gunModel[2] = new ModelRendererTurbo(this,  17,  1, textureX, textureY); // MainBody
-		gunModel[3] = new ModelRendererTurbo(this,  57,  1, textureX, textureY); // BodyCasement
-		gunModel[4] = new ModelRendererTurbo(this,  81,  1, textureX, textureY); // RingF
-		gunModel[5] = new ModelRendererTurbo(this,  73,  1, textureX, textureY); // Scope
-		gunModel[6] = new ModelRendererTurbo(this,  97,  1, textureX, textureY); // ScopeStand
-		gunModel[7] = new ModelRendererTurbo(this,  105,  1, textureX, textureY); // RearLoader
-		gunModel[8] = new ModelRendererTurbo(this,  121,  1, textureX, textureY); // RearGrip
-		gunModel[9] = new ModelRendererTurbo(this,  89,  1, textureX, textureY); // RearGrip
-		gunModel[10] = new ModelRendererTurbo(this,  73,  1, textureX, textureY); // 
-		gunModel[11] = new ModelRendererTurbo(this,  73,  1, textureX, textureY); // Scope
-		gunModel[12] = new ModelRendererTurbo(this,  73,  1, textureX, textureY); // Scope
+		gunModel[0] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Grip
+		gunModel[1] = new ModelRendererTurbo(this, 9, 1, textureX, textureY); // Grip
+		gunModel[2] = new ModelRendererTurbo(this, 17, 1, textureX, textureY); // MainBody
+		gunModel[3] = new ModelRendererTurbo(this, 57, 1, textureX, textureY); // BodyCasement
+		gunModel[4] = new ModelRendererTurbo(this, 81, 1, textureX, textureY); // RingF
+		gunModel[5] = new ModelRendererTurbo(this, 73, 1, textureX, textureY); // Scope
+		gunModel[6] = new ModelRendererTurbo(this, 97, 1, textureX, textureY); // ScopeStand
+		gunModel[7] = new ModelRendererTurbo(this, 105, 1, textureX, textureY); // RearLoader
+		gunModel[8] = new ModelRendererTurbo(this, 121, 1, textureX, textureY); // RearGrip
+		gunModel[9] = new ModelRendererTurbo(this, 89, 1, textureX, textureY); // RearGrip
+		gunModel[10] = new ModelRendererTurbo(this, 73, 1, textureX, textureY); //
+		gunModel[11] = new ModelRendererTurbo(this, 73, 1, textureX, textureY); // Scope
+		gunModel[12] = new ModelRendererTurbo(this, 73, 1, textureX, textureY); // Scope
 
 		gunModel[0].addBox(0F, 0F, 0F, 1, 3, 1, 0F); // Grip
 		gunModel[0].setRotationPoint(-1F, -3.23F, -0.5F);
@@ -78,19 +78,16 @@ public class ModelPanzerfaust3 extends ModelGun
 		gunModel[12].setRotationPoint(-2F, -7F, 3.3F);
 
 
-
 // Ammo
 		ammoModel = new ModelRendererTurbo[2];
-		ammoModel[0] = new ModelRendererTurbo(this,  129,  1, textureX, textureY); // RocketMiddle
-		ammoModel[1] = new ModelRendererTurbo(this,  153,  1, textureX, textureY); // RocketBody
+		ammoModel[0] = new ModelRendererTurbo(this, 129, 1, textureX, textureY); // RocketMiddle
+		ammoModel[1] = new ModelRendererTurbo(this, 153, 1, textureX, textureY); // RocketBody
 
 		ammoModel[0].addBox(0F, 0F, 0F, 9, 1, 1, 0F); // RocketMiddle
 		ammoModel[0].setRotationPoint(0F, -5.5F, -0.5F);
 
 		ammoModel[1].addBox(0F, 0F, 0F, 4, 2, 2, 0F); // RocketBody
 		ammoModel[1].setRotationPoint(2F, -6F, -1F);
-
-		
 
 
 		gunSlideDistance = 0F;

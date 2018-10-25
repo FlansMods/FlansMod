@@ -5,7 +5,7 @@ import com.flansmod.client.model.ModelGun;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.common.vector.Vector3f;
 
-public class ModelR700 extends ModelGun 
+public class ModelR700 extends ModelGun
 {
 	public ModelR700()
 	{
@@ -19,7 +19,7 @@ public class ModelR700 extends ModelGun
 		
 		gunModel[1] = new ModelRendererTurbo(this, 0, 2, textureX, textureY);
 		gunModel[1].addBox(-1F, 0F, -1F, 13, 2, 2);
-				
+		
 		//Scope
 		defaultScopeModel = new ModelRendererTurbo[5];
 		
@@ -45,7 +45,7 @@ public class ModelR700 extends ModelGun
 		
 		//Stock
 		defaultStockModel = new ModelRendererTurbo[2];
-				
+		
 		defaultStockModel[0] = new ModelRendererTurbo(this, 16, 6, textureX, textureY);
 		defaultStockModel[0].addBox(-2F, -0.5F, -1F, 1, 2, 2);
 		

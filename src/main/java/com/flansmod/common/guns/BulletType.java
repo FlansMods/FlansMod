@@ -13,34 +13,50 @@ import com.flansmod.common.types.TypeFile;
 
 public class BulletType extends ShootableType
 {
-	/** The number of flak particles to spawn upon exploding */
+	/**
+	 * The number of flak particles to spawn upon exploding
+	 */
 	public int flak = 0;
-	/** The type of flak particles to spawn */
+	/**
+	 * The type of flak particles to spawn
+	 */
 	public String flakParticles = "largesmoke";
 	
-	/** If true then this bullet will burn entites it hits */
+	/**
+	 * If true then this bullet will burn entites it hits
+	 */
 	public boolean setEntitiesOnFire = false;
-
-	/** Exclusively for driveable usage. Replaces old isBomb and isShell booleans with something more flexible */
+	
+	/**
+	 * Exclusively for driveable usage. Replaces old isBomb and isShell booleans with something more flexible
+	 */
 	public EnumWeaponType weaponType = EnumWeaponType.NONE;
-
+	
 	public String hitSound;
 	public float hitSoundRange = 50;
 	
 	public boolean hasLight = false;
 	public float penetratingPower = 1F;
-	/** Lock on variables. If true, then the bullet will search for a target at the moment it is fired */
+	/**
+	 * Lock on variables. If true, then the bullet will search for a target at the moment it is fired
+	 */
 	public boolean lockOnToPlanes = false, lockOnToVehicles = false, lockOnToMechas = false, lockOnToPlayers = false, lockOnToLivings = false;
-	/** Lock on maximum angle for finding a target */
+	/**
+	 * Lock on maximum angle for finding a target
+	 */
 	public float maxLockOnAngle = 45F;
-	/** Lock on force that pulls the bullet towards its prey */
+	/**
+	 * Lock on force that pulls the bullet towards its prey
+	 */
 	public float lockOnForce = 1F;
 	
 	public String trailTexture = "defaultBulletTrail";
 	
 	public ArrayList<PotionEffect> hitEffects = new ArrayList<PotionEffect>();
 	
-	/** The static bullets list */
+	/**
+	 * The static bullets list
+	 */
 	public static List<BulletType> bullets = new ArrayList<BulletType>();
 	
 	public BulletType(TypeFile file)
@@ -49,7 +65,7 @@ public class BulletType extends ShootableType
 		texture = "defaultBullet";
 		bullets.add(this);
 	}
-
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
@@ -62,10 +78,10 @@ public class BulletType extends ShootableType
 				flakParticles = split[1];
 			else if(split[0].equals("SetEntitiesOnFire"))
 				setEntitiesOnFire = Boolean.parseBoolean(split[1]);
-
+			
 			else if(split[0].equals("HitSound"))
 			{
- 				hitSound = split[1];
+				hitSound = split[1];
 				FlansMod.proxy.loadSound(contentPack, "sound", split[1]);
 			}
 			else if(split[0].equals("HitSoundRange"))
@@ -74,7 +90,7 @@ public class BulletType extends ShootableType
 				penetratingPower = (Boolean.parseBoolean(split[1].toLowerCase()) ? 1F : 0.25F);
 			else if(split[0].equals("Penetration") || split[0].equals("PenetratingPower"))
 				penetratingPower = Float.parseFloat(split[1]);
-
+			
 			else if(split[0].equals("Bomb"))
 				weaponType = EnumWeaponType.BOMB;
 			else if(split[0].equals("Shell"))
@@ -86,7 +102,7 @@ public class BulletType extends ShootableType
 			
 			else if(split[0].equals("TrailTexture"))
 				trailTexture = split[1];
-
+			
 			else if(split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("LockOnToDriveables"))
@@ -107,14 +123,14 @@ public class BulletType extends ShootableType
 				lockOnForce = Float.parseFloat(split[1]);
 			else if(split[0].equals("PotionEffect"))
 				hitEffects.add(getPotionEffect(split));
-		} 
-		catch (Exception e)
+		}
+		catch(Exception e)
 		{
 			FlansMod.log.error("Reading bullet file failed.");
 			FlansMod.log.throwing(e);
 		}
 	}
-
+	
 	public static BulletType getBullet(String s)
 	{
 		for(BulletType bullet : bullets)
@@ -124,7 +140,7 @@ public class BulletType extends ShootableType
 		}
 		return null;
 	}
-
+	
 	public static BulletType getBullet(Item item)
 	{
 		for(BulletType bullet : bullets)
@@ -135,7 +151,9 @@ public class BulletType extends ShootableType
 		return null;
 	}
 	
-	/** To be overriden by subtypes for model reloading */
+	/**
+	 * To be overriden by subtypes for model reloading
+	 */
 	public void reloadModel()
 	{
 		model = FlansMod.proxy.loadModel(modelString, shortName, ModelBase.class);

@@ -1,15 +1,14 @@
 package com.flansmod.common.guns;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumHand;
+
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumHand;
 
-
-public class ShotData 
+public class ShotData
 {
 	public int slot; // May include special cases like deployable
 	public InfoType shotFrom;
@@ -25,7 +24,7 @@ public class ShotData
 	}
 	
 	public static class SpawnEntityShotData extends ShotData
-	{		
+	{
 		public SpawnEntityShotData(int slot, EnumHand hand, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f direction)
 		{
 			super(slot, hand, shotFrom, shotType);
@@ -43,7 +42,7 @@ public class ShotData
 	}
 	
 	public static class InstantShotData extends ShotData
-	{		
+	{
 		public InstantShotData(int slot, EnumHand hand, InfoType shotFrom, ShootableType shotType, int shooterID, Vector3f origin, BulletHit hitData, Vector3f hit, float damage, boolean isExtraBullet, boolean silenced)
 		{
 			super(slot, hand, shotFrom, shotType);
@@ -65,7 +64,7 @@ public class ShotData
 		public Vector3f origin;
 		
 		// Can be null for environment hits etc
-		public BulletHit hitData; 
+		public BulletHit hitData;
 		public Vector3f hitPos;
 		
 		public float damage;

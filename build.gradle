@@ -23,7 +23,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.2.2611"
+    version = "1.12.2-14.23.5.2768"
     runDir = "run"
 
     replace "@ALLOWED_VERSIONS@", "[5.5.2,5.5.3)"
@@ -34,7 +34,7 @@ minecraft {
     replace "@VERSION_APOCALYPSE@", project.apocalypseVersion
     replaceIn "FlansModApocalypse.java"
 
-    mappings = "snapshot_20171003"
+    mappings = "stable_39"
 }
 
 processResources {
@@ -49,7 +49,7 @@ processResources {
 
         // replace version and mcversion
         expand 'version': project.version, 'apocalypseversion': project.apocalypseVersion,
-                'mcversion': project.minecraft.version
+            'mcversion': project.minecraft.version
     }
 
     // copy everything else except the mcmod.info

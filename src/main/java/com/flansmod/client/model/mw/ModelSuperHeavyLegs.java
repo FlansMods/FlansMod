@@ -3,7 +3,7 @@ package com.flansmod.client.model.mw;
 import com.flansmod.client.model.ModelCustomArmour;
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelSuperHeavyLegs extends ModelCustomArmour 
+public class ModelSuperHeavyLegs extends ModelCustomArmour
 {
 	public ModelSuperHeavyLegs()
 	{

@@ -1,13 +1,5 @@
 package com.flansmod.client;
 
-import net.minecraft.client.audio.MovingSound;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-
-import com.flansmod.common.driveables.EntityDriveable;
-
 //TODO : Implement this!
 public class MovingSoundDriveable // extends MovingSound 
 {

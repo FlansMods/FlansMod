@@ -1,7 +1,6 @@
 package com.flansmod.common.driveables;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.flansmod.api.IExplodeable;
 import com.flansmod.common.FlansMod;
@@ -23,33 +24,44 @@ import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 
 public class EntityVehicle extends EntityDriveable implements IExplodeable
 {
-	/** Weapon delays */
+	/**
+	 * Weapon delays
+	 */
 	public int shellDelay, gunDelay;
-	/** Position of looping sounds */
+	/**
+	 * Position of looping sounds
+	 */
 	public int soundPosition;
-	/** Front wheel yaw, used to control the vehicle steering */
+	/**
+	 * Front wheel yaw, used to control the vehicle steering
+	 */
 	public float wheelsYaw;
-	/** Despawn time */
+	/**
+	 * Despawn time
+	 */
 	private int ticksSinceUsed = 0;
-	/** Aesthetic door switch */
+	/**
+	 * Aesthetic door switch
+	 */
 	public boolean varDoor;
-	/** Wheel rotation angle. Only applies to vehicles that set a rotating wheels flag */
+	/**
+	 * Wheel rotation angle. Only applies to vehicles that set a rotating wheels flag
+	 */
 	public float wheelsAngle;
-	/** Delayer for door button */
+	/**
+	 * Delayer for door button
+	 */
 	public int toggleTimer = 0;
-
+	
 	public EntityVehicle(World world)
 	{
 		super(world);
 		stepHeight = 1.0F;
 	}
-
+	
 	//This one deals with spawning from a vehicle spawner
 	public EntityVehicle(World world, double x, double y, double z, VehicleType type, DriveableData data)
 	{
@@ -58,7 +70,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		setPosition(x, y, z);
 		initType(type, true, false);
 	}
-
+	
 	//This one allows you to deal with spawning from items
 	public EntityVehicle(World world, double x, double y, double z, EntityPlayer placer, VehicleType type, DriveableData data)
 	{
@@ -80,25 +92,26 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	{
 		super.readSpawnData(data);
 	}
-
+	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound tag)
 	{
 		super.writeEntityToNBT(tag);
 		tag.setBoolean("VarDoor", varDoor);
 	}
-
+	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound tag)
 	{
 		super.readEntityFromNBT(tag);
 		varDoor = tag.getBoolean("VarDoor");
 	}
-		
+	
 	/**
 	 * Called with the movement of the mouse. Used in controlling vehicles if need be.
-	 * @param deltaY 
-	 * @param deltaX 
+	 *
+	 * @param deltaY
+	 * @param deltaX
 	 */
 	@Override
 	public void onMouseMoved(int deltaX, int deltaY)
@@ -111,7 +124,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll, throt, steeringYaw);
 		wheelsYaw = steeringYaw;
 	}
-			
+	
 	@Override
 	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand)
 	{
@@ -154,14 +167,14 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		switch(key)
 		{
-			case 0 : //Accelerate : Increase the throttle, up to 1.
+			case 0: //Accelerate : Increase the throttle, up to 1.
 			{
 				throttle += 0.01F;
 				if(throttle > 1F)
 					throttle = 1F;
 				return true;
 			}
-			case 1 : //Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
+			case 1: //Decelerate : Decrease the throttle, down to -1, or 0 if the vehicle cannot reverse
 			{
 				throttle -= 0.01F;
 				if(throttle < -1F)
@@ -170,17 +183,17 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					throttle = 0F;
 				return true;
 			}
-			case 2 : //Left : Yaw the wheels left
+			case 2: //Left : Yaw the wheels left
 			{
 				wheelsYaw -= 1F;
 				return true;
 			}
-			case 3 : //Right : Yaw the wheels right
+			case 3: //Right : Yaw the wheels right
 			{
 				wheelsYaw += 1F;
 				return true;
 			}
-			case 4 : //Up : Brake
+			case 4: //Up : Brake
 			{
 				throttle *= 0.8F;
 				if(onGround)
@@ -190,16 +203,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 				return true;
 			}
-			case 5 : //Down : Do nothing
+			case 5: //Down : Do nothing
 			{
 				return true;
 			}
-			case 6 : //Exit : Get out
+			case 6: //Exit : Get out
 			{
 				getSeat(0).removePassengers();
-		  		return true;
+				return true;
 			}
-			case 7 : //Inventory
+			case 7: //Inventory
 			{
 				if(world.isRemote)
 				{
@@ -207,28 +220,28 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 				return true;
 			}
-			case 8 : //Shoot shell
-			case 9 : //Shoot bullet
+			case 8: //Shoot shell
+			case 9: //Shoot bullet
 			{
 				return super.pressKey(key, player);
 			}
-			case 10 : //Change control mode : Do nothing
+			case 10: //Change control mode : Do nothing
 			{
 				return true;
 			}
-			case 11 : //Roll left : Do nothing
+			case 11: //Roll left : Do nothing
 			{
 				return true;
 			}
-			case 12 : //Roll right : Do nothing
+			case 12: //Roll right : Do nothing
 			{
 				return true;
 			}
-			case 13 : // Gear : Do nothing
+			case 13: // Gear : Do nothing
 			{
 				return true;
 			}
-			case 14 : // Door
+			case 14: // Door
 			{
 				if(toggleTimer <= 0)
 				{
@@ -240,23 +253,23 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 				}
 				return true;
 			}
-			case 15 : // Wing : Do nothing
+			case 15: // Wing : Do nothing
 			{
 				return true;
 			}
-			case 16 : // Trim Button
+			case 16: // Trim Button
 			{
 				//applyTorque(new Vector3f(axes.getRoll() / 10, 0F, 0F));
 				return true;
 			}
-			case 17 : //Park
+			case 17: //Park
 			{
 				break;
 			}
 		}
 		return false;
 	}
-
+	
 	@Override
 	public Vector3f getLookVector(DriveablePosition dp)
 	{
@@ -272,7 +285,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			return;
 		}
-
+		
 		//Get vehicle type
 		VehicleType type = this.getVehicleType();
 		DriveableData data = getDriveableData();
@@ -281,9 +294,9 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			FlansMod.log.warn("Vehicle type null. Not ticking vehicle");
 			return;
 		}
-
+		
 		//Work out if this is the client side and the player is driving
-		boolean thePlayerIsDrivingThis = world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer 
+		boolean thePlayerIsDrivingThis = world.isRemote && getSeat(0) != null && getSeat(0).getControllingPassenger() instanceof EntityPlayer
 				&& FlansMod.proxy.isThePlayer((EntityPlayer)getSeat(0).getControllingPassenger());
 		
 		//Despawning
@@ -310,7 +323,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		//Rotate the wheels
 		if(hasEnoughFuel())
 		{
-			wheelsAngle += throttle * 0.2F;	
+			wheelsAngle += throttle * 0.2F;
 		}
 		
 		//Return the wheels to their resting position
@@ -326,7 +339,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		if(world.isRemote && !thePlayerIsDrivingThis)
 		{
 			//The driveable is currently moving towards its server position. Continue doing so.
-			if (serverPositionTransitionTicker > 0)
+			if(serverPositionTransitionTicker > 0)
 			{
 				double x = posX + (serverPosX - posX) / serverPositionTransitionTicker;
 				double y = posY + (serverPosY - posY) / serverPositionTransitionTicker;
@@ -346,7 +359,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		//Movement
-
+		
 		Vector3f amountToMoveCar = new Vector3f();
 		
 		for(EntityWheel wheel : wheels)
@@ -355,7 +368,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				wheel.prevPosX = wheel.posX;
 				wheel.prevPosY = wheel.posY;
-				wheel.prevPosZ = wheel.prevPosZ;
+				wheel.prevPosZ = wheel.posZ;
 			}
 		}
 		
@@ -385,7 +398,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			
 			//Apply velocity
 			//If the player driving this is in creative, then we can thrust, no matter what
-			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (getSeat(0) != null 
+			boolean canThrustCreatively = !TeamsManager.vehiclesNeedFuel || (getSeat(0) != null
 					&& getSeat(0).getControllingPassenger() instanceof EntityPlayer && ((EntityPlayer)getSeat(0).getControllingPassenger()).capabilities.isCreativeMode);
 			//Otherwise, check the fuel tanks!
 			if(canThrustCreatively || data.fuelInTank > data.engine.fuelConsumption * throttle)
@@ -404,7 +417,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					wheel.motionX += effectiveWheelSpeed * Math.cos(wheel.rotationYaw * 3.14159265F / 180F);
 					wheel.motionZ += effectiveWheelSpeed * Math.sin(wheel.rotationYaw * 3.14159265F / 180F);
 					
-	
+					
 				}
 				else
 				{
@@ -419,7 +432,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 					if(wheel.getExpectedWheelID() == 2 || wheel.getExpectedWheelID() == 3)
 					{
 						float velocityScale = 0.01F * (wheelsYaw > 0 ? type.turnLeftModifier : type.turnRightModifier) * (throttle > 0 ? 1 : -1);
-		
+						
 						wheel.motionX -= wheel.getSpeedXZ() * Math.sin(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
 						wheel.motionZ += wheel.getSpeedXZ() * Math.cos(wheel.rotationYaw * 3.14159265F / 180F) * velocityScale * wheelsYaw;
 					}
@@ -435,7 +448,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			{
 				wheel.motionY += type.buoyancy;
 			}
-
+			
 			wheel.move(MoverType.PLAYER, wheel.motionX, wheel.motionY, wheel.motionZ);
 			
 			//Pull wheels towards car
@@ -443,7 +456,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			Vector3f currentWheelPos = new Vector3f(wheel.posX - posX, wheel.posY - posY, wheel.posZ - posZ);
 			
 			Vector3f dPos = ((Vector3f)Vector3f.sub(targetWheelPos, currentWheelPos, null).scale(getVehicleType().wheelSpringStrength));
-				
+			
 			if(dPos.length() > 0.001F)
 			{
 				wheel.move(MoverType.PLAYER, dPos.x, dPos.y, dPos.z);
@@ -456,10 +469,10 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		
 		if(wheels[0] != null && wheels[1] != null && wheels[2] != null && wheels[3] != null)
 		{
-			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F); 
-			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F); 
-			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F); 
-			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F); 
+			Vector3f frontAxleCentre = new Vector3f((wheels[2].posX + wheels[3].posX) / 2F, (wheels[2].posY + wheels[3].posY) / 2F, (wheels[2].posZ + wheels[3].posZ) / 2F);
+			Vector3f backAxleCentre = new Vector3f((wheels[0].posX + wheels[1].posX) / 2F, (wheels[0].posY + wheels[1].posY) / 2F, (wheels[0].posZ + wheels[1].posZ) / 2F);
+			Vector3f leftSideCentre = new Vector3f((wheels[0].posX + wheels[3].posX) / 2F, (wheels[0].posY + wheels[3].posY) / 2F, (wheels[0].posZ + wheels[3].posZ) / 2F);
+			Vector3f rightSideCentre = new Vector3f((wheels[1].posX + wheels[2].posX) / 2F, (wheels[1].posY + wheels[2].posY) / 2F, (wheels[1].posZ + wheels[2].posZ) / 2F);
 			
 			float dx = frontAxleCentre.x - backAxleCentre.x;
 			float dy = frontAxleCentre.y - backAxleCentre.y;
@@ -475,7 +488,8 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			float yaw = (float)Math.atan2(dz, dx);
 			float pitch = -(float)Math.atan2(dy, dxz);
 			float roll = 0F;
-			if(type.canRoll){
+			if(type.canRoll)
+			{
 				roll = -(float)Math.atan2(dry, drxz);
 			}
 			
@@ -488,16 +502,16 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		}
 		
 		checkForCollisions();
-
+		
 		//Sounds
 		//Starting sound
-		if (throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.01F && throttle < 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.startSound, false);
 			soundPosition = type.startSoundLength;
 		}
 		//Flying sound
-		if (throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
+		if(throttle > 0.2F && soundPosition == 0 && hasEnoughFuel())
 		{
 			PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.engineSound, false);
 			soundPosition = type.engineSoundLength;
@@ -524,64 +538,81 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketVehicleControl(this), posX, posY, posZ, FlansMod.driveableUpdateRange, dimension);
 		}
-				
-				int animSpeed = 4;
+		
+		int animSpeed = 4;
 		//Change animation speed based on our current throttle
-		if((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33)){
+		if((throttle > 0.05 && throttle <= 0.33) || (throttle < -0.05 && throttle >= -0.33))
+		{
 			animSpeed = 3;
-		} else if((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66)){
+		}
+		else if((throttle > 0.33 && throttle <= 0.66) || (throttle < -0.33 && throttle >= -0.66))
+		{
 			animSpeed = 2;
-		} else if((throttle > 0.66 && throttle <= 0.9) || (throttle < -0.66 && throttle >= -0.9)){
+		}
+		else if((throttle > 0.66 && throttle <= 0.9) || (throttle < -0.66 && throttle >= -0.9))
+		{
 			animSpeed = 1;
-		} else if((throttle > 0.9 && throttle <= 1) || (throttle < -0.9 && throttle >= -1)){
+		}
+		else if((throttle > 0.9 && throttle <= 1) || (throttle < -0.9 && throttle >= -1))
+		{
 			animSpeed = 0;
 		}
 		
-    	if(throttle > 0.05){
-    		animCount --;
-        } else if (throttle < -0.05){
-        	animCount ++;
-        }
-        	
-        if(animCount <= 0){
-        	animCount = animSpeed;
-        	animFrame ++;
-        }
-
-        if(throttle < 0){
-        		if(animCount >= animSpeed){
-        			animCount = 0;
-                	animFrame --;
-        		}
-        }
-	//Cycle the animation frame, but only if we have anything to cycle
-	if(type.animFrames != 0){
-        if(animFrame > type.animFrames){
-        	animFrame = 0;
-        } if(animFrame < 0){
-        	animFrame = type.animFrames;
-        }
+		if(throttle > 0.05)
+		{
+			animCount--;
+		}
+		else if(throttle < -0.05)
+		{
+			animCount++;
+		}
+		
+		if(animCount <= 0)
+		{
+			animCount = animSpeed;
+			animFrame++;
+		}
+		
+		if(throttle < 0)
+		{
+			if(animCount >= animSpeed)
+			{
+				animCount = 0;
+				animFrame--;
+			}
+		}
+		//Cycle the animation frame, but only if we have anything to cycle
+		if(type.animFrames != 0)
+		{
+			if(animFrame > type.animFrames)
+			{
+				animFrame = 0;
+			}
+			if(animFrame < 0)
+			{
+				animFrame = type.animFrames;
+			}
+		}
 	}
-	}
-
+	
 	private float averageAngles(float a, float b)
 	{
 		FlansMod.log.debug("Pre  " + a + " " + b);
-
+		
 		float pi = (float)Math.PI;
 		for(; a > b + pi; a -= 2 * pi) ;
 		for(; a < b - pi; a += 2 * pi) ;
-
+		
 		float avg = (a + b) / 2F;
-
+		
 		for(; avg > pi; avg -= 2 * pi) ;
 		for(; avg < -pi; avg += 2 * pi) ;
-
+		
 		FlansMod.log.debug("Post " + a + " " + b + " " + avg);
-
+		
 		return avg;
 	}
-
+	
 	private Vec3d subtract(Vec3d a, Vec3d b)
 	{
 		return new Vec3d(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -589,23 +620,23 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 	
 	private Vec3d crossProduct(Vec3d a, Vec3d b)
 	{
-        return new Vec3d(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+		return new Vec3d(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 	}
-
+	
 	@Override
 	public boolean landVehicle()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
 		if(world.isRemote || isDead)
 			return true;
-
+		
 		VehicleType type = getVehicleType();
-
+		
 		if(damagesource.damageType.equals("player") && damagesource.getTrueSource().onGround && (getSeat(0) == null || getSeat(0).getControllingPassenger() == null))
 		{
 			ItemStack vehicleStack = new ItemStack(type.item, 1, driveableData.paintjobID);
@@ -613,35 +644,35 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			vehicleStack.setTagCompound(tags);
 			driveableData.writeToNBT(tags);
 			entityDropItem(vehicleStack, 0.5F);
-	 		setDead();
+			setDead();
 		}
 		return true;
 	}
-		
+	
 	public VehicleType getVehicleType()
 	{
 		return VehicleType.getVehicle(driveableType);
 	}
-
+	
 	@Override
-	public float getPlayerRoll() 
+	public float getPlayerRoll()
 	{
 		return axes.getRoll();
 	}
-
+	
 	@Override
-	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part) 
-	{		
+	protected void dropItemsOnPartDeath(Vector3f midpoint, DriveablePart part)
+	{
 	}
-
+	
 	@Override
-	public String getBombInventoryName() 
+	public String getBombInventoryName()
 	{
 		return "Mines";
 	}
 	
 	@Override
-	public String getMissileInventoryName() 
+	public String getMissileInventoryName()
 	{
 		return "Shells";
 	}

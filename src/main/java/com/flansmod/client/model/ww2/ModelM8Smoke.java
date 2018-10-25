@@ -9,13 +9,12 @@
 
 package com.flansmod.client.model.ww2;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
-import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.Coord2D;
-import com.flansmod.client.tmt.Shape2D;
 
-import org.lwjgl.opengl.GL11;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 
 public class ModelM8Smoke extends ModelBase
 {

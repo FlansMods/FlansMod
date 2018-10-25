@@ -1,5 +1,7 @@
 {
-	"variants": {
-		"normal": { "model": "flansmodapocalypse:blockSulphur" }
-	}
+  "variants": {
+    "normal": {
+      "model": "flansmodapocalypse:blockSulphur"
+    }
+  }
 }

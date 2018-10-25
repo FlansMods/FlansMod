@@ -10,17 +10,17 @@ import com.flansmod.common.types.InfoType;
 import com.flansmod.common.types.PaintableType;
 import com.flansmod.common.types.TypeFile;
 
-public class RewardBox extends InfoType 
+public class RewardBox extends InfoType
 {
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	// To anyone planning to add to this file in future, remember that the Minecraft EULA forbids monetization of any non-cosmetic additions
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	public ArrayList<Paintjob> paintjobs = new ArrayList<Paintjob>();
-	public float[] weightPerRarity = new float[] { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+	public float[] weightPerRarity = new float[]{1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 	
 	private static HashMap<Integer, RewardBox> boxes = new HashMap<Integer, RewardBox>();
 	
-	public RewardBox(TypeFile file) 
+	public RewardBox(TypeFile file)
 	{
 		super(file);
 	}
@@ -30,22 +30,22 @@ public class RewardBox extends InfoType
 	{
 		boxes.put(hashCode(), this);
 	}
-
+	
 	@Override
 	protected void read(String[] split, TypeFile file)
 	{
 		super.read(split, file);
-	
-		if (KeyMatches(split, "AddPaintjob"))
+		
+		if(KeyMatches(split, "AddPaintjob"))
 		{
 			PaintableType type = PaintableType.GetPaintableType(split[2].hashCode());
-			if(type == null) 
+			if(type == null)
 			{
 				FlansMod.Assert(false, "Invalid type: " + split[2] + " when reading " + shortName);
 				return;
 			}
 			Paintjob paintjob = type.getPaintjob(split[3]);
-			if(paintjob == null) 
+			if(paintjob == null)
 			{
 				FlansMod.Assert(false, "Invalid paintjob: " + split[3] + " when reading " + shortName);
 				return;
@@ -72,7 +72,7 @@ public class RewardBox extends InfoType
 		return EnumPaintjobRarity.UNKNOWN;
 	}
 	
-	public int GetReward(PlayerRankData data) 
+	public int GetReward(PlayerRankData data)
 	{
 		float totalWeight = 0.0f;
 		for(int i = 0; i < paintjobs.size(); i++)
@@ -92,13 +92,13 @@ public class RewardBox extends InfoType
 		FlansMod.Assert(false, "How did we not pick something?");
 		return 0;
 	}
-
-	public static RewardBox GetRewardBox(int boxHash) 
+	
+	public static RewardBox GetRewardBox(int boxHash)
 	{
 		return boxes.get(boxHash);
 	}
-
-	public static RewardBox GetRewardBox(String string) 
+	
+	public static RewardBox GetRewardBox(String string)
 	{
 		return GetRewardBox(string.hashCode());
 	}

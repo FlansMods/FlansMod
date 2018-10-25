@@ -5,8 +5,8 @@
 package com.flansmod.client.model.ww2; //Path where the model is located
 
 import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.ModelRendererTurbo;
 import com.flansmod.client.tmt.Shape2D;
 
 public class ModelJeep extends ModelVehicle //Same as Filename
@@ -1001,7 +1001,7 @@ public class ModelJeep extends ModelVehicle //Same as Filename
 		bodyModel[207].addShapeBox(0F, 0F, 0F, 1, 26, 1, 0F, 0F, 0F, -0.25F, -0.75F, 0F, 0F, -0.75F, 0F, 0F, 0F, 0F, -0.25F, 0F, 0F, -0.25F, -0.75F, 0F, 0F, -0.75F, 0F, 0F, 0F, 0F, -0.25F); // Box 2
 		bodyModel[207].setRotationPoint(-15.75F, -31.5F, -0.5F);
 
-		bodyModel[208].addShape3D(10F, -8F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 13, 18, 13), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 13, 1, 13), new Coord2D(1, 3, 1, 3) }), 6, 18, 17, 62, 6, ModelRendererTurbo.MR_FRONT, new float[] {5 ,10 ,5 ,11 ,5 ,10 ,5 ,11}); // Shape 4
+		bodyModel[208].addShape3D(10F, -8F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 13, 18, 13), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 13, 1, 13), new Coord2D(1, 3, 1, 3)}), 6, 18, 17, 62, 6, ModelRendererTurbo.MR_FRONT, new float[]{5, 10, 5, 11, 5, 10, 5, 11}); // Shape 4
 		bodyModel[208].setRotationPoint(-34F, -17F, -7F);
 		bodyModel[208].rotateAngleY = -1.57079633F;
 
@@ -1532,28 +1532,28 @@ public class ModelJeep extends ModelVehicle //Same as Filename
 		leftFrontWheelModel = new ModelRendererTurbo[1];
 		leftFrontWheelModel[0] = new ModelRendererTurbo(this, 0, 229, textureX, textureY); // Shape 10
 
-		leftFrontWheelModel[0].addShape3D(9.5F, -8.5F, -6F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3) }), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[] {5 ,11 ,5 ,11 ,5 ,11 ,5 ,11}); // Shape 10
+		leftFrontWheelModel[0].addShape3D(9.5F, -8.5F, -6F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3)}), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[]{5, 11, 5, 11, 5, 11, 5, 11}); // Shape 10
 		leftFrontWheelModel[0].setRotationPoint(24F, 2F, 13F);
 
 
 		rightFrontWheelModel = new ModelRendererTurbo[1];
 		rightFrontWheelModel[0] = new ModelRendererTurbo(this, 0, 229, textureX, textureY); // Shape 0
 
-		rightFrontWheelModel[0].addShape3D(9.5F, -8.5F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3) }), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[] {5 ,11 ,5 ,11 ,5 ,11 ,5 ,11}); // Shape 0
+		rightFrontWheelModel[0].addShape3D(9.5F, -8.5F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3)}), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[]{5, 11, 5, 11, 5, 11, 5, 11}); // Shape 0
 		rightFrontWheelModel[0].setRotationPoint(24F, 2F, -11F);
 
 
 		leftBackWheelModel = new ModelRendererTurbo[1];
 		leftBackWheelModel[0] = new ModelRendererTurbo(this, 0, 229, textureX, textureY); // Shape 0
 
-		leftBackWheelModel[0].addShape3D(9.5F, -8.5F, 0F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3) }), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[] {5 ,11 ,5 ,11 ,5 ,11 ,5 ,11}); // Shape 0
+		leftBackWheelModel[0].addShape3D(9.5F, -8.5F, 0F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3)}), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[]{5, 11, 5, 11, 5, 11, 5, 11}); // Shape 0
 		leftBackWheelModel[0].setRotationPoint(-20.5F, 2F, 17F);
 
 
 		rightBackWheelModel = new ModelRendererTurbo[1];
 		rightBackWheelModel[0] = new ModelRendererTurbo(this, 0, 229, textureX, textureY); // Shape 1
 
-		rightBackWheelModel[0].addShape3D(9.5F, -8.5F, -6F, new Shape2D(new Coord2D[] { new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3) }), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[] {5 ,11 ,5 ,11 ,5 ,11 ,5 ,11}); // Shape 1
+		rightBackWheelModel[0].addShape3D(9.5F, -8.5F, -6F, new Shape2D(new Coord2D[]{new Coord2D(4, 0, 4, 0), new Coord2D(15, 0, 15, 0), new Coord2D(18, 3, 18, 3), new Coord2D(18, 14, 18, 14), new Coord2D(15, 17, 15, 17), new Coord2D(4, 17, 4, 17), new Coord2D(1, 14, 1, 14), new Coord2D(1, 3, 1, 3)}), 6, 18, 17, 64, 6, ModelRendererTurbo.MR_FRONT, new float[]{5, 11, 5, 11, 5, 11, 5, 11}); // Shape 1
 		rightBackWheelModel[0].setRotationPoint(-20.5F, 2F, -17F);
 
 
@@ -1602,7 +1602,6 @@ public class ModelJeep extends ModelVehicle //Same as Filename
 		steeringWheelModel[5].rotateAngleZ = -0.2268928F;
 
 
-
 		// Passenger 2
 		ModelRendererTurbo[][] gun_1_Model = new ModelRendererTurbo[3][];
 
@@ -1629,24 +1628,24 @@ public class ModelJeep extends ModelVehicle //Same as Filename
 		gun_2_Model[1][6] = new ModelRendererTurbo(this, 92, 34, textureX, textureY); // Box 13
 		gun_2_Model[1][7] = new ModelRendererTurbo(this, 100, 34, textureX, textureY); // Box 14
 
-		gun_2_Model[1][0].addShapeBox(-6F, -2.3F, -1F, 7, 2, 2, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F); // Box 4
+		gun_2_Model[1][0].addShapeBox(-6F, -2.3F, -1F, 7, 2, 2, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F, 0F, 0.5F, 0F); // Box 4
 
-		gun_2_Model[1][1].addShapeBox(0.5F, -1.8F, -0.5F, 10, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 7
+		gun_2_Model[1][1].addShapeBox(0.5F, -1.8F, -0.5F, 10, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 7
 
-		gun_2_Model[1][2].addShapeBox(1F, -1.8F, -0.5F, 10, 1, 1, 0F,0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 8
+		gun_2_Model[1][2].addShapeBox(1F, -1.8F, -0.5F, 10, 1, 1, 0F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F, 0F, -0.1F, -0.1F); // Box 8
 
-		gun_2_Model[1][3].addShapeBox(-7.5F, -1.3F, -0.5F, 2, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 9
+		gun_2_Model[1][3].addShapeBox(-7.5F, -1.3F, -0.5F, 2, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 9
 
-		gun_2_Model[1][4].addShapeBox(-7.5F, -1.3F, -0.5F, 1, 3, 1, 0F,0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 1F, -0.2F, -0.2F, -1F, -0.2F, -0.2F, -1F, -0.2F, -0.2F, 1F, -0.2F, -0.2F); // Box 10
+		gun_2_Model[1][4].addShapeBox(-7.5F, -1.3F, -0.5F, 1, 3, 1, 0F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 0F, -0.2F, -0.2F, 1F, -0.2F, -0.2F, -1F, -0.2F, -0.2F, -1F, -0.2F, -0.2F, 1F, -0.2F, -0.2F); // Box 10
 
-		gun_2_Model[1][5].addShapeBox(-0.1F, -3F, -0.5F, 1, 1, 1, 0F,-0.9F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.9F, 0F, 0F, -0.9F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.9F, 0F, 0F); // Box 11
+		gun_2_Model[1][5].addShapeBox(-0.1F, -3F, -0.5F, 1, 1, 1, 0F, -0.9F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.9F, 0F, 0F, -0.9F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.9F, 0F, 0F); // Box 11
 
-		gun_2_Model[1][6].addShapeBox(-5.5F, -2.5F, -0.5F, 2, 1, 1, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 13
+		gun_2_Model[1][6].addShapeBox(-5.5F, -2.5F, -0.5F, 2, 1, 1, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 13
 
-		gun_2_Model[1][7].addShapeBox(-5.5F, -3.25F, -0.5F, 1, 1, 1, 0F,-0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F); // Box 14
+		gun_2_Model[1][7].addShapeBox(-5.5F, -3.25F, -0.5F, 1, 1, 1, 0F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F, -0.4F, -0.2F, -0.2F); // Box 14
 
 		//Gun Origin
-		for (ModelRendererTurbo gunPart : gun_2_Model[1])
+		for(ModelRendererTurbo gunPart : gun_2_Model[1])
 		{
 			gunPart.setRotationPoint(-15F, -30F, 0F);
 		}
@@ -1655,10 +1654,10 @@ public class ModelJeep extends ModelVehicle //Same as Filename
 		gun_2_Model[2] = new ModelRendererTurbo[1];
 		gun_2_Model[2][0] = new ModelRendererTurbo(this, 76, 34, textureX, textureY); // Box 299
 
-		gun_2_Model[2][0].addShapeBox(-4.5F, -1.7F, 1F, 4, 2, 3, 0F,-0.6F, 0F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0.5F, -0.6F, 0F, 0.5F, -0.6F, 0.5F, 0F, -0.6F, 0.5F, 0F, -0.6F, 0.5F, 0.5F, -0.6F, 0.5F, 0.5F); // Box 299
+		gun_2_Model[2][0].addShapeBox(-4.5F, -1.7F, 1F, 4, 2, 3, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0F, -0.6F, 0F, 0.5F, -0.6F, 0F, 0.5F, -0.6F, 0.5F, 0F, -0.6F, 0.5F, 0F, -0.6F, 0.5F, 0.5F, -0.6F, 0.5F, 0.5F); // Box 299
 
 		//Gun Origin
-		for (ModelRendererTurbo gunPart : gun_2_Model[2])
+		for(ModelRendererTurbo gunPart : gun_2_Model[2])
 		{
 			gunPart.setRotationPoint(-15F, -30F, 0F);
 		}

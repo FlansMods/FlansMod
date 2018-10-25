@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 import com.flansmod.client.tmt.ModelRendererTurbo;
 
-public class ModelRoundGrenade extends ModelBase 
+public class ModelRoundGrenade extends ModelBase
 {
 	public ModelRendererTurbo headModel;
 	public ModelRendererTurbo bodyModel;

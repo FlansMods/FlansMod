@@ -23,28 +23,28 @@ public class ModelChiHa extends ModelVehicle
 
 // Body
 		bodyModel = new ModelRendererTurbo[22];
-		bodyModel[0] = new ModelRendererTurbo(this,  50,  300, textureX, textureY); // CR.MainBody
-		bodyModel[1] = new ModelRendererTurbo(this,  50,  350, textureX, textureY); // CR.Beak
-		bodyModel[2] = new ModelRendererTurbo(this,  50,  410, textureX, textureY); // CR.BeakSupport
-		bodyModel[3] = new ModelRendererTurbo(this,  50,  660, textureX, textureY); // CR.EngineBlock
-		bodyModel[4] = new ModelRendererTurbo(this,  50,  720, textureX, textureY); // CR.BackCorner
-		bodyModel[5] = new ModelRendererTurbo(this,  50,  770, textureX, textureY); // CR.TrackWeldRight
-		bodyModel[6] = new ModelRendererTurbo(this,  50,  770, textureX, textureY); // CR.TrackWeldLeft
-		bodyModel[7] = new ModelRendererTurbo(this,  50,  850, textureX, textureY); // CR.RightTrackTopRight
-		bodyModel[8] = new ModelRendererTurbo(this,  50,  850, textureX, textureY); // CR.RightTrackTopLeft
-		bodyModel[9] = new ModelRendererTurbo(this,  0,  650, textureX, textureY); // CR.RightWheelfront
-		bodyModel[10] = new ModelRendererTurbo(this,  0,  680, textureX, textureY); // CR.RightWheelback
-		bodyModel[11] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelrightfront
-		bodyModel[12] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelrightcenter
-		bodyModel[13] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelrightback
-		bodyModel[14] = new ModelRendererTurbo(this,  0,  910, textureX, textureY); // CR.RightTubethingy
-		bodyModel[15] = new ModelRendererTurbo(this,  0,  650, textureX, textureY); // CR.LeftWheelfront
-		bodyModel[16] = new ModelRendererTurbo(this,  0,  680, textureX, textureY); // CR.LeftWheelback
-		bodyModel[17] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelleftfront
-		bodyModel[18] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelleftcenter
-		bodyModel[19] = new ModelRendererTurbo(this,  0,  720, textureX, textureY); // CR.miniwheelleftback
-		bodyModel[20] = new ModelRendererTurbo(this,  0,  910, textureX, textureY); // CR.LeftTubethingy
-		bodyModel[21] = new ModelRendererTurbo(this,  0,  116, textureX, textureY); // CR.SideThingLeft
+		bodyModel[0] = new ModelRendererTurbo(this, 50, 300, textureX, textureY); // CR.MainBody
+		bodyModel[1] = new ModelRendererTurbo(this, 50, 350, textureX, textureY); // CR.Beak
+		bodyModel[2] = new ModelRendererTurbo(this, 50, 410, textureX, textureY); // CR.BeakSupport
+		bodyModel[3] = new ModelRendererTurbo(this, 50, 660, textureX, textureY); // CR.EngineBlock
+		bodyModel[4] = new ModelRendererTurbo(this, 50, 720, textureX, textureY); // CR.BackCorner
+		bodyModel[5] = new ModelRendererTurbo(this, 50, 770, textureX, textureY); // CR.TrackWeldRight
+		bodyModel[6] = new ModelRendererTurbo(this, 50, 770, textureX, textureY); // CR.TrackWeldLeft
+		bodyModel[7] = new ModelRendererTurbo(this, 50, 850, textureX, textureY); // CR.RightTrackTopRight
+		bodyModel[8] = new ModelRendererTurbo(this, 50, 850, textureX, textureY); // CR.RightTrackTopLeft
+		bodyModel[9] = new ModelRendererTurbo(this, 0, 650, textureX, textureY); // CR.RightWheelfront
+		bodyModel[10] = new ModelRendererTurbo(this, 0, 680, textureX, textureY); // CR.RightWheelback
+		bodyModel[11] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelrightfront
+		bodyModel[12] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelrightcenter
+		bodyModel[13] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelrightback
+		bodyModel[14] = new ModelRendererTurbo(this, 0, 910, textureX, textureY); // CR.RightTubethingy
+		bodyModel[15] = new ModelRendererTurbo(this, 0, 650, textureX, textureY); // CR.LeftWheelfront
+		bodyModel[16] = new ModelRendererTurbo(this, 0, 680, textureX, textureY); // CR.LeftWheelback
+		bodyModel[17] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelleftfront
+		bodyModel[18] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelleftcenter
+		bodyModel[19] = new ModelRendererTurbo(this, 0, 720, textureX, textureY); // CR.miniwheelleftback
+		bodyModel[20] = new ModelRendererTurbo(this, 0, 910, textureX, textureY); // CR.LeftTubethingy
+		bodyModel[21] = new ModelRendererTurbo(this, 0, 116, textureX, textureY); // CR.SideThingLeft
 
 		bodyModel[0].addBox(0F, 0F, 0F, 77, 12, 30, 0); // CR.MainBody
 		bodyModel[0].setRotationPoint(-40F, -8F, -12F);
@@ -116,26 +116,25 @@ public class ModelChiHa extends ModelVehicle
 		bodyModel[21].setRotationPoint(-11F, -19F, -12F);
 
 
-
 // Turret
 		turretModel = new ModelRendererTurbo[17];
-		turretModel[0] = new ModelRendererTurbo(this,  0,  174, textureX, textureY); // Turret
-		turretModel[1] = new ModelRendererTurbo(this,  121,  48, textureX, textureY); // Mantle
-		turretModel[2] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // UpperTurret
-		turretModel[3] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // LowerTurret
-		turretModel[4] = new ModelRendererTurbo(this,  90,  60, textureX, textureY); // AngledTurret
-		turretModel[5] = new ModelRendererTurbo(this,  90,  81, textureX, textureY); // AngledTurret
-		turretModel[6] = new ModelRendererTurbo(this,  130,  90, textureX, textureY); // AmmoRacket
-		turretModel[7] = new ModelRendererTurbo(this,  0,  77, textureX, textureY); // CH
-		turretModel[8] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Rail
-		turretModel[9] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Rail
-		turretModel[10] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Rail
-		turretModel[11] = new ModelRendererTurbo(this,  0,  0, textureX, textureY); // Rail
-		turretModel[12] = new ModelRendererTurbo(this,  0,  3, textureX, textureY); // RailConnecter
-		turretModel[13] = new ModelRendererTurbo(this,  0,  3, textureX, textureY); // RailConnecter
-		turretModel[14] = new ModelRendererTurbo(this,  0,  3, textureX, textureY); // RailConnecter
-		turretModel[15] = new ModelRendererTurbo(this,  0,  3, textureX, textureY); // RailConnecter
-		turretModel[16] = new ModelRendererTurbo(this,  29,  126, textureX, textureY); // 
+		turretModel[0] = new ModelRendererTurbo(this, 0, 174, textureX, textureY); // Turret
+		turretModel[1] = new ModelRendererTurbo(this, 121, 48, textureX, textureY); // Mantle
+		turretModel[2] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // UpperTurret
+		turretModel[3] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // LowerTurret
+		turretModel[4] = new ModelRendererTurbo(this, 90, 60, textureX, textureY); // AngledTurret
+		turretModel[5] = new ModelRendererTurbo(this, 90, 81, textureX, textureY); // AngledTurret
+		turretModel[6] = new ModelRendererTurbo(this, 130, 90, textureX, textureY); // AmmoRacket
+		turretModel[7] = new ModelRendererTurbo(this, 0, 77, textureX, textureY); // CH
+		turretModel[8] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Rail
+		turretModel[9] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Rail
+		turretModel[10] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Rail
+		turretModel[11] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Rail
+		turretModel[12] = new ModelRendererTurbo(this, 0, 3, textureX, textureY); // RailConnecter
+		turretModel[13] = new ModelRendererTurbo(this, 0, 3, textureX, textureY); // RailConnecter
+		turretModel[14] = new ModelRendererTurbo(this, 0, 3, textureX, textureY); // RailConnecter
+		turretModel[15] = new ModelRendererTurbo(this, 0, 3, textureX, textureY); // RailConnecter
+		turretModel[16] = new ModelRendererTurbo(this, 29, 126, textureX, textureY); //
 
 		turretModel[0].addBox(-3F, -30F, -10F, 15, 10, 20, 0F); // Turret
 		turretModel[0].setRotationPoint(0F, 0F, 0F);
@@ -202,13 +201,12 @@ public class ModelChiHa extends ModelVehicle
 		turretModel[16].setRotationPoint(0F, 0F, 0F);
 
 
-
 // Barrel
 		barrelModel = new ModelRendererTurbo[4];
-		barrelModel[0] = new ModelRendererTurbo(this,  0,  50, textureX, textureY); // Barrel
-		barrelModel[1] = new ModelRendererTurbo(this,  0,  41, textureX, textureY); // UnderBarrel
-		barrelModel[2] = new ModelRendererTurbo(this,  0,  64, textureX, textureY); // BarrelConnecter
-		barrelModel[3] = new ModelRendererTurbo(this,  61,  53, textureX, textureY); // BarrelMantle
+		barrelModel[0] = new ModelRendererTurbo(this, 0, 50, textureX, textureY); // Barrel
+		barrelModel[1] = new ModelRendererTurbo(this, 0, 41, textureX, textureY); // UnderBarrel
+		barrelModel[2] = new ModelRendererTurbo(this, 0, 64, textureX, textureY); // BarrelConnecter
+		barrelModel[3] = new ModelRendererTurbo(this, 61, 53, textureX, textureY); // BarrelMantle
 
 		barrelModel[0].addBox(14F, -28F, -2F, 21, 3, 3, 0F); // Barrel
 		barrelModel[0].setRotationPoint(0F, 0F, 0F);
@@ -224,21 +222,20 @@ public class ModelChiHa extends ModelVehicle
 		barrelModel[3].rotateAngleZ = 0.01745329F;
 
 
-
 // Left Track
 		leftTrackModel = new ModelRendererTurbo[12];
-		leftTrackModel[0] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel1
-		leftTrackModel[1] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel2
-		leftTrackModel[2] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel3
-		leftTrackModel[3] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel4
-		leftTrackModel[4] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel5
-		leftTrackModel[5] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // LT.Wheel6
-		leftTrackModel[6] = new ModelRendererTurbo(this,  600,  400, textureX, textureY); // LT.Top
-		leftTrackModel[7] = new ModelRendererTurbo(this,  600,  430, textureX, textureY); // LT.Front
-		leftTrackModel[8] = new ModelRendererTurbo(this,  600,  460, textureX, textureY); // LT.Bottom
-		leftTrackModel[9] = new ModelRendererTurbo(this,  600,  500, textureX, textureY); // LT.Back
-		leftTrackModel[10] = new ModelRendererTurbo(this,  600,  530, textureX, textureY); // LT.Frontcorner
-		leftTrackModel[11] = new ModelRendererTurbo(this,  600,  570, textureX, textureY); // LT.Backcorner
+		leftTrackModel[0] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel1
+		leftTrackModel[1] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel2
+		leftTrackModel[2] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel3
+		leftTrackModel[3] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel4
+		leftTrackModel[4] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel5
+		leftTrackModel[5] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // LT.Wheel6
+		leftTrackModel[6] = new ModelRendererTurbo(this, 600, 400, textureX, textureY); // LT.Top
+		leftTrackModel[7] = new ModelRendererTurbo(this, 600, 430, textureX, textureY); // LT.Front
+		leftTrackModel[8] = new ModelRendererTurbo(this, 600, 460, textureX, textureY); // LT.Bottom
+		leftTrackModel[9] = new ModelRendererTurbo(this, 600, 500, textureX, textureY); // LT.Back
+		leftTrackModel[10] = new ModelRendererTurbo(this, 600, 530, textureX, textureY); // LT.Frontcorner
+		leftTrackModel[11] = new ModelRendererTurbo(this, 600, 570, textureX, textureY); // LT.Backcorner
 
 		leftTrackModel[0].addBox(0F, 0F, 0F, 7, 7, 6, 0F); // LT.Wheel1
 		leftTrackModel[0].setRotationPoint(28F, 2F, -18F);
@@ -279,21 +276,20 @@ public class ModelChiHa extends ModelVehicle
 		leftTrackModel[11].rotateAngleZ = 0.6632251F;
 
 
-
 // Right Track
 		rightTrackModel = new ModelRendererTurbo[12];
-		rightTrackModel[0] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel1
-		rightTrackModel[1] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel2
-		rightTrackModel[2] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel3
-		rightTrackModel[3] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel4
-		rightTrackModel[4] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel5
-		rightTrackModel[5] = new ModelRendererTurbo(this,  500,  500, textureX, textureY); // RT.Wheel6
-		rightTrackModel[6] = new ModelRendererTurbo(this,  600,  400, textureX, textureY); // RT.Top
-		rightTrackModel[7] = new ModelRendererTurbo(this,  600,  430, textureX, textureY); // RT.Front
-		rightTrackModel[8] = new ModelRendererTurbo(this,  600,  460, textureX, textureY); // RT.Bottom
-		rightTrackModel[9] = new ModelRendererTurbo(this,  600,  500, textureX, textureY); // RT.Back
-		rightTrackModel[10] = new ModelRendererTurbo(this,  600,  530, textureX, textureY); // RT.Frontcorner
-		rightTrackModel[11] = new ModelRendererTurbo(this,  600,  570, textureX, textureY); // RT.Backcorner
+		rightTrackModel[0] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel1
+		rightTrackModel[1] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel2
+		rightTrackModel[2] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel3
+		rightTrackModel[3] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel4
+		rightTrackModel[4] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel5
+		rightTrackModel[5] = new ModelRendererTurbo(this, 500, 500, textureX, textureY); // RT.Wheel6
+		rightTrackModel[6] = new ModelRendererTurbo(this, 600, 400, textureX, textureY); // RT.Top
+		rightTrackModel[7] = new ModelRendererTurbo(this, 600, 430, textureX, textureY); // RT.Front
+		rightTrackModel[8] = new ModelRendererTurbo(this, 600, 460, textureX, textureY); // RT.Bottom
+		rightTrackModel[9] = new ModelRendererTurbo(this, 600, 500, textureX, textureY); // RT.Back
+		rightTrackModel[10] = new ModelRendererTurbo(this, 600, 530, textureX, textureY); // RT.Frontcorner
+		rightTrackModel[11] = new ModelRendererTurbo(this, 600, 570, textureX, textureY); // RT.Backcorner
 
 		rightTrackModel[0].addBox(0F, 0F, 0F, 7, 7, 6, 0F); // RT.Wheel1
 		rightTrackModel[0].setRotationPoint(28F, 2F, 18F);

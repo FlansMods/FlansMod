@@ -12,7 +12,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 {
 	public ModelPoolObjEntry()
 	{
-		fileExtensions = new String[] {"obj"};
+		fileExtensions = new String[]{"obj"};
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 				
 				if(s.equals(""))
 					continue;
-
+				
 				if(s.startsWith("g "))
 				{
 					setTextureGroup(s.substring(s.indexOf(" ") + 1).trim());
@@ -81,7 +81,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 						s = s.substring(s.indexOf(" ") + 1).trim();
 					}
 					
-					uvs.add(new float[] {v[0], 1F - v[1]});
+					uvs.add(new float[]{v[0], 1F - v[1]});
 					continue;
 				}
 				if(s.startsWith("vn "))
@@ -101,9 +101,9 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 					float flt = v[2];
 					v[2] = v[1];
 					v[1] = flt;
-
-					normals.add(new float[] {v[0], v[1], v[2]});
-					continue;					
+					
+					normals.add(new float[]{v[0], v[1], v[2]});
+					continue;
 				}
 				if(s.startsWith("f "))
 				{
@@ -111,7 +111,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 					ArrayList<PositionTextureVertex> v = new ArrayList<PositionTextureVertex>();
 					String s1;
 					int finalPhase = 0;
-					float[] normal = new float[] {0F, 0F, 0F};
+					float[] normal = new float[]{0F, 0F, 0F};
 					ArrayList<Vec3d> iNormal = new ArrayList<Vec3d>();
 					do
 					{
@@ -132,7 +132,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 							if(uvs.size() > vtInt)
 								curUV = uvs.get(vtInt);
 							else
-								curUV = new float[] {0, 0};
+								curUV = new float[]{0, 0};
 							int vnInt = 0;
 							if(f.length == 3)
 							{
@@ -145,7 +145,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 							if(normals.size() > vnInt)
 								curNormals = normals.get(vnInt);
 							else
-								curNormals = new float[] {0, 0, 0};
+								curNormals = new float[]{0, 0, 0};
 						}
 						else
 						{
@@ -153,18 +153,18 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 							if(uvs.size() > vInt)
 								curUV = uvs.get(vInt);
 							else
-								curUV = new float[] {0, 0};
+								curUV = new float[]{0, 0};
 							if(normals.size() > vInt)
 								curNormals = normals.get(vInt);
 							else
-								curNormals = new float[] {0, 0, 0};
+								curNormals = new float[]{0, 0, 0};
 						}
 						
 						iNormal.add(new Vec3d(curNormals[0], curNormals[1], curNormals[2]));
-
-						normal[0]+= curNormals[0];
-						normal[1]+= curNormals[1];
-						normal[2]+= curNormals[2];
+						
+						normal[0] += curNormals[0];
+						normal[1] += curNormals[1];
+						normal[2] += curNormals[2];
 						
 						if(vInt < verts.size())
 						{
@@ -182,9 +182,9 @@ public class ModelPoolObjEntry extends ModelPoolEntry
 					
 					float d = MathHelper.sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
 					
-					normal[0]/= d;
-					normal[1]/= d;
-					normal[2]/= d;
+					normal[0] /= d;
+					normal[1] /= d;
+					normal[2] /= d;
 					
 					PositionTextureVertex[] vToArr = new PositionTextureVertex[v.size()];
 					

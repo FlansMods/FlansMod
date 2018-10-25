@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class PermanentBaseData 
+public class PermanentBaseData
 {
 	public int baseID = 0;
 	public List<BlockPos> spawnPoints = new ArrayList<BlockPos>();
@@ -32,7 +32,7 @@ public class PermanentBaseData
 		for(int i = 0; i < iNumObj; i++)
 		{
 			NBTTagCompound objectTags = tags.getCompoundTag("SP_" + i);
-			spawnPoints.add(new BlockPos(objectTags.getDouble("x"),	objectTags.getDouble("y"), objectTags.getDouble("z")));
+			spawnPoints.add(new BlockPos(objectTags.getDouble("x"), objectTags.getDouble("y"), objectTags.getDouble("z")));
 		}
 	}
 	
