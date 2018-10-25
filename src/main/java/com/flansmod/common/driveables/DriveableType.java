@@ -167,6 +167,10 @@ public abstract class DriveableType extends PaintableType
 	/** */
 	public float turretRotationSpeed = 2.5F;
 	
+	/**
+	* If it is set to true, vehicle will crush any living entity under the wheels
+	*/
+	public boolean squashMobs = true;
 	
 	/**
 	 * Collision points for block based collisions
@@ -318,6 +322,8 @@ public abstract class DriveableType extends PaintableType
 			{
 				wheelPositions[Integer.parseInt(split[1])] = new DriveablePosition(new Vector3f(Float.parseFloat(split[2]) / 16F, Float.parseFloat(split[3]) / 16F, Float.parseFloat(split[4]) / 16F), split.length > 5 ? EnumDriveablePart.getPart(split[5]) : EnumDriveablePart.coreWheel);
 			}
+			else if(split[0].equals("SquashMobs"))
+				squashMobs = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
 				wheelStepHeight = Float.parseFloat(split[1]);
 			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
