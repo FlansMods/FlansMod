@@ -16,7 +16,7 @@ public class VehicleType extends DriveableType
 	 * Movement modifiers
 	 */
 	public float turnLeftModifier = 1F, turnRightModifier = 1F;
-	/** If this is true, the vehicle will drive from all wheels */2
+	/** If this is true, the vehicle will drive from all wheels */
 	public boolean fourWheelDrive = false;
 	/**
 	 * If true, then wheels will rotate as the vehicle drives
