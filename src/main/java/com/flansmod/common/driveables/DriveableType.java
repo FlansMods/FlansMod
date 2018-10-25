@@ -174,7 +174,7 @@ public abstract class DriveableType extends PaintableType
 	/**
 	* Mass (In tons)
 	*/
-	public double mass = 1.0;
+	public float mass = 1.0;
 	
 	/**
 	 * Collision points for block based collisions
@@ -329,7 +329,7 @@ public abstract class DriveableType extends PaintableType
 			else if(split[0].equals("SquashMobs"))
 				squashMobs = Boolean.parseBoolean(split[1]);
 			else if(split[0].equals("Mass"))
-				mass = Double.parseDouble(split[1]);
+				mass = Float.parseFloat(split[1]);
 			else if(split[0].equals("WheelRadius") || split[0].equals("WheelStepHeight"))
 				wheelStepHeight = Float.parseFloat(split[1]);
 			else if(split[0].equals("WheelSpringStrength") || split[0].equals("SpringStrength"))
