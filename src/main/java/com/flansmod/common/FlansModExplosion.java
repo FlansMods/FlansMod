@@ -38,7 +38,6 @@ public class FlansModExplosion extends Explosion
 {
 	
 	private final boolean causesFire;
-	private final boolean isSmoking;
 	private final boolean breaksBlocks;
 	private final Random random;
 	private final World world;
@@ -68,12 +67,11 @@ public class FlansModExplosion extends Explosion
 		this.position = new Vec3d(this.x, this.y, this.z);
 		this.type = type;
 		this.explosive = entity;
-		this.isSmoking = smoking;
 		
 		if(!ForgeEventFactory.onExplosionStart(world, this))
 		{
 			this.doExplosionA();
-			this.doExplosionB(true);
+			this.doExplosionB(smoking);
 			
 			for(EntityPlayer obj : world.playerEntities)
 			{
@@ -210,7 +208,7 @@ public class FlansModExplosion extends Explosion
 	{
 		this.world.playSound((EntityPlayer)null, this.x, this.y, this.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
 		
-		if(this.isSmoking)
+		if(this.size >= 2.0F && this.breaksBlocks)
 		{
 			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
 		}
@@ -219,7 +217,7 @@ public class FlansModExplosion extends Explosion
 			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
 		}
 		
-		if(this.isSmoking)
+		if(this.breaksBlocks)
 		{
 			for(BlockPos blockpos : this.affectedBlockPositions)
 			{
