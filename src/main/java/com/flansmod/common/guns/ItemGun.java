@@ -698,7 +698,8 @@ public class ItemGun extends Item implements IPaintableItem
 	{
 		if(EntityBullet.OnHit(world, origin, hit, shooter, shotFrom, shotType, null, damage, hitData))
 		{
-			EntityBullet.OnDetonate(world, hit, shooter, null, shotFrom, shotType);
+			EntityBullet fakeBullet = new EntityBullet(world, hit.toVec3(), 0f, 0f, shooter, 0f, 0f, shotType, 0f, shotFrom);
+			EntityBullet.OnDetonate(world, hit, shooter, fakeBullet, shotFrom, shotType);
 		}
 		
 		if(world.isRemote)
